@@ -1,24 +1,48 @@
 import React from 'react';
 import { Router, Link, RouteComponentProps, Redirect } from '@reach/router';
-import Article from './component/Article';
+import Article, { ArticleProps } from './component/Article';
+import Edition, { EditionProps } from './component/Edition';
+import Product, { ProductProps } from './component/Product';
+import Front, { FrontProps } from './component/Front';
 
-const Home = ({  }: RouteComponentProps) => (
-	<div>
-		<h2>Welcome</h2>
-	</div>
-);
+const Error = () => <div>Error!</div>;
 
-const Edition = ({  }: RouteComponentProps) => (
-	<div>
-		<h2>Edition</h2>
-	</div>
-);
+const ProductRoute = (props: RouteComponentProps<ProductProps>) => {
+	if (props.product) {
+		return <Product product={props.product} />;
+	} else return <Error />;
+};
 
-const Front = ({  }: RouteComponentProps) => (
-	<div>
-		<h2>Front</h2>
-	</div>
-);
+const EditionRoute = (props: RouteComponentProps<EditionProps>) => {
+	if (props.product && props.edition) {
+		return <Edition edition={props.edition} product={props.product} />;
+	} else return <Error />;
+};
+
+const FrontRoute = (props: RouteComponentProps<FrontProps>) => {
+	if (props.front && props.product && props.edition) {
+		return (
+			<Front
+				front={props.front}
+				edition={props.edition}
+				product={props.product}
+			/>
+		);
+	} else return <Error />;
+};
+
+const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
+	if (props.front && props.article && props.product && props.edition) {
+		return (
+			<Article
+				article={props.article}
+				front={props.front}
+				edition={props.edition}
+				product={props.product}
+			/>
+		);
+	} else return <Error />;
+};
 
 const App: React.FC = () => {
 	return (
@@ -31,10 +55,10 @@ const App: React.FC = () => {
 			</nav>
 			<Router>
 				<Redirect from="/" to="daily" noThrow />
-				<Home path=":edition" />
-				<Edition path=":edition/:editionId" />
-				<Front path=":edition/:editionId/:front" />
-				<Article path=":edition/:editionId/:front/:article" />
+				<ProductRoute path=":product" />
+				<EditionRoute path=":product/:edition" />
+				<FrontRoute path=":product/:edition/:front" />
+				<ArticleRoute path=":product/:edition/:front/:article" />
 			</Router>
 		</div>
 	);
