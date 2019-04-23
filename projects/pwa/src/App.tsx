@@ -8,9 +8,15 @@ const Home = ({  }: RouteComponentProps) => (
 	</div>
 );
 
-const Dashboard = ({  }: RouteComponentProps) => (
+const Edition = ({  }: RouteComponentProps) => (
 	<div>
-		<h2>Dashboard</h2>
+		<h2>Edition</h2>
+	</div>
+);
+
+const Front = ({  }: RouteComponentProps) => (
+	<div>
+		<h2>Front</h2>
 	</div>
 );
 
@@ -19,12 +25,14 @@ const App: React.FC = () => {
 		<div className="App">
 			<nav>
 				<Link to="/">Home</Link>
-				<Link to="dashboard">Dashboard</Link>
-				<Link to="edition/id/front/otters">Article</Link>
+				<Link to="daily/sunday">Sunday</Link>
+				<Link to="daily/sunday/sport">Sports front</Link>
+				<Link to="daily/sunday/sport/otters">Sports Article</Link>
 			</nav>
 			<Router>
 				<Home path="/" />
-				<Dashboard path="dashboard" />
+				<Edition path=":edition/:editionId" />
+				<Front path=":edition/:editionId/:front" />
 				<Article path=":edition/:editionId/:front/:article" />
 			</Router>
 		</div>
