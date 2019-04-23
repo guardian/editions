@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Router, Link, RouteComponentProps } from '@reach/router';
+import Article from './component/Article';
+
+const Home = ({  }: RouteComponentProps) => (
+	<div>
+		<h2>Welcome</h2>
+	</div>
+);
+
+const Dashboard = ({  }: RouteComponentProps) => (
+	<div>
+		<h2>Dashboard</h2>
+	</div>
+);
 
 const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+	return (
+		<div className="App">
+			<nav>
+				<Link to="/">Home</Link>
+				<Link to="dashboard">Dashboard</Link>
+				<Link to="edition/id/front/otters">Article</Link>
+			</nav>
+			<Router>
+				<Home path="/" />
+				<Dashboard path="dashboard" />
+				<Article path=":edition/:editionId/:front/:article" />
+			</Router>
+		</div>
+	);
+};
 
 export default App;
