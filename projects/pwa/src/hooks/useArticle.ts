@@ -12,8 +12,8 @@ const useArticle = (front: string, id: string): AsyncReturnable<Article> => {
 	useEffect(() => {
 		setTimeout(() => {
 			setState({
-				title: 'Article title',
-				content: `this is article #${id}`,
+				title: `Article about ${id}`,
+				content: `this is article ${id} in front ${front}`,
 			});
 		}, 200);
 	}, [front, id]);

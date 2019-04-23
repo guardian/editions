@@ -9,7 +9,7 @@ export interface ProductProps {
 const Product = ({ product }: ProductProps) => {
 	return (
 		<div>
-			<h2>{product}</h2>
+			<h2>{product} edition</h2>
 			<ul>
 				<li>
 					<Link to={urlBuilder(product, 'saturday')}>Saturday edition</Link>

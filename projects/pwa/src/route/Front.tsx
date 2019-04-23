@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import { urlBuilder } from '../helper/urlBuilder';
+import Header from '../component/Header';
 
 export interface FrontProps {
 	product: string;
@@ -11,7 +12,7 @@ export interface FrontProps {
 const Front = ({ product, edition, front }: FrontProps) => {
 	return (
 		<div>
-			<h2>{front} Front</h2>
+			<Header backLink={urlBuilder(product, edition)}>{front} Front</Header>
 			<ul>
 				<li>
 					<Link to={urlBuilder(product, edition, front, 'otters')}>

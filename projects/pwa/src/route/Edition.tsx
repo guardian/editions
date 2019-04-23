@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import { urlBuilder } from '../helper/urlBuilder';
+import Header from '../component/Header';
 
 export interface EditionProps {
 	product: string;
@@ -10,7 +11,7 @@ export interface EditionProps {
 const Edition = ({ product, edition }: EditionProps) => {
 	return (
 		<div>
-			<h2>{edition} edition</h2>
+			<Header backLink={urlBuilder(product)}>{edition} Edition</Header>
 			<ul>
 				<li>
 					<Link to={urlBuilder(product, edition, 'sports')}>Sports front</Link>

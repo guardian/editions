@@ -1,9 +1,9 @@
 import React from 'react';
 import { Router, Link, RouteComponentProps, Redirect } from '@reach/router';
-import Article, { ArticleProps } from './component/Article';
-import Edition, { EditionProps } from './component/Edition';
-import Product, { ProductProps } from './component/Product';
-import Front, { FrontProps } from './component/Front';
+import Article, { ArticleProps } from './route/Article';
+import Edition, { EditionProps } from './route/Edition';
+import Product, { ProductProps } from './route/Product';
+import Front, { FrontProps } from './route/Front';
 
 const Error = () => <div>Error!</div>;
 
