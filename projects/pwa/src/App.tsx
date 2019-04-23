@@ -46,13 +46,7 @@ const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
 
 const App: React.FC = () => {
 	return (
-		<div className="App">
-			<nav>
-				<Link to="/">Home</Link>
-				<Link to="daily/sunday">Sunday</Link>
-				<Link to="daily/sunday/sport">Sports front</Link>
-				<Link to="daily/sunday/sport/otters">Sports Article</Link>
-			</nav>
+		<div>
 			<Router>
 				<Redirect from="/" to="daily" noThrow />
 				<ProductRoute path=":product" />
@@ -60,6 +54,23 @@ const App: React.FC = () => {
 				<FrontRoute path=":product/:edition/:front" />
 				<ArticleRoute path=":product/:edition/:front/:article" />
 			</Router>
+			<nav style={{ opacity: 0.5, fontSize: '.5em' }}>
+				<ul>
+					<li>secret debug nav</li>
+					<li>
+						<Link to="/">Home</Link>
+					</li>
+					<li>
+						<Link to="daily/sunday">Sunday</Link>
+					</li>
+					<li>
+						<Link to="daily/sunday/sport">Sports front</Link>
+					</li>
+					<li>
+						<Link to="daily/sunday/sport/otters">Sports Article</Link>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	);
 };

@@ -1,15 +1,21 @@
 import React, { ReactNode } from 'react';
 import { Link } from '@reach/router';
+import styles from './Header.module.css';
+
+export type BackLink = {
+	title: string;
+	url: string;
+};
 
 const Header = ({
 	backLink,
 	children,
 }: {
-	backLink?: string;
+	backLink?: BackLink;
 	children: ReactNode;
 }) => (
-	<header>
-		{backLink && <Link to={backLink}>Return to {backLink}</Link>}
+	<header className={styles.root}>
+		{backLink && <Link to={backLink.url}>Return to {backLink.title}</Link>}
 		<h1>{children}</h1>
 	</header>
 );
