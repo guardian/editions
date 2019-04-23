@@ -1,5 +1,6 @@
 import React from 'react';
 import useArticle from '../hooks/useArticle';
+import { RouteComponentProps } from '@reach/router';
 
 interface ArticleProps {
 	edition: string;
@@ -8,12 +9,12 @@ interface ArticleProps {
 	article: string;
 }
 
-const Article = ({
+const ArticleContent = ({
 	edition,
 	editionId,
 	front,
 	article,
-}: ArticleProps & any) => {
+}: ArticleProps) => {
 	const content = useArticle(front, article);
 	return content ? (
 		<div>
@@ -28,6 +29,19 @@ const Article = ({
 	) : (
 		<div>loading</div>
 	);
+};
+
+const Article = (props: RouteComponentProps<ArticleProps>) => {
+	if (props.front && props.article && props.edition && props.editionId) {
+		return (
+			<ArticleContent
+				article={props.article}
+				front={props.front}
+				editionId={props.editionId}
+				edition={props.edition}
+			/>
+		);
+	} else return <div>Error</div>;
 };
 
 export default Article;

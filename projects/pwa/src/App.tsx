@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Link, RouteComponentProps } from '@reach/router';
+import { Router, Link, RouteComponentProps, Redirect } from '@reach/router';
 import Article from './component/Article';
 
 const Home = ({  }: RouteComponentProps) => (
@@ -30,7 +30,8 @@ const App: React.FC = () => {
 				<Link to="daily/sunday/sport/otters">Sports Article</Link>
 			</nav>
 			<Router>
-				<Home path="/" />
+				<Redirect from="/" to="daily" noThrow />
+				<Home path=":edition" />
 				<Edition path=":edition/:editionId" />
 				<Front path=":edition/:editionId/:front" />
 				<Article path=":edition/:editionId/:front/:article" />
