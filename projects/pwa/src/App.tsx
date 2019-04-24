@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Link, RouteComponentProps, Redirect } from '@reach/router';
 import Article, { ArticleProps } from './route/Article';
-import Edition, { EditionProps } from './route/Edition';
+import Issue, { IssueProps } from './route/Issue';
 import Product, { ProductProps } from './route/Product';
 import Front, { FrontProps } from './route/Front';
 
@@ -13,18 +13,18 @@ const ProductRoute = (props: RouteComponentProps<ProductProps>) => {
     } else return <Error />;
 };
 
-const EditionRoute = (props: RouteComponentProps<EditionProps>) => {
-    if (props.product && props.edition) {
-        return <Edition edition={props.edition} product={props.product} />;
+const IssueRoute = (props: RouteComponentProps<IssueProps>) => {
+    if (props.product && props.issue) {
+        return <Issue issue={props.issue} product={props.product} />;
     } else return <Error />;
 };
 
 const FrontRoute = (props: RouteComponentProps<FrontProps>) => {
-    if (props.front && props.product && props.edition) {
+    if (props.front && props.product && props.issue) {
         return (
             <Front
                 front={props.front}
-                edition={props.edition}
+                issue={props.issue}
                 product={props.product}
             />
         );
@@ -32,12 +32,12 @@ const FrontRoute = (props: RouteComponentProps<FrontProps>) => {
 };
 
 const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
-    if (props.front && props.article && props.product && props.edition) {
+    if (props.front && props.article && props.product && props.issue) {
         return (
             <Article
                 article={props.article}
                 front={props.front}
-                edition={props.edition}
+                issue={props.issue}
                 product={props.product}
             />
         );
@@ -50,9 +50,9 @@ const App: React.FC = () => {
             <Router>
                 <Redirect from="/" to="daily" noThrow />
                 <ProductRoute path=":product" />
-                <EditionRoute path=":product/:edition" />
-                <FrontRoute path=":product/:edition/:front" />
-                <ArticleRoute path=":product/:edition/:front/:article" />
+                <IssueRoute path=":product/:issue" />
+                <FrontRoute path=":product/:issue/:front" />
+                <ArticleRoute path=":product/:issue/:front/:article" />
             </Router>
             <nav style={{ opacity: 0.5, fontSize: '.5em' }}>
                 <ul>

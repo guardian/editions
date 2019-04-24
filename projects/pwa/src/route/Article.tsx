@@ -6,19 +6,19 @@ import Content from '../component/Content';
 
 export interface ArticleProps {
     product: string;
-    edition: string;
+    issue: string;
     front: string;
     article: string;
 }
 
-const Article = ({ product, edition, front, article }: ArticleProps) => {
+const Article = ({ product, issue, front, article }: ArticleProps) => {
     const content = useArticle(front, article);
     return (
         <div>
             <Header
                 backLink={{
                     title: `${front} front`,
-                    url: urlBuilder(product, edition, front),
+                    url: urlBuilder({ product, issue, front }),
                 }}
             >
                 {content ? content.title : 'loading'}
@@ -28,7 +28,7 @@ const Article = ({ product, edition, front, article }: ArticleProps) => {
                     <div>
                         <p>{content.content}</p>
                         <ul>
-                            {[product, edition, front, article].map(
+                            {[product, issue, front, article].map(
                                 (thing, index) => (
                                     <li key={index}>{thing}</li>
                                 ),
