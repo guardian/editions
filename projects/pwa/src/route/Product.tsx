@@ -15,13 +15,13 @@ const Product = ({ product }: ProductProps) => {
             <Content>
                 <ul>
                     <li>
-                        <Link to={urlBuilder(product, 'saturday')}>
-                            Saturday edition
+                        <Link to={urlBuilder({ product, issue: 'saturday' })}>
+                            Saturday issue
                         </Link>
                     </li>
                     <li>
-                        <Link to={urlBuilder(product, 'sunday')}>
-                            Sunday edition
+                        <Link to={urlBuilder({ product, issue: 'sunday' })}>
+                            Sunday issue
                         </Link>
                     </li>
                 </ul>

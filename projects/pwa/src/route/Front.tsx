@@ -6,17 +6,17 @@ import Content from '../component/Content';
 
 export interface FrontProps {
     product: string;
-    edition: string;
+    issue: string;
     front: string;
 }
 
-const Front = ({ product, edition, front }: FrontProps) => {
+const Front = ({ product, issue, front }: FrontProps) => {
     return (
         <div>
             <Header
                 backLink={{
-                    title: `${edition} edition`,
-                    url: urlBuilder(product, edition),
+                    title: `${issue} issue`,
+                    url: urlBuilder({ product, issue }),
                 }}
             >
                 {front} Front
@@ -25,20 +25,30 @@ const Front = ({ product, edition, front }: FrontProps) => {
                 <ul>
                     <li>
                         <Link
-                            to={urlBuilder(product, edition, front, 'otters')}
+                            to={urlBuilder({
+                                product,
+                                issue,
+                                front,
+                                article: 'otters',
+                            })}
                         >
                             Otter story
                         </Link>
                     </li>
                     <li>
                         <Link
-                            to={urlBuilder(product, edition, front, 'skiing')}
+                            to={urlBuilder({
+                                product,
+                                issue,
+                                front,
+                                article: 'skiing',
+                            })}
                         >
                             Skiing story
                         </Link>
                     </li>
                 </ul>
-                <p>{edition}</p>
+                <p>{issue}</p>
                 <p>{product}</p>
             </Content>
         </div>

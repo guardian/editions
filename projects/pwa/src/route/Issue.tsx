@@ -4,31 +4,39 @@ import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
 import Content from '../component/Content';
 
-export interface EditionProps {
+export interface IssueProps {
     product: string;
-    edition: string;
+    issue: string;
 }
 
-const Edition = ({ product, edition }: EditionProps) => {
+const Issue = ({ product, issue }: IssueProps) => {
     return (
         <div>
             <Header
                 backLink={{
                     title: `${product} Guardian`,
-                    url: urlBuilder(product),
+                    url: urlBuilder({ product }),
                 }}
             >
-                {edition} edition
+                {issue} issue
             </Header>
             <Content>
                 <ul>
                     <li>
-                        <Link to={urlBuilder(product, edition, 'sports')}>
+                        <Link
+                            to={urlBuilder({ product, issue, front: 'sports' })}
+                        >
                             Sports front
                         </Link>
                     </li>
                     <li>
-                        <Link to={urlBuilder(product, edition, 'lifestyle')}>
+                        <Link
+                            to={urlBuilder({
+                                product,
+                                issue,
+                                front: 'lifestyle',
+                            })}
+                        >
                             Lifestyle front
                         </Link>
                     </li>
@@ -39,4 +47,4 @@ const Edition = ({ product, edition }: EditionProps) => {
     );
 };
 
-export default Edition;
+export default Issue;
