@@ -3,6 +3,13 @@ export const metrics = {
     baseline: 10,
 };
 
+export const webpageLike = (allowWebpageUI: boolean) => `
+    user-select: ${allowWebpageUI ? 'text' : 'none'};
+    -webkit-tap-highlight-color: ${
+        allowWebpageUI ? 'default' : `rgba(255,255,255,.5)`
+    };
+`;
+
 export const boxPadding = () =>
     `padding: 
         ${metrics.baseline}px 

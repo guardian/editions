@@ -4,12 +4,8 @@ import Article, { ArticleProps } from './route/Article';
 import Issue, { IssueProps } from './route/Issue';
 import Product, { ProductProps } from './route/Product';
 import Front, { FrontProps } from './route/Front';
-import Footer from './component/Footer';
-import emotionReset from 'emotion-reset';
-import { injectGlobal } from 'emotion';
-import { palette } from '@guardian/pasteup/palette';
-import { sans } from '@guardian/pasteup/typography';
-
+import Footer from './component/layout/Footer';
+import injectGlobalStyles from './helper/globalStyles';
 const Error = () => <div>Error!</div>;
 
 const ProductRoute = (props: RouteComponentProps<ProductProps>) => {
@@ -50,15 +46,7 @@ const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
 };
 
 const App: React.FC = () => {
-    injectGlobal`
-        ${emotionReset}
-        :root {
-            font-family: ${sans.body};
-        }
-        a {
-            color: ${palette.brand.main};
-        }
-    `;
+    injectGlobalStyles();
     return (
         <>
             <Router>

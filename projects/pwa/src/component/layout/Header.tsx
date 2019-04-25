@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { metrics } from '../helper/styles';
+import { metrics } from '../../helper/styles';
 import { css } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
-import usePageTitle from '../hooks/usePageTitle';
-import Wrapper from './layout/Wrapper';
+import usePageTitle from '../../hooks/usePageTitle';
+import Wrapper from './Wrapper';
 import { headline } from '@guardian/pasteup/typography';
 
 type StyleProps = {

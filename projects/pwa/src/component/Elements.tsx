@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 import { Text } from './elements/Text';
+import WebpageLikeView from './helper/WebpageLikeView';
 
 const clear = css`
     clear: both;
@@ -8,9 +9,7 @@ const clear = css`
 
 export const Elements: React.FC<{
     elements: CAPIElement[];
-}> = ({
-    elements,
-}) => {
+}> = ({ elements }) => {
     const output = elements.map((element, i) => {
         switch (element._type) {
             case 'model.dotcomrendering.pageElements.TextBlockElement':
@@ -21,9 +20,9 @@ export const Elements: React.FC<{
     });
 
     return (
-        <>
+        <WebpageLikeView>
             {output}
             <div className={clear} />
-        </>
+        </WebpageLikeView>
     );
 };

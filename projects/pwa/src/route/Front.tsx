@@ -1,9 +1,9 @@
 import React from 'react';
 import { urlBuilder } from '../helper/urlBuilder';
-import Header from '../component/Header';
+import Header from '../component/layout/Header';
 import Wall, { Tile } from '../component/Wall';
 import Wrapper from '../component/layout/Wrapper';
-import Rows from '../component/layout/Rows';
+import Rows from '../component/helper/Rows';
 
 export interface FrontProps {
     product: string;

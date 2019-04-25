@@ -1,9 +1,9 @@
 import React from 'react';
 import { urlBuilder } from '../helper/urlBuilder';
-import Header from '../component/Header';
+import Header from '../component/layout/Header';
 import Wrapper from '../component/layout/Wrapper';
 import { AnchorButton } from '../component/Button';
-import Rows from '../component/layout/Rows';
+import Rows from '../component/helper/Rows';
 export interface IssueProps {
     product: string;
     issue: string;

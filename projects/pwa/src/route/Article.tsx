@@ -1,6 +1,6 @@
 import React from 'react';
 import useArticle from '../hooks/useArticle';
-import Header, { Appearances } from '../component/Header';
+import Header, { Appearances } from '../component/layout/Header';
 import { urlBuilder } from '../helper/urlBuilder';
 import Wrapper from '../component/layout/Wrapper';
 import { Elements } from '../component/Elements';

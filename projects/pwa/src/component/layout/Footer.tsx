@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from 'emotion';
-import Wrapper from './layout/Wrapper';
+import Wrapper from './Wrapper';
 
 const styles = css`
     font-size: 0.75em;
