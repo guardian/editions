@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Link } from '@reach/router';
 import { css } from 'emotion';
+import { palette } from '@guardian/pasteup/palette';
 
 export type BackLink = {
     title: string;
@@ -9,7 +10,7 @@ export type BackLink = {
 
 const styles = css`
     padding: 0.5em 1em 1em;
-    background: darkblue;
+    background: ${palette.brand.main};
     color: #fff;
 
     a {

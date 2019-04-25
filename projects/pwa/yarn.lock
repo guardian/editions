@@ -856,6 +856,11 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.2.tgz#63985d3d8b02530e0869962f4da09142ee8e200e"
   integrity sha512-n/VQ4mbfr81aqkx/XmVicOLjviMuy02eenSdJY33SVA7S2J42EU0P1H0mOogfYedb3wXA0d/LVtBrgTSm04WEA==
 
+"@guardian/pasteup@^1.0.0-alpha.7":
+  version "1.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.7.tgz#680656b92632006d736d0378ae19f8c6943769c8"
+  integrity sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==
+
 "@jest/console@^24.7.1":
   version "24.7.1"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.7.1.tgz#32a9e42535a97aedfe037e725bd67e954b459545"
