@@ -59,41 +59,13 @@ const App: React.FC = () => {
         }
     `;
     return (
-        <div>
-            <Router>
-                <Redirect from="/" to="daily" noThrow />
-                <ProductRoute path=":product" />
-                <IssueRoute path=":product/:issue" />
-                <FrontRoute path=":product/:issue/:front" />
-                <ArticleRoute path=":product/:issue/:front/:article" />
-            </Router>
-            <Content>
-                <details>
-                    <summary>Secret navigation</summary>
-                    <nav>
-                        <ul>
-                            <li>secret debug nav</li>
-                            <li>
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li>
-                                <Link to="daily/sunday">Sunday</Link>
-                            </li>
-                            <li>
-                                <Link to="daily/sunday/sport">
-                                    Sports front
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="daily/sunday/sport/otters">
-                                    Sports Article
-                                </Link>
-                            </li>
-                        </ul>
-                    </nav>
-                </details>
-            </Content>
-        </div>
+        <Router>
+            <Redirect from="/" to="daily" noThrow />
+            <ProductRoute path=":product" />
+            <IssueRoute path=":product/:issue" />
+            <FrontRoute path=":product/:issue/:front" />
+            <ArticleRoute path=":product/:issue/:front/:article" />
+        </Router>
     );
 };
 
