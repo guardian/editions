@@ -1,10 +1,10 @@
 import React from 'react';
-import { Router, Link, RouteComponentProps, Redirect } from '@reach/router';
+import { Router, RouteComponentProps, Redirect } from '@reach/router';
 import Article, { ArticleProps } from './route/Article';
 import Issue, { IssueProps } from './route/Issue';
 import Product, { ProductProps } from './route/Product';
 import Front, { FrontProps } from './route/Front';
-import Content from './component/Content';
+import Footer from './component/Footer';
 import emotionReset from 'emotion-reset';
 import { injectGlobal } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
@@ -59,13 +59,16 @@ const App: React.FC = () => {
         }
     `;
     return (
-        <Router>
-            <Redirect from="/" to="daily" noThrow />
-            <ProductRoute path=":product" />
-            <IssueRoute path=":product/:issue" />
-            <FrontRoute path=":product/:issue/:front" />
-            <ArticleRoute path=":product/:issue/:front/:article" />
-        </Router>
+        <>
+            <Router>
+                <Redirect from="/" to="daily" noThrow />
+                <ProductRoute path=":product" />
+                <IssueRoute path=":product/:issue" />
+                <FrontRoute path=":product/:issue/:front" />
+                <ArticleRoute path=":product/:issue/:front/:article" />
+            </Router>
+            <Footer />
+        </>
     );
 };
 

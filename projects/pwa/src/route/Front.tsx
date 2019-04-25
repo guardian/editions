@@ -2,6 +2,7 @@ import React from 'react';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
 import FrontContainer, { Tile } from '../component/Front';
+import Content from '../component/Content';
 
 export interface FrontProps {
     product: string;
@@ -44,7 +45,7 @@ const Front = ({ product, issue, front }: FrontProps) => {
                         product,
                         issue,
                         front,
-                        article: 'skiing',
+                        article: 'brexit',
                     })}
                     title={'Brexit story'}
                 />
@@ -53,15 +54,17 @@ const Front = ({ product, issue, front }: FrontProps) => {
                         product,
                         issue,
                         front,
-                        article: 'skiing',
+                        article: 'got',
                     })}
                     title={'GoT story'}
                 />
             </FrontContainer>
-            <ul>
-                <li>{issue}</li>
-                <li>{product}</li>
-            </ul>
+            <Content>
+                <ul>
+                    <li>{issue}</li>
+                    <li>{product}</li>
+                </ul>
+            </Content>
         </div>
     );
 };
