@@ -8,6 +8,7 @@ import Footer from './component/Footer';
 import emotionReset from 'emotion-reset';
 import { injectGlobal } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
+import { sans } from '@guardian/pasteup/typography';
 
 const Error = () => <div>Error!</div>;
 
@@ -52,7 +53,7 @@ const App: React.FC = () => {
     injectGlobal`
         ${emotionReset}
         :root {
-            font-family: 'system-ui';
+            font-family: ${sans.body};
         }
         a {
             color: ${palette.brand.main};

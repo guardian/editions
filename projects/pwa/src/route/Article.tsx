@@ -1,8 +1,8 @@
 import React from 'react';
 import useArticle from '../hooks/useArticle';
-import Header from '../component/Header';
+import Header, { Appearances } from '../component/Header';
 import { urlBuilder } from '../helper/urlBuilder';
-import Content from '../component/Content';
+import Wrapper from '../component/layout/Wrapper';
 import { Elements } from '../component/Elements';
 
 export interface ArticleProps {
@@ -17,6 +17,7 @@ const Article = ({ product, issue, front, article }: ArticleProps) => {
     return (
         <div>
             <Header
+                appearance={Appearances.White}
                 backLink={{
                     title: `${front} front`,
                     url: urlBuilder({ product, issue, front }),
@@ -24,13 +25,13 @@ const Article = ({ product, issue, front, article }: ArticleProps) => {
             >
                 {content ? content.headline : 'loading'}
             </Header>
-            <Content>
+            <Wrapper border>
                 {content ? (
-                    <Elements elements={content.elements}/>
+                    <Elements elements={content.elements} />
                 ) : (
                     <div>loading</div>
                 )}
-            </Content>
+            </Wrapper>
         </div>
     );
 };

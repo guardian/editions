@@ -1,5 +1,5 @@
 import React, { ReactNode, Children } from 'react';
-import { metrics } from '../helper/styles';
+import { metrics } from '../../helper/styles';
 import { css } from 'emotion';
 
 const styles = css`

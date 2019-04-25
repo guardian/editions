@@ -4,5 +4,12 @@ export const metrics = {
 };
 
 export const boxPadding = () =>
-    `padding: ${metrics.baseline}px ${metrics.gutter}px ${metrics.baseline *
-        2}px;`;
+    `padding: 
+        ${metrics.baseline}px 
+        ${metrics.gutter}px 
+        ${metrics.baseline * 2}px;`;
+
+export const resetLink = () => `    
+    text-decoration: none;
+    color: inherit;
+`;

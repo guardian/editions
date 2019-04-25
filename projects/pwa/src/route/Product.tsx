@@ -1,9 +1,9 @@
 import React from 'react';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
-import Content from '../component/Content';
+import Wrapper from '../component/layout/Wrapper';
 import { AnchorButton } from '../component/Button';
-import Rows from '../component/Rows';
+import Rows from '../component/layout/Rows';
 
 export interface ProductProps {
     product: string;
@@ -13,7 +13,7 @@ const Product = ({ product }: ProductProps) => {
     return (
         <div>
             <Header>{`${product} Guardian`}</Header>
-            <Content>
+            <Wrapper border>
                 <Rows>
                     <AnchorButton
                         href={urlBuilder({ product, issue: 'saturday' })}
@@ -26,7 +26,7 @@ const Product = ({ product }: ProductProps) => {
                         Sunday issue
                     </AnchorButton>
                 </Rows>
-            </Content>
+            </Wrapper>
         </div>
     );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
-import FrontContainer, { Tile } from '../component/Front';
-import Content from '../component/Content';
-import Rows from '../component/Rows';
+import Wall, { Tile } from '../component/wall/Wall';
+import Wrapper from '../component/layout/Wrapper';
+import Rows from '../component/layout/Rows';
 
 export interface FrontProps {
     product: string;
@@ -22,50 +22,52 @@ const Front = ({ product, issue, front }: FrontProps) => {
             >
                 {`${front} front`}
             </Header>
-            <FrontContainer>
-                <Tile
-                    href={urlBuilder({
-                        product,
-                        issue,
-                        front,
-                        article: 'otters',
-                    })}
-                    title={'Otter story'}
-                />
-                <Tile
-                    href={urlBuilder({
-                        product,
-                        issue,
-                        front,
-                        article: 'skiing',
-                    })}
-                    title={'Skiing story'}
-                />
-                <Tile
-                    href={urlBuilder({
-                        product,
-                        issue,
-                        front,
-                        article: 'brexit',
-                    })}
-                    title={'Brexit story'}
-                />
-                <Tile
-                    href={urlBuilder({
-                        product,
-                        issue,
-                        front,
-                        article: 'got',
-                    })}
-                    title={'GoT story'}
-                />
-            </FrontContainer>
-            <Content>
+            <Wrapper padding={false}>
+                <Wall>
+                    <Tile
+                        href={urlBuilder({
+                            product,
+                            issue,
+                            front,
+                            article: 'otters',
+                        })}
+                        title={'Otter story'}
+                    />
+                    <Tile
+                        href={urlBuilder({
+                            product,
+                            issue,
+                            front,
+                            article: 'skiing',
+                        })}
+                        title={'Skiing story'}
+                    />
+                    <Tile
+                        href={urlBuilder({
+                            product,
+                            issue,
+                            front,
+                            article: 'brexit',
+                        })}
+                        title={'Brexit story'}
+                    />
+                    <Tile
+                        href={urlBuilder({
+                            product,
+                            issue,
+                            front,
+                            article: 'got',
+                        })}
+                        title={'GoT story'}
+                    />
+                </Wall>
+            </Wrapper>
+            <Wrapper>
                 <Rows>
                     <>{issue}</>
                     <>{product}</>
                 </Rows>
-            </Content>
+            </Wrapper>
         </div>
     );
 };

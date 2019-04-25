@@ -1,16 +1,17 @@
 import React from 'react';
-import { boxPadding } from '../helper/styles';
 import { css } from 'emotion';
+import Wrapper from './layout/Wrapper';
 
 const styles = css`
-    ${boxPadding()};
     font-size: 0.75em;
 `;
 
 const Footer = () => (
-    <footer className={styles}>
-        &copy;{new Date().getFullYear()} Guardian news & media
-    </footer>
+    <Wrapper border={false}>
+        <footer className={styles}>
+            &copy;{new Date().getFullYear()} Guardian News & Media
+        </footer>
+    </Wrapper>
 );
 
 export default Footer;
