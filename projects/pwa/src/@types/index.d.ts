@@ -1,1 +1,2 @@
-declare module '@guardian/pasteup/palette'
+declare module '@guardian/pasteup/palette';
+declare module 'emotion-reset';

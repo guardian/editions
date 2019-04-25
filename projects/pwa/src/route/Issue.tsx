@@ -41,6 +41,8 @@ const Issue = ({ product, issue }: IssueProps) => {
                         </Link>
                     </li>
                 </ul>
+            </Content>
+            <Content>
                 <p>{product}</p>
             </Content>
         </div>

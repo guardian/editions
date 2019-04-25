@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from '@reach/router';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
+import FrontContainer, { Tile } from '../component/Front';
 import Content from '../component/Content';
 
 export interface FrontProps {
@@ -21,35 +21,49 @@ const Front = ({ product, issue, front }: FrontProps) => {
             >
                 {front} Front
             </Header>
+            <FrontContainer>
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'otters',
+                    })}
+                    title={'Otter story'}
+                />
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'skiing',
+                    })}
+                    title={'Skiing story'}
+                />
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'brexit',
+                    })}
+                    title={'Brexit story'}
+                />
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'got',
+                    })}
+                    title={'GoT story'}
+                />
+            </FrontContainer>
             <Content>
                 <ul>
-                    <li>
-                        <Link
-                            to={urlBuilder({
-                                product,
-                                issue,
-                                front,
-                                article: 'otters',
-                            })}
-                        >
-                            Otter story
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to={urlBuilder({
-                                product,
-                                issue,
-                                front,
-                                article: 'skiing',
-                            })}
-                        >
-                            Skiing story
-                        </Link>
-                    </li>
+                    <li>{issue}</li>
+                    <li>{product}</li>
                 </ul>
-                <p>{issue}</p>
-                <p>{product}</p>
             </Content>
         </div>
     );

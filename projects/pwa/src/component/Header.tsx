@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Link } from '@reach/router';
+import { boxPadding, metrics } from '../helper/styles';
 import { css } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
 
@@ -9,13 +10,18 @@ export type BackLink = {
 };
 
 const styles = css`
-    padding: 0.5em 1em 1em;
+    ${boxPadding()}
     background: ${palette.brand.main};
-    color: #fff;
+    color: ${palette.neutral[100]};
 
     a {
         color: inherit;
     }
+`;
+
+const headerStyles = css`
+    font-size: 2em;
+    margin-top: ${metrics.baseline}px;
 `;
 
 const Header = ({
@@ -27,7 +33,7 @@ const Header = ({
 }) => (
     <header className={styles}>
         {backLink && <Link to={backLink.url}>Return to {backLink.title}</Link>}
-        <h1>{children}</h1>
+        <h1 className={headerStyles}>{children}</h1>
     </header>
 );
 

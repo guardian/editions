@@ -1,9 +1,13 @@
 import React from 'react';
-import { Router, Link, RouteComponentProps, Redirect } from '@reach/router';
+import { Router, RouteComponentProps, Redirect } from '@reach/router';
 import Article, { ArticleProps } from './route/Article';
 import Issue, { IssueProps } from './route/Issue';
 import Product, { ProductProps } from './route/Product';
 import Front, { FrontProps } from './route/Front';
+import Footer from './component/Footer';
+import emotionReset from 'emotion-reset';
+import { injectGlobal } from 'emotion';
+import { palette } from '@guardian/pasteup/palette';
 
 const Error = () => <div>Error!</div>;
 
@@ -45,8 +49,17 @@ const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
 };
 
 const App: React.FC = () => {
+    injectGlobal`
+        ${emotionReset}
+        :root {
+            font-family: 'system-ui';
+        }
+        a {
+            color: ${palette.brand.main};
+        }
+    `;
     return (
-        <div>
+        <>
             <Router>
                 <Redirect from="/" to="daily" noThrow />
                 <ProductRoute path=":product" />
@@ -54,26 +67,8 @@ const App: React.FC = () => {
                 <FrontRoute path=":product/:issue/:front" />
                 <ArticleRoute path=":product/:issue/:front/:article" />
             </Router>
-            <nav style={{ opacity: 0.5, fontSize: '.5em' }}>
-                <ul>
-                    <li>secret debug nav</li>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="daily/sunday">Sunday</Link>
-                    </li>
-                    <li>
-                        <Link to="daily/sunday/sport">Sports front</Link>
-                    </li>
-                    <li>
-                        <Link to="daily/sunday/sport/otters">
-                            Sports Article
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+            <Footer />
+        </>
     );
 };
 

@@ -1,12 +1,15 @@
 import React, { ReactNode } from 'react';
+import { boxPadding } from '../helper/styles';
 import { css } from 'emotion';
+import { palette } from '@guardian/pasteup/palette';
 
 const styles = css`
-	padding: 0.5em 1em 1em;
+    ${boxPadding()};
+    border-bottom: 1px solid ${palette.neutral[86]};
 `;
 
 const Content = ({ children }: { children: ReactNode }) => (
-	<main className={styles}>{children}</main>
+    <main className={styles}>{children}</main>
 );
 
 export default Content;
