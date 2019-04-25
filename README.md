@@ -1,4 +1,4 @@
-# editions-pwa
+# editions
 
 The future Daily Edition app.
 
