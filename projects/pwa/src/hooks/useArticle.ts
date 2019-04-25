@@ -5,7 +5,7 @@ import { data as articleData } from '../fixtures/article';
 
 type Article = {
 	headline: string;
-	body: string;
+	elements: CAPIElement[];
 };
 
 type AsyncReturnable<Returnable> = Returnable | null;
@@ -16,7 +16,7 @@ const useArticle = (front: string, id: string): AsyncReturnable<Article> => {
 		setTimeout(() => {
 			setState({
 				headline: articleData.page.content.headline,
-				body: articleData.page.content.body,
+				elements: articleData.page.content.blocks.body[0].elements,
 			});
 		}, 200);
 	}, [front, id]);

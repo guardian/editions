@@ -3,6 +3,7 @@ import useArticle from '../hooks/useArticle';
 import Header from '../component/Header';
 import { urlBuilder } from '../helper/urlBuilder';
 import Content from '../component/Content';
+import { Elements } from '../component/Elements';
 
 export interface ArticleProps {
     product: string;
@@ -25,8 +26,7 @@ const Article = ({ product, issue, front, article }: ArticleProps) => {
             </Header>
             <Content>
                 {content ? (
-                    <div dangerouslySetInnerHTML={{ __html: content.body }}>
-                    </div>
+                    <Elements elements={content.elements}/>
                 ) : (
                     <div>loading</div>
                 )}
