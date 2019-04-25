@@ -18,7 +18,7 @@ const Issue = ({ product, issue }: IssueProps) => {
                     url: urlBuilder({ product }),
                 }}
             >
-                {issue} issue
+                {`${issue} issue`}
             </Header>
             <Content>
                 <ul>

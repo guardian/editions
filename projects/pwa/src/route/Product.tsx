@@ -11,7 +11,7 @@ export interface ProductProps {
 const Product = ({ product }: ProductProps) => {
     return (
         <div>
-            <Header>{product} Guardian</Header>
+            <Header>{`${product} Guardian`}</Header>
             <Content>
                 <ul>
                     <li>

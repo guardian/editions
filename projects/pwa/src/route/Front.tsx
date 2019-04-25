@@ -19,7 +19,7 @@ const Front = ({ product, issue, front }: FrontProps) => {
                     url: urlBuilder({ product, issue }),
                 }}
             >
-                {front} Front
+                {`${front} front`}
             </Header>
             <FrontContainer>
                 <Tile
