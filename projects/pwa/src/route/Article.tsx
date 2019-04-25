@@ -21,19 +21,11 @@ const Article = ({ product, issue, front, article }: ArticleProps) => {
                     url: urlBuilder({ product, issue, front }),
                 }}
             >
-                {content ? content.title : 'loading'}
+                {content ? content.headline : 'loading'}
             </Header>
             <Content>
                 {content ? (
-                    <div>
-                        <p>{content.content}</p>
-                        <ul>
-                            {[product, issue, front, article].map(
-                                (thing, index) => (
-                                    <li key={index}>{thing}</li>
-                                ),
-                            )}
-                        </ul>
+                    <div dangerouslySetInnerHTML={{ __html: content.body }}>
                     </div>
                 ) : (
                     <div>loading</div>

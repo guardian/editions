@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 
+// TODO: replace with call to backend!
+import { data as articleData } from '../fixtures/article';
+
 type Article = {
-	title: string;
-	content: string;
+	headline: string;
+	body: string;
 };
 
 type AsyncReturnable<Returnable> = Returnable | null;
@@ -12,8 +15,8 @@ const useArticle = (front: string, id: string): AsyncReturnable<Article> => {
 	useEffect(() => {
 		setTimeout(() => {
 			setState({
-				title: `Article about ${id}`,
-				content: `this is article ${id} in front ${front}`,
+				headline: articleData.page.content.headline,
+				body: articleData.page.content.body,
 			});
 		}, 200);
 	}, [front, id]);
