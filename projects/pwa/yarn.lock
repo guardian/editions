@@ -3411,6 +3411,11 @@ emojis-list@^2.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
   integrity sha1-TapNnbAPmBmIDHn6RXrlsJof04k=
 
+emotion-reset@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/emotion-reset/-/emotion-reset-1.0.4.tgz#3ea8a728653ad8d51fe6f73caaa2d7978ff6a9c7"
+  integrity sha512-F4phySwEl2N1GG8ss8k+L4D9+wHXzBJXPeyX0mfv3CgTZcAucWtecsUlnsZ+Tk9DDHNgHnNQUDS0yo5htd1x6A==
+
 emotion@^10.0.9:
   version "10.0.9"
   resolved "https://registry.yarnpkg.com/emotion/-/emotion-10.0.9.tgz#2c37598af13df31dcd35a1957eaa8830f368c066"

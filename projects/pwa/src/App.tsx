@@ -5,6 +5,8 @@ import Issue, { IssueProps } from './route/Issue';
 import Product, { ProductProps } from './route/Product';
 import Front, { FrontProps } from './route/Front';
 import Content from './component/Content';
+import emotionReset from 'emotion-reset';
+import { injectGlobal } from 'emotion';
 
 const Error = () => <div>Error!</div>;
 
@@ -46,6 +48,9 @@ const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
 };
 
 const App: React.FC = () => {
+    injectGlobal`
+                    ${emotionReset}
+                `;
     return (
         <div>
             <Router>
