@@ -7,6 +7,10 @@ import usePageTitle from '../hooks/usePageTitle';
 import Wrapper from './layout/Wrapper';
 import { headline } from '@guardian/pasteup/typography';
 
+type StyleProps = {
+    appearance: Appearances;
+};
+
 export type BackLink = {
     title: string;
     url: string;
@@ -17,7 +21,7 @@ export enum Appearances {
     White,
 }
 
-const styles = ({ appearance }: { appearance: Appearances }) =>
+const styles = ({ appearance }: StyleProps) =>
     appearance === Appearances.Brand
         ? css`
               background: ${palette.brand.main};
@@ -42,15 +46,14 @@ const headerStyles = css`
 const Header = ({
     backLink,
     children,
-    appearance,
+    ...styleProps
 }: {
     backLink?: BackLink;
     children: string;
-    appearance: Appearances;
-}) => {
+} & StyleProps) => {
     usePageTitle(children);
     return (
-        <header className={styles({ appearance })}>
+        <header className={styles(styleProps)}>
             <Wrapper>
                 {backLink && (
                     <Link to={backLink.url}>← Return to {backLink.title}</Link>

@@ -2,10 +2,11 @@ import React, { Children, ReactNode } from 'react';
 import { css } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
 import { Tile } from './Tile';
+
 /*
 Container for front 'tiles'
 */
-const wallStyle = css`
+const style = css`
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
@@ -17,7 +18,7 @@ const wallStyle = css`
         background: ${palette.neutral[100]};
     }
 `;
-const wallLiStyle = css`
+const liStyle = css`
     padding-top: 100%;
     width: 100%;
     position: relative;
@@ -30,9 +31,9 @@ const wallLiStyle = css`
     }
 `;
 const Wall = ({ children }: { children: ReactNode }) => (
-    <ul className={wallStyle}>
+    <ul className={style}>
         {Children.map(children, child => (
-            <li className={wallLiStyle}>{child}</li>
+            <li className={liStyle}>{child}</li>
         ))}
     </ul>
 );

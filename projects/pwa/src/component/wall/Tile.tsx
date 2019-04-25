@@ -8,20 +8,19 @@ import { headline } from '@guardian/pasteup/typography';
 /*
 Front 'tiles' themselves
 */
-
 enum Size {
     SmallSquare,
     Square,
     LongSquare,
 }
 
-type Tile = {
+type Props = {
     title: string;
     size: Size;
     href: string;
 };
 
-const tileStyle = css`
+const style = css`
     display: block;
     &:hover {
         background: ${palette.neutral[97]};
@@ -30,14 +29,14 @@ const tileStyle = css`
     ${boxPadding()}
 `;
 
-const tileTitleStyle = css`
+const titleStyle = css`
     ${headline(2)};
     font-weight: 700;
 `;
 
-const Tile = ({ title, size, href }: Tile) => (
-    <Link to={href} className={tileStyle} data-size={size}>
-        <h3 className={tileTitleStyle}>{title}</h3>
+const Tile = ({ title, size, href }: Props) => (
+    <Link to={href} className={style} data-size={size}>
+        <h3 className={titleStyle}>{title}</h3>
     </Link>
 );
 Tile.defaultProps = {
