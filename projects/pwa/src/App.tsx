@@ -49,8 +49,11 @@ const ArticleRoute = (props: RouteComponentProps<ArticleProps>) => {
 
 const App: React.FC = () => {
     injectGlobal`
-                    ${emotionReset}
-                `;
+        ${emotionReset}
+        :root {
+            font-family: 'system-ui';
+        }
+    `;
     return (
         <div>
             <Router>

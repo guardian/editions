@@ -10,9 +10,10 @@ Container for front 'tiles'
 const FrontStyle = css`
     display: grid;
     grid-template-columns: 1fr 1fr;
-
+    grid-gap: 0;
     & > * {
-        box-shadow: 0 0 0 1px ${palette.neutral[60]};
+        margin: -0.5px;
+        box-shadow: inset 0 0 0 1px ${palette.neutral[60]};
     }
 `;
 const Front = ({ children }: { children: ReactNode }) => (
@@ -36,7 +37,7 @@ enum Size {
 }
 
 type Tile = {
-    children: string;
+    title: string;
     size: Size;
     href: string;
 };
@@ -45,9 +46,9 @@ const TileStyle = css`
     display: block;
     ${boxPadding()}
 `;
-const Tile = ({ children, size, href }: Tile) => (
+const Tile = ({ title, size, href }: Tile) => (
     <Link to={href} className={TileStyle} data-size={size}>
-        <h3>{children}</h3>
+        <h3>{title}</h3>
     </Link>
 );
 Tile.defaultProps = {
