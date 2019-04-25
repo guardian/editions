@@ -4,6 +4,7 @@ import Article, { ArticleProps } from './route/Article';
 import Issue, { IssueProps } from './route/Issue';
 import Product, { ProductProps } from './route/Product';
 import Front, { FrontProps } from './route/Front';
+import Content from './component/Content';
 
 const Error = () => <div>Error!</div>;
 
@@ -54,25 +55,32 @@ const App: React.FC = () => {
                 <FrontRoute path=":product/:issue/:front" />
                 <ArticleRoute path=":product/:issue/:front/:article" />
             </Router>
-            <nav style={{ opacity: 0.5, fontSize: '.5em' }}>
-                <ul>
-                    <li>secret debug nav</li>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="daily/sunday">Sunday</Link>
-                    </li>
-                    <li>
-                        <Link to="daily/sunday/sport">Sports front</Link>
-                    </li>
-                    <li>
-                        <Link to="daily/sunday/sport/otters">
-                            Sports Article
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
+            <Content>
+                <details>
+                    <summary>Secret navigation</summary>
+                    <nav>
+                        <ul>
+                            <li>secret debug nav</li>
+                            <li>
+                                <Link to="/">Home</Link>
+                            </li>
+                            <li>
+                                <Link to="daily/sunday">Sunday</Link>
+                            </li>
+                            <li>
+                                <Link to="daily/sunday/sport">
+                                    Sports front
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="daily/sunday/sport/otters">
+                                    Sports Article
+                                </Link>
+                            </li>
+                        </ul>
+                    </nav>
+                </details>
+            </Content>
         </div>
     );
 };

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from '@reach/router';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
-import Content from '../component/Content';
+import FrontContainer, { Tile } from '../component/Front';
 
 export interface FrontProps {
     product: string;
@@ -21,36 +20,32 @@ const Front = ({ product, issue, front }: FrontProps) => {
             >
                 {front} Front
             </Header>
-            <Content>
-                <ul>
-                    <li>
-                        <Link
-                            to={urlBuilder({
-                                product,
-                                issue,
-                                front,
-                                article: 'otters',
-                            })}
-                        >
-                            Otter story
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to={urlBuilder({
-                                product,
-                                issue,
-                                front,
-                                article: 'skiing',
-                            })}
-                        >
-                            Skiing story
-                        </Link>
-                    </li>
-                </ul>
-                <p>{issue}</p>
-                <p>{product}</p>
-            </Content>
+            <FrontContainer>
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'otters',
+                    })}
+                >
+                    Otter story
+                </Tile>
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'skiing',
+                    })}
+                >
+                    Skiing story
+                </Tile>
+            </FrontContainer>
+            <ul>
+                <li>{issue}</li>
+                <li>{product}</li>
+            </ul>
         </div>
     );
 };
