@@ -4,7 +4,7 @@ import { css } from 'emotion';
 
 const styles = css`
     ${boxPadding()};
-    font-size: 0.5em;
+    font-size: 0.75em;
 `;
 
 const Footer = () => (
