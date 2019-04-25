@@ -1,8 +1,12 @@
 import React, { ReactNode } from 'react';
-import styles from './Content.module.css';
+import { css } from 'emotion';
+
+const styles = css`
+	padding: 0.5em 1em 1em;
+`;
 
 const Content = ({ children }: { children: ReactNode }) => (
-	<main className={styles.root}>{children}</main>
+	<main className={styles}>{children}</main>
 );
 
 export default Content;
