@@ -43,6 +43,10 @@ const headerStyles = css`
     font-weight: 700;
 `;
 
+const innerStyles = css`
+    text-align: right;
+`;
+
 const Header = ({
     backLink,
     children,
@@ -55,10 +59,14 @@ const Header = ({
     return (
         <header className={styles(styleProps)}>
             <Wrapper>
-                {backLink && (
-                    <Link to={backLink.url}>← Return to {backLink.title}</Link>
-                )}
-                <h1 className={headerStyles}>{children}</h1>
+                <div className={innerStyles}>
+                    {backLink && (
+                        <Link to={backLink.url}>
+                            ← Return to {backLink.title}
+                        </Link>
+                    )}
+                    <h1 className={headerStyles}>{children}</h1>
+                </div>
             </Wrapper>
         </header>
     );
