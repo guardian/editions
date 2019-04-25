@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from '@reach/router';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
 import Content from '../component/Content';
+import { AnchorButton } from '../component/Button';
+import Rows from '../component/Rows';
 
 export interface ProductProps {
     product: string;
@@ -13,18 +14,18 @@ const Product = ({ product }: ProductProps) => {
         <div>
             <Header>{`${product} Guardian`}</Header>
             <Content>
-                <ul>
-                    <li>
-                        <Link to={urlBuilder({ product, issue: 'saturday' })}>
-                            Saturday issue
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={urlBuilder({ product, issue: 'sunday' })}>
-                            Sunday issue
-                        </Link>
-                    </li>
-                </ul>
+                <Rows>
+                    <AnchorButton
+                        href={urlBuilder({ product, issue: 'saturday' })}
+                    >
+                        Saturday issue
+                    </AnchorButton>
+                    <AnchorButton
+                        href={urlBuilder({ product, issue: 'sunday' })}
+                    >
+                        Sunday issue
+                    </AnchorButton>
+                </Rows>
             </Content>
         </div>
     );

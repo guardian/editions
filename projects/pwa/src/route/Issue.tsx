@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from '@reach/router';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
 import Content from '../component/Content';
-
+import { AnchorButton } from '../component/Button';
+import Rows from '../component/Rows';
 export interface IssueProps {
     product: string;
     issue: string;
@@ -21,26 +21,26 @@ const Issue = ({ product, issue }: IssueProps) => {
                 {`${issue} issue`}
             </Header>
             <Content>
-                <ul>
-                    <li>
-                        <Link
-                            to={urlBuilder({ product, issue, front: 'sports' })}
-                        >
-                            Sports front
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to={urlBuilder({
-                                product,
-                                issue,
-                                front: 'lifestyle',
-                            })}
-                        >
-                            Lifestyle front
-                        </Link>
-                    </li>
-                </ul>
+                <Rows>
+                    <AnchorButton
+                        href={urlBuilder({
+                            product,
+                            issue,
+                            front: 'sports',
+                        })}
+                    >
+                        Sports front
+                    </AnchorButton>
+                    <AnchorButton
+                        href={urlBuilder({
+                            product,
+                            issue,
+                            front: 'lifestyle',
+                        })}
+                    >
+                        Lifestyle front
+                    </AnchorButton>
+                </Rows>
             </Content>
             <Content>
                 <p>{product}</p>

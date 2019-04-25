@@ -36,7 +36,7 @@ const Header = ({
     return (
         <header className={styles}>
             {backLink && (
-                <Link to={backLink.url}>Return to {backLink.title}</Link>
+                <Link to={backLink.url}>← Return to {backLink.title}</Link>
             )}
             <h1 className={headerStyles}>{children}</h1>
         </header>
