@@ -43,7 +43,9 @@ const Issue = ({ product, issue }: IssueProps) => {
                 </Rows>
             </Content>
             <Content>
-                <p>{product}</p>
+                <Rows>
+                    <>{product}</>
+                </Rows>
             </Content>
         </div>
     );

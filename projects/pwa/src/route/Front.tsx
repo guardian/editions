@@ -3,6 +3,7 @@ import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
 import FrontContainer, { Tile } from '../component/Front';
 import Content from '../component/Content';
+import Rows from '../component/Rows';
 
 export interface FrontProps {
     product: string;
@@ -60,10 +61,10 @@ const Front = ({ product, issue, front }: FrontProps) => {
                 />
             </FrontContainer>
             <Content>
-                <ul>
-                    <li>{issue}</li>
-                    <li>{product}</li>
-                </ul>
+                <Rows>
+                    <>{issue}</>
+                    <>{product}</>
+                </Rows>
             </Content>
         </div>
     );
