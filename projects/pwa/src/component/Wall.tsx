@@ -1,7 +1,7 @@
 import React, { Children, ReactNode } from 'react';
 import { css } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
-import { Tile } from './Tile';
+import { Tile } from './wall/Tile';
 
 /*
 Container for front 'tiles'

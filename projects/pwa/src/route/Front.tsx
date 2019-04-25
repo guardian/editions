@@ -1,7 +1,7 @@
 import React from 'react';
 import { urlBuilder } from '../helper/urlBuilder';
 import Header from '../component/Header';
-import Wall, { Tile } from '../component/wall/Wall';
+import Wall, { Tile } from '../component/Wall';
 import Wrapper from '../component/layout/Wrapper';
 import Rows from '../component/layout/Rows';
 
