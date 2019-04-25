@@ -3,6 +3,7 @@ import useArticle from '../hooks/useArticle';
 import Header from '../component/Header';
 import { urlBuilder } from '../helper/urlBuilder';
 import Content from '../component/Content';
+import { Elements } from '../component/Elements';
 
 export interface ArticleProps {
     product: string;
@@ -21,20 +22,11 @@ const Article = ({ product, issue, front, article }: ArticleProps) => {
                     url: urlBuilder({ product, issue, front }),
                 }}
             >
-                {content ? content.title : 'loading'}
+                {content ? content.headline : 'loading'}
             </Header>
             <Content>
                 {content ? (
-                    <div>
-                        <p>{content.content}</p>
-                        <ul>
-                            {[product, issue, front, article].map(
-                                (thing, index) => (
-                                    <li key={index}>{thing}</li>
-                                ),
-                            )}
-                        </ul>
-                    </div>
+                    <Elements elements={content.elements}/>
                 ) : (
                     <div>loading</div>
                 )}
