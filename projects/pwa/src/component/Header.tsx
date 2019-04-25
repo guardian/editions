@@ -21,8 +21,9 @@ export enum Appearances {
     White,
 }
 
-const styles = ({ appearance }: StyleProps) =>
-    appearance === Appearances.Brand
+const styles = ({ appearance }: StyleProps) => css`
+    padding-top: env(safe-area-inset-top);
+    ${appearance === Appearances.Brand
         ? css`
               background: ${palette.brand.main};
               color: ${palette.neutral[100]};
@@ -35,7 +36,8 @@ const styles = ({ appearance }: StyleProps) =>
               a {
                   color: ${palette.brand.main};
               }
-          `;
+          `}
+`;
 
 const headerStyles = css`
     ${headline(6)};
