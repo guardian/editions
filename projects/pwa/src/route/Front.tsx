@@ -39,6 +39,24 @@ const Front = ({ product, issue, front }: FrontProps) => {
                     })}
                     title={'Skiing story'}
                 />
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'skiing',
+                    })}
+                    title={'Brexit story'}
+                />
+                <Tile
+                    href={urlBuilder({
+                        product,
+                        issue,
+                        front,
+                        article: 'skiing',
+                    })}
+                    title={'GoT story'}
+                />
             </FrontContainer>
             <ul>
                 <li>{issue}</li>

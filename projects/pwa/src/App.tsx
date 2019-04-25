@@ -7,6 +7,7 @@ import Front, { FrontProps } from './route/Front';
 import Content from './component/Content';
 import emotionReset from 'emotion-reset';
 import { injectGlobal } from 'emotion';
+import { palette } from '@guardian/pasteup/palette';
 
 const Error = () => <div>Error!</div>;
 
@@ -52,6 +53,9 @@ const App: React.FC = () => {
         ${emotionReset}
         :root {
             font-family: 'system-ui';
+        }
+        a {
+            color: ${palette.brand.main};
         }
     `;
     return (

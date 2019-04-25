@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Link } from '@reach/router';
-import { boxPadding } from '../helper/styles';
+import { boxPadding, metrics } from '../helper/styles';
 import { css } from 'emotion';
 import { palette } from '@guardian/pasteup/palette';
 
@@ -19,6 +19,11 @@ const styles = css`
     }
 `;
 
+const headerStyles = css`
+    font-size: 2em;
+    margin-top: ${metrics.baseline}px;
+`;
+
 const Header = ({
     backLink,
     children,
@@ -28,7 +33,7 @@ const Header = ({
 }) => (
     <header className={styles}>
         {backLink && <Link to={backLink.url}>Return to {backLink.title}</Link>}
-        <h1>{children}</h1>
+        <h1 className={headerStyles}>{children}</h1>
     </header>
 );
 
