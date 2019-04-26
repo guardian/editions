@@ -25,7 +25,6 @@ export const textStyle = css`
             border-bottom: 1px solid ${palette.news.main};
         }
     }
-    ${body(3)};
 `;
 
 export const Text: React.FC<{
