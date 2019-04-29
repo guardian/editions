@@ -1,0 +1,18 @@
+{
+  "name": "editions-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/node": "^11.13.7",
+    "@types/node-fetch": "^2.3.2",
+    "express": "^4.16.4",
+    "node-fetch": "^2.3.0",
+    "ts-node": "^8.1.0",
+    "typescript-capi-thrift-experiment": "https://github.com/guardian/typescript-capi-thrift-experiment"
+  }
+}
