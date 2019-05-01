@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-const navigationPersistenceKey = __DEV__ ? 'NavigationStateDE-V' : null;
+const navigationPersistenceKey = __DEV__ ? 'NavigationStateDEV' : null;
 
 export default class App extends React.Component {
 	state = {
@@ -15,7 +15,7 @@ export default class App extends React.Component {
 				<AppLoading
 					startAsync={this._loadResourcesAsync}
 					onError={this._handleLoadingError}
-					onFinish={this._handleFinishLoading}
+					onFinish={this._handleFinishLoading
 				/>
 			);
 		} else {
