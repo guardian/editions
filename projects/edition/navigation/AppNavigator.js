@@ -1,10 +1,29 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
-import MainTabNavigator from './MainTabNavigator';
+import HomeScreen from '../screens/HomeScreen';
+import LinksScreen from '../screens/LinksScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import IssueScreen from '../screens/IssueScreen';
+import FrontScreen from '../screens/FrontScreen';
+import ArticleScreen from '../screens/ArticleScreen';
 
-export default createAppContainer(createSwitchNavigator({
-  // You could add another route here for authentication.
-  // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-  Main: MainTabNavigator,
-}));
+const HomeStack = createStackNavigator(
+	{
+		Home: HomeScreen,
+		Issue: IssueScreen,
+		Front: FrontScreen,
+		Article: ArticleScreen,
+		Settings: SettingsScreen,
+		Links: LinksScreen,
+	},
+	{
+		defaultNavigationOptions: {
+			headerStyle: {
+				backgroundColor: '#052962',
+			},
+			headerTintColor: '#fff',
+		},
+	}
+);
+export default createAppContainer(HomeStack);
