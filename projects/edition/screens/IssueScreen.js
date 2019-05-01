@@ -1,6 +1,8 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, FlatList, Button } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 
+import List from '../components/List';
+import { MonoTextBlock } from '../components/StyledText';
 export default class IssueScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.getParam('issue', 'NO-ID'),
@@ -11,18 +13,25 @@ export default class IssueScreen extends React.Component {
 		const issue = navigation.getParam('issue', 'NO-ID');
 		return (
 			<ScrollView style={styles.container}>
-				<Text>This is an IssueScreen for issue {issue}</Text>
-				<FlatList
-					data={[{ key: 'news' }, { key: 'sports' }]}
-					renderItem={({ item: { key } }) => (
-						<Button
-							onPress={() =>
-								this.props.navigation.navigate('Front', { issue, front: key })
-							}
-							title={key}
-						/>
-					)}
+				<List
+					to="Front"
+					data={[
+						{
+							issue,
+							front: 'news',
+							key: 'news',
+							title: 'News front',
+						},
+						{
+							issue,
+							front: 'sport',
+							key: 'sport',
+							title: 'Sport front',
+						},
+					]}
+					{...{ navigation }}
 				/>
+				<MonoTextBlock>This is an IssueScreen for issue {issue}</MonoTextBlock>
 			</ScrollView>
 		);
 	}
@@ -31,7 +40,6 @@ export default class IssueScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 15,
 		backgroundColor: '#fff',
 	},
 });

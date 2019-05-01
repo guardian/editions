@@ -1,6 +1,7 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, FlatList, Button } from 'react-native';
-
+import { View, StyleSheet } from 'react-native';
+import { MonoTextBlock } from '../components/StyledText';
+import { Transition } from 'react-navigation-fluid-transitions';
 export default class ArticleScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.getParam('article', 'NO-ID'),
@@ -12,20 +13,23 @@ export default class ArticleScreen extends React.Component {
 		const front = navigation.getParam('front', 'NO-ID');
 		const article = navigation.getParam('article', 'NO-ID');
 		return (
-			<ScrollView style={styles.container}>
-				<Text>
-					This is an ArticleScreen for article {article}. from front {front},
-					issue {issue}
-				</Text>
-			</ScrollView>
+			<Transition shared={`item-${article}`}>
+				<View style={styles.container}>
+					<MonoTextBlock>
+						This is an ArticleScreen for article {article}. from front {front},
+						issue {issue}
+					</MonoTextBlock>
+				</View>
+			</Transition>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
+		color: '#fff',
 		flex: 1,
-		paddingTop: 15,
-		backgroundColor: '#fff',
+		alignItems: 'center',
+		backgroundColor: '#f0f',
 	},
 });

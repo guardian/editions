@@ -6,17 +6,14 @@ import {
 	Button,
 	StyleSheet,
 	Text,
-	FlatList,
-	TouchableOpacity,
 	View,
 } from 'react-native';
-import { WebBrowser } from 'expo';
-
 import { MonoText } from '../components/StyledText';
-
+import List from '../components/List';
 export default class HomeScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: 'Home',
+		fontFamily: 'space-mono',
 		headerRight: (
 			<Button
 				onPress={() => navigation.navigate('Settings')}
@@ -26,32 +23,23 @@ export default class HomeScreen extends React.Component {
 	});
 
 	render() {
+		const { navigation } = this.props;
 		return (
 			<View style={styles.container}>
-				<ScrollView
-					style={styles.container}
-					contentContainerStyle={styles.contentContainer}
-				>
-					<View style={styles.welcomeContainer}>
+				<ScrollView style={styles.container}>
+					<View style={styles.getStartedContainer}>
 						<Image
-							source={
-								__DEV__
-									? require('../assets/images/robot-dev.png')
-									: require('../assets/images/robot-prod.png')
-							}
+							source={require('../assets/images/roundel-192x192.png')}
 							style={styles.welcomeImage}
 						/>
 					</View>
-					<FlatList
-						data={[{ key: 'sunday-30' }, { key: 'monday-1' }]}
-						renderItem={({ item: { key } }) => (
-							<Button
-								onPress={() =>
-									this.props.navigation.navigate('Issue', { issue: key })
-								}
-								title={key}
-							/>
-						)}
+					<List
+						data={[
+							{ key: 'sunday-30', issue: 'sunday-30', title: 'Sunday 30' },
+							{ key: 'monday-1', issue: 'monday-1', title: 'Monday 1' },
+						]}
+						to="Issue"
+						{...{ navigation }}
 					/>
 					<View style={styles.getStartedContainer}>
 						{this._maybeRenderDevelopmentModeWarning()}
@@ -70,48 +58,17 @@ export default class HomeScreen extends React.Component {
 							onPress={() => this.props.navigation.navigate('Links')}
 						/>
 					</View>
-
-					<View style={styles.helpContainer}>
-						<TouchableOpacity
-							onPress={this._handleHelpPress}
-							style={styles.helpLink}
-						>
-							<Text style={styles.helpLinkText}>
-								Help, it didn’t automatically reload!
-							</Text>
-						</TouchableOpacity>
-					</View>
 				</ScrollView>
-
-				<View style={styles.tabBarInfoContainer}>
-					<Text style={styles.tabBarInfoText}>
-						This is a tab bar. You can edit it in:
-					</Text>
-
-					<View
-						style={[styles.codeHighlightContainer, styles.navigationFilename]}
-					>
-						<MonoText style={styles.codeHighlightText}>
-							navigation/MainTabNavigator.js
-						</MonoText>
-					</View>
-				</View>
 			</View>
 		);
 	}
 
 	_maybeRenderDevelopmentModeWarning() {
 		if (__DEV__) {
-			const learnMoreButton = (
-				<Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-					Learn more
-				</Text>
-			);
-
 			return (
 				<Text style={styles.developmentModeText}>
 					Development mode is enabled, your app will be slower but you can use
-					useful development tools. {learnMoreButton}
+					useful development tools.
 				</Text>
 			);
 		} else {
@@ -122,18 +79,6 @@ export default class HomeScreen extends React.Component {
 			);
 		}
 	}
-
-	_handleLearnMorePress = () => {
-		WebBrowser.openBrowserAsync(
-			'https://docs.expo.io/versions/latest/guides/development-mode'
-		);
-	};
-
-	_handleHelpPress = () => {
-		WebBrowser.openBrowserAsync(
-			'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-		);
-	};
 }
 
 const styles = StyleSheet.create({
@@ -143,14 +88,13 @@ const styles = StyleSheet.create({
 	},
 	developmentModeText: {
 		marginBottom: 20,
+		marginTop: 20,
 		color: 'rgba(0,0,0,0.4)',
 		fontSize: 14,
 		lineHeight: 19,
 		textAlign: 'center',
 	},
-	contentContainer: {
-		paddingTop: 30,
-	},
+
 	welcomeContainer: {
 		alignItems: 'center',
 		marginTop: 10,
@@ -160,12 +104,12 @@ const styles = StyleSheet.create({
 		width: 100,
 		height: 80,
 		resizeMode: 'contain',
-		marginTop: 3,
-		marginLeft: -10,
 	},
 	getStartedContainer: {
 		alignItems: 'center',
 		marginHorizontal: 50,
+		marginVertical: 7,
+		padding: 16,
 	},
 	homeScreenFilename: {
 		marginVertical: 7,
