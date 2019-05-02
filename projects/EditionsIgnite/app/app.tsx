@@ -5,7 +5,7 @@
 import "./i18n"
 import * as React from "react"
 import { AppRegistry } from "react-native"
-import { StatefulNavigator } from "./navigation"
+import { RootNavigator } from "./navigation"
 import { StorybookUIRoot } from "../storybook"
 import { RootStore, setupRootStore } from "./models/root-store"
 import { Provider } from "mobx-react"
@@ -65,7 +65,7 @@ export class App extends React.Component<{}, AppState> {
     return (
       <Provider rootStore={rootStore} navigationStore={rootStore.navigationStore} {...otherStores}>
         <BackButtonHandler canExit={this.canExit}>
-          <StatefulNavigator />
+          <RootNavigator />
         </BackButtonHandler>
       </Provider>
     )
@@ -84,4 +84,3 @@ const SHOW_STORYBOOK = false
 
 const RootComponent = SHOW_STORYBOOK && __DEV__ ? StorybookUIRoot : App
 AppRegistry.registerComponent(APP_NAME, () => RootComponent)
-

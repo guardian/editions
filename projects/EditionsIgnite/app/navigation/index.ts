@@ -1,1 +1,1 @@
-export * from "./stateful-navigator"
+export * from "./root-navigator"

@@ -36,6 +36,7 @@
     "react-native-localize": "^1.0.0",
     "react-native-splash-screen": "3.1.1",
     "react-navigation": "3.0.0",
+    "react-navigation-fluid-transitions": "^0.3.2",
     "reactotron-mst": "^2.1.0",
     "reactotron-react-native": "^2.1.0",
     "validate.js": "0.12.0"
@@ -151,7 +152,8 @@
   },
   "rnpm": {
     "assets": [
-      "./app/theme/fonts/"
+      "./app/theme/fonts/",
+      "./app/assets/fonts/"
     ]
   }
 }
