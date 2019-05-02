@@ -1,0 +1,8 @@
+{
+  "createdWith": "",
+  "boilerplate": "ignite-bowser",
+  "examples": "classic",
+  "navigation": "react-navigation",
+  "askToOverwrite": true,
+  "generators": {}
+}
