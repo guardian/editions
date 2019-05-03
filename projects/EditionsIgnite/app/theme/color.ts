@@ -21,20 +21,16 @@ export const color = {
    */
   transparent: "rgba(0, 0, 0, 0)",
   /**
-   * The screen background.
+   * backgrounds.
    */
   background: palette.neutral[100],
+  darkBackground: palette.neutral[20],
+  textOverDarkBackground: palette.neutral[100],
   /**
-   * Text over the main tinting color.
+   * Brand (our blue)
    */
   textOverPrimary: palette.neutral[100],
-  /**
-   * The main tinting color.
-   */
   primary: palette.brand.main,
-  /**
-   * The main tinting color, but darker.
-   */
   primaryDarker: palette.brand.dark,
   /**
    * A subtle color used for borders and lines.
@@ -48,6 +44,7 @@ export const color = {
    * Secondary information.
    */
   dim: palette.neutral[20],
+
   /**
    * Error messages and icons.
    */

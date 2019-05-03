@@ -11,7 +11,7 @@ import { NavigationScreenProp } from "react-navigation"
 
 export class List extends React.Component<{
   data: any[]
-  onPress: ({}) => void
+  onPress: ({ key: any }) => void
 }> {
   render() {
     const { data, onPress } = this.props

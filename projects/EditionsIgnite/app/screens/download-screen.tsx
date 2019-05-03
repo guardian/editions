@@ -7,6 +7,14 @@ import { color } from "../theme/color"
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
+// TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
+const makeCacheFolder = () => RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
+
+const rebuildCacheFolder = async () => {
+  await RNFetchBlob.fs.unlink(issuesDir)
+  await makeCacheFolder()
+}
+
 export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
   const [files, setFiles] = useState([])
   const [progress, setProgress] = useState(0)
@@ -16,29 +24,35 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
       setFiles(files)
     })
 
-  const rebuildCacheFolder = async () => {
-    await RNFetchBlob.fs.unlink(issuesDir)
-    try {
-      await RNFetchBlob.fs.mkdir(issuesDir)
-    } catch {}
-  }
-
   useEffect(() => {
     refreshIssues()
   }, [])
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 0, padding: 20, height: 80, backgroundColor: color.dim }}>
+      <View
+        style={{
+          flex: 0,
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 20,
+          height: 80,
+          backgroundColor: color.darkBackground,
+        }}
+      >
         {progress > 0 ? (
-          <Text style={{ textAlign: "center" }}>{`Downloading (${Math.ceil(
-            progress * 100,
-          )}%)`}</Text>
+          <Text
+            style={{
+              color: color.textOverDarkBackground,
+            }}
+          >{`Downloading (${Math.ceil(progress * 100)}%)`}</Text>
         ) : (
           <Button
             title={"🤩 Download Zip 👋"}
             onPress={async () => {
-              RNFetchBlob.config({ fileCache: true })
+              RNFetchBlob.config({
+                fileCache: true,
+              })
                 .fetch(
                   "GET",
                   `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
@@ -47,9 +61,7 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
                   setProgress(received / total)
                 })
                 .then(async res => {
-                  try {
-                    await RNFetchBlob.fs.mkdir(issuesDir)
-                  } catch {}
+                  await makeCacheFolder()
                   await RNFetchBlob.fs.mv(res.path(), `${issuesDir}/test-${Date.now()}.zip`)
                   setProgress(0)
                   refreshIssues()
