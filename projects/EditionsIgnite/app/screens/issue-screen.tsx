@@ -1,8 +1,8 @@
 import React from "react"
-import { ScrollView, StyleSheet, Text } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 
-import { List } from "../../components/list"
-import { MonoTextBlock } from "../../components/styled-text"
+import { List } from "../components/list"
+import { MonoTextBlock } from "../components/styled-text"
 import { NavigationScreenProp } from "react-navigation"
 
 export class IssueScreen extends React.Component<{ navigation: NavigationScreenProp<{}> }> {

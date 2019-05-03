@@ -1,6 +1,6 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { MonoTextBlock } from "../../components/styled-text"
+import { MonoTextBlock } from "../components/styled-text"
 import { Transition } from "react-navigation-fluid-transitions"
 import { NavigationScreenProp } from "react-navigation"
 

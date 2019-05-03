@@ -1,7 +1,7 @@
 import React from "react"
 import { Image, Platform, ScrollView, Button, StyleSheet, Text, View } from "react-native"
-import { MonoText } from "../../components/styled-text"
-import { List } from "../../components/list"
+import { MonoText } from "../components/styled-text"
+import { List } from "../components/list"
 import { NavigationScreenProp } from "react-navigation"
 
 export class HomeScreen extends React.Component<{ navigation: NavigationScreenProp<{}> }> {
