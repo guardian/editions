@@ -7,7 +7,7 @@ import {
 	Transition,
 } from 'react-navigation-fluid-transitions';
 import ArticleScreen from './ArticleScreen';
-class FrontScreen2 extends React.Component {
+class FrontScreen extends React.Component {
 	static navigationOptions = () => ({
 		navigation: null,
 	});
@@ -49,24 +49,9 @@ class FrontScreen2 extends React.Component {
 	}
 }
 
-const Article = props => {
-	return (
-		<View>
-			<Text>Screen 2</Text>
-			<Transition shared="item-brexit">
-				<View style={{ padding: 50, backgroundColor: '#f0f', margin: 16 }}>
-					<Text>yolo</Text>
-				</View>
-			</Transition>
-
-			<Button title="Back" onPress={() => props.navigation.goBack()} />
-		</View>
-	);
-};
-
 const Navigator = createFluidNavigator(
 	{
-		Home: FrontScreen2,
+		Home: FrontScreen,
 		Article: ArticleScreen,
 	},
 	{

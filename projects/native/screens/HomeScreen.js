@@ -14,12 +14,6 @@ export default class HomeScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: 'Home',
 		fontFamily: 'space-mono',
-		headerRight: (
-			<Button
-				onPress={() => navigation.navigate('Settings')}
-				title="Settings"
-			/>
-		),
 	});
 
 	render() {
