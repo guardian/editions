@@ -16,4 +16,4 @@ If you're starting from scratch, we recommend starting out with Android Studio b
 ### Troubleshooting
 
 - Make sure your phone and computer are on the same WIFi network.
-- Inside your Android App, you might need to do a one time setup to change the development port. Shake the device, go to `Dev Settings`, and set your debug sewrver host to `localhost:9001`.
+- Inside your Android App, you might need to do a one time setup to change the development port. Shake the device, go to `Dev Settings`, and set your debug server host to `localhost:9001`.
