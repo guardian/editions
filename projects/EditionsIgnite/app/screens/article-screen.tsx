@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native"
 import { MonoTextBlock } from "../components/styled-text"
 import { Transition } from "react-navigation-fluid-transitions"
 import { NavigationScreenProp } from "react-navigation"
+import { color } from "../theme/color"
 
 export class ArticleScreen extends React.Component<{ navigation: NavigationScreenProp<{}> }> {
   static navigationOptions = ({ navigation }) => ({
@@ -31,6 +32,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#f0f",
+    backgroundColor: color.palette.highlight.main,
   },
 })

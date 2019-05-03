@@ -4,20 +4,24 @@
 
 import "./i18n"
 import * as React from "react"
-import { AppRegistry } from "react-native"
+import { AppRegistry, StatusBar } from "react-native"
 import { RootNavigator } from "./navigation"
 import { StorybookUIRoot } from "../storybook"
 
-/**
- * This is the root component of our app.
- */
+const navigationPersistenceKey = __DEV__ ? "NavigationStateDEV" : null
+
 export class App extends React.Component<{}, {}> {
   /**
    * When the component is mounted. This happens asynchronously and simply
    * re-renders when we're good to go.
    */
   render() {
-    return <RootNavigator />
+    return (
+      <>
+        <StatusBar barStyle="light-content" backgroundColor="#041f4a" />
+        <RootNavigator persistenceKey={navigationPersistenceKey} />
+      </>
+    )
   }
 }
 

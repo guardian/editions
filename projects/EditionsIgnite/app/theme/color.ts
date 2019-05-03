@@ -1,4 +1,4 @@
-import { palette } from "./palette"
+import { palette } from "@guardian/pasteup/palette"
 
 /**
  * Roles for colors.  Prefer using these over the palette.  It makes it easier
@@ -23,42 +23,46 @@ export const color = {
   /**
    * The screen background.
    */
-  background: palette.white,
+  background: palette.neutral[100],
+  /**
+   * Text over the main tinting color.
+   */
+  textOverPrimary: palette.neutral[100],
   /**
    * The main tinting color.
    */
-  primary: palette.orange,
+  primary: palette.brand.main,
   /**
    * The main tinting color, but darker.
    */
-  primaryDarker: palette.orangeDarker,
+  primaryDarker: palette.brand.dark,
   /**
    * A subtle color used for borders and lines.
    */
-  line: palette.offWhite,
+  line: palette.neutral[86],
   /**
    * The default color of text in many components.
    */
-  text: palette.white,
+  text: palette.neutral[7],
   /**
    * Secondary information.
    */
-  dim: palette.lightGrey,
+  dim: palette.neutral[20],
   /**
    * Error messages and icons.
    */
-  error: palette.angry,
+  error: palette.news.main,
 
   /**
-   * Storybook background for Text stories, or any stories where 
+   * Storybook background for Text stories, or any stories where
    * the text color is color.text, which is white by default, and does not show
    * in Stories against the default white background
-  */
-  storybookDarkBg: palette.black,
+   */
+  storybookDarkBg: palette.neutral[7],
 
   /**
    * Storybook text color for stories that display Text components against the
    * white background
-  */
-   storybookTextColor: palette.black,
+   */
+  storybookTextColor: palette.neutral[100],
 }
