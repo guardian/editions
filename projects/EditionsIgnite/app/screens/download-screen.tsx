@@ -4,6 +4,7 @@ import { List } from "../components/list"
 import { NavigationScreenProp } from "react-navigation"
 import RNFetchBlob from "rn-fetch-blob"
 import { color } from "../theme/color"
+import { metrics } from "../theme/spacing"
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
@@ -38,7 +39,7 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
             flex: 0,
             alignItems: "center",
             justifyContent: "center",
-            padding: 16,
+            padding: metrics.vertical,
             height: 80,
             backgroundColor: color.dimBackground,
           }}
@@ -75,61 +76,71 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
         <List
           data={files.map(file => ({ key: file, title: file }))}
           onPress={item => {
-            RNFetchBlob.ios.openDocument(issuesDir + "/" + item.key)
-            RNFetchBlob.android.addCompleteDownload({
-              title: item.key,
-              description: "desc",
-              mime: "data/zip",
-              path: issuesDir + "/" + item.key,
-              showNotification: true,
-            })
+            try {
+              RNFetchBlob.ios.openDocument(issuesDir + "/" + item.key)
+              RNFetchBlob.android.addCompleteDownload({
+                title: item.key,
+                description: "desc",
+                mime: "data/zip",
+                path: issuesDir + "/" + item.key,
+                showNotification: true,
+              })
+            } catch {
+              //TODO find a better approach for multi platform opens
+            }
           }}
         />
       </ScrollView>
-      <SafeAreaView
+      <View
         style={{
-          flexDirection: "row",
-          alignItems: "stretch",
-          justifyContent: "center",
           borderColor: color.line,
           borderTopWidth: 1,
+          padding: metrics.vertical,
         }}
       >
-        <View style={{ margin: 10 }}>
-          <Button
-            title="Refresh list"
-            onPress={() => {
-              alert(RNFetchBlob.fs.dirs.DocumentDir)
-              refreshIssues()
-            }}
-          />
-        </View>
-        <View style={{ margin: 10 }}>
-          <Button
-            title="Wipe cache"
-            onPress={() => {
-              Alert.alert(
-                "Delete cache",
-                "Ya sure lass?",
-                [
-                  {
-                    text: "Don't delete it",
-                  },
-                  {
-                    text: "AWAY WITH IT",
-                    style: "cancel",
-                    onPress: async () => {
-                      await rebuildCacheFolder()
-                      refreshIssues()
+        <SafeAreaView
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
+            <Button
+              title="Refresh list"
+              onPress={() => {
+                alert(RNFetchBlob.fs.dirs.DocumentDir)
+                refreshIssues()
+              }}
+            />
+          </View>
+          <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
+            <Button
+              title="Wipe cache"
+              onPress={() => {
+                Alert.alert(
+                  "Delete cache",
+                  "Ya sure lass?",
+                  [
+                    {
+                      text: "Don't delete it",
                     },
-                  },
-                ],
-                { cancelable: false },
-              )
-            }}
-          />
-        </View>
-      </SafeAreaView>
+                    {
+                      text: "AWAY WITH IT",
+                      style: "cancel",
+                      onPress: async () => {
+                        await rebuildCacheFolder()
+                        refreshIssues()
+                      },
+                    },
+                  ],
+                  { cancelable: false },
+                )
+              }}
+            />
+          </View>
+        </SafeAreaView>
+      </View>
     </View>
   )
 }

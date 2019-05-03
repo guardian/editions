@@ -8,6 +8,8 @@ import {
   View,
   Text,
 } from "react-native"
+import { color } from "../theme/color"
+import { metrics } from "../theme/spacing"
 
 export class List extends React.Component<{
   data: any[]
@@ -27,11 +29,11 @@ export class List extends React.Component<{
           <Highlight onPress={() => onPress(item)}>
             <View
               style={{
-                padding: 16,
-                paddingVertical: 24,
-                backgroundColor: "#fff",
+                padding: metrics.horizontal,
+                paddingVertical: metrics.vertical,
+                backgroundColor: color.background,
                 borderBottomWidth: 1,
-                borderColor: "#ddd",
+                borderColor: color.line,
               }}
             >
               <SafeAreaView>
