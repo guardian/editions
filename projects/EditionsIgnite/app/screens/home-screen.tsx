@@ -1,66 +1,83 @@
-import React from "react"
+import React, { useState } from "react"
 import { Image, Platform, ScrollView, Button, StyleSheet, Text, View } from "react-native"
 import { MonoText } from "../components/styled-text"
 import { List } from "../components/list"
 import { NavigationScreenProp } from "react-navigation"
+import RNFetchBlob from "rn-fetch-blob"
 
-export class HomeScreen extends React.Component<{ navigation: NavigationScreenProp<{}> }> {
-  static navigationOptions = ({ navigation }) => ({
-    title: "Home",
-    headerRight: <Button onPress={() => navigation.navigate("Settings")} title="Settings" />,
-  })
+export const HomeScreen = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+  const [files, setFiles] = useState([])
+  const [progress, setProgress] = useState(0)
+  return (
+    <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View style={styles.getStartedContainer}>
+          <Image
+            source={require("../assets/images/roundel-192x192.png")}
+            style={styles.welcomeImage}
+          />
+        </View>
+        <List
+          data={[
+            { key: "sunday-30", issue: "sunday-30", title: "Sunday 30" },
+            { key: "monday-1", issue: "monday-1", title: "Monday 1" },
+          ]}
+          to="Issue"
+          {...{ navigation }}
+        />
+        <View style={styles.getStartedContainer}>
+          <Text style={styles.getStartedText}>Get started by opening</Text>
 
-  render() {
-    const { navigation } = this.props
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container}>
-          <View style={styles.getStartedContainer}>
-            <Image
-              source={require("../assets/images/roundel-192x192.png")}
-              style={styles.welcomeImage}
-            />
+          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+            <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
           </View>
+          <Button
+            title={`Download Nvidia drivers (${Math.ceil(progress * 100)}%)`}
+            onPress={() => {
+              RNFetchBlob.config({ fileCache: true })
+                .fetch(
+                  "GET",
+                  `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
+                )
+                .progress((received, total) => {
+                  setProgress(received / total)
+                })
+                .then(async res => {
+                  const path = `${RNFetchBlob.fs.dirs.DocumentDir}/issues/test-${Date.now()}.zip`
+                  return RNFetchBlob.fs.mv(res.path(), path)
+                })
+                .catch((errorMessage, statusCode) => {
+                  alert(errorMessage)
+                })
+            }}
+          />
+          <Button
+            title="List stuff in issues"
+            onPress={() => {
+              RNFetchBlob.fs
+                .ls(RNFetchBlob.fs.dirs.DocumentDir + "/issues")
+                // files will an array contains filenames
+                .then(files => {
+                  alert(RNFetchBlob.fs.dirs.DocumentDir)
+                  setFiles(files)
+                })
+            }}
+          />
           <List
-            data={[
-              { key: "sunday-30", issue: "sunday-30", title: "Sunday 30" },
-              { key: "monday-1", issue: "monday-1", title: "Monday 1" },
-            ]}
+            data={files.map(file => ({ key: file, title: file }))}
             to="Issue"
             {...{ navigation }}
           />
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-            <Button title="Go to Links" onPress={() => this.props.navigation.navigate("Links")} />
-          </View>
-        </ScrollView>
-      </View>
-    )
-  }
-
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools.
-        </Text>
-      )
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      )
-    }
-  }
+        </View>
+      </ScrollView>
+    </View>
+  )
 }
+
+HomeScreen.navigationOptions = ({ navigation }) => ({
+  title: "Home",
+  headerRight: <Button onPress={() => navigation.navigate("Settings")} title="Settings" />,
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -108,26 +125,6 @@ const styles = StyleSheet.create({
     color: "rgba(96,100,109, 1)",
     lineHeight: 24,
     textAlign: "center",
-  },
-  tabBarInfoContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: "black",
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: "center",
-    backgroundColor: "#fbfbfb",
-    paddingVertical: 20,
   },
   tabBarInfoText: {
     fontSize: 17,
