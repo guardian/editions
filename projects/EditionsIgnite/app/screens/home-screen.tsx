@@ -17,7 +17,7 @@ export class HomeScreen extends React.Component<{ navigation: NavigationScreenPr
         <ScrollView style={styles.container}>
           <View style={styles.getStartedContainer}>
             <Image
-              source={require("../../assets/images/roundel-192x192.png")}
+              source={require("../assets/images/roundel-192x192.png")}
               style={styles.welcomeImage}
             />
           </View>
