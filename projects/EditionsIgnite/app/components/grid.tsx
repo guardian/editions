@@ -2,6 +2,7 @@ import React from "react"
 import { FlatList, TouchableOpacity, View, Text } from "react-native"
 import { Transition } from "react-navigation-fluid-transitions"
 import { NavigationScreenProp } from "react-navigation"
+import { color } from "../theme/color"
 
 export class Grid extends React.Component<{
   data: any[]
@@ -14,8 +15,6 @@ export class Grid extends React.Component<{
       <FlatList
         numColumns={2}
         style={{
-          background: "#f00",
-          borderColor: "#ddd",
           margin: 8,
         }}
         data={data}
@@ -32,7 +31,7 @@ export class Grid extends React.Component<{
                   style={{
                     flex: 1,
                     height: 100,
-                    backgroundColor: "#f0f",
+                    backgroundColor: color.palette.highlight.main,
                     margin: 8,
                     padding: 16,
                   }}

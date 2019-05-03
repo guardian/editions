@@ -3,6 +3,7 @@ import { HomeScreen } from "../screens/home-screen"
 import { IssueScreen } from "../screens/issue-screen"
 import { FrontScreen } from "../screens/front-screen"
 import { DownloadScreen } from "../screens/download-screen"
+import { color } from "../theme/color"
 
 export const RootNavigator = createAppContainer(
   createStackNavigator(
@@ -15,9 +16,9 @@ export const RootNavigator = createAppContainer(
     {
       defaultNavigationOptions: {
         headerStyle: {
-          backgroundColor: "#052962",
+          backgroundColor: color.primary,
         },
-        headerTintColor: "#fff",
+        headerTintColor: color.textOverPrimary,
       },
       initialRouteName: "Home",
     },
