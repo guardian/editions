@@ -4,10 +4,10 @@ import {
   FlatList,
   TouchableHighlight,
   TouchableNativeFeedback,
+  SafeAreaView,
   View,
   Text,
 } from "react-native"
-import { NavigationScreenProp } from "react-navigation"
 
 export class List extends React.Component<{
   data: any[]
@@ -34,7 +34,9 @@ export class List extends React.Component<{
                 borderColor: "#ddd",
               }}
             >
-              <Text>{title || "no title"}</Text>
+              <SafeAreaView>
+                <Text>{title || "no title"}</Text>
+              </SafeAreaView>
             </View>
           </Highlight>
         )}

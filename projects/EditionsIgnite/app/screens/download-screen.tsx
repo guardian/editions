@@ -7,7 +7,9 @@ import { color } from "../theme/color"
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
-// TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
+/*
+ TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
+ */
 const makeCacheFolder = () => RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
 
 const rebuildCacheFolder = async () => {
@@ -30,50 +32,46 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flex: 0,
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 20,
-          height: 80,
-          backgroundColor: color.darkBackground,
-        }}
-      >
-        {progress > 0 ? (
-          <Text
-            style={{
-              color: color.textOverDarkBackground,
-            }}
-          >{`Downloading (${Math.ceil(progress * 100)}%)`}</Text>
-        ) : (
-          <Button
-            title={"🤩 Download Zip 👋"}
-            onPress={async () => {
-              RNFetchBlob.config({
-                fileCache: true,
-              })
-                .fetch(
-                  "GET",
-                  `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
-                )
-                .progress((received, total) => {
-                  setProgress(received / total)
-                })
-                .then(async res => {
-                  await makeCacheFolder()
-                  await RNFetchBlob.fs.mv(res.path(), `${issuesDir}/test-${Date.now()}.zip`)
-                  setProgress(0)
-                  refreshIssues()
-                })
-                .catch(errorMessage => {
-                  alert(errorMessage)
-                })
-            }}
-          />
-        )}
-      </View>
       <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 0,
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+            height: 80,
+            backgroundColor: color.dimBackground,
+          }}
+        >
+          {progress > 0 ? (
+            <Text>{`Downloading (${Math.ceil(progress * 100)}%)`}</Text>
+          ) : (
+            <Button
+              title={"🤩 Download Zip 👋"}
+              onPress={async () => {
+                RNFetchBlob.config({
+                  fileCache: true,
+                })
+                  .fetch(
+                    "GET",
+                    `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
+                  )
+                  .progress((received, total) => {
+                    setProgress(received / total)
+                  })
+                  .then(async res => {
+                    await makeCacheFolder()
+                    await RNFetchBlob.fs.mv(res.path(), `${issuesDir}/test-${Date.now()}.zip`)
+                    setProgress(0)
+                    refreshIssues()
+                  })
+                  .catch(errorMessage => {
+                    alert(errorMessage)
+                  })
+              }}
+            />
+          )}
+        </View>
         <List
           data={files.map(file => ({ key: file, title: file }))}
           onPress={item => {
@@ -89,7 +87,13 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
         />
       </ScrollView>
       <SafeAreaView
-        style={{ flexDirection: "row", alignItems: "stretch", justifyContent: "center" }}
+        style={{
+          flexDirection: "row",
+          alignItems: "stretch",
+          justifyContent: "center",
+          borderColor: color.line,
+          borderTopWidth: 1,
+        }}
       >
         <View style={{ margin: 10 }}>
           <Button
