@@ -11,11 +11,10 @@ import { NavigationScreenProp } from "react-navigation"
 
 export class List extends React.Component<{
   data: any[]
-  navigation: NavigationScreenProp<{}>
-  to: string
+  onPress: ({}) => void
 }> {
   render() {
-    const { data, navigation, to } = this.props
+    const { data, onPress } = this.props
     const Highlight = Platform.OS === "android" ? TouchableNativeFeedback : TouchableHighlight
     return (
       <FlatList
@@ -25,7 +24,7 @@ export class List extends React.Component<{
         }}
         data={data}
         renderItem={({ item: { title, ...item } }: any) => (
-          <Highlight onPress={() => navigation.navigate(to, item)}>
+          <Highlight onPress={() => onPress(item)}>
             <View
               style={{
                 padding: 16,

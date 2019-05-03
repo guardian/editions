@@ -1,13 +1,10 @@
-import React, { useState } from "react"
-import { Image, Platform, ScrollView, Button, StyleSheet, Text, View } from "react-native"
+import React from "react"
+import { Image, ScrollView, Button, StyleSheet, Text, View } from "react-native"
 import { MonoText } from "../components/styled-text"
 import { List } from "../components/list"
 import { NavigationScreenProp } from "react-navigation"
-import RNFetchBlob from "rn-fetch-blob"
 
 export const HomeScreen = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
-  const [files, setFiles] = useState([])
-  const [progress, setProgress] = useState(0)
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container}>
@@ -22,7 +19,7 @@ export const HomeScreen = ({ navigation }: { navigation: NavigationScreenProp<{}
             { key: "sunday-30", issue: "sunday-30", title: "Sunday 30" },
             { key: "monday-1", issue: "monday-1", title: "Monday 1" },
           ]}
-          to="Issue"
+          onPress={item => navigation.navigate("Issue", item)}
           {...{ navigation }}
         />
         <View style={styles.getStartedContainer}>
@@ -31,43 +28,6 @@ export const HomeScreen = ({ navigation }: { navigation: NavigationScreenProp<{}
           <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
             <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
           </View>
-          <Button
-            title={`Download Nvidia drivers (${Math.ceil(progress * 100)}%)`}
-            onPress={() => {
-              RNFetchBlob.config({ fileCache: true })
-                .fetch(
-                  "GET",
-                  `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
-                )
-                .progress((received, total) => {
-                  setProgress(received / total)
-                })
-                .then(async res => {
-                  const path = `${RNFetchBlob.fs.dirs.DocumentDir}/issues/test-${Date.now()}.zip`
-                  return RNFetchBlob.fs.mv(res.path(), path)
-                })
-                .catch((errorMessage, statusCode) => {
-                  alert(errorMessage)
-                })
-            }}
-          />
-          <Button
-            title="List stuff in issues"
-            onPress={() => {
-              RNFetchBlob.fs
-                .ls(RNFetchBlob.fs.dirs.DocumentDir + "/issues")
-                // files will an array contains filenames
-                .then(files => {
-                  alert(RNFetchBlob.fs.dirs.DocumentDir)
-                  setFiles(files)
-                })
-            }}
-          />
-          <List
-            data={files.map(file => ({ key: file, title: file }))}
-            to="Issue"
-            {...{ navigation }}
-          />
         </View>
       </ScrollView>
     </View>
@@ -76,7 +36,7 @@ export const HomeScreen = ({ navigation }: { navigation: NavigationScreenProp<{}
 
 HomeScreen.navigationOptions = ({ navigation }) => ({
   title: "Home",
-  headerRight: <Button onPress={() => navigation.navigate("Settings")} title="Settings" />,
+  headerRight: <Button onPress={() => navigation.navigate("Downloads")} title="Downloads" />,
 })
 
 const styles = StyleSheet.create({
