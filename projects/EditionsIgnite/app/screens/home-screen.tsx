@@ -1,7 +1,7 @@
 import React from "react"
 import { Image, Platform, ScrollView, Button, StyleSheet, Text, View } from "react-native"
-import { MonoText } from "../../components/styled-text"
-import { List } from "../../components/list"
+import { MonoText } from "../components/styled-text"
+import { List } from "../components/list"
 import { NavigationScreenProp } from "react-navigation"
 
 export class HomeScreen extends React.Component<{ navigation: NavigationScreenProp<{}> }> {
@@ -17,7 +17,7 @@ export class HomeScreen extends React.Component<{ navigation: NavigationScreenPr
         <ScrollView style={styles.container}>
           <View style={styles.getStartedContainer}>
             <Image
-              source={require("../../assets/images/roundel-192x192.png")}
+              source={require("../assets/images/roundel-192x192.png")}
               style={styles.welcomeImage}
             />
           </View>

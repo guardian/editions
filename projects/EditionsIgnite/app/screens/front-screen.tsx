@@ -1,9 +1,9 @@
 import React from "react"
-import { ScrollView, StyleSheet, Text, View, Button } from "react-native"
-import { MonoTextBlock } from "../../components/styled-text"
-import { Grid } from "../../components/grid"
-import { createFluidNavigator, Transition } from "react-navigation-fluid-transitions"
-import { ArticleScreen } from "../article"
+import { ScrollView, StyleSheet } from "react-native"
+import { MonoTextBlock } from "../components/styled-text"
+import { Grid } from "../components/grid"
+import { createFluidNavigator } from "react-navigation-fluid-transitions"
+import { ArticleScreen } from "./article-screen"
 import { NavigationScreenProp } from "react-navigation"
 
 class FrontScreen2 extends React.Component<{ navigation: NavigationScreenProp<{}> }> {
@@ -43,21 +43,6 @@ class FrontScreen2 extends React.Component<{ navigation: NavigationScreenProp<{}
       </ScrollView>
     )
   }
-}
-
-const Article = props => {
-  return (
-    <View>
-      <Text>Screen 2</Text>
-      <Transition shared="item-brexit">
-        <View style={{ padding: 50, backgroundColor: "#f0f", margin: 16 }}>
-          <Text>yolo</Text>
-        </View>
-      </Transition>
-
-      <Button title="Back" onPress={() => props.navigation.goBack()} />
-    </View>
-  )
 }
 
 const Navigator = createFluidNavigator(

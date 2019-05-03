@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "run-android": "adb reverse tcp:9001 tcp:9001 && react-native run-android --port 9001",
+    "run-ios": "react-native run-ios --port 9001",
     "test": "jest",
     "compile": "tsc --noEmit -p . --pretty",
     "format": "npm-run-all format:*",
@@ -14,9 +16,11 @@
     "lint": "npm-run-all lint:*",
     "lint:ts": "eslint index.js app --fix --ext .js,.ts,.tsx",
     "postinstall": "solidarity",
-    "hack:types-react-navigation": "rimraf node_modules/@types/react-navigation/node_modules/@types",
+    "hack:types-react-navigation":
+      "rimraf node_modules/@types/react-navigation/node_modules/@types",
     "hack:types-react-native": "rimraf node_modules/@types/react-native/node_modules/@types",
-    "hack:types-react-test-renderer": "rimraf node_modules/@types/react-test-renderer/node_modules/@types",
+    "hack:types-react-test-renderer":
+      "rimraf node_modules/@types/react-test-renderer/node_modules/@types",
     "patch": "patch-package",
     "prepare": "npm-run-all patch hack:*",
     "storybook": "storybook start -p 9001 --skip-packager"
@@ -35,7 +39,7 @@
     "react-native-keychain": "3.0.0",
     "react-native-localize": "^1.0.0",
     "react-native-splash-screen": "3.1.1",
-    "react-navigation": "3.0.0",
+    "react-navigation": "3.0.6",
     "react-navigation-fluid-transitions": "^0.3.2",
     "reactotron-mst": "^2.1.0",
     "reactotron-react-native": "^2.1.0",
@@ -52,7 +56,7 @@
     "@types/ramda": "0.25.28",
     "@types/react": "16.7.7",
     "@types/react-native": "0.57.13",
-    "@types/react-navigation": "2.13.5",
+    "@types/react-navigation": "3.0.6",
     "@types/react-test-renderer": "16.0.3",
     "@typescript-eslint/eslint-plugin": "^1.1.0",
     "@typescript-eslint/parser": "^1.1.0",
@@ -86,10 +90,7 @@
   },
   "jest": {
     "preset": "jest-preset-ignite",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/e2e"
-    ]
+    "testPathIgnorePatterns": ["/node_modules/", "/e2e"]
   },
   "prettier": {
     "printWidth": 100,
@@ -112,11 +113,7 @@
       },
       "project": "./tsconfig.json"
     },
-    "plugins": [
-      "@typescript-eslint",
-      "react",
-      "react-native"
-    ],
+    "plugins": ["@typescript-eslint", "react", "react-native"],
     "settings": {
       "react": {
         "pragma": "React",
@@ -151,9 +148,6 @@
     }
   },
   "rnpm": {
-    "assets": [
-      "./app/theme/fonts/",
-      "./app/assets/fonts/"
-    ]
+    "assets": ["./app/theme/fonts/", "./app/assets/fonts/"]
   }
 }
