@@ -12,7 +12,6 @@
     "start": "ts-node index.ts"
   },
   "dependencies": {
-    "@creditkarma/thrift-server-core": "^0.13.6",
     "@types/node-fetch": "^2.3.3",
     "capi-ts": "/Users/alex_ware/code/thriftts/capi-ts",
     "express": "^4.16.4",
