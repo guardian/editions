@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "run-android": "adb reverse tcp:9001 tcp:9001 && react-native run-android --port 9001",
-    "run-ios": "react-native run-ios --port 9001",
+    "run-android": "adb reverse tcp:8081 tcp:8081 && react-native run-android",
+    "run-ios": "react-native run-ios",
     "test": "jest",
     "compile": "tsc --noEmit -p . --pretty",
     "format": "npm-run-all format:*",
