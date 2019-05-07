@@ -4,18 +4,19 @@ import {
   FlatList,
   TouchableHighlight,
   TouchableNativeFeedback,
+  SafeAreaView,
   View,
   Text,
 } from "react-native"
-import { NavigationScreenProp } from "react-navigation"
+import { color } from "../theme/color"
+import { metrics } from "../theme/spacing"
 
 export class List extends React.Component<{
   data: any[]
-  navigation: NavigationScreenProp<{}>
-  to: string
+  onPress: ({ key: any }) => void
 }> {
   render() {
-    const { data, navigation, to } = this.props
+    const { data, onPress } = this.props
     const Highlight = Platform.OS === "android" ? TouchableNativeFeedback : TouchableHighlight
     return (
       <FlatList
@@ -25,17 +26,19 @@ export class List extends React.Component<{
         }}
         data={data}
         renderItem={({ item: { title, ...item } }: any) => (
-          <Highlight onPress={() => navigation.navigate(to, item)}>
+          <Highlight onPress={() => onPress(item)}>
             <View
               style={{
-                padding: 16,
-                paddingVertical: 24,
-                backgroundColor: "#fff",
+                padding: metrics.horizontal,
+                paddingVertical: metrics.vertical,
+                backgroundColor: color.background,
                 borderBottomWidth: 1,
-                borderColor: "#ddd",
+                borderColor: color.line,
               }}
             >
-              <Text>{title || "no title"}</Text>
+              <SafeAreaView>
+                <Text>{title || "no title"}</Text>
+              </SafeAreaView>
             </View>
           </Highlight>
         )}

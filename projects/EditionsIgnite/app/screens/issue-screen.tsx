@@ -16,7 +16,7 @@ export class IssueScreen extends React.Component<{ navigation: NavigationScreenP
     return (
       <ScrollView style={styles.container}>
         <List
-          to="Front"
+          onPress={item => navigation.navigate("Front", item)}
           data={[
             {
               issue,
