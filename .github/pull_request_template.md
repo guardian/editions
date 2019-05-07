@@ -1,4 +1,4 @@
-## Why are you doing this? 🐝
+## Why are you doing this?
 
 <!--
 This sounds super accusatory BUT the idea is to help you work out the scope of the 
@@ -11,12 +11,12 @@ the breakage for reference.
 
 [**Trello Card ->**](https://trello.com)
 
-## Changes 🤟
+## Changes
 
 * Change 1
 * Change 2
 
-## Screenshots 🌈
+## Screenshots
 
 <!--
 Please try to add visuals! 
