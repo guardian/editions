@@ -12,8 +12,8 @@
     "start": "ts-node index.ts"
   },
   "dependencies": {
+    "@guardian/capi-ts": "^0.1.0",
     "@types/node-fetch": "^2.3.3",
-    "capi-ts": "/Users/alex_ware/code/thriftts/capi-ts",
     "express": "^4.16.4",
     "node-fetch": "^2.5.0"
   }
