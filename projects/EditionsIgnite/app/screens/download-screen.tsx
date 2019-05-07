@@ -18,10 +18,8 @@ const rebuildCacheFolder = async () => {
   await makeCacheFolder()
 }
 
-export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+const useFileList = () => {
   const [files, setFiles] = useState([])
-  const [progress, setProgress] = useState(0)
-
   const refreshIssues = () =>
     RNFetchBlob.fs.ls(issuesDir).then(files => {
       setFiles(files)
@@ -30,6 +28,13 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
   useEffect(() => {
     refreshIssues()
   }, [])
+
+  return [files, refreshIssues]
+}
+
+export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+  const [files, refreshIssues] = useFileList()
+  const [progress, setProgress] = useState(0)
 
   return (
     <View style={{ flex: 1 }}>
