@@ -1,0 +1,21 @@
+{
+  "name": "editions-backend",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
+  },
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "@creditkarma/thrift-server-core": "^0.13.6",
+    "@types/node-fetch": "^2.3.3",
+    "capi-ts": "/Users/alex_ware/code/thriftts/capi-ts",
+    "express": "^4.16.4",
+    "node-fetch": "^2.5.0"
+  }
+}
