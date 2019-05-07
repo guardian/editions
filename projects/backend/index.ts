@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import express = require("express");
 import fetch from "node-fetch";
 import {
@@ -9,11 +11,11 @@ const app = express();
 // app.get('/', (req, res) => res.send('Hello World!'))
 
 // app.listen(3000, () => console.log(`Example app listening on port 👌🏻!`))
-
+console.log(process.env.CAPIKEY);
 const port = 3131;
 const url = (path: string) =>
   `https://content.guardianapis.com/${path}?format=thrift&api-key=${
-    process.env.capikey
+    process.env.CAPIKEY
   }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all`;
 
 const getArticle = async (path: string) => {
@@ -42,10 +44,12 @@ app.get("/", (req, res) => {
     "artanddesign/gallery/2019/apr/24/the-art-of-visual-storytelling-in-pictures",
     "artanddesign/gallery/2019/apr/23/phyllis-galembo-mexico-masks-and-rituals-in-pictures"
   ];
-  Promise.all(articles.map(article => getArticle(article))).then(data => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(JSON.stringify(data));
-  });
+  Promise.all(articles.map(article => getArticle(article)))
+    .then(data => {
+      res.setHeader("Content-Type", "application/json");
+      res.send(JSON.stringify(data));
+    })
+    .catch(err => console.error(err));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
