@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@creditkarma/thrift-server-core": "^0.13.6",
-    "node-fetch": "^2.5.0"
-  }
-}
