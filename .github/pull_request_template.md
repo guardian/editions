@@ -1,7 +1,9 @@
 ## 🐝 Why are you doing this?
 
 <!--
-Remember, PRs are documentation for future contributors.
+This sounds super accusatory BUT the idea is to help you work out the scope of the 
+change outside of a typical trello card scope. You don't have to explain why 
+you personally are doing this!
 
 If this PR is a fix, please include a link to the original PR that introduced
 the breakage for reference.
