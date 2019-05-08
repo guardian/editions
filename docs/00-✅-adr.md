@@ -12,7 +12,7 @@ To write ADRs for all major technical decisions. Naming each with a monotonicall
 
 Rejected ADRs will have -🚯- after the counter.
 
-Accepted ADRS will have -🦆- after the counter.
+Accepted ADRS will have -✅- after the counter.
 
 ## Consequences
 
