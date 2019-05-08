@@ -7,6 +7,19 @@ export class MonoText extends React.Component<{ style?: any }> {
   }
 }
 
+export class HeadlineText extends React.Component<{ style?: any }> {
+  render() {
+    return (
+      <Text
+        {...this.props}
+        style={{
+          fontSize: 24,
+        }}
+      />
+    )
+  }
+}
+
 export class MonoTextBlock extends React.Component<{ style?: any }> {
   render() {
     return (
