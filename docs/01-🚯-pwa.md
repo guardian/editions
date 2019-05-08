@@ -10,7 +10,9 @@ The UX will be rendered in browser, which may not appear native.
 
 ## Decision
 
-To deliver editions as a progressive web app.
+To implement Editions as a progressive web app, delivered in a native wrapper. The native wrapper will contain a webview, that renders the PWA.
+
+The wrapper will handle required features that are not supported by PWAs such as background fetch, scheduled downloads and push notification handling.
 
 ## Consequences
 
