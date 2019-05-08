@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "wifi-android":"ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
-    "run-android": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && react-native run-android",
+    "run-android": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android",
     "run-ios": "react-native run-ios",
     "test": "jest",
     "compile": "tsc --noEmit -p . --pretty",
@@ -17,9 +17,11 @@
     "lint": "npm-run-all lint:*",
     "lint:ts": "eslint index.js app --fix --ext .js,.ts,.tsx",
     "postinstall": "solidarity",
-    "hack:types-react-navigation": "rimraf node_modules/@types/react-navigation/node_modules/@types",
+    "hack:types-react-navigation":
+      "rimraf node_modules/@types/react-navigation/node_modules/@types",
     "hack:types-react-native": "rimraf node_modules/@types/react-native/node_modules/@types",
-    "hack:types-react-test-renderer": "rimraf node_modules/@types/react-test-renderer/node_modules/@types",
+    "hack:types-react-test-renderer":
+      "rimraf node_modules/@types/react-test-renderer/node_modules/@types",
     "patch": "patch-package",
     "prepare": "npm-run-all patch hack:*",
     "storybook": "storybook start -p 9001 --skip-packager"
@@ -91,10 +93,7 @@
   },
   "jest": {
     "preset": "jest-preset-ignite",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/e2e"
-    ]
+    "testPathIgnorePatterns": ["/node_modules/", "/e2e"]
   },
   "prettier": {
     "printWidth": 100,
@@ -117,11 +116,7 @@
       },
       "project": "./tsconfig.json"
     },
-    "plugins": [
-      "@typescript-eslint",
-      "react",
-      "react-native"
-    ],
+    "plugins": ["@typescript-eslint", "react", "react-native"],
     "settings": {
       "react": {
         "pragma": "React",
@@ -156,9 +151,6 @@
     }
   },
   "rnpm": {
-    "assets": [
-      "./app/theme/fonts/",
-      "./app/assets/fonts/"
-    ]
+    "assets": ["./app/theme/fonts/", "./app/assets/fonts/"]
   }
 }
