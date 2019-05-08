@@ -25,6 +25,11 @@ To develop the editions app as a React Native application.
 - it is primarily a UI Layer for Android and Fuschia. it doesn't generate usable markup on web.
 - Smaller ecosystem than React Native
 
+[Xamarin](https://visualstudio.microsoft.com/xamarin/) was evaluated but rejected because:
+
+- Both this team and our department at large lacks C# experience
+- No easy path to web
+
 ## Consequences
 
 📱🤖 
