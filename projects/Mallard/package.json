@@ -5,13 +5,21 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "wifi-android":"ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
+    "wifi-android": "ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
     "run-android": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android",
     "run-ios": "react-native run-ios"
   },
   "dependencies": {
+    "@guardian/pasteup": "^1.0.0-alpha.8",
+    "@types/react-navigation": "^3.0.7",
+    "@types/rn-fetch-blob": "^1.2.1",
     "react": "16.8.6",
-    "react-native": "0.59.7"
+    "react-native": "0.59.7",
+    "react-native-gesture-handler": "^1.2.1",
+    "react-native-screens": "^1.0.0-alpha.22",
+    "react-navigation": "^3.9.1",
+    "react-navigation-fluid-transitions": "^0.3.2",
+    "rn-fetch-blob": "^0.10.15"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
