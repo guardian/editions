@@ -22,14 +22,4 @@ If you're starting from scratch, we recommend starting out with Android Studio b
 
 #### Android over WiFi
 
-
-
-1. Connect both devices to the same network.
-2. Connect android device by USB.
-3. Verify with `adb devices`
-4. `adb tcpip 5555`
-5. Find devices ip address. `adb shell ifconfig wlan0`
-6. `adb connect ${IP}`
-7. `adb reverse tcp:8097 tcp:8097`
-8. `adb reverse tcp:8081 tcp:8081`
-
+`yarn run wifi-android`
