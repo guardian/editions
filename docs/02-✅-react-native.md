@@ -19,7 +19,11 @@ To develop the editions app as a React Native application.
 - It has shipped excess library code which has caused app store review problems.
 - All the cool hot reload stuff was doable in react native alone.
 
-[Flutter](https://flutter.dev/) was evaluated but rejected because it reimplements the UI layer which poses significant risks to UX and a11y. This has a worse UX risk than a web app.
+[Flutter](https://flutter.dev/) was evaluated but rejected because:
+
+- It reimplements the UI layer, posing significant risks to UX, UI and a11y. 
+- it is primarily a UI Layer for Android and Fuschia. it doesn't generate usable markup on web.
+- Smaller ecosystem than React Native
 
 ## Consequences
 
