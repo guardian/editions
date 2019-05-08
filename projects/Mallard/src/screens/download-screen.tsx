@@ -18,8 +18,8 @@ const rebuildCacheFolder = async () => {
   await makeCacheFolder()
 }
 
-const useFileList = () => {
-  const [files, setFiles] = useState([])
+const useFileList = (): [string[], () => void] => {
+  const [files, setFiles] = useState<string[]>([])
   const refreshIssues = () =>
     RNFetchBlob.fs.ls(issuesDir).then(files => {
       setFiles(files)
@@ -32,7 +32,7 @@ const useFileList = () => {
   return [files, refreshIssues]
 }
 
-export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+export const DownloadScreen = () => {
   const [files, refreshIssues] = useFileList()
   const [progress, setProgress] = useState(0)
 
@@ -54,7 +54,7 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
           ) : (
             <Button
               title={"🤩 Download Zip 👋"}
-              onPress={async () => {
+              onPress={() => {
                 RNFetchBlob.config({
                   fileCache: true,
                 })
@@ -72,7 +72,7 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
                     refreshIssues()
                   })
                   .catch(errorMessage => {
-                    alert(errorMessage)
+                    Alert.alert(errorMessage)
                   })
               }}
             />
@@ -83,6 +83,7 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
           onPress={item => {
             try {
               RNFetchBlob.ios.openDocument(issuesDir + "/" + item.key)
+              // @ts-ignore
               RNFetchBlob.android.addCompleteDownload({
                 title: item.key,
                 description: "desc",
@@ -114,7 +115,7 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
             <Button
               title="Refresh list"
               onPress={() => {
-                alert(RNFetchBlob.fs.dirs.DocumentDir)
+                Alert.alert(RNFetchBlob.fs.dirs.DocumentDir)
                 refreshIssues()
               }}
             />
@@ -150,6 +151,6 @@ export const DownloadScreen = ({ navigation }: { navigation: NavigationScreenPro
   )
 }
 
-DownloadScreen.navigationOptions = ({ navigation }) => ({
+DownloadScreen.navigationOptions = () => ({
   title: "Downloads",
 })

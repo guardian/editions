@@ -34,9 +34,9 @@ export const HomeScreen = ({ navigation }: { navigation: NavigationScreenProp<{}
   )
 }
 
-HomeScreen.navigationOptions = ({ navigation }) => ({
+HomeScreen.navigationOptions = ({ navigation }:   { navigation: NavigationScreenProp<{}> }) => ({
   title: "Home",
-  headerRight: <Button onPress={() => navigation.navigate("Downloads")} title="Downloads" />,
+  headerRight: <Button onPress={() => {navigation.navigate("Downloads")}} title="Downloads" />,
 })
 
 const styles = StyleSheet.create({
