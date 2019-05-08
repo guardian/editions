@@ -6,6 +6,8 @@
 
 This needs to work cross platform.
 
+The UX will be rendered in browser, which may not appear native.
+
 ## Decision
 
 To deliver editions as a progressive web app.

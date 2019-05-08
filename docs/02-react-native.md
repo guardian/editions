@@ -10,7 +10,7 @@ The editions app needs to run and deliver background downloads functionality and
 
 To develop the editions app as a React Native application.
 
-## Additional information
+## Alternatives
 
 [Expo](https://expo.io/) was evaluated but rejected because:
 
@@ -18,6 +18,8 @@ To develop the editions app as a React Native application.
 - The managed workflow wants to use its own notification backend.
 - It has shipped excess library code which has caused app store review problems.
 - All the cool hot reload stuff was doable in react native alone.
+
+[Flutter](https://flutter.dev/) was evaluated but rejected because it reimplements the UI layer which poses significant risks to UX and a11y. This has a worse UX risk than a web app.
 
 ## Consequences
 
