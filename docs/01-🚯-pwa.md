@@ -16,4 +16,4 @@ The wrapper will handle required features that are not supported by PWAs such as
 
 ## Consequences
 
-It won't work on iOS.
+Because some key PWA features are not currently supported in Safari or WKWebView (e.g. service workers), the native wrapper will need to handle functionality such as offline browsing and universal links in iOS.
