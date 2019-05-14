@@ -1,25 +1,40 @@
 # Editions
 
-## Using
-
-Run `yarn run-ios` or `yarn run-android` to start either target.
-
 ## Installing
 
-Follow React native's <a href="https://facebook.github.io/react-native/">CLI Quickstart</a> to get set up.
+Start by installing our Node.js dependencies:
 
-You will need [Android Studio](https://developer.android.com/studio) and, if using a mac, [XCode](https://developer.apple.com/download/more/). If you are on a GNM machine chances are the App Store isn't working for you – Follow the link to get a direct download.
+```bash
+$ yarn
+```
+
+The following guides allow you to run the app locally on device emulators, or on real devices connected to your dev machine via USB.
+
+-   [Android](https://facebook.github.io/react-native/docs/getting-started#installing-dependencies-1)
+-   [iOS](https://facebook.github.io/react-native/docs/getting-started#installing-dependencies)
+
+**Note on installing Xcode:** If you are on a GNM machine chances are the App Store isn't working for you – [click here](https://developer.apple.com/download/more/) to get a direct download.
+
 If you're starting from scratch, we recommend starting out with Android Studio because it takes less time to download.
 
+## Using
 
-### Troubleshooting
+### Android
 
-- Make sure your phone and computer are on the same WIFi network.
-- Inside your Android App, you might need to do a one time setup to change the development port. Shake the device, go to `Dev Settings`, and set your debug server host to `localhost:9001`.
+```bash
+$ yarn run-android
+```
 
+### Android (over wifi)
 
-### Tips 'n' Tricks
+Make sure your phone and computer are on the same WiFi network.
 
-#### Android over WiFi
+```bash
+$ yarn run wifi-android
+```
 
-`yarn run wifi-android`
+### iOS
+
+```bash
+$ yarn run-ios
+```
