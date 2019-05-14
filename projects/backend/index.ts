@@ -7,6 +7,8 @@ import {
   CompactProtocol
 } from "@creditkarma/thrift-server-core";
 import { ItemResponseCodec } from "@guardian/capi-ts";
+import { s3fetch } from './s3';
+import { getIssue, getCollectionsForFront, getCollection } from './fronts';
 const app = express();
 // app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -37,19 +39,43 @@ const getArticle = async (path: string) => {
     data.content.blocks.body.map(_ => _.elements);
   return [title, body];
 };
+app.get("/edition/:editionId", (req,res)=>{
+    const id: string = req.params.editionId
+    getIssue(id).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
+app.get("/front/:frontId", (req,res)=>{
+    const id: string = req.params.frontId
+    getCollectionsForFront(id).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
+app.get("/collection/:collectionId", (req,res)=>{
+    const id: string = req.params.collectionId
+    getCollection(id).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
+app.get("/content/*?",(req,res)=>{
+    console.log(req.params)
+    const path: string = req.params[0]
+    console.log(path)
+    getArticle(path).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
 app.get("/", (req, res) => {
-  const articles = [
-    "books/2019/apr/23/tolkien-estate-disavows-forthcoming-film-starring-nicholas-hoult",
-    "film/2019/apr/24/celeste-review-lush-verdant-visuals-spoiled-by-a-limp-and-soggy-storyline",
-    "artanddesign/gallery/2019/apr/24/the-art-of-visual-storytelling-in-pictures",
-    "artanddesign/gallery/2019/apr/23/phyllis-galembo-mexico-masks-and-rituals-in-pictures"
-  ];
-  Promise.all(articles.map(article => getArticle(article)))
-    .then(data => {
-      res.setHeader("Content-Type", "application/json");
-      res.send(JSON.stringify(data));
-    })
-    .catch(err => console.error(err));
+    res.setHeader("Content-Type", "application/json");
+    res.send(JSON.stringify({'client':'🦆'}));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
