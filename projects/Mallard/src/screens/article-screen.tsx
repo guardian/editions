@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
+import { useFetch } from '../hooks/use-fetch'
 import { Transition } from 'react-navigation-fluid-transitions'
 import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../theme/color'
@@ -25,18 +26,11 @@ const styles = StyleSheet.create({
 })
 
 const useArticleData = (articleId, { headline }) => {
-    const [articleData, updateArticleData] = useState([headline, [[]]])
-    useEffect(() => {
-        fetch('http://localhost:3131').then(res =>
-            res.json().then(res => {
-                updateArticleData(res[articleId])
-            }),
-        )
-
-        return () => {}
-    }, [])
-
-    return articleData
+    return useFetch(
+        'http://localhost:3131',
+        [headline, [[]]],
+        res => res[articleId],
+    )
 }
 
 export const ArticleScreen = ({

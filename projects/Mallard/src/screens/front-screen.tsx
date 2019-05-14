@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { MonoTextBlock } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
 import { createFluidNavigator } from 'react-navigation-fluid-transitions'
 import { ArticleScreen } from './article-screen'
+import { useFetch } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 
 const styles = StyleSheet.create({
@@ -17,18 +18,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const useFrontsData = (): any => {
-    const [frontsData, updateFrontsData] = useState([])
-    useEffect(() => {
-        fetch('http://localhost:3131').then(res =>
-            res.json().then(res => {
-                updateFrontsData(res)
-            }),
-        )
-    }, [])
-
-    return frontsData
-}
+const useFrontsData = () => useFetch('http://localhost:3131', [], res => res)
 
 const PreFrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
     const frontsData = useFrontsData()
