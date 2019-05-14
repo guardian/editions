@@ -16,7 +16,10 @@
     "@creditkarma/thrift-server-core": "^0.13.6",
     "@guardian/capi-ts": "^0.1.0",
     "@types/node-fetch": "^2.3.3",
+    "aws-sdk": "^2.452.0",
     "express": "^4.16.4",
-    "node-fetch": "^2.5.0"
+    "node-fetch": "^2.5.0",
+    "object.fromentries": "^2.0.0",
+    "utility-types": "^3.7.0"
   }
 }

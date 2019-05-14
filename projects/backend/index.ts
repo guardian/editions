@@ -7,6 +7,8 @@ import {
   CompactProtocol
 } from "@creditkarma/thrift-server-core";
 import { ItemResponseCodec } from "@guardian/capi-ts";
+import { s3fetch } from './s3';
+import { getIssue, getCollectionsForFront, getCollection } from './fronts';
 const app = express();
 // app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -37,6 +39,40 @@ const getArticle = async (path: string) => {
     data.content.blocks.body.map(_ => _.elements);
   return [title, body];
 };
+app.get("/edition/:editionId", (req,res)=>{
+    const id: string = req.params.editionId
+    getIssue(id).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
+app.get("/front/:frontId", (req,res)=>{
+    const id: string = req.params.frontId
+    getCollectionsForFront(id).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
+app.get("/collection/:collectionId", (req,res)=>{
+    const id: string = req.params.collectionId
+    getCollection(id).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
+app.get("/content/*?",(req,res)=>{
+    console.log(req.params)
+    const path: string = req.params[0]
+    console.log(path)
+    getArticle(path).then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(data));
+      })
+})
+
 app.get("/", (req, res) => {
   const articles = [
     "books/2019/apr/23/tolkien-estate-disavows-forthcoming-film-starring-nicholas-hoult",
@@ -53,3 +89,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+
+// /  facia-tool-store/CODE/frontsapi/edition/dd753c95-b0be-4f0c-98a8-3797374e71b6/edition.json
+//    facia-tool-store/CODE/frontsapi/edition/dd753c95-b0be-4f0c-98a8-3797374e71b6/edition.json
