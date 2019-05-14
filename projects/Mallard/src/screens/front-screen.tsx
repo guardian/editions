@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { MonoTextBlock } from '../components/styled-text'
-import { Grid } from '../components/grid'
+import { Grid } from '../components/lists/grid'
 import { createFluidNavigator } from 'react-navigation-fluid-transitions'
 import { ArticleScreen } from './article-screen'
 import { NavigationScreenProp } from 'react-navigation'
@@ -17,53 +17,54 @@ const styles = StyleSheet.create({
     },
 })
 
-class FrontScreen2 extends React.Component<{
-    navigation: NavigationScreenProp<{}>
-}> {
-    static navigationOptions = () => ({
-        navigation: null,
-    })
-
-    render() {
-        const { navigation } = this.props
-        const issue = navigation.getParam('issue', 'NO-ID')
-        const front = navigation.getParam('front', 'NO-ID')
-        return (
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
-            >
-                <Grid
-                    to="Article"
-                    data={[
-                        {
-                            issue,
-                            front,
-                            article: 'otter',
-                            key: 'otter',
-                            title: 'Otter story',
-                        },
-                        {
-                            issue,
-                            front,
-                            article: 'brexit',
-                            key: 'brexit',
-                            title: 'Brexit story',
-                        },
-                    ]}
-                    {...{ navigation }}
-                />
-                <MonoTextBlock style={{ flex: 1 }}>
-                    This is an FrontScreen for from {front}, issue {issue}
-                </MonoTextBlock>
-            </ScrollView>
+const useFrontsData = (): any => {
+    const [frontsData, updateFrontsData] = useState([])
+    useEffect(() => {
+        fetch('http://localhost:3131').then(res =>
+            res.json().then(res => {
+                updateFrontsData(res)
+            }),
         )
-    }
+    }, [])
+
+    return frontsData
 }
+
+const PreFrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
+    const frontsData = useFrontsData()
+    const { navigation } = props
+    const issue = navigation.getParam('issue', 'NO-ID')
+    const front = navigation.getParam('front', 'NO-ID')
+    return (
+        <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+        >
+            <Grid
+                onPress={item => navigation.navigate('Article', item)}
+                data={frontsData.map(([title]: any[], index: number) => ({
+                    issue,
+                    front,
+                    article: index,
+                    key: index.toString(),
+                    title,
+                    headline: title,
+                }))}
+            />
+            <MonoTextBlock style={{ flex: 1 }}>
+                This is an FrontScreen for from {front}, issue {issue}
+            </MonoTextBlock>
+        </ScrollView>
+    )
+}
+
+PreFrontScreen.navigationOptions = () => ({
+    navigation: null,
+})
 
 const Navigator = createFluidNavigator(
     {
-        Home: FrontScreen2,
+        Home: PreFrontScreen,
         Article: ArticleScreen,
     },
     {

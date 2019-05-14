@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
-import { List } from '../components/list'
+import { List } from '../components/lists/list'
 import { MonoTextBlock } from '../components/styled-text'
 import { NavigationScreenProp } from 'react-navigation'
 

@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
     },
 })
 
-const useArticleData = () => {
-    const [articleData, updateArticleData] = useState(['Dummy headline', [[]]])
+const useArticleData = (articleId, { headline }) => {
+    const [articleData, updateArticleData] = useState([headline, [[]]])
     useEffect(() => {
         fetch('http://localhost:3131').then(res =>
             res.json().then(res => {
-                updateArticleData(res[0])
+                updateArticleData(res[articleId])
             }),
         )
 
@@ -44,17 +44,23 @@ export const ArticleScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const issue = navigation.getParam('issue', 'NO-ID')
-    const front = navigation.getParam('front', 'NO-ID')
-    const article = navigation.getParam('article', 'NO-ID')
-    const [headline, [articleData]] = useArticleData()
+    const article = navigation.getParam('article', -1)
+    const headlineFromUrl = navigation.getParam(
+        'headline',
+        'HEADLINE NOT FOUND',
+    )
+    const [headline, [articleData]] = useArticleData(article, {
+        headline: headlineFromUrl,
+    })
 
     return (
         <ScrollView>
             <View style={styles.container}>
                 <Transition shared={`item-${article}`}>
                     <View style={styles.headline}>
-                        <HeadlineText>{headline}</HeadlineText>
+                        <Transition shared={`item-text-${article}`}>
+                            <HeadlineText>{headline}</HeadlineText>
+                        </Transition>
                     </View>
                 </Transition>
                 {articleData
