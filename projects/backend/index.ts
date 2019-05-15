@@ -13,11 +13,11 @@ const app = express()
 // app.get('/', (req, res) => res.send('Hello World!'))
 
 // app.listen(3000, () => console.log(`Example app listening on port 👌🏻!`))
-console.log(process.env.CAPIKEY)
+console.log(process.env.CAPI_KEY)
 const port = 3131
 const url = (path: string) =>
     `https://content.guardianapis.com/${path}?format=thrift&api-key=${
-        process.env.CAPIKEY
+        process.env.CAPI_KEY
     }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all`
 
 const getArticle = async (path: string) => {
