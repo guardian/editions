@@ -21,7 +21,7 @@ const useSettings = (): StateContext => {
             AsyncStorage.getItem('@setting-' + setting).then(value => {
                 if (state.hasOwnProperty(setting)) {
                     //@ts-ignore
-                    setState({ [setting]: value })
+                    setState(currentState => { ...currentState, [setting]: value })
                 }
             })
         }
