@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "@guardian/pasteup": "^1.0.0-alpha.8",
+        "@react-native-community/async-storage": "^1.4.0",
         "react": "^16.8.6",
         "react-native": "0.59.3",
         "react-native-gesture-handler": "^1.2.1",

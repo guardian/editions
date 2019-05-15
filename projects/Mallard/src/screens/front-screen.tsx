@@ -4,7 +4,7 @@ import { MonoTextBlock } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
 import { createFluidNavigator } from 'react-navigation-fluid-transitions'
 import { ArticleScreen } from './article-screen'
-import { useFetch } from '../hooks/use-fetch'
+import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 
 const styles = StyleSheet.create({
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const useFrontsData = () => useFetch('http://localhost:3131', [], res => res)
+const useFrontsData = () => useEndpoint('', [], res => res)
 
 const PreFrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
     const frontsData = useFrontsData()

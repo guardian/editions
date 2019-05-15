@@ -28,16 +28,20 @@ export class IssueScreen extends React.Component<{
                     onPress={item => navigation.navigate('Front', item)}
                     data={[
                         {
-                            issue,
-                            front: 'news',
                             key: 'news',
                             title: 'News front',
+                            data: {
+                                issue,
+                                front: 'news',
+                            },
                         },
                         {
-                            issue,
-                            front: 'sport',
                             key: 'sport',
                             title: 'Sport front',
+                            data: {
+                                issue,
+                                front: 'sport',
+                            },
                         },
                     ]}
                     {...{ navigation }}

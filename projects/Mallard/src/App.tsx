@@ -2,9 +2,10 @@
 //
 // In this file, we'll be kicking off our app or storybook.
 
-import * as React from 'react'
-import { AppRegistry, StatusBar } from 'react-native'
+import React from 'react'
+import { StatusBar } from 'react-native'
 import { RootNavigator } from './navigation'
+import { SettingsProvider } from './hooks/use-settings'
 
 const navigationPersistenceKey = __DEV__ ? 'NavigationStateDEV' : null
 
@@ -15,10 +16,10 @@ export default class App extends React.Component<{}, {}> {
      */
     render() {
         return (
-            <>
+            <SettingsProvider>
                 <StatusBar barStyle="light-content" backgroundColor="#041f4a" />
                 <RootNavigator persistenceKey={navigationPersistenceKey} />
-            </>
+            </SettingsProvider>
         )
     }
 }

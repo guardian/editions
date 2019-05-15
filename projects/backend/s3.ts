@@ -1,5 +1,17 @@
-import { S3 } from 'aws-sdk'
-const s3 = new S3()
+import AWS, {
+    S3,
+    CredentialProviderChain,
+    SharedIniFileCredentials,
+} from 'aws-sdk'
+
+const s3 = new S3({
+    region: 'eu-west-1',
+    credentialProvider: new CredentialProviderChain([
+        () => new SharedIniFileCredentials({ profile: 'cmsFronts' }),
+        ...AWS.CredentialProviderChain.defaultProviders,
+    ]),
+})
+
 const stage = 'CODE'
 
 export const s3fetch = async (key: string) => {
