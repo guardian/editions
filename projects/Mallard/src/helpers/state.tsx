@@ -17,10 +17,12 @@ const useSettings = (): StateContext => {
         AsyncStorage.setItem('@setting-' + setting, value)
     }
     useEffect(() => {
-        for (let [setting] of Object.entries(state)) {
+        for (let setting of Object.keys(state)) {
             AsyncStorage.getItem('@setting-' + setting).then(value => {
-                //@ts-ignore
-                setState({ [setting]: value })
+                if (state.hasOwnProperty(setting)) {
+                    //@ts-ignore
+                    setState({ [setting]: value })
+                }
             })
         }
     }, [])
@@ -34,4 +36,4 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => (
         {children}
     </StateContext.Provider>
 )
-export const useStateValue = () => useContext(StateContext)
+export const useStateValue = (): StateContext => useContext(StateContext)

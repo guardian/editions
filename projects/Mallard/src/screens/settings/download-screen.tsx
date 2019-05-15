@@ -7,8 +7,7 @@ import {
     Alert,
     SafeAreaView,
 } from 'react-native'
-import { List } from '../components/lists/list'
-import { NavigationScreenProp } from 'react-navigation'
+import { List } from '../../components/lists/list'
 import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'

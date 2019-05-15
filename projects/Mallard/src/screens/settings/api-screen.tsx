@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
 
-import { List } from '../../components/list'
+import { List, ListHeading } from '../../components/lists/list'
 import { MonoTextBlock } from '../../components/styled-text'
 import { container } from '../../theme/styles'
 import { useStateValue } from '../../helpers/state'
@@ -20,6 +19,7 @@ const ApiScreen = () => {
     const [{}, setSetting] = useStateValue()
     return (
         <ScrollView style={styles.container}>
+            <ListHeading>Select a backend</ListHeading>
             <List
                 onPress={({ value }) => {
                     setSetting('apiUrl', value)
@@ -40,6 +40,9 @@ const ApiScreen = () => {
             <ApiState />
         </ScrollView>
     )
+}
+ApiScreen.navigationOptions = {
+    title: 'API Endpoint',
 }
 
 export { ApiScreen, ApiState }
