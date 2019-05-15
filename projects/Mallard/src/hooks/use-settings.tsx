@@ -7,12 +7,12 @@ import {
     defaultSettings,
 } from '../helpers/settings'
 
-type SettingsContext = [
+type SettingsFromContext = [
     Settings,
     (setting: keyof Settings, value: string) => void
 ]
 
-const useStoredSettings = (): SettingsContext => {
+const useStoredSettings = (): SettingsFromContext => {
     const [state, setState] = useState(defaultSettings)
     const setSetting = (setting: keyof Settings, value: string) => {
         setState({ [setting]: value })
@@ -32,18 +32,15 @@ const useStoredSettings = (): SettingsContext => {
     return [state, setSetting]
 }
 
-const SettingsContext = createContext<SettingsContext>([
-    defaultSettings,
-    (..._) => {
-        throw new Error('Context used without context provider')
-    },
-])
+const SettingsContext = createContext<SettingsFromContext>(
+    {} as SettingsFromContext,
+)
 
 const SettingsProvider = ({ children }: { children: React.ReactNode }) => (
     <SettingsContext.Provider value={useStoredSettings()}>
         {children}
     </SettingsContext.Provider>
 )
-const useSettings = (): SettingsContext => useContext(SettingsContext)
+const useSettings = (): SettingsFromContext => useContext(SettingsContext)
 
 export { SettingsProvider, useSettings }
