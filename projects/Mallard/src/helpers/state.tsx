@@ -19,18 +19,21 @@ const useSettings = (): StateContext => {
     useEffect(() => {
         for (let setting of Object.keys(state)) {
             AsyncStorage.getItem('@setting-' + setting).then(value => {
-                if (state.hasOwnProperty(setting)) {
-                    //@ts-ignore
-                    setState({ [setting]: value })
-                }
+                //@ts-ignore
+                setState({ [setting]: value })
             })
         }
     }, [])
     return [state, setSetting]
 }
 
-//@ts-ignore
-export const StateContext = createContext<StateContext>(null)
+export const StateContext = createContext<StateContext>([
+    defaultSettings,
+    (..._) => {
+        throw new Error('Context used without context provider')
+    },
+])
+
 export const StateProvider = ({ children }: { children: React.ReactNode }) => (
     <StateContext.Provider value={useSettings()}>
         {children}
