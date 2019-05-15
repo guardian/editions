@@ -12,12 +12,8 @@ interface ArticleFragment {
     publishedBy?: string
 }
 
-interface Collection {
-    name: string
-    live: ArticleFragment[]
-}
 
-interface CollectionMeta {
+interface Collection {
     displayName: string
     type: string
     backfill?: unknown
@@ -36,10 +32,12 @@ interface CollectionMeta {
     hideShowMore?: boolean
     platform?: unknown
     frontsToolSettings?: unknown
+    live: ArticleFragment[]
+
 }
 
 interface Front {
-    collections: { [key: string]: CollectionMeta }
+    collections: { [key: string]: Collection }
     canonical?: string
     group?: string
     isHidden?: boolean

@@ -20,9 +20,25 @@ export const getCollectionsForFront = async (id: string): Promise<Front> => {
 
     const selected = collections.filter(c => collectionIds.includes(c[0]))
 
+    const articles = await Promise.all(selected.map(async ([id, _])=>{
+        const collection = await getCollection(id)
+        return {
+            id: id,
+            articles: collection.contents        }
+    }))
+
+    const withArticles = selected.map(collection =>{
+       const [id, data] = collection
+       const as = articles.filtergwergheru9ghue9rguegheugdegui
+       const r = {...data, arti}
+    })
+
+
     const cs: { [key: string]: CollectionConfigResponse } = fromEntries(
-        selected,
+        withArticles,
     ) //This is a polyfill of Object.Entries which is a bit tooo new.
+
+
 
     return { ...front, collections: cs }
 }
