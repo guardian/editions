@@ -1,27 +1,27 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import AsyncStorage from '@react-native-community/async-storage'
 
-interface Settings {
-    apiUrl: string
-}
+import {
+    getSetting,
+    storeSetting,
+    Settings,
+    defaultSettings,
+} from '../helpers/settings'
+
 type SettingsContext = [
     Settings,
     (setting: keyof Settings, value: string) => void
 ]
 
-const defaultSettings: Settings = {
-    apiUrl: 'https://editions-api.gutools.co.uk',
-}
-
 const useStoredSettings = (): SettingsContext => {
     const [state, setState] = useState(defaultSettings)
     const setSetting = (setting: keyof Settings, value: string) => {
         setState({ [setting]: value })
-        AsyncStorage.setItem('@setting-' + setting, value)
+        storeSetting(setting, value)
     }
     useEffect(() => {
         for (let setting of Object.keys(state)) {
-            AsyncStorage.getItem('@setting-' + setting).then(value => {
+            //@ts-ignore
+            getSetting(setting).then(value => {
                 //@ts-ignore
                 setState(currentState => ({
                     ...currentState,
@@ -40,13 +40,11 @@ const SettingsContext = createContext<SettingsContext>([
     },
 ])
 
-export const SettingsProvider = ({
-    children,
-}: {
-    children: React.ReactNode
-}) => (
+const SettingsProvider = ({ children }: { children: React.ReactNode }) => (
     <SettingsContext.Provider value={useStoredSettings()}>
         {children}
     </SettingsContext.Provider>
 )
-export const useSettings = (): SettingsContext => useContext(SettingsContext)
+const useSettings = (): SettingsContext => useContext(SettingsContext)
+
+export { SettingsProvider, useSettings }
