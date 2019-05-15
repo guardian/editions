@@ -20,7 +20,10 @@ const useSettings = (): StateContext => {
         for (let setting of Object.keys(state)) {
             AsyncStorage.getItem('@setting-' + setting).then(value => {
                 //@ts-ignore
-                setState({ [setting]: value })
+                setState(currentState => ({
+                    ...currentState,
+                    [setting]: value,
+                }))
             })
         }
     }, [])
