@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
-import { useFetch } from '../hooks/use-fetch'
+import { useEndpoint } from '../hooks/use-fetch'
 import { Transition } from 'react-navigation-fluid-transitions'
 import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../theme/color'
@@ -26,11 +26,7 @@ const styles = StyleSheet.create({
 })
 
 const useArticleData = (articleId, { headline }) => {
-    return useFetch(
-        'http://localhost:3131',
-        [headline, [[]]],
-        res => res[articleId],
-    )
+    return useEndpoint('', [headline, [[]]], res => res[articleId])
 }
 
 export const ArticleScreen = ({

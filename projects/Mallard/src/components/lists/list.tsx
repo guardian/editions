@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import {
     Platform,
     FlatList,
@@ -11,7 +11,21 @@ import {
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { PropTypes } from './helpers'
+import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 
+export const ListHeading = ({ children }: { children: string }) => (
+    <View
+        style={{
+            padding: metrics.horizontal,
+            paddingTop: metrics.vertical * 2,
+            paddingBottom: metrics.vertical / 2,
+        }}
+    >
+        <SafeAreaView>
+            <UiBodyCopy style={{ fontWeight: '700' }}>{children}</UiBodyCopy>
+        </SafeAreaView>
+    </View>
+)
 export class List extends React.Component<PropTypes> {
     render() {
         const { data, onPress } = this.props
@@ -26,8 +40,8 @@ export class List extends React.Component<PropTypes> {
                     borderColor: '#ddd',
                 }}
                 data={data}
-                renderItem={({ item: { title, ...item } }: any) => (
-                    <Highlight onPress={() => onPress(item)}>
+                renderItem={({ item: { title, explainer, data } }: any) => (
+                    <Highlight onPress={() => onPress(data)}>
                         <View
                             style={{
                                 padding: metrics.horizontal,
@@ -38,7 +52,12 @@ export class List extends React.Component<PropTypes> {
                             }}
                         >
                             <SafeAreaView>
-                                <Text>{title || 'no title'}</Text>
+                                <UiBodyCopy>{title}</UiBodyCopy>
+                                {explainer && (
+                                    <UiExplainerCopy>
+                                        {explainer}
+                                    </UiExplainerCopy>
+                                )}
                             </SafeAreaView>
                         </View>
                     </Highlight>
