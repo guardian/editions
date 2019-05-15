@@ -25,7 +25,7 @@ const ApiScreen = ({
 
     const backends = [
         { title: 'Live backend', value: 'https://editions-api.gutools.co.uk' },
-        { title: 'Localhost', value: 'https://localhost:9001' },
+        { title: 'Localhost', value: 'https://localhost:3131' },
     ]
     return (
         <ScrollView style={styles.container}>
