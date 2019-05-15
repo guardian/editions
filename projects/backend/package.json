@@ -1,25 +1,27 @@
 {
-  "name": "editions-backend",
-  "version": "0.0.1",
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/express": "^4.16.1",
-    "dotenv": "^8.0.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.4.5"
-  },
-  "scripts": {
-    "start": "ts-node index.ts"
-  },
-  "dependencies": {
-    "@creditkarma/thrift-server-core": "^0.13.6",
-    "@guardian/capi-ts": "^0.1.0",
-    "@types/node-fetch": "^2.3.3",
-    "aws-sdk": "^2.452.0",
-    "express": "^4.16.4",
-    "node-fetch": "^2.5.0",
-    "object.fromentries": "^2.0.0",
-    "utility-types": "^3.7.0"
-  }
+    "name": "editions-backend",
+    "version": "0.0.1",
+    "main": "index.js",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/express": "^4.16.1",
+        "dotenv": "^8.0.0",
+        "ts-node": "^8.1.0",
+        "typescript": "^3.4.5"
+    },
+    "scripts": {
+        "start": "ts-node index.ts",
+        "validate": "cd ../.. && yarn validate-backend",
+        "fix": "cd ../.. && yarn fix-backend"
+    },
+    "dependencies": {
+        "@creditkarma/thrift-server-core": "^0.13.6",
+        "@guardian/capi-ts": "^0.1.0",
+        "@types/node-fetch": "^2.3.3",
+        "aws-sdk": "^2.452.0",
+        "express": "^4.16.4",
+        "node-fetch": "^2.5.0",
+        "object.fromentries": "^2.0.0",
+        "utility-types": "^3.7.0"
+    }
 }

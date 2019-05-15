@@ -8,13 +8,11 @@ import {
     View,
     Text,
 } from 'react-native'
-import { color } from '../theme/color'
-import { metrics } from '../theme/spacing'
+import { color } from '../../theme/color'
+import { metrics } from '../../theme/spacing'
+import { PropTypes } from './helpers'
 
-export class List extends React.Component<{
-    data: any[]
-    onPress: ({ key: any }) => void
-}> {
+export class List extends React.Component<PropTypes> {
     render() {
         const { data, onPress } = this.props
         const Highlight =
