@@ -22,7 +22,6 @@ const useStoredSettings = (): SettingsContext => {
         for (let setting of Object.keys(state)) {
             //@ts-ignore
             getSetting(setting).then(value => {
-                //@ts-ignore
                 setState(currentState => ({
                     ...currentState,
                     [setting]: value,
