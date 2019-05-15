@@ -2,17 +2,12 @@ import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 
-export interface Issue {
-    name: string
-    fronts: string[]
-}
-
 export const getIssue = async (issue: string): Promise<Issue> => {
     const x = await s3fetch(`frontsapi/edition/${issue}/edition.json`)
     return x.json() as Promise<Issue>
 }
 
-export const getCollectionsForFront = async (id: string) => {
+export const getCollectionsForFront = async (id: string): Promise<Front> => {
     const resp = await s3fetch('frontsapi/config/config.json')
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
 

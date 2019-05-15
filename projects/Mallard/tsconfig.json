@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "paths": { "*": ["types/*"] },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
