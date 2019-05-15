@@ -20,7 +20,6 @@ const ApiScreen = () => {
     const [{}, setSetting] = useStateValue()
     return (
         <ScrollView style={styles.container}>
-            <ApiState />
             <List
                 onPress={({ value }) => {
                     setSetting('apiUrl', value)
@@ -38,6 +37,7 @@ const ApiScreen = () => {
                     },
                 ]}
             />
+            <ApiState />
         </ScrollView>
     )
 }

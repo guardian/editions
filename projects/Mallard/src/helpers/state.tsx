@@ -1,20 +1,11 @@
-import React, {
-    createContext,
-    useContext,
-    useState,
-    Context,
-    useEffect,
-} from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-community/async-storage'
 
-const DEFAULT_URL = 'https://editions-api.gutools.co.uk'
-
-type Settings = {
+interface Settings {
     apiUrl: string
 }
-
 const defaultSettings: Settings = {
-    apiUrl: DEFAULT_URL,
+    apiUrl: 'https://editions-api.gutools.co.uk',
 }
 
 type StateContext = [Settings, (setting: keyof Settings, value: string) => void]
@@ -26,7 +17,7 @@ const useSettings = (): StateContext => {
         AsyncStorage.setItem('@setting-' + setting, value)
     }
     useEffect(() => {
-        for (let setting of Object.keys(state)) {
+        for (let [setting] of Object.entries(state)) {
             AsyncStorage.getItem('@setting-' + setting).then(value => {
                 //@ts-ignore
                 setState({ [setting]: value })
