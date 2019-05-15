@@ -1,16 +1,12 @@
 import React from 'react'
 import { FlatList, TouchableOpacity, View, Text } from 'react-native'
 import { Transition } from 'react-navigation-fluid-transitions'
-import { NavigationScreenProp } from 'react-navigation'
-import { color } from '../theme/color'
+import { color } from '../../theme/color'
+import { PropTypes } from './helpers'
 
-export class Grid extends React.Component<{
-    data: any[]
-    navigation: NavigationScreenProp<{}>
-    to: string
-}> {
+export class Grid extends React.Component<PropTypes> {
     render() {
-        const { data, navigation, to } = this.props
+        const { data, onPress } = this.props
         return (
             <FlatList
                 numColumns={2}
@@ -18,12 +14,12 @@ export class Grid extends React.Component<{
                     margin: 8,
                 }}
                 data={data}
-                renderItem={({ item: { title, ...item } }) => (
+                renderItem={({ item }) => (
                     <TouchableOpacity
                         style={{
                             flex: 1,
                         }}
-                        onPress={() => navigation.navigate(to, item)}
+                        onPress={() => onPress(item)}
                     >
                         <View style={{ backgroundColor: '#fff' }}>
                             <Transition shared={`item-${item.key}`}>
@@ -37,7 +33,11 @@ export class Grid extends React.Component<{
                                         padding: 16,
                                     }}
                                 >
-                                    <Text>{title || 'no title'}</Text>
+                                    <Transition
+                                        shared={`item-text-${item.key}`}
+                                    >
+                                        <Text>{item.title}</Text>
+                                    </Transition>
                                 </View>
                             </Transition>
                         </View>
