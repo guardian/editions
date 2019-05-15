@@ -132,9 +132,9 @@ HomeScreen.navigationOptions = ({
     headerRight: (
         <Button
             onPress={() => {
-                navigation.navigate('Downloads')
+                navigation.navigate('Settings')
             }}
-            title="Downloads"
+            title="Settings"
         />
     ),
 })
