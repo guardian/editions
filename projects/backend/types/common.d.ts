@@ -1,3 +1,6 @@
+// This file is symlinked into both backend and Mallard.
+// Be careful.
+
 interface Issue {
     name: string
     fronts: string[]
