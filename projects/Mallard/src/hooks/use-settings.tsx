@@ -4,13 +4,16 @@ import AsyncStorage from '@react-native-community/async-storage'
 interface Settings {
     apiUrl: string
 }
+type SettingsContext = [
+    Settings,
+    (setting: keyof Settings, value: string) => void
+]
+
 const defaultSettings: Settings = {
     apiUrl: 'https://editions-api.gutools.co.uk',
 }
 
-type StateContext = [Settings, (setting: keyof Settings, value: string) => void]
-
-const useSettings = (): StateContext => {
+const useStoredSettings = (): SettingsContext => {
     const [state, setState] = useState(defaultSettings)
     const setSetting = (setting: keyof Settings, value: string) => {
         setState({ [setting]: value })
@@ -30,16 +33,20 @@ const useSettings = (): StateContext => {
     return [state, setSetting]
 }
 
-export const StateContext = createContext<StateContext>([
+const SettingsContext = createContext<SettingsContext>([
     defaultSettings,
     (..._) => {
         throw new Error('Context used without context provider')
     },
 ])
 
-export const StateProvider = ({ children }: { children: React.ReactNode }) => (
-    <StateContext.Provider value={useSettings()}>
+export const SettingsProvider = ({
+    children,
+}: {
+    children: React.ReactNode
+}) => (
+    <SettingsContext.Provider value={useStoredSettings()}>
         {children}
-    </StateContext.Provider>
+    </SettingsContext.Provider>
 )
-export const useStateValue = (): StateContext => useContext(StateContext)
+export const useSettings = (): SettingsContext => useContext(SettingsContext)

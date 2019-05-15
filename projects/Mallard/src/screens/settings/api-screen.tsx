@@ -4,19 +4,19 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { List, ListHeading } from '../../components/lists/list'
 import { MonoTextBlock } from '../../components/styled-text'
 import { container } from '../../theme/styles'
-import { useStateValue } from '../../helpers/state'
+import { useSettings } from '../../hooks/use-settings'
 
 const styles = StyleSheet.create({
     container,
 })
 
 const ApiState = () => {
-    const [{ apiUrl }] = useStateValue()
+    const [{ apiUrl }] = useSettings()
     return <MonoTextBlock>API backend pointing to {apiUrl}</MonoTextBlock>
 }
 
 const ApiScreen = () => {
-    const [{}, setSetting] = useStateValue()
+    const [{}, setSetting] = useSettings()
     return (
         <ScrollView style={styles.container}>
             <ListHeading>Select a backend</ListHeading>
