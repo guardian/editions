@@ -7,7 +7,6 @@ import {
     CompactProtocol,
 } from '@creditkarma/thrift-server-core'
 import { ItemResponseCodec } from '@guardian/capi-ts'
-import { s3fetch } from './s3'
 import { getIssue, getCollectionsForFront, getCollection } from './fronts'
 const app = express()
 // app.get('/', (req, res) => res.send('Hello World!'))

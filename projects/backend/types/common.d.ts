@@ -12,7 +12,6 @@ interface ArticleFragment {
     publishedBy?: string
 }
 
-
 interface Collection {
     displayName: string
     type: string
@@ -32,8 +31,7 @@ interface Collection {
     hideShowMore?: boolean
     platform?: unknown
     frontsToolSettings?: unknown
-    live: ArticleFragment[]
-
+    articles?: ArticleFragment[]
 }
 
 interface Front {

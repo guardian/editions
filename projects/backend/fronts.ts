@@ -7,6 +7,17 @@ export const getIssue = async (issue: string): Promise<Issue> => {
     return x.json() as Promise<Issue>
 }
 
+export const getCollection = async (
+    id: string,
+): Promise<{ id: string; articles: NestedArticleFragment[] }> => {
+    const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
+    const collection: CollectionFromResponse = await resp.json()
+    return {
+        id: collection.displayName,
+        articles: collection.live,
+    }
+}
+
 export const getCollectionsForFront = async (id: string): Promise<Front> => {
     const resp = await s3fetch('frontsapi/config/config.json')
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
@@ -20,36 +31,20 @@ export const getCollectionsForFront = async (id: string): Promise<Front> => {
 
     const selected = collections.filter(c => collectionIds.includes(c[0]))
 
-    const articles = await Promise.all(selected.map(async ([id, _])=>{
-        const collection = await getCollection(id)
-        return {
-            id: id,
-            articles: collection.contents        }
-    }))
+    const articles = await Promise.all(collectionIds.map(getCollection))
 
-    const withArticles = selected.map(collection =>{
-       const [id, data] = collection
-       const as = articles.filtergwergheru9ghue9rguegheugdegui
-       const r = {...data, arti}
-    })
+    const articleMap = new Map(
+        articles.map(({ id, articles }) => [id, articles]),
+    )
 
+    const combined: [string, Collection][] = selected.map(([id, data]) => [
+        id,
+        { ...data, articles: articleMap.get(id) },
+    ])
 
-    const cs: { [key: string]: CollectionConfigResponse } = fromEntries(
-        withArticles,
-    ) //This is a polyfill of Object.Entries which is a bit tooo new.
-
-
+    const cs: { [key: string]: Collection } = fromEntries(combined) //This is a polyfill of Object.Entries which is a bit tooo new.
 
     return { ...front, collections: cs }
-}
-
-export const getCollection = async (id: string) => {
-    const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
-    const collection: CollectionFromResponse = await resp.json()
-    return {
-        name: collection.displayName,
-        contents: collection.live,
-    }
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107
