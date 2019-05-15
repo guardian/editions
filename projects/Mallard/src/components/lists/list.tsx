@@ -11,18 +11,18 @@ import {
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { PropTypes } from './helpers'
+import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 
-export const ListHeading = ({ children }: { children: ReactNode }) => (
+export const ListHeading = ({ children }: { children: string }) => (
     <View
         style={{
             padding: metrics.horizontal,
             paddingTop: metrics.vertical * 2,
             paddingBottom: metrics.vertical / 2,
-            backgroundColor: color.background,
         }}
     >
         <SafeAreaView>
-            <Text style={{ fontSize: 17, fontWeight: '900' }}>{children}</Text>
+            <UiBodyCopy style={{ fontWeight: '700' }}>{children}</UiBodyCopy>
         </SafeAreaView>
     </View>
 )
@@ -40,8 +40,8 @@ export class List extends React.Component<PropTypes> {
                     borderColor: '#ddd',
                 }}
                 data={data}
-                renderItem={({ item: { title, ...item } }: any) => (
-                    <Highlight onPress={() => onPress(item)}>
+                renderItem={({ item: { title, explainer, data } }: any) => (
+                    <Highlight onPress={() => onPress(data)}>
                         <View
                             style={{
                                 padding: metrics.horizontal,
@@ -52,9 +52,12 @@ export class List extends React.Component<PropTypes> {
                             }}
                         >
                             <SafeAreaView>
-                                <Text style={{ fontSize: 17 }}>
-                                    {title || 'no title'}
-                                </Text>
+                                <UiBodyCopy>{title}</UiBodyCopy>
+                                {explainer && (
+                                    <UiExplainerCopy>
+                                        {explainer}
+                                    </UiExplainerCopy>
+                                )}
                             </SafeAreaView>
                         </View>
                     </Highlight>

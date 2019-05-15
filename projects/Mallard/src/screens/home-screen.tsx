@@ -38,13 +38,17 @@ export const HomeScreen = ({
                     data={[
                         {
                             key: 'sunday-30',
-                            issue: 'sunday-30',
                             title: 'Sunday 30',
+                            data: {
+                                issue: 'sunday-30',
+                            },
                         },
                         {
                             key: 'monday-1',
-                            issue: 'monday-1',
                             title: 'Monday 1',
+                            data: {
+                                issue: 'monday-1',
+                            },
                         },
                     ]}
                     onPress={item => navigation.navigate('Issue', item)}

@@ -2,7 +2,7 @@ import { color } from './color'
 
 const container = {
     flex: 1,
-    backgroundColor: color.background,
+    backgroundColor: color.dimBackground,
 }
 
 export { container }
