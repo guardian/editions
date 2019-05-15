@@ -10,11 +10,6 @@ module.exports = {
     rules: {
         'prettier/prettier': 'error',
         '@typescript-eslint/explicit-member-accessibility': 'off',
-    },
-    parserOptions: {
-        project: './projects/Mallard/tsconfig.json',
-        ecmaFeatures: {
-            jsx: true,
-        },
+        '@typescript-eslint/explicit-function-return-type': 'off',
     },
 }

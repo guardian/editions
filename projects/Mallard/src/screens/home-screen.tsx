@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, ScrollView, Button, StyleSheet, Text, View } from 'react-native'
 import { MonoText } from '../components/styled-text'
-import { List } from '../components/list'
+import { List } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 
 const styles = StyleSheet.create({
@@ -100,7 +100,6 @@ export const HomeScreen = ({
                         },
                     ]}
                     onPress={item => navigation.navigate('Issue', item)}
-                    {...{ navigation }}
                 />
                 <View style={styles.getStartedContainer}>
                     <Text style={styles.getStartedText}>

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
+import { useFetch } from '../hooks/use-fetch'
 import { Transition } from 'react-navigation-fluid-transitions'
 import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../theme/color'
@@ -24,19 +25,12 @@ const styles = StyleSheet.create({
     },
 })
 
-const useArticleData = () => {
-    const [articleData, updateArticleData] = useState(['Dummy headline', [[]]])
-    useEffect(() => {
-        fetch('http://localhost:3131').then(res =>
-            res.json().then(res => {
-                updateArticleData(res[0])
-            }),
-        )
-
-        return () => {}
-    }, [])
-
-    return articleData
+const useArticleData = (articleId, { headline }) => {
+    return useFetch(
+        'http://localhost:3131',
+        [headline, [[]]],
+        res => res[articleId],
+    )
 }
 
 export const ArticleScreen = ({
@@ -44,17 +38,23 @@ export const ArticleScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const issue = navigation.getParam('issue', 'NO-ID')
-    const front = navigation.getParam('front', 'NO-ID')
-    const article = navigation.getParam('article', 'NO-ID')
-    const [headline, [articleData]] = useArticleData()
+    const article = navigation.getParam('article', -1)
+    const headlineFromUrl = navigation.getParam(
+        'headline',
+        'HEADLINE NOT FOUND',
+    )
+    const [headline, [articleData]] = useArticleData(article, {
+        headline: headlineFromUrl,
+    })
 
     return (
         <ScrollView>
             <View style={styles.container}>
                 <Transition shared={`item-${article}`}>
                     <View style={styles.headline}>
-                        <HeadlineText>{headline}</HeadlineText>
+                        <Transition shared={`item-text-${article}`}>
+                            <HeadlineText>{headline}</HeadlineText>
+                        </Transition>
                     </View>
                 </Transition>
                 {articleData
