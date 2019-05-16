@@ -1,25 +1,36 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
+import { Issue, CollectionArticles, Front, Collection } from './common'
 
-export const getIssue = async (issue: string): Promise<Issue> => {
+export const getIssue = async (issue: string): Promise<Issue | 'notfound'> => {
     const x = await s3fetch(`frontsapi/edition/${issue}/edition.json`)
+    if (x.status === 404) return 'notfound'
+    if (!x.ok) throw new Error('failed s3')
     return x.json() as Promise<Issue>
 }
 
 export const getCollection = async (
     id: string,
-): Promise<{ id: string; articles: NestedArticleFragment[] }> => {
-    const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
-    const collection: CollectionFromResponse = await resp.json()
-    return {
-        id: collection.displayName,
-        articles: collection.live,
+): Promise<CollectionArticles | 'notfound'> => {
+    try {
+        const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
+        if (resp.status === 404) return 'notfound'
+        if (!resp.ok) throw new Error('failed s3')
+        const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
+        return {
+            id: collection.displayName,
+            articles: collection.live,
+        }
+    } catch {
+        return { id, articles: [] }
     }
 }
 
 export const getCollectionsForFront = async (id: string): Promise<Front> => {
     const resp = await s3fetch('frontsapi/config/config.json')
+    if (!resp.ok) throw new Error('failed s3')
+
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
 
     if (!(id in config.fronts)) throw new Error('Front not found')
@@ -34,7 +45,12 @@ export const getCollectionsForFront = async (id: string): Promise<Front> => {
     const articles = await Promise.all(collectionIds.map(getCollection))
 
     const articleMap = new Map(
-        articles.map(({ id, articles }) => [id, articles]),
+        articles
+            .filter(
+                (maybeArticle): maybeArticle is CollectionArticles =>
+                    maybeArticle !== 'notfound',
+            )
+            .map(({ id, articles }) => [id, articles]),
     )
 
     const combined: [string, Collection][] = selected.map(([id, data]) => [

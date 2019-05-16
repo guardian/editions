@@ -12,7 +12,6 @@ const app = express()
 // app.get('/', (req, res) => res.send('Hello World!'))
 
 // app.listen(3000, () => console.log(`Example app listening on port 👌🏻!`))
-console.log(process.env.CAPI_KEY)
 const port = 3131
 const url = (path: string) =>
     `https://content.guardianapis.com/${path}?format=thrift&api-key=${
@@ -46,8 +45,8 @@ app.get('/edition/:editionId', (req, res) => {
     })
 })
 
-app.get('/front/:frontId', (req, res) => {
-    const id: string = req.params.frontId
+app.get('/front/*?', (req, res) => {
+    const id: string = req.params[0]
     getCollectionsForFront(id).then(data => {
         res.setHeader('Content-Type', 'application/json')
         res.send(JSON.stringify(data))
