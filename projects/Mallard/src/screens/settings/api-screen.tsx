@@ -28,8 +28,7 @@ const ApiScreen = ({
         { title: 'Localhost', value: 'https://localhost:3131' },
         {
             title: 'Lauras funhouse',
-            value:
-                'https://s3.amazonaws.com/lauras-funhouse/download.json#yaddayadda#',
+            value: 'https://s3.amazonaws.com/lauras-funhouse/download.json?q=',
         },
     ]
     return (

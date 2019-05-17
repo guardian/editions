@@ -13,10 +13,8 @@ const getSetting = (setting: keyof Settings) =>
         if (item) return item
         else return defaultSettings[setting]
     })
-const storeSetting = async (setting: keyof Settings, value: string) => {
-    const r = await AsyncStorage.setItem('@Setting_' + setting, value)
-    alert('set' + (await getSetting(setting)))
-    return r
+const storeSetting = (setting: keyof Settings, value: string) => {
+    return AsyncStorage.setItem('@Setting_' + setting, value)
 }
 
 export { getSetting, storeSetting }
