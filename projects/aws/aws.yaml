@@ -1,0 +1,330 @@
+Parameters:
+  stack:
+    Type: String
+    Description: Stack
+  app:
+    Type: String
+    Description: App
+  stage:
+    Type: String
+    Description: Stage
+Resources:
+  editionsdist39AF67A6:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: EditionsStack/editions-dist/Resource
+  EditionsBackendServiceRole74FAA4BE:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                Fn::Join:
+                  - ""
+                  - - lambda.
+                    - Ref: AWS::URLSuffix
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/ServiceRole/Resource
+  EditionsBackendServiceRoleDefaultPolicy6C36170A:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - editionsdist39AF67A6
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - editionsdist39AF67A6
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+      PolicyName: EditionsBackendServiceRoleDefaultPolicy6C36170A
+      Roles:
+        - Ref: EditionsBackendServiceRole74FAA4BE
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/ServiceRole/DefaultPolicy/Resource
+  EditionsBackend45ED90CB:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: editionsdist39AF67A6
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Ref: stack
+              - /
+              - Ref: stage
+              - /
+              - Ref: app
+              - /
+              - Ref: app
+              - .zip
+      Handler: handler
+      Role:
+        Fn::GetAtt:
+          - EditionsBackendServiceRole74FAA4BE
+          - Arn
+      Runtime: nodejs8.10
+    DependsOn:
+      - EditionsBackendServiceRoleDefaultPolicy6C36170A
+      - EditionsBackendServiceRole74FAA4BE
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/Resource
+  EditionsBackendApiPermissionANYEEF30B78:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - EditionsBackend45ED90CB
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: endpointE7B9679B
+            - /
+            - Ref: endpointDeploymentStageprod2CD5F9C4
+            - /*/
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/ApiPermission.ANY..
+  EditionsBackendApiPermissionTestANYA1C5E44B:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - EditionsBackend45ED90CB
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: endpointE7B9679B
+            - /test-invoke-stage/*/
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/ApiPermission.Test.ANY..
+  EditionsBackendApiPermissionANYproxy11655BDE:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - EditionsBackend45ED90CB
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: endpointE7B9679B
+            - /
+            - Ref: endpointDeploymentStageprod2CD5F9C4
+            - /*/{proxy+}
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/ApiPermission.ANY..{proxy+}
+  EditionsBackendApiPermissionTestANYproxy999E3E76:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - EditionsBackend45ED90CB
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: endpointE7B9679B
+            - /test-invoke-stage/*/{proxy+}
+    Metadata:
+      aws:cdk:path: EditionsStack/EditionsBackend/ApiPermission.Test.ANY..{proxy+}
+  endpointE7B9679B:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: endpoint
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/Resource
+  endpointDeployment457D977D4290e29d203f426320d78440a794fa15:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: endpointE7B9679B
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - endpointproxyANY6E13FB92
+      - endpointproxy3148D98A
+      - endpointANY514C2A81
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/Deployment/Resource
+  endpointDeploymentStageprod2CD5F9C4:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: endpointE7B9679B
+      DeploymentId:
+        Ref: endpointDeployment457D977D4290e29d203f426320d78440a794fa15
+      StageName: prod
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/DeploymentStage.prod/Resource
+  endpointCloudWatchRole52213BC3:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                Fn::Join:
+                  - ""
+                  - - apigateway.
+                    - Ref: AWS::URLSuffix
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/CloudWatchRole/Resource
+  endpointAccount6DA1D142:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - endpointCloudWatchRole52213BC3
+          - Arn
+    DependsOn:
+      - endpointE7B9679B
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/Account
+  endpointproxy3148D98A:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - endpointE7B9679B
+          - RootResourceId
+      PathPart: "{proxy+}"
+      RestApiId:
+        Ref: endpointE7B9679B
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/Default/{proxy+}/Resource
+  endpointproxyANY6E13FB92:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: ANY
+      ResourceId:
+        Ref: endpointproxy3148D98A
+      RestApiId:
+        Ref: endpointE7B9679B
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - EditionsBackend45ED90CB
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/Default/{proxy+}/ANY/Resource
+  endpointANY514C2A81:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: ANY
+      ResourceId:
+        Fn::GetAtt:
+          - endpointE7B9679B
+          - RootResourceId
+      RestApiId:
+        Ref: endpointE7B9679B
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - EditionsBackend45ED90CB
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: EditionsStack/endpoint/Default/ANY/Resource
+Outputs:
+  endpointEndpoint5E1E9134:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: endpointE7B9679B
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: endpointDeploymentStageprod2CD5F9C4
+          - /
+
