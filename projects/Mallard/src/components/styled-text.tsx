@@ -9,6 +9,7 @@ export class HeadlineText extends React.Component<{ style?: any }> {
             <Text
                 {...this.props}
                 style={{
+                    fontFamily: 'GHGuardianHeadline-Bold',
                     fontSize: 24,
                 }}
             />

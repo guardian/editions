@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Button } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
 import { useEndpoint } from '../hooks/use-fetch'
 import { Transition } from 'react-navigation-fluid-transitions'
@@ -48,6 +48,12 @@ export const ArticleScreen = ({
             <View style={styles.container}>
                 <Transition shared={`item-${article}`}>
                     <View style={styles.headline}>
+                        <Button
+                            onPress={() => {
+                                navigation.goBack()
+                            }}
+                            title={'Backsies'}
+                        />
                         <Transition shared={`item-text-${article}`}>
                             <HeadlineText>{headline}</HeadlineText>
                         </Transition>
