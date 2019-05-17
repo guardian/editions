@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { color } from '../theme/color'
 import { metrics } from '../theme/spacing'
+import { palette } from '../theme/palette'
 
 export class HeadlineText extends React.Component<{ style?: any }> {
     render() {
@@ -11,6 +12,7 @@ export class HeadlineText extends React.Component<{ style?: any }> {
                 style={{
                     fontFamily: 'GHGuardianHeadline-Bold',
                     fontSize: 24,
+                    color: color.text,
                 }}
             />
         )
