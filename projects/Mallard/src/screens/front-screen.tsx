@@ -1,11 +1,10 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, View, StyleSheet } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
-import { createFluidNavigator } from 'react-navigation-fluid-transitions'
-import { ArticleScreen } from './article-screen'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
+import { metrics } from '../theme/spacing'
 
 const styles = StyleSheet.create({
     container: {
@@ -30,7 +29,15 @@ const FrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
-            <HeadlineText>News</HeadlineText>
+            <View
+                style={{
+                    padding: metrics.horizontal,
+                    paddingBottom: 0,
+                    paddingTop: metrics.vertical * 2,
+                }}
+            >
+                <HeadlineText>News</HeadlineText>
+            </View>
             <Grid
                 onPress={item => navigation.navigate('Article', item)}
                 data={frontsData.map(([title]: any[], index: number) => ({

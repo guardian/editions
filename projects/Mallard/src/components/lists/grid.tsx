@@ -3,6 +3,7 @@ import { FlatList, TouchableOpacity, View, Text } from 'react-native'
 import { Transition } from 'react-navigation-fluid-transitions'
 import { color } from '../../theme/color'
 import { PropTypes } from './helpers'
+import { metrics } from '../../theme/spacing'
 
 export class Grid extends React.Component<PropTypes> {
     render() {
@@ -11,7 +12,7 @@ export class Grid extends React.Component<PropTypes> {
             <FlatList
                 numColumns={2}
                 style={{
-                    margin: 8,
+                    margin: metrics.horizontal - metrics.horizontal / 4,
                 }}
                 data={data}
                 renderItem={({ item }) => (
@@ -29,7 +30,7 @@ export class Grid extends React.Component<PropTypes> {
                                         height: 100,
                                         backgroundColor:
                                             color.palette.highlight.main,
-                                        margin: 8,
+                                        margin: metrics.horizontal / 4,
                                         padding: 16,
                                     }}
                                 >
