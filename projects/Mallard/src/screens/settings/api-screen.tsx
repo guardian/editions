@@ -26,6 +26,11 @@ const ApiScreen = ({
     const backends = [
         { title: 'Live backend', value: 'https://editions-api.gutools.co.uk' },
         { title: 'Localhost', value: 'https://localhost:3131' },
+        {
+            title: 'Lauras funhouse',
+            value:
+                'https://s3.amazonaws.com/lauras-funhouse/download.json#yaddayadda#',
+        },
     ]
     return (
         <ScrollView style={styles.container}>
