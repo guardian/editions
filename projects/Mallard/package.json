@@ -12,6 +12,11 @@
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard"
     },
+    "rnpm": {
+        "assets": [
+            "./src/assets/fonts"
+        ]
+    },
     "dependencies": {
         "@guardian/pasteup": "^1.0.0-alpha.8",
         "@react-native-community/async-storage": "^1.4.0",

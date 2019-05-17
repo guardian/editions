@@ -26,11 +26,15 @@ export const useEndpoint = <Fetchable>(
     const [data, updateData] = useState(initialState)
     useEffect(() => {
         getSetting('apiUrl').then(apiUrl =>
-            fetch(apiUrl + '/' + path).then(res =>
-                res.json().then(res => {
-                    updateData(transform(res))
+            fetch(apiUrl + '/' + path)
+                .then(async res => {
+                    return res.json().then(res => {
+                        updateData(transform(res))
+                    })
+                })
+                .catch(err => {
+                    alert(JSON.stringify(err))
                 }),
-            ),
         )
     }, [])
 

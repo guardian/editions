@@ -1,11 +1,10 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
-import { MonoTextBlock } from '../components/styled-text'
+import { ScrollView, View, StyleSheet } from 'react-native'
+import { MonoTextBlock, HeadlineText } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
-import { createFluidNavigator } from 'react-navigation-fluid-transitions'
-import { ArticleScreen } from './article-screen'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
+import { metrics } from '../theme/spacing'
 
 const styles = StyleSheet.create({
     container: {
@@ -20,7 +19,7 @@ const styles = StyleSheet.create({
 
 const useFrontsData = () => useEndpoint('', [], res => res)
 
-const PreFrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
+const FrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
     const frontsData = useFrontsData()
     const { navigation } = props
     const issue = navigation.getParam('issue', 'NO-ID')
@@ -30,6 +29,15 @@ const PreFrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
+            <View
+                style={{
+                    padding: metrics.horizontal,
+                    paddingBottom: 0,
+                    paddingTop: metrics.vertical * 2,
+                }}
+            >
+                <HeadlineText>News</HeadlineText>
+            </View>
             <Grid
                 onPress={item => navigation.navigate('Article', item)}
                 data={frontsData.map(([title]: any[], index: number) => ({
@@ -48,30 +56,4 @@ const PreFrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
     )
 }
 
-PreFrontScreen.navigationOptions = () => ({
-    navigation: null,
-})
-
-const Navigator = createFluidNavigator(
-    {
-        Home: PreFrontScreen,
-        Article: ArticleScreen,
-    },
-    {
-        initialRouteName: 'Home',
-        transitionConfig: {
-            duration: 300,
-        },
-    },
-)
-
-export class FrontScreen extends React.Component<{
-    navigation: NavigationScreenProp<{}>
-}> {
-    static router = Navigator.router
-
-    render() {
-        const { navigation } = this.props
-        return <Navigator navigation={navigation} />
-    }
-}
+export { FrontScreen }

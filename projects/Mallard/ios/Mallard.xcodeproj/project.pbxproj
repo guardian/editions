@@ -45,6 +45,28 @@
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		1E1950B0D52446F3A33585F8 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E402822012C34F64AA00D0D0 /* libRNCAsyncStorage.a */; };
+		03A3180411DF433889C548BE /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E3F69ACEDCF4C16B3243401 /* GHGuardianHeadline-Black.ttf */; };
+		57675D5BA6834B109D990276 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2BAB762F9EC4DFD9C08D338 /* GHGuardianHeadline-BlackItalic.ttf */; };
+		2B9D10B64DBE4AF18692560C /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEE2F7756B5E485096DE9E1E /* GHGuardianHeadline-Bold.ttf */; };
+		AA81CD3301464CCDA36C766D /* GHGuardianHeadline-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C4C9C4B9F6943B592F6E8A9 /* GHGuardianHeadline-BoldItalic.ttf */; };
+		25E5DE4A8E8E43ECA782E2C8 /* GHGuardianHeadline-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 224ED611D5E34EC28E355957 /* GHGuardianHeadline-Light.ttf */; };
+		BD6EF2DE19234B4CA199409D /* GHGuardianHeadline-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0B3C28ED7654F44B7A4626C /* GHGuardianHeadline-LightItalic.ttf */; };
+		4A4A11EBF53746B2BC36CF22 /* GHGuardianHeadline-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96E01CE25442492FBB391461 /* GHGuardianHeadline-Medium.ttf */; };
+		0E5B7CEE86814BA19D2182C4 /* GHGuardianHeadline-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADD910EF7ABD41049DF48D7B /* GHGuardianHeadline-MediumItalic.ttf */; };
+		C98FFB575F204F4BA9A068F2 /* GHGuardianHeadline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A02028315FD4B6ABC7D4394 /* GHGuardianHeadline-Regular.ttf */; };
+		CB6DE72883FC458B8A6CA15E /* GHGuardianHeadline-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50B02A55ACDB4CE1AF46150F /* GHGuardianHeadline-RegularItalic.ttf */; };
+		D33433E540764703A9A56224 /* GHGuardianHeadline-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C980ECB64934BD193C34BE2 /* GHGuardianHeadline-Semibold.ttf */; };
+		B124EC4AE0A345B48C26F55B /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B45276F6ADC452AA025ED0D /* GHGuardianHeadline-SemiboldItalic.ttf */; };
+		90EEC3C2CA394EC5A6A94EEB /* GuardianTextEgyptian-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 382E03B1B3F449A3B7B90917 /* GuardianTextEgyptian-Bold.ttf */; };
+		35511AD9BFA24B0098B0CA44 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0DB0E2FE741414AA217DABB /* GuardianTextEgyptian-BoldItalic.ttf */; };
+		D942044A79DB48A29699E33F /* GuardianTextEgyptian-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92F56BD735524F23B4D96B40 /* GuardianTextEgyptian-Regular.ttf */; };
+		83324759F49643C5AD532AEA /* GuardianTextEgyptian-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76397DBA281A48A9A3AC9AF3 /* GuardianTextEgyptian-RegularItalic.ttf */; };
+		7DB05FD13DD84EF39F34FD4C /* GuardianTextSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 595EFDF1C9194A23BE12A0A8 /* GuardianTextSans-Bold.ttf */; };
+		9781DB5D222C4CB19593F039 /* GuardianTextSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 101E3C3B67E7489FB656D5D4 /* GuardianTextSans-BoldItalic.ttf */; };
+		2818F2DE0CEA4E279959CC9C /* GuardianTextSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 127C4FBB56844A9DA9743267 /* GuardianTextSans-Regular.ttf */; };
+		45D20681F84D4EBBB0C0AB39 /* GuardianTextSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB7E15E4F0CD41569909D545 /* GuardianTextSans-RegularItalic.ttf */; };
+		A708D86693BC46E6925EF49B /* GTGuardianTitlepiece-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90DBBD2ACCDF44F6B33E060C /* GTGuardianTitlepiece-Bold.ttf */; };
+		3DA2DDD3DAE843018C666E82 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -390,6 +412,28 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		6771A18BDD144402A066FE1C /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		E402822012C34F64AA00D0D0 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		8E3F69ACEDCF4C16B3243401 /* GHGuardianHeadline-Black.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-Black.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D2BAB762F9EC4DFD9C08D338 /* GHGuardianHeadline-BlackItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-BlackItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AEE2F7756B5E485096DE9E1E /* GHGuardianHeadline-Bold.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-Bold.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1C4C9C4B9F6943B592F6E8A9 /* GHGuardianHeadline-BoldItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-BoldItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		224ED611D5E34EC28E355957 /* GHGuardianHeadline-Light.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-Light.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D0B3C28ED7654F44B7A4626C /* GHGuardianHeadline-LightItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-LightItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		96E01CE25442492FBB391461 /* GHGuardianHeadline-Medium.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-Medium.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		ADD910EF7ABD41049DF48D7B /* GHGuardianHeadline-MediumItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-MediumItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6A02028315FD4B6ABC7D4394 /* GHGuardianHeadline-Regular.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-Regular.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		50B02A55ACDB4CE1AF46150F /* GHGuardianHeadline-RegularItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-RegularItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-RegularItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7C980ECB64934BD193C34BE2 /* GHGuardianHeadline-Semibold.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-Semibold.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-Semibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7B45276F6ADC452AA025ED0D /* GHGuardianHeadline-SemiboldItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-SemiboldItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-SemiboldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		382E03B1B3F449A3B7B90917 /* GuardianTextEgyptian-Bold.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-Bold.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D0DB0E2FE741414AA217DABB /* GuardianTextEgyptian-BoldItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-BoldItalic.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		92F56BD735524F23B4D96B40 /* GuardianTextEgyptian-Regular.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-Regular.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		76397DBA281A48A9A3AC9AF3 /* GuardianTextEgyptian-RegularItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-RegularItalic.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-RegularItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		595EFDF1C9194A23BE12A0A8 /* GuardianTextSans-Bold.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-Bold.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		101E3C3B67E7489FB656D5D4 /* GuardianTextSans-BoldItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-BoldItalic.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		127C4FBB56844A9DA9743267 /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FB7E15E4F0CD41569909D545 /* GuardianTextSans-RegularItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-RegularItalic.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-RegularItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		90DBBD2ACCDF44F6B33E060C /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/guardian_titlepiece_subset_apptt 180118/full_not_hinted/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -639,6 +683,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				ABFED8DA2284261400DA41EA /* Recovered References */,
+				27D1B38353E448A1A16EB8D3 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -700,6 +745,36 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		27D1B38353E448A1A16EB8D3 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				8E3F69ACEDCF4C16B3243401 /* GHGuardianHeadline-Black.ttf */,
+				D2BAB762F9EC4DFD9C08D338 /* GHGuardianHeadline-BlackItalic.ttf */,
+				AEE2F7756B5E485096DE9E1E /* GHGuardianHeadline-Bold.ttf */,
+				1C4C9C4B9F6943B592F6E8A9 /* GHGuardianHeadline-BoldItalic.ttf */,
+				224ED611D5E34EC28E355957 /* GHGuardianHeadline-Light.ttf */,
+				D0B3C28ED7654F44B7A4626C /* GHGuardianHeadline-LightItalic.ttf */,
+				96E01CE25442492FBB391461 /* GHGuardianHeadline-Medium.ttf */,
+				ADD910EF7ABD41049DF48D7B /* GHGuardianHeadline-MediumItalic.ttf */,
+				6A02028315FD4B6ABC7D4394 /* GHGuardianHeadline-Regular.ttf */,
+				50B02A55ACDB4CE1AF46150F /* GHGuardianHeadline-RegularItalic.ttf */,
+				7C980ECB64934BD193C34BE2 /* GHGuardianHeadline-Semibold.ttf */,
+				7B45276F6ADC452AA025ED0D /* GHGuardianHeadline-SemiboldItalic.ttf */,
+				382E03B1B3F449A3B7B90917 /* GuardianTextEgyptian-Bold.ttf */,
+				D0DB0E2FE741414AA217DABB /* GuardianTextEgyptian-BoldItalic.ttf */,
+				92F56BD735524F23B4D96B40 /* GuardianTextEgyptian-Regular.ttf */,
+				76397DBA281A48A9A3AC9AF3 /* GuardianTextEgyptian-RegularItalic.ttf */,
+				595EFDF1C9194A23BE12A0A8 /* GuardianTextSans-Bold.ttf */,
+				101E3C3B67E7489FB656D5D4 /* GuardianTextSans-BoldItalic.ttf */,
+				127C4FBB56844A9DA9743267 /* GuardianTextSans-Regular.ttf */,
+				FB7E15E4F0CD41569909D545 /* GuardianTextSans-RegularItalic.ttf */,
+				90DBBD2ACCDF44F6B33E060C /* GTGuardianTitlepiece-Bold.ttf */,
+				95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -1193,6 +1268,28 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				C555A75222848D6C002DF16C /* Icon-1024.png in Resources */,
+				03A3180411DF433889C548BE /* GHGuardianHeadline-Black.ttf in Resources */,
+				57675D5BA6834B109D990276 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
+				2B9D10B64DBE4AF18692560C /* GHGuardianHeadline-Bold.ttf in Resources */,
+				AA81CD3301464CCDA36C766D /* GHGuardianHeadline-BoldItalic.ttf in Resources */,
+				25E5DE4A8E8E43ECA782E2C8 /* GHGuardianHeadline-Light.ttf in Resources */,
+				BD6EF2DE19234B4CA199409D /* GHGuardianHeadline-LightItalic.ttf in Resources */,
+				4A4A11EBF53746B2BC36CF22 /* GHGuardianHeadline-Medium.ttf in Resources */,
+				0E5B7CEE86814BA19D2182C4 /* GHGuardianHeadline-MediumItalic.ttf in Resources */,
+				C98FFB575F204F4BA9A068F2 /* GHGuardianHeadline-Regular.ttf in Resources */,
+				CB6DE72883FC458B8A6CA15E /* GHGuardianHeadline-RegularItalic.ttf in Resources */,
+				D33433E540764703A9A56224 /* GHGuardianHeadline-Semibold.ttf in Resources */,
+				B124EC4AE0A345B48C26F55B /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */,
+				90EEC3C2CA394EC5A6A94EEB /* GuardianTextEgyptian-Bold.ttf in Resources */,
+				35511AD9BFA24B0098B0CA44 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */,
+				D942044A79DB48A29699E33F /* GuardianTextEgyptian-Regular.ttf in Resources */,
+				83324759F49643C5AD532AEA /* GuardianTextEgyptian-RegularItalic.ttf in Resources */,
+				7DB05FD13DD84EF39F34FD4C /* GuardianTextSans-Bold.ttf in Resources */,
+				9781DB5D222C4CB19593F039 /* GuardianTextSans-BoldItalic.ttf in Resources */,
+				2818F2DE0CEA4E279959CC9C /* GuardianTextSans-Regular.ttf in Resources */,
+				45D20681F84D4EBBB0C0AB39 /* GuardianTextSans-RegularItalic.ttf in Resources */,
+				A708D86693BC46E6925EF49B /* GTGuardianTitlepiece-Bold.ttf in Resources */,
+				3DA2DDD3DAE843018C666E82 /* SpaceMono-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
