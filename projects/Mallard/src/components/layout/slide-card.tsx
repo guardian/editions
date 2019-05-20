@@ -1,5 +1,14 @@
 import React, { useState, useEffect, ReactNode, useRef } from 'react'
-import { Animated, View, Text, Platform, StyleSheet } from 'react-native'
+import {
+    Animated,
+    View,
+    Text,
+    Platform,
+    StyleSheet,
+    TouchableHighlight,
+} from 'react-native'
+import { Chevron } from '../chevron'
+import { metrics } from '../../theme/spacing'
 
 /* 
 This is the swipey contraption that contains an article.
@@ -22,17 +31,19 @@ const styles = StyleSheet.create({
 export const SlideCard = ({
     children,
     header,
+    headerStyle,
     onDismiss,
 }: {
     children: ReactNode
     header: ReactNode
+    headerStyle: {}
     onDismiss: () => void
 }) => {
     const [scale] = useState(() => new Animated.Value(1))
-    const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true)
+    const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(false)
     useEffect(() => {
         scale.addListener(({ value }) => {
-            setScrollIndicatorVisible(value > 50)
+            setScrollIndicatorVisible(value > 0)
             if (value < -100) {
                 onDismiss()
             }
@@ -55,7 +66,36 @@ export const SlideCard = ({
                 },
             ]}
         >
-            {header}
+            <TouchableHighlight onPress={onDismiss} accessibilityHint="Go back">
+                <View
+                    style={[
+                        headerStyle,
+                        {
+                            alignItems: 'center',
+                            paddingVertical: metrics.vertical,
+                            borderBottomWidth: scrollIndicatorVisible
+                                ? StyleSheet.hairlineWidth
+                                : 0,
+                        },
+                    ]}
+                >
+                    <Animated.View
+                        style={{
+                            transform: [
+                                {
+                                    translateY: scale.interpolate({
+                                        inputRange: [0, 100],
+                                        outputRange: [metrics.vertical / -4, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                            ],
+                        }}
+                    >
+                        <Chevron />
+                    </Animated.View>
+                </View>
+            </TouchableHighlight>
             <Animated.ScrollView
                 scrollEventThrottle={1}
                 showsVerticalScrollIndicator={scrollIndicatorVisible}

@@ -77,24 +77,13 @@ const ArticleScreenContents = ({
     const appearance = useArticleAppearance()
     return (
         <SlideCard
-            header={
-                <TouchableHighlight
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
-                    accessibilityHint="Go back"
-                >
-                    <View style={[styles.card, appearance.card]}>
-                        <Chevron />
-                    </View>
-                </TouchableHighlight>
-            }
+            headerStyle={[styles.card, appearance.card]}
             onDismiss={() => {
                 navigation.goBack()
             }}
         >
             <View style={styles.container}>
-                <View style={[styles.card, appearance.card]}>
+                <View style={[styles.card, appearance.card, { paddingTop: 0 }]}>
                     <HeadlineText
                         style={[styles.headline, appearance.headline]}
                     >

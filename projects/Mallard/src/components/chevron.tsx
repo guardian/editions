@@ -1,43 +1,41 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
 import { color } from '../theme/color'
 
-const styles = StyleSheet.create({
-    container: {
-        width: 80,
-        height: 40,
-        backgroundColor: 'yellow',
-    },
-    arrow: {
-        width: '50%',
-        height: 10,
-        backgroundColor: color.text,
-        position: 'absolute',
-        borderRadius: 999,
-    },
-})
+import Svg, {
+    Circle,
+    Ellipse,
+    G,
+    Text,
+    TSpan,
+    TextPath,
+    Path,
+    Polygon,
+    Polyline,
+    Line,
+    Rect,
+    Use,
+    Image,
+    Symbol,
+    Defs,
+    LinearGradient,
+    RadialGradient,
+    Stop,
+    ClipPath,
+    Pattern,
+    Mask,
+} from 'react-native-svg'
 
 const Chevron = () => (
-    <View style={styles.container}>
-        <View
-            style={[
-                styles.arrow,
-                {
-                    transform: [{ rotate: '10deg' }],
-                },
-            ]}
-        />
-        <View
-            style={[
-                styles.arrow,
-                {
-                    right: 0,
-                    backgroundColor: 'blue',
-                    transform: [{ rotate: '-10deg' }],
-                },
-            ]}
-        />
-    </View>
+    <Svg width="37" height="11" viewBox="0 0 37 11" fill="none">
+        <G opacity="0.5">
+            <Path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M2.13851 5.03797C0.818469 4.53125 0.159137 3.05037 0.665855 1.73032C1.17257 0.410277 2.65346 -0.249054 3.9735 0.257665L18.2498 5.73784L32.5262 0.257665C33.8462 -0.249054 35.3271 0.410277 35.8338 1.73032C36.3405 3.05037 35.6812 4.53125 34.3612 5.03797L19.5012 10.7422C19.0883 10.9007 18.6595 10.9451 18.2498 10.8908C17.8401 10.9451 17.4114 10.9007 16.9985 10.7422L2.13851 5.03797Z"
+                fill={color.text}
+            />
+        </G>
+    </Svg>
 )
 
 export { Chevron }
