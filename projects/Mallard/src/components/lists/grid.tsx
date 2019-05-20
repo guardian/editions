@@ -22,23 +22,19 @@ export class Grid extends React.Component<PropTypes> {
                         }}
                         onPress={() => onPress(item)}
                     >
-                        <View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    height: 100,
-                                    backgroundColor: color.background,
-                                    margin: metrics.horizontal / 4,
-                                    padding: metrics.horizontal / 2,
-                                    paddingVertical: metrics.vertical / 4,
-                                    borderTopColor: color.line,
-                                    borderTopWidth: StyleSheet.hairlineWidth,
-                                }}
-                            >
-                                <HeadlineCardText>
-                                    {item.title}
-                                </HeadlineCardText>
-                            </View>
+                        <View
+                            style={{
+                                flex: 1,
+                                height: 100,
+                                backgroundColor: color.background,
+                                margin: metrics.horizontal / 4,
+                                padding: metrics.horizontal / 2,
+                                paddingVertical: metrics.vertical / 4,
+                                borderTopColor: color.line,
+                                borderTopWidth: StyleSheet.hairlineWidth,
+                            }}
+                        >
+                            <HeadlineCardText>{item.title}</HeadlineCardText>
                         </View>
                     </TouchableOpacity>
                 )}
