@@ -14,19 +14,33 @@ import { PropTypes, Item, OnPressHandler } from './helpers'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 import { useAppAppearance } from '../../theme/appearance'
 
+const styles = StyleSheet.create({
+    heading: {
+        padding: metrics.horizontal,
+        paddingTop: metrics.vertical * 2,
+        paddingBottom: metrics.vertical / 2,
+    },
+    item: {
+        padding: metrics.horizontal,
+        paddingVertical: metrics.vertical,
+        borderTopWidth: 0,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    list: {
+        borderTopWidth: StyleSheet.hairlineWidth,
+    },
+})
+
 export const ListHeading = ({ children }: { children: string }) => (
-    <View
-        style={{
-            padding: metrics.horizontal,
-            paddingTop: metrics.vertical * 2,
-            paddingBottom: metrics.vertical / 2,
-        }}
-    >
+    <View style={styles.heading}>
         <SafeAreaView>
             <UiBodyCopy style={{ fontWeight: '700' }}>{children}</UiBodyCopy>
         </SafeAreaView>
     </View>
 )
+
+const Highlight =
+    Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
 
 const ListItem = ({
     onPress,
@@ -35,19 +49,18 @@ const ListItem = ({
     item: Item
     onPress: OnPressHandler
 }) => {
-    const Highlight =
-        Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
+    const { borderColor, backgroundColor } = useAppAppearance()
+
     return (
         <Highlight onPress={() => onPress(data)}>
             <View
-                style={{
-                    padding: metrics.horizontal,
-                    paddingVertical: metrics.vertical,
-                    borderTopWidth: 0,
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                    borderColor: useAppAppearance().borderColor,
-                    backgroundColor: useAppAppearance().backgroundColor,
-                }}
+                style={[
+                    styles.item,
+                    {
+                        borderColor,
+                        backgroundColor,
+                    },
+                ]}
             >
                 <SafeAreaView>
                     <UiBodyCopy>{title}</UiBodyCopy>
@@ -65,12 +78,15 @@ const ListItem = ({
 }
 
 export const List = ({ data, onPress }: PropTypes) => {
+    const { borderColor } = useAppAppearance()
     return (
         <FlatList
-            style={{
-                borderTopWidth: StyleSheet.hairlineWidth,
-                borderColor: useAppAppearance().borderColor,
-            }}
+            style={[
+                styles.list,
+                {
+                    borderColor,
+                },
+            ]}
             data={data}
             renderItem={({ item }) => (
                 <ListItem onPress={onPress} item={item} />

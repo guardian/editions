@@ -1,9 +1,24 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import { useAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
 import { color } from '../theme/color'
 
+const styles = StyleSheet.create({
+    headlineText: {
+        fontFamily: 'GHGuardianHeadline-Medium',
+        fontSize: 24,
+        color: color.text,
+    },
+    headlineCardText: {
+        fontSize: 16,
+    },
+    bodyCopy: {
+        fontSize: 17,
+        fontFamily: 'GuardianTextSans-Regular',
+    },
+    explainerCopy: { fontSize: 15, fontFamily: 'GuardianTextSans-Regular' },
+})
 export const HeadlineText = ({
     style,
     ...props
@@ -11,19 +26,7 @@ export const HeadlineText = ({
     children: string
     style?: {}
 }) => {
-    return (
-        <Text
-            {...props}
-            style={[
-                {
-                    fontFamily: 'GHGuardianHeadline-Medium',
-                    fontSize: 24,
-                    color: color.text,
-                },
-                style,
-            ]}
-        />
-    )
+    return <Text {...props} style={[styles.headlineText, style]} />
 }
 
 export const HeadlineCardText = ({
@@ -32,7 +35,7 @@ export const HeadlineCardText = ({
 }: {
     children: string
 }) => (
-    <HeadlineText {...props} style={{ fontSize: 16 }}>
+    <HeadlineText {...props} style={styles.headlineCardText}>
         {children}
     </HeadlineText>
 )
@@ -48,12 +51,13 @@ export const UiBodyCopy = ({
     return (
         <Text
             {...props}
-            style={{
-                fontSize: 17,
-                fontFamily: 'GuardianTextSans-Regular',
-                color: useAppAppearance().color,
-                ...style,
-            }}
+            style={[
+                styles.bodyCopy,
+                {
+                    color: useAppAppearance().color,
+                },
+                style,
+            ]}
         >
             {children}
         </Text>
@@ -71,12 +75,13 @@ export const UiExplainerCopy = ({
     return (
         <Text
             {...props}
-            style={{
-                fontSize: 15,
-                fontFamily: 'GuardianTextSans-Regular',
-                color: useAppAppearance().dimColor,
-                ...style,
-            }}
+            style={[
+                styles.explainerCopy,
+                {
+                    color: useAppAppearance().dimColor,
+                },
+                style,
+            ]}
         >
             {children}
         </Text>
@@ -97,7 +102,6 @@ export const MonoTextBlock = ({
             style={{
                 padding: metrics.vertical,
                 paddingHorizontal: metrics.horizontal,
-                color: useAppAppearance().color,
                 alignItems: 'center',
                 ...style,
             }}
