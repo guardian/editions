@@ -1,7 +1,8 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { color, useAppearanceColor } from '../theme/color'
+import { useAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
+import { color } from '../theme/color'
 
 export const HeadlineText = ({
     style,
@@ -23,8 +24,15 @@ export const HeadlineText = ({
     )
 }
 
-export const HeadlineCardText = props => (
-    <HeadlineText {...props} style={{ fontSize: 16 }} />
+export const HeadlineCardText = ({
+    children,
+    ...props
+}: {
+    children: string
+}) => (
+    <HeadlineText {...props} style={{ fontSize: 16 }}>
+        {children}
+    </HeadlineText>
 )
 
 export const UiBodyCopy = ({
@@ -41,7 +49,7 @@ export const UiBodyCopy = ({
             style={{
                 fontSize: 17,
                 fontFamily: 'GuardianTextSans-Regular',
-                color: useAppearanceColor().color,
+                color: useAppAppearance().color,
                 ...style,
             }}
         >
@@ -64,7 +72,7 @@ export const UiExplainerCopy = ({
             style={{
                 fontSize: 15,
                 fontFamily: 'GuardianTextSans-Regular',
-                color: useAppearanceColor().dimColor,
+                color: useAppAppearance().dimColor,
                 ...style,
             }}
         >
@@ -87,7 +95,7 @@ export const MonoTextBlock = ({
             style={{
                 padding: metrics.vertical,
                 paddingHorizontal: metrics.horizontal,
-                color: useAppearanceColor().color,
+                color: useAppAppearance().color,
                 alignItems: 'center',
                 ...style,
             }}

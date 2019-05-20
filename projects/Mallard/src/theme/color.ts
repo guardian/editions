@@ -1,5 +1,4 @@
 import { palette } from '@guardian/pasteup/palette'
-import { createContext, useContext } from 'react'
 
 /*
 Roles for colors.  Prefer using these over the palette.  It makes it easier
@@ -48,35 +47,3 @@ export const color = {
     */
     palette,
 }
-
-/*
-Appearances are like themes for the core UI
-*/
-interface AppearanceColor {
-    backgroundColor: string
-    borderColor: string
-    color: string
-    dimColor: string
-}
-type Appearance = 'default' | 'primary'
-
-const appearanceColors: { [key in Appearance]: AppearanceColor } = {
-    primary: {
-        backgroundColor: color.primary,
-        borderColor: color.lineOverPrimary,
-        color: color.textOverPrimary,
-        dimColor: color.textOverPrimary,
-    },
-    default: {
-        backgroundColor: color.background,
-        borderColor: color.line,
-        color: color.text,
-        dimColor: color.dimText,
-    },
-}
-
-const AppearanceContext = createContext<Appearance>('default')
-export const WithAppearance = AppearanceContext.Provider
-
-export const useAppearanceColor = (): AppearanceColor =>
-    appearanceColors[useContext(AppearanceContext)]

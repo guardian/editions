@@ -20,7 +20,7 @@ export const SlideCard = ({
     const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true)
     useEffect(() => {
         scale.addListener(({ value }) => {
-            setScrollIndicatorVisible(value > 0)
+            setScrollIndicatorVisible(value > 50)
             if (value < -100) {
                 onDismiss()
             }

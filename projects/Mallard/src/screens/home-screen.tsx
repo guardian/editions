@@ -4,7 +4,7 @@ import { List } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { primaryContainer } from '../theme/styles'
 import { ApiState } from './settings/api-screen'
-import { WithAppearance } from '../theme/color'
+import { WithAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
 
 const styles = StyleSheet.create({
@@ -28,7 +28,7 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     return (
-        <WithAppearance value={'primary'}>
+        <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
                 <View style={styles.getStartedContainer}>
                     <Image
@@ -57,7 +57,7 @@ export const HomeScreen = ({
                 />
                 <ApiState />
             </ScrollView>
-        </WithAppearance>
+        </WithAppAppearance>
     )
 }
 

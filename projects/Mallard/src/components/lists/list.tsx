@@ -12,7 +12,7 @@ import {
 import { metrics } from '../../theme/spacing'
 import { PropTypes, Item, OnPressHandler } from './helpers'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
-import { useAppearanceColor } from '../../theme/color'
+import { useAppAppearance } from '../../theme/appearance'
 
 export const ListHeading = ({ children }: { children: string }) => (
     <View
@@ -45,8 +45,8 @@ const ListItem = ({
                     paddingVertical: metrics.vertical,
                     borderTopWidth: 0,
                     borderBottomWidth: StyleSheet.hairlineWidth,
-                    borderColor: useAppearanceColor().borderColor,
-                    backgroundColor: useAppearanceColor().backgroundColor,
+                    borderColor: useAppAppearance().borderColor,
+                    backgroundColor: useAppAppearance().backgroundColor,
                 }}
             >
                 <SafeAreaView>
@@ -69,7 +69,7 @@ export const List = ({ data, onPress }: PropTypes) => {
         <FlatList
             style={{
                 borderTopWidth: StyleSheet.hairlineWidth,
-                borderColor: useAppearanceColor().borderColor,
+                borderColor: useAppAppearance().borderColor,
             }}
             data={data}
             renderItem={({ item }) => (
