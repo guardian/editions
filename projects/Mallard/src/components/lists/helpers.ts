@@ -8,7 +8,8 @@ export interface Item {
     data?: ItemData
 }
 
+export type OnPressHandler = (item: ItemData) => void
 export interface PropTypes {
     data: Item[]
-    onPress: (item: ItemData) => void
+    onPress: OnPressHandler
 }

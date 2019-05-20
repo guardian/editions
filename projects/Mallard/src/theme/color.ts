@@ -11,38 +11,39 @@ put that in the <Spinner /> component.
 
 export const color = {
     /*
-  Backgrounds
-  */
+    Backgrounds
+    */
     background: palette.neutral[100],
     dimBackground: palette.neutral[97],
     darkBackground: palette.neutral[20],
     textOverDarkBackground: palette.neutral[100],
 
     /*
-  Brand (our blue)
-  */
+    Brand (our blue)
+    */
     textOverPrimary: palette.neutral[100],
     primary: palette.brand.main,
     primaryDarker: palette.brand.dark,
 
     /*
-  Border colors
-  */
+    Border colors
+    */
     line: palette.neutral[86],
+    lineOverPrimary: palette.brand.pastel,
 
     /*
-  Text colors
-  */
+    Text colors
+    */
     text: palette.neutral[7],
     dimText: palette.neutral[20],
 
     /*
-  Error messages and icons.
-  */
+    Error messages and icons.
+    */
     error: palette.news.main,
 
     /*
-  The palette is available to use, but prefer using the name.
-  */
+    The palette is available to use, but prefer using the name.
+    */
     palette,
 }

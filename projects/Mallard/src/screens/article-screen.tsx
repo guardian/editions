@@ -1,29 +1,36 @@
 import React from 'react'
-import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-    Button,
-    SafeAreaView,
-} from 'react-native'
-import { MonoTextBlock, HeadlineText } from '../components/styled-text'
+import { View, Text, StyleSheet, Button, Platform } from 'react-native'
+import { HeadlineText } from '../components/styled-text'
 import { useEndpoint } from '../hooks/use-fetch'
-import { Transition } from 'react-navigation-fluid-transitions'
 import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../theme/color'
 import { metrics } from '../theme/spacing'
+import { SlideCard } from '../components/layout/slide-card'
+import {
+    useArticleAppearance,
+    WithArticleAppearance,
+    articleAppearances,
+} from '../theme/appearance'
 
+const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
     container: {
-        color: '#fff',
+        marginTop: notchInsetSize,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        overflow: 'hidden',
+        flex: 2,
     },
-    headline: {
-        flex: 1,
+    card: {
+        flexShrink: 0,
         alignItems: 'flex-start',
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
-        backgroundColor: color.palette.highlight.main,
+        paddingVertical: metrics.vertical / 2,
+        borderBottomWidth: 1,
+        ...articleAppearances.default.card,
+    },
+    headline: {
+        ...articleAppearances.default.headline,
     },
     block: {
         alignItems: 'flex-start',
@@ -51,34 +58,57 @@ export const ArticleScreen = ({
     })
 
     return (
-        <ScrollView>
+        <WithArticleAppearance
+            value={['news', 'lifestyle', 'comment', 'default'][article % 4]}
+        >
+            <ArticleScreenContents
+                {...{ article, articleData, headline, navigation }}
+            />
+        </WithArticleAppearance>
+    )
+}
+
+const ArticleScreenContents = ({
+    navigation,
+    articleData,
+    headline,
+}: {
+    navigation: NavigationScreenProp<{}>
+    articleData: {}
+    headline: string
+}) => {
+    const appearance = useArticleAppearance()
+    return (
+        <SlideCard
+            onDismiss={() => {
+                navigation.goBack()
+            }}
+        >
             <View style={styles.container}>
-                <SafeAreaView
-                    style={{ backgroundColor: color.palette.highlight.main }}
-                >
-                    <Transition shared={`item-${article}`}>
-                        <View style={styles.headline}>
-                            <Button
-                                onPress={() => {
-                                    navigation.goBack()
-                                }}
-                                title={'Backsies'}
-                            />
-                            <Transition shared={`item-text-${article}`}>
-                                <HeadlineText>{headline}</HeadlineText>
-                            </Transition>
-                        </View>
-                    </Transition>
-                </SafeAreaView>
-                {articleData
-                    .filter(el => el.type === 0)
-                    .map((el, index) => (
-                        <View style={styles.block} key={index}>
-                            <Text>{el.textTypeData.html}</Text>
-                        </View>
-                    ))}
+                <View style={[styles.card, appearance.card]}>
+                    <Button
+                        onPress={() => {
+                            navigation.goBack()
+                        }}
+                        title={'👈 Backsies'}
+                    />
+                    <HeadlineText
+                        style={[styles.headline, appearance.headline]}
+                    >
+                        {headline}
+                    </HeadlineText>
+                </View>
+                <View style={{ backgroundColor: color.background, flex: 1 }}>
+                    {articleData
+                        .filter(el => el.type === 0)
+                        .map((el, index) => (
+                            <View style={styles.block} key={index}>
+                                <Text>{el.textTypeData.html}</Text>
+                            </View>
+                        ))}
+                </View>
             </View>
-        </ScrollView>
+        </SlideCard>
     )
 }
 

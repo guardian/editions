@@ -2,21 +2,23 @@ import React from 'react'
 import { Image, ScrollView, Button, StyleSheet, Text, View } from 'react-native'
 import { List } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
-import { container } from '../theme/styles'
+import { primaryContainer } from '../theme/styles'
 import { ApiState } from './settings/api-screen'
+import { WithAppAppearance } from '../theme/appearance'
+import { metrics } from '../theme/spacing'
 
 const styles = StyleSheet.create({
-    container,
+    container: primaryContainer,
     welcomeImage: {
-        width: 100,
-        height: 80,
+        width: 1024 / 8,
+        height: 559 / 8,
         resizeMode: 'contain',
     },
     getStartedContainer: {
-        alignItems: 'center',
-        marginHorizontal: 50,
-        marginVertical: 7,
-        padding: 16,
+        alignItems: 'flex-start',
+        marginHorizontal: metrics.horizontal,
+        marginVertical: metrics.vertical,
+        marginTop: metrics.vertical * 2,
     },
 })
 
@@ -26,11 +28,11 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     return (
-        <View style={styles.container}>
+        <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
                 <View style={styles.getStartedContainer}>
                     <Image
-                        source={require('../assets/images/roundel-192x192.png')}
+                        source={require('../assets/images/logo.png')}
                         style={styles.welcomeImage}
                     />
                 </View>
@@ -51,11 +53,11 @@ export const HomeScreen = ({
                             },
                         },
                     ]}
-                    onPress={item => navigation.navigate('Issue', item)}
+                    onPress={item => navigation.navigate('Front', item)}
                 />
                 <ApiState />
             </ScrollView>
-        </View>
+        </WithAppAppearance>
     )
 }
 
@@ -64,7 +66,7 @@ HomeScreen.navigationOptions = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => ({
-    title: 'Home',
+    title: 'Mallard',
     headerRight: (
         <Button
             onPress={() => {

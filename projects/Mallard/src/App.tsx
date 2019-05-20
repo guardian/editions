@@ -7,7 +7,7 @@ import { StatusBar } from 'react-native'
 import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
 
-const navigationPersistenceKey = __DEV__ ? 'NavigationStateDEV-' : null
+const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DEV-' : null
 
 export default class App extends React.Component<{}, {}> {
     /**
@@ -17,7 +17,11 @@ export default class App extends React.Component<{}, {}> {
     render() {
         return (
             <SettingsProvider>
-                <StatusBar barStyle="light-content" backgroundColor="#041f4a" />
+                <StatusBar
+                    animated={true}
+                    barStyle="light-content"
+                    backgroundColor="#041f4a"
+                />
                 <RootNavigator persistenceKey={navigationPersistenceKey} />
             </SettingsProvider>
         )

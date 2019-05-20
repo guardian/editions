@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
     Platform,
     FlatList,
@@ -7,62 +7,90 @@ import {
     SafeAreaView,
     View,
     Text,
+    StyleSheet,
 } from 'react-native'
-import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { PropTypes } from './helpers'
+import { PropTypes, Item, OnPressHandler } from './helpers'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { useAppAppearance } from '../../theme/appearance'
+
+const styles = StyleSheet.create({
+    heading: {
+        padding: metrics.horizontal,
+        paddingTop: metrics.vertical * 2,
+        paddingBottom: metrics.vertical / 2,
+    },
+    item: {
+        padding: metrics.horizontal,
+        paddingVertical: metrics.vertical,
+        borderTopWidth: 0,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    list: {
+        borderTopWidth: StyleSheet.hairlineWidth,
+    },
+})
 
 export const ListHeading = ({ children }: { children: string }) => (
-    <View
-        style={{
-            padding: metrics.horizontal,
-            paddingTop: metrics.vertical * 2,
-            paddingBottom: metrics.vertical / 2,
-        }}
-    >
+    <View style={styles.heading}>
         <SafeAreaView>
             <UiBodyCopy style={{ fontWeight: '700' }}>{children}</UiBodyCopy>
         </SafeAreaView>
     </View>
 )
-export class List extends React.Component<PropTypes> {
-    render() {
-        const { data, onPress } = this.props
-        const Highlight =
-            Platform.OS === 'android'
-                ? TouchableNativeFeedback
-                : TouchableHighlight
-        return (
-            <FlatList
-                style={{
-                    borderTopWidth: 1,
-                    borderColor: '#ddd',
-                }}
-                data={data}
-                renderItem={({ item: { title, explainer, data } }: any) => (
-                    <Highlight onPress={() => onPress(data)}>
-                        <View
-                            style={{
-                                padding: metrics.horizontal,
-                                paddingVertical: metrics.vertical,
-                                backgroundColor: color.background,
-                                borderBottomWidth: 1,
-                                borderColor: color.line,
-                            }}
+
+const Highlight =
+    Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
+
+const ListItem = ({
+    onPress,
+    item: { title, explainer, data },
+}: {
+    item: Item
+    onPress: OnPressHandler
+}) => {
+    const { borderColor, backgroundColor } = useAppAppearance()
+
+    return (
+        <Highlight onPress={() => onPress(data)}>
+            <View
+                style={[
+                    styles.item,
+                    {
+                        borderColor,
+                        backgroundColor,
+                    },
+                ]}
+            >
+                <SafeAreaView>
+                    <UiBodyCopy>{title}</UiBodyCopy>
+                    {explainer && (
+                        <UiExplainerCopy
+                            style={{ marginTop: metrics.vertical / 8 }}
                         >
-                            <SafeAreaView>
-                                <UiBodyCopy>{title}</UiBodyCopy>
-                                {explainer && (
-                                    <UiExplainerCopy>
-                                        {explainer}
-                                    </UiExplainerCopy>
-                                )}
-                            </SafeAreaView>
-                        </View>
-                    </Highlight>
-                )}
-            />
-        )
-    }
+                            {explainer}
+                        </UiExplainerCopy>
+                    )}
+                </SafeAreaView>
+            </View>
+        </Highlight>
+    )
+}
+
+export const List = ({ data, onPress }: PropTypes) => {
+    const { borderColor } = useAppAppearance()
+    return (
+        <FlatList
+            style={[
+                styles.list,
+                {
+                    borderColor,
+                },
+            ]}
+            data={data}
+            renderItem={({ item }) => (
+                <ListItem onPress={onPress} item={item} />
+            )}
+        />
+    )
 }

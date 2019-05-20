@@ -5,52 +5,56 @@ import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
-
+import { container } from '../theme/styles'
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    contentContainer: {
-        flex: 1,
-        alignItems: 'stretch',
-    },
+    container,
+    contentContainer: {},
 })
 
 const useFrontsData = () => useEndpoint('', [], res => res)
 
-const FrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
+const FrontRow = ({ frontsData, front, issue, navigation }) => (
+    <>
+        <View
+            style={{
+                padding: metrics.horizontal,
+                paddingBottom: 0,
+                paddingTop: metrics.vertical * 2,
+            }}
+        >
+            <HeadlineText>{front}</HeadlineText>
+        </View>
+        <Grid
+            onPress={item => navigation.navigate('Article', item)}
+            data={frontsData.map(([title]: any[], index: number) => ({
+                issue,
+                front,
+                article: index,
+                key: index.toString(),
+                title,
+                headline: title,
+            }))}
+        />
+    </>
+)
+
+const FrontScreen = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => {
     const frontsData = useFrontsData()
-    const { navigation } = props
     const issue = navigation.getParam('issue', 'NO-ID')
-    const front = navigation.getParam('front', 'NO-ID')
     return (
         <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
-            <View
-                style={{
-                    padding: metrics.horizontal,
-                    paddingBottom: 0,
-                    paddingTop: metrics.vertical * 2,
-                }}
-            >
-                <HeadlineText>News</HeadlineText>
-            </View>
-            <Grid
-                onPress={item => navigation.navigate('Article', item)}
-                data={frontsData.map(([title]: any[], index: number) => ({
-                    issue,
-                    front,
-                    article: index,
-                    key: index.toString(),
-                    title,
-                    headline: title,
-                }))}
-            />
+            <FrontRow front={'News'} {...{ issue, navigation, frontsData }} />
+            <FrontRow front={'Sport'} {...{ issue, navigation, frontsData }} />
+            <FrontRow front={'Other'} {...{ issue, navigation, frontsData }} />
             <MonoTextBlock style={{ flex: 1 }}>
-                This is an FrontScreen for from {front}, issue {issue}
+                This is an FrontScreen for issue {issue}
             </MonoTextBlock>
         </ScrollView>
     )

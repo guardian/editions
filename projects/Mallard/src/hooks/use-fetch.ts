@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getSetting } from '../helpers/settings'
+import { useSettings } from './use-settings'
 
 export const useFetch = <Fetchable>(
     url: string,
@@ -23,20 +23,6 @@ export const useEndpoint = <Fetchable>(
     initialState: Fetchable,
     transform: (_: Fetchable) => Fetchable = res => res,
 ): Fetchable => {
-    const [data, updateData] = useState(initialState)
-    useEffect(() => {
-        getSetting('apiUrl').then(apiUrl =>
-            fetch(apiUrl + '/' + path)
-                .then(async res => {
-                    return res.json().then(res => {
-                        updateData(transform(res))
-                    })
-                })
-                .catch(err => {
-                    alert(JSON.stringify(err))
-                }),
-        )
-    }, [])
-
-    return data
+    const [{ apiUrl }] = useSettings()
+    return useFetch(apiUrl + '/' + path, initialState, transform)
 }
