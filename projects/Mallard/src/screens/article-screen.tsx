@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Button, Platform } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { HeadlineText } from '../components/styled-text'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
@@ -11,8 +11,6 @@ import {
     WithArticleAppearance,
     articleAppearances,
 } from '../theme/appearance'
-import { TouchableHighlight } from 'react-native-gesture-handler'
-import { Chevron } from '../components/chevron'
 
 const styles = StyleSheet.create({
     container: {
@@ -21,9 +19,8 @@ const styles = StyleSheet.create({
     card: {
         flexShrink: 0,
         alignItems: 'flex-start',
-        padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 2,
-        borderBottomWidth: 1,
+        paddingHorizontal: metrics.horizontal,
+        borderBottomWidth: StyleSheet.hairlineWidth,
         ...articleAppearances.default.card,
     },
     headline: {
@@ -40,6 +37,15 @@ const useArticleData = (articleId, { headline }) => {
     return useEndpoint('', [headline, [[]]], res => res[articleId])
 }
 
+const fixture = seed => ({
+    image: [
+        'https://media.guim.co.uk/1d046fd12d5685eacd943fcf2089f23ecc873e8b/0_224_6720_4032/1000.jpg',
+        'https://i.guim.co.uk/img/media/aa751497cada64b193f8f3e640a3261eb0e16e81/424_255_4518_2711/master/4518.jpg?width=860&quality=45&auto=format&fit=max&dpr=2&s=5025f6e75a0cbb9a7cdecf948f1a54af',
+        null,
+    ][seed % 3],
+    appearance: ['news', 'lifestyle', 'comment', 'default'][seed % 4],
+})
+
 export const ArticleScreen = ({
     navigation,
 }: {
@@ -53,13 +59,11 @@ export const ArticleScreen = ({
     const [headline, [articleData]] = useArticleData(article, {
         headline: headlineFromUrl,
     })
-
+    const { image, appearance } = fixture(article)
     return (
-        <WithArticleAppearance
-            value={['news', 'lifestyle', 'comment', 'default'][article % 4]}
-        >
+        <WithArticleAppearance value={appearance}>
             <ArticleScreenContents
-                {...{ article, articleData, headline, navigation }}
+                {...{ article, articleData, headline, navigation, image }}
             />
         </WithArticleAppearance>
     )
@@ -69,10 +73,12 @@ const ArticleScreenContents = ({
     navigation,
     articleData,
     headline,
+    image,
 }: {
     navigation: NavigationScreenProp<{}>
     articleData: {}
     headline: string
+    image?: string
 }) => {
     const appearance = useArticleAppearance()
     return (
@@ -83,9 +89,32 @@ const ArticleScreenContents = ({
             }}
         >
             <View style={styles.container}>
-                <View style={[styles.card, appearance.card, { paddingTop: 0 }]}>
+                <View
+                    style={[
+                        styles.card,
+                        appearance.card,
+                        { paddingBottom: metrics.vertical },
+                    ]}
+                >
+                    {image && (
+                        <Image
+                            style={{
+                                width: '100%',
+                                aspectRatio: 1.5,
+                                marginBottom: metrics.vertical / 2,
+                                backgroundColor: 'rgba(0,0,0,.25)',
+                            }}
+                            source={{
+                                uri: image,
+                            }}
+                        />
+                    )}
                     <HeadlineText
-                        style={[styles.headline, appearance.headline]}
+                        style={[
+                            styles.headline,
+                            appearance.headline,
+                            { marginRight: metrics.horizontal * 2 },
+                        ]}
                     >
                         {headline}
                     </HeadlineText>

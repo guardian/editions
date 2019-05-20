@@ -6,6 +6,9 @@ import {
     Platform,
     StyleSheet,
     TouchableHighlight,
+    PanResponder,
+    TouchableWithoutFeedback,
+    Easing,
 } from 'react-native'
 import { Chevron } from '../chevron'
 import { metrics } from '../../theme/spacing'
@@ -16,26 +19,29 @@ This is the swipey contraption that contains an article.
 on iOS you can swipe it down to close
 
 TODO: you should be able to swipe it to the left too
-TODO: fade in some header view after scrolling past x point
 */
 const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
     container: {
         marginTop: notchInsetSize,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        overflow: 'hidden',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: -2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
         flex: 1,
     },
 })
 export const SlideCard = ({
     children,
-    header,
     headerStyle,
     onDismiss,
 }: {
     children: ReactNode
-    header: ReactNode
+
     headerStyle: {}
     onDismiss: () => void
 }) => {
@@ -49,6 +55,23 @@ export const SlideCard = ({
             }
         })
     }, [])
+    const [translateX] = useState(() => new Animated.Value(0))
+    const [panResponder] = useState(() =>
+        PanResponder.create({
+            onMoveShouldSetPanResponder: (e, { dy }) => dy > 10,
+            onPanResponderMove: Animated.event([null, { dy: translateX }]),
+            onPanResponderRelease: (e, { dy }) => {
+                if (Math.abs(dy) >= 100) {
+                    onDismiss()
+                } else {
+                    Animated.spring(translateX, {
+                        toValue: 0,
+                        bounciness: 10,
+                    }).start()
+                }
+            },
+        }),
+    )
     return (
         <Animated.View
             style={[
@@ -56,37 +79,46 @@ export const SlideCard = ({
                 {
                     transform: [
                         {
-                            scale: scale.interpolate({
-                                inputRange: [-100, 0],
-                                outputRange: [0.9, 1],
-                                extrapolate: 'clamp',
-                            }),
+                            translateY: Animated.add(
+                                scale.interpolate({
+                                    inputRange: [-100, 0],
+                                    outputRange: [100, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                                translateX,
+                            ),
                         },
                     ],
                 },
             ]}
         >
-            <TouchableHighlight onPress={onDismiss} accessibilityHint="Go back">
-                <View
-                    style={[
-                        headerStyle,
-                        {
-                            alignItems: 'center',
-                            paddingVertical: metrics.vertical,
-                            borderBottomWidth: scrollIndicatorVisible
-                                ? StyleSheet.hairlineWidth
-                                : 0,
-                        },
-                    ]}
+            <View
+                style={[
+                    headerStyle,
+                    {
+                        alignItems: 'center',
+                        borderTopWidth: StyleSheet.hairlineWidth,
+                        borderBottomWidth: scrollIndicatorVisible
+                            ? StyleSheet.hairlineWidth
+                            : 0,
+                    },
+                ]}
+                {...panResponder.panHandlers}
+            >
+                <TouchableWithoutFeedback
+                    onPress={onDismiss}
+                    accessibilityHint="Go back"
                 >
                     <Animated.View
                         style={{
+                            padding: metrics.vertical,
                             transform: [
                                 {
                                     translateY: scale.interpolate({
-                                        inputRange: [0, 100],
+                                        inputRange: [50, 250],
                                         outputRange: [metrics.vertical / -4, 0],
                                         extrapolate: 'clamp',
+                                        easing: Easing.elastic(1),
                                     }),
                                 },
                             ],
@@ -94,8 +126,9 @@ export const SlideCard = ({
                     >
                         <Chevron />
                     </Animated.View>
-                </View>
-            </TouchableHighlight>
+                </TouchableWithoutFeedback>
+            </View>
+
             <Animated.ScrollView
                 scrollEventThrottle={1}
                 showsVerticalScrollIndicator={scrollIndicatorVisible}
@@ -113,18 +146,15 @@ export const SlideCard = ({
                         },
                     ],
                 }}
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    y: scale,
-                                },
+                onScroll={Animated.event([
+                    {
+                        nativeEvent: {
+                            contentOffset: {
+                                y: scale,
                             },
                         },
-                    ],
-                    { useNativeDriver: true },
-                )}
+                    },
+                ])}
             >
                 {children}
             </Animated.ScrollView>
