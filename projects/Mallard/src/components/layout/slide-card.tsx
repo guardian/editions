@@ -67,6 +67,7 @@ export const SlideCard = ({
                     Animated.spring(translateX, {
                         toValue: 0,
                         bounciness: 10,
+                        useNativeDriver: true,
                     }).start()
                 }
             },
@@ -118,7 +119,6 @@ export const SlideCard = ({
                                         inputRange: [50, 250],
                                         outputRange: [metrics.vertical / -4, 0],
                                         extrapolate: 'clamp',
-                                        easing: Easing.elastic(1),
                                     }),
                                 },
                             ],
@@ -146,15 +146,18 @@ export const SlideCard = ({
                         },
                     ],
                 }}
-                onScroll={Animated.event([
-                    {
-                        nativeEvent: {
-                            contentOffset: {
-                                y: scale,
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: {
+                                    y: scale,
+                                },
                             },
                         },
-                    },
-                ])}
+                    ],
+                    { useNativeDriver: true },
+                )}
             >
                 {children}
             </Animated.ScrollView>
