@@ -5,18 +5,15 @@ import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
-
+import { container } from '../theme/styles'
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
+    container,
     contentContainer: {},
 })
 
 const useFrontsData = () => useEndpoint('', [], res => res)
 
-const FrontRow = ({ frontsData, title, issue, front, navigation }) => (
+const FrontRow = ({ frontsData, front, issue, navigation }) => (
     <>
         <View
             style={{
@@ -25,7 +22,7 @@ const FrontRow = ({ frontsData, title, issue, front, navigation }) => (
                 paddingTop: metrics.vertical * 2,
             }}
         >
-            <HeadlineText>{title}</HeadlineText>
+            <HeadlineText>{front}</HeadlineText>
         </View>
         <Grid
             onPress={item => navigation.navigate('Article', item)}
@@ -41,30 +38,23 @@ const FrontRow = ({ frontsData, title, issue, front, navigation }) => (
     </>
 )
 
-const FrontScreen = (props: { navigation: NavigationScreenProp<{}> }) => {
+const FrontScreen = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => {
     const frontsData = useFrontsData()
-    const { navigation } = props
     const issue = navigation.getParam('issue', 'NO-ID')
-    const front = navigation.getParam('front', 'NO-ID')
     return (
         <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
-            <FrontRow
-                title={'News'}
-                {...{ issue, navigation, frontsData, front }}
-            />
-            <FrontRow
-                title={'Sport'}
-                {...{ issue, navigation, frontsData, front }}
-            />
-            <FrontRow
-                title={'Other'}
-                {...{ issue, navigation, frontsData, front }}
-            />
+            <FrontRow front={'News'} {...{ issue, navigation, frontsData }} />
+            <FrontRow front={'Sport'} {...{ issue, navigation, frontsData }} />
+            <FrontRow front={'Other'} {...{ issue, navigation, frontsData }} />
             <MonoTextBlock style={{ flex: 1 }}>
-                This is an FrontScreen for from {front}, issue {issue}
+                This is an FrontScreen for issue {issue}
             </MonoTextBlock>
         </ScrollView>
     )

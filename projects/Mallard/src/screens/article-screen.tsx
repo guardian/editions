@@ -1,29 +1,29 @@
 import React from 'react'
-import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-    Button,
-    SafeAreaView,
-} from 'react-native'
-import { MonoTextBlock, HeadlineText } from '../components/styled-text'
+import { View, Text, StyleSheet, Button, Platform } from 'react-native'
+import { HeadlineText } from '../components/styled-text'
 import { useEndpoint } from '../hooks/use-fetch'
-import { Transition } from 'react-navigation-fluid-transitions'
 import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../theme/color'
 import { metrics } from '../theme/spacing'
+import { SlideCard } from '../components/layout/slide-card'
 
+const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
     container: {
-        color: '#fff',
+        marginTop: notchInsetSize,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        overflow: 'hidden',
+        flex: 2,
     },
     headline: {
-        flex: 1,
+        flexShrink: 0,
         alignItems: 'flex-start',
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
-        backgroundColor: color.palette.highlight.main,
+        paddingVertical: metrics.vertical / 2,
+        backgroundColor: color.palette.lifestyle.faded,
+        borderColor: color.line,
+        borderBottomWidth: 1,
     },
     block: {
         alignItems: 'flex-start',
@@ -49,36 +49,39 @@ export const ArticleScreen = ({
     const [headline, [articleData]] = useArticleData(article, {
         headline: headlineFromUrl,
     })
-
     return (
-        <ScrollView>
+        <SlideCard
+            onDismiss={() => {
+                navigation.goBack()
+            }}
+        >
             <View style={styles.container}>
-                <SafeAreaView
-                    style={{ backgroundColor: color.palette.highlight.main }}
-                >
-                    <Transition shared={`item-${article}`}>
-                        <View style={styles.headline}>
-                            <Button
-                                onPress={() => {
-                                    navigation.goBack()
-                                }}
-                                title={'Backsies'}
-                            />
-                            <Transition shared={`item-text-${article}`}>
-                                <HeadlineText>{headline}</HeadlineText>
-                            </Transition>
-                        </View>
-                    </Transition>
-                </SafeAreaView>
-                {articleData
-                    .filter(el => el.type === 0)
-                    .map((el, index) => (
-                        <View style={styles.block} key={index}>
-                            <Text>{el.textTypeData.html}</Text>
-                        </View>
-                    ))}
+                <View style={styles.headline}>
+                    <Button
+                        onPress={() => {
+                            navigation.goBack()
+                        }}
+                        title={'👈 Backsies'}
+                    />
+                    <HeadlineText
+                        style={{
+                            color: color.palette.lifestyle.main,
+                        }}
+                    >
+                        {headline}
+                    </HeadlineText>
+                </View>
+                <View style={{ backgroundColor: color.background, flex: 1 }}>
+                    {articleData
+                        .filter(el => el.type === 0)
+                        .map((el, index) => (
+                            <View style={styles.block} key={index}>
+                                <Text>{el.textTypeData.html}</Text>
+                            </View>
+                        ))}
+                </View>
             </View>
-        </ScrollView>
+        </SlideCard>
     )
 }
 
