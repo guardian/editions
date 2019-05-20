@@ -2,7 +2,7 @@ import { color } from './color'
 import { createContext, useContext } from 'react'
 
 /*
-Appearances are like themes for the core UI
+App appearances
 */
 interface AppAppearanceStyles {
     backgroundColor: string
@@ -26,9 +26,52 @@ const AppAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
         dimColor: color.dimText,
     },
 }
+/*Article appearances */
+interface ArticleAppearanceStyles {
+    card: {}
+    headline: {}
+}
+type ArticleAppearance = 'default' | 'news' | 'lifestyle'
 
-const AppAppearanceContext = createContext<AppAppearance>('default')
-export const WithAppAppearance = AppAppearanceContext.Provider
+const ArticleAppearances: {
+    [key in ArticleAppearance]: ArticleAppearanceStyles
+} = {
+    default: {
+        card: {
+            backgroundColor: color.primary,
+            borderColor: color.lineOverPrimary,
+        },
+        headline: {
+            color: color.textOverPrimary,
+            fontFamily: 'GHGuardianHeadline-Regular',
+        },
+    },
+    lifestyle: {
+        card: {
+            backgroundColor: color.palette.lifestyle.faded,
+        },
+        headline: {
+            fontFamily: 'GHGuardianHeadline-Medium',
+            color: color.palette.lifestyle.main,
+        },
+    },
+}
 
-export const useAppAppearance = (): AppAppearanceStyles =>
-    AppAppearances[useContext(AppAppearanceContext)]
+const getCtx = <AppearanceIndex, Styles>(defaultAppearance, appearances: A) => {
+    const AppearanceContext = createContext<AppearanceIndex>(defaultAppearance)
+    const WithAppearance = AppearanceContext.Provider
+
+    const useAppearance = (): Styles =>
+        appearances[useContext(AppearanceContext)]
+
+    return [WithAppearance, useAppearance]
+}
+
+export const [WithAppAppearance, useAppAppearance] = getCtx(
+    'default',
+    AppAppearances,
+)
+export const [WithArticleAppearance, useArticleAppearance] = getCtx(
+    'default',
+    ArticleAppearances,
+)

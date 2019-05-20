@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         flex: 2,
     },
-    headline: {
+    card: {
         flexShrink: 0,
         alignItems: 'flex-start',
         padding: metrics.horizontal,
@@ -56,7 +56,7 @@ export const ArticleScreen = ({
             }}
         >
             <View style={styles.container}>
-                <View style={styles.headline}>
+                <View style={styles.card}>
                     <Button
                         onPress={() => {
                             navigation.goBack()
