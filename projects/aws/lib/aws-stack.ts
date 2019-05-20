@@ -23,29 +23,6 @@ export class EditionsStack extends cdk.Stack {
             description: 'Stage',
         })
 
-        // const vpcId = new cdk.CfnParameter(this, 'vpc', {
-        //     type: 'AWS::EC2::VPC::Id',
-        //     description: 'vpc goes here',
-        // })
-
-        // const vpc = ec2.VpcNetwork.import(this, 'vpc', {
-        //     vpcId: vpcId.stringValue,
-        //     availabilityZones: ['eu-west-1'],
-        // })
-
-        // const subnetId = new cdk.CfnParameter(this, 'subnet', {
-        //     type: 'AWS::EC2::Subnet::Id',
-        //     description: 'subnet goes here',
-        // })
-
-        // const subnet = ec2.VpcSubnet.import(this, 'subnets', {
-        //     availabilityZone: 'eu-west-1',
-        //     subnetId: subnetId.stringValue,
-        // })
-        // const vpc = new ec2.VpcNetwork(this, 'editions-vpc', {})
-        //locating vpc
-        //const vpcSubnet = new ec2.VpcPrivateSubnet(this, 'editions-subnet', {})
-
         const deploy = new s3.Bucket(this, 'editions-dist')
 
         const backend = new lambda.Function(this, 'EditionsBackend', {
@@ -60,8 +37,6 @@ export class EditionsStack extends cdk.Stack {
             environment: {
                 hello: 'key',
             },
-            // vpc: vpc,
-            // vpcSubnets: subnet,
         })
 
         new apigateway.LambdaRestApi(
