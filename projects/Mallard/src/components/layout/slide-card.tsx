@@ -35,36 +35,25 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 })
-export const SlideCard = ({
-    children,
+
+const dismissAt = 100
+
+const Header = ({
+    scrollY,
+    isScrolling,
+    cardOffset,
     headerStyle,
     onDismiss,
-}: {
-    children: ReactNode
-
-    headerStyle: {}
-    onDismiss: () => void
-}) => {
-    const [scale] = useState(() => new Animated.Value(1))
-    const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(false)
-    useEffect(() => {
-        scale.addListener(({ value }) => {
-            setScrollIndicatorVisible(value > 0)
-            if (value < -100) {
-                onDismiss()
-            }
-        })
-    }, [])
-    const [translateX] = useState(() => new Animated.Value(0))
+}: any) => {
     const [panResponder] = useState(() =>
         PanResponder.create({
             onMoveShouldSetPanResponder: (e, { dy }) => dy > 10,
-            onPanResponderMove: Animated.event([null, { dy: translateX }]),
+            onPanResponderMove: Animated.event([null, { dy: cardOffset }]),
             onPanResponderRelease: (e, { dy }) => {
-                if (Math.abs(dy) >= 100) {
+                if (Math.abs(dy) >= dismissAt) {
                     onDismiss()
                 } else {
-                    Animated.spring(translateX, {
+                    Animated.spring(cardOffset, {
                         toValue: 0,
                         bounciness: 10,
                         useNativeDriver: true,
@@ -74,6 +63,67 @@ export const SlideCard = ({
         }),
     )
     return (
+        <View
+            style={[
+                headerStyle,
+                {
+                    alignItems: 'center',
+                    borderTopWidth: StyleSheet.hairlineWidth,
+                    borderBottomWidth: isScrolling
+                        ? StyleSheet.hairlineWidth
+                        : 0,
+                },
+            ]}
+            {...panResponder.panHandlers}
+        >
+            <TouchableWithoutFeedback
+                onPress={onDismiss}
+                accessibilityHint="Go back"
+            >
+                <Animated.View
+                    style={{
+                        padding: metrics.vertical,
+                        transform: [
+                            {
+                                translateY: scrollY.interpolate({
+                                    inputRange: [50, 250],
+                                    outputRange: [metrics.vertical / -4, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                            },
+                        ],
+                    }}
+                >
+                    <Chevron />
+                </Animated.View>
+            </TouchableWithoutFeedback>
+        </View>
+    )
+}
+
+export const SlideCard = ({
+    children,
+    headerStyle,
+    backgroundColor,
+    onDismiss,
+}: {
+    children: ReactNode
+    headerStyle: {}
+    backgroundColor: string
+    onDismiss: () => void
+}) => {
+    const [scrollY] = useState(() => new Animated.Value(1))
+    const [cardOffset] = useState(() => new Animated.Value(0))
+    const [isScrolling, setIsScrolling] = useState(false)
+    useEffect(() => {
+        scrollY.addListener(({ value }) => {
+            setIsScrolling(value > 0)
+            if (value < dismissAt * -1) {
+                onDismiss()
+            }
+        })
+    }, [])
+    return (
         <Animated.View
             style={[
                 styles.container,
@@ -81,77 +131,39 @@ export const SlideCard = ({
                     transform: [
                         {
                             translateY: Animated.add(
-                                scale.interpolate({
-                                    inputRange: [-100, 0],
-                                    outputRange: [100, 0],
+                                scrollY.interpolate({
+                                    inputRange: [dismissAt * -1, 0],
+                                    outputRange: [dismissAt, 0],
                                     extrapolate: 'clamp',
                                 }),
-                                translateX,
+                                cardOffset,
                             ),
                         },
                     ],
                 },
             ]}
         >
-            <View
-                style={[
+            <Header
+                {...{
+                    scrollY,
+                    isScrolling,
+                    cardOffset,
                     headerStyle,
-                    {
-                        alignItems: 'center',
-                        borderTopWidth: StyleSheet.hairlineWidth,
-                        borderBottomWidth: scrollIndicatorVisible
-                            ? StyleSheet.hairlineWidth
-                            : 0,
-                    },
-                ]}
-                {...panResponder.panHandlers}
-            >
-                <TouchableWithoutFeedback
-                    onPress={onDismiss}
-                    accessibilityHint="Go back"
-                >
-                    <Animated.View
-                        style={{
-                            padding: metrics.vertical,
-                            transform: [
-                                {
-                                    translateY: scale.interpolate({
-                                        inputRange: [50, 250],
-                                        outputRange: [metrics.vertical / -4, 0],
-                                        extrapolate: 'clamp',
-                                    }),
-                                },
-                            ],
-                        }}
-                    >
-                        <Chevron />
-                    </Animated.View>
-                </TouchableWithoutFeedback>
-            </View>
-
+                    onDismiss,
+                }}
+            />
             <Animated.ScrollView
                 scrollEventThrottle={1}
-                showsVerticalScrollIndicator={scrollIndicatorVisible}
-                contentContainerStyle={{ flexGrow: 1 }}
-                style={{
+                contentContainerStyle={{
                     flexGrow: 1,
-                    background: 'blue',
-                    transform: [
-                        {
-                            translateY: scale.interpolate({
-                                inputRange: [-100, 0],
-                                outputRange: [-100, 0],
-                                extrapolate: 'clamp',
-                            }),
-                        },
-                    ],
                 }}
+                style={{ backgroundColor }}
                 onScroll={Animated.event(
                     [
                         {
                             nativeEvent: {
                                 contentOffset: {
-                                    y: scale,
+                                    y: scrollY,
                                 },
                             },
                         },
@@ -159,7 +171,21 @@ export const SlideCard = ({
                     { useNativeDriver: true },
                 )}
             >
-                {children}
+                <Animated.View
+                    style={{
+                        transform: [
+                            {
+                                translateY: scrollY.interpolate({
+                                    inputRange: [-100, 0],
+                                    outputRange: [-100, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                            },
+                        ],
+                    }}
+                >
+                    {children}
+                </Animated.View>
             </Animated.ScrollView>
         </Animated.View>
     )

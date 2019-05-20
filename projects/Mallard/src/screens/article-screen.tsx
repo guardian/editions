@@ -84,6 +84,7 @@ const ArticleScreenContents = ({
     return (
         <SlideCard
             headerStyle={[styles.card, appearance.card]}
+            backgroundColor={appearance.card.backgroundColor}
             onDismiss={() => {
                 navigation.goBack()
             }}
