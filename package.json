@@ -2,12 +2,16 @@
     "scripts": {
         "validate-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json",
         "validate-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json",
-        "validate": "yarn validate-mallard && yarn validate-backend",
+        "validate-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json",
+        "validate": "yarn validate-mallard && yarn validate-backend && yarn validate-aws",
         "fix-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json --fix",
         "fix-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json --fix",
-        "fix": "yarn fix-mallard && yarn fix-backend"
+        "fix-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json --fix",
+        "fix": "yarn fix-mallard && yarn fix-backend && yarn fix-aws",
+        "upload": "node-riffraff-artifact"
     },
     "devDependencies": {
+        "@guardian/node-riffraff-artifact": "0.0.6",
         "@typescript-eslint/eslint-plugin": "^1.7.0",
         "@typescript-eslint/parser": "^1.7.0",
         "eslint": "^5.16.0",

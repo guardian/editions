@@ -1,0 +1,20 @@
+stacks: [frontend]
+regions: [eu-west-1]
+
+deployments:
+    backend:
+        type: aws-lambda
+        dependencies: [cloudformation]
+        parameters:
+            prefixStack: false
+            bucket: editions-dist
+            fileName: backend.zip
+            functionNames: [backend-]
+    cloudformation:
+        type: cloud-formation
+        app: editions
+        parameters:
+            prependStackToCloudFormationStackName: false
+            cloudFormationStackName: editions
+            templatePath: cloudformation/cloudformation.yaml
+            cloudFormationStackByTags: false

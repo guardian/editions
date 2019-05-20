@@ -1,14 +1,17 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "projects/Mallard"
-		},
-		{
-			"path": "projects/backend"
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "projects/Mallard"
+        },
+        {
+            "path": "projects/backend"
+        },
+        {
+            "path": "projects/aws"
+        }
+    ],
+    "settings": {}
 }

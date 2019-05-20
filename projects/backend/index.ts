@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+import awsServerlessExpress from 'aws-serverless-express'
+import { Handler } from 'aws-lambda'
 import express = require('express')
 import fetch from 'node-fetch'
 import {
@@ -8,14 +10,13 @@ import {
 } from '@creditkarma/thrift-server-core'
 import { ItemResponseCodec } from '@guardian/capi-ts'
 import { getIssue, getCollectionsForFront, getCollection } from './fronts'
-const app = express()
-// app.get('/', (req, res) => res.send('Hello World!'))
 
-// app.listen(3000, () => console.log(`Example app listening on port 👌🏻!`))
+const app = express()
+
 const port = 3131
 const url = (path: string) =>
     `https://content.guardianapis.com/${path}?format=thrift&api-key=${
-        process.env.CAPI_KEY
+    process.env.CAPI_KEY
     }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all`
 
 const getArticle = async (path: string) => {
@@ -76,4 +77,15 @@ app.get('/', (req, res) => {
     res.send(JSON.stringify({ client: '🦆' }))
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+export const handler: Handler = (event, context) => {
+    awsServerlessExpress.proxy(
+        awsServerlessExpress.createServer(app),
+        event,
+        context,
+    )
+}
+
+if (require.main === module)
+    app.listen(port, () =>
+        console.log(`Example app listening on port ${port}!`),
+    )
