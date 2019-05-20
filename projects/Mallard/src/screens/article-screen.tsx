@@ -70,12 +70,10 @@ export const ArticleScreen = ({
 
 const ArticleScreenContents = ({
     navigation,
-    article,
     articleData,
     headline,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: number
     articleData: {}
     headline: string
 }) => {
