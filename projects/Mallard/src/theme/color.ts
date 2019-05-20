@@ -1,4 +1,5 @@
 import { palette } from '@guardian/pasteup/palette'
+import { createContext, useContext } from 'react'
 
 /*
 Roles for colors.  Prefer using these over the palette.  It makes it easier
@@ -11,38 +12,71 @@ put that in the <Spinner /> component.
 
 export const color = {
     /*
-  Backgrounds
-  */
+    Backgrounds
+    */
     background: palette.neutral[100],
     dimBackground: palette.neutral[97],
     darkBackground: palette.neutral[20],
     textOverDarkBackground: palette.neutral[100],
 
     /*
-  Brand (our blue)
-  */
+    Brand (our blue)
+    */
     textOverPrimary: palette.neutral[100],
     primary: palette.brand.main,
     primaryDarker: palette.brand.dark,
 
     /*
-  Border colors
-  */
+    Border colors
+    */
     line: palette.neutral[86],
+    lineOverPrimary: palette.brand.pastel,
 
     /*
-  Text colors
-  */
+    Text colors
+    */
     text: palette.neutral[7],
     dimText: palette.neutral[20],
 
     /*
-  Error messages and icons.
-  */
+    Error messages and icons.
+    */
     error: palette.news.main,
 
     /*
-  The palette is available to use, but prefer using the name.
-  */
+    The palette is available to use, but prefer using the name.
+    */
     palette,
 }
+
+/*
+Appearances are like themes for the core UI
+*/
+interface AppearanceColor {
+    backgroundColor: string
+    borderColor: string
+    color: string
+    dimColor: string
+}
+type Appearance = 'default' | 'primary'
+
+const appearanceColors: { [key in Appearance]: AppearanceColor } = {
+    primary: {
+        backgroundColor: color.primary,
+        borderColor: color.lineOverPrimary,
+        color: color.textOverPrimary,
+        dimColor: color.textOverPrimary,
+    },
+    default: {
+        backgroundColor: color.background,
+        borderColor: color.line,
+        color: color.text,
+        dimColor: color.dimText,
+    },
+}
+
+const AppearanceContext = createContext<Appearance>('default')
+export const WithAppearance = AppearanceContext.Provider
+
+export const useAppearanceColor = (): AppearanceColor =>
+    appearanceColors[useContext(AppearanceContext)]

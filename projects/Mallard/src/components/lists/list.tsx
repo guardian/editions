@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
     Platform,
     FlatList,
@@ -7,11 +7,12 @@ import {
     SafeAreaView,
     View,
     Text,
+    StyleSheet,
 } from 'react-native'
-import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { PropTypes } from './helpers'
+import { PropTypes, Item, OnPressHandler } from './helpers'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { useAppearanceColor } from '../../theme/color'
 
 export const ListHeading = ({ children }: { children: string }) => (
     <View
@@ -26,43 +27,54 @@ export const ListHeading = ({ children }: { children: string }) => (
         </SafeAreaView>
     </View>
 )
-export class List extends React.Component<PropTypes> {
-    render() {
-        const { data, onPress } = this.props
-        const Highlight =
-            Platform.OS === 'android'
-                ? TouchableNativeFeedback
-                : TouchableHighlight
-        return (
-            <FlatList
+
+const ListItem = ({
+    onPress,
+    item: { title, explainer, data },
+}: {
+    item: Item
+    onPress: OnPressHandler
+}) => {
+    const Highlight =
+        Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
+    return (
+        <Highlight onPress={() => onPress(data)}>
+            <View
                 style={{
-                    borderTopWidth: 1,
-                    borderColor: '#ddd',
+                    padding: metrics.horizontal,
+                    paddingVertical: metrics.vertical,
+                    borderTopWidth: 0,
+                    borderBottomWidth: StyleSheet.hairlineWidth,
+                    borderColor: useAppearanceColor().borderColor,
+                    backgroundColor: useAppearanceColor().backgroundColor,
                 }}
-                data={data}
-                renderItem={({ item: { title, explainer, data } }: any) => (
-                    <Highlight onPress={() => onPress(data)}>
-                        <View
-                            style={{
-                                padding: metrics.horizontal,
-                                paddingVertical: metrics.vertical,
-                                backgroundColor: color.background,
-                                borderBottomWidth: 1,
-                                borderColor: color.line,
-                            }}
+            >
+                <SafeAreaView>
+                    <UiBodyCopy>{title}</UiBodyCopy>
+                    {explainer && (
+                        <UiExplainerCopy
+                            style={{ marginTop: metrics.vertical / 8 }}
                         >
-                            <SafeAreaView>
-                                <UiBodyCopy>{title}</UiBodyCopy>
-                                {explainer && (
-                                    <UiExplainerCopy>
-                                        {explainer}
-                                    </UiExplainerCopy>
-                                )}
-                            </SafeAreaView>
-                        </View>
-                    </Highlight>
-                )}
-            />
-        )
-    }
+                            {explainer}
+                        </UiExplainerCopy>
+                    )}
+                </SafeAreaView>
+            </View>
+        </Highlight>
+    )
+}
+
+export const List = ({ data, onPress }: PropTypes) => {
+    return (
+        <FlatList
+            style={{
+                borderTopWidth: StyleSheet.hairlineWidth,
+                borderColor: useAppearanceColor().borderColor,
+            }}
+            data={data}
+            renderItem={({ item }) => (
+                <ListItem onPress={onPress} item={item} />
+            )}
+        />
+    )
 }
