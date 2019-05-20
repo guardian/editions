@@ -2,7 +2,6 @@ import cdk = require('@aws-cdk/cdk')
 import apigateway = require('@aws-cdk/aws-apigateway')
 import lambda = require('@aws-cdk/aws-lambda')
 import s3 = require('@aws-cdk/aws-s3')
-import ec2 = require('@aws-cdk/aws-ec2')
 
 import { Code } from '@aws-cdk/aws-lambda'
 // import { Bucket } from '@aws-cdk/aws-s3';
