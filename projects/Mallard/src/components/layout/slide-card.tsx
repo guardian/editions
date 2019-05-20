@@ -16,7 +16,7 @@ export const SlideCard = ({
     children: ReactNode
     onDismiss: () => void
 }) => {
-    const scale = useRef(new Animated.Value(1)).current
+    const [scale] = useState(() => new Animated.Value(1))
     const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true)
     useEffect(() => {
         scale.addListener(({ value }) => {
