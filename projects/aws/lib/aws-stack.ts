@@ -38,13 +38,17 @@ export class EditionsStack extends cdk.Stack {
             },
         })
 
-        new apigateway.LambdaRestApi(
-            this,
-            `${stageParameter.value}-${appParameter.value}-endpoint`,
-            {
-                handler: backend,
+        new apigateway.LambdaRestApi(this, 'endpoint', {
+            handler: backend,
+            options: {
+                restApiName: `${stageParameter.stringValue}-${
+                    appParameter.stringValue
+                }-endpoint`,
+                description: `${stageParameter.stringValue}-${
+                    appParameter.stringValue
+                }-endpoint`,
             },
-        )
+        })
 
         deploy.grantRead(backend)
     }
