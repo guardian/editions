@@ -11,15 +11,12 @@ import {
     WithArticleAppearance,
     articleAppearances,
 } from '../theme/appearance'
+import { TouchableHighlight } from 'react-native-gesture-handler'
+import { Chevron } from '../components/chevron'
 
-const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
     container: {
-        marginTop: notchInsetSize,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        overflow: 'hidden',
-        flex: 2,
+        flex: 1,
     },
     card: {
         flexShrink: 0,
@@ -80,18 +77,24 @@ const ArticleScreenContents = ({
     const appearance = useArticleAppearance()
     return (
         <SlideCard
+            header={
+                <TouchableHighlight
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                    accessibilityHint="Go back"
+                >
+                    <View style={[styles.card, appearance.card]}>
+                        <Chevron />
+                    </View>
+                </TouchableHighlight>
+            }
             onDismiss={() => {
                 navigation.goBack()
             }}
         >
             <View style={styles.container}>
                 <View style={[styles.card, appearance.card]}>
-                    <Button
-                        onPress={() => {
-                            navigation.goBack()
-                        }}
-                        title={'👈 Backsies'}
-                    />
                     <HeadlineText
                         style={[styles.headline, appearance.headline]}
                     >
