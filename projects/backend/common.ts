@@ -1,18 +1,22 @@
 // This file is symlinked into both backend and Mallard.
 // Be careful.
 
-interface Issue {
+export interface Issue {
     name: string
     fronts: string[]
 }
 
-interface ArticleFragment {
+export interface ArticleFragment {
     id: string
     frontPublicationDate: number
     publishedBy?: string
 }
 
-interface Collection {
+export interface CollectionArticles {
+    id: string
+    articles: ArticleFragment[]
+}
+export interface Collection {
     displayName: string
     type: string
     backfill?: unknown
@@ -34,7 +38,7 @@ interface Collection {
     articles?: ArticleFragment[]
 }
 
-interface Front {
+export interface Front {
     collections: { [key: string]: Collection }
     canonical?: string
     group?: string

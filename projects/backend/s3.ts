@@ -12,22 +12,55 @@ const s3 = new S3({
     ]),
 })
 
-const stage = 'CODE'
+const stage = 'PROD'
 
-export const s3fetch = async (key: string) => {
+type S3Response =
+    | {
+          status: number
+          ok: false
+      }
+    | {
+          status: number
+          ok: true
+          text: () => Promise<string>
+          json: () => Promise<{}>
+          lastModified?: Date
+      }
+
+export const s3fetch = (key: string): Promise<S3Response> => {
     const k = `${stage}/${key}`
     console.log(k)
-    const result = await s3
-        .getObject({
-            Key: k,
-            Bucket: 'facia-tool-store',
-        })
-        .promise()
-    const body = result.Body
-    if (body == null) throw new Error('Not found.')
-    return {
-        text: async () => body.toString(),
-        json: async () => JSON.parse(body.toString()),
-        lastModified: result.LastModified,
-    }
+    return new Promise((resolve, reject) => {
+        s3.getObject(
+            {
+                Key: k,
+                Bucket: 'facia-tool-store',
+            },
+            (error, result) => {
+                if (error && error.code == 'NoSuchKey') {
+                    resolve({ status: 404, ok: false })
+                    return
+                }
+                if (result == null) debugger
+                if (error) reject(error)
+
+                const body = result.Body
+
+                if (body == undefined) {
+                    reject(new Error('Not found.'))
+                    return
+                }
+                console.log(
+                    JSON.stringify(JSON.parse(body.toString()), null, 2),
+                )
+                resolve({
+                    status: 200,
+                    ok: true,
+                    text: async () => body.toString(),
+                    json: async () => JSON.parse(body.toString()),
+                    lastModified: result.LastModified,
+                })
+            },
+        )
+    })
 }

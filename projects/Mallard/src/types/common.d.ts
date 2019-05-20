@@ -1,1 +1,0 @@
-../../../backend/types/common.d.ts
