@@ -14,12 +14,14 @@ export const HeadlineText = ({
     return (
         <Text
             {...props}
-            style={{
-                fontFamily: 'GHGuardianHeadline-Medium',
-                fontSize: 24,
-                color: color.text,
-                ...style,
-            }}
+            style={[
+                {
+                    fontFamily: 'GHGuardianHeadline-Medium',
+                    fontSize: 24,
+                    color: color.text,
+                },
+                style,
+            ]}
         />
     )
 }

@@ -6,6 +6,11 @@ import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../theme/color'
 import { metrics } from '../theme/spacing'
 import { SlideCard } from '../components/layout/slide-card'
+import {
+    useArticleAppearance,
+    WithArticleAppearance,
+    articleAppearances,
+} from '../theme/appearance'
 
 const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
@@ -21,9 +26,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 2,
-        backgroundColor: color.palette.lifestyle.faded,
-        borderColor: color.line,
         borderBottomWidth: 1,
+        ...articleAppearances.default.card,
+    },
+    headline: {
+        ...articleAppearances.default.headline,
     },
     block: {
         alignItems: 'flex-start',
@@ -49,6 +56,30 @@ export const ArticleScreen = ({
     const [headline, [articleData]] = useArticleData(article, {
         headline: headlineFromUrl,
     })
+
+    return (
+        <WithArticleAppearance
+            value={['news', 'lifestyle', 'comment', 'default'][article % 4]}
+        >
+            <ArticleScreenContents
+                {...{ article, articleData, headline, navigation }}
+            />
+        </WithArticleAppearance>
+    )
+}
+
+const ArticleScreenContents = ({
+    navigation,
+    article,
+    articleData,
+    headline,
+}: {
+    navigation: NavigationScreenProp<{}>
+    article: number
+    articleData: {}
+    headline: string
+}) => {
+    const appearance = useArticleAppearance()
     return (
         <SlideCard
             onDismiss={() => {
@@ -56,7 +87,7 @@ export const ArticleScreen = ({
             }}
         >
             <View style={styles.container}>
-                <View style={styles.card}>
+                <View style={[styles.card, appearance.card]}>
                     <Button
                         onPress={() => {
                             navigation.goBack()
@@ -64,9 +95,7 @@ export const ArticleScreen = ({
                         title={'👈 Backsies'}
                     />
                     <HeadlineText
-                        style={{
-                            color: color.palette.lifestyle.main,
-                        }}
+                        style={[styles.headline, appearance.headline]}
                     >
                         {headline}
                     </HeadlineText>

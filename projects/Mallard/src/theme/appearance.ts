@@ -1,8 +1,9 @@
 import { color } from './color'
 import { createContext, useContext } from 'react'
+import { Animated } from 'react-native'
 
 /*
-App appearances
+Types
 */
 interface AppAppearanceStyles {
     backgroundColor: string
@@ -10,9 +11,15 @@ interface AppAppearanceStyles {
     color: string
     dimColor: string
 }
-type AppAppearance = 'default' | 'primary'
+interface ArticleAppearanceStyles {
+    card: {}
+    headline: {}
+}
 
-const AppAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
+type AppAppearance = 'default' | 'primary'
+type ArticleAppearance = 'default' | 'news' | 'lifestyle' | 'comment'
+
+const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
         backgroundColor: color.primary,
         borderColor: color.lineOverPrimary,
@@ -26,24 +33,35 @@ const AppAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
         dimColor: color.dimText,
     },
 }
-/*Article appearances */
-interface ArticleAppearanceStyles {
-    card: {}
-    headline: {}
-}
-type ArticleAppearance = 'default' | 'news' | 'lifestyle'
 
-const ArticleAppearances: {
+/*
+COLOURS
+*/
+export const articleAppearances: {
     [key in ArticleAppearance]: ArticleAppearanceStyles
 } = {
     default: {
         card: {
-            backgroundColor: color.primary,
-            borderColor: color.lineOverPrimary,
+            backgroundColor: color.background,
+            borderColor: color.line,
         },
         headline: {
-            color: color.textOverPrimary,
-            fontFamily: 'GHGuardianHeadline-Regular',
+            color: color.text,
+        },
+    },
+    news: {
+        card: {},
+        headline: {
+            color: color.palette.news.main,
+        },
+    },
+    comment: {
+        card: {
+            backgroundColor: color.palette.opinion.faded,
+        },
+        headline: {
+            color: color.palette.opinion.main,
+            fontFamily: 'GHGuardianHeadline-Light',
         },
     },
     lifestyle: {
@@ -51,27 +69,21 @@ const ArticleAppearances: {
             backgroundColor: color.palette.lifestyle.faded,
         },
         headline: {
-            fontFamily: 'GHGuardianHeadline-Medium',
+            fontFamily: 'GHGuardianHeadline-Bold',
             color: color.palette.lifestyle.main,
         },
     },
 }
+/*
+  Exports
+ */
+const AppAppearanceContext = createContext<AppAppearance>('default')
+const ArticleAppearanceContext = createContext<ArticleAppearance>('default')
 
-const getCtx = <AppearanceIndex, Styles>(defaultAppearance, appearances: A) => {
-    const AppearanceContext = createContext<AppearanceIndex>(defaultAppearance)
-    const WithAppearance = AppearanceContext.Provider
+export const WithAppAppearance = AppAppearanceContext.Provider
+export const useAppAppearance = (): AppAppearanceStyles =>
+    appAppearances[useContext(AppAppearanceContext)]
 
-    const useAppearance = (): Styles =>
-        appearances[useContext(AppearanceContext)]
-
-    return [WithAppearance, useAppearance]
-}
-
-export const [WithAppAppearance, useAppAppearance] = getCtx(
-    'default',
-    AppAppearances,
-)
-export const [WithArticleAppearance, useArticleAppearance] = getCtx(
-    'default',
-    ArticleAppearances,
-)
+export const WithArticleAppearance = ArticleAppearanceContext.Provider
+export const useArticleAppearance = (): ArticleAppearanceStyles =>
+    articleAppearances[useContext(ArticleAppearanceContext)]
