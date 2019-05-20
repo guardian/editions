@@ -50,7 +50,7 @@ const Header = ({
             onMoveShouldSetPanResponder: (e, { dy }) => dy > 10,
             onPanResponderMove: Animated.event([null, { dy: cardOffset }]),
             onPanResponderRelease: (e, { dy }) => {
-                if (Math.abs(dy) >= dismissAt) {
+                if (dy >= dismissAt) {
                     onDismiss()
                 } else {
                     Animated.spring(cardOffset, {
