@@ -22,6 +22,11 @@ export class EditionsStack extends cdk.Stack {
             description: 'Stage',
         })
 
+        const capiParameter = new cdk.CfnParameter(this, 'capi', {
+            type: 'String',
+            description: 'Capi key',
+        })
+
         const deploy = new s3.Bucket(this, 'editions-dist')
 
         const backend = new lambda.Function(this, 'EditionsBackend', {
@@ -34,7 +39,7 @@ export class EditionsStack extends cdk.Stack {
             ),
             handler: 'handler',
             environment: {
-                hello: 'key',
+                CAPI_KEY: capiParameter.stringValue,
             },
         })
 
