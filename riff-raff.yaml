@@ -16,5 +16,5 @@ deployments:
         parameters:
             prependStackToCloudFormationStackName: false
             cloudFormationStackName: editions
-            templatePath: cloudformation/cloudformation.yaml
+            templatePath: cloudformation.yaml
             cloudFormationStackByTags: false
