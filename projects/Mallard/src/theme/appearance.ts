@@ -12,17 +12,30 @@ interface AppAppearanceStyles {
     dimColor: string
 }
 interface ArticleAppearanceStyles {
+    /*
+    You can spread this over any 'hero' 
+    background in the article page
+    */
     backgrounds: {
         backgroundColor?: string
         borderColor?: string
     }
+    /*
+    Spread this over text and icons
+    */
     text: {
         color?: string
     }
+    /*
+    Overrides for the headline
+    */
     headline: {
         color?: string
         fontFamily?: string
     }
+    /*
+    Feel free to add more stuff as needed!!
+    */
 }
 
 export type AppAppearance = 'default' | 'primary'
