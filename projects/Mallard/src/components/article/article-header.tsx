@@ -70,6 +70,7 @@ const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'flex-end',
         height: 500,
+        marginTop: -50,
         ...articleAppearances.default.backgrounds,
     },
     headline: {

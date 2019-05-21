@@ -95,7 +95,7 @@ export const SlideCard = ({
                         transform: [
                             {
                                 translateY: scrollY.interpolate({
-                                    inputRange: [-100, 0],
+                                    inputRange: [-150, 0],
                                     outputRange: [-100, 0],
                                     extrapolate: 'clamp',
                                 }),
