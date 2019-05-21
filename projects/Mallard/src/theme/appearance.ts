@@ -12,12 +12,17 @@ interface AppAppearanceStyles {
     dimColor: string
 }
 interface ArticleAppearanceStyles {
-    cardAndPlaque: {
+    backgrounds: {
         backgroundColor?: string
         borderColor?: string
+    }
+    text: {
         color?: string
     }
-    headline: {}
+    headline: {
+        color?: string
+        fontFamily?: string
+    }
 }
 
 export type AppAppearance = 'default' | 'primary'
@@ -50,44 +55,50 @@ export const articleAppearances: {
     [key in ArticleAppearance]: ArticleAppearanceStyles
 } = {
     default: {
-        cardAndPlaque: {
+        backgrounds: {
             backgroundColor: color.background,
             borderColor: color.line,
         },
-        headline: {
+        text: {
             color: color.text,
         },
+        headline: {},
     },
     news: {
-        cardAndPlaque: {},
-        headline: {
+        backgrounds: {},
+        text: {
             color: color.palette.news.main,
         },
+        headline: {},
     },
     comment: {
-        cardAndPlaque: {
+        backgrounds: {
             backgroundColor: color.palette.opinion.faded,
         },
-        headline: {
+        text: {
             color: color.palette.opinion.main,
+        },
+        headline: {
             fontFamily: 'GHGuardianHeadline-Light',
         },
     },
     lifestyle: {
-        cardAndPlaque: {
+        backgrounds: {
             backgroundColor: color.palette.lifestyle.faded,
+        },
+        text: {
+            color: color.palette.lifestyle.main,
         },
         headline: {
             fontFamily: 'GHGuardianHeadline-Bold',
-            color: color.palette.lifestyle.main,
         },
     },
     longread: {
-        cardAndPlaque: {
+        backgrounds: {
             backgroundColor: color.palette.neutral[7],
-            color: color.palette.neutral[100],
         },
-        headline: { color: color.palette.neutral[100] },
+        text: { color: color.palette.neutral[100] },
+        headline: {},
     },
 }
 /*

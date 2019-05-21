@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        ...articleAppearances.default.cardAndPlaque,
+        ...articleAppearances.default.backgrounds,
     },
     block: {
         alignItems: 'flex-start',
@@ -43,8 +43,12 @@ const Article = ({
     const { appearance, name: appearanceName } = useArticleAppearance()
     return (
         <SlideCard
-            headerStyle={[styles.header, appearance.cardAndPlaque]}
-            backgroundColor={appearance.cardAndPlaque.backgroundColor}
+            headerStyle={[
+                styles.header,
+                appearance.backgrounds,
+                appearance.text,
+            ]}
+            backgroundColor={appearance.backgrounds.backgroundColor}
             onDismiss={() => {
                 navigation.goBack()
             }}

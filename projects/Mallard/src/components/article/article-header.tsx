@@ -9,9 +9,9 @@ import {
 import { ArticleImage } from './article-image'
 
 type Style = {
-    card: {}
+    background: {}
     headline: {}
-    plaque: {}
+    textBackground: {}
 }
 
 type PropTypes = {
@@ -19,16 +19,16 @@ type PropTypes = {
     image?: string | null
 }
 
-const newsStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
-    card: {
+const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
+    background: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
         borderBottomWidth: StyleSheet.hairlineWidth,
         paddingBottom: metrics.vertical,
         paddingTop: metrics.headerHeight,
-        ...articleAppearances.default.cardAndPlaque,
+        ...articleAppearances.default.backgrounds,
     },
-    plaque: {},
+    textBackground: {},
     headline: {
         marginRight: metrics.horizontal * 2,
         ...articleAppearances.default.headline,
@@ -38,7 +38,7 @@ const newsStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
 const NewsHeader = ({ headline, image }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
-        <View style={[newsStyles.card, appearance.cardAndPlaque]}>
+        <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
             {image && (
                 <ArticleImage
                     style={{
@@ -48,26 +48,32 @@ const NewsHeader = ({ headline, image }: PropTypes) => {
                     image={image}
                 />
             )}
-            <HeadlineText style={[newsStyles.headline, appearance.headline]}>
+            <HeadlineText
+                style={[
+                    newsHeaderStyles.headline,
+                    appearance.text,
+                    appearance.headline,
+                ]}
+            >
                 {headline}
             </HeadlineText>
         </View>
     )
 }
 
-const longReadStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
-    card: {
+const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
+    background: {
         flexShrink: 0,
         alignItems: 'flex-start',
         justifyContent: 'flex-end',
         height: 500,
-        ...articleAppearances.default.cardAndPlaque,
+        ...articleAppearances.default.backgrounds,
     },
     headline: {
         ...articleAppearances.default.headline,
     },
-    plaque: {
-        ...articleAppearances.default.cardAndPlaque,
+    textBackground: {
+        ...articleAppearances.default.backgrounds,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 2,
         marginEnd: metrics.horizontal * 2,
@@ -77,16 +83,25 @@ const longReadStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
 const LongReadHeader = ({ headline, image }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
-        <View style={[longReadStyles.card, appearance.cardAndPlaque]}>
+        <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
             {image && (
                 <ArticleImage
                     style={StyleSheet.absoluteFillObject}
                     image={image}
                 />
             )}
-            <View style={[longReadStyles.plaque, appearance.cardAndPlaque]}>
+            <View
+                style={[
+                    longReadHeaderStyles.textBackground,
+                    appearance.backgrounds,
+                ]}
+            >
                 <HeadlineText
-                    style={[longReadStyles.headline, appearance.headline]}
+                    style={[
+                        longReadHeaderStyles.headline,
+                        appearance.text,
+                        appearance.headline,
+                    ]}
                 >
                     {headline}
                 </HeadlineText>
