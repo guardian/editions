@@ -12,7 +12,7 @@ interface AppAppearanceStyles {
     dimColor: string
 }
 interface ArticleAppearanceStyles {
-    card: {}
+    cardAndPlaque: {}
     headline: {}
 }
 
@@ -46,7 +46,7 @@ export const articleAppearances: {
     [key in ArticleAppearance]: ArticleAppearanceStyles
 } = {
     default: {
-        card: {
+        cardAndPlaque: {
             backgroundColor: color.background,
             borderColor: color.line,
         },
@@ -55,13 +55,13 @@ export const articleAppearances: {
         },
     },
     news: {
-        card: {},
+        cardAndPlaque: {},
         headline: {
             color: color.palette.news.main,
         },
     },
     comment: {
-        card: {
+        cardAndPlaque: {
             backgroundColor: color.palette.opinion.faded,
         },
         headline: {
@@ -70,7 +70,7 @@ export const articleAppearances: {
         },
     },
     lifestyle: {
-        card: {
+        cardAndPlaque: {
             backgroundColor: color.palette.lifestyle.faded,
         },
         headline: {
@@ -79,8 +79,9 @@ export const articleAppearances: {
         },
     },
     longread: {
-        card: {
+        cardAndPlaque: {
             backgroundColor: color.palette.neutral[7],
+            color: color.palette.neutral[100],
         },
         headline: { color: color.palette.neutral[100] },
     },
@@ -96,5 +97,11 @@ export const useAppAppearance = (): AppAppearanceStyles =>
     appAppearances[useContext(AppAppearanceContext)]
 
 export const WithArticleAppearance = ArticleAppearanceContext.Provider
-export const useArticleAppearance = (): ArticleAppearanceStyles =>
-    articleAppearances[useContext(ArticleAppearanceContext)]
+
+export const useArticleAppearance = (): {
+    name: ArticleAppearance
+    appearance: ArticleAppearanceStyles
+} => ({
+    name: useContext(ArticleAppearanceContext),
+    appearance: articleAppearances[useContext(ArticleAppearanceContext)],
+})

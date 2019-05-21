@@ -10,7 +10,10 @@ import {
     WithArticleAppearance,
     articleAppearances,
 } from '../theme/appearance'
-import { LongReadHeader } from '../components/article/article-header'
+import {
+    LongReadHeader,
+    NewsHeader,
+} from '../components/article/article-header'
 
 const fixture = seed => ({
     image: [
@@ -26,7 +29,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        ...articleAppearances.default.card,
+        ...articleAppearances.default.cardAndPlaque,
     },
     block: {
         alignItems: 'flex-start',
@@ -73,17 +76,21 @@ const ArticleScreenContents = ({
     headline: string
     image?: string
 }) => {
-    const appearance = useArticleAppearance()
+    const { appearance, name: appearanceName } = useArticleAppearance()
     return (
         <SlideCard
-            headerStyle={[styles.header, appearance.card]}
-            backgroundColor={appearance.card.backgroundColor}
+            headerStyle={[styles.header, appearance.cardAndPlaque]}
+            backgroundColor={appearance.cardAndPlaque.backgroundColor}
             onDismiss={() => {
                 navigation.goBack()
             }}
         >
             <View style={styles.container}>
-                <LongReadHeader {...{ headline, image }} />
+                {appearanceName === 'longread' ? (
+                    <LongReadHeader {...{ headline, image }} />
+                ) : (
+                    <NewsHeader {...{ headline, image }} />
+                )}
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
                     {articleData

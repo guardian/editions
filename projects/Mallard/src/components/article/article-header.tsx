@@ -14,13 +14,19 @@ type Style = {
     plaque: {}
 }
 
+type PropTypes = {
+    headline: string
+    image?: string
+}
+
 const newsStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     card: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
         borderBottomWidth: StyleSheet.hairlineWidth,
         paddingBottom: metrics.vertical,
-        ...articleAppearances.default.card,
+        paddingTop: metrics.headerHeight,
+        ...articleAppearances.default.cardAndPlaque,
     },
     plaque: {},
     headline: {
@@ -29,16 +35,10 @@ const newsStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     },
 })
 
-const NewsHeader = ({
-    headline,
-    image,
-}: {
-    headline: string
-    image?: string
-}) => {
-    const appearance = useArticleAppearance()
+const NewsHeader = ({ headline, image }: PropTypes) => {
+    const { appearance } = useArticleAppearance()
     return (
-        <View style={[newsStyles.card, appearance.card]}>
+        <View style={[newsStyles.card, appearance.cardAndPlaque]}>
             {image && (
                 <ArticleImage
                     style={{
@@ -60,36 +60,31 @@ const longReadStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         flexShrink: 0,
         alignItems: 'flex-start',
         justifyContent: 'flex-end',
-        ...articleAppearances.default.card,
+        height: 500,
+        ...articleAppearances.default.cardAndPlaque,
     },
     headline: {
         ...articleAppearances.default.headline,
     },
     plaque: {
-        ...articleAppearances.default.card,
+        ...articleAppearances.default.cardAndPlaque,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 2,
         marginEnd: metrics.horizontal * 2,
     },
 })
 
-const LongReadHeader = ({
-    headline,
-    image,
-}: {
-    headline: string
-    image?: string
-}) => {
-    const appearance = useArticleAppearance()
+const LongReadHeader = ({ headline, image }: PropTypes) => {
+    const { appearance } = useArticleAppearance()
     return (
-        <View style={[longReadStyles.card, appearance.card, { height: 400 }]}>
+        <View style={[longReadStyles.card, appearance.cardAndPlaque]}>
             {image && (
                 <ArticleImage
                     style={StyleSheet.absoluteFillObject}
                     image={image}
                 />
             )}
-            <View style={[longReadStyles.plaque, appearance.card]}>
+            <View style={[longReadStyles.plaque, appearance.cardAndPlaque]}>
                 <HeadlineText
                     style={[longReadStyles.headline, appearance.headline]}
                 >

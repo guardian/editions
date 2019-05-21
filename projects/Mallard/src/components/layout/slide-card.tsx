@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import { Chevron } from '../chevron'
 import { metrics } from '../../theme/spacing'
+import { color } from '../../theme/color'
 
 /* 
 This is the swipey contraption that contains an article.
@@ -34,20 +35,38 @@ const styles = StyleSheet.create({
         elevation: 5,
         flex: 1,
     },
+    headerContainer: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        left: 0,
+        height: metrics.headerHeight,
+        zIndex: 90,
+        alignContent: 'stretch',
+        justifyContent: 'center',
+    },
+    headerChevronContainer: {
+        flex: 1,
+        width: '100%',
+        paddingHorizontal: metrics.horizontal,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 20,
+    },
+    headerBackground: {
+        zIndex: 10,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
 })
 
 const dismissAt = 100
 
-const Header = ({
-    scrollY,
-    isScrolling,
-    cardOffset,
-    headerStyle,
-    onDismiss,
-}: any) => {
+const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
     const [panResponder] = useState(() =>
         PanResponder.create({
-            onMoveShouldSetPanResponder: (e, { dy }) => dy > 10,
+            onStartShouldSetPanResponder: () => false,
+            onMoveShouldSetPanResponder: (e, { dy }) => dy > 1,
             onPanResponderMove: Animated.event([null, { dy: cardOffset }]),
             onPanResponderRelease: (e, { dy }) => {
                 if (dy >= dismissAt) {
@@ -63,17 +82,8 @@ const Header = ({
         }),
     )
     return (
-        <View
-            style={[
-                headerStyle,
-                {
-                    alignItems: 'center',
-                    borderTopWidth: StyleSheet.hairlineWidth,
-                    borderBottomWidth: isScrolling
-                        ? StyleSheet.hairlineWidth
-                        : 0,
-                },
-            ]}
+        <Animated.View
+            style={[styles.headerContainer]}
             {...panResponder.panHandlers}
         >
             <TouchableWithoutFeedback
@@ -81,23 +91,42 @@ const Header = ({
                 accessibilityHint="Go back"
             >
                 <Animated.View
-                    style={{
-                        padding: metrics.vertical,
-                        transform: [
-                            {
-                                translateY: scrollY.interpolate({
-                                    inputRange: [50, 250],
-                                    outputRange: [metrics.vertical / -4, 0],
-                                    extrapolate: 'clamp',
-                                }),
-                            },
-                        ],
-                    }}
+                    style={[
+                        styles.headerChevronContainer,
+                        {
+                            transform: [
+                                {
+                                    translateY: scrollY.interpolate({
+                                        inputRange: [0, 200],
+                                        outputRange: [
+                                            metrics.headerHeight / -4,
+                                            0,
+                                        ],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                            ],
+                        },
+                    ]}
                 >
-                    <Chevron />
+                    <Chevron color={StyleSheet.flatten(style).color} />
                 </Animated.View>
             </TouchableWithoutFeedback>
-        </View>
+            <Animated.View
+                style={[
+                    style,
+                    StyleSheet.absoluteFillObject,
+                    styles.headerBackground,
+                    {
+                        opacity: scrollY.interpolate({
+                            inputRange: [0, 200],
+                            outputRange: [0, 1],
+                            extrapolate: 'clamp',
+                        }),
+                    },
+                ]}
+            />
+        </Animated.View>
     )
 }
 
@@ -114,10 +143,8 @@ export const SlideCard = ({
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
     const [cardOffset] = useState(() => new Animated.Value(0))
-    const [isScrolling, setIsScrolling] = useState(false)
     useEffect(() => {
         scrollY.addListener(({ value }) => {
-            setIsScrolling(value > 0)
             if (value < dismissAt * -1) {
                 onDismiss()
             }
@@ -144,11 +171,10 @@ export const SlideCard = ({
             ]}
         >
             <Header
+                style={headerStyle}
                 {...{
                     scrollY,
-                    isScrolling,
                     cardOffset,
-                    headerStyle,
                     onDismiss,
                 }}
             />
