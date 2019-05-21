@@ -16,7 +16,7 @@ type Style = {
 
 type PropTypes = {
     headline: string
-    image?: string
+    image?: string | null
 }
 
 const newsStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({

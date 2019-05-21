@@ -138,7 +138,7 @@ export const SlideCard = ({
 }: {
     children: ReactNode
     headerStyle: {}
-    backgroundColor: string
+    backgroundColor: string | undefined
     onDismiss: () => void
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))

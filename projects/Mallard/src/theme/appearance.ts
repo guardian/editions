@@ -12,12 +12,16 @@ interface AppAppearanceStyles {
     dimColor: string
 }
 interface ArticleAppearanceStyles {
-    cardAndPlaque: {}
+    cardAndPlaque: {
+        backgroundColor?: string
+        borderColor?: string
+        color?: string
+    }
     headline: {}
 }
 
-type AppAppearance = 'default' | 'primary'
-type ArticleAppearance =
+export type AppAppearance = 'default' | 'primary'
+export type ArticleAppearance =
     | 'default'
     | 'news'
     | 'lifestyle'
