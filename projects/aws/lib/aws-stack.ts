@@ -53,7 +53,7 @@ export class EditionsStack extends cdk.Stack {
             },
         })
 
-        const endpoint = new apigateway.LambdaIntegration(backend)
+        new apigateway.LambdaIntegration(backend)
 
         // const endpoint = new apigateway.LambdaRestApi(this, 'endpoint', {
         //     handler: backend,
