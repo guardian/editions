@@ -2,7 +2,7 @@ import React from 'react'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { WithArticleAppearance, ArticleAppearance } from '../theme/appearance'
-import { Article } from '../components/article/article'
+import { Article } from '../components/article'
 
 const fixture = (
     seed: number,

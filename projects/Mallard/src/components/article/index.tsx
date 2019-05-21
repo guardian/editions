@@ -3,12 +3,17 @@ import { View, Text, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { SlideCard } from '../../components/layout/slide-card'
+import { SlideCard } from '../layout/slide-card'
 import {
     useArticleAppearance,
     articleAppearances,
 } from '../../theme/appearance'
 import { LongReadHeader, NewsHeader } from './article-header'
+
+/* 
+This is the article view! For all of the articles. 
+it gets everything it needs from its route
+*/
 
 const styles = StyleSheet.create({
     container: {
