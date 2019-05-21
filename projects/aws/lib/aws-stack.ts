@@ -4,7 +4,6 @@ import lambda = require('@aws-cdk/aws-lambda')
 import s3 = require('@aws-cdk/aws-s3')
 
 import { Code } from '@aws-cdk/aws-lambda'
-// import { Bucket } from '@aws-cdk/aws-s3';
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
