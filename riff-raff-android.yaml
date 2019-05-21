@@ -1,0 +1,16 @@
+regions:
+    - eu-west-1
+stacks:
+    - mobile
+deployments:
+    builds-s3-files:
+        type: aws-s3
+        parameters:
+            cacheControl: max-age=10
+            publicReadAcl: false
+            prefixPackage: false
+            bucket: builds.gutools.co.uk
+            prefixStage: false
+            prefixStack: false
+            mimeTypes:
+                json: application/json
