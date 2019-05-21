@@ -2,6 +2,7 @@ import cdk = require('@aws-cdk/cdk')
 import apigateway = require('@aws-cdk/aws-apigateway')
 import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
+import { handler } from '../../backend/index'
 import s3 = require('@aws-cdk/aws-s3')
 
 export class EditionsStack extends cdk.Stack {
@@ -31,7 +32,7 @@ export class EditionsStack extends cdk.Stack {
             'editions-dist',
         )
         const backend = new lambda.Function(this, 'EditionsBackend', {
-            functionName: `backend-${stageParameter.stringValue}`,
+            functionName: `editions-backend-${stageParameter.stringValue}`,
             runtime: lambda.Runtime.NodeJS810,
             // code: Code.inline(
             //     `module.handler = () => console.log('hi ${
@@ -52,19 +53,20 @@ export class EditionsStack extends cdk.Stack {
             },
         })
 
-        new apigateway.LambdaRestApi(this, 'endpoint', {
-            handler: backend,
-            proxy: true,
-            options: {
-                restApiName: `${stageParameter.stringValue}-${
-                    appParameter.stringValue
-                }-endpoint`,
-                description: `${stageParameter.stringValue}-${
-                    appParameter.stringValue
-                }-endpoint`,
-            },
-        })
+        const endpoint = new apigateway.LambdaIntegration(backend)
 
+        // const endpoint = new apigateway.LambdaRestApi(this, 'endpoint', {
+        //     handler: backend,
+        //     proxy: true,
+        //     options: {
+        //         restApiName: `${appParameter.stringValue}-backend-endpoint-${
+        //             stageParameter.stringValue
+        //         }`,
+        //         description: `The endpoint for the editions backend lambda in ${
+        //             stageParameter.stringValue
+        //         }`,
+        //     },
+        // })
         deploy.grantRead(backend)
     }
 }
