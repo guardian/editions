@@ -17,7 +17,12 @@ interface ArticleAppearanceStyles {
 }
 
 type AppAppearance = 'default' | 'primary'
-type ArticleAppearance = 'default' | 'news' | 'lifestyle' | 'comment'
+type ArticleAppearance =
+    | 'default'
+    | 'news'
+    | 'lifestyle'
+    | 'comment'
+    | 'longread'
 
 const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
@@ -72,6 +77,12 @@ export const articleAppearances: {
             fontFamily: 'GHGuardianHeadline-Bold',
             color: color.palette.lifestyle.main,
         },
+    },
+    longread: {
+        card: {
+            backgroundColor: color.palette.neutral[7],
+        },
+        headline: { color: color.palette.neutral[100] },
     },
 }
 /*

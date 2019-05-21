@@ -7,7 +7,7 @@ import { StatusBar } from 'react-native'
 import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
 
-const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DEV-' : null
+const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DV-' : null
 
 export default class App extends React.Component<{}, {}> {
     /**
