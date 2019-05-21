@@ -9,8 +9,11 @@ import {
 import { ArticleImage } from './article-image'
 
 type Style = {
+    /* outer container around the header. For spacing and background colour*/
     background: {}
+    /* text styles for the headline `<Text>` element. Mainly for colours*/
     headline: {}
+    /* optional container around the headline `<Text>` that adds a background colour*/
     textBackground: {}
 }
 
