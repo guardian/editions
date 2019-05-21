@@ -46,7 +46,7 @@ export class EditionsStack extends cdk.Stack {
                     stageParameter.stringValue
                 }/backend/backend.zip`,
             ),
-            handler: 'handler',
+            handler: 'index.handler',
             environment: {
                 CAPI_KEY: capiParameter.stringValue,
             },
