@@ -4,12 +4,12 @@
     "actions": [
         {
             "action": "backend",
-            "path": "projects/backend/dist",
+            "path": "./projects/backend/dist",
             "compress": "zip"
         },
         {
             "action": "cloudformation",
-            "path": "projects/aws/cloudformation.yaml",
+            "path": "./projects/aws/cloudformation.yaml",
             "compress": false
         }
     ]
