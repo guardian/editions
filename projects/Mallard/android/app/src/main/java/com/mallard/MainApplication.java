@@ -3,6 +3,7 @@ package com.mallard;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnziparchive.RNZipArchivePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNZipArchivePackage(),
             new AsyncStoragePackage(),
             new RNFetchBlobPackage(),
             new RNScreensPackage(),

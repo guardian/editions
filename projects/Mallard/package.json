@@ -23,6 +23,7 @@
         "react": "^16.8.6",
         "react-native": "0.59.3",
         "react-native-gesture-handler": "^1.2.1",
+        "react-native-zip-archive": "^4.0.1",
         "react-navigation": "3.9.1",
         "react-navigation-fluid-transitions": "^0.3.2",
         "rn-fetch-blob": "^0.10.15"

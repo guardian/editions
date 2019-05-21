@@ -6,11 +6,13 @@ import {
     View,
     Alert,
     SafeAreaView,
+    TextInput,
 } from 'react-native'
 import { List } from '../../components/lists/list'
 import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
+import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
@@ -115,6 +117,14 @@ export const DownloadScreen = () => {
                 style={{
                     borderColor: color.line,
                     borderTopWidth: 1,
+                }}
+            >
+                <TextInput value={RNFetchBlob.fs.dirs.DocumentDir} />
+            </View>
+            <View
+                style={{
+                    borderColor: color.line,
+                    borderTopWidth: 1,
                     padding: metrics.vertical,
                 }}
             >
@@ -127,9 +137,16 @@ export const DownloadScreen = () => {
                 >
                     <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                         <Button
-                            title="Refresh list"
+                            title="See folder"
                             onPress={() => {
                                 Alert.alert(RNFetchBlob.fs.dirs.DocumentDir)
+                            }}
+                        />
+                    </View>
+                    <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
+                        <Button
+                            title="Refresh list"
+                            onPress={() => {
                                 refreshIssues()
                             }}
                         />
