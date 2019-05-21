@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
 const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
     const [panResponder] = useState(() =>
         PanResponder.create({
+            /* we don't do anything until we 
+            detect a downwards motion. This is done 
+            because panresponder cancels the event from 
+            bubbling if it's using it and we want back button 
+            inside this can pick up the touch event  */
             onStartShouldSetPanResponder: () => false,
             onMoveShouldSetPanResponder: (e, { dy }) => dy > 1,
             onPanResponderMove: Animated.event([null, { dy: cardOffset }]),
