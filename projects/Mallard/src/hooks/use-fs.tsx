@@ -43,9 +43,7 @@ const useDownloadQueueInCtx = (): DownloadQueueHook => {
                 progress: received / total,
                 cancel: async () => {
                     await dl.cancel()
-                    setTimeout(() => {
-                        deleteIssue(issue)
-                    }, 1000)
+                    deleteIssue(issue)
                 },
             })
         })
