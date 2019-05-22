@@ -22,7 +22,7 @@ export const DownloadScreen = () => {
         const archives = files.filter(({ type }) => type !== 'other')
         const other = files.filter(({ type }) => type === 'other')
 
-        const returnable = archives.map(file => ({
+        const returnable: Item<File>[] = archives.map(file => ({
             key: file.filename,
             title:
                 file.type === 'issue'
@@ -41,7 +41,6 @@ export const DownloadScreen = () => {
                         .map(({ size }) => size)
                         .reduce((acc, cur) => acc + cur, 0),
                 ),
-                data: null,
             })
         }
         return returnable
@@ -149,7 +148,7 @@ export const DownloadScreen = () => {
                             title="Copy local path to clipboard"
                             onPress={() => {
                                 Clipboard.setString(issuesDir)
-                                alert(issuesDir)
+                                Alert.alert(issuesDir)
                             }}
                         />
                     </View>
