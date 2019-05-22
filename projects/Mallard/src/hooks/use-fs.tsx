@@ -11,7 +11,6 @@ type FileListHook = [
 
 const useFileListInCtx = (): FileListHook => {
     const [files, setFiles] = useState<File[]>([])
-    console.log(files)
 
     const refreshIssues = () => {
         getFileList().then(setFiles)
