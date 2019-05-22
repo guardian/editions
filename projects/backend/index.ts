@@ -16,7 +16,7 @@ const app = express()
 const port = 3131
 const url = (path: string) =>
     `https://content.guardianapis.com/${path}?format=thrift&api-key=${
-    process.env.CAPI_KEY
+        process.env.CAPI_KEY
     }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all`
 
 const getArticle = async (path: string) => {

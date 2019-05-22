@@ -18,7 +18,6 @@ export const getCollection = async (
         if (resp.status === 404) return 'notfound'
         if (!resp.ok) throw new Error('failed s3')
         const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
-        console.log(collection)
         return {
             id: collection.displayName,
             articles: collection.live,
