@@ -6,7 +6,6 @@ import {
     TouchableNativeFeedback,
     SafeAreaView,
     View,
-    Text,
     StyleSheet,
 } from 'react-native'
 import { metrics } from '../../theme/spacing'
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
+        paddingVertical: metrics.vertical / 1.25,
         borderTopWidth: 0,
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
@@ -42,17 +41,21 @@ export const ListHeading = ({ children }: { children: string }) => (
 const Highlight =
     Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
 
-const ListItem = ({
+const ListItem = <ItemData extends {}>({
     onPress,
     item: { title, explainer, data },
 }: {
-    item: Item
-    onPress: OnPressHandler
+    item: Item<ItemData>
+    onPress: OnPressHandler<ItemData>
 }) => {
     const { borderColor, backgroundColor } = useAppAppearance()
 
     return (
-        <Highlight onPress={() => onPress(data)}>
+        <Highlight
+            onPress={() => {
+                if (data) onPress(data)
+            }}
+        >
             <View
                 style={[
                     styles.item,
@@ -77,7 +80,10 @@ const ListItem = ({
     )
 }
 
-export const List = ({ data, onPress }: PropTypes) => {
+export const List = <ItemData extends {}>({
+    data,
+    onPress,
+}: PropTypes<ItemData>) => {
     const { borderColor } = useAppAppearance()
     return (
         <FlatList

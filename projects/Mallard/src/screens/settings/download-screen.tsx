@@ -1,85 +1,78 @@
-import React, { useState, useEffect } from 'react'
-import {
-    ScrollView,
-    Button,
-    Text,
-    View,
-    Alert,
-    SafeAreaView,
-} from 'react-native'
+import React, { useState, useMemo } from 'react'
+import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
 import { List } from '../../components/lists/list'
-import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-
-const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
-
-/*
- TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
- */
-const makeCacheFolder = () =>
-    RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
-
-const rebuildCacheFolder = async () => {
-    await RNFetchBlob.fs.unlink(issuesDir)
-    await makeCacheFolder()
-}
-
-const useFileList = (): [string[], () => void] => {
-    const [files, setFiles] = useState<string[]>([])
-    const refreshIssues = () =>
-        RNFetchBlob.fs.ls(issuesDir).then(files => {
-            setFiles(files)
-        })
-
-    useEffect(() => {
-        refreshIssues()
-    }, [])
-
-    return [files, refreshIssues]
-}
+import { useFileList } from '../../hooks/use-fs'
+import { Item } from '../../components/lists/helpers'
+import {
+    File,
+    displayFileSize,
+    issuesDir,
+    deleteAllFiles,
+    downloadIssue,
+    unzipIssue,
+    deleteOtherFiles,
+} from '../../helpers/files'
 
 export const DownloadScreen = () => {
-    const [files, refreshIssues] = useFileList()
+    const [files, { refreshIssues }] = useFileList()
     const [progress, setProgress] = useState(0)
+    const fileList = useMemo((): Item<File>[] => {
+        const archives = files.filter(({ type }) => type !== 'other')
+        const other = files.filter(({ type }) => type === 'other')
 
+        const returnable: Item<File>[] = archives.map(file => ({
+            key: file.filename,
+            title:
+                file.type === 'issue'
+                    ? `🗞 ${file.issue}`
+                    : `📦 ${file.filename}`,
+            explainer: `${displayFileSize(file.size)} – ${file.type}`,
+            data: file,
+        }))
+
+        if (other.length) {
+            returnable.push({
+                key: 'others',
+                title: `😧 ${other.length} unknown files`,
+                explainer: displayFileSize(
+                    other
+                        .map(({ size }) => size)
+                        .reduce((acc, cur) => acc + cur, 0),
+                ),
+            })
+        }
+        return returnable
+    }, [files])
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View
-                    style={{
-                        flex: 0,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: metrics.vertical,
-                        height: 80,
-                        backgroundColor: color.dimBackground,
-                    }}
-                >
+            <View
+                style={{
+                    paddingVertical: metrics.vertical,
+                    backgroundColor: color.dimBackground,
+                    flex: 0,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                     {progress > 0 ? (
                         <Text>{`Downloading (${Math.ceil(
                             progress * 100,
                         )}%)`}</Text>
                     ) : (
                         <Button
-                            title={'🤩 Download Zip 👋'}
+                            title={'🌈 Download Issue'}
                             onPress={() => {
-                                RNFetchBlob.config({
-                                    fileCache: true,
+                                const dl = downloadIssue('noop')
+                                setProgress(0.000001)
+                                dl.progress((received, total) => {
+                                    setProgress(received / total)
                                 })
-                                    .fetch(
-                                        'GET',
-                                        `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
-                                    )
-                                    .progress((received, total) => {
-                                        setProgress(received / total)
-                                    })
-                                    .then(async res => {
-                                        await makeCacheFolder()
-                                        await RNFetchBlob.fs.mv(
-                                            res.path(),
-                                            `${issuesDir}/test-${Date.now()}.zip`,
-                                        )
+                                dl.promise
+                                    .then(async () => {
                                         setProgress(0)
                                         refreshIssues()
                                     })
@@ -90,77 +83,85 @@ export const DownloadScreen = () => {
                         />
                     )}
                 </View>
-                <List
-                    data={files.map(file => ({ key: file, title: file }))}
-                    onPress={item => {
-                        try {
-                            RNFetchBlob.ios.openDocument(
-                                issuesDir + '/' + item.key,
+                <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
+                    <Button
+                        title="💣 Cleanup"
+                        onPress={() => {
+                            Alert.alert(
+                                'Delete cache',
+                                'Ya sure lass?',
+                                [
+                                    {
+                                        text: "Don't delete anything",
+                                    },
+                                    {
+                                        text: 'Delete other files',
+                                        style: 'cancel',
+                                        onPress: async () => {
+                                            await deleteOtherFiles()
+                                            refreshIssues()
+                                        },
+                                    },
+                                    {
+                                        text: 'AWAY WITH IT ALL',
+                                        style: 'cancel',
+                                        onPress: async () => {
+                                            await deleteAllFiles()
+                                            refreshIssues()
+                                        },
+                                    },
+                                ],
+                                { cancelable: false },
                             )
-                            // @ts-ignore
-                            RNFetchBlob.android.addCompleteDownload({
-                                title: item.key,
-                                description: 'desc',
-                                mime: 'data/zip',
-                                path: issuesDir + '/' + item.key,
-                                showNotification: true,
-                            })
-                        } catch {
-                            // TODO find a better approach for multi platform opens
+                        }}
+                    />
+                </View>
+            </View>
+
+            <ScrollView style={{ flex: 1 }}>
+                <List
+                    data={fileList}
+                    onPress={({ type, path, issue }) => {
+                        if (type === 'archive') {
+                            unzipIssue(issue)
+                                .then(async () => {
+                                    refreshIssues()
+                                })
+                                .catch(error => {
+                                    Alert.alert(error)
+                                    refreshIssues()
+                                })
+                        } else {
+                            Alert.alert('oof')
                         }
                     }}
                 />
-            </ScrollView>
-            <View
-                style={{
-                    borderColor: color.line,
-                    borderTopWidth: 1,
-                    padding: metrics.vertical,
-                }}
-            >
-                <SafeAreaView
+                <View
                     style={{
-                        flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        padding: metrics.vertical,
                     }}
                 >
                     <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                         <Button
-                            title="Refresh list"
+                            title="Copy local path to clipboard"
                             onPress={() => {
-                                Alert.alert(RNFetchBlob.fs.dirs.DocumentDir)
-                                refreshIssues()
+                                Clipboard.setString(issuesDir)
+                                Alert.alert(issuesDir)
                             }}
                         />
                     </View>
                     <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                         <Button
-                            title="Wipe cache"
+                            title="Refresh list"
                             onPress={() => {
-                                Alert.alert(
-                                    'Delete cache',
-                                    'Ya sure lass?',
-                                    [
-                                        {
-                                            text: "Don't delete it",
-                                        },
-                                        {
-                                            text: 'AWAY WITH IT',
-                                            style: 'cancel',
-                                            onPress: async () => {
-                                                await rebuildCacheFolder()
-                                                refreshIssues()
-                                            },
-                                        },
-                                    ],
-                                    { cancelable: false },
-                                )
+                                refreshIssues()
                             }}
                         />
                     </View>
-                </SafeAreaView>
-            </View>
+                </View>
+            </ScrollView>
         </View>
     )
 }

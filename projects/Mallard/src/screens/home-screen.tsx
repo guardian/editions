@@ -1,11 +1,20 @@
 import React from 'react'
-import { Image, ScrollView, Button, StyleSheet, Text, View } from 'react-native'
-import { List } from '../components/lists/list'
+import {
+    Image,
+    ScrollView,
+    Button,
+    StyleSheet,
+    View,
+    Alert,
+} from 'react-native'
+import { List, ListHeading } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { primaryContainer } from '../theme/styles'
 import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
+import { useFileList } from '../hooks/use-fs'
+import { unzipIssue } from '../helpers/files'
 
 const styles = StyleSheet.create({
     container: primaryContainer,
@@ -17,7 +26,6 @@ const styles = StyleSheet.create({
     getStartedContainer: {
         alignItems: 'flex-start',
         marginHorizontal: metrics.horizontal,
-        marginVertical: metrics.vertical,
         marginTop: metrics.vertical * 2,
     },
 })
@@ -27,6 +35,7 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
+    const [files, { refreshIssues }] = useFileList()
     return (
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
@@ -36,6 +45,7 @@ export const HomeScreen = ({
                         style={styles.welcomeImage}
                     />
                 </View>
+                <ListHeading>Demo issues</ListHeading>
                 <List
                     data={[
                         {
@@ -55,6 +65,39 @@ export const HomeScreen = ({
                     ]}
                     onPress={item => navigation.navigate('Front', item)}
                 />
+                {files.length > 0 && (
+                    <>
+                        <ListHeading>Issues on device</ListHeading>
+                        <List
+                            data={files
+                                .filter(({ type }) => type !== 'other')
+                                .map(file => ({
+                                    key: file.issue,
+                                    title:
+                                        file.type === 'archive'
+                                            ? 'Compressed issue'
+                                            : file.issue,
+                                    explainer:
+                                        file.type === 'archive'
+                                            ? 'Tap to unarchive'
+                                            : null,
+                                    data: file,
+                                }))}
+                            onPress={file => {
+                                if (file.type === 'archive') {
+                                    unzipIssue(file.issue).then(async () => {
+                                        refreshIssues()
+                                        Alert.alert(`Unzipped ${file.issue}`)
+                                    })
+                                } else {
+                                    Alert.alert(
+                                        'Hold there, this is not supported yet',
+                                    )
+                                }
+                            }}
+                        />
+                    </>
+                )}
                 <ApiState />
             </ScrollView>
         </WithAppAppearance>
