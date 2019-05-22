@@ -115,10 +115,9 @@ export const DownloadScreen = () => {
                                 .sort((a, b) => b[0].localeCompare(a[0]))
                                 .map(([key, { progress, cancel }]) => ({
                                     key,
-                                    title: `${Math.ceil(
+                                    title: `🔋 ${Math.ceil(
                                         progress * 100,
                                     )}% downloaded`,
-                                    explainer: key,
                                     data: { cancel },
                                 }))}
                             onPress={({ cancel }) => {
@@ -137,7 +136,7 @@ export const DownloadScreen = () => {
                                     refreshIssues()
                                 })
                                 .catch(error => {
-                                    Alert.alert(error)
+                                    Alert.alert(JSON.stringify(error))
                                     refreshIssues()
                                 })
                         } else {
