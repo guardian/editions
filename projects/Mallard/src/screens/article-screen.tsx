@@ -1,42 +1,18 @@
 import React from 'react'
-import { View, Text, StyleSheet, Button, Platform } from 'react-native'
-import { HeadlineText } from '../components/styled-text'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
-import { color } from '../theme/color'
-import { metrics } from '../theme/spacing'
-import { SlideCard } from '../components/layout/slide-card'
-import {
-    useArticleAppearance,
-    WithArticleAppearance,
-    articleAppearances,
-} from '../theme/appearance'
+import { WithArticleAppearance, ArticleAppearance } from '../theme/appearance'
+import { Article } from '../components/article'
 
-const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
-const styles = StyleSheet.create({
-    container: {
-        marginTop: notchInsetSize,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        overflow: 'hidden',
-        flex: 2,
-    },
-    card: {
-        flexShrink: 0,
-        alignItems: 'flex-start',
-        padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 2,
-        borderBottomWidth: 1,
-        ...articleAppearances.default.card,
-    },
-    headline: {
-        ...articleAppearances.default.headline,
-    },
-    block: {
-        alignItems: 'flex-start',
-        padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
-    },
+const fixture = (
+    seed: number,
+): { image: string | null; appearance: ArticleAppearance } => ({
+    image: [
+        'https://media.guim.co.uk/1d046fd12d5685eacd943fcf2089f23ecc873e8b/0_224_6720_4032/1000.jpg',
+        'https://i.guim.co.uk/img/media/aa751497cada64b193f8f3e640a3261eb0e16e81/424_255_4518_2711/master/4518.jpg?width=860&quality=45&auto=format&fit=max&dpr=2&s=5025f6e75a0cbb9a7cdecf948f1a54af',
+        null,
+    ][seed % 3],
+    appearance: ['news', 'lifestyle', 'comment', 'longread'][seed % 4],
 })
 
 const useArticleData = (articleId, { headline }) => {
@@ -48,67 +24,24 @@ export const ArticleScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const article = navigation.getParam('article', -1)
+    const articleFromUrl = navigation.getParam('article', -1)
     const headlineFromUrl = navigation.getParam(
         'headline',
         'HEADLINE NOT FOUND',
     )
-    const [headline, [articleData]] = useArticleData(article, {
+    const [headline, [article]] = useArticleData(articleFromUrl, {
         headline: headlineFromUrl,
     })
-
+    const { image, appearance } = fixture(articleFromUrl)
     return (
-        <WithArticleAppearance
-            value={['news', 'lifestyle', 'comment', 'default'][article % 4]}
-        >
-            <ArticleScreenContents
-                {...{ article, articleData, headline, navigation }}
+        <WithArticleAppearance value={appearance}>
+            <Article
+                article={article}
+                headline={headline}
+                image={image}
+                navigation={navigation}
             />
         </WithArticleAppearance>
-    )
-}
-
-const ArticleScreenContents = ({
-    navigation,
-    articleData,
-    headline,
-}: {
-    navigation: NavigationScreenProp<{}>
-    articleData: {}
-    headline: string
-}) => {
-    const appearance = useArticleAppearance()
-    return (
-        <SlideCard
-            onDismiss={() => {
-                navigation.goBack()
-            }}
-        >
-            <View style={styles.container}>
-                <View style={[styles.card, appearance.card]}>
-                    <Button
-                        onPress={() => {
-                            navigation.goBack()
-                        }}
-                        title={'👈 Backsies'}
-                    />
-                    <HeadlineText
-                        style={[styles.headline, appearance.headline]}
-                    >
-                        {headline}
-                    </HeadlineText>
-                </View>
-                <View style={{ backgroundColor: color.background, flex: 1 }}>
-                    {articleData
-                        .filter(el => el.type === 0)
-                        .map((el, index) => (
-                            <View style={styles.block} key={index}>
-                                <Text>{el.textTypeData.html}</Text>
-                            </View>
-                        ))}
-                </View>
-            </View>
-        </SlideCard>
     )
 }
 

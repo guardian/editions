@@ -7,11 +7,13 @@ import { color } from '../theme/color'
 const styles = StyleSheet.create({
     headlineText: {
         fontFamily: 'GHGuardianHeadline-Medium',
-        fontSize: 24,
+        fontSize: 30,
+        lineHeight: 34,
         color: color.text,
     },
     headlineCardText: {
         fontSize: 16,
+        lineHeight: 20,
     },
     bodyCopy: {
         fontSize: 17,

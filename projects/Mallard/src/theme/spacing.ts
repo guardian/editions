@@ -40,4 +40,8 @@
  */
 export const spacing = [0, 4, 8, 12, 16, 24, 32, 48, 64]
 
-export const metrics = { horizontal: spacing[4], vertical: spacing[5] }
+export const metrics = {
+    horizontal: spacing[4],
+    vertical: spacing[5],
+    headerHeight: spacing[5] * 2.5,
+}
