@@ -48,6 +48,7 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                 Bucket: 'facia-tool-store',
             },
             (error, result) => {
+                console.log(error || 'NO ERROR')
                 if (error && error.code == 'NoSuchKey') {
                     resolve({ status: 404, ok: false })
                     return
@@ -55,6 +56,10 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                 if (result == null) debugger
                 if (error) reject(error)
 
+                if (result == undefined) {
+                    reject(new Error('No result!.'))
+                    return
+                }
                 const body = result.Body
 
                 if (body == undefined) {

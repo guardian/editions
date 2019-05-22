@@ -2,9 +2,6 @@ Parameters:
   stack:
     Type: String
     Description: Stack
-  app:
-    Type: String
-    Description: App
   stage:
     Type: String
     Description: Stage
@@ -42,22 +39,6 @@ Resources:
     Properties:
       PolicyDocument:
         Statement:
-          - Action:
-              - s3:GetObject*
-              - s3:GetBucket*
-              - s3:List*
-            Effect: Allow
-            Resource:
-              - Fn::Join:
-                  - ""
-                  - - "arn:"
-                    - Ref: AWS::Partition
-                    - :s3:::editions-dist
-              - Fn::Join:
-                  - ""
-                  - - "arn:"
-                    - Ref: AWS::Partition
-                    - :s3:::editions-dist/*
           - Action: sts:AssumeRole
             Effect: Allow
             Resource:
@@ -95,7 +76,7 @@ Resources:
       FunctionName:
         Fn::Join:
           - ""
-          - - editions-backend-
+          - - backend-
             - Ref: stage
     DependsOn:
       - EditionsBackendServiceRoleDefaultPolicy6C36170A
@@ -201,17 +182,7 @@ Resources:
   endpointE7B9679B:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Description:
-        Fn::Join:
-          - ""
-          - - "The endpoint for the editions backend lambda in "
-            - Ref: stage
-      Name:
-        Fn::Join:
-          - ""
-          - - Ref: app
-            - -backend-endpoint-
-            - Ref: stage
+      Name: endpoint
     Metadata:
       aws:cdk:path: EditionsStack/endpoint/Resource
   endpointDeployment457D977D4290e29d203f426320d78440a794fa15:
