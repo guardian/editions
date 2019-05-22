@@ -1,78 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import {
-    ScrollView,
-    Button,
-    Text,
-    View,
-    Alert,
-    SafeAreaView,
-    TextInput,
-    Clipboard,
-} from 'react-native'
+import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
 import { List } from '../../components/lists/list'
 import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { zip, unzip, subscribe } from 'react-native-zip-archive'
-
-const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
-
-/*
- TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
- */
-const makeCacheFolder = () =>
-    RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
-
-const rebuildCacheFolder = async () => {
-    await RNFetchBlob.fs.unlink(issuesDir)
-    await makeCacheFolder()
-}
-
-const filesize = size => {
-    if (size / 1000 < 1) {
-        return size + 'B'
-    }
-    if (size / 1000 / 1000 < 1) {
-        return size / 1000 + 'KB'
-    }
-    return size / 1000 / 1000 + 'MB'
-}
-
-type File = {
-    name: string
-    path: string
-    size: number
-    type: 'other' | 'archive' | 'issue'
-}
-
-const useFileList = (): [File[], () => void] => {
-    const [files, setFiles] = useState<File[]>([])
-    const refreshIssues = async () => {
-        const files = await RNFetchBlob.fs.ls(issuesDir)
-        const finalFiles: File[] = []
-        for (const name of files) {
-            const path = issuesDir + '/' + name
-            const { size, type } = await RNFetchBlob.fs.stat(path)
-            finalFiles.push({
-                name,
-                size: parseInt(size),
-                path,
-                type:
-                    type === 'directory'
-                        ? 'issue'
-                        : name.includes('.zip')
-                        ? 'archive'
-                        : 'other',
-            })
-        }
-        setFiles(finalFiles)
-    }
-    useEffect(() => {
-        refreshIssues()
-    }, [])
-
-    return [files, refreshIssues]
-}
+import { unzip } from 'react-native-zip-archive'
+import {
+    useFileList,
+    filesize,
+    makeCacheFolder,
+    rebuildCacheFolder,
+    issuesDir,
+} from '../../hooks/use-fs'
 
 export const DownloadScreen = () => {
     const [files, refreshIssues] = useFileList()
