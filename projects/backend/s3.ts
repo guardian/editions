@@ -4,29 +4,17 @@ import AWS, {
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
 } from 'aws-sdk'
-AWS.config.credentials = new ChainableTemporaryCredentials({
-    params: {
-        RoleArn: process.env.arn as string,
-        RoleSessionName: 'front-assume-role-access',
-    },
-})
+AWS.config.credentials = process.env.arn
+    ? new ChainableTemporaryCredentials({
+          params: {
+              RoleArn: process.env.arn as string,
+              RoleSessionName: 'front-assume-role-access',
+          },
+      })
+    : new SharedIniFileCredentials({ profile: 'cmsFronts' })
 
 const s3 = new S3({
     region: 'eu-west-1',
-    // credentialProvider: new CredentialProviderChain([
-    //     () => {
-    //         const arn = process.env.arn
-    //         console.log('ARN IS', arn)
-    //         if (arn == null)
-    //             return new SharedIniFileCredentials({ profile: 'cmsFronts' })
-    //         return new ChainableTemporaryCredentials({
-    //             params: {
-    //                 RoleArn: arn,
-    //                 RoleSessionName: 'front-assume-role-access',
-    //             },
-    //         })
-    //     },
-    // ]),
 })
 
 const stage = 'CODE'
