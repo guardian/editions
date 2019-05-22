@@ -61,9 +61,7 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                     reject(new Error('Not found.'))
                     return
                 }
-                console.log(
-                    JSON.stringify(JSON.parse(body.toString()), null, 2),
-                )
+
                 resolve({
                     status: 200,
                     ok: true,
