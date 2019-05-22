@@ -7,7 +7,7 @@ import { metrics } from '../../theme/spacing'
 import { unzip } from 'react-native-zip-archive'
 import {
     useFileList,
-    filesize,
+    displayFileSize,
     makeCacheFolder,
     rebuildCacheFolder,
     issuesDir,
@@ -25,13 +25,13 @@ export const DownloadScreen = () => {
                 title: [file.type === 'issue' ? '🗞' : '📦', file.name].join(
                     ' ',
                 ),
-                explainer: `${filesize(file.size)} – ${file.type}`,
+                explainer: `${displayFileSize(file.size)} – ${file.type}`,
                 data: file,
             })),
             other.length && {
                 key: 'others',
                 title: `😧 ${other.length} unknown files`,
-                explainer: filesize(
+                explainer: displayFileSize(
                     other
                         .map(({ size }) => size)
                         .reduce((acc, cur) => acc + cur, 0),

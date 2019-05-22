@@ -13,15 +13,15 @@ export type File = {
 /*
  TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
  */
-export const makeCacheFolder = () =>
+export const makeCacheFolder = (): Promise<void> =>
     RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
 
-export const rebuildCacheFolder = async () => {
+export const rebuildCacheFolder = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(issuesDir)
     await makeCacheFolder()
 }
 
-export const filesize = (size: File['size']) => {
+export const displayFileSize = (size: File['size']): string => {
     if (size / 1000 < 1) {
         return size + 'B'
     }
