@@ -1,23 +1,23 @@
 import React, { useState, useMemo } from 'react'
 import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
-import { List } from '../../components/lists/list'
+import { List, ListHeading } from '../../components/lists/list'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { useFileList } from '../../hooks/use-fs'
+import { useFileList, useDownloadQueue } from '../../hooks/use-fs'
 import { Item } from '../../components/lists/helpers'
 import {
     File,
     displayFileSize,
     issuesDir,
     deleteAllFiles,
-    downloadIssue,
     unzipIssue,
     deleteOtherFiles,
 } from '../../helpers/files'
 
 export const DownloadScreen = () => {
     const [files, { refreshIssues }] = useFileList()
-    const [progress, setProgress] = useState(0)
+    const [queue, download] = useDownloadQueue()
+    console.log(queue)
     const fileList = useMemo((): Item<File>[] => {
         const archives = files.filter(({ type }) => type !== 'other')
         const other = files.filter(({ type }) => type === 'other')
@@ -45,6 +45,7 @@ export const DownloadScreen = () => {
         }
         return returnable
     }, [files])
+
     return (
         <View style={{ flex: 1 }}>
             <View
@@ -58,30 +59,18 @@ export const DownloadScreen = () => {
                 }}
             >
                 <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
-                    {progress > 0 ? (
-                        <Text>{`Downloading (${Math.ceil(
-                            progress * 100,
-                        )}%)`}</Text>
-                    ) : (
-                        <Button
-                            title={'🌈 Download Issue'}
-                            onPress={() => {
-                                const dl = downloadIssue('noop')
-                                setProgress(0.000001)
-                                dl.progress((received, total) => {
-                                    setProgress(received / total)
+                    <Button
+                        title={'🌈 Download Issue'}
+                        onPress={() => {
+                            download('noop' + Math.random())
+                                .then(async () => {
+                                    refreshIssues()
                                 })
-                                dl.promise
-                                    .then(async () => {
-                                        setProgress(0)
-                                        refreshIssues()
-                                    })
-                                    .catch(errorMessage => {
-                                        Alert.alert(errorMessage)
-                                    })
-                            }}
-                        />
-                    )}
+                                .catch(errorMessage => {
+                                    Alert.alert(JSON.stringify(errorMessage))
+                                })
+                        }}
+                    />
                 </View>
                 <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                     <Button
@@ -117,8 +106,27 @@ export const DownloadScreen = () => {
                     />
                 </View>
             </View>
-
             <ScrollView style={{ flex: 1 }}>
+                {Object.keys(queue).length > 0 && (
+                    <>
+                        <ListHeading>Active downloads</ListHeading>
+                        <List
+                            data={Object.entries(queue)
+                                .sort((a, b) => b[0].localeCompare(a[0]))
+                                .map(([key, { progress, cancel }]) => ({
+                                    key,
+                                    title: `🔋 ${Math.ceil(
+                                        progress * 100,
+                                    )}% downloaded`,
+                                    data: { cancel },
+                                }))}
+                            onPress={({ cancel }) => {
+                                cancel()
+                            }}
+                        />
+                    </>
+                )}
+                <ListHeading>On device</ListHeading>
                 <List
                     data={fileList}
                     onPress={({ type, path, issue }) => {
@@ -128,7 +136,7 @@ export const DownloadScreen = () => {
                                     refreshIssues()
                                 })
                                 .catch(error => {
-                                    Alert.alert(error)
+                                    Alert.alert(JSON.stringify(error))
                                     refreshIssues()
                                 })
                         } else {

@@ -52,10 +52,13 @@ export const downloadIssue = (issue: File['issue']) => {
             await makeCacheFolder()
             await RNFetchBlob.fs.mv(
                 res.path(),
-                `${issuesDir}/test-${Date.now()}.zip`,
+                `${issuesDir}/${Date.now()}-${Math.trunc(
+                    Math.random() * 100000,
+                )}.zip`,
             )
             return res
         }),
+        cancel: returnable.cancel,
         progress: returnable.progress,
     }
 }
