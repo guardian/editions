@@ -46,7 +46,7 @@ type S3Response =
 
 export const s3fetch = (key: string): Promise<S3Response> => {
     const k = `${stage}/${key}`
-    console.log(k, 'hello', process.env.arn)
+    console.log(k)
     return new Promise((resolve, reject) => {
         s3.getObject(
             {
