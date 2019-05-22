@@ -32,7 +32,16 @@ export const displayFileSize = (size: File['size']): string => {
 }
 
 /*
- TODO: this code is uggers
+ TODO: this code can  more cleanly identify an unpacked issue vs an other 
+ by reading a manifest inside of it & doing some basic file checking to verify integrity.
+
+ We probably don't need to run useFileList outside of views meant 
+ to manage files so it can be a bit expensive to call. We might
+ not even need it in the final app!
+ For actually consuming files when reading issues we might 
+ wanna use a cheaper function and if 
+ reading anything in an issue fails we can invalidate the whole thing and kick 
+ off a fresh download in the background
  */
 const makeFile = async (name: string): Promise<File> => {
     const path = issuesDir + '/' + name
