@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     },
     headerBackground: {
         zIndex: 10,
-        borderTopWidth: Math.ceil(StyleSheet.hairlineWidth),
-        borderBottomWidth: Math.ceil(StyleSheet.hairlineWidth),
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
     },
 })
 

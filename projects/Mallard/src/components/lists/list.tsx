@@ -23,10 +23,11 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 1.25,
         borderTopWidth: 0,
-        borderBottomWidth: Math.ceil(StyleSheet.hairlineWidth),
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        marginVertical: StyleSheet.hairlineWidth,
     },
     list: {
-        borderTopWidth: Math.ceil(StyleSheet.hairlineWidth),
+        borderTopWidth: StyleSheet.hairlineWidth,
     },
 })
 
@@ -65,16 +66,14 @@ const ListItem = <ItemData extends {}>({
                     },
                 ]}
             >
-                <SafeAreaView>
-                    <UiBodyCopy>{title}</UiBodyCopy>
-                    {explainer && (
-                        <UiExplainerCopy
-                            style={{ marginTop: metrics.vertical / 8 }}
-                        >
-                            {explainer}
-                        </UiExplainerCopy>
-                    )}
-                </SafeAreaView>
+                <UiBodyCopy>{title}</UiBodyCopy>
+                {explainer && (
+                    <UiExplainerCopy
+                        style={{ marginTop: metrics.vertical / 8 }}
+                    >
+                        {explainer}
+                    </UiExplainerCopy>
+                )}
             </View>
         </Highlight>
     )
