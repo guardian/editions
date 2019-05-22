@@ -11,24 +11,26 @@ import {
     makeCacheFolder,
     rebuildCacheFolder,
     issuesDir,
+    File,
 } from '../../hooks/use-fs'
+import { Item } from '../../components/lists/helpers'
 
 export const DownloadScreen = () => {
     const [files, refreshIssues] = useFileList()
     const [progress, setProgress] = useState(0)
-    const fileList = useMemo(() => {
+    const fileList = useMemo((): Item<File>[] => {
         const archives = files.filter(({ type }) => type !== 'other')
         const other = files.filter(({ type }) => type === 'other')
-        return [
-            ...archives.map(file => ({
-                key: file.name,
-                title: [file.type === 'issue' ? '🗞' : '📦', file.name].join(
-                    ' ',
-                ),
-                explainer: `${displayFileSize(file.size)} – ${file.type}`,
-                data: file,
-            })),
-            other.length && {
+
+        const returnable = archives.map(file => ({
+            key: file.name,
+            title: [file.type === 'issue' ? '🗞' : '📦', file.name].join(' '),
+            explainer: `${displayFileSize(file.size)} – ${file.type}`,
+            data: file,
+        }))
+
+        if (other.length) {
+            returnable.push({
                 key: 'others',
                 title: `😧 ${other.length} unknown files`,
                 explainer: displayFileSize(
@@ -36,8 +38,10 @@ export const DownloadScreen = () => {
                         .map(({ size }) => size)
                         .reduce((acc, cur) => acc + cur, 0),
                 ),
-            },
-        ].filter(({ key }) => key)
+                data: null,
+            })
+        }
+        return returnable
     }, [files])
     return (
         <View style={{ flex: 1 }}>
