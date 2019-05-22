@@ -4,12 +4,6 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-// import {
-//     PolicyStatement,
-//     PolicyStatementEffect,
-//     // PolicyDocument,
-//     // ServicePrincipal,
-// } from '@aws-cdk/aws-iam'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -18,10 +12,7 @@ export class EditionsStack extends cdk.Stack {
             type: 'String',
             description: 'Stack',
         })
-        // const appParameter = new cdk.CfnParameter(this, 'app', {
-        //     type: 'String',
-        //     description: 'App',
-        // })
+
         const stageParameter = new cdk.CfnParameter(this, 'stage', {
             type: 'String',
             description: 'Stage',
@@ -65,28 +56,9 @@ export class EditionsStack extends cdk.Stack {
                 arn: frontsRoleARN.stringValue,
             },
         })
-        // deploy.grantRead(backend)
-
-        // const runLambdaPolicy = new PolicyDocument()
-        // const runLambdaStatement = new PolicyStatement(
-        //     PolicyStatementEffect.Allow,
-        // )
-        // runLambdaStatement.addResource(backend.functionArn)
-        // runLambdaStatement.addAction('lambda:InvokeFunction')
-        // runLambdaStatement.addPrincipal(new ServicePrincipal("apigateway.amazonaws.com"))
-        // runLambdaPolicy.addStatement(runLambdaStatement)
 
         new apigateway.LambdaRestApi(this, 'editions-backend-apigateway', {
             handler: backend,
-            // options: {
-            //     restApiName: `${appParameter.stringValue}-backend-endpoint-${
-            //         stageParameter.stringValue
-            //         }`,
-            //     description: `The endpoint for the editions backend lambda in ${
-            //         stageParameter.stringValue
-            //         }`,
-            //     // policy: runLambdaPolicy,
-            // },
         })
 
         const policy = new iam.PolicyStatement(iam.PolicyStatementEffect.Allow)
