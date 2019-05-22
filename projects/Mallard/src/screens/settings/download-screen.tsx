@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
 import { List } from '../../components/lists/list'
 import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { unzip } from 'react-native-zip-archive'
-import {
-    useFileList,
-    displayFileSize,
-    makeCacheFolder,
-    rebuildCacheFolder,
-    issuesDir,
-    File,
-} from '../../hooks/use-fs'
+import { useFileList } from '../../hooks/use-fs'
 import { Item } from '../../components/lists/helpers'
+import {
+    File,
+    displayFileSize,
+    issuesDir,
+    rebuildCacheFolder,
+    downloadIssue,
+} from '../../helpers/files'
 
 export const DownloadScreen = () => {
-    const [files, refreshIssues] = useFileList()
+    const [files, { refreshIssues }] = useFileList()
     const [progress, setProgress] = useState(0)
     const fileList = useMemo((): Item<File>[] => {
         const archives = files.filter(({ type }) => type !== 'other')
@@ -64,22 +64,11 @@ export const DownloadScreen = () => {
                         <Button
                             title={'Download Zip'}
                             onPress={() => {
-                                RNFetchBlob.config({
-                                    fileCache: true,
-                                })
-                                    .fetch(
-                                        'GET',
-                                        `https://github.com/guardian/dotcom-rendering/archive/master.zip?date=${Date.now()}`,
-                                    )
+                                downloadIssue('noop')
                                     .progress((received, total) => {
                                         setProgress(received / total)
                                     })
-                                    .then(async res => {
-                                        await makeCacheFolder()
-                                        await RNFetchBlob.fs.mv(
-                                            res.path(),
-                                            `${issuesDir}/test-${Date.now()}.zip`,
-                                        )
+                                    .then(async () => {
                                         setProgress(0)
                                         refreshIssues()
                                     })

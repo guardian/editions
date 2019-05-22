@@ -1,35 +1,15 @@
 import { useState, useEffect } from 'react'
 import RNFetchBlob from 'rn-fetch-blob'
+import { issuesDir, File } from '../helpers/files'
 
-export const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
+type FileList = File[]
 
-export type File = {
-    name: string
-    path: string
-    size: number
-    type: 'other' | 'archive' | 'issue'
-}
-
-/*
- TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
- */
-export const makeCacheFolder = (): Promise<void> =>
-    RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
-
-export const rebuildCacheFolder = async (): Promise<void> => {
-    await RNFetchBlob.fs.unlink(issuesDir)
-    await makeCacheFolder()
-}
-
-export const displayFileSize = (size: File['size']): string => {
-    if (size / 1024 < 1) {
-        return size.toFixed(2) + ' B'
+type FileListHook = [
+    FileList,
+    {
+        refreshIssues: () => void
     }
-    if (size / 1024 / 1024 < 1) {
-        return (size / 1024).toFixed(2) + ' KB'
-    }
-    return (size / 1024 / 1024).toFixed(2) + ' MB'
-}
+]
 
 /*
  TODO: this code can  more cleanly identify an unpacked issue vs an other 
@@ -59,8 +39,8 @@ const makeFile = async (name: string): Promise<File> => {
     }
 }
 
-export const useFileList = (): [File[], () => void] => {
-    const [files, setFiles] = useState<File[]>([])
+const useFileList = (): FileListHook => {
+    const [files, setFiles] = useState<FileList>([])
     const refreshIssues = () => {
         RNFetchBlob.fs
             .ls(issuesDir)
@@ -71,5 +51,7 @@ export const useFileList = (): [File[], () => void] => {
         refreshIssues()
     }, [])
 
-    return [files, refreshIssues]
+    return [files, { refreshIssues }]
 }
+
+export { useFileList }
