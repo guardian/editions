@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import {
     ScrollView,
     Button,
@@ -7,12 +7,13 @@ import {
     Alert,
     SafeAreaView,
     TextInput,
+    Clipboard,
 } from 'react-native'
 import { List } from '../../components/lists/list'
 import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
+import { zip, unzip, subscribe } from 'react-native-zip-archive'
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
@@ -33,7 +34,34 @@ const useFileList = (): [string[], () => void] => {
         RNFetchBlob.fs.ls(issuesDir).then(files => {
             setFiles(files)
         })
+    name: string
+    path: string
+    size: number
+    type: 'other' | 'archive' | 'issue'
+}
 
+const useFileList = (): [File[], () => void] => {
+    const [files, setFiles] = useState<File[]>([])
+    const refreshIssues = async () => {
+        const files = await RNFetchBlob.fs.ls(issuesDir)
+        const finalFiles: File[] = []
+        for (const name of files) {
+            const path = issuesDir + '/' + name
+            const { size, type } = await RNFetchBlob.fs.stat(path)
+            finalFiles.push({
+                name,
+                size: parseInt(size),
+                path,
+                type:
+                    type === 'directory'
+                        ? 'issue'
+                        : name.includes('.zip')
+                        ? 'archive'
+                        : 'other',
+            })
+        }
+        setFiles(finalFiles)
+    }
     useEffect(() => {
         refreshIssues()
     }, [])
@@ -44,34 +72,56 @@ const useFileList = (): [string[], () => void] => {
 export const DownloadScreen = () => {
     const [files, refreshIssues] = useFileList()
     const [progress, setProgress] = useState(0)
-
+    const fileList = useMemo(() => {
+        const archives = files.filter(({ type }) => type !== 'other')
+        const other = files.filter(({ type }) => type === 'other')
+        return [
+            ...archives.map(file => ({
+                key: file.name,
+                title: [file.type === 'issue' ? '🗞' : '📦', file.name].join(
+                    ' ',
+                ),
+                explainer: `${filesize(file.size)} – ${file.type}`,
+                data: file,
+            })),
+            other.length && {
+                key: 'others',
+                title: `😧 ${other.length} unknown files`,
+                explainer: filesize(
+                    other
+                        .map(({ size }) => size)
+                        .reduce((acc, cur) => acc + cur, 0),
+                ),
+            },
+        ].filter(({ key }) => key)
+    }, [files])
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View
-                    style={{
-                        flex: 0,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: metrics.vertical,
-                        height: 80,
-                        backgroundColor: color.dimBackground,
-                    }}
-                >
+            <View
+                style={{
+                    paddingVertical: metrics.vertical,
+                    backgroundColor: color.dimBackground,
+                    flex: 0,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                     {progress > 0 ? (
                         <Text>{`Downloading (${Math.ceil(
                             progress * 100,
                         )}%)`}</Text>
                     ) : (
                         <Button
-                            title={'🤩 Download Zip 👋'}
+                            title={'Download Zip'}
                             onPress={() => {
                                 RNFetchBlob.config({
                                     fileCache: true,
                                 })
                                     .fetch(
                                         'GET',
-                                        `https://ftp.mozilla.org/pub/firefox/releases/45.0.2/linux-x86_64/as/firefox-45.0.2.tar.bz2?date=${Date.now()}`,
+                                        `https://github.com/guardian/dotcom-rendering/archive/master.zip?date=${Date.now()}`,
                                     )
                                     .progress((received, total) => {
                                         setProgress(received / total)
@@ -92,54 +142,65 @@ export const DownloadScreen = () => {
                         />
                     )}
                 </View>
-                <List
-                    data={files.map(file => ({ key: file, title: file }))}
-                    onPress={item => {
-                        try {
-                            RNFetchBlob.ios.openDocument(
-                                issuesDir + '/' + item.key,
+                <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
+                    <Button
+                        title="Wipe cache"
+                        onPress={() => {
+                            Alert.alert(
+                                'Delete cache',
+                                'Ya sure lass?',
+                                [
+                                    {
+                                        text: "Don't delete it",
+                                    },
+                                    {
+                                        text: 'AWAY WITH IT',
+                                        style: 'cancel',
+                                        onPress: async () => {
+                                            await rebuildCacheFolder()
+                                            refreshIssues()
+                                        },
+                                    },
+                                ],
+                                { cancelable: false },
                             )
-                            // @ts-ignore
-                            RNFetchBlob.android.addCompleteDownload({
-                                title: item.key,
-                                description: 'desc',
-                                mime: 'data/zip',
-                                path: issuesDir + '/' + item.key,
-                                showNotification: true,
-                            })
-                        } catch {
-                            // TODO find a better approach for multi platform opens
+                        }}
+                    />
+                </View>
+            </View>
+
+            <ScrollView style={{ flex: 1 }}>
+                <List
+                    data={fileList}
+                    onPress={({ type, path }) => {
+                        if (type === 'archive') {
+                            unzip(path, path + '-extracted')
+                                .then(async () => {
+                                    await RNFetchBlob.fs.unlink(path)
+                                    refreshIssues()
+                                })
+                                .catch(error => {
+                                    alert(error)
+                                    refreshIssues()
+                                })
+                        } else {
+                            alert('oof')
                         }
                     }}
                 />
-            </ScrollView>
-            <View
-                style={{
-                    borderColor: color.line,
-                    borderTopWidth: 1,
-                }}
-            >
-                <TextInput value={RNFetchBlob.fs.dirs.DocumentDir} />
-            </View>
-            <View
-                style={{
-                    borderColor: color.line,
-                    borderTopWidth: 1,
-                    padding: metrics.vertical,
-                }}
-            >
-                <SafeAreaView
+                <View
                     style={{
-                        flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        padding: metrics.vertical,
                     }}
                 >
                     <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                         <Button
-                            title="See folder"
+                            title="Copy local path to clipboard"
                             onPress={() => {
-                                Alert.alert(RNFetchBlob.fs.dirs.DocumentDir)
+                                Clipboard.setString(issuesDir)
+                                alert(issuesDir)
                             }}
                         />
                     </View>
@@ -151,33 +212,8 @@ export const DownloadScreen = () => {
                             }}
                         />
                     </View>
-                    <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
-                        <Button
-                            title="Wipe cache"
-                            onPress={() => {
-                                Alert.alert(
-                                    'Delete cache',
-                                    'Ya sure lass?',
-                                    [
-                                        {
-                                            text: "Don't delete it",
-                                        },
-                                        {
-                                            text: 'AWAY WITH IT',
-                                            style: 'cancel',
-                                            onPress: async () => {
-                                                await rebuildCacheFolder()
-                                                refreshIssues()
-                                            },
-                                        },
-                                    ],
-                                    { cancelable: false },
-                                )
-                            }}
-                        />
-                    </View>
-                </SafeAreaView>
-            </View>
+                </View>
+            </ScrollView>
         </View>
     )
 }
