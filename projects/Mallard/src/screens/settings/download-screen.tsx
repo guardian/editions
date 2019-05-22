@@ -4,15 +4,16 @@ import { List } from '../../components/lists/list'
 import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { unzip } from 'react-native-zip-archive'
 import { useFileList } from '../../hooks/use-fs'
 import { Item } from '../../components/lists/helpers'
 import {
     File,
     displayFileSize,
     issuesDir,
-    rebuildCacheFolder,
+    deleteAllFiles,
     downloadIssue,
+    unzipIssue,
+    deleteOtherFiles,
 } from '../../helpers/files'
 
 export const DownloadScreen = () => {
@@ -23,8 +24,11 @@ export const DownloadScreen = () => {
         const other = files.filter(({ type }) => type === 'other')
 
         const returnable = archives.map(file => ({
-            key: file.name,
-            title: [file.type === 'issue' ? '🗞' : '📦', file.name].join(' '),
+            key: file.filename,
+            title:
+                file.type === 'issue'
+                    ? `🗞 ${file.issue}`
+                    : `📦 ${file.filename}`,
             explainer: `${displayFileSize(file.size)} – ${file.type}`,
             data: file,
         }))
@@ -62,12 +66,14 @@ export const DownloadScreen = () => {
                         )}%)`}</Text>
                     ) : (
                         <Button
-                            title={'Download Zip'}
+                            title={'🌈 Download Issue'}
                             onPress={() => {
-                                downloadIssue('noop')
-                                    .progress((received, total) => {
-                                        setProgress(received / total)
-                                    })
+                                const dl = downloadIssue('noop')
+                                setProgress(0.000001)
+                                dl.progress((received, total) => {
+                                    setProgress(received / total)
+                                })
+                                dl.promise
                                     .then(async () => {
                                         setProgress(0)
                                         refreshIssues()
@@ -81,20 +87,28 @@ export const DownloadScreen = () => {
                 </View>
                 <View style={{ marginHorizontal: metrics.horizontal / 2 }}>
                     <Button
-                        title="Wipe cache"
+                        title="💣 Cleanup"
                         onPress={() => {
                             Alert.alert(
                                 'Delete cache',
                                 'Ya sure lass?',
                                 [
                                     {
-                                        text: "Don't delete it",
+                                        text: "Don't delete anything",
                                     },
                                     {
-                                        text: 'AWAY WITH IT',
+                                        text: 'Delete other files',
                                         style: 'cancel',
                                         onPress: async () => {
-                                            await rebuildCacheFolder()
+                                            await deleteOtherFiles()
+                                            refreshIssues()
+                                        },
+                                    },
+                                    {
+                                        text: 'AWAY WITH IT ALL',
+                                        style: 'cancel',
+                                        onPress: async () => {
+                                            await deleteAllFiles()
                                             refreshIssues()
                                         },
                                     },
@@ -109,11 +123,10 @@ export const DownloadScreen = () => {
             <ScrollView style={{ flex: 1 }}>
                 <List
                     data={fileList}
-                    onPress={({ type, path }) => {
+                    onPress={({ type, path, issue }) => {
                         if (type === 'archive') {
-                            unzip(path, path + '-extracted')
+                            unzipIssue(issue)
                                 .then(async () => {
-                                    await RNFetchBlob.fs.unlink(path)
                                     refreshIssues()
                                 })
                                 .catch(error => {
