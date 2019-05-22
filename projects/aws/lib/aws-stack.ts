@@ -61,7 +61,7 @@ export class EditionsStack extends cdk.Stack {
             code: Code.bucket(
                 deploy,
                 `${stackParameter.stringValue}/${
-                    stageParameter.stringValue
+                stageParameter.stringValue
                 }/backend/backend.zip`,
             ),
             handler: 'index.handler',
@@ -70,25 +70,25 @@ export class EditionsStack extends cdk.Stack {
                 arn: frontsRoleARN.stringValue,
             },
         })
-        const runLambdaPolicy = new PolicyDocument()
-        const runLambdaStatement = new PolicyStatement(
-            PolicyStatementEffect.Allow,
-        )
-        runLambdaStatement.addResource(backend.functionArn)
-        runLambdaStatement.addAction('lambda:*')
+        // const runLambdaPolicy = new PolicyDocument()
+        // const runLambdaStatement = new PolicyStatement(
+        //     PolicyStatementEffect.Allow,
+        // )
+        // runLambdaStatement.addResource(backend.functionArn)
+        // runLambdaStatement.addAction('lambda:*')
 
-        runLambdaPolicy.addStatement(runLambdaStatement)
+        // runLambdaPolicy.addStatement(runLambdaStatement)
 
         new apigateway.LambdaRestApi(this, 'endpoint', {
             handler: backend,
             options: {
                 restApiName: `${appParameter.stringValue}-backend-endpoint-${
                     stageParameter.stringValue
-                }`,
+                    }`,
                 description: `The endpoint for the editions backend lambda in ${
                     stageParameter.stringValue
-                }`,
-                policy: runLambdaPolicy,
+                    }`,
+                // policy: runLambdaPolicy,
             },
         })
 
