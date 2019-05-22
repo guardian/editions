@@ -4,23 +4,29 @@ import AWS, {
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
 } from 'aws-sdk'
+AWS.config.credentials = new ChainableTemporaryCredentials({
+    params: {
+        RoleArn: process.env.arn as string,
+        RoleSessionName: 'front-assume-role-access',
+    },
+})
 
 const s3 = new S3({
     region: 'eu-west-1',
-    credentialProvider: new CredentialProviderChain([
-        () => {
-            const arn = process.env.arn
-            console.log('ARN IS', arn)
-            if (arn == null)
-                return new SharedIniFileCredentials({ profile: 'cmsFronts' })
-            return new ChainableTemporaryCredentials({
-                params: {
-                    RoleArn: arn,
-                    RoleSessionName: 'front-assume-role-access',
-                },
-            })
-        },
-    ]),
+    // credentialProvider: new CredentialProviderChain([
+    //     () => {
+    //         const arn = process.env.arn
+    //         console.log('ARN IS', arn)
+    //         if (arn == null)
+    //             return new SharedIniFileCredentials({ profile: 'cmsFronts' })
+    //         return new ChainableTemporaryCredentials({
+    //             params: {
+    //                 RoleArn: arn,
+    //                 RoleSessionName: 'front-assume-role-access',
+    //             },
+    //         })
+    //     },
+    // ]),
 })
 
 const stage = 'CODE'
@@ -40,7 +46,7 @@ type S3Response =
 
 export const s3fetch = (key: string): Promise<S3Response> => {
     const k = `${stage}/${key}`
-    console.log(k)
+    console.log(k, 'hello', process.env.arn)
     return new Promise((resolve, reject) => {
         s3.getObject(
             {
