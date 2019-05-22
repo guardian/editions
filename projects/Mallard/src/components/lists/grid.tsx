@@ -31,7 +31,9 @@ export class Grid extends React.Component<PropTypes> {
                                 padding: metrics.horizontal / 2,
                                 paddingVertical: metrics.vertical / 4,
                                 borderTopColor: color.line,
-                                borderTopWidth: StyleSheet.hairlineWidth,
+                                borderTopWidth: Math.ceil(
+                                    StyleSheet.hairlineWidth,
+                                ),
                             }}
                         >
                             <HeadlineCardText>{item.title}</HeadlineCardText>

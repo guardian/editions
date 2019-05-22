@@ -26,7 +26,7 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     background: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: Math.ceil(StyleSheet.hairlineWidth),
         paddingBottom: metrics.vertical,
         paddingTop: metrics.headerHeight,
         ...articleAppearances.default.backgrounds,
