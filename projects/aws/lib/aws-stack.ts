@@ -50,7 +50,7 @@ export class EditionsStack extends cdk.Stack {
         )
 
         const backend = new lambda.Function(this, 'EditionsBackend', {
-            functionName: `backend-${stageParameter.stringValue}`,
+            functionName: `editions-backend-${stageParameter.stringValue}`,
             runtime: lambda.Runtime.NodeJS810,
             timeout: 60,
             code: Code.bucket(
@@ -76,7 +76,7 @@ export class EditionsStack extends cdk.Stack {
         // runLambdaStatement.addPrincipal(new ServicePrincipal("apigateway.amazonaws.com"))
         // runLambdaPolicy.addStatement(runLambdaStatement)
 
-        new apigateway.LambdaRestApi(this, 'endpoint', {
+        new apigateway.LambdaRestApi(this, 'editions-backend-apigateway', {
             handler: backend,
             // options: {
             //     restApiName: `${appParameter.stringValue}-backend-endpoint-${
