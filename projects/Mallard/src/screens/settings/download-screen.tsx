@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
 import { List } from '../../components/lists/list'
-import RNFetchBlob from 'rn-fetch-blob'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { useFileList } from '../../hooks/use-fs'
@@ -130,11 +129,11 @@ export const DownloadScreen = () => {
                                     refreshIssues()
                                 })
                                 .catch(error => {
-                                    alert(error)
+                                    Alert.alert(error)
                                     refreshIssues()
                                 })
                         } else {
-                            alert('oof')
+                            Alert.alert('oof')
                         }
                     }}
                 />

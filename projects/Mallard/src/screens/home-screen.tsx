@@ -4,7 +4,6 @@ import {
     ScrollView,
     Button,
     StyleSheet,
-    Text,
     View,
     Alert,
 } from 'react-native'
@@ -15,6 +14,7 @@ import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
 import { useFileList } from '../hooks/use-fs'
+import { unzipIssue } from '../helpers/files'
 
 const styles = StyleSheet.create({
     container: primaryContainer,
@@ -35,7 +35,7 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const [files] = useFileList()
+    const [files, { refreshIssues }] = useFileList()
     return (
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
@@ -65,17 +65,39 @@ export const HomeScreen = ({
                     ]}
                     onPress={item => navigation.navigate('Front', item)}
                 />
-                <ListHeading>Issues on device</ListHeading>
-                <List
-                    data={files.map(file => ({
-                        key: file.issue,
-                        title: file.issue,
-                        data: {},
-                    }))}
-                    onPress={() => {
-                        Alert.alert('Hold there, this is not supported yet')
-                    }}
-                />
+                {files.length > 0 && (
+                    <>
+                        <ListHeading>Issues on device</ListHeading>
+                        <List
+                            data={files
+                                .filter(({ type }) => type !== 'other')
+                                .map(file => ({
+                                    key: file.issue,
+                                    title:
+                                        file.type === 'archive'
+                                            ? 'Compressed issue'
+                                            : file.issue,
+                                    explainer:
+                                        file.type === 'archive'
+                                            ? 'Tap to unarchive'
+                                            : null,
+                                    data: file,
+                                }))}
+                            onPress={file => {
+                                if (file.type === 'archive') {
+                                    unzipIssue(file.issue).then(async () => {
+                                        refreshIssues()
+                                        Alert.alert(`Unzipped ${file.issue}`)
+                                    })
+                                } else {
+                                    Alert.alert(
+                                        'Hold there, this is not supported yet',
+                                    )
+                                }
+                            }}
+                        />
+                    </>
+                )}
                 <ApiState />
             </ScrollView>
         </WithAppAppearance>

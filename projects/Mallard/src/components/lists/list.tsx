@@ -6,7 +6,6 @@ import {
     TouchableNativeFeedback,
     SafeAreaView,
     View,
-    Text,
     StyleSheet,
 } from 'react-native'
 import { metrics } from '../../theme/spacing'
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
+        paddingVertical: metrics.vertical / 1.25,
         borderTopWidth: 0,
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
