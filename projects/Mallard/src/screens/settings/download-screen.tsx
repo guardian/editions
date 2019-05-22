@@ -28,12 +28,17 @@ const rebuildCacheFolder = async () => {
     await makeCacheFolder()
 }
 
-const useFileList = (): [string[], () => void] => {
-    const [files, setFiles] = useState<string[]>([])
-    const refreshIssues = () =>
-        RNFetchBlob.fs.ls(issuesDir).then(files => {
-            setFiles(files)
-        })
+const filesize = size => {
+    if (size / 1000 < 1) {
+        return size + 'B'
+    }
+    if (size / 1000 / 1000 < 1) {
+        return size / 1000 + 'KB'
+    }
+    return size / 1000 / 1000 + 'MB'
+}
+
+type File = {
     name: string
     path: string
     size: number
