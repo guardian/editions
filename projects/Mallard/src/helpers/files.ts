@@ -7,7 +7,7 @@ export type File = {
     filename: string
     path: string
     size: number
-    issue: IssueId
+    issue: string
     type: 'other' | 'archive' | 'issue'
 }
 

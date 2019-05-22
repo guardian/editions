@@ -1,11 +1,20 @@
 import React from 'react'
-import { Image, ScrollView, Button, StyleSheet, Text, View } from 'react-native'
-import { List } from '../components/lists/list'
+import {
+    Image,
+    ScrollView,
+    Button,
+    StyleSheet,
+    Text,
+    View,
+    Alert,
+} from 'react-native'
+import { List, ListHeading } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { primaryContainer } from '../theme/styles'
 import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
+import { useFileList } from '../hooks/use-fs'
 
 const styles = StyleSheet.create({
     container: primaryContainer,
@@ -17,7 +26,6 @@ const styles = StyleSheet.create({
     getStartedContainer: {
         alignItems: 'flex-start',
         marginHorizontal: metrics.horizontal,
-        marginVertical: metrics.vertical,
         marginTop: metrics.vertical * 2,
     },
 })
@@ -27,6 +35,7 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
+    const [files] = useFileList()
     return (
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
@@ -36,6 +45,7 @@ export const HomeScreen = ({
                         style={styles.welcomeImage}
                     />
                 </View>
+                <ListHeading>Demo issues</ListHeading>
                 <List
                     data={[
                         {
@@ -54,6 +64,17 @@ export const HomeScreen = ({
                         },
                     ]}
                     onPress={item => navigation.navigate('Front', item)}
+                />
+                <ListHeading>Issues on device</ListHeading>
+                <List
+                    data={files.map(file => ({
+                        key: file.issue,
+                        title: file.issue,
+                        data: {},
+                    }))}
+                    onPress={() => {
+                        Alert.alert('Hold there, this is not supported yet')
+                    }}
                 />
                 <ApiState />
             </ScrollView>

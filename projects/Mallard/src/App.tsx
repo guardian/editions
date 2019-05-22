@@ -6,6 +6,7 @@ import React from 'react'
 import { StatusBar } from 'react-native'
 import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
+import { FileSystemProvider } from './hooks/use-fs'
 
 const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DV-' : null
 
@@ -16,14 +17,16 @@ export default class App extends React.Component<{}, {}> {
      */
     render() {
         return (
-            <SettingsProvider>
-                <StatusBar
-                    animated={true}
-                    barStyle="light-content"
-                    backgroundColor="#041f4a"
-                />
-                <RootNavigator persistenceKey={navigationPersistenceKey} />
-            </SettingsProvider>
+            <FileSystemProvider>
+                <SettingsProvider>
+                    <StatusBar
+                        animated={true}
+                        barStyle="light-content"
+                        backgroundColor="#041f4a"
+                    />
+                    <RootNavigator persistenceKey={navigationPersistenceKey} />
+                </SettingsProvider>
+            </FileSystemProvider>
         )
     }
 }
