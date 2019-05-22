@@ -10,6 +10,7 @@ const s3 = new S3({
     credentialProvider: new CredentialProviderChain([
         () => {
             const arn = process.env.arn
+            console.log('ARN IS', arn)
             if (arn == null)
                 return new SharedIniFileCredentials({ profile: 'cmsFronts' })
             return new ChainableTemporaryCredentials({
@@ -19,11 +20,10 @@ const s3 = new S3({
                 },
             })
         },
-        ...AWS.CredentialProviderChain.defaultProviders,
     ]),
 })
 
-const stage = 'PROD'
+const stage = 'CODE'
 
 type S3Response =
     | {
