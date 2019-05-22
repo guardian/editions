@@ -12,12 +12,39 @@ interface AppAppearanceStyles {
     dimColor: string
 }
 interface ArticleAppearanceStyles {
-    card: {}
-    headline: {}
+    /*
+    You can spread this over any 'hero' 
+    background in the article page
+    */
+    backgrounds: {
+        backgroundColor?: string
+        borderColor?: string
+    }
+    /*
+    Spread this over text and icons
+    */
+    text: {
+        color?: string
+    }
+    /*
+    Overrides for the headline
+    */
+    headline: {
+        color?: string
+        fontFamily?: string
+    }
+    /*
+    Feel free to add more stuff as needed!!
+    */
 }
 
-type AppAppearance = 'default' | 'primary'
-type ArticleAppearance = 'default' | 'news' | 'lifestyle' | 'comment'
+export type AppAppearance = 'default' | 'primary'
+export type ArticleAppearance =
+    | 'default'
+    | 'news'
+    | 'lifestyle'
+    | 'comment'
+    | 'longread'
 
 const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
@@ -41,37 +68,50 @@ export const articleAppearances: {
     [key in ArticleAppearance]: ArticleAppearanceStyles
 } = {
     default: {
-        card: {
+        backgrounds: {
             backgroundColor: color.background,
             borderColor: color.line,
         },
-        headline: {
+        text: {
             color: color.text,
         },
+        headline: {},
     },
     news: {
-        card: {},
-        headline: {
+        backgrounds: {},
+        text: {
             color: color.palette.news.main,
         },
+        headline: {},
     },
     comment: {
-        card: {
+        backgrounds: {
             backgroundColor: color.palette.opinion.faded,
         },
-        headline: {
+        text: {
             color: color.palette.opinion.main,
+        },
+        headline: {
             fontFamily: 'GHGuardianHeadline-Light',
         },
     },
     lifestyle: {
-        card: {
+        backgrounds: {
             backgroundColor: color.palette.lifestyle.faded,
+        },
+        text: {
+            color: color.palette.lifestyle.main,
         },
         headline: {
             fontFamily: 'GHGuardianHeadline-Bold',
-            color: color.palette.lifestyle.main,
         },
+    },
+    longread: {
+        backgrounds: {
+            backgroundColor: color.palette.neutral[7],
+        },
+        text: { color: color.palette.neutral[100] },
+        headline: {},
     },
 }
 /*
@@ -85,5 +125,11 @@ export const useAppAppearance = (): AppAppearanceStyles =>
     appAppearances[useContext(AppAppearanceContext)]
 
 export const WithArticleAppearance = ArticleAppearanceContext.Provider
-export const useArticleAppearance = (): ArticleAppearanceStyles =>
-    articleAppearances[useContext(ArticleAppearanceContext)]
+
+export const useArticleAppearance = (): {
+    name: ArticleAppearance
+    appearance: ArticleAppearanceStyles
+} => ({
+    name: useContext(ArticleAppearanceContext),
+    appearance: articleAppearances[useContext(ArticleAppearanceContext)],
+})
