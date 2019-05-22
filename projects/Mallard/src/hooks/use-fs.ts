@@ -23,12 +23,12 @@ export const rebuildCacheFolder = async (): Promise<void> => {
 
 export const displayFileSize = (size: File['size']): string => {
     if (size / 1024 < 1) {
-        return size + 'B'
+        return size.toFixed(2) + ' B'
     }
     if (size / 1024 / 1024 < 1) {
-        return size / 1024 + 'KB'
+        return (size / 1024).toFixed(2) + ' KB'
     }
-    return size / 1024 / 1024 + 'MB'
+    return (size / 1024 / 1024).toFixed(2) + ' MB'
 }
 
 /*
