@@ -56,6 +56,7 @@ export const downloadIssue = (issue: File['issue']) => {
             )
             return res
         }),
+        cancel: returnable.cancel,
         progress: returnable.progress,
     }
 }

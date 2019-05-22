@@ -67,7 +67,7 @@ export const DownloadScreen = () => {
                                     refreshIssues()
                                 })
                                 .catch(errorMessage => {
-                                    Alert.alert(errorMessage)
+                                    Alert.alert(JSON.stringify(errorMessage))
                                 })
                         }}
                     />
@@ -111,16 +111,19 @@ export const DownloadScreen = () => {
                     <>
                         <ListHeading>Active downloads</ListHeading>
                         <List
-                            data={Object.entries(queue).map(
-                                ([key, { progress }]) => ({
+                            data={Object.entries(queue)
+                                .sort((a, b) => b[0].localeCompare(a[0]))
+                                .map(([key, { progress, cancel }]) => ({
                                     key,
                                     title: `${Math.ceil(
                                         progress * 100,
                                     )}% downloaded`,
                                     explainer: key,
-                                }),
-                            )}
-                            onPress={() => {}}
+                                    data: { cancel },
+                                }))}
+                            onPress={({ cancel }) => {
+                                cancel()
+                            }}
                         />
                     </>
                 )}

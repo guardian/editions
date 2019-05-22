@@ -22,28 +22,39 @@ type DownloadQueueHook = [
 
 const useDownloadQueueInCtx = (): DownloadQueueHook => {
     const [queue, setQueue] = useState({})
-
-    const download = (issue: File['issue']) => {
-        const dl = downloadIssue(issue)
-        dl.progress((received, total) => {
-            setQueue(q => ({
-                ...q,
-                [issue]: {
-                    progress: received / total,
-                },
-            }))
+    const deleteIssue = (issue: File['issue']) =>
+        setQueue(q => {
+            const clone = { ...q }
+            delete clone[issue]
+            return clone
         })
+    const setIssue = (issue: File['issue'], state) =>
         setQueue(q => ({
             ...q,
             [issue]: {
-                progress: 0,
+                ...q[issue],
+                ...state,
             },
         }))
-        return dl.promise.then(() => {
-            setQueue(q => {
-                delete q[issue]
-                return q
+    const download = (issue: File['issue']) => {
+        const dl = downloadIssue(issue)
+        dl.progress((received, total) => {
+            setIssue(issue, {
+                progress: received / total,
+                cancel: async () => {
+                    await dl.cancel()
+                    setTimeout(() => {
+                        deleteIssue(issue)
+                    }, 1000)
+                },
             })
+        })
+        setIssue(issue, {
+            progress: 0,
+            cancel: dl.cancel,
+        })
+        return dl.promise.then(() => {
+            deleteIssue(issue)
         })
     }
 
