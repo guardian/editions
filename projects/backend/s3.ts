@@ -17,7 +17,7 @@ const s3 = new S3({
     region: 'eu-west-1',
 })
 
-const stage = 'CODE'
+const stage = process.env.stage || 'CODE'
 
 type S3Response =
     | {

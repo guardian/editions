@@ -54,6 +54,7 @@ export class EditionsStack extends cdk.Stack {
             environment: {
                 CAPI_KEY: capiParameter.stringValue,
                 arn: frontsRoleARN.stringValue,
+                stage: stageParameter.stringValue,
             },
         })
 
