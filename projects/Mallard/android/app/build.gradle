@@ -138,7 +138,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-zip-archive')
     implementation project(':@react-native-community_async-storage')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-screens')
