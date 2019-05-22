@@ -69,7 +69,6 @@ export class EditionsStack extends cdk.Stack {
 
         new apigateway.LambdaRestApi(this, 'endpoint', {
             handler: backend,
-            proxy: false,
             options: {
                 restApiName: `${appParameter.stringValue}-backend-endpoint-${
                     stageParameter.stringValue
