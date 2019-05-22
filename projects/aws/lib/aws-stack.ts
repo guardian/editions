@@ -4,7 +4,11 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-import { PolicyStatement, PolicyStatementEffect } from '@aws-cdk/aws-iam'
+import {
+    PolicyStatement,
+    PolicyStatementEffect,
+    PolicyDocument,
+} from '@aws-cdk/aws-iam'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -66,6 +70,14 @@ export class EditionsStack extends cdk.Stack {
                 arn: frontsRoleARN.stringValue,
             },
         })
+        const runLambdaPolicy = new PolicyDocument()
+        const runLambdaStatement = new PolicyStatement(
+            PolicyStatementEffect.Allow,
+        )
+        runLambdaStatement.addResource(backend.functionArn)
+        runLambdaStatement.addAction('lambda:*')
+
+        runLambdaPolicy.addStatement(runLambdaStatement)
 
         new apigateway.LambdaRestApi(this, 'endpoint', {
             handler: backend,
@@ -76,6 +88,7 @@ export class EditionsStack extends cdk.Stack {
                 description: `The endpoint for the editions backend lambda in ${
                     stageParameter.stringValue
                 }`,
+                policy: runLambdaPolicy,
             },
         })
 
