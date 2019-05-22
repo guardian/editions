@@ -2,12 +2,23 @@ import AWS, {
     S3,
     CredentialProviderChain,
     SharedIniFileCredentials,
+    ChainableTemporaryCredentials,
 } from 'aws-sdk'
 
 const s3 = new S3({
     region: 'eu-west-1',
     credentialProvider: new CredentialProviderChain([
-        () => new SharedIniFileCredentials({ profile: 'cmsFronts' }),
+        () => {
+            const arn = process.env.arn
+            if (arn == null)
+                return new SharedIniFileCredentials({ profile: 'cmsFronts' })
+            return new ChainableTemporaryCredentials({
+                params: {
+                    RoleArn: arn,
+                    RoleSessionName: 'front-assume-role-access',
+                },
+            })
+        },
         ...AWS.CredentialProviderChain.defaultProviders,
     ]),
 })
