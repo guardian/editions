@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
     item: {
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 1.25,
-        borderTopWidth: 0,
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth * 1.1,
     },
     list: {
         borderTopWidth: StyleSheet.hairlineWidth,
