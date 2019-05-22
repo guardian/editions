@@ -7,7 +7,7 @@ import iam = require('@aws-cdk/aws-iam')
 import {
     PolicyStatement,
     PolicyStatementEffect,
-    PolicyDocument,
+    // PolicyDocument,
 } from '@aws-cdk/aws-iam'
 
 export class EditionsStack extends cdk.Stack {
