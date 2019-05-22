@@ -45,7 +45,7 @@ export class EditionsStack extends cdk.Stack {
         )
 
         const backend = new lambda.Function(this, 'EditionsBackend', {
-            functionName: `editions-backend-${stageParameter.stringValue}`,
+            functionName: `backend-${stageParameter.stringValue}`,
             runtime: lambda.Runtime.NodeJS810,
             // code: Code.inline(
             //     `module.handler = () => console.log('hi ${
