@@ -14,6 +14,7 @@ export interface ArticleFragment {
 
 export interface CollectionArticles {
     id: string
+    name?: string
     articles: ArticleFragment[]
 }
 export interface Collection {

@@ -62,6 +62,18 @@
     "@aws-cdk/aws-sns" "^0.31.0"
     "@aws-cdk/cdk" "^0.31.0"
 
+"@aws-cdk/aws-cloudfront@^0.31.0":
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cloudfront/-/aws-cloudfront-0.31.0.tgz#4870239dc66fa4d91e2fc6d10a7e6c218fb69164"
+  integrity sha512-1roIs+NS045x4e7+UQKmf5puyVQT7j5CD+hwEaOnyeZJbQzYC7ok5HeJNbjsFbjpe+30bkPc3c7HYAbb1jh1tw==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "^0.31.0"
+    "@aws-cdk/aws-iam" "^0.31.0"
+    "@aws-cdk/aws-kms" "^0.31.0"
+    "@aws-cdk/aws-route53" "^0.31.0"
+    "@aws-cdk/aws-s3" "^0.31.0"
+    "@aws-cdk/cdk" "^0.31.0"
+
 "@aws-cdk/aws-cloudwatch@^0.31.0":
   version "0.31.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cloudwatch/-/aws-cloudwatch-0.31.0.tgz#2c417a998c256cf5ac5637f27c03332b470020ff"

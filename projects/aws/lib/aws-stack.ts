@@ -4,7 +4,6 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props)
@@ -58,14 +57,19 @@ export class EditionsStack extends cdk.Stack {
             },
         })
 
-        new apigateway.LambdaRestApi(this, 'editions-backend-apigateway', {
-            handler: backend,
-        })
+        const gateway = new apigateway.LambdaRestApi(
+            this,
+            'editions-backend-apigateway-${stageParameter.stringValue}',
+            {
+                handler: backend,
+            },
+        )
+
+        backend.addEnvironment('url', gateway.url)
 
         const policy = new iam.PolicyStatement(iam.PolicyStatementEffect.Allow)
         policy.addResource(frontsAccess.roleArn)
         policy.addAction('sts:AssumeRole')
-
         backend.addToRolePolicy(policy)
     }
 }

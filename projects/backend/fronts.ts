@@ -3,11 +3,19 @@ import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 import { Issue, CollectionArticles, Front, Collection } from './common'
 
-export const getIssue = async (issue: string): Promise<Issue | 'notfound'> => {
-    const x = await s3fetch(`frontsapi/edition/${issue}/edition.json`)
+const url = process.env.url || ''
+
+export const getIssue = async (id: string): Promise<Issue | 'notfound'> => {
+    const x = await s3fetch(`frontsapi/edition/${id}/edition.json`)
     if (x.status === 404) return 'notfound'
     if (!x.ok) throw new Error('failed s3')
-    return x.json() as Promise<Issue>
+    const issue: Issue = (await x.json()) as Issue
+    const withUrls = {
+        ...issue,
+        fronts: issue.fronts.map(id => `${url}/${id}`),
+    }
+
+    return withUrls
 }
 
 export const getCollection = async (
@@ -19,7 +27,8 @@ export const getCollection = async (
         if (!resp.ok) throw new Error('failed s3')
         const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
         return {
-            id: collection.displayName,
+            id: id,
+            name: collection.displayName,
             articles: collection.live,
         }
     } catch {
@@ -43,15 +52,22 @@ export const getCollectionsForFront = async (id: string): Promise<Front> => {
     const selected = collections.filter(c => collectionIds.includes(c[0]))
 
     const articles = await Promise.all(collectionIds.map(getCollection))
-
     const articleMap = new Map(
         articles
             .filter(
                 (maybeArticle): maybeArticle is CollectionArticles =>
                     maybeArticle !== 'notfound',
             )
-            .map(({ id, articles }) => [id, articles]),
+            .map(({ id, articles }) => [
+                id, //this is a display name
+                articles.map(article => ({
+                    ...article,
+                    url: `${url}/${article.id}`,
+                })),
+            ]),
     )
+    console.log(articleMap)
+    console.log(JSON.stringify(selected, null, 2))
 
     const combined: [string, Collection][] = selected.map(([id, data]) => [
         id,
