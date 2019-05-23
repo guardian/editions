@@ -4,6 +4,7 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
+import cloudfront = require('@aws-cdk/aws-cloudfront')
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -58,14 +59,40 @@ export class EditionsStack extends cdk.Stack {
             },
         })
 
-        new apigateway.LambdaRestApi(this, 'editions-backend-apigateway', {
-            handler: backend,
-        })
+        const gateway = new apigateway.LambdaRestApi(
+            this,
+            'editions-backend-apigateway',
+            {
+                handler: backend,
+            },
+        )
 
         const policy = new iam.PolicyStatement(iam.PolicyStatementEffect.Allow)
         policy.addResource(frontsAccess.roleArn)
         policy.addAction('sts:AssumeRole')
 
         backend.addToRolePolicy(policy)
+        if (gateway.deploymentStage == null) {
+            throw new Error(
+                "Well, I'm stumped. This should be defined if we're deploying.",
+            )
+        }
+
+        const gatewayDeployment = gateway.deploymentStage.stageName
+
+        new cloudfront.CloudFrontWebDistribution(
+            this,
+            'backend-cloudfront-distribution',
+            {
+                originConfigs: [
+                    {
+                        behaviors: [{ isDefaultBehavior: true }],
+                        customOriginSource: {
+                            domainName: `${gatewayDeployment}.execute-api.eu-west-1.amazonaws.com`, //Yes, this really should not be hard coded.
+                        },
+                    },
+                ],
+            },
+        )
     }
 }
