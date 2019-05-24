@@ -52,9 +52,9 @@ const FrontScreen = ({
         >
             <FrontRow front={'News'} {...{ issue, navigation, frontsData }} />
             <FrontRow front={'Sport'} {...{ issue, navigation, frontsData }} />
-            <FrontRow front={'Other'} {...{ issue, navigation, frontsData }} />
+            <FrontRow front={'Opinion'} {...{ issue, navigation, frontsData }} />
             <MonoTextBlock style={{ flex: 1 }}>
-                This is an FrontScreen for issue {issue}
+                This is a FrontScreen for issue {issue}
             </MonoTextBlock>
         </ScrollView>
     )
