@@ -9,7 +9,7 @@ type FileListHook = [
     }
 ]
 
-type DownloadQueue = {
+interface DownloadQueue {
     [key: string]: {
         progress: number
     }

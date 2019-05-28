@@ -3,7 +3,7 @@ import { unzip } from 'react-native-zip-archive'
 
 export const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
-export type File = {
+export interface File {
     filename: string
     path: string
     size: number
@@ -23,6 +23,30 @@ This cleans EVERYTHING
 export const deleteAllFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(issuesDir)
     await makeCacheFolder()
+}
+
+/*
+Very low effort-ly optimise file list rebuilds.
+Only regenerate the file object if we've got new files.
+
+By using this in vanilla JS we don't have to fire up
+react in the background
+*/
+let fileListRawMemo = ''
+let fileListMemo: File[] = []
+
+export const getFileList = async (): Promise<File[]> => {
+    const fileListRaw = await RNFetchBlob.fs.ls(issuesDir)
+    if (fileListRawMemo === fileListRaw.join()) {
+        return fileListMemo
+    } else {
+        const fileList = await RNFetchBlob.fs
+            .ls(issuesDir)
+            .then(files => Promise.all(files.map(makeFile)))
+        fileListRawMemo = fileListRaw.join()
+        fileListMemo = fileList
+        return fileList
+    }
 }
 
 /*
@@ -84,16 +108,6 @@ export const displayFileSize = (size: File['size']): string => {
     return (size / 1024 / 1024).toFixed(2) + ' MB'
 }
 
-/*
-Very low effort-ly optimise file list rebuilds. 
-Only regenerate the file object if we've got new files.
-
-By using this in vanilla JS we don't have to fire up 
-react in the background
-*/
-let fileListRawMemo: string = ''
-let fileListMemo: File[] = []
-
 const makeFile = async (filename: string): Promise<File> => {
     const path = issuesDir + '/' + filename
     const { size, type } = await RNFetchBlob.fs.stat(path)
@@ -108,19 +122,5 @@ const makeFile = async (filename: string): Promise<File> => {
                 : filename.includes('.zip')
                 ? 'archive'
                 : 'other',
-    }
-}
-
-export const getFileList = async (): Promise<File[]> => {
-    const fileListRaw = await RNFetchBlob.fs.ls(issuesDir)
-    if (fileListRawMemo === fileListRaw.join()) {
-        return fileListMemo
-    } else {
-        const fileList = await RNFetchBlob.fs
-            .ls(issuesDir)
-            .then(files => Promise.all(files.map(makeFile)))
-        fileListRawMemo = fileListRaw.join()
-        fileListMemo = fileList
-        return fileList
     }
 }

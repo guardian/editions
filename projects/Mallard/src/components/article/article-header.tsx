@@ -8,7 +8,7 @@ import {
 } from '../../theme/appearance'
 import { ArticleImage } from './article-image'
 
-type Style = {
+interface Style {
     /* outer container around the header. For spacing and background colour*/
     background: {}
     /* text styles for the headline `<Text>` element. Mainly for colours*/
@@ -17,7 +17,7 @@ type Style = {
     textBackground: {}
 }
 
-type PropTypes = {
+interface PropTypes {
     headline: string
     image?: string | null
 }
