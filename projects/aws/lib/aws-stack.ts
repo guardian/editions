@@ -4,6 +4,8 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
+import cloudfront = require('@aws-cdk/aws-cloudfront')
+import { CfnOutput } from '@aws-cdk/cdk'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -58,14 +60,40 @@ export class EditionsStack extends cdk.Stack {
             },
         })
 
-        new apigateway.LambdaRestApi(this, 'editions-backend-apigateway', {
-            handler: backend,
-        })
-
         const policy = new iam.PolicyStatement(iam.PolicyStatementEffect.Allow)
         policy.addResource(frontsAccess.roleArn)
         policy.addAction('sts:AssumeRole')
 
         backend.addToRolePolicy(policy)
+
+        const gateway = new apigateway.LambdaRestApi(
+            this,
+            'editions-backend-apigateway',
+            {
+                handler: backend,
+            },
+        )
+
+        const gatewayId = gateway.restApiId
+
+        const dist = new cloudfront.CloudFrontWebDistribution(
+            this,
+            'backend-cloudfront-distribution',
+            {
+                originConfigs: [
+                    {
+                        originPath: 'prod', //This is hard coded and could be the deployment id
+                        behaviors: [{ isDefaultBehavior: true }],
+                        customOriginSource: {
+                            domainName: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
+                        },
+                    },
+                ],
+            },
+        )
+        new CfnOutput(this, 'Cloudfront-distribution', {
+            description: 'URL for distribution',
+            value: `https://${dist.domainName}`,
+        })
     }
 }
