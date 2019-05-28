@@ -80,9 +80,13 @@ export class EditionsStack extends cdk.Stack {
             this,
             'backend-cloudfront-distribution',
             {
+                comment: `Cloudfront distribution for editions ${
+                    stageParameter.stringValue
+                }`,
+                defaultRootObject: '',
                 originConfigs: [
                     {
-                        originPath: 'prod', //This is hard coded and could be the deployment id
+                        originPath: '/prod', //This is hard coded and could be the deployment id
                         behaviors: [{ isDefaultBehavior: true }],
                         customOriginSource: {
                             domainName: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
