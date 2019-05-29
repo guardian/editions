@@ -32,7 +32,6 @@ export const getArticle = async (path: string) => {
 
 export const articleController = (req: Request, res: Response) => {
     const path: string = req.params[0]
-    console.log(path)
     getArticle(path).then(data => {
         res.setHeader('Content-Type', 'application/json')
         res.send(JSON.stringify(data))
