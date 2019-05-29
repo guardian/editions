@@ -35,6 +35,23 @@ react in the background
 let fileListRawMemo = ''
 let fileListMemo: File[] = []
 
+const makeFile = async (filename: string): Promise<File> => {
+    const path = issuesDir + '/' + filename
+    const { size, type } = await RNFetchBlob.fs.stat(path)
+    return {
+        filename,
+        issue: filename.split('.')[0],
+        size: parseInt(size),
+        path,
+        type:
+            type === 'directory'
+                ? 'issue'
+                : filename.includes('.zip')
+                ? 'archive'
+                : 'other',
+    }
+}
+
 export const getFileList = async (): Promise<File[]> => {
     const fileListRaw = await RNFetchBlob.fs.ls(issuesDir)
     if (fileListRawMemo === fileListRaw.join()) {
@@ -106,21 +123,4 @@ export const displayFileSize = (size: File['size']): string => {
         return (size / 1024).toFixed(2) + ' KB'
     }
     return (size / 1024 / 1024).toFixed(2) + ' MB'
-}
-
-const makeFile = async (filename: string): Promise<File> => {
-    const path = issuesDir + '/' + filename
-    const { size, type } = await RNFetchBlob.fs.stat(path)
-    return {
-        filename,
-        issue: filename.split('.')[0],
-        size: parseInt(size),
-        path,
-        type:
-            type === 'directory'
-                ? 'issue'
-                : filename.includes('.zip')
-                ? 'archive'
-                : 'other',
-    }
 }
