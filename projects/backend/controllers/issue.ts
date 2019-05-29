@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { s3fetch } from '../s3'
-import { Issue, CollectionArticles, Front, Collection } from '../common'
+import { Issue } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
 
 const getIssue = async (
