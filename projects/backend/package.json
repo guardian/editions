@@ -9,13 +9,13 @@
     "devDependencies": {
         "@types/aws-serverless-express": "^3.3.1",
         "@types/express": "^4.16.1",
+        "@zeit/ncc": "^0.18.5",
         "dotenv": "^8.0.0",
-        "parcel": "^1.12.3",
         "ts-node": "^8.1.0",
         "typescript": "^3.4.5"
     },
     "scripts": {
-        "build": "tsc && parcel build index.js --target=node --global handler -o index.js --bundle-node-modules --no-source-maps",
+        "build": "ncc build index.ts -o dist -m",
         "start": "ts-node index.ts",
         "validate": "cd ../.. && yarn validate-backend",
         "fix": "cd ../.. && yarn fix-backend"

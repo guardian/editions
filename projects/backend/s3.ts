@@ -30,6 +30,7 @@ type S3Response =
           text: () => Promise<string>
           json: () => Promise<{}>
           lastModified?: Date
+          etag: string | undefined
       }
 
 export const s3fetch = (key: string): Promise<S3Response> => {
@@ -67,6 +68,7 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                     text: async () => body.toString(),
                     json: async () => JSON.parse(body.toString()),
                     lastModified: result.LastModified,
+                    etag: result.ETag,
                 })
             },
         )

@@ -44,7 +44,7 @@ export class EditionsStack extends cdk.Stack {
 
         const backend = new lambda.Function(this, 'EditionsBackend', {
             functionName: `editions-backend-${stageParameter.stringValue}`,
-            runtime: lambda.Runtime.NodeJS810,
+            runtime: lambda.Runtime.NodeJS10x,
             timeout: 60,
             code: Code.bucket(
                 deploy,
