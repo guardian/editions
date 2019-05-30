@@ -14,6 +14,7 @@ export class Grid extends React.Component<PropTypes> {
                 style={{
                     margin: metrics.horizontal - metrics.horizontal / 4,
                 }}
+                scrollEnabled={false}
                 data={data}
                 renderItem={({ item }) => (
                     <TouchableOpacity
