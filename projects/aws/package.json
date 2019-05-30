@@ -1,5 +1,5 @@
 {
-    "name": "aws",
+    "name": "editions-aws",
     "version": "0.1.0",
     "bin": {
         "aws": "bin/aws.js"
