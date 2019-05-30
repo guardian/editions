@@ -22,6 +22,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 20,
     },
+    standfirstText: {
+        fontFamily: 'GHGuardianHeadline-Regular',
+        fontSize: 20,
+        lineHeight: 24,
+    },
+    serifBodyCopy: {
+        fontFamily: 'GuardianTextEgyptian-Reg',
+        fontSize: 17,
+        lineHeight: 24,
+    },
     bodyCopy: {
         fontSize: 17,
         fontFamily: 'GuardianTextSans-Regular',
@@ -48,6 +58,16 @@ export const HeadlineKickerText = ({
     return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
 
+export const StandfirstText = ({
+    style,
+    ...props
+}: {
+    children: string
+    style?: {}
+}) => {
+    return <Text {...props} style={[styles.standfirstText, style]} />
+}
+
 export const HeadlineCardText = ({
     children,
     ...props
@@ -58,6 +78,32 @@ export const HeadlineCardText = ({
         {children}
     </HeadlineText>
 )
+
+export const BodyCopy = ({
+    style,
+    weight,
+    ...props
+}: {
+    children: string
+    weight: 'regular' | 'bold'
+    style?: {}
+}) => {
+    return (
+        <Text
+            {...props}
+            style={[
+                styles.serifBodyCopy,
+                style,
+                weight === 'bold' && {
+                    fontFamily: 'GuardianTextEgyptian-Bold',
+                },
+            ]}
+        />
+    )
+}
+BodyCopy.defaultProps = {
+    weight: 'regular',
+}
 
 export const UiBodyCopy = ({
     children,

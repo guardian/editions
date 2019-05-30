@@ -9,6 +9,8 @@ import {
 import { ArticleImage } from './article-image'
 
 type Style = {
+    /* kicker */
+    kicker: {}
     /* outer container around the header. For spacing and background colour*/
     background: {}
     /* text styles for the headline `<Text>` element. Mainly for colours*/
@@ -27,10 +29,12 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     background: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
-        borderBottomWidth: StyleSheet.hairlineWidth,
         paddingBottom: metrics.vertical,
         paddingTop: metrics.headerHeight,
         ...articleAppearances.default.backgrounds,
+    },
+    kicker: {
+        marginBottom: metrics.vertical / 2,
     },
     textBackground: {},
     headline: {
@@ -47,13 +51,15 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
                 <ArticleImage
                     style={{
                         aspectRatio: 1.5,
-                        marginBottom: metrics.vertical / 2,
+                        marginBottom: metrics.vertical / 4,
                     }}
                     image={image}
                 />
             )}
             {kicker && (
-                <HeadlineKickerText style={[appearance.text]}>
+                <HeadlineKickerText
+                    style={[newsHeaderStyles.kicker, appearance.text]}
+                >
                     {kicker}
                 </HeadlineKickerText>
             )}
@@ -78,6 +84,9 @@ const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         height: 500,
         marginTop: -10,
         ...articleAppearances.default.backgrounds,
+    },
+    kicker: {
+        ...newsHeaderStyles.kicker,
     },
     headline: {
         ...articleAppearances.default.headline,
@@ -107,7 +116,9 @@ const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
                 ]}
             >
                 {kicker && (
-                    <HeadlineKickerText style={[appearance.text]}>
+                    <HeadlineKickerText
+                        style={[longReadHeaderStyles.kicker, appearance.text]}
+                    >
                         {kicker}
                     </HeadlineKickerText>
                 )}

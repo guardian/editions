@@ -38,6 +38,12 @@ interface ArticleAppearanceStyles {
     */
     kicker: {
         color?: string
+    } /*
+    Overrides for the byline
+    */
+    byline: {
+        color?: string
+        borderColor?: string
     }
     /*
     Feel free to add more stuff as needed!!
@@ -85,6 +91,7 @@ export const articleAppearances: {
         },
         headline: {},
         kicker: {},
+        byline: {},
     },
     news: {
         backgrounds: {},
@@ -93,6 +100,7 @@ export const articleAppearances: {
         },
         headline: {},
         kicker: {},
+        byline: {},
     },
     comment: {
         backgrounds: {
@@ -105,6 +113,7 @@ export const articleAppearances: {
             fontFamily: 'GHGuardianHeadline-Light',
         },
         kicker: {},
+        byline: {},
     },
     sport: {
         backgrounds: {
@@ -118,6 +127,7 @@ export const articleAppearances: {
             color: color.text,
         },
         kicker: {},
+        byline: {},
     },
     culture: {
         backgrounds: {
@@ -130,6 +140,7 @@ export const articleAppearances: {
             color: color.text,
         },
         kicker: {},
+        byline: {},
     },
     lifestyle: {
         backgrounds: {
@@ -142,6 +153,7 @@ export const articleAppearances: {
             fontFamily: 'GHGuardianHeadline-Bold',
         },
         kicker: {},
+        byline: {},
     },
     longread: {
         backgrounds: {
@@ -150,6 +162,7 @@ export const articleAppearances: {
         text: { color: color.palette.neutral[100] },
         headline: {},
         kicker: {},
+        byline: {},
     },
 }
 /*
