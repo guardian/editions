@@ -74,6 +74,10 @@ export const unzipIssue = (issue: File['issue']) => {
 /*
 Cheeky size helper
 */
+export const displayPerc = (elapsed: number, total: number) => {
+    return `${Math.ceil((elapsed / total) * 100)}%`
+}
+
 export const displayFileSize = (size: File['size']): string => {
     if (size / 1024 < 1) {
         return size.toFixed(2) + ' B'
