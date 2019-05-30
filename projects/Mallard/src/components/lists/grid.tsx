@@ -5,7 +5,7 @@ import { PropTypes } from './helpers'
 import { metrics } from '../../theme/spacing'
 import { HeadlineCardText } from '../styled-text'
 
-export class Grid extends React.Component<PropTypes> {
+export class Grid<T> extends React.Component<PropTypes<T>> {
     render() {
         const { data, onPress } = this.props
         return (

@@ -8,7 +8,7 @@ import {
 } from '../../theme/appearance'
 import { ArticleImage } from './article-image'
 
-type Style = {
+interface Style {
     /* kicker */
     kicker: {}
     /* outer container around the header. For spacing and background colour*/
@@ -19,7 +19,7 @@ type Style = {
     textBackground: {}
 }
 
-export type PropTypes = {
+export interface PropTypes {
     headline: string
     kicker?: string | null
     image?: string | null

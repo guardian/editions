@@ -1,6 +1,5 @@
 import { color } from './color'
 import { createContext, useContext } from 'react'
-import { Animated } from 'react-native'
 
 /*
 Types
@@ -13,7 +12,7 @@ interface AppAppearanceStyles {
 }
 interface ArticleAppearanceStyles {
     /*
-    You can spread this over any 'hero' 
+    You can spread this over any 'hero'
     background in the article page
     */
     backgrounds: {

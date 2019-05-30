@@ -3,13 +3,6 @@ require('dotenv').config()
 import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import express = require('express')
-import fetch from 'node-fetch'
-import {
-    BufferedTransport,
-    CompactProtocol,
-} from '@creditkarma/thrift-server-core'
-import { ItemResponseCodec } from '@guardian/capi-ts'
-import { getCollectionsForFront, getCollection } from './fronts'
 import { issueController } from './controllers/issue'
 import { articleController } from './controllers/article'
 import { frontController, collectionsController } from './controllers/fronts'

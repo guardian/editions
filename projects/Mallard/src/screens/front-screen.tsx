@@ -13,7 +13,12 @@ const styles = StyleSheet.create({
 
 const useFrontsData = () => useEndpoint('', [], res => res)
 
-const FrontRow = ({ frontsData, front, issue, navigation }) => (
+const FrontRow: React.FC<{
+    frontsData: any
+    front: any
+    issue: any
+    navigation: any
+}> = ({ frontsData, front, issue, navigation }) => (
     <>
         <View
             style={{
@@ -52,7 +57,10 @@ const FrontScreen = ({
         >
             <FrontRow front={'News'} {...{ issue, navigation, frontsData }} />
             <FrontRow front={'Sport'} {...{ issue, navigation, frontsData }} />
-            <FrontRow front={'Opinion'} {...{ issue, navigation, frontsData }} />
+            <FrontRow
+                front={'Opinion'}
+                {...{ issue, navigation, frontsData }}
+            />
             <MonoTextBlock style={{ flex: 1 }}>
                 This is a FrontScreen for issue {issue}
             </MonoTextBlock>
