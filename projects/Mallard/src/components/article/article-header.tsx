@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { HeadlineText } from '../../components/styled-text'
+import { HeadlineText, HeadlineKickerText } from '../../components/styled-text'
 import { metrics } from '../../theme/spacing'
 import {
     useArticleAppearance,
@@ -17,8 +17,9 @@ type Style = {
     textBackground: {}
 }
 
-type PropTypes = {
+export type PropTypes = {
     headline: string
+    kicker?: string | null
     image?: string | null
 }
 
@@ -38,7 +39,7 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     },
 })
 
-const NewsHeader = ({ headline, image }: PropTypes) => {
+const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
@@ -50,6 +51,11 @@ const NewsHeader = ({ headline, image }: PropTypes) => {
                     }}
                     image={image}
                 />
+            )}
+            {kicker && (
+                <HeadlineKickerText style={[appearance.text]}>
+                    {kicker}
+                </HeadlineKickerText>
             )}
             <HeadlineText
                 style={[
@@ -84,7 +90,7 @@ const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     },
 })
 
-const LongReadHeader = ({ headline, image }: PropTypes) => {
+const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
@@ -100,6 +106,11 @@ const LongReadHeader = ({ headline, image }: PropTypes) => {
                     appearance.backgrounds,
                 ]}
             >
+                {kicker && (
+                    <HeadlineKickerText style={[appearance.text]}>
+                        {kicker}
+                    </HeadlineKickerText>
+                )}
                 <HeadlineText
                     style={[
                         longReadHeaderStyles.headline,

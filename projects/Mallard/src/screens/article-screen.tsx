@@ -62,6 +62,7 @@ export const ArticleScreen = ({
             <WithArticleAppearance value={appearances[appearance]}>
                 <Article
                     article={article}
+                    kicker={'Kicker'}
                     headline={headline}
                     image={image}
                     navigation={navigation}

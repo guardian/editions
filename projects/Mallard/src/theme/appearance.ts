@@ -34,6 +34,12 @@ interface ArticleAppearanceStyles {
         fontFamily?: string
     }
     /*
+    Overrides for the kicker
+    */
+    kicker: {
+        color?: string
+    }
+    /*
     Feel free to add more stuff as needed!!
     */
 }
@@ -43,6 +49,8 @@ export type ArticleAppearance =
     | 'default'
     | 'news'
     | 'lifestyle'
+    | 'sport'
+    | 'culture'
     | 'comment'
     | 'longread'
 
@@ -76,6 +84,7 @@ export const articleAppearances: {
             color: color.text,
         },
         headline: {},
+        kicker: {},
     },
     news: {
         backgrounds: {},
@@ -83,6 +92,7 @@ export const articleAppearances: {
             color: color.palette.news.main,
         },
         headline: {},
+        kicker: {},
     },
     comment: {
         backgrounds: {
@@ -94,6 +104,32 @@ export const articleAppearances: {
         headline: {
             fontFamily: 'GHGuardianHeadline-Light',
         },
+        kicker: {},
+    },
+    sport: {
+        backgrounds: {
+            backgroundColor: color.palette.sport.faded,
+        },
+        text: {
+            color: color.palette.sport.main,
+        },
+        headline: {
+            fontFamily: 'GHGuardianHeadline-Light',
+            color: color.text,
+        },
+        kicker: {},
+    },
+    culture: {
+        backgrounds: {
+            backgroundColor: color.palette.culture.faded,
+        },
+        text: {
+            color: color.palette.culture.main,
+        },
+        headline: {
+            color: color.text,
+        },
+        kicker: {},
     },
     lifestyle: {
         backgrounds: {
@@ -105,6 +141,7 @@ export const articleAppearances: {
         headline: {
             fontFamily: 'GHGuardianHeadline-Bold',
         },
+        kicker: {},
     },
     longread: {
         backgrounds: {
@@ -112,6 +149,7 @@ export const articleAppearances: {
         },
         text: { color: color.palette.neutral[100] },
         headline: {},
+        kicker: {},
     },
 }
 /*

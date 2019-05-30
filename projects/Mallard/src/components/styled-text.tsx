@@ -11,6 +11,13 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         color: color.text,
     },
+    headlineKickerText: {
+        fontFamily: 'GTGuardianTitlepiece-Bold',
+        fontSize: 15,
+        lineHeight: 24,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+    },
     headlineCardText: {
         fontSize: 16,
         lineHeight: 20,
@@ -29,6 +36,16 @@ export const HeadlineText = ({
     style?: {}
 }) => {
     return <Text {...props} style={[styles.headlineText, style]} />
+}
+
+export const HeadlineKickerText = ({
+    style,
+    ...props
+}: {
+    children: string
+    style?: {}
+}) => {
+    return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
 
 export const HeadlineCardText = ({
