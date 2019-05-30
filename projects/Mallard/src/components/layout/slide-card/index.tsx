@@ -27,11 +27,13 @@ export const SlideCard = ({
     headerStyle,
     backgroundColor,
     onDismiss,
+    fadesHeaderIn,
 }: {
     children: ReactNode
     headerStyle: {}
     backgroundColor: string | undefined
     onDismiss: () => void
+    fadesHeaderIn: boolean
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
     const [cardOffset] = useState(() => new Animated.Value(0))
@@ -67,6 +69,7 @@ export const SlideCard = ({
                 {...{
                     scrollY,
                     cardOffset,
+                    fadesHeaderIn,
                     onDismiss,
                 }}
             />
@@ -107,4 +110,8 @@ export const SlideCard = ({
             </Animated.ScrollView>
         </Animated.View>
     )
+}
+
+SlideCard.defaultProps = {
+    fadesHeaderIn: false,
 }

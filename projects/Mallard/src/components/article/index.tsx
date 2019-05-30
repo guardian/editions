@@ -58,6 +58,7 @@ const Article = ({
                 appearance.backgrounds,
                 appearance.text,
             ]}
+            fadesHeaderIn={appearanceName === 'longread'}
             backgroundColor={appearance.backgrounds.backgroundColor}
             onDismiss={() => {
                 navigation.goBack()

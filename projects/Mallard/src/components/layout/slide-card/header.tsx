@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
+const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
     return (
         <View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback
@@ -68,13 +68,18 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                     style,
                     StyleSheet.absoluteFillObject,
                     styles.headerBackground,
-                    {
-                        opacity: scrollY.interpolate({
-                            inputRange: [0, 50],
-                            outputRange: [0, 1],
-                            extrapolate: 'clamp',
-                        }),
-                    },
+                    ,
+                    fadesHeaderIn
+                        ? {
+                              opacity: scrollY.interpolate({
+                                  inputRange: [0, 50],
+                                  outputRange: [0, 1],
+                                  extrapolate: 'clamp',
+                              }),
+                          }
+                        : {
+                              opacity: 1,
+                          },
                 ]}
             />
         </View>
