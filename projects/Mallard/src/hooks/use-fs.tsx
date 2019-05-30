@@ -11,7 +11,7 @@ type DownloadQueueItem = {
     cancel: () => void
 }
 
-export type DownloadQueue = {
+interface DownloadQueue {
     [key: string]: DownloadQueueItem
 }
 

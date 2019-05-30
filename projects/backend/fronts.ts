@@ -1,24 +1,19 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { Issue, CollectionArticles, Front, Collection } from './common'
-
-export const getIssue = async (issue: string): Promise<Issue | 'notfound'> => {
-    const x = await s3fetch(`frontsapi/edition/${issue}/edition.json`)
-    if (x.status === 404) return 'notfound'
-    if (!x.ok) throw new Error('failed s3')
-    return x.json() as Promise<Issue>
-}
+import { CollectionArticles, Front, Collection } from './common'
+import { LastModifiedUpdater } from './lastModified'
 
 export const getCollection = async (
     id: string,
+    lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<CollectionArticles | 'notfound'> => {
     try {
         const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
         if (resp.status === 404) return 'notfound'
         if (!resp.ok) throw new Error('failed s3')
+        lastModifiedUpdater(resp.lastModified)
         const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
-        console.log(collection)
         return {
             id: collection.displayName,
             articles: collection.live,
@@ -28,9 +23,15 @@ export const getCollection = async (
     }
 }
 
-export const getCollectionsForFront = async (id: string): Promise<Front> => {
+export const getCollectionsForFront = async (
+    id: string,
+    lastModifiedUpdater: LastModifiedUpdater,
+): Promise<Front> => {
     const resp = await s3fetch('frontsapi/config/config.json')
     if (!resp.ok) throw new Error('failed s3')
+    lastModifiedUpdater(resp.lastModified)
+    //But ALEX, won't this always be now, as the fronts config will change regularly?
+    //Yes. We don't intend to read it from here forever. Comment out as needed.
 
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
 
@@ -43,7 +44,9 @@ export const getCollectionsForFront = async (id: string): Promise<Front> => {
 
     const selected = collections.filter(c => collectionIds.includes(c[0]))
 
-    const articles = await Promise.all(collectionIds.map(getCollection))
+    const articles = await Promise.all(
+        collectionIds.map(id => getCollection(id, lastModifiedUpdater)),
+    )
 
     const articleMap = new Map(
         articles

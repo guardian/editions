@@ -2,17 +2,22 @@ import AWS, {
     S3,
     CredentialProviderChain,
     SharedIniFileCredentials,
+    ChainableTemporaryCredentials,
 } from 'aws-sdk'
+AWS.config.credentials = process.env.arn
+    ? new ChainableTemporaryCredentials({
+          params: {
+              RoleArn: process.env.arn as string,
+              RoleSessionName: 'front-assume-role-access',
+          },
+      })
+    : new SharedIniFileCredentials({ profile: 'cmsFronts' })
 
 const s3 = new S3({
     region: 'eu-west-1',
-    credentialProvider: new CredentialProviderChain([
-        () => new SharedIniFileCredentials({ profile: 'cmsFronts' }),
-        ...AWS.CredentialProviderChain.defaultProviders,
-    ]),
 })
 
-const stage = 'PROD'
+const stage = process.env.stage || 'CODE'
 
 type S3Response =
     | {
@@ -25,6 +30,7 @@ type S3Response =
           text: () => Promise<string>
           json: () => Promise<{}>
           lastModified?: Date
+          etag: string | undefined
       }
 
 export const s3fetch = (key: string): Promise<S3Response> => {
@@ -37,6 +43,7 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                 Bucket: 'facia-tool-store',
             },
             (error, result) => {
+                console.log(error || 'NO ERROR')
                 if (error && error.code == 'NoSuchKey') {
                     resolve({ status: 404, ok: false })
                     return
@@ -44,21 +51,24 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                 if (result == null) debugger
                 if (error) reject(error)
 
+                if (result == undefined) {
+                    reject(new Error('No result!.'))
+                    return
+                }
                 const body = result.Body
 
                 if (body == undefined) {
                     reject(new Error('Not found.'))
                     return
                 }
-                console.log(
-                    JSON.stringify(JSON.parse(body.toString()), null, 2),
-                )
+
                 resolve({
                     status: 200,
                     ok: true,
                     text: async () => body.toString(),
                     json: async () => JSON.parse(body.toString()),
                     lastModified: result.LastModified,
+                    etag: result.ETag,
                 })
             },
         )

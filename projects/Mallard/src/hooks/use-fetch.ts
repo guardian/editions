@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useSettings } from './use-settings'
 
-export const useFetch = <Fetchable>(
+export const useFetch = <T>(
     url: string,
-    initialState: Fetchable,
-    transform: (_: Fetchable) => Fetchable = res => res,
-): Fetchable => {
+    initialState: T,
+    transform: (_: T) => T = res => res,
+): T => {
     const [data, updateData] = useState(initialState)
     useEffect(() => {
         fetch(url).then(res =>
@@ -18,11 +18,11 @@ export const useFetch = <Fetchable>(
     return data
 }
 
-export const useEndpoint = <Fetchable>(
+export const useEndpoint = <T>(
     path: string,
-    initialState: Fetchable,
-    transform: (_: Fetchable) => Fetchable = res => res,
-): Fetchable => {
+    initialState: T,
+    transform: (_: any) => T = res => res as T,
+): T => {
     const [{ apiUrl }] = useSettings()
     return useFetch(apiUrl + '/' + path, initialState, transform)
 }

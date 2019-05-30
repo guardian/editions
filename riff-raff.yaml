@@ -9,12 +9,12 @@ deployments:
             prefixStack: false
             bucket: editions-dist
             fileName: backend.zip
-            functionNames: [backend-]
+            functionNames: [editions-backend-]
     cloudformation:
         type: cloud-formation
         app: editions
         parameters:
             prependStackToCloudFormationStackName: false
             cloudFormationStackName: editions
-            templatePath: cloudformation/cloudformation.yaml
+            templatePath: cloudformation.yaml
             cloudFormationStackByTags: false

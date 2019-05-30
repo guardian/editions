@@ -3,74 +3,19 @@ require('dotenv').config()
 import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import express = require('express')
-import fetch from 'node-fetch'
-import {
-    BufferedTransport,
-    CompactProtocol,
-} from '@creditkarma/thrift-server-core'
-import { ItemResponseCodec } from '@guardian/capi-ts'
-import { getIssue, getCollectionsForFront, getCollection } from './fronts'
+import { issueController } from './controllers/issue'
+import { articleController } from './controllers/article'
+import { frontController, collectionsController } from './controllers/fronts'
 
 const app = express()
 
-const port = 3131
-const url = (path: string) =>
-    `https://content.guardianapis.com/${path}?format=thrift&api-key=${
-    process.env.CAPI_KEY
-    }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all`
+app.get('/edition/:editionId', issueController)
 
-const getArticle = async (path: string) => {
-    const resp = await fetch(url(path))
-    const buffer = await resp.arrayBuffer()
+app.get('/front/*?', frontController)
 
-    const receiver: BufferedTransport = BufferedTransport.receiver(
-        new Buffer(buffer),
-    )
-    const input = new CompactProtocol(receiver)
+app.get('/collection/:collectionId', collectionsController)
 
-    const data = ItemResponseCodec.decode(input)
-    const title = data && data.content && data.content.webTitle
-    const body =
-        data &&
-        data.content &&
-        data.content.blocks &&
-        data.content.blocks.body &&
-        data.content.blocks.body.map(_ => _.elements)
-    return [title, body]
-}
-app.get('/edition/:editionId', (req, res) => {
-    const id: string = req.params.editionId
-    getIssue(id).then(data => {
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify(data))
-    })
-})
-
-app.get('/front/*?', (req, res) => {
-    const id: string = req.params[0]
-    getCollectionsForFront(id).then(data => {
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify(data))
-    })
-})
-
-app.get('/collection/:collectionId', (req, res) => {
-    const id: string = req.params.collectionId
-    getCollection(id).then(data => {
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify(data))
-    })
-})
-
-app.get('/content/*?', (req, res) => {
-    console.log(req.params)
-    const path: string = req.params[0]
-    console.log(path)
-    getArticle(path).then(data => {
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify(data))
-    })
-})
+app.get('/content/*?', articleController)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
@@ -85,7 +30,10 @@ export const handler: Handler = (event, context) => {
     )
 }
 
-if (require.main === module)
+if (require.main === module) {
+    const port = 3131
+
     app.listen(port, () =>
-        console.log(`Example app listening on port ${port}!`),
+        console.log(`Editions backend listening on port ${port}!`),
     )
+}
