@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import { Chevron } from '../../chevron'
 import { metrics } from '../../../theme/spacing'
-import { dismissAt } from './helpers'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -49,7 +48,7 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                             transform: [
                                 {
                                     translateY: scrollY.interpolate({
-                                        inputRange: [0, 200],
+                                        inputRange: [0, 100],
                                         outputRange: [
                                             metrics.headerHeight / -4,
                                             0,
@@ -71,7 +70,7 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                     styles.headerBackground,
                     {
                         opacity: scrollY.interpolate({
-                            inputRange: [0, 200],
+                            inputRange: [0, 50],
                             outputRange: [0, 1],
                             extrapolate: 'clamp',
                         }),

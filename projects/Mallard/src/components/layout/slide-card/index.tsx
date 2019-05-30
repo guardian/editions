@@ -2,15 +2,14 @@ import React, { useState, useEffect, ReactNode, useRef } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
-
+import { metrics } from '../../../theme/spacing'
 /* 
 This is the swipey contraption that contains an article.
 */
 
-const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
     container: {
-        marginTop: notchInsetSize,
+        marginTop: metrics.slideCardSpacing,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,

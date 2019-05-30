@@ -34,7 +34,11 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         ...articleAppearances.default.backgrounds,
     },
     kicker: {
-        marginBottom: metrics.vertical / 2,
+        paddingBottom: metrics.vertical / 2,
+        marginBottom: metrics.vertical / 4,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        width: '100%',
+        ...articleAppearances.default.backgrounds,
     },
     textBackground: {},
     headline: {
@@ -57,11 +61,11 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
                 />
             )}
             {kicker && (
-                <HeadlineKickerText
-                    style={[newsHeaderStyles.kicker, appearance.text]}
-                >
-                    {kicker}
-                </HeadlineKickerText>
+                <View style={[newsHeaderStyles.kicker, appearance.backgrounds]}>
+                    <HeadlineKickerText style={[appearance.text]}>
+                        {kicker}
+                    </HeadlineKickerText>
+                </View>
             )}
             <HeadlineText
                 style={[
@@ -116,11 +120,16 @@ const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
                 ]}
             >
                 {kicker && (
-                    <HeadlineKickerText
-                        style={[longReadHeaderStyles.kicker, appearance.text]}
+                    <View
+                        style={[
+                            longReadHeaderStyles.kicker,
+                            appearance.backgrounds,
+                        ]}
                     >
-                        {kicker}
-                    </HeadlineKickerText>
+                        <HeadlineKickerText style={[appearance.text]}>
+                            {kicker}
+                        </HeadlineKickerText>
+                    </View>
                 )}
                 <HeadlineText
                     style={[

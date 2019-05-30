@@ -15,8 +15,6 @@ const styles = StyleSheet.create({
         fontFamily: 'GTGuardianTitlepiece-Bold',
         fontSize: 15,
         lineHeight: 24,
-        letterSpacing: 2,
-        textTransform: 'uppercase',
     },
     headlineCardText: {
         fontSize: 16,

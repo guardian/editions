@@ -101,13 +101,17 @@ export const articleAppearances: {
     },
     news: {
         backgrounds: {},
-        text: {},
-        headline: {},
-        kicker: {},
-        byline: {
+        text: {
             color: color.palette.news.main,
         },
-        standfirst: {},
+        headline: {
+            color: color.text,
+        },
+        kicker: {},
+        byline: {},
+        standfirst: {
+            color: color.text,
+        },
     },
     comment: {
         backgrounds: {

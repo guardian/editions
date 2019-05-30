@@ -8,6 +8,7 @@ import {
 } from '../theme/appearance'
 import { Article } from '../components/article'
 import { Button, View } from 'react-native'
+import { metrics } from '../theme/spacing'
 
 const fixture = (seed: number): { image: string | null } => ({
     image: [
@@ -77,4 +78,7 @@ export const ArticleScreen = ({
 ArticleScreen.navigationOptions = ({ navigation }) => ({
     title: navigation.getParam('article', 'NO-ID'),
     gesturesEnabled: true,
+    gestureResponseDistance: {
+        vertical: metrics.headerHeight + metrics.slideCardSpacing,
+    },
 })
