@@ -64,6 +64,8 @@ export const ArticleScreen = ({
                     article={article}
                     kicker={'Kicker'}
                     headline={headline}
+                    byline={'Byliney McPerson'}
+                    standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
                     image={image}
                     navigation={navigation}
                 />

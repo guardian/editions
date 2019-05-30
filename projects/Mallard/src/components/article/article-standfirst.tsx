@@ -8,10 +8,11 @@ import {
 } from '../../theme/appearance'
 
 export type PropTypes = {
-    children: string
+    standfirst: string
+    byline: string
 }
 
-const styles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
+const styles = StyleSheet.create({
     background: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
@@ -27,25 +28,21 @@ const styles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         paddingTop: metrics.vertical / 4,
         width: '100%',
     },
-    textBackground: {},
-    headline: {
-        marginRight: metrics.horizontal * 2,
-        ...articleAppearances.default.headline,
-    },
 })
 
-const Standfirst = ({ children }: PropTypes) => {
+const Standfirst = ({ standfirst, byline }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[styles.background, appearance.backgrounds]}>
-            <StandfirstText
-                style={[styles.headline, appearance.text, appearance.headline]}
-            >
-                {children}
+            <StandfirstText style={[appearance.text, appearance.standfirst]}>
+                {standfirst}
             </StandfirstText>
             <View style={[styles.bylineBackground, appearance.backgrounds]}>
-                <BodyCopy weight={'bold'} style={[appearance.text]}>
-                    Jim Waterson
+                <BodyCopy
+                    weight={'bold'}
+                    style={[appearance.text, appearance.byline]}
+                >
+                    {byline}
                 </BodyCopy>
             </View>
         </View>

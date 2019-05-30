@@ -23,14 +23,14 @@ const styles = StyleSheet.create({
         lineHeight: 20,
     },
     standfirstText: {
-        fontFamily: 'GHGuardianHeadline-Regular',
-        fontSize: 20,
-        lineHeight: 24,
+        fontFamily: 'GuardianTextEgyptian-Reg',
+        fontSize: 17,
+        lineHeight: 21,
     },
     serifBodyCopy: {
         fontFamily: 'GuardianTextEgyptian-Reg',
         fontSize: 17,
-        lineHeight: 24,
+        lineHeight: 21,
     },
     bodyCopy: {
         fontSize: 17,

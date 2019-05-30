@@ -13,7 +13,10 @@ import {
     NewsHeader,
     PropTypes as ArticleHeaderPropTypes,
 } from './article-header'
-import { Standfirst } from './article-standfirst'
+import {
+    Standfirst,
+    PropTypes as StandfirstPropTypes,
+} from './article-standfirst'
 
 /* 
 This is the article view! For all of the articles. 
@@ -40,10 +43,13 @@ const Article = ({
     headline,
     image,
     kicker,
+    byline,
+    standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
     article: {}
-} & ArticleHeaderPropTypes) => {
+} & ArticleHeaderPropTypes &
+    StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
     return (
         <SlideCard
@@ -63,10 +69,7 @@ const Article = ({
                 ) : (
                     <NewsHeader {...{ headline, image, kicker }} />
                 )}
-                <Standfirst>
-                    Is this delicious smoky dip the ultimate aubergine recipe –
-                    and which side of the great tahini divide are you on?
-                </Standfirst>
+                <Standfirst {...{ byline, standfirst }} />
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
                     {article

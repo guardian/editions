@@ -38,12 +38,18 @@ interface ArticleAppearanceStyles {
     */
     kicker: {
         color?: string
-    } /*
+    }
+    /*
+    Overrides for the standfirst
+    */
+    standfirst: {
+        color?: string
+    }
+    /*
     Overrides for the byline
     */
     byline: {
         color?: string
-        borderColor?: string
     }
     /*
     Feel free to add more stuff as needed!!
@@ -92,15 +98,17 @@ export const articleAppearances: {
         headline: {},
         kicker: {},
         byline: {},
+        standfirst: {},
     },
     news: {
         backgrounds: {},
-        text: {
-            color: color.palette.news.main,
-        },
+        text: {},
         headline: {},
         kicker: {},
-        byline: {},
+        byline: {
+            color: color.palette.news.main,
+        },
+        standfirst: {},
     },
     comment: {
         backgrounds: {
@@ -114,6 +122,7 @@ export const articleAppearances: {
         },
         kicker: {},
         byline: {},
+        standfirst: {},
     },
     sport: {
         backgrounds: {
@@ -128,6 +137,7 @@ export const articleAppearances: {
         },
         kicker: {},
         byline: {},
+        standfirst: { color: color.text },
     },
     culture: {
         backgrounds: {
@@ -141,6 +151,9 @@ export const articleAppearances: {
         },
         kicker: {},
         byline: {},
+        standfirst: {
+            color: color.text,
+        },
     },
     lifestyle: {
         backgrounds: {
@@ -154,6 +167,7 @@ export const articleAppearances: {
         },
         kicker: {},
         byline: {},
+        standfirst: {},
     },
     longread: {
         backgrounds: {
@@ -163,6 +177,7 @@ export const articleAppearances: {
         headline: {},
         kicker: {},
         byline: {},
+        standfirst: {},
     },
 }
 /*
