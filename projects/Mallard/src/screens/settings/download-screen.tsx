@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react'
-import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
+import React, { useMemo } from 'react'
+import { ScrollView, Button, View, Alert, Clipboard } from 'react-native'
 import { List, ListHeading } from '../../components/lists/list'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
@@ -130,6 +130,7 @@ export const DownloadScreen = () => {
                 <List
                     data={fileList}
                     onPress={({ type, path, issue }) => {
+                        console.log(path)
                         if (type === 'archive') {
                             unzipIssue(issue)
                                 .then(async () => {

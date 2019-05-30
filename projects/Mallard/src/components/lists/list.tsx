@@ -39,8 +39,18 @@ export const ListHeading = ({ children }: { children: string }) => (
     </View>
 )
 
-const Highlight =
-    Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight
+const Highlight: React.FC<{
+    onPress: () => void
+    children: React.ReactNode
+}> = ({ onPress, children }) => {
+    return Platform.OS === 'android' ? (
+        <TouchableNativeFeedback onPress={onPress}>
+            {children}
+        </TouchableNativeFeedback>
+    ) : (
+        <TouchableHighlight onPress={onPress}>{children}</TouchableHighlight>
+    )
+}
 
 const ListItem = <ItemData extends {}>({
     onPress,

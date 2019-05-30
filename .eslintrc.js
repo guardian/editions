@@ -11,13 +11,15 @@ module.exports = {
         'prettier/prettier': 'error',
         '@typescript-eslint/explicit-member-accessibility': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        'react/prop-types': 'off',
+        '@typescript-eslint/no-object-literal-type-assertion': 'warn',
     },
     overrides: [
         {
-            'files':['*.d.ts'],
-            'rules':{
-                '@typescript-eslint/no-explicit-any':'off'
-            }
-        }
-    ]
+            files: ['*.d.ts'],
+            rules: {
+                '@typescript-eslint/no-explicit-any': 'off',
+            },
+        },
+    ],
 }
