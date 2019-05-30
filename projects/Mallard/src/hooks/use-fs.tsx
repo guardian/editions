@@ -5,7 +5,7 @@ import { File, getFileList, downloadIssue } from '../helpers/files'
 /*
 Downloads
 */
-type DownloadQueueItem = {
+interface DownloadQueueItem {
     received: number
     total: number
     cancel: () => void
