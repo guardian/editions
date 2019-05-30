@@ -7,8 +7,9 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Button, View } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { metrics } from '../theme/spacing'
+import { UiBodyCopy } from '../components/styled-text'
 
 const fixture = (seed: number): { image: string | null } => ({
     image: [
@@ -44,12 +45,15 @@ export const ArticleScreen = ({
                 style={{
                     backgroundColor: 'tomato',
                     position: 'absolute',
-                    bottom: 100,
                     zIndex: 9999,
+                    elevation: 999,
+                    bottom: 100,
+                    right: metrics.horizontal,
+                    alignSelf: 'flex-end',
+                    borderRadius: 999,
                 }}
             >
-                <Button
-                    title={`Cycle appearances: [${appearances[appearance]}]`}
+                <TouchableOpacity
                     onPress={() => {
                         setAppearance(app => {
                             if (app + 1 >= appearances.length) {
@@ -58,7 +62,17 @@ export const ArticleScreen = ({
                             return app + 1
                         })
                     }}
-                />
+                >
+                    <UiBodyCopy
+                        style={{
+                            padding: metrics.horizontal * 2,
+                            paddingVertical: metrics.vertical / 1.5,
+                            color: '#fff',
+                        }}
+                    >
+                        {`${appearances[appearance]} 🌈`}
+                    </UiBodyCopy>
+                </TouchableOpacity>
             </View>
             <WithArticleAppearance value={appearances[appearance]}>
                 <Article

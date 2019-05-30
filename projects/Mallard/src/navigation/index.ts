@@ -49,23 +49,39 @@ export const RootNavigator = createAppContainer(
                         const { layout, position, scene } = sceneProps
                         const thisSceneIndex = scene.index
 
-                        const translateY = position.interpolate({
+                        const cardTranslateY = position.interpolate({
                             inputRange: [thisSceneIndex - 1, thisSceneIndex],
                             outputRange: [layout.initHeight, 0],
+                        })
+                        const backgroundTranslateY = position.interpolate({
+                            inputRange: [thisSceneIndex, thisSceneIndex + 1],
+                            outputRange: [0, -5],
                         })
                         const scale = position.interpolate({
                             inputRange: [thisSceneIndex, thisSceneIndex + 0.75],
                             extrapolate: 'clamp',
                             outputRange: [1, 0.95],
                         })
+                        const borderRadius = position.interpolate({
+                            inputRange: [thisSceneIndex, thisSceneIndex + 1],
+                            extrapolate: 'clamp',
+                            outputRange: [0, 20],
+                        })
 
                         return scene.route.routeName === 'Main'
                             ? {
-                                  transform: [{ scale }],
-                                  borderRadius: 26,
+                                  transform: [
+                                      {
+                                          scale,
+                                      },
+                                      {
+                                          translateY: backgroundTranslateY,
+                                      },
+                                  ],
+                                  borderRadius,
                                   overflow: 'hidden',
                               }
-                            : { transform: [{ translateY }] }
+                            : { transform: [{ translateY: cardTranslateY }] }
                     },
                 }
             },
