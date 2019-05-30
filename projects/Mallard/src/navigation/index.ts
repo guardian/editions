@@ -39,6 +39,9 @@ export const RootNavigator = createAppContainer(
             cardOverlayEnabled: true,
             transitionConfig: () => {
                 return {
+                    containerStyle: {
+                        backgroundColor: 'transparent',
+                    },
                     transitionSpec: {
                         duration: 400,
                         easing: Easing.elastic(0.75),
@@ -49,17 +52,12 @@ export const RootNavigator = createAppContainer(
                         const { layout, position, scene } = sceneProps
                         const thisSceneIndex = scene.index
 
-                        const cardTranslateY = position.interpolate({
+                        const translateY = position.interpolate({
                             inputRange: [thisSceneIndex - 1, thisSceneIndex],
                             outputRange: [layout.initHeight, 0],
                         })
-                        const backgroundTranslateY = position.interpolate({
-                            inputRange: [thisSceneIndex, thisSceneIndex + 1],
-                            outputRange: [0, -5],
-                        })
                         const scale = position.interpolate({
                             inputRange: [thisSceneIndex, thisSceneIndex + 0.75],
-                            extrapolate: 'clamp',
                             outputRange: [1, 0.95],
                         })
                         const borderRadius = position.interpolate({
@@ -74,14 +72,11 @@ export const RootNavigator = createAppContainer(
                                       {
                                           scale,
                                       },
-                                      {
-                                          translateY: backgroundTranslateY,
-                                      },
                                   ],
                                   borderRadius,
                                   overflow: 'hidden',
                               }
-                            : { transform: [{ translateY: cardTranslateY }] }
+                            : { transform: [{ translateY }] }
                     },
                 }
             },
