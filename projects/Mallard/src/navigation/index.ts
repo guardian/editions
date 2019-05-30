@@ -40,14 +40,13 @@ export const RootNavigator = createAppContainer(
             transitionConfig: () => {
                 return {
                     transitionSpec: {
-                        duration: 750,
-                        easing: Easing.out(Easing.poly(4)),
+                        duration: 500,
+                        easing: Easing.elastic(0.75),
                         timing: Animated.timing,
                         useNativeDriver: true,
                     },
                     screenInterpolator: sceneProps => {
                         const { layout, position, scene } = sceneProps
-                        console.log(scene.route.routeName)
                         const thisSceneIndex = scene.index
 
                         const translateY = position.interpolate({
@@ -56,13 +55,13 @@ export const RootNavigator = createAppContainer(
                         })
                         const scale = position.interpolate({
                             inputRange: [thisSceneIndex - 1, thisSceneIndex],
-                            outputRange: [1.05, 1],
+                            outputRange: [1.033, 1],
                         })
 
                         return scene.route.routeName === 'Main'
                             ? {
                                   transform: [{ scale }],
-                                  borderRadius: 10,
+                                  borderRadius: 26,
                                   overflow: 'hidden',
                               }
                             : { transform: [{ translateY }] }

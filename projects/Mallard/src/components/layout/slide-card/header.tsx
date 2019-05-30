@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Animated,
     StyleSheet,
-    PanResponder,
+    View,
     TouchableWithoutFeedback,
 } from 'react-native'
 import { Chevron } from '../../chevron'
@@ -36,34 +36,8 @@ const styles = StyleSheet.create({
 })
 
 const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
-    const [panResponder] = useState(() =>
-        PanResponder.create({
-            /* we don't do anything until we 
-            detect a downwards motion. This is done 
-            because panresponder cancels the event from 
-            bubbling if it's using it and we want back button 
-            inside this can pick up the touch event  */
-            onStartShouldSetPanResponder: () => false,
-            onMoveShouldSetPanResponder: (e, { dy }) => dy > 1,
-            onPanResponderMove: Animated.event([null, { dy: cardOffset }]),
-            onPanResponderRelease: (e, { dy }) => {
-                if (dy >= dismissAt) {
-                    onDismiss()
-                } else {
-                    Animated.spring(cardOffset, {
-                        toValue: 0,
-                        bounciness: 10,
-                        useNativeDriver: true,
-                    }).start()
-                }
-            },
-        }),
-    )
     return (
-        <Animated.View
-            style={[styles.headerContainer]}
-            {...panResponder.panHandlers}
-        >
+        <View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback
                 onPress={onDismiss}
                 accessibilityHint="Go back"
@@ -104,7 +78,7 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                     },
                 ]}
             />
-        </Animated.View>
+        </View>
     )
 }
 

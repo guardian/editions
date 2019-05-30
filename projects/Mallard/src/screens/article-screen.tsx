@@ -76,4 +76,5 @@ export const ArticleScreen = ({
 
 ArticleScreen.navigationOptions = ({ navigation }) => ({
     title: navigation.getParam('article', 'NO-ID'),
+    gesturesEnabled: true,
 })
