@@ -6,6 +6,7 @@ import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
 import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from '../theme/color'
+import { Animated, Easing } from 'react-native'
 
 export const RootNavigator = createAppContainer(
     createStackNavigator(
@@ -36,6 +37,38 @@ export const RootNavigator = createAppContainer(
             mode: 'modal',
             headerMode: 'none',
             cardOverlayEnabled: true,
+            transitionConfig: () => {
+                return {
+                    transitionSpec: {
+                        duration: 750,
+                        easing: Easing.out(Easing.poly(4)),
+                        timing: Animated.timing,
+                        useNativeDriver: true,
+                    },
+                    screenInterpolator: sceneProps => {
+                        const { layout, position, scene } = sceneProps
+                        console.log(scene.route.routeName)
+                        const thisSceneIndex = scene.index
+
+                        const translateY = position.interpolate({
+                            inputRange: [thisSceneIndex - 1, thisSceneIndex],
+                            outputRange: [layout.initHeight, 0],
+                        })
+                        const scale = position.interpolate({
+                            inputRange: [thisSceneIndex - 1, thisSceneIndex],
+                            outputRange: [1.05, 1],
+                        })
+
+                        return scene.route.routeName === 'Main'
+                            ? {
+                                  transform: [{ scale }],
+                                  borderRadius: 10,
+                                  overflow: 'hidden',
+                              }
+                            : { transform: [{ translateY }] }
+                    },
+                }
+            },
             defaultNavigationOptions: {
                 gesturesEnabled: false,
             },
