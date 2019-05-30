@@ -8,7 +8,7 @@ import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
 import { FileSystemProvider } from './hooks/use-fs'
 
-const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DV-' : null
+const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DEV-2-' : null
 
 export default class App extends React.Component<{}, {}> {
     /**

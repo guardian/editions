@@ -40,7 +40,7 @@ export const RootNavigator = createAppContainer(
             transitionConfig: () => {
                 return {
                     transitionSpec: {
-                        duration: 500,
+                        duration: 400,
                         easing: Easing.elastic(0.75),
                         timing: Animated.timing,
                         useNativeDriver: true,
@@ -54,8 +54,9 @@ export const RootNavigator = createAppContainer(
                             outputRange: [layout.initHeight, 0],
                         })
                         const scale = position.interpolate({
-                            inputRange: [thisSceneIndex - 1, thisSceneIndex],
-                            outputRange: [1.033, 1],
+                            inputRange: [thisSceneIndex, thisSceneIndex + 0.75],
+                            extrapolate: 'clamp',
+                            outputRange: [1, 0.95],
                         })
 
                         return scene.route.routeName === 'Main'
