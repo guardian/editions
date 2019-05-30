@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet } from 'react-native'
+import { ScrollView, View, StyleSheet, Dimensions } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
 const useFrontsData = () => useEndpoint('', [], res => res)
 
 const FrontRow = ({ frontsData, front, issue, navigation }) => {
+    const { width } = Dimensions.get('window')
     return (
         <>
             <View
@@ -26,7 +27,7 @@ const FrontRow = ({ frontsData, front, issue, navigation }) => {
                 <HeadlineText>{front}</HeadlineText>
             </View>
             <ScrollView horizontal={true} pagingEnabled>
-                <View style={{ width: 375 }}>
+                <View style={{ width }}>
                     <Grid
                         onPress={item => navigation.navigate('Article', item)}
                         data={frontsData.map(
@@ -41,7 +42,7 @@ const FrontRow = ({ frontsData, front, issue, navigation }) => {
                         )}
                     />
                 </View>
-                <View style={{ width: 375 }}>
+                <View style={{ width }}>
                     <Grid
                         onPress={item => navigation.navigate('Article', item)}
                         data={frontsData.map(
