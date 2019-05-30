@@ -6,6 +6,7 @@ import {
     useArticleAppearance,
     articleAppearances,
 } from '../../theme/appearance'
+import { Multiline } from '../multiline'
 
 export type PropTypes = {
     standfirst: string
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
     },
     bylineBackground: {
         ...articleAppearances.default.backgrounds,
-        borderTopWidth: StyleSheet.hairlineWidth,
         marginTop: metrics.vertical,
         marginBottom: metrics.vertical,
         paddingTop: metrics.vertical / 4,
@@ -37,7 +37,23 @@ const Standfirst = ({ standfirst, byline }: PropTypes) => {
             <StandfirstText style={[appearance.text, appearance.standfirst]}>
                 {standfirst}
             </StandfirstText>
-            <View style={[styles.bylineBackground, appearance.backgrounds]}>
+            <View
+                style={[
+                    styles.bylineBackground,
+                    appearance.backgrounds,
+                    {
+                        justifyContent: 'flex-end',
+                        alignContent: 'stretch',
+                        alignItems: 'stretch',
+                    },
+                ]}
+            >
+                <Multiline
+                    color={
+                        StyleSheet.flatten([appearance.text, appearance.byline])
+                            .color
+                    }
+                />
                 <BodyCopy
                     weight={'bold'}
                     style={[appearance.text, appearance.byline]}
