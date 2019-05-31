@@ -2,17 +2,17 @@ import React, { useContext, createContext } from 'react'
 import { useState, useEffect } from 'react'
 import { File, getFileList, downloadIssue } from '../helpers/files'
 
-type FileListHook = [
-    File[],
-    {
-        refreshIssues: () => void
-    }
-]
+/*
+Downloads
+*/
+type DownloadQueueItem = {
+    received: number
+    total: number
+    cancel: () => void
+}
 
-type DownloadQueue = {
-    [key: string]: {
-        progress: number
-    }
+interface DownloadQueue {
+    [key: string]: DownloadQueueItem
 }
 
 type DownloadQueueHook = [
@@ -21,14 +21,17 @@ type DownloadQueueHook = [
 ]
 
 const useDownloadQueueInCtx = (): DownloadQueueHook => {
-    const [queue, setQueue] = useState({})
+    const [queue, setQueue] = useState<DownloadQueue>({})
     const deleteIssue = (issue: File['issue']) =>
         setQueue(q => {
             const clone = { ...q }
             delete clone[issue]
             return clone
         })
-    const setIssue = (issue: File['issue'], state) =>
+    const setIssue = (
+        issue: File['issue'],
+        state: Partial<DownloadQueueItem>,
+    ) =>
         setQueue(q => ({
             ...q,
             [issue]: {
@@ -39,17 +42,22 @@ const useDownloadQueueInCtx = (): DownloadQueueHook => {
     const download = (issue: File['issue']) => {
         const dl = downloadIssue(issue)
         dl.progress((received, total) => {
+            if (total >= received) {
+                setIssue(issue, {
+                    total,
+                })
+            }
             setIssue(issue, {
-                progress: received / total,
-                cancel: async () => {
-                    await dl.cancel()
-                    deleteIssue(issue)
-                },
+                received,
             })
         })
         setIssue(issue, {
-            progress: 0,
-            cancel: dl.cancel,
+            received: 0,
+            total: -1,
+            cancel: async () => {
+                await dl.cancel()
+                deleteIssue(issue)
+            },
         })
         return dl.promise.then(() => {
             deleteIssue(issue)
@@ -59,6 +67,15 @@ const useDownloadQueueInCtx = (): DownloadQueueHook => {
     return [queue, download]
 }
 
+/*
+Files
+*/
+type FileListHook = [
+    File[],
+    {
+        refreshIssues: () => void
+    }
+]
 const useFileListInCtx = (): FileListHook => {
     const [files, setFiles] = useState<File[]>([])
 
@@ -72,6 +89,9 @@ const useFileListInCtx = (): FileListHook => {
     return [files, { refreshIssues }]
 }
 
+/*
+Provider
+*/
 const FileSystemContext = createContext<{
     fileList: FileListHook
     downloads: DownloadQueueHook

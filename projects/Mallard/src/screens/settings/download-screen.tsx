@@ -1,9 +1,13 @@
-import React, { useState, useMemo } from 'react'
-import { ScrollView, Button, Text, View, Alert, Clipboard } from 'react-native'
+import React, { useMemo } from 'react'
+import { ScrollView, Button, View, Alert, Clipboard } from 'react-native'
 import { List, ListHeading } from '../../components/lists/list'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { useFileList, useDownloadQueue } from '../../hooks/use-fs'
+import {
+    useFileList,
+    useDownloadQueue,
+    DownloadQueue,
+} from '../../hooks/use-fs'
 import { Item } from '../../components/lists/helpers'
 import {
     File,
@@ -12,12 +16,50 @@ import {
     deleteAllFiles,
     unzipIssue,
     deleteOtherFiles,
+    displayPerc,
 } from '../../helpers/files'
+
+const Queue = ({ queue }: { queue: DownloadQueue }) => {
+    return (
+        <>
+            <ListHeading>Active downloads</ListHeading>
+            <List
+                data={Object.entries(queue)
+                    .sort((a, b) => b[0].localeCompare(a[0]))
+                    .map(([key, { received, total, cancel }]) => ({
+                        key,
+                        title: `🔋 ${
+                            total > 0
+                                ? displayPerc(received, total)
+                                : displayFileSize(received)
+                        } downloaded`,
+                        data: { cancel },
+                    }))}
+                onPress={({ cancel }) => {
+                    Alert.alert(
+                        'Cancel this download?',
+                        'You sure?',
+                        [
+                            {
+                                text: 'Keep it',
+                            },
+                            {
+                                text: 'AWAY WITH IT ALL',
+                                style: 'cancel',
+                                onPress: cancel,
+                            },
+                        ],
+                        { cancelable: false },
+                    )
+                }}
+            />
+        </>
+    )
+}
 
 export const DownloadScreen = () => {
     const [files, { refreshIssues }] = useFileList()
     const [queue, download] = useDownloadQueue()
-    console.log(queue)
     const fileList = useMemo((): Item<File>[] => {
         const archives = files.filter(({ type }) => type !== 'other')
         const other = files.filter(({ type }) => type === 'other')
@@ -107,29 +149,11 @@ export const DownloadScreen = () => {
                 </View>
             </View>
             <ScrollView style={{ flex: 1 }}>
-                {Object.keys(queue).length > 0 && (
-                    <>
-                        <ListHeading>Active downloads</ListHeading>
-                        <List
-                            data={Object.entries(queue)
-                                .sort((a, b) => b[0].localeCompare(a[0]))
-                                .map(([key, { progress, cancel }]) => ({
-                                    key,
-                                    title: `🔋 ${Math.ceil(
-                                        progress * 100,
-                                    )}% downloaded`,
-                                    data: { cancel },
-                                }))}
-                            onPress={({ cancel }) => {
-                                cancel()
-                            }}
-                        />
-                    </>
-                )}
+                {Object.keys(queue).length > 0 && <Queue queue={queue} />}
                 <ListHeading>On device</ListHeading>
                 <List
                     data={fileList}
-                    onPress={({ type, path, issue }) => {
+                    onPress={({ type, issue }) => {
                         if (type === 'archive') {
                             unzipIssue(issue)
                                 .then(async () => {

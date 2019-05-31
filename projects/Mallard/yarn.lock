@@ -655,10 +655,20 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@guardian/pasteup@^1.0.0-alpha.8":
-  version "1.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.8.tgz#340cc86207523adc71b5b6cb1d6693e3afeab217"
-  integrity sha512-ojTYoCRQxUx6axiwCLX26JKGmIah/MJix6AiPGIplQ/DiO4oJXS6RUC+HfYIEZC8V1g3woqXzmVF2lgCfDtyIA==
+"@creditkarma/thrift-server-core@^0.13.6":
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/@creditkarma/thrift-server-core/-/thrift-server-core-0.13.6.tgz#065e9f83300e7fff66049f8a32c5ffba546dd1bb"
+  integrity sha512-mggZtxkk6C89HVVmA+s5lAO6bxyENxLCbse+Jd1Q8HQ6jbOk5t94nHNV8ZMacuk056WNe5QVUequM4KJO8LcoA==
+
+"@guardian/capi-ts@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/capi-ts/-/capi-ts-0.1.0.tgz#c218e08c7ae00324d7aa90e502e52a739e751abe"
+  integrity sha512-zxCPW+9O7xkiQOp284D5WwdN9X+EEWA1qM5aAkocef7le90NfYqlyNy+z7ndtjbYjfuf0mfWozCKiKFNwjg0GA==
+
+"@guardian/pasteup@^1.0.0-alpha.11":
+  version "1.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.11.tgz#a1e442b6dba4540fce1273eff74abb74c0652f2d"
+  integrity sha512-MLzUhb0+oaMS1g9FQ8nL3G3cdEsQTzC8/Hq1vdrIV/ufbu/6u7sult/AXXk602WodE4ugRZoJMZ5N90Z0WCfBg==
 
 "@jest/console@^24.7.1":
   version "24.7.1"

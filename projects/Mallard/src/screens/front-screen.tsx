@@ -13,7 +13,12 @@ const styles = StyleSheet.create({
 
 const useFrontsData = () => useEndpoint('', [], res => res)
 
-const FrontRow = ({ frontsData, front, issue, navigation }) => {
+const FrontRow: React.FC<{
+    frontsData: any
+    front: any
+    issue: any
+    navigation: any
+}> = ({ frontsData, front, issue, navigation }) => (
     const { width } = Dimensions.get('window')
     return (
         <>
