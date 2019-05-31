@@ -41,7 +41,6 @@
         "@types/react-test-renderer": "^16.8.1",
         "@types/rn-fetch-blob": "^1.2.1",
         "babel-jest": "^24.8.0",
-        "eslint": "^5.16.0",
         "jest": "^24.8.0",
         "metro-react-native-babel-preset": "^0.54.0",
         "react-test-renderer": "16.8.6",
