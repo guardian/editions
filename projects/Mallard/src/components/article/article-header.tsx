@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { HeadlineText } from '../../components/styled-text'
+import { HeadlineText, HeadlineKickerText } from '../../components/styled-text'
 import { metrics } from '../../theme/spacing'
 import {
     useArticleAppearance,
@@ -9,6 +9,8 @@ import {
 import { ArticleImage } from './article-image'
 
 interface Style {
+    /* kicker */
+    kicker: {}
     /* outer container around the header. For spacing and background colour*/
     background: {}
     /* text styles for the headline `<Text>` element. Mainly for colours*/
@@ -17,8 +19,9 @@ interface Style {
     textBackground: {}
 }
 
-interface PropTypes {
+export interface PropTypes {
     headline: string
+    kicker?: string | null
     image?: string | null
 }
 
@@ -26,9 +29,15 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     background: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
-        borderBottomWidth: StyleSheet.hairlineWidth,
         paddingBottom: metrics.vertical,
         paddingTop: metrics.headerHeight,
+        ...articleAppearances.default.backgrounds,
+    },
+    kicker: {
+        paddingBottom: metrics.vertical / 2,
+        marginBottom: metrics.vertical / 4,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        width: '100%',
         ...articleAppearances.default.backgrounds,
     },
     textBackground: {},
@@ -38,7 +47,7 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     },
 })
 
-const NewsHeader = ({ headline, image }: PropTypes) => {
+const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
@@ -46,10 +55,17 @@ const NewsHeader = ({ headline, image }: PropTypes) => {
                 <ArticleImage
                     style={{
                         aspectRatio: 1.5,
-                        marginBottom: metrics.vertical / 2,
+                        marginBottom: metrics.vertical / 4,
                     }}
                     image={image}
                 />
+            )}
+            {kicker && (
+                <View style={[newsHeaderStyles.kicker, appearance.backgrounds]}>
+                    <HeadlineKickerText style={[appearance.text]}>
+                        {kicker}
+                    </HeadlineKickerText>
+                </View>
             )}
             <HeadlineText
                 style={[
@@ -73,6 +89,9 @@ const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         marginTop: -10,
         ...articleAppearances.default.backgrounds,
     },
+    kicker: {
+        ...newsHeaderStyles.kicker,
+    },
     headline: {
         ...articleAppearances.default.headline,
     },
@@ -84,7 +103,7 @@ const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
     },
 })
 
-const LongReadHeader = ({ headline, image }: PropTypes) => {
+const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
@@ -100,6 +119,18 @@ const LongReadHeader = ({ headline, image }: PropTypes) => {
                     appearance.backgrounds,
                 ]}
             >
+                {kicker && (
+                    <View
+                        style={[
+                            longReadHeaderStyles.kicker,
+                            appearance.backgrounds,
+                        ]}
+                    >
+                        <HeadlineKickerText style={[appearance.text]}>
+                            {kicker}
+                        </HeadlineKickerText>
+                    </View>
+                )}
                 <HeadlineText
                     style={[
                         longReadHeaderStyles.headline,

@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
     Animated,
     StyleSheet,
-    PanResponder,
+    View,
     TouchableWithoutFeedback,
 } from 'react-native'
 import { Chevron } from '../../chevron'
 import { metrics } from '../../../theme/spacing'
-import { dismissAt } from './helpers'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -35,35 +34,15 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
-    const [panResponder] = useState(() =>
-        PanResponder.create({
-            /* we don't do anything until we 
-            detect a downwards motion. This is done 
-            because panresponder cancels the event from 
-            bubbling if it's using it and we want back button 
-            inside this can pick up the touch event  */
-            onStartShouldSetPanResponder: () => false,
-            onMoveShouldSetPanResponder: (e, { dy }) => dy > 1,
-            onPanResponderMove: Animated.event([null, { dy: cardOffset }]),
-            onPanResponderRelease: (e, { dy }) => {
-                if (dy >= dismissAt) {
-                    onDismiss()
-                } else {
-                    Animated.spring(cardOffset, {
-                        toValue: 0,
-                        bounciness: 10,
-                        useNativeDriver: true,
-                    }).start()
-                }
-            },
-        }),
-    )
+const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
+    const color = useMemo(() => {
+        const flat = StyleSheet.flatten(style) as { color?: string }
+        if (flat.color) return flat.color
+        return undefined
+    }, [style])
+
     return (
-        <Animated.View
-            style={[styles.headerContainer]}
-            {...panResponder.panHandlers}
-        >
+        <View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback
                 onPress={onDismiss}
                 accessibilityHint="Go back"
@@ -75,7 +54,7 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                             transform: [
                                 {
                                     translateY: scrollY.interpolate({
-                                        inputRange: [0, 200],
+                                        inputRange: [0, 100],
                                         outputRange: [
                                             metrics.headerHeight / -4,
                                             0,
@@ -87,7 +66,7 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                         },
                     ]}
                 >
-                    <Chevron color={StyleSheet.flatten(style).color} />
+                    <Chevron color={color} />
                 </Animated.View>
             </TouchableWithoutFeedback>
             <Animated.View
@@ -95,16 +74,21 @@ const Header = ({ scrollY, cardOffset, style, onDismiss }: any) => {
                     style,
                     StyleSheet.absoluteFillObject,
                     styles.headerBackground,
-                    {
-                        opacity: scrollY.interpolate({
-                            inputRange: [0, 200],
-                            outputRange: [0, 1],
-                            extrapolate: 'clamp',
-                        }),
-                    },
+                    ,
+                    fadesHeaderIn
+                        ? {
+                              opacity: scrollY.interpolate({
+                                  inputRange: [0, 50],
+                                  outputRange: [0, 1],
+                                  extrapolate: 'clamp',
+                              }),
+                          }
+                        : {
+                              opacity: 1,
+                          },
                 ]}
             />
-        </Animated.View>
+        </View>
     )
 }
 

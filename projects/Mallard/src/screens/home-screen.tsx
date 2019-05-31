@@ -80,7 +80,7 @@ export const HomeScreen = ({
                                     explainer:
                                         file.type === 'archive'
                                             ? 'Tap to unarchive'
-                                            : null,
+                                            : undefined,
                                     data: file,
                                 }))}
                             onPress={file => {

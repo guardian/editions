@@ -8,7 +8,15 @@ import {
     useArticleAppearance,
     articleAppearances,
 } from '../../theme/appearance'
-import { LongReadHeader, NewsHeader } from './article-header'
+import {
+    LongReadHeader,
+    NewsHeader,
+    PropTypes as ArticleHeaderPropTypes,
+} from './article-header'
+import {
+    Standfirst,
+    PropTypes as StandfirstPropTypes,
+} from './article-standfirst'
 
 /* 
 This is the article view! For all of the articles. 
@@ -34,12 +42,14 @@ const Article = ({
     article,
     headline,
     image,
+    kicker,
+    byline,
+    standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: {}
-    headline: string
-    image?: string | null
-}) => {
+    article: any[]
+} & ArticleHeaderPropTypes &
+    StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
     return (
         <SlideCard
@@ -48,6 +58,7 @@ const Article = ({
                 appearance.backgrounds,
                 appearance.text,
             ]}
+            fadesHeaderIn={appearanceName === 'longread'}
             backgroundColor={appearance.backgrounds.backgroundColor}
             onDismiss={() => {
                 navigation.goBack()
@@ -55,10 +66,11 @@ const Article = ({
         >
             <View style={styles.container}>
                 {appearanceName === 'longread' ? (
-                    <LongReadHeader {...{ headline, image }} />
+                    <LongReadHeader {...{ headline, image, kicker }} />
                 ) : (
-                    <NewsHeader {...{ headline, image }} />
+                    <NewsHeader {...{ headline, image, kicker }} />
                 )}
+                <Standfirst {...{ byline, standfirst }} />
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
                     {article

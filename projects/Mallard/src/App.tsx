@@ -3,12 +3,12 @@
 // In this file, we'll be kicking off our app or storybook.
 
 import React from 'react'
-import { StatusBar } from 'react-native'
+import { StatusBar, View } from 'react-native'
 import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
 import { FileSystemProvider } from './hooks/use-fs'
 
-const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DV-' : null
+const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DEV-2-' : null
 
 export default class App extends React.Component<{}, {}> {
     /**
@@ -24,7 +24,11 @@ export default class App extends React.Component<{}, {}> {
                         barStyle="light-content"
                         backgroundColor="#041f4a"
                     />
-                    <RootNavigator persistenceKey={navigationPersistenceKey} />
+                    <View style={{ flex: 1, backgroundColor: '#000' }}>
+                        <RootNavigator
+                            persistenceKey={navigationPersistenceKey}
+                        />
+                    </View>
                 </SettingsProvider>
             </FileSystemProvider>
         )

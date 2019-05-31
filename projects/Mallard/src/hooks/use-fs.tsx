@@ -5,13 +5,13 @@ import { File, getFileList, downloadIssue } from '../helpers/files'
 /*
 Downloads
 */
-type DownloadQueueItem = {
+interface DownloadQueueItem {
     received: number
     total: number
     cancel: () => void
 }
 
-interface DownloadQueue {
+export interface DownloadQueue {
     [key: string]: DownloadQueueItem
 }
 

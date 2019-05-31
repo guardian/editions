@@ -11,9 +11,24 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         color: color.text,
     },
+    headlineKickerText: {
+        fontFamily: 'GTGuardianTitlepiece-Bold',
+        fontSize: 15,
+        lineHeight: 24,
+    },
     headlineCardText: {
         fontSize: 16,
         lineHeight: 20,
+    },
+    standfirstText: {
+        fontFamily: 'GuardianTextEgyptian-Reg',
+        fontSize: 17,
+        lineHeight: 21,
+    },
+    serifBodyCopy: {
+        fontFamily: 'GuardianTextEgyptian-Reg',
+        fontSize: 17,
+        lineHeight: 21,
     },
     bodyCopy: {
         fontSize: 17,
@@ -31,6 +46,26 @@ export const HeadlineText = ({
     return <Text {...props} style={[styles.headlineText, style]} />
 }
 
+export const HeadlineKickerText = ({
+    style,
+    ...props
+}: {
+    children: string
+    style?: {}
+}) => {
+    return <Text {...props} style={[styles.headlineKickerText, style]} />
+}
+
+export const StandfirstText = ({
+    style,
+    ...props
+}: {
+    children: string
+    style?: {}
+}) => {
+    return <Text {...props} style={[styles.standfirstText, style]} />
+}
+
 export const HeadlineCardText = ({
     children,
     ...props
@@ -41,6 +76,32 @@ export const HeadlineCardText = ({
         {children}
     </HeadlineText>
 )
+
+export const BodyCopy = ({
+    style,
+    weight,
+    ...props
+}: {
+    children: string
+    weight: 'regular' | 'bold'
+    style?: {}
+}) => {
+    return (
+        <Text
+            {...props}
+            style={[
+                styles.serifBodyCopy,
+                style,
+                weight === 'bold' && {
+                    fontFamily: 'GuardianTextEgyptian-Bold',
+                },
+            ]}
+        />
+    )
+}
+BodyCopy.defaultProps = {
+    weight: 'regular',
+}
 
 export const UiBodyCopy = ({
     children,

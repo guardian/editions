@@ -71,6 +71,8 @@
 		F6C2DE30612444E8950463B0 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F89749D218B4491B86CF7AE5 /* libRNSVG-tvOS.a */; };
 		3A140BAAF8A54BCD80E527EA /* libRNZipArchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06F3F6CFD64143DA87F45CD9 /* libRNZipArchive.a */; };
 		E9885E433EE84C1585CED823 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE20416D3D243E5A4320927 /* libz.tbd */; };
+		3141A00B48124CDEB222AE8C /* GuardianTextEgyptian-Reg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74288DBD9D3848588CDA9778 /* GuardianTextEgyptian-Reg.ttf */; };
+		F4F556D931AA48DAB9FF3F92 /* GuardianTextEgyptian-RegIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B79D2F0496E4B54B5A15981 /* GuardianTextEgyptian-RegIt.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -430,8 +432,6 @@
 		7B45276F6ADC452AA025ED0D /* GHGuardianHeadline-SemiboldItalic.ttf */ = {isa = PBXFileReference; name = "GHGuardianHeadline-SemiboldItalic.ttf"; path = "../src/assets/fonts/guardian_headline_subset_apptt 180104/noalts_not_hinted/GHGuardianHeadline-SemiboldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		382E03B1B3F449A3B7B90917 /* GuardianTextEgyptian-Bold.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-Bold.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D0DB0E2FE741414AA217DABB /* GuardianTextEgyptian-BoldItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-BoldItalic.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		92F56BD735524F23B4D96B40 /* GuardianTextEgyptian-Regular.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-Regular.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		76397DBA281A48A9A3AC9AF3 /* GuardianTextEgyptian-RegularItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-RegularItalic.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-RegularItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		595EFDF1C9194A23BE12A0A8 /* GuardianTextSans-Bold.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-Bold.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		101E3C3B67E7489FB656D5D4 /* GuardianTextSans-BoldItalic.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-BoldItalic.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		127C4FBB56844A9DA9743267 /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/guardian_textsans_subset_apptt 180413/noalts_not_hinted_webmetrics/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
@@ -444,6 +444,9 @@
 		197CB28C99C64D45B992B609 /* RNZipArchive.xcodeproj */ = {isa = PBXFileReference; name = "RNZipArchive.xcodeproj"; path = "../node_modules/react-native-zip-archive/ios/RNZipArchive.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		06F3F6CFD64143DA87F45CD9 /* libRNZipArchive.a */ = {isa = PBXFileReference; name = "libRNZipArchive.a"; path = "libRNZipArchive.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		7FE20416D3D243E5A4320927 /* libz.tbd */ = {isa = PBXFileReference; name = "libz.tbd"; path = "usr/lib/libz.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
+		74288DBD9D3848588CDA9778 /* GuardianTextEgyptian-Reg.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-Reg.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-Reg.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8A107111D4A24C5AACD6E2A0 /* GuardianTextEgyptian-RegularIt.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-RegularIt.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-RegularIt.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8B79D2F0496E4B54B5A15981 /* GuardianTextEgyptian-RegIt.ttf */ = {isa = PBXFileReference; name = "GuardianTextEgyptian-RegIt.ttf"; path = "../src/assets/fonts/guardian_textegyptian_subset_apptt 180410/noalts_not_hinted_webmetrics/GuardianTextEgyptian-RegIt.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -788,6 +791,9 @@
 				FB7E15E4F0CD41569909D545 /* GuardianTextSans-RegularItalic.ttf */,
 				90DBBD2ACCDF44F6B33E060C /* GTGuardianTitlepiece-Bold.ttf */,
 				95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */,
+				74288DBD9D3848588CDA9778 /* GuardianTextEgyptian-Reg.ttf */,
+				8A107111D4A24C5AACD6E2A0 /* GuardianTextEgyptian-RegularIt.ttf */,
+				8B79D2F0496E4B54B5A15981 /* GuardianTextEgyptian-RegIt.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1307,6 +1313,9 @@
 				45D20681F84D4EBBB0C0AB39 /* GuardianTextSans-RegularItalic.ttf in Resources */,
 				A708D86693BC46E6925EF49B /* GTGuardianTitlepiece-Bold.ttf in Resources */,
 				3DA2DDD3DAE843018C666E82 /* SpaceMono-Regular.ttf in Resources */,
+				3141A00B48124CDEB222AE8C /* GuardianTextEgyptian-Reg.ttf in Resources */,
+				E2214CD36FD3402BAB698FE5 /* GuardianTextEgyptian-RegularIt.ttf in Resources */,
+				F4F556D931AA48DAB9FF3F92 /* GuardianTextEgyptian-RegIt.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
