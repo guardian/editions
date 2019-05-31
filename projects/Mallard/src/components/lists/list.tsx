@@ -9,9 +9,26 @@ import {
     StyleSheet,
 } from 'react-native'
 import { metrics } from '../../theme/spacing'
-import { PropTypes, Item, OnPressHandler } from './helpers'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 import { useAppAppearance } from '../../theme/appearance'
+
+/*
+An item is what the list uses to draw its own row –
+See https://facebook.github.io/react-native/docs/using-a-listview
+*/
+export interface Item<D> {
+    key: string
+    title: string
+    explainer?: string
+    data?: D
+}
+
+/*
+<D> inside of an item is passed to the click handler. 
+This is the function that gets called when clicking a row.
+D contains things like the route a row points or the text content of it
+*/
+export type OnPressHandler<D> = (item: D) => void
 
 const styles = StyleSheet.create({
     heading: {
@@ -52,12 +69,12 @@ const Highlight: React.FC<{
     )
 }
 
-const ListItem = <ItemData extends {}>({
+const ListItem = <D extends {}>({
     onPress,
     item: { title, explainer, data },
 }: {
-    item: Item<ItemData>
-    onPress: OnPressHandler<ItemData>
+    item: Item<D>
+    onPress: OnPressHandler<D>
 }) => {
     const { borderColor, backgroundColor } = useAppAppearance()
 
@@ -89,10 +106,13 @@ const ListItem = <ItemData extends {}>({
     )
 }
 
-export const List = <ItemData extends {}>({
+export const List = <D extends {}>({
     data,
     onPress,
-}: PropTypes<ItemData>) => {
+}: {
+    data: Item<D>[]
+    onPress: OnPressHandler<D>
+}) => {
     const { borderColor } = useAppAppearance()
     return (
         <FlatList

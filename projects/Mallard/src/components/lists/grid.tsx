@@ -4,6 +4,10 @@ import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { HeadlineCardText } from '../styled-text'
 
+/*
+TODO: Delete this, replace with proper fronts grid view
+*/
+
 export const Grid = ({ data, onPress }: any) => {
     return (
         <FlatList

@@ -30,7 +30,7 @@ const FrontRow: React.FC<{
             <HeadlineText>{front}</HeadlineText>
         </View>
         <Grid
-            onPress={item => navigation.navigate('Article', item)}
+            onPress={(item: string) => navigation.navigate('Article', item)}
             data={frontsData.map(([title]: any[], index: number) => ({
                 issue,
                 front,

@@ -8,7 +8,7 @@ import {
     useDownloadQueue,
     DownloadQueue,
 } from '../../hooks/use-fs'
-import { Item } from '../../components/lists/helpers'
+import { Item } from '../../components/lists/list'
 import {
     File,
     displayFileSize,

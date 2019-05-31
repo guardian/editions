@@ -19,7 +19,7 @@ const fixture = (seed: number): { image: string | null } => ({
     ][seed % 3],
 })
 
-const useArticleData = (articleId, { headline }) => {
+const useArticleData = (articleId: any, { headline }: any) => {
     return useEndpoint('', [headline, [[]]], res => res[articleId])
 }
 

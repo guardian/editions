@@ -47,7 +47,7 @@ const Article = ({
     standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: {}
+    article: any[]
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
