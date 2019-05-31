@@ -74,7 +74,9 @@ export const ArticleScreen = ({
                     </UiBodyCopy>
                 </TouchableOpacity>
             </View>
-            <WithArticleAppearance value={appearances[appearance]}>
+            <WithArticleAppearance
+                value={appearances[appearance] as ArticleAppearance}
+            >
                 <Article
                     article={article}
                     kicker={'Kicker'}
@@ -89,7 +91,11 @@ export const ArticleScreen = ({
     )
 }
 
-ArticleScreen.navigationOptions = ({ navigation }) => ({
+ArticleScreen.navigationOptions = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => ({
     title: navigation.getParam('article', 'NO-ID'),
     gesturesEnabled: true,
     gestureResponseDistance: {

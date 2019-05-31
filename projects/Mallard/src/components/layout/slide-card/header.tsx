@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
     Animated,
     StyleSheet,
@@ -35,6 +35,12 @@ const styles = StyleSheet.create({
 })
 
 const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
+    const color = useMemo(() => {
+        const flat = StyleSheet.flatten(style) as { color?: string }
+        if (flat.color) return flat.color
+        return undefined
+    }, [style])
+
     return (
         <View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback
@@ -60,7 +66,7 @@ const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
                         },
                     ]}
                 >
-                    <Chevron color={StyleSheet.flatten(style).color} />
+                    <Chevron color={color} />
                 </Animated.View>
             </TouchableWithoutFeedback>
             <Animated.View
