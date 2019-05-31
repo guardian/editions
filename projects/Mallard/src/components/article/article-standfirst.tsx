@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
 import { metrics } from '../../theme/spacing'
 import {
@@ -8,7 +8,7 @@ import {
 } from '../../theme/appearance'
 import { Multiline } from '../multiline'
 
-export type PropTypes = {
+export interface PropTypes {
     standfirst: string
     byline: string
 }
