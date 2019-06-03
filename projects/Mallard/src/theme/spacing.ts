@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 /**
  * NOTE TO DEVS:
  *
@@ -40,8 +42,11 @@
  */
 export const spacing = [0, 4, 8, 12, 16, 24, 32, 48, 64]
 
+const headerHeight = spacing[5] * 2.5
+
 export const metrics = {
     horizontal: spacing[4],
     vertical: spacing[5],
-    headerHeight: spacing[5] * 2.5,
+    headerHeight,
+    slideCardSpacing: Platform.OS === 'ios' ? headerHeight : headerHeight * 0.5,
 }

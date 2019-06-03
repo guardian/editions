@@ -2,15 +2,14 @@ import React, { useState, useEffect, ReactNode, useRef } from 'react'
 import { Animated, Platform, StyleSheet } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
-
+import { metrics } from '../../../theme/spacing'
 /* 
 This is the swipey contraption that contains an article.
 */
 
-const notchInsetSize = Platform.OS === 'ios' ? 50 : 0
 const styles = StyleSheet.create({
     container: {
-        marginTop: notchInsetSize,
+        marginTop: metrics.slideCardSpacing,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -28,11 +27,13 @@ export const SlideCard = ({
     headerStyle,
     backgroundColor,
     onDismiss,
+    fadesHeaderIn,
 }: {
     children: ReactNode
     headerStyle: {}
     backgroundColor: string | undefined
     onDismiss: () => void
+    fadesHeaderIn: boolean
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
     const [cardOffset] = useState(() => new Animated.Value(0))
@@ -68,6 +69,7 @@ export const SlideCard = ({
                 {...{
                     scrollY,
                     cardOffset,
+                    fadesHeaderIn,
                     onDismiss,
                 }}
             />
@@ -108,4 +110,8 @@ export const SlideCard = ({
             </Animated.ScrollView>
         </Animated.View>
     )
+}
+
+SlideCard.defaultProps = {
+    fadesHeaderIn: false,
 }

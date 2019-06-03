@@ -33,6 +33,24 @@ interface ArticleAppearanceStyles {
         fontFamily?: string
     }
     /*
+    Overrides for the kicker
+    */
+    kicker: {
+        color?: string
+    }
+    /*
+    Overrides for the standfirst
+    */
+    standfirst: {
+        color?: string
+    }
+    /*
+    Overrides for the byline
+    */
+    byline: {
+        color?: string
+    }
+    /*
     Feel free to add more stuff as needed!!
     */
 }
@@ -42,6 +60,8 @@ export type ArticleAppearance =
     | 'default'
     | 'news'
     | 'lifestyle'
+    | 'sport'
+    | 'culture'
     | 'comment'
     | 'longread'
 
@@ -75,13 +95,23 @@ export const articleAppearances: {
             color: color.text,
         },
         headline: {},
+        kicker: {},
+        byline: {},
+        standfirst: {},
     },
     news: {
         backgrounds: {},
         text: {
             color: color.palette.news.main,
         },
-        headline: {},
+        headline: {
+            color: color.text,
+        },
+        kicker: {},
+        byline: {},
+        standfirst: {
+            color: color.text,
+        },
     },
     comment: {
         backgrounds: {
@@ -92,6 +122,40 @@ export const articleAppearances: {
         },
         headline: {
             fontFamily: 'GHGuardianHeadline-Light',
+        },
+        kicker: {},
+        byline: {},
+        standfirst: {},
+    },
+    sport: {
+        backgrounds: {
+            backgroundColor: color.palette.sport.faded,
+        },
+        text: {
+            color: color.palette.sport.main,
+        },
+        headline: {
+            fontFamily: 'GHGuardianHeadline-Light',
+            color: color.text,
+        },
+        kicker: {},
+        byline: {},
+        standfirst: { color: color.text },
+    },
+    culture: {
+        backgrounds: {
+            backgroundColor: color.palette.culture.faded,
+        },
+        text: {
+            color: color.palette.culture.main,
+        },
+        headline: {
+            color: color.text,
+        },
+        kicker: {},
+        byline: {},
+        standfirst: {
+            color: color.text,
         },
     },
     lifestyle: {
@@ -104,6 +168,9 @@ export const articleAppearances: {
         headline: {
             fontFamily: 'GHGuardianHeadline-Bold',
         },
+        kicker: {},
+        byline: {},
+        standfirst: {},
     },
     longread: {
         backgrounds: {
@@ -111,6 +178,9 @@ export const articleAppearances: {
         },
         text: { color: color.palette.neutral[100] },
         headline: {},
+        kicker: {},
+        byline: {},
+        standfirst: {},
     },
 }
 /*
