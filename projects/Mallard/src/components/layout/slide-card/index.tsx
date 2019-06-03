@@ -36,7 +36,6 @@ export const SlideCard = ({
     fadesHeaderIn: boolean
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
-    const [cardOffset] = useState(() => new Animated.Value(0))
     useEffect(() => {
         scrollY.addListener(({ value }) => {
             if (value < dismissAt * -1) {
@@ -51,14 +50,11 @@ export const SlideCard = ({
                 {
                     transform: [
                         {
-                            translateY: Animated.add(
-                                scrollY.interpolate({
-                                    inputRange: [dismissAt * -1, 0],
-                                    outputRange: [dismissAt, 0],
-                                    extrapolate: 'clamp',
-                                }),
-                                cardOffset,
-                            ),
+                            translateY: scrollY.interpolate({
+                                inputRange: [dismissAt * -1, 0],
+                                outputRange: [dismissAt, 0],
+                                extrapolate: 'clamp',
+                            }),
                         },
                     ],
                 },
@@ -68,7 +64,6 @@ export const SlideCard = ({
                 style={headerStyle}
                 {...{
                     scrollY,
-                    cardOffset,
                     fadesHeaderIn,
                     onDismiss,
                 }}
