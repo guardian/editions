@@ -56,3 +56,16 @@ export interface Front {
     webTitle?: string
     navSection?: string
 }
+
+export interface UnknownElement {
+    id: 'unknown'
+}
+export interface HTMLElement {
+    id: 'html'
+    html: string
+}
+export interface ImageElement {
+    id: 'image'
+    src: string
+}
+export type BlockElement = HTMLElement | ImageElement | UnknownElement
