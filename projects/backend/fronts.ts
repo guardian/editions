@@ -3,7 +3,6 @@ import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 import { CollectionArticles, Front, Collection } from './common'
 import { LastModifiedUpdater } from './lastModified'
-import console = require('console')
 
 export const getCollection = async (
     id: string,
