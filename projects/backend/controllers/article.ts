@@ -4,7 +4,8 @@ import {
     CompactProtocol,
 } from '@creditkarma/thrift-server-core'
 import { ItemResponseCodec } from '@guardian/capi-ts'
-
+import { elementParser } from '../capi/elements'
+import fetch from 'node-fetch'
 const url = (path: string) =>
     `https://content.guardianapis.com/${path}?format=thrift&api-key=${
         process.env.CAPI_KEY
@@ -21,12 +22,14 @@ export const getArticle = async (path: string) => {
 
     const data = ItemResponseCodec.decode(input)
     const title = data && data.content && data.content.webTitle
-    const body =
+    const blocks =
         data &&
         data.content &&
         data.content.blocks &&
         data.content.blocks.body &&
         data.content.blocks.body.map(_ => _.elements)
+    const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
+    const elements = body && body.map(elementParser)
     return [title, body]
 }
 
