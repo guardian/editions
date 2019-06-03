@@ -49,7 +49,7 @@ const FrontRow: React.FC<{
                 </View>
                 <View style={{ width }}>
                     <Grid
-                        onPress={item => navigation.navigate('Article', item)}
+                        onPress={(item: string) => navigation.navigate('Article', item)}
                         data={frontsData.map(
                             ([title]: any[], index: number) => ({
                                 issue,
