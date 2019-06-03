@@ -30,7 +30,7 @@ export const getArticle = async (path: string) => {
         data.content.blocks.body.map(_ => _.elements)
     const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
     const elements = body && body.map(elementParser)
-    return [title, body]
+    return [title, elements]
 }
 
 export const articleController = (req: Request, res: Response) => {
