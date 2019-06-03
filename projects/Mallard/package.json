@@ -19,7 +19,6 @@
         ]
     },
     "dependencies": {
-        "@creditkarma/thrift-server-core": "^0.13.6",
         "@guardian/pasteup": "^1.0.0-alpha.11",
         "@react-native-community/async-storage": "^1.4.0",
         "react": "^16.8.6",
