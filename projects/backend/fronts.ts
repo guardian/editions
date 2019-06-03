@@ -14,12 +14,15 @@ export const getCollection = async (
         if (!resp.ok) throw new Error('failed s3')
         lastModifiedUpdater(resp.lastModified)
         const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
+        console.log(collection)
         return {
-            id: collection.displayName,
-            articles: collection.live,
+            id,
+            name: collection.displayName,
+            articles: collection.live.map(_ => _.id),
         }
     } catch {
-        return { id, articles: [] }
+        console.log('OH NO', id)
+        return 'notfound'
     }
 }
 
@@ -47,7 +50,7 @@ export const getCollectionsForFront = async (
     const articles = await Promise.all(
         collectionIds.map(id => getCollection(id, lastModifiedUpdater)),
     )
-
+    console.log(articles, 'SSS')
     const articleMap = new Map(
         articles
             .filter(
@@ -56,14 +59,14 @@ export const getCollectionsForFront = async (
             )
             .map(({ id, articles }) => [id, articles]),
     )
-
+    console.log(articleMap, '>?>')
     const combined: [string, Collection][] = selected.map(([id, data]) => [
         id,
         { ...data, articles: articleMap.get(id) },
     ])
 
     const cs: { [key: string]: Collection } = fromEntries(combined) //This is a polyfill of Object.Entries which is a bit tooo new.
-
+    console.log(front)
     return { ...front, collections: cs }
 }
 

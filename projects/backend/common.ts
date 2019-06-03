@@ -9,15 +9,10 @@ export interface Issue {
     fronts: string[]
 }
 
-export interface ArticleFragment {
-    id: string
-    frontPublicationDate: number
-    publishedBy?: string
-}
-
 export interface CollectionArticles {
     id: string
-    articles: ArticleFragment[]
+    name: string
+    articles: string[]
 }
 export interface Collection {
     displayName: string
@@ -38,7 +33,7 @@ export interface Collection {
     hideShowMore?: boolean
     platform?: unknown
     frontsToolSettings?: unknown
-    articles?: ArticleFragment[]
+    articles?: string[]
 }
 
 export interface Front {
@@ -56,3 +51,16 @@ export interface Front {
     webTitle?: string
     navSection?: string
 }
+
+export interface UnknownElement {
+    id: 'unknown'
+}
+export interface HTMLElement {
+    id: 'html'
+    html: string
+}
+export interface ImageElement {
+    id: 'image'
+    src: string
+}
+export type BlockElement = HTMLElement | ImageElement | UnknownElement
