@@ -18,7 +18,7 @@ const FrontRow: React.FC<{
     front: any
     issue: any
     navigation: any
-}> = ({ frontsData, front, issue, navigation }) => (
+}> = ({ frontsData, front, issue, navigation }) => {
     const { width } = Dimensions.get('window')
     return (
         <>
@@ -34,7 +34,9 @@ const FrontRow: React.FC<{
             <ScrollView horizontal={true} pagingEnabled>
                 <View style={{ width }}>
                     <Grid
-                        onPress={(item: string) => navigation.navigate('Article', item)}
+                        onPress={(item: string) =>
+                            navigation.navigate('Article', item)
+                        }
                         data={frontsData.map(
                             ([title]: any[], index: number) => ({
                                 issue,
@@ -49,7 +51,9 @@ const FrontRow: React.FC<{
                 </View>
                 <View style={{ width }}>
                     <Grid
-                        onPress={(item: string) => navigation.navigate('Article', item)}
+                        onPress={(item: string) =>
+                            navigation.navigate('Article', item)
+                        }
                         data={frontsData.map(
                             ([title]: any[], index: number) => ({
                                 issue,
