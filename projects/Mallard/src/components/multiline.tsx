@@ -6,16 +6,27 @@ import { StyleSheet } from 'react-native'
 
 const pixel = StyleSheet.hairlineWidth * 2
 
-const Multiline = ({ color }: { color: string }) => (
-    <Svg width="100%" height={pixel * 11} fill="none">
-        <Rect y={pixel * 9} width="100%" height={pixel} fill={color} />
-        <Rect y={pixel * 6} width="100%" height={pixel} fill={color} />
-        <Rect y={pixel * 3} width="100%" height={pixel} fill={color} />
-        <Rect width="100%" height={pixel} fill={color} />
-    </Svg>
-)
+const Multiline = ({ color, count }: { color: string; count: number }) => {
+    const lines = []
+    for (let i = 0; i < count; i++) {
+        lines.push(
+            <Rect
+                y={pixel * count * 3}
+                width="100%"
+                height={pixel}
+                fill={color}
+            />,
+        )
+    }
+    return (
+        <Svg width="100%" height={pixel * count * 3} fill="none">
+            {lines}
+        </Svg>
+    )
+}
 Multiline.defaultProps = {
     color: themeColor.text,
+    count: 4,
 }
 
 export { Multiline }
