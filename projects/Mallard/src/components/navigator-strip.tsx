@@ -31,7 +31,7 @@ const Signpost = ({ fill, title }: { fill: string; title: string }) => (
     </G>
 )
 
-const Thermometer = ({
+const NavigatorStrip = ({
     title,
     fill,
     steps,
@@ -61,8 +61,8 @@ const Thermometer = ({
         </Svg>
     )
 }
-Thermometer.defaultProps = {
+NavigatorStrip.defaultProps = {
     fill: color.text,
     steps: 3,
 }
-export default Thermometer
+export { NavigatorStrip }
