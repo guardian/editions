@@ -48,19 +48,5 @@
     },
     "jest": {
         "preset": "react-native"
-    },
-    "workspaces": {
-        "nohoist": [
-            "react-native",
-            "react-native/**",
-            "react-native-zip-archive",
-            "react-native-svg",
-            "react-navigation",
-            "react-navigation/**",
-            "rn-fetch-blob",
-            "rn-fetch-blob/**",
-            "@react-native-community/async-storage",
-            "@guardian/pasteup"
-        ]
     }
 }
