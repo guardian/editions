@@ -6,6 +6,8 @@ import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
+import Thermometer from '../components/thermometer'
+
 const styles = StyleSheet.create({
     container,
     contentContainer: {},
@@ -27,7 +29,7 @@ const FrontRow: React.FC<{
                 paddingTop: metrics.vertical * 2,
             }}
         >
-            <HeadlineText>{front}</HeadlineText>
+            <Thermometer title={front} />
         </View>
         <Grid
             onPress={(item: string) => navigation.navigate('Article', item)}
