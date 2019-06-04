@@ -5,7 +5,7 @@ import Svg, { Rect } from 'react-native-svg'
 import { StyleSheet } from 'react-native'
 
 const pixel = StyleSheet.hairlineWidth * 2
-const gap = StyleSheet.hairlineWidth * 12
+const gap = pixel * 6
 
 const Multiline = ({ color, count }: { color: string; count: number }) => {
     const lines = []
