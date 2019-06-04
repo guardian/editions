@@ -20,11 +20,11 @@ const Signpost = ({ fill, title }: { fill: string; title: string }) => (
         />
         <Text
             fill={color.textOverDarkBackground}
-            fontSize="20"
-            fontWeight="bold"
+            fontSize="30"
             textAnchor="middle"
+            fontFamily="GTGuardianTitlepiece-Bold"
             x={signPostRadius}
-            y={signPostRadius + 5}
+            y={signPostRadius * 1.5}
         >
             {title[0]}
         </Text>
