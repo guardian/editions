@@ -11,7 +11,8 @@
         "run-ios": "react-native run-ios",
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard",
-        "build-android-debug": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res --verbose"
+        "build-android-debug": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+        "build-ios-debug": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios"
     },
     "rnpm": {
         "assets": [
