@@ -1,6 +1,7 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, Alert, PixelRatio } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
+import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { SlideCard } from '../layout/slide-card'
@@ -37,6 +38,26 @@ const styles = StyleSheet.create({
     },
 })
 
+const render = (article) => {
+    return `
+    <html>
+    <head></head>
+    <body>
+      ${article
+            .filter(el => el.type === 0)
+            .map(el => (
+                el.textTypeData.html
+            )).join('')}
+      <script>
+        setTimeout(function() {
+            window.ReactNativeWebView.postMessage(document.body.getBoundingClientRect().height)
+        }, 0)
+      </script>
+    </body>
+    </html>
+    `
+}
+
 const Article = ({
     navigation,
     article,
@@ -51,6 +72,8 @@ const Article = ({
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
+    const html = render(article)
+    const [height, setHeight] = useState(500)
     return (
         <SlideCard
             headerStyle={[
@@ -68,18 +91,24 @@ const Article = ({
                 {appearanceName === 'longread' ? (
                     <LongReadHeader {...{ headline, image, kicker }} />
                 ) : (
-                    <NewsHeader {...{ headline, image, kicker }} />
-                )}
+                        <NewsHeader {...{ headline, image, kicker }} />
+                    )}
                 <Standfirst {...{ byline, standfirst }} />
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
-                    {article
+                    <WebView originWhitelist={['*']}
+                        source={{ html: html }}
+                        onMessage={event => {
+                            setHeight(parseInt(event.nativeEvent.data) / PixelRatio.get())
+                        }}
+                        style={{ flex: 1, height: height }} />
+                    {/* {article
                         .filter(el => el.type === 0)
                         .map((el, index) => (
                             <View style={styles.block} key={index}>
                                 <Text>{el.textTypeData.html}</Text>
                             </View>
-                        ))}
+                        ))} */}
                 </View>
             </View>
         </SlideCard>
