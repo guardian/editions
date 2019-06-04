@@ -38,16 +38,15 @@ const styles = StyleSheet.create({
     },
 })
 
-const render = (article) => {
+const render = article => {
     return `
     <html>
     <head></head>
     <body>
       ${article
-            .filter(el => el.type === 0)
-            .map(el => (
-                el.textTypeData.html
-            )).join('')}
+          .filter(el => el.type === 0)
+          .map(el => el.textTypeData.html)
+          .join('')}
       <script>
         setTimeout(function() {
             window.ReactNativeWebView.postMessage(document.body.getBoundingClientRect().height)
@@ -91,17 +90,22 @@ const Article = ({
                 {appearanceName === 'longread' ? (
                     <LongReadHeader {...{ headline, image, kicker }} />
                 ) : (
-                        <NewsHeader {...{ headline, image, kicker }} />
-                    )}
+                    <NewsHeader {...{ headline, image, kicker }} />
+                )}
                 <Standfirst {...{ byline, standfirst }} />
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
-                    <WebView originWhitelist={['*']}
+                    <WebView
+                        originWhitelist={['*']}
                         source={{ html: html }}
                         onMessage={event => {
-                            setHeight(parseInt(event.nativeEvent.data) / PixelRatio.get())
+                            setHeight(
+                                parseInt(event.nativeEvent.data) /
+                                    PixelRatio.get(),
+                            )
                         }}
-                        style={{ flex: 1, height: height }} />
+                        style={{ flex: 1, height: height }}
+                    />
                     {/* {article
                         .filter(el => el.type === 0)
                         .map((el, index) => (
