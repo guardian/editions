@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 })
 
 const Standfirst = ({ standfirst, byline }: PropTypes) => {
-    const { appearance } = useArticleAppearance()
+    const { appearance, name } = useArticleAppearance()
     return (
         <View style={[styles.background, appearance.backgrounds]}>
             <StandfirstText style={[appearance.text, appearance.standfirst]}>
@@ -49,6 +49,7 @@ const Standfirst = ({ standfirst, byline }: PropTypes) => {
                 ]}
             >
                 <Multiline
+                    count={name === 'comment' ? 8 : 4}
                     color={
                         StyleSheet.flatten([appearance.text, appearance.byline])
                             .color
