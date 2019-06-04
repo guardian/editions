@@ -2,9 +2,15 @@ import React from 'react'
 import { color as themeColor } from '../theme/color'
 
 import Svg, { G, Path } from 'react-native-svg'
+import { metrics } from '../theme/spacing'
 
 const Chevron = ({ color }: { color: string }) => (
-    <Svg width="37" height="11" viewBox="0 0 37 11" fill="none">
+    <Svg
+        width="37"
+        height={metrics.headerHeight / 4}
+        viewBox="0 0 37 11"
+        fill="none"
+    >
         <G opacity="0.5">
             <Path
                 fill-rule="evenodd"

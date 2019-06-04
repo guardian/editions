@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react'
+import React from 'react'
 import {
     Animated,
     StyleSheet,
     View,
     TouchableWithoutFeedback,
+    StyleProp,
 } from 'react-native'
 import { Chevron } from '../../chevron'
 import { metrics } from '../../../theme/spacing'
+import { color } from '../../../theme/color'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -34,13 +36,17 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
-    const color = useMemo(() => {
-        const flat = StyleSheet.flatten(style) as { color?: string }
-        if (flat.color) return flat.color
-        return undefined
-    }, [style])
-
+const Header = ({
+    scrollY,
+    fadesHeaderIn,
+    style,
+    onDismiss,
+}: {
+    scrollY: Animated.Value
+    fadesHeaderIn: boolean
+    style: StyleProp<{}>
+    onDismiss: () => void
+}) => {
     return (
         <View style={[styles.headerContainer]}>
             <TouchableWithoutFeedback
@@ -56,7 +62,7 @@ const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
                                     translateY: scrollY.interpolate({
                                         inputRange: [0, 100],
                                         outputRange: [
-                                            metrics.headerHeight / -4,
+                                            metrics.headerHeight / -10,
                                             0,
                                         ],
                                         extrapolate: 'clamp',
@@ -66,7 +72,11 @@ const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
                         },
                     ]}
                 >
-                    <Chevron color={color} />
+                    <Chevron
+                        color={
+                            fadesHeaderIn ? color.textOverPrimary : color.text
+                        }
+                    />
                 </Animated.View>
             </TouchableWithoutFeedback>
             <Animated.View
@@ -74,7 +84,6 @@ const Header = ({ scrollY, fadesHeaderIn, style, onDismiss }: any) => {
                     style,
                     StyleSheet.absoluteFillObject,
                     styles.headerBackground,
-                    ,
                     fadesHeaderIn
                         ? {
                               opacity: scrollY.interpolate({
