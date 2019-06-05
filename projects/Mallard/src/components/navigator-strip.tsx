@@ -34,15 +34,17 @@ const Signpost = ({ fill, title }: { fill: string; title: string }) => (
 const NavigatorStrip = ({
     title,
     fill,
-    steps,
+    stops,
 }: {
-    fill: string
     title: string
-    steps: number
+    fill: string
+    stops: number
 }) => {
-    const stops = []
-    for (let i = 1; i < steps - 1; i++) {
-        stops.push(<Stop cx={`${(i / (steps - 1)) * 100}%`} fill={fill} />)
+    const stopElements = []
+    for (let i = 1; i < stops - 1; i++) {
+        stopElements.push(
+            <Stop cx={`${(i / (stops - 1)) * 100}%`} fill={fill} />,
+        )
     }
 
     return (
@@ -54,15 +56,15 @@ const NavigatorStrip = ({
                 y2={signPostRadius}
                 stroke={fill}
             />
-            {stops}
+            {stopElements}
             <Stop cx={radius} fill={fill} />
-            <Stop fill={fill} cx={'100%'} translateX={radius * -1} />
+            <Stop cx={'100%'} translateX={radius * -1} fill={fill} />
             <Signpost title={title} fill={fill} />
         </Svg>
     )
 }
 NavigatorStrip.defaultProps = {
     fill: color.text,
-    steps: 3,
+    stops: 3,
 }
 export { NavigatorStrip }
