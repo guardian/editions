@@ -44,13 +44,13 @@ const render = article => {
     <head></head>
     <body>
       ${article
-          .filter(el => el.type === 0)
-          .map(el => el.textTypeData.html)
-          .join('')}
+            .filter(el => el.type === 0)
+            .map(el => el.textTypeData.html)
+            .join('')}
       <script>
-        setTimeout(function() {
+        window.requestAnimationFrame(function() {
             window.ReactNativeWebView.postMessage(document.body.getBoundingClientRect().height)
-        }, 0)
+        })
       </script>
     </body>
     </html>
@@ -90,8 +90,8 @@ const Article = ({
                 {appearanceName === 'longread' ? (
                     <LongReadHeader {...{ headline, image, kicker }} />
                 ) : (
-                    <NewsHeader {...{ headline, image, kicker }} />
-                )}
+                        <NewsHeader {...{ headline, image, kicker }} />
+                    )}
                 <Standfirst {...{ byline, standfirst }} />
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
@@ -101,7 +101,7 @@ const Article = ({
                         onMessage={event => {
                             setHeight(
                                 parseInt(event.nativeEvent.data) /
-                                    PixelRatio.get(),
+                                PixelRatio.get(),
                             )
                         }}
                         style={{ flex: 1, height: height }}
