@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet } from 'react-native'
+import { ScrollView, View, StyleSheet, Dimensions } from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
@@ -18,30 +18,58 @@ const FrontRow: React.FC<{
     front: any
     issue: any
     navigation: any
-}> = ({ frontsData, front, issue, navigation }) => (
-    <>
-        <View
-            style={{
-                padding: metrics.horizontal,
-                paddingBottom: 0,
-                paddingTop: metrics.vertical * 2,
-            }}
-        >
-            <HeadlineText>{front}</HeadlineText>
-        </View>
-        <Grid
-            onPress={(item: string) => navigation.navigate('Article', item)}
-            data={frontsData.map(([title]: any[], index: number) => ({
-                issue,
-                front,
-                article: index,
-                key: index.toString(),
-                title,
-                headline: title,
-            }))}
-        />
-    </>
-)
+}> = ({ frontsData, front, issue, navigation }) => {
+    const { width } = Dimensions.get('window')
+    return (
+        <>
+            <View
+                style={{
+                    padding: metrics.horizontal,
+                    paddingBottom: 0,
+                    paddingTop: metrics.vertical * 2,
+                }}
+            >
+                <HeadlineText>{front}</HeadlineText>
+            </View>
+            <ScrollView horizontal={true} pagingEnabled>
+                <View style={{ width }}>
+                    <Grid
+                        onPress={(item: string) =>
+                            navigation.navigate('Article', item)
+                        }
+                        data={frontsData.map(
+                            ([title]: any[], index: number) => ({
+                                issue,
+                                front,
+                                article: index,
+                                key: index.toString(),
+                                title,
+                                headline: title,
+                            }),
+                        )}
+                    />
+                </View>
+                <View style={{ width }}>
+                    <Grid
+                        onPress={(item: string) =>
+                            navigation.navigate('Article', item)
+                        }
+                        data={frontsData.map(
+                            ([title]: any[], index: number) => ({
+                                issue,
+                                front,
+                                article: index,
+                                key: index.toString(),
+                                title,
+                                headline: title,
+                            }),
+                        )}
+                    />
+                </View>
+            </ScrollView>
+        </>
+    )
+}
 
 const FrontScreen = ({
     navigation,
