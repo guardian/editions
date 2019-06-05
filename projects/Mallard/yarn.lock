@@ -655,6 +655,16 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@creditkarma/thrift-server-core@^0.13.6":
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/@creditkarma/thrift-server-core/-/thrift-server-core-0.13.6.tgz#065e9f83300e7fff66049f8a32c5ffba546dd1bb"
+  integrity sha512-mggZtxkk6C89HVVmA+s5lAO6bxyENxLCbse+Jd1Q8HQ6jbOk5t94nHNV8ZMacuk056WNe5QVUequM4KJO8LcoA==
+
+"@guardian/capi-ts@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/capi-ts/-/capi-ts-0.1.0.tgz#c218e08c7ae00324d7aa90e502e52a739e751abe"
+  integrity sha512-zxCPW+9O7xkiQOp284D5WwdN9X+EEWA1qM5aAkocef7le90NfYqlyNy+z7ndtjbYjfuf0mfWozCKiKFNwjg0GA==
+
 "@guardian/pasteup@^1.0.0-alpha.11":
   version "1.0.0-alpha.11"
   resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.11.tgz#a1e442b6dba4540fce1273eff74abb74c0652f2d"
@@ -935,6 +945,11 @@
   dependencies:
     "@types/jest-diff" "*"
 
+"@types/node@^12.0.4":
+  version "12.0.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.4.tgz#46832183115c904410c275e34cf9403992999c32"
+  integrity sha512-j8YL2C0fXq7IONwl/Ud5Kt0PeXw22zGERt+HSSnwbKOJVsAGkEz3sFCYwaF9IOuoG1HOtE0vKCj6sXF7Q0+Vaw==
+
 "@types/prop-types@*":
   version "15.7.1"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.1.tgz#f1a11e7babb0c3cad68100be381d1e064c68f1f6"
@@ -970,11 +985,6 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
-
-"@types/rn-fetch-blob@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@types/rn-fetch-blob/-/rn-fetch-blob-1.2.1.tgz#c20e9d66e8a0e600508682f58160ecaeb8586142"
-  integrity sha512-Fv/0HFckui0cDayYcno+0IT98t7pmtVesjqUh5p1EuOPMn13uhYoJZDCdhN4iHuVqcnCLXZkmwd+T82DN7ASJw==
 
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
