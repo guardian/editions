@@ -12,7 +12,8 @@
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard",
         "build-android-debug": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-        "build-ios-debug": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios"
+        "build-ios-debug": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
+        "rn-link": "react-native link"
     },
     "rnpm": {
         "assets": [
@@ -26,6 +27,7 @@
         "react-native": "0.59.3",
         "react-native-gesture-handler": "^1.2.1",
         "react-native-svg": "^9.4.0",
+        "react-native-webview": "^5.11.0",
         "react-native-zip-archive": "^4.0.1",
         "react-navigation": "3.9.1",
         "react-navigation-fluid-transitions": "^0.3.2",
