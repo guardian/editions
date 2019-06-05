@@ -1,5 +1,12 @@
-import React from 'react'
-import { ScrollView, View, StyleSheet, Dimensions } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+    ScrollView,
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    Animated,
+} from 'react-native'
 import { MonoTextBlock, HeadlineText } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
@@ -22,6 +29,14 @@ const FrontRow: React.FC<{
     navigation: any
 }> = ({ frontsData, front, issue, navigation }) => {
     const { width } = Dimensions.get('window')
+    const [asdf, ff] = useState(0)
+    const [scrollX] = useState(() => new Animated.Value(0))
+    useEffect(() => {
+        scrollX.addListener(({ value }) => {
+            ff(value)
+        })
+    }, [])
+
     return (
         <>
             <View
@@ -29,11 +44,35 @@ const FrontRow: React.FC<{
                     padding: metrics.horizontal,
                     paddingBottom: 0,
                     paddingTop: metrics.vertical * 2,
+                    overflow: 'visible',
                 }}
             >
-                <NavigatorStrip title={front} />
+                <NavigatorStrip
+                    title={front}
+                    position={scrollX.interpolate({
+                        inputRange: [0, width * 2],
+                        outputRange: [0, 1],
+                    })}
+                />
+                <Text>{asdf}</Text>
             </View>
-            <ScrollView horizontal={true} pagingEnabled>
+            <Animated.ScrollView
+                scrollEventThrottle={1}
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: {
+                                    x: scrollX,
+                                },
+                            },
+                        },
+                    ],
+                    { useNativeDriver: true },
+                )}
+                horizontal={true}
+                pagingEnabled
+            >
                 <View style={{ width }}>
                     <Grid
                         onPress={(item: string) =>
@@ -68,7 +107,24 @@ const FrontRow: React.FC<{
                         )}
                     />
                 </View>
-            </ScrollView>
+                <View style={{ width }}>
+                    <Grid
+                        onPress={(item: string) =>
+                            navigation.navigate('Article', item)
+                        }
+                        data={frontsData.map(
+                            ([title]: any[], index: number) => ({
+                                issue,
+                                front,
+                                article: index,
+                                key: index.toString(),
+                                title,
+                                headline: title,
+                            }),
+                        )}
+                    />
+                </View>
+            </Animated.ScrollView>
         </>
     )
 }
