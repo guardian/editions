@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
-import Svg, { Circle, Text, Line, G } from 'react-native-svg'
+import Svg, { Circle, Text, Line, G, Rect } from 'react-native-svg'
 import { color } from '../theme/color'
 import { Animated, View, Dimensions } from 'react-native'
 
 const radius = 4
-const signPostRadius = 20
+const signPostRadius = 18
 
 const Stop = ({ fill, ...props }: { fill: string; [key: string]: any }) => {
     return <Circle r={radius} cy={signPostRadius} fill={fill} {...props} />
@@ -16,32 +16,91 @@ const AnimatedG = Animated.createAnimatedComponent(G)
 const Signpost = ({
     fill,
     title,
-    ...props
+    position,
 }: {
     fill: string
     title: string
-    [key: string]: any
-}) => (
-    <AnimatedG {...props}>
-        <Circle
-            cy={signPostRadius}
-            cx={signPostRadius}
-            fill={fill}
-            r={signPostRadius}
-            opacity={0.2}
-        />
-        <Text
-            fill={color.textOverDarkBackground}
-            fontSize="30"
-            textAnchor="middle"
-            fontFamily="GTGuardianTitlepiece-Bold"
-            x={signPostRadius}
-            y={signPostRadius * 1.5}
-        >
-            {title[0]}
-        </Text>
-    </AnimatedG>
-)
+    position: Animated.AnimatedInterpolation
+}) => {
+    const [textWidth, setTextWidth] = useState(1)
+    return (
+        <>
+            <AnimatedG
+                style={[
+                    {
+                        opacity: position.interpolate({
+                            inputRange: [0, 20],
+                            outputRange: [0, 1],
+                        }),
+                        transform: [
+                            {
+                                translateX: position,
+                            },
+                        ],
+                    },
+                ]}
+            >
+                <Circle
+                    cy={signPostRadius}
+                    cx={signPostRadius}
+                    fill={fill}
+                    r={signPostRadius}
+                />
+                <Text
+                    fill={color.textOverDarkBackground}
+                    fontSize="22"
+                    textAnchor="middle"
+                    fontFamily="GTGuardianTitlepiece-Bold"
+                    x={signPostRadius}
+                    y={signPostRadius * 1.4}
+                >
+                    {title[0]}
+                </Text>
+            </AnimatedG>
+            <AnimatedG
+                style={[
+                    {
+                        opacity: position.interpolate({
+                            inputRange: [0, 20],
+                            outputRange: [1, 0],
+                        }),
+                        transform: [
+                            {
+                                scaleX: position.interpolate({
+                                    inputRange: [0, 20],
+                                    outputRange: [1, 0.5],
+                                    extrapolate: 'clamp',
+                                }),
+                                translateX: position,
+                            },
+                        ],
+                    },
+                ]}
+            >
+                <Rect
+                    x={0}
+                    y={0}
+                    width={textWidth + signPostRadius * 2}
+                    height={signPostRadius * 2}
+                    fill={fill}
+                    rx={signPostRadius}
+                />
+                <Text
+                    onLayout={ev => {
+                        setTextWidth(ev.nativeEvent.layout.width)
+                    }}
+                    fill={color.textOverDarkBackground}
+                    fontSize="22"
+                    fontFamily="GTGuardianTitlepiece-Bold"
+                    x={signPostRadius * 0.9}
+                    y={signPostRadius * 1.4}
+                >
+                    {title}
+                </Text>
+            </AnimatedG>
+        </>
+    )
+}
 
 const NavigatorStrip = ({
     title,
@@ -61,14 +120,14 @@ const NavigatorStrip = ({
         )
     }
 
-    const [width, setWidth] = useState(Dimensions.get('window').width)
+    const [width, setWidth] = useState(0)
 
     return (
         <View
             onLayout={ev => {
                 setWidth(ev.nativeEvent.layout.width)
             }}
-            style={{ overflow: 'visible' }}
+            style={{ opacity: width !== 0 ? 1 : 0 }}
         >
             <Svg
                 width="100%"
@@ -86,21 +145,10 @@ const NavigatorStrip = ({
                 <Stop cx={radius} fill={fill} />
                 <Stop cx={'100%'} translateX={radius * -1} fill={fill} />
                 <Signpost
-                    style={[
-                        {
-                            transform: [
-                                {
-                                    translateX: position.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [
-                                            0,
-                                            width - signPostRadius * 2,
-                                        ],
-                                    }),
-                                },
-                            ],
-                        },
-                    ]}
+                    position={position.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, width - signPostRadius * 2],
+                    })}
                     title={title}
                     fill={fill}
                 />

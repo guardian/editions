@@ -29,14 +29,7 @@ const FrontRow: React.FC<{
     navigation: any
 }> = ({ frontsData, front, issue, navigation }) => {
     const { width } = Dimensions.get('window')
-    const [asdf, ff] = useState(0)
     const [scrollX] = useState(() => new Animated.Value(0))
-    useEffect(() => {
-        scrollX.addListener(({ value }) => {
-            ff(value)
-        })
-    }, [])
-
     return (
         <>
             <View
@@ -54,7 +47,6 @@ const FrontRow: React.FC<{
                         outputRange: [0, 1],
                     })}
                 />
-                <Text>{asdf}</Text>
             </View>
             <Animated.ScrollView
                 scrollEventThrottle={1}
