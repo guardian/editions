@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
     ScrollView,
     View,
@@ -30,6 +30,13 @@ const FrontRow: React.FC<{
 }> = ({ frontsData, front, issue, navigation }) => {
     const { width } = Dimensions.get('window')
     const [scrollX] = useState(() => new Animated.Value(0))
+    const scrollViewRef = useRef()
+    const pages = 3
+    const getScrollPos = x =>
+        (x - metrics.horizontal) *
+        ((width - metrics.horizontal * 4) / width) *
+        pages
+
     return (
         <>
             <View
@@ -37,18 +44,36 @@ const FrontRow: React.FC<{
                     padding: metrics.horizontal,
                     paddingBottom: 0,
                     paddingTop: metrics.vertical * 2,
-                    overflow: 'visible',
                 }}
             >
                 <NavigatorStrip
                     title={front}
+                    onScrub={x => {
+                        if (
+                            x > 20 &&
+                            scrollViewRef.current &&
+                            scrollViewRef.current._component
+                        ) {
+                            scrollViewRef.current._component.scrollTo({
+                                x: getScrollPos(x),
+                                animated: false,
+                            })
+                        }
+                    }}
+                    onReleaseScrub={x => {
+                        const page = Math.round(getScrollPos(x) / width)
+                        scrollViewRef.current._component.scrollTo({
+                            x: width * page,
+                        })
+                    }}
                     position={scrollX.interpolate({
-                        inputRange: [0, width * 2],
+                        inputRange: [0, width * (pages - 1)],
                         outputRange: [0, 1],
                     })}
                 />
             </View>
             <Animated.ScrollView
+                ref={scrollView => (scrollViewRef.current = scrollView)}
                 scrollEventThrottle={1}
                 onScroll={Animated.event(
                     [

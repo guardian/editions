@@ -1,28 +1,42 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Svg, { Circle, Text, Line, G, Rect } from 'react-native-svg'
 import { color } from '../theme/color'
-import { Animated, View, Dimensions } from 'react-native'
+import { Animated, View, PanResponder } from 'react-native'
 
 const radius = 4
 const signPostRadius = 18
+const AnimatedG = Animated.createAnimatedComponent(G)
 
 const Stop = ({ fill, ...props }: { fill: string; [key: string]: any }) => {
     return <Circle r={radius} cy={signPostRadius} fill={fill} {...props} />
 }
 
-const AnimatedG = Animated.createAnimatedComponent(G)
+const Stops = ({ fill, stops }: { fill: string; stops: number }) => {
+    const stopElements = [
+        <Stop cx={radius} fill={fill} />,
+        <Stop cx={'100%'} translateX={radius * -1} fill={fill} />,
+    ]
+    for (let i = 1; i < stops - 1; i++) {
+        stopElements.push(
+            <Stop cx={`${(i / (stops - 1)) * 100}%`} fill={fill} />,
+        )
+    }
+    return <>{stopElements}</>
+}
 
 const Signpost = ({
     fill,
     title,
     position,
+    containerWidth,
 }: {
     fill: string
     title: string
     position: Animated.AnimatedInterpolation
+    containerWidth: number
 }) => {
-    const [textWidth, setTextWidth] = useState(1)
+    const [textWidth, setTextWidth] = useState(0)
     return (
         <>
             <AnimatedG
@@ -60,10 +74,12 @@ const Signpost = ({
             <AnimatedG
                 style={[
                     {
-                        opacity: position.interpolate({
-                            inputRange: [0, 20],
-                            outputRange: [1, 0],
-                        }),
+                        opacity: textWidth
+                            ? position.interpolate({
+                                  inputRange: [0, 20],
+                                  outputRange: [1, 0],
+                              })
+                            : 0,
                         transform: [
                             {
                                 scaleX: position.interpolate({
@@ -87,7 +103,10 @@ const Signpost = ({
                 />
                 <Text
                     onLayout={ev => {
-                        setTextWidth(ev.nativeEvent.layout.width)
+                        const { width } = ev.nativeEvent.layout
+                        if (width < containerWidth) {
+                            setTextWidth(width)
+                        }
                     }}
                     fill={color.textOverDarkBackground}
                     fontSize="22"
@@ -107,27 +126,41 @@ const NavigatorStrip = ({
     fill,
     stops,
     position,
+    onScrub,
+    onReleaseScrub,
 }: {
     title: string
     fill: string
     stops: number
     position: Animated.AnimatedInterpolation
+    onScrub: (to: number) => void
+    onReleaseScrub: (to: number) => void
 }) => {
-    const stopElements = []
-    for (let i = 1; i < stops - 1; i++) {
-        stopElements.push(
-            <Stop cx={`${(i / (stops - 1)) * 100}%`} fill={fill} />,
-        )
-    }
-
     const [width, setWidth] = useState(0)
-
+    const [panResponder] = useState(() =>
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderTerminationRequest: () => false,
+            onPanResponderStart: (evt, gestureState) => {
+                onScrub(gestureState.x0 - signPostRadius)
+            },
+            onPanResponderMove: (evt, gestureState) => {
+                onScrub(gestureState.moveX - signPostRadius)
+            },
+            onPanResponderEnd: (evt, gestureState) => {
+                onReleaseScrub(
+                    gestureState.x0 + gestureState.dx - signPostRadius,
+                )
+            },
+        }),
+    )
     return (
         <View
             onLayout={ev => {
                 setWidth(ev.nativeEvent.layout.width)
             }}
-            style={{ opacity: width !== 0 ? 1 : 0 }}
+            {...panResponder.panHandlers}
         >
             <Svg
                 width="100%"
@@ -141,14 +174,13 @@ const NavigatorStrip = ({
                     y2={signPostRadius}
                     stroke={fill}
                 />
-                {stopElements}
-                <Stop cx={radius} fill={fill} />
-                <Stop cx={'100%'} translateX={radius * -1} fill={fill} />
+                <Stops stops={stops} fill={fill} />
                 <Signpost
                     position={position.interpolate({
                         inputRange: [0, 1],
                         outputRange: [0, width - signPostRadius * 2],
                     })}
+                    containerWidth={width}
                     title={title}
                     fill={fill}
                 />
