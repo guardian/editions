@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Alert, PixelRatio } from 'react-native'
+import { View, StyleSheet, PixelRatio } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
@@ -106,13 +106,6 @@ const Article = ({
                         }}
                         style={{ flex: 1, height: height }}
                     />
-                    {/* {article
-                        .filter(el => el.type === 0)
-                        .map((el, index) => (
-                            <View style={styles.block} key={index}>
-                                <Text>{el.textTypeData.html}</Text>
-                            </View>
-                        ))} */}
                 </View>
             </View>
         </SlideCard>
