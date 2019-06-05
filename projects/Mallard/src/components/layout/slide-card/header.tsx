@@ -74,7 +74,9 @@ const Header = ({
                 >
                     <Chevron
                         color={
-                            fadesHeaderIn ? color.textOverDarkBackground : color.text
+                            fadesHeaderIn
+                                ? color.textOverDarkBackground
+                                : color.text
                         }
                     />
                 </Animated.View>
