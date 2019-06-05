@@ -12,6 +12,7 @@ export const Grid = ({ data, onPress }: any) => {
     return (
         <FlatList
             numColumns={2}
+            scrollEnabled={false}
             style={{
                 margin: metrics.horizontal - metrics.horizontal / 4,
             }}
