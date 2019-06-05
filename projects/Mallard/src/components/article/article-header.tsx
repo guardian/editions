@@ -30,7 +30,7 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
         paddingBottom: metrics.vertical,
-        paddingTop: metrics.headerHeight,
+        paddingTop: metrics.headerHeight + metrics.vertical / 2,
         ...articleAppearances.default.backgrounds,
     },
     kicker: {
