@@ -18,6 +18,7 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
+import { IBlockElement } from '@guardian/capi-ts'
 
 /* 
 This is the article view! For all of the articles. 
@@ -38,15 +39,15 @@ const styles = StyleSheet.create({
     },
 })
 
-const render = article => {
+const render = (article: IBlockElement[]) => {
     return `
     <html>
     <head></head>
     <body>
       ${article
-          .filter(el => el.type === 0)
-          .map(el => el.textTypeData.html)
-          .join('')}
+            .filter(el => el.type === 0)
+            .map(el => el.textTypeData && el.textTypeData.html)
+            .join('')}
       <script>
         window.requestAnimationFrame(function() {
             window.ReactNativeWebView.postMessage(document.body.getBoundingClientRect().height)
@@ -67,7 +68,7 @@ const Article = ({
     standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: any[]
+    article: IBlockElement[]
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
@@ -90,8 +91,8 @@ const Article = ({
                 {appearanceName === 'longread' ? (
                     <LongReadHeader {...{ headline, image, kicker }} />
                 ) : (
-                    <NewsHeader {...{ headline, image, kicker }} />
-                )}
+                        <NewsHeader {...{ headline, image, kicker }} />
+                    )}
                 <Standfirst {...{ byline, standfirst }} />
 
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
@@ -101,7 +102,7 @@ const Article = ({
                         onMessage={event => {
                             setHeight(
                                 parseInt(event.nativeEvent.data) /
-                                    PixelRatio.get(),
+                                PixelRatio.get(),
                             )
                         }}
                         style={{ flex: 1, height: height }}
