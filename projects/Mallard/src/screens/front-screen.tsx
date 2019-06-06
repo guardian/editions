@@ -36,7 +36,7 @@ const getScrollPos = (screenX: number) => {
     const { width } = Dimensions.get('window')
     return (
         (screenX - metrics.horizontal) *
-        ((width - metrics.horizontal * 4) / width)
+        ((width - metrics.horizontal * 6) / width)
     )
 }
 const getNearestPage = (screenX: number, pageCount: number) => {
@@ -130,7 +130,7 @@ const FrontRow: React.FC<{
                                 issue,
                                 front,
                                 article: index,
-                                key: index.toString() + '1',
+                                key: index.toString() + front + '1',
                                 title,
                                 headline: title,
                             }),
@@ -147,7 +147,7 @@ const FrontRow: React.FC<{
                                 issue,
                                 front,
                                 article: index,
-                                key: index.toString() + '2',
+                                key: index.toString() + front + '2',
                                 title,
                                 headline: title,
                             }),
@@ -164,7 +164,7 @@ const FrontRow: React.FC<{
                                 issue,
                                 front,
                                 article: index,
-                                key: index.toString() + '3',
+                                key: index.toString() + front + '3',
                                 title,
                                 headline: title,
                             }),
