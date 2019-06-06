@@ -1,22 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { color } from '../../theme/color'
 import { Animated, Text, StyleSheet } from 'react-native'
 import { signPostRadius } from './helpers'
 
-const Scrubber = ({
-    children,
-    fill,
-    position,
-    scrubbing,
-}: {
-    fill: string
-    children: string
-    position: Animated.AnimatedInterpolation
-    scrubbing: boolean
-}) => {
-    const styles = StyleSheet.create({
-        bubble: {
+const getStyles = (fill: string) =>
+    StyleSheet.create({
+        root: {
             height: signPostRadius * 2,
             minWidth: signPostRadius * 2,
             paddingHorizontal: signPostRadius * 0.55,
@@ -27,7 +17,7 @@ const Scrubber = ({
             flex: 0,
             width: 'auto',
         },
-        innerBubble: {
+        bubble: {
             backgroundColor: fill,
             borderRadius: signPostRadius,
             zIndex: -1,
@@ -42,9 +32,22 @@ const Scrubber = ({
             fontFamily: 'GTGuardianTitlepiece-Bold',
         },
     })
+
+const Scrubber = ({
+    children,
+    fill,
+    position,
+    scrubbing,
+}: {
+    fill: string
+    children: string
+    position: Animated.AnimatedInterpolation
+    scrubbing: boolean
+}) => {
+    const styles = useMemo(() => getStyles(fill), [fill])
     return (
         <Animated.View
-            style={[styles.bubble, { transform: [{ translateX: position }] }]}
+            style={[styles.root, { transform: [{ translateX: position }] }]}
         >
             <Animated.Text
                 style={[
@@ -75,7 +78,7 @@ const Scrubber = ({
             </Animated.Text>
             <Animated.View
                 style={[
-                    styles.innerBubble,
+                    styles.bubble,
                     {
                         opacity: position.interpolate({
                             inputRange: [0, 20],
@@ -94,7 +97,7 @@ const Scrubber = ({
             />
             <Animated.View
                 style={[
-                    styles.innerBubble,
+                    styles.bubble,
                     {
                         width: signPostRadius * 2,
                         alignItems: 'center',
