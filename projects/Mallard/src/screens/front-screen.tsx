@@ -13,7 +13,7 @@ import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
-import { NavigatorStrip } from '../components/navigator'
+import { Navigator } from '../components/navigator'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -63,7 +63,7 @@ const FrontRow: React.FC<{
                     paddingTop: metrics.vertical * 2,
                 }}
             >
-                <NavigatorStrip
+                <Navigator
                     title={front}
                     onScrub={screenX => {
                         if (

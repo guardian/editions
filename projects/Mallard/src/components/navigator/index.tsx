@@ -8,7 +8,7 @@ import { Background } from './background'
 const scrubberRadius = 18
 const stopRadius = 4
 
-const NavigatorStrip = ({
+const Navigator = ({
     title,
     fill,
     stops,
@@ -76,8 +76,8 @@ const NavigatorStrip = ({
         </View>
     )
 }
-NavigatorStrip.defaultProps = {
+Navigator.defaultProps = {
     fill: color.text,
     stops: 3,
 }
-export { NavigatorStrip }
+export { Navigator }
