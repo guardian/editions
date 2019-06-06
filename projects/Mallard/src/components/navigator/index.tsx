@@ -91,13 +91,6 @@ const NavigatorStrip = ({
             <Scrubber
                 position={scaledPosition}
                 scrubbing={scrubbing}
-                style={{
-                    transform: [
-                        {
-                            translateX: scaledPosition,
-                        },
-                    ],
-                }}
                 fill={fill}
             >
                 {title}

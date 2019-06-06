@@ -15,6 +15,10 @@ import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
 import { NavigatorStrip } from '../components/navigator'
 
+interface AnimatedScrollViewRef {
+    _component: ScrollView
+}
+
 const styles = StyleSheet.create({
     container,
     contentContainer: {},
@@ -30,19 +34,25 @@ const FrontRow: React.FC<{
 }> = ({ frontsData, front, issue, navigation }) => {
     const { width } = Dimensions.get('window')
     const [scrollX] = useState(() => new Animated.Value(0))
-    const scrollViewRef = useRef()
+    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
     const pages = 3
-    const getScrollPos = x => {
+
+    /* 
+    Map the position of the tap on the screen to 
+    the position of the tap on the scrubber itself (which has padding). 
+    This is coupled to the visual layout and we can be a bit more 
+    clever but also for now this works 
+    */
+    const getScrollPos = (screenX: number) => {
         const { width } = Dimensions.get('window')
         return (
-            (x - metrics.horizontal) *
-            ((width - metrics.horizontal * 4) / width) *
-            pages
+            (screenX - metrics.horizontal) *
+            ((width - metrics.horizontal * 4) / width)
         )
     }
-    const getNearestPage = x => {
+    const getNearestPage = (screenX: number) => {
         const { width } = Dimensions.get('window')
-        return Math.round(getScrollPos(x) / width)
+        return Math.round((getScrollPos(screenX) * pages) / width)
     }
     return (
         <>
@@ -55,23 +65,28 @@ const FrontRow: React.FC<{
             >
                 <NavigatorStrip
                     title={front}
-                    onScrub={x => {
+                    onScrub={screenX => {
                         if (
                             scrollViewRef.current &&
                             scrollViewRef.current._component
                         ) {
                             scrollViewRef.current._component.scrollTo({
-                                x: getScrollPos(x),
+                                x: getScrollPos(screenX) * pages,
                                 animated: false,
                             })
                         }
                     }}
-                    onReleaseScrub={x => {
-                        scrollViewRef.current._component.scrollTo({
-                            x:
-                                Dimensions.get('window').width *
-                                getNearestPage(x),
-                        })
+                    onReleaseScrub={screenX => {
+                        if (
+                            scrollViewRef.current &&
+                            scrollViewRef.current._component
+                        ) {
+                            scrollViewRef.current._component.scrollTo({
+                                x:
+                                    Dimensions.get('window').width *
+                                    getNearestPage(screenX),
+                            })
+                        }
                     }}
                     position={scrollX.interpolate({
                         inputRange: [
@@ -83,7 +98,9 @@ const FrontRow: React.FC<{
                 />
             </View>
             <Animated.ScrollView
-                ref={scrollView => (scrollViewRef.current = scrollView)}
+                ref={(scrollView: AnimatedScrollViewRef) =>
+                    (scrollViewRef.current = scrollView)
+                }
                 scrollEventThrottle={1}
                 onScroll={Animated.event(
                     [

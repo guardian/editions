@@ -1,26 +1,18 @@
 import React from 'react'
 
 import { color } from '../../theme/color'
-import {
-    Animated,
-    Text as NativeText,
-    StyleSheet,
-    ViewStyle,
-    StyleProp,
-} from 'react-native'
+import { Animated, Text, StyleSheet } from 'react-native'
 import { signPostRadius } from './helpers'
 
 const Scrubber = ({
     children,
     fill,
     position,
-    style,
     scrubbing,
 }: {
     fill: string
     children: string
     position: Animated.AnimatedInterpolation
-    style: StyleProp<ViewStyle>
     scrubbing: boolean
 }) => {
     const styles = StyleSheet.create({
@@ -51,7 +43,9 @@ const Scrubber = ({
         },
     })
     return (
-        <Animated.View style={[styles.bubble, style]}>
+        <Animated.View
+            style={[styles.bubble, { transform: [{ translateX: position }] }]}
+        >
             <Animated.Text
                 style={[
                     styles.text,
@@ -123,7 +117,7 @@ const Scrubber = ({
                     },
                 ]}
             >
-                <NativeText style={[styles.text]}>{children[0]}</NativeText>
+                <Text style={[styles.text]}>{children[0]}</Text>
             </Animated.View>
         </Animated.View>
     )
