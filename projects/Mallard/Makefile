@@ -6,3 +6,4 @@ debug-android:
 
 debug-ios:
 	yarn build-ios-debug
+    xcodebuild archive -allowProvisioningUpdates -configuration Debug -scheme Mallard -derivedDataPath ./ -archivePath "./Mallard.xcarchive" > build.log
