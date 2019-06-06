@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useState, useRef } from 'react'
 import {
     ScrollView,
     View,
-    Text,
     StyleSheet,
     Dimensions,
     Animated,
 } from 'react-native'
-import { MonoTextBlock, HeadlineText } from '../components/styled-text'
+import { MonoTextBlock } from '../components/styled-text'
 import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
@@ -26,6 +25,24 @@ const styles = StyleSheet.create({
 
 const useFrontsData = () => useEndpoint('', [], res => res)
 
+/* 
+Map the position of the tap on the screen to 
+the position of the tap on the scrubber itself (which has padding). 
+This is coupled to the visual layout and we can be a bit more 
+clever but also for now this works 
+*/
+const getScrollPos = (screenX: number) => {
+    const { width } = Dimensions.get('window')
+    return (
+        (screenX - metrics.horizontal) *
+        ((width - metrics.horizontal * 4) / width)
+    )
+}
+const getNearestPage = (screenX: number, pageCount: number) => {
+    const { width } = Dimensions.get('window')
+    return Math.round((getScrollPos(screenX) * pageCount) / width)
+}
+
 const FrontRow: React.FC<{
     frontsData: any
     front: any
@@ -37,23 +54,6 @@ const FrontRow: React.FC<{
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
     const pages = 3
 
-    /* 
-    Map the position of the tap on the screen to 
-    the position of the tap on the scrubber itself (which has padding). 
-    This is coupled to the visual layout and we can be a bit more 
-    clever but also for now this works 
-    */
-    const getScrollPos = (screenX: number) => {
-        const { width } = Dimensions.get('window')
-        return (
-            (screenX - metrics.horizontal) *
-            ((width - metrics.horizontal * 4) / width)
-        )
-    }
-    const getNearestPage = (screenX: number) => {
-        const { width } = Dimensions.get('window')
-        return Math.round((getScrollPos(screenX) * pages) / width)
-    }
     return (
         <>
             <View
@@ -84,7 +84,7 @@ const FrontRow: React.FC<{
                             scrollViewRef.current._component.scrollTo({
                                 x:
                                     Dimensions.get('window').width *
-                                    getNearestPage(screenX),
+                                    getNearestPage(screenX, pages),
                             })
                         }
                     }}

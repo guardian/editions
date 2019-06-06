@@ -48,7 +48,17 @@ const Scrubber = ({
     const styles = useMemo(() => getStyles(fill, radius), [fill, radius])
     return (
         <Animated.View
-            style={[styles.root, { transform: [{ translateX: position }] }]}
+            style={[
+                styles.root,
+                {
+                    transform: [
+                        { translateX: position },
+                        {
+                            scale: scrubbing ? 1.2 : 1,
+                        },
+                    ],
+                },
+            ]}
         >
             <Animated.Text
                 style={[
@@ -113,9 +123,6 @@ const Scrubber = ({
                                     outputRange: [1.25, 1],
                                     extrapolate: 'clamp',
                                 }),
-                            },
-                            {
-                                scale: scrubbing ? 1.2 : 1,
                             },
                         ],
                     },
