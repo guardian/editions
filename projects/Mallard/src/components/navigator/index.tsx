@@ -1,33 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 
-import Svg, { Circle, Line } from 'react-native-svg'
 import { color } from '../../theme/color'
 import { Animated, View, PanResponder } from 'react-native'
-import { signPostRadius, radius } from './helpers'
 import { Scrubber } from './scrubber'
+import { Background } from './background'
 
-const Stops = ({ fill, stops }: { fill: string; stops: number }) => {
-    const Stop = ({ fill, ...props }: { fill: string; [key: string]: any }) => {
-        return <Circle r={radius} cy={signPostRadius} fill={fill} {...props} />
-    }
-    const stopElements = [
-        <Line
-            x1="0"
-            y1={signPostRadius}
-            x2="100%"
-            y2={signPostRadius}
-            stroke={fill}
-        />,
-        <Stop cx={radius} fill={fill} />,
-        <Stop cx={'100%'} translateX={radius * -1} fill={fill} />,
-    ]
-    for (let i = 1; i < stops - 1; i++) {
-        stopElements.push(
-            <Stop cx={`${(i / (stops - 1)) * 100}%`} fill={fill} />,
-        )
-    }
-    return <>{stopElements}</>
-}
+const scrubberRadius = 18
+const stopRadius = 4
 
 const NavigatorStrip = ({
     title,
@@ -51,26 +30,26 @@ const NavigatorStrip = ({
             onStartShouldSetPanResponder: () => true,
             onMoveShouldSetPanResponder: () => true,
             onPanResponderTerminationRequest: () => false,
-            onPanResponderStart: (evt, gestureState) => {
-                onScrub(gestureState.x0 - signPostRadius)
+            onPanResponderStart: (ev, gestureState) => {
                 setScrubbing(true)
+                onScrub(gestureState.x0 - scrubberRadius)
             },
-            onPanResponderMove: (evt, gestureState) => {
-                onScrub(gestureState.moveX - signPostRadius)
+            onPanResponderMove: (ev, gestureState) => {
+                onScrub(gestureState.moveX - scrubberRadius)
             },
-            onPanResponderEnd: (evt, gestureState) => {
+            onPanResponderEnd: (ev, gestureState) => {
                 setScrubbing(false)
                 onReleaseScrub(
-                    gestureState.x0 + gestureState.dx - signPostRadius,
+                    gestureState.x0 + gestureState.dx - scrubberRadius,
                 )
             },
         }),
     )
-    const scaledPosition = useMemo(
+    const interpolatedPosition = useMemo(
         () =>
             position.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, width - signPostRadius * 2],
+                outputRange: [0, width - scrubberRadius * 2],
             }),
         [width],
     )
@@ -81,17 +60,16 @@ const NavigatorStrip = ({
                 setWidth(ev.nativeEvent.layout.width)
             }}
         >
-            <Svg
-                width="100%"
-                height={signPostRadius * 2}
-                style={{ overflow: 'visible', position: 'absolute' }}
-            >
-                <Stops stops={stops} fill={fill} />
-            </Svg>
+            <Background
+                height={scrubberRadius}
+                stopRadius={stopRadius}
+                {...{ stops, fill }}
+            />
             <Scrubber
-                position={scaledPosition}
+                position={interpolatedPosition}
                 scrubbing={scrubbing}
                 fill={fill}
+                radius={scrubberRadius}
             >
                 {title}
             </Scrubber>

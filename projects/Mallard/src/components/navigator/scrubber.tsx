@@ -2,14 +2,13 @@ import React, { useMemo } from 'react'
 
 import { color } from '../../theme/color'
 import { Animated, Text, StyleSheet } from 'react-native'
-import { signPostRadius } from './helpers'
 
-const getStyles = (fill: string) =>
+const getStyles = (fill: string, radius: number) =>
     StyleSheet.create({
         root: {
-            height: signPostRadius * 2,
-            minWidth: signPostRadius * 2,
-            paddingHorizontal: signPostRadius * 0.55,
+            height: radius * 2,
+            minWidth: radius * 2,
+            paddingHorizontal: radius * 0.55,
             alignItems: 'flex-start',
             alignSelf: 'flex-start',
             flexDirection: 'row',
@@ -19,15 +18,15 @@ const getStyles = (fill: string) =>
         },
         bubble: {
             backgroundColor: fill,
-            borderRadius: signPostRadius,
+            borderRadius: radius,
             zIndex: -1,
             ...StyleSheet.absoluteFillObject,
         },
         text: {
             color: color.textOverDarkBackground,
             fontSize: 22,
-            height: signPostRadius * 2,
-            lineHeight: signPostRadius * 1.75,
+            height: radius * 2,
+            lineHeight: radius * 1.75,
             alignItems: 'center',
             fontFamily: 'GTGuardianTitlepiece-Bold',
         },
@@ -38,13 +37,15 @@ const Scrubber = ({
     fill,
     position,
     scrubbing,
+    radius,
 }: {
     fill: string
     children: string
     position: Animated.AnimatedInterpolation
     scrubbing: boolean
+    radius: number
 }) => {
-    const styles = useMemo(() => getStyles(fill), [fill])
+    const styles = useMemo(() => getStyles(fill, radius), [fill, radius])
     return (
         <Animated.View
             style={[styles.root, { transform: [{ translateX: position }] }]}
@@ -99,7 +100,7 @@ const Scrubber = ({
                 style={[
                     styles.bubble,
                     {
-                        width: signPostRadius * 2,
+                        width: radius * 2,
                         alignItems: 'center',
                         opacity: position.interpolate({
                             inputRange: [0, 5, 20],
