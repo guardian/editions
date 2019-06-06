@@ -18,6 +18,7 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
+import { IBlockElement } from '@guardian/capi-ts'
 
 /* 
 This is the article view! For all of the articles. 
@@ -38,14 +39,14 @@ const styles = StyleSheet.create({
     },
 })
 
-const render = article => {
+const render = (article: IBlockElement[]) => {
     return `
     <html>
     <head></head>
     <body>
       ${article
           .filter(el => el.type === 0)
-          .map(el => el.textTypeData.html)
+          .map(el => el.textTypeData && el.textTypeData.html)
           .join('')}
       <script>
         window.requestAnimationFrame(function() {
@@ -67,7 +68,7 @@ const Article = ({
     standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: any[]
+    article: IBlockElement[]
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
