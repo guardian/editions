@@ -13,7 +13,7 @@ import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
-import { NavigatorStrip } from '../components/navigator-strip'
+import { NavigatorStrip } from '../components/navigator'
 
 const styles = StyleSheet.create({
     container,
@@ -32,11 +32,18 @@ const FrontRow: React.FC<{
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef()
     const pages = 3
-    const getScrollPos = x =>
-        (x - metrics.horizontal) *
-        ((width - metrics.horizontal * 4) / width) *
-        pages
-
+    const getScrollPos = x => {
+        const { width } = Dimensions.get('window')
+        return (
+            (x - metrics.horizontal) *
+            ((width - metrics.horizontal * 4) / width) *
+            pages
+        )
+    }
+    const getNearestPage = x => {
+        const { width } = Dimensions.get('window')
+        return Math.round(getScrollPos(x) / width)
+    }
     return (
         <>
             <View
@@ -50,7 +57,6 @@ const FrontRow: React.FC<{
                     title={front}
                     onScrub={x => {
                         if (
-                            x > 20 &&
                             scrollViewRef.current &&
                             scrollViewRef.current._component
                         ) {
@@ -61,13 +67,17 @@ const FrontRow: React.FC<{
                         }
                     }}
                     onReleaseScrub={x => {
-                        const page = Math.round(getScrollPos(x) / width)
                         scrollViewRef.current._component.scrollTo({
-                            x: width * page,
+                            x:
+                                Dimensions.get('window').width *
+                                getNearestPage(x),
                         })
                     }}
                     position={scrollX.interpolate({
-                        inputRange: [0, width * (pages - 1)],
+                        inputRange: [
+                            0,
+                            Dimensions.get('window').width * (pages - 1),
+                        ],
                         outputRange: [0, 1],
                     })}
                 />
@@ -100,7 +110,7 @@ const FrontRow: React.FC<{
                                 issue,
                                 front,
                                 article: index,
-                                key: index.toString(),
+                                key: index.toString() + '1',
                                 title,
                                 headline: title,
                             }),
@@ -117,7 +127,7 @@ const FrontRow: React.FC<{
                                 issue,
                                 front,
                                 article: index,
-                                key: index.toString(),
+                                key: index.toString() + '2',
                                 title,
                                 headline: title,
                             }),
@@ -134,7 +144,7 @@ const FrontRow: React.FC<{
                                 issue,
                                 front,
                                 article: index,
-                                key: index.toString(),
+                                key: index.toString() + '3',
                                 title,
                                 headline: title,
                             }),
