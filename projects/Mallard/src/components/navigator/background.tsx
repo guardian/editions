@@ -6,15 +6,15 @@ const Background = ({
     fill,
     stops,
     height,
-    stopRadius,
+    radius,
 }: {
     fill: string
     stops: number
     height: number
-    stopRadius: number
+    radius: number
 }) => {
     const Stop = ({ fill, ...props }: { fill: string; [key: string]: any }) => {
-        return <Circle r={stopRadius} cy={height} fill={fill} {...props} />
+        return <Circle r={radius} cy={height} fill={fill} {...props} />
     }
     const stopElements = []
     for (let i = 1; i < stops - 1; i++) {
@@ -29,8 +29,8 @@ const Background = ({
             style={{ overflow: 'visible', position: 'absolute' }}
         >
             <Line x1="0" y1={height} x2="100%" y2={height} stroke={fill} />
-            <Stop cx={stopRadius} fill={fill} />
-            <Stop cx={'100%'} translateX={stopRadius * -1} fill={fill} />
+            <Stop cx={radius} fill={fill} />
+            <Stop cx={'100%'} translateX={radius * -1} fill={fill} />
             {stopElements}
         </Svg>
     )

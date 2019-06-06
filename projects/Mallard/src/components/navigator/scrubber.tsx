@@ -33,8 +33,8 @@ const getStyles = (fill: string, radius: number) =>
     })
 
 const Scrubber = ({
-    children,
     fill,
+    children,
     position,
     scrubbing,
     radius,

@@ -13,6 +13,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
 import { Navigator } from '../components/navigator'
+import { color } from '../theme/color'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -47,8 +48,9 @@ const FrontRow: React.FC<{
     frontsData: any
     front: any
     issue: any
-    navigation: any
-}> = ({ frontsData, front, issue, navigation }) => {
+    navigation: NavigationScreenProp<{}>
+    color: string
+}> = ({ frontsData, front, issue, navigation, color }) => {
     const { width } = Dimensions.get('window')
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
@@ -65,6 +67,7 @@ const FrontRow: React.FC<{
             >
                 <Navigator
                     title={front}
+                    fill={color}
                     onScrub={screenX => {
                         if (
                             scrollViewRef.current &&
@@ -119,7 +122,7 @@ const FrontRow: React.FC<{
             >
                 <View style={{ width }}>
                     <Grid
-                        onPress={(item: string) =>
+                        onPress={(item: {}) =>
                             navigation.navigate('Article', item)
                         }
                         data={frontsData.map(
@@ -136,7 +139,7 @@ const FrontRow: React.FC<{
                 </View>
                 <View style={{ width }}>
                     <Grid
-                        onPress={(item: string) =>
+                        onPress={(item: {}) =>
                             navigation.navigate('Article', item)
                         }
                         data={frontsData.map(
@@ -153,7 +156,7 @@ const FrontRow: React.FC<{
                 </View>
                 <View style={{ width }}>
                     <Grid
-                        onPress={(item: string) =>
+                        onPress={(item: {}) =>
                             navigation.navigate('Article', item)
                         }
                         data={frontsData.map(
@@ -185,9 +188,18 @@ const FrontScreen = ({
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
-            <FrontRow front={'News'} {...{ issue, navigation, frontsData }} />
-            <FrontRow front={'Sport'} {...{ issue, navigation, frontsData }} />
             <FrontRow
+                color={color.palette.news.main}
+                front={'News'}
+                {...{ issue, navigation, frontsData }}
+            />
+            <FrontRow
+                color={color.palette.sport.main}
+                front={'Sport'}
+                {...{ issue, navigation, frontsData }}
+            />
+            <FrontRow
+                color={color.palette.opinion.main}
                 front={'Opinion'}
                 {...{ issue, navigation, frontsData }}
             />

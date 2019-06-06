@@ -62,7 +62,7 @@ const Navigator = ({
         >
             <Background
                 height={scrubberRadius}
-                stopRadius={stopRadius}
+                radius={stopRadius}
                 {...{ stops, fill }}
             />
             <Scrubber
