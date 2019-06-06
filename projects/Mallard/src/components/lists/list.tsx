@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 1.25,
+        paddingVertical: metrics.vertical,
         borderTopWidth: 0,
         borderBottomWidth: StyleSheet.hairlineWidth,
         marginVertical: StyleSheet.hairlineWidth,

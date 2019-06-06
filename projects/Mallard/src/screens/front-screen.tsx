@@ -7,6 +7,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
 import { NavigatorStrip } from '../components/navigator-strip'
+import StoryCard from '../components/front/story-card'
 
 const styles = StyleSheet.create({
     container,
@@ -35,38 +36,13 @@ const FrontRow: React.FC<{
             </View>
             <ScrollView horizontal={true} pagingEnabled>
                 <View style={{ width }}>
-                    <Grid
-                        onPress={(item: string) =>
-                            navigation.navigate('Article', item)
-                        }
-                        data={frontsData.map(
-                            ([title]: any[], index: number) => ({
-                                issue,
-                                front,
-                                article: index,
-                                key: index.toString(),
-                                title,
-                                headline: title,
-                            }),
-                        )}
-                    />
+                    <StoryCard length={2} />
                 </View>
                 <View style={{ width }}>
-                    <Grid
-                        onPress={(item: string) =>
-                            navigation.navigate('Article', item)
-                        }
-                        data={frontsData.map(
-                            ([title]: any[], index: number) => ({
-                                issue,
-                                front,
-                                article: index,
-                                key: index.toString(),
-                                title,
-                                headline: title,
-                            }),
-                        )}
-                    />
+                    <StoryCard length={3} />
+                </View>
+                <View style={{ width }}>
+                    <StoryCard length={4} />
                 </View>
             </ScrollView>
         </>
