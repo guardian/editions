@@ -2,10 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
 import { metrics } from '../../theme/spacing'
-import {
-    useArticleAppearance,
-    articleAppearances,
-} from '../../theme/appearance'
+import { useArticleAppearance } from '../../theme/appearance'
 import { Multiline } from '../multiline'
 
 export interface PropTypes {
@@ -19,10 +16,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         borderBottomWidth: StyleSheet.hairlineWidth,
         paddingTop: metrics.vertical / 2,
-        ...articleAppearances.default.backgrounds,
     },
     bylineBackground: {
-        ...articleAppearances.default.backgrounds,
         marginTop: metrics.vertical,
         marginBottom: metrics.vertical,
         paddingTop: metrics.vertical / 4,
