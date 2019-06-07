@@ -1,0 +1,8 @@
+app_identifier("uk.co.guardian.editions") # The bundle identifier of your app
+apple_id("apps.automation@guardian.co.uk") # Your Apple email address
+
+itc_team_id("304191") # App Store Connect Team ID
+team_id("998P9U5NGJ") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
