@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, FunctionComponent } from 'react'
 import {
     ScrollView,
     View,
@@ -15,6 +15,7 @@ import { FrontCardGroup } from '../components/front/front-card-group'
 import { FrontsData } from '../helpers/types'
 import { Navigator } from '../components/navigator'
 import { color } from '../theme/color'
+import { ArticleAppearance } from '../theme/appearance'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -40,16 +41,53 @@ const getScrollPos = (screenX: number) => {
         ((width - metrics.horizontal * 6) / width)
     )
 }
+
 const getNearestPage = (screenX: number, pageCount: number) => {
     const { width } = Dimensions.get('window')
     return Math.round((getScrollPos(screenX) * pageCount) / width)
 }
-const getTranslateForPage = (page: number) => {
+
+const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     const { width } = Dimensions.get('window')
-    return {
+    return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
         outputRange: [metrics.horizontal * -1.5, 0, metrics.horizontal * 1.5],
-    }
+    })
+}
+
+const FrontRowPage: FunctionComponent<{
+    frontsData: FrontsData
+    length: number
+    appearance: ArticleAppearance
+    page: number
+    scrollX: Animated.Value
+}> = ({ frontsData, length, appearance, page, scrollX }) => {
+    const { width, height: windowHeight } = Dimensions.get('window')
+    const height = windowHeight - 300
+    //TODO: viewport height - padding - slider
+
+    const translateX = getTranslateForPage(scrollX, page)
+
+    return (
+        <View style={{ width }}>
+            <FrontCardGroup
+                appearance={appearance}
+                stories={frontsData}
+                length={length}
+                translate={translateX}
+                style={[
+                    {
+                        height,
+                        transform: [
+                            {
+                                translateX,
+                            },
+                        ],
+                    },
+                ]}
+            />
+        </View>
+    )
 }
 
 const FrontRow: React.FC<{
@@ -129,63 +167,24 @@ const FrontRow: React.FC<{
                 horizontal={true}
                 pagingEnabled
             >
-                <View style={{ width }}>
-                    <FrontCardGroup
-                        appearance={'comment'}
-                        stories={frontsData}
-                        length={2}
-                        style={[
-                            {
-                                height,
-                                transform: [
-                                    {
-                                        translateX: scrollX.interpolate(
-                                            getTranslateForPage(0),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </View>
-                <View style={{ width }}>
-                    <FrontCardGroup
-                        appearance={'sport'}
-                        stories={frontsData}
-                        length={3}
-                        style={[
-                            {
-                                height,
-                                transform: [
-                                    {
-                                        translateX: scrollX.interpolate(
-                                            getTranslateForPage(1),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </View>
-                <View style={{ width }}>
-                    <FrontCardGroup
-                        appearance={'news'}
-                        stories={frontsData}
-                        length={4}
-                        style={[
-                            {
-                                height,
-                                transform: [
-                                    {
-                                        translateX: scrollX.interpolate(
-                                            getTranslateForPage(2),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </View>
+                <FrontRowPage
+                    page={0}
+                    length={2}
+                    appearance={'comment'}
+                    {...{ frontsData, scrollX }}
+                />
+                <FrontRowPage
+                    page={1}
+                    length={3}
+                    appearance={'sport'}
+                    {...{ frontsData, scrollX }}
+                />
+                <FrontRowPage
+                    page={2}
+                    length={4}
+                    appearance={'news'}
+                    {...{ frontsData, scrollX }}
+                />
             </Animated.ScrollView>
         </>
     )

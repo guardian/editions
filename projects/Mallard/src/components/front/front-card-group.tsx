@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle, Animated } from 'react-native'
+import { StyleSheet, StyleProp, Animated } from 'react-native'
 import { Multiline } from '../multiline'
 import { metrics } from '../../theme/spacing'
 
@@ -45,19 +45,40 @@ interface PropTypes {
     style: StyleProp<{}>
     stories: Story[]
     length?: number
+    translate: Animated.Value
 }
 
 const FrontCardGroupWithAppearance = ({
     style,
     stories,
     length,
+    translate,
 }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     const trimmed = useMemo(() => stories.slice(0, length), [stories, length])
     return (
         <Animated.View style={[styles.root, style, appearance.backgrounds]}>
             {trimmed.map((story, i) => (
-                <View style={styles.row} key={i}>
+                <Animated.View
+                    style={[
+                        styles.row,
+                        {
+                            transform: [
+                                {
+                                    translateX: translate.interpolate({
+                                        inputRange: [
+                                            metrics.horizontal * -1.5,
+                                            0,
+                                            metrics.horizontal * 1.5,
+                                        ],
+                                        outputRange: [60 * i, 0, -60 * i],
+                                    }),
+                                },
+                            ],
+                        },
+                    ]}
+                    key={i}
+                >
                     <SmallCard
                         style={styles.unit}
                         id={i}
@@ -71,7 +92,7 @@ const FrontCardGroupWithAppearance = ({
                             style={{ flex: 0 }}
                         />
                     )}
-                </View>
+                </Animated.View>
             ))}
         </Animated.View>
     )
