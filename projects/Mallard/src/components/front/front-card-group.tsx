@@ -57,7 +57,7 @@ const FrontCardGroupWithAppearance = ({
     return (
         <View style={[styles.root, style, appearance.backgrounds]}>
             {trimmed.map((story, i) => (
-                <View style={styles.row}>
+                <View style={styles.row} key={i}>
                     <SmallCard
                         style={styles.unit}
                         id={i}
