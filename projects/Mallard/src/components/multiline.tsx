@@ -2,10 +2,10 @@ import React from 'react'
 import { color as themeColor } from '../theme/color'
 
 import Svg, { Rect } from 'react-native-svg'
-import { StyleSheet, StyleProp } from 'react-native'
+import { StyleSheet, StyleProp, ViewStyle } from 'react-native'
 
 const pixel = StyleSheet.hairlineWidth * 2
-const gap = pixel * 6
+const gap = pixel * 3.5
 
 const Multiline = ({
     color,
@@ -14,7 +14,7 @@ const Multiline = ({
 }: {
     color: string
     count: number
-    style: StyleProp<{}>
+    style?: StyleProp<{}>
 }) => {
     const lines = []
     for (let i = 0; i < count; i++) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Animated } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
 import { metrics } from '../../theme/spacing'
 import { useArticleAppearance } from '../../theme/appearance'
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 const Standfirst = ({ standfirst, byline }: PropTypes) => {
     const { appearance, name } = useArticleAppearance()
     return (
-        <View style={[styles.background, appearance.backgrounds]}>
+        <Animated.View style={[styles.background, appearance.backgrounds]}>
             <StandfirstText style={[appearance.text, appearance.standfirst]}>
                 {standfirst}
             </StandfirstText>
@@ -57,7 +57,7 @@ const Standfirst = ({ standfirst, byline }: PropTypes) => {
                     {byline}
                 </BodyCopy>
             </View>
-        </View>
+        </Animated.View>
     )
 }
 

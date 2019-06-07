@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { Multiline } from '../multiline'
 import { metrics } from '../../theme/spacing'
 
@@ -10,19 +10,22 @@ import {
     ArticleAppearance,
 } from '../../theme/appearance'
 import { SmallCard } from './cards'
+import { color } from '../../theme/color'
 
 const styles = StyleSheet.create({
     root: {
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'center',
-        shadowColor: '#000',
+        shadowColor: color.text,
         shadowOffset: {
             width: 0,
             height: 2,
         },
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
+        elevation: 2,
+        borderRadius: 2,
         margin: metrics.horizontal,
         marginVertical: metrics.vertical,
     },
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
 })
 
 interface PropTypes {
-    style: { height: number }
+    style: StyleProp<ViewStyle & {}>
     stories: Story[]
     length?: number
 }
