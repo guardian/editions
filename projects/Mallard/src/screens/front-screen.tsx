@@ -6,7 +6,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
 import { NavigatorStrip } from '../components/navigator-strip'
-import { FrontPage } from '../components/front/front-page'
+import { FrontCardGroup } from '../components/front/front-card-group'
 import { FrontsData } from '../helpers/types'
 
 const styles = StyleSheet.create({
@@ -37,7 +37,7 @@ const FrontRow: React.FC<{
             </View>
             <ScrollView horizontal={true} pagingEnabled>
                 <View style={{ width }}>
-                    <FrontPage
+                    <FrontCardGroup
                         appearance={'comment'}
                         stories={frontsData}
                         length={2}
@@ -45,7 +45,7 @@ const FrontRow: React.FC<{
                     />
                 </View>
                 <View style={{ width }}>
-                    <FrontPage
+                    <FrontCardGroup
                         appearance={'sport'}
                         stories={frontsData}
                         length={3}
@@ -53,7 +53,7 @@ const FrontRow: React.FC<{
                     />
                 </View>
                 <View style={{ width }}>
-                    <FrontPage
+                    <FrontCardGroup
                         appearance={'news'}
                         stories={frontsData}
                         length={4}

@@ -1,5 +1,6 @@
 import { color } from './color'
 import { createContext, useContext } from 'react'
+import merge from 'deepmerge'
 
 /*
 Types
@@ -214,5 +215,8 @@ export const useArticleAppearance = (): {
     appearance: ArticleAppearanceStyles
 } => ({
     name: useContext(ArticleAppearanceContext),
-    appearance: articleAppearances[useContext(ArticleAppearanceContext)],
+    appearance: merge(
+        articleAppearances.default,
+        articleAppearances[useContext(ArticleAppearanceContext)],
+    ),
 })

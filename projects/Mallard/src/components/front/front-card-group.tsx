@@ -7,7 +7,6 @@ import { Story } from '../../helpers/types'
 import {
     WithArticleAppearance,
     useArticleAppearance,
-    articleAppearances,
     ArticleAppearance,
 } from '../../theme/appearance'
 import { SmallCard } from './cards'
@@ -45,7 +44,11 @@ interface PropTypes {
     length?: number
 }
 
-const FrontPageWithAppearance = ({ style, stories, length }: PropTypes) => {
+const FrontCardGroupWithAppearance = ({
+    style,
+    stories,
+    length,
+}: PropTypes) => {
     const { appearance } = useArticleAppearance()
     const trimmed = useMemo(() => stories.slice(0, length), [stories, length])
     return (
@@ -60,11 +63,7 @@ const FrontPageWithAppearance = ({ style, stories, length }: PropTypes) => {
                     />
                     {i < trimmed.length - 1 && (
                         <Multiline
-                            color={
-                                articleAppearances.default.backgrounds
-                                    .borderColor ||
-                                appearance.backgrounds.borderColor
-                            }
+                            color={appearance.backgrounds.borderColor}
                             count={2}
                             style={{ flex: 0 }}
                         />
@@ -75,18 +74,18 @@ const FrontPageWithAppearance = ({ style, stories, length }: PropTypes) => {
     )
 }
 
-const FrontPage = ({
+const FrontCardGroup = ({
     appearance,
     ...props
 }: {
     appearance: ArticleAppearance
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
-        <FrontPageWithAppearance {...props} />
+        <FrontCardGroupWithAppearance {...props} />
     </WithArticleAppearance>
 )
 
-FrontPage.defaultProps = {
+FrontCardGroup.defaultProps = {
     stories: [],
 }
-export { FrontPage }
+export { FrontCardGroup }
