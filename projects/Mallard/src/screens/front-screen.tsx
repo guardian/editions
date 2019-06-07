@@ -1,13 +1,13 @@
 import React from 'react'
 import { ScrollView, View, StyleSheet, Dimensions } from 'react-native'
-import { MonoTextBlock, HeadlineText } from '../components/styled-text'
-import { Grid } from '../components/lists/grid'
+import { MonoTextBlock } from '../components/styled-text'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
 import { NavigatorStrip } from '../components/navigator-strip'
-import StoryCard from '../components/front/story-card'
+import { FrontPage } from '../components/front/front-page'
+import { FrontsData } from '../helpers/types'
 
 const styles = StyleSheet.create({
     container,
@@ -17,12 +17,13 @@ const styles = StyleSheet.create({
 const useFrontsData = () => useEndpoint('', [], res => res)
 
 const FrontRow: React.FC<{
-    frontsData: any
+    frontsData: FrontsData
     front: any
     issue: any
     navigation: any
 }> = ({ frontsData, front, issue, navigation }) => {
-    const { width } = Dimensions.get('window')
+    const { width, height: windowHeight } = Dimensions.get('window')
+    const height = windowHeight - 300 //TODO: viewport height - padding - slider
     return (
         <>
             <View
@@ -36,13 +37,28 @@ const FrontRow: React.FC<{
             </View>
             <ScrollView horizontal={true} pagingEnabled>
                 <View style={{ width }}>
-                    <StoryCard length={2} />
+                    <FrontPage
+                        appearance={'comment'}
+                        stories={frontsData}
+                        length={2}
+                        style={{ height }}
+                    />
                 </View>
                 <View style={{ width }}>
-                    <StoryCard length={3} />
+                    <FrontPage
+                        appearance={'sport'}
+                        stories={frontsData}
+                        length={3}
+                        style={{ height }}
+                    />
                 </View>
                 <View style={{ width }}>
-                    <StoryCard length={4} />
+                    <FrontPage
+                        appearance={'news'}
+                        stories={frontsData}
+                        length={4}
+                        style={{ height }}
+                    />
                 </View>
             </ScrollView>
         </>
