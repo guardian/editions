@@ -48,7 +48,7 @@ export const HeadlineText = ({
     children: string
     style?: StyleProp<TextStyle>
 }) => {
-    return <Text {...props} style={[styles.headlineText, style].flat()} />
+    return <Text {...props} style={[styles.headlineText, style]} />
 }
 
 export const HeadlineKickerText = ({
@@ -58,7 +58,7 @@ export const HeadlineKickerText = ({
     children: string
     style?: StyleProp<TextStyle>
 }) => {
-    return <Text {...props} style={[styles.headlineKickerText, style].flat()} />
+    return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
 
 export const StandfirstText = ({
