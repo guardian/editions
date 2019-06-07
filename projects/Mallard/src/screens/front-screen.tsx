@@ -44,6 +44,13 @@ const getNearestPage = (screenX: number, pageCount: number) => {
     const { width } = Dimensions.get('window')
     return Math.round((getScrollPos(screenX) * pageCount) / width)
 }
+const getTranslateForPage = (page: number) => {
+    const { width } = Dimensions.get('window')
+    return {
+        inputRange: [width * (page - 1), width * page, width * (page + 1)],
+        outputRange: [metrics.horizontal * -1.5, 0, metrics.horizontal * 1.5],
+    }
+}
 
 const FrontRow: React.FC<{
     frontsData: FrontsData
@@ -127,7 +134,18 @@ const FrontRow: React.FC<{
                         appearance={'comment'}
                         stories={frontsData}
                         length={2}
-                        style={{ height }}
+                        style={[
+                            {
+                                height,
+                                transform: [
+                                    {
+                                        translateX: scrollX.interpolate(
+                                            getTranslateForPage(0),
+                                        ),
+                                    },
+                                ],
+                            },
+                        ]}
                     />
                 </View>
                 <View style={{ width }}>
@@ -135,7 +153,18 @@ const FrontRow: React.FC<{
                         appearance={'sport'}
                         stories={frontsData}
                         length={3}
-                        style={{ height }}
+                        style={[
+                            {
+                                height,
+                                transform: [
+                                    {
+                                        translateX: scrollX.interpolate(
+                                            getTranslateForPage(1),
+                                        ),
+                                    },
+                                ],
+                            },
+                        ]}
                     />
                 </View>
                 <View style={{ width }}>
@@ -143,7 +172,18 @@ const FrontRow: React.FC<{
                         appearance={'news'}
                         stories={frontsData}
                         length={4}
-                        style={{ height }}
+                        style={[
+                            {
+                                height,
+                                transform: [
+                                    {
+                                        translateX: scrollX.interpolate(
+                                            getTranslateForPage(2),
+                                        ),
+                                    },
+                                ],
+                            },
+                        ]}
                     />
                 </View>
             </Animated.ScrollView>

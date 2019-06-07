@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleSheet, StyleProp, ViewStyle, Animated } from 'react-native'
 import { Multiline } from '../multiline'
 import { metrics } from '../../theme/spacing'
 
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 })
 
 interface PropTypes {
-    style: StyleProp<ViewStyle & {}>
+    style: StyleProp<{}>
     stories: Story[]
     length?: number
 }
@@ -55,7 +55,7 @@ const FrontCardGroupWithAppearance = ({
     const { appearance } = useArticleAppearance()
     const trimmed = useMemo(() => stories.slice(0, length), [stories, length])
     return (
-        <View style={[styles.root, style, appearance.backgrounds]}>
+        <Animated.View style={[styles.root, style, appearance.backgrounds]}>
             {trimmed.map((story, i) => (
                 <View style={styles.row} key={i}>
                     <SmallCard
@@ -73,7 +73,7 @@ const FrontCardGroupWithAppearance = ({
                     )}
                 </View>
             ))}
-        </View>
+        </Animated.View>
     )
 }
 
