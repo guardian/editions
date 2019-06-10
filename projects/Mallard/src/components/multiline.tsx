@@ -20,6 +20,7 @@ const Multiline = ({
     for (let i = 0; i < count; i++) {
         lines.push(
             <Rect
+                key={i}
                 y={pixel * i * gap}
                 width="100%"
                 height={pixel}

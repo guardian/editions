@@ -41,7 +41,7 @@ const getScrollPos = (screenX: number) => {
 
 const getNearestPage = (screenX: number, pageCount: number) => {
     const { width } = Dimensions.get('window')
-    return Math.round((getScrollPos(screenX) * pageCount) / width)
+    return Math.round((getScrollPos(screenX) * (pageCount - 1)) / width)
 }
 
 const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
@@ -148,6 +148,8 @@ const FrontRow: React.FC<{
                 ref={(scrollView: AnimatedScrollViewRef) =>
                     (scrollViewRef.current = scrollView)
                 }
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 onScroll={Animated.event(
                     [
