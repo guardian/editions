@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
 const render = (article: IBlockElement[]) => {
     return `
     <html>
-    <head></head>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
     <body>
       ${article
           .filter(el => el.type === 0)
@@ -50,7 +52,7 @@ const render = (article: IBlockElement[]) => {
           .join('')}
       <script>
         window.requestAnimationFrame(function() {
-            window.ReactNativeWebView.postMessage(document.body.getBoundingClientRect().height)
+            window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
         })
       </script>
     </body>
@@ -98,14 +100,12 @@ const Article = ({
                 <View style={{ backgroundColor: color.background, flex: 1 }}>
                     <WebView
                         originWhitelist={['*']}
+                        scrollEnabled={false}
                         source={{ html: html }}
                         onMessage={event => {
-                            setHeight(
-                                parseInt(event.nativeEvent.data) /
-                                    PixelRatio.get(),
-                            )
+                            setHeight(parseInt(event.nativeEvent.data))
                         }}
-                        style={{ flex: 1, height: height }}
+                        style={{ flex: 1, minHeight: height }}
                     />
                 </View>
             </View>
