@@ -1,14 +1,14 @@
 debug-android:
 	mkdir -p android/app/src/main/assets
-	yarn build-android-debug
+	yarn bundle-android
 	cd android && ./gradlew assembleDebug && cd ..
 	cp android/app/build/outputs/apk/debug/app-debug.apk .
 
 debug-ios:
-	yarn build-ios-debug
+	yarn bundle-ios
 	xcodebuild archive -allowProvisioningUpdates -project ios/Mallard.xcodeproj -configuration Debug -scheme Mallard -derivedDataPath ./ -archivePath "./Mallard.xcarchive" > build.log
 	xcodebuild -exportArchive -allowProvisioningUpdates -exportOptionsPlist ExportOptions.plist -archivePath "./Mallard.xcarchive" -exportPath ./ >> build.log
 
 beta-ios:
-	yarn build-ios-debug
+	yarn bundle-ios
 	cd ios && fastlane beta
