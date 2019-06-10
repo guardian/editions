@@ -3,10 +3,14 @@
 // In this file, we'll be kicking off our app or storybook.
 
 import React from 'react'
+import { useScreens } from 'react-native-screens'
 import { StatusBar, View } from 'react-native'
+
 import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
 import { FileSystemProvider } from './hooks/use-fs'
+
+useScreens()
 
 const navigationPersistenceKey = __DEV__ ? 'Navigation-State-DEV-99-' : null
 

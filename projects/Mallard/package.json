@@ -26,6 +26,7 @@
         "react": "^16.8.6",
         "react-native": "0.59.3",
         "react-native-gesture-handler": "^1.2.1",
+        "react-native-screens": "^1.0.0-alpha.22",
         "react-native-svg": "^9.4.0",
         "react-native-webview": "^5.11.0",
         "react-native-zip-archive": "^4.0.1",
