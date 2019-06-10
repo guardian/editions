@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useMemo } from 'react'
 import {
     ScrollView,
     View,
@@ -14,6 +14,8 @@ import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
 import { Navigator } from '../components/navigator'
 import { color } from '../theme/color'
+import { Issue } from '../common'
+import { renderIssueDate } from '../helpers/issues'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -182,12 +184,17 @@ const FrontScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const frontsData = useFrontsData()
-    const issue = navigation.getParam('issue', 'NO-ID')
+    const issue: Issue = navigation.getParam('issue', { date: -1 })
+    const issueDate = useMemo(() => renderIssueDate(issue.date), [issue.date])
+
     return (
         <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
+            <MonoTextBlock style={{ flex: 1 }}>
+                {issueDate.weekday} - {issueDate.date}
+            </MonoTextBlock>
             <FrontRow
                 color={color.palette.news.main}
                 front={'News'}
@@ -203,9 +210,6 @@ const FrontScreen = ({
                 front={'Opinion'}
                 {...{ issue, navigation, frontsData }}
             />
-            <MonoTextBlock style={{ flex: 1 }}>
-                This is a FrontScreen for issue {issue}
-            </MonoTextBlock>
         </ScrollView>
     )
 }

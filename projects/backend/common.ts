@@ -6,6 +6,7 @@ export type Article = IBlockElement[][]
 
 export interface Issue {
     name: string
+    date: number
     fronts: string[]
 }
 
