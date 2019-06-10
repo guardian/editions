@@ -36,10 +36,7 @@ clever but also for now this works
 */
 const getScrollPos = (screenX: number) => {
     const { width } = Dimensions.get('window')
-    return (
-        (screenX - metrics.horizontal) *
-        ((width - metrics.horizontal * 6) / width)
-    )
+    return screenX + (metrics.horizontal * 6 * screenX) / width
 }
 
 const getNearestPage = (screenX: number, pageCount: number) => {
@@ -121,7 +118,7 @@ const FrontRow: React.FC<{
                             scrollViewRef.current._component
                         ) {
                             scrollViewRef.current._component.scrollTo({
-                                x: getScrollPos(screenX) * pages,
+                                x: getScrollPos(screenX) * (pages - 1),
                                 animated: false,
                             })
                         }
