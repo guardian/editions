@@ -19,7 +19,7 @@ const Navigator = ({
     title: string
     fill: string
     stops: number
-    position: Animated.Value
+    position: Animated.AnimatedInterpolation
     onScrub: (to: number) => void
     onReleaseScrub: (to: number) => void
 }) => {
@@ -45,14 +45,11 @@ const Navigator = ({
             },
         }),
     )
-    const interpolatedPosition = useMemo(
-        () =>
-            position.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, width - scrubberRadius * 2],
-            }),
-        [width],
-    )
+    const interpolatedPosition = position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, width - scrubberRadius * 2],
+    })
+
     return (
         <View
             {...panResponder.panHandlers}

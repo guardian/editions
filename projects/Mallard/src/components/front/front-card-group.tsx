@@ -45,7 +45,7 @@ interface PropTypes {
     style: StyleProp<{}>
     stories: Story[]
     length?: number
-    translate: Animated.Value
+    translate: Animated.AnimatedInterpolation
 }
 
 const FrontCardGroupWithAppearance = ({
