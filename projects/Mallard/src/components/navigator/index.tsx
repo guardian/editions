@@ -19,7 +19,7 @@ const Navigator = ({
     title: string
     fill: string
     stops: number
-    position: Animated.AnimatedInterpolation
+    position: Animated.Value
     onScrub: (to: number) => void
     onReleaseScrub: (to: number) => void
 }) => {

@@ -41,7 +41,7 @@ const Scrubber = ({
 }: {
     fill: string
     children: string
-    position: Animated.AnimatedInterpolation
+    position: Animated.Value
     scrubbing: boolean
     radius: number
 }) => {
