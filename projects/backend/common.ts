@@ -4,7 +4,7 @@
 export type ArticleFromTheCollectionsAtm = string
 export interface ArticleFundamentals {
     title: string
-    imageURL: string
+    imageURL?: string
 }
 export interface Article extends ArticleFundamentals {
     elements: BlockElement[]
