@@ -1,16 +1,9 @@
 import React from 'react'
-import {
-    Platform,
-    FlatList,
-    TouchableHighlight,
-    TouchableNativeFeedback,
-    SafeAreaView,
-    View,
-    StyleSheet,
-} from 'react-native'
+import { FlatList, SafeAreaView, View, StyleSheet } from 'react-native'
 import { metrics } from '../../theme/spacing'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 import { useAppAppearance } from '../../theme/appearance'
+import { Highlight } from '../highlight'
 
 /*
 An item is what the list uses to draw its own row –
@@ -38,9 +31,7 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 1.25,
-        borderTopWidth: 0,
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        paddingVertical: metrics.vertical,
         marginVertical: StyleSheet.hairlineWidth,
     },
     list: {
@@ -56,19 +47,6 @@ export const ListHeading = ({ children }: { children: string }) => (
     </View>
 )
 
-const Highlight: React.FC<{
-    onPress: () => void
-    children: React.ReactNode
-}> = ({ onPress, children }) => {
-    return Platform.OS === 'android' ? (
-        <TouchableNativeFeedback onPress={onPress}>
-            {children}
-        </TouchableNativeFeedback>
-    ) : (
-        <TouchableHighlight onPress={onPress}>{children}</TouchableHighlight>
-    )
-}
-
 const ListItem = <D extends {}>({
     onPress,
     item: { title, explainer, data },
@@ -79,30 +57,37 @@ const ListItem = <D extends {}>({
     const { borderColor, backgroundColor } = useAppAppearance()
 
     return (
-        <Highlight
-            onPress={() => {
-                if (data) onPress(data)
-            }}
-        >
-            <View
-                style={[
-                    styles.item,
-                    {
-                        borderColor,
-                        backgroundColor,
-                    },
-                ]}
+        <>
+            <Highlight
+                onPress={() => {
+                    if (data) onPress(data)
+                }}
             >
-                <UiBodyCopy>{title}</UiBodyCopy>
-                {explainer && (
-                    <UiExplainerCopy
-                        style={{ marginTop: metrics.vertical / 8 }}
-                    >
-                        {explainer}
-                    </UiExplainerCopy>
-                )}
-            </View>
-        </Highlight>
+                <View
+                    style={[
+                        styles.item,
+                        {
+                            backgroundColor,
+                        },
+                    ]}
+                >
+                    <UiBodyCopy>{title}</UiBodyCopy>
+                    {explainer && (
+                        <UiExplainerCopy
+                            style={{ marginTop: metrics.vertical / 8 }}
+                        >
+                            {explainer}
+                        </UiExplainerCopy>
+                    )}
+                </View>
+            </Highlight>
+            <View
+                style={{
+                    height: StyleSheet.hairlineWidth,
+                    backgroundColor: borderColor,
+                }}
+            />
+        </>
     )
 }
 

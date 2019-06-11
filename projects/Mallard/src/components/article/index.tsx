@@ -5,10 +5,7 @@ import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
 import { SlideCard } from '../layout/slide-card'
-import {
-    useArticleAppearance,
-    articleAppearances,
-} from '../../theme/appearance'
+import { useArticleAppearance } from '../../theme/appearance'
 import {
     LongReadHeader,
     NewsHeader,
@@ -28,9 +25,6 @@ it gets everything it needs from its route
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    header: {
-        ...articleAppearances.default.backgrounds,
     },
     block: {
         alignItems: 'flex-start',
@@ -78,11 +72,7 @@ const Article = ({
     const [height, setHeight] = useState(500)
     return (
         <SlideCard
-            headerStyle={[
-                styles.header,
-                appearance.backgrounds,
-                appearance.text,
-            ]}
+            headerStyle={[appearance.backgrounds, appearance.text]}
             fadesHeaderIn={appearanceName === 'longread'}
             backgroundColor={appearance.backgrounds.backgroundColor}
             onDismiss={() => {

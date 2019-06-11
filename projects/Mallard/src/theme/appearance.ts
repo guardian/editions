@@ -1,5 +1,6 @@
 import { color } from './color'
 import { createContext, useContext } from 'react'
+import merge from 'deepmerge'
 
 /*
 Types
@@ -18,6 +19,12 @@ interface ArticleAppearanceStyles {
     backgrounds: {
         backgroundColor?: string
         borderColor?: string
+    }
+    /*
+    Card bg overrides
+    */
+    cardBackgrounds: {
+        backgroundColor?: string
     }
     /*
     Spread this over text and icons
@@ -91,6 +98,7 @@ export const articleAppearances: {
             backgroundColor: color.background,
             borderColor: color.line,
         },
+        cardBackgrounds: {},
         text: {
             color: color.text,
         },
@@ -101,6 +109,7 @@ export const articleAppearances: {
     },
     news: {
         backgrounds: {},
+        cardBackgrounds: {},
         text: {
             color: color.palette.news.main,
         },
@@ -117,6 +126,7 @@ export const articleAppearances: {
         backgrounds: {
             backgroundColor: color.palette.opinion.faded,
         },
+        cardBackgrounds: {},
         text: {
             color: color.palette.opinion.main,
         },
@@ -131,6 +141,7 @@ export const articleAppearances: {
         backgrounds: {
             backgroundColor: color.palette.sport.faded,
         },
+        cardBackgrounds: {},
         text: {
             color: color.palette.sport.main,
         },
@@ -146,6 +157,7 @@ export const articleAppearances: {
         backgrounds: {
             backgroundColor: color.palette.culture.faded,
         },
+        cardBackgrounds: {},
         text: {
             color: color.palette.culture.main,
         },
@@ -162,6 +174,7 @@ export const articleAppearances: {
         backgrounds: {
             backgroundColor: color.palette.lifestyle.faded,
         },
+        cardBackgrounds: {},
         text: {
             color: color.palette.lifestyle.main,
         },
@@ -176,6 +189,7 @@ export const articleAppearances: {
         backgrounds: {
             backgroundColor: color.palette.neutral[7],
         },
+        cardBackgrounds: {},
         text: { color: color.palette.neutral[100] },
         headline: {},
         kicker: {},
@@ -183,6 +197,7 @@ export const articleAppearances: {
         standfirst: {},
     },
 }
+
 /*
   Exports
  */
@@ -200,5 +215,8 @@ export const useArticleAppearance = (): {
     appearance: ArticleAppearanceStyles
 } => ({
     name: useContext(ArticleAppearanceContext),
-    appearance: articleAppearances[useContext(ArticleAppearanceContext)],
+    appearance: merge(
+        articleAppearances.default,
+        articleAppearances[useContext(ArticleAppearanceContext)],
+    ),
 })

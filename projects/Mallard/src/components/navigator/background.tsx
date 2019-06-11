@@ -19,7 +19,7 @@ const Background = ({
     const stopElements = []
     for (let i = 1; i < stops - 1; i++) {
         stopElements.push(
-            <Stop cx={`${(i / (stops - 1)) * 100}%`} fill={fill} />,
+            <Stop key={i} cx={`${(i / (stops - 1)) * 100}%`} fill={fill} />,
         )
     }
     return (

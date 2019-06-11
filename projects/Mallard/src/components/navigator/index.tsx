@@ -25,12 +25,13 @@ const Navigator = ({
 }) => {
     const [width, setWidth] = useState(0)
     const [scrubbing, setScrubbing] = useState(false)
-    const [panResponder] = useState(() =>
+    const [panResponder] = useState(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
             onMoveShouldSetPanResponder: () => true,
             onPanResponderTerminationRequest: () => false,
-            onPanResponderStart: (ev, gestureState) => {
+            onShouldBlockNativeResponder: () => true,
+            onPanResponderGrant: (ev, gestureState) => {
                 setScrubbing(true)
                 onScrub(gestureState.x0 - scrubberRadius)
             },
@@ -45,17 +46,17 @@ const Navigator = ({
             },
         }),
     )
-    const interpolatedPosition = useMemo(
-        () =>
-            position.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, width - scrubberRadius * 2],
-            }),
-        [width],
-    )
+    const interpolatedPosition = position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, width - scrubberRadius * 2],
+    })
+
     return (
         <View
             {...panResponder.panHandlers}
+            style={{
+                backgroundColor: 'transparent',
+            }}
             onLayout={ev => {
                 setWidth(ev.nativeEvent.layout.width)
             }}

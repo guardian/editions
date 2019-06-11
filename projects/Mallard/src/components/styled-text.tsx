@@ -1,24 +1,29 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, TextStyle, StyleProp } from 'react-native'
 import { useAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
 import { color } from '../theme/color'
 
+const cardStyles = {
+    default: {
+        fontSize: 19,
+        lineHeight: 22,
+    },
+}
+
 const styles = StyleSheet.create({
     headlineText: {
-        fontFamily: 'GHGuardianHeadline-Medium',
+        fontFamily: 'GHGuardianHeadline-Regular',
         fontSize: 30,
         lineHeight: 34,
         color: color.text,
     },
     headlineKickerText: {
         fontFamily: 'GTGuardianTitlepiece-Bold',
-        fontSize: 15,
-        lineHeight: 24,
+        ...cardStyles.default,
     },
     headlineCardText: {
-        fontSize: 16,
-        lineHeight: 20,
+        ...cardStyles.default,
     },
     standfirstText: {
         fontFamily: 'GuardianTextEgyptian-Reg',
@@ -41,7 +46,7 @@ export const HeadlineText = ({
     ...props
 }: {
     children: string
-    style?: {}
+    style?: StyleProp<TextStyle>
 }) => {
     return <Text {...props} style={[styles.headlineText, style]} />
 }
@@ -51,7 +56,7 @@ export const HeadlineKickerText = ({
     ...props
 }: {
     children: string
-    style?: {}
+    style?: StyleProp<TextStyle>
 }) => {
     return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
@@ -61,18 +66,20 @@ export const StandfirstText = ({
     ...props
 }: {
     children: string
-    style?: {}
+    style?: StyleProp<TextStyle>
 }) => {
     return <Text {...props} style={[styles.standfirstText, style]} />
 }
 
 export const HeadlineCardText = ({
     children,
+    style,
     ...props
 }: {
     children: string
+    style?: StyleProp<TextStyle>
 }) => (
-    <HeadlineText {...props} style={styles.headlineCardText}>
+    <HeadlineText {...props} style={[styles.headlineCardText, style]}>
         {children}
     </HeadlineText>
 )
