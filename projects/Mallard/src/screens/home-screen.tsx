@@ -63,15 +63,15 @@ export const HomeScreen = ({
                             },
                         },
                     ]}
-                    onPress={item =>
-                        navigation.navigate('Article', {
-                            headline: 'CATS ARE THE BEST PET',
-                            path:
-                                'politics/2019/jun/11/matt-hancock-refuses-to-rule-out-staying-in-eu-after-31-october',
-                        })
-                    }
+                    // onPress={item =>
+                    //     navigation.navigate('Article', {
+                    //         headline: 'CATS ARE THE BEST PET',
+                    //         path:
+                    //             'politics/2019/jun/11/matt-hancock-refuses-to-rule-out-staying-in-eu-after-31-october',
+                    //     })
+                    // }
 
-                    // onPress={item => navigation.navigate('Front', item)}
+                    onPress={item => navigation.navigate('Front', item)}
                 />
                 {files.length > 0 && (
                     <>
