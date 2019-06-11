@@ -12,7 +12,7 @@ import { FileSystemProvider } from './hooks/use-fs'
 
 useScreens()
 
-const navigationPersistenceKey = __DEV__ ? 'nav-1560178658546-' : null
+const navigationPersistenceKey = __DEV__ ? 'nav-1560178658566-' : null
 
 export default class App extends React.Component<{}, {}> {
     /**

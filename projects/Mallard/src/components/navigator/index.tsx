@@ -8,6 +8,23 @@ import { Background } from './background'
 const scrubberRadius = 18
 const stopRadius = 4
 
+export const NavigatorSkeleton = () => {
+    return (
+        <View
+            style={{
+                height: scrubberRadius * 2,
+            }}
+        >
+            <Background
+                height={scrubberRadius}
+                radius={stopRadius}
+                stops={0}
+                fill={color.dimText}
+            />
+        </View>
+    )
+}
+
 const Navigator = ({
     title,
     fill,
@@ -79,6 +96,6 @@ const Navigator = ({
 }
 Navigator.defaultProps = {
     fill: color.text,
-    stops: 3,
+    stops: 0,
 }
 export { Navigator }

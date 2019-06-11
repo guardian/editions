@@ -3,7 +3,7 @@ import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
 import { useEndpoint } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { FrontCardGroup } from './front-card-group'
-import { Navigator } from '../navigator'
+import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
 
@@ -70,7 +70,10 @@ const Page: FunctionComponent<{
     )
 }
 
-const Wrapper: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
+const Wrapper: FunctionComponent<{
+    scrubber: ReactNode
+    children: ReactNode
+}> = ({ children, scrubber }) => {
     const height = Dimensions.get('window').height - 300
     return (
         <View
@@ -80,6 +83,15 @@ const Wrapper: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
                 minHeight: height,
             }}
         >
+            <View
+                style={{
+                    padding: metrics.horizontal,
+                    marginBottom: 0,
+                    marginTop: metrics.vertical * 2,
+                }}
+            >
+                {scrubber}
+            </View>
             {children}
         </View>
     )
@@ -95,7 +107,7 @@ export const Front: FunctionComponent<{
 
     if (!frontData)
         return (
-            <Wrapper>
+            <Wrapper scrubber={<NavigatorSkeleton />}>
                 <Text>Wait up</Text>
             </Wrapper>
         )
@@ -105,14 +117,8 @@ export const Front: FunctionComponent<{
     const collections = Object.entries(frontData.collections)
 
     return (
-        <Wrapper>
-            <View
-                style={{
-                    padding: metrics.horizontal,
-                    marginBottom: 0,
-                    marginTop: metrics.vertical * 2,
-                }}
-            >
+        <Wrapper
+            scrubber={
                 <Navigator
                     stops={pages}
                     title={front}
@@ -148,7 +154,8 @@ export const Front: FunctionComponent<{
                         outputRange: [0, 1],
                     })}
                 />
-            </View>
+            }
+        >
             <Animated.ScrollView
                 ref={(scrollView: AnimatedScrollViewRef) =>
                     (scrollViewRef.current = scrollView)
