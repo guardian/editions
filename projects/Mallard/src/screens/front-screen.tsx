@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, FunctionComponent } from 'react'
 import {
     ScrollView,
     View,
@@ -7,13 +7,15 @@ import {
     Animated,
 } from 'react-native'
 import { MonoTextBlock } from '../components/styled-text'
-import { Grid } from '../components/lists/grid'
 import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../theme/spacing'
 import { container } from '../theme/styles'
+import { FrontCardGroup } from '../components/front/front-card-group'
+import { FrontsData } from '../helpers/types'
 import { Navigator } from '../components/navigator'
 import { color } from '../theme/color'
+import { ArticleAppearance } from '../theme/appearance'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -34,24 +36,66 @@ clever but also for now this works
 */
 const getScrollPos = (screenX: number) => {
     const { width } = Dimensions.get('window')
-    return (
-        (screenX - metrics.horizontal) *
-        ((width - metrics.horizontal * 6) / width)
-    )
+    return screenX + (metrics.horizontal * 6 * screenX) / width
 }
+
 const getNearestPage = (screenX: number, pageCount: number) => {
     const { width } = Dimensions.get('window')
-    return Math.round((getScrollPos(screenX) * pageCount) / width)
+    return Math.round((getScrollPos(screenX) * (pageCount - 1)) / width)
+}
+
+const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
+    const { width } = Dimensions.get('window')
+    return scrollX.interpolate({
+        inputRange: [width * (page - 1), width * page, width * (page + 1)],
+        outputRange: [metrics.horizontal * -1.5, 0, metrics.horizontal * 1.5],
+    })
+}
+
+const FrontRowPage: FunctionComponent<{
+    frontsData: FrontsData
+    length: number
+    appearance: ArticleAppearance
+    page: number
+    scrollX: Animated.Value
+}> = ({ frontsData, length, appearance, page, scrollX }) => {
+    const { width, height: windowHeight } = Dimensions.get('window')
+    const height = windowHeight - 300
+    //TODO: viewport height - padding - slider
+
+    const translateX = getTranslateForPage(scrollX, page)
+
+    return (
+        <View style={{ width }}>
+            <FrontCardGroup
+                appearance={appearance}
+                stories={frontsData}
+                length={length}
+                translate={translateX}
+                style={[
+                    {
+                        height,
+                        transform: [
+                            {
+                                translateX,
+                            },
+                        ],
+                    },
+                ]}
+            />
+        </View>
+    )
 }
 
 const FrontRow: React.FC<{
-    frontsData: any
+    frontsData: FrontsData
     front: any
     issue: any
     navigation: NavigationScreenProp<{}>
     color: string
 }> = ({ frontsData, front, issue, navigation, color }) => {
-    const { width } = Dimensions.get('window')
+    const { width, height: windowHeight } = Dimensions.get('window')
+    const height = windowHeight - 300 //TODO: viewport height - padding - slider
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
     const pages = 3
@@ -74,7 +118,7 @@ const FrontRow: React.FC<{
                             scrollViewRef.current._component
                         ) {
                             scrollViewRef.current._component.scrollTo({
-                                x: getScrollPos(screenX) * pages,
+                                x: getScrollPos(screenX) * (pages - 1),
                                 animated: false,
                             })
                         }
@@ -104,6 +148,8 @@ const FrontRow: React.FC<{
                 ref={(scrollView: AnimatedScrollViewRef) =>
                     (scrollViewRef.current = scrollView)
                 }
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 onScroll={Animated.event(
                     [
@@ -120,57 +166,24 @@ const FrontRow: React.FC<{
                 horizontal={true}
                 pagingEnabled
             >
-                <View style={{ width }}>
-                    <Grid
-                        onPress={(item: {}) =>
-                            navigation.navigate('Article', item)
-                        }
-                        data={frontsData.map(
-                            ([title]: any[], index: number) => ({
-                                issue,
-                                front,
-                                article: index,
-                                key: index.toString() + front + '1',
-                                title,
-                                headline: title,
-                            }),
-                        )}
-                    />
-                </View>
-                <View style={{ width }}>
-                    <Grid
-                        onPress={(item: {}) =>
-                            navigation.navigate('Article', item)
-                        }
-                        data={frontsData.map(
-                            ([title]: any[], index: number) => ({
-                                issue,
-                                front,
-                                article: index,
-                                key: index.toString() + front + '2',
-                                title,
-                                headline: title,
-                            }),
-                        )}
-                    />
-                </View>
-                <View style={{ width }}>
-                    <Grid
-                        onPress={(item: {}) =>
-                            navigation.navigate('Article', item)
-                        }
-                        data={frontsData.map(
-                            ([title]: any[], index: number) => ({
-                                issue,
-                                front,
-                                article: index,
-                                key: index.toString() + front + '3',
-                                title,
-                                headline: title,
-                            }),
-                        )}
-                    />
-                </View>
+                <FrontRowPage
+                    page={0}
+                    length={2}
+                    appearance={'comment'}
+                    {...{ frontsData, scrollX }}
+                />
+                <FrontRowPage
+                    page={1}
+                    length={3}
+                    appearance={'sport'}
+                    {...{ frontsData, scrollX }}
+                />
+                <FrontRowPage
+                    page={2}
+                    length={4}
+                    appearance={'news'}
+                    {...{ frontsData, scrollX }}
+                />
             </Animated.ScrollView>
         </>
     )

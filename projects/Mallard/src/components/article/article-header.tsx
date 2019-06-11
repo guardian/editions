@@ -2,10 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { HeadlineText, HeadlineKickerText } from '../../components/styled-text'
 import { metrics } from '../../theme/spacing'
-import {
-    useArticleAppearance,
-    articleAppearances,
-} from '../../theme/appearance'
+import { useArticleAppearance } from '../../theme/appearance'
 import { ArticleImage } from './article-image'
 
 interface Style {
@@ -31,19 +28,16 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         paddingBottom: metrics.vertical,
         paddingTop: metrics.headerHeight + metrics.vertical / 2,
-        ...articleAppearances.default.backgrounds,
     },
     kicker: {
         paddingBottom: metrics.vertical / 2,
         marginBottom: metrics.vertical / 4,
         borderBottomWidth: StyleSheet.hairlineWidth,
         width: '100%',
-        ...articleAppearances.default.backgrounds,
     },
     textBackground: {},
     headline: {
         marginRight: metrics.horizontal * 2,
-        ...articleAppearances.default.headline,
     },
 })
 
@@ -87,16 +81,12 @@ const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         justifyContent: 'flex-end',
         height: 500,
         marginTop: -10,
-        ...articleAppearances.default.backgrounds,
     },
     kicker: {
         ...newsHeaderStyles.kicker,
     },
-    headline: {
-        ...articleAppearances.default.headline,
-    },
+    headline: {},
     textBackground: {
-        ...articleAppearances.default.backgrounds,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 2,
         marginEnd: metrics.horizontal * 2,

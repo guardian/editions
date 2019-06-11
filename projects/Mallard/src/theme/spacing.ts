@@ -1,12 +1,12 @@
 import { Platform, StatusBar } from 'react-native'
 
-export const spacing = [0, 4, 8, 12, 16, 28]
+export const spacing = [0, 3, 6, 12, 18, 24]
 
 const headerHeight = spacing[5]
 
 export const metrics = {
     horizontal: spacing[3],
-    vertical: spacing[4],
+    vertical: spacing[3],
     headerHeight,
     slideCardSpacing:
         Platform.OS === 'ios'

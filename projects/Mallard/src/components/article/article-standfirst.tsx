@@ -1,11 +1,8 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Animated } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
 import { metrics } from '../../theme/spacing'
-import {
-    useArticleAppearance,
-    articleAppearances,
-} from '../../theme/appearance'
+import { useArticleAppearance } from '../../theme/appearance'
 import { Multiline } from '../multiline'
 
 export interface PropTypes {
@@ -19,10 +16,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         borderBottomWidth: StyleSheet.hairlineWidth,
         paddingTop: metrics.vertical / 2,
-        ...articleAppearances.default.backgrounds,
     },
     bylineBackground: {
-        ...articleAppearances.default.backgrounds,
         marginTop: metrics.vertical,
         marginBottom: metrics.vertical,
         paddingTop: metrics.vertical / 4,
@@ -33,7 +28,7 @@ const styles = StyleSheet.create({
 const Standfirst = ({ standfirst, byline }: PropTypes) => {
     const { appearance, name } = useArticleAppearance()
     return (
-        <View style={[styles.background, appearance.backgrounds]}>
+        <Animated.View style={[styles.background, appearance.backgrounds]}>
             <StandfirstText style={[appearance.text, appearance.standfirst]}>
                 {standfirst}
             </StandfirstText>
@@ -62,7 +57,7 @@ const Standfirst = ({ standfirst, byline }: PropTypes) => {
                     {byline}
                 </BodyCopy>
             </View>
-        </View>
+        </Animated.View>
     )
 }
 
