@@ -10,6 +10,7 @@ import { RootNavigator } from './navigation'
 import { SettingsProvider } from './hooks/use-settings'
 import { FileSystemProvider } from './hooks/use-fs'
 
+useScreens();
 const navigationPersistenceKey = __DEV__ ? 'nav-1560178658543-' : null
 
 export default class App extends React.Component<{}, {}> {
