@@ -1,6 +1,6 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import { HomeScreen } from '../screens/home-screen'
-import { FrontScreen } from '../screens/front-screen'
+import { IssueScreen } from '../screens/issue-screen'
 import { ArticleScreen } from '../screens/article-screen'
 import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
@@ -14,7 +14,7 @@ export const RootNavigator = createAppContainer(
             Main: createStackNavigator(
                 {
                     Home: HomeScreen,
-                    Front: FrontScreen,
+                    Issue: IssueScreen,
                     Downloads: DownloadScreen,
                     Settings: SettingsScreen,
                     Endpoints: ApiScreen,

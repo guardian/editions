@@ -71,7 +71,7 @@ export const HomeScreen = ({
                     //     })
                     // }
 
-                    onPress={item => navigation.navigate('Front', item)}
+                    onPress={item => navigation.navigate('Issue', item)}
                 />
                 {files.length > 0 && (
                     <>

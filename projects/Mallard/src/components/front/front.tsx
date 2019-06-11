@@ -1,27 +1,18 @@
-import React, { useState, useRef, FunctionComponent } from 'react'
-import {
-    ScrollView,
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    Animated,
-} from 'react-native'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
+import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
 import { useEndpoint } from '../../hooks/use-fetch'
-import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../../theme/spacing'
-import { container } from '../../theme/styles'
 import { FrontCardGroup } from './front-card-group'
 import { Navigator } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
-import { Front, Collection } from '../../../../backend/common'
+import { Front as FrontType, Collection } from '../../../../backend/common'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
 const useFrontsData = (front: string) =>
-    useEndpoint<Front | null>(`front/${front}`, null)
+    useEndpoint<FrontType | null>(`front/${front}`, null)
 
 /*
 Map the position of the tap on the screen to
@@ -47,16 +38,14 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     })
 }
 
-const FrontRowPage: FunctionComponent<{
+const Page: FunctionComponent<{
     length: number
     appearance: ArticleAppearance
     page: number
     scrollX: Animated.Value
     collection: Collection
 }> = ({ collection, length, appearance, page, scrollX }) => {
-    const { width, height: windowHeight } = Dimensions.get('window')
-    const height = windowHeight - 300
-
+    const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, page)
 
     return (
@@ -68,7 +57,7 @@ const FrontRowPage: FunctionComponent<{
                 translate={translateX}
                 style={[
                     {
-                        height,
+                        flex: 1,
                         transform: [
                             {
                                 translateX,
@@ -81,29 +70,51 @@ const FrontRowPage: FunctionComponent<{
     )
 }
 
-export const FrontRow: React.FC<{
+const Wrapper: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
+    const height = Dimensions.get('window').height - 300
+    return (
+        <View
+            style={{
+                height,
+                maxHeight: height,
+                minHeight: height,
+            }}
+        >
+            {children}
+        </View>
+    )
+}
+
+export const Front: FunctionComponent<{
     front: string
 }> = ({ front }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
 
     const frontData = useFrontsData(front)
-    if (!frontData) return <Text>LOL</Text>
+
+    if (!frontData)
+        return (
+            <Wrapper>
+                <Text>Wait up</Text>
+            </Wrapper>
+        )
 
     const color = 'green'
     const pages = Object.keys(frontData.collections).length
     const collections = Object.entries(frontData.collections)
 
     return (
-        <>
+        <Wrapper>
             <View
                 style={{
                     padding: metrics.horizontal,
-                    paddingBottom: 0,
-                    paddingTop: metrics.vertical * 2,
+                    marginBottom: 0,
+                    marginTop: metrics.vertical * 2,
                 }}
             >
                 <Navigator
+                    stops={pages}
                     title={front}
                     fill={color}
                     onScrub={screenX => {
@@ -161,7 +172,7 @@ export const FrontRow: React.FC<{
                 pagingEnabled
             >
                 {collections.map(([id, collection], i) => (
-                    <FrontRowPage
+                    <Page
                         page={i}
                         length={6}
                         appearance={'comment'}
@@ -170,6 +181,6 @@ export const FrontRow: React.FC<{
                     />
                 ))}
             </Animated.ScrollView>
-        </>
+        </Wrapper>
     )
 }
