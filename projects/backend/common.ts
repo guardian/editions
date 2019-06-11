@@ -62,5 +62,23 @@ export interface HTMLElement {
 export interface ImageElement {
     id: 'image'
     src: string
+    alt?: string
+    caption?: string
+    copyright?: string
 }
-export type BlockElement = HTMLElement | ImageElement | UnknownElement
+export interface TweetElement {
+    id: 'tweet'
+    url: string
+    html: string
+}
+export interface PullquoteElement {
+    id: 'pullquote'
+    html: string
+    role?: string
+}
+export type BlockElement =
+    | HTMLElement
+    | ImageElement
+    | UnknownElement
+    | TweetElement
+    | PullquoteElement
