@@ -7,15 +7,12 @@ import {
     Dimensions,
     Animated,
 } from 'react-native'
-import { MonoTextBlock } from '../styled-text'
 import { useEndpoint } from '../../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import { metrics } from '../../theme/spacing'
 import { container } from '../../theme/styles'
 import { FrontCardGroup } from './front-card-group'
-import { FrontsData } from '../../helpers/types'
 import { Navigator } from '../navigator'
-import { color } from '../../theme/color'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front, Collection } from '../../../../backend/common'
 
@@ -23,13 +20,8 @@ interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const styles = StyleSheet.create({
-    container,
-    contentContainer: {},
-})
-
 const useFrontsData = (front: string) =>
-    useEndpoint<Front | null>(`front/${front}`, null, res => res)
+    useEndpoint<Front | null>(`front/${front}`, null)
 
 /*
 Map the position of the tap on the screen to
@@ -64,7 +56,6 @@ const FrontRowPage: FunctionComponent<{
 }> = ({ collection, length, appearance, page, scrollX }) => {
     const { width, height: windowHeight } = Dimensions.get('window')
     const height = windowHeight - 300
-    //TODO: viewport height - padding - slider
 
     const translateX = getTranslateForPage(scrollX, page)
 
@@ -72,7 +63,7 @@ const FrontRowPage: FunctionComponent<{
         <View style={{ width }}>
             <FrontCardGroup
                 appearance={appearance}
-                collection={collection}
+                articles={collection.articles || []}
                 length={length}
                 translate={translateX}
                 style={[
@@ -92,10 +83,7 @@ const FrontRowPage: FunctionComponent<{
 
 export const FrontRow: React.FC<{
     front: string
-    navigation: NavigationScreenProp<{}>
-}> = ({ front, navigation }) => {
-    const { width, height: windowHeight } = Dimensions.get('window')
-    const height = windowHeight - 300 //TODO: viewport height - padding - slider
+}> = ({ front }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
 

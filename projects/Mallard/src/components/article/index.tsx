@@ -64,7 +64,7 @@ const Article = ({
     standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: IBlockElement[]
+    article: BlockElement[]
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()

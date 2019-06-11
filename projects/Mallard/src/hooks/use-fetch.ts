@@ -10,6 +10,7 @@ export const useFetch = <T>(
     useEffect(() => {
         fetch(url).then(res =>
             res.json().then(res => {
+                console.log(res)
                 updateData(transform(res))
             }),
         )

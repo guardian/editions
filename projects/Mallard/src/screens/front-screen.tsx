@@ -16,6 +16,7 @@ import { FrontsData } from '../helpers/types'
 import { Navigator } from '../components/navigator'
 import { color } from '../theme/color'
 import { ArticleAppearance } from '../theme/appearance'
+import { FrontRow } from '../components/front/front'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -52,143 +53,6 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     })
 }
 
-const FrontRowPage: FunctionComponent<{
-    frontsData: FrontsData
-    length: number
-    appearance: ArticleAppearance
-    page: number
-    scrollX: Animated.Value
-}> = ({ frontsData, length, appearance, page, scrollX }) => {
-    const { width, height: windowHeight } = Dimensions.get('window')
-    const height = windowHeight - 300
-    //TODO: viewport height - padding - slider
-
-    const translateX = getTranslateForPage(scrollX, page)
-
-    return (
-        <View style={{ width }}>
-            <FrontCardGroup
-                appearance={appearance}
-                stories={frontsData}
-                length={length}
-                translate={translateX}
-                style={[
-                    {
-                        height,
-                        transform: [
-                            {
-                                translateX,
-                            },
-                        ],
-                    },
-                ]}
-            />
-        </View>
-    )
-}
-
-const FrontRow: React.FC<{
-    frontsData: FrontsData
-    front: any
-    issue: any
-    navigation: NavigationScreenProp<{}>
-    color: string
-}> = ({ frontsData, front, issue, navigation, color }) => {
-    const { width, height: windowHeight } = Dimensions.get('window')
-    const height = windowHeight - 300 //TODO: viewport height - padding - slider
-    const [scrollX] = useState(() => new Animated.Value(0))
-    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
-    const pages = 3
-
-    return (
-        <>
-            <View
-                style={{
-                    padding: metrics.horizontal,
-                    paddingBottom: 0,
-                    paddingTop: metrics.vertical * 2,
-                }}
-            >
-                <Navigator
-                    title={front}
-                    fill={color}
-                    onScrub={screenX => {
-                        if (
-                            scrollViewRef.current &&
-                            scrollViewRef.current._component
-                        ) {
-                            scrollViewRef.current._component.scrollTo({
-                                x: getScrollPos(screenX) * (pages - 1),
-                                animated: false,
-                            })
-                        }
-                    }}
-                    onReleaseScrub={screenX => {
-                        if (
-                            scrollViewRef.current &&
-                            scrollViewRef.current._component
-                        ) {
-                            scrollViewRef.current._component.scrollTo({
-                                x:
-                                    Dimensions.get('window').width *
-                                    getNearestPage(screenX, pages),
-                            })
-                        }
-                    }}
-                    position={scrollX.interpolate({
-                        inputRange: [
-                            0,
-                            Dimensions.get('window').width * (pages - 1),
-                        ],
-                        outputRange: [0, 1],
-                    })}
-                />
-            </View>
-            <Animated.ScrollView
-                ref={(scrollView: AnimatedScrollViewRef) =>
-                    (scrollViewRef.current = scrollView)
-                }
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={1}
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    x: scrollX,
-                                },
-                            },
-                        },
-                    ],
-                    { useNativeDriver: true },
-                )}
-                horizontal={true}
-                pagingEnabled
-            >
-                <FrontRowPage
-                    page={0}
-                    length={2}
-                    appearance={'comment'}
-                    {...{ frontsData, scrollX }}
-                />
-                <FrontRowPage
-                    page={1}
-                    length={3}
-                    appearance={'sport'}
-                    {...{ frontsData, scrollX }}
-                />
-                <FrontRowPage
-                    page={2}
-                    length={4}
-                    appearance={'news'}
-                    {...{ frontsData, scrollX }}
-                />
-            </Animated.ScrollView>
-        </>
-    )
-}
-
 const FrontScreen = ({
     navigation,
 }: {
@@ -201,21 +65,7 @@ const FrontScreen = ({
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
         >
-            <FrontRow
-                color={color.palette.news.main}
-                front={'News'}
-                {...{ issue, navigation, frontsData }}
-            />
-            <FrontRow
-                color={color.palette.sport.main}
-                front={'Sport'}
-                {...{ issue, navigation, frontsData }}
-            />
-            <FrontRow
-                color={color.palette.opinion.main}
-                front={'Opinion'}
-                {...{ issue, navigation, frontsData }}
-            />
+            <FrontRow front="cities" />
             <MonoTextBlock style={{ flex: 1 }}>
                 This is a FrontScreen for issue {issue}
             </MonoTextBlock>
