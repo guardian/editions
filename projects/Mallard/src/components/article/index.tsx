@@ -64,12 +64,12 @@ const Article = ({
     standfirst,
 }: {
     navigation: NavigationScreenProp<{}>
-    article: BlockElement[]
+    article?: BlockElement[]
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { appearance, name: appearanceName } = useArticleAppearance()
-    const html = render(article)
     const [height, setHeight] = useState(500)
+    const html = article ? render(article) : ''
     return (
         <SlideCard
             headerStyle={[appearance.backgrounds, appearance.text]}

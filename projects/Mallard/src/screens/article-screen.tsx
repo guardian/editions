@@ -7,16 +7,30 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType } from '../common'
+import { Article as ArticleType, ArticleFundamentals } from '../common'
 import { View, TouchableOpacity, Text } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 
-type MaybeArticle = ArticleType | null
+type MaybeArticle = ArticleType | ArticleFundamentals
 
-const useArticleData = (path: string, { headline }: { headline: string }) => {
-    return useEndpoint<MaybeArticle>(`content/${path}`, null, res => res)
+const useArticleData = (
+    path: string,
+    { title }: { title: string },
+): MaybeArticle => {
+    return useEndpoint<MaybeArticle>(
+        `content/${path}`,
+        {
+            title,
+            imageURL:
+                'https://i.kym-cdn.com/entries/icons/original/000/027/475/Screen_Shot_2018-10-25_at_11.02.15_AM.png',
+        },
+        res => res,
+    )
 }
+
+const isFullArticle = (article: MaybeArticle): article is ArticleType =>
+    (article as ArticleType).elements !== undefined
 
 export const ArticleScreen = ({
     navigation,
@@ -24,23 +38,25 @@ export const ArticleScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const articleFromUrl = navigation.getParam('path', '')
-    const headlineFromUrl = navigation.getParam(
-        'headline',
-        'HEADLINE NOT FOUND',
-    )
+    const titleFromUrl = navigation.getParam('title', 'Loading')
     const [appearance, setAppearance] = useState(0)
     const article = useArticleData(articleFromUrl, {
-        headline: headlineFromUrl,
+        title: titleFromUrl,
     })
-    console.log(article)
-    if (!article) {
+    const { title, imageURL } = article
+    if (!isFullArticle(article)) {
         return (
-            <View style={{ backgroundColor: 'pink', fontSize: 9999 }}>
-                <Text style={{ color: 'blue', fontSize: 9999 }}>Loading</Text>
-            </View>
+            <Article
+                kicker={'Kicker 🥾'}
+                headline={title}
+                byline={'Byliney McPerson'}
+                standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+                image={imageURL}
+                navigation={navigation}
+            />
         )
     }
-    const { title, elements, imageURL } = article
+    const { elements } = article
 
     const appearances = Object.keys(articleAppearances)
     return (
