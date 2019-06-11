@@ -24,5 +24,6 @@ export const useEndpoint = <T>(
     transform: (_: any) => T = res => res as T,
 ): T => {
     const [{ apiUrl }] = useSettings()
-    return useFetch(apiUrl + '/' + path, initialState, transform)
+    const url = apiUrl + '/' + path
+    return useFetch(url, initialState, transform)
 }

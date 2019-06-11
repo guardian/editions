@@ -7,20 +7,15 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { View, TouchableOpacity } from 'react-native'
+import { Article as ArticleType } from '../common'
+import { View, TouchableOpacity, Text } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 
-const fixture = (seed: number): { image: string | null } => ({
-    image: [
-        'https://media.guim.co.uk/1d046fd12d5685eacd943fcf2089f23ecc873e8b/0_224_6720_4032/1000.jpg',
-        'https://i.guim.co.uk/img/media/aa751497cada64b193f8f3e640a3261eb0e16e81/424_255_4518_2711/master/4518.jpg?width=860&quality=45&auto=format&fit=max&dpr=2&s=5025f6e75a0cbb9a7cdecf948f1a54af',
-        null,
-    ][seed % 3],
-})
+type MaybeArticle = ArticleType | null
 
-const useArticleData = (articleId: any, { headline }: any) => {
-    return useEndpoint('', [headline, [[]]], res => res[articleId])
+const useArticleData = (path: string, { headline }: { headline: string }) => {
+    return useEndpoint<MaybeArticle>(`content/${path}`, null, res => res)
 }
 
 export const ArticleScreen = ({
@@ -28,17 +23,26 @@ export const ArticleScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const articleFromUrl = navigation.getParam('article', -1)
+    const articleFromUrl = navigation.getParam('path', '')
     const headlineFromUrl = navigation.getParam(
         'headline',
         'HEADLINE NOT FOUND',
     )
-    const [headline, [article]] = useArticleData(articleFromUrl, {
+    const [appearance, setAppearance] = useState(0)
+    const article = useArticleData(articleFromUrl, {
         headline: headlineFromUrl,
     })
-    const { image } = fixture(articleFromUrl)
+    console.log(article)
+    if (!article) {
+        return (
+            <View style={{ backgroundColor: 'pink', fontSize: 9999 }}>
+                <Text style={{ color: 'blue', fontSize: 9999 }}>Loading</Text>
+            </View>
+        )
+    }
+    const { title, elements, imageURL } = article
+
     const appearances = Object.keys(articleAppearances)
-    const [appearance, setAppearance] = useState(0)
     return (
         <>
             <View
@@ -78,12 +82,12 @@ export const ArticleScreen = ({
                 value={appearances[appearance] as ArticleAppearance}
             >
                 <Article
-                    article={article}
-                    kicker={'Kicker'}
-                    headline={headline}
+                    article={elements}
+                    kicker={'Kicker 🥾'}
+                    headline={title}
                     byline={'Byliney McPerson'}
                     standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                    image={image}
+                    image={imageURL}
                     navigation={navigation}
                 />
             </WithArticleAppearance>

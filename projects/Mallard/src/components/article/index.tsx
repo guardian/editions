@@ -15,10 +15,10 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
-import { IBlockElement } from '@guardian/capi-ts'
+import { BlockElement, HTMLElement } from '../../common'
 
-/* 
-This is the article view! For all of the articles. 
+/*
+This is the article view! For all of the articles.
 it gets everything it needs from its route
 */
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const render = (article: IBlockElement[]) => {
+const render = (article: BlockElement[]) => {
     return `
     <html>
     <head>
@@ -41,8 +41,8 @@ const render = (article: IBlockElement[]) => {
     </head>
     <body>
       ${article
-          .filter(el => el.type === 0)
-          .map(el => el.textTypeData && el.textTypeData.html)
+          .filter(el => el.id === 'html')
+          .map(el => (el as HTMLElement).html)
           .join('')}
       <script>
         window.requestAnimationFrame(function() {
