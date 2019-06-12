@@ -4,7 +4,6 @@ import { useSettings } from './use-settings'
 let naiveCache: { [url: string]: any } = {}
 
 export const clearLocalCache = () => {
-    alert(`deleting ${Object.keys(naiveCache).length} entries`)
     for (let url in naiveCache) {
         delete naiveCache[url]
         console.log(`deleted ${url}`)
