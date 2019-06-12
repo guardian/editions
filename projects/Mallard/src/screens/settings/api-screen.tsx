@@ -6,6 +6,9 @@ import { MonoTextBlock } from '../../components/styled-text'
 import { container } from '../../theme/styles'
 import { useSettings } from '../../hooks/use-settings'
 import { NavigationScreenProp } from 'react-navigation'
+import { TextInput } from 'react-native-gesture-handler'
+import { color } from '../../theme/color'
+import { metrics } from '../../theme/spacing'
 
 const styles = StyleSheet.create({
     container,
@@ -25,7 +28,7 @@ const ApiScreen = ({
 
     const backends = [
         { title: 'Live backend', value: 'https://editions-api.gutools.co.uk' },
-        { title: 'Localhost', value: 'https://406de389.ngrok.io' },
+        { title: 'Localhost', value: 'https://localhost:3131' },
         {
             title: 'Lauras funhouse',
             value: 'https://s3.amazonaws.com/lauras-funhouse/download.json?q=',
@@ -33,7 +36,23 @@ const ApiScreen = ({
     ]
     return (
         <ScrollView style={styles.container}>
-            <ListHeading>Select a backend</ListHeading>
+            <ListHeading>Selected backend</ListHeading>
+            <TextInput
+                style={{
+                    padding: metrics.horizontal,
+                    paddingVertical: metrics.vertical * 2,
+                    backgroundColor: color.background,
+                    borderBottomColor: color.line,
+                    borderBottomWidth: StyleSheet.hairlineWidth,
+                }}
+                onChangeText={value => {
+                    if (value) {
+                        setSetting('apiUrl', value)
+                    }
+                }}
+                value={apiUrl || ''}
+            />
+            <ListHeading>Presets</ListHeading>
             <List
                 onPress={({ value }) => {
                     setSetting('apiUrl', value)

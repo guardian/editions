@@ -18,13 +18,9 @@ const useArticleData = (
     path: string,
     { title }: { title: string },
 ): MaybeArticle => {
-    return useEndpoint<MaybeArticle>(
-        `content/${path}`,
-        {
-            title,
-        },
-        res => res,
-    )
+    return useEndpoint<MaybeArticle>(`content/${path}`, {
+        title,
+    })
 }
 
 const isFullArticle = (article: MaybeArticle): article is ArticleType =>

@@ -1,17 +1,24 @@
 import { useEffect, useState } from 'react'
 import { useSettings } from './use-settings'
 
-export const useFetch = <T>(
-    url: string,
-    initialState: T,
-    transform: (_: T) => T = res => res,
-): T => {
-    const [data, updateData] = useState(initialState)
+let naiveCache: { [url: string]: any } = {}
+
+export const clearLocalCache = () => {
+    alert(`deleting ${Object.keys(naiveCache).length} entries`)
+    for (let url in naiveCache) {
+        delete naiveCache[url]
+        console.log(`deleted ${url}`)
+    }
+}
+
+export const useFetch = <T>(url: string, initialState: T): T => {
+    const initial = naiveCache[url] ? naiveCache[url] : initialState
+    const [data, updateData] = useState(initial)
     useEffect(() => {
         fetch(url).then(res =>
             res.json().then(res => {
-                console.log(res)
-                updateData(transform(res))
+                naiveCache[url] = res
+                updateData(res)
             }),
         )
     }, [url])
@@ -19,12 +26,8 @@ export const useFetch = <T>(
     return data
 }
 
-export const useEndpoint = <T>(
-    path: string,
-    initialState: T,
-    transform: (_: any) => T = res => res as T,
-): T => {
+export const useEndpoint = <T>(path: string, initialState: T): T => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return useFetch(url, initialState, transform)
+    return useFetch(url, initialState)
 }
