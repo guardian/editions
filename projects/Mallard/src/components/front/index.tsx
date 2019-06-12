@@ -2,7 +2,7 @@ import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
 import { useEndpoint } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
-import { FrontCardGroup } from './front-card-group'
+import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
@@ -50,7 +50,7 @@ const Page: FunctionComponent<{
 
     return (
         <View style={{ width }}>
-            <FrontCardGroup
+            <CardGroup
                 appearance={appearance}
                 articles={collection.articles || []}
                 length={length}

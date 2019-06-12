@@ -4,7 +4,7 @@ import { MonoTextBlock } from '../components/styled-text'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 
 import { container } from '../theme/styles'
-import { Front } from '../components/front/front'
+import { Front } from '../components/front'
 import { renderIssueDate } from '../helpers/issues'
 import { Issue } from '../common'
 
