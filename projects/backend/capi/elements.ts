@@ -1,10 +1,11 @@
 import { IBlockElement, ElementType } from '@guardian/capi-ts'
 import { BlockElement } from '../common'
 import { extractImage } from './assets'
+import { renderAtom } from './atoms'
 
 export const elementParser: (
     element: IBlockElement,
-) => BlockElement = element => {
+) => Promise<BlockElement> = async element => {
     switch (element.type) {
         case ElementType.TEXT:
             if (element.textTypeData && element.textTypeData.html) {
@@ -49,11 +50,21 @@ export const elementParser: (
                 }
             }
         case ElementType.CONTENTATOM:
-            if(
+            if (
                 element.contentAtomTypeData &&
                 element.contentAtomTypeData.atomId &&
                 element.contentAtomTypeData.atomType
-            )
+            ) {
+                const rendered = await renderAtom(
+                    element.contentAtomTypeData.atomType,
+                    element.contentAtomTypeData.atomId,
+                )
+                return {
+                    id: '⚛︎',
+                    atomType: element.contentAtomTypeData.atomType,
+                    ...rendered,
+                }
+            }
     }
     return { id: 'unknown' }
 }

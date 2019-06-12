@@ -83,9 +83,18 @@ export interface PullquoteElement {
     html: string
     role?: string
 }
+
+export interface AtomElement {
+    id: '⚛︎'
+    atomType: string
+    html?: string
+    css?: string[]
+    js?: string[]
+}
 export type BlockElement =
     | HTMLElement
     | ImageElement
     | UnknownElement
     | TweetElement
+    | AtomElement
     | PullquoteElement
