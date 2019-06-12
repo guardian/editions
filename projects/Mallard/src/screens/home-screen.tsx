@@ -74,7 +74,7 @@ export const HomeScreen = ({
                 <ListHeading>Demo issues</ListHeading>
                 <List
                     data={issueList}
-                    onPress={issue => navigation.navigate('Front', issue)}
+                    onPress={issue => navigation.navigate('Issue', issue)}
                 />
                 {files.length > 0 && (
                     <>
