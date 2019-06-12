@@ -7,19 +7,22 @@ import { container } from '../theme/styles'
 import { Front } from '../components/front'
 import { renderIssueDate } from '../helpers/issues'
 import { Issue } from '../common'
+import { Header } from '../components/header'
 
 const styles = StyleSheet.create({
     container,
     contentContainer: {},
 })
 
-const IssueScreen = ({
+export const IssueScreen = ({
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
     const issue: Issue = navigation.getParam('issue', { date: -1 })
-    const issueDate = useMemo(() => renderIssueDate(issue.date), [issue.date])
+    const { weekday, date } = useMemo(() => renderIssueDate(issue.date), [
+        issue.date,
+    ])
 
     /* 
     we don't wanna render a massive tree at once 
@@ -41,15 +44,10 @@ const IssueScreen = ({
                     setViewIsTransitioning(false)
                 }}
             />
-            <MonoTextBlock>
-                This is a IssueScreen for issue {issueDate.weekday} -{' '}
-                {issueDate.date}
-            </MonoTextBlock>
+            <Header title={weekday} subtitle={date} />
 
             <Front {...{ viewIsTransitioning }} front="cities" />
             <Front {...{ viewIsTransitioning }} front="best-awards" />
         </ScrollView>
     )
 }
-
-export { IssueScreen }
