@@ -4,7 +4,6 @@ import {
     SharedIniFileCredentials,
 } from 'aws-sdk'
 import { awsToString } from '../parser'
-import { AtomElement } from '../common'
 
 const creds = process.env.arn
     ? {}
