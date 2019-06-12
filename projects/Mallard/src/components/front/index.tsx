@@ -15,7 +15,6 @@ import { Front as FrontType, Collection } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
-import { withResponse } from '../../hooks/use-response'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView

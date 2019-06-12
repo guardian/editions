@@ -7,7 +7,7 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType, ArticleFundamentals } from '../common'
+import { Article as ArticleType } from '../common'
 import { View, TouchableOpacity, Text } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
