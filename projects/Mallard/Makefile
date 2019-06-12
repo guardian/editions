@@ -11,4 +11,8 @@ debug-ios:
 
 beta-ios:
 	yarn bundle-ios
-	cd ios && fastlane beta
+	fastlane ios beta
+
+beta-android:
+	yarn bundle-android
+	fastlane android beta
