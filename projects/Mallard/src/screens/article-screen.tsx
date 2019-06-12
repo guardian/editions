@@ -24,9 +24,9 @@ export const ArticleScreen = ({
     const pathFromUrl = navigation.getParam('path', '')
     const titleFromUrl = navigation.getParam('title', 'Loading')
     const [appearance, setAppearance] = useState(0)
-    const article = useArticleData(pathFromUrl)
     const appearances = Object.keys(articleAppearances)
 
+    const article = useArticleData(pathFromUrl)
     return withResponse(article, {
         error: () => <Text>😭</Text>,
         pending: () => (

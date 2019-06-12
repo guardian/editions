@@ -6,6 +6,7 @@ import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
+import { Spinner } from '../spinner'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -108,7 +109,15 @@ export const Front: FunctionComponent<{
     return withResponse(response, {
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <Text>Wait up</Text>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Spinner />
+                </View>
             </Wrapper>
         ),
         success: frontData => {
