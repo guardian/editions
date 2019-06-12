@@ -1,10 +1,6 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, PixelRatio, Dimensions } from 'react-native'
-import {
-    NavigationScreenProp,
-    NavigationInjectedProps,
-    withNavigation,
-} from 'react-navigation'
+import { View, StyleSheet, Dimensions, Linking } from 'react-native'
+import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
@@ -19,7 +15,8 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
-import { BlockElement, HTMLElement } from '../../common'
+import { BlockElement } from '../../common'
+import { render } from './html/render'
 
 /*
 This is the article view! For all of the articles.
@@ -36,27 +33,6 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
 })
-
-const render = (article: BlockElement[]) => {
-    return `
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-      ${article
-          .filter(el => el.id === 'html')
-          .map(el => (el as HTMLElement).html)
-          .join('')}
-      <script>
-        window.requestAnimationFrame(function() {
-            window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
-        })
-      </script>
-    </body>
-    </html>
-    `
-}
 
 const Article = withNavigation(
     ({
@@ -75,6 +51,7 @@ const Article = withNavigation(
         const { appearance, name: appearanceName } = useArticleAppearance()
         const [height, setHeight] = useState(Dimensions.get('window').height)
         const html = useMemo(() => (article ? render(article) : ''), [article])
+
         return (
             <SlideCard
                 headerStyle={[appearance.backgrounds, appearance.text]}
@@ -98,7 +75,15 @@ const Article = withNavigation(
                         <WebView
                             originWhitelist={['*']}
                             scrollEnabled={false}
+                            useWebKit={false}
                             source={{ html: html }}
+                            onShouldStartLoadWithRequest={event => {
+                                if (event.url !== 'about:blank') {
+                                    Linking.openURL(event.url)
+                                    return false
+                                }
+                                return true
+                            }}
                             onMessage={event => {
                                 setHeight(parseInt(event.nativeEvent.data))
                             }}
