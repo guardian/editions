@@ -1,5 +1,7 @@
 import { BlockElement, HTMLElement } from '../../../common'
 import { Platform } from 'react-native'
+import { metrics } from '../../../theme/spacing'
+import { color } from '../../../theme/color'
 
 type fontFormats = 'ttf' | 'otf'
 
@@ -30,13 +32,27 @@ export const render = (article: BlockElement[]) => {
             <style>
               ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
               * {
-                font-family: 'GuardianTextEgyptian-Reg'
+                margin: 0;
+                padding: 0;
+              }
+              #app {
+                    font-family: 'GuardianTextEgyptian-Reg';
+                  padding: ${metrics.vertical}px ${metrics.horizontal}px;
+              }
+              #app p {
+                  margin-bottom: ${metrics.vertical * 2}px;
+              }
+              #app a {
+                  color: ${color.primary};
+                  text-decoration-color: ${color.line};
               }
             </style>
             <meta name="viewport" content="width=device-width, initial-scale=1">
         </head>
         <body>
-            ${articleHtml}
+            <div id="app">
+                ${articleHtml}
+            </div>
             <script>
                 window.requestAnimationFrame(function() {
                     window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
