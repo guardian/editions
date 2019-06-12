@@ -35,7 +35,13 @@ const useFetch = <T>(
                 }),
             )
             .catch((err: Error) => {
-                onError(err)
+                /*
+                if we have stale data let's 
+                just serve it and eat this up
+                */
+                if (response.type !== 'success') {
+                    onError(err)
+                }
             })
     }, [url])
 
