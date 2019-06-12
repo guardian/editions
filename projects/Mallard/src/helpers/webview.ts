@@ -1,12 +1,15 @@
 import { Platform } from 'react-native'
 
 /* this tricks vs code into thinking we are using emotion */
-export const css = (a: string[], ...b: string[]) =>
-    a.reduce((acc, k, i) => {
-        if (b[i]) {
-            return acc + k + b[i]
+export const css = (
+    literals: TemplateStringsArray,
+    ...placeholders: any[]
+): string =>
+    literals.reduce((acc, literal, i) => {
+        if (placeholders[i]) {
+            return acc + literal + placeholders[i]
         }
-        return acc + k
+        return acc + literal
     }, '')
 
 export const generateAssetsFontCss = (fontFamily: string) => {
