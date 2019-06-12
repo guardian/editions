@@ -7,6 +7,8 @@ import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
 import { Spinner } from '../spinner'
+import { FlexCenter } from '../layout/flex-center'
+import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -109,17 +111,20 @@ export const Front: FunctionComponent<{
     return withResponse(response, {
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <View
-                    style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
+                <FlexCenter>
                     <Spinner />
-                </View>
+                </FlexCenter>
             </Wrapper>
         ),
+        error: err => (
+            <Wrapper scrubber={<NavigatorSkeleton />}>
+                <FlexCenter>
+                    <UiBodyCopy>Oh no! something failed</UiBodyCopy>
+                    <UiExplainerCopy>{err.message}</UiExplainerCopy>
+                </FlexCenter>
+            </Wrapper>
+        ),
+
         success: frontData => {
             const color = 'green'
             const pages = Object.keys(frontData.collections).length
@@ -203,11 +208,5 @@ export const Front: FunctionComponent<{
                 </Wrapper>
             )
         },
-        error: err => (
-            <Wrapper scrubber={<NavigatorSkeleton />}>
-                <Text>Oh no! something failed</Text>
-                <Text>{err.message}</Text>
-            </Wrapper>
-        ),
     })
 }
