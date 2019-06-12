@@ -2,13 +2,18 @@ import { useEffect, useState, ReactNode, ReactElement } from 'react'
 import { useSettings } from './use-settings'
 
 let naiveCache: { [url: string]: any } = {}
+
+interface Error {
+    message: string
+    name?: string
+}
 interface PendingResponse {
-    type: 'loading' | 'error'
+    type: 'loading'
 }
 
 interface ErroredResponse {
     type: 'error'
-    error?: {}
+    error: Error
 }
 interface SuccesfulResponse<T> {
     type: 'success'
@@ -32,20 +37,20 @@ export const withResponse = <T>(
     }: {
         success: (resp: T) => ReactElement
         loading: () => ReactElement
-        error: () => ReactElement
+        error: (error: Error) => ReactElement
     },
-) => {
-    if (response.type === 'success' && response.response)
-        return success(response.response)
+): ReactElement => {
+    if (response.type === 'success') return success(response.response)
     else if (response.type === 'loading') return loading()
-    else return error()
+    else if (response.type === 'error') return error(response.error)
+    else return error({ message: 'Request failed' })
 }
 
 export const useFetch = <T>(url: string): Response<T> => {
     const [response, setResponse] = useState(
         naiveCache[url] ? naiveCache[url] : null,
     )
-    const [error, setError] = useState(undefined)
+    const [error, setError] = useState({ message: 'Mysterious error' })
     const [type, setType] = useState<Response<T>['type']>(
         naiveCache[url] ? 'success' : 'loading',
     )
@@ -53,14 +58,19 @@ export const useFetch = <T>(url: string): Response<T> => {
         fetch(url)
             .then(res =>
                 res.json().then(res => {
-                    naiveCache[url] = res
-                    setType('success')
-                    setResponse(res)
+                    console.log(res)
+                    if (res) {
+                        naiveCache[url] = res
+                        setResponse(res)
+                        setType('success')
+                    } else {
+                        setType('error')
+                    }
                 }),
             )
-            .catch(err => {
-                setType('error')
+            .catch((err: Error) => {
                 setError(err)
+                setType('error')
             })
     }, [url])
 

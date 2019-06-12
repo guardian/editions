@@ -194,9 +194,10 @@ export const Front: FunctionComponent<{
                 </Wrapper>
             )
         },
-        error: () => (
+        error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <Text>Oh no! something failed</Text>
+                <Text>{err.message}</Text>
             </Wrapper>
         ),
     })
