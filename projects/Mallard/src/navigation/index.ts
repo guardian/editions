@@ -22,7 +22,8 @@ export const RootNavigator = createAppContainer(
                 {
                     defaultNavigationOptions: {
                         headerStyle: {
-                            backgroundColor: color.primary,
+                            backgroundColor: color.palette.brand.dark,
+                            borderBottomColor: color.text,
                         },
                         headerTintColor: color.textOverPrimary,
                     },

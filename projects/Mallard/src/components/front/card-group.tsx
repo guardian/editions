@@ -48,7 +48,7 @@ interface PropTypes {
     translate: Animated.AnimatedInterpolation
 }
 
-const FrontCardGroupWithAppearance = ({
+const CardGroupWithAppearance = ({
     style,
     articles,
     length,
@@ -98,18 +98,18 @@ const FrontCardGroupWithAppearance = ({
     )
 }
 
-const FrontCardGroup = ({
+const CardGroup = ({
     appearance,
     ...props
 }: {
     appearance: ArticleAppearance
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
-        <FrontCardGroupWithAppearance {...props} />
+        <CardGroupWithAppearance {...props} />
     </WithArticleAppearance>
 )
 
-FrontCardGroup.defaultProps = {
+CardGroup.defaultProps = {
     stories: [],
 }
-export { FrontCardGroup }
+export { CardGroup }
