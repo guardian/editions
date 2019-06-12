@@ -14,5 +14,6 @@ beta-ios:
 	fastlane ios beta
 
 beta-android:
+	mkdir -p android/app/src/main/assets
 	yarn bundle-android
 	fastlane android beta
