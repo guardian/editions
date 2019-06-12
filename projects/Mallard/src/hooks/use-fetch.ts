@@ -8,7 +8,7 @@ interface Error {
     name?: string
 }
 interface PendingResponse {
-    type: 'loading'
+    type: 'pending'
 }
 
 interface ErroredResponse {
@@ -32,16 +32,16 @@ export const withResponse = <T>(
     response: Response<T>,
     {
         success,
-        loading,
+        pending,
         error,
     }: {
         success: (resp: T) => ReactElement
-        loading: () => ReactElement
+        pending: () => ReactElement
         error: (error: Error) => ReactElement
     },
 ): ReactElement => {
     if (response.type === 'success') return success(response.response)
-    else if (response.type === 'loading') return loading()
+    else if (response.type === 'pending') return pending()
     else if (response.type === 'error') return error(response.error)
     else return error({ message: 'Request failed' })
 }
@@ -52,7 +52,7 @@ export const useFetch = <T>(url: string): Response<T> => {
     )
     const [error, setError] = useState({ message: 'Mysterious error' })
     const [type, setType] = useState<Response<T>['type']>(
-        naiveCache[url] ? 'success' : 'loading',
+        naiveCache[url] ? 'success' : 'pending',
     )
     useEffect(() => {
         fetch(url)
@@ -77,7 +77,7 @@ export const useFetch = <T>(url: string): Response<T> => {
     switch (type) {
         case 'success':
             return { response, type }
-        case 'loading':
+        case 'pending':
             return { type }
         case 'error':
             return { error, type }

@@ -29,7 +29,7 @@ export const ArticleScreen = ({
 
     return withResponse(article, {
         error: () => <Text>😭</Text>,
-        loading: () => (
+        pending: () => (
             <Article
                 kicker={'Kicker 🥾'}
                 headline={titleFromUrl}

@@ -106,7 +106,7 @@ export const Front: FunctionComponent<{
     const response = useFrontsData(front)
 
     return withResponse(response, {
-        loading: () => (
+        pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <Text>Wait up</Text>
             </Wrapper>
