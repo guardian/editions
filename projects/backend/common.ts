@@ -12,6 +12,7 @@ export interface Article extends ArticleFundamentals {
 
 export interface Issue {
     name: string
+    date: number
     fronts: string[]
 }
 

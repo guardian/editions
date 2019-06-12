@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
     Image,
     ScrollView,
@@ -14,7 +14,22 @@ import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
 import { useFileList } from '../hooks/use-fs'
+import { Issue } from '../common'
+import { renderIssueDate } from '../helpers/issues'
 import { unzipIssue } from '../helpers/files'
+
+const demoIssues: Issue[] = [
+    {
+        name: '',
+        date: new Date(Date.now()).getTime(),
+        fronts: [],
+    },
+    {
+        name: '',
+        date: new Date(Date.now() - 86400000).getTime(),
+        fronts: [],
+    },
+]
 
 const styles = StyleSheet.create({
     container: primaryContainer,
@@ -36,6 +51,17 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [files, { refreshIssues }] = useFileList()
+    const issueList = useMemo(
+        () =>
+            demoIssues.map(issue => ({
+                key: issue.date.toString(),
+                title: renderIssueDate(issue.date).date,
+                data: {
+                    issue,
+                },
+            })),
+        [demoIssues.map(({ date }) => date)],
+    )
     return (
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
@@ -47,31 +73,8 @@ export const HomeScreen = ({
                 </View>
                 <ListHeading>Demo issues</ListHeading>
                 <List
-                    data={[
-                        {
-                            key: 'sunday-30',
-                            title: 'Sunday 30',
-                            data: {
-                                issue: 'sunday-30',
-                            },
-                        },
-                        {
-                            key: 'monday-1',
-                            title: 'Monday 1',
-                            data: {
-                                issue: 'monday-1',
-                            },
-                        },
-                    ]}
-                    // onPress={item =>
-                    //     navigation.navigate('Article', {
-                    //         headline: 'CATS ARE THE BEST PET',
-                    //         path:
-                    //             'politics/2019/jun/11/matt-hancock-refuses-to-rule-out-staying-in-eu-after-31-october',
-                    //     })
-                    // }
-
-                    onPress={item => navigation.navigate('Issue', item)}
+                    data={issueList}
+                    onPress={issue => navigation.navigate('Issue', issue)}
                 />
                 {files.length > 0 && (
                     <>
