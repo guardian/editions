@@ -1,10 +1,4 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    ReactNode,
-    MutableRefObject,
-} from 'react'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
 import { useEndpoint } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
@@ -108,7 +102,7 @@ export const Front: FunctionComponent<{
     viewIsTransitioning: boolean
 }> = ({ front, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
-    const scrollViewRef = useRef<ScrollView>()
+    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
 
     const frontData = useFrontsData(front)
 
@@ -133,16 +127,22 @@ export const Front: FunctionComponent<{
                     title={front}
                     fill={color}
                     onScrub={screenX => {
-                        if (scrollViewRef.current) {
-                            scrollViewRef.current.scrollTo({
+                        if (
+                            scrollViewRef.current &&
+                            scrollViewRef.current._component
+                        ) {
+                            scrollViewRef.current._component.scrollTo({
                                 x: getScrollPos(screenX) * (pages - 1),
                                 animated: false,
                             })
                         }
                     }}
                     onReleaseScrub={screenX => {
-                        if (scrollViewRef.current) {
-                            scrollViewRef.current.scrollTo({
+                        if (
+                            scrollViewRef.current &&
+                            scrollViewRef.current._component
+                        ) {
+                            scrollViewRef.current._component.scrollTo({
                                 x:
                                     Dimensions.get('window').width *
                                     getNearestPage(screenX, pages),
@@ -161,7 +161,7 @@ export const Front: FunctionComponent<{
         >
             <Animated.ScrollView
                 ref={(scrollView: AnimatedScrollViewRef) =>
-                    (scrollViewRef.current = scrollView._component)
+                    (scrollViewRef.current = scrollView)
                 }
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
