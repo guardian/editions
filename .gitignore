@@ -4,3 +4,4 @@ node_modules
 projects/Mallard/.vscode/.react/*
 projects/backend/.cache/*
 projects/backend/dist*
+projects/aws/cloudformation.yaml
