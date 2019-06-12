@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GHGuardianHeadline-Black.ttf</string>
@@ -66,6 +66,7 @@
 		<string>GuardianTextEgyptian-Reg.ttf</string>
 		<string>GuardianTextEgyptian-RegularIt.ttf</string>
 		<string>GuardianTextEgyptian-RegIt.ttf</string>
+		<string>SpaceMono-Regular copy.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
