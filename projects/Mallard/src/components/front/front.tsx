@@ -99,7 +99,8 @@ const Wrapper: FunctionComponent<{
 
 export const Front: FunctionComponent<{
     front: string
-}> = ({ front }) => {
+    viewIsTransitioning: boolean
+}> = ({ front, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
 
@@ -114,7 +115,9 @@ export const Front: FunctionComponent<{
 
     const color = 'green'
     const pages = Object.keys(frontData.collections).length
-    const collections = Object.entries(frontData.collections)
+    const collections = viewIsTransitioning
+        ? Object.entries(frontData.collections).slice(0, 1)
+        : Object.entries(frontData.collections)
 
     return (
         <Wrapper
