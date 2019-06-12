@@ -7,38 +7,51 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { View, TouchableOpacity } from 'react-native'
+import { Article as ArticleType, ArticleFundamentals } from '../common'
+import { View, TouchableOpacity, Text } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 
-const fixture = (seed: number): { image: string | null } => ({
-    image: [
-        'https://media.guim.co.uk/1d046fd12d5685eacd943fcf2089f23ecc873e8b/0_224_6720_4032/1000.jpg',
-        'https://i.guim.co.uk/img/media/aa751497cada64b193f8f3e640a3261eb0e16e81/424_255_4518_2711/master/4518.jpg?width=860&quality=45&auto=format&fit=max&dpr=2&s=5025f6e75a0cbb9a7cdecf948f1a54af',
-        null,
-    ][seed % 3],
-})
+type MaybeArticle = ArticleType | ArticleFundamentals
 
-const useArticleData = (articleId: any, { headline }: any) => {
-    return useEndpoint('', [headline, [[]]], res => res[articleId])
+const useArticleData = (
+    path: string,
+    { title }: { title: string },
+): MaybeArticle => {
+    return useEndpoint<MaybeArticle>(`content/${path}`, {
+        title,
+    })
 }
+
+const isFullArticle = (article: MaybeArticle): article is ArticleType =>
+    (article as ArticleType).elements !== undefined
 
 export const ArticleScreen = ({
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const articleFromUrl = navigation.getParam('article', -1)
-    const headlineFromUrl = navigation.getParam(
-        'headline',
-        'HEADLINE NOT FOUND',
-    )
-    const [headline, [article]] = useArticleData(articleFromUrl, {
-        headline: headlineFromUrl,
-    })
-    const { image } = fixture(articleFromUrl)
-    const appearances = Object.keys(articleAppearances)
+    const articleFromUrl = navigation.getParam('path', '')
+    const titleFromUrl = navigation.getParam('title', 'Loading')
     const [appearance, setAppearance] = useState(0)
+    const article = useArticleData(articleFromUrl, {
+        title: titleFromUrl,
+    })
+    const { title, imageURL } = article
+    if (!isFullArticle(article)) {
+        return (
+            <Article
+                kicker={'Kicker 🥾'}
+                headline={title}
+                byline={'Byliney McPerson'}
+                standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+                image={imageURL}
+            />
+        )
+    }
+    const { elements } = article
+
+    const appearances = Object.keys(articleAppearances)
     return (
         <>
             <View
@@ -78,13 +91,12 @@ export const ArticleScreen = ({
                 value={appearances[appearance] as ArticleAppearance}
             >
                 <Article
-                    article={article}
-                    kicker={'Kicker'}
-                    headline={headline}
+                    article={elements}
+                    kicker={'Kicker 🥾'}
+                    headline={title}
                     byline={'Byliney McPerson'}
                     standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                    image={image}
-                    navigation={navigation}
+                    image={imageURL}
                 />
             </WithArticleAppearance>
         </>
@@ -96,7 +108,7 @@ ArticleScreen.navigationOptions = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => ({
-    title: navigation.getParam('article', 'NO-ID'),
+    title: navigation.getParam('title', 'Loading'),
     gesturesEnabled: true,
     gestureResponseDistance: {
         vertical: metrics.headerHeight + metrics.slideCardSpacing,

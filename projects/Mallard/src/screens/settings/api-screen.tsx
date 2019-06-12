@@ -6,6 +6,9 @@ import { MonoTextBlock } from '../../components/styled-text'
 import { container } from '../../theme/styles'
 import { useSettings } from '../../hooks/use-settings'
 import { NavigationScreenProp } from 'react-navigation'
+import { TextInput } from 'react-native-gesture-handler'
+import { color } from '../../theme/color'
+import { metrics } from '../../theme/spacing'
 
 const styles = StyleSheet.create({
     container,
@@ -33,7 +36,23 @@ const ApiScreen = ({
     ]
     return (
         <ScrollView style={styles.container}>
-            <ListHeading>Select a backend</ListHeading>
+            <ListHeading>Selected backend</ListHeading>
+            <TextInput
+                style={{
+                    padding: metrics.horizontal,
+                    paddingVertical: metrics.vertical * 2,
+                    backgroundColor: color.background,
+                    borderBottomColor: color.line,
+                    borderBottomWidth: StyleSheet.hairlineWidth,
+                }}
+                onChangeText={value => {
+                    if (value) {
+                        setSetting('apiUrl', value)
+                    }
+                }}
+                value={apiUrl || ''}
+            />
+            <ListHeading>Presets</ListHeading>
             <List
                 onPress={({ value }) => {
                     setSetting('apiUrl', value)

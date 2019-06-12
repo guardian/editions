@@ -1,38 +1,24 @@
-import React, { useState, useRef, FunctionComponent } from 'react'
-import {
-    ScrollView,
-    View,
-    StyleSheet,
-    Dimensions,
-    Animated,
-} from 'react-native'
-import { MonoTextBlock } from '../components/styled-text'
-import { useEndpoint } from '../hooks/use-fetch'
-import { NavigationScreenProp } from 'react-navigation'
-import { metrics } from '../theme/spacing'
-import { container } from '../theme/styles'
-import { FrontCardGroup } from '../components/front/front-card-group'
-import { FrontsData } from '../helpers/types'
-import { Navigator } from '../components/navigator'
-import { color } from '../theme/color'
-import { ArticleAppearance } from '../theme/appearance'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
+import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
+import { useEndpoint } from '../../hooks/use-fetch'
+import { metrics } from '../../theme/spacing'
+import { FrontCardGroup } from './front-card-group'
+import { Navigator, NavigatorSkeleton } from '../navigator'
+import { ArticleAppearance } from '../../theme/appearance'
+import { Front as FrontType, Collection } from '../../../../backend/common'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const styles = StyleSheet.create({
-    container,
-    contentContainer: {},
-})
+const useFrontsData = (front: string) =>
+    useEndpoint<FrontType | null>(`front/${front}`, null)
 
-const useFrontsData = () => useEndpoint('', [], res => res)
-
-/* 
-Map the position of the tap on the screen to 
-the position of the tap on the scrubber itself (which has padding). 
-This is coupled to the visual layout and we can be a bit more 
-clever but also for now this works 
+/*
+Map the position of the tap on the screen to
+the position of the tap on the scrubber itself (which has padding).
+This is coupled to the visual layout and we can be a bit more
+clever but also for now this works
 */
 const getScrollPos = (screenX: number) => {
     const { width } = Dimensions.get('window')
@@ -52,29 +38,26 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     })
 }
 
-const FrontRowPage: FunctionComponent<{
-    frontsData: FrontsData
+const Page: FunctionComponent<{
     length: number
     appearance: ArticleAppearance
     page: number
     scrollX: Animated.Value
-}> = ({ frontsData, length, appearance, page, scrollX }) => {
-    const { width, height: windowHeight } = Dimensions.get('window')
-    const height = windowHeight - 300
-    //TODO: viewport height - padding - slider
-
+    collection: Collection
+}> = ({ collection, length, appearance, page, scrollX }) => {
+    const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, page)
 
     return (
         <View style={{ width }}>
             <FrontCardGroup
                 appearance={appearance}
-                stories={frontsData}
+                articles={collection.articles || []}
                 length={length}
                 translate={translateX}
                 style={[
                     {
-                        height,
+                        flex: 1,
                         transform: [
                             {
                                 translateX,
@@ -87,29 +70,57 @@ const FrontRowPage: FunctionComponent<{
     )
 }
 
-const FrontRow: React.FC<{
-    frontsData: FrontsData
-    front: any
-    issue: any
-    navigation: NavigationScreenProp<{}>
-    color: string
-}> = ({ frontsData, front, issue, navigation, color }) => {
-    const { width, height: windowHeight } = Dimensions.get('window')
-    const height = windowHeight - 300 //TODO: viewport height - padding - slider
-    const [scrollX] = useState(() => new Animated.Value(0))
-    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
-    const pages = 3
-
+const Wrapper: FunctionComponent<{
+    scrubber: ReactNode
+    children: ReactNode
+}> = ({ children, scrubber }) => {
+    const height = Dimensions.get('window').height - 300
     return (
-        <>
+        <View
+            style={{
+                height,
+                maxHeight: height,
+                minHeight: height,
+            }}
+        >
             <View
                 style={{
                     padding: metrics.horizontal,
-                    paddingBottom: 0,
-                    paddingTop: metrics.vertical * 2,
+                    marginBottom: 0,
+                    marginTop: metrics.vertical * 2,
                 }}
             >
+                {scrubber}
+            </View>
+            {children}
+        </View>
+    )
+}
+
+export const Front: FunctionComponent<{
+    front: string
+}> = ({ front }) => {
+    const [scrollX] = useState(() => new Animated.Value(0))
+    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
+
+    const frontData = useFrontsData(front)
+
+    if (!frontData)
+        return (
+            <Wrapper scrubber={<NavigatorSkeleton />}>
+                <Text>Wait up</Text>
+            </Wrapper>
+        )
+
+    const color = 'green'
+    const pages = Object.keys(frontData.collections).length
+    const collections = Object.entries(frontData.collections)
+
+    return (
+        <Wrapper
+            scrubber={
                 <Navigator
+                    stops={pages}
                     title={front}
                     fill={color}
                     onScrub={screenX => {
@@ -143,7 +154,8 @@ const FrontRow: React.FC<{
                         outputRange: [0, 1],
                     })}
                 />
-            </View>
+            }
+        >
             <Animated.ScrollView
                 ref={(scrollView: AnimatedScrollViewRef) =>
                     (scrollViewRef.current = scrollView)
@@ -166,61 +178,16 @@ const FrontRow: React.FC<{
                 horizontal={true}
                 pagingEnabled
             >
-                <FrontRowPage
-                    page={0}
-                    length={2}
-                    appearance={'comment'}
-                    {...{ frontsData, scrollX }}
-                />
-                <FrontRowPage
-                    page={1}
-                    length={3}
-                    appearance={'sport'}
-                    {...{ frontsData, scrollX }}
-                />
-                <FrontRowPage
-                    page={2}
-                    length={4}
-                    appearance={'news'}
-                    {...{ frontsData, scrollX }}
-                />
+                {collections.map(([id, collection], i) => (
+                    <Page
+                        page={i}
+                        length={6}
+                        appearance={'comment'}
+                        key={id}
+                        {...{ collection, scrollX }}
+                    />
+                ))}
             </Animated.ScrollView>
-        </>
+        </Wrapper>
     )
 }
-
-const FrontScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
-    const frontsData = useFrontsData()
-    const issue = navigation.getParam('issue', 'NO-ID')
-    return (
-        <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-        >
-            <FrontRow
-                color={color.palette.news.main}
-                front={'News'}
-                {...{ issue, navigation, frontsData }}
-            />
-            <FrontRow
-                color={color.palette.sport.main}
-                front={'Sport'}
-                {...{ issue, navigation, frontsData }}
-            />
-            <FrontRow
-                color={color.palette.opinion.main}
-                front={'Opinion'}
-                {...{ issue, navigation, frontsData }}
-            />
-            <MonoTextBlock style={{ flex: 1 }}>
-                This is a FrontScreen for issue {issue}
-            </MonoTextBlock>
-        </ScrollView>
-    )
-}
-
-export { FrontScreen }

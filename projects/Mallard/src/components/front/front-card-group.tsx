@@ -3,7 +3,6 @@ import { StyleSheet, StyleProp, Animated } from 'react-native'
 import { Multiline } from '../multiline'
 import { metrics } from '../../theme/spacing'
 
-import { Story } from '../../helpers/types'
 import {
     WithArticleAppearance,
     useArticleAppearance,
@@ -11,6 +10,7 @@ import {
 } from '../../theme/appearance'
 import { SmallCard } from './cards'
 import { color } from '../../theme/color'
+import { ArticleFromTheCollectionsAtm } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -43,19 +43,19 @@ const styles = StyleSheet.create({
 
 interface PropTypes {
     style: StyleProp<{}>
-    stories: Story[]
+    articles: ArticleFromTheCollectionsAtm[]
     length?: number
     translate: Animated.AnimatedInterpolation
 }
 
 const FrontCardGroupWithAppearance = ({
     style,
-    stories,
+    articles,
     length,
     translate,
 }: PropTypes) => {
     const { appearance } = useArticleAppearance()
-    const trimmed = useMemo(() => stories.slice(0, length), [stories, length])
+    const trimmed = useMemo(() => articles.slice(0, length), [articles, length])
     return (
         <Animated.View style={[styles.root, style, appearance.backgrounds]}>
             {trimmed.map((story, i) => (
@@ -81,9 +81,9 @@ const FrontCardGroupWithAppearance = ({
                 >
                     <SmallCard
                         style={styles.unit}
-                        id={i}
+                        path={story}
                         kicker="Kicker"
-                        headline={story[0]}
+                        headline={story}
                     />
                     {i < trimmed.length - 1 && (
                         <Multiline

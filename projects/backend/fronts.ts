@@ -37,7 +37,6 @@ export const getCollectionsForFront = async (
     //Yes. We don't intend to read it from here forever. Comment out as needed.
 
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
-
     if (!(id in config.fronts)) throw new Error('Front not found')
     const front = config.fronts[id]
     const collectionIds = front.collections

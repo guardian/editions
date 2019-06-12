@@ -1,8 +1,14 @@
-import { IBlockElement } from '@guardian/capi-ts'
-
 // This file is symlinked into both backend and Mallard.
 // Be careful.
-export type Article = IBlockElement[][]
+
+export type ArticleFromTheCollectionsAtm = string
+export interface ArticleFundamentals {
+    title: string
+    imageURL?: string
+}
+export interface Article extends ArticleFundamentals {
+    elements: BlockElement[]
+}
 
 export interface Issue {
     name: string
