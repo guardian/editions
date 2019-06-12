@@ -2,12 +2,17 @@ import { BlockElement, HTMLElement } from '../../../common'
 import { metrics } from '../../../theme/spacing'
 import { color } from '../../../theme/color'
 import { generateAssetsFontCss, css, makeHtml } from '../../../helpers/webview'
+import { PixelRatio } from 'react-native'
 
 const styles = css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     * {
         margin: 0;
         padding: 0;
+    }
+    :root {
+        font-size: ${17 * PixelRatio.getFontScale()}px;
+        line-height; 1.4;
     }
     #app {
         font-family: 'GuardianTextEgyptian-Reg';
