@@ -1,10 +1,6 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, PixelRatio, Dimensions } from 'react-native'
-import {
-    NavigationScreenProp,
-    NavigationInjectedProps,
-    withNavigation,
-} from 'react-navigation'
+import { View, StyleSheet, Dimensions, Linking } from 'react-native'
+import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
@@ -19,7 +15,7 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
-import { BlockElement, HTMLElement } from '../../common'
+import { BlockElement } from '../../common'
 import { render } from './html/render'
 
 /*
@@ -55,6 +51,7 @@ const Article = withNavigation(
         const { appearance, name: appearanceName } = useArticleAppearance()
         const [height, setHeight] = useState(Dimensions.get('window').height)
         const html = useMemo(() => (article ? render(article) : ''), [article])
+
         return (
             <SlideCard
                 headerStyle={[appearance.backgrounds, appearance.text]}
@@ -75,18 +72,23 @@ const Article = withNavigation(
                     <View
                         style={{ backgroundColor: color.background, flex: 1 }}
                     >
-                        {html != null && (
-                            <WebView
-                                useWebKit={false}
-                                originWhitelist={['*']}
-                                scrollEnabled={false}
-                                source={{ html: html }}
-                                onMessage={event => {
-                                    setHeight(parseInt(event.nativeEvent.data))
-                                }}
-                                style={{ flex: 1, minHeight: height }}
-                            />
-                        )}
+                        <WebView
+                            originWhitelist={['*']}
+                            scrollEnabled={false}
+                            useWebKit={false}
+                            source={{ html: html }}
+                            onShouldStartLoadWithRequest={event => {
+                                if (event.url !== 'about:blank') {
+                                    Linking.openURL(event.url)
+                                    return false
+                                }
+                                return true
+                            }}
+                            onMessage={event => {
+                                setHeight(parseInt(event.nativeEvent.data))
+                            }}
+                            style={{ flex: 1, minHeight: height }}
+                        />
                     </View>
                 </View>
             </SlideCard>

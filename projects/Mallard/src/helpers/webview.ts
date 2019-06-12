@@ -25,3 +25,31 @@ export const generateAssetsFontCss = (fontFamily: string) => {
         }
     `
 }
+
+/* makes some HTML and posts the height back */
+export const makeHtml = ({
+    styles,
+    html,
+}: {
+    styles: string
+    html: string
+}) => `
+<html>
+<head>
+    <style>
+      ${styles}
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="app">
+        ${html}
+    </div>
+    <script>
+        window.requestAnimationFrame(function() {
+            window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
+        })
+    </script>
+</body>
+</html>
+`

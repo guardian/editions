@@ -1,7 +1,7 @@
 import { BlockElement, HTMLElement } from '../../../common'
 import { metrics } from '../../../theme/spacing'
 import { color } from '../../../theme/color'
-import { generateAssetsFontCss, css } from '../../../helpers/webview'
+import { generateAssetsFontCss, css, makeHtml } from '../../../helpers/webview'
 
 const styles = css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
@@ -23,29 +23,10 @@ const styles = css`
 `
 
 export const render = (article: BlockElement[]) => {
-    const articleHtml = article
+    const html = article
         .filter(el => el.id === 'html')
         .map(el => (el as HTMLElement).html)
         .join('')
 
-    return `
-        <html>
-        <head>
-            <style>
-              ${styles}
-            </style>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-        <body>
-            <div id="app">
-                ${articleHtml}
-            </div>
-            <script>
-                window.requestAnimationFrame(function() {
-                    window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
-                })
-            </script>
-        </body>
-        </html>
-    `
+    return makeHtml({ styles, html })
 }
