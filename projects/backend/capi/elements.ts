@@ -48,6 +48,12 @@ export const elementParser: (
                     role: element.pullquoteTypeData.role,
                 }
             }
+        case ElementType.CONTENTATOM:
+            if(
+                element.contentAtomTypeData &&
+                element.contentAtomTypeData.atomId &&
+                element.contentAtomTypeData.atomType
+            )
     }
     return { id: 'unknown' }
 }
