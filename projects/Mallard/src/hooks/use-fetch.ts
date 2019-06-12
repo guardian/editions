@@ -1,7 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ReactNode, ReactElement } from 'react'
 import { useSettings } from './use-settings'
 
 let naiveCache: { [url: string]: any } = {}
+interface PendingResponse {
+    type: 'loading' | 'error'
+}
+
+interface ErroredResponse {
+    type: 'error'
+    error?: {}
+}
+interface SuccesfulResponse<T> {
+    type: 'success'
+    response: T
+}
+type Response<T> = PendingResponse | ErroredResponse | SuccesfulResponse<T>
 
 export const clearLocalCache = () => {
     for (let url in naiveCache) {
@@ -10,23 +23,59 @@ export const clearLocalCache = () => {
     }
 }
 
-export const useFetch = <T>(url: string, initialState: T): T => {
-    const initial = naiveCache[url] ? naiveCache[url] : initialState
-    const [data, updateData] = useState(initial)
-    useEffect(() => {
-        fetch(url).then(res =>
-            res.json().then(res => {
-                naiveCache[url] = res
-                updateData(res)
-            }),
-        )
-    }, [url])
-
-    return data
+export const withResponse = <T>(
+    response: Response<T>,
+    {
+        success,
+        loading,
+        error,
+    }: {
+        success: (resp: T) => ReactElement
+        loading: () => ReactElement
+        error: () => ReactElement
+    },
+) => {
+    if (response.type === 'success' && response.response)
+        return success(response.response)
+    else if (response.type === 'loading') return loading()
+    else return error()
 }
 
-export const useEndpoint = <T>(path: string, initialState: T): T => {
+export const useFetch = <T>(url: string): Response<T> => {
+    const [response, setResponse] = useState(
+        naiveCache[url] ? naiveCache[url] : null,
+    )
+    const [error, setError] = useState(undefined)
+    const [type, setType] = useState<Response<T>['type']>(
+        naiveCache[url] ? 'success' : 'loading',
+    )
+    useEffect(() => {
+        fetch(url)
+            .then(res =>
+                res.json().then(res => {
+                    naiveCache[url] = res
+                    setType('success')
+                    setResponse(res)
+                }),
+            )
+            .catch(err => {
+                setType('error')
+                setError(err)
+            })
+    }, [url])
+
+    switch (type) {
+        case 'success':
+            return { response, type }
+        case 'loading':
+            return { type }
+        case 'error':
+            return { error, type }
+    }
+}
+
+export const useEndpoint = <T>(path: string): Response<T> => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return useFetch(url, initialState)
+    return useFetch(url)
 }
