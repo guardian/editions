@@ -23,21 +23,19 @@ const SmallCard = withNavigation(
         style,
         headline,
         kicker,
-        id,
+        path,
         navigation,
     }: NavigationInjectedProps & {
         style: StyleProp<ViewStyle>
         headline: string
         kicker: string
-        id: number
+        path: string
     }) => {
         const { appearance } = useArticleAppearance()
         return (
             <View style={style}>
                 <Highlight
-                    onPress={() =>
-                        navigation.navigate('Article', { article: id })
-                    }
+                    onPress={() => navigation.navigate('Article', { path })}
                 >
                     <View
                         style={[

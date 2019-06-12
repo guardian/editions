@@ -14,9 +14,9 @@ import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from '../theme/appearance'
 import { metrics } from '../theme/spacing'
 import { useFileList } from '../hooks/use-fs'
-import { unzipIssue } from '../helpers/files'
 import { Issue } from '../common'
 import { renderIssueDate } from '../helpers/issues'
+import { unzipIssue } from '../helpers/files'
 
 const demoIssues: Issue[] = [
     {

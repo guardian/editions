@@ -5,6 +5,7 @@ import { List } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { container } from '../theme/styles'
 import { useSettings } from '../hooks/use-settings'
+import { clearLocalCache } from '../hooks/use-fetch'
 
 const styles = StyleSheet.create({
     container,
@@ -31,6 +32,19 @@ const SettingsScreen = ({
                         title: 'API Endpoint',
                         explainer: apiUrl,
                         data: { to: 'Endpoints' },
+                    },
+                ]}
+            />
+            <List
+                onPress={() => {
+                    clearLocalCache()
+                }}
+                data={[
+                    {
+                        key: 'Clear local cache',
+                        title: 'Clear local cache',
+                        explainer: 'You can also cmd-r',
+                        data: {},
                     },
                 ]}
             />

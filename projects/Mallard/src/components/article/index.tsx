@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, PixelRatio } from 'react-native'
-import { NavigationScreenProp } from 'react-navigation'
+import React, { useState, useMemo } from 'react'
+import { View, StyleSheet, PixelRatio, Dimensions } from 'react-native'
+import {
+    NavigationScreenProp,
+    NavigationInjectedProps,
+    withNavigation,
+} from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
@@ -15,10 +19,10 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
-import { IBlockElement } from '@guardian/capi-ts'
+import { BlockElement, HTMLElement } from '../../common'
 
-/* 
-This is the article view! For all of the articles. 
+/*
+This is the article view! For all of the articles.
 it gets everything it needs from its route
 */
 
@@ -33,7 +37,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const render = (article: IBlockElement[]) => {
+const render = (article: BlockElement[]) => {
     return `
     <html>
     <head>
@@ -41,8 +45,8 @@ const render = (article: IBlockElement[]) => {
     </head>
     <body>
       ${article
-          .filter(el => el.type === 0)
-          .map(el => el.textTypeData && el.textTypeData.html)
+          .filter(el => el.id === 'html')
+          .map(el => (el as HTMLElement).html)
           .join('')}
       <script>
         window.requestAnimationFrame(function() {
@@ -54,53 +58,57 @@ const render = (article: IBlockElement[]) => {
     `
 }
 
-const Article = ({
-    navigation,
-    article,
-    headline,
-    image,
-    kicker,
-    byline,
-    standfirst,
-}: {
-    navigation: NavigationScreenProp<{}>
-    article: IBlockElement[]
-} & ArticleHeaderPropTypes &
-    StandfirstPropTypes) => {
-    const { appearance, name: appearanceName } = useArticleAppearance()
-    const html = render(article)
-    const [height, setHeight] = useState(500)
-    return (
-        <SlideCard
-            headerStyle={[appearance.backgrounds, appearance.text]}
-            fadesHeaderIn={appearanceName === 'longread'}
-            backgroundColor={appearance.backgrounds.backgroundColor}
-            onDismiss={() => {
-                navigation.goBack()
-            }}
-        >
-            <View style={styles.container}>
-                {appearanceName === 'longread' ? (
-                    <LongReadHeader {...{ headline, image, kicker }} />
-                ) : (
-                    <NewsHeader {...{ headline, image, kicker }} />
-                )}
-                <Standfirst {...{ byline, standfirst }} />
+const Article = withNavigation(
+    ({
+        navigation,
+        article,
+        headline,
+        image,
+        kicker,
+        byline,
+        standfirst,
+    }: {
+        article?: BlockElement[]
+    } & ArticleHeaderPropTypes &
+        StandfirstPropTypes &
+        NavigationInjectedProps) => {
+        const { appearance, name: appearanceName } = useArticleAppearance()
+        const [height, setHeight] = useState(Dimensions.get('window').height)
+        const html = useMemo(() => (article ? render(article) : ''), [article])
+        return (
+            <SlideCard
+                headerStyle={[appearance.backgrounds, appearance.text]}
+                fadesHeaderIn={appearanceName === 'longread'}
+                backgroundColor={appearance.backgrounds.backgroundColor}
+                onDismiss={() => {
+                    navigation.goBack()
+                }}
+            >
+                <View style={styles.container}>
+                    {appearanceName === 'longread' ? (
+                        <LongReadHeader {...{ headline, image, kicker }} />
+                    ) : (
+                        <NewsHeader {...{ headline, image, kicker }} />
+                    )}
+                    <Standfirst {...{ byline, standfirst }} />
 
-                <View style={{ backgroundColor: color.background, flex: 1 }}>
-                    <WebView
-                        originWhitelist={['*']}
-                        scrollEnabled={false}
-                        source={{ html: html }}
-                        onMessage={event => {
-                            setHeight(parseInt(event.nativeEvent.data))
-                        }}
-                        style={{ flex: 1, minHeight: height }}
-                    />
+                    <View
+                        style={{ backgroundColor: color.background, flex: 1 }}
+                    >
+                        <WebView
+                            originWhitelist={['*']}
+                            scrollEnabled={false}
+                            source={{ html: html }}
+                            onMessage={event => {
+                                setHeight(parseInt(event.nativeEvent.data))
+                            }}
+                            style={{ flex: 1, minHeight: height }}
+                        />
+                    </View>
                 </View>
-            </View>
-        </SlideCard>
-    )
-}
+            </SlideCard>
+        )
+    },
+)
 
 export { Article }
