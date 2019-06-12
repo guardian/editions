@@ -54,18 +54,15 @@ export const useResponse = <T>(
     }
 }
 
-export const withResponse = <T>(
-    response: Response<T>,
-    {
-        success,
-        pending,
-        error,
-    }: {
-        success: (resp: T) => ReactElement
-        pending: () => ReactElement
-        error: (error: Error) => ReactElement
-    },
-): ReactElement => {
+export const withResponse = <T>(response: Response<T>) => ({
+    success,
+    pending,
+    error,
+}: {
+    success: (resp: T) => ReactElement
+    pending: () => ReactElement
+    error: (error: Error) => ReactElement
+}): ReactElement => {
     if (response.type === 'success') return success(response.response)
     else if (response.type === 'pending') return pending()
     else if (response.type === 'error') return error(response.error)

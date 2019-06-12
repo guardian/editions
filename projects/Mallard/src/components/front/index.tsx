@@ -1,6 +1,12 @@
-import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
-import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
-import { useEndpoint } from '../../hooks/use-fetch'
+import React, {
+    useState,
+    useRef,
+    FunctionComponent,
+    ReactNode,
+    useMemo,
+} from 'react'
+import { ScrollView, View, Dimensions, Animated } from 'react-native'
+import { useEndpointResponse } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -15,8 +21,11 @@ interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const useFrontsData = (front: string) =>
-    useEndpoint<FrontType>(`front/${front}`, res => res.collections != null)
+const useFrontsResponse = (front: string) =>
+    useEndpointResponse<FrontType>(
+        `front/${front}`,
+        res => res.collections != null,
+    )
 
 /*
 Map the position of the tap on the screen to
@@ -107,9 +116,9 @@ export const Front: FunctionComponent<{
 }> = ({ front, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
-    const response = useFrontsData(front)
+    const frontsResponse = useFrontsResponse(front)
 
-    return withResponse(response, {
+    return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <FlexCenter>

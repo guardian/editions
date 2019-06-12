@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSettings } from './use-settings'
-import { useResponse, Response, Error } from './use-response'
+import { useResponse, Response, Error, withResponse } from './use-response'
 
 let naiveCache: { [url: string]: any } = {}
 
@@ -42,11 +42,11 @@ const useFetch = <T>(
     return response
 }
 
-export const useEndpoint = <T>(
+export const useEndpointResponse = <T>(
     path: string,
     validator: (response: T | any) => boolean = () => true,
-): Response<T> => {
+) => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return useFetch(url, validator)
+    return withResponse<T>(useFetch(url, validator))
 }
