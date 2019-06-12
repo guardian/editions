@@ -20,6 +20,7 @@ import {
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
 import { BlockElement, HTMLElement } from '../../common'
+import { render } from './html/render'
 
 /*
 This is the article view! For all of the articles.
@@ -36,27 +37,6 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
 })
-
-const render = (article: BlockElement[]) => {
-    return `
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-      ${article
-          .filter(el => el.id === 'html')
-          .map(el => (el as HTMLElement).html)
-          .join('')}
-      <script>
-        window.requestAnimationFrame(function() {
-            window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
-        })
-      </script>
-    </body>
-    </html>
-    `
-}
 
 const Article = withNavigation(
     ({
@@ -95,15 +75,18 @@ const Article = withNavigation(
                     <View
                         style={{ backgroundColor: color.background, flex: 1 }}
                     >
-                        <WebView
-                            originWhitelist={['*']}
-                            scrollEnabled={false}
-                            source={{ html: html }}
-                            onMessage={event => {
-                                setHeight(parseInt(event.nativeEvent.data))
-                            }}
-                            style={{ flex: 1, minHeight: height }}
-                        />
+                        {html != null && (
+                            <WebView
+                                useWebKit={false}
+                                originWhitelist={['*']}
+                                scrollEnabled={false}
+                                source={{ html: html }}
+                                onMessage={event => {
+                                    setHeight(parseInt(event.nativeEvent.data))
+                                }}
+                                style={{ flex: 1, minHeight: height }}
+                            />
+                        )}
                     </View>
                 </View>
             </SlideCard>
