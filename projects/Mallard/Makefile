@@ -16,4 +16,5 @@ beta-ios:
 beta-android:
 	mkdir -p android/app/src/main/assets
 	yarn bundle-android
+	rm -rf android/app/src/main/res/drawable-*
 	fastlane android beta
