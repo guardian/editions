@@ -42,6 +42,11 @@ export class EditionsStack extends cdk.Stack {
             frontsRoleARN.stringValue,
         )
 
+        const atomLambdaParam = new cdk.CfnParameter(this, 'atom-lambda-arn', {
+            type: 'String',
+            description: 'lambda access',
+        })
+
         const backend = new lambda.Function(this, 'EditionsBackend', {
             functionName: `editions-backend-${stageParameter.stringValue}`,
             runtime: lambda.Runtime.NodeJS10x,
@@ -57,6 +62,7 @@ export class EditionsStack extends cdk.Stack {
                 CAPI_KEY: capiParameter.stringValue,
                 arn: frontsRoleARN.stringValue,
                 stage: stageParameter.stringValue,
+                atomArn: atomLambdaParam.stringValue,
             },
         })
 
@@ -65,6 +71,14 @@ export class EditionsStack extends cdk.Stack {
         policy.addAction('sts:AssumeRole')
 
         backend.addToRolePolicy(policy)
+
+        const atomPolicy = new iam.PolicyStatement(
+            iam.PolicyStatementEffect.Allow,
+        )
+        atomPolicy.addResource(atomLambdaParam.stringValue)
+        atomPolicy.addAction('lambda:InvokeFunction')
+
+        backend.addToRolePolicy(atomPolicy)
 
         const gateway = new apigateway.LambdaRestApi(
             this,

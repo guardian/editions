@@ -45,7 +45,7 @@ export const getArticle = async (path: string): Promise<Article> => {
         data.content.blocks.body &&
         data.content.blocks.body.map(_ => _.elements)
     const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
-    const elements = body && body.map(elementParser)
+    const elements = body && (await Promise.all(body.map(elementParser)))
     if (elements == null) throw new Error('Elements was undefined!')
 
     return {
