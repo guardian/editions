@@ -9,6 +9,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { TextInput } from 'react-native-gesture-handler'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
+import { backends } from '../../helpers/settings'
 
 const styles = StyleSheet.create({
     container,
@@ -26,14 +27,6 @@ const ApiScreen = ({
 }) => {
     const [{ apiUrl }, setSetting] = useSettings()
 
-    const backends = [
-        { title: 'Live backend', value: 'https://editions-api.gutools.co.uk' },
-        { title: 'Localhost', value: 'https://localhost:3131' },
-        {
-            title: 'Lauras funhouse',
-            value: 'https://s3.amazonaws.com/lauras-funhouse/download.json?q=',
-        },
-    ]
     return (
         <ScrollView style={styles.container}>
             <ListHeading>Selected backend</ListHeading>
