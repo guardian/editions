@@ -124,7 +124,6 @@ export const Front: FunctionComponent<{
                 </FlexCenter>
             </Wrapper>
         ),
-
         success: frontData => {
             const color = 'green'
             const pages = Object.keys(frontData.collections).length
