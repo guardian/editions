@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useEndpoint, withResponse } from '../hooks/use-fetch'
+import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import {
     WithArticleAppearance,
@@ -11,6 +11,7 @@ import { Article as ArticleType, ArticleFundamentals } from '../common'
 import { View, TouchableOpacity, Text } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
+import { withResponse } from '../hooks/use-response'
 
 const useArticleData = (path: string) => {
     return useEndpoint<ArticleType>(`content/${path}`)
@@ -25,8 +26,8 @@ export const ArticleScreen = ({
     const titleFromUrl = navigation.getParam('title', 'Loading')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
-
     const article = useArticleData(pathFromUrl)
+
     return withResponse(article, {
         error: () => <Text>😭</Text>,
         pending: () => (

@@ -1,25 +1,8 @@
-import { useEffect, useState, ReactNode, ReactElement } from 'react'
+import { useEffect } from 'react'
 import { useSettings } from './use-settings'
+import { useResponse, Response, Error } from './use-response'
 
 let naiveCache: { [url: string]: any } = {}
-
-interface Error {
-    message: string
-    name?: string
-}
-interface PendingResponse {
-    type: 'pending'
-}
-
-interface ErroredResponse {
-    type: 'error'
-    error: Error
-}
-interface SuccesfulResponse<T> {
-    type: 'success'
-    response: T
-}
-type Response<T> = PendingResponse | ErroredResponse | SuccesfulResponse<T>
 
 export const clearLocalCache = () => {
     for (let url in naiveCache) {
@@ -28,64 +11,42 @@ export const clearLocalCache = () => {
     }
 }
 
-export const withResponse = <T>(
-    response: Response<T>,
-    {
-        success,
-        pending,
-        error,
-    }: {
-        success: (resp: T) => ReactElement
-        pending: () => ReactElement
-        error: (error: Error) => ReactElement
-    },
-): ReactElement => {
-    if (response.type === 'success') return success(response.response)
-    else if (response.type === 'pending') return pending()
-    else if (response.type === 'error') return error(response.error)
-    else return error({ message: 'Request failed' })
-}
-
-export const useFetch = <T>(url: string): Response<T> => {
-    const [response, setResponse] = useState(
+/*
+use a validator to abort a fetch request
+if doesn't contain the right type - say on an error 500
+*/
+const useFetch = <T>(
+    url: string,
+    validator: (response: any) => boolean = () => true,
+): Response<T> => {
+    const { response, onSuccess, onError } = useResponse(
         naiveCache[url] ? naiveCache[url] : null,
-    )
-    const [error, setError] = useState({ message: 'Mysterious error' })
-    const [type, setType] = useState<Response<T>['type']>(
-        naiveCache[url] ? 'success' : 'pending',
     )
     useEffect(() => {
         fetch(url)
             .then(res =>
                 res.json().then(res => {
-                    console.log(res)
-                    if (res) {
+                    if (res && validator(res)) {
                         naiveCache[url] = res
-                        setResponse(res)
-                        setType('success')
+                        onSuccess(res)
                     } else {
-                        setType('error')
+                        onError({ message: 'Failed to parse data' })
                     }
                 }),
             )
             .catch((err: Error) => {
-                setError(err)
-                setType('error')
+                onError(err)
             })
     }, [url])
 
-    switch (type) {
-        case 'success':
-            return { response, type }
-        case 'pending':
-            return { type }
-        case 'error':
-            return { error, type }
-    }
+    return response
 }
 
-export const useEndpoint = <T>(path: string): Response<T> => {
+export const useEndpoint = <T>(
+    path: string,
+    validator: (response: T | any) => boolean = () => true,
+): Response<T> => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return useFetch(url)
+    return useFetch(url, validator)
 }

@@ -1,6 +1,6 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
-import { useEndpoint, withResponse } from '../../hooks/use-fetch'
+import { useEndpoint } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -9,13 +9,14 @@ import { Front as FrontType, Collection } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { withResponse } from '../../hooks/use-response'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
 const useFrontsData = (front: string) =>
-    useEndpoint<FrontType>(`front/${front}`)
+    useEndpoint<FrontType>(`front/${front}`, res => res.collections != null)
 
 /*
 Map the position of the tap on the screen to
