@@ -46,7 +46,6 @@ export const ArticleScreen = ({
                 byline={'Byliney McPerson'}
                 standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
                 image={imageURL}
-                navigation={navigation}
             />
         )
     }
@@ -98,7 +97,6 @@ export const ArticleScreen = ({
                     byline={'Byliney McPerson'}
                     standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
                     image={imageURL}
-                    navigation={navigation}
                 />
             </WithArticleAppearance>
         </>
@@ -110,7 +108,7 @@ ArticleScreen.navigationOptions = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => ({
-    title: navigation.getParam('article', 'NO-ID'),
+    title: navigation.getParam('title', 'Loading'),
     gesturesEnabled: true,
     gestureResponseDistance: {
         vertical: metrics.headerHeight + metrics.slideCardSpacing,

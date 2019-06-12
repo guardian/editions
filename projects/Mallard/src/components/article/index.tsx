@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, PixelRatio } from 'react-native'
-import { NavigationScreenProp } from 'react-navigation'
+import React, { useState, useMemo } from 'react'
+import { View, StyleSheet, PixelRatio, Dimensions } from 'react-native'
+import {
+    NavigationScreenProp,
+    NavigationInjectedProps,
+    withNavigation,
+} from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
@@ -54,53 +58,57 @@ const render = (article: BlockElement[]) => {
     `
 }
 
-const Article = ({
-    navigation,
-    article,
-    headline,
-    image,
-    kicker,
-    byline,
-    standfirst,
-}: {
-    navigation: NavigationScreenProp<{}>
-    article?: BlockElement[]
-} & ArticleHeaderPropTypes &
-    StandfirstPropTypes) => {
-    const { appearance, name: appearanceName } = useArticleAppearance()
-    const [height, setHeight] = useState(500)
-    const html = article ? render(article) : ''
-    return (
-        <SlideCard
-            headerStyle={[appearance.backgrounds, appearance.text]}
-            fadesHeaderIn={appearanceName === 'longread'}
-            backgroundColor={appearance.backgrounds.backgroundColor}
-            onDismiss={() => {
-                navigation.goBack()
-            }}
-        >
-            <View style={styles.container}>
-                {appearanceName === 'longread' ? (
-                    <LongReadHeader {...{ headline, image, kicker }} />
-                ) : (
-                    <NewsHeader {...{ headline, image, kicker }} />
-                )}
-                <Standfirst {...{ byline, standfirst }} />
+const Article = withNavigation(
+    ({
+        navigation,
+        article,
+        headline,
+        image,
+        kicker,
+        byline,
+        standfirst,
+    }: {
+        article?: BlockElement[]
+    } & ArticleHeaderPropTypes &
+        StandfirstPropTypes &
+        NavigationInjectedProps) => {
+        const { appearance, name: appearanceName } = useArticleAppearance()
+        const [height, setHeight] = useState(Dimensions.get('window').height)
+        const html = useMemo(() => (article ? render(article) : ''), [article])
+        return (
+            <SlideCard
+                headerStyle={[appearance.backgrounds, appearance.text]}
+                fadesHeaderIn={appearanceName === 'longread'}
+                backgroundColor={appearance.backgrounds.backgroundColor}
+                onDismiss={() => {
+                    navigation.goBack()
+                }}
+            >
+                <View style={styles.container}>
+                    {appearanceName === 'longread' ? (
+                        <LongReadHeader {...{ headline, image, kicker }} />
+                    ) : (
+                        <NewsHeader {...{ headline, image, kicker }} />
+                    )}
+                    <Standfirst {...{ byline, standfirst }} />
 
-                <View style={{ backgroundColor: color.background, flex: 1 }}>
-                    <WebView
-                        originWhitelist={['*']}
-                        scrollEnabled={false}
-                        source={{ html: html }}
-                        onMessage={event => {
-                            setHeight(parseInt(event.nativeEvent.data))
-                        }}
-                        style={{ flex: 1, minHeight: height }}
-                    />
+                    <View
+                        style={{ backgroundColor: color.background, flex: 1 }}
+                    >
+                        <WebView
+                            originWhitelist={['*']}
+                            scrollEnabled={false}
+                            source={{ html: html }}
+                            onMessage={event => {
+                                setHeight(parseInt(event.nativeEvent.data))
+                            }}
+                            style={{ flex: 1, minHeight: height }}
+                        />
+                    </View>
                 </View>
-            </View>
-        </SlideCard>
-    )
-}
+            </SlideCard>
+        )
+    },
+)
 
 export { Article }
