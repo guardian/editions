@@ -1,18 +1,30 @@
-import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
-import { ScrollView, View, Text, Dimensions, Animated } from 'react-native'
-import { useEndpoint } from '../../hooks/use-fetch'
+import React, {
+    useState,
+    useRef,
+    FunctionComponent,
+    ReactNode,
+    useMemo,
+} from 'react'
+import { ScrollView, View, Dimensions, Animated } from 'react-native'
+import { useEndpointResponse } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
+import { Spinner } from '../spinner'
+import { FlexCenter } from '../layout/flex-center'
+import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const useFrontsData = (front: string) =>
-    useEndpoint<FrontType | null>(`front/${front}`, null)
+const useFrontsResponse = (front: string) =>
+    useEndpointResponse<FrontType>(
+        `front/${front}`,
+        res => res.collections != null,
+    )
 
 /*
 Map the position of the tap on the screen to
@@ -103,94 +115,106 @@ export const Front: FunctionComponent<{
 }> = ({ front, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
+    const frontsResponse = useFrontsResponse(front)
 
-    const frontData = useFrontsData(front)
-
-    if (!frontData)
-        return (
+    return frontsResponse({
+        pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <Text>Wait up</Text>
+                <FlexCenter>
+                    <Spinner />
+                </FlexCenter>
             </Wrapper>
-        )
+        ),
+        error: err => (
+            <Wrapper scrubber={<NavigatorSkeleton />}>
+                <FlexCenter>
+                    <UiBodyCopy>Oh no! something failed</UiBodyCopy>
+                    <UiExplainerCopy>{err.message}</UiExplainerCopy>
+                </FlexCenter>
+            </Wrapper>
+        ),
+        success: frontData => {
+            const color = 'green'
+            const pages = Object.keys(frontData.collections).length
+            const collections = viewIsTransitioning
+                ? Object.entries(frontData.collections).slice(0, 1)
+                : Object.entries(frontData.collections)
 
-    const color = 'green'
-    const pages = Object.keys(frontData.collections).length
-    const collections = viewIsTransitioning
-        ? Object.entries(frontData.collections).slice(0, 1)
-        : Object.entries(frontData.collections)
-
-    return (
-        <Wrapper
-            scrubber={
-                <Navigator
-                    stops={pages}
-                    title={front}
-                    fill={color}
-                    onScrub={screenX => {
-                        if (
-                            scrollViewRef.current &&
-                            scrollViewRef.current._component
-                        ) {
-                            scrollViewRef.current._component.scrollTo({
-                                x: getScrollPos(screenX) * (pages - 1),
-                                animated: false,
-                            })
-                        }
-                    }}
-                    onReleaseScrub={screenX => {
-                        if (
-                            scrollViewRef.current &&
-                            scrollViewRef.current._component
-                        ) {
-                            scrollViewRef.current._component.scrollTo({
-                                x:
+            return (
+                <Wrapper
+                    scrubber={
+                        <Navigator
+                            stops={pages}
+                            title={front}
+                            fill={color}
+                            onScrub={screenX => {
+                                if (
+                                    scrollViewRef.current &&
+                                    scrollViewRef.current._component
+                                ) {
+                                    scrollViewRef.current._component.scrollTo({
+                                        x: getScrollPos(screenX) * (pages - 1),
+                                        animated: false,
+                                    })
+                                }
+                            }}
+                            onReleaseScrub={screenX => {
+                                if (
+                                    scrollViewRef.current &&
+                                    scrollViewRef.current._component
+                                ) {
+                                    scrollViewRef.current._component.scrollTo({
+                                        x:
+                                            Dimensions.get('window').width *
+                                            getNearestPage(screenX, pages),
+                                    })
+                                }
+                            }}
+                            position={scrollX.interpolate({
+                                inputRange: [
+                                    0,
                                     Dimensions.get('window').width *
-                                    getNearestPage(screenX, pages),
-                            })
+                                        (pages - 1),
+                                ],
+                                outputRange: [0, 1],
+                            })}
+                        />
+                    }
+                >
+                    <Animated.ScrollView
+                        ref={(scrollView: AnimatedScrollViewRef) =>
+                            (scrollViewRef.current = scrollView)
                         }
-                    }}
-                    position={scrollX.interpolate({
-                        inputRange: [
-                            0,
-                            Dimensions.get('window').width * (pages - 1),
-                        ],
-                        outputRange: [0, 1],
-                    })}
-                />
-            }
-        >
-            <Animated.ScrollView
-                ref={(scrollView: AnimatedScrollViewRef) =>
-                    (scrollViewRef.current = scrollView)
-                }
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={1}
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    x: scrollX,
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        scrollEventThrottle={1}
+                        onScroll={Animated.event(
+                            [
+                                {
+                                    nativeEvent: {
+                                        contentOffset: {
+                                            x: scrollX,
+                                        },
+                                    },
                                 },
-                            },
-                        },
-                    ],
-                    { useNativeDriver: true },
-                )}
-                horizontal={true}
-                pagingEnabled
-            >
-                {collections.map(([id, collection], i) => (
-                    <Page
-                        page={i}
-                        length={6}
-                        appearance={'comment'}
-                        key={id}
-                        {...{ collection, scrollX }}
-                    />
-                ))}
-            </Animated.ScrollView>
-        </Wrapper>
-    )
+                            ],
+                            { useNativeDriver: true },
+                        )}
+                        horizontal={true}
+                        pagingEnabled
+                    >
+                        {collections.map(([id, collection], i) => (
+                            <Page
+                                page={i}
+                                length={6}
+                                appearance={'comment'}
+                                key={id}
+                                {...{ collection, scrollX }}
+                            />
+                        ))}
+                    </Animated.ScrollView>
+                </Wrapper>
+            )
+        },
+    })
 }

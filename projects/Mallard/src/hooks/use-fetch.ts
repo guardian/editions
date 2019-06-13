@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSettings } from './use-settings'
+import { useResponse, Response, Error, withResponse } from './use-response'
+import { REQUEST_INVALID_RESPONSE_VALIDATION } from '../helpers/words'
 
 let naiveCache: { [url: string]: any } = {}
 
@@ -10,23 +12,50 @@ export const clearLocalCache = () => {
     }
 }
 
-export const useFetch = <T>(url: string, initialState: T): T => {
-    const initial = naiveCache[url] ? naiveCache[url] : initialState
-    const [data, updateData] = useState(initial)
+/*
+use a validator to abort a fetch request
+if doesn't contain the right type - say on an error 500
+*/
+const useFetch = <T>(
+    url: string,
+    validator: (response: any) => boolean = () => true,
+): Response<T> => {
+    const { response, onSuccess, onError } = useResponse(
+        naiveCache[url] ? naiveCache[url] : null,
+    )
     useEffect(() => {
-        fetch(url).then(res =>
-            res.json().then(res => {
-                naiveCache[url] = res
-                updateData(res)
-            }),
-        )
+        fetch(url)
+            .then(res =>
+                res.json().then(res => {
+                    if (res && validator(res)) {
+                        naiveCache[url] = res
+                        onSuccess(res)
+                    } else {
+                        onError({
+                            message: REQUEST_INVALID_RESPONSE_VALIDATION,
+                        })
+                    }
+                }),
+            )
+            .catch((err: Error) => {
+                /*
+                if we have stale data let's 
+                just serve it and eat this up
+                */
+                if (response.state !== 'success') {
+                    onError(err)
+                }
+            })
     }, [url])
 
-    return data
+    return response
 }
 
-export const useEndpoint = <T>(path: string, initialState: T): T => {
+export const useEndpointResponse = <T>(
+    path: string,
+    validator: (response: T | any) => boolean = () => true,
+) => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return useFetch(url, initialState)
+    return withResponse<T>(useFetch(url, validator))
 }
