@@ -4,7 +4,6 @@ import {
     StyleSheet,
     View,
     TouchableWithoutFeedback,
-    StyleProp,
 } from 'react-native'
 import { Chevron } from '../../chevron'
 import { metrics } from '../../../theme/spacing'
@@ -31,6 +30,8 @@ const styles = StyleSheet.create({
     },
     headerBackground: {
         zIndex: 10,
+        backgroundColor: color.background,
+        borderColor: color.line,
         borderTopWidth: StyleSheet.hairlineWidth,
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
@@ -38,13 +39,9 @@ const styles = StyleSheet.create({
 
 const Header = ({
     scrollY,
-    fadesHeaderIn,
-    style,
     onDismiss,
 }: {
     scrollY: Animated.Value
-    fadesHeaderIn: boolean
-    style: StyleProp<{}>
     onDismiss: () => void
 }) => {
     return (
@@ -72,33 +69,9 @@ const Header = ({
                         },
                     ]}
                 >
-                    <Chevron
-                        color={
-                            fadesHeaderIn
-                                ? color.textOverDarkBackground
-                                : color.text
-                        }
-                    />
+                    <Chevron color={color.text} />
                 </Animated.View>
             </TouchableWithoutFeedback>
-            <Animated.View
-                style={[
-                    style,
-                    StyleSheet.absoluteFillObject,
-                    styles.headerBackground,
-                    fadesHeaderIn
-                        ? {
-                              opacity: scrollY.interpolate({
-                                  inputRange: [0, 50],
-                                  outputRange: [0, 1],
-                                  extrapolate: 'clamp',
-                              }),
-                          }
-                        : {
-                              opacity: 1,
-                          },
-                ]}
-            />
         </View>
     )
 }

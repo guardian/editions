@@ -25,16 +25,10 @@ const styles = StyleSheet.create({
 
 export const SlideCard = ({
     children,
-    headerStyle,
-    backgroundColor,
     onDismiss,
-    fadesHeaderIn,
 }: {
     children: ReactNode
-    headerStyle: {}
-    backgroundColor: string | undefined
     onDismiss: () => void
-    fadesHeaderIn: boolean
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
     useEffect(() => {
@@ -62,10 +56,8 @@ export const SlideCard = ({
             ]}
         >
             <Header
-                style={headerStyle}
                 {...{
                     scrollY,
-                    fadesHeaderIn,
                     onDismiss,
                 }}
             />
@@ -74,7 +66,6 @@ export const SlideCard = ({
                 contentContainerStyle={{
                     flexGrow: 1,
                 }}
-                style={{ backgroundColor }}
                 onScroll={Animated.event(
                     [
                         {
