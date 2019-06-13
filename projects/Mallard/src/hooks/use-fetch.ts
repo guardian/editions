@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSettings } from './use-settings'
 import { useResponse, Response, Error, withResponse } from './use-response'
+import { REQUEST_INVALID_RESPONSE_VALIDATION } from '../helpers/words'
 
 let naiveCache: { [url: string]: any } = {}
 
@@ -30,7 +31,9 @@ const useFetch = <T>(
                         naiveCache[url] = res
                         onSuccess(res)
                     } else {
-                        onError({ message: 'Failed to parse data' })
+                        onError({
+                            message: REQUEST_INVALID_RESPONSE_VALIDATION,
+                        })
                     }
                 }),
             )
@@ -39,7 +42,7 @@ const useFetch = <T>(
                 if we have stale data let's 
                 just serve it and eat this up
                 */
-                if (response.type !== 'success') {
+                if (response.state !== 'success') {
                     onError(err)
                 }
             })

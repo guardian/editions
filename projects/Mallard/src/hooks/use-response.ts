@@ -1,18 +1,19 @@
 import { useState, ReactElement } from 'react'
+import { REQUEST_INVALID_RESPONSE_STATE } from '../helpers/words'
 
 export interface Error {
     message: string
     name?: string
 }
 interface PendingResponse {
-    type: 'pending'
+    state: 'pending'
 }
 interface ErroredResponse {
-    type: 'error'
+    state: 'error'
     error: Error
 }
 interface SuccesfulResponse<T> {
-    type: 'success'
+    state: 'success'
     response: T
 }
 export type Response<T> =
@@ -27,29 +28,33 @@ export const useResponse = <T>(
     onSuccess: (res: T) => void
     onError: (error: Error) => void
 } => {
-    const [response, setResponse] = useState<T>(initial)
-    const [error, setError] = useState({ message: 'Mysterious error' })
-    const [type, setType] = useState<Response<T>['type']>(
+    const [response, setResponse] = useState<SuccesfulResponse<T>['response']>(
+        initial,
+    )
+    const [error, setError] = useState<ErroredResponse['error']>({
+        message: 'Mysterious error',
+    })
+    const [state, setState] = useState<Response<T>['state']>(
         initial ? 'success' : 'pending',
     )
     return {
         response:
-            type === 'success'
+            state === 'success'
                 ? {
-                      type,
+                      state,
                       response,
                   }
-                : type === 'error'
-                ? { type, error }
-                : { type },
+                : state === 'error'
+                ? { state, error }
+                : { state },
 
         onSuccess: res => {
             setResponse(res)
-            setType('success')
+            setState('success')
         },
         onError: err => {
             setError(err)
-            setType('error')
+            setState('error')
         },
     }
 }
@@ -63,8 +68,8 @@ export const withResponse = <T>(response: Response<T>) => ({
     pending: () => ReactElement
     error: (error: Error) => ReactElement
 }): ReactElement => {
-    if (response.type === 'success') return success(response.response)
-    else if (response.type === 'pending') return pending()
-    else if (response.type === 'error') return error(response.error)
-    else return error({ message: 'Request failed' })
+    if (response.state === 'success') return success(response.response)
+    else if (response.state === 'pending') return pending()
+    else if (response.state === 'error') return error(response.error)
+    else return error({ message: REQUEST_INVALID_RESPONSE_STATE })
 }
