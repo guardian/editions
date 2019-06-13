@@ -21,6 +21,9 @@ const styles = StyleSheet.create({
         elevation: 5,
         flex: 1,
     },
+    flexGrow: {
+        flexGrow: 1,
+    },
 })
 
 export const SlideCard = ({
@@ -63,9 +66,7 @@ export const SlideCard = ({
             />
             <Animated.ScrollView
                 scrollEventThrottle={1}
-                contentContainerStyle={{
-                    flexGrow: 1,
-                }}
+                contentContainerStyle={styles.flexGrow}
                 onScroll={Animated.event(
                     [
                         {
@@ -80,17 +81,20 @@ export const SlideCard = ({
                 )}
             >
                 <Animated.View
-                    style={{
-                        transform: [
-                            {
-                                translateY: scrollY.interpolate({
-                                    inputRange: [-110, 0],
-                                    outputRange: [-100, 0],
-                                    extrapolate: 'clamp',
-                                }),
-                            },
-                        ],
-                    }}
+                    style={[
+                        styles.flexGrow,
+                        {
+                            transform: [
+                                {
+                                    translateY: scrollY.interpolate({
+                                        inputRange: [-110, 0],
+                                        outputRange: [-100, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                            ],
+                        },
+                    ]}
                 >
                     {children}
                 </Animated.View>
