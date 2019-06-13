@@ -118,6 +118,7 @@ export const Front: FunctionComponent<{
     const frontsResponse = useFrontsResponse(front)
 
     return frontsResponse({
+        // eslint-disable-next-line react/display-name
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <FlexCenter>
@@ -125,6 +126,7 @@ export const Front: FunctionComponent<{
                 </FlexCenter>
             </Wrapper>
         ),
+        // eslint-disable-next-line react/display-name
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <FlexCenter>
@@ -133,6 +135,7 @@ export const Front: FunctionComponent<{
                 </FlexCenter>
             </Wrapper>
         ),
+        // eslint-disable-next-line react/display-name
         success: frontData => {
             const color = 'green'
             const pages = Object.keys(frontData.collections).length

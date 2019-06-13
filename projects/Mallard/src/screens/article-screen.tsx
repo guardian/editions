@@ -31,6 +31,7 @@ export const ArticleScreen = ({
     const articleResponse = useArticleResponse(pathFromUrl)
 
     return articleResponse({
+        // eslint-disable-next-line react/display-name
         error: ({ message }) => (
             <FlexCenter style={{ backgroundColor: 'tomato' }}>
                 <Text style={{ fontSize: 40 }}>😭</Text>
@@ -43,6 +44,7 @@ export const ArticleScreen = ({
                 />
             </FlexCenter>
         ),
+        // eslint-disable-next-line react/display-name
         pending: () => (
             <Article
                 kicker={'Kicker 🥾'}
@@ -51,6 +53,7 @@ export const ArticleScreen = ({
                 standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
             />
         ),
+        // eslint-disable-next-line react/display-name
         success: ({ title, imageURL, elements }) => {
             return (
                 <>
