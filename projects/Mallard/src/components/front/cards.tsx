@@ -33,7 +33,7 @@ const SmallCard = withNavigation(
     }: SmallCardProps & Partial<InjectedProps>) => {
         const { appearance } = useArticleAppearance()
         if (navigation == null) {
-            throw new Error('No navigation presetn in cards.')
+            throw new Error('No navigation present in cards.')
         }
         return (
             <View style={style}>
