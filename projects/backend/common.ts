@@ -15,11 +15,16 @@ export interface Issue {
     date: number
     fronts: string[]
 }
-
+export interface FrontArticle {
+    path: string
+    headline: string
+    kicker: string
+    image: string
+}
 export interface CollectionArticles {
     id: string
     name: string
-    articles: string[]
+    articles: FrontArticle[]
 }
 export interface Collection {
     displayName: string
@@ -40,7 +45,7 @@ export interface Collection {
     hideShowMore?: boolean
     platform?: unknown
     frontsToolSettings?: unknown
-    articles?: string[]
+    articles?: FrontArticle[]
 }
 
 export interface Front {
