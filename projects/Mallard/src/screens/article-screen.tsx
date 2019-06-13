@@ -7,26 +7,27 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType } from '../common'
+import { Article as ArticleType, FrontArticle } from '../common'
 import { View, TouchableOpacity, Text, Button } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
-import { Params } from '../navigation'
 
 const useArticleResponse = (path: string) =>
     useEndpointResponse<ArticleType>(
         `content/${path}`,
         article => article.title != null,
     )
-
+export interface Params {
+    article: FrontArticle
+}
 export const ArticleScreen = ({
     navigation,
 }: {
     navigation: NavigationScreenProp<{}, Params>
 }) => {
     const frontArticle = navigation.getParam('article')
-
+    console.log(frontArticle)
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(frontArticle.path)

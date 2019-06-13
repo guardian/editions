@@ -6,8 +6,8 @@ import { Highlight } from '../highlight'
 import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
 
 import { useArticleAppearance } from '../../theme/appearance'
-import { Params } from '../../navigation'
 import { FrontArticle } from '../../common'
+import { Params } from '../../screens/article-screen'
 
 const styles = StyleSheet.create({
     root: {
@@ -20,20 +20,21 @@ const styles = StyleSheet.create({
         flexBasis: '100%',
     },
 })
-const SmallCard = withNavigation(
-    ({
-        style,
-        article,
-        navigation,
-    }: NavigationInjectedProps<Params> & {
-        style: StyleProp<ViewStyle>
-        article: FrontArticle
-    }) => {
+interface SmallCardProps {
+    style: StyleProp<ViewStyle>
+    article: FrontArticle
+}
+type InjectedProps = NavigationInjectedProps<Params>
+const InjectedSmallCard = withNavigation(
+    ({ style, article, navigation }: SmallCardProps & InjectedProps) => {
         const { appearance } = useArticleAppearance()
         return (
             <View style={style}>
                 <Highlight
-                    onPress={() => navigation.navigate('Article', article)}
+                    onPress={() => {
+                        console.log(article)
+                        navigation.navigate('Article', { article: article })
+                    }}
                 >
                     <View
                         style={[
@@ -58,6 +59,10 @@ const SmallCard = withNavigation(
             </View>
         )
     },
-)
+) //Dirty type casting unti useNavigation hooks are stable
+
+const SmallCard = (InjectedSmallCard as unknown) as React.FunctionComponent<
+    SmallCardProps
+>
 
 export { SmallCard }

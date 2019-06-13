@@ -8,9 +8,7 @@ import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from '../theme/color'
 import { Animated, Easing } from 'react-native'
 import { FrontArticle } from '../common'
-export interface Params {
-    article: FrontArticle
-}
+
 export const RootNavigator = createAppContainer(
     createStackNavigator(
         {
