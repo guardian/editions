@@ -23,7 +23,10 @@ platform :ios do
       build_number: latest_testflight_build_number + 1
     )
     build_app(
-      scheme: "Mallard"
+      scheme: "Mallard",
+      export_options: {
+        exportOptionsPlist: "exports-plists/release.plist"
+      }
     )
     upload_to_testflight(
       skip_waiting_for_build_processing: true
