@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { StyleSheet, StyleProp, Animated } from 'react-native'
+import React, { useMemo, ReactNode } from 'react'
+import { StyleSheet, StyleProp, Animated, View } from 'react-native'
 import { Multiline } from '../multiline'
 import { metrics } from '../../theme/spacing'
 
@@ -36,6 +36,14 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'space-between',
     },
+    doubleRow: {
+        flex: 1,
+        flexDirection: 'row',
+        overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+    },
     unit: {
         flex: 1,
     },
@@ -48,52 +56,85 @@ interface PropTypes {
     translate: Animated.AnimatedInterpolation
 }
 
-const CardGroupWithAppearance = ({
-    style,
-    articles,
-    length,
+const Row = ({
+    children,
     translate,
-}: PropTypes) => {
+    isLastChild,
+    index,
+}: {
+    children: ReactNode
+    translate: PropTypes['translate']
+    isLastChild: boolean
+    index: number
+}) => {
     const { appearance } = useArticleAppearance()
-    const trimmed = useMemo(() => articles.slice(0, length), [articles, length])
+    return (
+        <Animated.View
+            style={[
+                styles.row,
+                {
+                    transform: [
+                        {
+                            translateX: translate.interpolate({
+                                inputRange: [
+                                    metrics.horizontal * -1.5,
+                                    0,
+                                    metrics.horizontal * 1.5,
+                                ],
+                                outputRange: [60 * index, 0, -60 * index],
+                            }),
+                        },
+                    ],
+                },
+            ]}
+        >
+            {children}
+            {!isLastChild && (
+                <Multiline
+                    color={appearance.backgrounds.borderColor}
+                    count={2}
+                    style={{ flex: 0 }}
+                />
+            )}
+        </Animated.View>
+    )
+}
+
+const CardGroupWithAppearance = ({ style, articles, translate }: PropTypes) => {
+    const { appearance } = useArticleAppearance()
+
     return (
         <Animated.View style={[styles.root, style, appearance.backgrounds]}>
-            {trimmed.map((story, i) => (
-                <Animated.View
-                    style={[
-                        styles.row,
-                        {
-                            transform: [
-                                {
-                                    translateX: translate.interpolate({
-                                        inputRange: [
-                                            metrics.horizontal * -1.5,
-                                            0,
-                                            metrics.horizontal * 1.5,
-                                        ],
-                                        outputRange: [60 * i, 0, -60 * i],
-                                    }),
-                                },
-                            ],
-                        },
-                    ]}
-                    key={i}
-                >
+            <Row index={0} isLastChild={false} translate={translate}>
+                <View style={styles.doubleRow}>
                     <SmallCard
-                        style={styles.unit}
-                        path={story}
+                        style={[styles.unit]}
+                        path={articles[0]}
                         kicker="Kicker"
-                        headline={story}
+                        headline={articles[0]}
                     />
-                    {i < trimmed.length - 1 && (
-                        <Multiline
-                            color={appearance.backgrounds.borderColor}
-                            count={2}
-                            style={{ flex: 0 }}
-                        />
-                    )}
-                </Animated.View>
-            ))}
+                    <SmallCard
+                        style={[
+                            styles.unit,
+                            {
+                                borderColor: appearance.backgrounds.borderColor,
+                                borderLeftWidth: StyleSheet.hairlineWidth,
+                            },
+                        ]}
+                        path={articles[1]}
+                        kicker="Kicker"
+                        headline={articles[1]}
+                    />
+                </View>
+            </Row>
+            <Row index={1} isLastChild={true} translate={translate}>
+                <SmallCard
+                    style={styles.unit}
+                    path={articles[2]}
+                    kicker="Kicker"
+                    headline={articles[2]}
+                />
+            </Row>
         </Animated.View>
     )
 }

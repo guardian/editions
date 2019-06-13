@@ -46,8 +46,8 @@ export const IssueScreen = ({
             />
             <Header title={weekday} subtitle={date} />
 
-            <Front {...{ viewIsTransitioning }} front="cities" />
             <Front {...{ viewIsTransitioning }} front="best-awards" />
+            <Front {...{ viewIsTransitioning }} front="cities" />
         </ScrollView>
     )
 }

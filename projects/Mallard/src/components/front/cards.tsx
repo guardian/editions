@@ -35,6 +35,7 @@ const SmallCard = withNavigation(
         return (
             <View style={style}>
                 <Highlight
+                    style={{ flex: 1 }}
                     onPress={() => navigation.navigate('Article', { path })}
                 >
                     <View

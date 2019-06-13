@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform } from 'react-native'
+import { Platform, StyleProp, ViewStyle } from 'react-native'
 import {
     TouchableNativeFeedback,
     TouchableOpacity,
@@ -8,13 +8,16 @@ import {
 const Highlight: React.FC<{
     onPress: () => void
     children: React.ReactNode
-}> = ({ onPress, children }) => {
+    style?: StyleProp<ViewStyle>
+}> = ({ onPress, children, style }) => {
     return Platform.OS === 'android' ? (
-        <TouchableNativeFeedback onPress={onPress}>
+        <TouchableNativeFeedback {...style} onPress={onPress}>
             {children}
         </TouchableNativeFeedback>
     ) : (
-        <TouchableOpacity onPress={onPress}>{children}</TouchableOpacity>
+        <TouchableOpacity {...style} onPress={onPress}>
+            {children}
+        </TouchableOpacity>
     )
 }
 

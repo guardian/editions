@@ -206,7 +206,7 @@ export const Front: FunctionComponent<{
                         {collections.map(([id, collection], i) => (
                             <Page
                                 page={i}
-                                length={6}
+                                length={3}
                                 appearance={'comment'}
                                 key={id}
                                 {...{ collection, scrollX }}
