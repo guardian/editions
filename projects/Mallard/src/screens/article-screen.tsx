@@ -18,16 +18,15 @@ const useArticleResponse = (path: string) =>
         `content/${path}`,
         article => article.title != null,
     )
-export interface Params {
+export interface ArticleParams {
     article: FrontArticle
 }
 export const ArticleScreen = ({
     navigation,
 }: {
-    navigation: NavigationScreenProp<{}, Params>
+    navigation: NavigationScreenProp<{}, ArticleParams>
 }) => {
     const frontArticle = navigation.getParam('article')
-    console.log(frontArticle)
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(frontArticle.path)

@@ -7,7 +7,7 @@ import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
 
 import { useArticleAppearance } from '../../theme/appearance'
 import { FrontArticle } from '../../common'
-import { Params } from '../../screens/article-screen'
+import { ArticleParams } from '../../screens/article-screen'
 
 const styles = StyleSheet.create({
     root: {
@@ -24,7 +24,7 @@ interface SmallCardProps {
     style: StyleProp<ViewStyle>
     article: FrontArticle
 }
-type InjectedProps = NavigationInjectedProps<Params>
+type InjectedProps = NavigationInjectedProps<ArticleParams>
 const SmallCard = withNavigation(
     ({
         style,
@@ -39,7 +39,6 @@ const SmallCard = withNavigation(
             <View style={style}>
                 <Highlight
                     onPress={() => {
-                        console.log(article)
                         navigation.navigate('Article', { article: article })
                     }}
                 >
