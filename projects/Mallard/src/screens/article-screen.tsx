@@ -8,9 +8,10 @@ import {
 } from '../theme/appearance'
 import { Article } from '../components/article'
 import { Article as ArticleType } from '../common'
-import { View, TouchableOpacity, Text } from 'react-native'
+import { View, TouchableOpacity, Text, Button } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
+import { FlexCenter } from '../components/layout/flex-center'
 
 const useArticleResponse = (path: string) =>
     useEndpointResponse<ArticleType>(
@@ -30,7 +31,17 @@ export const ArticleScreen = ({
     const articleResponse = useArticleResponse(pathFromUrl)
 
     return articleResponse({
-        error: () => <Text>😭</Text>,
+        error: () => (
+            <FlexCenter style={{ backgroundColor: 'tomato' }}>
+                <Text style={{ fontSize: 40 }}>😭</Text>
+                <Button
+                    title={'go back'}
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                />
+            </FlexCenter>
+        ),
         pending: () => (
             <Article
                 kicker={'Kicker 🥾'}

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native'
 
 /*
 Super simple centerer helper to put 
@@ -10,8 +10,12 @@ const styles = StyleSheet.create({
     root: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 })
 
-const FlexCenter = ({ children }: { children: ReactNode }) => (
-    <View style={styles.root}>{children}</View>
-)
+const FlexCenter = ({
+    children,
+    style,
+}: {
+    children: ReactNode
+    style?: StyleProp<ViewStyle>
+}) => <View style={[styles.root, style]}>{children}</View>
 
 export { FlexCenter }
