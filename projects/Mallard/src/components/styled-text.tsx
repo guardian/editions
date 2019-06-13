@@ -113,9 +113,11 @@ BodyCopy.defaultProps = {
 export const UiBodyCopy = ({
     children,
     style,
+    weight,
     ...props
 }: {
     children: string
+    weight: 'regular' | 'bold'
     style?: {}
 }) => {
     return (
@@ -126,12 +128,18 @@ export const UiBodyCopy = ({
                 {
                     color: useAppAppearance().color,
                 },
+                weight === 'bold' && {
+                    fontFamily: 'GuardianTextSans-Bold',
+                },
                 style,
             ]}
         >
             {children}
         </Text>
     )
+}
+UiBodyCopy.defaultProps = {
+    weight: 'regular',
 }
 
 export const UiExplainerCopy = ({

@@ -31,9 +31,10 @@ export const ArticleScreen = ({
     const articleResponse = useArticleResponse(pathFromUrl)
 
     return articleResponse({
-        error: () => (
+        error: ({ message }) => (
             <FlexCenter style={{ backgroundColor: 'tomato' }}>
                 <Text style={{ fontSize: 40 }}>😭</Text>
+                <UiBodyCopy weight="bold">{message}</UiBodyCopy>
                 <Button
                     title={'go back'}
                     onPress={() => {

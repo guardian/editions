@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 export const ListHeading = ({ children }: { children: string }) => (
     <View style={styles.heading}>
         <SafeAreaView>
-            <UiBodyCopy style={{ fontWeight: '700' }}>{children}</UiBodyCopy>
+            <UiBodyCopy weight="bold">{children}</UiBodyCopy>
         </SafeAreaView>
     </View>
 )
