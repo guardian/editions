@@ -25,6 +25,12 @@ export const getArticle = async (path: string): Promise<Article> => {
     const data = ItemResponseCodec.decode(input)
     const title = data && data.content && data.content.webTitle
     if (title == null) throw new Error('Title was undefined!')
+    const standfirst =
+        data &&
+        data.content &&
+        data.content.fields &&
+        data.content.fields.standfirst
+    if (standfirst == null) throw new Error('Standfirst was undefined!')
 
     const image =
         data &&
@@ -50,6 +56,7 @@ export const getArticle = async (path: string): Promise<Article> => {
 
     return {
         title,
+        standfirst,
         imageURL,
         elements,
     }

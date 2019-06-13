@@ -1,12 +1,10 @@
 // This file is symlinked into both backend and Mallard.
 // Be careful.
 
-export type ArticleFromTheCollectionsAtm = string
-export interface ArticleFundamentals {
+export interface Article {
     title: string
+    standfirst: string
     imageURL?: string
-}
-export interface Article extends ArticleFundamentals {
     elements: BlockElement[]
 }
 
@@ -20,6 +18,7 @@ export interface FrontArticle {
     headline: string
     kicker: string
     image: string
+    byline: string
 }
 export interface CollectionArticles {
     id: string

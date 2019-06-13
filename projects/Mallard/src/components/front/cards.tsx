@@ -6,6 +6,7 @@ import { Highlight } from '../highlight'
 import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
 
 import { useArticleAppearance } from '../../theme/appearance'
+import { Params } from '../../navigation'
 
 const styles = StyleSheet.create({
     root: {
@@ -25,7 +26,7 @@ const SmallCard = withNavigation(
         kicker,
         path,
         navigation,
-    }: NavigationInjectedProps & {
+    }: NavigationInjectedProps<Params> & {
         style: StyleProp<ViewStyle>
         headline: string
         kicker: string

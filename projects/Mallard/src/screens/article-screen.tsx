@@ -22,7 +22,7 @@ const useArticleResponse = (path: string) =>
 export const ArticleScreen = ({
     navigation,
 }: {
-    navigation: NavigationScreenProp<{}>
+    navigation: NavigationScreenProp<{}, Params>
 }) => {
     const pathFromUrl = navigation.getParam('path', '')
     const titleFromUrl = navigation.getParam('title', 'Loading')

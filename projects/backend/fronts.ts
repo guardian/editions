@@ -27,6 +27,7 @@ export const getCollection = async (
                     image:
                         meta.imageSrc ||
                         'https://i.guim.co.uk/img/media/7c71ec6e4bc73ab01384e94b02efe16df054bb73/0_51_3600_2160/master/3600.jpg?width=1900&quality=45&auto=format&fit=max&dpr=2&s=5b33424cbebbad93a8001c62a701a64d',
+                    byline: meta.byline || 'no byline set',
                 }
             }),
         }

@@ -10,7 +10,7 @@ import {
 } from '../../theme/appearance'
 import { SmallCard } from './cards'
 import { color } from '../../theme/color'
-import { ArticleFromTheCollectionsAtm } from '../../common'
+import { FrontArticle } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
 interface PropTypes {
     style: StyleProp<{}>
-    articles: ArticleFromTheCollectionsAtm[]
+    articles: FrontArticle[]
     length?: number
     translate: Animated.AnimatedInterpolation
 }
@@ -81,9 +81,9 @@ const CardGroupWithAppearance = ({
                 >
                     <SmallCard
                         style={styles.unit}
-                        path={story}
-                        kicker="Kicker"
-                        headline={story}
+                        path={story.path}
+                        kicker={story.kicker}
+                        headline={story.headline}
                     />
                     {i < trimmed.length - 1 && (
                         <Multiline
