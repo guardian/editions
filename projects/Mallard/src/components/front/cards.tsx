@@ -7,6 +7,7 @@ import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
 
 import { useArticleAppearance } from '../../theme/appearance'
 import { Params } from '../../navigation'
+import { FrontArticle } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -22,21 +23,17 @@ const styles = StyleSheet.create({
 const SmallCard = withNavigation(
     ({
         style,
-        headline,
-        kicker,
-        path,
+        article,
         navigation,
     }: NavigationInjectedProps<Params> & {
         style: StyleProp<ViewStyle>
-        headline: string
-        kicker: string
-        path: string
+        article: FrontArticle
     }) => {
         const { appearance } = useArticleAppearance()
         return (
             <View style={style}>
                 <Highlight
-                    onPress={() => navigation.navigate('Article', { path })}
+                    onPress={() => navigation.navigate('Article', article)}
                 >
                     <View
                         style={[
@@ -49,12 +46,12 @@ const SmallCard = withNavigation(
                         <HeadlineKickerText
                             style={[appearance.text, appearance.kicker]}
                         >
-                            {kicker}
+                            {article.kicker}
                         </HeadlineKickerText>
                         <HeadlineCardText
                             style={[appearance.text, appearance.headline]}
                         >
-                            {headline}
+                            {article.headline}
                         </HeadlineCardText>
                     </View>
                 </Highlight>

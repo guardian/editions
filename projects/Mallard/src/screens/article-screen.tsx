@@ -12,6 +12,7 @@ import { View, TouchableOpacity, Text, Button } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
+import { Params } from '../navigation'
 
 const useArticleResponse = (path: string) =>
     useEndpointResponse<ArticleType>(
@@ -24,11 +25,11 @@ export const ArticleScreen = ({
 }: {
     navigation: NavigationScreenProp<{}, Params>
 }) => {
-    const pathFromUrl = navigation.getParam('path', '')
-    const titleFromUrl = navigation.getParam('title', 'Loading')
+    const frontArticle = navigation.getParam('article')
+
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
-    const articleResponse = useArticleResponse(pathFromUrl)
+    const articleResponse = useArticleResponse(frontArticle.path)
 
     return articleResponse({
         error: ({ message }) => (
@@ -45,13 +46,13 @@ export const ArticleScreen = ({
         ),
         pending: () => (
             <Article
-                kicker={'Kicker 🥾'}
-                headline={titleFromUrl}
-                byline={'Byliney McPerson'}
-                standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+                kicker={frontArticle.kicker}
+                headline={frontArticle.headline}
+                byline={frontArticle.byline}
+                standfirst=""
             />
         ),
-        success: ({ title, imageURL, elements }) => {
+        success: ({ standfirst, imageURL, elements }) => {
             return (
                 <>
                     <View
@@ -92,11 +93,11 @@ export const ArticleScreen = ({
                     >
                         <Article
                             article={elements}
-                            kicker={'Kicker 🥾'}
-                            headline={title}
-                            byline={'Byliney McPerson'}
-                            standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                            image={imageURL}
+                            kicker={frontArticle.kicker}
+                            headline={frontArticle.headline}
+                            byline={frontArticle.byline}
+                            standfirst={standfirst}
+                            image={imageURL || frontArticle.image}
                         />
                     </WithArticleAppearance>
                 </>

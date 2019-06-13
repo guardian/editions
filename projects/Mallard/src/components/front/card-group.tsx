@@ -79,12 +79,7 @@ const CardGroupWithAppearance = ({
                     ]}
                     key={i}
                 >
-                    <SmallCard
-                        style={styles.unit}
-                        path={story.path}
-                        kicker={story.kicker}
-                        headline={story.headline}
-                    />
+                    <SmallCard style={styles.unit} article={story} />
                     {i < trimmed.length - 1 && (
                         <Multiline
                             color={appearance.backgrounds.borderColor}
