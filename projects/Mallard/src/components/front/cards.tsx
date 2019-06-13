@@ -25,9 +25,16 @@ interface SmallCardProps {
     article: FrontArticle
 }
 type InjectedProps = NavigationInjectedProps<Params>
-const InjectedSmallCard = withNavigation(
-    ({ style, article, navigation }: SmallCardProps & InjectedProps) => {
+const SmallCard = withNavigation(
+    ({
+        style,
+        article,
+        navigation,
+    }: SmallCardProps & Partial<InjectedProps>) => {
         const { appearance } = useArticleAppearance()
+        if (navigation == null) {
+            throw new Error('No navigation presetn in cards.')
+        }
         return (
             <View style={style}>
                 <Highlight
@@ -60,9 +67,5 @@ const InjectedSmallCard = withNavigation(
         )
     },
 ) //Dirty type casting unti useNavigation hooks are stable
-
-const SmallCard = (InjectedSmallCard as unknown) as React.FunctionComponent<
-    SmallCardProps
->
 
 export { SmallCard }
