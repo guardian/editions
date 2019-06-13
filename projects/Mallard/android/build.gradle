@@ -31,3 +31,21 @@ allprojects {
         }
     }
 }
+
+android {
+    signingConfigs {
+        release {
+            if (project.hasProperty('EDITIONS_RELEASE_UPLOAD_STORE_FILE')) {
+                storeFile file(EDITIONS_RELEASE_UPLOAD_STORE_FILE)
+                storePassword EDITIONS_RELEASE_UPLOAD_STORE_PASSWORD
+                keyAlias EDITIONS_RELEASE_UPLOAD_KEY_ALIAS
+                keyPassword EDITIONS_RELEASE_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
