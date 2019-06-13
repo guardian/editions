@@ -19,6 +19,10 @@ const styles = StyleSheet.create({
         zIndex: 90,
         alignContent: 'stretch',
         justifyContent: 'center',
+        backgroundColor: color.background,
+        borderColor: color.line,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
     },
     headerChevronContainer: {
         flex: 1,
@@ -27,13 +31,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 20,
-    },
-    headerBackground: {
-        zIndex: 10,
-        backgroundColor: color.background,
-        borderColor: color.line,
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderBottomWidth: StyleSheet.hairlineWidth,
     },
 })
 
