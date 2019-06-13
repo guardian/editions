@@ -41,6 +41,9 @@ platform :android do
   lane :beta do
     gradle(task: 'clean', project_dir: 'android/')
     gradle(task: 'assemble', build_type: 'Release', project_dir: 'android/')
-    supply(track: 'internal')
+    supply(
+      track: 'internal',
+      package_name: 'com.guardian.editions'
+    )
   end
 end
