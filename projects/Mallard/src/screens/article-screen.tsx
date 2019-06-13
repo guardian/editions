@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEndpointResponse } from '../hooks/use-fetch'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
     ArticleAppearance,
@@ -32,9 +32,23 @@ export const ArticleScreen = ({
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(pathFromUrl)
+    /* 
+    we don't wanna render a massive tree at once 
+    as the navigator is trying to push the screen bc this
+    delays the tap response 
+
+    we can pass this prop to identify if we wanna render 
+    just the 'above the fold' content or the whole shebang
+    */
+    const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
     return (
         <SlideCard onDismiss={() => navigation.goBack()}>
+            <NavigationEvents
+                onDidFocus={() => {
+                    setViewIsTransitioning(false)
+                }}
+            />
             {articleResponse({
                 error: ({ message }) => (
                     <FlexCenter style={{ backgroundColor: 'tomato' }}>
@@ -99,9 +113,15 @@ export const ArticleScreen = ({
                                 }
                             >
                                 <Article
-                                    article={elements}
+                                    article={
+                                        viewIsTransitioning
+                                            ? undefined
+                                            : elements
+                                    }
                                     kicker={'Kicker 🥾'}
-                                    headline={title}
+                                    headline={
+                                        viewIsTransitioning ? 'www' : title
+                                    }
                                     byline={'Byliney McPerson'}
                                     standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
                                     image={imageURL}
