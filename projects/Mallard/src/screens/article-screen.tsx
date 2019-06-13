@@ -13,6 +13,7 @@ import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
 import { SlideCard } from '../components/layout/slide-card/index'
+import { color } from '../theme/color'
 
 const useArticleResponse = (path: string) =>
     useEndpointResponse<ArticleType>(
@@ -51,15 +52,9 @@ export const ArticleScreen = ({
             />
             {articleResponse({
                 error: ({ message }) => (
-                    <FlexCenter style={{ backgroundColor: 'tomato' }}>
+                    <FlexCenter style={{ backgroundColor: color.background }}>
                         <Text style={{ fontSize: 40 }}>😭</Text>
                         <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                        <Button
-                            title={'go back'}
-                            onPress={() => {
-                                navigation.goBack()
-                            }}
-                        />
                     </FlexCenter>
                 ),
                 pending: () => (
