@@ -28,8 +28,7 @@ export const ArticleScreen = ({
         | FrontArticle
         | undefined
 
-    const path =
-        navigation.getParam('path')
+    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
