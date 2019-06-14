@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useEndpointResponse } from '../hooks/use-fetch'
+import { Error } from '../hooks/use-response'
 import { NavigationScreenProp } from 'react-navigation'
 import {
     WithArticleAppearance,
@@ -29,82 +30,82 @@ export const ArticleScreen = ({
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(pathFromUrl)
-
-    return articleResponse({
-        // eslint-disable-next-line react/display-name
-        error: ({ message }) => (
-            <FlexCenter style={{ backgroundColor: 'tomato' }}>
-                <Text style={{ fontSize: 40 }}>😭</Text>
-                <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                <Button
-                    title={'go back'}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
-                />
-            </FlexCenter>
-        ),
-        // eslint-disable-next-line react/display-name
-        pending: () => (
-            <Article
-                kicker={'Kicker 🥾'}
-                headline={titleFromUrl}
-                byline={'Byliney McPerson'}
-                standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+    const error = ({ message }: Error) => (
+        <FlexCenter style={{ backgroundColor: 'tomato' }}>
+            <Text style={{ fontSize: 40 }}>😭</Text>
+            <UiBodyCopy weight="bold">{message}</UiBodyCopy>
+            <Button
+                title={'go back'}
+                onPress={() => {
+                    navigation.goBack()
+                }}
             />
-        ),
-        // eslint-disable-next-line react/display-name
-        success: ({ title, imageURL, elements }) => {
-            return (
-                <>
-                    <View
-                        style={{
-                            backgroundColor: 'tomato',
-                            position: 'absolute',
-                            zIndex: 9999,
-                            elevation: 999,
-                            bottom: 100,
-                            right: metrics.horizontal,
-                            alignSelf: 'flex-end',
-                            borderRadius: 999,
+        </FlexCenter>
+    )
+    const pending = () => (
+        <Article
+            kicker={'Kicker 🥾'}
+            headline={titleFromUrl}
+            byline={'Byliney McPerson'}
+            standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+        />
+    )
+    const success = ({ title, imageURL, elements }: ArticleType) => {
+        return (
+            <>
+                <View
+                    style={{
+                        backgroundColor: 'tomato',
+                        position: 'absolute',
+                        zIndex: 9999,
+                        elevation: 999,
+                        bottom: 100,
+                        right: metrics.horizontal,
+                        alignSelf: 'flex-end',
+                        borderRadius: 999,
+                    }}
+                >
+                    <TouchableOpacity
+                        onPress={() => {
+                            setAppearance(app => {
+                                if (app + 1 >= appearances.length) {
+                                    return 0
+                                }
+                                return app + 1
+                            })
                         }}
                     >
-                        <TouchableOpacity
-                            onPress={() => {
-                                setAppearance(app => {
-                                    if (app + 1 >= appearances.length) {
-                                        return 0
-                                    }
-                                    return app + 1
-                                })
+                        <UiBodyCopy
+                            style={{
+                                padding: metrics.horizontal * 2,
+                                paddingVertical: metrics.vertical / 1.5,
+                                color: '#fff',
                             }}
                         >
-                            <UiBodyCopy
-                                style={{
-                                    padding: metrics.horizontal * 2,
-                                    paddingVertical: metrics.vertical / 1.5,
-                                    color: '#fff',
-                                }}
-                            >
-                                {`${appearances[appearance]} 🌈`}
-                            </UiBodyCopy>
-                        </TouchableOpacity>
-                    </View>
-                    <WithArticleAppearance
-                        value={appearances[appearance] as ArticleAppearance}
-                    >
-                        <Article
-                            article={elements}
-                            kicker={'Kicker 🥾'}
-                            headline={title}
-                            byline={'Byliney McPerson'}
-                            standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                            image={imageURL}
-                        />
-                    </WithArticleAppearance>
-                </>
-            )
-        },
+                            {`${appearances[appearance]} 🌈`}
+                        </UiBodyCopy>
+                    </TouchableOpacity>
+                </View>
+                <WithArticleAppearance
+                    value={appearances[appearance] as ArticleAppearance}
+                >
+                    <Article
+                        article={elements}
+                        kicker={'Kicker 🥾'}
+                        headline={title}
+                        byline={'Byliney McPerson'}
+                        standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+                        image={imageURL}
+                    />
+                </WithArticleAppearance>
+            </>
+        )
+    }
+
+    return articleResponse({
+        error,
+        pending,
+        success,
     })
 }
 
