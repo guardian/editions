@@ -1,9 +1,38 @@
 import { AsyncStorage } from 'react-native'
-
 export interface Settings {
     apiUrl: string
+    hasLiveDevMenu: boolean
 }
 
+/* 
+we can only store strings to memory 
+so we need to convert them
+*/
+const [TRUE, FALSE] = ['TRUE', 'FALSE']
+type UnsanitizedSetting = Settings[keyof Settings]
+const sanitize = (value: UnsanitizedSetting): string => {
+    if (value === true) {
+        value = TRUE
+    }
+    if (value === false) {
+        value = FALSE
+    }
+    return value
+}
+const unsanitize = (value: string): UnsanitizedSetting => {
+    if (value === TRUE) {
+        return true
+    }
+    if (value === FALSE) {
+        return false
+    }
+    return value
+}
+
+/*
+Default settings.
+This is a bit of a mess
+*/
 export const backends = [
     {
         title: 'PROD',
@@ -19,15 +48,23 @@ export const backends = [
 
 export const defaultSettings: Settings = {
     apiUrl: backends[0].value,
+    hasLiveDevMenu: false,
 }
 
-const getSetting = (setting: keyof Settings) =>
+/* 
+getters & setters
+*/
+export const getSetting = (setting: keyof Settings) =>
     AsyncStorage.getItem('@Setting_' + setting).then(item => {
-        if (item) return item
-        else return defaultSettings[setting]
+        if (!item) {
+            return defaultSettings[setting]
+        }
+        return unsanitize(item)
     })
-const storeSetting = (setting: keyof Settings, value: string) => {
-    return AsyncStorage.setItem('@Setting_' + setting, value)
-}
 
-export { getSetting, storeSetting }
+export const storeSetting = (
+    setting: keyof Settings,
+    value: string | boolean,
+) => {
+    return AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
+}

@@ -9,13 +9,13 @@ import {
 
 type SettingsFromContext = [
     Settings,
-    (setting: keyof Settings, value: string) => void
+    (setting: keyof Settings, value: Settings[keyof Settings]) => void
 ]
 
 const useStoredSettings = (): SettingsFromContext => {
     const [state, setState] = useState(defaultSettings)
-    const setSetting = (setting: keyof Settings, value: string) => {
-        setState({ [setting]: value })
+    const setSetting = (setting: keyof Settings, value: string | boolean) => {
+        setState(settings => ({ ...settings, [setting]: value }))
         storeSetting(setting, value)
     }
     useEffect(() => {
