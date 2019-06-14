@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
 })
 
-interface SmallCardProps {
+interface PropTypes {
     style: StyleProp<ViewStyle>
     article: FrontArticle
     path: FrontArticle['path']
@@ -32,7 +32,7 @@ const SmallCard = withNavigation(
         article,
         path,
         navigation,
-    }: SmallCardProps & NavigationInjectedProps<{}>) => {
+    }: PropTypes & NavigationInjectedProps<{}>) => {
         const { appearance } = useArticleAppearance()
         return (
             <View style={style}>

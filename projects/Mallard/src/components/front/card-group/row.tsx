@@ -38,6 +38,9 @@ interface RowPropTypes {
     index: number
 }
 
+/*
+this is the low level row that actually takes in children. do not export
+*/
 const Row = ({
     children,
     translate,
@@ -79,7 +82,11 @@ const Row = ({
     )
 }
 
-export const RowWithArticle = ({
+/*
+ROW WITH ARTICLE
+shows 1 article
+*/
+const RowWithArticle = ({
     article,
     ...rowProps
 }: {
@@ -90,7 +97,13 @@ export const RowWithArticle = ({
     </Row>
 )
 
-export const RowWithTwoArticles = ({
+/*
+ROW WITH TWO ARTICLES
+shows 2 articles side by side. If there's less 
+it falls back to a single row and if there's more 
+then it eats them up
+*/
+const RowWithTwoArticles = ({
     articles,
     ...rowProps
 }: {
@@ -128,3 +141,5 @@ export const RowWithTwoArticles = ({
         </Row>
     )
 }
+
+export { RowWithTwoArticles, RowWithArticle }
