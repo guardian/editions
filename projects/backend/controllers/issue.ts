@@ -12,7 +12,8 @@ const getIssue = async (
     if (x.status === 404) return 'notfound'
     if (!x.ok) throw new Error('failed s3')
     lastModifiedUpdater(x.lastModified)
-    return x.json() as Promise<Issue>
+    const json = await x.json()
+    return { date: 0, ...json } as Issue
 }
 
 export const issueController = (req: Request, res: Response) => {

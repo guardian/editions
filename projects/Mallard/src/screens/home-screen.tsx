@@ -17,6 +17,7 @@ import { useFileList } from '../hooks/use-fs'
 import { Issue } from '../common'
 import { renderIssueDate } from '../helpers/issues'
 import { unzipIssue } from '../helpers/files'
+import { useIssue } from '../hooks/use-issue'
 
 const demoIssues: Issue[] = [
     {
@@ -30,7 +31,7 @@ const demoIssues: Issue[] = [
         fronts: [],
     },
 ]
-
+const issues = ['alpha-edition']
 const styles = StyleSheet.create({
     container: primaryContainer,
     welcomeImage: {
@@ -51,7 +52,7 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [files, { refreshIssues }] = useFileList()
-    const issueList = useMemo(
+    const demoIssueList = useMemo(
         () =>
             demoIssues.map(issue => ({
                 key: issue.date.toString(),
@@ -62,6 +63,23 @@ export const HomeScreen = ({
             })),
         [demoIssues.map(({ date }) => date)],
     )
+    const issueList = issues
+        .map(issue =>
+            useIssue<Issue | undefined>(issue)({
+                success: _ => _,
+                pending: () => undefined,
+                error: _ => undefined,
+            }),
+        )
+        .filter((maybeIssue): maybeIssue is Issue => maybeIssue !== undefined)
+        .map(issue => ({
+            key: issue.date.toString(),
+            title: renderIssueDate(issue.date).date,
+            data: {
+                issue,
+            },
+        }))
+
     return (
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
@@ -73,9 +91,21 @@ export const HomeScreen = ({
                 </View>
                 <ListHeading>Demo issues</ListHeading>
                 <List
-                    data={issueList}
+                    data={demoIssueList}
                     onPress={issue => navigation.navigate('Issue', issue)}
                 />
+                <ListHeading>Issues from backend</ListHeading>
+
+                {issueList.length > 0 && (
+                    <>
+                        <List
+                            data={issueList}
+                            onPress={issue =>
+                                navigation.navigate('Issue', issue)
+                            }
+                        />
+                    </>
+                )}
                 {files.length > 0 && (
                     <>
                         <ListHeading>Issues on device</ListHeading>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, ReactElement } from 'react'
 import { useEndpointResponse } from '../hooks/use-fetch'
 import { NavigationScreenProp } from 'react-navigation'
 import {
@@ -14,7 +14,7 @@ import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
 
 const useArticleResponse = (path: string) =>
-    useEndpointResponse<ArticleType>(
+    useEndpointResponse<ArticleType, ReactElement>(
         `content/${path}`,
         article => article.title != null,
     )
@@ -28,8 +28,7 @@ export const ArticleScreen = ({
         | FrontArticle
         | undefined
 
-    const path =
-        navigation.getParam('path')
+    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)

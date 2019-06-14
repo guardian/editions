@@ -4,6 +4,7 @@ import React, {
     FunctionComponent,
     ReactNode,
     useMemo,
+    ReactElement,
 } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
 import { useEndpointResponse } from '../../hooks/use-fetch'
@@ -21,7 +22,7 @@ interface AnimatedScrollViewRef {
 }
 
 const useFrontsResponse = (front: string) =>
-    useEndpointResponse<FrontType>(
+    useEndpointResponse<FrontType, ReactElement>(
         `front/${front}`,
         res => res.collections != null,
     )
