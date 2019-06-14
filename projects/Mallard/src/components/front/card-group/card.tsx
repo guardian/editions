@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
-import { metrics } from '../../theme/spacing'
+import { metrics } from '../../../theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
-import { Highlight } from '../highlight'
-import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
+import { Highlight } from '../../highlight'
+import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
-import { useArticleAppearance } from '../../theme/appearance'
-import { FrontArticle } from '../../common'
+import { useArticleAppearance } from '../../../theme/appearance'
+import { FrontArticle } from '../../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -19,24 +19,28 @@ const styles = StyleSheet.create({
         flexBasis: '100%',
     },
 })
-interface SmallCardProps {
+
+interface PropTypes {
     style: StyleProp<ViewStyle>
     article: FrontArticle
+    path: FrontArticle['path']
 }
-type InjectedProps = NavigationInjectedProps<{}>
+
 const SmallCard = withNavigation(
-    ({ style, article, navigation }: SmallCardProps & InjectedProps) => {
+    ({
+        style,
+        article,
+        path,
+        navigation,
+    }: PropTypes & NavigationInjectedProps<{}>) => {
         const { appearance } = useArticleAppearance()
-        if (navigation == null) {
-            throw new Error('No navigation present in cards.')
-        }
         return (
             <View style={style}>
                 <Highlight
                     onPress={() => {
                         navigation.navigate('Article', {
-                            article: article,
-                            path: article.path,
+                            article,
+                            path,
                         })
                     }}
                 >
