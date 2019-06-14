@@ -2,10 +2,9 @@ import React, { useState, useMemo } from 'react'
 import { View, StyleSheet, Dimensions, Linking } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { WebView } from 'react-native-webview'
-import { color } from '../../theme/color'
-import { metrics } from '../../theme/spacing'
-import { SlideCard } from '../layout/slide-card'
-import { useArticleAppearance } from '../../theme/appearance'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { useArticleAppearance } from 'src/theme/appearance'
 import {
     LongReadHeader,
     NewsHeader,
@@ -15,7 +14,7 @@ import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
-import { BlockElement } from '../../common'
+import { BlockElement } from 'src/common'
 import { render } from './html/render'
 
 /*
