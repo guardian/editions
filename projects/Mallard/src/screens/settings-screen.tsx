@@ -14,7 +14,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { container } from '../theme/styles'
 import { useSettings } from '../hooks/use-settings'
 import { clearLocalCache } from '../hooks/use-fetch'
-import { MonoTextBlock } from '../components/styled-text'
+import { MonoTextBlock, UiBodyCopy } from '../components/styled-text'
 import { Highlight } from '../components/highlight'
 
 const styles = StyleSheet.create({
@@ -26,7 +26,9 @@ const SettingsScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const [{ apiUrl, hasLiveDevMenu }, setSetting] = useSettings()
+    const [settings, setSetting] = useSettings()
+    const { apiUrl, hasLiveDevMenu } = settings
+
     return (
         <ScrollView style={styles.container}>
             <ListHeading>About this app</ListHeading>
@@ -127,6 +129,17 @@ const SettingsScreen = ({
                                 },
                             },
                         ]}
+                    />
+                    <ListHeading>Your settings</ListHeading>
+                    <List
+                        onPress={() => {}}
+                        data={Object.entries(settings).map(
+                            ([title, explainer]) => ({
+                                key: title,
+                                title,
+                                explainer: explainer + '',
+                            }),
+                        )}
                     />
                 </>
             )}
