@@ -7,7 +7,7 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType } from '../common'
+import { Article as ArticleType, FrontArticle } from '../common'
 import { View, TouchableOpacity, Text, Button } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
@@ -24,11 +24,15 @@ export const ArticleScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const pathFromUrl = navigation.getParam('path', '')
-    const titleFromUrl = navigation.getParam('title', 'Loading')
+    const frontArticle = navigation.getParam('article') as
+        | FrontArticle
+        | undefined
+
+    const path =
+        navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
-    const articleResponse = useArticleResponse(pathFromUrl)
+    const articleResponse = useArticleResponse(path)
 
     return articleResponse({
         error: ({ message }) => (
@@ -45,13 +49,13 @@ export const ArticleScreen = ({
         ),
         pending: () => (
             <Article
-                kicker={'Kicker 🥾'}
-                headline={titleFromUrl}
-                byline={'Byliney McPerson'}
-                standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+                kicker={(frontArticle && frontArticle.kicker) || ''}
+                headline={(frontArticle && frontArticle.headline) || ''}
+                byline={(frontArticle && frontArticle.byline) || ''}
+                standfirst=""
             />
         ),
-        success: ({ title, imageURL, elements }) => {
+        success: ({ standfirst, title, byline, imageURL, elements }) => {
             return (
                 <>
                     <View
@@ -92,11 +96,17 @@ export const ArticleScreen = ({
                     >
                         <Article
                             article={elements}
-                            kicker={'Kicker 🥾'}
-                            headline={title}
-                            byline={'Byliney McPerson'}
-                            standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                            image={imageURL}
+                            kicker={(frontArticle && frontArticle.kicker) || ''}
+                            headline={
+                                (frontArticle && frontArticle.headline) || title
+                            }
+                            byline={
+                                (frontArticle && frontArticle.byline) || byline
+                            }
+                            standfirst={standfirst}
+                            image={
+                                imageURL || (frontArticle && frontArticle.image)
+                            }
                         />
                     </WithArticleAppearance>
                 </>

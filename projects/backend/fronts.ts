@@ -18,7 +18,18 @@ export const getCollection = async (
         return {
             id,
             name: collection.displayName,
-            articles: collection.live.map(_ => _.id),
+            articles: collection.live.map(article => {
+                const meta = article.meta as ArticleFragmentRootMeta
+                return {
+                    path: article.id,
+                    headline: meta.headline || 'THIS ARTICLE LACKS A HEADLINE',
+                    kicker: meta.customKicker || 'no custom kicker',
+                    image:
+                        meta.imageSrc ||
+                        'https://i.guim.co.uk/img/media/7c71ec6e4bc73ab01384e94b02efe16df054bb73/0_51_3600_2160/master/3600.jpg?width=1900&quality=45&auto=format&fit=max&dpr=2&s=5b33424cbebbad93a8001c62a701a64d',
+                    byline: meta.byline || 'no byline set',
+                }
+            }),
         }
     } catch {
         console.log('OH NO', id)
@@ -84,6 +95,48 @@ interface CollectionFromResponse {
     metadata?: { type: string }[]
     uneditable?: boolean
 }
+interface ArticleFragmentRootMeta {
+    group?: string
+    headline?: string
+    trailText?: string
+    byline?: string
+    customKicker?: string
+    href?: string
+    imageSrc?: string
+    imageSrcThumb?: string
+    imageSrcWidth?: string
+    imageSrcHeight?: string
+    imageSrcOrigin?: string
+    imageCutoutSrc?: string
+    imageCutoutSrcWidth?: string
+    imageCutoutSrcHeight?: string
+    imageCutoutSrcOrigin?: string
+    isBreaking?: boolean
+    isBoosted?: boolean
+    showLivePlayable?: boolean
+    showMainVideo?: boolean
+    showBoostedHeadline?: boolean
+    showQuotedHeadline?: boolean
+    showByline?: boolean
+    imageCutoutReplace?: boolean
+    imageReplace?: boolean
+    imageHide?: boolean
+    showKickerTag?: boolean
+    showKickerSection?: boolean
+    showKickerCustom?: boolean
+    snapUri?: string
+    snapType?: string
+    snapCss?: string
+    imageSlideshowReplace?: boolean
+    slideshow?: Array<{
+        src?: string
+        thumb?: string
+        width?: string
+        height?: string
+        origin?: string
+    }>
+}
+
 interface NestedArticleFragmentRootFields {
     id: string
     frontPublicationDate: number
