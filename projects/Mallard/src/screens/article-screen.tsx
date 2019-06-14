@@ -18,18 +18,21 @@ const useArticleResponse = (path: string) =>
         `content/${path}`,
         article => article.title != null,
     )
-export interface ArticleParams {
-    article: FrontArticle
-}
+
 export const ArticleScreen = ({
     navigation,
 }: {
-    navigation: NavigationScreenProp<{}, ArticleParams>
+    navigation: NavigationScreenProp<{}>
 }) => {
-    const frontArticle = navigation.getParam('article')
+    const frontArticle = navigation.getParam('article') as
+        | FrontArticle
+        | undefined
+
+    const path =
+        (frontArticle && frontArticle.path) || navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
-    const articleResponse = useArticleResponse(frontArticle.path)
+    const articleResponse = useArticleResponse(path)
 
     return articleResponse({
         error: ({ message }) => (
@@ -46,13 +49,13 @@ export const ArticleScreen = ({
         ),
         pending: () => (
             <Article
-                kicker={frontArticle.kicker}
-                headline={frontArticle.headline}
-                byline={frontArticle.byline}
+                kicker={(frontArticle && frontArticle.kicker) || ''}
+                headline={(frontArticle && frontArticle.headline) || ''}
+                byline={(frontArticle && frontArticle.byline) || ''}
                 standfirst=""
             />
         ),
-        success: ({ standfirst, imageURL, elements }) => {
+        success: ({ standfirst, title, byline, imageURL, elements }) => {
             return (
                 <>
                     <View
@@ -93,11 +96,17 @@ export const ArticleScreen = ({
                     >
                         <Article
                             article={elements}
-                            kicker={frontArticle.kicker}
-                            headline={frontArticle.headline}
-                            byline={frontArticle.byline}
+                            kicker={(frontArticle && frontArticle.kicker) || ''}
+                            headline={
+                                (frontArticle && frontArticle.headline) || title
+                            }
+                            byline={
+                                (frontArticle && frontArticle.byline) || byline
+                            }
                             standfirst={standfirst}
-                            image={imageURL || frontArticle.image}
+                            image={
+                                imageURL || (frontArticle && frontArticle.image)
+                            }
                         />
                     </WithArticleAppearance>
                 </>

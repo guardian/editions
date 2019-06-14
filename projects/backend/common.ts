@@ -3,6 +3,7 @@
 
 export interface Article {
     title: string
+    byline: string
     standfirst: string
     imageURL?: string
     elements: BlockElement[]

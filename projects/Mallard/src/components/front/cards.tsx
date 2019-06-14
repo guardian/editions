@@ -7,7 +7,6 @@ import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
 
 import { useArticleAppearance } from '../../theme/appearance'
 import { FrontArticle } from '../../common'
-import { ArticleParams } from '../../screens/article-screen'
 
 const styles = StyleSheet.create({
     root: {
@@ -24,13 +23,9 @@ interface SmallCardProps {
     style: StyleProp<ViewStyle>
     article: FrontArticle
 }
-type InjectedProps = NavigationInjectedProps<ArticleParams>
+type InjectedProps = NavigationInjectedProps<{}>
 const SmallCard = withNavigation(
-    ({
-        style,
-        article,
-        navigation,
-    }: SmallCardProps & Partial<InjectedProps>) => {
+    ({ style, article, navigation }: SmallCardProps & InjectedProps) => {
         const { appearance } = useArticleAppearance()
         if (navigation == null) {
             throw new Error('No navigation present in cards.')
@@ -39,7 +34,10 @@ const SmallCard = withNavigation(
             <View style={style}>
                 <Highlight
                     onPress={() => {
-                        navigation.navigate('Article', { article: article })
+                        navigation.navigate('Article', {
+                            article: article,
+                            path: article.path,
+                        })
                     }}
                 >
                     <View
