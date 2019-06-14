@@ -1,6 +1,6 @@
 module.exports = {
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'prettier'],
+    plugins: ['@typescript-eslint', 'prettier', 'react-hooks'],
     extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
@@ -13,6 +13,8 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': 'off',
         'react/prop-types': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'warn',
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
     },
     overrides: [
         {
