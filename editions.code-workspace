@@ -19,7 +19,6 @@
             "javascriptreact",
             "typescript",
             "typescriptreact"
-            //{"language": "html", "autoFix": true},
         ]
     }
 }
