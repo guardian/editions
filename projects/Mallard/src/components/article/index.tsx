@@ -48,50 +48,39 @@ const Article = withNavigation(
     } & ArticleHeaderPropTypes &
         StandfirstPropTypes &
         NavigationInjectedProps) => {
-        const { appearance, name: appearanceName } = useArticleAppearance()
+        const { name: appearanceName } = useArticleAppearance()
         const [height, setHeight] = useState(Dimensions.get('window').height)
         const html = useMemo(() => (article ? render(article) : ''), [article])
 
         return (
-            <SlideCard
-                headerStyle={[appearance.backgrounds, appearance.text]}
-                fadesHeaderIn={appearanceName === 'longread'}
-                backgroundColor={appearance.backgrounds.backgroundColor}
-                onDismiss={() => {
-                    navigation.goBack()
-                }}
-            >
-                <View style={styles.container}>
-                    {appearanceName === 'longread' ? (
-                        <LongReadHeader {...{ headline, image, kicker }} />
-                    ) : (
-                        <NewsHeader {...{ headline, image, kicker }} />
-                    )}
-                    <Standfirst {...{ byline, standfirst }} />
+            <View style={styles.container}>
+                {appearanceName === 'longread' ? (
+                    <LongReadHeader {...{ headline, image, kicker }} />
+                ) : (
+                    <NewsHeader {...{ headline, image, kicker }} />
+                )}
+                <Standfirst {...{ byline, standfirst }} />
 
-                    <View
-                        style={{ backgroundColor: color.background, flex: 1 }}
-                    >
-                        <WebView
-                            originWhitelist={['*']}
-                            scrollEnabled={false}
-                            useWebKit={false}
-                            source={{ html: html }}
-                            onShouldStartLoadWithRequest={event => {
-                                if (event.url !== 'about:blank') {
-                                    Linking.openURL(event.url)
-                                    return false
-                                }
-                                return true
-                            }}
-                            onMessage={event => {
-                                setHeight(parseInt(event.nativeEvent.data))
-                            }}
-                            style={{ flex: 1, minHeight: height }}
-                        />
-                    </View>
+                <View style={{ backgroundColor: color.background, flex: 1 }}>
+                    <WebView
+                        originWhitelist={['*']}
+                        scrollEnabled={false}
+                        useWebKit={false}
+                        source={{ html: html }}
+                        onShouldStartLoadWithRequest={event => {
+                            if (event.url !== 'about:blank') {
+                                Linking.openURL(event.url)
+                                return false
+                            }
+                            return true
+                        }}
+                        onMessage={event => {
+                            setHeight(parseInt(event.nativeEvent.data))
+                        }}
+                        style={{ flex: 1, minHeight: height }}
+                    />
                 </View>
-            </SlideCard>
+            </View>
         )
     },
 )
