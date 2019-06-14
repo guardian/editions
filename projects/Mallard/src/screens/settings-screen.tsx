@@ -1,5 +1,13 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, Dimensions, View } from 'react-native'
+import {
+    ScrollView,
+    StyleSheet,
+    Text,
+    Dimensions,
+    View,
+    AsyncStorage,
+    Alert,
+} from 'react-native'
 
 import { List, ListHeading } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
@@ -77,13 +85,33 @@ const SettingsScreen = ({
                                 },
                             },
                             {
-                                key: 'Clear cache',
-                                title: 'Clear local cache',
-                                explainer:
-                                    'You can also cmd-r or quit and reopen',
+                                key: 'Clear caches',
+                                title: 'Clear caches',
                                 data: {
                                     onPress: () => {
-                                        clearLocalCache()
+                                        Alert.alert(
+                                            'Clear caches',
+                                            'You sure?',
+                                            [
+                                                {
+                                                    text: 'Delete fetch cache',
+                                                    onPress: () => {
+                                                        clearLocalCache()
+                                                    },
+                                                },
+                                                {
+                                                    text: 'Delete EVERYTHING',
+                                                    onPress: () => {
+                                                        AsyncStorage.clear()
+                                                    },
+                                                },
+                                                {
+                                                    style: 'cancel',
+                                                    text: `No don't do it`,
+                                                },
+                                            ],
+                                            { cancelable: false },
+                                        )
                                     },
                                 },
                             },

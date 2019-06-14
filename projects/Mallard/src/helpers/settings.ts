@@ -8,25 +8,19 @@ export interface Settings {
 we can only store strings to memory 
 so we need to convert them
 */
-const [TRUE, FALSE] = ['TRUE', 'FALSE']
 type UnsanitizedSetting = Settings[keyof Settings]
 const sanitize = (value: UnsanitizedSetting): string => {
-    if (value === true) {
-        value = TRUE
-    }
-    if (value === false) {
-        value = FALSE
+    if (typeof value !== 'string') {
+        return JSON.stringify(value)
     }
     return value
 }
 const unsanitize = (value: string): UnsanitizedSetting => {
-    if (value === TRUE) {
-        return true
+    try {
+        return JSON.parse(value)
+    } catch {
+        return value
     }
-    if (value === FALSE) {
-        return false
-    }
-    return value
 }
 
 /*
