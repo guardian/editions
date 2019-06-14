@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
     unit: {
         flex: 1,
     },
+    rightUnit: {
+        borderLeftWidth: StyleSheet.hairlineWidth,
+    },
 })
 
 interface PropTypes {
@@ -116,9 +119,9 @@ const CardGroupWithAppearance = ({ style, articles, translate }: PropTypes) => {
                     <SmallCard
                         style={[
                             styles.unit,
+                            styles.rightUnit,
                             {
                                 borderColor: appearance.backgrounds.borderColor,
-                                borderLeftWidth: StyleSheet.hairlineWidth,
                             },
                         ]}
                         path={articles[1]}
