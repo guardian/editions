@@ -63,6 +63,6 @@ const SmallCard = withNavigation(
             </View>
         )
     },
-) //Dirty type casting unti useNavigation hooks are stable
+)
 
 export { SmallCard }
