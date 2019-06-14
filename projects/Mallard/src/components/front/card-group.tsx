@@ -10,7 +10,7 @@ import {
 } from '../../theme/appearance'
 import { SmallCard } from './cards'
 import { color } from '../../theme/color'
-import { ArticleFromTheCollectionsAtm } from '../../common'
+import { FrontArticle } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
 interface PropTypes {
     style: StyleProp<{}>
-    articles: ArticleFromTheCollectionsAtm[]
+    articles: FrontArticle[]
     length?: number
     translate: Animated.AnimatedInterpolation
 }
@@ -112,9 +112,8 @@ const CardGroupWithAppearance = ({ style, articles, translate }: PropTypes) => {
                 <View style={styles.doubleRow}>
                     <SmallCard
                         style={[styles.unit]}
-                        path={articles[0]}
-                        kicker="Kicker"
-                        headline={articles[0]}
+                        path={articles[0].path}
+                        article={articles[0]}
                     />
                     <SmallCard
                         style={[
@@ -124,18 +123,16 @@ const CardGroupWithAppearance = ({ style, articles, translate }: PropTypes) => {
                                 borderColor: appearance.backgrounds.borderColor,
                             },
                         ]}
-                        path={articles[1]}
-                        kicker="Kicker"
-                        headline={articles[1]}
+                        path={articles[0].path}
+                        article={articles[0]}
                     />
                 </View>
             </Row>
             <Row index={1} isLastChild={true} translate={translate}>
                 <SmallCard
                     style={styles.unit}
-                    path={articles[2]}
-                    kicker="Kicker"
-                    headline={articles[2]}
+                    path={articles[0].path}
+                    article={articles[0]}
                 />
             </Row>
         </Animated.View>
