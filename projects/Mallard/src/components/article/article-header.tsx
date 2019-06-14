@@ -45,7 +45,7 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
-            {image && (
+            {image ? (
                 <ArticleImage
                     style={{
                         aspectRatio: 1.5,
@@ -53,14 +53,14 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
                     }}
                     image={image}
                 />
-            )}
-            {kicker && (
+            ) : null}
+            {kicker ? (
                 <View style={[newsHeaderStyles.kicker, appearance.backgrounds]}>
                     <HeadlineKickerText style={[appearance.text]}>
                         {kicker}
                     </HeadlineKickerText>
                 </View>
-            )}
+            ) : null}
             <HeadlineText
                 style={[
                     newsHeaderStyles.headline,

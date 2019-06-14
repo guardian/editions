@@ -45,8 +45,8 @@ export const RootNavigator = createAppContainer(
                         backgroundColor: 'transparent',
                     },
                     transitionSpec: {
-                        duration: 400,
-                        easing: Easing.elastic(0.75),
+                        duration: 200,
+                        easing: Easing.ease,
                         timing: Animated.timing,
                         useNativeDriver: true,
                     },

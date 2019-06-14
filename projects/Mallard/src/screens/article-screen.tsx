@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useEndpointResponse } from '../hooks/use-fetch'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
     ArticleAppearance,
@@ -12,6 +12,8 @@ import { View, TouchableOpacity, Text, Button } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
+import { SlideCard } from '../components/layout/slide-card/index'
+import { color } from '../theme/color'
 
 const useArticleResponse = (path: string) =>
     useEndpointResponse<ArticleType>(
@@ -28,91 +30,118 @@ export const ArticleScreen = ({
         | FrontArticle
         | undefined
 
-    const path =
-        navigation.getParam('path')
+    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
 
-    return articleResponse({
-        error: ({ message }) => (
-            <FlexCenter style={{ backgroundColor: 'tomato' }}>
-                <Text style={{ fontSize: 40 }}>😭</Text>
-                <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                <Button
-                    title={'go back'}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
-                />
-            </FlexCenter>
-        ),
-        pending: () => (
-            <Article
-                kicker={(frontArticle && frontArticle.kicker) || ''}
-                headline={(frontArticle && frontArticle.headline) || ''}
-                byline={(frontArticle && frontArticle.byline) || ''}
-                standfirst=""
+    /* 
+    we don't wanna render a massive tree at once 
+    as the navigator is trying to push the screen bc this
+    delays the tap response 
+     we can pass this prop to identify if we wanna render 
+    just the 'above the fold' content or the whole shebang
+    */
+    const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+
+    return (
+        <SlideCard onDismiss={() => navigation.goBack()}>
+            <NavigationEvents
+                onDidFocus={() => {
+                    setViewIsTransitioning(false)
+                }}
             />
-        ),
-        success: ({ standfirst, title, byline, imageURL, elements }) => {
-            return (
-                <>
-                    <View
-                        style={{
-                            backgroundColor: 'tomato',
-                            position: 'absolute',
-                            zIndex: 9999,
-                            elevation: 999,
-                            bottom: 100,
-                            right: metrics.horizontal,
-                            alignSelf: 'flex-end',
-                            borderRadius: 999,
-                        }}
-                    >
-                        <TouchableOpacity
-                            onPress={() => {
-                                setAppearance(app => {
-                                    if (app + 1 >= appearances.length) {
-                                        return 0
-                                    }
-                                    return app + 1
-                                })
+            {articleResponse({
+                error: ({ message }) => (
+                    <FlexCenter style={{ backgroundColor: color.background }}>
+                        <Text style={{ fontSize: 40 }}>😭</Text>
+                        <UiBodyCopy weight="bold">{message}</UiBodyCopy>
+                    </FlexCenter>
+                ),
+                pending: () => (
+                    <Article
+                        kicker={(frontArticle && frontArticle.kicker) || ''}
+                        headline={(frontArticle && frontArticle.headline) || ''}
+                        byline={(frontArticle && frontArticle.byline) || ''}
+                        standfirst=""
+                    />
+                ),
+                success: ({
+                    standfirst,
+                    title,
+                    byline,
+                    imageURL,
+                    elements,
+                }) => (
+                    <>
+                        <View
+                            style={{
+                                backgroundColor: 'tomato',
+                                position: 'absolute',
+                                zIndex: 9999,
+                                elevation: 999,
+                                bottom: 100,
+                                right: metrics.horizontal,
+                                alignSelf: 'flex-end',
+                                borderRadius: 999,
                             }}
                         >
-                            <UiBodyCopy
-                                style={{
-                                    padding: metrics.horizontal * 2,
-                                    paddingVertical: metrics.vertical / 1.5,
-                                    color: '#fff',
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setAppearance(app => {
+                                        if (app + 1 >= appearances.length) {
+                                            return 0
+                                        }
+                                        return app + 1
+                                    })
                                 }}
                             >
-                                {`${appearances[appearance]} 🌈`}
-                            </UiBodyCopy>
-                        </TouchableOpacity>
-                    </View>
-                    <WithArticleAppearance
-                        value={appearances[appearance] as ArticleAppearance}
-                    >
-                        <Article
-                            article={elements}
-                            kicker={(frontArticle && frontArticle.kicker) || ''}
-                            headline={
-                                (frontArticle && frontArticle.headline) || title
-                            }
-                            byline={
-                                (frontArticle && frontArticle.byline) || byline
-                            }
-                            standfirst={standfirst}
-                            image={
-                                imageURL || (frontArticle && frontArticle.image)
-                            }
-                        />
-                    </WithArticleAppearance>
-                </>
-            )
-        },
-    })
+                                <UiBodyCopy
+                                    style={{
+                                        backgroundColor: 'tomato',
+                                        position: 'absolute',
+                                        zIndex: 9999,
+                                        elevation: 999,
+                                        bottom: 100,
+                                        right: metrics.horizontal,
+                                        alignSelf: 'flex-end',
+                                        borderRadius: 999,
+                                    }}
+                                >
+                                    {`${appearances[appearance]} 🌈`}
+                                </UiBodyCopy>
+                            </TouchableOpacity>
+                        </View>
+                        <WithArticleAppearance
+                            value={appearances[appearance] as ArticleAppearance}
+                        >
+                            <Article
+                                article={
+                                    viewIsTransitioning ? undefined : elements
+                                }
+                                kicker={
+                                    (frontArticle && frontArticle.kicker) || ''
+                                }
+                                headline={
+                                    (frontArticle && frontArticle.headline) ||
+                                    title
+                                }
+                                byline={
+                                    (frontArticle && frontArticle.byline) ||
+                                    byline
+                                }
+                                standfirst={standfirst}
+                                image={
+                                    imageURL ||
+                                    (frontArticle && frontArticle.image)
+                                }
+                            />
+                        </WithArticleAppearance>
+                    </>
+                ),
+            })}
+        </SlideCard>
+    )
 }
 
 ArticleScreen.navigationOptions = ({

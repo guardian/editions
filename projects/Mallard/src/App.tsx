@@ -12,7 +12,7 @@ import { FileSystemProvider } from './hooks/use-fs'
 
 useScreens()
 
-const navigationPersistenceKey = __DEV__ ? 'nav-dfdsf' : null
+const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
 
 export default class App extends React.Component<{}, {}> {
     /**

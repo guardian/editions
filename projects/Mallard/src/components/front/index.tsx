@@ -51,21 +51,19 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
 }
 
 const Page: FunctionComponent<{
-    length: number
     appearance: ArticleAppearance
-    page: number
+    index: number
     scrollX: Animated.Value
     collection: Collection
-}> = ({ collection, length, appearance, page, scrollX }) => {
+}> = ({ collection, appearance, index, scrollX }) => {
     const { width } = Dimensions.get('window')
-    const translateX = getTranslateForPage(scrollX, page)
+    const translateX = getTranslateForPage(scrollX, index)
 
     return (
         <View style={{ width }}>
             <CardGroup
                 appearance={appearance}
                 articles={collection.articles || []}
-                length={length}
                 translate={translateX}
                 style={[
                     {
@@ -205,8 +203,7 @@ export const Front: FunctionComponent<{
                     >
                         {collections.map(([id, collection], i) => (
                             <Page
-                                page={i}
-                                length={6}
+                                index={i}
                                 appearance={'comment'}
                                 key={id}
                                 {...{ collection, scrollX }}

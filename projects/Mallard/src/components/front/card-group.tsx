@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { StyleSheet, StyleProp, Animated } from 'react-native'
+import React, { useMemo, ReactNode } from 'react'
+import { StyleSheet, StyleProp, Animated, View } from 'react-native'
 import { Multiline } from '../multiline'
 import { metrics } from '../../theme/spacing'
 
@@ -8,9 +8,10 @@ import {
     useArticleAppearance,
     ArticleAppearance,
 } from '../../theme/appearance'
-import { SmallCard } from './cards'
+import { SmallCard } from './card-group/card'
 import { color } from '../../theme/color'
 import { FrontArticle } from '../../common'
+import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
 
 const styles = StyleSheet.create({
     root: {
@@ -29,78 +30,83 @@ const styles = StyleSheet.create({
         margin: metrics.horizontal,
         marginVertical: metrics.vertical,
     },
-    row: {
-        flexBasis: 0,
-        flexGrow: 1,
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        justifyContent: 'space-between',
-    },
-    unit: {
-        flex: 1,
-    },
 })
 
-interface PropTypes {
-    style: StyleProp<{}>
+export interface PropTypes {
     articles: FrontArticle[]
-    length?: number
     translate: Animated.AnimatedInterpolation
 }
 
-const CardGroupWithAppearance = ({
+const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
+    return (
+        <>
+            {articles.map((article, index) => (
+                <RowWithArticle
+                    index={index}
+                    key={index}
+                    isLastChild={index === articles.length}
+                    translate={translate}
+                    article={article}
+                />
+            ))}
+        </>
+    )
+}
+
+const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
+    /*
+    if something goes wrong and there's less 
+    stuff than expected we fall back to using 
+    a flexible container rather than crash
+    */
+    if (articles.length < 3)
+        return <AnyStoryCardGroup {...{ articles, translate }} />
+
+    return (
+        <>
+            <RowWithTwoArticles
+                index={0}
+                isLastChild={false}
+                translate={translate}
+                articles={[articles[0], articles[1]]}
+            />
+            <RowWithArticle
+                index={0}
+                isLastChild={false}
+                translate={translate}
+                article={articles[2]}
+            />
+        </>
+    )
+}
+
+const Wrapper = ({
     style,
-    articles,
-    length,
-    translate,
-}: PropTypes) => {
+    children,
+}: {
+    style: StyleProp<{}>
+    children: ReactNode
+}) => {
     const { appearance } = useArticleAppearance()
-    const trimmed = useMemo(() => articles.slice(0, length), [articles, length])
     return (
         <Animated.View style={[styles.root, style, appearance.backgrounds]}>
-            {trimmed.map((story, i) => (
-                <Animated.View
-                    style={[
-                        styles.row,
-                        {
-                            transform: [
-                                {
-                                    translateX: translate.interpolate({
-                                        inputRange: [
-                                            metrics.horizontal * -1.5,
-                                            0,
-                                            metrics.horizontal * 1.5,
-                                        ],
-                                        outputRange: [60 * i, 0, -60 * i],
-                                    }),
-                                },
-                            ],
-                        },
-                    ]}
-                    key={i}
-                >
-                    <SmallCard style={styles.unit} article={story} />
-                    {i < trimmed.length - 1 && (
-                        <Multiline
-                            color={appearance.backgrounds.borderColor}
-                            count={2}
-                            style={{ flex: 0 }}
-                        />
-                    )}
-                </Animated.View>
-            ))}
+            {children}
         </Animated.View>
     )
 }
 
 const CardGroup = ({
     appearance,
+    style,
     ...props
 }: {
     appearance: ArticleAppearance
+    style: StyleProp<{}>
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
-        <CardGroupWithAppearance {...props} />
+        <Wrapper style={style}>
+            <ThreeStoryCardGroup {...props} />
+        </Wrapper>
     </WithArticleAppearance>
 )
 
