@@ -7,7 +7,7 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType } from '../common'
+import { Article as ArticleType, FrontArticle } from '../common'
 import { View, TouchableOpacity, Text, Button } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
@@ -21,24 +21,25 @@ const useArticleResponse = (path: string) =>
         article => article.title != null,
     )
 
-const ArticleScreenWithAppearance = () => {}
-
 export const ArticleScreen = ({
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const pathFromUrl = navigation.getParam('path', '')
-    const titleFromUrl = navigation.getParam('title', 'Loading')
+    const frontArticle = navigation.getParam('article') as
+        | FrontArticle
+        | undefined
+
+    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
-    const articleResponse = useArticleResponse(pathFromUrl)
+    const articleResponse = useArticleResponse(path)
+
     /* 
     we don't wanna render a massive tree at once 
     as the navigator is trying to push the screen bc this
     delays the tap response 
-
-    we can pass this prop to identify if we wanna render 
+     we can pass this prop to identify if we wanna render 
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
@@ -59,72 +60,85 @@ export const ArticleScreen = ({
                 ),
                 pending: () => (
                     <Article
-                        kicker={'Kicker 🥾'}
-                        headline={titleFromUrl}
-                        byline={'Byliney McPerson'}
-                        standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
+                        kicker={(frontArticle && frontArticle.kicker) || ''}
+                        headline={(frontArticle && frontArticle.headline) || ''}
+                        byline={(frontArticle && frontArticle.byline) || ''}
+                        standfirst=""
                     />
                 ),
-                success: ({ title, imageURL, elements }) => {
-                    return (
-                        <>
-                            <View
-                                style={{
-                                    backgroundColor: 'tomato',
-                                    position: 'absolute',
-                                    zIndex: 9999,
-                                    elevation: 999,
-                                    bottom: 100,
-                                    right: metrics.horizontal,
-                                    alignSelf: 'flex-end',
-                                    borderRadius: 999,
+                success: ({
+                    standfirst,
+                    title,
+                    byline,
+                    imageURL,
+                    elements,
+                }) => (
+                    <>
+                        <View
+                            style={{
+                                backgroundColor: 'tomato',
+                                position: 'absolute',
+                                zIndex: 9999,
+                                elevation: 999,
+                                bottom: 100,
+                                right: metrics.horizontal,
+                                alignSelf: 'flex-end',
+                                borderRadius: 999,
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setAppearance(app => {
+                                        if (app + 1 >= appearances.length) {
+                                            return 0
+                                        }
+                                        return app + 1
+                                    })
                                 }}
                             >
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setAppearance(app => {
-                                            if (app + 1 >= appearances.length) {
-                                                return 0
-                                            }
-                                            return app + 1
-                                        })
+                                <UiBodyCopy
+                                    style={{
+                                        backgroundColor: 'tomato',
+                                        position: 'absolute',
+                                        zIndex: 9999,
+                                        elevation: 999,
+                                        bottom: 100,
+                                        right: metrics.horizontal,
+                                        alignSelf: 'flex-end',
+                                        borderRadius: 999,
                                     }}
                                 >
-                                    <UiBodyCopy
-                                        style={{
-                                            padding: metrics.horizontal * 2,
-                                            paddingVertical:
-                                                metrics.vertical / 1.5,
-                                            color: '#fff',
-                                        }}
-                                    >
-                                        {`${appearances[appearance]} 🌈`}
-                                    </UiBodyCopy>
-                                </TouchableOpacity>
-                            </View>
-                            <WithArticleAppearance
-                                value={
-                                    appearances[appearance] as ArticleAppearance
+                                    {`${appearances[appearance]} 🌈`}
+                                </UiBodyCopy>
+                            </TouchableOpacity>
+                        </View>
+                        <WithArticleAppearance
+                            value={appearances[appearance] as ArticleAppearance}
+                        >
+                            <Article
+                                article={
+                                    viewIsTransitioning ? undefined : elements
                                 }
-                            >
-                                <Article
-                                    article={
-                                        viewIsTransitioning
-                                            ? undefined
-                                            : elements
-                                    }
-                                    kicker={'Kicker 🥾'}
-                                    headline={
-                                        viewIsTransitioning ? 'www' : title
-                                    }
-                                    byline={'Byliney McPerson'}
-                                    standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                                    image={imageURL}
-                                />
-                            </WithArticleAppearance>
-                        </>
-                    )
-                },
+                                kicker={
+                                    (frontArticle && frontArticle.kicker) || ''
+                                }
+                                headline={
+                                    (frontArticle && frontArticle.headline) ||
+                                    title
+                                }
+                                byline={
+                                    (frontArticle && frontArticle.byline) ||
+                                    byline
+                                }
+                                standfirst={standfirst}
+                                image={
+                                    imageURL ||
+                                    (frontArticle && frontArticle.image)
+                                }
+                            />
+                        </WithArticleAppearance>
+                    </>
+                ),
             })}
         </SlideCard>
     )

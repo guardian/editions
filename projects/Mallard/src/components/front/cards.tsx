@@ -6,6 +6,7 @@ import { Highlight } from '../highlight'
 import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
 
 import { useArticleAppearance } from '../../theme/appearance'
+import { FrontArticle } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -18,24 +19,26 @@ const styles = StyleSheet.create({
         flexBasis: '100%',
     },
 })
+interface SmallCardProps {
+    style: StyleProp<ViewStyle>
+    article: FrontArticle
+}
+type InjectedProps = NavigationInjectedProps<{}>
 const SmallCard = withNavigation(
-    ({
-        style,
-        headline,
-        kicker,
-        path,
-        navigation,
-    }: NavigationInjectedProps & {
-        style: StyleProp<ViewStyle>
-        headline: string
-        kicker: string
-        path: string
-    }) => {
+    ({ style, article, navigation }: SmallCardProps & InjectedProps) => {
         const { appearance } = useArticleAppearance()
+        if (navigation == null) {
+            throw new Error('No navigation present in cards.')
+        }
         return (
             <View style={style}>
                 <Highlight
-                    onPress={() => navigation.navigate('Article', { path })}
+                    onPress={() => {
+                        navigation.navigate('Article', {
+                            article: article,
+                            path: article.path,
+                        })
+                    }}
                 >
                     <View
                         style={[
@@ -48,12 +51,12 @@ const SmallCard = withNavigation(
                         <HeadlineKickerText
                             style={[appearance.text, appearance.kicker]}
                         >
-                            {kicker}
+                            {article.kicker}
                         </HeadlineKickerText>
                         <HeadlineCardText
                             style={[appearance.text, appearance.headline]}
                         >
-                            {headline}
+                            {article.headline}
                         </HeadlineCardText>
                     </View>
                 </Highlight>
