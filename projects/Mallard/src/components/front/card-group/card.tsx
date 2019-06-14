@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
-import { metrics } from '../../theme/spacing'
+import { metrics } from '../../../theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
-import { Highlight } from '../highlight'
-import { HeadlineCardText, HeadlineKickerText } from '../styled-text'
+import { Highlight } from '../../highlight'
+import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
-import { useArticleAppearance } from '../../theme/appearance'
-import { FrontArticle } from '../../common'
+import { useArticleAppearance } from '../../../theme/appearance'
+import { FrontArticle } from '../../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         flexBasis: '100%',
     },
 })
+
 interface SmallCardProps {
     style: StyleProp<ViewStyle>
     article: FrontArticle

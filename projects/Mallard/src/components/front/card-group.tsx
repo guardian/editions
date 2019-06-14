@@ -8,9 +8,10 @@ import {
     useArticleAppearance,
     ArticleAppearance,
 } from '../../theme/appearance'
-import { SmallCard } from './cards'
+import { SmallCard } from './card-group/card'
 import { color } from '../../theme/color'
 import { FrontArticle } from '../../common'
+import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
 
 const styles = StyleSheet.create({
     root: {
@@ -29,124 +30,83 @@ const styles = StyleSheet.create({
         margin: metrics.horizontal,
         marginVertical: metrics.vertical,
     },
-    row: {
-        flexBasis: 0,
-        flexGrow: 1,
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        justifyContent: 'space-between',
-    },
-    doubleRow: {
-        flex: 1,
-        flexDirection: 'row',
-        overflow: 'hidden',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-    },
-    unit: {
-        flex: 1,
-    },
-    rightUnit: {
-        borderLeftWidth: StyleSheet.hairlineWidth,
-    },
 })
 
-interface PropTypes {
-    style: StyleProp<{}>
+export interface PropTypes {
     articles: FrontArticle[]
-    length?: number
     translate: Animated.AnimatedInterpolation
 }
 
-const Row = ({
-    children,
-    translate,
-    isLastChild,
-    index,
-}: {
-    children: ReactNode
-    translate: PropTypes['translate']
-    isLastChild: boolean
-    index: number
-}) => {
-    const { appearance } = useArticleAppearance()
+const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
     return (
-        <Animated.View
-            style={[
-                styles.row,
-                {
-                    transform: [
-                        {
-                            translateX: translate.interpolate({
-                                inputRange: [
-                                    metrics.horizontal * -1.5,
-                                    0,
-                                    metrics.horizontal * 1.5,
-                                ],
-                                outputRange: [60 * index, 0, -60 * index],
-                            }),
-                        },
-                    ],
-                },
-            ]}
-        >
-            {children}
-            {!isLastChild && (
-                <Multiline
-                    color={appearance.backgrounds.borderColor}
-                    count={2}
-                    style={{ flex: 0 }}
+        <>
+            {articles.map((article, index) => (
+                <RowWithArticle
+                    index={index}
+                    key={index}
+                    isLastChild={index === articles.length}
+                    translate={translate}
+                    article={article}
                 />
-            )}
-        </Animated.View>
+            ))}
+        </>
     )
 }
 
-const CardGroupWithAppearance = ({ style, articles, translate }: PropTypes) => {
-    const { appearance } = useArticleAppearance()
+const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
+    /*
+    if something goes wrong and there's less 
+    stuff than expected we fall back to using 
+    a flexible container rather than crash
+    */
+    if (articles.length < 3)
+        return <AnyStoryCardGroup {...{ articles, translate }} />
 
     return (
+        <>
+            <RowWithTwoArticles
+                index={0}
+                isLastChild={false}
+                translate={translate}
+                articles={[articles[0], articles[1]]}
+            />
+            <RowWithArticle
+                index={0}
+                isLastChild={false}
+                translate={translate}
+                article={articles[2]}
+            />
+        </>
+    )
+}
+
+const Wrapper = ({
+    style,
+    children,
+}: {
+    style: StyleProp<{}>
+    children: ReactNode
+}) => {
+    const { appearance } = useArticleAppearance()
+    return (
         <Animated.View style={[styles.root, style, appearance.backgrounds]}>
-            <Row index={0} isLastChild={false} translate={translate}>
-                <View style={styles.doubleRow}>
-                    <SmallCard
-                        style={[styles.unit]}
-                        path={articles[0].path}
-                        article={articles[0]}
-                    />
-                    <SmallCard
-                        style={[
-                            styles.unit,
-                            styles.rightUnit,
-                            {
-                                borderColor: appearance.backgrounds.borderColor,
-                            },
-                        ]}
-                        path={articles[0].path}
-                        article={articles[0]}
-                    />
-                </View>
-            </Row>
-            <Row index={1} isLastChild={true} translate={translate}>
-                <SmallCard
-                    style={styles.unit}
-                    path={articles[0].path}
-                    article={articles[0]}
-                />
-            </Row>
+            {children}
         </Animated.View>
     )
 }
 
 const CardGroup = ({
     appearance,
+    style,
     ...props
 }: {
     appearance: ArticleAppearance
+    style: StyleProp<{}>
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
-        <CardGroupWithAppearance {...props} />
+        <Wrapper style={style}>
+            <ThreeStoryCardGroup {...props} />
+        </Wrapper>
     </WithArticleAppearance>
 )
 

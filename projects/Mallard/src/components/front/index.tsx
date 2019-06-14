@@ -65,7 +65,6 @@ const Page: FunctionComponent<{
             <CardGroup
                 appearance={appearance}
                 articles={collection.articles || []}
-                length={length}
                 translate={translateX}
                 style={[
                     {
