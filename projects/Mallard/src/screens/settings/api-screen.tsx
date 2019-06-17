@@ -9,7 +9,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { TextInput } from 'react-native-gesture-handler'
 import { color } from '../../theme/color'
 import { metrics } from '../../theme/spacing'
-import { backends } from '../../helpers/settings'
+import { backends, defaultSettings } from '../../helpers/settings'
 
 const styles = StyleSheet.create({
     container,
@@ -17,7 +17,12 @@ const styles = StyleSheet.create({
 
 const ApiState = () => {
     const [{ apiUrl }] = useSettings()
-    return <MonoTextBlock>API backend pointing to {apiUrl}</MonoTextBlock>
+    if (apiUrl === defaultSettings.apiUrl) return null
+    return (
+        <MonoTextBlock>
+            API backend pointing to {apiUrl}. This is not PROD!
+        </MonoTextBlock>
+    )
 }
 
 const ApiScreen = ({
