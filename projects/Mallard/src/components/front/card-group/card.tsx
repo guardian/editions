@@ -77,7 +77,13 @@ const coverStyles = StyleSheet.create({
         height: '100%',
         flex: 1,
     },
-    text: { width: '50%', position: 'absolute', bottom: 0, left: 0 },
+    text: {
+        width: '50%',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        top: '50%',
+    },
 })
 
 const CoverCard = ({ style, article, path }: PropTypes) => {

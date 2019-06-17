@@ -58,24 +58,24 @@ const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
-    if (articles.length < 3)
+    if (articles.length !== 3)
         return <AnyStoryCardGroup {...{ articles, translate }} />
 
     return (
         <>
-            <RowWithTwoArticles
+            <RowWithArticle
                 index={0}
                 isLastChild={false}
                 translate={translate}
-                articles={[articles[0], articles[1]]}
-                size={Size.fourth}
+                article={articles[2]}
+                size={Size.hero}
             />
-            <RowWithArticle
+            <RowWithTwoArticles
                 index={0}
                 isLastChild={true}
                 translate={translate}
-                article={articles[2]}
-                size={Size.hero}
+                articles={[articles[0], articles[1]]}
+                size={Size.third}
             />
         </>
     )

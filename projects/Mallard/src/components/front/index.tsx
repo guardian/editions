@@ -1,10 +1,4 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    ReactNode,
-    useMemo,
-} from 'react'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
 import { useEndpointResponse } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
