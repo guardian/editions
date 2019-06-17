@@ -4,9 +4,18 @@ import { Multiline } from '../../multiline'
 import { metrics } from '../../../theme/spacing'
 
 import { useArticleAppearance } from '../../../theme/appearance'
-import { SmallCard } from './../card-group/card'
+import { Card } from './../card-group/card'
 import { FrontArticle } from '../../../common'
 import { PropTypes as CardGroupPropTypes } from '../card-group'
+
+export enum Size {
+    row,
+    fourth,
+    third,
+    half,
+    hero,
+    superhero,
+}
 
 const styles = StyleSheet.create({
     row: {
@@ -88,12 +97,19 @@ shows 1 article
 */
 const RowWithArticle = ({
     article,
+    size,
     ...rowProps
 }: {
+    size: Size
     article: FrontArticle
 } & RowPropTypes) => (
     <Row {...rowProps}>
-        <SmallCard style={styles.card} path={article.path} article={article} />
+        <Card
+            style={styles.card}
+            path={article.path}
+            article={article}
+            size={size}
+        />
     </Row>
 )
 
@@ -105,8 +121,10 @@ then it eats them up
 */
 const RowWithTwoArticles = ({
     articles,
+    size,
     ...rowProps
 }: {
+    size: Size
     articles: [FrontArticle, FrontArticle]
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
@@ -117,16 +135,19 @@ const RowWithTwoArticles = ({
     we fall back to 1 article
     */
     if (!articles[1])
-        return <RowWithArticle {...rowProps} article={articles[0]} />
+        return (
+            <RowWithArticle {...rowProps} {...{ size }} article={articles[0]} />
+        )
     return (
         <Row {...rowProps}>
             <View style={styles.doubleRow}>
-                <SmallCard
+                <Card
                     style={[styles.card]}
                     path={articles[0].path}
                     article={articles[0]}
+                    size={size}
                 />
-                <SmallCard
+                <Card
                     style={[
                         styles.card,
                         styles.rightCard,
@@ -136,6 +157,7 @@ const RowWithTwoArticles = ({
                     ]}
                     path={articles[1].path}
                     article={articles[1]}
+                    size={size}
                 />
             </View>
         </Row>
