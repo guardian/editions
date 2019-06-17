@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
 import { metrics } from '../../../theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
@@ -10,7 +10,7 @@ import { FrontArticle } from '../../../common'
 
 const styles = StyleSheet.create({
     root: {
-        padding: metrics.horizontal,
+        padding: metrics.horizontal / 2,
         paddingVertical: metrics.vertical / 2,
     },
     elastic: {
@@ -34,6 +34,7 @@ const SmallCard = withNavigation(
         navigation,
     }: PropTypes & NavigationInjectedProps<{}>) => {
         const { appearance } = useArticleAppearance()
+
         return (
             <View style={style}>
                 <Highlight
@@ -52,16 +53,29 @@ const SmallCard = withNavigation(
                             appearance.cardBackgrounds,
                         ]}
                     >
-                        <HeadlineKickerText
-                            style={[appearance.text, appearance.kicker]}
-                        >
-                            {article.kicker}
-                        </HeadlineKickerText>
-                        <HeadlineCardText
-                            style={[appearance.text, appearance.headline]}
-                        >
-                            {article.headline}
-                        </HeadlineCardText>
+                        <Image
+                            accessibilityLabel={'Loading content'}
+                            style={{
+                                width: '100%',
+                                flex: 1,
+                                marginBottom: metrics.vertical / 2,
+                            }}
+                            source={{
+                                uri: 'https://placekitten.com/200/200',
+                            }}
+                        />
+                        <View>
+                            <HeadlineKickerText
+                                style={[appearance.text, appearance.kicker]}
+                            >
+                                Kick {article.kicker}
+                            </HeadlineKickerText>
+                            <HeadlineCardText
+                                style={[appearance.text, appearance.headline]}
+                            >
+                                headline {article.headline}
+                            </HeadlineCardText>
+                        </View>
                     </View>
                 </Highlight>
             </View>
