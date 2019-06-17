@@ -114,6 +114,11 @@ export const unzipIssue = (issue: File['issue']) => {
     )
 }
 
+export const getJson = (path: string) =>
+    RNFetchBlob.fs.readFile(path, 'utf8').then(d => {
+        return JSON.parse(d)
+    })
+
 /*
 Cheeky size helper
 */

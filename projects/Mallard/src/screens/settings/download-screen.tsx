@@ -17,6 +17,7 @@ import {
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
+    getJson,
 } from '../../helpers/files'
 import RNFetchBlob from 'rn-fetch-blob'
 
@@ -165,8 +166,8 @@ export const DownloadScreen = () => {
                                     refreshIssues()
                                 })
                         } else if (type === 'json') {
-                            RNFetchBlob.fs.readFile(path, 'utf8').then(data => {
-                                Alert.alert(data)
+                            getJson(path).then(data => {
+                                Alert.alert(JSON.stringify(data))
                             })
                         } else {
                             Alert.alert('oof')
