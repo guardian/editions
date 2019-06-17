@@ -81,7 +81,10 @@ export const HomeScreen = ({
                         <ListHeading>Issues on device</ListHeading>
                         <List
                             data={files
-                                .filter(({ type }) => type !== 'other')
+                                .filter(
+                                    ({ type }) =>
+                                        type === 'archive' || type === 'issue',
+                                )
                                 .map(file => ({
                                     key: file.issue,
                                     title:

@@ -6,6 +6,7 @@ import {
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from '../helpers/words'
 import { getJson, issuesDir } from 'src/helpers/files'
+import { Issue } from 'src/common'
 
 let naiveCache: { [url: string]: any } = {}
 let naiveJsonCache: { [path: string]: any } = {}
@@ -83,20 +84,41 @@ const useFetch = <T>(
     return response
 }
 
+const usePaths = (
+    issue: Issue['name'],
+    path: string,
+): { fs: string; url: string } => {
+    const [{ apiUrl }] = useSettings()
+    const url = apiUrl + '/' + path
+    const fs = issuesDir + '/' + issue + '/' + path + '.json'
+    return { url, fs }
+}
+
 export const useJsonResponse = <T>(
-    issue: string,
+    issue: Issue['name'],
     path: string,
     validator: ValidatorFn<T> = () => true,
 ) => {
-    const fullPath = issuesDir + '/' + issue + '/' + path + '.json'
-    return withResponse<T>(useJson(fullPath, validator))
+    const { fs } = usePaths(issue, path)
+    return withResponse<T>(useJson(fs, validator))
 }
 
 export const useEndpointResponse = <T>(
     path: string,
     validator: ValidatorFn<T> = () => true,
 ) => {
-    const [{ apiUrl }] = useSettings()
-    const url = apiUrl + '/' + path
+    const { url } = usePaths('', path)
     return withResponse<T>(useFetch(url, validator))
+}
+
+export const useJsonThenFetchResponse = <T>(
+    issue: string,
+    path: string,
+    validator: ValidatorFn<T> = () => true,
+) => {
+    const { fs, url } = usePaths(issue, path)
+    const responses = [useFetch(url, validator), useJson(fs, validator)]
+
+    const winner = responses.find(({ state }) => state === 'success')
+    return withResponse<T>(winner ? winner : responses[0])
 }
