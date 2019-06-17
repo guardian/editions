@@ -87,7 +87,7 @@ const CoverCard = ({ style, article, path }: PropTypes) => {
                 <Image
                     style={coverStyles.cover}
                     source={{
-                        uri: 'https://placekitten.com/200/200',
+                        uri: article.image,
                     }}
                 />
                 <TextBlock
@@ -101,29 +101,31 @@ const CoverCard = ({ style, article, path }: PropTypes) => {
     )
 }
 
-const smallStyles = StyleSheet.create({
+const imageStyles = StyleSheet.create({
     image: {
         width: '100%',
         flex: 1,
     },
 })
 
-const SmallCard = ({ style, article, path }: PropTypes) => {
-    /* gotta derive these from appearance+size */
-    const textBlockAppearance = 'default'
+const ImageCard = ({ style, article, path }: PropTypes) => {
     return (
         <CardTappable {...{ style, article, path }}>
             <Image
-                style={smallStyles.image}
+                style={imageStyles.image}
                 source={{
-                    uri: 'https://placekitten.com/200/200',
+                    uri: article.image,
                 }}
             />
-            <TextBlock
-                kicker={article.kicker}
-                headline={article.headline}
-                textBlockAppearance={textBlockAppearance}
-            />
+            <TextBlock kicker={article.kicker} headline={article.headline} />
+        </CardTappable>
+    )
+}
+
+const SmallCard = ({ style, article, path }: PropTypes) => {
+    return (
+        <CardTappable {...{ style, article, path }}>
+            <TextBlock kicker={article.kicker} headline={article.headline} />
         </CardTappable>
     )
 }
@@ -132,6 +134,8 @@ const Card = ({ size, ...props }: { size: Size } & PropTypes) => {
     /* this chooses the card type for us based on ummm MAGIC? */
     return size >= Size.hero ? (
         <CoverCard {...props} />
+    ) : size >= Size.half ? (
+        <ImageCard {...props} />
     ) : (
         <SmallCard {...props} />
     )

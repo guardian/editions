@@ -75,12 +75,16 @@ const TextBlock = ({
     return (
         <View style={[rootStyle, style]}>
             <HeadlineKickerText style={kickerStyle}>
-                Kick {kicker}
+                {kicker}
             </HeadlineKickerText>
             <HeadlineCardText style={headlineStyle}>
-                headline {headline}
+                {headline}
             </HeadlineCardText>
         </View>
     )
 }
+TextBlock.defaultProps = {
+    textBlockAppearance: 'default',
+}
+
 export { TextBlock }
