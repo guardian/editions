@@ -153,7 +153,9 @@ export const articleAppearances: {
             backgroundColor: color.palette.sport.faded,
         },
         cardBackgrounds: {},
-        contrastCardBackgrounds: {},
+        contrastCardBackgrounds: {
+            backgroundColor: color.palette.sport.main,
+        },
         text: {
             color: color.palette.sport.main,
         },
