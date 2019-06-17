@@ -98,12 +98,20 @@ export const HomeScreen = ({
                                 if (file.type === 'archive') {
                                     unzipIssue(file.issue).then(async () => {
                                         refreshIssues()
-                                        Alert.alert(`Unzipped ${file.issue}`)
+                                        navigation.navigate('Issue', {
+                                            issue: {
+                                                name: file.issue,
+                                                date: -2,
+                                            },
+                                        })
                                     })
                                 } else {
-                                    Alert.alert(
-                                        'Hold there, this is not supported yet',
-                                    )
+                                    navigation.navigate('Issue', {
+                                        issue: {
+                                            name: file.issue,
+                                            date: -2,
+                                        },
+                                    })
                                 }
                             }}
                         />

@@ -5,7 +5,7 @@ import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from '../helpers/words'
-import { getJson } from 'src/helpers/files'
+import { getJson, issuesDir } from 'src/helpers/files'
 
 let naiveCache: { [url: string]: any } = {}
 let naiveJsonCache: { [path: string]: any } = {}
@@ -23,10 +23,7 @@ if doesn't contain the right type - say on an error 500
 */
 type ValidatorFn<T> = (response: any | T) => boolean
 
-export const useJson = <T>(
-    path: string,
-    validator: ValidatorFn<T> = () => true,
-) => {
+const useJson = <T>(path: string, validator: ValidatorFn<T> = () => true) => {
     const { response, onSuccess, onError } = useResponse(
         naiveJsonCache[path] ? naiveJsonCache[path] : null,
     )
@@ -86,9 +83,18 @@ const useFetch = <T>(
     return response
 }
 
+export const useJsonResponse = <T>(
+    issue: string,
+    path: string,
+    validator: ValidatorFn<T> = () => true,
+) => {
+    const fullPath = issuesDir + '/' + issue + '/' + path + '.json'
+    return withResponse<T>(useJson(fullPath, validator))
+}
+
 export const useEndpointResponse = <T>(
     path: string,
-    validator: (response: T | any) => boolean = () => true,
+    validator: ValidatorFn<T> = () => true,
 ) => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path

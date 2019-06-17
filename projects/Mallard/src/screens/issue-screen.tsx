@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { MonoTextBlock } from '../components/styled-text'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 
 import { container } from '../theme/styles'
@@ -20,6 +19,7 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const issue: Issue = navigation.getParam('issue', { date: -1 })
+    console.log(issue)
     const { weekday, date } = useMemo(() => renderIssueDate(issue.date), [
         issue.date,
     ])
@@ -46,8 +46,21 @@ export const IssueScreen = ({
             />
             <Header title={weekday} subtitle={date} />
 
-            <Front {...{ viewIsTransitioning }} front="best-awards" />
-            <Front {...{ viewIsTransitioning }} front="cities" />
+            <Front
+                {...{ viewIsTransitioning }}
+                issue={issue.name}
+                front="best-awards"
+            />
+            <Front
+                {...{ viewIsTransitioning }}
+                issue={issue.name}
+                front="local-asdf"
+            />
+            <Front
+                {...{ viewIsTransitioning }}
+                issue={issue.name}
+                front="cities"
+            />
         </ScrollView>
     )
 }

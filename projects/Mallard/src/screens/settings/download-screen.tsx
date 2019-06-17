@@ -19,7 +19,6 @@ import {
     displayPerc,
     getJson,
 } from '../../helpers/files'
-import RNFetchBlob from 'rn-fetch-blob'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (

@@ -1,12 +1,6 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    ReactNode,
-    useMemo,
-} from 'react'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
-import { useEndpointResponse } from '../../hooks/use-fetch'
+import { useEndpointResponse, useJsonResponse } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -15,17 +9,24 @@ import { Front as FrontType, Collection } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { Issue } from 'src/common'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const useFrontsResponse = (front: string) =>
-    useEndpointResponse<FrontType>(
+const useFrontsResponse = (issue: string, front: string) => {
+    return useJsonResponse(
+        issue,
         `front/${front}`,
         res => res.collections != null,
     )
 
+    useEndpointResponse<FrontType>(
+        `front/${front}`,
+        res => res.collections != null,
+    )
+}
 /*
 Map the position of the tap on the screen to
 the position of the tap on the scrubber itself (which has padding).
@@ -109,11 +110,12 @@ const Wrapper: FunctionComponent<{
 
 export const Front: FunctionComponent<{
     front: string
+    issue: Issue['name']
     viewIsTransitioning: boolean
-}> = ({ front, viewIsTransitioning }) => {
+}> = ({ front, issue, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
-    const frontsResponse = useFrontsResponse(front)
+    const frontsResponse = useFrontsResponse(issue, front)
 
     return frontsResponse({
         pending: () => (
