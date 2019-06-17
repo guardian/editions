@@ -1,0 +1,6 @@
+{
+    "name": "src",
+    "@notes": "metro bundler treats absolute imports as names in package.json. Kinda like monorepos. We are doing a teeny hack that 'names' the src folder as src, effectively tricking Metro bundler into loading stuff from it while making the imports look like an absolute path.",
+    "@more notes": "Just to explain, if the name here was 'banana', something like `import Article from 'banana/components/article'` would work.",
+    "@even more notes": "Why name it src then? Well, vs code and eslint don't know about this convention in metro bundler but they know about other more standard ways of doing absolute resolution so using the folder name lets them work with no config"
+}
