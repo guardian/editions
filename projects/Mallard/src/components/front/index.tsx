@@ -14,6 +14,7 @@ import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 import { Issue } from 'src/common'
+import { color as themeColor } from '../../theme/color'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -133,7 +134,7 @@ export const Front: FunctionComponent<{
             </Wrapper>
         ),
         success: frontData => {
-            const color = 'green'
+            const color = themeColor.palette.news.bright
             const pages = Object.keys(frontData.collections).length
             const collections = viewIsTransitioning
                 ? Object.entries(frontData.collections).slice(0, 1)
