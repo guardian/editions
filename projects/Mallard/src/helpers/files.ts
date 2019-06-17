@@ -1,16 +1,24 @@
 import RNFetchBlob from 'rn-fetch-blob'
 import { unzip } from 'react-native-zip-archive'
+import { Issue } from 'src/common'
 
 export const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
-export interface File {
+interface BasicFile {
     filename: string
     path: string
     size: number
     issue: string
-    type: 'other' | 'archive' | 'issue' | 'json'
+}
+interface OtherFile extends BasicFile {
+    type: 'other' | 'archive' | 'json'
+}
+interface IssueFile extends BasicFile {
+    contents: Issue
+    type: 'issue'
 }
 
+export type File = OtherFile | IssueFile
 /*
  TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
  */
@@ -37,21 +45,40 @@ let fileListMemo: File[] = []
 
 const makeFile = async (filename: string): Promise<File> => {
     const path = issuesDir + '/' + filename
-    const { size, type } = await RNFetchBlob.fs.stat(path)
-    return {
-        filename,
-        issue: filename.split('.')[0],
-        size: parseInt(size),
-        path,
-        type:
-            type === 'directory'
-                ? 'issue'
-                : filename.includes('.zip')
-                ? 'archive'
-                : filename.includes('.json')
-                ? 'json'
-                : 'other',
-    }
+    const { size: fsSize, type: fsType } = await RNFetchBlob.fs.stat(path)
+
+    const type =
+        fsType === 'directory'
+            ? 'issue'
+            : filename.includes('.zip')
+            ? 'archive'
+            : filename.includes('.json')
+            ? 'json'
+            : 'other'
+
+    const issue = filename.split('.')[0]
+    const size = parseInt(fsSize)
+
+    return type === 'issue'
+        ? {
+              filename,
+              path,
+              issue,
+              size,
+              type,
+              contents: {
+                  name: `download #${filename}`,
+                  date: -12,
+                  fronts: [],
+              },
+          }
+        : {
+              filename,
+              path,
+              issue,
+              size,
+              type,
+          }
 }
 
 export const getFileList = async (): Promise<File[]> => {

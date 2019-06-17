@@ -88,13 +88,13 @@ export const HomeScreen = ({
                                 .map(file => ({
                                     key: file.issue,
                                     title:
-                                        file.type === 'archive'
-                                            ? 'Compressed issue'
-                                            : file.issue,
+                                        file.type === 'issue'
+                                            ? file.contents.name
+                                            : 'Compressed issue',
                                     explainer:
-                                        file.type === 'archive'
-                                            ? 'Tap to unarchive'
-                                            : undefined,
+                                        file.type === 'issue'
+                                            ? undefined
+                                            : 'Tap to unarchive',
                                     data: file,
                                 }))}
                             onPress={file => {
@@ -104,16 +104,12 @@ export const HomeScreen = ({
                                         navigation.navigate('Issue', {
                                             issue: {
                                                 name: file.issue,
-                                                date: -2,
                                             },
                                         })
                                     })
-                                } else {
+                                } else if (file.type === 'issue') {
                                     navigation.navigate('Issue', {
-                                        issue: {
-                                            name: file.issue,
-                                            date: -2,
-                                        },
+                                        issue: file.contents,
                                     })
                                 }
                             }}
