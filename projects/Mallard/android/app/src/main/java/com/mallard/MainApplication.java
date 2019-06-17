@@ -1,4 +1,4 @@
-package com.mallard;
+package com.guardian.editions;
 
 import android.app.Application;
 
