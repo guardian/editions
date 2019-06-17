@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, ViewStyle, StyleProp } from 'react-native'
 import { metrics } from '../../../theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
@@ -61,17 +61,19 @@ const TextBlock = ({
     kicker,
     headline,
     textBlockAppearance,
+    style,
 }: {
     kicker: string
     headline: string
     textBlockAppearance: TextBlockAppearance
+    style?: StyleProp<ViewStyle>
 }) => {
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
 
     return (
-        <View style={rootStyle}>
+        <View style={[rootStyle, style]}>
             <HeadlineKickerText style={kickerStyle}>
                 Kick {kicker}
             </HeadlineKickerText>
