@@ -69,7 +69,7 @@ export const DownloadScreen = () => {
             key: file.filename,
             title:
                 file.type === 'issue'
-                    ? `🗞 ${file.issue}`
+                    ? `🗞 ${file.issue.name}`
                     : `📦 ${file.filename}`,
             explainer: `${displayFileSize(file.size)} – ${file.type}`,
             data: file,
@@ -154,9 +154,9 @@ export const DownloadScreen = () => {
                 <ListHeading>On device</ListHeading>
                 <List
                     data={fileList}
-                    onPress={({ type, issue, path }) => {
+                    onPress={({ type, id, path }) => {
                         if (type === 'archive') {
-                            unzipIssue(issue)
+                            unzipIssue(id)
                                 .then(async () => {
                                     refreshIssues()
                                 })

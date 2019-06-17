@@ -86,10 +86,10 @@ export const HomeScreen = ({
                                         type === 'archive' || type === 'issue',
                                 )
                                 .map(file => ({
-                                    key: file.issue,
+                                    key: file.id,
                                     title:
                                         file.type === 'issue'
-                                            ? file.contents.name
+                                            ? file.issue.name
                                             : 'Compressed issue',
                                     explainer:
                                         file.type === 'issue'
@@ -99,17 +99,17 @@ export const HomeScreen = ({
                                 }))}
                             onPress={file => {
                                 if (file.type === 'archive') {
-                                    unzipIssue(file.issue).then(async () => {
+                                    unzipIssue(file.id).then(async () => {
                                         refreshIssues()
                                         navigation.navigate('Issue', {
                                             issue: {
-                                                name: file.issue,
+                                                name: file.id,
                                             },
                                         })
                                     })
                                 } else if (file.type === 'issue') {
                                     navigation.navigate('Issue', {
-                                        issue: file.contents,
+                                        issue: file.issue,
                                     })
                                 }
                             }}

@@ -8,13 +8,13 @@ interface BasicFile {
     filename: string
     path: string
     size: number
-    issue: string
+    id: string
 }
 interface OtherFile extends BasicFile {
     type: 'other' | 'archive' | 'json'
 }
 interface IssueFile extends BasicFile {
-    contents: Issue
+    issue: Issue
     type: 'issue'
 }
 
@@ -56,18 +56,18 @@ const makeFile = async (filename: string): Promise<File> => {
             ? 'json'
             : 'other'
 
-    const issue = filename.split('.')[0]
+    const id = filename.split('.')[0]
     const size = parseInt(fsSize)
 
     return type === 'issue'
         ? {
               filename,
               path,
-              issue,
+              id,
               size,
               type,
-              contents: {
-                  name: `download #${filename}`,
+              issue: {
+                  name: `Downloaded issue #${filename}`,
                   date: -12,
                   fronts: [],
               },
@@ -75,7 +75,7 @@ const makeFile = async (filename: string): Promise<File> => {
         : {
               filename,
               path,
-              issue,
+              id,
               size,
               type,
           }
@@ -108,7 +108,7 @@ export const deleteOtherFiles = async (): Promise<void> => {
 /*
 TODO: this is not the real issue url
 */
-export const downloadIssue = (issue: File['issue']) => {
+export const downloadIssue = (issue: File['id']) => {
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
@@ -133,7 +133,7 @@ export const downloadIssue = (issue: File['issue']) => {
     }
 }
 
-export const unzipIssue = (issue: File['issue']) => {
+export const unzipIssue = (issue: File['id']) => {
     const zipFilePath = issuesDir + '/' + issue + '.zip'
     const outputPath = issuesDir + '/' + issue
     return unzip(zipFilePath, outputPath).then(() =>
