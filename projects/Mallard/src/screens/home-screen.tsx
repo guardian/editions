@@ -74,7 +74,12 @@ export const HomeScreen = ({
                 <ListHeading>Demo issues</ListHeading>
                 <List
                     data={issueList}
-                    onPress={issue => navigation.navigate('Issue', issue)}
+                    onPress={({ issue }) => {
+                        navigation.navigate('Issue', {
+                            path: 'TODO-NAME',
+                            issue,
+                        })
+                    }}
                 />
                 {files.length > 0 && (
                     <>
@@ -103,13 +108,12 @@ export const HomeScreen = ({
                                     unzipIssue(file.id).then(async () => {
                                         refreshIssues()
                                         navigation.navigate('Issue', {
-                                            issue: {
-                                                name: file.id,
-                                            },
+                                            path: file.id,
                                         })
                                     })
                                 } else if (file.type === 'issue') {
                                     navigation.navigate('Issue', {
+                                        path: file.issue.name,
                                         issue: file.issue,
                                     })
                                 }

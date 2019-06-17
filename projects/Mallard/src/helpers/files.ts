@@ -114,7 +114,7 @@ export const downloadIssue = (issue: File['id']) => {
         overwrite: true,
     }).fetch(
         'GET',
-        `https://github.com/guardian/dotcom-rendering/archive/master.zip?issue=${issue}date=${Date.now()}`,
+        `https://cdn.glitch.com/d424b6ae-9403-412d-8e4e-f0ffe346b09c%2Ffront.zip?v=1560804690298?issue=${issue}date=${Date.now()}`,
     )
 
     return {

@@ -7,6 +7,8 @@ import { Front } from '../components/front'
 import { renderIssueDate } from '../helpers/issues'
 import { Issue } from '../common'
 import { Header } from '../components/header'
+import { FlexCenter } from 'src/components/layout/flex-center'
+import { UiBodyCopy } from 'src/components/styled-text'
 
 const styles = StyleSheet.create({
     container,
@@ -18,6 +20,7 @@ export const IssueScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
+    const path: Issue['name'] = navigation.getParam('path')
     const issue: Issue = navigation.getParam('issue', { date: -1 })
     const { weekday, date } = useMemo(() => renderIssueDate(issue.date), [
         issue.date,
@@ -33,6 +36,13 @@ export const IssueScreen = ({
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
+    if (!path) {
+        return (
+            <FlexCenter>
+                <UiBodyCopy>Not found</UiBodyCopy>
+            </FlexCenter>
+        )
+    }
     return (
         <ScrollView
             style={styles.container}
@@ -47,19 +57,15 @@ export const IssueScreen = ({
 
             <Front
                 {...{ viewIsTransitioning }}
-                issue={issue.name}
+                issue={path}
                 front="best-awards"
             />
             <Front
                 {...{ viewIsTransitioning }}
-                issue={issue.name}
+                issue={path}
                 front="local-asdf"
             />
-            <Front
-                {...{ viewIsTransitioning }}
-                issue={issue.name}
-                front="cities"
-            />
+            <Front {...{ viewIsTransitioning }} issue={path} front="cities" />
         </ScrollView>
     )
 }
