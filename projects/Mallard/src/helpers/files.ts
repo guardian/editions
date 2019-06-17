@@ -67,8 +67,8 @@ const makeFile = async (filename: string): Promise<File> => {
               size,
               type,
               issue: {
-                  name: `Downloaded issue #${filename}`,
-                  date: -12,
+                  name: filename,
+                  date: new Date(parseInt(filename.split('-')[0])).getTime(),
                   fronts: [],
               },
           }
@@ -154,6 +154,7 @@ export const displayPerc = (elapsed: number, total: number) => {
 }
 
 export const displayFileSize = (size: File['size']): string => {
+    if (!size) size = -1
     if (size / 1024 < 1) {
         return size.toFixed(2) + ' B'
     }

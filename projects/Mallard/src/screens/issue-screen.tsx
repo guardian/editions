@@ -19,7 +19,6 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const issue: Issue = navigation.getParam('issue', { date: -1 })
-    console.log(issue)
     const { weekday, date } = useMemo(() => renderIssueDate(issue.date), [
         issue.date,
     ])

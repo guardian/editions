@@ -89,11 +89,12 @@ export const HomeScreen = ({
                                     key: file.id,
                                     title:
                                         file.type === 'issue'
-                                            ? file.issue.name
+                                            ? renderIssueDate(file.issue.date)
+                                                  .date
                                             : 'Compressed issue',
                                     explainer:
                                         file.type === 'issue'
-                                            ? undefined
+                                            ? `From fs/${file.id}`
                                             : 'Tap to unarchive',
                                     data: file,
                                 }))}
