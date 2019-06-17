@@ -8,7 +8,7 @@ export interface File {
     path: string
     size: number
     issue: string
-    type: 'other' | 'archive' | 'issue'
+    type: 'other' | 'archive' | 'issue' | 'json'
 }
 
 /*
@@ -48,6 +48,8 @@ const makeFile = async (filename: string): Promise<File> => {
                 ? 'issue'
                 : filename.includes('.zip')
                 ? 'archive'
+                : filename.includes('.json')
+                ? 'json'
                 : 'other',
     }
 }

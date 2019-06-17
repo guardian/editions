@@ -18,6 +18,7 @@ import {
     deleteOtherFiles,
     displayPerc,
 } from '../../helpers/files'
+import RNFetchBlob from 'rn-fetch-blob'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
@@ -153,7 +154,7 @@ export const DownloadScreen = () => {
                 <ListHeading>On device</ListHeading>
                 <List
                     data={fileList}
-                    onPress={({ type, issue }) => {
+                    onPress={({ type, issue, path }) => {
                         if (type === 'archive') {
                             unzipIssue(issue)
                                 .then(async () => {
@@ -163,6 +164,10 @@ export const DownloadScreen = () => {
                                     Alert.alert(JSON.stringify(error))
                                     refreshIssues()
                                 })
+                        } else if (type === 'json') {
+                            RNFetchBlob.fs.readFile(path, 'utf8').then(data => {
+                                Alert.alert(data)
+                            })
                         } else {
                             Alert.alert('oof')
                         }
