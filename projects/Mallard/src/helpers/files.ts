@@ -114,7 +114,7 @@ export const downloadIssue = (issue: File['id']) => {
         overwrite: true,
     }).fetch(
         'GET',
-        `https://cdn.glitch.com/d424b6ae-9403-412d-8e4e-f0ffe346b09c%2Ffront.zip?v=1560804690298?issue=${issue}date=${Date.now()}`,
+        `https://lauras-funhouse.s3.amazonaws.com/demo-issue.zip?v=1560804690298?issue=${issue}date=${Date.now()}`,
     )
 
     return {

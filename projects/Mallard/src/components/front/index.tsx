@@ -1,10 +1,6 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
-import {
-    useEndpointResponse,
-    useJsonResponse,
-    useJsonThenFetchResponse,
-} from '../../hooks/use-fetch'
+import { useJsonThenFetch } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -15,18 +11,21 @@ import { FlexCenter } from '../layout/flex-center'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
 import { Issue } from 'src/common'
 import { color as themeColor } from '../../theme/color'
+import { withResponse } from 'src/hooks/use-response'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
 const useFrontsResponse = (issue: string, front: string) => {
-    return useJsonThenFetchResponse(
+    const resp = useJsonThenFetch<FrontType>(
         issue,
         `front/${front}`,
         res => res.collections != null,
     )
+    return withResponse<FrontType>(resp)
 }
+
 /*
 Map the position of the tap on the screen to
 the position of the tap on the scrubber itself (which has padding).

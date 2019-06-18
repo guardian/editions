@@ -16,6 +16,10 @@ export const clearLocalCache = () => {
         delete naiveCache[url]
         console.log(`deleted ${url}`)
     }
+    for (let path in naiveJsonCache) {
+        delete naiveJsonCache[path]
+        console.log(`deleted ${path}`)
+    }
 }
 
 /*
@@ -33,7 +37,7 @@ const useJson = <T>(path: string, validator: ValidatorFn<T> = () => true) => {
             .then(data => {
                 if (data && validator(data)) {
                     naiveJsonCache[path] = data
-                    onSuccess(data)
+                    onSuccess(data as T)
                 } else {
                     onError({
                         message: LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
@@ -62,7 +66,7 @@ const useFetch = <T>(
                 res.json().then(res => {
                     if (res && validator(res)) {
                         naiveCache[url] = res
-                        onSuccess(res)
+                        onSuccess(res as T)
                     } else {
                         onError({
                             message: REQUEST_INVALID_RESPONSE_VALIDATION,
@@ -94,13 +98,16 @@ const usePaths = (
     return { url, fs }
 }
 
-export const useJsonResponse = <T>(
-    issue: Issue['name'],
+export const useJsonThenFetch = <T>(
+    issue: string,
     path: string,
     validator: ValidatorFn<T> = () => true,
 ) => {
-    const { fs } = usePaths(issue, path)
-    return withResponse<T>(useJson(fs, validator))
+    const { fs, url } = usePaths(issue, path)
+    const responses = [useFetch<T>(url, validator), useJson<T>(fs, validator)]
+
+    const winner = responses.find(({ state }) => state === 'success')
+    return winner ? winner : responses[0]
 }
 
 export const useEndpointResponse = <T>(
@@ -109,16 +116,4 @@ export const useEndpointResponse = <T>(
 ) => {
     const { url } = usePaths('', path)
     return withResponse<T>(useFetch(url, validator))
-}
-
-export const useJsonThenFetchResponse = <T>(
-    issue: string,
-    path: string,
-    validator: ValidatorFn<T> = () => true,
-) => {
-    const { fs, url } = usePaths(issue, path)
-    const responses = [useFetch(url, validator), useJson(fs, validator)]
-
-    const winner = responses.find(({ state }) => state === 'success')
-    return withResponse<T>(winner ? winner : responses[0])
 }
