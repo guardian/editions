@@ -8,7 +8,7 @@ import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -119,10 +119,10 @@ export const Front: FunctionComponent<{
         ),
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <FlexCenter>
-                    <UiBodyCopy>Oh no! something failed</UiBodyCopy>
-                    <UiExplainerCopy>{err.message}</UiExplainerCopy>
-                </FlexCenter>
+                <FlexErrorMessage
+                    title={'Oh no! something failed'}
+                    message={err.message}
+                />
             </Wrapper>
         ),
         success: frontData => {

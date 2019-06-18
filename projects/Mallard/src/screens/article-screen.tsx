@@ -8,12 +8,12 @@ import {
 } from '../theme/appearance'
 import { Article } from '../components/article'
 import { Article as ArticleType, FrontArticle } from '../common'
-import { View, TouchableOpacity, Text, Button } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
-import { FlexCenter } from '../components/layout/flex-center'
 import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 
 const useArticleResponse = (path: string) =>
     useEndpointResponse<ArticleType>(
@@ -53,19 +53,28 @@ export const ArticleScreen = ({
             />
             {articleResponse({
                 error: ({ message }) => (
-                    <FlexCenter style={{ backgroundColor: color.background }}>
-                        <Text style={{ fontSize: 40 }}>😭</Text>
-                        <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                    </FlexCenter>
-                ),
-                pending: () => (
-                    <Article
-                        kicker={(frontArticle && frontArticle.kicker) || ''}
-                        headline={(frontArticle && frontArticle.headline) || ''}
-                        byline={(frontArticle && frontArticle.byline) || ''}
-                        standfirst=""
+                    <FlexErrorMessage
+                        icon="😭"
+                        title={message}
+                        style={{ backgroundColor: color.background }}
                     />
                 ),
+                pending: () =>
+                    frontArticle ? (
+                        <Article
+                            image={frontArticle.image || ''}
+                            kicker={frontArticle.kicker || ''}
+                            headline={frontArticle.headline || ''}
+                            byline={frontArticle.byline || ''}
+                            standfirst=""
+                        />
+                    ) : (
+                        <FlexErrorMessage
+                            icon="😭"
+                            title={'loading'}
+                            style={{ backgroundColor: color.background }}
+                        />
+                    ),
                 success: ({
                     standfirst,
                     title,
