@@ -128,7 +128,7 @@ const ImageCard = ({ style, article, path }: PropTypes) => {
                 }}
             />
             <TextBlock
-                style={style.textBlock}
+                style={imageStyles.textBlock}
                 kicker={article.kicker}
                 headline={article.headline}
             />
