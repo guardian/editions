@@ -35,9 +35,31 @@ const url = (paths: string[]) =>
 export const getArticles = async (
     paths: string[],
 ): Promise<{ [key: string]: CAPIArticle }> => {
-    const resp = await attempt(fetch(url(paths)))
+    const endpoint = url(paths)
+    if (endpoint.length > 1000) {
+        console.warn(
+            `Unusually long CAPI request of ${endpoint.length}, splitting`,
+            paths,
+        )
+        const midpoint = ~~(paths.length / 2) //Coerece into int, even though apparently you can slice on a float
+        const firstRequest = attempt(getArticles(paths.slice(0, midpoint)))
+        const last = await attempt(getArticles(paths.slice(midpoint)))
+        const first = await firstRequest
+        if (hasFailed(first)) {
+            console.error(first.error)
+            throw new Error('Error when spliting CAPI request (first half)')
+        }
+        if (hasFailed(last)) {
+            console.error(last.error)
+            throw new Error('Error when spliting CAPI request (second half)')
+        }
+        const firstArray = Object.entries(first)
+        const lastArray = Object.entries(last)
+        return fromEntries(firstArray.concat(lastArray))
+    }
+
+    const resp = await attempt(fetch(endpoint))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
-    // console.log(await resp.text())
     const buffer = await resp.arrayBuffer()
 
     const receiver: BufferedTransport = BufferedTransport.receiver(
@@ -56,7 +78,6 @@ export const getArticles = async (
             console.log('failure when parsing', attempt.error)
         }
     })
-
     const articleEntries = articlePromises.filter(hasSucceeded)
     return fromEntries(articleEntries)
 }
