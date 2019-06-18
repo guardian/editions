@@ -17,6 +17,7 @@ import { useFileList } from '../hooks/use-fs'
 import { Issue } from '../common'
 import { renderIssueDate } from '../helpers/issues'
 import { unzipIssue } from '../helpers/files'
+import { APP_DISPLAY_NAME } from 'src/helpers/words'
 
 const demoIssues: Issue[] = [
     {
@@ -120,7 +121,7 @@ HomeScreen.navigationOptions = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => ({
-    title: 'Mallard',
+    title: APP_DISPLAY_NAME,
     headerRight: (
         <Button
             onPress={() => {

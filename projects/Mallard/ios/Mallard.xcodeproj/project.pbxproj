@@ -42,29 +42,29 @@
 		422E4A73F4EE438C8B1BD795 /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 207736DCB9F74144A53432B0 /* libRNGestureHandler-tvOS.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		C549378022B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E3F69ACEDCF4C16B3243401 /* GHGuardianHeadline-Black.ttf */; };
-		C549378122B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2BAB762F9EC4DFD9C08D338 /* GHGuardianHeadline-BlackItalic.ttf */; };
-		C549378222B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEE2F7756B5E485096DE9E1E /* GHGuardianHeadline-Bold.ttf */; };
-		C549378322B149BB00B1D9A2 /* GHGuardianHeadline-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C4C9C4B9F6943B592F6E8A9 /* GHGuardianHeadline-BoldItalic.ttf */; };
-		C549378422B149BB00B1D9A2 /* GHGuardianHeadline-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 224ED611D5E34EC28E355957 /* GHGuardianHeadline-Light.ttf */; };
-		C549378522B149BB00B1D9A2 /* GHGuardianHeadline-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0B3C28ED7654F44B7A4626C /* GHGuardianHeadline-LightItalic.ttf */; };
-		C549378622B149BB00B1D9A2 /* GHGuardianHeadline-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96E01CE25442492FBB391461 /* GHGuardianHeadline-Medium.ttf */; };
-		C549378722B149BB00B1D9A2 /* GHGuardianHeadline-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADD910EF7ABD41049DF48D7B /* GHGuardianHeadline-MediumItalic.ttf */; };
-		C549378822B149BB00B1D9A2 /* GHGuardianHeadline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A02028315FD4B6ABC7D4394 /* GHGuardianHeadline-Regular.ttf */; };
-		C549378922B149BB00B1D9A2 /* GHGuardianHeadline-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50B02A55ACDB4CE1AF46150F /* GHGuardianHeadline-RegularItalic.ttf */; };
-		C549378A22B149BB00B1D9A2 /* GHGuardianHeadline-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C980ECB64934BD193C34BE2 /* GHGuardianHeadline-Semibold.ttf */; };
-		C549378B22B149BB00B1D9A2 /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B45276F6ADC452AA025ED0D /* GHGuardianHeadline-SemiboldItalic.ttf */; };
-		C549378C22B149BB00B1D9A2 /* GuardianTextEgyptian-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 382E03B1B3F449A3B7B90917 /* GuardianTextEgyptian-Bold.ttf */; };
-		C549378D22B149BB00B1D9A2 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0DB0E2FE741414AA217DABB /* GuardianTextEgyptian-BoldItalic.ttf */; };
-		C549378E22B149BB00B1D9A2 /* GuardianTextSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 595EFDF1C9194A23BE12A0A8 /* GuardianTextSans-Bold.ttf */; };
-		C549378F22B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 101E3C3B67E7489FB656D5D4 /* GuardianTextSans-BoldItalic.ttf */; };
-		C549379022B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 127C4FBB56844A9DA9743267 /* GuardianTextSans-Regular.ttf */; };
-		C549379122B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB7E15E4F0CD41569909D545 /* GuardianTextSans-RegularItalic.ttf */; };
-		C549379222B149BB00B1D9A2 /* GTGuardianTitlepiece-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90DBBD2ACCDF44F6B33E060C /* GTGuardianTitlepiece-Bold.ttf */; };
+		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* GuardianTextEgyptian-Reg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74288DBD9D3848588CDA9778 /* GuardianTextEgyptian-Reg.ttf */; };
-		C549379522B149BB00B1D9A2 /* GuardianTextEgyptian-RegularIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8A107111D4A24C5AACD6E2A0 /* GuardianTextEgyptian-RegularIt.ttf */; };
-		C549379622B149BB00B1D9A2 /* GuardianTextEgyptian-RegIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B79D2F0496E4B54B5A15981 /* GuardianTextEgyptian-RegIt.ttf */; };
+		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
 		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
 		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
@@ -710,29 +710,7 @@
 		27D1B38353E448A1A16EB8D3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8E3F69ACEDCF4C16B3243401 /* GHGuardianHeadline-Black.ttf */,
-				D2BAB762F9EC4DFD9C08D338 /* GHGuardianHeadline-BlackItalic.ttf */,
-				AEE2F7756B5E485096DE9E1E /* GHGuardianHeadline-Bold.ttf */,
-				1C4C9C4B9F6943B592F6E8A9 /* GHGuardianHeadline-BoldItalic.ttf */,
-				224ED611D5E34EC28E355957 /* GHGuardianHeadline-Light.ttf */,
-				D0B3C28ED7654F44B7A4626C /* GHGuardianHeadline-LightItalic.ttf */,
-				96E01CE25442492FBB391461 /* GHGuardianHeadline-Medium.ttf */,
-				ADD910EF7ABD41049DF48D7B /* GHGuardianHeadline-MediumItalic.ttf */,
-				6A02028315FD4B6ABC7D4394 /* GHGuardianHeadline-Regular.ttf */,
-				50B02A55ACDB4CE1AF46150F /* GHGuardianHeadline-RegularItalic.ttf */,
-				7C980ECB64934BD193C34BE2 /* GHGuardianHeadline-Semibold.ttf */,
-				7B45276F6ADC452AA025ED0D /* GHGuardianHeadline-SemiboldItalic.ttf */,
-				382E03B1B3F449A3B7B90917 /* GuardianTextEgyptian-Bold.ttf */,
-				D0DB0E2FE741414AA217DABB /* GuardianTextEgyptian-BoldItalic.ttf */,
-				595EFDF1C9194A23BE12A0A8 /* GuardianTextSans-Bold.ttf */,
-				101E3C3B67E7489FB656D5D4 /* GuardianTextSans-BoldItalic.ttf */,
-				127C4FBB56844A9DA9743267 /* GuardianTextSans-Regular.ttf */,
-				FB7E15E4F0CD41569909D545 /* GuardianTextSans-RegularItalic.ttf */,
-				90DBBD2ACCDF44F6B33E060C /* GTGuardianTitlepiece-Bold.ttf */,
 				95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */,
-				74288DBD9D3848588CDA9778 /* GuardianTextEgyptian-Reg.ttf */,
-				8A107111D4A24C5AACD6E2A0 /* GuardianTextEgyptian-RegularIt.ttf */,
-				8B79D2F0496E4B54B5A15981 /* GuardianTextEgyptian-RegIt.ttf */,
 				49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */,
 				1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */,
 				2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */,
@@ -1428,29 +1406,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
-				C549378122B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
-				C549378222B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
-				C549378322B149BB00B1D9A2 /* GHGuardianHeadline-BoldItalic.ttf in Resources */,
-				C549378422B149BB00B1D9A2 /* GHGuardianHeadline-Light.ttf in Resources */,
-				C549378522B149BB00B1D9A2 /* GHGuardianHeadline-LightItalic.ttf in Resources */,
-				C549378622B149BB00B1D9A2 /* GHGuardianHeadline-Medium.ttf in Resources */,
-				C549378722B149BB00B1D9A2 /* GHGuardianHeadline-MediumItalic.ttf in Resources */,
-				C549378822B149BB00B1D9A2 /* GHGuardianHeadline-Regular.ttf in Resources */,
-				C549378922B149BB00B1D9A2 /* GHGuardianHeadline-RegularItalic.ttf in Resources */,
-				C549378A22B149BB00B1D9A2 /* GHGuardianHeadline-Semibold.ttf in Resources */,
-				C549378B22B149BB00B1D9A2 /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */,
-				C549378C22B149BB00B1D9A2 /* GuardianTextEgyptian-Bold.ttf in Resources */,
-				C549378D22B149BB00B1D9A2 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */,
-				C549378E22B149BB00B1D9A2 /* GuardianTextSans-Bold.ttf in Resources */,
-				C549378F22B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */,
-				C549379022B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */,
-				C549379122B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */,
-				C549379222B149BB00B1D9A2 /* GTGuardianTitlepiece-Bold.ttf in Resources */,
+				C549378022B149BB00B1D9A2 /* (null) in Resources */,
+				C549378122B149BB00B1D9A2 /* (null) in Resources */,
+				C549378222B149BB00B1D9A2 /* (null) in Resources */,
+				C549378322B149BB00B1D9A2 /* (null) in Resources */,
+				C549378422B149BB00B1D9A2 /* (null) in Resources */,
+				C549378522B149BB00B1D9A2 /* (null) in Resources */,
+				C549378622B149BB00B1D9A2 /* (null) in Resources */,
+				C549378722B149BB00B1D9A2 /* (null) in Resources */,
+				C549378822B149BB00B1D9A2 /* (null) in Resources */,
+				C549378922B149BB00B1D9A2 /* (null) in Resources */,
+				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
+				C549379022B149BB00B1D9A2 /* (null) in Resources */,
+				C549379122B149BB00B1D9A2 /* (null) in Resources */,
+				C549379222B149BB00B1D9A2 /* (null) in Resources */,
 				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* GuardianTextEgyptian-Reg.ttf in Resources */,
-				C549379522B149BB00B1D9A2 /* GuardianTextEgyptian-RegularIt.ttf in Resources */,
-				C549379622B149BB00B1D9A2 /* GuardianTextEgyptian-RegIt.ttf in Resources */,
+				C549379422B149BB00B1D9A2 /* (null) in Resources */,
+				C549379522B149BB00B1D9A2 /* (null) in Resources */,
+				C549379622B149BB00B1D9A2 /* (null) in Resources */,
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
