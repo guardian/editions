@@ -4,7 +4,6 @@ import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController } from './controllers/issue'
-import { articleController } from './controllers/article'
 import { frontController, collectionsController } from './controllers/fronts'
 
 const app = express()
@@ -14,8 +13,6 @@ app.get('/edition/:editionId', issueController)
 app.get('/front/*?', frontController)
 
 app.get('/collection/:collectionId', collectionsController)
-
-app.get('/content/*?', articleController)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
