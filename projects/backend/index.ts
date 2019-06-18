@@ -8,7 +8,7 @@ import { frontController, collectionsController } from './controllers/fronts'
 
 const app = express()
 
-app.get('/edition/:editionId', issueController)
+app.get('/issue/:editionId', issueController)
 
 app.get('/front/*?', frontController)
 
