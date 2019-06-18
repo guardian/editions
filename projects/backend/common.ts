@@ -2,7 +2,9 @@
 // Be careful.
 
 export interface Article {
-    title: string
+    headline: string
+    kicker: string
+    image: string
     byline: string
     standfirst: string
     imageURL?: string
@@ -14,42 +16,15 @@ export interface Issue {
     date: number
     fronts: string[]
 }
-export interface FrontArticle {
-    path: string
-    headline: string
-    kicker: string
-    image: string
-    byline: string
-}
-export interface CollectionArticles {
-    id: string
-    name: string
-    articles: FrontArticle[]
-}
+
 export interface Collection {
     displayName: string
-    type: string
-    backfill?: unknown
-    href?: string
-    groups?: string[]
-    metadata?: unknown[]
-    uneditable?: boolean
-    showTags?: boolean
-    hideKickers?: boolean
-    excludedFromRss?: boolean
-    description?: string
-    showSections?: boolean
-    showDateHeader?: boolean
-    showLatestUpdate?: boolean
-    excludeFromRss?: boolean
-    hideShowMore?: boolean
-    platform?: unknown
-    frontsToolSettings?: unknown
-    articles?: FrontArticle[]
+    articles?: { [key: string]: Article }
+    preview?: true
 }
 
 export interface Front {
-    collections: { [key: string]: Collection }
+    collections: string[]
     canonical?: string
     group?: string
     isHidden?: boolean
