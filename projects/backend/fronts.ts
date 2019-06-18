@@ -41,7 +41,6 @@ export const getCollection = async (
             const fragment =
                 articleFragments[`internal-code/page/${article.id}`] ||
                 articleFragments[path]
-            console.log(fragment)
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
