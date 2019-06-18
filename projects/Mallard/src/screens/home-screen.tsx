@@ -6,6 +6,7 @@ import {
     StyleSheet,
     View,
     Alert,
+    Platform,
 } from 'react-native'
 import { List, ListHeading } from '../components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
@@ -18,6 +19,7 @@ import { Issue } from '../common'
 import { renderIssueDate } from '../helpers/issues'
 import { unzipIssue } from '../helpers/files'
 import { APP_DISPLAY_NAME } from 'src/helpers/words'
+import { color } from 'src/theme/color'
 
 const demoIssues: Issue[] = [
     {
@@ -127,6 +129,7 @@ HomeScreen.navigationOptions = ({
             onPress={() => {
                 navigation.navigate('Settings')
             }}
+            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
             title="Settings"
         />
     ),
