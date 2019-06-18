@@ -11,7 +11,6 @@ type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
 const styles = {
     root: {
         paddingBottom: metrics.vertical,
-        paddingTop: metrics.vertical / 3,
     },
     rootWithHighlight: {
         backgroundColor: color.palette.highlight.main,

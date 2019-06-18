@@ -83,6 +83,7 @@ const coverStyles = StyleSheet.create({
         bottom: 0,
         left: 0,
         top: '50%',
+        paddingTop: metrics.vertical / 3,
     },
 })
 
@@ -112,6 +113,9 @@ const imageStyles = StyleSheet.create({
         width: '100%',
         flex: 1,
     },
+    textBlock: {
+        paddingTop: metrics.vertical / 3,
+    },
 })
 
 const ImageCard = ({ style, article, path }: PropTypes) => {
@@ -123,7 +127,11 @@ const ImageCard = ({ style, article, path }: PropTypes) => {
                     uri: article.image,
                 }}
             />
-            <TextBlock kicker={article.kicker} headline={article.headline} />
+            <TextBlock
+                style={style.textBlock}
+                kicker={article.kicker}
+                headline={article.headline}
+            />
         </CardTappable>
     )
 }

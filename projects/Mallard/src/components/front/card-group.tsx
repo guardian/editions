@@ -71,7 +71,7 @@ const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
                 size={Size.hero}
             />
             <RowWithTwoArticles
-                index={0}
+                index={1}
                 isLastChild={true}
                 translate={translate}
                 articles={[articles[0], articles[1]]}
