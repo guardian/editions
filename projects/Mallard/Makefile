@@ -5,8 +5,8 @@ debug-android:
 	cp android/app/build/outputs/apk/debug/app-debug.apk .
 
 debug-ios:
-	#yarn bundle-ios
-	#xcodebuild archive -allowProvisioningUpdates -project ios/Mallard.xcodeproj -configuration Debug -scheme Mallard -derivedDataPath ./ -archivePath "./Mallard.xcarchive" > build.log
+	yarn bundle-ios
+	xcodebuild archive -allowProvisioningUpdates -project ios/Mallard.xcodeproj -configuration Debug -scheme Mallard -derivedDataPath ./ -archivePath "./Mallard.xcarchive" > build.log
 	xcodebuild -exportArchive -allowProvisioningUpdates -exportOptionsPlist ios/exports-plists/debug.plist -archivePath "./Mallard.xcarchive" -exportPath ./ >> build.log
 
 beta-ios:
