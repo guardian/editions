@@ -8,6 +8,11 @@
             "compress": "zip"
         },
         {
+            "action": "archiver",
+            "path": "projects/archiver/dist",
+            "compress": "zip"
+        },
+        {
             "action": "cloudformation",
             "path": "projects/aws/cloudformation.yaml",
             "compress": false

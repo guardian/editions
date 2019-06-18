@@ -29,6 +29,8 @@ app.get('/', (req, res) => {
     res.send(JSON.stringify({ client: '🦆' }))
 })
 
+app.get('/*?', redirectController)
+console.log(JSON.stringify(app._router.stack, null, 2))
 export const handler: Handler = (event, context) => {
     awsServerlessExpress.proxy(
         awsServerlessExpress.createServer(app),
