@@ -50,12 +50,18 @@ const useFetch = <T>(
 
     return response
 }
-
-export const useEndpointResponse = <T>(
+export const useEndpoint = <T>(
     path: string,
     validator: (response: T | any) => boolean = () => true,
 ) => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return withResponse<T>(useFetch(url, validator))
+    return useFetch<T>(url, validator)
+}
+
+export const useEndpointResponse = <T>(
+    path: string,
+    validator: (response: T | any) => boolean = () => true,
+) => {
+    return withResponse<T>(useEndpoint<T>(path, validator))
 }

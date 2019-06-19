@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useEndpointResponse } from '../hooks/use-fetch'
+import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
@@ -15,17 +15,35 @@ import { FlexCenter } from '../components/layout/flex-center'
 import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
 import { PathToArticle } from './article-screen'
+import { withResponse } from 'src/hooks/use-response'
 
 export interface PathToArticle {
     collection: Collection['key']
     article: ArticleType['key']
 }
 
-const useArticleResponse = ({ collection, article }: PathToArticle) =>
-    useEndpointResponse<ArticleType>(
-        `collection/${collection}/${article}`,
-        article => article.headline != null,
-    )
+const useArticleResponse = ({ collection, article }: PathToArticle) => {
+    const resp = useEndpoint<Collection>(`collection/${collection}`)
+    if (resp.state === 'success') {
+        const articleContent =
+            resp.response.articles && resp.response.articles[article]
+        if (articleContent) {
+            console.log(articleContent)
+            return withResponse<ArticleType>({
+                ...resp,
+                response: articleContent,
+            })
+        } else {
+            return withResponse<ArticleType>({
+                state: 'error',
+                error: {
+                    message: 'not found',
+                },
+            })
+        }
+    }
+    return withResponse<ArticleType>(resp)
+}
 
 const ArticleScreenWithProps = ({
     path,
@@ -164,8 +182,12 @@ export const ArticleScreen = ({
 
     const path = navigation.getParam('path') as PathToArticle | undefined
 
-    if (!path) {
-        return <Text>Error</Text>
+    if (!path || !path.article || !path.collection) {
+        return (
+            <FlexCenter style={{ backgroundColor: color.background }}>
+                <Text>{JSON.stringify(path)}</Text>
+            </FlexCenter>
+        )
     }
     return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
 }

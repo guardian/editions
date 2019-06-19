@@ -95,7 +95,7 @@ const Page = ({
                         appearance={appearance}
                         articles={Object.values(collection.articles)}
                         translate={translateX}
-                        collection={collection}
+                        collection={collection.key}
                         style={[
                             {
                                 flex: 1,

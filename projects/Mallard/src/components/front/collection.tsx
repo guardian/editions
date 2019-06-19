@@ -9,7 +9,7 @@ import {
 } from '../../theme/appearance'
 import { color } from '../../theme/color'
 import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
-import { Article } from '../../common'
+import { Article, Collection as CollectionType } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 
 export interface PropTypes {
     articles: Article[]
-    collection: Collection['key']
+    collection: CollectionType['key']
     translate: Animated.AnimatedInterpolation
 }
 
