@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSettings } from './use-settings'
 import { useResponse, Response, Error, withResponse } from './use-response'
-import { REQUEST_INVALID_RESPONSE_VALIDATION } from '../helpers/words'
+import { REQUEST_INVALID_RESPONSE_VALIDATION } from 'src/helpers/words'
 
 let naiveCache: { [url: string]: any } = {}
 

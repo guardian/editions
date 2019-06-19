@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { color } from '../../theme/color'
+import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet } from 'react-native'
 
 const getStyles = (fill: string, radius: number) =>

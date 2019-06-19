@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, StyleProp, Animated } from 'react-native'
-import { metrics } from '../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 
 import {
     WithArticleAppearance,
     useArticleAppearance,
     ArticleAppearance,
-} from '../../theme/appearance'
-import { color } from '../../theme/color'
+} from 'src/theme/appearance'
+import { color } from 'src/theme/color'
 import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
 import { Article, Collection as CollectionType } from 'src/common'
 

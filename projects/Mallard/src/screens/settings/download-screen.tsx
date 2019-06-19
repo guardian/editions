@@ -1,14 +1,10 @@
 import React, { useMemo } from 'react'
 import { ScrollView, Button, View, Alert, Clipboard } from 'react-native'
-import { List, ListHeading } from '../../components/lists/list'
-import { color } from '../../theme/color'
-import { metrics } from '../../theme/spacing'
-import {
-    useFileList,
-    useDownloadQueue,
-    DownloadQueue,
-} from '../../hooks/use-fs'
-import { Item } from '../../components/lists/list'
+import { List, ListHeading } from 'src/components/lists/list'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { useFileList, useDownloadQueue, DownloadQueue } from 'src/hooks/use-fs'
+import { Item } from 'src/components/lists/list'
 import {
     File,
     displayFileSize,
@@ -17,7 +13,7 @@ import {
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
-} from '../../helpers/files'
+} from 'src/helpers/files'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (

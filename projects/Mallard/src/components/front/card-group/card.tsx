@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
-import { metrics } from '../../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
 
-import { useArticleAppearance } from '../../../theme/appearance'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { Article } from 'src/common'
 import { PathToArticle } from 'src/screens/article-screen'
 

@@ -1,10 +1,10 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
-import { useEndpointResponse } from '../../hooks/use-fetch'
-import { metrics } from '../../theme/spacing'
+import { useEndpointResponse } from 'src/hooks/use-fetch'
+import { metrics } from 'src/theme/spacing'
 import { Collection } from './collection'
 import { Navigator, NavigatorSkeleton } from '../navigator'
-import { ArticleAppearance } from '../../theme/appearance'
+import { ArticleAppearance } from 'src/theme/appearance'
 import {
     Front as FrontType,
     Collection as CollectionType,

@@ -8,16 +8,16 @@ import {
     Alert,
     Platform,
 } from 'react-native'
-import { List, ListHeading } from '../components/lists/list'
+import { List, ListHeading } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
-import { primaryContainer } from '../theme/styles'
+import { primaryContainer } from 'src/theme/styles'
 import { ApiState } from './settings/api-screen'
-import { WithAppAppearance } from '../theme/appearance'
-import { metrics } from '../theme/spacing'
-import { useFileList } from '../hooks/use-fs'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { metrics } from 'src/theme/spacing'
+import { useFileList } from 'src/hooks/use-fs'
 import { Issue } from 'src/common'
-import { renderIssueDate } from '../helpers/issues'
-import { unzipIssue } from '../helpers/files'
+import { renderIssueDate } from 'src/helpers/issues'
+import { unzipIssue } from 'src/helpers/files'
 import { APP_DISPLAY_NAME } from 'src/helpers/words'
 import { color } from 'src/theme/color'
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, ViewStyle, StyleProp } from 'react-native'
-import { metrics } from '../../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
-import { useArticleAppearance } from '../../../theme/appearance'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'

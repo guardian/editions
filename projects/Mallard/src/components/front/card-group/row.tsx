@@ -1,9 +1,9 @@
 import React, { ReactNode, useMemo } from 'react'
 import { StyleSheet, Animated, View } from 'react-native'
 import { Multiline } from '../../multiline'
-import { metrics } from '../../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 
-import { useArticleAppearance } from '../../../theme/appearance'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from '../collection'
 import { Article, Collection } from 'src/common'
 import { Card } from './../card-group/card'

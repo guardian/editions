@@ -1,8 +1,8 @@
 import React from 'react'
-import { color as themeColor } from '../theme/color'
+import { color as themeColor } from 'src/theme/color'
 
 import Svg, { G, Path } from 'react-native-svg'
-import { metrics } from '../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 
 const Chevron = ({ color }: { color: string }) => (
     <Svg

@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
-import { metrics } from '../../theme/spacing'
-import { useArticleAppearance } from '../../theme/appearance'
+import { metrics } from 'src/theme/spacing'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { Multiline } from '../multiline'
 
 export interface PropTypes {

@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
-import { useEndpoint } from '../hooks/use-fetch'
+import { useEndpoint } from 'src/hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
     ArticleAppearance,
     articleAppearances,
-} from '../theme/appearance'
-import { Article } from '../components/article'
+} from 'src/theme/appearance'
+import { Article } from 'src/components/article'
 import { Article as ArticleType, Collection } from 'src/common'
 import { View, TouchableOpacity } from 'react-native'
-import { metrics } from '../theme/spacing'
-import { UiBodyCopy } from '../components/styled-text'
-import { SlideCard } from '../components/layout/slide-card/index'
-import { color } from '../theme/color'
+import { metrics } from 'src/theme/spacing'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { SlideCard } from 'src/components/layout/slide-card/index'
+import { color } from 'src/theme/color'
 import { PathToArticle } from './article-screen'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'

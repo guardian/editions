@@ -1,8 +1,8 @@
 import React from 'react'
 import { FlatList, SafeAreaView, View, StyleSheet } from 'react-native'
-import { metrics } from '../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
-import { useAppAppearance } from '../../theme/appearance'
+import { useAppAppearance } from 'src/theme/appearance'
 import { Highlight } from '../highlight'
 
 /*

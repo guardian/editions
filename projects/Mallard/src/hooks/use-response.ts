@@ -1,5 +1,5 @@
 import { useState, ReactElement } from 'react'
-import { REQUEST_INVALID_RESPONSE_STATE } from '../helpers/words'
+import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
 
 export interface Error {
     message: string

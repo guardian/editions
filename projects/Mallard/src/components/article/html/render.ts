@@ -1,6 +1,6 @@
 import { BlockElement, HTMLElement } from 'src/common'
-import { metrics } from '../../../theme/spacing'
-import { color } from '../../../theme/color'
+import { metrics } from 'src/theme/spacing'
+import { color } from 'src/theme/color'
 import { generateAssetsFontCss, css, makeHtml } from '../../../helpers/webview'
 import { PixelRatio } from 'react-native'
 
