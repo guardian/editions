@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useEndpointResponse } from '../hooks/use-fetch'
+import { useEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
@@ -7,30 +7,53 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType, FrontArticle } from '../common'
+import { Article as ArticleType, Collection } from 'src/common'
 import { View, TouchableOpacity } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
+import { PathToArticle } from './article-screen'
+import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 
-const useArticleResponse = (path: string) =>
-    useEndpointResponse<ArticleType>(
-        `content/${path}`,
-        article => article.title != null,
-    )
+export interface PathToArticle {
+    collection: Collection['key']
+    article: ArticleType['key']
+}
 
-export const ArticleScreen = ({
+const useArticleResponse = ({ collection, article }: PathToArticle) => {
+    const resp = useEndpoint<Collection>(`collection/${collection}`)
+    if (resp.state === 'success') {
+        const articleContent =
+            resp.response.articles && resp.response.articles[article]
+        if (articleContent) {
+            return withResponse<ArticleType>({
+                ...resp,
+                response: articleContent,
+            })
+        } else {
+            return withResponse<ArticleType>({
+                state: 'error',
+                error: {
+                    message: ERR_404_REMOTE,
+                },
+            })
+        }
+    }
+    return withResponse<ArticleType>(resp)
+}
+
+const ArticleScreenWithProps = ({
+    path,
+    articlePrefill,
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
+    path: PathToArticle
+    articlePrefill?: ArticleType
 }) => {
-    const frontArticle = navigation.getParam('article') as
-        | FrontArticle
-        | undefined
-
-    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
@@ -60,28 +83,15 @@ export const ArticleScreen = ({
                     />
                 ),
                 pending: () =>
-                    frontArticle ? (
-                        <Article
-                            image={frontArticle.image || ''}
-                            kicker={frontArticle.kicker || ''}
-                            headline={frontArticle.headline || ''}
-                            byline={frontArticle.byline || ''}
-                            standfirst=""
-                        />
+                    articlePrefill ? (
+                        <Article {...articlePrefill} />
                     ) : (
                         <FlexErrorMessage
-                            icon="😭"
                             title={'loading'}
                             style={{ backgroundColor: color.background }}
                         />
                     ),
-                success: ({
-                    standfirst,
-                    title,
-                    byline,
-                    imageURL,
-                    elements,
-                }) => (
+                success: ({ elements, ...article }) => (
                     <>
                         <View
                             style={{
@@ -128,22 +138,7 @@ export const ArticleScreen = ({
                                 article={
                                     viewIsTransitioning ? undefined : elements
                                 }
-                                kicker={
-                                    (frontArticle && frontArticle.kicker) || ''
-                                }
-                                headline={
-                                    (frontArticle && frontArticle.headline) ||
-                                    title
-                                }
-                                byline={
-                                    (frontArticle && frontArticle.byline) ||
-                                    byline
-                                }
-                                standfirst={standfirst}
-                                image={
-                                    imageURL ||
-                                    (frontArticle && frontArticle.image)
-                                }
+                                {...article}
                             />
                         </WithArticleAppearance>
                     </>
@@ -151,6 +146,28 @@ export const ArticleScreen = ({
             })}
         </SlideCard>
     )
+}
+
+export const ArticleScreen = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => {
+    const articlePrefill = navigation.getParam('article') as
+        | ArticleType
+        | undefined
+
+    const path = navigation.getParam('path') as PathToArticle | undefined
+
+    if (!path || !path.article || !path.collection) {
+        return (
+            <FlexErrorMessage
+                title={ERR_404_MISSING_PROPS}
+                style={{ backgroundColor: color.background }}
+            />
+        )
+    }
+    return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
 }
 
 ArticleScreen.navigationOptions = ({

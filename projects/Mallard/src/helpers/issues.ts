@@ -1,4 +1,4 @@
-import { Issue } from '../common'
+import { Issue } from 'src/common'
 
 const months = [
     'Jan',

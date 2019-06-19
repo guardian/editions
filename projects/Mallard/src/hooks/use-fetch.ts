@@ -26,16 +26,23 @@ const useFetch = <T>(
     useEffect(() => {
         fetch(url)
             .then(res =>
-                res.json().then(res => {
-                    if (res && validator(res)) {
-                        naiveCache[url] = res
-                        onSuccess(res)
-                    } else {
+                res
+                    .json()
+                    .then(res => {
+                        if (res && validator(res)) {
+                            naiveCache[url] = res
+                            onSuccess(res)
+                        } else {
+                            onError({
+                                message: REQUEST_INVALID_RESPONSE_VALIDATION,
+                            })
+                        }
+                    })
+                    .catch(() => {
                         onError({
                             message: REQUEST_INVALID_RESPONSE_VALIDATION,
                         })
-                    }
-                }),
+                    }),
             )
             .catch((err: Error) => {
                 /*
@@ -50,12 +57,18 @@ const useFetch = <T>(
 
     return response
 }
-
-export const useEndpointResponse = <T>(
+export const useEndpoint = <T>(
     path: string,
     validator: (response: T | any) => boolean = () => true,
 ) => {
     const [{ apiUrl }] = useSettings()
     const url = apiUrl + '/' + path
-    return withResponse<T>(useFetch(url, validator))
+    return useFetch<T>(url, validator)
+}
+
+export const useEndpointResponse = <T>(
+    path: string,
+    validator: (response: T | any) => boolean = () => true,
+) => {
+    return withResponse<T>(useEndpoint<T>(path, validator))
 }

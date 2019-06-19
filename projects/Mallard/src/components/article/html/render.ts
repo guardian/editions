@@ -1,4 +1,4 @@
-import { BlockElement, HTMLElement } from '../../../common'
+import { BlockElement, HTMLElement } from 'src/common'
 import { metrics } from '../../../theme/spacing'
 import { color } from '../../../theme/color'
 import { generateAssetsFontCss, css, makeHtml } from '../../../helpers/webview'

@@ -8,8 +8,8 @@ import {
     ArticleAppearance,
 } from '../../theme/appearance'
 import { color } from '../../theme/color'
-import { FrontArticle } from '../../common'
 import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
+import { Article, Collection as CollectionType } from 'src/common'
 
 const styles = StyleSheet.create({
     root: {
@@ -31,11 +31,12 @@ const styles = StyleSheet.create({
 })
 
 export interface PropTypes {
-    articles: FrontArticle[]
+    articles: Article[]
+    collection: CollectionType['key']
     translate: Animated.AnimatedInterpolation
 }
 
-const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
+const AnyStoryCollection = ({ articles, collection, translate }: PropTypes) => {
     return (
         <>
             {articles.map((article, index) => (
@@ -45,6 +46,7 @@ const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
                     isLastChild={index === articles.length - 1}
                     translate={translate}
                     article={article}
+                    collection={collection}
                     size={Size.row}
                 />
             ))}
@@ -52,14 +54,18 @@ const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
     )
 }
 
-const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
+const ThreeStoryCollection = ({
+    articles,
+    collection,
+    translate,
+}: PropTypes) => {
     /*
     if something goes wrong and there's less 
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
     if (articles.length !== 3)
-        return <AnyStoryCardGroup {...{ articles, translate }} />
+        return <AnyStoryCollection {...{ articles, collection, translate }} />
 
     return (
         <>
@@ -69,6 +75,7 @@ const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
                 translate={translate}
                 article={articles[2]}
                 size={Size.hero}
+                collection={collection}
             />
             <RowWithTwoArticles
                 index={1}
@@ -76,6 +83,7 @@ const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
                 translate={translate}
                 articles={[articles[0], articles[1]]}
                 size={Size.third}
+                collection={collection}
             />
         </>
     )
@@ -96,7 +104,7 @@ const Wrapper = ({
     )
 }
 
-const CardGroup = ({
+const Collection = ({
     appearance,
     style,
     ...props
@@ -106,12 +114,12 @@ const CardGroup = ({
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
-            <ThreeStoryCardGroup {...props} />
+            <ThreeStoryCollection {...props} />
         </Wrapper>
     </WithArticleAppearance>
 )
 
-CardGroup.defaultProps = {
+Collection.defaultProps = {
     stories: [],
 }
-export { CardGroup }
+export { Collection }

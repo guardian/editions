@@ -5,15 +5,16 @@ import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
 
 import { useArticleAppearance } from '../../../theme/appearance'
-import { FrontArticle } from '../../../common'
+import { Article } from 'src/common'
+import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
 import { Size } from './row'
 
 interface PropTypes {
     style: StyleProp<ViewStyle>
-    article: FrontArticle
-    path: FrontArticle['path']
+    article: Article
+    path: PathToArticle
 }
 
 /*
@@ -29,6 +30,12 @@ const tappableStyles = StyleSheet.create({
         flexBasis: '100%',
     },
 })
+
+interface PropTypes {
+    style: StyleProp<ViewStyle>
+    article: Article
+    path: PathToArticle
+}
 
 const CardTappable = withNavigation(
     ({

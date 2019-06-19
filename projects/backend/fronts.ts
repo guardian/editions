@@ -37,20 +37,21 @@ export const getCollection = async (
     const preview = live ? undefined : true
     const capiArticles = await getArticles(Object.keys(articleFragments))
     const articles: [string, Article][] = Object.entries(capiArticles).map(
-        ([path, article]) => {
+        ([key, article]) => {
             const fragment =
                 articleFragments[`internal-code/page/${article.id}`] ||
-                articleFragments[path]
+                articleFragments[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageURL = (meta && meta.imageSrc) || article.imageURL
 
-            return [path, { ...article, kicker, headline, imageURL }]
+            return [key, { ...article, key, kicker, headline, imageURL }]
         },
     )
 
     return {
+        key: id,
         displayName: collection.displayName,
         articles: fromEntries(articles),
         preview,
@@ -72,7 +73,7 @@ export const getFront = async (
     const front = config.fronts[id]
     const collectionIds = front.collections
 
-    return front
+    return { ...front, key: id }
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107
