@@ -8,7 +8,7 @@ import React, {
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
 import { useEndpointResponse } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
-import { CardGroup } from './card-group'
+import { Collection } from './collection'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
 import { Front as FrontType, Collection } from '../../../../backend/common'
@@ -61,7 +61,7 @@ const Page: FunctionComponent<{
 
     return (
         <View style={{ width }}>
-            <CardGroup
+            <Collection
                 appearance={appearance}
                 articles={collection.articles || []}
                 translate={translateX}

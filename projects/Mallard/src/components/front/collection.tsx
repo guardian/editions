@@ -1,6 +1,5 @@
-import React, { useMemo, ReactNode } from 'react'
-import { StyleSheet, StyleProp, Animated, View } from 'react-native'
-import { Multiline } from '../multiline'
+import React, { ReactNode } from 'react'
+import { StyleSheet, StyleProp, Animated } from 'react-native'
 import { metrics } from '../../theme/spacing'
 
 import {
@@ -8,7 +7,6 @@ import {
     useArticleAppearance,
     ArticleAppearance,
 } from '../../theme/appearance'
-import { SmallCard } from './card-group/card'
 import { color } from '../../theme/color'
 import { FrontArticle } from '../../common'
 import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
@@ -37,7 +35,7 @@ export interface PropTypes {
     translate: Animated.AnimatedInterpolation
 }
 
-const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
+const AnyStoryCollection = ({ articles, translate }: PropTypes) => {
     return (
         <>
             {articles.map((article, index) => (
@@ -53,14 +51,14 @@ const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
     )
 }
 
-const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
+const ThreeStoryCollection = ({ articles, translate }: PropTypes) => {
     /*
     if something goes wrong and there's less 
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
     if (articles.length < 3)
-        return <AnyStoryCardGroup {...{ articles, translate }} />
+        return <AnyStoryCollection {...{ articles, translate }} />
 
     return (
         <>
@@ -95,7 +93,7 @@ const Wrapper = ({
     )
 }
 
-const CardGroup = ({
+const Collection = ({
     appearance,
     style,
     ...props
@@ -105,12 +103,12 @@ const CardGroup = ({
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
-            <ThreeStoryCardGroup {...props} />
+            <ThreeStoryCollection {...props} />
         </Wrapper>
     </WithArticleAppearance>
 )
 
-CardGroup.defaultProps = {
+Collection.defaultProps = {
     stories: [],
 }
-export { CardGroup }
+export { Collection }

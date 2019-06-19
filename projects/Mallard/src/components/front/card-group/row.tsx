@@ -6,7 +6,7 @@ import { metrics } from '../../../theme/spacing'
 import { useArticleAppearance } from '../../../theme/appearance'
 import { SmallCard } from './../card-group/card'
 import { FrontArticle } from '../../../common'
-import { PropTypes as CardGroupPropTypes } from '../card-group'
+import { PropTypes as CollectionPropTypes } from '../collection'
 
 const styles = StyleSheet.create({
     row: {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 })
 
 interface RowPropTypes {
-    translate: CardGroupPropTypes['translate']
+    translate: CollectionPropTypes['translate']
     isLastChild: boolean
     index: number
 }
