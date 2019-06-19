@@ -13,6 +13,7 @@ export interface Article {
 }
 
 export interface Issue {
+    key: string
     name: string
     date: number
     fronts: string[]

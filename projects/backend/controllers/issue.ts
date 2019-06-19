@@ -12,15 +12,17 @@ const getIssue = async (
     if (x.status === 404) return 'notfound'
     if (!x.ok) throw new Error('failed s3')
     lastModifiedUpdater(x.lastModified)
-    return x.json() as Promise<Issue>
+    return x.json().then(res => ({ ...res, key: issue })) as Promise<Issue>
 }
 
 export const issueController = (req: Request, res: Response) => {
     const id: string = req.params.editionId
     const [date, updater] = lastModified()
-    getIssue(id, updater).then(data => {
-        res.setHeader('Last-Modifed', date())
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify(data))
-    })
+    getIssue(id, updater)
+        .then(data => {
+            res.setHeader('Last-Modifed', date())
+            res.setHeader('Content-Type', 'application/json')
+            res.send(JSON.stringify(data))
+        })
+        .catch(e => console.error(e))
 }

@@ -23,13 +23,15 @@ import { color } from 'src/theme/color'
 
 const demoIssues: Issue[] = [
     {
-        name: '',
+        key: 'alpha-edition',
+        name: 'PROD dummy',
         date: new Date(Date.now()).getTime(),
         fronts: [],
     },
     {
-        name: '',
-        date: new Date(Date.now() - 86400000).getTime(),
+        key: 'dd753c95-b0be-4f0c-98a8-3797374e71b6',
+        name: 'CODE dummy',
+        date: new Date(Date.now()).getTime(),
         fronts: [],
     },
 ]
@@ -59,8 +61,9 @@ export const HomeScreen = ({
             demoIssues.map(issue => ({
                 key: issue.date.toString(),
                 title: renderIssueDate(issue.date).date,
+                explainer: issue.key,
                 data: {
-                    issue,
+                    issue: issue.key,
                 },
             })),
         [demoIssues.map(({ date }) => date)],
@@ -77,7 +80,7 @@ export const HomeScreen = ({
                 <ListHeading>Demo issues</ListHeading>
                 <List
                     data={issueList}
-                    onPress={issue => navigation.navigate('Issue', issue)}
+                    onPress={path => navigation.navigate('Issue', { path })}
                 />
                 {files.length > 0 && (
                     <>
