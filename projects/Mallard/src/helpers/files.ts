@@ -19,6 +19,9 @@ interface IssueFile extends BasicFile {
 }
 
 export type File = OtherFile | IssueFile
+export const fileIsIssue = (file: File): file is IssueFile =>
+    file.type === 'issue'
+
 /*
  TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
  */

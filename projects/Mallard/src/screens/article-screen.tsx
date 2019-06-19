@@ -16,10 +16,9 @@ import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
 
 const useArticleResponse = (path: string) =>
-    useEndpointResponse<ArticleType>(
-        `content/${path}`,
-        article => article.title != null,
-    )
+    useEndpointResponse<ArticleType>(`content/${path}`, {
+        validator: article => article.title != null,
+    })
 
 export const ArticleScreen = ({
     navigation,

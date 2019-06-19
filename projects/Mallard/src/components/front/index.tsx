@@ -1,6 +1,6 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
-import { useJsonThenFetch } from '../../hooks/use-fetch'
+import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
 import { CardGroup } from './card-group'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -18,11 +18,9 @@ interface AnimatedScrollViewRef {
 }
 
 const useFrontsResponse = (issue: string, front: string) => {
-    const resp = useJsonThenFetch<FrontType>(
-        issue,
-        `front/${front}`,
-        res => res.collections != null,
-    )
+    const resp = useJsonOrEndpoint<FrontType>(issue, `front/${front}`, {
+        validator: res => res.collections != null,
+    })
     return withResponse<FrontType>(resp)
 }
 

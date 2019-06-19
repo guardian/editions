@@ -5,8 +5,9 @@ import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from '../helpers/words'
-import { getJson, issuesDir } from 'src/helpers/files'
+import { getJson, issuesDir, fileIsIssue } from 'src/helpers/files'
 import { Issue } from 'src/common'
+import { useFileList } from './use-fs'
 
 let naiveCache: { [url: string]: any } = {}
 let naiveJsonCache: { [path: string]: any } = {}
@@ -28,7 +29,10 @@ if doesn't contain the right type - say on an error 500
 */
 type ValidatorFn<T> = (response: any | T) => boolean
 
-const useJson = <T>(path: string, validator: ValidatorFn<T> = () => true) => {
+const useJson = <T>(
+    path: string,
+    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
+) => {
     const { response, onSuccess, onError } = useResponse(
         naiveJsonCache[path] ? naiveJsonCache[path] : null,
     )
@@ -55,12 +59,29 @@ const useJson = <T>(path: string, validator: ValidatorFn<T> = () => true) => {
 
 const useFetch = <T>(
     url: string,
-    validator: ValidatorFn<T> = () => true,
+    {
+        validator,
+        skip,
+    }: {
+        validator: ValidatorFn<T>
+        /*
+        skip running the effect if we don't want it. 
+        this allows us conditionally calling the hook.
+
+        'skip' seems to be a pattern for conditional effects
+        https://github.com/trojanowski/react-apollo-hooks/issues/21
+        */
+        skip?: boolean
+    } = {
+        validator: () => true,
+        skip: false,
+    },
 ): Response<T> => {
     const { response, onSuccess, onError } = useResponse(
         naiveCache[url] ? naiveCache[url] : null,
     )
     useEffect(() => {
+        if (skip) return
         fetch(url)
             .then(res =>
                 res.json().then(res => {
@@ -83,7 +104,7 @@ const useFetch = <T>(
                     onError(err)
                 }
             })
-    }, [url])
+    }, [url, skip])
 
     return response
 }
@@ -98,22 +119,36 @@ const usePaths = (
     return { url, fs }
 }
 
-export const useJsonThenFetch = <T>(
+export const useJsonOrEndpoint = <T>(
     issue: string,
     path: string,
-    validator: ValidatorFn<T> = () => true,
+    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ) => {
     const { fs, url } = usePaths(issue, path)
-    const responses = [useFetch<T>(url, validator), useJson<T>(fs, validator)]
+    const isIssueOnDevice =
+        useFileList()[0].find(
+            file => fileIsIssue(file) && file.issue.name === issue,
+        ) !== undefined
 
+    const responses = [
+        useFetch<T>(url, { validator, skip: isIssueOnDevice }),
+        useJson<T>(fs, { validator }),
+    ]
     const winner = responses.find(({ state }) => state === 'success')
-    return winner ? winner : responses[0]
+
+    if (winner) {
+        return winner
+    }
+    if (isIssueOnDevice) {
+        return responses[1]
+    }
+    return responses[0]
 }
 
 export const useEndpointResponse = <T>(
     path: string,
-    validator: ValidatorFn<T> = () => true,
+    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ) => {
     const { url } = usePaths('', path)
-    return withResponse<T>(useFetch(url, validator))
+    return withResponse<T>(useFetch(url, { validator }))
 }
