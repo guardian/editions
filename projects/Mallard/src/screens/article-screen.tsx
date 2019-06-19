@@ -7,30 +7,35 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Article as ArticleType, FrontArticle } from '../common'
-import { View, TouchableOpacity, Text, Button } from 'react-native'
+import { Collection, Article as ArticleType } from '../common'
+import { View, TouchableOpacity, Text } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
 import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
+import { PathToArticle } from './article-screen'
 
-const useArticleResponse = (path: string) =>
+export interface PathToArticle {
+    collection: Collection['key']
+    article: ArticleType['key']
+}
+
+const useArticleResponse = ({ collection, article }: PathToArticle) =>
     useEndpointResponse<ArticleType>(
-        `content/${path}`,
-        article => article.title != null,
+        `collection/${collection}/${article}`,
+        article => article.headline != null,
     )
 
-export const ArticleScreen = ({
+const ArticleScreenWithProps = ({
+    path,
+    articlePrefill,
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
+    path: PathToArticle
+    articlePrefill?: ArticleType
 }) => {
-    const frontArticle = navigation.getParam('article') as
-        | FrontArticle
-        | undefined
-
-    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
@@ -60,15 +65,17 @@ export const ArticleScreen = ({
                 ),
                 pending: () => (
                     <Article
-                        kicker={(frontArticle && frontArticle.kicker) || ''}
-                        headline={(frontArticle && frontArticle.headline) || ''}
-                        byline={(frontArticle && frontArticle.byline) || ''}
+                        kicker={(articlePrefill && articlePrefill.kicker) || ''}
+                        headline={
+                            (articlePrefill && articlePrefill.headline) || ''
+                        }
+                        byline={(articlePrefill && articlePrefill.byline) || ''}
                         standfirst=""
                     />
                 ),
                 success: ({
                     standfirst,
-                    title,
+                    headline,
                     byline,
                     imageURL,
                     elements,
@@ -120,20 +127,22 @@ export const ArticleScreen = ({
                                     viewIsTransitioning ? undefined : elements
                                 }
                                 kicker={
-                                    (frontArticle && frontArticle.kicker) || ''
+                                    (articlePrefill && articlePrefill.kicker) ||
+                                    ''
                                 }
                                 headline={
-                                    (frontArticle && frontArticle.headline) ||
-                                    title
+                                    (articlePrefill &&
+                                        articlePrefill.headline) ||
+                                    headline
                                 }
                                 byline={
-                                    (frontArticle && frontArticle.byline) ||
+                                    (articlePrefill && articlePrefill.byline) ||
                                     byline
                                 }
                                 standfirst={standfirst}
                                 image={
                                     imageURL ||
-                                    (frontArticle && frontArticle.image)
+                                    (articlePrefill && articlePrefill.image)
                                 }
                             />
                         </WithArticleAppearance>
@@ -142,6 +151,23 @@ export const ArticleScreen = ({
             })}
         </SlideCard>
     )
+}
+
+export const ArticleScreen = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => {
+    const articlePrefill = navigation.getParam('article') as
+        | ArticleType
+        | undefined
+
+    const path = navigation.getParam('path') as PathToArticle | undefined
+
+    if (!path) {
+        return <Text>Error</Text>
+    }
+    return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
 }
 
 ArticleScreen.navigationOptions = ({

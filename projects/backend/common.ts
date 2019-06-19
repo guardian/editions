@@ -19,6 +19,7 @@ export interface Issue {
 }
 
 export interface Collection {
+    key: string
     displayName: string
     articles?: { [key: string]: Article }
     preview?: true

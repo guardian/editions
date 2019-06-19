@@ -7,6 +7,7 @@ import { useArticleAppearance } from '../../../theme/appearance'
 import { SmallCard } from './../card-group/card'
 import { PropTypes as CollectionPropTypes } from '../collection'
 import { Article } from 'src/common'
+import { Collection } from '../../../common'
 
 const styles = StyleSheet.create({
     row: {
@@ -32,6 +33,9 @@ const styles = StyleSheet.create({
     },
 })
 
+interface NavigationPropTypes {
+    collection: Collection['key']
+}
 interface RowPropTypes {
     translate: CollectionPropTypes['translate']
     isLastChild: boolean
@@ -88,12 +92,21 @@ shows 1 article
 */
 const RowWithArticle = ({
     article,
+    collection,
     ...rowProps
 }: {
     article: Article
-} & RowPropTypes) => (
+} & NavigationPropTypes &
+    RowPropTypes) => (
     <Row {...rowProps}>
-        <SmallCard style={styles.card} path={article.key} article={article} />
+        <SmallCard
+            style={styles.card}
+            path={{
+                article: article.key,
+                collection,
+            }}
+            article={article}
+        />
     </Row>
 )
 
@@ -105,10 +118,12 @@ then it eats them up
 */
 const RowWithTwoArticles = ({
     articles,
+    collection,
     ...rowProps
 }: {
     articles: [Article, Article]
-} & RowPropTypes) => {
+} & NavigationPropTypes &
+    RowPropTypes) => {
     const { appearance } = useArticleAppearance()
 
     /*
@@ -117,13 +132,22 @@ const RowWithTwoArticles = ({
     we fall back to 1 article
     */
     if (!articles[1])
-        return <RowWithArticle {...rowProps} article={articles[0]} />
+        return (
+            <RowWithArticle
+                {...rowProps}
+                collection={collection}
+                article={articles[0]}
+            />
+        )
     return (
         <Row {...rowProps}>
             <View style={styles.doubleRow}>
                 <SmallCard
                     style={[styles.card]}
-                    path={articles[0].key}
+                    path={{
+                        article: articles[0].key,
+                        collection,
+                    }}
                     article={articles[0]}
                 />
                 <SmallCard
@@ -134,7 +158,10 @@ const RowWithTwoArticles = ({
                             borderColor: appearance.backgrounds.borderColor,
                         },
                     ]}
-                    path={articles[1].key}
+                    path={{
+                        article: articles[1].key,
+                        collection,
+                    }}
                     article={articles[1]}
                 />
             </View>

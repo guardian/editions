@@ -32,10 +32,11 @@ const styles = StyleSheet.create({
 
 export interface PropTypes {
     articles: Article[]
+    collection: Collection['key']
     translate: Animated.AnimatedInterpolation
 }
 
-const AnyStoryCollection = ({ articles, translate }: PropTypes) => {
+const AnyStoryCollection = ({ articles, collection, translate }: PropTypes) => {
     return (
         <>
             {articles.map((article, index) => (
@@ -45,20 +46,25 @@ const AnyStoryCollection = ({ articles, translate }: PropTypes) => {
                     isLastChild={index === articles.length}
                     translate={translate}
                     article={article}
+                    collection={collection}
                 />
             ))}
         </>
     )
 }
 
-const ThreeStoryCollection = ({ articles, translate }: PropTypes) => {
+const ThreeStoryCollection = ({
+    articles,
+    collection,
+    translate,
+}: PropTypes) => {
     /*
     if something goes wrong and there's less 
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
     if (articles.length < 3)
-        return <AnyStoryCollection {...{ articles, translate }} />
+        return <AnyStoryCollection {...{ articles, collection, translate }} />
 
     return (
         <>
@@ -67,12 +73,14 @@ const ThreeStoryCollection = ({ articles, translate }: PropTypes) => {
                 isLastChild={false}
                 translate={translate}
                 articles={[articles[0], articles[1]]}
+                collection={collection}
             />
             <RowWithArticle
                 index={0}
                 isLastChild={false}
                 translate={translate}
                 article={articles[2]}
+                collection={collection}
             />
         </>
     )

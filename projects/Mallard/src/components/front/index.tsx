@@ -65,7 +65,7 @@ const Page = ({
     appearance: ArticleAppearance
     index: number
     scrollX: Animated.Value
-    collection: string
+    collection: CollectionType['key']
 }) => {
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
@@ -95,6 +95,7 @@ const Page = ({
                         appearance={appearance}
                         articles={Object.values(collection.articles)}
                         translate={translateX}
+                        collection={collection}
                         style={[
                             {
                                 flex: 1,
@@ -108,7 +109,7 @@ const Page = ({
                     />
                 </View>
             ) : (
-                <PageError message="empty collection" />
+                <PageError message="Empty collection" />
             ),
     })
 }

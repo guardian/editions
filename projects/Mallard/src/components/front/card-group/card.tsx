@@ -7,6 +7,7 @@ import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { useArticleAppearance } from '../../../theme/appearance'
 import { Article } from '../../../common'
+import { PathToArticle } from 'src/screens/article-screen'
 
 const styles = StyleSheet.create({
     root: {
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
 interface PropTypes {
     style: StyleProp<ViewStyle>
     article: Article
-    path: string
+    path: PathToArticle
 }
 
 const SmallCard = withNavigation(

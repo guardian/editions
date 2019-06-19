@@ -51,6 +51,7 @@ export const getCollection = async (
     )
 
     return {
+        key: id,
         displayName: collection.displayName,
         articles: fromEntries(articles),
         preview,
