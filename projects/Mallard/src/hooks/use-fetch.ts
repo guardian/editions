@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSettings } from './use-settings'
-import { useResponse, Response, Error, withResponse } from './use-response'
+import { useResponse, Response, Error } from './use-response'
 import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
@@ -143,12 +143,4 @@ export const useJsonOrEndpoint = <T>(
         return responses[1]
     }
     return responses[0]
-}
-
-export const useEndpointResponse = <T>(
-    path: string,
-    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-) => {
-    const { url } = usePaths('', path)
-    return withResponse<T>(useFetch(url, { validator }))
 }

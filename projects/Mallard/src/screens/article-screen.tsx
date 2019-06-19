@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useEndpointResponse } from '../hooks/use-fetch'
+import { useJsonOrEndpoint } from '../hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
@@ -14,11 +14,14 @@ import { UiBodyCopy } from '../components/styled-text'
 import { FlexCenter } from '../components/layout/flex-center'
 import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
+import { withResponse } from 'src/hooks/use-response'
 
 const useArticleResponse = (path: string) =>
-    useEndpointResponse<ArticleType>(`content/${path}`, {
-        validator: article => article.title != null,
-    })
+    withResponse(
+        useJsonOrEndpoint<ArticleType>('n/a', `content/${path}`, {
+            validator: article => article.title != null,
+        }),
+    )
 
 export const ArticleScreen = ({
     navigation,
