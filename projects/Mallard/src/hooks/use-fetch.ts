@@ -120,7 +120,7 @@ const usePaths = (
 }
 
 export const useJsonOrEndpoint = <T>(
-    issue: string,
+    issue: Issue['name'],
     path: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ) => {
