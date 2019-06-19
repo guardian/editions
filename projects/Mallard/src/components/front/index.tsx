@@ -65,47 +65,39 @@ const Page = ({
     const translateX = getTranslateForPage(scrollX, index)
     const collectionResponse = useCollectionResponse(collection)
 
-    const PageError = useMemo(
-        () => ({ message }: { message: string }) => (
-            <View style={{ width }}>
-                <FlexCenter>
-                    <UiBodyCopy weight="bold">
-                        Oh no! something failed
-                    </UiBodyCopy>
-                    <UiExplainerCopy>{message}</UiExplainerCopy>
-                </FlexCenter>
-            </View>
-        ),
-        [width],
+    return (
+        <View style={{ width }}>
+            {collectionResponse({
+                error: ({ message }) => <FlexErrorMessage title={message} />,
+                pending: () => (
+                    <FlexCenter>
+                        <Spinner />
+                    </FlexCenter>
+                ),
+                success: collection =>
+                    collection.articles ? (
+                        <Collection
+                            appearance={appearance}
+                            articles={Object.values(collection.articles)}
+                            translate={translateX}
+                            collection={collection.key}
+                            style={[
+                                {
+                                    flex: 1,
+                                    transform: [
+                                        {
+                                            translateX,
+                                        },
+                                    ],
+                                },
+                            ]}
+                        />
+                    ) : (
+                        <FlexErrorMessage title="Empty collection" />
+                    ),
+            })}
+        </View>
     )
-
-    return collectionResponse({
-        error: ({ message }) => <PageError {...{ message }} />,
-        pending: () => <Spinner />,
-        success: collection =>
-            collection.articles ? (
-                <View style={{ width }}>
-                    <Collection
-                        appearance={appearance}
-                        articles={Object.values(collection.articles)}
-                        translate={translateX}
-                        collection={collection.key}
-                        style={[
-                            {
-                                flex: 1,
-                                transform: [
-                                    {
-                                        translateX,
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </View>
-            ) : (
-                <PageError message="Empty collection" />
-            ),
-    })
 }
 
 const Wrapper: FunctionComponent<{
