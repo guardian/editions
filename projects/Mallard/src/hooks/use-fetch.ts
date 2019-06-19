@@ -26,16 +26,23 @@ const useFetch = <T>(
     useEffect(() => {
         fetch(url)
             .then(res =>
-                res.json().then(res => {
-                    if (res && validator(res)) {
-                        naiveCache[url] = res
-                        onSuccess(res)
-                    } else {
+                res
+                    .json()
+                    .then(res => {
+                        if (res && validator(res)) {
+                            naiveCache[url] = res
+                            onSuccess(res)
+                        } else {
+                            onError({
+                                message: REQUEST_INVALID_RESPONSE_VALIDATION,
+                            })
+                        }
+                    })
+                    .catch(() => {
                         onError({
                             message: REQUEST_INVALID_RESPONSE_VALIDATION,
                         })
-                    }
-                }),
+                    }),
             )
             .catch((err: Error) => {
                 /*

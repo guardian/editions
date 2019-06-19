@@ -5,7 +5,7 @@ import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
 
 import { useArticleAppearance } from '../../../theme/appearance'
-import { Article } from '../../../common'
+import { Article } from 'src/common'
 import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'

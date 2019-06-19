@@ -5,8 +5,7 @@ import { metrics } from '../../../theme/spacing'
 
 import { useArticleAppearance } from '../../../theme/appearance'
 import { PropTypes as CollectionPropTypes } from '../collection'
-import { Article } from 'src/common'
-import { Collection } from '../../../common'
+import { Article, Collection } from 'src/common'
 import { Card } from './../card-group/card'
 
 export enum Size {

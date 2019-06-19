@@ -9,7 +9,7 @@ import {
 } from '../../theme/appearance'
 import { color } from '../../theme/color'
 import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
-import { Article, Collection as CollectionType } from '../../common'
+import { Article, Collection as CollectionType } from 'src/common'
 
 const styles = StyleSheet.create({
     root: {
