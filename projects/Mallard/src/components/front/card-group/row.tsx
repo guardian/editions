@@ -1,17 +1,24 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { StyleSheet, Animated, View } from 'react-native'
 import { Multiline } from '../../multiline'
 import { metrics } from '../../../theme/spacing'
 
 import { useArticleAppearance } from '../../../theme/appearance'
-import { SmallCard } from './../card-group/card'
 import { PropTypes as CollectionPropTypes } from '../collection'
 import { Article } from 'src/common'
 import { Collection } from '../../../common'
+import { Card } from './../card-group/card'
+
+export enum Size {
+    row,
+    third,
+    half,
+    hero,
+    superhero,
+}
 
 const styles = StyleSheet.create({
     row: {
-        flexBasis: 0,
         flexGrow: 1,
         flexDirection: 'column',
         alignItems: 'stretch',
@@ -40,6 +47,19 @@ interface RowPropTypes {
     translate: CollectionPropTypes['translate']
     isLastChild: boolean
     index: number
+    size: Size
+}
+
+const getHeightForSize = (size: Size): string => {
+    const heights = {
+        [Size.row]: 'auto',
+        [Size.third]: `${(2 / 6) * 100}%`,
+        [Size.half]: '50%',
+        [Size.hero]: `${(4 / 6) * 100}%`,
+        [Size.superhero]: 'auto',
+    }
+
+    return heights[size]
 }
 
 /*
@@ -50,14 +70,17 @@ const Row = ({
     translate,
     isLastChild,
     index,
+    size,
 }: {
     children: ReactNode
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
+    const height = useMemo(() => getHeightForSize(size), [size])
     return (
         <Animated.View
             style={[
                 styles.row,
+                { height },
                 {
                     transform: [
                         {
@@ -99,8 +122,9 @@ const RowWithArticle = ({
 } & NavigationPropTypes &
     RowPropTypes) => (
     <Row {...rowProps}>
-        <SmallCard
+        <Card
             style={styles.card}
+            size={rowProps.size}
             path={{
                 article: article.key,
                 collection,
@@ -142,15 +166,16 @@ const RowWithTwoArticles = ({
     return (
         <Row {...rowProps}>
             <View style={styles.doubleRow}>
-                <SmallCard
+                <Card
                     style={[styles.card]}
                     path={{
                         article: articles[0].key,
                         collection,
                     }}
                     article={articles[0]}
+                    size={rowProps.size}
                 />
-                <SmallCard
+                <Card
                     style={[
                         styles.card,
                         styles.rightCard,
@@ -163,6 +188,7 @@ const RowWithTwoArticles = ({
                         collection,
                     }}
                     article={articles[1]}
+                    size={rowProps.size}
                 />
             </View>
         </Row>

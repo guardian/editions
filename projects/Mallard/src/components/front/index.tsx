@@ -1,10 +1,4 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    ReactNode,
-    useMemo,
-} from 'react'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
 import { useEndpointResponse } from '../../hooks/use-fetch'
 import { metrics } from '../../theme/spacing'
@@ -17,7 +11,7 @@ import {
 } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -159,10 +153,10 @@ export const Front: FunctionComponent<{
         ),
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <FlexCenter>
-                    <UiBodyCopy>Oh no! something failed</UiBodyCopy>
-                    <UiExplainerCopy>{err.message}</UiExplainerCopy>
-                </FlexCenter>
+                <FlexErrorMessage
+                    title={'Oh no! something failed'}
+                    message={err.message}
+                />
             </Wrapper>
         ),
         success: frontData => {
@@ -238,7 +232,7 @@ export const Front: FunctionComponent<{
                         {collections.map(([id, collection], i) => (
                             <Page
                                 index={i}
-                                appearance={'comment'}
+                                appearance={'sport'}
                                 key={id}
                                 {...{ collection, scrollX }}
                             />

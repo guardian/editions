@@ -7,15 +7,15 @@ import {
     articleAppearances,
 } from '../theme/appearance'
 import { Article } from '../components/article'
-import { Collection, Article as ArticleType } from '../common'
-import { View, TouchableOpacity, Text } from 'react-native'
+import { Article as ArticleType, Collection } from '../common'
+import { View, TouchableOpacity } from 'react-native'
 import { metrics } from '../theme/spacing'
 import { UiBodyCopy } from '../components/styled-text'
-import { FlexCenter } from '../components/layout/flex-center'
 import { SlideCard } from '../components/layout/slide-card/index'
 import { color } from '../theme/color'
 import { PathToArticle } from './article-screen'
 import { withResponse } from 'src/hooks/use-response'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -76,21 +76,21 @@ const ArticleScreenWithProps = ({
             />
             {articleResponse({
                 error: ({ message }) => (
-                    <FlexCenter style={{ backgroundColor: color.background }}>
-                        <Text style={{ fontSize: 40 }}>😭</Text>
-                        <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                    </FlexCenter>
-                ),
-                pending: () => (
-                    <Article
-                        kicker={(articlePrefill && articlePrefill.kicker) || ''}
-                        headline={
-                            (articlePrefill && articlePrefill.headline) || ''
-                        }
-                        byline={(articlePrefill && articlePrefill.byline) || ''}
-                        standfirst=""
+                    <FlexErrorMessage
+                        icon="😭"
+                        title={message}
+                        style={{ backgroundColor: color.background }}
                     />
                 ),
+                pending: () =>
+                    articlePrefill ? (
+                        <Article {...articlePrefill} />
+                    ) : (
+                        <FlexErrorMessage
+                            title={'loading'}
+                            style={{ backgroundColor: color.background }}
+                        />
+                    ),
                 success: ({
                     standfirst,
                     headline,
@@ -184,9 +184,11 @@ export const ArticleScreen = ({
 
     if (!path || !path.article || !path.collection) {
         return (
-            <FlexCenter style={{ backgroundColor: color.background }}>
-                <Text>{JSON.stringify(path)}</Text>
-            </FlexCenter>
+            <FlexErrorMessage
+                icon="😭"
+                title={'Not found'}
+                style={{ backgroundColor: color.background }}
+            />
         )
     }
     return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />

@@ -1,20 +1,30 @@
-import React from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import React, { ReactNode } from 'react'
+import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
 import { metrics } from '../../../theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
-import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { useArticleAppearance } from '../../../theme/appearance'
 import { Article } from '../../../common'
 import { PathToArticle } from 'src/screens/article-screen'
 
-const styles = StyleSheet.create({
+import { TextBlock } from './text-block'
+import { Size } from './row'
+
+interface PropTypes {
+    style: StyleProp<ViewStyle>
+    article: Article
+    path: PathToArticle
+}
+
+/*
+TAPPABLE
+This just wraps every card to make it tappable
+*/
+const tappableStyles = StyleSheet.create({
     root: {
-        padding: metrics.horizontal,
+        padding: metrics.horizontal / 2,
         paddingVertical: metrics.vertical / 2,
-    },
-    elastic: {
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: '100%',
@@ -27,13 +37,17 @@ interface PropTypes {
     path: PathToArticle
 }
 
-const SmallCard = withNavigation(
+const CardTappable = withNavigation(
     ({
+        children,
         style,
         article,
         path,
         navigation,
-    }: PropTypes & NavigationInjectedProps<{}>) => {
+    }: {
+        children: ReactNode
+    } & PropTypes &
+        NavigationInjectedProps) => {
         const { appearance } = useArticleAppearance()
         return (
             <View style={style}>
@@ -47,22 +61,12 @@ const SmallCard = withNavigation(
                 >
                     <View
                         style={[
-                            styles.elastic,
-                            styles.root,
+                            tappableStyles.root,
                             appearance.backgrounds,
                             appearance.cardBackgrounds,
                         ]}
                     >
-                        <HeadlineKickerText
-                            style={[appearance.text, appearance.kicker]}
-                        >
-                            {article.kicker}
-                        </HeadlineKickerText>
-                        <HeadlineCardText
-                            style={[appearance.text, appearance.headline]}
-                        >
-                            {article.headline}
-                        </HeadlineCardText>
+                        {children}
                     </View>
                 </Highlight>
             </View>
@@ -70,4 +74,91 @@ const SmallCard = withNavigation(
     },
 )
 
-export { SmallCard }
+/*
+COVER CARD
+Text over image. To use in lifestyle & art heros
+*/
+const coverStyles = StyleSheet.create({
+    cover: {
+        width: '100%',
+        height: '100%',
+        flex: 1,
+    },
+    text: {
+        width: '50%',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        top: '50%',
+        paddingTop: metrics.vertical / 3,
+    },
+})
+
+const CoverCard = ({ style, article, path }: PropTypes) => {
+    return (
+        <CardTappable {...{ style, article, path }}>
+            <View style={coverStyles.cover}>
+                <Image
+                    style={coverStyles.cover}
+                    source={{
+                        uri: article.image,
+                    }}
+                />
+                <TextBlock
+                    kicker={article.kicker}
+                    headline={article.headline}
+                    textBlockAppearance={'pillarColor'}
+                    style={coverStyles.text}
+                />
+            </View>
+        </CardTappable>
+    )
+}
+
+const imageStyles = StyleSheet.create({
+    image: {
+        width: '100%',
+        flex: 1,
+    },
+    textBlock: {
+        paddingTop: metrics.vertical / 3,
+    },
+})
+
+const ImageCard = ({ style, article, path }: PropTypes) => {
+    return (
+        <CardTappable {...{ style, article, path }}>
+            <Image
+                style={imageStyles.image}
+                source={{
+                    uri: article.image,
+                }}
+            />
+            <TextBlock
+                style={imageStyles.textBlock}
+                kicker={article.kicker}
+                headline={article.headline}
+            />
+        </CardTappable>
+    )
+}
+
+const SmallCard = ({ style, article, path }: PropTypes) => {
+    return (
+        <CardTappable {...{ style, article, path }}>
+            <TextBlock kicker={article.kicker} headline={article.headline} />
+        </CardTappable>
+    )
+}
+
+const Card = ({ size, ...props }: { size: Size } & PropTypes) => {
+    /* this chooses the card type for us based on ummm MAGIC? */
+    return size >= Size.hero ? (
+        <CoverCard {...props} />
+    ) : size >= Size.half ? (
+        <ImageCard {...props} />
+    ) : (
+        <SmallCard {...props} />
+    )
+}
+export { Card }

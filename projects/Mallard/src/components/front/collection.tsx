@@ -8,7 +8,7 @@ import {
     ArticleAppearance,
 } from '../../theme/appearance'
 import { color } from '../../theme/color'
-import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
+import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
 import { Article, Collection as CollectionType } from '../../common'
 
 const styles = StyleSheet.create({
@@ -43,10 +43,11 @@ const AnyStoryCollection = ({ articles, collection, translate }: PropTypes) => {
                 <RowWithArticle
                     index={index}
                     key={index}
-                    isLastChild={index === articles.length}
+                    isLastChild={index === articles.length - 1}
                     translate={translate}
                     article={article}
                     collection={collection}
+                    size={Size.row}
                 />
             ))}
         </>
@@ -63,23 +64,25 @@ const ThreeStoryCollection = ({
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
-    if (articles.length < 3)
+    if (articles.length !== 3)
         return <AnyStoryCollection {...{ articles, collection, translate }} />
 
     return (
         <>
-            <RowWithTwoArticles
-                index={0}
-                isLastChild={false}
-                translate={translate}
-                articles={[articles[0], articles[1]]}
-                collection={collection}
-            />
             <RowWithArticle
                 index={0}
                 isLastChild={false}
                 translate={translate}
                 article={articles[2]}
+                size={Size.hero}
+                collection={collection}
+            />
+            <RowWithTwoArticles
+                index={1}
+                isLastChild={true}
+                translate={translate}
+                articles={[articles[0], articles[1]]}
+                size={Size.third}
                 collection={collection}
             />
         </>
