@@ -82,8 +82,7 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue)
-        return <FlexErrorMessage icon="😭" title={'Not found'} />
+    if (!path || !path.issue) return <FlexErrorMessage title={'Not found'} />
 
     return <IssueScreenWithProps path={path} />
 }

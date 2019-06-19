@@ -73,7 +73,7 @@ export const getFront = async (
     const front = config.fronts[id]
     const collectionIds = front.collections
 
-    return front
+    return { ...front, key: id }
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107

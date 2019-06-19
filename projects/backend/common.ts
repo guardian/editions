@@ -1,8 +1,11 @@
 // This file is symlinked into both backend and Mallard.
 // Be careful.
 
-export interface Article {
+interface WithKey {
     key: string
+}
+
+export interface Article extends WithKey {
     headline: string
     kicker: string
     image: string
@@ -12,21 +15,19 @@ export interface Article {
     elements: BlockElement[]
 }
 
-export interface Issue {
-    key: string
+export interface Issue extends WithKey {
     name: string
     date: number
     fronts: string[]
 }
 
-export interface Collection {
-    key: string
+export interface Collection extends WithKey {
     displayName: string
     articles?: { [key: string]: Article }
     preview?: true
 }
 
-export interface Front {
+export interface Front extends WithKey {
     collections: string[]
     canonical?: string
     group?: string
