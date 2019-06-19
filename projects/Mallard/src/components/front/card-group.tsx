@@ -1,6 +1,5 @@
-import React, { useMemo, ReactNode } from 'react'
-import { StyleSheet, StyleProp, Animated, View } from 'react-native'
-import { Multiline } from '../multiline'
+import React, { ReactNode } from 'react'
+import { StyleSheet, StyleProp, Animated } from 'react-native'
 import { metrics } from '../../theme/spacing'
 
 import {
@@ -8,10 +7,9 @@ import {
     useArticleAppearance,
     ArticleAppearance,
 } from '../../theme/appearance'
-import { SmallCard } from './card-group/card'
 import { color } from '../../theme/color'
 import { FrontArticle } from '../../common'
-import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
+import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
 
 const styles = StyleSheet.create({
     root: {
@@ -44,9 +42,10 @@ const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
                 <RowWithArticle
                     index={index}
                     key={index}
-                    isLastChild={index === articles.length}
+                    isLastChild={index === articles.length - 1}
                     translate={translate}
                     article={article}
+                    size={Size.row}
                 />
             ))}
         </>
@@ -59,22 +58,24 @@ const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
-    if (articles.length < 3)
+    if (articles.length !== 3)
         return <AnyStoryCardGroup {...{ articles, translate }} />
 
     return (
         <>
-            <RowWithTwoArticles
-                index={0}
-                isLastChild={false}
-                translate={translate}
-                articles={[articles[0], articles[1]]}
-            />
             <RowWithArticle
                 index={0}
                 isLastChild={false}
                 translate={translate}
                 article={articles[2]}
+                size={Size.hero}
+            />
+            <RowWithTwoArticles
+                index={1}
+                isLastChild={true}
+                translate={translate}
+                articles={[articles[0], articles[1]]}
+                size={Size.third}
             />
         </>
     )
