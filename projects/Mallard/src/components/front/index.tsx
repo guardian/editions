@@ -11,7 +11,10 @@ import { metrics } from '../../theme/spacing'
 import { Collection } from './collection'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from '../../theme/appearance'
-import { Front as FrontType, Collection } from '../../../../backend/common'
+import {
+    Front as FrontType,
+    Collection as CollectionType,
+} from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
@@ -25,6 +28,9 @@ const useFrontsResponse = (front: string) =>
         `front/${front}`,
         res => res.collections != null,
     )
+
+const useCollectionResponse = (collection: string) =>
+    useEndpointResponse<CollectionType>(`collection/${collection}`)
 
 /*
 Map the position of the tap on the screen to
@@ -50,34 +56,61 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     })
 }
 
-const Page: FunctionComponent<{
+const Page = ({
+    collection,
+    appearance,
+    index,
+    scrollX,
+}: {
     appearance: ArticleAppearance
     index: number
     scrollX: Animated.Value
-    collection: Collection
-}> = ({ collection, appearance, index, scrollX }) => {
+    collection: string
+}) => {
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
+    const collectionResponse = useCollectionResponse(collection)
 
-    return (
-        <View style={{ width }}>
-            <Collection
-                appearance={appearance}
-                articles={collection.articles || []}
-                translate={translateX}
-                style={[
-                    {
-                        flex: 1,
-                        transform: [
-                            {
-                                translateX,
-                            },
-                        ],
-                    },
-                ]}
-            />
-        </View>
+    const PageError = useMemo(
+        () => ({ message }: { message: string }) => (
+            <View style={{ width }}>
+                <FlexCenter>
+                    <UiBodyCopy weight="bold">
+                        Oh no! something failed
+                    </UiBodyCopy>
+                    <UiExplainerCopy>{message}</UiExplainerCopy>
+                </FlexCenter>
+            </View>
+        ),
+        [width],
     )
+
+    return collectionResponse({
+        error: ({ message }) => <PageError {...{ message }} />,
+        pending: () => <Spinner />,
+        success: collection =>
+            collection.articles ? (
+                <View style={{ width }}>
+                    <Collection
+                        appearance={appearance}
+                        articles={Object.values(collection.articles)}
+                        translate={translateX}
+                        style={[
+                            {
+                                flex: 1,
+                                transform: [
+                                    {
+                                        translateX,
+                                    },
+                                ],
+                            },
+                        ]}
+                    />
+                </View>
+            ) : (
+                <PageError message="empty collection" />
+            ),
+    })
 }
 
 const Wrapper: FunctionComponent<{

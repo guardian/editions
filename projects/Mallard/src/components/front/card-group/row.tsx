@@ -5,8 +5,8 @@ import { metrics } from '../../../theme/spacing'
 
 import { useArticleAppearance } from '../../../theme/appearance'
 import { SmallCard } from './../card-group/card'
-import { FrontArticle } from '../../../common'
 import { PropTypes as CollectionPropTypes } from '../collection'
+import { Article } from 'src/common'
 
 const styles = StyleSheet.create({
     row: {
@@ -90,10 +90,10 @@ const RowWithArticle = ({
     article,
     ...rowProps
 }: {
-    article: FrontArticle
+    article: Article
 } & RowPropTypes) => (
     <Row {...rowProps}>
-        <SmallCard style={styles.card} path={article.path} article={article} />
+        <SmallCard style={styles.card} path={article.key} article={article} />
     </Row>
 )
 
@@ -107,7 +107,7 @@ const RowWithTwoArticles = ({
     articles,
     ...rowProps
 }: {
-    articles: [FrontArticle, FrontArticle]
+    articles: [Article, Article]
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
 
@@ -123,7 +123,7 @@ const RowWithTwoArticles = ({
             <View style={styles.doubleRow}>
                 <SmallCard
                     style={[styles.card]}
-                    path={articles[0].path}
+                    path={articles[0].key}
                     article={articles[0]}
                 />
                 <SmallCard
@@ -134,7 +134,7 @@ const RowWithTwoArticles = ({
                             borderColor: appearance.backgrounds.borderColor,
                         },
                     ]}
-                    path={articles[1].path}
+                    path={articles[1].key}
                     article={articles[1]}
                 />
             </View>

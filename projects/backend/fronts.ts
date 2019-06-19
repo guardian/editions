@@ -37,16 +37,16 @@ export const getCollection = async (
     const preview = live ? undefined : true
     const capiArticles = await getArticles(Object.keys(articleFragments))
     const articles: [string, Article][] = Object.entries(capiArticles).map(
-        ([path, article]) => {
+        ([key, article]) => {
             const fragment =
                 articleFragments[`internal-code/page/${article.id}`] ||
-                articleFragments[path]
+                articleFragments[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageURL = (meta && meta.imageSrc) || article.imageURL
 
-            return [path, { ...article, kicker, headline, imageURL }]
+            return [key, { ...article, key, kicker, headline, imageURL }]
         },
     )
 

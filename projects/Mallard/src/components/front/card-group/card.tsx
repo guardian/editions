@@ -6,7 +6,7 @@ import { Highlight } from '../../highlight'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { useArticleAppearance } from '../../../theme/appearance'
-import { FrontArticle } from '../../../common'
+import { Article } from '../../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
 
 interface PropTypes {
     style: StyleProp<ViewStyle>
-    article: FrontArticle
-    path: FrontArticle['path']
+    article: Article
+    path: string
 }
 
 const SmallCard = withNavigation(

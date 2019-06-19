@@ -8,8 +8,8 @@ import {
     ArticleAppearance,
 } from '../../theme/appearance'
 import { color } from '../../theme/color'
-import { FrontArticle } from '../../common'
 import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
+import { Article } from '../../common'
 
 const styles = StyleSheet.create({
     root: {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 })
 
 export interface PropTypes {
-    articles: FrontArticle[]
+    articles: Article[]
     translate: Animated.AnimatedInterpolation
 }
 

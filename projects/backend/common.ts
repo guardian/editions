@@ -2,6 +2,7 @@
 // Be careful.
 
 export interface Article {
+    key: string
     headline: string
     kicker: string
     image: string
