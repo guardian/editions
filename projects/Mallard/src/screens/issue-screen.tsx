@@ -10,6 +10,8 @@ import { Header } from '../components/header'
 import { useEndpointResponse } from 'src/hooks/use-fetch'
 import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { FlexCenter } from 'src/components/layout/flex-center'
 
 const styles = StyleSheet.create({
     container,
@@ -53,8 +55,12 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                 }}
             />
             {issueResponse({
-                error: () => <Spinner />,
-                pending: () => <Spinner />,
+                error: ({ message }) => <FlexErrorMessage title={message} />,
+                pending: () => (
+                    <FlexCenter>
+                        <Spinner />
+                    </FlexCenter>
+                ),
                 success: issue => (
                     <>
                         <IssueHeader issue={issue} />
@@ -82,7 +88,8 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue) return <FlexErrorMessage title={'Not found'} />
+    if (!path || !path.issue)
+        return <FlexErrorMessage title={ERR_404_MISSING_PROPS} />
 
     return <IssueScreenWithProps path={path} />
 }

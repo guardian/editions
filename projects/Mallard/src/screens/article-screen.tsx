@@ -16,6 +16,7 @@ import { color } from '../theme/color'
 import { PathToArticle } from './article-screen'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -28,7 +29,6 @@ const useArticleResponse = ({ collection, article }: PathToArticle) => {
         const articleContent =
             resp.response.articles && resp.response.articles[article]
         if (articleContent) {
-            console.log(articleContent)
             return withResponse<ArticleType>({
                 ...resp,
                 response: articleContent,
@@ -37,7 +37,7 @@ const useArticleResponse = ({ collection, article }: PathToArticle) => {
             return withResponse<ArticleType>({
                 state: 'error',
                 error: {
-                    message: 'not found',
+                    message: ERR_404_REMOTE,
                 },
             })
         }
@@ -91,13 +91,7 @@ const ArticleScreenWithProps = ({
                             style={{ backgroundColor: color.background }}
                         />
                     ),
-                success: ({
-                    standfirst,
-                    headline,
-                    byline,
-                    imageURL,
-                    elements,
-                }) => (
+                success: ({ elements, ...article }) => (
                     <>
                         <View
                             style={{
@@ -144,24 +138,7 @@ const ArticleScreenWithProps = ({
                                 article={
                                     viewIsTransitioning ? undefined : elements
                                 }
-                                kicker={
-                                    (articlePrefill && articlePrefill.kicker) ||
-                                    ''
-                                }
-                                headline={
-                                    (articlePrefill &&
-                                        articlePrefill.headline) ||
-                                    headline
-                                }
-                                byline={
-                                    (articlePrefill && articlePrefill.byline) ||
-                                    byline
-                                }
-                                standfirst={standfirst}
-                                image={
-                                    imageURL ||
-                                    (articlePrefill && articlePrefill.image)
-                                }
+                                {...article}
                             />
                         </WithArticleAppearance>
                     </>
@@ -185,8 +162,7 @@ export const ArticleScreen = ({
     if (!path || !path.article || !path.collection) {
         return (
             <FlexErrorMessage
-                icon="😭"
-                title={'Not found'}
+                title={ERR_404_MISSING_PROPS}
                 style={{ backgroundColor: color.background }}
             />
         )

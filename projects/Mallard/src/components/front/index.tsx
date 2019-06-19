@@ -12,6 +12,7 @@ import {
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
+import { ERR_404_REMOTE } from 'src/helpers/words'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -93,7 +94,7 @@ const Page = ({
                             ]}
                         />
                     ) : (
-                        <FlexErrorMessage title="Empty collection" />
+                        <FlexErrorMessage title={ERR_404_REMOTE} />
                     ),
             })}
         </View>
