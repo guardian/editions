@@ -63,47 +63,30 @@ const AnyStoryCollectionPage = ({
     )
 }
 
-const SingleStoryCollectionPage = ({
-    articles,
-    collection,
-    translate,
-    issue,
-}: PropTypes) => {
-    if (articles.length < 1)
-        return (
-            <AnyStoryCollectionPage
-                {...{ articles, collection, translate, issue }}
-            />
-        )
+const SingleStoryCollectionPage = ({ articles, ...props }: PropTypes) => {
+    if (articles.length !== 1)
+        return <AnyStoryCollectionPage {...{ articles, ...props }} />
+
     return (
         <>
             <RowWithOneArticle
                 index={0}
                 article={articles[0]}
                 size={RowSize.superhero}
-                {...{ collection, issue, translate }}
+                {...props}
             />
         </>
     )
 }
 
-const ThreeStoryCollectionPage = ({
-    articles,
-    collection,
-    translate,
-    issue,
-}: PropTypes) => {
+const ThreeStoryCollectionPage = ({ articles, ...props }: PropTypes) => {
     /*
     if something goes wrong and there's less 
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
     if (articles.length !== 3)
-        return (
-            <AnyStoryCollectionPage
-                {...{ articles, collection, translate, issue }}
-            />
-        )
+        return <AnyStoryCollectionPage {...{ articles, ...props }} />
 
     return (
         <>
@@ -111,14 +94,13 @@ const ThreeStoryCollectionPage = ({
                 index={0}
                 article={articles[2]}
                 size={RowSize.hero}
-                {...{ collection, issue, translate }}
+                {...props}
             />
             <RowWithTwoArticles
                 index={1}
-                translate={translate}
                 articles={[articles[0], articles[1]]}
                 size={RowSize.third}
-                {...{ collection, issue, translate }}
+                {...props}
             />
         </>
     )
