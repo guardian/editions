@@ -5,7 +5,7 @@ import {
     storeSetting,
     Settings,
     defaultSettings,
-} from '../helpers/settings'
+} from 'src/helpers/settings'
 
 type SettingsFromContext = [
     Settings,

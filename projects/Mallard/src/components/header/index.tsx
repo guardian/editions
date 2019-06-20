@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Text, View, StyleSheet, SafeAreaView, Button } from 'react-native'
-import { color } from '../../theme/color'
-import { metrics } from '../../theme/spacing'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
 
 const styles = StyleSheet.create({
     background: {

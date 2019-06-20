@@ -1,38 +1,62 @@
 import React, { useState } from 'react'
-import { useJsonOrEndpoint } from '../hooks/use-fetch'
+import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
     ArticleAppearance,
     articleAppearances,
-} from '../theme/appearance'
-import { Article } from '../components/article'
-import { Article as ArticleType, FrontArticle } from '../common'
-import { View, TouchableOpacity, Text, Button } from 'react-native'
-import { metrics } from '../theme/spacing'
-import { UiBodyCopy } from '../components/styled-text'
-import { FlexCenter } from '../components/layout/flex-center'
-import { SlideCard } from '../components/layout/slide-card/index'
-import { color } from '../theme/color'
+} from 'src/theme/appearance'
+import { Article } from 'src/components/article'
+import { Article as ArticleType, Collection } from 'src/common'
+import { View, TouchableOpacity } from 'react-native'
+import { metrics } from 'src/theme/spacing'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { SlideCard } from 'src/components/layout/slide-card/index'
+import { color } from 'src/theme/color'
+import { PathToArticle } from './article-screen'
 import { withResponse } from 'src/hooks/use-response'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 
-const useArticleResponse = (path: string) =>
-    withResponse(
-        useJsonOrEndpoint<ArticleType>('n/a', `content/${path}`, {
-            validator: article => article.title != null,
-        }),
+export interface PathToArticle {
+    collection: Collection['key']
+    article: ArticleType['key']
+}
+
+const useArticleResponse = ({ collection, article }: PathToArticle) => {
+    const resp = useJsonOrEndpoint<ArticleType>(
+        'n/a',
+        `collection/${collection}`,
     )
+    if (resp.state === 'success') {
+        const articleContent =
+            resp.response.articles && resp.response.articles[article]
+        if (articleContent) {
+            return withResponse<ArticleType>({
+                ...resp,
+                response: articleContent,
+            })
+        } else {
+            return withResponse<ArticleType>({
+                state: 'error',
+                error: {
+                    message: ERR_404_REMOTE,
+                },
+            })
+        }
+    }
+    return withResponse<ArticleType>(resp)
+}
 
-export const ArticleScreen = ({
+const ArticleScreenWithProps = ({
+    path,
+    articlePrefill,
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
+    path: PathToArticle
+    articlePrefill?: ArticleType
 }) => {
-    const frontArticle = navigation.getParam('article') as
-        | FrontArticle
-        | undefined
-
-    const path = navigation.getParam('path')
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
@@ -55,26 +79,22 @@ export const ArticleScreen = ({
             />
             {articleResponse({
                 error: ({ message }) => (
-                    <FlexCenter style={{ backgroundColor: color.background }}>
-                        <Text style={{ fontSize: 40 }}>😭</Text>
-                        <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                    </FlexCenter>
-                ),
-                pending: () => (
-                    <Article
-                        kicker={(frontArticle && frontArticle.kicker) || ''}
-                        headline={(frontArticle && frontArticle.headline) || ''}
-                        byline={(frontArticle && frontArticle.byline) || ''}
-                        standfirst=""
+                    <FlexErrorMessage
+                        icon="😭"
+                        title={message}
+                        style={{ backgroundColor: color.background }}
                     />
                 ),
-                success: ({
-                    standfirst,
-                    title,
-                    byline,
-                    imageURL,
-                    elements,
-                }) => (
+                pending: () =>
+                    articlePrefill ? (
+                        <Article {...articlePrefill} />
+                    ) : (
+                        <FlexErrorMessage
+                            title={'loading'}
+                            style={{ backgroundColor: color.background }}
+                        />
+                    ),
+                success: ({ elements, ...article }) => (
                     <>
                         <View
                             style={{
@@ -121,22 +141,7 @@ export const ArticleScreen = ({
                                 article={
                                     viewIsTransitioning ? undefined : elements
                                 }
-                                kicker={
-                                    (frontArticle && frontArticle.kicker) || ''
-                                }
-                                headline={
-                                    (frontArticle && frontArticle.headline) ||
-                                    title
-                                }
-                                byline={
-                                    (frontArticle && frontArticle.byline) ||
-                                    byline
-                                }
-                                standfirst={standfirst}
-                                image={
-                                    imageURL ||
-                                    (frontArticle && frontArticle.image)
-                                }
+                                {...article}
                             />
                         </WithArticleAppearance>
                     </>
@@ -144,6 +149,28 @@ export const ArticleScreen = ({
             })}
         </SlideCard>
     )
+}
+
+export const ArticleScreen = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => {
+    const articlePrefill = navigation.getParam('article') as
+        | ArticleType
+        | undefined
+
+    const path = navigation.getParam('path') as PathToArticle | undefined
+
+    if (!path || !path.article || !path.collection) {
+        return (
+            <FlexErrorMessage
+                title={ERR_404_MISSING_PROPS}
+                style={{ backgroundColor: color.background }}
+            />
+        )
+    }
+    return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
 }
 
 ArticleScreen.navigationOptions = ({

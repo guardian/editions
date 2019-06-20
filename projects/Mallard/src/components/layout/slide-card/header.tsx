@@ -6,8 +6,8 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native'
 import { Chevron } from '../../chevron'
-import { metrics } from '../../../theme/spacing'
-import { color } from '../../../theme/color'
+import { metrics } from 'src/theme/spacing'
+import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     headerContainer: {

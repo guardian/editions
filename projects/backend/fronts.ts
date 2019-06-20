@@ -1,43 +1,64 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { CollectionArticles, Front, Collection } from './common'
+import { Front, Collection, Article } from './common'
 import { LastModifiedUpdater } from './lastModified'
+import { attempt, hasFailed } from './utils/try'
+import { getArticles } from './capi/articles'
 
 export const getCollection = async (
     id: string,
+    live: boolean = true,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<CollectionArticles | 'notfound'> => {
-    try {
-        const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
-        if (resp.status === 404) return 'notfound'
-        if (!resp.ok) throw new Error('failed s3')
-        lastModifiedUpdater(resp.lastModified)
-        const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
-        console.log(collection)
-        return {
-            id,
-            name: collection.displayName,
-            articles: collection.live.map(article => {
-                const meta = article.meta as ArticleFragmentRootMeta
-                return {
-                    path: article.id,
-                    headline: meta.headline || 'THIS ARTICLE LACKS A HEADLINE',
-                    kicker: meta.customKicker || 'no custom kicker',
-                    image:
-                        meta.imageSrc ||
-                        'https://i.guim.co.uk/img/media/7c71ec6e4bc73ab01384e94b02efe16df054bb73/0_51_3600_2160/master/3600.jpg?width=1900&quality=45&auto=format&fit=max&dpr=2&s=5b33424cbebbad93a8001c62a701a64d',
-                    byline: meta.byline || 'no byline set',
-                }
-            }),
-        }
-    } catch {
-        console.log('OH NO', id)
-        return 'notfound'
+): Promise<Collection> => {
+    const resp = await attempt(
+        s3fetch(`frontsapi/collection/${id}/collection.json`),
+    )
+    if (hasFailed(resp)) throw new Error('Could not fetch from S3.')
+
+    lastModifiedUpdater(resp.lastModified)
+
+    const deserialized = await attempt(resp.json())
+    if (hasFailed(resp)) throw new Error('Response was not valid json')
+
+    const collection: CollectionFromResponse = deserialized as CollectionFromResponse
+
+    const articleFragmentList = live ? collection.live : collection.draft
+    if (articleFragmentList == null) throw new Error('Hello that didnt work')
+    const articleFragments = fromEntries(
+        articleFragmentList.map(
+            (fragment): [string, NestedArticleFragment] => [
+                fragment.id,
+                fragment,
+            ],
+        ),
+    )
+
+    const preview = live ? undefined : true
+    const capiArticles = await getArticles(Object.keys(articleFragments))
+    const articles: [string, Article][] = Object.entries(capiArticles).map(
+        ([key, article]) => {
+            const fragment =
+                articleFragments[`internal-code/page/${article.id}`] ||
+                articleFragments[key]
+            const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
+            const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
+            const headline = (meta && meta.headline) || article.headline
+            const imageURL = (meta && meta.imageSrc) || article.imageURL
+
+            return [key, { ...article, key, kicker, headline, imageURL }]
+        },
+    )
+
+    return {
+        key: id,
+        displayName: collection.displayName,
+        articles: fromEntries(articles),
+        preview,
     }
 }
 
-export const getCollectionsForFront = async (
+export const getFront = async (
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Front> => {
@@ -52,32 +73,7 @@ export const getCollectionsForFront = async (
     const front = config.fronts[id]
     const collectionIds = front.collections
 
-    // const collections =
-    const collections = Object.entries(config.collections)
-
-    const selected = collections.filter(c => collectionIds.includes(c[0]))
-
-    const articles = await Promise.all(
-        collectionIds.map(id => getCollection(id, lastModifiedUpdater)),
-    )
-    console.log(articles, 'SSS')
-    const articleMap = new Map(
-        articles
-            .filter(
-                (maybeArticle): maybeArticle is CollectionArticles =>
-                    maybeArticle !== 'notfound',
-            )
-            .map(({ id, articles }) => [id, articles]),
-    )
-    console.log(articleMap, '>?>')
-    const combined: [string, Collection][] = selected.map(([id, data]) => [
-        id,
-        { ...data, articles: articleMap.get(id) },
-    ])
-
-    const cs: { [key: string]: Collection } = fromEntries(combined) //This is a polyfill of Object.Entries which is a bit tooo new.
-    console.log(front)
-    return { ...front, collections: cs }
+    return { ...front, key: id }
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107

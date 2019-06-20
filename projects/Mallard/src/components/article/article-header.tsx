@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { HeadlineText, HeadlineKickerText } from '../../components/styled-text'
-import { metrics } from '../../theme/spacing'
-import { useArticleAppearance } from '../../theme/appearance'
+import { HeadlineText, HeadlineKickerText } from 'src/components/styled-text'
+import { metrics } from 'src/theme/spacing'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from './article-image'
 
 interface Style {

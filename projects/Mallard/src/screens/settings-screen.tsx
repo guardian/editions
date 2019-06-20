@@ -9,13 +9,14 @@ import {
     Alert,
 } from 'react-native'
 
-import { List, ListHeading } from '../components/lists/list'
+import { List, ListHeading } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
-import { container } from '../theme/styles'
-import { useSettings } from '../hooks/use-settings'
-import { clearLocalCache } from '../hooks/use-fetch'
-import { MonoTextBlock, UiBodyCopy } from '../components/styled-text'
-import { Highlight } from '../components/highlight'
+import { container } from 'src/theme/styles'
+import { useSettings } from 'src/hooks/use-settings'
+import { clearLocalCache } from 'src/hooks/use-fetch'
+import { MonoTextBlock } from 'src/components/styled-text'
+import { Highlight } from 'src/components/highlight'
+import { APP_DISPLAY_NAME } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     container,
@@ -31,10 +32,10 @@ const SettingsScreen = ({
 
     return (
         <ScrollView style={styles.container}>
-            <ListHeading>About this app</ListHeading>
+            <ListHeading>{`About ${APP_DISPLAY_NAME}`}</ListHeading>
             <MonoTextBlock>
-                Thanks for helping us test the Editions app beta! your feedback
-                will be invaluable to the final product.
+                Thanks for helping us test the {APP_DISPLAY_NAME} app! your
+                feedback will be invaluable to the final product.
             </MonoTextBlock>
             <MonoTextBlock>
                 Come back soon to see relevant settings.

@@ -2,29 +2,44 @@ import React, { useMemo, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 
-import { container } from '../theme/styles'
-import { Front } from '../components/front'
-import { renderIssueDate } from '../helpers/issues'
-import { Issue } from '../common'
-import { Header } from '../components/header'
+import { container } from 'src/theme/styles'
+import { Front } from 'src/components/front'
+import { renderIssueDate } from 'src/helpers/issues'
+import { Issue } from 'src/common'
+import { Header } from 'src/components/header'
+
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { UiBodyCopy } from 'src/components/styled-text'
+import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
+import { withResponse } from 'src/hooks/use-response'
+import { Spinner } from 'src/components/spinner'
 
 const styles = StyleSheet.create({
     container,
     contentContainer: {},
 })
 
-export const IssueScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
-    const path: Issue['name'] = navigation.getParam('path')
-    const issue: Issue = navigation.getParam('issue', { date: -1 })
+const useIssueResponse = (issue: Issue['key']) =>
+    withResponse<Issue>(
+        useJsonOrEndpoint<Issue>(issue, `issue/${issue}`, {
+            validator: res => res.fronts != null,
+        }),
+    )
+export interface PathToIssue {
+    issue: Issue['key']
+}
+
+const IssueHeader = ({ issue }: { issue: Issue }) => {
     const { weekday, date } = useMemo(() => renderIssueDate(issue.date), [
         issue.date,
     ])
+
+    return <Header title={weekday} subtitle={date} />
+}
+
+const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
+    const issueResponse = useIssueResponse(path.issue)
 
     /* 
     we don't wanna render a massive tree at once 
@@ -35,14 +50,6 @@ export const IssueScreen = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
-
-    if (!path) {
-        return (
-            <FlexCenter>
-                <UiBodyCopy>Not found</UiBodyCopy>
-            </FlexCenter>
-        )
-    }
     return (
         <ScrollView
             style={styles.container}
@@ -53,19 +60,48 @@ export const IssueScreen = ({
                     setViewIsTransitioning(false)
                 }}
             />
-            <Header title={weekday} subtitle={date} />
-
-            <Front
-                {...{ viewIsTransitioning }}
-                issue={path}
-                front="best-awards"
-            />
-            <Front
-                {...{ viewIsTransitioning }}
-                issue={path}
-                front="local-asdf"
-            />
-            <Front {...{ viewIsTransitioning }} issue={path} front="cities" />
+            {issueResponse({
+                error: ({ message }) => <FlexErrorMessage title={message} />,
+                pending: () => (
+                    <FlexCenter>
+                        <Spinner />
+                    </FlexCenter>
+                ),
+                success: issue => (
+                    <>
+                        <IssueHeader issue={issue} />
+                        {issue.fronts.map(front => (
+                            <Front
+                                issue={issue.key}
+                                key={front}
+                                {...{ viewIsTransitioning, front }}
+                            />
+                        ))}
+                        <Front
+                            issue={issue.key}
+                            {...{ viewIsTransitioning }}
+                            front="best-awards"
+                        />
+                        <Front
+                            issue={issue.key}
+                            {...{ viewIsTransitioning }}
+                            front="cities"
+                        />
+                    </>
+                ),
+            })}
         </ScrollView>
     )
+}
+
+export const IssueScreen = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => {
+    const path = navigation.getParam('path') as PathToIssue | undefined
+    if (!path || !path.issue)
+        return <FlexErrorMessage title={ERR_404_MISSING_PROPS} />
+
+    return <IssueScreenWithProps path={path} />
 }

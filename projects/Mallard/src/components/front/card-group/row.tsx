@@ -1,16 +1,23 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { StyleSheet, Animated, View } from 'react-native'
 import { Multiline } from '../../multiline'
-import { metrics } from '../../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 
-import { useArticleAppearance } from '../../../theme/appearance'
-import { SmallCard } from './../card-group/card'
-import { FrontArticle } from '../../../common'
-import { PropTypes as CardGroupPropTypes } from '../card-group'
+import { useArticleAppearance } from 'src/theme/appearance'
+import { PropTypes as CollectionPropTypes } from '../collection'
+import { Article, Collection } from 'src/common'
+import { Card } from './../card-group/card'
+
+export enum Size {
+    row,
+    third,
+    half,
+    hero,
+    superhero,
+}
 
 const styles = StyleSheet.create({
     row: {
-        flexBasis: 0,
         flexGrow: 1,
         flexDirection: 'column',
         alignItems: 'stretch',
@@ -32,10 +39,26 @@ const styles = StyleSheet.create({
     },
 })
 
+interface NavigationPropTypes {
+    collection: Collection['key']
+}
 interface RowPropTypes {
-    translate: CardGroupPropTypes['translate']
+    translate: CollectionPropTypes['translate']
     isLastChild: boolean
     index: number
+    size: Size
+}
+
+const getHeightForSize = (size: Size): string => {
+    const heights = {
+        [Size.row]: 'auto',
+        [Size.third]: `${(2 / 6) * 100}%`,
+        [Size.half]: '50%',
+        [Size.hero]: `${(4 / 6) * 100}%`,
+        [Size.superhero]: 'auto',
+    }
+
+    return heights[size]
 }
 
 /*
@@ -46,14 +69,17 @@ const Row = ({
     translate,
     isLastChild,
     index,
+    size,
 }: {
     children: ReactNode
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
+    const height = useMemo(() => getHeightForSize(size), [size])
     return (
         <Animated.View
             style={[
                 styles.row,
+                { height },
                 {
                     transform: [
                         {
@@ -88,12 +114,22 @@ shows 1 article
 */
 const RowWithArticle = ({
     article,
+    collection,
     ...rowProps
 }: {
-    article: FrontArticle
-} & RowPropTypes) => (
+    article: Article
+} & NavigationPropTypes &
+    RowPropTypes) => (
     <Row {...rowProps}>
-        <SmallCard style={styles.card} path={article.path} article={article} />
+        <Card
+            style={styles.card}
+            size={rowProps.size}
+            path={{
+                article: article.key,
+                collection,
+            }}
+            article={article}
+        />
     </Row>
 )
 
@@ -105,10 +141,12 @@ then it eats them up
 */
 const RowWithTwoArticles = ({
     articles,
+    collection,
     ...rowProps
 }: {
-    articles: [FrontArticle, FrontArticle]
-} & RowPropTypes) => {
+    articles: [Article, Article]
+} & NavigationPropTypes &
+    RowPropTypes) => {
     const { appearance } = useArticleAppearance()
 
     /*
@@ -117,16 +155,26 @@ const RowWithTwoArticles = ({
     we fall back to 1 article
     */
     if (!articles[1])
-        return <RowWithArticle {...rowProps} article={articles[0]} />
+        return (
+            <RowWithArticle
+                {...rowProps}
+                collection={collection}
+                article={articles[0]}
+            />
+        )
     return (
         <Row {...rowProps}>
             <View style={styles.doubleRow}>
-                <SmallCard
+                <Card
                     style={[styles.card]}
-                    path={articles[0].path}
+                    path={{
+                        article: articles[0].key,
+                        collection,
+                    }}
                     article={articles[0]}
+                    size={rowProps.size}
                 />
-                <SmallCard
+                <Card
                     style={[
                         styles.card,
                         styles.rightCard,
@@ -134,8 +182,12 @@ const RowWithTwoArticles = ({
                             borderColor: appearance.backgrounds.borderColor,
                         },
                     ]}
-                    path={articles[1].path}
+                    path={{
+                        article: articles[1].key,
+                        collection,
+                    }}
                     article={articles[1]}
+                    size={rowProps.size}
                 />
             </View>
         </Row>

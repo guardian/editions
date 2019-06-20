@@ -1,6 +1,6 @@
 import React, { useContext, createContext } from 'react'
 import { useState, useEffect } from 'react'
-import { File, getFileList, downloadIssue } from '../helpers/files'
+import { File, getFileList, downloadIssue } from 'src/helpers/files'
 
 /*
 Downloads

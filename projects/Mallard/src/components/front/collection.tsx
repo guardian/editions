@@ -1,17 +1,15 @@
-import React, { useMemo, ReactNode } from 'react'
-import { StyleSheet, StyleProp, Animated, View } from 'react-native'
-import { Multiline } from '../multiline'
-import { metrics } from '../../theme/spacing'
+import React, { ReactNode } from 'react'
+import { StyleSheet, StyleProp, Animated } from 'react-native'
+import { metrics } from 'src/theme/spacing'
 
 import {
     WithArticleAppearance,
     useArticleAppearance,
     ArticleAppearance,
-} from '../../theme/appearance'
-import { SmallCard } from './card-group/card'
-import { color } from '../../theme/color'
-import { FrontArticle } from '../../common'
-import { RowWithArticle, RowWithTwoArticles } from './card-group/row'
+} from 'src/theme/appearance'
+import { color } from 'src/theme/color'
+import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
+import { Article, Collection as CollectionType } from 'src/common'
 
 const styles = StyleSheet.create({
     root: {
@@ -33,48 +31,59 @@ const styles = StyleSheet.create({
 })
 
 export interface PropTypes {
-    articles: FrontArticle[]
+    articles: Article[]
+    collection: CollectionType['key']
     translate: Animated.AnimatedInterpolation
 }
 
-const AnyStoryCardGroup = ({ articles, translate }: PropTypes) => {
+const AnyStoryCollection = ({ articles, collection, translate }: PropTypes) => {
     return (
         <>
             {articles.map((article, index) => (
                 <RowWithArticle
                     index={index}
                     key={index}
-                    isLastChild={index === articles.length}
+                    isLastChild={index === articles.length - 1}
                     translate={translate}
                     article={article}
+                    collection={collection}
+                    size={Size.row}
                 />
             ))}
         </>
     )
 }
 
-const ThreeStoryCardGroup = ({ articles, translate }: PropTypes) => {
+const ThreeStoryCollection = ({
+    articles,
+    collection,
+    translate,
+}: PropTypes) => {
     /*
     if something goes wrong and there's less 
     stuff than expected we fall back to using 
     a flexible container rather than crash
     */
-    if (articles.length < 3)
-        return <AnyStoryCardGroup {...{ articles, translate }} />
+    if (articles.length !== 3)
+        return <AnyStoryCollection {...{ articles, collection, translate }} />
 
     return (
         <>
-            <RowWithTwoArticles
-                index={0}
-                isLastChild={false}
-                translate={translate}
-                articles={[articles[0], articles[1]]}
-            />
             <RowWithArticle
                 index={0}
                 isLastChild={false}
                 translate={translate}
                 article={articles[2]}
+                size={Size.hero}
+                collection={collection}
+            />
+            <RowWithTwoArticles
+                index={1}
+                isLastChild={true}
+                translate={translate}
+                articles={[articles[0], articles[1]]}
+                size={Size.third}
+                collection={collection}
             />
         </>
     )
@@ -95,7 +104,7 @@ const Wrapper = ({
     )
 }
 
-const CardGroup = ({
+const Collection = ({
     appearance,
     style,
     ...props
@@ -105,12 +114,12 @@ const CardGroup = ({
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
-            <ThreeStoryCardGroup {...props} />
+            <ThreeStoryCollection {...props} />
         </Wrapper>
     </WithArticleAppearance>
 )
 
-CardGroup.defaultProps = {
+Collection.defaultProps = {
     stories: [],
 }
-export { CardGroup }
+export { Collection }

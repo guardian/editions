@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSettings } from './use-settings'
-import { useResponse, Response, Error } from './use-response'
+import { useResponse, Response, Error, withResponse } from './use-response'
 import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
@@ -53,7 +53,7 @@ const useJson = <T>(
                     onError(err)
                 }
             })
-    }, [path])
+    }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
     return response
 }
 
@@ -84,16 +84,23 @@ const useFetch = <T>(
         if (skip) return
         fetch(url)
             .then(res =>
-                res.json().then(res => {
-                    if (res && validator(res)) {
-                        naiveCache[url] = res
-                        onSuccess(res as T)
-                    } else {
+                res
+                    .json()
+                    .then(res => {
+                        if (res && validator(res)) {
+                            naiveCache[url] = res
+                            onSuccess(res as T)
+                        } else {
+                            onError({
+                                message: REQUEST_INVALID_RESPONSE_VALIDATION,
+                            })
+                        }
+                    })
+                    .catch(() => {
                         onError({
                             message: REQUEST_INVALID_RESPONSE_VALIDATION,
                         })
-                    }
-                }),
+                    }),
             )
             .catch((err: Error) => {
                 /*
@@ -104,23 +111,24 @@ const useFetch = <T>(
                     onError(err)
                 }
             })
-    }, [url, skip])
+    }, [url, skip]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return response
 }
 
 const usePaths = (
-    issue: Issue['name'],
+    issue: Issue['key'],
     path: string,
 ): { fs: string; url: string } => {
     const [{ apiUrl }] = useSettings()
-    const url = apiUrl + '/' + path
     const fs = issuesDir + '/' + issue + '/' + path + '.json'
+    const url = apiUrl + '/' + path
+
     return { url, fs }
 }
 
 export const useJsonOrEndpoint = <T>(
-    issue: Issue['name'],
+    issue: Issue['key'],
     path: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ) => {

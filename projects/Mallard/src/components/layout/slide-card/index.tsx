@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactNode } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
-import { metrics } from '../../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 
 /* 
 This is the swipey contraption that contains an article.
