@@ -15,7 +15,7 @@ import { Issue } from 'src/common'
 import { color as themeColor } from '../../theme/color'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
-import { ERR_404_REMOTE } from 'src/helpers/words'
+import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -80,7 +80,9 @@ const Page = ({
     return (
         <View style={{ width }}>
             {collectionResponse({
-                error: ({ message }) => <FlexErrorMessage title={message} />,
+                error: ({ message }) => (
+                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                ),
                 pending: () => (
                     <FlexCenter>
                         <Spinner />
