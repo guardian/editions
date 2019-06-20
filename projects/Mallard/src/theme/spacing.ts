@@ -8,6 +8,7 @@ export const metrics = {
     horizontal: spacing[3],
     vertical: spacing[3],
     headerHeight,
+    frontCardHeight: 540,
     slideCardSpacing:
         Platform.OS === 'ios'
             ? spacing[5] * 2

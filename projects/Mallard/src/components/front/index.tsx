@@ -117,13 +117,12 @@ const Wrapper: FunctionComponent<{
     scrubber: ReactNode
     children: ReactNode
 }> = ({ children, scrubber }) => {
-    const height = Dimensions.get('window').height - 300
     return (
         <View
             style={{
-                height,
-                maxHeight: height,
-                minHeight: height,
+                height: metrics.frontCardHeight,
+                maxHeight: metrics.frontCardHeight,
+                minHeight: metrics.frontCardHeight,
             }}
         >
             <View
