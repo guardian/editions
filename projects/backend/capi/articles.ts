@@ -1,10 +1,6 @@
 import { attempt, hasFailed, hasSucceeded } from '../utils/try'
-import {
-    SearchResponseCodec,
-    ItemResponseCodec,
-    ContentType,
-} from '@guardian/capi-ts'
-import { Article, BlockElement } from '../common'
+import { SearchResponseCodec, ContentType } from '@guardian/capi-ts'
+import { BlockElement } from '../common'
 import {
     BufferedTransport,
     CompactProtocol,
@@ -31,56 +27,6 @@ const url = (paths: string[]) =>
     )}format=thrift&api-key=${
         process.env.CAPI_KEY
     }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift`
-
-export const getArticles = async (
-    paths: string[],
-): Promise<{ [key: string]: CAPIArticle }> => {
-    const endpoint = url(paths)
-    if (endpoint.length > 1000) {
-        console.warn(
-            `Unusually long CAPI request of ${endpoint.length}, splitting`,
-            paths,
-        )
-        const midpoint = ~~(paths.length / 2) //Coerece into int, even though apparently you can slice on a float
-        const firstRequest = attempt(getArticles(paths.slice(0, midpoint)))
-        const last = await attempt(getArticles(paths.slice(midpoint)))
-        const first = await firstRequest
-        if (hasFailed(first)) {
-            console.error(first.error)
-            throw new Error('Error when spliting CAPI request (first half)')
-        }
-        if (hasFailed(last)) {
-            console.error(last.error)
-            throw new Error('Error when spliting CAPI request (second half)')
-        }
-        const firstArray = Object.entries(first)
-        const lastArray = Object.entries(last)
-        return fromEntries(firstArray.concat(lastArray))
-    }
-
-    const resp = await attempt(fetch(endpoint))
-    if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
-    const buffer = await resp.arrayBuffer()
-
-    const receiver: BufferedTransport = BufferedTransport.receiver(
-        Buffer.from(buffer),
-    )
-    const input = new CompactProtocol(receiver)
-    const data = SearchResponseCodec.decode(input)
-    const results: IContent[] = data.results
-    const articlePromises = await Promise.all(
-        results.map(result => attempt(parseArticleResult(result))),
-    )
-
-    //If we fail to get an article in a collection we just ignore it and move on.
-    articlePromises.forEach(attempt => {
-        if (hasFailed(attempt)) {
-            console.log('failure when parsing', attempt.error)
-        }
-    })
-    const articleEntries = articlePromises.filter(hasSucceeded)
-    return fromEntries(articleEntries)
-}
 
 const parseArticleResult = async (
     result: IContent,
@@ -136,4 +82,54 @@ const parseArticleResult = async (
             elements,
         },
     ]
+}
+
+export const getArticles = async (
+    paths: string[],
+): Promise<{ [key: string]: CAPIArticle }> => {
+    const endpoint = url(paths)
+    if (endpoint.length > 1000) {
+        console.warn(
+            `Unusually long CAPI request of ${endpoint.length}, splitting`,
+            paths,
+        )
+        const midpoint = ~~(paths.length / 2) //Coerece into int, even though apparently you can slice on a float
+        const firstRequest = attempt(getArticles(paths.slice(0, midpoint)))
+        const last = await attempt(getArticles(paths.slice(midpoint)))
+        const first = await firstRequest
+        if (hasFailed(first)) {
+            console.error(first.error)
+            throw new Error('Error when spliting CAPI request (first half)')
+        }
+        if (hasFailed(last)) {
+            console.error(last.error)
+            throw new Error('Error when spliting CAPI request (second half)')
+        }
+        const firstArray = Object.entries(first)
+        const lastArray = Object.entries(last)
+        return fromEntries(firstArray.concat(lastArray))
+    }
+
+    const resp = await attempt(fetch(endpoint))
+    if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
+    const buffer = await resp.arrayBuffer()
+
+    const receiver: BufferedTransport = BufferedTransport.receiver(
+        Buffer.from(buffer),
+    )
+    const input = new CompactProtocol(receiver)
+    const data = SearchResponseCodec.decode(input)
+    const results: IContent[] = data.results
+    const articlePromises = await Promise.all(
+        results.map(result => attempt(parseArticleResult(result))),
+    )
+
+    //If we fail to get an article in a collection we just ignore it and move on.
+    articlePromises.forEach(attempt => {
+        if (hasFailed(attempt)) {
+            console.log('failure when parsing', attempt.error)
+        }
+    })
+    const articleEntries = articlePromises.filter(hasSucceeded)
+    return fromEntries(articleEntries)
 }

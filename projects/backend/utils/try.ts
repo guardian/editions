@@ -1,6 +1,6 @@
-export type Failure = {
+export interface Failure {
     __failure: true
-    error: Error | any
+    error: Error | {}
 }
 
 export type Attempt<T> = Failure | T

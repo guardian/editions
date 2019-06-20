@@ -1,4 +1,4 @@
-import AWS, {
+import {
     S3,
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
@@ -18,7 +18,7 @@ const s3 = new S3({
 
 const stage = process.env.stage || 'CODE'
 
-type S3Response = {
+interface S3Response {
     status: number
     ok: true
     text: () => Promise<string>
