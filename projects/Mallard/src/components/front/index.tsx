@@ -165,7 +165,7 @@ export const Front: FunctionComponent<{
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
     const frontsResponse = useFrontsResponse(issue, front)
-
+    const [{ hasLiveDevMenu }] = useSettings()
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
@@ -177,8 +177,8 @@ export const Front: FunctionComponent<{
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <FlexErrorMessage
-                    title={'Oh no! something failed'}
-                    message={err.message}
+                    title={GENERIC_ERROR}
+                    message={hasLiveDevMenu ? err.message : undefined}
                 />
             </Wrapper>
         ),
