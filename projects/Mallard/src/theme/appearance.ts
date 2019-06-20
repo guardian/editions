@@ -120,11 +120,9 @@ export const articleAppearances: {
         backgrounds: {},
         cardBackgrounds: {},
         contrastCardBackgrounds: {},
-        text: {
-            color: color.palette.news.main,
-        },
+        text: {},
         headline: {
-            color: color.text,
+            color: color.dimText,
         },
         kicker: {},
         byline: {},

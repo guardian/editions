@@ -154,7 +154,7 @@ const SmallCard = ({ style, article, path }: PropTypes) => {
 const Card = ({ size, ...props }: { size: Size } & PropTypes) => {
     /* this chooses the card type for us based on ummm MAGIC? */
     return size >= Size.hero ? (
-        <CoverCard {...props} />
+        <ImageCard {...props} />
     ) : size >= Size.half ? (
         <ImageCard {...props} />
     ) : (
