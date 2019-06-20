@@ -10,6 +10,7 @@ import {
 import { color } from 'src/theme/color'
 import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
 import { Article, Collection as CollectionType } from 'src/common'
+import { Issue } from '../../../../backend/common'
 
 const styles = StyleSheet.create({
     root: {
@@ -32,11 +33,17 @@ const styles = StyleSheet.create({
 
 export interface PropTypes {
     articles: Article[]
-    collection: CollectionType['key']
     translate: Animated.AnimatedInterpolation
+    issue: Issue['key']
+    collection: CollectionType['key']
 }
 
-const AnyStoryCollection = ({ articles, collection, translate }: PropTypes) => {
+const AnyStoryCollection = ({
+    articles,
+    collection,
+    translate,
+    issue,
+}: PropTypes) => {
     return (
         <>
             {articles.map((article, index) => (
@@ -44,9 +51,8 @@ const AnyStoryCollection = ({ articles, collection, translate }: PropTypes) => {
                     index={index}
                     key={index}
                     isLastChild={index === articles.length - 1}
-                    translate={translate}
                     article={article}
-                    collection={collection}
+                    {...{ collection, issue, translate }}
                     size={Size.row}
                 />
             ))}
@@ -58,6 +64,7 @@ const ThreeStoryCollection = ({
     articles,
     collection,
     translate,
+    issue,
 }: PropTypes) => {
     /*
     if something goes wrong and there's less 
@@ -65,17 +72,20 @@ const ThreeStoryCollection = ({
     a flexible container rather than crash
     */
     if (articles.length !== 3)
-        return <AnyStoryCollection {...{ articles, collection, translate }} />
+        return (
+            <AnyStoryCollection
+                {...{ articles, collection, translate, issue }}
+            />
+        )
 
     return (
         <>
             <RowWithArticle
                 index={0}
                 isLastChild={false}
-                translate={translate}
                 article={articles[2]}
                 size={Size.hero}
-                collection={collection}
+                {...{ collection, issue, translate }}
             />
             <RowWithTwoArticles
                 index={1}
@@ -83,7 +93,7 @@ const ThreeStoryCollection = ({
                 translate={translate}
                 articles={[articles[0], articles[1]]}
                 size={Size.third}
-                collection={collection}
+                {...{ collection, issue, translate }}
             />
         </>
     )

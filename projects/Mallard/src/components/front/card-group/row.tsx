@@ -5,7 +5,7 @@ import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from '../collection'
-import { Article, Collection } from 'src/common'
+import { Article, Collection, Issue } from 'src/common'
 import { Card } from './../card-group/card'
 
 export enum Size {
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
 
 interface NavigationPropTypes {
     collection: Collection['key']
+    issue: Issue['key']
 }
 interface RowPropTypes {
     translate: CollectionPropTypes['translate']
@@ -115,6 +116,7 @@ shows 1 article
 const RowWithArticle = ({
     article,
     collection,
+    issue,
     ...rowProps
 }: {
     article: Article
@@ -127,6 +129,7 @@ const RowWithArticle = ({
             path={{
                 article: article.key,
                 collection,
+                issue,
             }}
             article={article}
         />
@@ -142,6 +145,7 @@ then it eats them up
 const RowWithTwoArticles = ({
     articles,
     collection,
+    issue,
     ...rowProps
 }: {
     articles: [Article, Article]
@@ -170,6 +174,7 @@ const RowWithTwoArticles = ({
                     path={{
                         article: articles[0].key,
                         collection,
+                        issue,
                     }}
                     article={articles[0]}
                     size={rowProps.size}
@@ -185,6 +190,7 @@ const RowWithTwoArticles = ({
                     path={{
                         article: articles[1].key,
                         collection,
+                        issue,
                     }}
                     article={articles[1]}
                     size={rowProps.size}

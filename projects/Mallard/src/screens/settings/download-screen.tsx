@@ -13,6 +13,7 @@ import {
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
+    getJson,
 } from 'src/helpers/files'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
@@ -64,7 +65,7 @@ export const DownloadScreen = () => {
             key: file.filename,
             title:
                 file.type === 'issue'
-                    ? `🗞 ${file.issue}`
+                    ? `🗞 ${file.issue.name}`
                     : `📦 ${file.filename}`,
             explainer: `${displayFileSize(file.size)} – ${file.type}`,
             data: file,
@@ -149,9 +150,9 @@ export const DownloadScreen = () => {
                 <ListHeading>On device</ListHeading>
                 <List
                     data={fileList}
-                    onPress={({ type, issue }) => {
+                    onPress={({ type, id, path }) => {
                         if (type === 'archive') {
-                            unzipIssue(issue)
+                            unzipIssue(id)
                                 .then(async () => {
                                     refreshIssues()
                                 })
@@ -159,6 +160,10 @@ export const DownloadScreen = () => {
                                     Alert.alert(JSON.stringify(error))
                                     refreshIssues()
                                 })
+                        } else if (type === 'json') {
+                            getJson(path).then(data => {
+                                Alert.alert(JSON.stringify(data))
+                            })
                         } else {
                             Alert.alert('oof')
                         }

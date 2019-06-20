@@ -12,7 +12,11 @@ const ErrorMessage = ({ icon, title, message }: PropTypes) => (
     <>
         {!!icon && <Text style={{ fontSize: 40 }}>{icon}</Text>}
         <UiBodyCopy weight="bold">{title}</UiBodyCopy>
-        {!!message && <UiExplainerCopy>{message}</UiExplainerCopy>}
+        {!!message && (
+            <UiExplainerCopy style={{ textAlign: 'center' }}>
+                {message}
+            </UiExplainerCopy>
+        )}
     </>
 )
 

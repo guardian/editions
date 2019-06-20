@@ -1,6 +1,6 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
 import { ScrollView, View, Dimensions, Animated } from 'react-native'
-import { useEndpointResponse } from 'src/hooks/use-fetch'
+import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
 import { Collection } from './collection'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -11,21 +11,30 @@ import {
 } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
+import { Issue } from 'src/common'
+import { color as themeColor } from '../../theme/color'
+import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
-import { ERR_404_REMOTE } from 'src/helpers/words'
+import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const useFrontsResponse = (front: string) =>
-    useEndpointResponse<FrontType>(
-        `front/${front}`,
-        res => res.collections != null,
-    )
+const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
+    const resp = useJsonOrEndpoint<FrontType>(issue, `front/${front}`, {
+        validator: res => res.collections != null,
+    })
+    return withResponse<FrontType>(resp)
+}
 
-const useCollectionResponse = (collection: string) =>
-    useEndpointResponse<CollectionType>(`collection/${collection}`)
+const useCollectionResponse = (
+    issue: Issue['key'],
+    collection: Collection['key'],
+) =>
+    withResponse<CollectionType>(
+        useJsonOrEndpoint<CollectionType>(issue, `collection/${collection}`),
+    )
 
 /*
 Map the position of the tap on the screen to
@@ -53,6 +62,7 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
 
 const Page = ({
     collection,
+    issue,
     appearance,
     index,
     scrollX,
@@ -61,27 +71,29 @@ const Page = ({
     index: number
     scrollX: Animated.Value
     collection: CollectionType['key']
+    issue: Issue['key']
 }) => {
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
-    const collectionResponse = useCollectionResponse(collection)
+    const collectionResponse = useCollectionResponse(issue, collection)
 
     return (
         <View style={{ width }}>
             {collectionResponse({
-                error: ({ message }) => <FlexErrorMessage title={message} />,
+                error: ({ message }) => (
+                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                ),
                 pending: () => (
                     <FlexCenter>
                         <Spinner />
                     </FlexCenter>
                 ),
-                success: collection =>
-                    collection.articles ? (
+                success: collectionData =>
+                    collectionData.articles ? (
                         <Collection
-                            appearance={appearance}
-                            articles={Object.values(collection.articles)}
+                            articles={Object.values(collectionData.articles)}
                             translate={translateX}
-                            collection={collection.key}
+                            {...{ issue, collection, appearance }}
                             style={[
                                 {
                                     flex: 1,
@@ -130,11 +142,12 @@ const Wrapper: FunctionComponent<{
 
 export const Front: FunctionComponent<{
     front: string
+    issue: Issue['key']
     viewIsTransitioning: boolean
-}> = ({ front, viewIsTransitioning }) => {
+}> = ({ front, issue, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
-    const frontsResponse = useFrontsResponse(front)
+    const frontsResponse = useFrontsResponse(issue, front)
 
     return frontsResponse({
         pending: () => (
@@ -153,7 +166,7 @@ export const Front: FunctionComponent<{
             </Wrapper>
         ),
         success: frontData => {
-            const color = 'green'
+            const color = themeColor.palette.news.bright
             const pages = Object.keys(frontData.collections).length
             const collections = viewIsTransitioning
                 ? Object.entries(frontData.collections).slice(0, 1)
@@ -224,8 +237,9 @@ export const Front: FunctionComponent<{
                     >
                         {collections.map(([id, collection], i) => (
                             <Page
+                                issue={issue}
                                 index={i}
-                                appearance={'sport'}
+                                appearance={'news'}
                                 key={id}
                                 {...{ collection, scrollX }}
                             />

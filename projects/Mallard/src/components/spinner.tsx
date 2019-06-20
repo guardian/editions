@@ -1,14 +1,10 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { Text } from 'react-native'
 
 const Spinner = () => (
-    <Image
-        accessibilityLabel={'Loading content'}
-        style={{ width: 90, height: 90 }}
-        source={{
-            uri: 'https://media.giphy.com/media/mTs11L9uuyGiI/giphy.gif',
-        }}
-    />
+    <Text accessibilityLabel={'Loading content'} style={{ fontSize: 40 }}>
+        ⏰
+    </Text>
 )
 
 export { Spinner }

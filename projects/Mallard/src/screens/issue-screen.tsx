@@ -7,19 +7,27 @@ import { Front } from 'src/components/front'
 import { renderIssueDate } from 'src/helpers/issues'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
-import { useEndpointResponse } from 'src/hooks/use-fetch'
-import { Spinner } from 'src/components/spinner'
+
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
-import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
+import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
+import { withResponse } from 'src/hooks/use-response'
+import { Spinner } from 'src/components/spinner'
 
 const styles = StyleSheet.create({
     container,
-    contentContainer: {},
+    contentContainer: {
+        flexGrow: 1,
+    },
 })
 
 const useIssueResponse = (issue: Issue['key']) =>
-    useEndpointResponse<Issue>(`issue/${issue}`, res => res.fronts != null)
+    withResponse<Issue>(
+        useJsonOrEndpoint<Issue>(issue, `issue`, {
+            validator: res => res.fronts != null,
+        }),
+    )
 export interface PathToIssue {
     issue: Issue['key']
 }
@@ -55,7 +63,9 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                 }}
             />
             {issueResponse({
-                error: ({ message }) => <FlexErrorMessage title={message} />,
+                error: ({ message }) => (
+                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                ),
                 pending: () => (
                     <FlexCenter>
                         <Spinner />
@@ -64,17 +74,26 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                 success: issue => (
                     <>
                         <IssueHeader issue={issue} />
-                        {issue.fronts.map(front => (
+                        {(viewIsTransitioning
+                            ? issue.fronts.slice(0, 2)
+                            : issue.fronts
+                        ).map(front => (
                             <Front
+                                issue={issue.key}
                                 key={front}
                                 {...{ viewIsTransitioning, front }}
                             />
                         ))}
                         <Front
+                            issue={issue.key}
                             {...{ viewIsTransitioning }}
                             front="best-awards"
                         />
-                        <Front {...{ viewIsTransitioning }} front="cities" />
+                        <Front
+                            issue={issue.key}
+                            {...{ viewIsTransitioning }}
+                            front="cities"
+                        />
                     </>
                 ),
             })}

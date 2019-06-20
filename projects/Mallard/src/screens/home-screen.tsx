@@ -5,7 +5,6 @@ import {
     Button,
     StyleSheet,
     View,
-    Alert,
     Platform,
 } from 'react-native'
 import { List, ListHeading } from 'src/components/lists/list'
@@ -87,29 +86,35 @@ export const HomeScreen = ({
                         <ListHeading>Issues on device</ListHeading>
                         <List
                             data={files
-                                .filter(({ type }) => type !== 'other')
+                                .filter(
+                                    ({ type }) =>
+                                        type === 'archive' || type === 'issue',
+                                )
                                 .map(file => ({
-                                    key: file.issue,
+                                    key: file.id,
                                     title:
-                                        file.type === 'archive'
-                                            ? 'Compressed issue'
-                                            : file.issue,
+                                        file.type === 'issue'
+                                            ? file.issue.name
+                                            : 'Compressed issue',
                                     explainer:
-                                        file.type === 'archive'
-                                            ? 'Tap to unarchive'
-                                            : undefined,
+                                        file.type === 'issue'
+                                            ? `From fs/${file.id}`
+                                            : 'Tap to unarchive',
                                     data: file,
                                 }))}
                             onPress={file => {
                                 if (file.type === 'archive') {
-                                    unzipIssue(file.issue).then(async () => {
+                                    unzipIssue(file.id).then(async () => {
                                         refreshIssues()
-                                        Alert.alert(`Unzipped ${file.issue}`)
+                                        navigation.navigate('Issue', {
+                                            path: file.id,
+                                        })
                                     })
-                                } else {
-                                    Alert.alert(
-                                        'Hold there, this is not supported yet',
-                                    )
+                                } else if (file.type === 'issue') {
+                                    navigation.navigate('Issue', {
+                                        path: { issue: file.issue.key },
+                                        issue: file.issue,
+                                    })
                                 }
                             }}
                         />
