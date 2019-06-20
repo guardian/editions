@@ -28,7 +28,7 @@ const useStoredSettings = (): SettingsFromContext => {
                 }))
             })
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
     return [state, setSetting]
 }
 

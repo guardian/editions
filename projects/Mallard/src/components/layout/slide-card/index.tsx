@@ -40,7 +40,7 @@ export const SlideCard = ({
                 onDismiss()
             }
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <Animated.View
             style={[

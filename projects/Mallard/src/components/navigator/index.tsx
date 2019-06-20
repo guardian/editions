@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, View, PanResponder } from 'react-native'
