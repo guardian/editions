@@ -164,12 +164,14 @@ export const ArticleScreen = ({
 
     const path = navigation.getParam('path') as PathToArticle | undefined
 
-    if (!path || !path.article || !path.collection) {
+    if (!path || !path.article || !path.collection || !path.issue) {
         return (
-            <FlexErrorMessage
-                title={ERR_404_MISSING_PROPS}
-                style={{ backgroundColor: color.background }}
-            />
+            <SlideCard onDismiss={() => navigation.goBack()}>
+                <FlexErrorMessage
+                    title={ERR_404_MISSING_PROPS}
+                    style={{ backgroundColor: color.background }}
+                />
+            </SlideCard>
         )
     }
     return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
