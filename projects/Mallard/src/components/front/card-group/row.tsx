@@ -162,7 +162,7 @@ const RowWithTwoArticles = ({
         return (
             <RowWithArticle
                 {...rowProps}
-                collection={collection}
+                {...{ issue, collection }}
                 article={articles[0]}
             />
         )
