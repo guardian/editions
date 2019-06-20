@@ -113,7 +113,7 @@ export const HomeScreen = ({
                                     })
                                 } else if (file.type === 'issue') {
                                     navigation.navigate('Issue', {
-                                        path: file.issue.name,
+                                        path: { issue: file.issue.name },
                                         issue: file.issue,
                                     })
                                 }
