@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
         elevation: 2,
-        borderRadius: 2,
         margin: metrics.frontsPageSides,
         marginVertical: metrics.vertical,
     },
