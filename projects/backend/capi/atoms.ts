@@ -1,8 +1,4 @@
-import {
-    Lambda,
-    ChainableTemporaryCredentials,
-    SharedIniFileCredentials,
-} from 'aws-sdk'
+import { Lambda, SharedIniFileCredentials } from 'aws-sdk'
 import { awsToString } from '../parser'
 
 const creds = process.env.arn
@@ -15,7 +11,7 @@ const lambda = new Lambda({
     region: 'eu-west-1',
     ...creds,
 })
-const stage = process.env.stage || 'CODE'
+
 export const renderAtom = async (
     atomType: string,
     atomId: string,

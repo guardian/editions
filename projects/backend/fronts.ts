@@ -71,7 +71,6 @@ export const getFront = async (
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
     if (!(id in config.fronts)) throw new Error('Front not found')
     const front = config.fronts[id]
-    const collectionIds = front.collections
 
     return { ...front, key: id }
 }
@@ -124,13 +123,13 @@ interface ArticleFragmentRootMeta {
     snapType?: string
     snapCss?: string
     imageSlideshowReplace?: boolean
-    slideshow?: Array<{
+    slideshow?: {
         src?: string
         thumb?: string
         width?: string
         height?: string
         origin?: string
-    }>
+    }[]
 }
 
 interface NestedArticleFragmentRootFields {
