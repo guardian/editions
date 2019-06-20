@@ -55,7 +55,6 @@ const AnyStoryCollection = ({
                 <RowWithOneArticle
                     index={index}
                     key={index}
-                    isLastChild={index === articles.length - 1}
                     article={article}
                     {...{ collection, issue, translate }}
                     size={RowSize.row}
@@ -81,7 +80,6 @@ const SingleStoryCollection = ({
         <>
             <RowWithOneArticle
                 index={0}
-                isLastChild={true}
                 article={articles[0]}
                 size={RowSize.superhero}
                 {...{ collection, issue, translate }}
@@ -112,14 +110,12 @@ const ThreeStoryCollection = ({
         <>
             <RowWithOneArticle
                 index={0}
-                isLastChild={false}
                 article={articles[2]}
                 size={RowSize.hero}
                 {...{ collection, issue, translate }}
             />
             <RowWithTwoArticles
                 index={1}
-                isLastChild={true}
                 translate={translate}
                 articles={[articles[0], articles[1]]}
                 size={RowSize.third}

@@ -38,7 +38,6 @@ interface NavigationPropTypes {
 }
 interface RowPropTypes {
     translate: CollectionPropTypes['translate']
-    isLastChild: boolean
     index: number
     size: RowSize
 }
@@ -49,7 +48,6 @@ this is the low level row that actually takes in children. do not export
 const Row = ({
     children,
     translate,
-    isLastChild,
     index,
     size,
 }: {
@@ -71,21 +69,20 @@ const Row = ({
                                     0,
                                     metrics.horizontal * 1.5,
                                 ],
-                                outputRange: [60 * index, 0, -60 * index],
+                                outputRange: [10 * index, 0, -10 * index],
                             }),
                         },
                     ],
                 },
             ]}
         >
-            {children}
-            {isLastChild ? null : (
+            {index !== 0 ? (
                 <Multiline
                     color={appearance.backgrounds.borderColor}
                     count={2}
-                    style={{ flex: 0 }}
                 />
-            )}
+            ) : null}
+            {children}
         </Animated.View>
     )
 }

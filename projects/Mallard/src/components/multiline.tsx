@@ -11,10 +11,12 @@ const Multiline = ({
     color,
     count,
     style,
+    width,
 }: {
     color: string
     count: number
     style?: StyleProp<{}>
+    width?: string | number
 }) => {
     const lines = []
     for (let i = 0; i < count; i++) {
@@ -29,7 +31,7 @@ const Multiline = ({
         )
     }
     return (
-        <Svg {...style} width="100%" height={pixel * count * gap} fill="none">
+        <Svg {...style} width={width} height={pixel * count * gap} fill="none">
             {lines}
         </Svg>
     )
@@ -37,6 +39,7 @@ const Multiline = ({
 Multiline.defaultProps = {
     color: themeColor.text,
     count: 4,
+    width: '100%',
 }
 
 export { Multiline }
