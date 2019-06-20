@@ -209,7 +209,8 @@ export const Front: FunctionComponent<{
                                 inputRange: [
                                     0,
                                     Dimensions.get('window').width *
-                                        (pages - 1),
+                                        (pages - 1) +
+                                        0.001,
                                 ],
                                 outputRange: [0, 1],
                             })}
