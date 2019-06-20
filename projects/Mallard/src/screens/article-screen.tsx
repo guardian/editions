@@ -17,15 +17,17 @@ import { PathToArticle } from './article-screen'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { Issue } from '../../../backend/common'
 
 export interface PathToArticle {
     collection: Collection['key']
     article: ArticleType['key']
+    issue: Issue['key']
 }
 
-const useArticleResponse = ({ collection, article }: PathToArticle) => {
+const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
     const resp = useJsonOrEndpoint<ArticleType>(
-        'n/a',
+        issue,
         `collection/${collection}`,
     )
     if (resp.state === 'success') {

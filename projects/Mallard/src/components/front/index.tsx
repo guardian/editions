@@ -21,7 +21,7 @@ interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const useFrontsResponse = (issue: string, front: string) => {
+const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
     const resp = useJsonOrEndpoint<FrontType>(issue, `front/${front}`, {
         validator: res => res.collections != null,
     })
@@ -32,7 +32,7 @@ const useCollectionResponse = (
     issue: Issue['key'],
     collection: Collection['key'],
 ) =>
-    withResponse(
+    withResponse<CollectionType>(
         useJsonOrEndpoint<CollectionType>(issue, `collection/${collection}`),
     )
 
@@ -62,6 +62,7 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
 
 const Page = ({
     collection,
+    issue,
     appearance,
     index,
     scrollX,
@@ -70,10 +71,11 @@ const Page = ({
     index: number
     scrollX: Animated.Value
     collection: CollectionType['key']
+    issue: Issue['key']
 }) => {
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
-    const collectionResponse = useCollectionResponse('n/a', collection)
+    const collectionResponse = useCollectionResponse(issue, collection)
 
     return (
         <View style={{ width }}>
@@ -84,13 +86,12 @@ const Page = ({
                         <Spinner />
                     </FlexCenter>
                 ),
-                success: collection =>
-                    collection.articles ? (
+                success: collectionData =>
+                    collectionData.articles ? (
                         <Collection
-                            appearance={appearance}
-                            articles={Object.values(collection.articles)}
+                            articles={Object.values(collectionData.articles)}
                             translate={translateX}
-                            collection={collection.key}
+                            {...{ issue, collection, appearance }}
                             style={[
                                 {
                                     flex: 1,
@@ -234,6 +235,7 @@ export const Front: FunctionComponent<{
                     >
                         {collections.map(([id, collection], i) => (
                             <Page
+                                issue={issue}
                                 index={i}
                                 appearance={'sport'}
                                 key={id}
