@@ -12,6 +12,7 @@ import { RowWithOneArticle, RowWithTwoArticles } from './row'
 import { Article, Collection as CollectionType } from 'src/common'
 import { Issue } from '../../../../../backend/common'
 import { RowSize, PageAppearance } from '../helpers'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 
 const styles = StyleSheet.create({
     root: {
@@ -45,6 +46,9 @@ const AnyStoryCollection = ({
     translate,
     issue,
 }: PropTypes) => {
+    if (!articles.length) {
+        return <FlexErrorMessage icon="🐶" title="bark! im empty" />
+    }
     return (
         <>
             {articles.map((article, index) => (

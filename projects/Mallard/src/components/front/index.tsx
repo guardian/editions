@@ -23,6 +23,7 @@ import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
 import { PageAppearance } from './helpers'
+import { useSettings } from 'src/hooks/use-settings'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -87,12 +88,15 @@ const Page = ({
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
     const collectionResponse = useCollectionResponse(issue, collection)
-
+    const [{ hasLiveDevMenu }] = useSettings()
     return (
         <View style={{ width }}>
             {collectionResponse({
                 error: ({ message }) => (
-                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                    <FlexErrorMessage
+                        title={GENERIC_ERROR}
+                        message={hasLiveDevMenu ? message : undefined}
+                    />
                 ),
                 pending: () => (
                     <FlexCenter>

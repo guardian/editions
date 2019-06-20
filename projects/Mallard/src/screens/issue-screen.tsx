@@ -14,6 +14,7 @@ import { FlexCenter } from 'src/components/layout/flex-center'
 import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
+import { useSettings } from 'src/hooks/use-settings'
 
 const styles = StyleSheet.create({
     container,
@@ -52,6 +53,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+    const [{ hasLiveDevMenu }] = useSettings()
     return (
         <ScrollView
             style={styles.container}
@@ -64,7 +66,10 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
             />
             {issueResponse({
                 error: ({ message }) => (
-                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                    <FlexErrorMessage
+                        title={GENERIC_ERROR}
+                        message={hasLiveDevMenu ? message : undefined}
+                    />
                 ),
                 pending: () => (
                     <FlexCenter>
