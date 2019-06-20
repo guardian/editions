@@ -46,6 +46,11 @@ react in the background
 let fileListRawMemo = ''
 let fileListMemo: File[] = []
 
+export const getJson = (path: string) =>
+    RNFetchBlob.fs.readFile(path, 'utf8').then(d => {
+        return JSON.parse(d)
+    })
+
 const makeFile = async (filename: string): Promise<File> => {
     const path = issuesDir + '/' + filename
     const { size: fsSize, type: fsType } = await RNFetchBlob.fs.stat(path)
@@ -62,26 +67,35 @@ const makeFile = async (filename: string): Promise<File> => {
     const id = filename.split('.')[0]
     const size = parseInt(fsSize)
 
-    return type === 'issue'
-        ? {
-              filename,
-              path,
-              id,
-              size,
-              type,
-              issue: {
-                  name: filename,
-                  date: new Date(parseInt(filename.split('-')[0])).getTime(),
-                  fronts: [],
-              },
-          }
-        : {
-              filename,
-              path,
-              id,
-              size,
-              type,
-          }
+    if (type === 'issue') {
+        try {
+            const issue = await getJson(path + '/issue')
+            return {
+                filename,
+                path,
+                id,
+                size,
+                type,
+                issue,
+            }
+        } catch {
+            return {
+                filename,
+                path,
+                id,
+                size,
+                type: 'other',
+            }
+        }
+    }
+
+    return {
+        filename,
+        path,
+        id,
+        size,
+        type,
+    }
 }
 
 export const getFileList = async (): Promise<File[]> => {
@@ -143,11 +157,6 @@ export const unzipIssue = (issue: File['id']) => {
         RNFetchBlob.fs.unlink(zipFilePath),
     )
 }
-
-export const getJson = (path: string) =>
-    RNFetchBlob.fs.readFile(path, 'utf8').then(d => {
-        return JSON.parse(d)
-    })
 
 /*
 Cheeky size helper

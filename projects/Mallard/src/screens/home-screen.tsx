@@ -94,8 +94,7 @@ export const HomeScreen = ({
                                     key: file.id,
                                     title:
                                         file.type === 'issue'
-                                            ? renderIssueDate(file.issue.date)
-                                                  .date
+                                            ? file.issue.name
                                             : 'Compressed issue',
                                     explainer:
                                         file.type === 'issue'
@@ -113,7 +112,7 @@ export const HomeScreen = ({
                                     })
                                 } else if (file.type === 'issue') {
                                     navigation.navigate('Issue', {
-                                        path: { issue: file.issue.name },
+                                        path: { issue: file.issue.key },
                                         issue: file.issue,
                                     })
                                 }

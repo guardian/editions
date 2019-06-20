@@ -121,7 +121,7 @@ const usePaths = (
     path: string,
 ): { fs: string; url: string } => {
     const [{ apiUrl }] = useSettings()
-    const fs = issuesDir + '/' + issue + '/' + path + '.json'
+    const fs = issuesDir + '/' + issue + '/' + path
     const url = apiUrl + '/' + path
 
     return { url, fs }
@@ -135,7 +135,7 @@ export const useJsonOrEndpoint = <T>(
     const { fs, url } = usePaths(issue, path)
     const isIssueOnDevice =
         useFileList()[0].find(
-            file => fileIsIssue(file) && file.issue.name === issue,
+            file => fileIsIssue(file) && file.issue.key === issue,
         ) !== undefined
 
     const responses = [

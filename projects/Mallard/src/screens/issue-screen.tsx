@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 
 const useIssueResponse = (issue: Issue['key']) =>
     withResponse<Issue>(
-        useJsonOrEndpoint<Issue>(issue, `issue/${issue}`, {
+        useJsonOrEndpoint<Issue>(issue, `issue`, {
             validator: res => res.fronts != null,
         }),
     )
