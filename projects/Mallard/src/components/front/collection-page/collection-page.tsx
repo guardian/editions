@@ -8,10 +8,10 @@ import {
     ArticleAppearance,
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { RowWithOneArticle, RowWithTwoArticles } from './card-group/row'
+import { RowWithOneArticle, RowWithTwoArticles } from './row'
 import { Article, Collection as CollectionType } from 'src/common'
-import { Issue } from '../../../../backend/common'
-import { RowSize } from './helpers'
+import { Issue } from '../../../../../backend/common'
+import { RowSize, PageAppearance } from '../helpers'
 
 const styles = StyleSheet.create({
     root: {
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 2,
         borderRadius: 2,
-        margin: metrics.horizontal,
+        margin: metrics.frontsPageSides,
         marginVertical: metrics.vertical,
     },
 })
@@ -140,15 +140,6 @@ const Wrapper = ({
     )
 }
 
-export enum PageAppearance {
-    superhero,
-    two,
-    three,
-    four,
-    five,
-    six,
-}
-
 const CollectionPage = ({
     appearance,
     pageAppearance,
@@ -161,10 +152,12 @@ const CollectionPage = ({
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
-            {pageAppearance === PageAppearance.superhero ? (
+            {pageAppearance >= PageAppearance.superhero ? (
                 <SingleStoryCollection {...props} />
-            ) : (
+            ) : pageAppearance >= PageAppearance.three ? (
                 <ThreeStoryCollection {...props} />
+            ) : (
+                <AnyStoryCollection {...props} />
             )}
         </Wrapper>
     </WithArticleAppearance>

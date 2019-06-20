@@ -193,8 +193,6 @@ const Card = ({ size, ...props }: { size: RowSize } & PropTypes) => {
         <SuperHeroImageCard {...props} />
     ) : size >= RowSize.hero ? (
         <ImageCard {...props} />
-    ) : size >= RowSize.half ? (
-        <ImageCard {...props} />
     ) : (
         <SmallCard {...props} />
     )

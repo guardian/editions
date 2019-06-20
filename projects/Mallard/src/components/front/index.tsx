@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
-import { CollectionPage, PageAppearance } from './collection-page'
+import { CollectionPage } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from 'src/theme/appearance'
 import {
@@ -22,6 +22,7 @@ import { color as themeColor } from '../../theme/color'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
+import { PageAppearance } from './helpers'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -62,7 +63,11 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     const { width } = Dimensions.get('window')
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
-        outputRange: [metrics.horizontal * -1.5, 0, metrics.horizontal * 1.5],
+        outputRange: [
+            metrics.frontsPageSides * -1.75,
+            0,
+            metrics.frontsPageSides * 1.75,
+        ],
     })
 }
 
@@ -125,7 +130,7 @@ const Page = ({
 }
 
 const wrapperStyles = StyleSheet.create({
-    inner: { height: metrics.frontCardHeight },
+    inner: { height: metrics.frontsPageHeight },
 })
 
 const Wrapper: FunctionComponent<{

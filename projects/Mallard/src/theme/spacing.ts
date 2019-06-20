@@ -3,12 +3,16 @@ import { Platform, StatusBar } from 'react-native'
 export const spacing = [0, 3, 6, 12, 18, 30]
 
 const headerHeight = spacing[5]
-
-export const metrics = {
+const basicMetrics = {
     horizontal: spacing[3],
     vertical: spacing[3],
+}
+
+export const metrics = {
+    ...basicMetrics,
     headerHeight,
-    frontCardHeight: 540,
+    frontsPageSides: basicMetrics.horizontal * 1.5,
+    frontsPageHeight: 540,
     slideCardSpacing:
         Platform.OS === 'ios'
             ? spacing[5] * 2

@@ -4,9 +4,9 @@ import { Multiline } from '../../multiline'
 import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
-import { PropTypes as CollectionPropTypes } from '../collection-page'
+import { PropTypes as CollectionPropTypes } from './collection-page'
 import { Article, Collection, Issue } from 'src/common'
-import { Card } from './../card-group/card'
+import { Card } from '../item/item'
 import { RowSize, getHeightForSize } from '../helpers'
 
 const styles = StyleSheet.create({
