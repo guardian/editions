@@ -89,16 +89,6 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                                 {...{ viewIsTransitioning, front }}
                             />
                         ))}
-                        <Front
-                            issue={issue.key}
-                            {...{ viewIsTransitioning }}
-                            front="best-awards"
-                        />
-                        <Front
-                            issue={issue.key}
-                            {...{ viewIsTransitioning }}
-                            front="cities"
-                        />
                     </>
                 ),
             })}

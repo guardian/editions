@@ -9,7 +9,7 @@ import {
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { RowWithOneArticle, RowWithTwoArticles } from './row'
-import { Article, Collection as CollectionType } from 'src/common'
+import { Article, Collection } from 'src/common'
 import { Issue } from '../../../../../backend/common'
 import { RowSize, PageAppearance } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
