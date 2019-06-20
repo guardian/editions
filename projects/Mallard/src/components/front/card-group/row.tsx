@@ -4,17 +4,10 @@ import { Multiline } from '../../multiline'
 import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
-import { PropTypes as CollectionPropTypes } from '../collection'
+import { PropTypes as CollectionPropTypes } from '../collection-page'
 import { Article, Collection, Issue } from 'src/common'
 import { Card } from './../card-group/card'
-
-export enum Size {
-    row,
-    third,
-    half,
-    hero,
-    superhero,
-}
+import { RowSize, getHeightForSize } from '../helpers'
 
 const styles = StyleSheet.create({
     row: {
@@ -47,19 +40,7 @@ interface RowPropTypes {
     translate: CollectionPropTypes['translate']
     isLastChild: boolean
     index: number
-    size: Size
-}
-
-const getHeightForSize = (size: Size): string => {
-    const heights = {
-        [Size.row]: 'auto',
-        [Size.third]: `${(2 / 6) * 100}%`,
-        [Size.half]: '50%',
-        [Size.hero]: `${(4 / 6) * 100}%`,
-        [Size.superhero]: 'auto',
-    }
-
-    return heights[size]
+    size: RowSize
 }
 
 /*
@@ -113,7 +94,7 @@ const Row = ({
 ROW WITH ARTICLE
 shows 1 article
 */
-const RowWithArticle = ({
+const RowWithOneArticle = ({
     article,
     collection,
     issue,
@@ -160,7 +141,7 @@ const RowWithTwoArticles = ({
     */
     if (!articles[1])
         return (
-            <RowWithArticle
+            <RowWithOneArticle
                 {...rowProps}
                 {...{ issue, collection }}
                 article={articles[0]}
@@ -200,4 +181,4 @@ const RowWithTwoArticles = ({
     )
 }
 
-export { RowWithTwoArticles, RowWithArticle }
+export { RowWithTwoArticles, RowWithOneArticle }

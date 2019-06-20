@@ -8,9 +8,10 @@ import {
     ArticleAppearance,
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { RowWithArticle, RowWithTwoArticles, Size } from './card-group/row'
+import { RowWithOneArticle, RowWithTwoArticles } from './card-group/row'
 import { Article, Collection as CollectionType } from 'src/common'
 import { Issue } from '../../../../backend/common'
+import { RowSize } from './helpers'
 
 const styles = StyleSheet.create({
     root: {
@@ -47,15 +48,40 @@ const AnyStoryCollection = ({
     return (
         <>
             {articles.map((article, index) => (
-                <RowWithArticle
+                <RowWithOneArticle
                     index={index}
                     key={index}
                     isLastChild={index === articles.length - 1}
                     article={article}
                     {...{ collection, issue, translate }}
-                    size={Size.row}
+                    size={RowSize.row}
                 />
             ))}
+        </>
+    )
+}
+
+const SingleStoryCollection = ({
+    articles,
+    collection,
+    translate,
+    issue,
+}: PropTypes) => {
+    if (articles.length < 1)
+        return (
+            <AnyStoryCollection
+                {...{ articles, collection, translate, issue }}
+            />
+        )
+    return (
+        <>
+            <RowWithOneArticle
+                index={0}
+                isLastChild={true}
+                article={articles[0]}
+                size={RowSize.superhero}
+                {...{ collection, issue, translate }}
+            />
         </>
     )
 }
@@ -80,11 +106,11 @@ const ThreeStoryCollection = ({
 
     return (
         <>
-            <RowWithArticle
+            <RowWithOneArticle
                 index={0}
                 isLastChild={false}
                 article={articles[2]}
-                size={Size.hero}
+                size={RowSize.hero}
                 {...{ collection, issue, translate }}
             />
             <RowWithTwoArticles
@@ -92,7 +118,7 @@ const ThreeStoryCollection = ({
                 isLastChild={true}
                 translate={translate}
                 articles={[articles[0], articles[1]]}
-                size={Size.third}
+                size={RowSize.third}
                 {...{ collection, issue, translate }}
             />
         </>
@@ -114,22 +140,37 @@ const Wrapper = ({
     )
 }
 
-const Collection = ({
+export enum PageAppearance {
+    superhero,
+    two,
+    three,
+    four,
+    five,
+    six,
+}
+
+const CollectionPage = ({
     appearance,
+    pageAppearance,
     style,
     ...props
 }: {
     appearance: ArticleAppearance
+    pageAppearance: PageAppearance
     style: StyleProp<{}>
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
-            <ThreeStoryCollection {...props} />
+            {pageAppearance === PageAppearance.superhero ? (
+                <SingleStoryCollection {...props} />
+            ) : (
+                <ThreeStoryCollection {...props} />
+            )}
         </Wrapper>
     </WithArticleAppearance>
 )
 
-Collection.defaultProps = {
+CollectionPage.defaultProps = {
     stories: [],
 }
-export { Collection }
+export { CollectionPage }

@@ -9,7 +9,7 @@ import { Article } from 'src/common'
 import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
-import { Size } from './row'
+import { RowSize, getHeightForSize } from '../helpers'
 
 interface PropTypes {
     style: StyleProp<ViewStyle>
@@ -23,11 +23,13 @@ This just wraps every card to make it tappable
 */
 const tappableStyles = StyleSheet.create({
     root: {
-        padding: metrics.horizontal / 2,
-        paddingVertical: metrics.vertical / 2,
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: '100%',
+    },
+    padding: {
+        padding: metrics.horizontal / 2,
+        paddingVertical: metrics.vertical / 2,
     },
 })
 
@@ -44,8 +46,10 @@ const CardTappable = withNavigation(
         article,
         path,
         navigation,
+        hasPadding,
     }: {
         children: ReactNode
+        hasPadding?: boolean
     } & PropTypes &
         NavigationInjectedProps) => {
         const { appearance } = useArticleAppearance()
@@ -62,6 +66,7 @@ const CardTappable = withNavigation(
                     <View
                         style={[
                             tappableStyles.root,
+                            hasPadding && tappableStyles.padding,
                             appearance.backgrounds,
                             appearance.cardBackgrounds,
                         ]}
@@ -73,6 +78,9 @@ const CardTappable = withNavigation(
         )
     },
 )
+CardTappable.defaultProps = {
+    hasPadding: true,
+}
 
 /*
 COVER CARD
@@ -143,6 +151,35 @@ const ImageCard = ({ style, article, path }: PropTypes) => {
     )
 }
 
+const superHeroImageStyles = StyleSheet.create({
+    image: {
+        width: '100%',
+        flex: 0,
+        height: getHeightForSize(RowSize.hero),
+    },
+    textBlock: {
+        ...tappableStyles.padding,
+    },
+})
+
+const SuperHeroImageCard = ({ style, article, path }: PropTypes) => {
+    return (
+        <CardTappable {...{ article, path, style }} hasPadding={false}>
+            <Image
+                style={[superHeroImageStyles.image]}
+                source={{
+                    uri: article.image,
+                }}
+            />
+            <TextBlock
+                style={[superHeroImageStyles.textBlock]}
+                kicker={article.kicker}
+                headline={article.headline}
+            />
+        </CardTappable>
+    )
+}
+
 const SmallCard = ({ style, article, path }: PropTypes) => {
     return (
         <CardTappable {...{ style, article, path }}>
@@ -151,11 +188,12 @@ const SmallCard = ({ style, article, path }: PropTypes) => {
     )
 }
 
-const Card = ({ size, ...props }: { size: Size } & PropTypes) => {
-    /* this chooses the card type for us based on ummm MAGIC? */
-    return size >= Size.hero ? (
+const Card = ({ size, ...props }: { size: RowSize } & PropTypes) => {
+    return size >= RowSize.superhero ? (
+        <SuperHeroImageCard {...props} />
+    ) : size >= RowSize.hero ? (
         <ImageCard {...props} />
-    ) : size >= Size.half ? (
+    ) : size >= RowSize.half ? (
         <ImageCard {...props} />
     ) : (
         <SmallCard {...props} />

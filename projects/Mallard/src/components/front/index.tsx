@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
-import { Collection } from './collection'
+import { CollectionPage, PageAppearance } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from 'src/theme/appearance'
 import {
@@ -36,7 +36,7 @@ const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
 
 const useCollectionResponse = (
     issue: Issue['key'],
-    collection: Collection['key'],
+    collection: CollectionType['key'],
 ) =>
     withResponse<CollectionType>(
         useJsonOrEndpoint<CollectionType>(issue, `collection/${collection}`),
@@ -96,9 +96,14 @@ const Page = ({
                 ),
                 success: collectionData =>
                     collectionData.articles ? (
-                        <Collection
+                        <CollectionPage
                             articles={Object.values(collectionData.articles)}
                             translate={translateX}
+                            pageAppearance={
+                                index === 0
+                                    ? PageAppearance.superhero
+                                    : PageAppearance.three
+                            }
                             {...{ issue, collection, appearance }}
                             style={[
                                 {
