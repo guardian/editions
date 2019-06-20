@@ -237,7 +237,7 @@ export const Front: FunctionComponent<{
                             <Page
                                 issue={issue}
                                 index={i}
-                                appearance={'sport'}
+                                appearance={'news'}
                                 key={id}
                                 {...{ collection, scrollX }}
                             />
