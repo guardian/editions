@@ -50,7 +50,7 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
                 headlineStyle: [
                     styles.headline,
                     appearance.text,
-                    appearance.kicker,
+                    appearance.headline,
                 ],
             }
     }

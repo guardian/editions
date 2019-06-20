@@ -1,5 +1,11 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
-import { ScrollView, View, Dimensions, Animated } from 'react-native'
+import {
+    ScrollView,
+    View,
+    Dimensions,
+    Animated,
+    StyleSheet,
+} from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
 import { Collection } from './collection'
@@ -113,19 +119,16 @@ const Page = ({
     )
 }
 
+const wrapperStyles = StyleSheet.create({
+    inner: { height: metrics.frontCardHeight },
+})
+
 const Wrapper: FunctionComponent<{
     scrubber: ReactNode
     children: ReactNode
 }> = ({ children, scrubber }) => {
-    const height = Dimensions.get('window').height - 300
     return (
-        <View
-            style={{
-                height,
-                maxHeight: height,
-                minHeight: height,
-            }}
-        >
+        <View>
             <View
                 style={{
                     padding: metrics.horizontal,
@@ -135,7 +138,7 @@ const Wrapper: FunctionComponent<{
             >
                 {scrubber}
             </View>
-            {children}
+            <View style={wrapperStyles.inner}>{children}</View>
         </View>
     )
 }
@@ -206,7 +209,8 @@ export const Front: FunctionComponent<{
                                 inputRange: [
                                     0,
                                     Dimensions.get('window').width *
-                                        (pages - 1),
+                                        (pages - 1) +
+                                        0.001,
                                 ],
                                 outputRange: [0, 1],
                             })}
