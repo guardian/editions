@@ -120,9 +120,7 @@ const Wrapper: FunctionComponent<{
     return (
         <View
             style={{
-                height: metrics.frontCardHeight,
-                maxHeight: metrics.frontCardHeight,
-                minHeight: metrics.frontCardHeight,
+                flex: 0,
             }}
         >
             <View
@@ -134,7 +132,7 @@ const Wrapper: FunctionComponent<{
             >
                 {scrubber}
             </View>
-            {children}
+            <View style={{ height: metrics.frontCardHeight }}>{children}</View>
         </View>
     )
 }
