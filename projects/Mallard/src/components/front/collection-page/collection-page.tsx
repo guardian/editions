@@ -36,10 +36,10 @@ export interface PropTypes {
     articles: Article[]
     translate: Animated.AnimatedInterpolation
     issue: Issue['key']
-    collection: CollectionType['key']
+    collection: Collection['key']
 }
 
-const AnyStoryCollection = ({
+const AnyStoryCollectionPage = ({
     articles,
     collection,
     translate,
@@ -63,7 +63,7 @@ const AnyStoryCollection = ({
     )
 }
 
-const SingleStoryCollection = ({
+const SingleStoryCollectionPage = ({
     articles,
     collection,
     translate,
@@ -71,7 +71,7 @@ const SingleStoryCollection = ({
 }: PropTypes) => {
     if (articles.length < 1)
         return (
-            <AnyStoryCollection
+            <AnyStoryCollectionPage
                 {...{ articles, collection, translate, issue }}
             />
         )
@@ -87,7 +87,7 @@ const SingleStoryCollection = ({
     )
 }
 
-const ThreeStoryCollection = ({
+const ThreeStoryCollectionPage = ({
     articles,
     collection,
     translate,
@@ -100,7 +100,7 @@ const ThreeStoryCollection = ({
     */
     if (articles.length !== 3)
         return (
-            <AnyStoryCollection
+            <AnyStoryCollectionPage
                 {...{ articles, collection, translate, issue }}
             />
         )
@@ -152,11 +152,11 @@ const CollectionPage = ({
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
             {pageAppearance >= PageAppearance.superhero ? (
-                <SingleStoryCollection {...props} />
+                <SingleStoryCollectionPage {...props} />
             ) : pageAppearance >= PageAppearance.three ? (
-                <ThreeStoryCollection {...props} />
+                <ThreeStoryCollectionPage {...props} />
             ) : (
-                <AnyStoryCollection {...props} />
+                <AnyStoryCollectionPage {...props} />
             )}
         </Wrapper>
     </WithArticleAppearance>

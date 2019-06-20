@@ -6,7 +6,7 @@ import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from './collection-page'
 import { Article, Collection, Issue } from 'src/common'
-import { Card } from '../item/item'
+import { Item } from '../item/item'
 import { RowSize, getHeightForSize } from '../helpers'
 
 const styles = StyleSheet.create({
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
     },
-    rightCard: {
+    rightItem: {
         borderLeftWidth: StyleSheet.hairlineWidth,
     },
 })
@@ -101,7 +101,7 @@ const RowWithOneArticle = ({
 } & NavigationPropTypes &
     RowPropTypes) => (
     <Row {...rowProps}>
-        <Card
+        <Item
             style={styles.card}
             size={rowProps.size}
             path={{
@@ -147,7 +147,7 @@ const RowWithTwoArticles = ({
     return (
         <Row {...rowProps}>
             <View style={styles.doubleRow}>
-                <Card
+                <Item
                     style={[styles.card]}
                     path={{
                         article: articles[0].key,
@@ -157,10 +157,10 @@ const RowWithTwoArticles = ({
                     article={articles[0]}
                     size={rowProps.size}
                 />
-                <Card
+                <Item
                     style={[
                         styles.card,
-                        styles.rightCard,
+                        styles.rightItem,
                         {
                             borderColor: appearance.backgrounds.borderColor,
                         },

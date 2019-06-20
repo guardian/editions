@@ -39,7 +39,7 @@ interface PropTypes {
     path: PathToArticle
 }
 
-const CardTappable = withNavigation(
+const ItemTappable = withNavigation(
     ({
         children,
         style,
@@ -78,7 +78,7 @@ const CardTappable = withNavigation(
         )
     },
 )
-CardTappable.defaultProps = {
+ItemTappable.defaultProps = {
     hasPadding: true,
 }
 
@@ -102,9 +102,9 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverCard = ({ style, article, path }: PropTypes) => {
+const CoverItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ style, article, path }}>
+        <ItemTappable {...{ style, article, path }}>
             <View style={coverStyles.cover}>
                 <Image
                     style={coverStyles.cover}
@@ -119,7 +119,7 @@ const CoverCard = ({ style, article, path }: PropTypes) => {
                     style={coverStyles.text}
                 />
             </View>
-        </CardTappable>
+        </ItemTappable>
     )
 }
 
@@ -133,9 +133,9 @@ const imageStyles = StyleSheet.create({
     },
 })
 
-const ImageCard = ({ style, article, path }: PropTypes) => {
+const ImageItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ style, article, path }}>
+        <ItemTappable {...{ style, article, path }}>
             <Image
                 style={imageStyles.image}
                 source={{
@@ -147,7 +147,7 @@ const ImageCard = ({ style, article, path }: PropTypes) => {
                 kicker={article.kicker}
                 headline={article.headline}
             />
-        </CardTappable>
+        </ItemTappable>
     )
 }
 
@@ -162,9 +162,9 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageCard = ({ style, article, path }: PropTypes) => {
+const SuperHeroImageItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ article, path, style }} hasPadding={false}>
+        <ItemTappable {...{ article, path, style }} hasPadding={false}>
             <Image
                 style={[superHeroImageStyles.image]}
                 source={{
@@ -176,25 +176,25 @@ const SuperHeroImageCard = ({ style, article, path }: PropTypes) => {
                 kicker={article.kicker}
                 headline={article.headline}
             />
-        </CardTappable>
+        </ItemTappable>
     )
 }
 
-const SmallCard = ({ style, article, path }: PropTypes) => {
+const SmallItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ style, article, path }}>
+        <ItemTappable {...{ style, article, path }}>
             <TextBlock kicker={article.kicker} headline={article.headline} />
-        </CardTappable>
+        </ItemTappable>
     )
 }
 
-const Card = ({ size, ...props }: { size: RowSize } & PropTypes) => {
+const Item = ({ size, ...props }: { size: RowSize } & PropTypes) => {
     return size >= RowSize.superhero ? (
-        <SuperHeroImageCard {...props} />
+        <SuperHeroImageItem {...props} />
     ) : size >= RowSize.hero ? (
-        <ImageCard {...props} />
+        <ImageItem {...props} />
     ) : (
-        <SmallCard {...props} />
+        <SmallItem {...props} />
     )
 }
-export { Card }
+export { Item }
