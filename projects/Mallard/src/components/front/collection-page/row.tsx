@@ -10,13 +10,14 @@ import { getRowHeightForSize, RowLayout } from '../helpers'
 
 const styles = StyleSheet.create({
     row: {
-        flexGrow: 1,
+        flex: 0,
+        overflow: 'hidden',
+        flexBasis: 'auto',
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'space-between',
     },
     doubleRow: {
-        flex: 1,
         flexDirection: 'row',
         overflow: 'hidden',
         display: 'flex',
