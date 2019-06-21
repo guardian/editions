@@ -25,6 +25,9 @@ export enum RowSize {
     superhero,
 }
 
+/*
+This resolves where each article goes
+*/
 export const withSlots = (page: LazyPageLayout): PageLayout => {
     let slot = 0
     return page.map(({ columns, ...row }) => {

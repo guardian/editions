@@ -81,7 +81,7 @@ ItemTappable.defaultProps = {
 }
 
 /*
-COVER CARD
+COVER ITEM
 Text over image. To use in lifestyle & art heros
 */
 const coverStyles = StyleSheet.create({
@@ -121,6 +121,10 @@ const CoverItem = ({ style, article, path }: PropTypes) => {
     )
 }
 
+/*
+IMAGE ITEM
+Text below image. To use in most heros
+*/
 const imageStyles = StyleSheet.create({
     image: {
         width: '100%',
@@ -149,6 +153,10 @@ const ImageItem = ({ style, article, path }: PropTypes) => {
     )
 }
 
+/*
+SUPERHERO IMAGE ITEM
+Text below image. To use in news & sport supers
+*/
 const superHeroImageStyles = StyleSheet.create({
     image: {
         width: '100%',
