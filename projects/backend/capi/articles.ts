@@ -22,7 +22,7 @@ interface CAPIArticle {
 }
 
 const url = (paths: string[]) =>
-    `https://content.guardianapis.com/search?ids=${paths.join(
+    `xxxxxx?ids=${paths.join(
         ',',
     )}format=thrift&api-key=${
         process.env.CAPI_KEY
