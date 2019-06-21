@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>compileBitcode</key>
+	<true/>
+	<key>method</key>
+	<string>development</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>998P9U5NGJ</string>
+	<key>thinning</key>
+	<string>&lt;none&gt;</string>
+	<key>manifest</key>
+	<dict>
+		<key>appURL</key>
+		<string>https://s3-eu-west-1.amazonaws.com/builds.gutools.co.uk/Mallard.ipa</string>
+		<key>displayImageURL</key>
+		<string>https://s3-eu-west-1.amazonaws.com/builds.gutools.co.uk/Mallard.png</string>
+		<key>fullSizeImageURL</key>
+		<string>https://s3-eu-west-1.amazonaws.com/builds.gutools.co.uk/Mallard.png</string>
+	</dict>
+</dict>
+</plist>
