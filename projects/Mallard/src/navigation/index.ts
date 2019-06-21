@@ -5,7 +5,7 @@ import { ArticleScreen } from '../screens/article-screen'
 import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
 import { ApiScreen } from '../screens/settings/api-screen'
-import { color } from '../theme/color'
+import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 
 export const RootNavigator = createAppContainer(
@@ -44,8 +44,8 @@ export const RootNavigator = createAppContainer(
                         backgroundColor: 'transparent',
                     },
                     transitionSpec: {
-                        duration: 400,
-                        easing: Easing.elastic(0.75),
+                        duration: 200,
+                        easing: Easing.ease,
                         timing: Animated.timing,
                         useNativeDriver: true,
                     },

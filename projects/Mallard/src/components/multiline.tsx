@@ -1,8 +1,8 @@
 import React from 'react'
-import { color as themeColor } from '../theme/color'
+import { color as themeColor } from 'src/theme/color'
 
 import Svg, { Rect } from 'react-native-svg'
-import { StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { StyleSheet, StyleProp } from 'react-native'
 
 const pixel = StyleSheet.hairlineWidth * 2
 const gap = 3

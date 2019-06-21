@@ -1,6 +1,5 @@
-import AWS, {
+import {
     S3,
-    CredentialProviderChain,
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
 } from 'aws-sdk'
@@ -19,23 +18,17 @@ const s3 = new S3({
 
 const stage = process.env.stage || 'CODE'
 
-type S3Response =
-    | {
-          status: number
-          ok: false
-      }
-    | {
-          status: number
-          ok: true
-          text: () => Promise<string>
-          json: () => Promise<{}>
-          lastModified?: Date
-          etag: string | undefined
-      }
+interface S3Response {
+    status: number
+    ok: true
+    text: () => Promise<string>
+    json: () => Promise<{}>
+    lastModified?: Date
+    etag: string | undefined
+}
 
 export const s3fetch = (key: string): Promise<S3Response> => {
     const k = `${stage}/${key}`
-    console.log(k)
     return new Promise((resolve, reject) => {
         s3.getObject(
             {
@@ -43,9 +36,8 @@ export const s3fetch = (key: string): Promise<S3Response> => {
                 Bucket: 'facia-tool-store',
             },
             (error, result) => {
-                console.log(error || 'NO ERROR')
                 if (error && error.code == 'NoSuchKey') {
-                    resolve({ status: 404, ok: false })
+                    reject({ status: 404, ok: false })
                     return
                 }
                 if (result == null) debugger

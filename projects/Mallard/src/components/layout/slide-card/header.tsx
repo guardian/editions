@@ -4,11 +4,10 @@ import {
     StyleSheet,
     View,
     TouchableWithoutFeedback,
-    StyleProp,
 } from 'react-native'
 import { Chevron } from '../../chevron'
-import { metrics } from '../../../theme/spacing'
-import { color } from '../../../theme/color'
+import { metrics } from 'src/theme/spacing'
+import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -20,6 +19,10 @@ const styles = StyleSheet.create({
         zIndex: 90,
         alignContent: 'stretch',
         justifyContent: 'center',
+        backgroundColor: color.background,
+        borderColor: color.line,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
     },
     headerChevronContainer: {
         flex: 1,
@@ -29,22 +32,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         zIndex: 20,
     },
-    headerBackground: {
-        zIndex: 10,
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
 })
 
 const Header = ({
     scrollY,
-    fadesHeaderIn,
-    style,
     onDismiss,
 }: {
     scrollY: Animated.Value
-    fadesHeaderIn: boolean
-    style: StyleProp<{}>
     onDismiss: () => void
 }) => {
     return (
@@ -72,33 +66,9 @@ const Header = ({
                         },
                     ]}
                 >
-                    <Chevron
-                        color={
-                            fadesHeaderIn
-                                ? color.textOverDarkBackground
-                                : color.text
-                        }
-                    />
+                    <Chevron color={color.text} />
                 </Animated.View>
             </TouchableWithoutFeedback>
-            <Animated.View
-                style={[
-                    style,
-                    StyleSheet.absoluteFillObject,
-                    styles.headerBackground,
-                    fadesHeaderIn
-                        ? {
-                              opacity: scrollY.interpolate({
-                                  inputRange: [0, 50],
-                                  outputRange: [0, 1],
-                                  extrapolate: 'clamp',
-                              }),
-                          }
-                        : {
-                              opacity: 1,
-                          },
-                ]}
-            />
         </View>
     )
 }

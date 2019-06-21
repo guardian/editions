@@ -1,8 +1,4 @@
-import {
-    Lambda,
-    ChainableTemporaryCredentials,
-    SharedIniFileCredentials,
-} from 'aws-sdk'
+import { Lambda, SharedIniFileCredentials } from 'aws-sdk'
 import { awsToString } from '../parser'
 
 const creds = process.env.arn
@@ -15,11 +11,11 @@ const lambda = new Lambda({
     region: 'eu-west-1',
     ...creds,
 })
-const stage = process.env.stage || 'CODE'
+
 export const renderAtom = async (
     atomType: string,
     atomId: string,
-): Promise<{ html?: string; css: string[]; js: string[] } | null> => {
+): Promise<{ html?: string; css: string[]; js: string[] }> => {
     let resp = await lambda
         .invoke({
             FunctionName: process.env.atomArn || `editions-atom-renderer-CODE`,
@@ -31,7 +27,7 @@ export const renderAtom = async (
         .promise()
 
     const payload = awsToString(resp.Payload)
-    if (!payload) return null
+    if (!payload) throw new Error('No response from atom renderer.')
     const result = JSON.parse(JSON.parse(payload)) //FIXME: this is not good.
     return {
         html: result['html'],

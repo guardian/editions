@@ -92,6 +92,7 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -102,11 +103,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mallard"
+        applicationId "com.guardian.editions"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode vcode
+        versionName "1.0-alpha"
     }
     splits {
         abi {
@@ -116,10 +117,23 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('EDITIONS_RELEASE_UPLOAD_STORE_FILE')) {
+                storeFile file(EDITIONS_RELEASE_UPLOAD_STORE_FILE)
+                storePassword EDITIONS_RELEASE_UPLOAD_STORE_PASSWORD
+                keyAlias EDITIONS_RELEASE_UPLOAD_KEY_ALIAS
+                keyPassword EDITIONS_RELEASE_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+    
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release

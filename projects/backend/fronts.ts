@@ -1,32 +1,64 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { CollectionArticles, Front, Collection } from './common'
+import { Front, Collection, Article } from './common'
 import { LastModifiedUpdater } from './lastModified'
+import { attempt, hasFailed } from './utils/try'
+import { getArticles } from './capi/articles'
 
 export const getCollection = async (
     id: string,
+    live: boolean = true,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<CollectionArticles | 'notfound'> => {
-    try {
-        const resp = await s3fetch(`frontsapi/collection/${id}/collection.json`)
-        if (resp.status === 404) return 'notfound'
-        if (!resp.ok) throw new Error('failed s3')
-        lastModifiedUpdater(resp.lastModified)
-        const collection: CollectionFromResponse = (await resp.json()) as CollectionFromResponse
-        console.log(collection)
-        return {
-            id,
-            name: collection.displayName,
-            articles: collection.live.map(_ => _.id),
-        }
-    } catch {
-        console.log('OH NO', id)
-        return 'notfound'
+): Promise<Collection> => {
+    const resp = await attempt(
+        s3fetch(`frontsapi/collection/${id}/collection.json`),
+    )
+    if (hasFailed(resp)) throw new Error('Could not fetch from S3.')
+
+    lastModifiedUpdater(resp.lastModified)
+
+    const deserialized = await attempt(resp.json())
+    if (hasFailed(resp)) throw new Error('Response was not valid json')
+
+    const collection: CollectionFromResponse = deserialized as CollectionFromResponse
+
+    const articleFragmentList = live ? collection.live : collection.draft
+    if (articleFragmentList == null) throw new Error('Hello that didnt work')
+    const articleFragments = fromEntries(
+        articleFragmentList.map(
+            (fragment): [string, NestedArticleFragment] => [
+                fragment.id,
+                fragment,
+            ],
+        ),
+    )
+
+    const preview = live ? undefined : true
+    const capiArticles = await getArticles(Object.keys(articleFragments))
+    const articles: [string, Article][] = Object.entries(capiArticles).map(
+        ([key, article]) => {
+            const fragment =
+                articleFragments[`internal-code/page/${article.id}`] ||
+                articleFragments[key]
+            const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
+            const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
+            const headline = (meta && meta.headline) || article.headline
+            const imageURL = (meta && meta.imageSrc) || article.imageURL
+
+            return [key, { ...article, key, kicker, headline, imageURL }]
+        },
+    )
+
+    return {
+        key: id,
+        displayName: collection.displayName,
+        articles: fromEntries(articles),
+        preview,
     }
 }
 
-export const getCollectionsForFront = async (
+export const getFront = async (
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Front> => {
@@ -39,34 +71,8 @@ export const getCollectionsForFront = async (
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
     if (!(id in config.fronts)) throw new Error('Front not found')
     const front = config.fronts[id]
-    const collectionIds = front.collections
 
-    // const collections =
-    const collections = Object.entries(config.collections)
-
-    const selected = collections.filter(c => collectionIds.includes(c[0]))
-
-    const articles = await Promise.all(
-        collectionIds.map(id => getCollection(id, lastModifiedUpdater)),
-    )
-    console.log(articles, 'SSS')
-    const articleMap = new Map(
-        articles
-            .filter(
-                (maybeArticle): maybeArticle is CollectionArticles =>
-                    maybeArticle !== 'notfound',
-            )
-            .map(({ id, articles }) => [id, articles]),
-    )
-    console.log(articleMap, '>?>')
-    const combined: [string, Collection][] = selected.map(([id, data]) => [
-        id,
-        { ...data, articles: articleMap.get(id) },
-    ])
-
-    const cs: { [key: string]: Collection } = fromEntries(combined) //This is a polyfill of Object.Entries which is a bit tooo new.
-    console.log(front)
-    return { ...front, collections: cs }
+    return { ...front, key: id }
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107
@@ -84,6 +90,48 @@ interface CollectionFromResponse {
     metadata?: { type: string }[]
     uneditable?: boolean
 }
+interface ArticleFragmentRootMeta {
+    group?: string
+    headline?: string
+    trailText?: string
+    byline?: string
+    customKicker?: string
+    href?: string
+    imageSrc?: string
+    imageSrcThumb?: string
+    imageSrcWidth?: string
+    imageSrcHeight?: string
+    imageSrcOrigin?: string
+    imageCutoutSrc?: string
+    imageCutoutSrcWidth?: string
+    imageCutoutSrcHeight?: string
+    imageCutoutSrcOrigin?: string
+    isBreaking?: boolean
+    isBoosted?: boolean
+    showLivePlayable?: boolean
+    showMainVideo?: boolean
+    showBoostedHeadline?: boolean
+    showQuotedHeadline?: boolean
+    showByline?: boolean
+    imageCutoutReplace?: boolean
+    imageReplace?: boolean
+    imageHide?: boolean
+    showKickerTag?: boolean
+    showKickerSection?: boolean
+    showKickerCustom?: boolean
+    snapUri?: string
+    snapType?: string
+    snapCss?: string
+    imageSlideshowReplace?: boolean
+    slideshow?: {
+        src?: string
+        thumb?: string
+        width?: string
+        height?: string
+        origin?: string
+    }[]
+}
+
 interface NestedArticleFragmentRootFields {
     id: string
     frontPublicationDate: number

@@ -13,5 +13,12 @@
             "path": "projects/aws"
         }
     ],
-    "settings": {}
+    "settings": {
+        "eslint.validate": [
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact"
+        ]
+    }
 }

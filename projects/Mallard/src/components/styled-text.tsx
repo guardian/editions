@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, View, StyleSheet, TextStyle, StyleProp } from 'react-native'
-import { useAppAppearance } from '../theme/appearance'
-import { metrics } from '../theme/spacing'
-import { color } from '../theme/color'
+import { useAppAppearance } from 'src/theme/appearance'
+import { metrics } from 'src/theme/spacing'
+import { color } from 'src/theme/color'
 
 const cardStyles = {
     default: {

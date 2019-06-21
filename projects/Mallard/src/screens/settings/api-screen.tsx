@@ -1,15 +1,15 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
-import { List, ListHeading } from '../../components/lists/list'
-import { MonoTextBlock } from '../../components/styled-text'
-import { container } from '../../theme/styles'
-import { useSettings } from '../../hooks/use-settings'
+import { List, ListHeading } from 'src/components/lists/list'
+import { MonoTextBlock } from 'src/components/styled-text'
+import { container } from 'src/theme/styles'
+import { useSettings } from 'src/hooks/use-settings'
 import { NavigationScreenProp } from 'react-navigation'
 import { TextInput } from 'react-native-gesture-handler'
-import { color } from '../../theme/color'
-import { metrics } from '../../theme/spacing'
-import { backends } from '../../helpers/settings'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { backends, defaultSettings } from 'src/helpers/settings'
 
 const styles = StyleSheet.create({
     container,
@@ -17,7 +17,12 @@ const styles = StyleSheet.create({
 
 const ApiState = () => {
     const [{ apiUrl }] = useSettings()
-    return <MonoTextBlock>API backend pointing to {apiUrl}</MonoTextBlock>
+    if (apiUrl === defaultSettings.apiUrl) return null
+    return (
+        <MonoTextBlock>
+            API backend pointing to {apiUrl}. This is not PROD!
+        </MonoTextBlock>
+    )
 }
 
 const ApiScreen = ({

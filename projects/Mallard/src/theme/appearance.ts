@@ -27,6 +27,12 @@ interface ArticleAppearanceStyles {
         backgroundColor?: string
     }
     /*
+    Contrast-y cards
+    */
+    contrastCardBackgrounds: {
+        backgroundColor?: string
+    }
+    /*
     Spread this over text and icons
     */
     text: {
@@ -98,6 +104,9 @@ export const articleAppearances: {
             backgroundColor: color.background,
             borderColor: color.line,
         },
+        contrastCardBackgrounds: {
+            backgroundColor: color.palette.neutral[7],
+        },
         cardBackgrounds: {},
         text: {
             color: color.text,
@@ -110,11 +119,10 @@ export const articleAppearances: {
     news: {
         backgrounds: {},
         cardBackgrounds: {},
-        text: {
-            color: color.palette.news.main,
-        },
+        contrastCardBackgrounds: {},
+        text: {},
         headline: {
-            color: color.text,
+            color: color.dimText,
         },
         kicker: {},
         byline: {},
@@ -127,6 +135,7 @@ export const articleAppearances: {
             backgroundColor: color.palette.opinion.faded,
         },
         cardBackgrounds: {},
+        contrastCardBackgrounds: {},
         text: {
             color: color.palette.opinion.main,
         },
@@ -142,6 +151,9 @@ export const articleAppearances: {
             backgroundColor: color.palette.sport.faded,
         },
         cardBackgrounds: {},
+        contrastCardBackgrounds: {
+            backgroundColor: color.palette.sport.main,
+        },
         text: {
             color: color.palette.sport.main,
         },
@@ -158,6 +170,7 @@ export const articleAppearances: {
             backgroundColor: color.palette.culture.faded,
         },
         cardBackgrounds: {},
+        contrastCardBackgrounds: {},
         text: {
             color: color.palette.culture.main,
         },
@@ -175,6 +188,7 @@ export const articleAppearances: {
             backgroundColor: color.palette.lifestyle.faded,
         },
         cardBackgrounds: {},
+        contrastCardBackgrounds: {},
         text: {
             color: color.palette.lifestyle.main,
         },
@@ -190,6 +204,7 @@ export const articleAppearances: {
             backgroundColor: color.palette.neutral[7],
         },
         cardBackgrounds: {},
+        contrastCardBackgrounds: {},
         text: { color: color.palette.neutral[100] },
         headline: {},
         kicker: {},

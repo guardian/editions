@@ -5,17 +5,17 @@ import {
     storeSetting,
     Settings,
     defaultSettings,
-} from '../helpers/settings'
+} from 'src/helpers/settings'
 
 type SettingsFromContext = [
     Settings,
-    (setting: keyof Settings, value: string) => void
+    (setting: keyof Settings, value: Settings[keyof Settings]) => void
 ]
 
 const useStoredSettings = (): SettingsFromContext => {
     const [state, setState] = useState(defaultSettings)
-    const setSetting = (setting: keyof Settings, value: string) => {
-        setState({ [setting]: value })
+    const setSetting = (setting: keyof Settings, value: string | boolean) => {
+        setState(settings => ({ ...settings, [setting]: value }))
         storeSetting(setting, value)
     }
     useEffect(() => {
@@ -28,7 +28,7 @@ const useStoredSettings = (): SettingsFromContext => {
                 }))
             })
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
     return [state, setSetting]
 }
 

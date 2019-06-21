@@ -11,4 +11,10 @@ debug-ios:
 
 beta-ios:
 	yarn bundle-ios
-	cd ios && fastlane beta
+	fastlane ios beta
+
+beta-android:
+	mkdir -p android/app/src/main/assets
+	yarn bundle-android
+	rm -rf android/app/src/main/res/drawable-*
+	fastlane android beta

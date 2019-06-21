@@ -1,108 +1,180 @@
-import React, { useState, useMemo } from 'react'
-import { useEndpointResponse } from '../hooks/use-fetch'
-import { NavigationScreenProp } from 'react-navigation'
+import React, { useState } from 'react'
+import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
+import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
     ArticleAppearance,
     articleAppearances,
-} from '../theme/appearance'
-import { Article } from '../components/article'
-import { Article as ArticleType } from '../common'
-import { View, TouchableOpacity, Text, Button } from 'react-native'
-import { metrics } from '../theme/spacing'
-import { UiBodyCopy } from '../components/styled-text'
-import { FlexCenter } from '../components/layout/flex-center'
+} from 'src/theme/appearance'
+import { Article } from 'src/components/article'
+import { Article as ArticleType, Collection } from 'src/common'
+import { View, TouchableOpacity } from 'react-native'
+import { metrics } from 'src/theme/spacing'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { SlideCard } from 'src/components/layout/slide-card/index'
+import { color } from 'src/theme/color'
+import { PathToArticle } from './article-screen'
+import { withResponse } from 'src/hooks/use-response'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { Issue } from '../../../backend/common'
 
-const useArticleResponse = (path: string) =>
-    useEndpointResponse<ArticleType>(
-        `content/${path}`,
-        article => article.title != null,
+export interface PathToArticle {
+    collection: Collection['key']
+    article: ArticleType['key']
+    issue: Issue['key']
+}
+
+const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
+    const resp = useJsonOrEndpoint<ArticleType>(
+        issue,
+        `collection/${collection}`,
     )
+    if (resp.state === 'success') {
+        const articleContent =
+            resp.response.articles && resp.response.articles[article]
+        if (articleContent) {
+            return withResponse<ArticleType>({
+                ...resp,
+                response: articleContent,
+            })
+        } else {
+            return withResponse<ArticleType>({
+                state: 'error',
+                error: {
+                    message: ERR_404_REMOTE,
+                },
+            })
+        }
+    }
+    return withResponse<ArticleType>(resp)
+}
+
+const ArticleScreenWithProps = ({
+    path,
+    articlePrefill,
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+    path: PathToArticle
+    articlePrefill?: ArticleType
+}) => {
+    const [appearance, setAppearance] = useState(0)
+    const appearances = Object.keys(articleAppearances)
+    const articleResponse = useArticleResponse(path)
+
+    /* 
+    we don't wanna render a massive tree at once 
+    as the navigator is trying to push the screen bc this
+    delays the tap response 
+     we can pass this prop to identify if we wanna render 
+    just the 'above the fold' content or the whole shebang
+    */
+    const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+
+    return (
+        <SlideCard onDismiss={() => navigation.goBack()}>
+            <NavigationEvents
+                onDidFocus={() => {
+                    setViewIsTransitioning(false)
+                }}
+            />
+            {articleResponse({
+                error: ({ message }) => (
+                    <FlexErrorMessage
+                        icon="😭"
+                        title={message}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                pending: () =>
+                    articlePrefill ? (
+                        <Article {...articlePrefill} />
+                    ) : (
+                        <FlexErrorMessage
+                            title={'loading'}
+                            style={{ backgroundColor: color.background }}
+                        />
+                    ),
+                success: ({ elements, ...article }) => (
+                    <>
+                        <View
+                            style={{
+                                backgroundColor: 'tomato',
+                                position: 'absolute',
+                                zIndex: 9999,
+                                elevation: 999,
+                                bottom: 100,
+                                right: metrics.horizontal,
+                                alignSelf: 'flex-end',
+                                borderRadius: 999,
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setAppearance(app => {
+                                        if (app + 1 >= appearances.length) {
+                                            return 0
+                                        }
+                                        return app + 1
+                                    })
+                                }}
+                            >
+                                <UiBodyCopy
+                                    style={{
+                                        backgroundColor: 'tomato',
+                                        position: 'absolute',
+                                        zIndex: 9999,
+                                        elevation: 999,
+                                        bottom: 100,
+                                        right: metrics.horizontal,
+                                        alignSelf: 'flex-end',
+                                        borderRadius: 999,
+                                    }}
+                                >
+                                    {`${appearances[appearance]} 🌈`}
+                                </UiBodyCopy>
+                            </TouchableOpacity>
+                        </View>
+                        <WithArticleAppearance
+                            value={appearances[appearance] as ArticleAppearance}
+                        >
+                            <Article
+                                article={
+                                    viewIsTransitioning ? undefined : elements
+                                }
+                                {...article}
+                            />
+                        </WithArticleAppearance>
+                    </>
+                ),
+            })}
+        </SlideCard>
+    )
+}
 
 export const ArticleScreen = ({
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const pathFromUrl = navigation.getParam('path', '')
-    const titleFromUrl = navigation.getParam('title', 'Loading')
-    const [appearance, setAppearance] = useState(0)
-    const appearances = Object.keys(articleAppearances)
-    const articleResponse = useArticleResponse(pathFromUrl)
+    const articlePrefill = navigation.getParam('article') as
+        | ArticleType
+        | undefined
 
-    return articleResponse({
-        error: ({ message }) => (
-            <FlexCenter style={{ backgroundColor: 'tomato' }}>
-                <Text style={{ fontSize: 40 }}>😭</Text>
-                <UiBodyCopy weight="bold">{message}</UiBodyCopy>
-                <Button
-                    title={'go back'}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
+    const path = navigation.getParam('path') as PathToArticle | undefined
+
+    if (!path || !path.article || !path.collection || !path.issue) {
+        return (
+            <SlideCard onDismiss={() => navigation.goBack()}>
+                <FlexErrorMessage
+                    title={ERR_404_MISSING_PROPS}
+                    style={{ backgroundColor: color.background }}
                 />
-            </FlexCenter>
-        ),
-        pending: () => (
-            <Article
-                kicker={'Kicker 🥾'}
-                headline={titleFromUrl}
-                byline={'Byliney McPerson'}
-                standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-            />
-        ),
-        success: ({ title, imageURL, elements }) => {
-            return (
-                <>
-                    <View
-                        style={{
-                            backgroundColor: 'tomato',
-                            position: 'absolute',
-                            zIndex: 9999,
-                            elevation: 999,
-                            bottom: 100,
-                            right: metrics.horizontal,
-                            alignSelf: 'flex-end',
-                            borderRadius: 999,
-                        }}
-                    >
-                        <TouchableOpacity
-                            onPress={() => {
-                                setAppearance(app => {
-                                    if (app + 1 >= appearances.length) {
-                                        return 0
-                                    }
-                                    return app + 1
-                                })
-                            }}
-                        >
-                            <UiBodyCopy
-                                style={{
-                                    padding: metrics.horizontal * 2,
-                                    paddingVertical: metrics.vertical / 1.5,
-                                    color: '#fff',
-                                }}
-                            >
-                                {`${appearances[appearance]} 🌈`}
-                            </UiBodyCopy>
-                        </TouchableOpacity>
-                    </View>
-                    <WithArticleAppearance
-                        value={appearances[appearance] as ArticleAppearance}
-                    >
-                        <Article
-                            article={elements}
-                            kicker={'Kicker 🥾'}
-                            headline={title}
-                            byline={'Byliney McPerson'}
-                            standfirst={`Is this delicious smoky dip the ultimate aubergine recipe – and which side of the great tahini divide are you on?`}
-                            image={imageURL}
-                        />
-                    </WithArticleAppearance>
-                </>
-            )
-        },
-    })
+            </SlideCard>
+        )
+    }
+    return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
 }
 
 ArticleScreen.navigationOptions = ({

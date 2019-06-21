@@ -1,4 +1,4 @@
-package com.mallard;
+package com.guardian.editions;
 
 import android.os.Bundle;
 import com.facebook.react.ReactFragmentActivity;

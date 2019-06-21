@@ -1,14 +1,10 @@
 import React, { useMemo } from 'react'
 import { ScrollView, Button, View, Alert, Clipboard } from 'react-native'
-import { List, ListHeading } from '../../components/lists/list'
-import { color } from '../../theme/color'
-import { metrics } from '../../theme/spacing'
-import {
-    useFileList,
-    useDownloadQueue,
-    DownloadQueue,
-} from '../../hooks/use-fs'
-import { Item } from '../../components/lists/list'
+import { List, ListHeading } from 'src/components/lists/list'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { useFileList, useDownloadQueue, DownloadQueue } from 'src/hooks/use-fs'
+import { Item } from 'src/components/lists/list'
 import {
     File,
     displayFileSize,
@@ -17,7 +13,8 @@ import {
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
-} from '../../helpers/files'
+    getJson,
+} from 'src/helpers/files'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
@@ -68,7 +65,7 @@ export const DownloadScreen = () => {
             key: file.filename,
             title:
                 file.type === 'issue'
-                    ? `🗞 ${file.issue}`
+                    ? `🗞 ${file.issue.name}`
                     : `📦 ${file.filename}`,
             explainer: `${displayFileSize(file.size)} – ${file.type}`,
             data: file,
@@ -153,9 +150,9 @@ export const DownloadScreen = () => {
                 <ListHeading>On device</ListHeading>
                 <List
                     data={fileList}
-                    onPress={({ type, issue }) => {
+                    onPress={({ type, id, path }) => {
                         if (type === 'archive') {
-                            unzipIssue(issue)
+                            unzipIssue(id)
                                 .then(async () => {
                                     refreshIssues()
                                 })
@@ -163,6 +160,10 @@ export const DownloadScreen = () => {
                                     Alert.alert(JSON.stringify(error))
                                     refreshIssues()
                                 })
+                        } else if (type === 'json') {
+                            getJson(path).then(data => {
+                                Alert.alert(JSON.stringify(data))
+                            })
                         } else {
                             Alert.alert('oof')
                         }

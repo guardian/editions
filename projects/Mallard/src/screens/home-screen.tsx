@@ -5,28 +5,32 @@ import {
     Button,
     StyleSheet,
     View,
-    Alert,
+    Platform,
 } from 'react-native'
-import { List, ListHeading } from '../components/lists/list'
+import { List, ListHeading } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
-import { primaryContainer } from '../theme/styles'
+import { primaryContainer } from 'src/theme/styles'
 import { ApiState } from './settings/api-screen'
-import { WithAppAppearance } from '../theme/appearance'
-import { metrics } from '../theme/spacing'
-import { useFileList } from '../hooks/use-fs'
-import { Issue } from '../common'
-import { renderIssueDate } from '../helpers/issues'
-import { unzipIssue } from '../helpers/files'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { metrics } from 'src/theme/spacing'
+import { useFileList } from 'src/hooks/use-fs'
+import { Issue } from 'src/common'
+import { renderIssueDate } from 'src/helpers/issues'
+import { unzipIssue } from 'src/helpers/files'
+import { APP_DISPLAY_NAME } from 'src/helpers/words'
+import { color } from 'src/theme/color'
 
 const demoIssues: Issue[] = [
     {
-        name: '',
+        key: 'alpha-edition',
+        name: 'PROD dummy',
         date: new Date(Date.now()).getTime(),
         fronts: [],
     },
     {
-        name: '',
-        date: new Date(Date.now() - 86400000).getTime(),
+        key: 'dd753c95-b0be-4f0c-98a8-3797374e71b6',
+        name: 'CODE dummy',
+        date: new Date(Date.now()).getTime(),
         fronts: [],
     },
 ]
@@ -56,8 +60,9 @@ export const HomeScreen = ({
             demoIssues.map(issue => ({
                 key: issue.date.toString(),
                 title: renderIssueDate(issue.date).date,
+                explainer: issue.key,
                 data: {
-                    issue,
+                    issue: issue.key,
                 },
             })),
         [demoIssues.map(({ date }) => date)],
@@ -74,36 +79,42 @@ export const HomeScreen = ({
                 <ListHeading>Demo issues</ListHeading>
                 <List
                     data={issueList}
-                    onPress={issue => navigation.navigate('Issue', issue)}
+                    onPress={path => navigation.navigate('Issue', { path })}
                 />
                 {files.length > 0 && (
                     <>
                         <ListHeading>Issues on device</ListHeading>
                         <List
                             data={files
-                                .filter(({ type }) => type !== 'other')
+                                .filter(
+                                    ({ type }) =>
+                                        type === 'archive' || type === 'issue',
+                                )
                                 .map(file => ({
-                                    key: file.issue,
+                                    key: file.id,
                                     title:
-                                        file.type === 'archive'
-                                            ? 'Compressed issue'
-                                            : file.issue,
+                                        file.type === 'issue'
+                                            ? file.issue.name
+                                            : 'Compressed issue',
                                     explainer:
-                                        file.type === 'archive'
-                                            ? 'Tap to unarchive'
-                                            : undefined,
+                                        file.type === 'issue'
+                                            ? `From fs/${file.id}`
+                                            : 'Tap to unarchive',
                                     data: file,
                                 }))}
                             onPress={file => {
                                 if (file.type === 'archive') {
-                                    unzipIssue(file.issue).then(async () => {
+                                    unzipIssue(file.id).then(async () => {
                                         refreshIssues()
-                                        Alert.alert(`Unzipped ${file.issue}`)
+                                        navigation.navigate('Issue', {
+                                            path: file.id,
+                                        })
                                     })
-                                } else {
-                                    Alert.alert(
-                                        'Hold there, this is not supported yet',
-                                    )
+                                } else if (file.type === 'issue') {
+                                    navigation.navigate('Issue', {
+                                        path: { issue: file.issue.key },
+                                        issue: file.issue,
+                                    })
                                 }
                             }}
                         />
@@ -120,12 +131,13 @@ HomeScreen.navigationOptions = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => ({
-    title: 'Mallard',
+    title: APP_DISPLAY_NAME,
     headerRight: (
         <Button
             onPress={() => {
                 navigation.navigate('Settings')
             }}
+            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
             title="Settings"
         />
     ),

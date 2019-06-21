@@ -1,50 +1,34 @@
 // This file is symlinked into both backend and Mallard.
 // Be careful.
 
-export type ArticleFromTheCollectionsAtm = string
-export interface ArticleFundamentals {
-    title: string
-    imageURL?: string
+interface WithKey {
+    key: string
 }
-export interface Article extends ArticleFundamentals {
+
+export interface Article extends WithKey {
+    headline: string
+    kicker: string
+    image: string
+    byline: string
+    standfirst: string
+    imageURL?: string
     elements: BlockElement[]
 }
 
-export interface Issue {
+export interface Issue extends WithKey {
     name: string
     date: number
     fronts: string[]
 }
 
-export interface CollectionArticles {
-    id: string
-    name: string
-    articles: string[]
-}
-export interface Collection {
+export interface Collection extends WithKey {
     displayName: string
-    type: string
-    backfill?: unknown
-    href?: string
-    groups?: string[]
-    metadata?: unknown[]
-    uneditable?: boolean
-    showTags?: boolean
-    hideKickers?: boolean
-    excludedFromRss?: boolean
-    description?: string
-    showSections?: boolean
-    showDateHeader?: boolean
-    showLatestUpdate?: boolean
-    excludeFromRss?: boolean
-    hideShowMore?: boolean
-    platform?: unknown
-    frontsToolSettings?: unknown
-    articles?: string[]
+    articles?: { [key: string]: Article }
+    preview?: true
 }
 
-export interface Front {
-    collections: { [key: string]: Collection }
+export interface Front extends WithKey {
+    collections: string[]
     canonical?: string
     group?: string
     isHidden?: boolean

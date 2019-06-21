@@ -6,13 +6,13 @@ import React from 'react'
 import { useScreens } from 'react-native-screens'
 import { StatusBar, View } from 'react-native'
 
-import { RootNavigator } from './navigation'
-import { SettingsProvider } from './hooks/use-settings'
-import { FileSystemProvider } from './hooks/use-fs'
+import { RootNavigator } from 'src/navigation'
+import { SettingsProvider } from 'src/hooks/use-settings'
+import { FileSystemProvider } from 'src/hooks/use-fs'
 
 useScreens()
 
-const navigationPersistenceKey = __DEV__ ? 'nav-1560178658566-' : null
+const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
 
 export default class App extends React.Component<{}, {}> {
     /**

@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactNode } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
-import { metrics } from '../../../theme/spacing'
+import { metrics } from 'src/theme/spacing'
 
 /* 
 This is the swipey contraption that contains an article.
@@ -21,20 +21,17 @@ const styles = StyleSheet.create({
         elevation: 5,
         flex: 1,
     },
+    flexGrow: {
+        flexGrow: 1,
+    },
 })
 
 export const SlideCard = ({
     children,
-    headerStyle,
-    backgroundColor,
     onDismiss,
-    fadesHeaderIn,
 }: {
     children: ReactNode
-    headerStyle: {}
-    backgroundColor: string | undefined
     onDismiss: () => void
-    fadesHeaderIn: boolean
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
     useEffect(() => {
@@ -43,7 +40,7 @@ export const SlideCard = ({
                 onDismiss()
             }
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <Animated.View
             style={[
@@ -62,19 +59,14 @@ export const SlideCard = ({
             ]}
         >
             <Header
-                style={headerStyle}
                 {...{
                     scrollY,
-                    fadesHeaderIn,
                     onDismiss,
                 }}
             />
             <Animated.ScrollView
                 scrollEventThrottle={1}
-                contentContainerStyle={{
-                    flexGrow: 1,
-                }}
-                style={{ backgroundColor }}
+                contentContainerStyle={styles.flexGrow}
                 onScroll={Animated.event(
                     [
                         {
@@ -89,17 +81,20 @@ export const SlideCard = ({
                 )}
             >
                 <Animated.View
-                    style={{
-                        transform: [
-                            {
-                                translateY: scrollY.interpolate({
-                                    inputRange: [-110, 0],
-                                    outputRange: [-100, 0],
-                                    extrapolate: 'clamp',
-                                }),
-                            },
-                        ],
-                    }}
+                    style={[
+                        styles.flexGrow,
+                        {
+                            transform: [
+                                {
+                                    translateY: scrollY.interpolate({
+                                        inputRange: [-110, 0],
+                                        outputRange: [-100, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                            ],
+                        },
+                    ]}
                 >
                     {children}
                 </Animated.View>

@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { HeadlineText, HeadlineKickerText } from '../../components/styled-text'
-import { metrics } from '../../theme/spacing'
-import { useArticleAppearance } from '../../theme/appearance'
+import { HeadlineText, HeadlineKickerText } from 'src/components/styled-text'
+import { metrics } from 'src/theme/spacing'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from './article-image'
 
 interface Style {
@@ -45,7 +45,7 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
-            {image && (
+            {image ? (
                 <ArticleImage
                     style={{
                         aspectRatio: 1.5,
@@ -53,14 +53,14 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
                     }}
                     image={image}
                 />
-            )}
-            {kicker && (
+            ) : null}
+            {kicker ? (
                 <View style={[newsHeaderStyles.kicker, appearance.backgrounds]}>
                     <HeadlineKickerText style={[appearance.text]}>
                         {kicker}
                     </HeadlineKickerText>
                 </View>
-            )}
+            ) : null}
             <HeadlineText
                 style={[
                     newsHeaderStyles.headline,

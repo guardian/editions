@@ -1,29 +1,45 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    ReactNode,
-    useMemo,
-} from 'react'
-import { ScrollView, View, Dimensions, Animated } from 'react-native'
-import { useEndpointResponse } from '../../hooks/use-fetch'
-import { metrics } from '../../theme/spacing'
-import { CardGroup } from './card-group'
+import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
+import {
+    ScrollView,
+    View,
+    Dimensions,
+    Animated,
+    StyleSheet,
+} from 'react-native'
+import { useJsonOrEndpoint } from '../../hooks/use-fetch'
+import { metrics } from 'src/theme/spacing'
+import { Collection } from './collection'
 import { Navigator, NavigatorSkeleton } from '../navigator'
-import { ArticleAppearance } from '../../theme/appearance'
-import { Front as FrontType, Collection } from '../../../../backend/common'
+import { ArticleAppearance } from 'src/theme/appearance'
+import {
+    Front as FrontType,
+    Collection as CollectionType,
+} from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
+import { Issue } from 'src/common'
+import { color as themeColor } from '../../theme/color'
+import { withResponse } from 'src/hooks/use-response'
+import { FlexErrorMessage } from '../layout/errors/flex-error-message'
+import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
 }
 
-const useFrontsResponse = (front: string) =>
-    useEndpointResponse<FrontType>(
-        `front/${front}`,
-        res => res.collections != null,
+const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
+    const resp = useJsonOrEndpoint<FrontType>(issue, `front/${front}`, {
+        validator: res => res.collections != null,
+    })
+    return withResponse<FrontType>(resp)
+}
+
+const useCollectionResponse = (
+    issue: Issue['key'],
+    collection: Collection['key'],
+) =>
+    withResponse<CollectionType>(
+        useJsonOrEndpoint<CollectionType>(issue, `collection/${collection}`),
     )
 
 /*
@@ -50,51 +66,69 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     })
 }
 
-const Page: FunctionComponent<{
-    length: number
+const Page = ({
+    collection,
+    issue,
+    appearance,
+    index,
+    scrollX,
+}: {
     appearance: ArticleAppearance
-    page: number
+    index: number
     scrollX: Animated.Value
-    collection: Collection
-}> = ({ collection, length, appearance, page, scrollX }) => {
+    collection: CollectionType['key']
+    issue: Issue['key']
+}) => {
     const { width } = Dimensions.get('window')
-    const translateX = getTranslateForPage(scrollX, page)
+    const translateX = getTranslateForPage(scrollX, index)
+    const collectionResponse = useCollectionResponse(issue, collection)
 
     return (
         <View style={{ width }}>
-            <CardGroup
-                appearance={appearance}
-                articles={collection.articles || []}
-                length={length}
-                translate={translateX}
-                style={[
-                    {
-                        flex: 1,
-                        transform: [
-                            {
-                                translateX,
-                            },
-                        ],
-                    },
-                ]}
-            />
+            {collectionResponse({
+                error: ({ message }) => (
+                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                ),
+                pending: () => (
+                    <FlexCenter>
+                        <Spinner />
+                    </FlexCenter>
+                ),
+                success: collectionData =>
+                    collectionData.articles ? (
+                        <Collection
+                            articles={Object.values(collectionData.articles)}
+                            translate={translateX}
+                            {...{ issue, collection, appearance }}
+                            style={[
+                                {
+                                    flex: 1,
+                                    transform: [
+                                        {
+                                            translateX,
+                                        },
+                                    ],
+                                },
+                            ]}
+                        />
+                    ) : (
+                        <FlexErrorMessage title={ERR_404_REMOTE} />
+                    ),
+            })}
         </View>
     )
 }
+
+const wrapperStyles = StyleSheet.create({
+    inner: { height: metrics.frontCardHeight },
+})
 
 const Wrapper: FunctionComponent<{
     scrubber: ReactNode
     children: ReactNode
 }> = ({ children, scrubber }) => {
-    const height = Dimensions.get('window').height - 300
     return (
-        <View
-            style={{
-                height,
-                maxHeight: height,
-                minHeight: height,
-            }}
-        >
+        <View>
             <View
                 style={{
                     padding: metrics.horizontal,
@@ -104,18 +138,19 @@ const Wrapper: FunctionComponent<{
             >
                 {scrubber}
             </View>
-            {children}
+            <View style={wrapperStyles.inner}>{children}</View>
         </View>
     )
 }
 
 export const Front: FunctionComponent<{
     front: string
+    issue: Issue['key']
     viewIsTransitioning: boolean
-}> = ({ front, viewIsTransitioning }) => {
+}> = ({ front, issue, viewIsTransitioning }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
-    const frontsResponse = useFrontsResponse(front)
+    const frontsResponse = useFrontsResponse(issue, front)
 
     return frontsResponse({
         pending: () => (
@@ -127,14 +162,14 @@ export const Front: FunctionComponent<{
         ),
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <FlexCenter>
-                    <UiBodyCopy>Oh no! something failed</UiBodyCopy>
-                    <UiExplainerCopy>{err.message}</UiExplainerCopy>
-                </FlexCenter>
+                <FlexErrorMessage
+                    title={'Oh no! something failed'}
+                    message={err.message}
+                />
             </Wrapper>
         ),
         success: frontData => {
-            const color = 'green'
+            const color = themeColor.palette.news.bright
             const pages = Object.keys(frontData.collections).length
             const collections = viewIsTransitioning
                 ? Object.entries(frontData.collections).slice(0, 1)
@@ -174,7 +209,8 @@ export const Front: FunctionComponent<{
                                 inputRange: [
                                     0,
                                     Dimensions.get('window').width *
-                                        (pages - 1),
+                                        (pages - 1) +
+                                        0.001,
                                 ],
                                 outputRange: [0, 1],
                             })}
@@ -205,9 +241,9 @@ export const Front: FunctionComponent<{
                     >
                         {collections.map(([id, collection], i) => (
                             <Page
-                                page={i}
-                                length={6}
-                                appearance={'comment'}
+                                issue={issue}
+                                index={i}
+                                appearance={'news'}
                                 key={id}
                                 {...{ collection, scrollX }}
                             />

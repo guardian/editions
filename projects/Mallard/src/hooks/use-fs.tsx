@@ -1,6 +1,6 @@
 import React, { useContext, createContext } from 'react'
 import { useState, useEffect } from 'react'
-import { File, getFileList, downloadIssue } from '../helpers/files'
+import { File, getFileList, downloadIssue } from 'src/helpers/files'
 
 /*
 Downloads
@@ -15,23 +15,17 @@ export interface DownloadQueue {
     [key: string]: DownloadQueueItem
 }
 
-type DownloadQueueHook = [
-    DownloadQueue,
-    (issue: File['issue']) => Promise<void>
-]
+type DownloadQueueHook = [DownloadQueue, (issue: File['id']) => Promise<void>]
 
 const useDownloadQueueInCtx = (): DownloadQueueHook => {
     const [queue, setQueue] = useState<DownloadQueue>({})
-    const deleteIssue = (issue: File['issue']) =>
+    const deleteIssue = (issue: File['id']) =>
         setQueue(q => {
             const clone = { ...q }
             delete clone[issue]
             return clone
         })
-    const setIssue = (
-        issue: File['issue'],
-        state: Partial<DownloadQueueItem>,
-    ) =>
+    const setIssue = (issue: File['id'], state: Partial<DownloadQueueItem>) =>
         setQueue(q => ({
             ...q,
             [issue]: {
@@ -39,7 +33,7 @@ const useDownloadQueueInCtx = (): DownloadQueueHook => {
                 ...state,
             },
         }))
-    const download = (issue: File['issue']) => {
+    const download = (issue: File['id']) => {
         const dl = downloadIssue(issue)
         dl.progress((received, total) => {
             if (total >= received) {
