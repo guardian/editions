@@ -8,7 +8,7 @@ import {
     ArticleAppearance,
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { RowWithArticles } from './row'
+import { Row } from './row'
 import { Article, Issue, Collection } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
@@ -39,6 +39,21 @@ export interface PropTypes {
     collection: Collection['key']
 }
 
+const Wrapper = ({
+    style,
+    children,
+}: {
+    style: StyleProp<{}>
+    children: ReactNode
+}) => {
+    const { appearance } = useArticleAppearance()
+    return (
+        <Animated.View style={[styles.root, style, appearance.backgrounds]}>
+            {children}
+        </Animated.View>
+    )
+}
+
 const CollectionPageWithAppearance = ({
     articles,
     collection,
@@ -52,7 +67,7 @@ const CollectionPageWithAppearance = ({
     return (
         <>
             {pageLayout.map((row, index) => (
-                <RowWithArticles
+                <Row
                     index={index}
                     key={index}
                     articles={
@@ -69,22 +84,6 @@ const CollectionPageWithAppearance = ({
         </>
     )
 }
-
-const Wrapper = ({
-    style,
-    children,
-}: {
-    style: StyleProp<{}>
-    children: ReactNode
-}) => {
-    const { appearance } = useArticleAppearance()
-    return (
-        <Animated.View style={[styles.root, style, appearance.backgrounds]}>
-            {children}
-        </Animated.View>
-    )
-}
-
 const CollectionPage = ({
     appearance,
     style,

@@ -44,7 +44,7 @@ interface RowPropTypes {
 /*
 this is the low level row that actually takes in children. do not export
 */
-const Row = ({
+const RowWithChildren = ({
     children,
     translate,
     index,
@@ -102,7 +102,7 @@ const RowWithOneArticle = ({
     RowPropTypes) => {
     const { Item } = row.columns[0]
     return (
-        <Row {...rowProps} {...{ row }}>
+        <RowWithChildren {...rowProps} {...{ row }}>
             <Item
                 style={styles.card}
                 size={row.size}
@@ -113,17 +113,17 @@ const RowWithOneArticle = ({
                 }}
                 article={article}
             />
-        </Row>
+        </RowWithChildren>
     )
 }
 
 /*
-ROW WITH ARTICLES
+ROW
 shows 2 articles side by side. If there's less 
 it falls back to a single row and if there's more 
 then it eats them up
 */
-const RowWithArticles = ({
+const Row = ({
     articles,
     collection,
     issue,
@@ -136,6 +136,7 @@ const RowWithArticles = ({
     const { appearance } = useArticleAppearance()
 
     if (row.columns.length !== 2 || !articles[1]) {
+        if (!articles[0]) return null
         return (
             <RowWithOneArticle
                 {...rowProps}
@@ -148,7 +149,7 @@ const RowWithArticles = ({
     const [{ Item: FirstItem }, { Item: SecondItem }] = row.columns
 
     return (
-        <Row {...rowProps} {...{ row }}>
+        <RowWithChildren {...rowProps} {...{ row }}>
             <View style={styles.doubleRow}>
                 <FirstItem
                     style={[styles.card]}
@@ -177,8 +178,8 @@ const RowWithArticles = ({
                     size={row.size}
                 />
             </View>
-        </Row>
+        </RowWithChildren>
     )
 }
 
-export { RowWithArticles, RowWithOneArticle }
+export { Row }

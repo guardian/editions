@@ -19,4 +19,23 @@ const threeStoryPage: PageLayout = withSlots([
     },
 ])
 
-export { superHeroPage, threeStoryPage }
+const fiveStoryPage: PageLayout = withSlots([
+    {
+        size: RowSize.half,
+        columns: [ImageItem, ImageItem],
+    },
+    {
+        size: RowSize.row,
+        columns: [SmallItem],
+    },
+    {
+        size: RowSize.row,
+        columns: [SmallItem],
+    },
+    {
+        size: RowSize.row,
+        columns: [SmallItem],
+    },
+])
+
+export { superHeroPage, threeStoryPage, fiveStoryPage }
