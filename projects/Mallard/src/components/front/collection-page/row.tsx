@@ -7,7 +7,7 @@ import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from './collection-page'
 import { Article, Collection, Issue } from 'src/common'
 import { Item } from '../item/item'
-import { RowSize, getHeightForSize } from '../helpers'
+import { RowSize, getRowHeightForSize } from '../helpers'
 
 const styles = StyleSheet.create({
     row: {
@@ -54,7 +54,7 @@ const Row = ({
     children: ReactNode
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
-    const height = useMemo(() => getHeightForSize(size), [size])
+    const height = useMemo(() => getRowHeightForSize(size), [size])
     return (
         <Animated.View
             style={[

@@ -53,7 +53,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
-    const [{ hasLiveDevMenu }] = useSettings()
+    const [{ isUsingProdDevtools }] = useSettings()
     return (
         <ScrollView
             style={styles.container}
@@ -68,7 +68,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                 error: ({ message }) => (
                     <FlexErrorMessage
                         title={GENERIC_ERROR}
-                        message={hasLiveDevMenu ? message : undefined}
+                        message={isUsingProdDevtools ? message : undefined}
                     />
                 ),
                 pending: () => (

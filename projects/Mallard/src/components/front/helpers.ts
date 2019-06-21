@@ -15,7 +15,7 @@ export enum PageAppearance {
     superhero,
 }
 
-export const getHeightForSize = (size: RowSize): string => {
+export const getRowHeightForSize = (size: RowSize): string => {
     const heights = {
         [RowSize.row]: 'auto',
         [RowSize.third]: `${(2 / 6) * 100}%`,

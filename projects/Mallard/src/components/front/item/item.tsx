@@ -9,7 +9,7 @@ import { Article } from 'src/common'
 import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
-import { RowSize, getHeightForSize } from '../helpers'
+import { RowSize, getRowHeightForSize } from '../helpers'
 
 interface PropTypes {
     style: StyleProp<ViewStyle>
@@ -155,7 +155,7 @@ const superHeroImageStyles = StyleSheet.create({
     image: {
         width: '100%',
         flex: 0,
-        height: getHeightForSize(RowSize.hero),
+        height: getRowHeightForSize(RowSize.hero),
     },
     textBlock: {
         ...tappableStyles.padding,

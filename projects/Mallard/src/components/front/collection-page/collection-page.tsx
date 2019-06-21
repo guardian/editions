@@ -9,8 +9,7 @@ import {
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { RowWithOneArticle, RowWithTwoArticles } from './row'
-import { Article, Collection } from 'src/common'
-import { Issue } from '../../../../../backend/common'
+import { Article, Issue, Collection } from 'src/common'
 import { RowSize, PageAppearance } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 
@@ -68,14 +67,12 @@ const SingleStoryCollectionPage = ({ articles, ...props }: PropTypes) => {
         return <AnyStoryCollectionPage {...{ articles, ...props }} />
 
     return (
-        <>
-            <RowWithOneArticle
-                index={0}
-                article={articles[0]}
-                size={RowSize.superhero}
-                {...props}
-            />
-        </>
+        <RowWithOneArticle
+            index={0}
+            article={articles[0]}
+            size={RowSize.superhero}
+            {...props}
+        />
     )
 }
 

@@ -88,14 +88,14 @@ const Page = ({
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
     const collectionResponse = useCollectionResponse(issue, collection)
-    const [{ hasLiveDevMenu }] = useSettings()
+    const [{ isUsingProdDevtools }] = useSettings()
     return (
         <View style={{ width }}>
             {collectionResponse({
                 error: ({ message }) => (
                     <FlexErrorMessage
                         title={GENERIC_ERROR}
-                        message={hasLiveDevMenu ? message : undefined}
+                        message={isUsingProdDevtools ? message : undefined}
                     />
                 ),
                 pending: () => (
@@ -165,7 +165,7 @@ export const Front: FunctionComponent<{
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
     const frontsResponse = useFrontsResponse(issue, front)
-    const [{ hasLiveDevMenu }] = useSettings()
+    const [{ isUsingProdDevtools }] = useSettings()
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
@@ -178,7 +178,7 @@ export const Front: FunctionComponent<{
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <FlexErrorMessage
                     title={GENERIC_ERROR}
-                    message={hasLiveDevMenu ? err.message : undefined}
+                    message={isUsingProdDevtools ? err.message : undefined}
                 />
             </Wrapper>
         ),
