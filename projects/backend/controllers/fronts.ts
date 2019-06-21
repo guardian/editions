@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { lastModified } from '../lastModified'
 import { getFront, getCollection } from '../fronts'
+import { hasFailed } from '../utils/try'
 
 export const frontController = (req: Request, res: Response) => {
     const id: string = req.params[0]
@@ -25,12 +26,18 @@ export const collectionsController = (req: Request, res: Response) => {
 
     getCollection(id, true, updater)
         .then(data => {
+            if (hasFailed(data)) {
+                console.error('Exception in the collections controller.')
+                console.error(JSON.stringify(data))
+                res.sendStatus(500)
+                return
+            }
             res.setHeader('Last-Modifed', date())
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })
         .catch(error => {
-            console.error('Error in the collections controller.')
+            console.error('Exception in the collections controller.')
             console.error(error)
             res.sendStatus(500)
         })

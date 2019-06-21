@@ -1,7 +1,16 @@
 export interface Failure {
     __failure: true
     error: Error | {}
+    messages?: string[]
 }
+export const withFailureMessage = (
+    failure: Failure,
+    message: string,
+): Failure => ({
+    __failure: true,
+    error: failure.error,
+    messages: [message, ...(failure.messages || [])],
+})
 
 export type Attempt<T> = Failure | T
 
