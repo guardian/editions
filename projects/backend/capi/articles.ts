@@ -21,11 +21,13 @@ interface CAPIArticle {
     elements: BlockElement[]
 }
 
+const capiKey: string | undefined = process.env.CAPI_KEY || undefined
+
 const url = (paths: string[]) =>
     `https://content.guardianapis.com/search?ids=${paths.join(
         ',',
     )}format=thrift&api-key=${
-        process.env.CAPI_KEY
+        capiKey
     }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
 
 const parseArticleResult = async (

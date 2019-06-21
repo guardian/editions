@@ -5,6 +5,7 @@ import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
+import { crosswordController } from './controllers/crossword'
 
 const app = express()
 
@@ -13,6 +14,8 @@ app.get('/issue/:editionId', issueController)
 app.get('/front/*?', frontController)
 
 app.get('/collection/:collectionId', collectionsController)
+
+app.get('/crossword/:date', crosswordController)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
