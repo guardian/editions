@@ -34,8 +34,10 @@ export const getCollection = async (
     const articleFragments = fromEntries(articleFragmentList)
     const ids: number[] = articleFragmentList.map(([id]) => id)
     const preview = live ? undefined : true
-    const capiPrintArticles = await attempt(getArticles(ids, 'printsent'))
-    const capiSearchArticles = await attempt(getArticles(ids, 'search'))
+    const [capiPrintArticles, capiSearchArticles] = await Promise.all([
+        attempt(getArticles(ids, 'printsent')),
+        attempt(getArticles(ids, 'search')),
+    ])
     if (hasFailed(capiPrintArticles))
         return withFailureMessage(
             capiPrintArticles,
@@ -57,7 +59,7 @@ export const getCollection = async (
             return inResponse
         })
         .map(([key, fragment]) => {
-            const article = capiPrintArticles[key] || capiSearchArticles[key]
+            const article = capiSearchArticles[key] || capiPrintArticles[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
