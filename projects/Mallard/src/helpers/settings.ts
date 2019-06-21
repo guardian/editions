@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 export interface Settings {
     apiUrl: string
-    hasLiveDevMenu: boolean
+    isUsingProdDevtools: boolean
 }
 
 /* 
@@ -42,7 +42,7 @@ export const backends = [
 
 export const defaultSettings: Settings = {
     apiUrl: backends[0].value,
-    hasLiveDevMenu: false,
+    isUsingProdDevtools: false,
 }
 
 /* 

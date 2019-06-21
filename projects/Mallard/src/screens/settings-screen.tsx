@@ -28,7 +28,7 @@ const SettingsScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [settings, setSetting] = useSettings()
-    const { apiUrl, hasLiveDevMenu } = settings
+    const { apiUrl, isUsingProdDevtools } = settings
 
     return (
         <ScrollView style={styles.container}>
@@ -40,13 +40,13 @@ const SettingsScreen = ({
             <MonoTextBlock>
                 Come back soon to see relevant settings.
             </MonoTextBlock>
-            {!hasLiveDevMenu ? (
+            {!isUsingProdDevtools ? (
                 <>
                     <View style={{ height: Dimensions.get('window').height }} />
                     <Highlight
                         style={{ alignItems: 'center' }}
                         onPress={() => {
-                            setSetting('hasLiveDevMenu', true)
+                            setSetting('isUsingProdDevtools', true)
                         }}
                     >
                         <Text
@@ -125,7 +125,7 @@ const SettingsScreen = ({
                                     'Scroll down and tap the duck to bring it back',
                                 data: {
                                     onPress: () => {
-                                        setSetting('hasLiveDevMenu', false)
+                                        setSetting('isUsingProdDevtools', false)
                                     },
                                 },
                             },

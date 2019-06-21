@@ -9,12 +9,16 @@ import { Article } from 'src/common'
 import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
-import { Size } from './row'
+import { RowSize, getRowHeightForSize } from '../helpers'
 
-interface PropTypes {
+interface TappablePropTypes {
     style: StyleProp<ViewStyle>
     article: Article
     path: PathToArticle
+}
+
+export interface PropTypes extends TappablePropTypes {
+    size: RowSize
 }
 
 /*
@@ -23,30 +27,28 @@ This just wraps every card to make it tappable
 */
 const tappableStyles = StyleSheet.create({
     root: {
-        padding: metrics.horizontal / 2,
-        paddingVertical: metrics.vertical / 2,
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: '100%',
     },
+    padding: {
+        padding: metrics.horizontal / 2,
+        paddingVertical: metrics.vertical / 2,
+    },
 })
 
-interface PropTypes {
-    style: StyleProp<ViewStyle>
-    article: Article
-    path: PathToArticle
-}
-
-const CardTappable = withNavigation(
+const ItemTappable = withNavigation(
     ({
         children,
         style,
         article,
         path,
         navigation,
+        hasPadding,
     }: {
         children: ReactNode
-    } & PropTypes &
+        hasPadding?: boolean
+    } & TappablePropTypes &
         NavigationInjectedProps) => {
         const { appearance } = useArticleAppearance()
         return (
@@ -62,6 +64,7 @@ const CardTappable = withNavigation(
                     <View
                         style={[
                             tappableStyles.root,
+                            hasPadding && tappableStyles.padding,
                             appearance.backgrounds,
                             appearance.cardBackgrounds,
                         ]}
@@ -73,9 +76,12 @@ const CardTappable = withNavigation(
         )
     },
 )
+ItemTappable.defaultProps = {
+    hasPadding: true,
+}
 
 /*
-COVER CARD
+COVER ITEM
 Text over image. To use in lifestyle & art heros
 */
 const coverStyles = StyleSheet.create({
@@ -94,9 +100,9 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverCard = ({ style, article, path }: PropTypes) => {
+const CoverItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ style, article, path }}>
+        <ItemTappable {...{ style, article, path }}>
             <View style={coverStyles.cover}>
                 <Image
                     style={coverStyles.cover}
@@ -111,10 +117,14 @@ const CoverCard = ({ style, article, path }: PropTypes) => {
                     style={coverStyles.text}
                 />
             </View>
-        </CardTappable>
+        </ItemTappable>
     )
 }
 
+/*
+IMAGE ITEM
+Text below image. To use in most heros
+*/
 const imageStyles = StyleSheet.create({
     image: {
         width: '100%',
@@ -125,9 +135,9 @@ const imageStyles = StyleSheet.create({
     },
 })
 
-const ImageCard = ({ style, article, path }: PropTypes) => {
+const ImageItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ style, article, path }}>
+        <ItemTappable {...{ style, article, path }}>
             <Image
                 style={imageStyles.image}
                 source={{
@@ -139,26 +149,49 @@ const ImageCard = ({ style, article, path }: PropTypes) => {
                 kicker={article.kicker}
                 headline={article.headline}
             />
-        </CardTappable>
+        </ItemTappable>
     )
 }
 
-const SmallCard = ({ style, article, path }: PropTypes) => {
+/*
+SUPERHERO IMAGE ITEM
+Text below image. To use in news & sport supers
+*/
+const superHeroImageStyles = StyleSheet.create({
+    image: {
+        width: '100%',
+        flex: 0,
+        height: getRowHeightForSize(RowSize.hero),
+    },
+    textBlock: {
+        ...tappableStyles.padding,
+    },
+})
+
+const SuperHeroImageItem = ({ style, article, path }: PropTypes) => {
     return (
-        <CardTappable {...{ style, article, path }}>
-            <TextBlock kicker={article.kicker} headline={article.headline} />
-        </CardTappable>
+        <ItemTappable {...{ article, path, style }} hasPadding={false}>
+            <Image
+                style={[superHeroImageStyles.image]}
+                source={{
+                    uri: article.image,
+                }}
+            />
+            <TextBlock
+                style={[superHeroImageStyles.textBlock]}
+                kicker={article.kicker}
+                headline={article.headline}
+            />
+        </ItemTappable>
     )
 }
 
-const Card = ({ size, ...props }: { size: Size } & PropTypes) => {
-    /* this chooses the card type for us based on ummm MAGIC? */
-    return size >= Size.hero ? (
-        <ImageCard {...props} />
-    ) : size >= Size.half ? (
-        <ImageCard {...props} />
-    ) : (
-        <SmallCard {...props} />
+const SmallItem = ({ style, article, path }: PropTypes) => {
+    return (
+        <ItemTappable {...{ style, article, path }}>
+            <TextBlock kicker={article.kicker} headline={article.headline} />
+        </ItemTappable>
     )
 }
-export { Card }
+
+export { SuperHeroImageItem, ImageItem, SmallItem, CoverItem }

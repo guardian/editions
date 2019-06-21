@@ -4,27 +4,20 @@ import { Multiline } from '../../multiline'
 import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
-import { PropTypes as CollectionPropTypes } from '../collection'
+import { PropTypes as CollectionPropTypes } from './collection-page'
 import { Article, Collection, Issue } from 'src/common'
-import { Card } from './../card-group/card'
-
-export enum Size {
-    row,
-    third,
-    half,
-    hero,
-    superhero,
-}
+import { getRowHeightForSize, RowLayout } from '../helpers'
 
 const styles = StyleSheet.create({
     row: {
-        flexGrow: 1,
+        flex: 0,
+        overflow: 'hidden',
+        flexBasis: 'auto',
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'space-between',
     },
     doubleRow: {
-        flex: 1,
         flexDirection: 'row',
         overflow: 'hidden',
         display: 'flex',
@@ -34,7 +27,7 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
     },
-    rightCard: {
+    rightItem: {
         borderLeftWidth: StyleSheet.hairlineWidth,
     },
 })
@@ -45,37 +38,23 @@ interface NavigationPropTypes {
 }
 interface RowPropTypes {
     translate: CollectionPropTypes['translate']
-    isLastChild: boolean
     index: number
-    size: Size
-}
-
-const getHeightForSize = (size: Size): string => {
-    const heights = {
-        [Size.row]: 'auto',
-        [Size.third]: `${(2 / 6) * 100}%`,
-        [Size.half]: '50%',
-        [Size.hero]: `${(4 / 6) * 100}%`,
-        [Size.superhero]: 'auto',
-    }
-
-    return heights[size]
+    row: RowLayout
 }
 
 /*
 this is the low level row that actually takes in children. do not export
 */
-const Row = ({
+const RowWithChildren = ({
     children,
     translate,
-    isLastChild,
     index,
-    size,
+    row,
 }: {
     children: ReactNode
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
-    const height = useMemo(() => getHeightForSize(size), [size])
+    const height = useMemo(() => getRowHeightForSize(row.size), [row.size])
     return (
         <Animated.View
             style={[
@@ -90,21 +69,20 @@ const Row = ({
                                     0,
                                     metrics.horizontal * 1.5,
                                 ],
-                                outputRange: [60 * index, 0, -60 * index],
+                                outputRange: [10 * index, 0, -10 * index],
                             }),
                         },
                     ],
                 },
             ]}
         >
-            {children}
-            {isLastChild ? null : (
+            {index !== 0 ? (
                 <Multiline
                     color={appearance.backgrounds.borderColor}
                     count={2}
-                    style={{ flex: 0 }}
                 />
-            )}
+            ) : null}
+            {children}
         </Animated.View>
     )
 }
@@ -113,63 +91,68 @@ const Row = ({
 ROW WITH ARTICLE
 shows 1 article
 */
-const RowWithArticle = ({
+const RowWithOneArticle = ({
     article,
     collection,
     issue,
+    row,
     ...rowProps
 }: {
     article: Article
 } & NavigationPropTypes &
-    RowPropTypes) => (
-    <Row {...rowProps}>
-        <Card
-            style={styles.card}
-            size={rowProps.size}
-            path={{
-                article: article.key,
-                collection,
-                issue,
-            }}
-            article={article}
-        />
-    </Row>
-)
+    RowPropTypes) => {
+    const { Item } = row.columns[0]
+    return (
+        <RowWithChildren {...rowProps} {...{ row }}>
+            <Item
+                style={styles.card}
+                size={row.size}
+                path={{
+                    article: article.key,
+                    collection,
+                    issue,
+                }}
+                article={article}
+            />
+        </RowWithChildren>
+    )
+}
 
 /*
-ROW WITH TWO ARTICLES
+ROW
 shows 2 articles side by side. If there's less 
 it falls back to a single row and if there's more 
 then it eats them up
 */
-const RowWithTwoArticles = ({
+const Row = ({
     articles,
     collection,
     issue,
+    row,
     ...rowProps
 }: {
-    articles: [Article, Article]
+    articles: [Article] | [Article, Article]
 } & NavigationPropTypes &
     RowPropTypes) => {
     const { appearance } = useArticleAppearance()
 
-    /*
-    we can't fully enforce this article pair so if 
-    something goes wrong and we are missing article #2 
-    we fall back to 1 article
-    */
-    if (!articles[1])
+    if (row.columns.length !== 2 || !articles[1]) {
+        if (!articles[0]) return null
         return (
-            <RowWithArticle
+            <RowWithOneArticle
                 {...rowProps}
-                {...{ issue, collection }}
+                {...{ issue, collection, row }}
                 article={articles[0]}
             />
         )
+    }
+
+    const [{ Item: FirstItem }, { Item: SecondItem }] = row.columns
+
     return (
-        <Row {...rowProps}>
+        <RowWithChildren {...rowProps} {...{ row }}>
             <View style={styles.doubleRow}>
-                <Card
+                <FirstItem
                     style={[styles.card]}
                     path={{
                         article: articles[0].key,
@@ -177,12 +160,12 @@ const RowWithTwoArticles = ({
                         issue,
                     }}
                     article={articles[0]}
-                    size={rowProps.size}
+                    size={row.size}
                 />
-                <Card
+                <SecondItem
                     style={[
                         styles.card,
-                        styles.rightCard,
+                        styles.rightItem,
                         {
                             borderColor: appearance.backgrounds.borderColor,
                         },
@@ -193,11 +176,11 @@ const RowWithTwoArticles = ({
                         issue,
                     }}
                     article={articles[1]}
-                    size={rowProps.size}
+                    size={row.size}
                 />
             </View>
-        </Row>
+        </RowWithChildren>
     )
 }
 
-export { RowWithTwoArticles, RowWithArticle }
+export { Row }

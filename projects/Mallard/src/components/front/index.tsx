@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
-import { Collection } from './collection'
+import { CollectionPage } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { ArticleAppearance } from 'src/theme/appearance'
 import {
@@ -22,6 +22,8 @@ import { color as themeColor } from '../../theme/color'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
+import { superHeroPage, threeStoryPage, fiveStoryPage } from './layouts'
+import { useSettings } from 'src/hooks/use-settings'
 
 interface AnimatedScrollViewRef {
     _component: ScrollView
@@ -36,7 +38,7 @@ const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
 
 const useCollectionResponse = (
     issue: Issue['key'],
-    collection: Collection['key'],
+    collection: CollectionType['key'],
 ) =>
     withResponse<CollectionType>(
         useJsonOrEndpoint<CollectionType>(issue, `collection/${collection}`),
@@ -62,7 +64,11 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     const { width } = Dimensions.get('window')
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
-        outputRange: [metrics.horizontal * -1.5, 0, metrics.horizontal * 1.5],
+        outputRange: [
+            metrics.frontsPageSides * -1.75,
+            0,
+            metrics.frontsPageSides * 1.75,
+        ],
     })
 }
 
@@ -82,12 +88,15 @@ const Page = ({
     const { width } = Dimensions.get('window')
     const translateX = getTranslateForPage(scrollX, index)
     const collectionResponse = useCollectionResponse(issue, collection)
-
+    const [{ isUsingProdDevtools }] = useSettings()
     return (
         <View style={{ width }}>
             {collectionResponse({
                 error: ({ message }) => (
-                    <FlexErrorMessage title={GENERIC_ERROR} message={message} />
+                    <FlexErrorMessage
+                        title={GENERIC_ERROR}
+                        message={isUsingProdDevtools ? message : undefined}
+                    />
                 ),
                 pending: () => (
                     <FlexCenter>
@@ -96,9 +105,16 @@ const Page = ({
                 ),
                 success: collectionData =>
                     collectionData.articles ? (
-                        <Collection
+                        <CollectionPage
                             articles={Object.values(collectionData.articles)}
                             translate={translateX}
+                            pageLayout={
+                                index === 0
+                                    ? superHeroPage
+                                    : index === 1
+                                    ? threeStoryPage
+                                    : fiveStoryPage
+                            }
                             {...{ issue, collection, appearance }}
                             style={[
                                 {
@@ -120,7 +136,7 @@ const Page = ({
 }
 
 const wrapperStyles = StyleSheet.create({
-    inner: { height: metrics.frontCardHeight },
+    inner: { height: metrics.frontsPageHeight },
 })
 
 const Wrapper: FunctionComponent<{
@@ -151,7 +167,7 @@ export const Front: FunctionComponent<{
     const [scrollX] = useState(() => new Animated.Value(0))
     const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
     const frontsResponse = useFrontsResponse(issue, front)
-
+    const [{ isUsingProdDevtools }] = useSettings()
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
@@ -163,8 +179,8 @@ export const Front: FunctionComponent<{
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
                 <FlexErrorMessage
-                    title={'Oh no! something failed'}
-                    message={err.message}
+                    title={GENERIC_ERROR}
+                    message={isUsingProdDevtools ? err.message : undefined}
                 />
             </Wrapper>
         ),
