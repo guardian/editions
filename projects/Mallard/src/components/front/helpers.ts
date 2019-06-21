@@ -1,3 +1,22 @@
+import { FunctionComponent } from 'react'
+import { PropTypes } from './item/item'
+
+type Item = FunctionComponent<PropTypes>
+interface ItemLayoutDefinition {
+    Item: Item
+    slot: number
+}
+interface AbstractRowLayout<I> {
+    size: RowSize
+    columns: [I] | [I, I]
+}
+
+type AbstractPageLayout<I> = AbstractRowLayout<I>[]
+type LazyPageLayout = AbstractPageLayout<Item>
+
+export type PageLayout = AbstractPageLayout<ItemLayoutDefinition>
+export type RowLayout = AbstractRowLayout<ItemLayoutDefinition>
+
 export enum RowSize {
     row,
     third,
@@ -6,13 +25,34 @@ export enum RowSize {
     superhero,
 }
 
-export enum PageAppearance {
-    six,
-    five,
-    four,
-    three,
-    two,
-    superhero,
+export const withSlots = (page: LazyPageLayout): PageLayout => {
+    let slot = 0
+    return page.map(({ columns, ...row }) => {
+        if (columns.length === 1) {
+            return {
+                ...row,
+                columns: [
+                    {
+                        slot: slot++,
+                        Item: columns[0],
+                    },
+                ],
+            }
+        }
+        return {
+            ...row,
+            columns: [
+                {
+                    slot: slot++,
+                    Item: columns[0],
+                },
+                {
+                    slot: slot++,
+                    Item: columns[1],
+                },
+            ],
+        }
+    })
 }
 
 export const getRowHeightForSize = (size: RowSize): string => {

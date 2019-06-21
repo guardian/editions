@@ -6,8 +6,7 @@ import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from './collection-page'
 import { Article, Collection, Issue } from 'src/common'
-import { Item } from '../item/item'
-import { RowSize, getRowHeightForSize } from '../helpers'
+import { getRowHeightForSize, RowLayout } from '../helpers'
 
 const styles = StyleSheet.create({
     row: {
@@ -39,7 +38,7 @@ interface NavigationPropTypes {
 interface RowPropTypes {
     translate: CollectionPropTypes['translate']
     index: number
-    size: RowSize
+    row: RowLayout
 }
 
 /*
@@ -49,12 +48,12 @@ const Row = ({
     children,
     translate,
     index,
-    size,
+    row,
 }: {
     children: ReactNode
 } & RowPropTypes) => {
     const { appearance } = useArticleAppearance()
-    const height = useMemo(() => getRowHeightForSize(size), [size])
+    const height = useMemo(() => getRowHeightForSize(row.size), [row.size])
     return (
         <Animated.View
             style={[
@@ -95,59 +94,63 @@ const RowWithOneArticle = ({
     article,
     collection,
     issue,
+    row,
     ...rowProps
 }: {
     article: Article
 } & NavigationPropTypes &
-    RowPropTypes) => (
-    <Row {...rowProps}>
-        <Item
-            style={styles.card}
-            size={rowProps.size}
-            path={{
-                article: article.key,
-                collection,
-                issue,
-            }}
-            article={article}
-        />
-    </Row>
-)
+    RowPropTypes) => {
+    const { Item } = row.columns[0]
+    return (
+        <Row {...rowProps} {...{ row }}>
+            <Item
+                style={styles.card}
+                size={row.size}
+                path={{
+                    article: article.key,
+                    collection,
+                    issue,
+                }}
+                article={article}
+            />
+        </Row>
+    )
+}
 
 /*
-ROW WITH TWO ARTICLES
+ROW WITH ARTICLES
 shows 2 articles side by side. If there's less 
 it falls back to a single row and if there's more 
 then it eats them up
 */
-const RowWithTwoArticles = ({
+const RowWithArticles = ({
     articles,
     collection,
     issue,
+    row,
     ...rowProps
 }: {
-    articles: [Article, Article]
+    articles: [Article] | [Article, Article]
 } & NavigationPropTypes &
     RowPropTypes) => {
     const { appearance } = useArticleAppearance()
 
-    /*
-    we can't fully enforce this article pair so if 
-    something goes wrong and we are missing article #2 
-    we fall back to 1 article
-    */
-    if (!articles[1])
+    if (row.columns.length !== 2 || !articles[1]) {
         return (
             <RowWithOneArticle
                 {...rowProps}
-                {...{ issue, collection }}
+                {...{ issue, collection, row }}
                 article={articles[0]}
             />
         )
+    }
+
+    const [{ Item: FirstItem }, { Item: SecondItem }] = row.columns
+
     return (
-        <Row {...rowProps}>
+        <Row {...rowProps} {...{ row }}>
             <View style={styles.doubleRow}>
-                <Item
+                <FirstItem
                     style={[styles.card]}
                     path={{
                         article: articles[0].key,
@@ -155,9 +158,9 @@ const RowWithTwoArticles = ({
                         issue,
                     }}
                     article={articles[0]}
-                    size={rowProps.size}
+                    size={row.size}
                 />
-                <Item
+                <SecondItem
                     style={[
                         styles.card,
                         styles.rightItem,
@@ -171,11 +174,11 @@ const RowWithTwoArticles = ({
                         issue,
                     }}
                     article={articles[1]}
-                    size={rowProps.size}
+                    size={row.size}
                 />
             </View>
         </Row>
     )
 }
 
-export { RowWithTwoArticles, RowWithOneArticle }
+export { RowWithArticles, RowWithOneArticle }

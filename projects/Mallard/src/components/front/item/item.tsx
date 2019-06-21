@@ -11,10 +11,14 @@ import { PathToArticle } from 'src/screens/article-screen'
 import { TextBlock } from './text-block'
 import { RowSize, getRowHeightForSize } from '../helpers'
 
-interface PropTypes {
+interface TappablePropTypes {
     style: StyleProp<ViewStyle>
     article: Article
     path: PathToArticle
+}
+
+export interface PropTypes extends TappablePropTypes {
+    size: RowSize
 }
 
 /*
@@ -33,12 +37,6 @@ const tappableStyles = StyleSheet.create({
     },
 })
 
-interface PropTypes {
-    style: StyleProp<ViewStyle>
-    article: Article
-    path: PathToArticle
-}
-
 const ItemTappable = withNavigation(
     ({
         children,
@@ -50,7 +48,7 @@ const ItemTappable = withNavigation(
     }: {
         children: ReactNode
         hasPadding?: boolean
-    } & PropTypes &
+    } & TappablePropTypes &
         NavigationInjectedProps) => {
         const { appearance } = useArticleAppearance()
         return (
@@ -188,13 +186,4 @@ const SmallItem = ({ style, article, path }: PropTypes) => {
     )
 }
 
-const Item = ({ size, ...props }: { size: RowSize } & PropTypes) => {
-    return size >= RowSize.superhero ? (
-        <SuperHeroImageItem {...props} />
-    ) : size >= RowSize.hero ? (
-        <ImageItem {...props} />
-    ) : (
-        <SmallItem {...props} />
-    )
-}
-export { Item }
+export { SuperHeroImageItem, ImageItem, SmallItem, CoverItem }

@@ -22,7 +22,7 @@ import { color as themeColor } from '../../theme/color'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
-import { PageAppearance } from './helpers'
+import { superHeroPage, threeStoryPage } from './layouts'
 import { useSettings } from 'src/hooks/use-settings'
 
 interface AnimatedScrollViewRef {
@@ -108,10 +108,8 @@ const Page = ({
                         <CollectionPage
                             articles={Object.values(collectionData.articles)}
                             translate={translateX}
-                            pageAppearance={
-                                index === 0
-                                    ? PageAppearance.superhero
-                                    : PageAppearance.three
+                            pageLayout={
+                                index === 0 ? superHeroPage : threeStoryPage
                             }
                             {...{ issue, collection, appearance }}
                             style={[

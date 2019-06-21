@@ -8,9 +8,9 @@ import {
     ArticleAppearance,
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { RowWithOneArticle, RowWithTwoArticles } from './row'
+import { RowWithArticles } from './row'
 import { Article, Issue, Collection } from 'src/common'
-import { RowSize, PageAppearance } from '../helpers'
+import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 
 const styles = StyleSheet.create({
@@ -35,70 +35,37 @@ export interface PropTypes {
     articles: Article[]
     translate: Animated.AnimatedInterpolation
     issue: Issue['key']
+    pageLayout: PageLayout
     collection: Collection['key']
 }
 
-const AnyStoryCollectionPage = ({
+const CollectionPageWithAppearance = ({
     articles,
     collection,
     translate,
     issue,
+    pageLayout,
 }: PropTypes) => {
     if (!articles.length) {
         return <FlexErrorMessage icon="🐶" title="bark! im empty" />
     }
     return (
         <>
-            {articles.map((article, index) => (
-                <RowWithOneArticle
+            {pageLayout.map((row, index) => (
+                <RowWithArticles
                     index={index}
                     key={index}
-                    article={article}
-                    {...{ collection, issue, translate }}
-                    size={RowSize.row}
+                    articles={
+                        row.columns[1]
+                            ? [
+                                  articles[row.columns[0].slot],
+                                  articles[row.columns[1].slot],
+                              ]
+                            : [articles[row.columns[0].slot]]
+                    }
+                    {...{ collection, issue, translate, row }}
                 />
             ))}
-        </>
-    )
-}
-
-const SingleStoryCollectionPage = ({ articles, ...props }: PropTypes) => {
-    if (articles.length !== 1)
-        return <AnyStoryCollectionPage {...{ articles, ...props }} />
-
-    return (
-        <RowWithOneArticle
-            index={0}
-            article={articles[0]}
-            size={RowSize.superhero}
-            {...props}
-        />
-    )
-}
-
-const ThreeStoryCollectionPage = ({ articles, ...props }: PropTypes) => {
-    /*
-    if something goes wrong and there's less 
-    stuff than expected we fall back to using 
-    a flexible container rather than crash
-    */
-    if (articles.length !== 3)
-        return <AnyStoryCollectionPage {...{ articles, ...props }} />
-
-    return (
-        <>
-            <RowWithOneArticle
-                index={0}
-                article={articles[2]}
-                size={RowSize.hero}
-                {...props}
-            />
-            <RowWithTwoArticles
-                index={1}
-                articles={[articles[0], articles[1]]}
-                size={RowSize.third}
-                {...props}
-            />
         </>
     )
 }
@@ -120,23 +87,15 @@ const Wrapper = ({
 
 const CollectionPage = ({
     appearance,
-    pageAppearance,
     style,
     ...props
 }: {
     appearance: ArticleAppearance
-    pageAppearance: PageAppearance
     style: StyleProp<{}>
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>
         <Wrapper style={style}>
-            {pageAppearance >= PageAppearance.superhero ? (
-                <SingleStoryCollectionPage {...props} />
-            ) : pageAppearance >= PageAppearance.three ? (
-                <ThreeStoryCollectionPage {...props} />
-            ) : (
-                <AnyStoryCollectionPage {...props} />
-            )}
+            <CollectionPageWithAppearance {...props} />
         </Wrapper>
     </WithArticleAppearance>
 )
