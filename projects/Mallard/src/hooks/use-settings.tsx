@@ -5,6 +5,7 @@ import {
     storeSetting,
     Settings,
     defaultSettings,
+    getAllSettings,
 } from 'src/helpers/settings'
 
 type SettingsFromContext = [
@@ -12,35 +13,44 @@ type SettingsFromContext = [
     (setting: keyof Settings, value: Settings[keyof Settings]) => void
 ]
 
-const useStoredSettings = (): SettingsFromContext => {
-    const [state, setState] = useState(defaultSettings)
+/**
+ * Fetch settings stored in AsyncStorage on mount
+ */
+const useStoredSettings = (): SettingsFromContext | null => {
+    const [settings, setSettings] = useState(null as Settings | null)
     const setSetting = (setting: keyof Settings, value: string | boolean) => {
-        setState(settings => ({ ...settings, [setting]: value }))
+        setSettings(settings => {
+            if (!settings) {
+                console.warn(
+                    'Settings had not yet been fetched when trying to set a setting, ignoring setting update.',
+                )
+                return settings
+            }
+            return { ...settings, [setting]: value }
+        })
         storeSetting(setting, value)
     }
     useEffect(() => {
-        for (let setting of Object.keys(state)) {
-            //@ts-ignore
-            getSetting(setting).then(value => {
-                setState(currentState => ({
-                    ...currentState,
-                    [setting]: value,
-                }))
-            })
-        }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-    return [state, setSetting]
+        getAllSettings().then(s => setSettings(s))
+    }, [])
+    return settings && [settings, setSetting]
 }
 
 const SettingsContext = createContext<SettingsFromContext>(
     {} as SettingsFromContext,
 )
 
-const SettingsProvider = ({ children }: { children: React.ReactNode }) => (
-    <SettingsContext.Provider value={useStoredSettings()}>
-        {children}
-    </SettingsContext.Provider>
-)
+const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
+    const settings = useStoredSettings()
+    return (
+        // @TODO: do we need to render a loading state here, it's so quick that we probably don't?
+        settings && (
+            <SettingsContext.Provider value={settings}>
+                {children}
+            </SettingsContext.Provider>
+        )
+    )
+}
 const useSettings = (): SettingsFromContext => useContext(SettingsContext)
 
 export { SettingsProvider, useSettings }

@@ -119,6 +119,15 @@ const SettingsScreen = ({
                                 },
                             },
                             {
+                                key: 'Re-start onboarding',
+                                title: 'Re-start onboarding',
+                                data: {
+                                    onPress: () => {
+                                        setSetting('hasOnboarded', false)
+                                    },
+                                },
+                            },
+                            {
                                 key: 'Hide this menu',
                                 title: 'Hide this menu',
                                 explainer:

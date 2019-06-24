@@ -1,3 +1,4 @@
+import React from 'react'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import { HomeScreen } from '../screens/home-screen'
 import { IssueScreen } from '../screens/issue-screen'
@@ -8,8 +9,10 @@ import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 import { issueToArticleScreenInterpolator } from './interpolators'
+import { useSettings } from 'src/hooks/use-settings'
+import { OnboardingHandler } from 'src/onboarding'
 
-export const RootNavigator = createAppContainer(
+const RootContainer = createAppContainer(
     createStackNavigator(
         {
             Main: createStackNavigator(
@@ -57,3 +60,21 @@ export const RootNavigator = createAppContainer(
         },
     ),
 )
+
+const RootNavigator = ({
+    persistenceKey,
+}: {
+    persistenceKey: string | null
+}) => {
+    const [settings, setSetting] = useSettings()
+
+    return settings.hasOnboarded ? (
+        <RootContainer persistenceKey={persistenceKey} />
+    ) : (
+        <OnboardingHandler
+            onComplete={() => setSetting('hasOnboarded', true)}
+        />
+    )
+}
+
+export { RootNavigator }
