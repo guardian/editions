@@ -3,52 +3,73 @@ import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 import { Front, Collection, Article } from './common'
 import { LastModifiedUpdater } from './lastModified'
-import { attempt, hasFailed } from './utils/try'
+import { attempt, hasFailed, Attempt, withFailureMessage } from './utils/try'
 import { getArticles } from './capi/articles'
 
 export const getCollection = async (
     id: string,
     live: boolean = true,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<Collection> => {
+): Promise<Attempt<Collection>> => {
     const resp = await attempt(
         s3fetch(`frontsapi/collection/${id}/collection.json`),
     )
-    if (hasFailed(resp)) throw new Error('Could not fetch from S3.')
+    if (hasFailed(resp))
+        return withFailureMessage(resp, 'Could not fetch from S3')
 
     lastModifiedUpdater(resp.lastModified)
 
     const deserialized = await attempt(resp.json())
-    if (hasFailed(resp)) throw new Error('Response was not valid json')
+    if (hasFailed(deserialized))
+        return withFailureMessage(deserialized, 'Response was not valid json')
 
-    const collection: CollectionFromResponse = deserialized as CollectionFromResponse
+    const collection = deserialized as CollectionFromResponse
 
-    const articleFragmentList = live ? collection.live : collection.draft
-    if (articleFragmentList == null) throw new Error('Hello that didnt work')
-    const articleFragments = fromEntries(
-        articleFragmentList.map(
-            (fragment): [string, NestedArticleFragment] => [
-                fragment.id,
-                fragment,
-            ],
-        ),
+    const articleFragmentList = collection.live.map(
+        (fragment): [number, NestedArticleFragment] => [
+            parseInt(fragment.id.replace('internal-code/page/', '')),
+            fragment,
+        ],
     )
-
+    const articleFragments = fromEntries(articleFragmentList)
+    const ids: number[] = articleFragmentList.map(([id]) => id)
     const preview = live ? undefined : true
-    const capiArticles = await getArticles(Object.keys(articleFragments))
-    const articles: [string, Article][] = Object.entries(capiArticles).map(
-        ([key, article]) => {
-            const fragment =
-                articleFragments[`internal-code/page/${article.id}`] ||
-                articleFragments[key]
+    const [capiPrintArticles, capiSearchArticles] = await Promise.all([
+        attempt(getArticles(ids, 'printsent')),
+        attempt(getArticles(ids, 'search')),
+    ])
+    if (hasFailed(capiPrintArticles))
+        return withFailureMessage(
+            capiPrintArticles,
+            'Could not connect to capi print sent',
+        )
+    if (hasFailed(capiSearchArticles))
+        return withFailureMessage(
+            capiSearchArticles,
+            'Could not connect to CAPI',
+        )
+
+    const articles: [string, Article][] = Object.entries(articleFragments)
+        .filter(([key]) => {
+            const inResponse =
+                key in capiPrintArticles || key in capiSearchArticles
+            if (!inResponse) {
+                console.warn(`Removing ${key} as not in CAPI response.`)
+            }
+            return inResponse
+        })
+        .map(([key, fragment]) => {
+            const article = capiSearchArticles[key] || capiPrintArticles[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageURL = (meta && meta.imageSrc) || article.imageURL
 
-            return [key, { ...article, key, kicker, headline, imageURL }]
-        },
-    )
+            return [
+                article.path,
+                { ...article, key, kicker, headline, imageURL },
+            ]
+        })
 
     return {
         key: id,

@@ -12,7 +12,8 @@ import { IContent } from '@guardian/capi-ts/dist/Content'
 import fetch from 'node-fetch'
 
 interface CAPIArticle {
-    id: number | undefined
+    id: number
+    path: string
     headline: string
     image: string
     byline: string
@@ -21,27 +22,22 @@ interface CAPIArticle {
     elements: BlockElement[]
 }
 
-const url = (paths: string[]) =>
-    `https://content.guardianapis.com/search?ids=${paths.join(
-        ',',
-    )}format=thrift&api-key=${
-        process.env.CAPI_KEY
-    }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
-
 const parseArticleResult = async (
     result: IContent,
-): Promise<[string, CAPIArticle]> => {
-    const id = result.id
+): Promise<[number, CAPIArticle]> => {
+    const path = result.id
 
     if (result.type !== ContentType.ARTICLE)
-        throw new Error(`${id} isn't an article`)
+        throw new Error(`${path} isn't an article`)
     const internalid = result.fields && result.fields.internalPageCode
+    if (internalid == null)
+        throw new Error(`internalid was undefined in ${path}!`)
 
-    const parser = elementParser(id)
+    const parser = elementParser(path)
     const title = result && result.webTitle
     const standfirst = result && result.fields && result.fields.standfirst
     if (standfirst == null)
-        throw new Error(`Standfirst was undefined in ${id}!`)
+        throw new Error(`Standfirst was undefined in ${path}!`)
 
     const image =
         result &&
@@ -60,21 +56,23 @@ const parseArticleResult = async (
         result.blocks.body &&
         result.blocks.body.map(_ => _.elements)
     const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
-    if (body == null) throw new Error(`Body was undefined in ${id}!`)
+    if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
     const elements = await attempt(Promise.all(body.map(parser)))
-    if (hasFailed(elements)) throw new Error(`Element parsing failed in ${id}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
+    if (hasFailed(elements))
+        throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
 
-    if (elements == null) throw new Error(`Elements was undefined in ${id}!`)
+    if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
 
     const byline = result && result.fields && result.fields.byline
 
-    if (byline == null) throw new Error(`Byline was undefined in ${id}!`)
+    if (byline == null) throw new Error(`Byline was undefined in ${path}!`)
 
     return [
-        result.id,
+        internalid,
         {
             id: internalid,
+            path: path,
             byline,
             headline: title,
             standfirst,
@@ -84,18 +82,33 @@ const parseArticleResult = async (
     ]
 }
 
+const printsent = (paths: string[]) =>
+    `${process.env.psurl}?ids=${paths.join(',')}format=thrift&api-key=${
+        process.env.CAPI_KEY
+    }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+
+const search = (paths: string[]) =>
+    `https://content.guardianapis.com/search?ids=${paths.join(
+        ',',
+    )}format=thrift&api-key=${
+        process.env.CAPI_KEY
+    }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+
 export const getArticles = async (
-    paths: string[],
+    ids: number[],
+    capi: 'printsent' | 'search',
 ): Promise<{ [key: string]: CAPIArticle }> => {
-    const endpoint = url(paths)
+    const paths = ids.map(_ => `internal-code/page/${_}`)
+
+    const endpoint = capi === 'printsent' ? printsent(paths) : search(paths)
     if (endpoint.length > 1000) {
         console.warn(
             `Unusually long CAPI request of ${endpoint.length}, splitting`,
             paths,
         )
-        const midpoint = ~~(paths.length / 2) //Coerece into int, even though apparently you can slice on a float
-        const firstRequest = attempt(getArticles(paths.slice(0, midpoint)))
-        const last = await attempt(getArticles(paths.slice(midpoint)))
+        const midpoint = ~~(ids.length / 2) //Coerece into int, even though apparently you can slice on a float
+        const firstRequest = attempt(getArticles(ids.slice(0, midpoint), capi))
+        const last = await attempt(getArticles(ids.slice(midpoint), capi))
         const first = await firstRequest
         if (hasFailed(first)) {
             console.error(first.error)
