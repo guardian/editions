@@ -20,9 +20,14 @@ export class EditionsStack extends cdk.Stack {
             description: 'Stage',
         })
 
-        const capiParameter = new cdk.CfnParameter(this, 'capi', {
+        const capiKeyParameter = new cdk.CfnParameter(this, 'capi', {
             type: 'String',
             description: 'Capi key',
+        })
+
+        const printSentURLParameter = new cdk.CfnParameter(this, 'psurl', {
+            type: 'String',
+            description: 'print sent url parameter',
         })
 
         const frontsRoleARN = new cdk.CfnParameter(this, 'fronts-role-arn', {
@@ -59,10 +64,11 @@ export class EditionsStack extends cdk.Stack {
             ),
             handler: 'index.handler',
             environment: {
-                CAPI_KEY: capiParameter.stringValue,
+                CAPI_KEY: capiKeyParameter.stringValue,
                 arn: frontsRoleARN.stringValue,
                 stage: stageParameter.stringValue,
                 atomArn: atomLambdaParam.stringValue,
+                psurl: printSentURLParameter.stringValue,
             },
         })
 

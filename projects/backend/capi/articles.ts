@@ -83,7 +83,7 @@ const parseArticleResult = async (
 }
 
 const printsent = (paths: string[]) =>
-    `xxxxxx?ids=${paths.join(',')}format=thrift&api-key=${
+    `${process.env.psurl}?ids=${paths.join(',')}format=thrift&api-key=${
         process.env.CAPI_KEY
     }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
 
