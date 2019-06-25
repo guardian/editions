@@ -15,11 +15,10 @@ const styles = StyleSheet.create({
             width: 0,
             height: -2,
         },
-        overflow: 'hidden',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        flex: 0,
+        flex: 1,
     },
     flexGrow: {
         flexGrow: 1,
