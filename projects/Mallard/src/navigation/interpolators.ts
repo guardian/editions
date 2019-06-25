@@ -1,7 +1,11 @@
 import { NavigationTransitionProps } from 'react-navigation'
-import { Dimensions } from 'react-native'
+import { Dimensions, LayoutRectangle } from 'react-native'
 import { getScreenPositionOfItem } from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
+
+export const getScaleForArticle = (width: LayoutRectangle['width']) => {
+    return width / Dimensions.get('window').width
+}
 
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
@@ -35,7 +39,7 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 }
 
 const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
-    const { layout, position, scene } = sceneProps
+    const { position, scene } = sceneProps
     const sceneIndex = scene.index
 
     /* 
@@ -64,7 +68,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     we need to scale the article's X to
     whatever its card width is
     */
-    const scaler = width / (layout.initWidth || windowWidth)
+    const scaler = getScaleForArticle(width)
     const scale = position.interpolate({
         inputRange: [sceneIndex - 1, sceneIndex],
         outputRange: [scaler, 1],

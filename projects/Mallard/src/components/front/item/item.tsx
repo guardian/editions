@@ -10,7 +10,11 @@ import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
 import { RowSize, getRowHeightForSize } from '../helpers'
-import { setScreenPositionOfItem } from 'src/helpers/positions'
+import {
+    setScreenPositionOfItem,
+    getScreenPositionOfItem,
+} from 'src/helpers/positions'
+import { getScaleForArticle } from 'src/navigation/interpolators'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -81,9 +85,15 @@ const ItemTappable = withNavigation(
             >
                 <Highlight
                     onPress={() => {
+                        const { width, height } = getScreenPositionOfItem(
+                            article.key,
+                        )
                         navigation.navigate('Article', {
                             article,
                             path,
+                            transitionProps: {
+                                cardHeight: height / getScaleForArticle(width),
+                            },
                         })
                     }}
                 >

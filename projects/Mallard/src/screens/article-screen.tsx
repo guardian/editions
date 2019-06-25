@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
@@ -8,7 +8,7 @@ import {
 } from 'src/theme/appearance'
 import { Article } from 'src/components/article'
 import { Article as ArticleType, Collection } from 'src/common'
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, Animated, Dimensions } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { SlideCard } from 'src/components/layout/slide-card/index'
@@ -23,6 +23,10 @@ export interface PathToArticle {
     collection: Collection['key']
     article: ArticleType['key']
     issue: Issue['key']
+}
+
+export interface ArticleTransitionProps {
+    cardHeight: number
 }
 
 const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
@@ -53,10 +57,12 @@ const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
 const ArticleScreenWithProps = ({
     path,
     articlePrefill,
+    transitionProps,
     navigation,
 }: {
     navigation: NavigationScreenProp<{}>
     path: PathToArticle
+    transitionProps?: ArticleTransitionProps
     articlePrefill?: ArticleType
 }) => {
     const [appearance, setAppearance] = useState(0)
@@ -71,9 +77,32 @@ const ArticleScreenWithProps = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+    const [height] = useState(
+        () =>
+            new Animated.Value(
+                (transitionProps && transitionProps.cardHeight) || 300,
+            ),
+    )
+
+    useEffect(() => {
+        Animated.sequence([
+            Animated.delay(150),
+            Animated.timing(height, {
+                toValue: Dimensions.get('window').height,
+                duration: 300,
+            }),
+        ]).start()
+    }, [])
 
     return (
-        <SlideCard onDismiss={() => navigation.goBack()}>
+        <SlideCard
+            style={{
+                height,
+                flex: 0,
+                overflow: 'hidden',
+            }}
+            onDismiss={() => navigation.goBack()}
+        >
             <NavigationEvents
                 onDidFocus={() => {
                     setViewIsTransitioning(false)
@@ -163,6 +192,9 @@ export const ArticleScreen = ({
         | undefined
 
     const path = navigation.getParam('path') as PathToArticle | undefined
+    const transitionProps = navigation.getParam('transitionProps') as
+        | ArticleTransitionProps
+        | undefined
 
     if (!path || !path.article || !path.collection || !path.issue) {
         return (
@@ -174,7 +206,11 @@ export const ArticleScreen = ({
             </SlideCard>
         )
     }
-    return <ArticleScreenWithProps {...{ articlePrefill, path, navigation }} />
+    return (
+        <ArticleScreenWithProps
+            {...{ articlePrefill, path, navigation, transitionProps }}
+        />
+    )
 }
 
 ArticleScreen.navigationOptions = ({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
 import { metrics } from 'src/theme/spacing'
@@ -27,9 +27,11 @@ const styles = StyleSheet.create({
 
 export const SlideCard = ({
     children,
+    style,
     onDismiss,
 }: {
     children: ReactNode
+    style: StyleProp<ViewStyle>
     onDismiss: () => void
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
@@ -44,6 +46,7 @@ export const SlideCard = ({
         <Animated.View
             style={[
                 styles.container,
+                style,
                 {
                     transform: [
                         {
@@ -76,7 +79,7 @@ export const SlideCard = ({
                             },
                         },
                     ],
-                    { useNativeDriver: true },
+                    { useNativeDriver: false },
                 )}
             >
                 <Animated.View
