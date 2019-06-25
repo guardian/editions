@@ -5,9 +5,9 @@ import {
     Text,
     Dimensions,
     View,
-    AsyncStorage,
     Alert,
 } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import { List, ListHeading } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'

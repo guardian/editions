@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@guardian/pasteup": "^1.0.0-alpha.11",
-        "@react-native-community/async-storage": "^1.4.0",
+        "@react-native-community/async-storage": "^1.5.0",
         "deepmerge": "^3.2.0",
         "react": "^16.8.6",
         "react-native": "0.59.3",
