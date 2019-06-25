@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useRef, useCallback } from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
@@ -10,6 +10,7 @@ import { PathToArticle } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
 import { RowSize, getRowHeightForSize } from '../helpers'
+import { setScreenPositionOfItem } from 'src/helpers/positions'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -51,8 +52,33 @@ const ItemTappable = withNavigation(
     } & TappablePropTypes &
         NavigationInjectedProps) => {
         const { appearance } = useArticleAppearance()
+        const tappableRef = useRef<View>()
+
+        const measure = useCallback(() => {
+            if (tappableRef.current) {
+                tappableRef.current.measureInWindow((x, y, width, height) => {
+                    setScreenPositionOfItem(article.key, {
+                        x,
+                        y,
+                        width,
+                        height,
+                    })
+                })
+            }
+        }, [article.key])
+
         return (
-            <View style={style}>
+            <View
+                style={style}
+                ref={(view: View) => (tappableRef.current = view)}
+                onLayout={ev => {
+                    setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
+                    measure()
+                }}
+                onTouchStart={() => {
+                    measure()
+                }}
+            >
                 <Highlight
                     onPress={() => {
                         navigation.navigate('Article', {

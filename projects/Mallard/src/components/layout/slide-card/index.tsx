@@ -10,16 +10,16 @@ This is the swipey contraption that contains an article.
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: metrics.slideCardSpacing,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: -2,
         },
+        overflow: 'hidden',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        flex: 1,
+        flex: 0,
     },
     flexGrow: {
         flexGrow: 1,
