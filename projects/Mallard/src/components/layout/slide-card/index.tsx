@@ -10,7 +10,6 @@ This is the swipey contraption that contains an article.
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: metrics.slideCardSpacing,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
