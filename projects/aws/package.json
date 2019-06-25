@@ -12,16 +12,16 @@
     },
     "devDependencies": {
         "@types/node": "8.10.45",
-        "aws-cdk": "^0.32.0",
-        "typescript": "^3.4.5"
+        "aws-cdk": "^0.35.0",
+        "typescript": "^3.5.2"
     },
     "dependencies": {
-        "@aws-cdk/aws-apigateway": "^0.32.0",
-        "@aws-cdk/aws-cloudfront": "^0.32.0",
-        "@aws-cdk/aws-iam": "^0.32.0",
-        "@aws-cdk/aws-lambda": "^0.32.0",
-        "@aws-cdk/aws-s3": "^0.32.0",
-        "@aws-cdk/cdk": "^0.32.0",
+        "@aws-cdk/aws-apigateway": "^0.35.0",
+        "@aws-cdk/aws-cloudfront": "^0.35.0",
+        "@aws-cdk/aws-iam": "^0.35.0",
+        "@aws-cdk/aws-lambda": "^0.35.0",
+        "@aws-cdk/aws-s3": "^0.35.0",
+        "@aws-cdk/cdk": "^0.35.0",
         "source-map-support": "^0.5.12"
     }
 }
