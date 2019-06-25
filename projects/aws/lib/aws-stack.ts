@@ -58,9 +58,7 @@ export class EditionsStack extends cdk.Stack {
             timeout: 60,
             code: Code.bucket(
                 deploy,
-                `${stackParameter.stringValue}/${
-                    stageParameter.stringValue
-                }/backend/backend.zip`,
+                `${stackParameter.stringValue}/${stageParameter.stringValue}/backend/backend.zip`,
             ),
             handler: 'index.handler',
             environment: {
@@ -100,9 +98,7 @@ export class EditionsStack extends cdk.Stack {
             this,
             'backend-cloudfront-distribution',
             {
-                comment: `Cloudfront distribution for editions ${
-                    stageParameter.stringValue
-                }`,
+                comment: `Cloudfront distribution for editions ${stageParameter.stringValue}`,
                 defaultRootObject: '',
                 originConfigs: [
                     {

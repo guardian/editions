@@ -25,12 +25,10 @@ export const getCollection = async (
 
     const collection = deserialized as CollectionFromResponse
 
-    const articleFragmentList = collection.live.map(
-        (fragment): [number, NestedArticleFragment] => [
-            parseInt(fragment.id.replace('internal-code/page/', '')),
-            fragment,
-        ],
-    )
+    const articleFragmentList = collection.live.map((fragment): [
+        number,
+        NestedArticleFragment,
+    ] => [parseInt(fragment.id.replace('internal-code/page/', '')), fragment])
     const articleFragments = fromEntries(articleFragmentList)
     const ids: number[] = articleFragmentList.map(([id]) => id)
     const preview = live ? undefined : true
