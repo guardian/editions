@@ -28,10 +28,10 @@ platform :ios do
     )
     build_app(
       scheme: "Mallard",
+      project: "ios/Mallard.xcodeproj",
       export_options: {
         exportOptionsPlist: "exports-plists/release.plist"
       }
-      project: "ios/Mallard.xcodeproj",
     )
     upload_to_testflight(
       skip_waiting_for_build_processing: true
