@@ -64,9 +64,7 @@ export const elementParser = (id: string) => async (
                 )
                 if (hasFailed(rendered)) {
                     console.warn(
-                        `${element.contentAtomTypeData.atomType} atom ${
-                            element.contentAtomTypeData.atomId
-                        } removed in ${id}!`,
+                        `${element.contentAtomTypeData.atomType} atom ${element.contentAtomTypeData.atomId} removed in ${id}!`,
                     )
                     return { id: 'unknown' }
                 }

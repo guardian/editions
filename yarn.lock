@@ -18,10 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@guardian/node-riffraff-artifact@0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.0.14.tgz#dff910bd40b6ab559cdfb8694a01aea657fb01b7"
-  integrity sha512-sPq1J7IpInAAmP6dCJy8ive854HBRBtNiG9xX2nCMVaQiY+r2vVYuDNqow8ZgvI1tUc/jIOgkBZIhj49rsn1qw==
+"@guardian/node-riffraff-artifact@0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.0.15.tgz#1a248e7a96fbf799172e18691ea8c2a20eda01ae"
+  integrity sha512-d4tZIhCk4BuRBQbPowVm8nvda+i1TqvRcuP3zirtEG7vnhEJyx41wXdS/0Jccv9jHTOufENVwNBqQgTqSqH0FA==
   dependencies:
     "@mojotech/json-type-validation" "^3.1.0"
     archiver "^3.0.0"
