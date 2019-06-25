@@ -65,7 +65,7 @@ export const HomeScreen = ({
                     issue: issue.key,
                 },
             })),
-        demoIssues.map(({ date }) => date),
+        demoIssues.map(({ key }) => key),
     )
 
     return (
