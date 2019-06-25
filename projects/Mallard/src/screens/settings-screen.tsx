@@ -123,7 +123,11 @@ const SettingsScreen = ({
                                 title: 'Re-start onboarding',
                                 data: {
                                     onPress: () => {
+                                        // go back to the main to simulate a fresh app
                                         setSetting('hasOnboarded', false)
+                                        navigation.navigate(
+                                            'OnboardingSwitcher',
+                                        )
                                     },
                                 },
                             },

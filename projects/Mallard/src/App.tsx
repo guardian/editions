@@ -12,8 +12,6 @@ import { FileSystemProvider } from 'src/hooks/use-fs'
 
 useScreens()
 
-const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
-
 export default class App extends React.Component<{}, {}> {
     /**
      * When the component is mounted. This happens asynchronously and simply
@@ -29,9 +27,7 @@ export default class App extends React.Component<{}, {}> {
                         backgroundColor="#041f4a"
                     />
                     <View style={{ flex: 1, backgroundColor: '#000' }}>
-                        <RootNavigator
-                            persistenceKey={navigationPersistenceKey}
-                        />
+                        <RootNavigator />
                     </View>
                 </SettingsProvider>
             </FileSystemProvider>
