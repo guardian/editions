@@ -16,6 +16,7 @@ import { useSettings } from 'src/hooks/use-settings'
 import { OnboardingHandler } from 'src/onboarding'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps, withPersistenceKey } from './helpers'
+import { shouldShowOnboarding } from 'src/helpers/settings'
 
 const AppStack = createStackNavigator(
     {
@@ -108,10 +109,10 @@ const OnboardingSwitcher = ({
 }) => {
     const [settings] = useSettings()
     useEffect(() => {
-        if (settings.hasOnboarded) {
-            navigation.navigate('App')
-        } else {
+        if (shouldShowOnboarding(settings)) {
             navigation.navigate('Onboarding')
+        } else {
+            navigation.navigate('App')
         }
     })
     return null

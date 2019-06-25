@@ -81,3 +81,6 @@ export const storeSetting = (
 ) => {
     return AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
 }
+
+export const shouldShowOnboarding = (settings: Settings) =>
+    !settings.hasOnboarded
