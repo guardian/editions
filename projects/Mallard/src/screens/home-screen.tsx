@@ -58,15 +58,16 @@ export const HomeScreen = ({
     const issueList = useMemo(
         () =>
             demoIssues.map(issue => ({
-                key: issue.date.toString(),
+                key: issue.key,
                 title: renderIssueDate(issue.date).date,
                 explainer: issue.key,
                 data: {
                     issue: issue.key,
                 },
             })),
-        [demoIssues.map(({ date }) => date)],
+        demoIssues.map(({ date }) => date),
     )
+
     return (
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
