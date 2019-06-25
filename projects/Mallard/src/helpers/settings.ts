@@ -2,10 +2,11 @@ import AsyncStorage from '@react-native-community/async-storage'
 export interface Settings {
     apiUrl: string
     isUsingProdDevtools: boolean
+    hasOnboarded: boolean
 }
 
-/* 
-we can only store strings to memory 
+/*
+we can only store strings to memory
 so we need to convert them
 */
 type UnsanitizedSetting = Settings[keyof Settings]
@@ -43,9 +44,10 @@ export const backends = [
 export const defaultSettings: Settings = {
     apiUrl: backends[0].value,
     isUsingProdDevtools: false,
+    hasOnboarded: false,
 }
 
-/* 
+/*
 getters & setters
 */
 export const getSetting = (setting: keyof Settings) =>
@@ -56,9 +58,29 @@ export const getSetting = (setting: keyof Settings) =>
         return unsanitize(item)
     })
 
+export const getAllSettings = async (): Promise<Settings> => {
+    const settings = await Promise.all(
+        (Object.keys(defaultSettings) as Array<
+            keyof typeof defaultSettings
+        >).map(key =>
+            getSetting(key).then(value => ({
+                key,
+                value,
+            })),
+        ),
+    )
+    return settings.reduce(
+        (acc, { key, value }) => ({ ...acc, [key]: value }),
+        {} as Settings,
+    )
+}
+
 export const storeSetting = (
     setting: keyof Settings,
     value: string | boolean,
 ) => {
     return AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
 }
+
+export const shouldShowOnboarding = (settings: Settings) =>
+    !settings.hasOnboarded

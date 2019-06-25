@@ -119,6 +119,19 @@ const SettingsScreen = ({
                                 },
                             },
                             {
+                                key: 'Re-start onboarding',
+                                title: 'Re-start onboarding',
+                                data: {
+                                    onPress: () => {
+                                        // go back to the main to simulate a fresh app
+                                        setSetting('hasOnboarded', false)
+                                        navigation.navigate(
+                                            'OnboardingSwitcher',
+                                        )
+                                    },
+                                },
+                            },
+                            {
                                 key: 'Hide this menu',
                                 title: 'Hide this menu',
                                 explainer:
