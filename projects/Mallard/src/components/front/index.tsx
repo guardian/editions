@@ -239,7 +239,9 @@ export const Front: FunctionComponent<{
                             offset: 0,
                             index,
                         })}
-                        keyExtractor={item => item}
+                        keyExtractor={(item: FrontType['collections'][0]) =>
+                            item
+                        }
                         onScroll={Animated.event(
                             [
                                 {
