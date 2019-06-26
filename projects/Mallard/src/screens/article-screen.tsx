@@ -67,7 +67,6 @@ const clipperStyles = StyleSheet.create({
     flex: { flex: 1 },
     bg: { backgroundColor: 'black' },
 })
-const AnimatedMaskedView = Animated.createAnimatedComponent(MaskedView)
 
 const Clipper = ({
     children,
@@ -105,7 +104,7 @@ const Clipper = ({
     /* android struggles animating masks sadface */
     if (!transitionProps || Platform.OS !== 'ios') return <>{children}</>
     return (
-        <AnimatedMaskedView
+        <MaskedView
             style={clipperStyles.flex}
             maskElement={
                 <Animated.View
@@ -123,7 +122,7 @@ const Clipper = ({
             }
         >
             {children}
-        </AnimatedMaskedView>
+        </MaskedView>
     )
 }
 
