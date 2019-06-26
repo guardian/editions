@@ -11,9 +11,9 @@ const app = express()
 
 app.get(issuePath(':issueId'), issueController)
 
-app.get(frontPath('*?'), frontController)
+app.get(frontPath(':issueId', '*?'), frontController)
 
-app.get(collectionPath(':collectionId'), collectionsController)
+app.get(collectionPath(':issueId', ':collectionId'), collectionsController)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')

@@ -35,7 +35,7 @@ const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
     const resp = useJsonOrEndpoint<Collection>(
         issue,
         FSPaths.collection(issue, collection),
-        APIPaths.collection(collection),
+        APIPaths.collection(issue, collection),
     )
     if (resp.state === 'success') {
         // TODO: we aren't storing the path anywhere on the article

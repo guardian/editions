@@ -28,7 +28,7 @@ const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
     const resp = useJsonOrEndpoint<FrontType>(
         issue,
         FSPaths.front(issue, front),
-        APIPaths.front(front),
+        APIPaths.front(issue, front),
         {
             validator: res => res.collections != null,
         },
@@ -44,7 +44,7 @@ const useCollectionResponse = (
         useJsonOrEndpoint<CollectionType>(
             issue,
             FSPaths.collection(issue, collection),
-            APIPaths.collection(collection),
+            APIPaths.collection(issue, collection),
         ),
     )
 
