@@ -42,8 +42,7 @@ const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
         // which means we can't key into our collection (which is keyed by path)
         // even when we have an article
         const articleContent =
-            resp.response.articles &&
-            Object.values(resp.response.articles).find(a => a.key === article)
+            resp.response.articles && resp.response.articles[article]
         if (articleContent) {
             return withResponse<ArticleType>({
                 ...resp,
