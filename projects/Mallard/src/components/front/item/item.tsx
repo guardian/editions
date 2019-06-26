@@ -126,7 +126,7 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({ style, article, path }: PropTypes) => {
+const CoverItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ style, article, path }}>
             <View style={coverStyles.cover}>
@@ -141,6 +141,7 @@ const CoverItem = ({ style, article, path }: PropTypes) => {
                     headline={article.headline}
                     textBlockAppearance={'pillarColor'}
                     style={coverStyles.text}
+                    {...{ size }}
                 />
             </View>
         </ItemTappable>
@@ -154,18 +155,25 @@ Text below image. To use in most heros
 const imageStyles = StyleSheet.create({
     image: {
         width: '100%',
-        flex: 1,
+        height: '50%',
+        flex: 0,
+    },
+    heroImage: {
+        height: '75%',
     },
     textBlock: {
         paddingTop: metrics.vertical / 3,
     },
 })
 
-const ImageItem = ({ style, article, path }: PropTypes) => {
+const ImageItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ style, article, path }}>
             <Image
-                style={imageStyles.image}
+                style={[
+                    imageStyles.image,
+                    size >= RowSize.hero && imageStyles.heroImage,
+                ]}
                 source={{
                     uri: article.image,
                 }}
@@ -174,6 +182,7 @@ const ImageItem = ({ style, article, path }: PropTypes) => {
                 style={imageStyles.textBlock}
                 kicker={article.kicker}
                 headline={article.headline}
+                {...{ size }}
             />
         </ItemTappable>
     )
@@ -194,7 +203,7 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageItem = ({ style, article, path }: PropTypes) => {
+const SuperHeroImageItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ article, path, style }} hasPadding={false}>
             <Image
@@ -207,15 +216,20 @@ const SuperHeroImageItem = ({ style, article, path }: PropTypes) => {
                 style={[superHeroImageStyles.textBlock]}
                 kicker={article.kicker}
                 headline={article.headline}
+                {...{ size }}
             />
         </ItemTappable>
     )
 }
 
-const SmallItem = ({ style, article, path }: PropTypes) => {
+const SmallItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ style, article, path }}>
-            <TextBlock kicker={article.kicker} headline={article.headline} />
+            <TextBlock
+                kicker={article.kicker}
+                headline={article.headline}
+                {...{ size }}
+            />
         </ItemTappable>
     )
 }
