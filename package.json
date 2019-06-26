@@ -11,7 +11,7 @@
         "upload": "node-riffraff-artifact",
         "install-backend": "cd projects/backend && yarn",
         "install-aws": "cd projects/backend && yarn",
-        "postinstall": "run-p -ln --aggregate-output install-*",
+        "postinstall": "run-s -ln --aggregate-output install-*",
         "build-backend": "cd projects/backend && yarn build",
         "build-aws": "cd projects/aws && yarn synth",
         "build": "run-p -ln --aggregate-output build-*"

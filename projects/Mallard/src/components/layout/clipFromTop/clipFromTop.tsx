@@ -28,7 +28,7 @@ interface PropTypes extends MaybePropTypes {
     from: number
 }
 
-const ActualClipFromTop = ({ children, from }: PropTypes) => {
+const MaskClipFromTop = ({ children, from }: PropTypes) => {
     const [windowHeight] = useState(() => Dimensions.get('window').height)
     const [height] = useState(
         () => new Animated.Value((from * 2) / windowHeight),
@@ -71,7 +71,7 @@ const ActualClipFromTop = ({ children, from }: PropTypes) => {
 const ClipFromTop = ({ children, from }: MaybePropTypes) => {
     /* android struggles animating masks sadface */
     if (Platform.OS !== 'ios' || from == undefined) return <>{children}</>
-    return <ActualClipFromTop from={from}>{children}</ActualClipFromTop>
+    return <MaskClipFromTop from={from}>{children}</MaskClipFromTop>
 }
 
 export { ClipFromTop }
