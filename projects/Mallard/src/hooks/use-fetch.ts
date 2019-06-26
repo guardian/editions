@@ -99,7 +99,6 @@ const useFetch = <T>(
                         }
                     })
                     .catch(err => {
-                        console.error(err)
                         onError({
                             message: REQUEST_INVALID_RESPONSE_VALIDATION,
                         })
