@@ -5,23 +5,26 @@
         "aws": "bin/aws.js"
     },
     "scripts": {
-        "build": "tsc",
+        "compile": "tsc",
         "watch": "tsc -w",
         "cdk": "cdk",
-        "synth": "tsc && cdk synth > cloudformation.yaml"
+        "synth": "cdk synth > cloudformation.yaml",
+        "clean": "rm -v bin/*.js bin/*.d.ts lib/*.js lib/*.d.ts",
+        "build": "run-s -ln compile synth clean"
     },
     "devDependencies": {
         "@types/node": "8.10.45",
-        "aws-cdk": "^0.35.0",
+        "aws-cdk": "^0.32.0",
         "typescript": "^3.5.2"
     },
     "dependencies": {
-        "@aws-cdk/aws-apigateway": "^0.35.0",
-        "@aws-cdk/aws-cloudfront": "^0.35.0",
-        "@aws-cdk/aws-iam": "^0.35.0",
-        "@aws-cdk/aws-lambda": "^0.35.0",
-        "@aws-cdk/aws-s3": "^0.35.0",
-        "@aws-cdk/cdk": "^0.35.0",
+        "@aws-cdk/aws-apigateway": "^0.32.0",
+        "@aws-cdk/aws-cloudfront": "^0.32.0",
+        "@aws-cdk/aws-iam": "^0.32.0",
+        "@aws-cdk/aws-lambda": "^0.32.0",
+        "@aws-cdk/aws-s3": "^0.32.0",
+        "@aws-cdk/cdk": "^0.32.0",
+        "npm-run-all": "^4.1.5",
         "source-map-support": "^0.5.12"
     }
 }
