@@ -3,11 +3,13 @@ require('dotenv').config()
 import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import express = require('express')
-import { issueController } from './controllers/issue'
+import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
 import { issuePath, frontPath, collectionPath } from './common'
 
 const app = express()
+
+app.get('/issues', issuesSummaryController)
 
 app.get(issuePath(':issueId'), issueController)
 
