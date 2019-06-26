@@ -3,7 +3,7 @@
         "validate-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json",
         "validate-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json",
         "validate-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json",
-        "validate": "run-p -ln --aggregate-output validate-backend validate-aws",
+        "validate": "run-p -ln --aggregate-output validate-*",
         "fix-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json --fix",
         "fix-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json --fix",
         "fix-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json --fix",
