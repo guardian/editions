@@ -102,13 +102,6 @@ const Page = ({
                         <CollectionPage
                             articles={Object.values(collectionData.articles)}
                             translate={translateX}
-                            pageLayout={
-                                index === 0
-                                    ? superHeroPage
-                                    : index === 1
-                                    ? threeStoryPage
-                                    : undefined
-                            }
                             {...{ issue, collection, appearance }}
                             style={[
                                 {
