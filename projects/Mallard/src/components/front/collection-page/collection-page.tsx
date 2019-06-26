@@ -12,6 +12,7 @@ import { Row } from './row'
 import { Article, Issue, Collection } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { GENERIC_ERROR } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     root: {
@@ -62,7 +63,7 @@ const CollectionPageWithAppearance = ({
     pageLayout,
 }: PropTypes) => {
     if (!articles.length) {
-        return <FlexErrorMessage icon="🐶" title="bark! im empty" />
+        return <FlexErrorMessage title={GENERIC_ERROR} />
     }
     return (
         <>
