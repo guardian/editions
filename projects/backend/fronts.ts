@@ -3,20 +3,28 @@ import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 import { Front, Collection, Article, Card } from './common'
 import { LastModifiedUpdater } from './lastModified'
-import { attempt, hasFailed, Attempt, withFailureMessage } from './utils/try'
+import {
+    attempt,
+    hasFailed,
+    Attempt,
+    withFailureMessage,
+    hasSucceeded,
+} from './utils/try'
 import { getArticles } from './capi/articles'
 
-const createCardsFromAllArticlesInCollection = (maxCardSize: number, articles: [string, Article][]): Card[] => {
-
+const createCardsFromAllArticlesInCollection = (
+    maxCardSize: number,
+    articles: [string, Article][],
+): Card[] => {
     const chunk = (arr: [string, Article][], size: number) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-        arr.slice(i * size, i * size + size)
-    )
+            arr.slice(i * size, i * size + size),
+        )
 
-    return chunk(articles, maxCardSize).map( (groupOfArticles) => {
+    return chunk(articles, maxCardSize).map(groupOfArticles => {
         return {
             layout: null,
-            articles: fromEntries(groupOfArticles)
+            articles: fromEntries(groupOfArticles),
         }
     })
 }
@@ -104,9 +112,17 @@ export const getFront = async (
 
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
     if (!(id in config.fronts)) throw new Error('Front not found')
-    const front = config.fronts[id]
+    const front = {
+        ...config.fronts[id],
+        collections: (await Promise.all(
+            config.fronts[id].collections.map(id =>
+                getCollection(id, true, lastModifiedUpdater),
+            ),
+        )).filter(hasSucceeded),
+        key: id,
+    }
 
-    return { ...front, key: id }
+    return front
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107

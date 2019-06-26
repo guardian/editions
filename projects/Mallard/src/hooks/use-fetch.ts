@@ -65,7 +65,7 @@ const useFetch = <T>(
     }: {
         validator: ValidatorFn<T>
         /*
-        skip running the effect if we don't want it. 
+        skip running the effect if we don't want it.
         this allows us conditionally calling the hook.
 
         'skip' seems to be a pattern for conditional effects
@@ -104,7 +104,7 @@ const useFetch = <T>(
             )
             .catch((err: Error) => {
                 /*
-                if we have stale data let's 
+                if we have stale data let's
                 just serve it and eat this up
                 */
                 if (response.state !== 'success') {
@@ -122,7 +122,7 @@ const usePaths = (
 ): { fs: string; url: string } => {
     const [{ apiUrl }] = useSettings()
     const fs = issuesDir + '/' + issue + '/' + path
-    const url = apiUrl + '/' + path
+    const url = apiUrl + '/' + issue + '/' + path
 
     return { url, fs }
 }

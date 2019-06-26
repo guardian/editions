@@ -48,16 +48,17 @@ const IssueHeader = ({ issue }: { issue: Issue }) => {
 const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
     const issueResponse = useIssueResponse(path.issue)
 
-    /* 
-    we don't wanna render a massive tree at once 
+    /*
+    we don't wanna render a massive tree at once
     as the navigator is trying to push the screen bc this
-    delays the tap response 
+    delays the tap response
 
-    we can pass this prop to identify if we wanna render 
+    we can pass this prop to identify if we wanna render
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
+
     return (
         <View style={styles.container}>
             <NavigationEvents
