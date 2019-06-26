@@ -8,7 +8,13 @@ import {
 } from 'src/theme/appearance'
 import { Article } from 'src/components/article'
 import { Article as ArticleType, Collection } from 'src/common'
-import { View, TouchableOpacity, Animated, Dimensions } from 'react-native'
+import {
+    View,
+    TouchableOpacity,
+    Animated,
+    Dimensions,
+    Easing,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { SlideCard } from 'src/components/layout/slide-card/index'
@@ -18,6 +24,7 @@ import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { Issue } from '../../../backend/common'
+import * as Clipped from 'react-native-clipped'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -77,10 +84,14 @@ const ArticleScreenWithProps = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+    const [windowHeight] = useState(() => Dimensions.get('window').height)
     const [height] = useState(
         () =>
             new Animated.Value(
-                (transitionProps && transitionProps.cardHeight) || 300,
+                1 -
+                    ((transitionProps && transitionProps.cardHeight) ||
+                        windowHeight) /
+                        windowHeight,
             ),
     )
 
@@ -88,97 +99,100 @@ const ArticleScreenWithProps = ({
         Animated.sequence([
             Animated.delay(150),
             Animated.timing(height, {
-                toValue: Dimensions.get('window').height,
+                toValue: 0,
                 duration: 300,
+                easing: Easing.inOut(Easing.linear),
             }),
         ]).start()
     }, [])
 
     return (
-        <SlideCard
-            style={{
-                height,
-                flex: 0,
-                overflow: 'hidden',
-            }}
-            onDismiss={() => navigation.goBack()}
-        >
-            <NavigationEvents
-                onDidFocus={() => {
-                    setViewIsTransitioning(false)
-                }}
-            />
-            {articleResponse({
-                error: ({ message }) => (
-                    <FlexErrorMessage
-                        icon="😭"
-                        title={message}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                pending: () =>
-                    articlePrefill ? (
-                        <Article {...articlePrefill} />
-                    ) : (
+        <Clipped.View bottom={height}>
+            <SlideCard
+                {...viewIsTransitioning}
+                onDismiss={() => navigation.goBack()}
+            >
+                <NavigationEvents
+                    onDidFocus={() => {
+                        setViewIsTransitioning(false)
+                    }}
+                />
+                {articleResponse({
+                    error: ({ message }) => (
                         <FlexErrorMessage
-                            title={'loading'}
+                            icon="😭"
+                            title={message}
                             style={{ backgroundColor: color.background }}
                         />
                     ),
-                success: ({ elements, ...article }) => (
-                    <>
-                        <View
-                            style={{
-                                backgroundColor: 'tomato',
-                                position: 'absolute',
-                                zIndex: 9999,
-                                elevation: 999,
-                                bottom: 100,
-                                right: metrics.horizontal,
-                                alignSelf: 'flex-end',
-                                borderRadius: 999,
-                            }}
-                        >
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setAppearance(app => {
-                                        if (app + 1 >= appearances.length) {
-                                            return 0
-                                        }
-                                        return app + 1
-                                    })
+                    pending: () =>
+                        articlePrefill ? (
+                            <Article {...articlePrefill} />
+                        ) : (
+                            <FlexErrorMessage
+                                title={'loading'}
+                                style={{ backgroundColor: color.background }}
+                            />
+                        ),
+                    success: ({ elements, ...article }) => (
+                        <>
+                            <View
+                                style={{
+                                    backgroundColor: 'tomato',
+                                    position: 'absolute',
+                                    zIndex: 9999,
+                                    elevation: 999,
+                                    bottom: 100,
+                                    right: metrics.horizontal,
+                                    alignSelf: 'flex-end',
+                                    borderRadius: 999,
                                 }}
                             >
-                                <UiBodyCopy
-                                    style={{
-                                        backgroundColor: 'tomato',
-                                        position: 'absolute',
-                                        zIndex: 9999,
-                                        elevation: 999,
-                                        bottom: 100,
-                                        right: metrics.horizontal,
-                                        alignSelf: 'flex-end',
-                                        borderRadius: 999,
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setAppearance(app => {
+                                            if (app + 1 >= appearances.length) {
+                                                return 0
+                                            }
+                                            return app + 1
+                                        })
                                     }}
                                 >
-                                    {`${appearances[appearance]} 🌈`}
-                                </UiBodyCopy>
-                            </TouchableOpacity>
-                        </View>
-                        <WithArticleAppearance
-                            value={appearances[appearance] as ArticleAppearance}
-                        >
-                            <Article
-                                article={
-                                    viewIsTransitioning ? undefined : elements
+                                    <UiBodyCopy
+                                        style={{
+                                            backgroundColor: 'tomato',
+                                            position: 'absolute',
+                                            zIndex: 9999,
+                                            elevation: 999,
+                                            bottom: 100,
+                                            right: metrics.horizontal,
+                                            alignSelf: 'flex-end',
+                                            borderRadius: 999,
+                                        }}
+                                    >
+                                        {`${appearances[appearance]} 🌈`}
+                                    </UiBodyCopy>
+                                </TouchableOpacity>
+                            </View>
+                            <WithArticleAppearance
+                                value={
+                                    appearances[appearance] as ArticleAppearance
                                 }
-                                {...article}
-                            />
-                        </WithArticleAppearance>
-                    </>
-                ),
-            })}
-        </SlideCard>
+                            >
+                                <Article
+                                    article={
+                                        viewIsTransitioning
+                                            ? undefined
+                                            : elements
+                                    }
+                                    {...article}
+                                />
+                            </WithArticleAppearance>
+                        </>
+                    ),
+                })}
+            </SlideCard>
+        </Clipped.View>
     )
 }
 
