@@ -151,7 +151,7 @@ const FrontWithResponse = ({
         <Wrapper
             scrubber={
                 <Navigator
-                    stops={stops + 1}
+                    stops={stops}
                     title={frontData.key}
                     fill={color}
                     onScrub={screenX => {
@@ -176,7 +176,10 @@ const FrontWithResponse = ({
                         }
                     }}
                     position={scrollX.interpolate({
-                        inputRange: [0, width * stops + 0.001],
+                        inputRange: [
+                            0,
+                            width * (stops <= 0 ? stops : stops - 1) + 0.001,
+                        ],
                         outputRange: [0, 1],
                     })}
                 />
