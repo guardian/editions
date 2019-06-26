@@ -86,7 +86,8 @@ const useFetch = <T>(
                 if (res.status >= 500) {
                     throw new Error('Failed to fetch') // 500s don't return json
                 }
-                res.json()
+                return res
+                    .json()
                     .then(res => {
                         if (res && validator(res)) {
                             naiveCache[url] = res
