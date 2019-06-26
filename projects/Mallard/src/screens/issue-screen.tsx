@@ -19,6 +19,7 @@ import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
+import { FSPaths, APIPaths } from 'src/paths'
 
 const styles = StyleSheet.create({
     container,
@@ -29,9 +30,14 @@ const styles = StyleSheet.create({
 
 const useIssueResponse = (issue: Issue['key']) =>
     withResponse<Issue>(
-        useJsonOrEndpoint<Issue>(issue, `issue`, {
-            validator: res => res.fronts != null,
-        }),
+        useJsonOrEndpoint<Issue>(
+            issue,
+            FSPaths.issue(issue),
+            APIPaths.issue(issue),
+            {
+                validator: res => res.fronts != null,
+            },
+        ),
     )
 export interface PathToIssue {
     issue: Issue['key']

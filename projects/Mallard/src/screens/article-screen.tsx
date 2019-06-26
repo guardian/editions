@@ -19,6 +19,7 @@ import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-messag
 import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { Issue } from '../../../backend/common'
 import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
+import { FSPaths, APIPaths } from 'src/paths'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -31,11 +32,15 @@ export interface ArticleTransitionProps {
 }
 
 const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
-    const resp = useJsonOrEndpoint<ArticleType>(
+    const resp = useJsonOrEndpoint<Collection>(
         issue,
-        `collection/${collection}`,
+        FSPaths.collection(issue, collection),
+        APIPaths.collection(issue, collection),
     )
     if (resp.state === 'success') {
+        // TODO: we aren't storing the path anywhere on the article
+        // which means we can't key into our collection (which is keyed by path)
+        // even when we have an article
         const articleContent =
             resp.response.articles && resp.response.articles[article]
         if (articleContent) {
@@ -70,11 +75,11 @@ const ArticleScreenWithProps = ({
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
 
-    /* 
-    we don't wanna render a massive tree at once 
+    /*
+    we don't wanna render a massive tree at once
     as the navigator is trying to push the screen bc this
-    delays the tap response 
-     we can pass this prop to identify if we wanna render 
+    delays the tap response
+     we can pass this prop to identify if we wanna render
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)

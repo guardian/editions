@@ -8,13 +8,13 @@ import { Item } from 'src/components/lists/list'
 import {
     File,
     displayFileSize,
-    issuesDir,
     deleteAllFiles,
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
     getJson,
 } from 'src/helpers/files'
+import { FSPaths } from 'src/paths'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
@@ -180,8 +180,8 @@ export const DownloadScreen = () => {
                         <Button
                             title="Copy local path to clipboard"
                             onPress={() => {
-                                Clipboard.setString(issuesDir)
-                                Alert.alert(issuesDir)
+                                Clipboard.setString(FSPaths.issuesDir)
+                                Alert.alert(FSPaths.issuesDir)
                             }}
                         />
                     </View>

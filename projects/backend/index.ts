@@ -5,14 +5,15 @@ import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
+import { issuePath, frontPath, collectionPath } from './common'
 
 const app = express()
 
-app.get('/issue/:editionId', issueController)
+app.get(issuePath(':issueId'), issueController)
 
-app.get('/front/*?', frontController)
+app.get(frontPath(':issueId', '*?'), frontController)
 
-app.get('/collection/:collectionId', collectionsController)
+app.get(collectionPath(':issueId', ':collectionId'), collectionsController)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')

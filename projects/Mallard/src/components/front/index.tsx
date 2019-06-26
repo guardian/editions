@@ -14,6 +14,7 @@ import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
+import { FSPaths, APIPaths } from 'src/paths'
 
 interface AnimatedFlatListRef {
     _component: FlatList<FrontType['collections'][0]>
@@ -24,9 +25,14 @@ interface FlatCardType {
 }
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
-    const resp = useJsonOrEndpoint<FrontType>(issue, `front/${front}`, {
-        validator: res => res.collections != null,
-    })
+    const resp = useJsonOrEndpoint<FrontType>(
+        issue,
+        FSPaths.front(issue, front),
+        APIPaths.front(issue, front),
+        {
+            validator: res => res.collections != null,
+        },
+    )
     return withResponse<FrontType>(resp)
 }
 

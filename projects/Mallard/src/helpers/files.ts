@@ -1,8 +1,7 @@
 import RNFetchBlob from 'rn-fetch-blob'
 import { unzip } from 'react-native-zip-archive'
 import { Issue } from 'src/common'
-
-export const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
+import { FSPaths } from 'src/paths'
 
 interface BasicFile {
     filename: string
@@ -26,14 +25,19 @@ export const fileIsIssue = (file: File): file is IssueFile =>
  TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
  */
 export const makeCacheFolder = (): Promise<void> =>
-    RNFetchBlob.fs.mkdir(issuesDir).catch(() => Promise.resolve())
+    RNFetchBlob.fs.mkdir(FSPaths.issuesDir).catch(() => Promise.resolve())
 
 /*
 This cleans EVERYTHING
 */
 export const deleteAllFiles = async (): Promise<void> => {
-    await RNFetchBlob.fs.unlink(issuesDir)
+    await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
     await makeCacheFolder()
+}
+
+const fileName = (path: string) => {
+    const sections = path.split('/')
+    return sections[sections.length - 1]
 }
 
 /*
@@ -51,27 +55,30 @@ export const getJson = (path: string) =>
         return JSON.parse(d)
     })
 
-const makeFile = async (filename: string): Promise<File> => {
-    const path = issuesDir + '/' + filename
+const pathToFile = (basePath: string = '') => async (
+    filePath: string,
+): Promise<File> => {
+    const path = basePath + '/' + filePath
     const { size: fsSize, type: fsType } = await RNFetchBlob.fs.stat(path)
 
     const type =
         fsType === 'directory'
             ? 'issue'
-            : filename.includes('.zip')
+            : filePath.includes('.zip')
             ? 'archive'
-            : filename.includes('.json')
+            : filePath.includes('.json')
             ? 'json'
             : 'other'
 
-    const id = filename.split('.')[0]
+    const id = filePath.split('.')[0]
     const size = parseInt(fsSize)
 
     if (type === 'issue') {
+        const id = fileName(path)
         try {
-            const issue = await getJson(path + '/issue')
+            const issue = await getJson(FSPaths.issue(id))
             return {
-                filename,
+                filename: filePath,
                 path,
                 id,
                 size,
@@ -80,7 +87,7 @@ const makeFile = async (filename: string): Promise<File> => {
             }
         } catch {
             return {
-                filename,
+                filename: filePath,
                 path,
                 id,
                 size,
@@ -90,7 +97,7 @@ const makeFile = async (filename: string): Promise<File> => {
     }
 
     return {
-        filename,
+        filename: filePath,
         path,
         id,
         size,
@@ -99,13 +106,15 @@ const makeFile = async (filename: string): Promise<File> => {
 }
 
 export const getFileList = async (): Promise<File[]> => {
-    const fileListRaw = await RNFetchBlob.fs.ls(issuesDir)
+    const fileListRaw = await RNFetchBlob.fs.ls(FSPaths.issuesDir)
     if (fileListRawMemo === fileListRaw.join()) {
         return fileListMemo
     } else {
         const fileList = await RNFetchBlob.fs
-            .ls(issuesDir)
-            .then(files => Promise.all(files.map(makeFile)))
+            .ls(FSPaths.issuesDir)
+            .then(files =>
+                Promise.all(files.map(pathToFile(FSPaths.issuesDir))),
+            )
         fileListRawMemo = fileListRaw.join()
         fileListMemo = fileList
         return fileList
@@ -139,9 +148,9 @@ export const downloadIssue = (issue: File['id']) => {
             await makeCacheFolder()
             await RNFetchBlob.fs.mv(
                 res.path(),
-                `${issuesDir}/${Date.now()}-${Math.trunc(
-                    Math.random() * 100000,
-                )}.zip`,
+                FSPaths.issueZip(
+                    `${Date.now()}-${Math.trunc(Math.random() * 100000)}`,
+                ),
             )
             return res
         }),
@@ -151,8 +160,8 @@ export const downloadIssue = (issue: File['id']) => {
 }
 
 export const unzipIssue = (issue: File['id']) => {
-    const zipFilePath = issuesDir + '/' + issue + '.zip'
-    const outputPath = issuesDir + '/' + issue
+    const zipFilePath = FSPaths.issueZip(issue)
+    const outputPath = FSPaths.issue(issue)
     return unzip(zipFilePath, outputPath).then(() =>
         RNFetchBlob.fs.unlink(zipFilePath),
     )

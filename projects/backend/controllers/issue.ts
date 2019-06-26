@@ -16,7 +16,7 @@ const getIssue = async (
 }
 
 export const issueController = (req: Request, res: Response) => {
-    const id: string = req.params.editionId
+    const id: string = req.params.issueId
     const [date, updater] = lastModified()
     getIssue(id, updater)
         .then(data => {
