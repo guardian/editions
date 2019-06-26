@@ -1,1 +1,1 @@
-../../backend/common.ts
+export * from '../../common/src/index'

@@ -5,8 +5,7 @@ import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from '../helpers/words'
-import { getJson, issuesDir, fileIsIssue } from 'src/helpers/files'
-import { Issue } from 'src/common'
+import { getJson, fileIsIssue } from 'src/helpers/files'
 import { useFileList } from './use-fs'
 
 let naiveCache: { [url: string]: any } = {}
@@ -32,8 +31,8 @@ type ValidatorFn<T> = (response: any | T) => boolean
 const useJson = <T>(
     path: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-) => {
-    const { response, onSuccess, onError } = useResponse(
+): Response<T> => {
+    const { response, onSuccess, onError } = useResponse<T>(
         naiveJsonCache[path] ? naiveJsonCache[path] : null,
     )
     useEffect(() => {
@@ -65,7 +64,7 @@ const useFetch = <T>(
     }: {
         validator: ValidatorFn<T>
         /*
-        skip running the effect if we don't want it. 
+        skip running the effect if we don't want it.
         this allows us conditionally calling the hook.
 
         'skip' seems to be a pattern for conditional effects
@@ -83,8 +82,11 @@ const useFetch = <T>(
     useEffect(() => {
         if (skip) return
         fetch(url)
-            .then(res =>
-                res
+            .then(res => {
+                if (res.status >= 500) {
+                    throw new Error('Failed to fetch') // 500s don't return json
+                }
+                return res
                     .json()
                     .then(res => {
                         if (res && validator(res)) {
@@ -96,15 +98,15 @@ const useFetch = <T>(
                             })
                         }
                     })
-                    .catch(() => {
+                    .catch(err => {
                         onError({
                             message: REQUEST_INVALID_RESPONSE_VALIDATION,
                         })
-                    }),
-            )
+                    })
+            })
             .catch((err: Error) => {
                 /*
-                if we have stale data let's 
+                if we have stale data let's
                 just serve it and eat this up
                 */
                 if (response.state !== 'success') {
@@ -116,31 +118,24 @@ const useFetch = <T>(
     return response
 }
 
-const usePaths = (
-    issue: Issue['key'],
-    path: string,
-): { fs: string; url: string } => {
-    const [{ apiUrl }] = useSettings()
-    const fs = issuesDir + '/' + issue + '/' + path
-    const url = apiUrl + '/' + path
-
-    return { url, fs }
-}
-
 export const useJsonOrEndpoint = <T>(
-    issue: Issue['key'],
-    path: string,
-    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
+    issueId: string,
+    fsPath: string,
+    endpointPath: string,
+    { validator = () => true }: { validator?: ValidatorFn<T> } = {},
 ) => {
-    const { fs, url } = usePaths(issue, path)
+    const [{ apiUrl }] = useSettings()
     const isIssueOnDevice =
         useFileList()[0].find(
-            file => fileIsIssue(file) && file.issue.key === issue,
+            file => fileIsIssue(file) && file.issue.key === issueId,
         ) !== undefined
 
     const responses = [
-        useFetch<T>(url, { validator, skip: isIssueOnDevice }),
-        useJson<T>(fs, { validator }),
+        useFetch<T>(`${apiUrl}${endpointPath}`, {
+            validator,
+            skip: isIssueOnDevice,
+        }),
+        useJson<T>(fsPath, { validator }),
     ]
     const winner = responses.find(({ state }) => state === 'success')
 
