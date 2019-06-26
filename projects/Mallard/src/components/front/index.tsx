@@ -187,9 +187,7 @@ export const Front: FunctionComponent<{
         success: frontData => {
             const color = themeColor.palette.news.bright
             const pages = Object.keys(frontData.collections).length
-            const collections = viewIsTransitioning
-                ? Object.entries(frontData.collections).slice(0, 1)
-                : Object.entries(frontData.collections)
+            const collections = frontData.collections
 
             return (
                 <Wrapper
@@ -233,7 +231,7 @@ export const Front: FunctionComponent<{
                         />
                     }
                 >
-                    <Animated.ScrollView
+                    <Animated.FlatList
                         ref={(scrollView: AnimatedScrollViewRef) =>
                             (scrollViewRef.current = scrollView)
                         }
@@ -254,17 +252,15 @@ export const Front: FunctionComponent<{
                         )}
                         horizontal={true}
                         pagingEnabled
-                    >
-                        {collections.map(([id, collection], i) => (
+                        data={collections}
+                        renderItem={({ item, index }) => (
                             <Page
-                                issue={issue}
-                                index={i}
                                 appearance={'news'}
-                                key={id}
-                                {...{ collection, scrollX }}
+                                collection={item}
+                                {...{ scrollX, issue, index }}
                             />
-                        ))}
-                    </Animated.ScrollView>
+                        )}
+                    />
                 </Wrapper>
             )
         },
