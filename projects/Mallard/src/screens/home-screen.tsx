@@ -19,6 +19,7 @@ import { renderIssueDate } from 'src/helpers/issues'
 import { unzipIssue } from 'src/helpers/files'
 import { APP_DISPLAY_NAME } from 'src/helpers/words'
 import { color } from 'src/theme/color'
+import { Header } from 'src/components/header'
 
 const demoIssues: Issue[] = [
     {
@@ -36,17 +37,7 @@ const demoIssues: Issue[] = [
 ]
 
 const styles = StyleSheet.create({
-    container: primaryContainer,
-    welcomeImage: {
-        width: 1024 / 8,
-        height: 559 / 8,
-        resizeMode: 'contain',
-    },
-    getStartedContainer: {
-        alignItems: 'flex-start',
-        marginHorizontal: metrics.horizontal,
-        marginTop: metrics.vertical * 2,
-    },
+    container: { ...primaryContainer, paddingTop: metrics.vertical * 4 },
 })
 
 export const HomeScreen = ({
@@ -70,13 +61,8 @@ export const HomeScreen = ({
 
     return (
         <WithAppAppearance value={'primary'}>
+            <Header title={APP_DISPLAY_NAME} />
             <ScrollView style={styles.container}>
-                <View style={styles.getStartedContainer}>
-                    <Image
-                        source={require('../assets/images/logo.png')}
-                        style={styles.welcomeImage}
-                    />
-                </View>
                 <ListHeading>Demo issues</ListHeading>
                 <List
                     data={issueList}
@@ -132,7 +118,8 @@ HomeScreen.navigationOptions = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => ({
-    title: APP_DISPLAY_NAME,
+    title: 'Home',
+    headerTitle: () => null,
     headerRight: (
         <Button
             onPress={() => {
