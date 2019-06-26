@@ -40,6 +40,10 @@ const SettingsScreen = ({
             <MonoTextBlock>
                 Come back soon to see relevant settings.
             </MonoTextBlock>
+            <ListHeading>{`Send Feedback`}</ListHeading>
+            <MonoTextBlock>
+                Send us feedback to editions.product@theguardian.com
+            </MonoTextBlock>
             {!isUsingProdDevtools ? (
                 <>
                     <View style={{ height: Dimensions.get('window').height }} />
