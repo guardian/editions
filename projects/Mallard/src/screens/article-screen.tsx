@@ -14,6 +14,7 @@ import {
     Animated,
     Dimensions,
     Easing,
+    Platform,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -61,6 +62,8 @@ const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
     return withResponse<ArticleType>(resp)
 }
 
+const AnimatedMaskedView = Animated.createAnimatedComponent(MaskedView)
+
 const Clipper = ({
     children,
     transitionProps,
@@ -76,8 +79,10 @@ const Clipper = ({
     const [height] = useState(
         () =>
             new Animated.Value(
-                (transitionProps &&
-                    transitionProps.startAtHeightFromFrontsItem) ||
+                (2 *
+                    ((transitionProps &&
+                        transitionProps.startAtHeightFromFrontsItem) ||
+                        windowHeight)) /
                     windowHeight,
             ),
     )
@@ -85,29 +90,32 @@ const Clipper = ({
         Animated.sequence([
             Animated.delay(150),
             Animated.timing(height, {
-                toValue: windowHeight,
+                toValue: 2,
                 duration: 300,
                 easing: Easing.inOut(Easing.linear),
             }),
         ]).start()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-    if (!transitionProps) return <>{children}</>
+    if (!transitionProps || Platform.OS !== 'ios') return <>{children}</>
     return (
-        <MaskedView
-            style={{ flex: 1, flexDirection: 'row', height: '100%' }}
+        <AnimatedMaskedView
+            style={{ flex: 1 }}
             maskElement={
                 <Animated.View
                     style={{
-                        height,
-                        flex: 0,
-                        backgroundColor: 'black',
+                        transform: [
+                            { translateY: windowHeight / -2 },
+                            { scaleY: height },
+                        ],
+                        flex: 1,
                         width: '100%',
+                        backgroundColor: 'black',
                     }}
                 />
             }
         >
             {children}
-        </MaskedView>
+        </AnimatedMaskedView>
     )
 }
 
