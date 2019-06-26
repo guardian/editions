@@ -18,7 +18,7 @@ export interface Article extends WithKey {
 export interface Issue extends WithKey {
     name: string
     date: number
-    fronts: string[]
+    fronts: Front['key'][]
 }
 
 export interface Collection extends WithKey {
@@ -28,7 +28,7 @@ export interface Collection extends WithKey {
 }
 
 export interface Front extends WithKey {
-    collections: string[]
+    collections: Collection['key'][]
     canonical?: string
     group?: string
     isHidden?: boolean

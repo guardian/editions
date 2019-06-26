@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
@@ -33,7 +33,7 @@ export interface PathToArticle {
 }
 
 export interface ArticleTransitionProps {
-    cardHeight: number
+    startAtHeightFromFrontsItem: number
 }
 
 const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
@@ -61,6 +61,43 @@ const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
     return withResponse<ArticleType>(resp)
 }
 
+const Clipper = ({
+    children,
+    transitionProps,
+}: {
+    children: ReactNode
+    transitionProps?: ArticleTransitionProps
+}) => {
+    /* 
+    This is part of the transition from fronts and it positions 
+    the article where it should on screen
+    */
+    const [windowHeight] = useState(() => Dimensions.get('window').height)
+    const [height] = useState(
+        () =>
+            new Animated.Value(
+                1 -
+                    ((transitionProps &&
+                        transitionProps.startAtHeightFromFrontsItem) ||
+                        windowHeight) /
+                        windowHeight,
+            ),
+    )
+    useEffect(() => {
+        Animated.sequence([
+            Animated.delay(150),
+            Animated.timing(height, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.inOut(Easing.linear),
+            }),
+        ]).start()
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    if (!transitionProps) return <>{children}</>
+    return <Clipped.View bottom={height}>{children}</Clipped.View>
+}
+
 const ArticleScreenWithProps = ({
     path,
     articlePrefill,
@@ -84,30 +121,9 @@ const ArticleScreenWithProps = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
-    const [windowHeight] = useState(() => Dimensions.get('window').height)
-    const [height] = useState(
-        () =>
-            new Animated.Value(
-                1 -
-                    ((transitionProps && transitionProps.cardHeight) ||
-                        windowHeight) /
-                        windowHeight,
-            ),
-    )
-
-    useEffect(() => {
-        Animated.sequence([
-            Animated.delay(150),
-            Animated.timing(height, {
-                toValue: 0,
-                duration: 300,
-                easing: Easing.inOut(Easing.linear),
-            }),
-        ]).start()
-    }, [])
 
     return (
-        <Clipped.View bottom={height}>
+        <Clipper {...{ transitionProps }}>
             <SlideCard
                 {...viewIsTransitioning}
                 onDismiss={() => navigation.goBack()}
@@ -192,7 +208,7 @@ const ArticleScreenWithProps = ({
                     ),
                 })}
             </SlideCard>
-        </Clipped.View>
+        </Clipper>
     )
 }
 

@@ -25,7 +25,7 @@ import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
 import { superHeroPage, threeStoryPage, fiveStoryPage } from './layouts'
 import { useSettings } from 'src/hooks/use-settings'
 
-interface AnimatedScrollViewRef {
+interface AnimatedFlatListRef {
     _component: ScrollView
 }
 
@@ -163,9 +163,9 @@ export const Front: FunctionComponent<{
     front: string
     issue: Issue['key']
     viewIsTransitioning: boolean
-}> = ({ front, issue, viewIsTransitioning }) => {
+}> = ({ front, issue }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
-    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
+    const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const frontsResponse = useFrontsResponse(issue, front)
     const [{ isUsingProdDevtools }] = useSettings()
     return frontsResponse({
@@ -186,7 +186,7 @@ export const Front: FunctionComponent<{
         ),
         success: frontData => {
             const color = themeColor.palette.news.bright
-            const pages = Object.keys(frontData.collections).length
+            const pages = frontData.collections.length
             const collections = frontData.collections
 
             return (
@@ -198,10 +198,10 @@ export const Front: FunctionComponent<{
                             fill={color}
                             onScrub={screenX => {
                                 if (
-                                    scrollViewRef.current &&
-                                    scrollViewRef.current._component
+                                    flatListRef.current &&
+                                    flatListRef.current._component
                                 ) {
-                                    scrollViewRef.current._component.scrollTo({
+                                    flatListRef.current._component.scrollTo({
                                         x: getScrollPos(screenX) * (pages - 1),
                                         animated: false,
                                     })
@@ -209,10 +209,10 @@ export const Front: FunctionComponent<{
                             }}
                             onReleaseScrub={screenX => {
                                 if (
-                                    scrollViewRef.current &&
-                                    scrollViewRef.current._component
+                                    flatListRef.current &&
+                                    flatListRef.current._component
                                 ) {
-                                    scrollViewRef.current._component.scrollTo({
+                                    flatListRef.current._component.scrollTo({
                                         x:
                                             Dimensions.get('window').width *
                                             getNearestPage(screenX, pages),
@@ -232,8 +232,8 @@ export const Front: FunctionComponent<{
                     }
                 >
                     <Animated.FlatList
-                        ref={(scrollView: AnimatedScrollViewRef) =>
-                            (scrollViewRef.current = scrollView)
+                        ref={(flatList: AnimatedFlatListRef) =>
+                            (flatListRef.current = flatList)
                         }
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
@@ -253,7 +253,13 @@ export const Front: FunctionComponent<{
                         horizontal={true}
                         pagingEnabled
                         data={collections}
-                        renderItem={({ item, index }) => (
+                        renderItem={({
+                            item,
+                            index,
+                        }: {
+                            item: FrontType['collections'][0]
+                            index: number
+                        }) => (
                             <Page
                                 appearance={'news'}
                                 collection={item}
