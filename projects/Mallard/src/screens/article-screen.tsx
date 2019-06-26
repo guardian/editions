@@ -15,6 +15,7 @@ import {
     Dimensions,
     Easing,
     Platform,
+    StyleSheet,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -62,6 +63,10 @@ const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
     return withResponse<ArticleType>(resp)
 }
 
+const clipperStyles = StyleSheet.create({
+    flex: { flex: 1 },
+    bg: { backgroundColor: 'black' },
+})
 const AnimatedMaskedView = Animated.createAnimatedComponent(MaskedView)
 
 const Clipper = ({
@@ -88,29 +93,32 @@ const Clipper = ({
     )
     useEffect(() => {
         Animated.sequence([
-            Animated.delay(150),
+            Animated.delay(50),
             Animated.timing(height, {
                 toValue: 2,
                 duration: 300,
                 easing: Easing.inOut(Easing.linear),
+                useNativeDriver: true,
             }),
         ]).start()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    /* android struggles animating masks sadface */
     if (!transitionProps || Platform.OS !== 'ios') return <>{children}</>
     return (
         <AnimatedMaskedView
-            style={{ flex: 1 }}
+            style={clipperStyles.flex}
             maskElement={
                 <Animated.View
-                    style={{
-                        transform: [
-                            { translateY: windowHeight / -2 },
-                            { scaleY: height },
-                        ],
-                        flex: 1,
-                        width: '100%',
-                        backgroundColor: 'black',
-                    }}
+                    style={[
+                        {
+                            transform: [
+                                { translateY: windowHeight / -2 },
+                                { scaleY: height },
+                            ],
+                        },
+                        clipperStyles.flex,
+                        clipperStyles.bg,
+                    ]}
                 />
             }
         >
@@ -151,7 +159,9 @@ const ArticleScreenWithProps = ({
             >
                 <NavigationEvents
                     onDidFocus={() => {
-                        setViewIsTransitioning(false)
+                        requestAnimationFrame(() => {
+                            setViewIsTransitioning(false)
+                        })
                     }}
                 />
                 {articleResponse({
