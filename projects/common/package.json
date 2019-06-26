@@ -1,0 +1,13 @@
+{
+  "name": "common",
+  "version": "0.0.1",
+  "description": "Common helpers / types for editions",
+  "license": "MIT",
+  "devDependencies": {
+    "@guardian/capi-ts": "^0.1.0"
+  },
+  "scripts": {
+    "validate": "cd ../.. && yarn validate-common",
+    "fix": "cd ../.. && yarn fix-common"
+  }
+}
