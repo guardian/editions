@@ -75,7 +75,7 @@ export const SlideCard = ({
                             },
                         },
                     ],
-                    { useNativeDriver: false },
+                    { useNativeDriver: true },
                 )}
             >
                 <Animated.View

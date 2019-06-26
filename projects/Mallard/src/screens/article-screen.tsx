@@ -18,7 +18,7 @@ import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { Issue } from '../../../backend/common'
-import { Clipper } from 'src/components/layout/clipper/clipper'
+import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -80,7 +80,7 @@ const ArticleScreenWithProps = ({
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
     return (
-        <Clipper
+        <ClipFromTop
             from={
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
@@ -171,7 +171,7 @@ const ArticleScreenWithProps = ({
                     ),
                 })}
             </SlideCard>
-        </Clipper>
+        </ClipFromTop>
     )
 }
 

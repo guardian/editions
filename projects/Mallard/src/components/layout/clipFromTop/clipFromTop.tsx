@@ -8,6 +8,12 @@ import {
 } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
 
+/* 
+This is part of the transition from articles to fronts
+and it crops the bottom end of the article so it feels 
+as if it's coming out of its card
+*/
+
 const clipperStyles = StyleSheet.create({
     flex: { flex: 1 },
     bg: { backgroundColor: 'black' },
@@ -22,11 +28,7 @@ interface PropTypes extends MaybePropTypes {
     from: number
 }
 
-const ActualClipper = ({ children, from }: PropTypes) => {
-    /* 
-    This is part of the transition from fronts and it positions 
-    the article where it should on screen
-    */
+const ActualClipFromTop = ({ children, from }: PropTypes) => {
     const [windowHeight] = useState(() => Dimensions.get('window').height)
     const [height] = useState(
         () => new Animated.Value((from * 2) / windowHeight),
@@ -66,10 +68,10 @@ const ActualClipper = ({ children, from }: PropTypes) => {
     )
 }
 
-const Clipper = ({ children, from }: MaybePropTypes) => {
+const ClipFromTop = ({ children, from }: MaybePropTypes) => {
     /* android struggles animating masks sadface */
     if (Platform.OS !== 'ios' || from == undefined) return <>{children}</>
-    return <ActualClipper from={from}>{children}</ActualClipper>
+    return <ActualClipFromTop from={from}>{children}</ActualClipFromTop>
 }
 
-export { Clipper }
+export { ClipFromTop }
