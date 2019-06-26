@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     NavigationScreenProp,
@@ -8,7 +8,6 @@ import {
 
 import { container } from 'src/theme/styles'
 import { Front } from 'src/components/front'
-import { renderIssueDate } from 'src/helpers/issues'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
 

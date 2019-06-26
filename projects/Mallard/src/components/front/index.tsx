@@ -163,6 +163,7 @@ export const Front: FunctionComponent<{
     const frontsResponse = useFrontsResponse(issue, front)
     const [{ isUsingProdDevtools }] = useSettings()
     const { width } = Dimensions.get('window')
+
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
@@ -189,7 +190,7 @@ export const Front: FunctionComponent<{
                     scrubber={
                         <Navigator
                             stops={pages}
-                            title={front}
+                            title={frontData.title || front}
                             fill={color}
                             onScrub={screenX => {
                                 if (
