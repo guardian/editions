@@ -68,7 +68,7 @@ type FileListHook = [
     File[],
     {
         refreshIssues: () => void
-    }
+    },
 ]
 const useFileListInCtx = (): FileListHook => {
     const [files, setFiles] = useState<File[]>([])
