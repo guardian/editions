@@ -1,11 +1,5 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
-import {
-    ScrollView,
-    View,
-    Dimensions,
-    Animated,
-    StyleSheet,
-} from 'react-native'
+import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
 import { CollectionPage } from './collection-page/collection-page'
@@ -26,7 +20,7 @@ import { superHeroPage, threeStoryPage, fiveStoryPage } from './layouts'
 import { useSettings } from 'src/hooks/use-settings'
 
 interface AnimatedFlatListRef {
-    _component: ScrollView
+    _component: FlatList<FrontType['collections'][0]>
 }
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
@@ -55,7 +49,7 @@ const getScrollPos = (screenX: number) => {
     return screenX + (metrics.horizontal * 6 * screenX) / width
 }
 
-const getNearestPage = (screenX: number, pageCount: number) => {
+const getNearestPage = (screenX: number, pageCount: number): number => {
     const { width } = Dimensions.get('window')
     return Math.round((getScrollPos(screenX) * (pageCount - 1)) / width)
 }
@@ -168,6 +162,7 @@ export const Front: FunctionComponent<{
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const frontsResponse = useFrontsResponse(issue, front)
     const [{ isUsingProdDevtools }] = useSettings()
+    const { width } = Dimensions.get('window')
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
@@ -201,10 +196,14 @@ export const Front: FunctionComponent<{
                                     flatListRef.current &&
                                     flatListRef.current._component
                                 ) {
-                                    flatListRef.current._component.scrollTo({
-                                        x: getScrollPos(screenX) * (pages - 1),
-                                        animated: false,
-                                    })
+                                    flatListRef.current._component.scrollToOffset(
+                                        {
+                                            offset:
+                                                getScrollPos(screenX) *
+                                                (pages - 1),
+                                            animated: false,
+                                        },
+                                    )
                                 }
                             }}
                             onReleaseScrub={screenX => {
@@ -212,20 +211,18 @@ export const Front: FunctionComponent<{
                                     flatListRef.current &&
                                     flatListRef.current._component
                                 ) {
-                                    flatListRef.current._component.scrollTo({
-                                        x:
-                                            Dimensions.get('window').width *
-                                            getNearestPage(screenX, pages),
-                                    })
+                                    flatListRef.current._component.scrollToIndex(
+                                        {
+                                            index: getNearestPage(
+                                                screenX,
+                                                pages,
+                                            ),
+                                        },
+                                    )
                                 }
                             }}
                             position={scrollX.interpolate({
-                                inputRange: [
-                                    0,
-                                    Dimensions.get('window').width *
-                                        (pages - 1) +
-                                        0.001,
-                                ],
+                                inputRange: [0, width * (pages - 1) + 0.001],
                                 outputRange: [0, 1],
                             })}
                         />
@@ -238,6 +235,11 @@ export const Front: FunctionComponent<{
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         scrollEventThrottle={1}
+                        getItemLayout={(_: never, index: number) => ({
+                            length: width,
+                            offset: 0,
+                            index,
+                        })}
                         onScroll={Animated.event(
                             [
                                 {

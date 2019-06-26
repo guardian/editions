@@ -86,6 +86,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                                     ? issue.fronts.slice(0, 2)
                                     : issue.fronts
                             }
+                            initialNumToRender={1}
                             renderItem={({ item }) => (
                                 <Front
                                     issue={issue.key}
