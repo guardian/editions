@@ -2,12 +2,12 @@ import { LayoutRectangle, Dimensions } from 'react-native'
 import { Article } from 'src/common'
 
 /*
-This stores the screen positions of all items so
+This stores the screen positions of all items so 
 that when you try to go and open them the transitioner
 knows where to place the screen.
 
 Ideally we'd use state for something like this but
-a) it's unclear how to retrieve react state
+a) it's unclear how to retrieve react state 
    from navigation/index :(
 b) animations in react in general are always a
    bunch of imperative escape hatches put together

@@ -120,8 +120,8 @@ const RowWithOneArticle = ({
 
 /*
 ROW
-shows 2 articles side by side. If there's less
-it falls back to a single row and if there's more
+shows 2 articles side by side. If there's less 
+it falls back to a single row and if there's more 
 then it eats them up
 */
 const Row = ({
