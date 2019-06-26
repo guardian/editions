@@ -17,6 +17,7 @@ import { OnboardingHandler } from 'src/onboarding'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps, withPersistenceKey } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
+import { issueToArticleScreenInterpolator } from './interpolators'
 
 const AppStack = createStackNavigator(
     {
@@ -47,49 +48,18 @@ const AppStack = createStackNavigator(
         mode: 'modal',
         headerMode: 'none',
         cardOverlayEnabled: true,
-        transitionConfig: () => {
-            return {
-                containerStyle: {
-                    backgroundColor: 'transparent',
-                },
-                transitionSpec: {
-                    duration: 200,
-                    easing: Easing.ease,
-                    timing: Animated.timing,
-                    useNativeDriver: true,
-                },
-                screenInterpolator: sceneProps => {
-                    const { layout, position, scene } = sceneProps
-                    const thisSceneIndex = scene.index
-
-                    const translateY = position.interpolate({
-                        inputRange: [thisSceneIndex - 1, thisSceneIndex],
-                        outputRange: [layout.initHeight, 0],
-                    })
-                    const scale = position.interpolate({
-                        inputRange: [thisSceneIndex, thisSceneIndex + 0.75],
-                        outputRange: [1, 0.95],
-                    })
-                    const borderRadius = position.interpolate({
-                        inputRange: [thisSceneIndex, thisSceneIndex + 1],
-                        extrapolate: 'clamp',
-                        outputRange: [0, 20],
-                    })
-
-                    return scene.route.routeName === 'Main'
-                        ? {
-                              transform: [
-                                  {
-                                      scale,
-                                  },
-                              ],
-                              borderRadius,
-                              overflow: 'hidden',
-                          }
-                        : { transform: [{ translateY }] }
-                },
-            }
-        },
+        transitionConfig: () => ({
+            containerStyle: {
+                backgroundColor: 'transparent',
+            },
+            transitionSpec: {
+                duration: 300,
+                easing: Easing.ease,
+                timing: Animated.timing,
+                useNativeDriver: true,
+            },
+            screenInterpolator: issueToArticleScreenInterpolator,
+        }),
         defaultNavigationOptions: {
             gesturesEnabled: false,
         },

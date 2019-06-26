@@ -1,11 +1,5 @@
 import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
-import {
-    ScrollView,
-    View,
-    Dimensions,
-    Animated,
-    StyleSheet,
-} from 'react-native'
+import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
 import { CollectionPage } from './collection-page/collection-page'
@@ -25,8 +19,8 @@ import { ERR_404_REMOTE, GENERIC_ERROR } from 'src/helpers/words'
 import { superHeroPage, threeStoryPage, fiveStoryPage } from './layouts'
 import { useSettings } from 'src/hooks/use-settings'
 
-interface AnimatedScrollViewRef {
-    _component: ScrollView
+interface AnimatedFlatListRef {
+    _component: FlatList<FrontType['collections'][0]>
 }
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
@@ -55,7 +49,7 @@ const getScrollPos = (screenX: number) => {
     return screenX + (metrics.horizontal * 6 * screenX) / width
 }
 
-const getNearestPage = (screenX: number, pageCount: number) => {
+const getNearestPage = (screenX: number, pageCount: number): number => {
     const { width } = Dimensions.get('window')
     return Math.round((getScrollPos(screenX) * (pageCount - 1)) / width)
 }
@@ -163,11 +157,12 @@ export const Front: FunctionComponent<{
     front: string
     issue: Issue['key']
     viewIsTransitioning: boolean
-}> = ({ front, issue, viewIsTransitioning }) => {
+}> = ({ front, issue }) => {
     const [scrollX] = useState(() => new Animated.Value(0))
-    const scrollViewRef = useRef<AnimatedScrollViewRef | undefined>()
+    const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const frontsResponse = useFrontsResponse(issue, front)
     const [{ isUsingProdDevtools }] = useSettings()
+    const { width } = Dimensions.get('window')
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
@@ -186,10 +181,8 @@ export const Front: FunctionComponent<{
         ),
         success: frontData => {
             const color = themeColor.palette.news.bright
-            const pages = Object.keys(frontData.collections).length
-            const collections = viewIsTransitioning
-                ? Object.entries(frontData.collections).slice(0, 1)
-                : Object.entries(frontData.collections)
+            const pages = frontData.collections.length
+            const collections = frontData.collections
 
             return (
                 <Wrapper
@@ -200,46 +193,55 @@ export const Front: FunctionComponent<{
                             fill={color}
                             onScrub={screenX => {
                                 if (
-                                    scrollViewRef.current &&
-                                    scrollViewRef.current._component
+                                    flatListRef.current &&
+                                    flatListRef.current._component
                                 ) {
-                                    scrollViewRef.current._component.scrollTo({
-                                        x: getScrollPos(screenX) * (pages - 1),
-                                        animated: false,
-                                    })
+                                    flatListRef.current._component.scrollToOffset(
+                                        {
+                                            offset:
+                                                getScrollPos(screenX) *
+                                                (pages - 1),
+                                            animated: false,
+                                        },
+                                    )
                                 }
                             }}
                             onReleaseScrub={screenX => {
                                 if (
-                                    scrollViewRef.current &&
-                                    scrollViewRef.current._component
+                                    flatListRef.current &&
+                                    flatListRef.current._component
                                 ) {
-                                    scrollViewRef.current._component.scrollTo({
-                                        x:
-                                            Dimensions.get('window').width *
-                                            getNearestPage(screenX, pages),
-                                    })
+                                    flatListRef.current._component.scrollToOffset(
+                                        {
+                                            offset:
+                                                getNearestPage(screenX, pages) *
+                                                width,
+                                        },
+                                    )
                                 }
                             }}
                             position={scrollX.interpolate({
-                                inputRange: [
-                                    0,
-                                    Dimensions.get('window').width *
-                                        (pages - 1) +
-                                        0.001,
-                                ],
+                                inputRange: [0, width * (pages - 1) + 0.001],
                                 outputRange: [0, 1],
                             })}
                         />
                     }
                 >
-                    <Animated.ScrollView
-                        ref={(scrollView: AnimatedScrollViewRef) =>
-                            (scrollViewRef.current = scrollView)
+                    <Animated.FlatList
+                        ref={(flatList: AnimatedFlatListRef) =>
+                            (flatListRef.current = flatList)
                         }
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         scrollEventThrottle={1}
+                        getItemLayout={(_: never, index: number) => ({
+                            length: width,
+                            offset: 0,
+                            index,
+                        })}
+                        keyExtractor={(item: FrontType['collections'][0]) =>
+                            item
+                        }
                         onScroll={Animated.event(
                             [
                                 {
@@ -254,17 +256,21 @@ export const Front: FunctionComponent<{
                         )}
                         horizontal={true}
                         pagingEnabled
-                    >
-                        {collections.map(([id, collection], i) => (
+                        data={collections}
+                        renderItem={({
+                            item,
+                            index,
+                        }: {
+                            item: FrontType['collections'][0]
+                            index: number
+                        }) => (
                             <Page
-                                issue={issue}
-                                index={i}
                                 appearance={'news'}
-                                key={id}
-                                {...{ collection, scrollX }}
+                                collection={item}
+                                {...{ scrollX, issue, index }}
                             />
-                        ))}
-                    </Animated.ScrollView>
+                        )}
+                    />
                 </Wrapper>
             )
         },

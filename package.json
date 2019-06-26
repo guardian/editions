@@ -1,33 +1,33 @@
 {
-    "scripts": {
-        "validate-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json",
-        "validate-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json",
-        "validate-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json",
-        "validate": "run-p -ln --aggregate-output validate-*",
-        "fix-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json --fix",
-        "fix-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json --fix",
-        "fix-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json --fix",
-        "fix": "run-p -ln --aggregate-output fix-*",
-        "upload": "node-riffraff-artifact",
-        "install-backend": "cd projects/backend && yarn --mutex network",
-        "install-aws": "cd projects/aws && yarn --mutex network",
-        "postinstall": "run-p -ln --aggregate-output install-*",
-        "build-backend": "cd projects/backend && yarn build",
-        "build-aws": "cd projects/aws && yarn build",
-        "build": "run-p -ln --aggregate-output build-*"
-    },
-    "devDependencies": {
-        "@guardian/node-riffraff-artifact": "0.0.15",
-        "@typescript-eslint/eslint-plugin": "^1.11.0",
-        "@typescript-eslint/parser": "^1.11.0",
-        "eslint": "^6.0.1",
-        "eslint-config-prettier": "^5.1.0",
-        "eslint-plugin-prettier": "^3.1.0",
-        "eslint-plugin-react": "^7.14.2",
-        "eslint-plugin-react-hooks": "^1.6.1",
-        "npm-run-all": "^4.1.5",
-        "prettier": "^1.18.2",
-        "typescript": "^3.5.2"
-    },
-    "private": true
+	"scripts": {
+		"validate-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json",
+		"validate-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json",
+		"validate-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json",
+		"validate": "run-p -ln --aggregate-output validate-*",
+		"fix-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json --fix",
+		"fix-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json --fix",
+		"fix-aws": "eslint 'projects/aws/**/*.{ts,tsx}' --parser-options=project:./projects/aws/tsconfig.json --fix",
+		"fix": "run-p -ln --aggregate-output fix-*",
+		"upload": "node-riffraff-artifact",
+		"install-backend": "cd projects/backend && yarn --mutex network",
+		"install-aws": "cd projects/aws && yarn --mutex network",
+		"postinstall": "run-s -ln install-*",
+		"build-backend": "cd projects/backend && yarn build",
+		"build-aws": "cd projects/aws && yarn build",
+		"build": "run-p -ln --aggregate-output build-*"
+	},
+	"devDependencies": {
+		"@guardian/node-riffraff-artifact": "0.0.15",
+		"@typescript-eslint/eslint-plugin": "^1.11.0",
+		"@typescript-eslint/parser": "^1.11.0",
+		"eslint": "^6.0.1",
+		"eslint-config-prettier": "^5.1.0",
+		"eslint-plugin-prettier": "^3.1.0",
+		"eslint-plugin-react": "^7.14.2",
+		"eslint-plugin-react-hooks": "^1.6.1",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^1.18.2",
+		"typescript": "^3.5.2"
+	},
+	"private": true
 }

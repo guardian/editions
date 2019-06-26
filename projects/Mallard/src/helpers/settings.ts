@@ -60,13 +60,12 @@ export const getSetting = (setting: keyof Settings) =>
 
 export const getAllSettings = async (): Promise<Settings> => {
     const settings = await Promise.all(
-        (Object.keys(defaultSettings) as Array<
-            keyof typeof defaultSettings
-        >).map(key =>
-            getSetting(key).then(value => ({
-                key,
-                value,
-            })),
+        (Object.keys(defaultSettings) as (keyof typeof defaultSettings)[]).map(
+            key =>
+                getSetting(key).then(value => ({
+                    key,
+                    value,
+                })),
         ),
     )
     return settings.reduce(

@@ -6,11 +6,18 @@ import { Highlight } from '../../highlight'
 
 import { useArticleAppearance } from 'src/theme/appearance'
 import { Article } from 'src/common'
-import { PathToArticle } from 'src/screens/article-screen'
+import {
+    PathToArticle,
+    ArticleTransitionProps,
+} from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
 import { RowSize, getRowHeightForSize } from '../helpers'
-import { setScreenPositionOfItem } from 'src/helpers/positions'
+import {
+    setScreenPositionOfItem,
+    getScreenPositionOfItem,
+} from 'src/helpers/positions'
+import { getScaleForArticle } from 'src/navigation/interpolators'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -81,9 +88,17 @@ const ItemTappable = withNavigation(
             >
                 <Highlight
                     onPress={() => {
+                        const { width, height } = getScreenPositionOfItem(
+                            article.key,
+                        )
+                        const transitionProps: ArticleTransitionProps = {
+                            startAtHeightFromFrontsItem:
+                                height / getScaleForArticle(width),
+                        }
                         navigation.navigate('Article', {
                             article,
                             path,
+                            transitionProps,
                         })
                     }}
                 >
