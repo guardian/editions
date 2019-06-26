@@ -17,6 +17,11 @@ export interface Article extends WithKey {
     elements: BlockElement[]
 }
 
+export interface IssueSummary extends WithKey {
+    name: string
+    date: number
+}
+
 export interface Issue extends WithKey {
     name: string
     date: number
