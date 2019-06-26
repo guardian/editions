@@ -1,10 +1,25 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { Front, Collection, Article } from './common'
+import { Front, Collection, Article, Card } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import { attempt, hasFailed, Attempt, withFailureMessage } from './utils/try'
 import { getArticles } from './capi/articles'
+
+const createCardsFromAllArticlesInCollection = (maxCardSize: number, articles: [string, Article][]): Card[] => {
+
+    const chunk = (arr: [string, Article][], size: number) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+        arr.slice(i * size, i * size + size)
+    )
+
+    return chunk(articles, maxCardSize).map( (groupOfArticles) => {
+        return {
+            layout: null,
+            articles: fromEntries(groupOfArticles)
+        }
+    })
+}
 
 export const getCollection = async (
     id: string,
@@ -72,7 +87,7 @@ export const getCollection = async (
     return {
         key: id,
         displayName: collection.displayName,
-        articles: fromEntries(articles),
+        cards: createCardsFromAllArticlesInCollection(5, articles),
         preview,
     }
 }

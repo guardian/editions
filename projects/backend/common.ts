@@ -21,9 +21,14 @@ export interface Issue extends WithKey {
     fronts: Front['key'][]
 }
 
+export interface Card {
+    layout: null
+    articles?: { [key: string]: Article }
+}
+
 export interface Collection extends WithKey {
     displayName: string
-    articles?: { [key: string]: Article }
+    cards: Card[]
     preview?: true
 }
 
