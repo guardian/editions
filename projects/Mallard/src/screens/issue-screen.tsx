@@ -83,6 +83,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                         <FlatList
                             data={issue.fronts}
                             initialNumToRender={1}
+                            keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <Front
                                     issue={issue.key}

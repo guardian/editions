@@ -211,12 +211,11 @@ export const Front: FunctionComponent<{
                                     flatListRef.current &&
                                     flatListRef.current._component
                                 ) {
-                                    flatListRef.current._component.scrollToIndex(
+                                    flatListRef.current._component.scrollToOffset(
                                         {
-                                            index: getNearestPage(
-                                                screenX,
-                                                pages,
-                                            ),
+                                            offset:
+                                                getNearestPage(screenX, pages) *
+                                                width,
                                         },
                                     )
                                 }
@@ -240,6 +239,7 @@ export const Front: FunctionComponent<{
                             offset: 0,
                             index,
                         })}
+                        keyExtractor={item => item}
                         onScroll={Animated.event(
                             [
                                 {
