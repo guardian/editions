@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
-import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
+import { StyleSheet, View } from 'react-native'
+import {
+    NavigationScreenProp,
+    NavigationEvents,
+    FlatList,
+} from 'react-navigation'
 
 import { container } from 'src/theme/styles'
 import { Front } from 'src/components/front'
@@ -55,10 +59,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
     return (
-        <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-        >
+        <View style={styles.container}>
             <NavigationEvents
                 onDidFocus={() => {
                     setViewIsTransitioning(false)
@@ -79,20 +80,21 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                 success: issue => (
                     <>
                         <IssueHeader issue={issue} />
-                        {(viewIsTransitioning
-                            ? issue.fronts.slice(0, 2)
-                            : issue.fronts
-                        ).map(front => (
-                            <Front
-                                issue={issue.key}
-                                key={front}
-                                {...{ viewIsTransitioning, front }}
-                            />
-                        ))}
+                        <FlatList
+                            data={issue.fronts}
+                            renderItem={({ item }) => (
+                                <Front
+                                    issue={issue.key}
+                                    key={item}
+                                    front={item}
+                                    {...{ viewIsTransitioning }}
+                                />
+                            )}
+                        />
                     </>
                 ),
             })}
-        </ScrollView>
+        </View>
     )
 }
 
