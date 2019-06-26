@@ -234,9 +234,12 @@ export const Front: FunctionComponent<{
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         scrollEventThrottle={1}
+                        windowSize={3}
+                        maxToRenderPerBatch={1}
+                        initialNumToRender={1}
                         getItemLayout={(_: never, index: number) => ({
                             length: width,
-                            offset: 0,
+                            offset: width * index,
                             index,
                         })}
                         keyExtractor={(item: FrontType['collections'][0]) =>

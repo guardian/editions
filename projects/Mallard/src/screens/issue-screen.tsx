@@ -82,6 +82,9 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                         <IssueHeader issue={issue} />
                         <FlatList
                             data={issue.fronts}
+                            debug
+                            windowSize={3}
+                            maxToRenderPerBatch={1}
                             initialNumToRender={1}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
