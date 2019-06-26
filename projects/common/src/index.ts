@@ -80,7 +80,7 @@ export type BlockElement =
     | AtomElement
     | PullquoteElement
 
-const issuePath = (issueId: string) => `issue/${issueId}`
+const issuePath = (issueId: string) => `${issueId}/issue`
 const frontPath = (issueId: string, frontId: string) =>
     `${issuePath(issueId)}/front/${frontId}`
 const collectionPath = (issueId: string, collectionId: string) =>
