@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
 import { metrics } from 'src/theme/spacing'
@@ -10,15 +10,9 @@ This is the swipey contraption that contains an article.
 
 const styles = StyleSheet.create({
     container: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: -2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        flex: 1,
+        flex: 0,
+        flexShrink: 0,
+        height: '100%',
     },
     flexGrow: {
         flexGrow: 1,
@@ -27,9 +21,11 @@ const styles = StyleSheet.create({
 
 export const SlideCard = ({
     children,
+    viewIsTransitioning,
     onDismiss,
 }: {
     children: ReactNode
+    viewIsTransitioning?: boolean
     onDismiss: () => void
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))
@@ -40,6 +36,7 @@ export const SlideCard = ({
             }
         })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <Animated.View
             style={[
@@ -57,12 +54,14 @@ export const SlideCard = ({
                 },
             ]}
         >
-            <Header
-                {...{
-                    scrollY,
-                    onDismiss,
-                }}
-            />
+            {viewIsTransitioning ? null : (
+                <Header
+                    {...{
+                        scrollY,
+                        onDismiss,
+                    }}
+                />
+            )}
             <Animated.ScrollView
                 scrollEventThrottle={1}
                 contentContainerStyle={styles.flexGrow}

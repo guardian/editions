@@ -16,18 +16,20 @@ b) animations in react in general are always a
    on screen?
 */
 
+export type ScreenPosition = LayoutRectangle
+
 const positions: {
-    [key: string]: LayoutRectangle
+    [key: string]: ScreenPosition
 } = {}
 
 const setScreenPositionOfItem = (
     item: Article['key'],
-    position: LayoutRectangle,
+    position: ScreenPosition,
 ) => {
     positions[item] = position
 }
 
-const getScreenPositionOfItem = (item: Article['key']): LayoutRectangle => {
+const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
     if (positions[item]) return positions[item]
     const { height, width } = Dimensions.get('window')
     return {

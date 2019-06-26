@@ -10,7 +10,7 @@ import {
 
 type SettingsFromContext = [
     Settings,
-    (setting: keyof Settings, value: Settings[keyof Settings]) => void
+    (setting: keyof Settings, value: Settings[keyof Settings]) => void,
 ]
 
 /**
