@@ -1,4 +1,10 @@
-import React, { useState, useRef, FunctionComponent, ReactNode } from 'react'
+import React, {
+    useState,
+    useRef,
+    FunctionComponent,
+    ReactNode,
+    useMemo,
+} from 'react'
 import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
@@ -15,13 +21,10 @@ import { FlexErrorMessage } from '../layout/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
 import { FSPaths, APIPaths } from 'src/paths'
+import { FlatCard, flattenCollections } from 'src/helpers/transform'
 
 interface AnimatedFlatListRef {
     _component: FlatList<FrontType['collections'][0]>
-}
-interface FlatCardType {
-    collection: Collection
-    articles: Article[]
 }
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
@@ -70,6 +73,7 @@ const Page = ({
     appearance,
     index,
     collection,
+    front,
     scrollX,
 }: {
     appearance: ArticleAppearance
@@ -77,6 +81,7 @@ const Page = ({
     scrollX: Animated.Value
     articles: Article[]
     collection: Collection['key']
+    front: FrontType['key']
     issue: Issue['key']
 }) => {
     const { width } = Dimensions.get('window')
@@ -86,7 +91,7 @@ const Page = ({
             <CollectionPage
                 articles={Object.values(articles)}
                 translate={translateX}
-                {...{ issue, collection, appearance }}
+                {...{ issue, collection, front, appearance }}
                 style={[
                     {
                         flex: 1,
@@ -111,7 +116,7 @@ const Wrapper: FunctionComponent<{
     children: ReactNode
 }> = ({ children, scrubber }) => {
     return (
-        <View>
+        <>
             <View
                 style={{
                     padding: metrics.horizontal,
@@ -122,7 +127,7 @@ const Wrapper: FunctionComponent<{
                 {scrubber}
             </View>
             <View style={wrapperStyles.inner}>{children}</View>
-        </View>
+        </>
     )
 }
 
@@ -137,16 +142,10 @@ const FrontWithResponse = ({
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const { width } = Dimensions.get('window')
-    const cards: FlatCardType[] = frontData.collections
-        .map(collection =>
-            collection.cards
-                .filter(card => Boolean(card.articles))
-                .map(({ articles }) => ({
-                    articles: Object.values(articles || {}),
-                    collection,
-                })),
-        )
-        .reduce((acc, val) => acc.concat(val), [])
+    const cards: FlatCard[] = useMemo(
+        () => flattenCollections(frontData.collections),
+        [], // eslint-disable-line react-hooks/exhaustive-deps
+    )
     const stops = cards.length
     return (
         <Wrapper
@@ -200,7 +199,7 @@ const FrontWithResponse = ({
                     offset: width * index,
                     index,
                 })}
-                keyExtractor={(item: FlatCardType, index: number) =>
+                keyExtractor={(item: FlatCard, index: number) =>
                     index + item.collection.key
                 }
                 onScroll={Animated.event(
@@ -220,13 +219,14 @@ const FrontWithResponse = ({
                     item,
                     index,
                 }: {
-                    item: FlatCardType
+                    item: FlatCard
                     index: number
                 }) => (
                     <Page
                         appearance={'news'}
                         articles={item.articles || []}
                         collection={item.collection.key}
+                        front={frontData.key}
                         {...{ scrollX, issue, index }}
                     />
                 )}

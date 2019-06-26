@@ -2,6 +2,11 @@ interface WithKey {
     key: string
 }
 
+export interface Card {
+    layout: null
+    articles: { [key: string]: Article }
+}
+
 export interface Article extends WithKey {
     headline: string
     kicker: string
@@ -20,7 +25,7 @@ export interface Issue extends WithKey {
 
 export interface Collection extends WithKey {
     displayName: string
-    articles?: { [key: string]: Article }
+    cards: Card[]
     preview?: true
 }
 

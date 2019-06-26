@@ -5,7 +5,7 @@ import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from './collection-page'
-import { Article, Collection, Issue } from 'src/common'
+import { Article, Collection, Issue, Front } from 'src/common'
 import { getRowHeightForSize, RowLayout } from '../helpers'
 
 const styles = StyleSheet.create({
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
 interface NavigationPropTypes {
     collection: Collection['key']
     issue: Issue['key']
+    front: Front['key']
 }
 interface RowPropTypes {
     translate: CollectionPropTypes['translate']
@@ -96,6 +97,7 @@ const RowWithOneArticle = ({
     collection,
     issue,
     row,
+    front,
     ...rowProps
 }: {
     article: Article
@@ -111,6 +113,7 @@ const RowWithOneArticle = ({
                     article: article.key,
                     collection,
                     issue,
+                    front,
                 }}
                 article={article}
             />
@@ -120,8 +123,8 @@ const RowWithOneArticle = ({
 
 /*
 ROW
-shows 2 articles side by side. If there's less 
-it falls back to a single row and if there's more 
+shows 2 articles side by side. If there's less
+it falls back to a single row and if there's more
 then it eats them up
 */
 const Row = ({
@@ -129,6 +132,7 @@ const Row = ({
     collection,
     issue,
     row,
+    front,
     ...rowProps
 }: {
     articles: [Article] | [Article, Article]
@@ -141,7 +145,7 @@ const Row = ({
         return (
             <RowWithOneArticle
                 {...rowProps}
-                {...{ issue, collection, row }}
+                {...{ issue, collection, front, row }}
                 article={articles[0]}
             />
         )
@@ -157,6 +161,8 @@ const Row = ({
                     path={{
                         article: articles[0].key,
                         collection,
+                        front,
+
                         issue,
                     }}
                     article={articles[0]}
@@ -173,6 +179,7 @@ const Row = ({
                     path={{
                         article: articles[1].key,
                         collection,
+                        front,
                         issue,
                     }}
                     article={articles[1]}
