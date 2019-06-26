@@ -13,6 +13,14 @@ import { Article, Issue, Collection } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
+import {
+    TODO_twoStoryPage,
+    superHeroPage,
+    threeStoryPage,
+    fourStoryPage,
+    fiveStoryPage,
+    sixStoryPage,
+} from '../layouts'
 
 const styles = StyleSheet.create({
     root: {
@@ -36,7 +44,7 @@ export interface PropTypes {
     articles: Article[]
     translate: Animated.AnimatedInterpolation
     issue: Issue['key']
-    pageLayout: PageLayout
+    pageLayout?: PageLayout
     collection: Collection['key']
 }
 
@@ -64,6 +72,27 @@ const CollectionPageWithAppearance = ({
 }: PropTypes) => {
     if (!articles.length) {
         return <FlexErrorMessage title={GENERIC_ERROR} />
+    }
+    if (!pageLayout) {
+        switch (articles.length) {
+            case 1:
+                pageLayout = superHeroPage
+                break
+            case 2:
+                pageLayout = TODO_twoStoryPage
+                break
+            case 3:
+                pageLayout = threeStoryPage
+                break
+            case 4:
+                pageLayout = fourStoryPage
+                break
+            case 5:
+                pageLayout = fiveStoryPage
+                break
+            default:
+                pageLayout = sixStoryPage
+        }
     }
     return (
         <>

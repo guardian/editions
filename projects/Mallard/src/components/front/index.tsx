@@ -102,13 +102,6 @@ const Page = ({
                         <CollectionPage
                             articles={Object.values(collectionData.articles)}
                             translate={translateX}
-                            pageLayout={
-                                index === 0
-                                    ? superHeroPage
-                                    : index === 1
-                                    ? threeStoryPage
-                                    : fiveStoryPage
-                            }
                             {...{ issue, collection, appearance }}
                             style={[
                                 {
@@ -229,15 +222,21 @@ export const Front: FunctionComponent<{
                     }
                 >
                     <Animated.FlatList
-                        ref={(flatList: AnimatedFlatListRef) =>
-                            (flatListRef.current = flatList)
-                        }
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         scrollEventThrottle={1}
+                        maxToRenderPerBatch={1}
+                        initialNumToRender={1}
+                        windowSize={3}
+                        horizontal={true}
+                        pagingEnabled
+                        data={collections}
+                        ref={(flatList: AnimatedFlatListRef) =>
+                            (flatListRef.current = flatList)
+                        }
                         getItemLayout={(_: never, index: number) => ({
                             length: width,
-                            offset: 0,
+                            offset: width * index,
                             index,
                         })}
                         keyExtractor={(item: FrontType['collections'][0]) =>
@@ -255,9 +254,6 @@ export const Front: FunctionComponent<{
                             ],
                             { useNativeDriver: true },
                         )}
-                        horizontal={true}
-                        pagingEnabled
-                        data={collections}
                         renderItem={({
                             item,
                             index,

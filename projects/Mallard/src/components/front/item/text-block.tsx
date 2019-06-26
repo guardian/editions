@@ -5,6 +5,7 @@ import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
+import { RowSize } from '../helpers'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
 
@@ -60,23 +61,30 @@ const TextBlock = ({
     kicker,
     headline,
     textBlockAppearance,
+    size,
     style,
 }: {
     kicker: string
     headline: string
     textBlockAppearance: TextBlockAppearance
+    size: RowSize
     style?: StyleProp<ViewStyle>
 }) => {
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
+    const fontSize = size >= RowSize.hero ? 24 : 18
 
     return (
         <View style={[rootStyle, style]}>
-            <HeadlineKickerText style={kickerStyle}>
+            <HeadlineKickerText
+                style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
+            >
                 {kicker}
             </HeadlineKickerText>
-            <HeadlineCardText style={headlineStyle}>
+            <HeadlineCardText
+                style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
+            >
                 {headline}
             </HeadlineCardText>
         </View>
