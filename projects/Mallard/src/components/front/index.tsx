@@ -107,7 +107,7 @@ const Page = ({
                                     ? superHeroPage
                                     : index === 1
                                     ? threeStoryPage
-                                    : fiveStoryPage
+                                    : undefined
                             }
                             {...{ issue, collection, appearance }}
                             style={[
