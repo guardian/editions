@@ -81,11 +81,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                     <>
                         <IssueHeader issue={issue} />
                         <FlatList
-                            data={
-                                viewIsTransitioning
-                                    ? issue.fronts.slice(0, 2)
-                                    : issue.fronts
-                            }
+                            data={issue.fronts}
                             initialNumToRender={1}
                             renderItem={({ item }) => (
                                 <Front

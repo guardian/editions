@@ -861,6 +861,11 @@
     xcode "^2.0.0"
     xmldoc "^0.4.0"
 
+"@react-native-community/masked-view@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.1.tgz#dbcfc5ec08efbb02d4142dd9426c8d7a396829d7"
+  integrity sha512-EyJVSbarZkOPYq+zCZLx9apMcpwkX9HvH6R+6CeVL29q88kEFemnLO/IhmE4YX/0MfalsduI8eTi7fuQh/5VeA==
+
 "@react-navigation/core@~3.4.1":
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.4.2.tgz#bec563e94fde40fbab3730cdc97f22afbb2a1498"
@@ -5019,11 +5024,6 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-native-clipped@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-clipped/-/react-native-clipped-0.3.1.tgz#194f0d3a39d624a97d9ebda442897a44ce7c70cd"
-  integrity sha512-YgmgNYKM6qTrcAQDkmDeEUoIsuHkeonZDT0le2gR3xx0y/lmaMn8pkyKRSvT68CyhybGF7NJE9wSuIF2gFsFZg==
 
 react-native-gesture-handler@^1.2.1:
   version "1.3.0"

@@ -23,8 +23,8 @@ import { PathToArticle } from './article-screen'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import MaskedView from '@react-native-community/masked-view'
 import { Issue } from '../../../backend/common'
-import * as Clipped from 'react-native-clipped'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -76,26 +76,39 @@ const Clipper = ({
     const [height] = useState(
         () =>
             new Animated.Value(
-                1 -
-                    ((transitionProps &&
-                        transitionProps.startAtHeightFromFrontsItem) ||
-                        windowHeight) /
-                        windowHeight,
+                (transitionProps &&
+                    transitionProps.startAtHeightFromFrontsItem) ||
+                    windowHeight,
             ),
     )
     useEffect(() => {
         Animated.sequence([
             Animated.delay(150),
             Animated.timing(height, {
-                toValue: 0,
+                toValue: windowHeight,
                 duration: 300,
                 easing: Easing.inOut(Easing.linear),
             }),
         ]).start()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
     if (!transitionProps) return <>{children}</>
-    return <Clipped.View bottom={height}>{children}</Clipped.View>
+    return (
+        <MaskedView
+            style={{ flex: 1, flexDirection: 'row', height: '100%' }}
+            maskElement={
+                <Animated.View
+                    style={{
+                        height,
+                        flex: 0,
+                        backgroundColor: 'black',
+                        width: '100%',
+                    }}
+                />
+            }
+        >
+            {children}
+        </MaskedView>
+    )
 }
 
 const ArticleScreenWithProps = ({
