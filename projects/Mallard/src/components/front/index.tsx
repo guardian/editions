@@ -228,15 +228,18 @@ export const Front: FunctionComponent<{
                     }
                 >
                     <Animated.FlatList
-                        ref={(flatList: AnimatedFlatListRef) =>
-                            (flatListRef.current = flatList)
-                        }
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         scrollEventThrottle={1}
-                        windowSize={3}
                         maxToRenderPerBatch={1}
                         initialNumToRender={1}
+                        windowSize={3}
+                        horizontal={true}
+                        pagingEnabled
+                        data={collections}
+                        ref={(flatList: AnimatedFlatListRef) =>
+                            (flatListRef.current = flatList)
+                        }
                         getItemLayout={(_: never, index: number) => ({
                             length: width,
                             offset: width * index,
@@ -257,9 +260,6 @@ export const Front: FunctionComponent<{
                             ],
                             { useNativeDriver: true },
                         )}
-                        horizontal={true}
-                        pagingEnabled
-                        data={collections}
                         renderItem={({
                             item,
                             index,
