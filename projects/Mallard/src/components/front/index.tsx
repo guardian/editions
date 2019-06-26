@@ -154,17 +154,6 @@ const FrontWithResponse = ({
                     stops={stops}
                     title={frontData.key}
                     fill={color}
-                    onScrub={screenX => {
-                        if (
-                            flatListRef.current &&
-                            flatListRef.current._component
-                        ) {
-                            flatListRef.current._component.scrollToOffset({
-                                offset: getScrollPos(screenX) * stops,
-                                animated: false,
-                            })
-                        }
-                    }}
                     onReleaseScrub={screenX => {
                         if (
                             flatListRef.current &&

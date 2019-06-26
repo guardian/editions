@@ -37,8 +37,8 @@ const Navigator = ({
     fill: string
     stops: number
     position: Animated.AnimatedInterpolation
-    onScrub: (to: number) => void
-    onReleaseScrub: (to: number) => void
+    onScrub?: (to: number) => void
+    onReleaseScrub?: (to: number) => void
 }) => {
     const [width, setWidth] = useState(0)
     const [scrubbing, setScrubbing] = useState(false)
@@ -50,16 +50,17 @@ const Navigator = ({
             onShouldBlockNativeResponder: () => true,
             onPanResponderGrant: (ev, gestureState) => {
                 setScrubbing(true)
-                onScrub(gestureState.x0 - scrubberRadius)
+                onScrub && onScrub(gestureState.x0 - scrubberRadius)
             },
             onPanResponderMove: (ev, gestureState) => {
-                onScrub(gestureState.moveX - scrubberRadius)
+                onScrub && onScrub(gestureState.moveX - scrubberRadius)
             },
             onPanResponderEnd: (ev, gestureState) => {
                 setScrubbing(false)
-                onReleaseScrub(
-                    gestureState.x0 + gestureState.dx - scrubberRadius,
-                )
+                onReleaseScrub &&
+                    onReleaseScrub(
+                        gestureState.x0 + gestureState.dx - scrubberRadius,
+                    )
             },
         }),
     )
@@ -70,7 +71,7 @@ const Navigator = ({
 
     return (
         <View
-            {...panResponder.panHandlers}
+            {...(onScrub ? panResponder.panHandlers : {})}
             style={{
                 backgroundColor: 'transparent',
             }}
