@@ -144,7 +144,7 @@ const FrontWithResponse = ({
     const { width } = Dimensions.get('window')
     const cards: FlatCard[] = useMemo(
         () => flattenCollections(frontData.collections),
-        [], // eslint-disable-line react-hooks/exhaustive-deps
+        frontData.collections.map(({ key }) => key), // eslint-disable-line react-hooks/exhaustive-deps
     )
     const stops = cards.length
     return (
