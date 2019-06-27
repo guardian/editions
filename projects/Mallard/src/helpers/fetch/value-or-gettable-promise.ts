@@ -14,7 +14,7 @@ fire the promise inside the hook code (we need to wrap that
 behavior in a useEffect).
 This prevents infinite loops from firing off
 
-Without a vorgp:
+Without a ValueOrGettablePromise:
 const useData = (promise) => {
     const [result, setResult] = useState(null) :(
     useEffect(()=>{
@@ -26,7 +26,7 @@ const useData = (promise) => {
 With a vorgp:
 const useData = (vorgp) => {
     const initialState = isPromise(vorgp) ? null : vorgp.value;
-    const [result, setResult] = useState(vorgp) :D
+    const [result, setResult] = useState(initialState) :D
     useEffect(()=>{
         // OR you could run it anyway and maybe use that to update the value later?
         if(isPromise(vorgp)){
