@@ -4,10 +4,11 @@ interface WithKey {
 
 export interface Card {
     layout: null
-    articles: { [key: string]: Article }
+    articles: { [key: string]: CAPIArticle }
 }
 
 export interface Article extends WithKey {
+    type: 'article'
     headline: string
     kicker: string
     image: string
@@ -16,6 +17,17 @@ export interface Article extends WithKey {
     imageURL?: string
     elements: BlockElement[]
 }
+
+export interface CrosswordArticle extends WithKey {
+    type: 'crossword'
+    headline: string
+    kicker: string
+    byline?: string
+    standfirst?: string
+    crossword: Crossword
+}
+
+export type CAPIArticle = Article | CrosswordArticle
 
 export interface IssueSummary extends WithKey {
     name: string
@@ -90,6 +102,69 @@ export type BlockElement =
     | TweetElement
     | AtomElement
     | PullquoteElement
+
+
+export interface CrosswordDimensions {
+    cols: number
+    rows: number
+}
+
+export interface CrosswordPosition {
+    x: number
+    y: number
+}
+
+export interface CrosswordCreator {
+    name: string
+    webUrl: string
+}
+
+export interface CrosswordEntry {
+    id: string
+    number?: number
+    humanNumber?: string
+    direction?: string
+    position?: CrosswordPosition
+    separatorLocations?: { [key:string]: number[] }
+    length?: number
+    clue?: string
+    group?: string[]
+    solution?: string
+    format?: string
+}
+
+export enum CrosswordType {
+    QUICK = 0,
+    CRYPTIC = 1,
+    QUIPTIC = 2,
+    SPEEDY = 3,
+    PRIZE = 4,
+    EVERYMAN = 5,
+    DIAN_QUIPTIC_CROSSWORD = 6,
+    WEEKEND = 7
+}
+
+export interface CapiDateTime {
+    dateTime: number
+    iso8601: string
+}
+
+export interface Crossword {
+    name: string
+    type: CrosswordType
+    number: number
+    date: CapiDateTime
+    dimensions: CrosswordDimensions
+    entries: CrosswordEntry[]
+    solutionAvailable: boolean
+    hasNumbers: boolean
+    randomCluesOrdering: boolean
+    instructions?: string
+    creator?: CrosswordCreator 
+    pdf?: string
+    annotatedSolution?: string
+    dateSolutionAvailable?: CapiDateTime
+}
 
 const issuePath = (issueId: string) => `${issueId}/issue`
 const frontPath = (issueId: string, frontId: string) =>

@@ -6,8 +6,8 @@ import {
     ArticleAppearance,
     articleAppearances,
 } from 'src/theme/appearance'
-import { Article } from 'src/components/article'
-import { Article as ArticleType, Collection, Front } from 'src/common'
+import { ArticleController } from 'src/components/article'
+import { CAPIArticle, Collection, Front } from 'src/common'
 import { View, TouchableOpacity, Dimensions } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -27,7 +27,7 @@ import { Button } from 'src/components/button/button'
 export interface PathToArticle {
     collection: Collection['key']
     front: Front['key']
-    article: ArticleType['key']
+    article: CAPIArticle['key']
     issue: Issue['key']
 }
 
@@ -52,12 +52,12 @@ const useArticleResponse = ({ article, issue, front }: PathToArticle) => {
         const articleContent = allArticles.find(({ key }) => key === article)
 
         if (articleContent) {
-            return withResponse<ArticleType>({
+            return withResponse<CAPIArticle>({
                 ...resp,
                 response: articleContent,
             })
         } else {
-            return withResponse<ArticleType>({
+            return withResponse<CAPIArticle>({
                 state: 'error',
                 error: {
                     message: ERR_404_REMOTE,
@@ -65,7 +65,7 @@ const useArticleResponse = ({ article, issue, front }: PathToArticle) => {
             })
         }
     }
-    return withResponse<ArticleType>(resp)
+    return withResponse<CAPIArticle>(resp)
 }
 
 const ArticleScreenWithProps = ({
@@ -77,7 +77,7 @@ const ArticleScreenWithProps = ({
     navigation: NavigationScreenProp<{}>
     path: PathToArticle
     transitionProps?: ArticleTransitionProps
-    articlePrefill?: ArticleType
+    articlePrefill?: CAPIArticle
 }) => {
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
@@ -120,14 +120,14 @@ const ArticleScreenWithProps = ({
                     ),
                     pending: () =>
                         articlePrefill ? (
-                            <Article {...articlePrefill} />
+                            <ArticleController article={articlePrefill} />
                         ) : (
                             <FlexErrorMessage
                                 title={'loading'}
                                 style={{ backgroundColor: color.background }}
                             />
                         ),
-                    success: ({ elements, ...article }) => (
+                    success: article => (
                         <>
                             {isUsingProdDevtools ? (
                                 <Button
@@ -158,13 +158,9 @@ const ArticleScreenWithProps = ({
                                     appearances[appearance] as ArticleAppearance
                                 }
                             >
-                                <Article
-                                    article={
-                                        viewIsTransitioning
-                                            ? undefined
-                                            : elements
-                                    }
-                                    {...article}
+                                <ArticleController
+                                    article={article}
+                                    viewIsTransitioning={viewIsTransitioning}
                                 />
                             </WithArticleAppearance>
                         </>
@@ -181,7 +177,7 @@ export const ArticleScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const articlePrefill = navigation.getParam('article') as
-        | ArticleType
+        | CAPIArticle
         | undefined
 
     const path = navigation.getParam('path') as PathToArticle | undefined

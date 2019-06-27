@@ -1,7 +1,7 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { Front, Collection, Article, Card } from './common'
+import { Front, Collection, CAPIArticle, Card, Crossword } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -14,9 +14,9 @@ import { getArticles } from './capi/articles'
 
 const createCardsFromAllArticlesInCollection = (
     maxCardSize: number,
-    articles: [string, Article][],
+    articles: [string, CAPIArticle][],
 ): Card[] => {
-    const chunk = (arr: [string, Article][], size: number) =>
+    const chunk = (arr: [string, CAPIArticle][], size: number) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
             arr.slice(i * size, i * size + size),
         )
@@ -70,7 +70,7 @@ export const getCollection = async (
             'Could not connect to CAPI',
         )
 
-    const articles: [string, Article][] = Object.entries(articleFragments)
+    const articles: [string, CAPIArticle][] = Object.entries(articleFragments)
         .filter(([key]) => {
             const inResponse =
                 key in capiPrintArticles || key in capiSearchArticles
@@ -84,18 +84,36 @@ export const getCollection = async (
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
-            const imageURL = (meta && meta.imageSrc) || article.imageURL
 
-            return [
-                article.path,
-                {
-                    ...article,
-                    key: article.path,
-                    kicker,
-                    headline,
-                    imageURL,
-                },
-            ]
+            switch (article.type) {
+                case 'crossword':
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            crossword: (article.crossword as unknown) as Crossword,
+                        },
+                    ]
+                case 'article':
+                    const imageURL = (meta && meta.imageSrc) || article.imageURL
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            imageURL,
+                        },
+                    ]
+
+                default:
+                    const msg: never = article
+                    throw new TypeError(`Unknown type: ${msg}`)
+            }
         })
 
     return {
