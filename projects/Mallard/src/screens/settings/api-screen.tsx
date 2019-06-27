@@ -20,7 +20,7 @@ const ApiState = () => {
     if (apiUrl === defaultSettings.apiUrl) return null
     return (
         <MonoTextBlock>
-            API backend pointing to {apiUrl}. This is not PROD!
+            {`API backend pointing to ${apiUrl}. This is not PROD!`}
         </MonoTextBlock>
     )
 }
