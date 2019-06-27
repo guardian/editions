@@ -58,6 +58,7 @@ const useArticleResponse = ({ article, issue, front }: PathToArticle) => {
             })
         } else {
             return withResponse<ArticleType>({
+                ...resp,
                 state: 'error',
                 error: {
                     message: ERR_404_REMOTE,

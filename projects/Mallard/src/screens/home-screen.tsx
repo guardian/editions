@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import {
     Image,
     ScrollView,
-    Button,
+    Button as NativeButton,
     StyleSheet,
     View,
     Platform,
@@ -27,6 +27,7 @@ import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-messag
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useApiEndpoint } from 'src/hooks/use-api'
+import { Button } from 'src/components/button/button'
 
 const demoIssues: Issue[] = [
     {
@@ -77,25 +78,39 @@ export const HomeScreen = ({
             <ScrollView style={styles.container}>
                 <ListHeading>Issues</ListHeading>
                 {issueSummary({
-                    success: issueList => (
-                        <List
-                            data={issueList.map(issue => ({
-                                title: renderIssueDate(issue.date * 1000).date,
-                                explainer: issue.name,
-                                key: issue.date + issue.name,
-                                data: {
-                                    issue: issue.key,
-                                },
-                            }))}
-                            onPress={path =>
-                                navigation.navigate('Issue', { path })
-                            }
-                        />
+                    success: (issueList, { retry }) => (
+                        <>
+                            <List
+                                data={issueList.map(issue => ({
+                                    title: renderIssueDate(issue.date * 1000)
+                                        .date,
+                                    explainer: issue.name,
+                                    key: issue.date + issue.name,
+                                    data: {
+                                        issue: issue.key,
+                                    },
+                                }))}
+                                onPress={path =>
+                                    navigation.navigate('Issue', { path })
+                                }
+                            />
+                            <View
+                                style={{
+                                    padding: metrics.vertical,
+                                    paddingHorizontal: metrics.horizontal,
+                                    paddingTop: metrics.vertical * 3,
+                                    alignItems: 'flex-start',
+                                }}
+                            >
+                                <Button onPress={retry}>Refresh</Button>
+                            </View>
+                        </>
                     ),
-                    error: ({ message }) => (
+                    error: ({ message }, { retry }) => (
                         <FlexErrorMessage
                             title={GENERIC_ERROR}
                             message={isUsingProdDevtools ? message : undefined}
+                            action={['Retry', retry]}
                         />
                     ),
                     pending: () => (
@@ -168,7 +183,7 @@ HomeScreen.navigationOptions = ({
     title: 'Home',
     headerTitle: () => null,
     headerRight: (
-        <Button
+        <NativeButton
             onPress={() => {
                 navigation.navigate('Settings')
             }}

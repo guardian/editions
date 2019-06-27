@@ -44,6 +44,7 @@ interface GettablePromise<T> {
 interface Value<T> {
     type: 'value'
     value: T
+    getValue: () => Promise<T>
 }
 
 export type ValueOrGettablePromise<T> = Value<T> | GettablePromise<T>
@@ -65,17 +66,19 @@ const valueOrGettablePromise = <T>(
         savePromiseResultToValue,
     }: { savePromiseResultToValue: (result: T) => void },
 ): ValueOrGettablePromise<T> => {
+    const getValue = async () => {
+        const val = await promiseGetter()
+        savePromiseResultToValue(val)
+        return val
+    }
     if (value) {
         return {
             type: 'value',
             value,
+            getValue,
         }
     }
-    return gettablePromise(async () => {
-        const val = await promiseGetter()
-        savePromiseResultToValue(val)
-        return val
-    })
+    return gettablePromise(getValue)
 }
 
 export { isGettablePromise, valueOrGettablePromise, gettablePromise }

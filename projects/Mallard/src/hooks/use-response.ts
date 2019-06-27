@@ -1,7 +1,7 @@
 import { useState, ReactElement, useEffect } from 'react'
 import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
 import {
-    ValueOrPromise,
+    ValueOrGettablePromise,
     isGettablePromise,
 } from 'src/helpers/fetch/value-or-gettable-promise'
 
@@ -20,19 +20,25 @@ interface SuccesfulResponse<T> {
     state: 'success'
     response: T
 }
-export type Response<T> =
+
+export type PureResponse<T> =
     | PendingResponse
     | ErroredResponse
     | SuccesfulResponse<T>
 
-export const useResponse = <T>(
-    initial: T | null,
-): {
-    response: Response<T>
+export type Response<T> = PureResponse<T> & {
+    retry: () => void
+}
+
+export interface ResponseHookCallbacks<T> {
     onSuccess: (res: T) => void
     onError: (error: Error) => void
-} => {
-    const [response, setResponse] = useState<
+}
+export const useResponse = <T>(
+    initial: T | null,
+    { onRequestRetry }: { onRequestRetry: (response: PureResponse<T>) => void },
+): [Response<T>, ResponseHookCallbacks<T>] => {
+    const [responseValue, setResponseValue] = useState<
         SuccesfulResponse<T | null>['response']
     >(initial)
     const [error, setError] = useState<ErroredResponse['error']>({
@@ -43,41 +49,49 @@ export const useResponse = <T>(
     )
 
     const onSuccess = (res: T) => {
-        setResponse(res)
+        setResponseValue(res)
         setState('success')
     }
     const onError = (err: ErroredResponse['error']) => {
         setError(err)
         setState('error')
     }
-
-    if (state === 'success' && response) {
-        return {
-            response: {
+    const getResponse = (): PureResponse<T> => {
+        if (state === 'success' && responseValue) {
+            return {
                 state,
-                response,
-            },
-            onSuccess,
-            onError,
+                response: responseValue,
+            }
         }
-    }
-    if (state === 'error') {
-        return {
-            response: {
+        if (state === 'error') {
+            return {
                 state,
                 error,
-            },
-            onSuccess,
-            onError,
+            }
+        }
+        return {
+            state: 'pending',
         }
     }
-    return {
-        response: {
-            state: 'pending',
-        },
-        onSuccess,
-        onError,
+    const response = getResponse()
+    const retry = () => {
+        setState('pending')
+        onRequestRetry(response)
     }
+    return [
+        {
+            ...response,
+            retry,
+        },
+        {
+            onSuccess,
+            onError,
+        },
+    ]
+}
+
+interface WithResponseCallbacks {
+    retry: () => void
 }
 
 export const withResponse = <T>(response: Response<T>) => ({
@@ -85,35 +99,62 @@ export const withResponse = <T>(response: Response<T>) => ({
     pending,
     error,
 }: {
-    success: (resp: T) => ReactElement
-    pending: () => ReactElement
-    error: (error: Error) => ReactElement
+    success: (resp: T, callbacks: WithResponseCallbacks) => ReactElement
+    pending: (callbacks: WithResponseCallbacks) => ReactElement
+    error: (error: Error, callbacks: WithResponseCallbacks) => ReactElement
 }): ReactElement => {
-    if (response.state === 'success') return success(response.response)
-    else if (response.state === 'pending') return pending()
-    else if (response.state === 'error') return error(response.error)
-    else return error({ message: REQUEST_INVALID_RESPONSE_STATE })
+    if (response.state === 'success')
+        return success(response.response, { retry: response.retry })
+    else if (response.state === 'pending')
+        return pending({ retry: response.retry })
+    else if (response.state === 'error')
+        return error(response.error, { retry: response.retry })
+    else
+        return error(
+            { message: REQUEST_INVALID_RESPONSE_STATE },
+            { retry: () => {} },
+        )
+}
+
+const promiseAsResponseEffect = <T>(
+    promise: ValueOrGettablePromise<T>,
+    { onSuccess, onError }: ResponseHookCallbacks<T>,
+    state?: Response<T>['state'],
+) => {
+    /*
+    if there's state lets request again
+    bc it means it's a retry
+    */
+    if (state || isGettablePromise(promise)) {
+        promise
+            .getValue()
+            .then(data => {
+                onSuccess(data as T)
+            })
+            .catch((err: Error) => {
+                /*
+                TODO: response should handle the error + stale data
+                case instead of eating it up here
+                */
+                if (state !== 'success') {
+                    onError(err)
+                }
+            })
+    }
 }
 
 export const usePromiseAsResponse = <T>(
-    promise: ValueOrPromise<T>,
+    promise: ValueOrGettablePromise<T>,
 ): Response<T> => {
-    const { response, onSuccess, onError } = useResponse<T>(
+    const [response, callbacks] = useResponse<T>(
         isGettablePromise<T>(promise) ? null : promise.value,
+        {
+            onRequestRetry: oldResponse =>
+                promiseAsResponseEffect(promise, callbacks, oldResponse.state),
+        },
     )
     useEffect(() => {
-        if (isGettablePromise(promise)) {
-            promise
-                .getValue()
-                .then(data => {
-                    onSuccess(data as T)
-                })
-                .catch((err: Error) => {
-                    if (response.state !== 'success') {
-                        onError(err)
-                    }
-                })
-        }
+        promiseAsResponseEffect(promise, callbacks)
     }, [])
 
     return response
