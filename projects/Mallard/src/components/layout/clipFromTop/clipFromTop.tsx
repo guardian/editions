@@ -8,9 +8,9 @@ import {
 } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
 
-/* 
+/*
 This is part of the transition from articles to fronts
-and it crops the bottom end of the article so it feels 
+and it crops the bottom end of the article so it feels
 as if it's coming out of its card
 */
 
@@ -35,9 +35,9 @@ const MaskClipFromTop = ({ children, from }: PropTypes) => {
     )
     useEffect(() => {
         Animated.sequence([
-            Animated.delay(50),
+            Animated.delay(75),
             Animated.timing(height, {
-                toValue: 2,
+                toValue: 2.25,
                 duration: 300,
                 easing: Easing.inOut(Easing.linear),
                 useNativeDriver: true,
