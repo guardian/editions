@@ -28,7 +28,6 @@ const useData = (vorgp) => {
     const initialState = isPromise(vorgp) ? null : vorgp.value;
     const [result, setResult] = useState(initialState) :D
     useEffect(()=>{
-        // OR you could run it anyway and maybe use that to update the value later?
         if(isPromise(vorgp)){
             vorgp.getValue().then(val => {setResult(val)})
         }
