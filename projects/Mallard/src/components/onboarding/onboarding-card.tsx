@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
     subtitle: {
-        marginBottom: metrics.vertical,
+        marginBottom: metrics.vertical * 2,
     },
 })
 
