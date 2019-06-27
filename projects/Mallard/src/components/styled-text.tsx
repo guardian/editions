@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     titlepieceText: {
         fontFamily: 'GTGuardianTitlepiece-Bold',
         fontSize: 30,
-        lineHeight: 34,
+        lineHeight: 30,
     },
     headlineKickerText: {
         fontFamily: 'GTGuardianTitlepiece-Bold',
