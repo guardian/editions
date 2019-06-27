@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
@@ -7,7 +7,7 @@ import {
     articleAppearances,
 } from 'src/theme/appearance'
 import { Article } from 'src/components/article'
-import { Article as ArticleType, Collection } from 'src/common'
+import { Article as ArticleType, Collection, Front } from 'src/common'
 import { View, TouchableOpacity } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -20,9 +20,11 @@ import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { Issue } from '../../../backend/common'
 import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
 import { FSPaths, APIPaths } from 'src/paths'
+import { flattenCollections } from 'src/helpers/transform'
 
 export interface PathToArticle {
     collection: Collection['key']
+    front: Front['key']
     article: ArticleType['key']
     issue: Issue['key']
 }
@@ -31,18 +33,22 @@ export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
 
-const useArticleResponse = ({ collection, article, issue }: PathToArticle) => {
-    const resp = useJsonOrEndpoint<Collection>(
+const useArticleResponse = ({ article, issue, front }: PathToArticle) => {
+    const resp = useJsonOrEndpoint<Front>(
         issue,
-        FSPaths.collection(issue, collection),
-        APIPaths.collection(issue, collection),
+        FSPaths.front(issue, front),
+        APIPaths.front(issue, front),
     )
     if (resp.state === 'success') {
         // TODO: we aren't storing the path anywhere on the article
         // which means we can't key into our collection (which is keyed by path)
         // even when we have an article
-        const articleContent =
-            resp.response.articles && resp.response.articles[article]
+
+        const allArticles = flattenCollections(resp.response.collections)
+            .map(({ articles }) => articles)
+            .reduce((acc, val) => acc.concat(val), [])
+        const articleContent = allArticles.find(({ key }) => key === article)
+
         if (articleContent) {
             return withResponse<ArticleType>({
                 ...resp,

@@ -146,7 +146,6 @@ export const useJsonOrEndpoint = <T>(
         useFileList()[0].find(
             file => fileIsIssue(file) && file.issue.key === issueId,
         ) !== undefined
-
     const responses = [
         useFetch<T>(`${apiUrl}${endpointPath}`, {
             validator,
