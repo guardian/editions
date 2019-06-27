@@ -6,8 +6,8 @@ import {
 } from './words'
 import {
     ValueOrGettablePromise,
-    returnValue,
-    returnGettablePromise,
+    makeValue,
+    makeGettablePromise,
 } from './fetch/value-or-gettable-promise'
 import { getJson, isIssueInDevice } from './files'
 import { Issue } from 'src/common'
@@ -51,9 +51,9 @@ const fetchFromApi = <T>(
 ): ValueOrGettablePromise<T> => {
     const { retrieve } = withCache('api')
     if (retrieve(endpointPath)) {
-        return returnValue(retrieve(endpointPath) as T)
+        return makeValue(retrieve(endpointPath) as T)
     }
-    return returnGettablePromise(() =>
+    return makeGettablePromise(() =>
         fetchFromApiSlow<T>(endpointPath, {
             validator,
         }),
@@ -114,11 +114,11 @@ const fetchFromIssue = <T>(
     */
     const { retrieve: retrieveApi } = withCache('api')
     const { retrieve: retrieveLocal } = withCache('local')
-    if (retrieveLocal(fsPath)) return returnValue(retrieveLocal(fsPath) as T)
+    if (retrieveLocal(fsPath)) return makeValue(retrieveLocal(fsPath) as T)
     if (retrieveApi(endpointPath))
-        return returnValue(retrieveApi(endpointPath) as T)
+        return makeValue(retrieveApi(endpointPath) as T)
 
-    return returnGettablePromise(() =>
+    return makeGettablePromise(() =>
         fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
     )
 }
