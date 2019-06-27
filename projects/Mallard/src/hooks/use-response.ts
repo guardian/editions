@@ -1,6 +1,6 @@
 import { useState, ReactElement, useEffect } from 'react'
 import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
-import { PromiseMaybe, isPromise } from 'src/helpers/promise-maybe'
+import { ValueOrPromise, isPromise } from 'src/helpers/fetch/value-or-promise'
 
 export interface Error {
     message: string
@@ -93,7 +93,7 @@ export const withResponse = <T>(response: Response<T>) => ({
 }
 
 export const usePromiseAsResponse = <T>(
-    promise: PromiseMaybe<T>,
+    promise: ValueOrPromise<T>,
 ): Response<T> => {
     const { response, onSuccess, onError } = useResponse<T>(
         isPromise<T>(promise) ? null : promise.value,

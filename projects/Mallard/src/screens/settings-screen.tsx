@@ -16,7 +16,7 @@ import { useSettings } from 'src/hooks/use-settings'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME } from 'src/helpers/words'
-import { clearCache } from 'src/helpers/cache'
+import { clearCache } from 'src/helpers/fetch/cache'
 
 const styles = StyleSheet.create({
     container,

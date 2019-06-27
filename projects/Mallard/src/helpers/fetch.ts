@@ -1,10 +1,14 @@
-import { withCache } from './cache'
+import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
 import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from './words'
-import { PromiseMaybe, returnResolved, returnPromise } from './promise-maybe'
+import {
+    ValueOrPromise,
+    returnValue,
+    returnGettablePromise,
+} from './fetch/value-or-promise'
 import { getJson, isIssueInDevice } from './files'
 import { Issue } from 'src/common'
 
@@ -48,12 +52,12 @@ const fetchFromApiSlow = async <T>(
 const fetchFromApi = <T>(
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-): PromiseMaybe<T> => {
+): ValueOrPromise<T> => {
     const { retrieve } = withCache('api')
     if (retrieve(endpointPath)) {
-        return returnResolved(retrieve(endpointPath) as T)
+        return returnValue(retrieve(endpointPath) as T)
     }
-    return returnPromise(() =>
+    return returnGettablePromise(() =>
         fetchFromApiSlow<T>(endpointPath, {
             validator,
         }),
@@ -107,18 +111,18 @@ const fetchFromIssue = <T>(
     fsPath: string,
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-): PromiseMaybe<T> => {
+): ValueOrPromise<T> => {
     /*
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
     */
     const { retrieve: retrieveApi } = withCache('api')
     const { retrieve: retrieveLocal } = withCache('local')
-    if (retrieveLocal(fsPath)) return returnResolved(retrieveLocal(fsPath) as T)
+    if (retrieveLocal(fsPath)) return returnValue(retrieveLocal(fsPath) as T)
     if (retrieveApi(endpointPath))
-        return returnResolved(retrieveApi(endpointPath) as T)
+        return returnValue(retrieveApi(endpointPath) as T)
 
-    return returnPromise(() =>
+    return returnGettablePromise(() =>
         fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
     )
 }
