@@ -25,12 +25,8 @@ const fetchFromApiSlow = async <T>(
         validator: ValidatorFn<T>
     },
 ): Promise<T> => {
-    const { store, retrieve } = withCache('api')
+    const { store } = withCache('api')
     const apiUrl = await getSetting('apiUrl')
-
-    if (retrieve(path)) {
-        return Promise.resolve(retrieve(path) as T)
-    }
 
     return fetch(apiUrl + path)
         .then(res => {
