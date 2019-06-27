@@ -63,7 +63,7 @@ const fetchFromApi = <T>(
 /*
 Fetch locally
 */
-const fetchFromLocalAsync = <T>(
+const fetchFromLocalSlow = <T>(
     path: string,
     {
         validator,
@@ -92,7 +92,7 @@ const fetchFromIssueSlow = async <T>(
 ): Promise<T> => {
     const issueInDevice = await isIssueInDevice(issueId)
     if (issueInDevice) {
-        return fetchFromLocalAsync<T>(fsPath, {
+        return fetchFromLocalSlow<T>(fsPath, {
             validator,
         })
     } else {
@@ -123,4 +123,4 @@ const fetchFromIssue = <T>(
     )
 }
 
-export { fetchFromIssue, fetchFromApi, fetchFromIssueSlow, fetchFromApiSlow }
+export { fetchFromIssue, fetchFromApi }
