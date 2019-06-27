@@ -36,7 +36,7 @@ export interface ResponseHookCallbacks<T> {
 }
 export const useResponse = <T>(
     initial: T | null,
-    { onRequestRetry }: { onRequestRetry: (response: PureResponse<T>) => void },
+    { onRequestRetry }: { onRequestRetry: () => void },
 ): [Response<T>, ResponseHookCallbacks<T>] => {
     const [responseValue, setResponseValue] = useState<
         SuccesfulResponse<T | null>['response']
@@ -56,6 +56,10 @@ export const useResponse = <T>(
         setError(err)
         setState('error')
     }
+    const retry = () => {
+        setState('pending')
+        onRequestRetry()
+    }
     const getResponse = (): PureResponse<T> => {
         if (state === 'success' && responseValue) {
             return {
@@ -73,14 +77,10 @@ export const useResponse = <T>(
             state: 'pending',
         }
     }
-    const response = getResponse()
-    const retry = () => {
-        setState('pending')
-        onRequestRetry(response)
-    }
+
     return [
         {
-            ...response,
+            ...getResponse(),
             retry,
         },
         {
@@ -119,13 +119,13 @@ export const withResponse = <T>(response: Response<T>) => ({
 const promiseAsResponseEffect = <T>(
     promise: ValueOrGettablePromise<T>,
     { onSuccess, onError }: ResponseHookCallbacks<T>,
-    state?: Response<T>['state'],
+    retry?: boolean,
 ) => {
     /*
     if there's state lets request again
     bc it means it's a retry
     */
-    if (state || isGettablePromise(promise)) {
+    if (retry || isGettablePromise(promise)) {
         promise
             .getValue()
             .then(data => {
@@ -136,9 +136,7 @@ const promiseAsResponseEffect = <T>(
                 TODO: response should handle the error + stale data
                 case instead of eating it up here
                 */
-                if (state !== 'success') {
-                    onError(err)
-                }
+                onError(err)
             })
     }
 }
@@ -149,8 +147,8 @@ export const usePromiseAsResponse = <T>(
     const [response, callbacks] = useResponse<T>(
         isGettablePromise<T>(promise) ? null : promise.value,
         {
-            onRequestRetry: oldResponse =>
-                promiseAsResponseEffect(promise, callbacks, oldResponse.state),
+            onRequestRetry: () =>
+                promiseAsResponseEffect(promise, callbacks, true),
         },
     )
     useEffect(() => {

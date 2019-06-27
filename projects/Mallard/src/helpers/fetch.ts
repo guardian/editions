@@ -111,7 +111,7 @@ const fetchFromIssue = <T>(
     const { retrieve, store } = withCache<T>('issue')
     return valueOrGettablePromise(
         [
-            retrieve(fsPath),
+            retrieve(endpointPath),
             async () => {
                 const issueOnDevice = await isIssueOnDevice(issueId)
                 if (issueOnDevice) {
