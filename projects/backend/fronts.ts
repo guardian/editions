@@ -106,6 +106,11 @@ export const getCollection = async (
     }
 }
 
+const getDisplayName = (front: string) => {
+    const split = front.split('/').pop() || front
+    return split.charAt(0).toUpperCase() + split.slice(1)
+}
+
 export const getFront = async (
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
@@ -120,6 +125,7 @@ export const getFront = async (
     if (!(id in config.fronts)) throw new Error('Front not found')
     const front = {
         ...config.fronts[id],
+        displayName: getDisplayName(id),
         collections: (await Promise.all(
             config.fronts[id].collections.map(id =>
                 getCollection(id, true, lastModifiedUpdater),
