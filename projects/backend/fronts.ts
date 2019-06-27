@@ -82,13 +82,19 @@ export const getCollection = async (
         .map(([key, fragment]) => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
-            const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
+            const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageURL = (meta && meta.imageSrc) || article.imageURL
 
             return [
                 article.path,
-                { ...article, key: article.path, kicker, headline, imageURL },
+                {
+                    ...article,
+                    key: article.path,
+                    kicker,
+                    headline,
+                    imageURL,
+                },
             ]
         })
 
