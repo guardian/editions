@@ -12,8 +12,8 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const sceneIndex = scene.index
 
     const scale = position.interpolate({
-        inputRange: [sceneIndex + 0.1, sceneIndex + 1],
-        outputRange: [1, 0.75],
+        inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
+        outputRange: [1, 1, 0.75],
     })
     const borderRadius = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 1],
@@ -42,8 +42,8 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
 
-    /* 
-    we are assuming our final article 
+    /*
+    we are assuming our final article
     will cover the entire screen here
     */
     const { width: windowWidth, height: windowHeight } = Dimensions.get(
@@ -56,7 +56,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     )
 
     /*
-    subtly blend the actual article page 
+    subtly blend the actual article page
     and its card so it's a bit less jarring
     */
     const opacity = position.interpolate({
@@ -74,8 +74,8 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
         outputRange: [scaler, 1],
     })
 
-    /* 
-    yScaleDiff calculates how many pixels we need to offset 
+    /*
+    yScaleDiff calculates how many pixels we need to offset
     our y translate to account for the scale
     */
     const yScaleDiff = (windowHeight - windowHeight * scaler) / 2
@@ -86,7 +86,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     })
 
     /*
-    If the card is half width we 
+    If the card is half width we
     need to move it to its side at the start
     */
     const distanceFromCentre = width / 2 + x - windowWidth / 2

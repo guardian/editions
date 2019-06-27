@@ -9,8 +9,16 @@ import { StatusBar, View } from 'react-native'
 import { RootNavigator } from 'src/navigation'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { FileSystemProvider } from 'src/hooks/use-fs'
+import { StyleSheet } from 'react-native'
 
 useScreens()
+
+const styles = StyleSheet.create({
+    appContainer: {
+        flex: 1,
+        backgroundColor: '#000',
+    },
+})
 
 export default class App extends React.Component<{}, {}> {
     /**
@@ -26,7 +34,7 @@ export default class App extends React.Component<{}, {}> {
                         barStyle="light-content"
                         backgroundColor="#041f4a"
                     />
-                    <View style={{ flex: 1, backgroundColor: '#000' }}>
+                    <View style={styles.appContainer}>
                         <RootNavigator />
                     </View>
                 </SettingsProvider>
