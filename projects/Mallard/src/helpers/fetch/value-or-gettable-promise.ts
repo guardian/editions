@@ -23,7 +23,7 @@ const useData = (promise) => {
     return result;
 }
 
-With a vorgp:
+With a ValueOrGettablePromise:
 const useData = (vorgp) => {
     const initialState = isPromise(vorgp) ? null : vorgp.value;
     const [result, setResult] = useState(initialState) :D
