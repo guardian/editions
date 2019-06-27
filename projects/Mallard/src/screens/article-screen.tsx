@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { useJsonOrEndpoint } from 'src/hooks/use-issue'
+import { useIssue } from 'src/hooks/use-issue'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,
@@ -34,7 +34,7 @@ export interface ArticleTransitionProps {
 }
 
 const useArticleResponse = ({ article, issue, front }: PathToArticle) => {
-    const resp = useJsonOrEndpoint<Front>(
+    const resp = useIssue<Front>(
         issue,
         FSPaths.front(issue, front),
         APIPaths.front(issue, front),

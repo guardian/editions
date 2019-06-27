@@ -15,7 +15,7 @@ import { Header } from 'src/components/header'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { useJsonOrEndpoint } from 'src/hooks/use-issue'
+import { useIssue } from 'src/hooks/use-issue'
 import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
@@ -30,14 +30,9 @@ const styles = StyleSheet.create({
 
 const useIssueResponse = (issue: Issue['key']) =>
     withResponse<Issue>(
-        useJsonOrEndpoint<Issue>(
-            issue,
-            FSPaths.issue(issue),
-            APIPaths.issue(issue),
-            {
-                validator: res => res.fronts != null,
-            },
-        ),
+        useIssue<Issue>(issue, FSPaths.issue(issue), APIPaths.issue(issue), {
+            validator: res => res.fronts != null,
+        }),
     )
 export interface PathToIssue {
     issue: Issue['key']

@@ -13,10 +13,10 @@ import { List, ListHeading } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
-import { clearLocalCache } from 'src/hooks/use-issue'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME } from 'src/helpers/words'
+import { clearCache } from 'src/helpers/cache'
 
 const styles = StyleSheet.create({
     container,
@@ -99,7 +99,7 @@ const SettingsScreen = ({
                                                 {
                                                     text: 'Delete fetch cache',
                                                     onPress: () => {
-                                                        clearLocalCache()
+                                                        clearCache()
                                                     },
                                                 },
                                                 {

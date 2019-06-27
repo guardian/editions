@@ -6,7 +6,7 @@ import React, {
     useMemo,
 } from 'react'
 import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
-import { useJsonOrEndpoint } from '../../hooks/use-issue'
+import { useIssue } from '../../hooks/use-issue'
 import { metrics } from 'src/theme/spacing'
 import { CollectionPage } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -28,7 +28,7 @@ interface AnimatedFlatListRef {
 }
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
-    const resp = useJsonOrEndpoint<FrontType>(
+    const resp = useIssue<FrontType>(
         issue,
         FSPaths.front(issue, front),
         APIPaths.front(issue, front),

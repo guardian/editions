@@ -20,12 +20,12 @@ import { unzipIssue } from 'src/helpers/files'
 import { APP_DISPLAY_NAME, GENERIC_ERROR } from 'src/helpers/words'
 import { color } from 'src/theme/color'
 import { issueSummaryPath, IssueSummary } from '../../../common/src'
-import { useEndpoint } from 'src/hooks/use-fetch'
 import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
+import { useApiEndpoint } from 'src/hooks/use-api'
 
 const demoIssues: Issue[] = [
     {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 })
 
 const useIssueSummary = () =>
-    withResponse(useEndpoint<IssueSummary[]>(issueSummaryPath()))
+    withResponse(useApiEndpoint<IssueSummary[]>(issueSummaryPath()))
 
 export const HomeScreen = ({
     navigation,
