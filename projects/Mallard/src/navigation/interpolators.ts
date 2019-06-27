@@ -97,6 +97,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 
     return {
         opacity,
+        marginBottom: metrics.slideCardSpacing,
         transform: [{ translateX }, { translateY }, { scale }],
     }
 }
