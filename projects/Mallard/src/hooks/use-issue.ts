@@ -1,5 +1,5 @@
 import { Response, usePromiseAsResponse } from './use-response'
-import { pickFromIssue, ValidatorFn } from 'src/helpers/fetch'
+import { fetchFromIssue, ValidatorFn } from 'src/helpers/fetch'
 
 export const useIssue = <T>(
     issueId: string,
@@ -8,6 +8,6 @@ export const useIssue = <T>(
     { validator = () => true }: { validator?: ValidatorFn<T> } = {},
 ): Response<T> => {
     return usePromiseAsResponse(
-        pickFromIssue(issueId, fsPath, endpointPath, { validator }),
+        fetchFromIssue(issueId, fsPath, endpointPath, { validator }),
     )
 }

@@ -10,7 +10,7 @@ import { Issue } from 'src/common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
-const pickFromApiAsync = async <T>(
+const fetchFromApiAsync = async <T>(
     path: string,
     {
         validator,
@@ -42,7 +42,7 @@ const pickFromApiAsync = async <T>(
         })
 }
 
-const pickFromApi = <T>(
+const fetchFromApi = <T>(
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ): PromiseMaybe<T> => {
@@ -51,13 +51,13 @@ const pickFromApi = <T>(
         return returnResolved(retrieve(endpointPath) as T)
     }
     return returnPromise(() =>
-        pickFromApiAsync<T>(endpointPath, {
+        fetchFromApiAsync<T>(endpointPath, {
             validator,
         }),
     )
 }
 
-const pickFromLocalAsync = <T>(
+const fetchFromLocalAsync = <T>(
     path: string,
     {
         validator,
@@ -78,7 +78,7 @@ const pickFromLocalAsync = <T>(
 /*
 either
 */
-const pickFromIssueAsync = async <T>(
+const fetchFromIssueAsync = async <T>(
     issueId: Issue['key'],
     fsPath: string,
     endpointPath: string,
@@ -86,17 +86,17 @@ const pickFromIssueAsync = async <T>(
 ): Promise<T> => {
     const issueInDevice = await isIssueInDevice(issueId)
     if (issueInDevice) {
-        return pickFromLocalAsync<T>(fsPath, {
+        return fetchFromLocalAsync<T>(fsPath, {
             validator,
         })
     } else {
-        return pickFromApiAsync<T>(endpointPath, {
+        return fetchFromApiAsync<T>(endpointPath, {
             validator,
         })
     }
 }
 
-const pickFromIssue = <T>(
+const fetchFromIssue = <T>(
     issueId: Issue['key'],
     fsPath: string,
     endpointPath: string,
@@ -113,8 +113,8 @@ const pickFromIssue = <T>(
         return returnResolved(retrieveApi(endpointPath) as T)
 
     return returnPromise(() =>
-        pickFromIssueAsync(issueId, fsPath, endpointPath, { validator }),
+        fetchFromIssueAsync(issueId, fsPath, endpointPath, { validator }),
     )
 }
 
-export { pickFromApiAsync, pickFromIssue, pickFromIssueAsync, pickFromApi }
+export { fetchFromApiAsync, fetchFromIssue, fetchFromIssueAsync, fetchFromApi }
