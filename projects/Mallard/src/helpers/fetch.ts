@@ -5,10 +5,10 @@ import {
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from './words'
 import {
-    ValueOrPromise,
+    ValueOrGettablePromise,
     returnValue,
     returnGettablePromise,
-} from './fetch/value-or-promise'
+} from './fetch/value-or-gettable-promise'
 import { getJson, isIssueInDevice } from './files'
 import { Issue } from 'src/common'
 
@@ -48,7 +48,7 @@ const fetchFromApiSlow = async <T>(
 const fetchFromApi = <T>(
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-): ValueOrPromise<T> => {
+): ValueOrGettablePromise<T> => {
     const { retrieve } = withCache('api')
     if (retrieve(endpointPath)) {
         return returnValue(retrieve(endpointPath) as T)
@@ -107,7 +107,7 @@ const fetchFromIssue = <T>(
     fsPath: string,
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-): ValueOrPromise<T> => {
+): ValueOrGettablePromise<T> => {
     /*
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
