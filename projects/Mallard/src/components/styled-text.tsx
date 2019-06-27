@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         color: color.text,
     },
+    titlepieceText: {
+        fontFamily: 'GTGuardianTitlepiece-Bold',
+        fontSize: 30,
+        lineHeight: 34,
+    },
     headlineKickerText: {
         fontFamily: 'GTGuardianTitlepiece-Bold',
         ...cardStyles.default,
@@ -41,6 +46,17 @@ const styles = StyleSheet.create({
     },
     explainerCopy: { fontSize: 15, fontFamily: 'GuardianTextSans-Regular' },
 })
+
+export const TitlepieceText = ({
+    style,
+    ...props
+}: {
+    children: string
+    style?: StyleProp<TextStyle>
+}) => {
+    return <Text {...props} style={[styles.titlepieceText, style]} />
+}
+
 export const HeadlineText = ({
     style,
     ...props
