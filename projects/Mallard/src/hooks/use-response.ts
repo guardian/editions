@@ -3,7 +3,7 @@ import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
 import {
     ValueOrPromise,
     isGettablePromise,
-} from 'src/helpers/fetch/value-or-promise'
+} from 'src/helpers/fetch/value-or-gettable-promise'
 
 export interface Error {
     message: string

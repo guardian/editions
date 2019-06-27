@@ -6,8 +6,7 @@ import {
 } from './words'
 import {
     ValueOrGettablePromise,
-    makeValue,
-    makeGettablePromise,
+    valueOrGettablePromise,
 } from './fetch/value-or-gettable-promise'
 import { getJson, isIssueInDevice } from './files'
 import { Issue } from 'src/common'
@@ -48,19 +47,17 @@ const fetchFromApi = <T>(
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ): ValueOrGettablePromise<T> => {
-    const { retrieve, store } = withCache('api')
-    if (retrieve(endpointPath)) {
-        return makeValue(retrieve(endpointPath) as T)
-    }
-    return makeGettablePromise(
-        () =>
+    const { retrieve, store } = withCache<T>('api')
+    return valueOrGettablePromise({
+        value: () => retrieve(endpointPath),
+        promiseGetter: () =>
             fetchFromApiSlow<T>(endpointPath, {
                 validator,
             }),
-        data => {
-            store(endpointPath, data)
+        savePromiseResultToInstantValue: result => {
+            store(endpointPath, result)
         },
-    )
+    })
 }
 
 /*
@@ -117,15 +114,15 @@ const fetchFromIssue = <T>(
     we consider api and local to return the
     same value so we use the same cache
     */
-    const { retrieve, store } = withCache('local')
-    if (retrieve(fsPath)) return makeValue(retrieve(fsPath) as T)
-
-    return makeGettablePromise(
-        () => fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
-        data => {
-            store(endpointPath, data)
+    const { retrieve, store } = withCache<T>('local')
+    return valueOrGettablePromise({
+        value: () => retrieve(fsPath),
+        promiseGetter: () =>
+            fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
+        savePromiseResultToInstantValue: result => {
+            store(endpointPath, result)
         },
-    )
+    })
 }
 
 export { fetchFromIssue, fetchFromApi }

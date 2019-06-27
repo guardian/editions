@@ -28,7 +28,7 @@ const useData = (vorgp) => {
     const initialState = isPromise(vorgp) ? null : vorgp.value;
     const [result, setResult] = useState(initialState) :D
     useEffect(()=>{
-        if(isPromise(vorgp)){
+        if(isGettablePromise(vorgp)){
             vorgp.getValue().then(val => {setResult(val)})
         }
     },[])
@@ -52,21 +52,30 @@ const isGettablePromise = <T>(
     vorgp: ValueOrGettablePromise<T>,
 ): vorgp is GettablePromise<T> => vorgp.type === 'promise'
 
-const makeValue = <T>(value: T): Value<T> => ({
-    type: 'value',
+const valueOrGettablePromise = <T>({
     value,
-})
+    promiseGetter,
+    savePromiseResultToInstantValue,
+}: {
+    value: () => T | null | undefined
+    promiseGetter: () => Promise<T>
+    savePromiseResultToInstantValue: (result: T) => void
+}): ValueOrGettablePromise<T> => {
+    const val = value()
+    if (val) {
+        return {
+            type: 'value',
+            value: val,
+        }
+    }
+    return {
+        type: 'promise',
+        getValue: async () => {
+            const val = await promiseGetter()
+            savePromiseResultToInstantValue(val)
+            return val
+        },
+    }
+}
 
-const makeGettablePromise = <T>(
-    getValue: () => Promise<T>,
-    setValue: (promiseResult: T) => void,
-): GettablePromise<T> => ({
-    type: 'promise',
-    getValue: async () => {
-        const value = await getValue()
-        setValue(value)
-        return value
-    },
-})
-
-export { makeValue, makeGettablePromise, isGettablePromise }
+export { isGettablePromise, valueOrGettablePromise }
