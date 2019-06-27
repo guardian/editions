@@ -4,6 +4,8 @@ import {
     TouchableOpacity,
     TouchableOpacityProps,
     StyleSheet,
+    StyleProp,
+    ViewStyle,
 } from 'react-native'
 import { UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'
@@ -24,11 +26,17 @@ const styles = StyleSheet.create({
 const Button = ({
     children,
     onPress,
+    style,
 }: {
     children: string
     onPress: TouchableOpacityProps['onPress']
+    style?: StyleProp<ViewStyle>
 }) => (
-    <TouchableOpacity accessibilityRole="button" onPress={onPress}>
+    <TouchableOpacity
+        accessibilityRole="button"
+        onPress={onPress}
+        style={style}
+    >
         <View style={styles.background}>
             <UiBodyCopy weight="bold" style={styles.text}>
                 {children}
