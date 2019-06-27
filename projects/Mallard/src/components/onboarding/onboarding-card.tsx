@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     },
     squareText: {
         color: color.palette.neutral[100],
-        fontSize: 50,
-        lineHeight: 50,
+        fontSize: 60,
+        lineHeight: 60,
     },
     explainer: {
         backgroundColor: color.background,
@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
 const OnboardingCard = ({
     children,
     title,
+    subtitle,
     style,
 }: {
     children: string
     title: string
-    style: StyleProp<ViewStyle>
+    subtitle?: string
+    style?: StyleProp<ViewStyle>
 }) => (
     <View style={style}>
         <View style={styles.square}>
@@ -43,6 +45,7 @@ const OnboardingCard = ({
             </TitlepieceText>
         </View>
         <View style={styles.explainer}>
+            {subtitle && <TitlepieceText style={[]}>{subtitle}</TitlepieceText>}
             <UiBodyCopy>{children}</UiBodyCopy>
         </View>
     </View>

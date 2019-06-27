@@ -31,7 +31,11 @@ const OnboardingHandler = ({ onComplete }: { onComplete: () => void }) => {
     return (
         <SafeAreaView style={styles.background}>
             <View style={styles.padding}>
-                <OnboardingCard style={styles.card} title="Welcome to the beta">
+                <OnboardingCard
+                    style={styles.card}
+                    title="Welcome to the Guardian daily"
+                    subtitle="Thank you for being a beta user"
+                >
                     {`Pardon our dust, we are getting things ready. If you notice anything odd let us know at ${FEEDBACK_EMAIL}`}
                 </OnboardingCard>
                 <Button
