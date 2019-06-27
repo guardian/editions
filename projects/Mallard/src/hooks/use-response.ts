@@ -121,20 +121,16 @@ const promiseAsResponseEffect = <T>(
     { onSuccess, onError }: ResponseHookCallbacks<T>,
     retry?: boolean,
 ) => {
-    /*
-    if there's state lets request again
-    bc it means it's a retry
-    */
     if (retry || isGettablePromise(promise)) {
         promise
             .getValue()
             .then(data => {
-                onSuccess(data as T)
+                onSuccess(data)
             })
             .catch((err: Error) => {
                 /*
-                TODO: response should handle the error + stale data
-                case instead of eating it up here
+                TODO: response should handle
+                the error + stale data case
                 */
                 onError(err)
             })
