@@ -10,7 +10,10 @@ import { Issue } from 'src/common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
-const fetchFromApiAsync = async <T>(
+/*
+get stuff from API
+*/
+const fetchFromApiSlow = async <T>(
     path: string,
     {
         validator,
@@ -51,12 +54,15 @@ const fetchFromApi = <T>(
         return returnResolved(retrieve(endpointPath) as T)
     }
     return returnPromise(() =>
-        fetchFromApiAsync<T>(endpointPath, {
+        fetchFromApiSlow<T>(endpointPath, {
             validator,
         }),
     )
 }
 
+/*
+Fetch locally
+*/
 const fetchFromLocalAsync = <T>(
     path: string,
     {
@@ -64,7 +70,7 @@ const fetchFromLocalAsync = <T>(
     }: {
         validator: ValidatorFn<T>
     },
-) =>
+): Promise<T> =>
     getJson(path).then(data => {
         const { store } = withCache('local')
         if (data && validator(data)) {
@@ -76,9 +82,9 @@ const fetchFromLocalAsync = <T>(
     })
 
 /*
-either
+Fetch from either
 */
-const fetchFromIssueAsync = async <T>(
+const fetchFromIssueSlow = async <T>(
     issueId: Issue['key'],
     fsPath: string,
     endpointPath: string,
@@ -90,7 +96,7 @@ const fetchFromIssueAsync = async <T>(
             validator,
         })
     } else {
-        return fetchFromApiAsync<T>(endpointPath, {
+        return fetchFromApiSlow<T>(endpointPath, {
             validator,
         })
     }
@@ -113,8 +119,8 @@ const fetchFromIssue = <T>(
         return returnResolved(retrieveApi(endpointPath) as T)
 
     return returnPromise(() =>
-        fetchFromIssueAsync(issueId, fsPath, endpointPath, { validator }),
+        fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
     )
 }
 
-export { fetchFromApiAsync, fetchFromIssue, fetchFromIssueAsync, fetchFromApi }
+export { fetchFromIssue, fetchFromApi, fetchFromIssueSlow, fetchFromApiSlow }
