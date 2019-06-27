@@ -18,6 +18,7 @@ import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
 import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
+import { FSPaths, APIPaths } from 'src/paths'
 
 const styles = StyleSheet.create({
     container,
@@ -28,9 +29,14 @@ const styles = StyleSheet.create({
 
 const useIssueResponse = (issue: Issue['key']) =>
     withResponse<Issue>(
-        useJsonOrEndpoint<Issue>(issue, `issue`, {
-            validator: res => res.fronts != null,
-        }),
+        useJsonOrEndpoint<Issue>(
+            issue,
+            FSPaths.issue(issue),
+            APIPaths.issue(issue),
+            {
+                validator: res => res.fronts != null,
+            },
+        ),
     )
 export interface PathToIssue {
     issue: Issue['key']
@@ -43,16 +49,17 @@ const IssueHeader = ({ issue }: { issue: Issue }) => {
 const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
     const issueResponse = useIssueResponse(path.issue)
 
-    /* 
-    we don't wanna render a massive tree at once 
+    /*
+    we don't wanna render a massive tree at once
     as the navigator is trying to push the screen bc this
-    delays the tap response 
+    delays the tap response
 
-    we can pass this prop to identify if we wanna render 
+    we can pass this prop to identify if we wanna render
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
+
     return (
         <View style={styles.container}>
             <NavigationEvents
@@ -77,7 +84,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
-                            maxToRenderPerBatch={1}
+                            maxToRenderPerBatch={2}
                             initialNumToRender={1}
                             ListHeaderComponent={<IssueHeader issue={issue} />}
                             keyExtractor={item => item}

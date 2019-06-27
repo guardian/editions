@@ -9,7 +9,7 @@ import {
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { Row } from './row'
-import { Article, Issue, Collection } from 'src/common'
+import { Article, Issue, Collection, Front } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
@@ -44,6 +44,7 @@ export interface PropTypes {
     articles: Article[]
     translate: Animated.AnimatedInterpolation
     issue: Issue['key']
+    front: Front['key']
     pageLayout?: PageLayout
     collection: Collection['key']
 }
@@ -68,6 +69,7 @@ const CollectionPageWithAppearance = ({
     collection,
     translate,
     issue,
+    front,
     pageLayout,
 }: PropTypes) => {
     if (!articles.length) {
@@ -100,6 +102,7 @@ const CollectionPageWithAppearance = ({
                 <Row
                     index={index}
                     key={index}
+                    front={front}
                     articles={
                         row.columns[1]
                             ? [

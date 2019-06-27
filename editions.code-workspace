@@ -11,6 +11,9 @@
         },
         {
             "path": "projects/aws"
+        },
+        {
+            "path": "projects/common"
         }
     ],
     "settings": {

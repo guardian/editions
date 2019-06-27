@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { s3fetch } from '../s3'
-import { Issue } from '../common'
+import { Issue, IssueSummary } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
 
 const getIssue = async (
@@ -16,11 +16,30 @@ const getIssue = async (
 }
 
 export const issueController = (req: Request, res: Response) => {
-    const id: string = req.params.editionId
+    const id: string = req.params.issueId
     const [date, updater] = lastModified()
     getIssue(id, updater)
         .then(data => {
             res.setHeader('Last-Modifed', date())
+            res.setHeader('Content-Type', 'application/json')
+            res.send(JSON.stringify(data))
+        })
+        .catch(e => console.error(e))
+}
+
+const getIssuesSummary = async (): Promise<IssueSummary[] | 'notfound'> => {
+    return Promise.resolve([
+        {
+            key: 'alpha-edition',
+            name: 'Daily Edition',
+            date: 1561561497,
+        },
+    ])
+}
+
+export const issuesSummaryController = (req: Request, res: Response) => {
+    getIssuesSummary()
+        .then(data => {
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })

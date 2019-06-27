@@ -3,16 +3,27 @@ require('dotenv').config()
 import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import express = require('express')
-import { issueController } from './controllers/issue'
+import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
+import {
+    issuePath,
+    frontPath,
+    collectionPath,
+    issueSummaryPath,
+} from './common'
 
 const app = express()
 
-app.get('/issue/:editionId', issueController)
+app.get('/' + issueSummaryPath(), issuesSummaryController)
 
-app.get('/front/*?', frontController)
+app.get('/' + issuePath(':issueId'), issueController)
 
-app.get('/collection/:collectionId', collectionsController)
+app.get('/' + frontPath(':issueId', '*?'), frontController)
+
+app.get(
+    '/' + collectionPath(':issueId', ':collectionId'),
+    collectionsController,
+)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')

@@ -17,9 +17,16 @@ import { useFileList } from 'src/hooks/use-fs'
 import { Issue } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
 import { unzipIssue } from 'src/helpers/files'
-import { APP_DISPLAY_NAME } from 'src/helpers/words'
+import { APP_DISPLAY_NAME, GENERIC_ERROR } from 'src/helpers/words'
 import { color } from 'src/theme/color'
 import { Header } from 'src/components/header'
+import { issueSummaryPath, IssueSummary } from '../../../common/src'
+import { useEndpoint } from 'src/hooks/use-fetch'
+import { withResponse } from 'src/hooks/use-response'
+import { Spinner } from 'src/components/spinner'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { useSettings } from 'src/hooks/use-settings'
+import { FlexCenter } from 'src/components/layout/flex-center'
 
 const demoIssues: Issue[] = [
     {
@@ -40,6 +47,9 @@ const styles = StyleSheet.create({
     container: { ...primaryContainer, paddingTop: metrics.vertical * 4 },
 })
 
+const useIssueSummary = () =>
+    withResponse(useEndpoint<IssueSummary[]>(issueSummaryPath()))
+
 export const HomeScreen = ({
     navigation,
 }: {
@@ -58,16 +68,42 @@ export const HomeScreen = ({
             })),
         demoIssues.map(({ key }) => key),
     )
+    const issueSummary = useIssueSummary()
+    const [{ isUsingProdDevtools }] = useSettings()
 
     return (
         <WithAppAppearance value={'primary'}>
             <Header title={APP_DISPLAY_NAME} />
             <ScrollView style={styles.container}>
-                <ListHeading>Demo issues</ListHeading>
-                <List
-                    data={issueList}
-                    onPress={path => navigation.navigate('Issue', { path })}
-                />
+                <ListHeading>Issues</ListHeading>
+                {issueSummary({
+                    success: issueList => (
+                        <List
+                            data={issueList.map(issue => ({
+                                title: renderIssueDate(issue.date * 1000).date,
+                                explainer: issue.name,
+                                key: issue.date + issue.name,
+                                data: {
+                                    issue: issue.key,
+                                },
+                            }))}
+                            onPress={path =>
+                                navigation.navigate('Issue', { path })
+                            }
+                        />
+                    ),
+                    error: ({ message }) => (
+                        <FlexErrorMessage
+                            title={GENERIC_ERROR}
+                            message={isUsingProdDevtools ? message : undefined}
+                        />
+                    ),
+                    pending: () => (
+                        <FlexCenter>
+                            <Spinner></Spinner>
+                        </FlexCenter>
+                    ),
+                })}
                 {files.length > 0 && (
                     <>
                         <ListHeading>Issues on device</ListHeading>
@@ -107,6 +143,17 @@ export const HomeScreen = ({
                         />
                     </>
                 )}
+                {isUsingProdDevtools ? (
+                    <>
+                        <ListHeading>Hardcoded issues</ListHeading>
+                        <List
+                            data={issueList}
+                            onPress={path =>
+                                navigation.navigate('Issue', { path })
+                            }
+                        />
+                    </>
+                ) : null}
                 <ApiState />
             </ScrollView>
         </WithAppAppearance>
