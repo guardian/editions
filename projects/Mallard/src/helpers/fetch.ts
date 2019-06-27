@@ -37,7 +37,6 @@ const fetchFromApiSlow = async <T>(
         })
         .then(data => {
             if (data && validator(data)) {
-                store(path, data)
                 return data
             } else {
                 throw new Error(REQUEST_INVALID_RESPONSE_VALIDATION)
@@ -49,14 +48,18 @@ const fetchFromApi = <T>(
     endpointPath: string,
     { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
 ): ValueOrGettablePromise<T> => {
-    const { retrieve } = withCache('api')
+    const { retrieve, store } = withCache('api')
     if (retrieve(endpointPath)) {
         return makeValue(retrieve(endpointPath) as T)
     }
-    return makeGettablePromise(() =>
-        fetchFromApiSlow<T>(endpointPath, {
-            validator,
-        }),
+    return makeGettablePromise(
+        () =>
+            fetchFromApiSlow<T>(endpointPath, {
+                validator,
+            }),
+        data => {
+            store(endpointPath, data)
+        },
     )
 }
 
@@ -74,7 +77,6 @@ const fetchFromLocalSlow = <T>(
     getJson(path).then(data => {
         const { store } = withCache('local')
         if (data && validator(data)) {
-            store(path, data)
             return data
         } else {
             throw new Error(LOCAL_JSON_INVALID_RESPONSE_VALIDATION)
@@ -111,15 +113,18 @@ const fetchFromIssue = <T>(
     /*
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
-    */
-    const { retrieve: retrieveApi } = withCache('api')
-    const { retrieve: retrieveLocal } = withCache('local')
-    if (retrieveLocal(fsPath)) return makeValue(retrieveLocal(fsPath) as T)
-    if (retrieveApi(endpointPath))
-        return makeValue(retrieveApi(endpointPath) as T)
 
-    return makeGettablePromise(() =>
-        fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
+    we consider api and local to return the
+    same value so we use the same cache
+    */
+    const { retrieve, store } = withCache('local')
+    if (retrieve(fsPath)) return makeValue(retrieve(fsPath) as T)
+
+    return makeGettablePromise(
+        () => fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
+        data => {
+            store(endpointPath, data)
+        },
     )
 }
 

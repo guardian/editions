@@ -59,9 +59,14 @@ const makeValue = <T>(value: T): Value<T> => ({
 
 const makeGettablePromise = <T>(
     getValue: () => Promise<T>,
+    setValue: (promiseResult: T) => void,
 ): GettablePromise<T> => ({
     type: 'promise',
-    getValue,
+    getValue: async () => {
+        const value = await getValue()
+        setValue(value)
+        return value
+    },
 })
 
 export { makeValue, makeGettablePromise, isGettablePromise }
