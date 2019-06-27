@@ -1,6 +1,9 @@
 import { useState, ReactElement, useEffect } from 'react'
 import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
-import { ValueOrPromise, isPromise } from 'src/helpers/fetch/value-or-promise'
+import {
+    ValueOrPromise,
+    isGettablePromise,
+} from 'src/helpers/fetch/value-or-promise'
 
 export interface Error {
     message: string
@@ -96,10 +99,10 @@ export const usePromiseAsResponse = <T>(
     promise: ValueOrPromise<T>,
 ): Response<T> => {
     const { response, onSuccess, onError } = useResponse<T>(
-        isPromise<T>(promise) ? null : promise.value,
+        isGettablePromise<T>(promise) ? null : promise.value,
     )
     useEffect(() => {
-        if (isPromise(promise)) {
+        if (isGettablePromise(promise)) {
             promise
                 .getValue()
                 .then(data => {
