@@ -5,11 +5,16 @@ import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
-import { issuePath, frontPath, collectionPath } from './common'
+import {
+    issuePath,
+    frontPath,
+    collectionPath,
+    issueSummaryPath,
+} from './common'
 
 const app = express()
 
-app.get('/issues', issuesSummaryController)
+app.get('/' + issueSummaryPath(), issuesSummaryController)
 
 app.get('/' + issuePath(':issueId'), issueController)
 

@@ -88,7 +88,7 @@ export const getCollection = async (
 
             return [
                 article.path,
-                { ...article, key, kicker, headline, imageURL },
+                { ...article, key: article.path, kicker, headline, imageURL },
             ]
         })
 

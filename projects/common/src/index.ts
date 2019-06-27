@@ -95,5 +95,6 @@ const frontPath = (issueId: string, frontId: string) =>
     `${issuePath(issueId)}/front/${frontId}`
 const collectionPath = (issueId: string, collectionId: string) =>
     `${issuePath(issueId)}/collection/${collectionId}`
+const issueSummaryPath = () => 'issues'
 
-export { issuePath, frontPath, collectionPath }
+export { issuePath, frontPath, collectionPath, issueSummaryPath }
