@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSettings } from './use-settings'
-import { useResponse, Response, Error, withResponse } from './use-response'
+import { useResponse, Response, Error } from './use-response'
 import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
@@ -116,6 +116,23 @@ const useFetch = <T>(
     }, [url, skip]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return response
+}
+
+export const useEndpoint = <T>(
+    endpointPath: string,
+    {
+        validator = () => true,
+        skip = false,
+    }: {
+        validator?: ValidatorFn<T>
+        skip?: boolean
+    } = {},
+) => {
+    const [{ apiUrl }] = useSettings()
+    return useFetch<T>(`${apiUrl}${endpointPath}`, {
+        validator,
+        skip,
+    })
 }
 
 export const useJsonOrEndpoint = <T>(
