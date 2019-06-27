@@ -7,7 +7,6 @@ import {
 import {
     ValueOrGettablePromise,
     valueOrGettablePromise,
-    gettablePromise,
 } from './fetch/value-or-gettable-promise'
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
@@ -75,11 +74,13 @@ const fetchFromApi = <T>(
     const { retrieve, store, clear } = withCache<T>('api')
     if (!cached) {
         clear(endpointPath)
-        return gettablePromise(() =>
-            fetchFromApiSlow<T>(endpointPath, {
-                validator,
-            }),
-        )
+        return {
+            type: 'promise',
+            getValue: () =>
+                fetchFromApiSlow<T>(endpointPath, {
+                    validator,
+                }),
+        }
     }
     return valueOrGettablePromise(
         [

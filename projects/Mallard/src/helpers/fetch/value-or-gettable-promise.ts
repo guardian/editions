@@ -53,13 +53,6 @@ const isGettablePromise = <T>(
     vorgp: ValueOrGettablePromise<T>,
 ): vorgp is GettablePromise<T> => vorgp.type === 'promise'
 
-const gettablePromise = <T>(
-    getValue: () => Promise<T>,
-): GettablePromise<T> => ({
-    type: 'promise',
-    getValue,
-})
-
 const valueOrGettablePromise = <T>(
     [value, promiseGetter]: [T | null | undefined, () => Promise<T>],
     {
@@ -78,7 +71,10 @@ const valueOrGettablePromise = <T>(
             getValue,
         }
     }
-    return gettablePromise(getValue)
+    return {
+        type: 'promise',
+        getValue,
+    }
 }
 
-export { isGettablePromise, valueOrGettablePromise, gettablePromise }
+export { isGettablePromise, valueOrGettablePromise }
