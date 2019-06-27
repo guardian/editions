@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     },
     headlineKickerText: {
         fontFamily: 'GTGuardianTitlepiece-Bold',
+        marginBottom: metrics.vertical / 8,
         ...cardStyles.default,
     },
     headlineCardText: {

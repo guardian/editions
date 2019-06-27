@@ -36,6 +36,7 @@ export interface Collection extends WithKey {
 
 export interface Front extends WithKey {
     collections: Collection[]
+    displayName?: string
     canonical?: string
     group?: string
     isHidden?: boolean
