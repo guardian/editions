@@ -17,7 +17,7 @@ export interface Item<D> {
 }
 
 /*
-<D> inside of an item is passed to the click handler. 
+<D> inside of an item is passed to the click handler.
 This is the function that gets called when clicking a row.
 D contains things like the route a row points or the text content of it
 */

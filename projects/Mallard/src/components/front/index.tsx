@@ -234,6 +234,8 @@ export const Front: FunctionComponent<{
 }> = ({ front, issue }) => {
     const frontsResponse = useFrontsResponse(issue, front)
     const [{ isUsingProdDevtools }] = useSettings()
+    const { width } = Dimensions.get('window')
+
     return frontsResponse({
         pending: () => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
