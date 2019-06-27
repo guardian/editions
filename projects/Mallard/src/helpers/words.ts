@@ -9,3 +9,4 @@ export const ERR_404_MISSING_PROPS = `Couldn't find a path to this item`
 export const ERR_404_REMOTE = `Couldn't find item`
 
 export const APP_DISPLAY_NAME = 'Daily Edition'
+export const FEEDBACK_EMAIL = 'editions.product@theguardian.com'

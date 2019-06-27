@@ -15,7 +15,7 @@ import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
-import { APP_DISPLAY_NAME } from 'src/helpers/words'
+import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { clearCache } from 'src/helpers/fetch/cache'
 
 const styles = StyleSheet.create({
@@ -39,6 +39,10 @@ const SettingsScreen = ({
             </MonoTextBlock>
             <MonoTextBlock>
                 Come back soon to see relevant settings.
+            </MonoTextBlock>
+            <ListHeading>{`Send Feedback`}</ListHeading>
+            <MonoTextBlock>
+                {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
             {!isUsingProdDevtools ? (
                 <>

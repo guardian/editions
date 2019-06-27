@@ -1,5 +1,12 @@
 import React from 'react'
-import { Text, View, StyleSheet, TextStyle, StyleProp } from 'react-native'
+import {
+    Text,
+    View,
+    StyleSheet,
+    TextStyle,
+    StyleProp,
+    TextProps,
+} from 'react-native'
 import { useAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
@@ -17,6 +24,11 @@ const styles = StyleSheet.create({
         fontSize: 30,
         lineHeight: 34,
         color: color.text,
+    },
+    titlepieceText: {
+        fontFamily: 'GTGuardianTitlepiece-Bold',
+        fontSize: 30,
+        lineHeight: 34,
     },
     headlineKickerText: {
         fontFamily: 'GTGuardianTitlepiece-Bold',
@@ -41,13 +53,24 @@ const styles = StyleSheet.create({
     },
     explainerCopy: { fontSize: 15, fontFamily: 'GuardianTextSans-Regular' },
 })
+
+export const TitlepieceText = ({
+    style,
+    ...props
+}: {
+    children: string
+    style?: StyleProp<TextStyle>
+} & TextProps) => {
+    return <Text {...props} style={[styles.titlepieceText, style]} />
+}
+
 export const HeadlineText = ({
     style,
     ...props
 }: {
     children: string
     style?: StyleProp<TextStyle>
-}) => {
+} & TextProps) => {
     return <Text {...props} style={[styles.headlineText, style]} />
 }
 
@@ -57,7 +80,7 @@ export const HeadlineKickerText = ({
 }: {
     children: string
     style?: StyleProp<TextStyle>
-}) => {
+} & TextProps) => {
     return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
 
@@ -67,7 +90,7 @@ export const StandfirstText = ({
 }: {
     children: string
     style?: StyleProp<TextStyle>
-}) => {
+} & TextProps) => {
     return <Text {...props} style={[styles.standfirstText, style]} />
 }
 
@@ -78,7 +101,7 @@ export const HeadlineCardText = ({
 }: {
     children: string
     style?: StyleProp<TextStyle>
-}) => (
+} & TextProps) => (
     <HeadlineText {...props} style={[styles.headlineCardText, style]}>
         {children}
     </HeadlineText>
@@ -92,7 +115,7 @@ export const BodyCopy = ({
     children: string
     weight: 'regular' | 'bold'
     style?: {}
-}) => {
+} & TextProps) => {
     return (
         <Text
             {...props}
@@ -119,7 +142,7 @@ export const UiBodyCopy = ({
     children: string
     weight: 'regular' | 'bold'
     style?: {}
-}) => {
+} & TextProps) => {
     return (
         <Text
             {...props}
@@ -149,7 +172,7 @@ export const UiExplainerCopy = ({
 }: {
     children: string
     style?: any
-}) => {
+} & TextProps) => {
     return (
         <Text
             {...props}
@@ -173,7 +196,7 @@ export const MonoTextBlock = ({
 }: {
     children: any
     style?: any
-}) => {
+} & TextProps) => {
     return (
         <View
             {...props}

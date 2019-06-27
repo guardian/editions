@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     NavigationScreenProp,
@@ -8,7 +8,6 @@ import {
 
 import { container } from 'src/theme/styles'
 import { Front } from 'src/components/front'
-import { renderIssueDate } from 'src/helpers/issues'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
 
@@ -39,11 +38,7 @@ export interface PathToIssue {
 }
 
 const IssueHeader = ({ issue }: { issue: Issue }) => {
-    const { weekday, date } = useMemo(() => renderIssueDate(issue.date), [
-        issue.date,
-    ])
-
-    return <Header title={weekday} subtitle={date} />
+    return <Header title={'Issue/'} subtitle={issue.name} />
 }
 
 const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
@@ -81,12 +76,12 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                 ),
                 success: issue => (
                     <>
-                        <IssueHeader issue={issue} />
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
+                            ListHeaderComponent={<IssueHeader issue={issue} />}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <Front

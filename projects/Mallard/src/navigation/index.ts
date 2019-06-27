@@ -66,11 +66,16 @@ const AppStack = createStackNavigator(
     },
 )
 
-const OnboardingStack = createStackNavigator({
-    Start: mapNavigationToProps(OnboardingHandler, nav => ({
-        onComplete: () => nav.navigate('App'),
-    })),
-})
+const OnboardingStack = createStackNavigator(
+    {
+        Start: mapNavigationToProps(OnboardingHandler, nav => ({
+            onComplete: () => nav.navigate('App'),
+        })),
+    },
+    {
+        headerMode: 'none',
+    },
+)
 
 const OnboardingSwitcher = ({
     navigation,
