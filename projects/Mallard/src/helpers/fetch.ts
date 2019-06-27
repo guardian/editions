@@ -13,9 +13,6 @@ import { Issue } from 'src/common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
-/*
-get stuff from API
-*/
 const fetchFromApiSlow = async <T>(
     path: string,
     {
@@ -24,9 +21,7 @@ const fetchFromApiSlow = async <T>(
         validator: ValidatorFn<T>
     },
 ): Promise<T> => {
-    const { store } = withCache('api')
     const apiUrl = await getSetting('apiUrl')
-
     return fetch(apiUrl + path)
         .then(res => {
             if (res.status >= 500) {
@@ -43,27 +38,7 @@ const fetchFromApiSlow = async <T>(
         })
 }
 
-const fetchFromApi = <T>(
-    endpointPath: string,
-    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-): ValueOrGettablePromise<T> => {
-    const { retrieve, store } = withCache<T>('api')
-    return valueOrGettablePromise({
-        value: () => retrieve(endpointPath),
-        promiseGetter: () =>
-            fetchFromApiSlow<T>(endpointPath, {
-                validator,
-            }),
-        savePromiseResultToInstantValue: result => {
-            store(endpointPath, result)
-        },
-    })
-}
-
-/*
-Fetch locally
-*/
-const fetchFromLocalSlow = <T>(
+const fetchFromFileSystemSlow = <T>(
     path: string,
     {
         validator,
@@ -72,7 +47,6 @@ const fetchFromLocalSlow = <T>(
     },
 ): Promise<T> =>
     getJson(path).then(data => {
-        const { store } = withCache('local')
         if (data && validator(data)) {
             return data
         } else {
@@ -81,24 +55,38 @@ const fetchFromLocalSlow = <T>(
     })
 
 /*
-Fetch from either
+Use these! They'll default to caching if possible.
+
+These fetchers assume a clean split between the app's
+api (sign in, issue list. maybe cachable maybe not)
+and the issue files (always cachable, identical
+across zip file & issue API)
 */
-const fetchFromIssueSlow = async <T>(
-    issueId: Issue['key'],
-    fsPath: string,
+const fetchFromApi = <T>(
     endpointPath: string,
-    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
-): Promise<T> => {
-    const issueInDevice = await isIssueInDevice(issueId)
-    if (issueInDevice) {
-        return fetchFromLocalSlow<T>(fsPath, {
-            validator,
-        })
-    } else {
-        return fetchFromApiSlow<T>(endpointPath, {
-            validator,
-        })
+    { validator, cached }: { validator: ValidatorFn<T>; cached: boolean } = {
+        validator: () => true,
+        cached: true,
+    },
+): ValueOrGettablePromise<T> => {
+    const { retrieve, store, clear } = withCache<T>('api')
+    if (!cached) {
+        clear(endpointPath)
     }
+    return valueOrGettablePromise(
+        [
+            cached ? retrieve(endpointPath) : null,
+            () =>
+                fetchFromApiSlow<T>(endpointPath, {
+                    validator,
+                }),
+        ],
+        {
+            savePromiseResultToValue: result => {
+                store(endpointPath, result)
+            },
+        },
+    )
 }
 
 const fetchFromIssue = <T>(
@@ -110,19 +98,30 @@ const fetchFromIssue = <T>(
     /*
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
-
-    we consider api and local to return the
-    same value so we use the same cache
     */
-    const { retrieve, store } = withCache<T>('local')
-    return valueOrGettablePromise({
-        value: () => retrieve(fsPath),
-        promiseGetter: () =>
-            fetchFromIssueSlow(issueId, fsPath, endpointPath, { validator }),
-        savePromiseResultToInstantValue: result => {
-            store(endpointPath, result)
+    const { retrieve, store } = withCache<T>('issue')
+    return valueOrGettablePromise(
+        [
+            retrieve(fsPath),
+            async () => {
+                const issueInDevice = await isIssueInDevice(issueId)
+                if (issueInDevice) {
+                    return fetchFromFileSystemSlow<T>(fsPath, {
+                        validator,
+                    })
+                } else {
+                    return fetchFromApiSlow<T>(endpointPath, {
+                        validator,
+                    })
+                }
+            },
+        ],
+        {
+            savePromiseResultToValue: result => {
+                store(endpointPath, result)
+            },
         },
-    })
+    )
 }
 
 export { fetchFromIssue, fetchFromApi }

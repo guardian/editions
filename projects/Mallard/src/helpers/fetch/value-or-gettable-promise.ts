@@ -52,27 +52,23 @@ const isGettablePromise = <T>(
     vorgp: ValueOrGettablePromise<T>,
 ): vorgp is GettablePromise<T> => vorgp.type === 'promise'
 
-const valueOrGettablePromise = <T>({
-    value,
-    promiseGetter,
-    savePromiseResultToInstantValue,
-}: {
-    value: () => T | null | undefined
-    promiseGetter: () => Promise<T>
-    savePromiseResultToInstantValue: (result: T) => void
-}): ValueOrGettablePromise<T> => {
-    const val = value()
-    if (val) {
+const valueOrGettablePromise = <T>(
+    [value, promiseGetter]: [T | null | undefined, () => Promise<T>],
+    {
+        savePromiseResultToValue,
+    }: { savePromiseResultToValue: (result: T) => void },
+): ValueOrGettablePromise<T> => {
+    if (value) {
         return {
             type: 'value',
-            value: val,
+            value,
         }
     }
     return {
         type: 'promise',
         getValue: async () => {
             const val = await promiseGetter()
-            savePromiseResultToInstantValue(val)
+            savePromiseResultToValue(val)
             return val
         },
     }
