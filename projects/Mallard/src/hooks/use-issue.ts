@@ -5,9 +5,8 @@ export const useIssue = <T>(
     issueId: string,
     fsPath: string,
     endpointPath: string,
-    { validator = () => true }: { validator?: ValidatorFn<T> } = {},
-): Response<T> => {
-    return usePromiseAsResponse(
+    { validator }: { validator?: ValidatorFn<T> } = {},
+): Response<T> =>
+    usePromiseAsResponse(
         fetchFromIssue(issueId, fsPath, endpointPath, { validator }),
     )
-}

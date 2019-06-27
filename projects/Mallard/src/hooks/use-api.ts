@@ -4,10 +4,10 @@ import { fetchFromApi, ValidatorFn } from 'src/helpers/fetch'
 export const useApiEndpoint = <T>(
     endpointPath: string,
     {
-        validator = () => true,
+        validator,
+        cached,
     }: {
         validator?: ValidatorFn<T>
+        cached?: boolean
     } = {},
-) => {
-    return usePromiseAsResponse(fetchFromApi(endpointPath, { validator }))
-}
+) => usePromiseAsResponse(fetchFromApi(endpointPath, { validator, cached }))

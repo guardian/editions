@@ -12,14 +12,13 @@ import { getJson, isIssueInDevice } from './files'
 import { Issue } from 'src/common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
-
 const fetchFromApiSlow = async <T>(
     path: string,
     {
-        validator,
+        validator = () => true,
     }: {
-        validator: ValidatorFn<T>
-    },
+        validator?: ValidatorFn<T>
+    } = {},
 ): Promise<T> => {
     const apiUrl = await getSetting('apiUrl')
     return fetch(apiUrl + path)
@@ -41,10 +40,10 @@ const fetchFromApiSlow = async <T>(
 const fetchFromFileSystemSlow = <T>(
     path: string,
     {
-        validator,
+        validator = () => true,
     }: {
-        validator: ValidatorFn<T>
-    },
+        validator?: ValidatorFn<T>
+    } = {},
 ): Promise<T> =>
     getJson(path).then(data => {
         if (data && validator(data)) {
@@ -64,10 +63,13 @@ across zip file & issue API)
 */
 const fetchFromApi = <T>(
     endpointPath: string,
-    { validator, cached }: { validator: ValidatorFn<T>; cached: boolean } = {
-        validator: () => true,
-        cached: true,
-    },
+    {
+        validator,
+        cached = true,
+    }: {
+        validator?: ValidatorFn<T>
+        cached?: boolean
+    } = {},
 ): ValueOrGettablePromise<T> => {
     const { retrieve, store, clear } = withCache<T>('api')
     if (!cached) {
@@ -93,7 +95,7 @@ const fetchFromIssue = <T>(
     issueId: Issue['key'],
     fsPath: string,
     endpointPath: string,
-    { validator }: { validator: ValidatorFn<T> } = { validator: () => true },
+    { validator }: { validator?: ValidatorFn<T> } = {},
 ): ValueOrGettablePromise<T> => {
     /*
     retrieve any cached value if we have any
