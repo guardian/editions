@@ -6,7 +6,7 @@ import React, {
     useMemo,
 } from 'react'
 import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
-import { useJsonOrEndpoint } from '../../hooks/use-fetch'
+import { useJsonOrEndpoint } from '../../hooks/use-issue'
 import { metrics } from 'src/theme/spacing'
 import { CollectionPage } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'

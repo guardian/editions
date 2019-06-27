@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
+import { useJsonOrEndpoint } from 'src/hooks/use-issue'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
     WithArticleAppearance,

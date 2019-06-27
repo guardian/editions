@@ -1,5 +1,6 @@
-import { useState, ReactElement } from 'react'
+import { useState, ReactElement, useEffect } from 'react'
 import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
+import { PromiseMaybe, isPromise } from 'src/helpers/promise-maybe'
 
 export interface Error {
     message: string
@@ -22,40 +23,57 @@ export type Response<T> =
     | SuccesfulResponse<T>
 
 export const useResponse = <T>(
-    initial: T,
+    initial: T | null,
 ): {
     response: Response<T>
     onSuccess: (res: T) => void
     onError: (error: Error) => void
 } => {
-    const [response, setResponse] = useState<SuccesfulResponse<T>['response']>(
-        initial,
-    )
+    const [response, setResponse] = useState<
+        SuccesfulResponse<T | null>['response']
+    >(initial)
     const [error, setError] = useState<ErroredResponse['error']>({
         message: 'Mysterious error',
     })
     const [state, setState] = useState<Response<T>['state']>(
         initial ? 'success' : 'pending',
     )
-    return {
-        response:
-            state === 'success'
-                ? {
-                      state,
-                      response,
-                  }
-                : state === 'error'
-                ? { state, error }
-                : { state },
 
-        onSuccess: res => {
-            setResponse(res)
-            setState('success')
+    const onSuccess = (res: T) => {
+        setResponse(res)
+        setState('success')
+    }
+    const onError = (err: ErroredResponse['error']) => {
+        setError(err)
+        setState('error')
+    }
+
+    if (state === 'success' && response) {
+        return {
+            response: {
+                state,
+                response,
+            },
+            onSuccess,
+            onError,
+        }
+    }
+    if (state === 'error') {
+        return {
+            response: {
+                state,
+                error,
+            },
+            onSuccess,
+            onError,
+        }
+    }
+    return {
+        response: {
+            state: 'pending',
         },
-        onError: err => {
-            setError(err)
-            setState('error')
-        },
+        onSuccess,
+        onError,
     }
 }
 
@@ -72,4 +90,28 @@ export const withResponse = <T>(response: Response<T>) => ({
     else if (response.state === 'pending') return pending()
     else if (response.state === 'error') return error(response.error)
     else return error({ message: REQUEST_INVALID_RESPONSE_STATE })
+}
+
+export const usePromiseAsResponse = <T>(
+    promise: PromiseMaybe<T>,
+): Response<T> => {
+    const { response, onSuccess, onError } = useResponse<T>(
+        isPromise<T>(promise) ? null : promise.value,
+    )
+    useEffect(() => {
+        if (isPromise(promise)) {
+            promise
+                .getValue()
+                .then(data => {
+                    onSuccess(data as T)
+                })
+                .catch((err: Error) => {
+                    if (response.state !== 'success') {
+                        onError(err)
+                    }
+                })
+        }
+    }, [])
+
+    return response
 }
