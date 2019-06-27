@@ -7,8 +7,9 @@ import {
 import {
     ValueOrGettablePromise,
     valueOrGettablePromise,
+    gettablePromise,
 } from './fetch/value-or-gettable-promise'
-import { getJson, isIssueInDevice } from './files'
+import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
@@ -74,10 +75,15 @@ const fetchFromApi = <T>(
     const { retrieve, store, clear } = withCache<T>('api')
     if (!cached) {
         clear(endpointPath)
+        return gettablePromise(() =>
+            fetchFromApiSlow<T>(endpointPath, {
+                validator,
+            }),
+        )
     }
     return valueOrGettablePromise(
         [
-            cached ? retrieve(endpointPath) : null,
+            retrieve(endpointPath),
             () =>
                 fetchFromApiSlow<T>(endpointPath, {
                     validator,
@@ -106,8 +112,8 @@ const fetchFromIssue = <T>(
         [
             retrieve(fsPath),
             async () => {
-                const issueInDevice = await isIssueInDevice(issueId)
-                if (issueInDevice) {
+                const issueOnDevice = await isIssueOnDevice(issueId)
+                if (issueOnDevice) {
                     return fetchFromFileSystemSlow<T>(fsPath, {
                         validator,
                     })

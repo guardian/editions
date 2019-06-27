@@ -167,7 +167,7 @@ export const unzipIssue = (issue: File['id']) => {
     )
 }
 
-export const isIssueInDevice = async (issue: Issue['key']): Promise<boolean> =>
+export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
     (await getFileList()).find(
         file => fileIsIssue(file) && file.issue.key === issue,
     ) !== undefined
