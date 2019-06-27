@@ -97,19 +97,19 @@ const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
     return (
         <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
-            {image && (
+            {image ? (
                 <ArticleImage
                     style={StyleSheet.absoluteFillObject}
                     image={image}
                 />
-            )}
+            ) : null}
             <View
                 style={[
                     longReadHeaderStyles.textBackground,
                     appearance.backgrounds,
                 ]}
             >
-                {kicker && (
+                {kicker ? (
                     <View
                         style={[
                             longReadHeaderStyles.kicker,
@@ -120,7 +120,7 @@ const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
                             {kicker}
                         </HeadlineKickerText>
                     </View>
-                )}
+                ) : null}
                 <HeadlineText
                     style={[
                         longReadHeaderStyles.headline,
