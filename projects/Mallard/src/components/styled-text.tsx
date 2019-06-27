@@ -6,6 +6,7 @@ import {
     TextStyle,
     StyleProp,
     TextProps,
+    ViewStyle,
 } from 'react-native'
 import { useAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
@@ -114,7 +115,7 @@ export const BodyCopy = ({
 }: {
     children: string
     weight: 'regular' | 'bold'
-    style?: {}
+    style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (
         <Text
@@ -141,7 +142,7 @@ export const UiBodyCopy = ({
 }: {
     children: string
     weight: 'regular' | 'bold'
-    style?: {}
+    style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (
         <Text
@@ -171,7 +172,7 @@ export const UiExplainerCopy = ({
     ...props
 }: {
     children: string
-    style?: any
+    style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (
         <Text
@@ -194,18 +195,20 @@ export const MonoTextBlock = ({
     style,
     ...props
 }: {
-    children: any
-    style?: any
-} & TextProps) => {
+    children: string
+    style?: StyleProp<ViewStyle>
+}) => {
     return (
         <View
             {...props}
-            style={{
-                padding: metrics.vertical,
-                paddingHorizontal: metrics.horizontal,
-                alignItems: 'center',
-                ...style,
-            }}
+            style={[
+                style,
+                {
+                    padding: metrics.vertical,
+                    paddingHorizontal: metrics.horizontal,
+                    alignItems: 'center',
+                },
+            ]}
         >
             <UiExplainerCopy style={{ textAlign: 'center' }}>
                 {children}
