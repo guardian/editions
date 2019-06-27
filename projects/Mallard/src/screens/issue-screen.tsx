@@ -90,7 +90,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
-                            maxToRenderPerBatch={1}
+                            maxToRenderPerBatch={2}
                             initialNumToRender={1}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
