@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
-import { TitlepieceText } from '../styled-text'
+import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -21,6 +21,9 @@ const styles = StyleSheet.create({
         backgroundColor: color.background,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
+    },
+    subtitle: {
+        marginBottom: metrics.vertical,
     },
 })
 
@@ -45,8 +48,12 @@ const OnboardingCard = ({
             </TitlepieceText>
         </View>
         <View style={styles.explainer}>
-            {subtitle && <TitlepieceText style={[]}>{subtitle}</TitlepieceText>}
-            <UiBodyCopy>{children}</UiBodyCopy>
+            {subtitle && (
+                <TitlepieceText style={styles.subtitle}>
+                    {subtitle}
+                </TitlepieceText>
+            )}
+            <UiExplainerCopy>{children}</UiExplainerCopy>
         </View>
     </View>
 )

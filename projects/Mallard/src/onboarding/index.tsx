@@ -36,7 +36,7 @@ const OnboardingHandler = ({ onComplete }: { onComplete: () => void }) => {
                     title="Welcome to the Guardian daily"
                     subtitle="Thank you for being a beta user"
                 >
-                    {`Pardon our dust, we are getting things ready. If you notice anything odd let us know at ${FEEDBACK_EMAIL}`}
+                    {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
                 </OnboardingCard>
                 <Button
                     onPress={() => {
