@@ -152,7 +152,7 @@ const FrontWithResponse = ({
             scrubber={
                 <Navigator
                     stops={stops}
-                    title={frontData.key}
+                    title={frontData.displayName || 'News'}
                     fill={color}
                     onReleaseScrub={screenX => {
                         if (

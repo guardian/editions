@@ -82,13 +82,19 @@ export const getCollection = async (
         .map(([key, fragment]) => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
-            const kicker = (meta && meta.customKicker) || '' // I'm not sure where else we should check for a kicker
+            const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageURL = (meta && meta.imageSrc) || article.imageURL
 
             return [
                 article.path,
-                { ...article, key: article.path, kicker, headline, imageURL },
+                {
+                    ...article,
+                    key: article.path,
+                    kicker,
+                    headline,
+                    imageURL,
+                },
             ]
         })
 
@@ -98,6 +104,11 @@ export const getCollection = async (
         cards: createCardsFromAllArticlesInCollection(5, articles),
         preview,
     }
+}
+
+const getDisplayName = (front: string) => {
+    const split = front.split('/').pop() || front
+    return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
 export const getFront = async (
@@ -114,6 +125,7 @@ export const getFront = async (
     if (!(id in config.fronts)) throw new Error('Front not found')
     const front = {
         ...config.fronts[id],
+        displayName: getDisplayName(id),
         collections: (await Promise.all(
             config.fronts[id].collections.map(id =>
                 getCollection(id, true, lastModifiedUpdater),

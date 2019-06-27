@@ -8,7 +8,7 @@ import {
 } from 'src/theme/appearance'
 import { Article } from 'src/components/article'
 import { Article as ArticleType, Collection, Front } from 'src/common'
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, Dimensions } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { SlideCard } from 'src/components/layout/slide-card/index'
@@ -21,6 +21,8 @@ import { Issue } from '../../../backend/common'
 import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
 import { FSPaths, APIPaths } from 'src/paths'
 import { flattenCollections } from 'src/helpers/transform'
+import { useSettings } from 'src/hooks/use-settings'
+import { Button } from 'src/components/button/button'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -80,6 +82,7 @@ const ArticleScreenWithProps = ({
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
+    const [{ isUsingProdDevtools }] = useSettings()
 
     /*
     we don't wanna render a massive tree at once
@@ -126,19 +129,8 @@ const ArticleScreenWithProps = ({
                         ),
                     success: ({ elements, ...article }) => (
                         <>
-                            <View
-                                style={{
-                                    backgroundColor: 'tomato',
-                                    position: 'absolute',
-                                    zIndex: 9999,
-                                    elevation: 999,
-                                    bottom: 100,
-                                    right: metrics.horizontal,
-                                    alignSelf: 'flex-end',
-                                    borderRadius: 999,
-                                }}
-                            >
-                                <TouchableOpacity
+                            {isUsingProdDevtools ? (
+                                <Button
                                     onPress={() => {
                                         setAppearance(app => {
                                             if (app + 1 >= appearances.length) {
@@ -147,23 +139,20 @@ const ArticleScreenWithProps = ({
                                             return app + 1
                                         })
                                     }}
+                                    style={{
+                                        position: 'absolute',
+                                        zIndex: 9999,
+                                        elevation: 999,
+                                        top:
+                                            Dimensions.get('window').height -
+                                            600,
+                                        right: metrics.horizontal,
+                                        alignSelf: 'flex-end',
+                                    }}
                                 >
-                                    <UiBodyCopy
-                                        style={{
-                                            backgroundColor: 'tomato',
-                                            position: 'absolute',
-                                            zIndex: 9999,
-                                            elevation: 999,
-                                            bottom: 100,
-                                            right: metrics.horizontal,
-                                            alignSelf: 'flex-end',
-                                            borderRadius: 999,
-                                        }}
-                                    >
-                                        {`${appearances[appearance]} 🌈`}
-                                    </UiBodyCopy>
-                                </TouchableOpacity>
-                            </View>
+                                    {`${appearances[appearance]} 🌈`}
+                                </Button>
+                            ) : null}
                             <WithArticleAppearance
                                 value={
                                     appearances[appearance] as ArticleAppearance

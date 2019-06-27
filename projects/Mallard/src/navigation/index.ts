@@ -53,8 +53,8 @@ const AppStack = createStackNavigator(
                 backgroundColor: 'transparent',
             },
             transitionSpec: {
-                duration: 300,
-                easing: Easing.ease,
+                duration: 500,
+                easing: Easing.elastic(1.1),
                 timing: Animated.timing,
                 useNativeDriver: true,
             },

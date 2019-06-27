@@ -10,6 +10,7 @@ import { elementParser } from './elements'
 import fromEntries from 'object.fromentries'
 import { IContent } from '@guardian/capi-ts/dist/Content'
 import fetch from 'node-fetch'
+import striptags from 'striptags'
 
 interface CAPIArticle {
     id: number
@@ -19,6 +20,7 @@ interface CAPIArticle {
     byline: string
     standfirst: string
     imageURL?: string
+    kicker?: string
     elements: BlockElement[]
 }
 
@@ -35,7 +37,13 @@ const parseArticleResult = async (
 
     const parser = elementParser(path)
     const title = result && result.webTitle
-    const standfirst = result && result.fields && result.fields.standfirst
+    const standfirst =
+        result &&
+        result.fields &&
+        result.fields.standfirst &&
+        striptags(result.fields.standfirst)
+    const kicker = result.tags[0] && result.tags[0].webTitle
+
     if (standfirst == null)
         throw new Error(`Standfirst was undefined in ${path}!`)
 
@@ -74,6 +82,7 @@ const parseArticleResult = async (
             id: internalid,
             path: path,
             byline,
+            kicker,
             headline: title,
             standfirst,
             image: imageURL,
