@@ -42,7 +42,7 @@ const SettingsScreen = ({
             </MonoTextBlock>
             <ListHeading>{`Send Feedback`}</ListHeading>
             <MonoTextBlock>
-                Send us feedback to editions.product@theguardian.com
+                {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
             {!isUsingProdDevtools ? (
                 <>

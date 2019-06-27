@@ -5,6 +5,7 @@ import { color } from 'src/theme/color'
 import { OnboardingCard } from 'src/components/onboarding/onboarding-card'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
+import { FEEDBACK_EMAIL } from 'src/helpers/words'
 
 const styles = StyleSheet.create({
     background: {
@@ -31,8 +32,7 @@ const OnboardingHandler = ({ onComplete }: { onComplete: () => void }) => {
         <SafeAreaView style={styles.background}>
             <View style={styles.padding}>
                 <OnboardingCard style={styles.card} title="Welcome to the beta">
-                    Pardon our dust, we are getting things ready. If you notice
-                    anything odd let us know at editions.product@theguardian.com
+                    {`Pardon our dust, we are getting things ready. If you notice anything odd let us know at ${FEEDBACK_EMAIL}`}
                 </OnboardingCard>
                 <Button
                     onPress={() => {
