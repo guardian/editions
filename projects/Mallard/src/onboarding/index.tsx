@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, SafeAreaView, View } from 'react-native'
+import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { OnboardingCard } from 'src/components/onboarding/onboarding-card'

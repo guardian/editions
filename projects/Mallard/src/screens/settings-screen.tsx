@@ -34,8 +34,8 @@ const SettingsScreen = ({
         <ScrollView style={styles.container}>
             <ListHeading>{`About ${APP_DISPLAY_NAME}`}</ListHeading>
             <MonoTextBlock>
-                Thanks for helping us test the {APP_DISPLAY_NAME} app! your
-                feedback will be invaluable to the final product.
+                {`Thanks for helping us test the ${APP_DISPLAY_NAME} app! your
+                feedback will be invaluable to the final product.`}
             </MonoTextBlock>
             <MonoTextBlock>
                 Come back soon to see relevant settings.
