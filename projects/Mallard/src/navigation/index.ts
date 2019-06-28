@@ -11,7 +11,7 @@ import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
 import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
-import { Animated, Easing, Platform } from 'react-native'
+import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import {
     OnboardingIntroScreen,
@@ -26,6 +26,8 @@ import {
     issueToIssueListInterpolator,
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
+import { AuthSwitcherScreen } from 'src/screens/auth-switcher-screen'
+import { SignoutScreen } from 'src/screens/signout-screen'
 
 const routeNames = {
     Issue: 'Issue',
@@ -167,29 +169,40 @@ const OnboardingStack = createStackNavigator(
     },
 )
 
+const AuthedStack = createSwitchNavigator(
+    {
+        Main: ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+            const [settings] = useSettings()
+            useEffect(() => {
+                if (shouldShowOnboarding(settings)) {
+                    navigation.navigate('Onboarding')
+                } else {
+                    navigation.navigate('App')
+                }
+            })
+            return null
+        },
+        App: AppStack,
+        Onboarding: OnboardingStack,
+    },
+    {
+        initialRouteName: 'Main',
+    },
+)
+
 const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
-            Main: ({
-                navigation,
-            }: {
-                navigation: NavigationScreenProp<{}>
-            }) => {
-                const [settings] = useSettings()
-                useEffect(() => {
-                    if (shouldShowOnboarding(settings)) {
-                        navigation.navigate('Onboarding')
-                    } else {
-                        navigation.navigate('App')
-                    }
-                })
-                return null
-            },
-            App: AppStack,
-            Onboarding: OnboardingStack,
+            Authed: AuthedStack,
+            Unauthed: AuthSwitcherScreen,
+            Signout: mapNavigationToProps(SignoutScreen, nav => ({
+                onSignout: () => {
+                    nav.navigate('Unauthed')
+                },
+            })),
         },
         {
-            initialRouteName: 'Main',
+            initialRouteName: 'Unauthed',
         },
     ),
 )
