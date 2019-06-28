@@ -4,6 +4,7 @@ import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { useArticleAppearance } from 'src/theme/appearance'
 import {
     LongReadHeader,
@@ -16,6 +17,7 @@ import {
 } from './article-standfirst'
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
+import { CAPIArticle } from '../../../../common/src'
 
 /*
 This is the article view! For all of the articles.
@@ -32,6 +34,48 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
 })
+
+export interface ArticleControllerPropTypes {
+    article: CAPIArticle
+    viewIsTransitioning: boolean
+}
+
+const ArticleController = ({
+    article,
+    viewIsTransitioning,
+}: {
+    article: CAPIArticle
+    viewIsTransitioning?: boolean
+}) => {
+    switch (article.type) {
+        case 'article':
+            return (
+                <Article
+                    article={viewIsTransitioning ? undefined : article.elements}
+                    {...article}
+                />
+            )
+
+        case 'crossword':
+            return (
+                <FlexErrorMessage
+                    icon="😭"
+                    title={"We don't render crosswords yet."}
+                    style={{ backgroundColor: color.background }}
+                />
+            )
+
+        default:
+            const message: never = article
+            return (
+                <FlexErrorMessage
+                    icon="😭"
+                    title={message}
+                    style={{ backgroundColor: color.background }}
+                />
+            )
+    }
+}
 
 const Article = withNavigation(
     ({
@@ -84,4 +128,4 @@ const Article = withNavigation(
     },
 )
 
-export { Article }
+export { ArticleController }

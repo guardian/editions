@@ -9,104 +9,147 @@ import { extractImage } from './assets'
 import { elementParser } from './elements'
 import fromEntries from 'object.fromentries'
 import { IContent } from '@guardian/capi-ts/dist/Content'
+import { ICrossword } from '@guardian/capi-ts/dist/Crossword'
 import fetch from 'node-fetch'
 import striptags from 'striptags'
 
-interface CAPIArticle {
+interface Article {
+    type: 'article'
     id: number
     path: string
     headline: string
+    kicker?: string
     image: string
     byline: string
     standfirst: string
     imageURL?: string
-    kicker?: string
     elements: BlockElement[]
 }
 
+export interface CrosswordArticle {
+    type: 'crossword'
+    id: number
+    path: string
+    headline: string
+    kicker?: string
+    byline?: string
+    standfirst?: string
+    crossword: ICrossword
+}
+
+export type CAPIContent = Article | CrosswordArticle
+
 const parseArticleResult = async (
     result: IContent,
-): Promise<[number, CAPIArticle]> => {
+): Promise<[number, CAPIContent]> => {
     const path = result.id
 
-    if (result.type !== ContentType.ARTICLE)
-        throw new Error(`${path} isn't an article`)
     const internalid = result.fields && result.fields.internalPageCode
     if (internalid == null)
         throw new Error(`internalid was undefined in ${path}!`)
 
-    const parser = elementParser(path)
     const title = result && result.webTitle
+
     const standfirst =
         result &&
         result.fields &&
         result.fields.standfirst &&
         striptags(result.fields.standfirst)
-    const kicker = result.tags[0] && result.tags[0].webTitle
-
-    if (standfirst == null)
-        throw new Error(`Standfirst was undefined in ${path}!`)
-
-    const image =
-        result &&
-        result.blocks &&
-        result.blocks.main &&
-        result.blocks.main.elements &&
-        result.blocks.main.elements[0].assets &&
-        extractImage(result.blocks.main.elements[0].assets)
-    const imageURL =
-        (image && image.file) ||
-        'https://media.guim.co.uk/d1c48b0c6ec594b396f786cfd3f6ba6ae0d93516/0_105_2754_1652/2754.jpg'
-
-    const blocks =
-        result &&
-        result.blocks &&
-        result.blocks.body &&
-        result.blocks.body.map(_ => _.elements)
-    const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
-    if (body == null) throw new Error(`Body was undefined in ${path}!`)
-
-    const elements = await attempt(Promise.all(body.map(parser)))
-    if (hasFailed(elements))
-        throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
-
-    if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
 
     const byline = result && result.fields && result.fields.byline
 
-    if (byline == null) throw new Error(`Byline was undefined in ${path}!`)
+    switch (result.type) {
+        case ContentType.ARTICLE:
+            const parser = elementParser(path)
+            const kicker = result.tags[0] && result.tags[0].webTitle
 
-    return [
-        internalid,
-        {
-            id: internalid,
-            path: path,
-            byline,
-            kicker,
-            headline: title,
-            standfirst,
-            image: imageURL,
-            elements,
-        },
-    ]
+            const image =
+                result &&
+                result.blocks &&
+                result.blocks.main &&
+                result.blocks.main.elements &&
+                result.blocks.main.elements[0].assets &&
+                extractImage(result.blocks.main.elements[0].assets)
+
+            const imageURL =
+                (image && image.file) ||
+                'https://media.guim.co.uk/d1c48b0c6ec594b396f786cfd3f6ba6ae0d93516/0_105_2754_1652/2754.jpg'
+
+            const blocks =
+                result &&
+                result.blocks &&
+                result.blocks.body &&
+                result.blocks.body.map(_ => _.elements)
+            const body =
+                blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
+            if (body == null) throw new Error(`Body was undefined in ${path}!`)
+
+            const elements = await attempt(Promise.all(body.map(parser)))
+            if (hasFailed(elements))
+                throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
+
+            if (elements == null)
+                throw new Error(`Elements was undefined in ${path}!`)
+
+            const article: [number, Article] = [
+                internalid,
+                {
+                    type: 'article',
+                    id: internalid,
+                    path: path,
+                    headline: title,
+                    kicker,
+                    image: imageURL,
+                    byline: byline || '',
+                    standfirst: standfirst || '',
+                    imageURL,
+                    elements,
+                },
+            ]
+            return article
+
+        case ContentType.CROSSWORD:
+            if (result.crossword == null)
+                throw new Error(
+                    `No crossword defined in Crossword article: ${path}`,
+                )
+
+            const crosswordArticle: [number, CrosswordArticle] = [
+                internalid,
+                {
+                    type: 'crossword',
+                    id: internalid,
+                    path: path,
+                    headline: title,
+                    byline: byline || '',
+                    standfirst: standfirst || '',
+                    crossword: result.crossword,
+                },
+            ]
+
+            return crosswordArticle
+
+        default:
+            throw new Error(`${path} isn't an article or a crossword`)
+    }
 }
 
+const capiApiKey = process.env.CAPI_KEY
+
 const printsent = (paths: string[]) =>
-    `${process.env.psurl}?ids=${paths.join(',')}format=thrift&api-key=${
-        process.env.CAPI_KEY
-    }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+    `${process.env.psurl}?ids=${paths.join(
+        ',',
+    )}format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
 
 const search = (paths: string[]) =>
     `https://content.guardianapis.com/search?ids=${paths.join(
         ',',
-    )}format=thrift&api-key=${
-        process.env.CAPI_KEY
-    }&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+    )}format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
 
 export const getArticles = async (
     ids: number[],
     capi: 'printsent' | 'search',
-): Promise<{ [key: string]: CAPIArticle }> => {
+): Promise<{ [key: string]: CAPIContent }> => {
     const paths = ids.map(_ => `internal-code/page/${_}`)
 
     const endpoint = capi === 'printsent' ? printsent(paths) : search(paths)
