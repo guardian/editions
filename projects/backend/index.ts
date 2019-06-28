@@ -5,6 +5,7 @@ import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
+import { weatherController } from './controllers/weather'
 import {
     issuePath,
     frontPath,
@@ -24,6 +25,8 @@ app.get(
     '/' + collectionPath(':issueId', ':collectionId'),
     collectionsController,
 )
+
+app.get('/weather/ipaddress/:ipAddress', weatherController)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
