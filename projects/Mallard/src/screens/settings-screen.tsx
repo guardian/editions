@@ -38,6 +38,15 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 onPress={({ onPress }) => onPress()}
                 data={[
                     {
+                        key: 'Sign out',
+                        title: 'Sign out',
+                        data: {
+                            onPress: () => {
+                                navigation.navigate('Signout')
+                            },
+                        },
+                    },
+                    {
                         key: 'Downloads',
                         title: 'Manage issues',
                         data: {

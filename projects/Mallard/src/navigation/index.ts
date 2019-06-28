@@ -22,6 +22,8 @@ import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { issueToArticleScreenInterpolator } from './interpolators'
+import { AuthSwitcherScreen } from 'src/screens/auth-switcher-screen'
+import { SignoutScreen } from 'src/screens/signout-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -110,29 +112,40 @@ const OnboardingStack = createStackNavigator(
     },
 )
 
+const AuthedStack = createSwitchNavigator(
+    {
+        Main: ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+            const [settings] = useSettings()
+            useEffect(() => {
+                if (shouldShowOnboarding(settings)) {
+                    navigation.navigate('Onboarding')
+                } else {
+                    navigation.navigate('App')
+                }
+            })
+            return null
+        },
+        App: AppStack,
+        Onboarding: OnboardingStack,
+    },
+    {
+        initialRouteName: 'Main',
+    },
+)
+
 const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
-            Main: ({
-                navigation,
-            }: {
-                navigation: NavigationScreenProp<{}>
-            }) => {
-                const [settings] = useSettings()
-                useEffect(() => {
-                    if (shouldShowOnboarding(settings)) {
-                        navigation.navigate('Onboarding')
-                    } else {
-                        navigation.navigate('App')
-                    }
-                })
-                return null
-            },
-            App: AppStack,
-            Onboarding: OnboardingStack,
+            Authed: AuthedStack,
+            Unauthed: AuthSwitcherScreen,
+            Signout: mapNavigationToProps(SignoutScreen, nav => ({
+                onSignout: () => {
+                    nav.navigate('Unauthed')
+                },
+            })),
         },
         {
-            initialRouteName: 'Main',
+            initialRouteName: 'Unauthed',
         },
     ),
 )
