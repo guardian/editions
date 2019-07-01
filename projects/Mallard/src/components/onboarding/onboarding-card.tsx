@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
-import { TitlepieceText } from '../styled-text'
+import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -14,24 +14,29 @@ const styles = StyleSheet.create({
     },
     squareText: {
         color: color.palette.neutral[100],
-        fontSize: 50,
-        lineHeight: 50,
+        fontSize: 60,
+        lineHeight: 60,
     },
     explainer: {
         backgroundColor: color.background,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
+    subtitle: {
+        marginBottom: metrics.vertical * 2,
+    },
 })
 
 const OnboardingCard = ({
     children,
     title,
+    subtitle,
     style,
 }: {
     children: string
     title: string
-    style: StyleProp<ViewStyle>
+    subtitle?: string
+    style?: StyleProp<ViewStyle>
 }) => (
     <View style={style}>
         <View style={styles.square}>
@@ -43,7 +48,12 @@ const OnboardingCard = ({
             </TitlepieceText>
         </View>
         <View style={styles.explainer}>
-            <UiBodyCopy>{children}</UiBodyCopy>
+            {subtitle && (
+                <TitlepieceText style={styles.subtitle}>
+                    {subtitle}
+                </TitlepieceText>
+            )}
+            <UiExplainerCopy>{children}</UiExplainerCopy>
         </View>
     </View>
 )
