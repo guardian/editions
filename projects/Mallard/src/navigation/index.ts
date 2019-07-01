@@ -13,7 +13,10 @@ import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
-import { OnboardingHandler } from 'src/onboarding'
+import {
+    OnboardingIntroScreen,
+    OnboardingConsentScreen,
+} from 'src/screens/onboarding-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps, withPersistenceKey } from './helpers'
@@ -69,8 +72,12 @@ const AppStack = createStackNavigator(
 
 const OnboardingStack = createStackNavigator(
     {
-        Start: mapNavigationToProps(OnboardingHandler, nav => ({
-            onComplete: () => nav.navigate('App'),
+        Start: mapNavigationToProps(OnboardingIntroScreen, nav => ({
+            onContinue: () => nav.navigate('Consent'),
+        })),
+        Consent: mapNavigationToProps(OnboardingConsentScreen, nav => ({
+            onContinue: () => nav.navigate('App'),
+            onOpenGdprConsent: () => nav.navigate('GdprConsent'),
         })),
     },
     {
@@ -87,23 +94,16 @@ const OnboardingSwitcher = ({
     useEffect(() => {
         if (shouldShowOnboarding(settings)) {
             navigation.navigate('Onboarding')
-        } else {
-            navigation.navigate('App')
         }
     })
-    return null
+    return AppStack
 }
-
-const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
 
 const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
-            App: withPersistenceKey(AppStack, navigationPersistenceKey),
-            Onboarding: withPersistenceKey(
-                OnboardingStack,
-                navigationPersistenceKey,
-            ),
+            App: AppStack,
+            Onboarding: OnboardingStack,
             OnboardingSwitcher,
         },
         {

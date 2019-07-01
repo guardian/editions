@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
     },
 })
 
+const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
+
 export default class App extends React.Component<{}, {}> {
     /**
      * When the component is mounted. This happens asynchronously and simply
@@ -35,7 +37,9 @@ export default class App extends React.Component<{}, {}> {
                         backgroundColor="#041f4a"
                     />
                     <View style={styles.appContainer}>
-                        <RootNavigator />
+                        <RootNavigator
+                            persistenceKey={navigationPersistenceKey}
+                        />
                     </View>
                 </SettingsProvider>
             </FileSystemProvider>
