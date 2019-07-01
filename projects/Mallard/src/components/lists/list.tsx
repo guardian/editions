@@ -34,14 +34,6 @@ const styles = StyleSheet.create({
     },
 })
 
-export const ListHeading = ({ children }: { children: string }) => (
-    <View style={styles.heading}>
-        <SafeAreaView>
-            <UiBodyCopy weight="bold">{children}</UiBodyCopy>
-        </SafeAreaView>
-    </View>
-)
-
 export const List = <D extends {}>({
     data,
     onPress,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
-import { List, ListHeading } from 'src/components/lists/list'
+import { List } from 'src/components/lists/list'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
@@ -10,6 +10,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { backends, defaultSettings } from 'src/helpers/settings'
+import { Heading } from 'src/components/layout/list/row'
 
 const styles = StyleSheet.create({
     container,
@@ -34,7 +35,7 @@ const ApiScreen = ({
 
     return (
         <ScrollView style={styles.container}>
-            <ListHeading>Selected backend</ListHeading>
+            <Heading>Selected backend</Heading>
             <TextInput
                 style={{
                     padding: metrics.horizontal,
@@ -50,7 +51,7 @@ const ApiScreen = ({
                 }}
                 value={apiUrl || ''}
             />
-            <ListHeading>Presets</ListHeading>
+            <Heading>Presets</Heading>
             <List
                 onPress={({ value }) => {
                     setSetting('apiUrl', value)

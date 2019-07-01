@@ -3,6 +3,7 @@ export interface Settings {
     apiUrl: string
     isUsingProdDevtools: boolean
     hasOnboarded: boolean
+    gdprAllowGoogleAnalytics: boolean
 }
 
 /*
@@ -43,6 +44,7 @@ export const defaultSettings: Settings = {
     apiUrl: backends[0].value,
     isUsingProdDevtools: false,
     hasOnboarded: false,
+    gdprAllowGoogleAnalytics: false,
 }
 
 /*

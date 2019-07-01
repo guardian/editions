@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import { List, ListHeading } from 'src/components/lists/list'
+import { List } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
@@ -17,6 +17,8 @@ import { clearLocalCache } from 'src/hooks/use-fetch'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
+import { GdprConsent } from './settings/gdpr-consent'
+import { Heading } from 'src/components/layout/list/row'
 
 const styles = StyleSheet.create({
     container,
@@ -32,7 +34,7 @@ const SettingsScreen = ({
 
     return (
         <ScrollView style={styles.container}>
-            <ListHeading>{`About ${APP_DISPLAY_NAME}`}</ListHeading>
+            <Heading>{`About ${APP_DISPLAY_NAME}`}</Heading>
             <MonoTextBlock>
                 {`Thanks for helping us test the ${APP_DISPLAY_NAME} app! your
                 feedback will be invaluable to the final product.`}
@@ -40,10 +42,11 @@ const SettingsScreen = ({
             <MonoTextBlock>
                 Come back soon to see relevant settings.
             </MonoTextBlock>
-            <ListHeading>{`Send Feedback`}</ListHeading>
+            <Heading>{`Send Feedback`}</Heading>
             <MonoTextBlock>
                 {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
+            <GdprConsent />
             {!isUsingProdDevtools ? (
                 <>
                     <View style={{ height: Dimensions.get('window').height }} />
@@ -65,7 +68,7 @@ const SettingsScreen = ({
                 </>
             ) : (
                 <>
-                    <ListHeading>💣 DEVELOPER ZONE 💣</ListHeading>
+                    <Heading>💣 DEVELOPER ZONE 💣</Heading>
                     <MonoTextBlock>
                         Only wander here if you know what you are doing!!
                     </MonoTextBlock>
@@ -148,7 +151,7 @@ const SettingsScreen = ({
                             },
                         ]}
                     />
-                    <ListHeading>Your settings</ListHeading>
+                    <Heading>Your settings</Heading>
                     <List
                         onPress={() => {}}
                         data={Object.entries(settings).map(

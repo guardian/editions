@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Highlight } from 'src/components/highlight'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, SafeAreaView } from 'react-native'
 import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 
@@ -16,13 +16,23 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
         marginVertical: StyleSheet.hairlineWidth,
     },
-    list: {
-        borderTopWidth: StyleSheet.hairlineWidth,
+    itemFlexer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
 })
 
+const Heading = ({ children }: { children: string }) => (
+    <View style={styles.heading}>
+        <SafeAreaView>
+            <UiBodyCopy weight="bold">{children}</UiBodyCopy>
+        </SafeAreaView>
+    </View>
+)
+
 const Separator = () => {
-    const { borderColor, backgroundColor } = useAppAppearance()
+    const { borderColor } = useAppAppearance()
 
     return (
         <View
@@ -67,7 +77,7 @@ const Row = ({ proxy, ...contents }: RowProps) => {
             ]}
         >
             {proxy ? (
-                <View>
+                <View style={styles.itemFlexer}>
                     <View>
                         <RowContents {...contents} />
                     </View>
@@ -89,4 +99,4 @@ const TappableRow = ({
     </Highlight>
 )
 
-export { Separator, Row, TappableRow }
+export { Separator, Row, TappableRow, Heading }
