@@ -56,11 +56,20 @@ const ArticleController = ({
                 />
             )
 
+        case 'gallery':
+            return (
+                <FlexErrorMessage
+                    icon="😭"
+                    title={"We don't support the rendering of galleries yet."}
+                    style={{ backgroundColor: color.background }}
+                />
+            )
+
         case 'crossword':
             return (
                 <FlexErrorMessage
                     icon="😭"
-                    title={"We don't render crosswords yet."}
+                    title={"We don't support the rendering of crosswords yet."}
                     style={{ backgroundColor: color.background }}
                 />
             )

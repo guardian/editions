@@ -26,6 +26,19 @@ interface Article {
     elements: BlockElement[]
 }
 
+interface GalleryArticle {
+    type: 'gallery'
+    id: number
+    path: string
+    headline: string
+    kicker?: string
+    image: string
+    byline: string
+    standfirst: string
+    imageURL?: string
+    elements: BlockElement[]
+}
+
 export interface CrosswordArticle {
     type: 'crossword'
     id: number
@@ -37,7 +50,7 @@ export interface CrosswordArticle {
     crossword: ICrossword
 }
 
-export type CAPIContent = Article | CrosswordArticle
+export type CAPIContent = Article | CrosswordArticle | GalleryArticle
 
 const parseArticleResult = async (
     result: IContent,
@@ -58,39 +71,37 @@ const parseArticleResult = async (
 
     const byline = result && result.fields && result.fields.byline
 
+    const parser = elementParser(path)
+    const kicker = result.tags[0] && result.tags[0].webTitle
+
+    const image =
+        result &&
+        result.blocks &&
+        result.blocks.main &&
+        result.blocks.main.elements &&
+        result.blocks.main.elements[0].assets &&
+        extractImage(result.blocks.main.elements[0].assets)
+
+    const imageURL =
+        (image && image.file) ||
+        'https://media.guim.co.uk/d1c48b0c6ec594b396f786cfd3f6ba6ae0d93516/0_105_2754_1652/2754.jpg'
+
+    const blocks =
+        result &&
+        result.blocks &&
+        result.blocks.body &&
+        result.blocks.body.map(_ => _.elements)
+    const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
+    if (body == null) throw new Error(`Body was undefined in ${path}!`)
+
+    const elements = await attempt(Promise.all(body.map(parser)))
+    if (hasFailed(elements))
+        throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
+
+    if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
+
     switch (result.type) {
         case ContentType.ARTICLE:
-            const parser = elementParser(path)
-            const kicker = result.tags[0] && result.tags[0].webTitle
-
-            const image =
-                result &&
-                result.blocks &&
-                result.blocks.main &&
-                result.blocks.main.elements &&
-                result.blocks.main.elements[0].assets &&
-                extractImage(result.blocks.main.elements[0].assets)
-
-            const imageURL =
-                (image && image.file) ||
-                'https://media.guim.co.uk/d1c48b0c6ec594b396f786cfd3f6ba6ae0d93516/0_105_2754_1652/2754.jpg'
-
-            const blocks =
-                result &&
-                result.blocks &&
-                result.blocks.body &&
-                result.blocks.body.map(_ => _.elements)
-            const body =
-                blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
-            if (body == null) throw new Error(`Body was undefined in ${path}!`)
-
-            const elements = await attempt(Promise.all(body.map(parser)))
-            if (hasFailed(elements))
-                throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
-
-            if (elements == null)
-                throw new Error(`Elements was undefined in ${path}!`)
-
             const article: [number, Article] = [
                 internalid,
                 {
@@ -107,6 +118,25 @@ const parseArticleResult = async (
                 },
             ]
             return article
+
+        case ContentType.GALLERY:
+            const galleryArticle: [number, GalleryArticle] = [
+                internalid,
+                {
+                    type: 'gallery',
+                    id: internalid,
+                    path: path,
+                    headline: title,
+                    kicker,
+                    image: imageURL,
+                    byline: byline || '',
+                    standfirst: standfirst || '',
+                    imageURL,
+                    elements,
+                },
+            ]
+
+            return galleryArticle
 
         case ContentType.CROSSWORD:
             if (result.crossword == null)
@@ -130,7 +160,7 @@ const parseArticleResult = async (
             return crosswordArticle
 
         default:
-            throw new Error(`${path} isn't an article or a crossword`)
+            throw new Error(`${path} isn't an article, crossword or gallery.`)
     }
 }
 

@@ -97,8 +97,8 @@ export const getCollection = async (
                             crossword: (article.crossword as unknown) as Crossword,
                         },
                     ]
-                case 'article':
-                    const imageURL = (meta && meta.imageSrc) || article.imageURL
+
+                case 'gallery':
                     return [
                         article.path,
                         {
@@ -106,7 +106,21 @@ export const getCollection = async (
                             key: article.path,
                             headline,
                             kicker,
-                            imageURL,
+                            imageURL:
+                                (meta && meta.imageSrc) || article.imageURL,
+                        },
+                    ]
+
+                case 'article':
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            imageURL:
+                                (meta && meta.imageSrc) || article.imageURL,
                         },
                     ]
 
