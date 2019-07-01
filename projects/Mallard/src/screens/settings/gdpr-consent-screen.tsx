@@ -3,10 +3,15 @@ import { View, StyleSheet, ScrollView, Switch, FlatList } from 'react-native'
 import { Row, Separator, Heading } from 'src/components/layout/list/row'
 import { useSettings } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
+import { GdprSwitchSettings } from 'src/helpers/settings'
 
 const styles = StyleSheet.create({
     container,
 })
+
+const gdprRelatedSwitches: (keyof GdprSwitchSettings)[] = [
+    'gdprAllowGoogleAnalytics',
+]
 
 interface GdprSwitch {
     name: string
@@ -15,9 +20,20 @@ interface GdprSwitch {
     setter: (value: boolean) => void
 }
 
+export const useGdprSwitches = () => {
+    const [, setSetting] = useSettings()
+
+    const enableEverything = () => {
+        gdprRelatedSwitches.map(sw => {
+            setSetting(sw, true)
+        })
+    }
+
+    return { enableEverything }
+}
+
 const GdprConsent = () => {
-    const [settings, setSetting] = useSettings()
-    const { gdprAllowGoogleAnalytics } = settings
+    const [{ gdprAllowGoogleAnalytics }, setSetting] = useSettings()
 
     const switches: GdprSwitch[] = [
         {

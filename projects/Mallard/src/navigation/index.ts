@@ -19,9 +19,18 @@ import {
 } from 'src/screens/onboarding-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { NavigationScreenProp } from 'react-navigation'
-import { mapNavigationToProps, withPersistenceKey } from './helpers'
+import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { issueToArticleScreenInterpolator } from './interpolators'
+
+const navOptionsWithGraunHeader = {
+    headerStyle: {
+        backgroundColor: color.palette.brand.dark,
+        borderBottomColor: color.text,
+    },
+    headerTintColor: color.textOverPrimary,
+}
+
 const AppStack = createStackNavigator(
     {
         Main: createStackNavigator(
@@ -35,11 +44,7 @@ const AppStack = createStackNavigator(
             },
             {
                 defaultNavigationOptions: {
-                    headerStyle: {
-                        backgroundColor: color.palette.brand.dark,
-                        borderBottomColor: color.text,
-                    },
-                    headerTintColor: color.textOverPrimary,
+                    ...navOptionsWithGraunHeader,
                 },
                 initialRouteName: 'Home',
             },
@@ -72,42 +77,62 @@ const AppStack = createStackNavigator(
 
 const OnboardingStack = createStackNavigator(
     {
-        Start: mapNavigationToProps(OnboardingIntroScreen, nav => ({
-            onContinue: () => nav.navigate('Consent'),
+        OnboardingStart: mapNavigationToProps(OnboardingIntroScreen, nav => ({
+            onContinue: () => nav.navigate('OnboardingConsent'),
         })),
-        Consent: mapNavigationToProps(OnboardingConsentScreen, nav => ({
-            onContinue: () => nav.navigate('App'),
-            onOpenGdprConsent: () => nav.navigate('GdprConsent'),
-        })),
+        OnboardingConsent: createStackNavigator(
+            {
+                Main: {
+                    screen: mapNavigationToProps(
+                        OnboardingConsentScreen,
+                        nav => ({
+                            onContinue: () => nav.navigate('App'),
+                            onOpenGdprConsent: () =>
+                                nav.navigate('OnboardingConsentInline'),
+                        }),
+                    ),
+                    navigationOptions: {
+                        header: null,
+                    },
+                },
+                OnboardingConsentInline: GdprConsentScreen,
+            },
+            {
+                mode: 'modal',
+                defaultNavigationOptions: {
+                    ...navOptionsWithGraunHeader,
+                },
+            },
+        ),
     },
     {
         headerMode: 'none',
     },
 )
 
-const OnboardingSwitcher = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
-    const [settings] = useSettings()
-    useEffect(() => {
-        if (shouldShowOnboarding(settings)) {
-            navigation.navigate('Onboarding')
-        }
-    })
-    return AppStack
-}
-
 const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
+            Main: ({
+                navigation,
+            }: {
+                navigation: NavigationScreenProp<{}>
+            }) => {
+                const [settings] = useSettings()
+                useEffect(() => {
+                    if (shouldShowOnboarding(settings)) {
+                        navigation.navigate('Onboarding')
+                    } else {
+                        navigation.navigate('App')
+                    }
+                })
+                return null
+            },
             App: AppStack,
             Onboarding: OnboardingStack,
-            OnboardingSwitcher,
         },
         {
-            initialRouteName: 'OnboardingSwitcher',
+            initialRouteName: 'Main',
         },
     ),
 )

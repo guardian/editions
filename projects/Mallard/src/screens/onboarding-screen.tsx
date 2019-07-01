@@ -3,7 +3,7 @@ import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { OnboardingIntro } from './onboarding/intro'
+import { OnboardingIntro, OnboardingConsent } from './onboarding/cards'
 
 const styles = StyleSheet.create({
     background: {
@@ -32,7 +32,6 @@ const OnboardingIntroScreen = ({ onContinue }: { onContinue: () => void }) => {
         <Frame>
             <OnboardingIntro
                 onContinue={() => {
-                    setSetting('hasOnboarded', true)
                     onContinue()
                 }}
             />
@@ -50,11 +49,12 @@ const OnboardingConsentScreen = ({
     const [, setSetting] = useSettings()
     return (
         <Frame>
-            <OnboardingIntro
+            <OnboardingConsent
+                {...{ onOpenGdprConsent }}
                 onContinue={() => {
                     onOpenGdprConsent()
-                    //setSetting('hasOnboarded', true)
-                    //onComplete()
+                    setSetting('hasOnboarded', true)
+                    onContinue()
                 }}
             />
         </Frame>

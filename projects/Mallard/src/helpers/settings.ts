@@ -1,9 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage'
-export interface Settings {
+
+export interface GdprSwitchSettings {
+    gdprAllowGoogleAnalytics: boolean
+}
+export interface Settings extends GdprSwitchSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
     hasOnboarded: boolean
-    gdprAllowGoogleAnalytics: boolean
 }
 
 /*

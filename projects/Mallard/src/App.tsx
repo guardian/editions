@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
+const navigationPersistenceKey = __DEV__ ? 'nav-3257684129734322' : null
 
 export default class App extends React.Component<{}, {}> {
     /**
@@ -37,9 +37,7 @@ export default class App extends React.Component<{}, {}> {
                         backgroundColor="#041f4a"
                     />
                     <View style={styles.appContainer}>
-                        <RootNavigator
-                            persistenceKey={navigationPersistenceKey}
-                        />
+                        <RootNavigator persistenceKey={null} />
                     </View>
                 </SettingsProvider>
             </FileSystemProvider>
