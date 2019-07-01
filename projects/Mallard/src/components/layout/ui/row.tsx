@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Footer = ({ children }: { children: string }) => (
+const Footer = ({ children }: { children: ReactElement }) => (
     <View style={styles.footer}>{children}</View>
 )
 
