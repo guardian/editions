@@ -1,7 +1,10 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { OnboardingCard } from 'src/components/onboarding/onboarding-card'
-import { Button } from 'src/components/button/button'
+import {
+    OnboardingCard,
+    CardAppearance,
+} from 'src/components/onboarding/onboarding-card'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useGdprSwitches } from 'src/hooks/use-settings'
@@ -28,7 +31,9 @@ const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
             >
                 {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
             </OnboardingCard>
-            <Button onPress={onContinue}>Start</Button>
+            <Button appearance={ButtonAppearance.tomato} onPress={onContinue}>
+                Start
+            </Button>
         </>
     )
 }
@@ -45,14 +50,21 @@ const OnboardingConsent = ({
         <>
             <OnboardingCard
                 style={styles.card}
+                appearance={CardAppearance.apricot}
                 title="We care about your privacy"
                 subtitle="We won’t share your data without asking"
             >
                 {`(temporary copy) By clicking agree you are agreeing to The Guardian’s privacy policy and data usage`}
             </OnboardingCard>
             <View style={styles.sbs}>
-                <Button onPress={onOpenGdprConsent}>Customize</Button>
                 <Button
+                    appearance={ButtonAppearance.apricot}
+                    onPress={onOpenGdprConsent}
+                >
+                    Customize
+                </Button>
+                <Button
+                    appearance={ButtonAppearance.apricot}
                     onPress={() => {
                         enableNulls()
                         onContinue()

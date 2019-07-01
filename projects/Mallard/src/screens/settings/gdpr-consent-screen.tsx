@@ -1,11 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
-import {
-    Row,
-    TappableRow,
-    Separator,
-    Heading,
-} from 'src/components/layout/ui/row'
+import { TappableRow, Separator, Heading } from 'src/components/layout/ui/row'
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
 import { GdprSwitchSetting } from 'src/helpers/settings'
