@@ -22,7 +22,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemFlexerShrinker: { flexShrink: 1 },
+    footer: {
+        padding: metrics.horizontal,
+        paddingVertical: metrics.vertical,
+        paddingTop: metrics.vertical * 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })
+
+const Footer = ({ children }: { children: string }) => (
+    <View style={styles.footer}>{children}</View>
+)
 
 const Heading = ({ children }: { children: string }) => (
     <View style={styles.heading}>
@@ -100,4 +111,4 @@ const TappableRow = ({
     </Highlight>
 )
 
-export { Separator, Row, TappableRow, Heading }
+export { Separator, Row, TappableRow, Footer, Heading }

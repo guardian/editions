@@ -1,12 +1,16 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
-import { TappableRow, Separator, Heading } from 'src/components/layout/ui/row'
+import {
+    TappableRow,
+    Separator,
+    Heading,
+    Footer,
+} from 'src/components/layout/ui/row'
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
 import { GdprSwitchSetting } from 'src/helpers/settings'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Button } from 'src/components/button/button'
-import { metrics } from 'src/theme/spacing'
 
 const styles = StyleSheet.create({
     container,
@@ -65,14 +69,9 @@ const GdprConsent = () => {
                 )}
             />
             {isUsingProdDevtools ? (
-                <View
-                    style={{
-                        padding: metrics.horizontal,
-                        paddingVertical: metrics.vertical,
-                    }}
-                >
+                <Footer>
                     <Button onPress={DEVMODE_resetAll}>Reset</Button>
-                </View>
+                </Footer>
             ) : null}
         </View>
     )
