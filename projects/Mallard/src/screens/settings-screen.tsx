@@ -10,11 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { List } from 'src/components/lists/list'
-import {
-    NavigationScreenProp,
-    withNavigation,
-    NavigationInjectedProps,
-} from 'react-navigation'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
 import { clearLocalCache } from 'src/hooks/use-fetch'
@@ -45,15 +41,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         data: {
                             onPress: () => {
                                 navigation.navigate('Downloads')
-                            },
-                        },
-                    },
-                    {
-                        key: 'Consent settings',
-                        title: 'Consent settings',
-                        data: {
-                            onPress: () => {
-                                navigation.navigate('GdprConsent')
                             },
                         },
                     },
@@ -135,21 +122,32 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     )
 })
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
 
     return (
         <ScrollView style={styles.container}>
+            <Heading>Settings</Heading>
+            <List
+                onPress={({ onPress }) => onPress()}
+                data={[
+                    {
+                        key: 'Consent settings',
+                        title: 'Consent settings',
+                        data: {
+                            onPress: () => {
+                                navigation.navigate('GdprConsent')
+                            },
+                        },
+                    },
+                ]}
+            />
             <Heading>{`About ${APP_DISPLAY_NAME}`}</Heading>
             <MonoTextBlock>
                 {`Thanks for helping us test the ${APP_DISPLAY_NAME} app!` +
                     `your feedback will be invaluable to the final product.`}
             </MonoTextBlock>
-            <MonoTextBlock>
-                Come back soon to see relevant settings.
-            </MonoTextBlock>
-            <Heading>{`Send Feedback`}</Heading>
             <MonoTextBlock>
                 {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
