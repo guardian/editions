@@ -5,6 +5,7 @@ import {
     Settings,
     getAllSettings,
     UnsanitizedSetting,
+    gdprSwitchSettings,
 } from 'src/helpers/settings'
 
 type SettingsFromContext = [
@@ -52,4 +53,24 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
 }
 const useSettings = (): SettingsFromContext => useContext(SettingsContext)
 
-export { SettingsProvider, useSettings }
+const useGdprSwitches = () => {
+    const [settings, setSetting] = useSettings()
+
+    const enableNulls = () => {
+        gdprSwitchSettings.map(sw => {
+            if (settings[sw] === null) {
+                setSetting(sw, true)
+            }
+        })
+    }
+
+    const resetAll = () => {
+        gdprSwitchSettings.map(sw => {
+            setSetting(sw, null)
+        })
+    }
+
+    return { enableNulls, resetAll }
+}
+
+export { SettingsProvider, useSettings, useGdprSwitches }

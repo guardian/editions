@@ -9,6 +9,11 @@ export interface GdprSwitchSettings {
     gdprAllowPerformance: GdprSwitchSetting
     gdprAllowTracking: GdprSwitchSetting
 }
+export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
+    'gdprAllowPerformance',
+    'gdprAllowTracking',
+]
+
 interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean

@@ -4,7 +4,7 @@ import { OnboardingCard } from 'src/components/onboarding/onboarding-card'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { FEEDBACK_EMAIL } from 'src/helpers/words'
-import { useGdprSwitches } from '../settings/gdpr-consent-screen'
+import { useGdprSwitches } from 'src/hooks/use-settings'
 
 const styles = StyleSheet.create({
     card: {

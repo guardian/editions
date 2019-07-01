@@ -12,36 +12,11 @@ const styles = StyleSheet.create({
     container,
 })
 
-const gdprRelatedSwitches: (keyof GdprSwitchSettings)[] = [
-    'gdprAllowPerformance',
-    'gdprAllowTracking',
-]
-
 interface GdprSwitch {
     name: string
     description: string
     value: GdprSwitchSetting
     setter: (value: boolean) => void
-}
-
-export const useGdprSwitches = () => {
-    const [settings, setSetting] = useSettings()
-
-    const enableNulls = () => {
-        gdprRelatedSwitches.map(sw => {
-            if (settings[sw] === null) {
-                setSetting(sw, true)
-            }
-        })
-    }
-
-    const resetAll = () => {
-        gdprRelatedSwitches.map(sw => {
-            setSetting(sw, null)
-        })
-    }
-
-    return { enableNulls, resetAll }
 }
 
 const GdprConsent = () => {
