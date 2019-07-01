@@ -74,13 +74,18 @@ const fetchFromApi = <T>(
     const { retrieve, store, clear } = withCache<T>('api')
     if (!cached) {
         clear(endpointPath)
-        return {
-            type: 'promise',
-            getValue: () =>
-                fetchFromApiSlow<T>(endpointPath, {
-                    validator,
-                }),
-        }
+        return valueOrGettablePromise(
+            [
+                null,
+                () =>
+                    fetchFromApiSlow<T>(endpointPath, {
+                        validator,
+                    }),
+            ],
+            {
+                savePromiseResultToValue: () => {},
+            },
+        )
     }
     return valueOrGettablePromise(
         [
