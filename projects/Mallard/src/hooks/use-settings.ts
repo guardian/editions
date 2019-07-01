@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
     storeSetting,
@@ -7,6 +7,7 @@ import {
     UnsanitizedSetting,
     gdprSwitchSettings,
 } from 'src/helpers/settings'
+import { createProviderHook } from 'src/helpers/provider'
 
 type SettingsFromContext = [
     Settings,
@@ -16,7 +17,7 @@ type SettingsFromContext = [
 /**
  * Fetch settings stored in AsyncStorage on mount
  */
-const useStoredSettings = (): SettingsFromContext | null => {
+const useSettingsInCtx = (): SettingsFromContext | null => {
     const [settings, setSettings] = useState(null as Settings | null)
     const setSetting = (setting: keyof Settings, value: UnsanitizedSetting) => {
         setSettings(settings => {
@@ -36,26 +37,19 @@ const useStoredSettings = (): SettingsFromContext | null => {
     return settings && [settings, setSetting]
 }
 
-const SettingsContext = createContext<SettingsFromContext>(
-    {} as SettingsFromContext,
-)
-
-const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
-    const settings = useStoredSettings()
-    return (
-        // @TODO: do we need to render a loading state here, it's so quick that we probably don't?
-        settings && (
-            <SettingsContext.Provider value={settings}>
-                {children}
-            </SettingsContext.Provider>
-        )
-    )
-}
-const useSettings = (): SettingsFromContext => useContext(SettingsContext)
+const {
+    Provider: SettingsProvider,
+    useAsHook: useSettings,
+} = createProviderHook<SettingsFromContext>(useSettingsInCtx)
 
 const useGdprSwitches = () => {
     const [settings, setSetting] = useSettings()
 
+    /*
+    if a user consents to all via any UI
+    means we wanna flip their null switches
+    but respect the explicit no's
+    */
     const enableNulls = () => {
         gdprSwitchSettings.map(sw => {
             if (settings[sw] === null) {
@@ -64,13 +58,19 @@ const useGdprSwitches = () => {
         })
     }
 
-    const resetAll = () => {
+    /*
+    for our own convenience let's add
+    a quick toggle to set switches back to
+    null (which is made impossible from
+    the userland UI by design)
+    */
+    const DEVMODE_resetAll = () => {
         gdprSwitchSettings.map(sw => {
             setSetting(sw, null)
         })
     }
 
-    return { enableNulls, resetAll }
+    return { enableNulls, DEVMODE_resetAll }
 }
 
 export { SettingsProvider, useSettings, useGdprSwitches }

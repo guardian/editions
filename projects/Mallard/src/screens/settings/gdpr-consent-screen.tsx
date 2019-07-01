@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
 import { Row, Separator, Heading } from 'src/components/layout/ui/row'
-import { useSettings } from 'src/hooks/use-settings'
+import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
-import { GdprSwitchSettings, GdprSwitchSetting } from 'src/helpers/settings'
+import { GdprSwitchSetting } from 'src/helpers/settings'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -24,7 +24,7 @@ const GdprConsent = () => {
         { gdprAllowPerformance, gdprAllowTracking, isUsingProdDevtools },
         setSetting,
     ] = useSettings()
-    const { resetAll } = useGdprSwitches()
+    const { DEVMODE_resetAll } = useGdprSwitches()
     const switches: GdprSwitch[] = [
         {
             name: 'Performance (NOT IN USE)',
@@ -75,7 +75,7 @@ const GdprConsent = () => {
                         paddingVertical: metrics.vertical,
                     }}
                 >
-                    <Button onPress={resetAll}>Reset</Button>
+                    <Button onPress={DEVMODE_resetAll}>Reset</Button>
                 </View>
             ) : null}
         </View>
