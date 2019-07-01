@@ -121,9 +121,9 @@ const RootNavigator = createAppContainer(
                 const [settings] = useSettings()
                 useEffect(() => {
                     if (shouldShowOnboarding(settings)) {
-                        navigation.navigate('Onboarding')
+                        navigation.replace('Onboarding')
                     } else {
-                        navigation.navigate('App')
+                        navigation.replace('App')
                     }
                 })
                 return null
