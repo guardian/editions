@@ -10,6 +10,7 @@ import { RootNavigator } from 'src/navigation'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { FileSystemProvider } from 'src/hooks/use-fs'
 import { StyleSheet } from 'react-native'
+import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 
 useScreens()
 
@@ -29,20 +30,22 @@ export default class App extends React.Component<{}, {}> {
      */
     render() {
         return (
-            <FileSystemProvider>
-                <SettingsProvider>
-                    <StatusBar
-                        animated={true}
-                        barStyle="light-content"
-                        backgroundColor="#041f4a"
-                    />
-                    <View style={styles.appContainer}>
-                        <RootNavigator
-                            persistenceKey={navigationPersistenceKey}
+            <ErrorBoundary>
+                <FileSystemProvider>
+                    <SettingsProvider>
+                        <StatusBar
+                            animated={true}
+                            barStyle="light-content"
+                            backgroundColor="#041f4a"
                         />
-                    </View>
-                </SettingsProvider>
-            </FileSystemProvider>
+                        <View style={styles.appContainer}>
+                            <RootNavigator
+                                persistenceKey={navigationPersistenceKey}
+                            />
+                        </View>
+                    </SettingsProvider>
+                </FileSystemProvider>
+            </ErrorBoundary>
         )
     }
 }

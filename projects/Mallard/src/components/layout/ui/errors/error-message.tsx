@@ -11,7 +11,9 @@ export interface PropTypes {
 const ErrorMessage = ({ icon, title, message }: PropTypes) => (
     <>
         {!!icon && <Text style={{ fontSize: 40 }}>{icon}</Text>}
-        <UiBodyCopy weight="bold">{title}</UiBodyCopy>
+        <UiBodyCopy weight="bold" style={{ textAlign: 'center' }}>
+            {title}
+        </UiBodyCopy>
         {!!message && (
             <UiExplainerCopy style={{ textAlign: 'center' }}>
                 {message}
