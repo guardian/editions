@@ -1,10 +1,8 @@
 import React from 'react'
 import { FlatList, SafeAreaView, View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { UiBodyCopy, UiExplainerCopy } from '../styled-text'
-import { useAppAppearance } from 'src/theme/appearance'
-import { Highlight } from '../highlight'
-
+import { UiBodyCopy } from '../styled-text'
+import { Separator, TappableRow } from 'src/components/layout/list/row'
 /*
 An item is what the list uses to draw its own row –
 See https://facebook.github.io/react-native/docs/using-a-listview
@@ -34,9 +32,6 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
         marginVertical: StyleSheet.hairlineWidth,
     },
-    list: {
-        borderTopWidth: StyleSheet.hairlineWidth,
-    },
 })
 
 export const ListHeading = ({ children }: { children: string }) => (
@@ -47,50 +42,6 @@ export const ListHeading = ({ children }: { children: string }) => (
     </View>
 )
 
-const ListItem = <D extends {}>({
-    onPress,
-    item: { title, explainer, data },
-}: {
-    item: Item<D>
-    onPress: OnPressHandler<D>
-}) => {
-    const { borderColor, backgroundColor } = useAppAppearance()
-
-    return (
-        <>
-            <Highlight
-                onPress={() => {
-                    if (data) onPress(data)
-                }}
-            >
-                <View
-                    style={[
-                        styles.item,
-                        {
-                            backgroundColor,
-                        },
-                    ]}
-                >
-                    <UiBodyCopy>{title}</UiBodyCopy>
-                    {explainer && (
-                        <UiExplainerCopy
-                            style={{ marginTop: metrics.vertical / 8 }}
-                        >
-                            {explainer}
-                        </UiExplainerCopy>
-                    )}
-                </View>
-            </Highlight>
-            <View
-                style={{
-                    height: StyleSheet.hairlineWidth,
-                    backgroundColor: borderColor,
-                }}
-            />
-        </>
-    )
-}
-
 export const List = <D extends {}>({
     data,
     onPress,
@@ -98,18 +49,19 @@ export const List = <D extends {}>({
     data: Item<D>[]
     onPress: OnPressHandler<D>
 }) => {
-    const { borderColor } = useAppAppearance()
     return (
         <FlatList
-            style={[
-                styles.list,
-                {
-                    borderColor,
-                },
-            ]}
+            ItemSeparatorComponent={Separator}
+            ListFooterComponent={Separator}
+            ListHeaderComponent={Separator}
             data={data}
             renderItem={({ item }) => (
-                <ListItem onPress={onPress} item={item} />
+                <TappableRow
+                    onPress={() => {
+                        if (item.data) onPress(item.data)
+                    }}
+                    {...item}
+                ></TappableRow>
             )}
         />
     )
