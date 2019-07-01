@@ -24,32 +24,29 @@ const styles = StyleSheet.create({
     },
 })
 
-const ThreeWaySwitch = ({
+const ThreeWaySwitch = ({ value }: { value: ThreeWaySwitchValue }) => {
+    return (
+        <View style={styles.edge}>
+            <Text style={[styles.side, value === true && styles.selectedSide]}>
+                Yes
+            </Text>
+            <Text style={[styles.side, value === false && styles.selectedSide]}>
+                No
+            </Text>
+        </View>
+    )
+}
+
+const TouchableThreeWaySwitch = ({
     value,
     onValueChange,
 }: {
     value: ThreeWaySwitchValue
-    onValueChange: () => void
-}) => {
-    return (
-        <TouchableOpacity onPress={onValueChange}>
-            <View style={styles.edge}>
-                <Text
-                    style={[styles.side, value === true && styles.selectedSide]}
-                >
-                    Yes
-                </Text>
-                <Text
-                    style={[
-                        styles.side,
-                        value === false && styles.selectedSide,
-                    ]}
-                >
-                    No
-                </Text>
-            </View>
-        </TouchableOpacity>
-    )
-}
+    onValueChange?: () => void
+}) => (
+    <TouchableOpacity onPress={onValueChange}>
+        <ThreeWaySwitch value={value} />
+    </TouchableOpacity>
+)
 
-export { ThreeWaySwitch }
+export { ThreeWaySwitch, TouchableThreeWaySwitch }
