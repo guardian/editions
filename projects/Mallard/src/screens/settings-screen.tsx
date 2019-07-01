@@ -17,7 +17,7 @@ import { clearLocalCache } from 'src/hooks/use-fetch'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
-import { GdprConsent } from './settings/gdpr-consent'
+import { GdprConsent } from './settings/gdpr-consent-screen'
 import { Heading } from 'src/components/layout/list/row'
 
 const styles = StyleSheet.create({
@@ -81,6 +81,15 @@ const SettingsScreen = ({
                                 data: {
                                     onPress: () => {
                                         navigation.navigate('Downloads')
+                                    },
+                                },
+                            },
+                            {
+                                key: 'Consent settings',
+                                title: 'Consent settings',
+                                data: {
+                                    onPress: () => {
+                                        navigation.navigate('GdprConsent')
                                     },
                                 },
                             },

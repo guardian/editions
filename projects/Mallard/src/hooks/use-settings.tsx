@@ -1,12 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-import {
-    getSetting,
-    storeSetting,
-    Settings,
-    defaultSettings,
-    getAllSettings,
-} from 'src/helpers/settings'
+import { storeSetting, Settings, getAllSettings } from 'src/helpers/settings'
 
 type SettingsFromContext = [
     Settings,

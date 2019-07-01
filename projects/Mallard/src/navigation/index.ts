@@ -14,11 +14,11 @@ import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import { OnboardingHandler } from 'src/onboarding'
+import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps, withPersistenceKey } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { issueToArticleScreenInterpolator } from './interpolators'
-
 const AppStack = createStackNavigator(
     {
         Main: createStackNavigator(
@@ -28,6 +28,7 @@ const AppStack = createStackNavigator(
                 Downloads: DownloadScreen,
                 Settings: SettingsScreen,
                 Endpoints: ApiScreen,
+                GdprConsent: GdprConsentScreen,
             },
             {
                 defaultNavigationOptions: {

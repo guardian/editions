@@ -1,8 +1,12 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet, ScrollView, Switch, FlatList } from 'react-native'
 import { Row, Separator, Heading } from 'src/components/layout/list/row'
-import { Switch, FlatList } from 'react-native-gesture-handler'
 import { useSettings } from 'src/hooks/use-settings'
+import { container } from 'src/theme/styles'
+
+const styles = StyleSheet.create({
+    container,
+})
 
 interface GdprSwitch {
     name: string
@@ -53,4 +57,10 @@ const GdprConsent = () => {
     )
 }
 
-export { GdprConsent }
+const GdprConsentScreen = () => (
+    <ScrollView style={styles.container}>
+        <GdprConsent></GdprConsent>
+    </ScrollView>
+)
+
+export { GdprConsent, GdprConsentScreen }
