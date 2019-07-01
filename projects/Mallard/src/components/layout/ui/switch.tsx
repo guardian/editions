@@ -9,17 +9,17 @@ export type ThreeWaySwitchValue = null | boolean
 const styles = StyleSheet.create({
     edge: {
         borderWidth: StyleSheet.hairlineWidth,
-        borderColor: color.primary,
+        borderColor: color.ui.shark,
         flexDirection: 'row',
         borderRadius: 2,
     },
     side: {
-        color: color.primary,
+        color: color.ui.shark,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 2,
     },
     selectedSide: {
-        backgroundColor: color.primary,
+        backgroundColor: color.ui.shark,
         color: color.textOverPrimary,
     },
 })

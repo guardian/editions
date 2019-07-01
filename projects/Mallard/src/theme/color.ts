@@ -48,6 +48,7 @@ export const color = {
     ui: {
         tomato: palette.news.bright,
         apricot: palette.opinion.bright,
+        shark: palette.sport.main,
     },
 
     /*
