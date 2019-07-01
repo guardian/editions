@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    itemFlexerShrinker: { flexShrink: 1 },
 })
 
 const Heading = ({ children }: { children: string }) => (
@@ -78,7 +79,7 @@ const Row = ({ proxy, ...contents }: RowProps) => {
         >
             {proxy ? (
                 <View style={styles.itemFlexer}>
-                    <View>
+                    <View style={styles.itemFlexerShrinker}>
                         <RowContents {...contents} />
                     </View>
                     {proxy}
