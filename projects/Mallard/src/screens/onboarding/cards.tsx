@@ -45,13 +45,13 @@ const OnboardingConsent = ({
             <OnboardingCard
                 style={styles.card}
                 title="We care about your privacy"
-                subtitle="And thats why the large button gives us all your data"
+                subtitle="We won’t share your data without asking"
             >
-                {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
+                {`(temporary copy) By clicking agree you are agreeing to The Guardian’s privacy policy and data usage`}
             </OnboardingCard>
             <View style={styles.sbs}>
                 <Button onPress={onOpenGdprConsent}>Customize</Button>
-                <Button onPress={onContinue}>Start</Button>
+                <Button onPress={onContinue}>Agree</Button>
             </View>
         </>
     )

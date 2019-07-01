@@ -27,7 +27,6 @@ const Frame = ({ children }: { children: ReactNode }) => (
 )
 
 const OnboardingIntroScreen = ({ onContinue }: { onContinue: () => void }) => {
-    const [, setSetting] = useSettings()
     return (
         <Frame>
             <OnboardingIntro

@@ -77,6 +77,7 @@ const GdprConsent = () => {
                 ListFooterComponent={Separator}
                 ListHeaderComponent={Separator}
                 data={switches}
+                keyExtractor={item => item.description + item.name}
                 renderItem={({ item }) => (
                     <Row
                         title={item.name}
