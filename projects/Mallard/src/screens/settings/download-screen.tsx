@@ -15,7 +15,7 @@ import {
     getJson,
 } from 'src/helpers/files'
 import { FSPaths } from 'src/paths'
-import { Heading } from 'src/components/layout/list/row'
+import { Heading } from 'src/components/layout/ui/row'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (

@@ -1,47 +1,70 @@
 import React from 'react'
-import { View, StyleSheet, ScrollView, Switch, FlatList } from 'react-native'
-import { Row, Separator, Heading } from 'src/components/layout/list/row'
+import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
+import { Row, Separator, Heading } from 'src/components/layout/ui/row'
 import { useSettings } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
-import { GdprSwitchSettings } from 'src/helpers/settings'
+import { GdprSwitchSettings, GdprSwitchSetting } from 'src/helpers/settings'
+import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
+import { Button } from 'src/components/button/button'
+import { metrics } from 'src/theme/spacing'
 
 const styles = StyleSheet.create({
     container,
 })
 
 const gdprRelatedSwitches: (keyof GdprSwitchSettings)[] = [
-    'gdprAllowGoogleAnalytics',
+    'gdprAllowPerformance',
+    'gdprAllowTracking',
 ]
 
 interface GdprSwitch {
     name: string
     description: string
-    value: boolean
+    value: GdprSwitchSetting
     setter: (value: boolean) => void
 }
 
 export const useGdprSwitches = () => {
-    const [, setSetting] = useSettings()
+    const [settings, setSetting] = useSettings()
 
-    const enableEverything = () => {
+    const enableNulls = () => {
         gdprRelatedSwitches.map(sw => {
-            setSetting(sw, true)
+            if (settings[sw] === null) {
+                setSetting(sw, true)
+            }
         })
     }
 
-    return { enableEverything }
+    const resetAll = () => {
+        gdprRelatedSwitches.map(sw => {
+            setSetting(sw, null)
+        })
+    }
+
+    return { enableNulls, resetAll }
 }
 
 const GdprConsent = () => {
-    const [{ gdprAllowGoogleAnalytics }, setSetting] = useSettings()
-
+    const [
+        { gdprAllowPerformance, gdprAllowTracking, isUsingProdDevtools },
+        setSetting,
+    ] = useSettings()
+    const { resetAll } = useGdprSwitches()
     const switches: GdprSwitch[] = [
         {
-            name: 'Google Analytics (NOT IN USE)',
+            name: 'Performance (NOT IN USE)',
             description: 'Basic tracking used to give you a better experience',
-            value: gdprAllowGoogleAnalytics,
+            value: gdprAllowPerformance,
             setter: value => {
-                setSetting('gdprAllowGoogleAnalytics', value)
+                setSetting('gdprAllowPerformance', value)
+            },
+        },
+        {
+            name: 'Tracking (NOT IN USE)',
+            description: 'Basic tracking used to give you a better experience',
+            value: gdprAllowTracking,
+            setter: value => {
+                setSetting('gdprAllowTracking', value)
             },
         },
     ]
@@ -59,7 +82,7 @@ const GdprConsent = () => {
                         title={item.name}
                         explainer={item.description}
                         proxy={
-                            <Switch
+                            <ThreeWaySwitch
                                 value={item.value}
                                 onValueChange={() => {
                                     item.setter(!item.value)
@@ -69,6 +92,16 @@ const GdprConsent = () => {
                     ></Row>
                 )}
             />
+            {isUsingProdDevtools ? (
+                <View
+                    style={{
+                        padding: metrics.horizontal,
+                        paddingVertical: metrics.vertical,
+                    }}
+                >
+                    <Button onPress={resetAll}>Reset</Button>
+                </View>
+            ) : null}
         </View>
     )
 }

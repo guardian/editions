@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { OnboardingCard } from 'src/components/onboarding/onboarding-card'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
     card: {
         width: '100%',
         marginBottom: metrics.horizontal * 2,
+    },
+    sbs: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
     },
 })
 
@@ -35,10 +40,6 @@ const OnboardingConsent = ({
     onOpenGdprConsent: () => void
     onContinue: () => void
 }) => {
-    const { enableEverything } = useGdprSwitches()
-    useEffect(() => {
-        enableEverything()
-    }, [])
     return (
         <>
             <OnboardingCard
@@ -48,8 +49,10 @@ const OnboardingConsent = ({
             >
                 {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
             </OnboardingCard>
-            <Button onPress={onOpenGdprConsent}>Customize</Button>
-            <Button onPress={onContinue}>Start</Button>
+            <View style={styles.sbs}>
+                <Button onPress={onOpenGdprConsent}>Customize</Button>
+                <Button onPress={onContinue}>Start</Button>
+            </View>
         </>
     )
 }

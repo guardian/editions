@@ -10,7 +10,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { backends, defaultSettings } from 'src/helpers/settings'
-import { Heading } from 'src/components/layout/list/row'
+import { Heading } from 'src/components/layout/ui/row'
 
 const styles = StyleSheet.create({
     container,

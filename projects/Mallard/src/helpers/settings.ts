@@ -1,7 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage'
 
+// Consent switches can be 'unset' or null
+export type GdprSwitchSetting = null | boolean
 export interface GdprSwitchSettings {
-    gdprAllowGoogleAnalytics: boolean
+    gdprAllowPerformance: GdprSwitchSetting
+    gdprAllowTracking: GdprSwitchSetting
 }
 export interface Settings extends GdprSwitchSettings {
     apiUrl: string
@@ -47,7 +50,8 @@ export const defaultSettings: Settings = {
     apiUrl: backends[0].value,
     isUsingProdDevtools: false,
     hasOnboarded: false,
-    gdprAllowGoogleAnalytics: false,
+    gdprAllowPerformance: null,
+    gdprAllowTracking: null,
 }
 
 /*

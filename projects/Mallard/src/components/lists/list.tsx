@@ -1,7 +1,6 @@
 import React from 'react'
-import { FlatList, StyleSheet } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { Separator, TappableRow } from 'src/components/layout/list/row'
+import { FlatList } from 'react-native'
+import { Separator, TappableRow } from 'src/components/layout/ui/row'
 /*
 An item is what the list uses to draw its own row –
 See https://facebook.github.io/react-native/docs/using-a-listview

@@ -17,8 +17,7 @@ import { clearLocalCache } from 'src/hooks/use-fetch'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
-import { GdprConsent } from './settings/gdpr-consent-screen'
-import { Heading } from 'src/components/layout/list/row'
+import { Heading } from 'src/components/layout/ui/row'
 
 const styles = StyleSheet.create({
     container,
@@ -46,7 +45,6 @@ const SettingsScreen = ({
             <MonoTextBlock>
                 {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
-            <GdprConsent />
             {!isUsingProdDevtools ? (
                 <>
                     <View style={{ height: Dimensions.get('window').height }} />
@@ -141,9 +139,7 @@ const SettingsScreen = ({
                                     onPress: () => {
                                         // go back to the main to simulate a fresh app
                                         setSetting('hasOnboarded', false)
-                                        navigation.navigate(
-                                            'OnboardingSwitcher',
-                                        )
+                                        navigation.navigate('Onboarding')
                                     },
                                 },
                             },

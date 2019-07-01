@@ -37,7 +37,9 @@ export default class App extends React.Component<{}, {}> {
                         backgroundColor="#041f4a"
                     />
                     <View style={styles.appContainer}>
-                        <RootNavigator persistenceKey={null} />
+                        <RootNavigator
+                            persistenceKey={navigationPersistenceKey}
+                        />
                     </View>
                 </SettingsProvider>
             </FileSystemProvider>

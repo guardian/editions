@@ -27,7 +27,7 @@ import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { Heading } from 'src/components/layout/list/row'
+import { Heading } from 'src/components/layout/ui/row'
 
 const demoIssues: Issue[] = [
     {
