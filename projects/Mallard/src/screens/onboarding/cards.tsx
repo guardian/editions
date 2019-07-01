@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { OnboardingCard } from 'src/components/onboarding/onboarding-card'
 import { Button } from 'src/components/button/button'
@@ -40,6 +40,7 @@ const OnboardingConsent = ({
     onOpenGdprConsent: () => void
     onContinue: () => void
 }) => {
+    const { enableNulls } = useGdprSwitches()
     return (
         <>
             <OnboardingCard
@@ -51,7 +52,14 @@ const OnboardingConsent = ({
             </OnboardingCard>
             <View style={styles.sbs}>
                 <Button onPress={onOpenGdprConsent}>Customize</Button>
-                <Button onPress={onContinue}>Agree</Button>
+                <Button
+                    onPress={() => {
+                        enableNulls()
+                        onContinue()
+                    }}
+                >
+                    Agree
+                </Button>
             </View>
         </>
     )
