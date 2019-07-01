@@ -15,7 +15,7 @@ import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-messag
 import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useIssue } from 'src/hooks/use-issue'
-import { withResponse } from 'src/hooks/use-response'
+import { withResponse } from 'src/helpers/response'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
 import { FSPaths, APIPaths } from 'src/paths'

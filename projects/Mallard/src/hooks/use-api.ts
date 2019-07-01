@@ -1,4 +1,4 @@
-import { usePromiseAsResponse } from './use-response'
+import { useInstantPromise } from './use-instant-promise'
 import { fetchFromApi, ValidatorFn } from 'src/helpers/fetch'
 
 export const useApiEndpoint = <T>(
@@ -10,4 +10,4 @@ export const useApiEndpoint = <T>(
         validator?: ValidatorFn<T>
         cached?: boolean
     } = {},
-) => usePromiseAsResponse(fetchFromApi(endpointPath, { validator, cached }))
+) => useInstantPromise(fetchFromApi(endpointPath, { validator, cached }))

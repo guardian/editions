@@ -8,7 +8,8 @@ import { InstantPromise, instantPromise } from './fetch/instant-promise'
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
 
-export type ValidatorFn<T> = (response: any | T) => boolean
+export type ValidatorFn<T> = (response: unknown | T) => boolean
+
 const fetchFromApiSlow = async <T>(
     path: string,
     {

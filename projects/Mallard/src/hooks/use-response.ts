@@ -1,15 +1,40 @@
-import { ReactElement, useEffect, useState } from 'react'
-import {
-    InstantPromise,
-    isSlowPromise,
-} from 'src/helpers/fetch/instant-promise'
+import { useState, useEffect } from 'react'
+
+/*
+you can use response to store an async value
+and update it for success/error scenarios.
+
+You will probably wanna wrap your response in
+something more abstract because this has a lot of
+nitty gritty implementation details
+
+This maps beautifully to promises, and even
+more beautifully to instant promises. you
+can use 'useInstantPromise' to wrap those
+
+Calling useResponse gives you two sets of stuff,
+the first one is the response you pass down to
+your consumer and the second one is your API to
+update the response. Ej:
+
+```js
+const [response, {onSuccess, onError}] = useResponse()
+
+useEffect(()=>{
+    Promise().then(onSuccess).catch(onError)
+})
+```
+(If you call useResponse with an initial value it'll
+already be resolved)
+
+*/
 
 export interface Error {
     message: string
     name?: string
 }
 
-type PureResponse<T> =
+type Response<T> =
     | {
           state: 'pending'
       }
@@ -22,20 +47,16 @@ type PureResponse<T> =
           response: T
       }
 
-export type Response<T> = PureResponse<T> & {
-    retry: () => void
-}
-
 export interface ResponseHookCallbacks<T> {
     onSuccess: (res: T) => void
     onError: (error: Error) => void
+    onPending: () => void
 }
 
-export const useResponse = <T>(
+const useResponse = <T>(
     initial: T | null,
-    { onRequestRetry }: { onRequestRetry: () => void },
 ): [Response<T>, ResponseHookCallbacks<T>] => {
-    const [response, setResponse] = useState<PureResponse<T>>(
+    const [response, setResponse] = useState<Response<T>>(
         initial
             ? {
                   state: 'success',
@@ -52,78 +73,62 @@ export const useResponse = <T>(
     const onError = (error: Error) => {
         setResponse({ state: 'error', error })
     }
-    const retry = () => {
+    const onPending = () => {
         setResponse({ state: 'pending' })
-        onRequestRetry()
     }
-
     return [
-        {
-            ...response,
-            retry,
-        },
+        response,
         {
             onSuccess,
             onError,
+            onPending,
         },
     ]
 }
 
-interface WithResponseCallbacks {
+/*
+A response can be 'fetchable'. This type of
+response controls how the data gets into it
+and thanks to this it can be retryable.
+
+useInstantPromise uses this behind the scenes
+so it might be the best living example. It works
+a bit like this:
+
+```
+const fetchValue = ({onSuccess, onError}) => {
+    Promise().then(onSuccess).catch(onError)
+}
+const response = useFetchableResponse<T>(
+    null,
+    (isInitial, {onSuccess, onError}) => fetchValue({onSuccess, onError}),
+)
+```
+*/
+
+export type FetchableResponse<T> = Response<T> & {
     retry: () => void
 }
 
-export const withResponse = <T>(response: Response<T>) => ({
-    success,
-    pending,
-    error,
-}: {
-    success: (resp: T, callbacks: WithResponseCallbacks) => ReactElement
-    pending: (callbacks: WithResponseCallbacks) => ReactElement
-    error: (error: Error, callbacks: WithResponseCallbacks) => ReactElement
-}): ReactElement => {
-    switch (response.state) {
-        case 'success':
-            return success(response.response, { retry: response.retry })
-        case 'error':
-            return error(response.error, { retry: response.retry })
-        case 'pending':
-            return pending({ retry: response.retry })
+const useFetchableResponse = <T>(
+    initial: T | null,
+    fetcher: (isInitial: boolean, callbacks: ResponseHookCallbacks<T>) => void,
+): FetchableResponse<T> => {
+    const [response, responseHookCallbacks] = useResponse(initial)
+
+    const retry = () => {
+        responseHookCallbacks.onPending()
+        fetcher(true, responseHookCallbacks)
+    }
+
+    useEffect(() => {
+        fetcher(false, responseHookCallbacks)
+    }, [])
+
+    return {
+        ...response,
+        retry,
     }
 }
 
-const promiseAsResponseEffect = <T>(
-    promise: InstantPromise<T>,
-    { onSuccess, onError }: ResponseHookCallbacks<T>,
-) => {
-    promise
-        .getValue()
-        .then(data => {
-            onSuccess(data)
-        })
-        .catch((err: Error) => {
-            /*
-            TODO: response should handle
-            the error + stale data case
-            */
-            onError(err)
-        })
-}
-
-export const usePromiseAsResponse = <T>(
-    promise: InstantPromise<T>,
-): Response<T> => {
-    const [response, callbacks] = useResponse<T>(
-        isSlowPromise<T>(promise) ? null : promise.value,
-        {
-            onRequestRetry: () => promiseAsResponseEffect(promise, callbacks),
-        },
-    )
-    useEffect(() => {
-        if (isSlowPromise(promise)) {
-            promiseAsResponseEffect(promise, callbacks)
-        }
-    }, [])
-
-    return response
-}
+export { useFetchableResponse, useResponse }
