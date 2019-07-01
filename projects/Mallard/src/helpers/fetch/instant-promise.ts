@@ -14,7 +14,7 @@ fire the promise inside the hook code (we need to wrap that
 behavior in a useEffect).
 This prevents infinite loops from firing off
 
-Without a ValueOrGettablePromise:
+Without a InstantPromise:
 const useData = (promise) => {
     const [result, setResult] = useState(null) :(
     useEffect(()=>{
@@ -23,20 +23,21 @@ const useData = (promise) => {
     return result;
 }
 
-With a ValueOrGettablePromise:
-const useData = (vorgp) => {
-    const initialState = isPromise(vorgp) ? null : vorgp.value;
+With a InstantPromise:
+const useData = (instantPromise) => {
+    const initialState = isPromise(instantPromise) ? null : instantPromise.value;
     const [result, setResult] = useState(initialState) :D
     useEffect(()=>{
-        if(isGettablePromise(vorgp)){
-            vorgp.getValue().then(val => {setResult(val)})
+        //or call it again?
+        if(isSlowPromise(instantPromise)){
+            instantPromise.getValue().then(val => {setResult(val)})
         }
     },[])
     return result;
 }
 */
 
-interface GettablePromise<T> {
+interface SlowPromise<T> {
     type: 'promise'
     getValue: () => Promise<T>
 }
@@ -47,18 +48,18 @@ interface Value<T> {
     getValue: () => Promise<T>
 }
 
-export type ValueOrGettablePromise<T> = Value<T> | GettablePromise<T>
+export type InstantPromise<T> = Value<T> | SlowPromise<T>
 
-const isGettablePromise = <T>(
-    vorgp: ValueOrGettablePromise<T>,
-): vorgp is GettablePromise<T> => vorgp.type === 'promise'
+const isSlowPromise = <T>(
+    instantPromise: InstantPromise<T>,
+): instantPromise is SlowPromise<T> => instantPromise.type === 'promise'
 
-const valueOrGettablePromise = <T>(
+const instantPromise = <T>(
     [value, promiseGetter]: [T | null | undefined, () => Promise<T>],
     {
         savePromiseResultToValue,
     }: { savePromiseResultToValue: (result: T) => void },
-): ValueOrGettablePromise<T> => {
+): InstantPromise<T> => {
     const getValue = async () => {
         const val = await promiseGetter()
         savePromiseResultToValue(val)
@@ -77,4 +78,4 @@ const valueOrGettablePromise = <T>(
     }
 }
 
-export { isGettablePromise, valueOrGettablePromise }
+export { isSlowPromise, instantPromise }

@@ -1,9 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react'
-import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
 import {
-    ValueOrGettablePromise,
-    isGettablePromise,
-} from 'src/helpers/fetch/value-or-gettable-promise'
+    InstantPromise,
+    isSlowPromise,
+} from 'src/helpers/fetch/instant-promise'
 
 export interface Error {
     message: string
@@ -94,7 +93,7 @@ export const withResponse = <T>(response: Response<T>) => ({
 }
 
 const promiseAsResponseEffect = <T>(
-    promise: ValueOrGettablePromise<T>,
+    promise: InstantPromise<T>,
     { onSuccess, onError }: ResponseHookCallbacks<T>,
 ) => {
     promise
@@ -112,16 +111,16 @@ const promiseAsResponseEffect = <T>(
 }
 
 export const usePromiseAsResponse = <T>(
-    promise: ValueOrGettablePromise<T>,
+    promise: InstantPromise<T>,
 ): Response<T> => {
     const [response, callbacks] = useResponse<T>(
-        isGettablePromise<T>(promise) ? null : promise.value,
+        isSlowPromise<T>(promise) ? null : promise.value,
         {
             onRequestRetry: () => promiseAsResponseEffect(promise, callbacks),
         },
     )
     useEffect(() => {
-        if (isGettablePromise(promise)) {
+        if (isSlowPromise(promise)) {
             promiseAsResponseEffect(promise, callbacks)
         }
     }, [])
