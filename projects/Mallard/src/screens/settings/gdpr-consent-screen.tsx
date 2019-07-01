@@ -8,7 +8,7 @@ import {
 } from 'src/components/layout/ui/row'
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
-import { GdprSwitchSettings, GdprSwitchSetting } from 'src/helpers/settings'
+import { GdprSwitchSettings } from 'src/helpers/settings'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Button } from 'src/components/button/button'
 
