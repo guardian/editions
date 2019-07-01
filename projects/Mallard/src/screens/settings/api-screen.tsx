@@ -9,7 +9,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { TextInput } from 'react-native-gesture-handler'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { backends, defaultSettings } from 'src/helpers/settings'
+import { backends, defaultSettings } from 'src/helpers/settings/defaults'
 import { Heading } from 'src/components/layout/ui/row'
 
 const styles = StyleSheet.create({

@@ -1,22 +1,33 @@
 import AsyncStorage from '@react-native-community/async-storage'
+import { defaultSettings } from './settings/defaults'
 
-// Consent switches can be 'unset' or null
+/*
+Consent switches can be 'unset' or null
+*/
 export type GdprSwitchSetting = null | boolean
 export interface GdprSwitchSettings {
     gdprAllowPerformance: GdprSwitchSetting
     gdprAllowTracking: GdprSwitchSetting
 }
-export interface Settings extends GdprSwitchSettings {
+interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
+}
+
+interface UserSettings {
     hasOnboarded: boolean
 }
+
+export interface Settings
+    extends GdprSwitchSettings,
+        UserSettings,
+        DevSettings {}
 
 /*
 we can only store strings to memory
 so we need to convert them
 */
-type UnsanitizedSetting = Settings[keyof Settings]
+export type UnsanitizedSetting = Settings[keyof Settings]
 const sanitize = (value: UnsanitizedSetting): string => {
     if (typeof value !== 'string') {
         return JSON.stringify(value)
@@ -29,29 +40,6 @@ const unsanitize = (value: string): UnsanitizedSetting => {
     } catch {
         return value
     }
-}
-
-/*
-Default settings.
-This is a bit of a mess
-*/
-export const backends = [
-    {
-        title: 'PROD',
-        value: 'https://d2cf1ljtg904cv.cloudfront.net/',
-    },
-    {
-        title: 'CODE',
-        value: 'https://d2mztzjulnpyb8.cloudfront.net/',
-    },
-]
-
-export const defaultSettings: Settings = {
-    apiUrl: backends[0].value,
-    isUsingProdDevtools: false,
-    hasOnboarded: false,
-    gdprAllowPerformance: null,
-    gdprAllowTracking: null,
 }
 
 /*
@@ -83,7 +71,7 @@ export const getAllSettings = async (): Promise<Settings> => {
 
 export const storeSetting = (
     setting: keyof Settings,
-    value: string | boolean,
+    value: UnsanitizedSetting,
 ) => {
     return AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
 }

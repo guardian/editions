@@ -1,10 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-import { storeSetting, Settings, getAllSettings } from 'src/helpers/settings'
+import {
+    storeSetting,
+    Settings,
+    getAllSettings,
+    UnsanitizedSetting,
+} from 'src/helpers/settings'
 
 type SettingsFromContext = [
     Settings,
-    (setting: keyof Settings, value: Settings[keyof Settings]) => void,
+    (setting: keyof Settings, value: UnsanitizedSetting) => void,
 ]
 
 /**
@@ -12,7 +17,7 @@ type SettingsFromContext = [
  */
 const useStoredSettings = (): SettingsFromContext | null => {
     const [settings, setSettings] = useState(null as Settings | null)
-    const setSetting = (setting: keyof Settings, value: string | boolean) => {
+    const setSetting = (setting: keyof Settings, value: UnsanitizedSetting) => {
         setSettings(settings => {
             if (!settings) {
                 console.warn(
