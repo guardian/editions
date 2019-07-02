@@ -17,22 +17,9 @@ b) animations in react in general are always a
 */
 
 export type ScreenPosition = LayoutRectangle
-export interface NavigationPosition {
-    position: Animated.AnimatedInterpolation
-    raw: {
-        position: Animated.Value
-        index: number
-    }
-}
-
-type SaveableNavigationPositions = 'article'
 
 const positions: {
     [key: string]: ScreenPosition
-} = {}
-
-const interpolators: {
-    [key in SaveableNavigationPositions]?: NavigationPosition
 } = {}
 
 const setScreenPositionOfItem = (
@@ -52,6 +39,27 @@ const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
         height,
     }
 }
+
+/*
+This stores the Animated.Value the navigation
+interpolator uses between screens and allow
+the screens involved to retrieve it.
+
+Hacky? yes. Works? yes
+*/
+export interface NavigationPosition {
+    position: Animated.AnimatedInterpolation
+    raw: {
+        position: Animated.Value
+        index: number
+    }
+}
+
+type SaveableNavigationPositions = 'article'
+
+const interpolators: {
+    [key in SaveableNavigationPositions]?: NavigationPosition
+} = {}
 
 const setNavigationPosition = (
     key: SaveableNavigationPositions,
