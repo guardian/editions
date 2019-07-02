@@ -113,7 +113,6 @@ const Article = ({
             <Standfirst
                 {...{ byline, standfirst }}
                 style={[
-                    { backgroundColor: color.background, flex: 1 },
                     navigationPosition && {
                         opacity: navigationPosition.position.interpolate({
                             inputRange: [0.6, 1],
