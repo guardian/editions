@@ -1,6 +1,9 @@
 import { NavigationTransitionProps } from 'react-navigation'
 import { Dimensions, LayoutRectangle } from 'react-native'
-import { getScreenPositionOfItem } from 'src/helpers/positions'
+import {
+    getScreenPositionOfItem,
+    setNavigationPosition,
+} from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
 
 export const getScaleForArticle = (width: LayoutRectangle['width']) => {
@@ -10,6 +13,8 @@ export const getScaleForArticle = (width: LayoutRectangle['width']) => {
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+
+    setNavigationPosition('article', [position, sceneIndex])
 
     const scale = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
@@ -60,8 +65,8 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     and its card so it's a bit less jarring
     */
     const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.8, sceneIndex],
-        outputRange: [0, 0.9, 1],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.95, sceneIndex],
+        outputRange: [0, 0.95, 1],
     })
 
     /*

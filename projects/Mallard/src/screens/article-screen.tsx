@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import { useIssue } from 'src/hooks/use-issue'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
-import {
-    WithArticleAppearance,
-    ArticleAppearance,
-    articleAppearances,
-} from 'src/theme/appearance'
+import { WithArticleAppearance, articleAppearances } from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
-import { CAPIArticle, Collection, Front } from 'src/common'
-import { Dimensions } from 'react-native'
+import { CAPIArticle, Collection, Front, ColorFromPalette } from 'src/common'
+import { Dimensions, Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
@@ -22,6 +18,7 @@ import { flattenCollections } from 'src/helpers/transform'
 import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
 import { withResponse } from 'src/helpers/response'
+import { getNavigationPosition } from 'src/helpers/positions'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -93,8 +90,20 @@ const ArticleScreenWithProps = ({
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
+    const navigationPosition = getNavigationPosition('article')
+    const position = navigationPosition
+        ? navigationPosition.position.interpolate({
+              inputRange: [
+                  navigationPosition.index,
+                  navigationPosition.index + 1,
+              ],
+              outputRange: [0, 1],
+          })
+        : undefined
+
     return (
         <ClipFromTop
+            easing={position}
             from={
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
@@ -155,11 +164,12 @@ const ArticleScreenWithProps = ({
                             ) : null}
                             <WithArticleAppearance
                                 value={
-                                    appearances[appearance] as ArticleAppearance
+                                    appearances[appearance] as ColorFromPalette
                                 }
                             >
                                 <ArticleController
                                     article={article}
+                                    transitionPosition={position}
                                     viewIsTransitioning={viewIsTransitioning}
                                 />
                             </WithArticleAppearance>

@@ -1,13 +1,13 @@
-import { LayoutRectangle, Dimensions } from 'react-native'
+import { LayoutRectangle, Dimensions, Animated } from 'react-native'
 import { Article } from 'src/common'
 
 /*
-This stores the screen positions of all items so 
+This stores the screen positions of all items so
 that when you try to go and open them the transitioner
 knows where to place the screen.
 
 Ideally we'd use state for something like this but
-a) it's unclear how to retrieve react state 
+a) it's unclear how to retrieve react state
    from navigation/index :(
 b) animations in react in general are always a
    bunch of imperative escape hatches put together
@@ -17,9 +17,19 @@ b) animations in react in general are always a
 */
 
 export type ScreenPosition = LayoutRectangle
+interface NavigationPosition {
+    position: Animated.Value
+    index: number
+}
+
+type SaveableNavigationPositions = 'article'
 
 const positions: {
     [key: string]: ScreenPosition
+} = {}
+
+const interpolators: {
+    [key in SaveableNavigationPositions]?: NavigationPosition
 } = {}
 
 const setScreenPositionOfItem = (
@@ -40,4 +50,19 @@ const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
     }
 }
 
-export { getScreenPositionOfItem, setScreenPositionOfItem }
+const setNavigationPosition = (
+    key: SaveableNavigationPositions,
+    [position, index]: [Animated.Value, number],
+) => {
+    interpolators[key] = { position, index }
+}
+const getNavigationPosition = (
+    key: SaveableNavigationPositions,
+): NavigationPosition | undefined => interpolators[key]
+
+export {
+    getScreenPositionOfItem,
+    setScreenPositionOfItem,
+    setNavigationPosition,
+    getNavigationPosition,
+}
