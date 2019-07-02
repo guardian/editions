@@ -1,7 +1,15 @@
 import { s3fetch } from './s3'
 import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { Front, Collection, CAPIArticle, Card, Crossword } from './common'
+import {
+    Front,
+    Collection,
+    CAPIArticle,
+    Card,
+    Crossword,
+    ColorFromPalette,
+    WithColor,
+} from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -143,6 +151,26 @@ const getDisplayName = (front: string) => {
     return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
+const getFrontColor = (front: string): WithColor => {
+    switch (front.split('/').pop() || front) {
+        case 'topstories':
+            return { color: 'neutral' }
+        case 'news':
+        case 'new':
+            return { color: 'news' }
+        case 'opinion':
+        case 'journal':
+            return { color: 'opinion' }
+        case 'sport':
+            return { color: 'sport' }
+        case 'life':
+        case 'review':
+        case 'food':
+            return { color: 'lifestyle' }
+    }
+    return { color: 'neutral' }
+}
+
 export const getFront = async (
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
@@ -152,11 +180,12 @@ export const getFront = async (
     lastModifiedUpdater(resp.lastModified)
     //But ALEX, won't this always be now, as the fronts config will change regularly?
     //Yes. We don't intend to read it from here forever. Comment out as needed.
-
+    const tone = getFrontColor(id)
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
     if (!(id in config.fronts)) throw new Error('Front not found')
     const front = {
         ...config.fronts[id],
+        ...tone,
         displayName: getDisplayName(id),
         collections: (await Promise.all(
             config.fronts[id].collections.map(id =>

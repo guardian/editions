@@ -2,6 +2,24 @@ interface WithKey {
     key: string
 }
 
+export type ColorFromPalette =
+    | 'news'
+    | 'opinion'
+    | 'sport'
+    | 'culture'
+    | 'lifestyle'
+    | 'neutral'
+
+interface WithCustomColor {
+    color: 'custom'
+    customColor: string
+}
+interface WithPillar {
+    color: ColorFromPalette
+}
+
+export type WithColor = WithCustomColor | WithPillar
+
 export interface Card {
     layout: null
     articles: { [key: string]: CAPIArticle }
@@ -56,22 +74,23 @@ export interface Collection extends WithKey {
     preview?: true
 }
 
-export interface Front extends WithKey {
-    collections: Collection[]
-    displayName?: string
-    canonical?: string
-    group?: string
-    isHidden?: boolean
-    isImageDisplayed?: boolean
-    imageHeight?: number
-    imageWidth?: number
-    imageUrl?: string
-    onPageDescription?: string
-    description?: string
-    title?: string
-    webTitle?: string
-    navSection?: string
-}
+export type Front = WithColor &
+    WithKey & {
+        collections: Collection[]
+        displayName?: string
+        canonical?: string
+        group?: string
+        isHidden?: boolean
+        isImageDisplayed?: boolean
+        imageHeight?: number
+        imageWidth?: number
+        imageUrl?: string
+        onPageDescription?: string
+        description?: string
+        title?: string
+        webTitle?: string
+        navSection?: string
+    }
 
 export interface UnknownElement {
     id: 'unknown'
@@ -113,7 +132,6 @@ export type BlockElement =
     | AtomElement
     | PullquoteElement
 
-
 export interface CrosswordDimensions {
     cols: number
     rows: number
@@ -135,7 +153,7 @@ export interface CrosswordEntry {
     humanNumber?: string
     direction?: string
     position?: CrosswordPosition
-    separatorLocations?: { [key:string]: number[] }
+    separatorLocations?: { [key: string]: number[] }
     length?: number
     clue?: string
     group?: string[]
@@ -151,7 +169,7 @@ export enum CrosswordType {
     PRIZE = 4,
     EVERYMAN = 5,
     DIAN_QUIPTIC_CROSSWORD = 6,
-    WEEKEND = 7
+    WEEKEND = 7,
 }
 
 export interface CapiDateTime {
@@ -170,7 +188,7 @@ export interface Crossword {
     hasNumbers: boolean
     randomCluesOrdering: boolean
     instructions?: string
-    creator?: CrosswordCreator 
+    creator?: CrosswordCreator
     pdf?: string
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime

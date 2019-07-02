@@ -5,23 +5,28 @@ import React, {
     ReactNode,
     useMemo,
 } from 'react'
-import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
+import {
+    View,
+    Dimensions,
+    Animated,
+    FlatList,
+    StyleSheet,
+    Alert,
+} from 'react-native'
 import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 import { metrics } from 'src/theme/spacing'
 import { CollectionPage } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
-import { ArticleAppearance } from 'src/theme/appearance'
 import { Front as FrontType } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, Collection, Article } from 'src/common'
-import { color as themeColor } from '../../theme/color'
+import { Issue, Collection, Article, ColorFromPalette } from 'src/common'
 import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
 import { FSPaths, APIPaths } from 'src/paths'
-import { FlatCard, flattenCollections } from 'src/helpers/transform'
+import { FlatCard, flattenCollections, getColor } from 'src/helpers/transform'
 
 interface AnimatedFlatListRef {
     _component: FlatList<FrontType['collections'][0]>
@@ -76,7 +81,7 @@ const Page = ({
     front,
     scrollX,
 }: {
-    appearance: ArticleAppearance
+    appearance: ColorFromPalette
     index: number
     scrollX: Animated.Value
     articles: Article[]
@@ -138,7 +143,7 @@ const FrontWithResponse = ({
     issue: Issue['key']
     frontData: FrontType
 }) => {
-    const color = themeColor.palette.news.bright
+    const color = getColor(frontData)
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const { width } = Dimensions.get('window')
