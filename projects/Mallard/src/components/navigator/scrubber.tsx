@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet } from 'react-native'
@@ -46,22 +46,13 @@ const Scrubber = ({
     radius: number
 }) => {
     const styles = useMemo(() => getStyles(fill, radius), [fill, radius])
+    const width = useRef(null)
     return (
         <Animated.View
             style={[
                 styles.root,
                 {
-                    transform: [
-                        {
-                            // prettier-ignore
-                            matrix: [
-                                1, 0, 0, 0,
-                                0, 1, 0, 0,
-                                0, 0, 1, 0,
-                                1, 1, 0, 1
-                            ]
-                        },
-                    ],
+                    transform: [{ translateX: position }],
                 },
             ]}
         >
@@ -70,20 +61,14 @@ const Scrubber = ({
                     styles.text,
                     {
                         opacity: position.interpolate({
-                            inputRange: [0, 20],
+                            inputRange: [0, 10],
                             outputRange: [1, 0],
                         }),
                         transform: [
                             {
                                 translateX: position.interpolate({
                                     inputRange: [0, 20],
-                                    outputRange: [0, -10],
-                                }),
-                            },
-                            {
-                                scaleX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [1, 0.5],
+                                    outputRange: [0, -20],
                                 }),
                             },
                         ],
@@ -93,6 +78,9 @@ const Scrubber = ({
                 {children}
             </Animated.Text>
             <Animated.View
+                onLayout={ev => {
+                    width.current = ev.nativeEvent.layout.width
+                }}
                 style={[
                     styles.bubble,
                     {
@@ -101,6 +89,16 @@ const Scrubber = ({
                             outputRange: [1, 0],
                         }),
                         transform: [
+                            //{ translateX: width.current || 0 },
+                            {
+                                translateX: position.interpolate({
+                                    inputRange: [0, 20],
+                                    outputRange: [
+                                        0,
+                                        (width.current || 0) * -0.4,
+                                    ],
+                                }),
+                            },
                             {
                                 scaleX: position.interpolate({
                                     inputRange: [0, 20],
