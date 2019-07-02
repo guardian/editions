@@ -1,5 +1,4 @@
-import { Collection, Article } from 'src/common'
-import { WithColor } from '../../../common/src'
+import { Collection, Article, WithColor } from 'src/common'
 import { palette } from '@guardian/pasteup/palette'
 
 export interface FlatCard {

@@ -1,12 +1,10 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
 import { Dimensions, Animated } from 'react-native'
-
 import { CollectionPage, PropTypes } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
-import { Front as FrontType } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, ColorFromPalette } from 'src/common'
+import { Issue, ColorFromPalette, Front as FrontType } from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
