@@ -182,13 +182,13 @@ export const articleAppearances: {
         },
         cardBackgrounds: {},
         contrastCardBackgrounds: {},
-        text: {
+        text: {},
+        headline: {
+            //fontFamily: 'GHGuardianHeadline-Bold',
+        },
+        kicker: {
             color: color.palette.lifestyle.main,
         },
-        headline: {
-            fontFamily: 'GHGuardianHeadline-Bold',
-        },
-        kicker: {},
         byline: {},
         standfirst: {},
     },

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, StyleProp, Animated } from 'react-native'
+import { StyleSheet, StyleProp, Animated, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 import {
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
         elevation: 2,
+        flex: 1,
         margin: metrics.frontsPageSides,
         marginVertical: metrics.vertical,
     },
@@ -48,22 +49,7 @@ export interface PropTypes {
     collection: Collection['key']
 }
 
-const Wrapper = ({
-    style,
-    children,
-}: {
-    style: StyleProp<{}>
-    children: ReactNode
-}) => {
-    const { appearance } = useArticleAppearance()
-    return (
-        <Animated.View style={[styles.root, style, appearance.backgrounds]}>
-            {children}
-        </Animated.View>
-    )
-}
-
-const CollectionPageWithAppearance = ({
+const CollectionPage = ({
     articles,
     collection,
     translate,
@@ -71,6 +57,7 @@ const CollectionPageWithAppearance = ({
     front,
     pageLayout,
 }: PropTypes) => {
+    const { appearance } = useArticleAppearance()
     if (!articles.length) {
         return <FlexErrorMessage title={GENERIC_ERROR} />
     }
@@ -96,7 +83,7 @@ const CollectionPageWithAppearance = ({
         }
     }
     return (
-        <>
+        <View style={[styles.root, appearance.backgrounds]}>
             {pageLayout.map((row, index) => (
                 <Row
                     index={index}
@@ -113,23 +100,9 @@ const CollectionPageWithAppearance = ({
                     {...{ collection, issue, translate, row }}
                 />
             ))}
-        </>
+        </View>
     )
 }
-const CollectionPage = ({
-    appearance,
-    style,
-    ...props
-}: {
-    appearance: ColorFromPalette
-    style: StyleProp<{}>
-} & PropTypes) => (
-    <WithArticleAppearance value={appearance}>
-        <Wrapper style={style}>
-            <CollectionPageWithAppearance {...props} />
-        </Wrapper>
-    </WithArticleAppearance>
-)
 
 CollectionPage.defaultProps = {
     stories: [],

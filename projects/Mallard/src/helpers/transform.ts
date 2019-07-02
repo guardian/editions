@@ -16,7 +16,8 @@ const colorMap = {
     neutral: palette.neutral[7],
 }
 
-export const getColor = (color: WithColor) => {
+export const getColor = (color: WithColor): string => {
+    if (!color.color) return colorMap['neutral']
     if (color.color === 'custom') return color.customColor
     return colorMap[color.color]
 }
