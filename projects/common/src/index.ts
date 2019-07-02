@@ -31,10 +31,9 @@ export interface Article extends WithKey {
     type: 'article'
     headline: string
     kicker: string
-    image: string
+    image: ImageWithColours | Image
     byline: string
     standfirst: string
-    imageURL?: string
     elements: BlockElement[]
 }
 
@@ -53,7 +52,7 @@ export interface GalleryArticle extends WithKey {
     kicker: string
     byline?: string
     standfirst?: string
-    imageURL?: string
+    image?: ImageWithColours | Image
     elements: BlockElement[]
 }
 
@@ -103,7 +102,7 @@ export interface HTMLElement {
 }
 export interface ImageElement {
     id: 'image'
-    src: string
+    src: Image
     alt?: string
     caption?: string
     copyright?: string
@@ -207,11 +206,29 @@ const frontPath = (issueId: string, frontId: string) =>
 const collectionPath = (issueId: string, collectionId: string) =>
     `${issuePath(issueId)}/collection/${collectionId}`
 const issueSummaryPath = () => 'issues'
-export const imageSizes = ['small', 'notsmall'] as const
-
+export const imageSizes = ['sample', 'phone', 'tablet'] as const
+export interface Image {
+    source: string
+    path: string
+}
+export interface ImageWithColours extends Image {
+    palette: {
+        //the palette from node-vibrant
+        Vibrant?: string
+        Muted?: string
+        DarkVibrant?: string
+        DarkMuted?: string
+        LightVibrant?: string
+        LightMuted?: string
+    }
+}
 export type ImageSize = typeof imageSizes[number]
-const mediaPath = (source: string, size: ImageSize, path: string) =>
-    `media/${size}/${source}/${path}`
+const mediaPath = (
+    issue: string,
+    source: string,
+    size: ImageSize,
+    path: string,
+) => `media/${size}/${source}/${path}`
 
 export {
     issuePath,

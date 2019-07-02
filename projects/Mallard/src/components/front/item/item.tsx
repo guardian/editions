@@ -23,6 +23,7 @@ import {
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
 import { navigateToArticle } from 'src/navigation/helpers'
+import { APIPaths } from 'src/paths'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -147,11 +148,16 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
-                {'image' in article ? (
+                {'image' in article && article.image ? (
                     <Image
                         style={coverStyles.cover}
                         source={{
-                            uri: article.image,
+                            uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                                'article',
+                                article.image.source,
+                                'phone',
+                                article.image.path,
+                            )}`,
                         }}
                     />
                 ) : null}
@@ -188,14 +194,19 @@ const imageStyles = StyleSheet.create({
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            {'image' in article ? (
+            {'image' in article && article.image ? (
                 <Image
                     style={[
                         imageStyles.image,
                         size >= RowSize.hero && imageStyles.heroImage,
                     ]}
                     source={{
-                        uri: article.image,
+                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                            'issue',
+                            article.image.source,
+                            'phone',
+                            article.image.path,
+                        )}`,
                     }}
                 />
             ) : null}
@@ -239,11 +250,16 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                {'image' in article ? (
+                {'image' in article && article.image ? (
                     <Image
                         style={[splitImageStyles.image]}
                         source={{
-                            uri: article.image,
+                            uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                                'issue',
+                                article.image.source,
+                                'phone',
+                                article.image.path,
+                            )}`,
                         }}
                     />
                 ) : null}
@@ -278,11 +294,16 @@ const superHeroImageStyles = StyleSheet.create({
 const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article ? (
+            {'image' in article && article.image ? (
                 <Image
                     style={[superHeroImageStyles.image]}
                     source={{
-                        uri: article.image,
+                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                            'issue',
+                            article.image.source,
+                            'phone',
+                            article.image.path,
+                        )}`,
                     }}
                 />
             ) : null}
@@ -335,11 +356,16 @@ const splashImageStyles = StyleSheet.create({
 const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article ? (
+            {'image' in article && article.image ? (
                 <Image
                     style={[splashImageStyles.image]}
                     source={{
-                        uri: article.image,
+                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                            'issue',
+                            article.image.source,
+                            'phone',
+                            article.image.path,
+                        )}`,
                     }}
                 />
             ) : null}

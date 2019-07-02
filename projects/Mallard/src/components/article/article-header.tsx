@@ -5,6 +5,7 @@ import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from './article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
+import { Image } from '../../common'
 
 interface Style {
     /* kicker */
@@ -20,7 +21,7 @@ interface Style {
 export interface PropTypes {
     headline: string
     kicker?: string | null
-    image?: string | null
+    image?: Image | null
 }
 
 const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({

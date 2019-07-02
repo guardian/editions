@@ -23,7 +23,10 @@ app.get('/' + issuePath(':issueId'), issueController)
 
 app.get('/' + frontPath(':issueId', '*?'), frontController)
 
-app.get('/' + mediaPath(':source', ':size' as ImageSize, '*?'), imageController)
+app.get(
+    '/' + mediaPath(':issueId', ':source', ':size' as ImageSize, '*?'),
+    imageController,
+)
 
 app.get(
     '/' + collectionPath(':issueId', ':collectionId'),

@@ -18,6 +18,7 @@ const getIssue = async (
 export const issueController = (req: Request, res: Response) => {
     const id: string = req.params.issueId
     const [date, updater] = lastModified()
+    console.log(`${req.url}: request for issue ${id}`)
     getIssue(id, updater)
         .then(data => {
             res.setHeader('Last-Modifed', date())
@@ -38,6 +39,7 @@ const getIssuesSummary = async (): Promise<IssueSummary[] | 'notfound'> => {
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
+    console.log('Issue summary requested.')
     getIssuesSummary()
         .then(data => {
             res.setHeader('Content-Type', 'application/json')

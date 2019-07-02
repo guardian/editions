@@ -1,11 +1,9 @@
 import { s3fetch } from './s3'
-import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 import {
     Front,
     Collection,
     CAPIArticle,
-    Card,
     Crossword,
     WithColor,
     cardLayouts,
@@ -20,6 +18,7 @@ import {
 } from './utils/try'
 import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
+import { getImageFromURL, getPalette } from './image'
 
 export const getCollection = async (
     id: string,
@@ -62,65 +61,98 @@ export const getCollection = async (
             'Could not connect to CAPI',
         )
 
-    const articles: [string, CAPIArticle][] = articleFragmentList
-        .filter(([key]) => {
-            const inResponse =
-                key in capiPrintArticles || key in capiSearchArticles
-            if (!inResponse) {
-                console.warn(`Removing ${key} as not in CAPI response.`)
-            }
-            return inResponse
-        })
-        .map(([key, fragment]) => {
-            const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
-            const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
-            const headline = (meta && meta.headline) || article.headline
+    const articles: [string, CAPIArticle][] = await Promise.all(
+        articleFragmentList
+            .filter(([key]) => {
+                const inResponse =
+                    key in capiPrintArticles || key in capiSearchArticles
+                if (!inResponse) {
+                    console.warn(`Removing ${key} as not in CAPI response.`)
+                }
+                return inResponse
+            })
+            .map(
+                async ([key, fragment]): Promise<[string, CAPIArticle]> => {
+                    const article =
+                        capiSearchArticles[key] || capiPrintArticles[key]
+                    const meta =
+                        fragment && (fragment.meta as ArticleFragmentRootMeta)
+                    const kicker =
+                        (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
+                    const headline = (meta && meta.headline) || article.headline
+                    const imageOverride =
+                        meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
 
-            switch (article.type) {
-                case 'crossword':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            key: article.path,
-                            headline,
-                            kicker,
-                            crossword: (article.crossword as unknown) as Crossword,
-                        },
-                    ]
+                    switch (article.type) {
+                        case 'crossword':
+                            return [
+                                article.path,
+                                {
+                                    ...article,
+                                    key: article.path,
+                                    headline,
+                                    kicker,
+                                    crossword: (article.crossword as unknown) as Crossword,
+                                },
+                            ]
 
-                case 'gallery':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            key: article.path,
-                            headline,
-                            kicker,
-                            imageURL:
-                                (meta && meta.imageSrc) || article.imageURL,
-                        },
-                    ]
+                        case 'gallery':
+                            const galleryImage = imageOverride || article.image
+                            if (galleryImage == null) {
+                                throw new Error(
+                                    `No image found in article: ${article.path}`,
+                                )
+                            }
+                            const galleryImageWithColours = await attempt(
+                                getPalette(galleryImage),
+                            )
 
-                case 'article':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            key: article.path,
-                            headline,
-                            kicker,
-                            imageURL:
-                                (meta && meta.imageSrc) || article.imageURL,
-                        },
-                    ]
+                            return [
+                                article.path,
+                                {
+                                    ...article,
+                                    key: article.path,
+                                    headline,
+                                    kicker,
+                                    image: hasSucceeded(galleryImageWithColours)
+                                        ? galleryImageWithColours
+                                        : galleryImage,
+                                },
+                            ]
 
-                default:
-                    const msg: never = article
-                    throw new TypeError(`Unknown type: ${msg}`)
-            }
-        })
+                        case 'article':
+                            const articleImage = imageOverride || article.image
+                            if (articleImage == null) {
+                                throw new Error(
+                                    `No image found in article: ${article.path}`,
+                                )
+                            }
+                            const articleImageWithColours = await attempt(
+                                getPalette(articleImage),
+                            )
+                            if (hasFailed(articleImageWithColours))
+                                console.error(articleImageWithColours)
+
+                            return [
+                                article.path,
+                                {
+                                    ...article,
+                                    key: article.path,
+                                    headline,
+                                    kicker,
+                                    image: hasSucceeded(articleImageWithColours)
+                                        ? articleImageWithColours
+                                        : articleImage,
+                                },
+                            ]
+
+                        default:
+                            const msg: never = article
+                            throw new TypeError(`Unknown type: ${msg}`)
+                    }
+                },
+            ),
+    )
 
     return {
         key: id,

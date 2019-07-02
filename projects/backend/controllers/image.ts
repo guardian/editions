@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getRedirect } from '../image'
+import { getImageURL } from '../image'
 import { imageSizes } from '../../common/src/index'
 export const imageController = (req: Request, res: Response) => {
     const source = req.params.source
@@ -9,6 +9,6 @@ export const imageController = (req: Request, res: Response) => {
         res.send('Invalid size')
     }
     const path: string = req.params[0]
-    const redirect = getRedirect(source, size, path)
+    const redirect = getImageURL({ source, path }, size)
     res.redirect(redirect)
 }

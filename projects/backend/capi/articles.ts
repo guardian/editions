@@ -1,11 +1,11 @@
 import { attempt, hasFailed, hasSucceeded } from '../utils/try'
 import { SearchResponseCodec, ContentType } from '@guardian/capi-ts'
-import { BlockElement } from '../common'
+import { BlockElement, Image } from '../common'
 import {
     BufferedTransport,
     CompactProtocol,
 } from '@creditkarma/thrift-server-core'
-import { extractImage } from './assets'
+import { getImage } from './assets'
 import { elementParser } from './elements'
 import fromEntries from 'object.fromentries'
 import { IContent } from '@guardian/capi-ts/dist/Content'
@@ -19,10 +19,9 @@ interface Article {
     path: string
     headline: string
     kicker?: string
-    image: string
+    image?: Image
     byline: string
     standfirst: string
-    imageURL?: string
     elements: BlockElement[]
 }
 
@@ -32,10 +31,9 @@ interface GalleryArticle {
     path: string
     headline: string
     kicker?: string
-    image: string
+    image?: Image
     byline: string
     standfirst: string
-    imageURL?: string
     elements: BlockElement[]
 }
 
@@ -56,7 +54,7 @@ const parseArticleResult = async (
     result: IContent,
 ): Promise<[number, CAPIContent]> => {
     const path = result.id
-
+    console.log(`Parsing CAPI response for ${path}`)
     const internalid = result.fields && result.fields.internalPageCode
     if (internalid == null)
         throw new Error(`internalid was undefined in ${path}!`)
@@ -74,18 +72,29 @@ const parseArticleResult = async (
     const parser = elementParser(path)
     const kicker = result.tags[0] && result.tags[0].webTitle
 
-    const image =
+    const maybeMainImage =
         result &&
         result.blocks &&
         result.blocks.main &&
         result.blocks.main.elements &&
         result.blocks.main.elements[0].assets &&
-        extractImage(result.blocks.main.elements[0].assets)
+        getImage(result.blocks.main.elements[0].assets)
 
-    const imageURL =
-        (image && image.file) ||
-        'https://media.guim.co.uk/d1c48b0c6ec594b396f786cfd3f6ba6ae0d93516/0_105_2754_1652/2754.jpg'
-
+    const maybeThumbnailElement =
+        result &&
+        result.elements &&
+        result.elements.find(element => element.relation === 'thumbnail')
+    const maybeThumbnailImage =
+        maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
+    const maybeImage = maybeMainImage || maybeThumbnailImage
+    if (maybeMainImage == null) {
+        console.warn(
+            `No main image in ${
+                result.id
+            } using thumbnail (${maybeThumbnailImage &&
+                maybeThumbnailImage.path}).`,
+        )
+    }
     const blocks =
         result &&
         result.blocks &&
@@ -110,10 +119,9 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     kicker,
-                    image: imageURL,
+                    image: maybeImage,
                     byline: byline || '',
                     standfirst: standfirst || '',
-                    imageURL,
                     elements,
                 },
             ]
@@ -128,10 +136,9 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     kicker,
-                    image: imageURL,
+                    image: maybeImage,
                     byline: byline || '',
                     standfirst: standfirst || '',
-                    imageURL,
                     elements,
                 },
             ]

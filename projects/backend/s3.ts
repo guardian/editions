@@ -16,7 +16,7 @@ const s3 = new S3({
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
 
-const stage = process.env.stage || 'PROD'
+const stage = 'PROD'
 
 interface S3Response {
     status: number
