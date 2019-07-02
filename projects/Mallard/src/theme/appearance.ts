@@ -1,6 +1,7 @@
 import { color } from './color'
 import { createContext, useContext } from 'react'
 import merge from 'deepmerge'
+import { ColorFromPalette } from 'src/common'
 
 /*
 Types
@@ -69,14 +70,6 @@ interface ArticleAppearanceStyles {
 }
 
 export type AppAppearance = 'default' | 'primary'
-export type ArticleAppearance =
-    | 'default'
-    | 'news'
-    | 'lifestyle'
-    | 'sport'
-    | 'culture'
-    | 'comment'
-    | 'longread'
 
 const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
@@ -97,9 +90,9 @@ const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
 COLOURS
 */
 export const articleAppearances: {
-    [key in ArticleAppearance]: ArticleAppearanceStyles
+    [key in ColorFromPalette]: ArticleAppearanceStyles
 } = {
-    default: {
+    neutral: {
         backgrounds: {
             backgroundColor: color.background,
             borderColor: color.line,
@@ -130,7 +123,7 @@ export const articleAppearances: {
             color: color.text,
         },
     },
-    comment: {
+    opinion: {
         backgrounds: {
             backgroundColor: color.palette.opinion.faded,
         },
@@ -189,25 +182,13 @@ export const articleAppearances: {
         },
         cardBackgrounds: {},
         contrastCardBackgrounds: {},
-        text: {
+        text: {},
+        headline: {
+            //fontFamily: 'GHGuardianHeadline-Bold',
+        },
+        kicker: {
             color: color.palette.lifestyle.main,
         },
-        headline: {
-            fontFamily: 'GHGuardianHeadline-Bold',
-        },
-        kicker: {},
-        byline: {},
-        standfirst: {},
-    },
-    longread: {
-        backgrounds: {
-            backgroundColor: color.palette.neutral[7],
-        },
-        cardBackgrounds: {},
-        contrastCardBackgrounds: {},
-        text: { color: color.palette.neutral[100] },
-        headline: {},
-        kicker: {},
         byline: {},
         standfirst: {},
     },
@@ -217,7 +198,7 @@ export const articleAppearances: {
   Exports
  */
 const AppAppearanceContext = createContext<AppAppearance>('default')
-const ArticleAppearanceContext = createContext<ArticleAppearance>('default')
+const ArticleAppearanceContext = createContext<ColorFromPalette>('neutral')
 
 export const WithAppAppearance = AppAppearanceContext.Provider
 export const useAppAppearance = (): AppAppearanceStyles =>
@@ -226,12 +207,12 @@ export const useAppAppearance = (): AppAppearanceStyles =>
 export const WithArticleAppearance = ArticleAppearanceContext.Provider
 
 export const useArticleAppearance = (): {
-    name: ArticleAppearance
+    name: ColorFromPalette
     appearance: ArticleAppearanceStyles
 } => ({
     name: useContext(ArticleAppearanceContext),
     appearance: merge(
-        articleAppearances.default,
+        articleAppearances.neutral,
         articleAppearances[useContext(ArticleAppearanceContext)],
     ),
 })

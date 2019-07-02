@@ -78,7 +78,7 @@ export const storeSetting = (
     setting: keyof Settings,
     value: UnsanitizedSetting,
 ) => {
-    return AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
+    AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
 }
 
 export const shouldShowOnboarding = (settings: Settings) =>

@@ -1,12 +1,8 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet, StyleProp, Animated } from 'react-native'
+import React from 'react'
+import { StyleSheet, Animated, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
-import {
-    WithArticleAppearance,
-    useArticleAppearance,
-    ArticleAppearance,
-} from 'src/theme/appearance'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { Row } from './row'
 import { Article, Issue, Collection, Front } from 'src/common'
@@ -35,6 +31,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
         elevation: 2,
+        flex: 1,
         margin: metrics.frontsPageSides,
         marginVertical: metrics.vertical,
     },
@@ -42,36 +39,21 @@ const styles = StyleSheet.create({
 
 export interface PropTypes {
     articles: Article[]
-    translate: Animated.AnimatedInterpolation
     issue: Issue['key']
     front: Front['key']
     pageLayout?: PageLayout
     collection: Collection['key']
 }
 
-const Wrapper = ({
-    style,
-    children,
-}: {
-    style: StyleProp<{}>
-    children: ReactNode
-}) => {
-    const { appearance } = useArticleAppearance()
-    return (
-        <Animated.View style={[styles.root, style, appearance.backgrounds]}>
-            {children}
-        </Animated.View>
-    )
-}
-
-const CollectionPageWithAppearance = ({
+const CollectionPage = ({
     articles,
     collection,
     translate,
     issue,
     front,
     pageLayout,
-}: PropTypes) => {
+}: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
+    const { appearance } = useArticleAppearance()
     if (!articles.length) {
         return <FlexErrorMessage title={GENERIC_ERROR} />
     }
@@ -97,7 +79,7 @@ const CollectionPageWithAppearance = ({
         }
     }
     return (
-        <>
+        <View style={[styles.root, appearance.backgrounds]}>
             {pageLayout.map((row, index) => (
                 <Row
                     index={index}
@@ -114,23 +96,9 @@ const CollectionPageWithAppearance = ({
                     {...{ collection, issue, translate, row }}
                 />
             ))}
-        </>
+        </View>
     )
 }
-const CollectionPage = ({
-    appearance,
-    style,
-    ...props
-}: {
-    appearance: ArticleAppearance
-    style: StyleProp<{}>
-} & PropTypes) => (
-    <WithArticleAppearance value={appearance}>
-        <Wrapper style={style}>
-            <CollectionPageWithAppearance {...props} />
-        </Wrapper>
-    </WithArticleAppearance>
-)
 
 CollectionPage.defaultProps = {
     stories: [],

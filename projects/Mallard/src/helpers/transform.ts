@@ -1,8 +1,24 @@
-import { Collection, Article } from 'src/common'
+import { Collection, Article, WithColor } from 'src/common'
+import { palette } from '@guardian/pasteup/palette'
 
 export interface FlatCard {
     collection: Collection
     articles: Article[]
+}
+
+const colorMap = {
+    news: palette.news.main,
+    opinion: palette.opinion.main,
+    sport: palette.sport.main,
+    culture: palette.culture.main,
+    lifestyle: palette.lifestyle.main,
+    neutral: palette.neutral[7],
+}
+
+export const getColor = (color: WithColor): string => {
+    if (!color.color) return colorMap['neutral']
+    if (color.color === 'custom') return color.customColor
+    return colorMap[color.color]
 }
 
 export const flattenCollections = (collections: Collection[]): FlatCard[] =>

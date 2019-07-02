@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet } from 'react-native'
@@ -22,6 +22,10 @@ const getStyles = (fill: string, radius: number) =>
             zIndex: -1,
             ...StyleSheet.absoluteFillObject,
         },
+        roundBubble: {
+            width: radius * 2,
+            alignItems: 'center',
+        },
         text: {
             color: color.textOverDarkBackground,
             fontSize: 22,
@@ -32,7 +36,7 @@ const getStyles = (fill: string, radius: number) =>
         },
     })
 
-const Scrubber = ({
+const Lozenge = ({
     fill,
     children,
     position,
@@ -41,44 +45,42 @@ const Scrubber = ({
 }: {
     fill: string
     children: string
-    position: Animated.AnimatedInterpolation
+    position?: Animated.AnimatedInterpolation
     scrubbing: boolean
     radius: number
 }) => {
     const styles = useMemo(() => getStyles(fill, radius), [fill, radius])
+    const width = useRef(null)
     return (
         <Animated.View
             style={[
                 styles.root,
-                {
+                position && {
                     transform: [
-                        { translateX: position },
                         {
-                            scale: scrubbing ? 1.2 : 1,
+                            translateX: position.interpolate({
+                                inputRange: [-100, 0, 100],
+                                outputRange: [-20, 0, 100],
+                            }),
                         },
                     ],
                 },
             ]}
         >
             <Animated.Text
+                accessibilityRole="header"
                 style={[
                     styles.text,
-                    {
+                    position && {
                         opacity: position.interpolate({
-                            inputRange: [0, 20],
-                            outputRange: [1, 0],
+                            inputRange: [-100, 0, 10],
+                            outputRange: [0.9, 1, 0],
                         }),
                         transform: [
                             {
                                 translateX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [0, -10],
-                                }),
-                            },
-                            {
-                                scaleX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [1, 0.5],
+                                    inputRange: [-100, 0, 20],
+                                    outputRange: [-10, 0, -20],
                                 }),
                             },
                         ],
@@ -88,18 +90,31 @@ const Scrubber = ({
                 {children}
             </Animated.Text>
             <Animated.View
+                onLayout={ev => {
+                    width.current = ev.nativeEvent.layout.width
+                }}
                 style={[
                     styles.bubble,
-                    {
+                    position && {
                         opacity: position.interpolate({
-                            inputRange: [0, 20],
-                            outputRange: [1, 0],
+                            inputRange: [-100, 10, 20],
+                            outputRange: [0.9, 1, 0],
                         }),
                         transform: [
                             {
+                                translateX: position.interpolate({
+                                    inputRange: [-100, 0, 20],
+                                    outputRange: [
+                                        -10,
+                                        0,
+                                        (width.current || 0) * -0.4,
+                                    ],
+                                }),
+                            },
+                            {
                                 scaleX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [1, 0.25],
+                                    inputRange: [-100, 0, 20],
+                                    outputRange: [1.1, 1, 0.25],
                                 }),
                             },
                         ],
@@ -107,25 +122,29 @@ const Scrubber = ({
                 ]}
             />
             <Animated.View
+                accessible={false}
                 style={[
                     styles.bubble,
-                    {
-                        width: radius * 2,
-                        alignItems: 'center',
-                        opacity: position.interpolate({
-                            inputRange: [0, 5, 20],
-                            outputRange: [0, 0.5, 1],
-                        }),
-                        transform: [
-                            {
-                                scaleX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [1.25, 1],
-                                    extrapolate: 'clamp',
-                                }),
-                            },
-                        ],
-                    },
+                    styles.roundBubble,
+                    position
+                        ? {
+                              opacity: position.interpolate({
+                                  inputRange: [0, 5, 20],
+                                  outputRange: [0, 0.5, 1],
+                              }),
+                              transform: [
+                                  {
+                                      scaleX: position.interpolate({
+                                          inputRange: [0, 20],
+                                          outputRange: [1.25, 1],
+                                          extrapolate: 'clamp',
+                                      }),
+                                  },
+                              ],
+                          }
+                        : {
+                              opacity: 0,
+                          },
                 ]}
             >
                 <Text style={[styles.text]}>{children[0]}</Text>
@@ -134,4 +153,4 @@ const Scrubber = ({
     )
 }
 
-export { Scrubber }
+export { Lozenge }
