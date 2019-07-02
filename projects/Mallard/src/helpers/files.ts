@@ -167,6 +167,11 @@ export const unzipIssue = (issue: File['id']) => {
     )
 }
 
+export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
+    (await getFileList()).find(
+        file => fileIsIssue(file) && file.issue.key === issue,
+    ) !== undefined
+
 /*
 Cheeky size helper
 */

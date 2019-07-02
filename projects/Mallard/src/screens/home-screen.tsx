@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import {
     Image,
     ScrollView,
-    Button,
+    Button as NativeButton,
     StyleSheet,
     View,
     Platform,
@@ -21,13 +21,14 @@ import { APP_DISPLAY_NAME, GENERIC_ERROR } from 'src/helpers/words'
 import { color } from 'src/theme/color'
 import { Header } from 'src/components/header'
 import { issueSummaryPath, IssueSummary } from '../../../common/src'
-import { useEndpoint } from 'src/hooks/use-fetch'
-import { withResponse } from 'src/hooks/use-response'
+import { withResponse } from 'src/helpers/response'
 import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { Heading } from 'src/components/layout/ui/row'
+import { useApiEndpoint } from 'src/hooks/use-api'
+import { Button } from 'src/components/button/button'
+import { Heading, Footer } from 'src/components/layout/ui/row'
 
 const demoIssues: Issue[] = [
     {
@@ -49,7 +50,9 @@ const styles = StyleSheet.create({
 })
 
 const useIssueSummary = () =>
-    withResponse(useEndpoint<IssueSummary[]>(issueSummaryPath()))
+    withResponse<IssueSummary[]>(
+        useApiEndpoint<IssueSummary[]>(issueSummaryPath()),
+    )
 
 export const HomeScreen = ({
     navigation,
@@ -78,25 +81,32 @@ export const HomeScreen = ({
             <ScrollView style={styles.container}>
                 <Heading>Issues</Heading>
                 {issueSummary({
-                    success: issueList => (
-                        <List
-                            data={issueList.map(issue => ({
-                                title: renderIssueDate(issue.date * 1000).date,
-                                explainer: issue.name,
-                                key: issue.date + issue.name,
-                                data: {
-                                    issue: issue.key,
-                                },
-                            }))}
-                            onPress={path =>
-                                navigation.navigate('Issue', { path })
-                            }
-                        />
+                    success: (issueList, { retry }) => (
+                        <>
+                            <List
+                                data={issueList.map(issue => ({
+                                    title: renderIssueDate(issue.date * 1000)
+                                        .date,
+                                    explainer: issue.name,
+                                    key: issue.date + issue.name,
+                                    data: {
+                                        issue: issue.key,
+                                    },
+                                }))}
+                                onPress={path =>
+                                    navigation.navigate('Issue', { path })
+                                }
+                            />
+                            <Footer>
+                                <Button onPress={retry}>Refresh</Button>
+                            </Footer>
+                        </>
                     ),
-                    error: ({ message }) => (
+                    error: ({ message }, { retry }) => (
                         <FlexErrorMessage
                             title={GENERIC_ERROR}
                             message={isUsingProdDevtools ? message : undefined}
+                            action={['Retry', retry]}
                         />
                     ),
                     pending: () => (
@@ -169,7 +179,7 @@ HomeScreen.navigationOptions = ({
     title: 'Home',
     headerTitle: () => null,
     headerRight: (
-        <Button
+        <NativeButton
             onPress={() => {
                 navigation.navigate('Settings')
             }}

@@ -1,75 +1,134 @@
-import { useState, ReactElement } from 'react'
-import { REQUEST_INVALID_RESPONSE_STATE } from 'src/helpers/words'
+import { useState, useEffect } from 'react'
+
+/*
+you can use response to store an async value
+and update it for success/error scenarios.
+
+You will probably wanna wrap your response in
+something more abstract because this has a lot of
+nitty gritty implementation details
+
+This maps beautifully to promises, and even
+more beautifully to instant promises. you
+can use 'useCachedOrPromise' to wrap those
+
+Calling useResponse gives you two sets of stuff,
+the first one is the response you pass down to
+your consumer and the second one is your API to
+update the response. Ej:
+
+```js
+const [response, {onSuccess, onError}] = useResponse()
+
+useEffect(()=>{
+    Promise().then(onSuccess).catch(onError)
+})
+```
+(If you call useResponse with an initial value it'll
+already be resolved)
+
+*/
 
 export interface Error {
     message: string
     name?: string
 }
-interface PendingResponse {
-    state: 'pending'
-}
-interface ErroredResponse {
-    state: 'error'
-    error: Error
-}
-interface SuccesfulResponse<T> {
-    state: 'success'
-    response: T
-}
-export type Response<T> =
-    | PendingResponse
-    | ErroredResponse
-    | SuccesfulResponse<T>
 
-export const useResponse = <T>(
-    initial: T,
-): {
-    response: Response<T>
+type Response<T> =
+    | {
+          state: 'pending'
+      }
+    | {
+          state: 'error'
+          error: Error
+      }
+    | {
+          state: 'success'
+          response: T
+      }
+
+export interface ResponseHookCallbacks<T> {
     onSuccess: (res: T) => void
     onError: (error: Error) => void
-} => {
-    const [response, setResponse] = useState<SuccesfulResponse<T>['response']>(
-        initial,
-    )
-    const [error, setError] = useState<ErroredResponse['error']>({
-        message: 'Mysterious error',
-    })
-    const [state, setState] = useState<Response<T>['state']>(
-        initial ? 'success' : 'pending',
-    )
-    return {
-        response:
-            state === 'success'
-                ? {
-                      state,
-                      response,
-                  }
-                : state === 'error'
-                ? { state, error }
-                : { state },
+    onPending: () => void
+}
 
-        onSuccess: res => {
-            setResponse(res)
-            setState('success')
+const useResponse = <T>(
+    initial: T | null,
+): [Response<T>, ResponseHookCallbacks<T>] => {
+    const [response, setResponse] = useState<Response<T>>(
+        initial
+            ? {
+                  state: 'success',
+                  response: initial,
+              }
+            : {
+                  state: 'pending',
+              },
+    )
+
+    const onSuccess = (response: T) => {
+        setResponse({ state: 'success', response })
+    }
+    const onError = (error: Error) => {
+        setResponse({ state: 'error', error })
+    }
+    const onPending = () => {
+        setResponse({ state: 'pending' })
+    }
+    return [
+        response,
+        {
+            onSuccess,
+            onError,
+            onPending,
         },
-        onError: err => {
-            setError(err)
-            setState('error')
-        },
+    ]
+}
+
+/*
+A response can be 'fetchable'. This type of
+response controls how the data gets into it
+and thanks to this it can be retryable.
+
+useCachedOrPromise uses this behind the scenes
+so it might be the best living example. It works
+a bit like this:
+
+```
+const fetchValue = ({onSuccess, onError}) => {
+    Promise().then(onSuccess).catch(onError)
+}
+const response = useFetchableResponse<T>(
+    null,
+    (isInitial, {onSuccess, onError}) => fetchValue({onSuccess, onError}),
+)
+```
+*/
+
+export type FetchableResponse<T> = Response<T> & {
+    retry: () => void
+}
+
+const useFetchableResponse = <T>(
+    initial: T | null,
+    fetcher: (isInitial: boolean, callbacks: ResponseHookCallbacks<T>) => void,
+): FetchableResponse<T> => {
+    const [response, responseHookCallbacks] = useResponse(initial)
+
+    const retry = () => {
+        responseHookCallbacks.onPending()
+        fetcher(false, responseHookCallbacks)
+    }
+
+    useEffect(() => {
+        fetcher(true, responseHookCallbacks)
+    }, [])
+
+    return {
+        ...response,
+        retry,
     }
 }
 
-export const withResponse = <T>(response: Response<T>) => ({
-    success,
-    pending,
-    error,
-}: {
-    success: (resp: T) => ReactElement
-    pending: () => ReactElement
-    error: (error: Error) => ReactElement
-}): ReactElement => {
-    if (response.state === 'success') return success(response.response)
-    else if (response.state === 'pending') return pending()
-    else if (response.state === 'error') return error(response.error)
-    else return error({ message: REQUEST_INVALID_RESPONSE_STATE })
-}
+export { useFetchableResponse, useResponse }

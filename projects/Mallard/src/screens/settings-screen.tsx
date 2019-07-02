@@ -13,10 +13,10 @@ import { List } from 'src/components/lists/list'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
-import { clearLocalCache } from 'src/hooks/use-fetch'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
+import { clearCache } from 'src/helpers/fetch/cache'
 import { Heading } from 'src/components/layout/ui/row'
 
 const styles = StyleSheet.create({
@@ -66,7 +66,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                                         {
                                             text: 'Delete fetch cache',
                                             onPress: () => {
-                                                clearLocalCache()
+                                                clearCache()
                                             },
                                         },
                                         {

@@ -6,7 +6,7 @@ import React, {
     useMemo,
 } from 'react'
 import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
-import { useJsonOrEndpoint } from '../../hooks/use-fetch'
+import { useIssue } from '../../hooks/use-issue'
 import { metrics } from 'src/theme/spacing'
 import { CollectionPage } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -16,19 +16,19 @@ import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { Issue, Collection, Article } from 'src/common'
 import { color as themeColor } from '../../theme/color'
-import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
 import { FSPaths, APIPaths } from 'src/paths'
 import { FlatCard, flattenCollections } from 'src/helpers/transform'
+import { withResponse } from 'src/helpers/response'
 
 interface AnimatedFlatListRef {
     _component: FlatList<FrontType['collections'][0]>
 }
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
-    const resp = useJsonOrEndpoint<FrontType>(
+    const resp = useIssue<FrontType>(
         issue,
         FSPaths.front(issue, front),
         APIPaths.front(issue, front),
