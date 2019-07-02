@@ -181,7 +181,9 @@ const frontPath = (issueId: string, frontId: string) =>
 const collectionPath = (issueId: string, collectionId: string) =>
     `${issuePath(issueId)}/collection/${collectionId}`
 const issueSummaryPath = () => 'issues'
-export type ImageSize = 'small' | 'notsmall'
+export const imageSizes = ['small', 'notsmall'] as const
+
+export type ImageSize = typeof imageSizes[number]
 const mediaPath = (source: string, size: ImageSize, path: string) =>
     `media/${size}/${source}/${path}`
 
