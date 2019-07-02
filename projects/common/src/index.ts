@@ -113,7 +113,6 @@ export type BlockElement =
     | AtomElement
     | PullquoteElement
 
-
 export interface CrosswordDimensions {
     cols: number
     rows: number
@@ -135,7 +134,7 @@ export interface CrosswordEntry {
     humanNumber?: string
     direction?: string
     position?: CrosswordPosition
-    separatorLocations?: { [key:string]: number[] }
+    separatorLocations?: { [key: string]: number[] }
     length?: number
     clue?: string
     group?: string[]
@@ -151,7 +150,7 @@ export enum CrosswordType {
     PRIZE = 4,
     EVERYMAN = 5,
     DIAN_QUIPTIC_CROSSWORD = 6,
-    WEEKEND = 7
+    WEEKEND = 7,
 }
 
 export interface CapiDateTime {
@@ -170,7 +169,7 @@ export interface Crossword {
     hasNumbers: boolean
     randomCluesOrdering: boolean
     instructions?: string
-    creator?: CrosswordCreator 
+    creator?: CrosswordCreator
     pdf?: string
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime
@@ -182,5 +181,8 @@ const frontPath = (issueId: string, frontId: string) =>
 const collectionPath = (issueId: string, collectionId: string) =>
     `${issuePath(issueId)}/collection/${collectionId}`
 const issueSummaryPath = () => 'issues'
+export type ImageSize = 'small' | 'notsmall'
+const mediaPath = (source: string, size: ImageSize, path: string) =>
+    `media/${size}/${source}/${path}`
 
-export { issuePath, frontPath, collectionPath, issueSummaryPath }
+export { issuePath, mediaPath, frontPath, collectionPath, issueSummaryPath }
