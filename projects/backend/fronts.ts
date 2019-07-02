@@ -7,7 +7,6 @@ import {
     CAPIArticle,
     Card,
     Crossword,
-    ColorFromPalette,
     WithColor,
 } from './common'
 import { LastModifiedUpdater } from './lastModified'
@@ -165,6 +164,8 @@ const getFrontColor = (front: string): WithColor => {
             return { color: 'sport' }
         case 'life':
         case 'review':
+        case 'guide':
+        case 'weekend':
         case 'food':
             return { color: 'lifestyle' }
     }

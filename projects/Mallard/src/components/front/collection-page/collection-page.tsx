@@ -5,11 +5,10 @@ import { metrics } from 'src/theme/spacing'
 import {
     WithArticleAppearance,
     useArticleAppearance,
-    ArticleAppearance,
 } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { Row } from './row'
-import { Article, Issue, Collection, Front } from 'src/common'
+import { Article, Issue, Collection, Front, ColorFromPalette } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
@@ -122,7 +121,7 @@ const CollectionPage = ({
     style,
     ...props
 }: {
-    appearance: ArticleAppearance
+    appearance: ColorFromPalette
     style: StyleProp<{}>
 } & PropTypes) => (
     <WithArticleAppearance value={appearance}>

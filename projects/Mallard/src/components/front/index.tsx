@@ -72,7 +72,7 @@ const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
     })
 }
 
-const Page = ({
+const WrappedCollectionPage = ({
     articles,
     issue,
     appearance,
@@ -144,6 +144,9 @@ const FrontWithResponse = ({
     frontData: FrontType
 }) => {
     const color = getColor(frontData)
+    const appearance =
+        frontData.color === 'custom' ? 'neutral' : frontData.color
+
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const { width } = Dimensions.get('window')
@@ -219,8 +222,8 @@ const FrontWithResponse = ({
                     item: FlatCard
                     index: number
                 }) => (
-                    <Page
-                        appearance={'news'}
+                    <WrappedCollectionPage
+                        appearance={appearance}
                         articles={item.articles || []}
                         collection={item.collection.key}
                         front={frontData.key}
