@@ -4,7 +4,10 @@ import {
     REQUEST_INVALID_RESPONSE_VALIDATION,
     LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
 } from './words'
-import { InstantPromise, instantPromise } from './fetch/instant-promise'
+import {
+    CachedOrPromise,
+    createCachedOrPromise,
+} from './fetch/cached-or-promise'
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
 
@@ -68,11 +71,11 @@ const fetchFromApi = <T>(
         validator?: ValidatorFn<T>
         cached?: boolean
     } = {},
-): InstantPromise<T> => {
+): CachedOrPromise<T> => {
     const { retrieve, store, clear } = withCache<T>('api')
     if (!cached) {
         clear(endpointPath)
-        return instantPromise(
+        return createCachedOrPromise(
             [
                 null,
                 () =>
@@ -85,7 +88,7 @@ const fetchFromApi = <T>(
             },
         )
     }
-    return instantPromise(
+    return createCachedOrPromise(
         [
             retrieve(endpointPath),
             () =>
@@ -106,13 +109,13 @@ const fetchFromIssue = <T>(
     fsPath: string,
     endpointPath: string,
     { validator }: { validator?: ValidatorFn<T> } = {},
-): InstantPromise<T> => {
+): CachedOrPromise<T> => {
     /*
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
     */
     const { retrieve, store } = withCache<T>('issue')
-    return instantPromise(
+    return createCachedOrPromise(
         [
             retrieve(endpointPath),
             async () => {

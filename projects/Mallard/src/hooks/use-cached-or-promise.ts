@@ -1,7 +1,7 @@
 import {
-    InstantPromise,
-    isSlowPromise,
-} from 'src/helpers/fetch/instant-promise'
+    CachedOrPromise,
+    isNotCached,
+} from 'src/helpers/fetch/cached-or-promise'
 import {
     ResponseHookCallbacks,
     FetchableResponse,
@@ -9,7 +9,7 @@ import {
 } from './use-response'
 
 const promiseAsResponseEffect = <T>(
-    promise: InstantPromise<T>,
+    promise: CachedOrPromise<T>,
     {
         onSuccess,
         onError,
@@ -29,13 +29,13 @@ const promiseAsResponseEffect = <T>(
         })
 }
 
-const useInstantPromise = <T>(
-    promise: InstantPromise<T>,
+const useCachedOrPromise = <T>(
+    promise: CachedOrPromise<T>,
 ): FetchableResponse<T> => {
     const response = useFetchableResponse<T>(
-        isSlowPromise<T>(promise) ? null : promise.value,
+        isNotCached<T>(promise) ? null : promise.value,
         (isInitial, { onSuccess, onError }) => {
-            if (!isInitial || isSlowPromise(promise)) {
+            if (!isInitial || isNotCached(promise)) {
                 promiseAsResponseEffect(promise, { onSuccess, onError })
             }
         },
@@ -44,4 +44,4 @@ const useInstantPromise = <T>(
     return response
 }
 
-export { useInstantPromise }
+export { useCachedOrPromise }

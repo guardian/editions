@@ -10,7 +10,7 @@ nitty gritty implementation details
 
 This maps beautifully to promises, and even
 more beautifully to instant promises. you
-can use 'useInstantPromise' to wrap those
+can use 'useCachedOrPromise' to wrap those
 
 Calling useResponse gives you two sets of stuff,
 the first one is the response you pass down to
@@ -91,7 +91,7 @@ A response can be 'fetchable'. This type of
 response controls how the data gets into it
 and thanks to this it can be retryable.
 
-useInstantPromise uses this behind the scenes
+useCachedOrPromise uses this behind the scenes
 so it might be the best living example. It works
 a bit like this:
 
