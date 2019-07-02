@@ -27,7 +27,17 @@ export interface CrosswordArticle extends WithKey {
     crossword: Crossword
 }
 
-export type CAPIArticle = Article | CrosswordArticle
+export interface GalleryArticle extends WithKey {
+    type: 'gallery'
+    headline: string
+    kicker: string
+    byline?: string
+    standfirst?: string
+    imageURL?: string
+    elements: BlockElement[]
+}
+
+export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
 
 export interface IssueSummary extends WithKey {
     name: string

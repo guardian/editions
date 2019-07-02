@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useIssue } from 'src/hooks/use-issue'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import {
@@ -8,14 +8,12 @@ import {
 } from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
 import { CAPIArticle, Collection, Front } from 'src/common'
-import { View, TouchableOpacity, Dimensions } from 'react-native'
+import { Dimensions } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { UiBodyCopy } from 'src/components/styled-text'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
 import { PathToArticle } from './article-screen'
-import { withResponse } from 'src/helpers/response'
-import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { ERR_404_REMOTE, ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { Issue } from '../../../backend/common'
 import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
@@ -23,6 +21,7 @@ import { FSPaths, APIPaths } from 'src/paths'
 import { flattenCollections } from 'src/helpers/transform'
 import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
+import { withResponse } from 'src/helpers/response'
 
 export interface PathToArticle {
     collection: Collection['key']

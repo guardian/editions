@@ -16,12 +16,12 @@ import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { Issue, Collection, Article } from 'src/common'
 import { color as themeColor } from '../../theme/color'
-import { withResponse } from 'src/helpers/response'
-import { FlexErrorMessage } from '../layout/errors/flex-error-message'
+import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
 import { FSPaths, APIPaths } from 'src/paths'
 import { FlatCard, flattenCollections } from 'src/helpers/transform'
+import { withResponse } from 'src/helpers/response'
 
 interface AnimatedFlatListRef {
     _component: FlatList<FrontType['collections'][0]>

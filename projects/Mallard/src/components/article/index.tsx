@@ -4,7 +4,7 @@ import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useArticleAppearance } from 'src/theme/appearance'
 import {
     LongReadHeader,
@@ -56,11 +56,20 @@ const ArticleController = ({
                 />
             )
 
+        case 'gallery':
+            return (
+                <FlexErrorMessage
+                    icon="😭"
+                    title={"We don't support the rendering of galleries yet."}
+                    style={{ backgroundColor: color.background }}
+                />
+            )
+
         case 'crossword':
             return (
                 <FlexErrorMessage
                     icon="😭"
-                    title={"We don't render crosswords yet."}
+                    title={"We don't support the rendering of crosswords yet."}
                     style={{ backgroundColor: color.background }}
                 />
             )

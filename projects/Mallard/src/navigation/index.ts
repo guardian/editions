@@ -13,11 +13,23 @@ import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
-import { OnboardingHandler } from 'src/onboarding'
+import {
+    OnboardingIntroScreen,
+    OnboardingConsentScreen,
+} from 'src/screens/onboarding-screen'
+import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { NavigationScreenProp } from 'react-navigation'
-import { mapNavigationToProps, withPersistenceKey } from './helpers'
+import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { issueToArticleScreenInterpolator } from './interpolators'
+
+const navOptionsWithGraunHeader = {
+    headerStyle: {
+        backgroundColor: color.palette.brand.dark,
+        borderBottomColor: color.text,
+    },
+    headerTintColor: color.textOverPrimary,
+}
 
 const AppStack = createStackNavigator(
     {
@@ -28,14 +40,11 @@ const AppStack = createStackNavigator(
                 Downloads: DownloadScreen,
                 Settings: SettingsScreen,
                 Endpoints: ApiScreen,
+                GdprConsent: GdprConsentScreen,
             },
             {
                 defaultNavigationOptions: {
-                    headerStyle: {
-                        backgroundColor: color.palette.brand.dark,
-                        borderBottomColor: color.text,
-                    },
-                    headerTintColor: color.textOverPrimary,
+                    ...navOptionsWithGraunHeader,
                 },
                 initialRouteName: 'Home',
             },
@@ -68,45 +77,62 @@ const AppStack = createStackNavigator(
 
 const OnboardingStack = createStackNavigator(
     {
-        Start: mapNavigationToProps(OnboardingHandler, nav => ({
-            onComplete: () => nav.navigate('App'),
+        OnboardingStart: mapNavigationToProps(OnboardingIntroScreen, nav => ({
+            onContinue: () => nav.navigate('OnboardingConsent'),
         })),
+        OnboardingConsent: createStackNavigator(
+            {
+                Main: {
+                    screen: mapNavigationToProps(
+                        OnboardingConsentScreen,
+                        nav => ({
+                            onContinue: () => nav.navigate('App'),
+                            onOpenGdprConsent: () =>
+                                nav.navigate('OnboardingConsentInline'),
+                        }),
+                    ),
+                    navigationOptions: {
+                        header: null,
+                    },
+                },
+                OnboardingConsentInline: GdprConsentScreen,
+            },
+            {
+                mode: 'modal',
+                defaultNavigationOptions: {
+                    ...navOptionsWithGraunHeader,
+                },
+            },
+        ),
     },
     {
         headerMode: 'none',
     },
 )
 
-const OnboardingSwitcher = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
-    const [settings] = useSettings()
-    useEffect(() => {
-        if (shouldShowOnboarding(settings)) {
-            navigation.navigate('Onboarding')
-        } else {
-            navigation.navigate('App')
-        }
-    })
-    return null
-}
-
-const navigationPersistenceKey = __DEV__ ? 'nav-dfddsf' : null
-
 const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
-            App: withPersistenceKey(AppStack, navigationPersistenceKey),
-            Onboarding: withPersistenceKey(
-                OnboardingStack,
-                navigationPersistenceKey,
-            ),
-            OnboardingSwitcher,
+            Main: ({
+                navigation,
+            }: {
+                navigation: NavigationScreenProp<{}>
+            }) => {
+                const [settings] = useSettings()
+                useEffect(() => {
+                    if (shouldShowOnboarding(settings)) {
+                        navigation.replace('Onboarding')
+                    } else {
+                        navigation.replace('App')
+                    }
+                })
+                return null
+            },
+            App: AppStack,
+            Onboarding: OnboardingStack,
         },
         {
-            initialRouteName: 'OnboardingSwitcher',
+            initialRouteName: 'Main',
         },
     ),
 )
