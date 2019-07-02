@@ -13,12 +13,13 @@ export const getScaleForArticle = (width: LayoutRectangle['width']) => {
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
-    const { width: windowWidth, height: windowHeight } = Dimensions.get(
-        'window',
-    )
+    const { height: windowHeight } = Dimensions.get('window')
 
     const minScale = 0.9
 
+    /*
+    these ones r easy
+    */
     const scale = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
         outputRange: [1, 1, minScale],
@@ -34,13 +35,19 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
         outputRange: [1, 0.9],
     })
 
-    const translateOffset =
-        (windowHeight - windowHeight * minScale) * -0.5 +
-        metrics.slideCardSpacing / 1.5
+    /*
+    we wanna control how far from the top edge
+    this window lands, to do so we calculate how
+    many px it has to move up to account for the
+    scale and then we mess with that number
+    as we please
+    */
+    const translateOffset = (windowHeight - windowHeight * minScale) * -0.5
+    const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
 
     const translateY = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 1],
-        outputRange: [0, translateOffset],
+        outputRange: [0, finalTranslate],
     })
 
     return {
