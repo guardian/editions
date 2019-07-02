@@ -118,11 +118,11 @@ const useFetchableResponse = <T>(
 
     const retry = () => {
         responseHookCallbacks.onPending()
-        fetcher(true, responseHookCallbacks)
+        fetcher(false, responseHookCallbacks)
     }
 
     useEffect(() => {
-        fetcher(false, responseHookCallbacks)
+        fetcher(true, responseHookCallbacks)
     }, [])
 
     return {
