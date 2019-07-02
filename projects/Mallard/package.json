@@ -9,6 +9,7 @@
         "wifi-android": "ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
         "run-android": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android",
         "run-ios": "react-native run-ios",
+        "run-ipad": "react-native run-ios --simulator=\"iPad Air 2\"",
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard",
         "bundle-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
