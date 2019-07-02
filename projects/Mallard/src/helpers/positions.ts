@@ -17,9 +17,12 @@ b) animations in react in general are always a
 */
 
 export type ScreenPosition = LayoutRectangle
-interface NavigationPosition {
-    position: Animated.Value
-    index: number
+export interface NavigationPosition {
+    position: Animated.AnimatedInterpolation
+    raw: {
+        position: Animated.Value
+        index: number
+    }
 }
 
 type SaveableNavigationPositions = 'article'
@@ -54,7 +57,13 @@ const setNavigationPosition = (
     key: SaveableNavigationPositions,
     [position, index]: [Animated.Value, number],
 ) => {
-    interpolators[key] = { position, index }
+    interpolators[key] = {
+        position: position.interpolate({
+            inputRange: [index, index + 1],
+            outputRange: [0, 1],
+        }),
+        raw: { position, index },
+    }
 }
 const getNavigationPosition = (
     key: SaveableNavigationPositions,

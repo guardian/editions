@@ -89,21 +89,13 @@ const ArticleScreenWithProps = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
-
     const navigationPosition = getNavigationPosition('article')
-    const position = navigationPosition
-        ? navigationPosition.position.interpolate({
-              inputRange: [
-                  navigationPosition.index,
-                  navigationPosition.index + 1,
-              ],
-              outputRange: [0, 1],
-          })
-        : undefined
 
     return (
         <ClipFromTop
-            easing={position}
+            easing={
+                (navigationPosition && navigationPosition.position) || undefined
+            }
             from={
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
@@ -169,7 +161,6 @@ const ArticleScreenWithProps = ({
                             >
                                 <ArticleController
                                     article={article}
-                                    transitionPosition={position}
                                     viewIsTransitioning={viewIsTransitioning}
                                 />
                             </WithArticleAppearance>

@@ -47,7 +47,7 @@ const Standfirst = ({ standfirst, byline, style }: PropTypes) => {
                 ]}
             >
                 <Multiline
-                    count={name === 'comment' ? 8 : 4}
+                    count={name === 'opinion' ? 8 : 4}
                     color={
                         StyleSheet.flatten([appearance.text, appearance.byline])
                             .color

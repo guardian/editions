@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react'
 import { View, StyleSheet, Dimensions, Linking, Animated } from 'react-native'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -18,6 +17,7 @@ import {
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
 import { CAPIArticle } from '../../../../common/src'
+import { getNavigationPosition } from 'src/helpers/positions'
 
 /*
 This is the article view! For all of the articles.
@@ -44,11 +44,9 @@ export interface ArticleControllerPropTypes {
 const ArticleController = ({
     article,
     viewIsTransitioning,
-    transitionPosition,
 }: {
     article: CAPIArticle
     viewIsTransitioning?: boolean
-    transitionPosition: Animated.AnimatedInterpolation
 }) => {
     switch (article.type) {
         case 'article':
@@ -56,7 +54,6 @@ const ArticleController = ({
                 <Article
                     article={viewIsTransitioning ? undefined : article.elements}
                     {...article}
-                    {...{ transitionPosition }}
                 />
             )
 
@@ -91,7 +88,6 @@ const ArticleController = ({
 }
 
 const Article = ({
-    transitionPosition,
     article,
     headline,
     image,
@@ -99,13 +95,13 @@ const Article = ({
     byline,
     standfirst,
 }: {
-    transitionPosition?: Animated.AnimatedInterpolation
     article?: BlockElement[]
 } & ArticleHeaderPropTypes &
     StandfirstPropTypes) => {
     const { name: appearanceName } = useArticleAppearance()
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const html = useMemo(() => (article ? render(article) : ''), [article])
+    const navigationPosition = getNavigationPosition('article')
 
     return (
         <View style={styles.container}>
@@ -118,8 +114,8 @@ const Article = ({
                 {...{ byline, standfirst }}
                 style={[
                     { backgroundColor: color.background, flex: 1 },
-                    transitionPosition && {
-                        opacity: transitionPosition.interpolate({
+                    navigationPosition && {
+                        opacity: navigationPosition.position.interpolate({
                             inputRange: [0.6, 1],
                             outputRange: [0, 1],
                         }),
@@ -130,8 +126,8 @@ const Article = ({
             <Animated.View
                 style={[
                     { backgroundColor: color.background, flex: 1 },
-                    transitionPosition && {
-                        opacity: transitionPosition.interpolate({
+                    navigationPosition && {
+                        opacity: navigationPosition.position.interpolate({
                             inputRange: [0.75, 1],
                             outputRange: [0, 1],
                         }),
