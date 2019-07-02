@@ -59,8 +59,8 @@ const Lozenge = ({
                     transform: [
                         {
                             translateX: position.interpolate({
-                                inputRange: [-100, 0, 10],
-                                outputRange: [-20, 1, 10],
+                                inputRange: [-100, 0, 100],
+                                outputRange: [-20, 0, 100],
                             }),
                         },
                     ],
