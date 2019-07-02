@@ -28,7 +28,7 @@ import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useApiEndpoint } from 'src/hooks/use-api'
 import { Button } from 'src/components/button/button'
-import { Heading } from 'src/components/layout/ui/row'
+import { Heading, Footer } from 'src/components/layout/ui/row'
 
 const demoIssues: Issue[] = [
     {
@@ -97,16 +97,9 @@ export const HomeScreen = ({
                                     navigation.navigate('Issue', { path })
                                 }
                             />
-                            <View
-                                style={{
-                                    padding: metrics.vertical,
-                                    paddingHorizontal: metrics.horizontal,
-                                    paddingTop: metrics.vertical * 3,
-                                    alignItems: 'flex-start',
-                                }}
-                            >
+                            <Footer>
                                 <Button onPress={retry}>Refresh</Button>
-                            </View>
+                            </Footer>
                         </>
                     ),
                     error: ({ message }, { retry }) => (
