@@ -100,7 +100,4 @@ const CollectionPage = ({
     )
 }
 
-CollectionPage.defaultProps = {
-    stories: [],
-}
 export { CollectionPage }
