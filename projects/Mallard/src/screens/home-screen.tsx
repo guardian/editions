@@ -7,7 +7,7 @@ import {
     View,
     Platform,
 } from 'react-native'
-import { List, ListHeading } from 'src/components/lists/list'
+import { List } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { primaryContainer } from 'src/theme/styles'
 import { ApiState } from './settings/api-screen'
@@ -24,9 +24,10 @@ import { issueSummaryPath, IssueSummary } from '../../../common/src'
 import { useEndpoint } from 'src/hooks/use-fetch'
 import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
-import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
+import { Heading } from 'src/components/layout/ui/row'
 
 const demoIssues: Issue[] = [
     {
@@ -75,7 +76,7 @@ export const HomeScreen = ({
         <WithAppAppearance value={'primary'}>
             <Header title={APP_DISPLAY_NAME} />
             <ScrollView style={styles.container}>
-                <ListHeading>Issues</ListHeading>
+                <Heading>Issues</Heading>
                 {issueSummary({
                     success: issueList => (
                         <List
@@ -106,7 +107,7 @@ export const HomeScreen = ({
                 })}
                 {files.length > 0 && (
                     <>
-                        <ListHeading>Issues on device</ListHeading>
+                        <Heading>Issues on device</Heading>
                         <List
                             data={files
                                 .filter(
@@ -145,7 +146,7 @@ export const HomeScreen = ({
                 )}
                 {isUsingProdDevtools ? (
                     <>
-                        <ListHeading>Hardcoded issues</ListHeading>
+                        <Heading>Hardcoded issues</Heading>
                         <List
                             data={issueList}
                             onPress={path =>

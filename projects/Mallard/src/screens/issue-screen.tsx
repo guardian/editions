@@ -11,7 +11,7 @@ import { Front } from 'src/components/front'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
 
-import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useJsonOrEndpoint } from 'src/hooks/use-fetch'

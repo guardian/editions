@@ -19,20 +19,5 @@ const mapNavigationToProps = <T extends {}, P extends {}>(
 ) => (props: T & { navigation: NavigationScreenProp<P> }) => (
     <Component {...props} {...mapper(props.navigation)} />
 )
-/**
- *
- * @param Container - a NavigationContainer that we want to persist route changes between sessions
- * @param key - the key
- */
-const withPersistenceKey = (
-    Container: NavigationContainer,
-    key: string | null,
-) => {
-    const Wrapper = (
-        props: NavigationContainerProps & NavigationNavigatorProps<any>,
-    ) => <Container {...props} persistenceKey={key} />
-    Wrapper.router = Container.router
-    return Wrapper
-}
 
-export { mapNavigationToProps, withPersistenceKey }
+export { mapNavigationToProps }

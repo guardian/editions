@@ -1,6 +1,6 @@
-import React, { useContext, createContext } from 'react'
 import { useState, useEffect } from 'react'
 import { File, getFileList, downloadIssue } from 'src/helpers/files'
+import { createProviderHook } from 'src/helpers/provider'
 
 /*
 Downloads
@@ -86,26 +86,18 @@ const useFileListInCtx = (): FileListHook => {
 /*
 Provider
 */
-const FileSystemContext = createContext<{
+const { Provider: FileSystemProvider, useAsHook } = createProviderHook<{
     fileList: FileListHook
     downloads: DownloadQueueHook
-}>({} as {
-    fileList: FileListHook
-    downloads: DownloadQueueHook
+}>(() => {
+    const fileList = useFileListInCtx()
+    const downloads = useDownloadQueueInCtx()
+
+    if (fileList !== null && downloads !== null) return { fileList, downloads }
+    return null
 })
 
-const FileSystemProvider = ({ children }: { children: React.ReactNode }) => (
-    <FileSystemContext.Provider
-        value={{
-            fileList: useFileListInCtx(),
-            downloads: useDownloadQueueInCtx(),
-        }}
-    >
-        {children}
-    </FileSystemContext.Provider>
-)
-const useFileList = (): FileListHook => useContext(FileSystemContext).fileList
-const useDownloadQueue = (): DownloadQueueHook =>
-    useContext(FileSystemContext).downloads
+const useFileList = (): FileListHook => useAsHook().fileList
+const useDownloadQueue = (): DownloadQueueHook => useAsHook().downloads
 
 export { FileSystemProvider, useFileList, useDownloadQueue }

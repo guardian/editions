@@ -43,6 +43,15 @@ export const color = {
     error: palette.news.main,
 
     /*
+    Onboarding & button UI.
+    */
+    ui: {
+        tomato: palette.news.bright,
+        apricot: palette.opinion.bright,
+        shark: palette.sport.main,
+    },
+
+    /*
     The palette is available to use, but prefer using the name.
     */
     palette,
