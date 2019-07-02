@@ -10,4 +10,4 @@ export const useApiEndpoint = <T>(
         validator?: ValidatorFn<T>
         cached?: boolean
     } = {},
-) => useInstantPromise(fetchFromApi(endpointPath, { validator, cached }))
+) => useInstantPromise<T>(fetchFromApi(endpointPath, { validator, cached }))
