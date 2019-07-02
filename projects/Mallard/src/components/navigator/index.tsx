@@ -70,26 +70,35 @@ const Navigator = ({
         }),
     )
 
+    const isScrollable = stops > 1
+    const isScrubbable = onScrub && isScrollable
+
     return (
         <View
-            {...(onScrub ? panResponder.panHandlers : {})}
+            {...(isScrubbable ? panResponder.panHandlers : {})}
             style={styles.root}
             onLayout={ev => {
                 setWidth(ev.nativeEvent.layout.width)
             }}
         >
-            <View style={styles.background}>
-                <Background
-                    height={scrubberRadius}
-                    radius={stopRadius}
-                    {...{ stops, fill }}
-                />
-            </View>
+            {isScrollable ? (
+                <View style={styles.background}>
+                    <Background
+                        height={scrubberRadius}
+                        radius={stopRadius}
+                        {...{ stops, fill }}
+                    />
+                </View>
+            ) : null}
             <Lozenge
-                position={position.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, width - scrubberRadius * 2],
-                })}
+                position={
+                    isScrollable
+                        ? position.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, width - scrubberRadius * 2],
+                          })
+                        : undefined
+                }
                 scrubbing={scrubbing}
                 fill={fill}
                 radius={scrubberRadius}

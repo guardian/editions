@@ -45,7 +45,7 @@ const Lozenge = ({
 }: {
     fill: string
     children: string
-    position: Animated.AnimatedInterpolation
+    position?: Animated.AnimatedInterpolation
     scrubbing: boolean
     radius: number
 }) => {
@@ -55,7 +55,7 @@ const Lozenge = ({
         <Animated.View
             style={[
                 styles.root,
-                {
+                position && {
                     transform: [{ translateX: position }],
                 },
             ]}
@@ -63,16 +63,16 @@ const Lozenge = ({
             <Animated.Text
                 style={[
                     styles.text,
-                    {
+                    position && {
                         opacity: position.interpolate({
-                            inputRange: [0, 10],
-                            outputRange: [1, 0],
+                            inputRange: [-100, 0, 10],
+                            outputRange: [0.9, 1, 0],
                         }),
                         transform: [
                             {
                                 translateX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [0, -20],
+                                    inputRange: [-100, 0, 20],
+                                    outputRange: [-5, 0, -20],
                                 }),
                             },
                         ],
@@ -87,16 +87,17 @@ const Lozenge = ({
                 }}
                 style={[
                     styles.bubble,
-                    {
+                    position && {
                         opacity: position.interpolate({
-                            inputRange: [10, 20],
-                            outputRange: [1, 0],
+                            inputRange: [-100, 10, 20],
+                            outputRange: [0.9, 1, 0],
                         }),
                         transform: [
                             {
                                 translateX: position.interpolate({
-                                    inputRange: [0, 20],
+                                    inputRange: [-100, 0, 20],
                                     outputRange: [
+                                        -5,
                                         0,
                                         (width.current || 0) * -0.4,
                                     ],
@@ -104,8 +105,8 @@ const Lozenge = ({
                             },
                             {
                                 scaleX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [1, 0.25],
+                                    inputRange: [-100, 0, 20],
+                                    outputRange: [1.1, 1, 0.25],
                                 }),
                             },
                         ],
@@ -116,21 +117,25 @@ const Lozenge = ({
                 style={[
                     styles.bubble,
                     styles.roundBubble,
-                    {
-                        opacity: position.interpolate({
-                            inputRange: [0, 5, 20],
-                            outputRange: [0, 0.5, 1],
-                        }),
-                        transform: [
-                            {
-                                scaleX: position.interpolate({
-                                    inputRange: [0, 20],
-                                    outputRange: [1.25, 1],
-                                    extrapolate: 'clamp',
-                                }),
-                            },
-                        ],
-                    },
+                    position
+                        ? {
+                              opacity: position.interpolate({
+                                  inputRange: [0, 5, 20],
+                                  outputRange: [0, 0.5, 1],
+                              }),
+                              transform: [
+                                  {
+                                      scaleX: position.interpolate({
+                                          inputRange: [0, 20],
+                                          outputRange: [1.25, 1],
+                                          extrapolate: 'clamp',
+                                      }),
+                                  },
+                              ],
+                          }
+                        : {
+                              opacity: 0,
+                          },
                 ]}
             >
                 <Text style={[styles.text]}>{children[0]}</Text>
