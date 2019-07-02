@@ -1,25 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 import { color } from 'src/theme/color'
-import { Animated, View, PanResponder } from 'react-native'
+import { Animated, View, PanResponder, StyleSheet } from 'react-native'
 import { Scrubber } from './scrubber'
 import { Background } from './background'
 
 const scrubberRadius = 18
 const stopRadius = 4
 
+const styles = StyleSheet.create({
+    root: {
+        height: scrubberRadius * 2,
+    },
+    background: {
+        marginHorizontal: scrubberRadius - stopRadius,
+    },
+})
+
 export const NavigatorSkeleton = () => {
     return (
-        <View
-            style={{
-                height: scrubberRadius * 2,
-            }}
-        >
+        <View style={[styles.root, styles.background]}>
             <Background
                 height={scrubberRadius}
                 radius={stopRadius}
                 stops={0}
-                fill={color.dimText}
+                fill={color.skeleton}
             />
         </View>
     )
@@ -40,8 +45,8 @@ const Navigator = ({
     onScrub?: (to: number) => void
     onReleaseScrub?: (to: number) => void
 }) => {
+    let scrubbing = useRef(false).current
     const [width, setWidth] = useState(0)
-    const [scrubbing, setScrubbing] = useState(false)
     const [panResponder] = useState(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
@@ -49,14 +54,14 @@ const Navigator = ({
             onPanResponderTerminationRequest: () => false,
             onShouldBlockNativeResponder: () => true,
             onPanResponderGrant: (ev, gestureState) => {
-                setScrubbing(true)
+                scrubbing = true
                 onScrub && onScrub(gestureState.x0 - scrubberRadius)
             },
             onPanResponderMove: (ev, gestureState) => {
                 onScrub && onScrub(gestureState.moveX - scrubberRadius)
             },
             onPanResponderEnd: (ev, gestureState) => {
-                setScrubbing(false)
+                scrubbing = false
                 onReleaseScrub &&
                     onReleaseScrub(
                         gestureState.x0 + gestureState.dx - scrubberRadius,
@@ -64,28 +69,27 @@ const Navigator = ({
             },
         }),
     )
-    const interpolatedPosition = position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, width - scrubberRadius * 2],
-    })
 
     return (
         <View
             {...(onScrub ? panResponder.panHandlers : {})}
-            style={{
-                backgroundColor: 'transparent',
-            }}
+            style={styles.root}
             onLayout={ev => {
                 setWidth(ev.nativeEvent.layout.width)
             }}
         >
-            <Background
-                height={scrubberRadius}
-                radius={stopRadius}
-                {...{ stops, fill }}
-            />
+            <View style={styles.background}>
+                <Background
+                    height={scrubberRadius}
+                    radius={stopRadius}
+                    {...{ stops, fill }}
+                />
+            </View>
             <Scrubber
-                position={interpolatedPosition}
+                position={position.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, width - scrubberRadius * 2],
+                })}
                 scrubbing={scrubbing}
                 fill={fill}
                 radius={scrubberRadius}

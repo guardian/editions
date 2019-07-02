@@ -89,7 +89,6 @@ const Scrubber = ({
                             outputRange: [1, 0],
                         }),
                         transform: [
-                            //{ translateX: width.current || 0 },
                             {
                                 translateX: position.interpolate({
                                     inputRange: [0, 20],
