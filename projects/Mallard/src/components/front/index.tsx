@@ -1,6 +1,5 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
 import { Dimensions, Animated } from 'react-native'
-import { useJsonOrEndpoint } from '../../hooks/use-fetch'
 
 import { CollectionPage, PropTypes } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -21,9 +20,10 @@ import {
     getNearestPage,
 } from './helpers'
 import { WithArticleAppearance } from 'src/theme/appearance'
+import { useIssue } from 'src/hooks/use-issue'
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
-    const resp = useJsonOrEndpoint<FrontType>(
+    const resp = useIssue<FrontType>(
         issue,
         FSPaths.front(issue, front),
         APIPaths.front(issue, front),
