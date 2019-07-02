@@ -20,7 +20,7 @@ const createProviderHook = <T extends {}>(hook: () => T | null) => {
         return ctx
     }
 
-    return { Provider, useAsHook, Context }
+    return { Provider, useAsHook }
 }
 
 export { createProviderHook }
