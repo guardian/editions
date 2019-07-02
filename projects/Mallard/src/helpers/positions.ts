@@ -67,7 +67,7 @@ const setNavigationPosition = (
 ) => {
     interpolators[key] = {
         position: position.interpolate({
-            inputRange: [index, index + 1],
+            inputRange: [index - 1, index],
             outputRange: [0, 1],
         }),
         raw: { position, index },

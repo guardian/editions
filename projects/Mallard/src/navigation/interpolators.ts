@@ -13,12 +13,15 @@ export const getScaleForArticle = (width: LayoutRectangle['width']) => {
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+    const { width: windowWidth, height: windowHeight } = Dimensions.get(
+        'window',
+    )
 
-    setNavigationPosition('article', [position, sceneIndex])
+    const minScale = 0.9
 
     const scale = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
-        outputRange: [1, 1, 0.75],
+        outputRange: [1, 1, minScale],
     })
     const borderRadius = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 1],
@@ -26,13 +29,23 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
         outputRange: [0, 20],
     })
     const opacity = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
+        inputRange: [sceneIndex, sceneIndex + 0.1],
         extrapolate: 'clamp',
-        outputRange: [1, 0.5, 0.2],
+        outputRange: [1, 0.9],
+    })
+
+    const translateOffset =
+        (windowHeight - windowHeight * minScale) * -0.5 +
+        metrics.slideCardSpacing / 1.5
+
+    const translateY = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, translateOffset],
     })
 
     return {
         transform: [
+            { translateY },
             {
                 scale,
             },
@@ -46,6 +59,8 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+
+    setNavigationPosition('article', [position, sceneIndex])
 
     /*
     we are assuming our final article
