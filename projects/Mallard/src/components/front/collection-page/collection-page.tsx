@@ -1,14 +1,11 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet, StyleProp, Animated, View } from 'react-native'
+import React from 'react'
+import { StyleSheet, Animated, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
-import {
-    WithArticleAppearance,
-    useArticleAppearance,
-} from 'src/theme/appearance'
+import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { Row } from './row'
-import { Article, Issue, Collection, Front, ColorFromPalette } from 'src/common'
+import { Article, Issue, Collection, Front } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
@@ -42,7 +39,6 @@ const styles = StyleSheet.create({
 
 export interface PropTypes {
     articles: Article[]
-    translate: Animated.AnimatedInterpolation
     issue: Issue['key']
     front: Front['key']
     pageLayout?: PageLayout
@@ -56,7 +52,7 @@ const CollectionPage = ({
     issue,
     front,
     pageLayout,
-}: PropTypes) => {
+}: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const { appearance } = useArticleAppearance()
     if (!articles.length) {
         return <FlexErrorMessage title={GENERIC_ERROR} />

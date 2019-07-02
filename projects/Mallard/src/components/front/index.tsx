@@ -7,7 +7,6 @@ import { Front as FrontType } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import { Issue, ColorFromPalette } from 'src/common'
-import { withResponse } from 'src/hooks/use-response'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
@@ -21,6 +20,7 @@ import {
 } from './helpers'
 import { WithArticleAppearance } from 'src/theme/appearance'
 import { useIssue } from 'src/hooks/use-issue'
+import { withResponse } from 'src/helpers/response'
 
 const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
     const resp = useIssue<FrontType>(
@@ -34,7 +34,7 @@ const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
     return withResponse<FrontType>(resp)
 }
 
-const WrappedCollectionPage = ({
+const CollectionPageInFront = ({
     index,
     appearance,
     scrollX,
@@ -43,7 +43,7 @@ const WrappedCollectionPage = ({
     index: number
     appearance: ColorFromPalette
     scrollX: Animated.Value
-} & Exclude<PropTypes, 'translate'>) => {
+} & PropTypes) => {
     const { width } = Dimensions.get('window')
     const translate = getTranslateForPage(scrollX, index)
     return (
@@ -155,7 +155,7 @@ const FrontWithResponse = ({
                     item: FlatCard
                     index: number
                 }) => (
-                    <WrappedCollectionPage
+                    <CollectionPageInFront
                         articles={item.articles || []}
                         collection={item.collection.key}
                         front={frontData.key}

@@ -2,8 +2,13 @@ import React, { ReactElement } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
-const wrapperStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     inner: { height: metrics.frontsPageHeight },
+    outer: {
+        padding: metrics.horizontal,
+        marginBottom: 0,
+        marginTop: metrics.vertical * 2,
+    },
 })
 
 const Wrapper = ({
@@ -15,16 +20,8 @@ const Wrapper = ({
 }) => {
     return (
         <>
-            <View
-                style={{
-                    padding: metrics.horizontal,
-                    marginBottom: 0,
-                    marginTop: metrics.vertical * 2,
-                }}
-            >
-                {scrubber}
-            </View>
-            <View style={wrapperStyles.inner}>{children}</View>
+            <View style={styles.outer}>{scrubber}</View>
+            <View style={styles.inner}>{children}</View>
         </>
     )
 }
