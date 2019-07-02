@@ -56,11 +56,19 @@ const Lozenge = ({
             style={[
                 styles.root,
                 position && {
-                    transform: [{ translateX: position }],
+                    transform: [
+                        {
+                            translateX: position.interpolate({
+                                inputRange: [-100, 0, 10],
+                                outputRange: [-20, 1, 10],
+                            }),
+                        },
+                    ],
                 },
             ]}
         >
             <Animated.Text
+                accessibilityRole="header"
                 style={[
                     styles.text,
                     position && {
@@ -72,7 +80,7 @@ const Lozenge = ({
                             {
                                 translateX: position.interpolate({
                                     inputRange: [-100, 0, 20],
-                                    outputRange: [-5, 0, -20],
+                                    outputRange: [-10, 0, -20],
                                 }),
                             },
                         ],
@@ -97,7 +105,7 @@ const Lozenge = ({
                                 translateX: position.interpolate({
                                     inputRange: [-100, 0, 20],
                                     outputRange: [
-                                        -5,
+                                        -10,
                                         0,
                                         (width.current || 0) * -0.4,
                                     ],
@@ -114,6 +122,7 @@ const Lozenge = ({
                 ]}
             />
             <Animated.View
+                accessible={false}
                 style={[
                     styles.bubble,
                     styles.roundBubble,
