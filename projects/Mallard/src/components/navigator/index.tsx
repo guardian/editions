@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, View, PanResponder, StyleSheet } from 'react-native'
-import { Scrubber } from './scrubber'
+import { Lozenge } from './lozenge'
 import { Background } from './background'
 
 const scrubberRadius = 18
@@ -85,7 +85,7 @@ const Navigator = ({
                     {...{ stops, fill }}
                 />
             </View>
-            <Scrubber
+            <Lozenge
                 position={position.interpolate({
                     inputRange: [0, 1],
                     outputRange: [0, width - scrubberRadius * 2],
@@ -95,7 +95,7 @@ const Navigator = ({
                 radius={scrubberRadius}
             >
                 {title}
-            </Scrubber>
+            </Lozenge>
         </View>
     )
 }

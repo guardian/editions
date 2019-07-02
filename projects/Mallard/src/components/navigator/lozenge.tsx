@@ -22,6 +22,10 @@ const getStyles = (fill: string, radius: number) =>
             zIndex: -1,
             ...StyleSheet.absoluteFillObject,
         },
+        roundBubble: {
+            width: radius * 2,
+            alignItems: 'center',
+        },
         text: {
             color: color.textOverDarkBackground,
             fontSize: 22,
@@ -32,7 +36,7 @@ const getStyles = (fill: string, radius: number) =>
         },
     })
 
-const Scrubber = ({
+const Lozenge = ({
     fill,
     children,
     position,
@@ -85,7 +89,7 @@ const Scrubber = ({
                     styles.bubble,
                     {
                         opacity: position.interpolate({
-                            inputRange: [0, 20],
+                            inputRange: [10, 20],
                             outputRange: [1, 0],
                         }),
                         transform: [
@@ -111,9 +115,8 @@ const Scrubber = ({
             <Animated.View
                 style={[
                     styles.bubble,
+                    styles.roundBubble,
                     {
-                        width: radius * 2,
-                        alignItems: 'center',
                         opacity: position.interpolate({
                             inputRange: [0, 5, 20],
                             outputRange: [0, 0.5, 1],
@@ -136,4 +139,4 @@ const Scrubber = ({
     )
 }
 
-export { Scrubber }
+export { Lozenge }
