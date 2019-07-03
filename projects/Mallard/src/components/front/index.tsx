@@ -17,20 +17,7 @@ import {
     getNearestPage,
 } from './helpers'
 import { WithArticleAppearance } from 'src/theme/appearance'
-import { useIssue } from 'src/hooks/use-issue'
-import { withResponse } from 'src/helpers/response'
-
-const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
-    const resp = useIssue<FrontType>(
-        issue,
-        FSPaths.front(issue, front),
-        APIPaths.front(issue, front),
-        {
-            validator: res => res.collections != null,
-        },
-    )
-    return withResponse<FrontType>(resp)
-}
+import { useFrontsResponse } from 'src/hooks/use-issue'
 
 const CollectionPageInFront = ({
     index,

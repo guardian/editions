@@ -4,6 +4,7 @@ import {
     Error,
     ResponseHookCallbacks,
 } from 'src/hooks/use-response'
+import { CachedOrPromise } from './fetch/cached-or-promise'
 
 interface WithResponseCallbacks<T> {
     retry: () => void

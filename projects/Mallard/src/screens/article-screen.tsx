@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useIssue } from 'src/hooks/use-issue'
+import { useIssue, useArticleResponse } from 'src/hooks/use-issue'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import { WithArticleAppearance, articleAppearances } from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
@@ -29,40 +29,6 @@ export interface PathToArticle {
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
-}
-
-const useArticleResponse = ({ article, issue, front }: PathToArticle) => {
-    const resp = useIssue<Front>(
-        issue,
-        FSPaths.front(issue, front),
-        APIPaths.front(issue, front),
-    )
-    if (resp.state === 'success') {
-        // TODO: we aren't storing the path anywhere on the article
-        // which means we can't key into our collection (which is keyed by path)
-        // even when we have an article
-
-        const allArticles = flattenCollections(resp.response.collections)
-            .map(({ articles }) => articles)
-            .reduce((acc, val) => acc.concat(val), [])
-        const articleContent = allArticles.find(({ key }) => key === article)
-
-        if (articleContent) {
-            return withResponse<CAPIArticle>({
-                ...resp,
-                response: articleContent,
-            })
-        } else {
-            return withResponse<CAPIArticle>({
-                ...resp,
-                state: 'error',
-                error: {
-                    message: ERR_404_REMOTE,
-                },
-            })
-        }
-    }
-    return withResponse<CAPIArticle>(resp)
 }
 
 const ArticleScreenWithProps = ({

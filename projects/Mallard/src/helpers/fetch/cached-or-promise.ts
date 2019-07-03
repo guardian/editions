@@ -54,6 +54,13 @@ const isNotCached = <T>(
     cachedOrPromise: CachedOrPromise<T>,
 ): cachedOrPromise is SlowPromiseGetter<T> => cachedOrPromise.type === 'promise'
 
+const asPromise = <T>(cachedOrPromise: CachedOrPromise<T>) => {
+    if (isNotCached(cachedOrPromise)) {
+        return cachedOrPromise.getValue()
+    }
+    return Promise.resolve(cachedOrPromise.value)
+}
+
 const createCachedOrPromise = <T>(
     [value, promiseGetter]: [T | null | undefined, () => Promise<T>],
     {
@@ -78,4 +85,4 @@ const createCachedOrPromise = <T>(
     }
 }
 
-export { isNotCached, createCachedOrPromise }
+export { isNotCached, asPromise, createCachedOrPromise }

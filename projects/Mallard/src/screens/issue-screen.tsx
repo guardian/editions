@@ -14,11 +14,9 @@ import { Header } from 'src/components/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { useIssue } from 'src/hooks/use-issue'
-import { withResponse } from 'src/helpers/response'
+import { useIssueResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
-import { FSPaths, APIPaths } from 'src/paths'
 
 const styles = StyleSheet.create({
     container,
@@ -27,12 +25,6 @@ const styles = StyleSheet.create({
     },
 })
 
-const useIssueResponse = (issue: Issue['key']) =>
-    withResponse<Issue>(
-        useIssue<Issue>(issue, FSPaths.issue(issue), APIPaths.issue(issue), {
-            validator: res => res.fronts != null,
-        }),
-    )
 export interface PathToIssue {
     issue: Issue['key']
 }
