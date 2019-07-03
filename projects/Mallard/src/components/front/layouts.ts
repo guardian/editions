@@ -1,5 +1,11 @@
 import { PageLayout, RowSize, withSlots } from './helpers'
-import {SplashImageItem, SuperHeroImageItem, ImageItem, SplitImageItem, SmallItem } from './item/item'
+import {
+    SplashImageItem,
+    SuperHeroImageItem,
+    ImageItem,
+    SplitImageItem,
+    SmallItem,
+} from './item/item'
 
 const splashPage: PageLayout = withSlots([
     {

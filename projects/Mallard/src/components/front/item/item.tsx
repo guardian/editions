@@ -220,28 +220,26 @@ const splitImageStyles = StyleSheet.create({
         height: '100%',
     },
     textBlock: {
-      flex: 0.5,
-    }
+        flex: 0.5,
+    },
 })
 
 const SplitImageItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ style, article, path }}>
             <View style={splitImageStyles.card}>
-              <TextBlock
-                  style={splitImageStyles.textBlock}
-                  kicker={article.kicker}
-                  headline={article.headline}
-                  {...{ size }}
-              />
-              <Image
-                  style={[
-                      splitImageStyles.image,
-                  ]}
-                  source={{
-                      uri: article.image,
-                  }}
-              />
+                <TextBlock
+                    style={splitImageStyles.textBlock}
+                    kicker={article.kicker}
+                    headline={article.headline}
+                    {...{ size }}
+                />
+                <Image
+                    style={[splitImageStyles.image]}
+                    source={{
+                        uri: article.image,
+                    }}
+                />
             </View>
         </ItemTappable>
     )
@@ -267,8 +265,7 @@ const superHeroImageStyles = StyleSheet.create({
         color: '#6B6666',
         position: 'absolute',
         bottom: 0,
-
-    }
+    },
 })
 
 const SuperHeroImageItem = ({ style, article, path, size }: PropTypes) => {
@@ -286,9 +283,9 @@ const SuperHeroImageItem = ({ style, article, path, size }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
-            <StandfirstText
-                style={[superHeroImageStyles.textStandBlock]}
-            >{article.standfirst}</StandfirstText>
+            <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
+                {article.standfirst}
+            </StandfirstText>
         </ItemTappable>
     )
 }
@@ -304,24 +301,24 @@ const splashImageStyles = StyleSheet.create({
         height: '100%',
     },
     textBlock: {
-        fontSize:40,
+        fontSize: 40,
         lineHeight: 30,
-        color:'#ffffff',
+        color: '#ffffff',
     },
     splashHeadline: {
-      position: 'absolute',
-      bottom: 0,
-      flex: 0,
-      zIndex: 10000,
-      width: '50%',
-      color:'#ffffff',
+        position: 'absolute',
+        bottom: 0,
+        flex: 0,
+        zIndex: 10000,
+        width: '50%',
+        color: '#ffffff',
     },
     textStandBlock: {
         ...tappableStyles.padding,
         fontSize: 14,
         lineHeight: 18,
         color: '#fff',
-    }
+    },
 })
 
 const SplashImageItem = ({ style, article, path, size }: PropTypes) => {
@@ -334,12 +331,12 @@ const SplashImageItem = ({ style, article, path, size }: PropTypes) => {
                 }}
             />
             <View style={[splashImageStyles.splashHeadline]}>
-              <StandfirstText
-                  style={[splashImageStyles.textBlock]}
-              >{article.kicker}</StandfirstText>
-              <StandfirstText
-                  style={[splashImageStyles.textStandBlock]}
-              >{article.standfirst}</StandfirstText>
+                <StandfirstText style={[splashImageStyles.textBlock]}>
+                    {article.kicker}
+                </StandfirstText>
+                <StandfirstText style={[splashImageStyles.textStandBlock]}>
+                    {article.standfirst}
+                </StandfirstText>
             </View>
         </ItemTappable>
     )
@@ -357,4 +354,11 @@ const SmallItem = ({ style, article, path, size }: PropTypes) => {
     )
 }
 
-export {SplashImageItem, SuperHeroImageItem, ImageItem, SplitImageItem, SmallItem, CoverItem }
+export {
+    SplashImageItem,
+    SuperHeroImageItem,
+    ImageItem,
+    SplitImageItem,
+    SmallItem,
+    CoverItem,
+}
