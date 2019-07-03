@@ -20,6 +20,7 @@ import {
     setScreenPositionFromView,
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
+import { color } from 'src/theme/color'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -258,7 +259,7 @@ const superHeroImageStyles = StyleSheet.create({
         ...tappableStyles.padding,
         fontSize: 14,
         lineHeight: 18,
-        color: 'color.palette.neutral[60]',
+        color: color.palette.neutral[60],
         position: 'absolute',
         bottom: 0,
     },
@@ -299,7 +300,7 @@ const splashImageStyles = StyleSheet.create({
     textBlock: {
         fontSize: 40,
         lineHeight: 30,
-        color: 'color.palette.neutral[100]',
+        color: color.palette.neutral[100],
     },
     splashHeadline: {
         position: 'absolute',
@@ -307,13 +308,13 @@ const splashImageStyles = StyleSheet.create({
         flex: 0,
         zIndex: 10000,
         width: '50%',
-        color: 'color.palette.neutral[100]',
+        color: color.palette.neutral[100],
     },
     textStandBlock: {
         ...tappableStyles.padding,
         fontSize: 14,
         lineHeight: 18,
-        color: 'color.palette.neutral[100]',
+        color: color.palette.neutral[100],
     },
 })
 
