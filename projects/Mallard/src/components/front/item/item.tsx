@@ -12,6 +12,7 @@ import {
 } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
+import { StandfirstText, HeadlineText } from 'src/components/styled-text'
 import { RowSize, getRowHeightForSize } from '../helpers'
 import {
     setScreenPositionOfItem,
@@ -204,6 +205,47 @@ const ImageItem = ({ style, article, path, size }: PropTypes) => {
 }
 
 /*
+IMAGE SPLIT
+Text below image. To use in most heros
+*/
+
+const splitImageStyles = StyleSheet.create({
+    image: {
+        width: '50%',
+        height: '100%',
+        flex: 0.5,
+    },
+    card: {
+        flexDirection: 'row',
+        height: '100%',
+    },
+    textBlock: {
+        flex: 0.5,
+    },
+})
+
+const SplitImageItem = ({ style, article, path, size }: PropTypes) => {
+    return (
+        <ItemTappable {...{ style, article, path }}>
+            <View style={splitImageStyles.card}>
+                <TextBlock
+                    style={splitImageStyles.textBlock}
+                    kicker={article.kicker}
+                    headline={article.headline}
+                    {...{ size }}
+                />
+                <Image
+                    style={[splitImageStyles.image]}
+                    source={{
+                        uri: article.image,
+                    }}
+                />
+            </View>
+        </ItemTappable>
+    )
+}
+
+/*
 SUPERHERO IMAGE ITEM
 Text below image. To use in news & sport supers
 */
@@ -215,6 +257,14 @@ const superHeroImageStyles = StyleSheet.create({
     },
     textBlock: {
         ...tappableStyles.padding,
+    },
+    textStandBlock: {
+        ...tappableStyles.padding,
+        fontSize: 14,
+        lineHeight: 18,
+        color: 'color.palette.neutral[60]',
+        position: 'absolute',
+        bottom: 0,
     },
 })
 
@@ -233,6 +283,61 @@ const SuperHeroImageItem = ({ style, article, path, size }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
+            <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
+                {article.standfirst}
+            </StandfirstText>
+        </ItemTappable>
+    )
+}
+
+/*
+SUPERHERO IMAGE ITEM
+Text below image. To use in news & sport supers
+*/
+const splashImageStyles = StyleSheet.create({
+    image: {
+        width: 'auto',
+        flex: 0,
+        height: '100%',
+    },
+    textBlock: {
+        fontSize: 40,
+        lineHeight: 30,
+        color: 'color.palette.neutral[100]',
+    },
+    splashHeadline: {
+        position: 'absolute',
+        bottom: 0,
+        flex: 0,
+        zIndex: 10000,
+        width: '50%',
+        color: 'color.palette.neutral[100]',
+    },
+    textStandBlock: {
+        ...tappableStyles.padding,
+        fontSize: 14,
+        lineHeight: 18,
+        color: 'color.palette.neutral[100]',
+    },
+})
+
+const SplashImageItem = ({ style, article, path, size }: PropTypes) => {
+    return (
+        <ItemTappable {...{ article, path, style }} hasPadding={false}>
+            <Image
+                style={[splashImageStyles.image]}
+                source={{
+                    uri: article.image,
+                }}
+            />
+            <View style={[splashImageStyles.splashHeadline]}>
+                <StandfirstText style={[splashImageStyles.textBlock]}>
+                    {article.kicker}
+                </StandfirstText>
+                <StandfirstText style={[splashImageStyles.textStandBlock]}>
+                    {article.standfirst}
+                </StandfirstText>
+            </View>
         </ItemTappable>
     )
 }
@@ -249,4 +354,11 @@ const SmallItem = ({ style, article, path, size }: PropTypes) => {
     )
 }
 
-export { SuperHeroImageItem, ImageItem, SmallItem, CoverItem }
+export {
+    SplashImageItem,
+    SuperHeroImageItem,
+    ImageItem,
+    SplitImageItem,
+    SmallItem,
+    CoverItem,
+}

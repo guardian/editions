@@ -1,5 +1,18 @@
 import { PageLayout, RowSize, withSlots } from './helpers'
-import { SuperHeroImageItem, ImageItem, SmallItem } from './item/item'
+import {
+    SplashImageItem,
+    SuperHeroImageItem,
+    ImageItem,
+    SplitImageItem,
+    SmallItem,
+} from './item/item'
+
+const splashPage: PageLayout = withSlots([
+    {
+        size: RowSize.superhero,
+        columns: [SplashImageItem],
+    },
+])
 
 const superHeroPage: PageLayout = withSlots([
     {
@@ -8,14 +21,14 @@ const superHeroPage: PageLayout = withSlots([
     },
 ])
 
-const TODO_twoStoryPage: PageLayout = withSlots([
+const twoStoryPage: PageLayout = withSlots([
     {
-        size: RowSize.half,
+        size: RowSize.hero,
         columns: [ImageItem],
     },
     {
-        size: RowSize.half,
-        columns: [ImageItem],
+        size: RowSize.third,
+        columns: [SplitImageItem],
     },
 ])
 
@@ -88,8 +101,9 @@ const sixStoryPage: PageLayout = withSlots([
 ])
 
 export {
+    splashPage,
     superHeroPage,
-    TODO_twoStoryPage,
+    twoStoryPage,
     threeStoryPage,
     fourStoryPage,
     fiveStoryPage,
