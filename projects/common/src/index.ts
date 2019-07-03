@@ -1,3 +1,5 @@
+import { cardLayouts } from './collection/card-layouts'
+
 interface WithKey {
     key: string
 }
@@ -198,12 +200,6 @@ export type CollectionCardLayout = number[]
 export interface CollectionCardLayouts {
     [countOfArticles: number]: CollectionCardLayout
 }
-const cardLayouts: CollectionCardLayouts = {
-    1: [1],
-    2: [1, 1],
-    3: [1, 2],
-    4: [1, 3],
-}
 
 const issuePath = (issueId: string) => `${issueId}/issue`
 const frontPath = (issueId: string, frontId: string) =>
@@ -219,9 +215,9 @@ const mediaPath = (source: string, size: ImageSize, path: string) =>
 
 export {
     issuePath,
-    cardLayouts,
     mediaPath,
     frontPath,
     collectionPath,
     issueSummaryPath,
+    cardLayouts,
 }
