@@ -1,4 +1,4 @@
-import { LayoutRectangle, Dimensions, Animated } from 'react-native'
+import { LayoutRectangle, Dimensions, Animated, View } from 'react-native'
 import { Article } from 'src/common'
 
 /*
@@ -27,6 +27,17 @@ const setScreenPositionOfItem = (
     position: ScreenPosition,
 ) => {
     positions[item] = position
+}
+
+const setScreenPositionFromView = (key: Article['key'], item: View) => {
+    item.measureInWindow((x, y, width, height) => {
+        setScreenPositionOfItem(key, {
+            x,
+            y,
+            width,
+            height,
+        })
+    })
 }
 
 const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
@@ -80,6 +91,7 @@ const getNavigationPosition = (
 export {
     getScreenPositionOfItem,
     setScreenPositionOfItem,
+    setScreenPositionFromView,
     setNavigationPosition,
     getNavigationPosition,
 }
