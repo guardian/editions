@@ -169,12 +169,12 @@ const capiApiKey = process.env.CAPI_KEY
 const printsent = (paths: string[]) =>
     `${process.env.psurl}?ids=${paths.join(
         ',',
-    )}format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+    )}&format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
 
 const search = (paths: string[]) =>
     `https://content.guardianapis.com/search?ids=${paths.join(
         ',',
-    )}format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
+    )}&format=thrift&api-key=${capiApiKey}&show-elements=all&show-atoms=all&show-rights=all&show-fields=all&show-tags=all&show-blocks=all&show-references=all&format=thrift&page-size=100`
 
 export const getArticles = async (
     ids: number[],
@@ -204,7 +204,8 @@ export const getArticles = async (
         const lastArray = Object.entries(last)
         return fromEntries(firstArray.concat(lastArray))
     }
-
+    console.log('Making CAPI query', endpoint)
+    console.log('Debug link:', endpoint.replace('thrift', 'json'))
     const resp = await attempt(fetch(endpoint))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
     const buffer = await resp.arrayBuffer()
