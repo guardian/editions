@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, Dimensions, Linking } from 'react-native'
-import { NavigationInjectedProps, withNavigation } from 'react-navigation'
+import { View, StyleSheet, Dimensions, Linking, Animated } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -18,6 +17,7 @@ import {
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
 import { CAPIArticle } from '../../../../common/src'
+import { getNavigationPosition } from 'src/helpers/positions'
 
 /*
 This is the article view! For all of the articles.
@@ -27,6 +27,7 @@ it gets everything it needs from its route
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: color.background,
     },
     block: {
         alignItems: 'flex-start',
@@ -86,55 +87,72 @@ const ArticleController = ({
     }
 }
 
-const Article = withNavigation(
-    ({
-        navigation,
-        article,
-        headline,
-        image,
-        kicker,
-        byline,
-        standfirst,
-    }: {
-        article?: BlockElement[]
-    } & ArticleHeaderPropTypes &
-        StandfirstPropTypes &
-        NavigationInjectedProps) => {
-        const { name: appearanceName } = useArticleAppearance()
-        const [height, setHeight] = useState(Dimensions.get('window').height)
-        const html = useMemo(() => (article ? render(article) : ''), [article])
+const Article = ({
+    article,
+    headline,
+    image,
+    kicker,
+    byline,
+    standfirst,
+}: {
+    article?: BlockElement[]
+} & ArticleHeaderPropTypes &
+    StandfirstPropTypes) => {
+    const { name: appearanceName } = useArticleAppearance()
+    const [height, setHeight] = useState(Dimensions.get('window').height)
+    const html = useMemo(() => (article ? render(article) : ''), [article])
+    const navigationPosition = getNavigationPosition('article')
 
-        return (
-            <View style={styles.container}>
-                {appearanceName === 'longread' ? (
-                    <LongReadHeader {...{ headline, image, kicker }} />
-                ) : (
-                    <NewsHeader {...{ headline, image, kicker }} />
-                )}
-                <Standfirst {...{ byline, standfirst }} />
+    return (
+        <View style={styles.container}>
+            {appearanceName === 'longread' ? (
+                <LongReadHeader {...{ headline, image, kicker }} />
+            ) : (
+                <NewsHeader {...{ headline, image, kicker }} />
+            )}
+            <Standfirst
+                {...{ byline, standfirst }}
+                style={[
+                    navigationPosition && {
+                        opacity: navigationPosition.position.interpolate({
+                            inputRange: [0.6, 1],
+                            outputRange: [0, 1],
+                        }),
+                    },
+                ]}
+            />
 
-                <View style={{ backgroundColor: color.background, flex: 1 }}>
-                    <WebView
-                        originWhitelist={['*']}
-                        scrollEnabled={false}
-                        useWebKit={false}
-                        source={{ html: html }}
-                        onShouldStartLoadWithRequest={event => {
-                            if (event.url !== 'about:blank') {
-                                Linking.openURL(event.url)
-                                return false
-                            }
-                            return true
-                        }}
-                        onMessage={event => {
-                            setHeight(parseInt(event.nativeEvent.data))
-                        }}
-                        style={{ flex: 1, minHeight: height }}
-                    />
-                </View>
-            </View>
-        )
-    },
-)
+            <Animated.View
+                style={[
+                    { backgroundColor: color.background, flex: 1 },
+                    navigationPosition && {
+                        opacity: navigationPosition.position.interpolate({
+                            inputRange: [0.75, 1],
+                            outputRange: [0, 1],
+                        }),
+                    },
+                ]}
+            >
+                <WebView
+                    originWhitelist={['*']}
+                    scrollEnabled={false}
+                    useWebKit={false}
+                    source={{ html: html }}
+                    onShouldStartLoadWithRequest={event => {
+                        if (event.url !== 'about:blank') {
+                            Linking.openURL(event.url)
+                            return false
+                        }
+                        return true
+                    }}
+                    onMessage={event => {
+                        setHeight(parseInt(event.nativeEvent.data))
+                    }}
+                    style={{ flex: 1, minHeight: height }}
+                />
+            </Animated.View>
+        </View>
+    )
+}
 
 export { ArticleController }

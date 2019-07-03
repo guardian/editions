@@ -17,6 +17,7 @@ import { RowSize, getRowHeightForSize } from '../helpers'
 import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
+    setScreenPositionFromView,
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
@@ -63,29 +64,24 @@ const ItemTappable = withNavigation(
         const { appearance } = useArticleAppearance()
         const tappableRef = useRef<View>()
 
-        const measure = useCallback(() => {
-            if (tappableRef.current) {
-                tappableRef.current.measureInWindow((x, y, width, height) => {
-                    setScreenPositionOfItem(article.key, {
-                        x,
-                        y,
-                        width,
-                        height,
-                    })
-                })
-            }
-        }, [article.key])
-
         return (
             <View
                 style={style}
                 ref={(view: View) => (tappableRef.current = view)}
                 onLayout={ev => {
                     setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
-                    measure()
+                    tappableRef.current &&
+                        setScreenPositionFromView(
+                            article.key,
+                            tappableRef.current,
+                        )
                 }}
                 onTouchStart={() => {
-                    measure()
+                    tappableRef.current &&
+                        setScreenPositionFromView(
+                            article.key,
+                            tappableRef.current,
+                        )
                 }}
             >
                 <Highlight

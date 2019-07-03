@@ -209,10 +209,12 @@ export const WithArticleAppearance = ArticleAppearanceContext.Provider
 export const useArticleAppearance = (): {
     name: ColorFromPalette
     appearance: ArticleAppearanceStyles
-} => ({
-    name: useContext(ArticleAppearanceContext),
-    appearance: merge(
-        articleAppearances.neutral,
-        articleAppearances[useContext(ArticleAppearanceContext)],
-    ),
-})
+} => {
+    const name = useContext(ArticleAppearanceContext)
+    return {
+        name,
+        appearance: name
+            ? merge(articleAppearances.neutral, articleAppearances[name])
+            : articleAppearances.neutral,
+    }
+}

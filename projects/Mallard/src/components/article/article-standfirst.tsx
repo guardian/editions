@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Animated } from 'react-native'
+import { View, StyleSheet, Animated, StyleProp } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
@@ -8,6 +8,7 @@ import { Multiline } from '../multiline'
 export interface PropTypes {
     standfirst: string
     byline: string
+    style?: StyleProp<{}>
 }
 
 const styles = StyleSheet.create({
@@ -25,10 +26,12 @@ const styles = StyleSheet.create({
     },
 })
 
-const Standfirst = ({ standfirst, byline }: PropTypes) => {
+const Standfirst = ({ standfirst, byline, style }: PropTypes) => {
     const { appearance, name } = useArticleAppearance()
     return (
-        <Animated.View style={[styles.background, appearance.backgrounds]}>
+        <Animated.View
+            style={[styles.background, appearance.backgrounds, style]}
+        >
             <StandfirstText style={[appearance.text, appearance.standfirst]}>
                 {standfirst}
             </StandfirstText>
@@ -44,7 +47,7 @@ const Standfirst = ({ standfirst, byline }: PropTypes) => {
                 ]}
             >
                 <Multiline
-                    count={name === 'comment' ? 8 : 4}
+                    count={name === 'opinion' ? 8 : 4}
                     color={
                         StyleSheet.flatten([appearance.text, appearance.byline])
                             .color

@@ -1,13 +1,13 @@
-import { LayoutRectangle, Dimensions } from 'react-native'
+import { LayoutRectangle, Dimensions, Animated, View } from 'react-native'
 import { Article } from 'src/common'
 
 /*
-This stores the screen positions of all items so 
+This stores the screen positions of all items so
 that when you try to go and open them the transitioner
 knows where to place the screen.
 
 Ideally we'd use state for something like this but
-a) it's unclear how to retrieve react state 
+a) it's unclear how to retrieve react state
    from navigation/index :(
 b) animations in react in general are always a
    bunch of imperative escape hatches put together
@@ -29,6 +29,17 @@ const setScreenPositionOfItem = (
     positions[item] = position
 }
 
+const setScreenPositionFromView = (key: Article['key'], item: View) => {
+    item.measureInWindow((x, y, width, height) => {
+        setScreenPositionOfItem(key, {
+            x,
+            y,
+            width,
+            height,
+        })
+    })
+}
+
 const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
     if (positions[item]) return positions[item]
     const { height, width } = Dimensions.get('window')
@@ -40,4 +51,47 @@ const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
     }
 }
 
-export { getScreenPositionOfItem, setScreenPositionOfItem }
+/*
+This stores the Animated.Value the navigation
+interpolator uses between screens and allow
+the screens involved to retrieve it.
+
+Hacky? yes. Works? yes
+*/
+export interface NavigationPosition {
+    position: Animated.AnimatedInterpolation
+    raw: {
+        position: Animated.Value
+        index: number
+    }
+}
+
+type SaveableNavigationPositions = 'article'
+
+const interpolators: {
+    [key in SaveableNavigationPositions]?: NavigationPosition
+} = {}
+
+const setNavigationPosition = (
+    key: SaveableNavigationPositions,
+    [position, index]: [Animated.Value, number],
+) => {
+    interpolators[key] = {
+        position: position.interpolate({
+            inputRange: [index - 1, index],
+            outputRange: [0, 1],
+        }),
+        raw: { position, index },
+    }
+}
+const getNavigationPosition = (
+    key: SaveableNavigationPositions,
+): NavigationPosition | undefined => interpolators[key]
+
+export {
+    getScreenPositionOfItem,
+    setScreenPositionOfItem,
+    setScreenPositionFromView,
+    setNavigationPosition,
+    getNavigationPosition,
+}
