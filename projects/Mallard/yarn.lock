@@ -965,6 +965,14 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.1.tgz#f1a11e7babb0c3cad68100be381d1e064c68f1f6"
   integrity sha512-CFzn9idOEpHrgdw8JsoTkaDDyRWk1jrzIV8djzcgpq0y9tG4B4lFT+Nxh52DVpDXV+n4+NPNv7M1Dj5uMp6XFg==
 
+"@types/react-native-fbsdk@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-fbsdk/-/react-native-fbsdk-0.7.0.tgz#75c6ef0b48d0aa4abd5ccc1af7b256b3c903f003"
+  integrity sha512-eGJZi93wfILxejJ0tU29ooruzSantFju9j3B4GkGAMqxtSzETtLxFnemYW/pvItHu+0etl8jB7uuGTWK4O2MQQ==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*", "@types/react-native@^0.57.53":
   version "0.57.60"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.57.60.tgz#61e97a84e2f64ed971e7d238bb30cec188898235"
@@ -5323,6 +5331,11 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-fbsdk@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-0.10.1.tgz#b3ed4237b1322956f2260c716d49c2ce08514741"
+  integrity sha512-/TfpiT7wLdP1ABWk46DhpadbOSXdizWEvrNhLABe+9jK8/ljaCL7nwHj+Xp0Yd6KBnW88in67ukAy2kbfbfZ+A==
+
 react-native-gesture-handler@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.3.0.tgz#d0386f565928ccc1849537f03f2e37fd5f6ad43f"
@@ -5331,6 +5344,11 @@ react-native-gesture-handler@^1.2.1:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.2"
     prop-types "^15.5.10"
+
+react-native-keychain@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-3.1.3.tgz#fce176e7b95243cecda1896a7e6bdfe0335d778a"
+  integrity sha512-eWUbjYJge4icX8FhWJk/OPlyGxPnW9bZDysBX3WwOG37iurdH692HKnM2Ih+S+0te65RytImvUrcVnHVBbumYg==
 
 react-native-safe-area-view@^0.14.1:
   version "0.14.4"

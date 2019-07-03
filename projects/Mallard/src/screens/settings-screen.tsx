@@ -13,6 +13,10 @@ import { Heading } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
+import {
+    userAccessTokenKeychain,
+    membershipAccessTokenKeychain,
+} from 'src/authentication/keychain'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -30,8 +34,12 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Sign out',
                         title: 'Sign out',
                         data: {
-                            onPress: () => {
-                                navigation.navigate('Signout')
+                            onPress: async () => {
+                                await Promise.all([
+                                    userAccessTokenKeychain.reset(),
+                                    membershipAccessTokenKeychain.reset(),
+                                ])
+                                navigation.navigate('Unauthed')
                             },
                         },
                     },

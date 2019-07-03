@@ -194,7 +194,9 @@ const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
             Authed: AuthedStack,
-            Unauthed: AuthSwitcherScreen,
+            Unauthed: mapNavigationToProps(AuthSwitcherScreen, nav => ({
+                onAuthenticated: () => nav.navigate('Authed'),
+            })),
             Signout: mapNavigationToProps(SignoutScreen, nav => ({
                 onSignout: () => {
                     nav.navigate('Unauthed')

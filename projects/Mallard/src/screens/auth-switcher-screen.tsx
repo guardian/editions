@@ -1,105 +1,152 @@
-import React, { useCallback, useRef, useState } from 'react'
-import WebView from 'react-native-webview'
-import { NativeSyntheticEvent } from 'react-native'
-import { WebViewMessage } from 'react-native-webview/lib/WebViewTypes'
-import { NavigationScreenProp } from 'react-navigation'
+import React, { useState, useCallback, useEffect } from 'react'
+import { View, TextInput, TextInputProps, Button, Text } from 'react-native'
+import {
+    fetchAndPersistUserAccessToken,
+    getMembershipDataForKeychainUser,
+} from 'src/authentication/helpers'
+import { LoginButton, AccessToken } from 'react-native-fbsdk'
 
-const USER_DATA_SUCCESS = 'USER_DATA_SUCCESS'
-const USER_DATA_FAILURE = 'USER_DATA_FAILURE'
-const COOKIES_NOT_SET = 'COOKIES_NOT_SET'
+const AuthInput = (props: TextInputProps) => (
+    <TextInput
+        {...props}
+        style={[
+            {
+                borderColor: 'black',
+                borderRadius: 4,
+                borderWidth: 1,
+                color: 'black',
+                padding: 5,
+                marginBottom: 10,
+            },
+        ]}
+    />
+)
 
-const LOG = 'LOG'
-
-// for some reason this needs to be called inside a function when in injecting
-const injectedJavascript = `
-const hasGuIdentityCookies =
-    document
-        .cookie
-        .split(";")
-        .map(c => c.split("=")[0].trim())
-        .find(key => key === "SC_GU_U" || key === "GU_U");
-
-
-const msg = (type, data) =>
-    window.ReactNativeWebView.postMessage(JSON.stringify({
-        type,
-        data
-    }));
-
-// for debugging
-const log = str => msg('${LOG}', str);
-
-// for some reason this needs wrapping in a function
-const tryToAuthenticate = () => {
-    if (hasGuIdentityCookies) {
-        fetch('https://members-data-api.theguardian.com/user-attributes/me', {
-            credentials: 'include'
-        })
-            .then(res => res.status === 200 ? res.json() : Promise.reject())
-            .then(res => msg('${USER_DATA_SUCCESS}', res))
-            .catch(() => msg('${USER_DATA_FAILURE}'))
-    } else {
-        msg('${COOKIES_NOT_SET}')
-    }
+enum AuthStatus {
+    pending = 0,
+    authed = 1,
+    unathed = 2,
+    authenticating = 3,
 }
 
-tryToAuthenticate();
-`
-
 const AuthSwitcherScreen = ({
-    navigation,
+    onAuthenticated,
 }: {
-    navigation: NavigationScreenProp<{}>
+    onAuthenticated: () => void
 }) => {
-    const [isWebViewHidden, setIsWebViewHidden] = useState(true)
+    const [authStatus, setAuthStatus] = useState(AuthStatus.pending)
 
-    const webViewRef = useRef<WebView>(null)
+    const [error, setError] = useState<string | null>(null)
 
-    const handleLoad = useCallback(() => {
-        const { current } = webViewRef
-
-        if (current) {
-            current.injectJavaScript(injectedJavascript)
-        }
+    const [email, setEmail] = useState('')
+    const onEmailChange = useCallback(value => {
+        setEmail(value)
+        setError(null)
     }, [])
 
-    const handleMessage = useCallback(
-        (event: NativeSyntheticEvent<WebViewMessage>) => {
-            const { type, data } = JSON.parse(event.nativeEvent.data)
+    const [password, setPassword] = useState('')
+    const onPasswordChange = useCallback(value => {
+        setPassword(value)
+        setError(null)
+    }, [])
 
-            switch (type) {
-                case USER_DATA_SUCCESS: {
-                    // TODO - change true to false
-                    if (data.contentAccess.paidMember === false) {
-                        // TODO - set a setting here rather than just navigating?
-                        navigation.navigate('Authed')
-                    }
-                    break
-                }
-                case USER_DATA_FAILURE: {
-                }
-                case COOKIES_NOT_SET: {
-                    setIsWebViewHidden(false)
-                }
-                case LOG: {
-                    console.log(data)
-                }
+    const onSubmit = useCallback(async () => {
+        try {
+            setAuthStatus(AuthStatus.authenticating)
+            const data = await fetchAndPersistUserAccessToken(email, password)
+            if (!data) {
+                setAuthStatus(AuthStatus.unathed)
+            } else {
+                onAuthenticated()
+                console.log(data)
             }
-        },
-        [navigation],
-    )
+        } catch (err) {
+            setAuthStatus(AuthStatus.unathed)
+            setError(err.message)
+        }
+    }, [email, password, onAuthenticated])
 
-    return (
-        <WebView
-            ref={webViewRef}
-            style={[{ display: isWebViewHidden ? 'none' : 'flex' }]}
-            source={{
-                uri: 'https://profile.theguardian.com/signin/current',
-            }}
-            onLoad={handleLoad}
-            onMessage={handleMessage}
-        />
-    )
+    // try to auth on mount
+    useEffect(() => {
+        getMembershipDataForKeychainUser().then(data => {
+            if (!data) {
+                setAuthStatus(AuthStatus.unathed)
+            } else {
+                onAuthenticated()
+            }
+        })
+    }, []) // don't want to change on new deps as we only want this to run on mount
+
+    switch (authStatus) {
+        case AuthStatus.pending: {
+            return <Text>Loading</Text>
+        }
+        case AuthStatus.authed: {
+            // this should never show
+            return <Text>Redirecting</Text>
+        }
+        case AuthStatus.authenticating:
+        case AuthStatus.unathed: {
+            return (
+                <View
+                    style={[
+                        {
+                            alignItems: 'stretch',
+                            backgroundColor: 'white',
+                            flex: 1,
+                            justifyContent: 'center',
+                            padding: 10,
+                        },
+                    ]}
+                >
+                    {error && <Text>{error}</Text>}
+                    <LoginButton
+                        onLoginFinished={(error, result) => {
+                            if (error) {
+                                console.log('login has error: ' + result.error)
+                                setError(result.error)
+                            } else if (result.isCancelled) {
+                                console.log('login is cancelled.')
+                            } else {
+                                AccessToken.getCurrentAccessToken().then(
+                                    data => {
+                                        if (data) {
+                                            console.log(
+                                                data.accessToken.toString(),
+                                            )
+                                        }
+                                    },
+                                )
+                            }
+                        }}
+                    />
+                    <AuthInput
+                        editable={authStatus !== AuthStatus.authenticating}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        textContentType="emailAddress"
+                        keyboardType="email-address"
+                        value={email}
+                        placeholder="Email"
+                        onChangeText={onEmailChange}
+                    ></AuthInput>
+                    <AuthInput
+                        editable={authStatus !== AuthStatus.authenticating}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        textContentType="password"
+                        value={password}
+                        placeholder="Password"
+                        secureTextEntry
+                        onChangeText={onPasswordChange}
+                    ></AuthInput>
+                    <Button title="submit" onPress={onSubmit}>
+                        Submit
+                    </Button>
+                </View>
+            )
+        }
+    }
 }
 
 export { AuthSwitcherScreen }
