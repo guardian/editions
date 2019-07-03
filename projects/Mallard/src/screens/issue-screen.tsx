@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Button, Platform } from 'react-native'
 import {
     NavigationScreenProp,
     NavigationEvents,
@@ -12,11 +12,18 @@ import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
 
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
+import { GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { useIssueResponse } from 'src/hooks/use-issue'
+import {
+    useIssueResponse,
+    useIssueWithResponse,
+    getIssueResponse,
+} from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
+import { color } from 'src/theme/color'
+import { withResponse } from '../helpers/response'
+import { useLatestIssue, getLatestIssue } from 'src/hooks/use-api'
 
 const styles = StyleSheet.create({
     container,
@@ -33,9 +40,11 @@ const IssueHeader = ({ issue }: { issue: Issue }) => {
     return <Header title={'Issue/'} subtitle={issue.name} />
 }
 
-const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
-    const issueResponse = useIssueResponse(path.issue)
-
+const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
+    const response = useIssueWithResponse(
+        path ? getIssueResponse(path.issue) : getLatestIssue(),
+        [path ? path.issue : 'latest'],
+    )
     /*
     we don't wanna render a massive tree at once
     as the navigator is trying to push the screen bc this
@@ -54,11 +63,12 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                     setViewIsTransitioning(false)
                 }}
             />
-            {issueResponse({
-                error: ({ message }) => (
+            {response({
+                error: ({ message }, { retry }) => (
                     <FlexErrorMessage
                         title={GENERIC_ERROR}
                         message={isUsingProdDevtools ? message : undefined}
+                        action={['Retry', retry]}
                     />
                 ),
                 pending: () => (
@@ -66,8 +76,8 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                         <Spinner />
                     </FlexCenter>
                 ),
-                success: issue => (
-                    <>
+                success: issue => {
+                    return (
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
@@ -83,8 +93,8 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                                 />
                             )}
                         />
-                    </>
-                ),
+                    )
+                },
             })}
         </View>
     )
@@ -96,8 +106,24 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue)
-        return <FlexErrorMessage title={ERR_404_MISSING_PROPS} />
-
-    return <IssueScreenWithProps path={path} />
+    if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
+    return <IssueScreenWithPath path={path} />
 }
+
+IssueScreen.navigationOptions = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => ({
+    title: 'Issue',
+    headerTitle: () => null,
+    headerRight: (
+        <Button
+            onPress={() => {
+                navigation.navigate('Home')
+            }}
+            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
+            title="More issues"
+        />
+    ),
+})

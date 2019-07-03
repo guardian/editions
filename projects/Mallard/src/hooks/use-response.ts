@@ -66,7 +66,6 @@ const useResponse = <T>(
                   state: 'pending',
               },
     )
-
     const onSuccess = (response: T) => {
         setResponse({ state: 'success', response })
     }
@@ -113,17 +112,22 @@ export type FetchableResponse<T> = Response<T> & {
 const useFetchableResponse = <T>(
     initial: T | null,
     fetcher: (isInitial: boolean, callbacks: ResponseHookCallbacks<T>) => void,
+    effectDependencies: unknown[] = [],
 ): FetchableResponse<T> => {
     const [response, responseHookCallbacks] = useResponse(initial)
-
     const retry = () => {
         responseHookCallbacks.onPending()
         fetcher(false, responseHookCallbacks)
     }
 
     useEffect(() => {
+        if (!initial) {
+            responseHookCallbacks.onPending()
+        } else {
+            responseHookCallbacks.onSuccess(initial)
+        }
         fetcher(true, responseHookCallbacks)
-    }, [])
+    }, effectDependencies)
 
     return {
         ...response,

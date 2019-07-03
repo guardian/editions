@@ -31,6 +31,7 @@ const promiseAsResponseEffect = <T>(
 
 const useCachedOrPromise = <T>(
     promise: CachedOrPromise<T>,
+    effectDependencies: unknown[] = [],
 ): FetchableResponse<T> => {
     const response = useFetchableResponse<T>(
         isNotCached<T>(promise) ? null : promise.value,
@@ -39,6 +40,7 @@ const useCachedOrPromise = <T>(
                 promiseAsResponseEffect(promise, { onSuccess, onError })
             }
         },
+        effectDependencies,
     )
 
     return response

@@ -30,13 +30,13 @@ const Background = ({
     const stopElements = useMemo(() => {
         let elements = [
             <Stop
-                key={1}
+                key={-2}
                 style={{ transform: { translateX: radius } }}
                 cx={0}
                 {...{ fill, height, radius }}
             />,
             <Stop
-                key={2}
+                key={-1}
                 style={{ transform: { translateX: radius * -1 } }}
                 cx={'100%'}
                 {...{ fill, height, radius }}
@@ -45,7 +45,6 @@ const Background = ({
         for (let i = 1; i < stops - 1; i++) {
             const cx = i / (stops - 1)
             const translateX = translate(cx, radius)
-            console.log(cx, translateX)
             elements.push(
                 <Stop
                     key={i}

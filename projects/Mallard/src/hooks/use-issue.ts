@@ -1,26 +1,33 @@
 import { useCachedOrPromise } from './use-cached-or-promise'
-import { FetchableResponse } from './use-response'
-import { fetchFromIssue, ValidatorFn } from 'src/helpers/fetch'
-import { Issue, Front, CAPIArticle, Article } from 'src/common'
+import { fetchFromIssue } from 'src/helpers/fetch'
+import { Issue, Front, Article } from 'src/common'
 import { withResponse } from 'src/helpers/response'
 import { FSPaths, APIPaths } from 'src/paths'
 import { PathToArticle } from 'src/screens/article-screen'
 import { flattenCollections } from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
 import {
-    asPromise,
     createCachedOrPromise,
+    isNotCached,
+    CachedOrPromise,
 } from 'src/helpers/fetch/cached-or-promise'
 
-const getIssueResponse = (issue: Issue['key']) =>
+export const useIssueWithResponse = <T>(
+    getter: CachedOrPromise<T>,
+    deps: any[] = [],
+) => withResponse<T>(useCachedOrPromise<T>(getter, deps))
+
+export const getIssueResponse = (issue: Issue['key']) =>
     fetchFromIssue<Issue>(issue, FSPaths.issue(issue), APIPaths.issue(issue), {
-        validator: res => res.fronts != null,
+        validator: res => {
+            return res.fronts != null
+        },
     })
 
 export const useIssueResponse = (issue: Issue['key']) =>
-    withResponse<Issue>(useCachedOrPromise(getIssueResponse(issue)))
+    useIssueWithResponse(getIssueResponse(issue), [issue])
 
-const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
+export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
     fetchFromIssue<Front>(
         issue,
         FSPaths.front(issue, front),
@@ -30,22 +37,34 @@ const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
         },
     )
 export const useFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
-    withResponse<Front>(useCachedOrPromise(getFrontsResponse(issue, front)))
+    useIssueWithResponse(getFrontsResponse(issue, front), [issue, front])
 
-export const getArticleResponse = ({ article, issue, front }: PathToArticle) =>
-    createCachedOrPromise<Article>(
+export const getArticleResponse = ({
+    article,
+    issue,
+    front,
+}: PathToArticle) => {
+    const response = getFrontsResponse(issue, front)
+
+    const pickArticleFromFront = (front: Front): Article | null => {
+        const allArticles = flattenCollections(front.collections)
+            .map(({ articles }) => articles)
+            .reduce((acc, val) => acc.concat(val), [])
+        const articleContent = allArticles.find(({ key }) => key === article)
+        if (articleContent) {
+            return articleContent
+        }
+        return null
+    }
+
+    return createCachedOrPromise<Article>(
         [
-            null,
+            !isNotCached(response)
+                ? pickArticleFromFront(response.value)
+                : null,
             async () => {
-                const response = await asPromise(
-                    getFrontsResponse(issue, front),
-                )
-                const allArticles = flattenCollections(response.collections)
-                    .map(({ articles }) => articles)
-                    .reduce((acc, val) => acc.concat(val), [])
-                const articleContent = allArticles.find(
-                    ({ key }) => key === article,
-                )
+                const resp = await response.getValue()
+                const articleContent = pickArticleFromFront(resp)
                 if (articleContent) {
                     return articleContent
                 }
@@ -56,5 +75,11 @@ export const getArticleResponse = ({ article, issue, front }: PathToArticle) =>
             savePromiseResultToValue: () => {},
         },
     )
+}
 export const useArticleResponse = (path: PathToArticle) =>
-    withResponse<Article>(useCachedOrPromise(getArticleResponse(path)))
+    useIssueWithResponse(getArticleResponse(path), [
+        path.article,
+        path.collection,
+        path.front,
+        path.issue,
+    ])

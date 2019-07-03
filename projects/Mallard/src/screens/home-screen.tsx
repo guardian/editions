@@ -92,6 +92,15 @@ export const HomeScreen = ({
                             />
                             <Footer>
                                 <Button onPress={retry}>Refresh</Button>
+                                <Button
+                                    onPress={() => {
+                                        navigation.navigate('Issue', {
+                                            path: null,
+                                        })
+                                    }}
+                                >
+                                    Go to latest
+                                </Button>
                             </Footer>
                         </>
                     ),

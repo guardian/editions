@@ -35,8 +35,8 @@ const AppStack = createStackNavigator(
     {
         Main: createStackNavigator(
             {
-                Home: HomeScreen,
                 Issue: IssueScreen,
+                Home: HomeScreen,
                 Downloads: DownloadScreen,
                 Settings: SettingsScreen,
                 Endpoints: ApiScreen,
@@ -46,7 +46,7 @@ const AppStack = createStackNavigator(
                 defaultNavigationOptions: {
                     ...navOptionsWithGraunHeader,
                 },
-                initialRouteName: 'Home',
+                initialRouteName: 'Issue',
             },
         ),
         Article: ArticleScreen,
