@@ -87,7 +87,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     and its card so it's a bit less jarring
     */
     const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.95, sceneIndex],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.99, sceneIndex],
         outputRange: [0, 0.95, 1],
     })
 
@@ -108,8 +108,8 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const yScaleDiff = (windowHeight - windowHeight * scaler) / 2
     const translater = y - yScaleDiff
     const translateY = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex],
-        outputRange: [translater, metrics.slideCardSpacing],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.75, sceneIndex],
+        outputRange: [translater, translater, metrics.slideCardSpacing],
     })
 
     /*
