@@ -18,23 +18,7 @@ import {
     hasSucceeded,
 } from './utils/try'
 import { getArticles } from './capi/articles'
-
-const createCardsFromAllArticlesInCollection = (
-    maxCardSize: number,
-    articles: [string, CAPIArticle][],
-): Card[] => {
-    const chunk = (arr: [string, CAPIArticle][], size: number) =>
-        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-            arr.slice(i * size, i * size + size),
-        )
-
-    return chunk(articles, maxCardSize).map(groupOfArticles => {
-        return {
-            layout: null,
-            articles: fromEntries(groupOfArticles),
-        }
-    })
-}
+import { createCardsFromAllArticlesInCollection } from './utils/collection'
 
 export const getCollection = async (
     id: string,
@@ -140,7 +124,7 @@ export const getCollection = async (
     return {
         key: id,
         displayName: collection.displayName,
-        cards: createCardsFromAllArticlesInCollection(5, articles),
+        cards: createCardsFromAllArticlesInCollection(articles),
         preview,
     }
 }
