@@ -14,7 +14,8 @@ import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import {
-    TODO_twoStoryPage,
+    splashPage,
+    twoStoryPage,
     superHeroPage,
     threeStoryPage,
     fourStoryPage,
@@ -77,11 +78,15 @@ const CollectionPageWithAppearance = ({
     }
     if (!pageLayout) {
         switch (articles.length) {
+            // case 1:
+            //     pageLayout = superHeroPage
+            //     break
+            //THIS IS JUST FOR DEVELOPMENT TODO: Make this layout work from API
             case 1:
-                pageLayout = superHeroPage
+                pageLayout = splashPage
                 break
             case 2:
-                pageLayout = TODO_twoStoryPage
+                pageLayout = twoStoryPage
                 break
             case 3:
                 pageLayout = threeStoryPage

@@ -23,6 +23,7 @@ export enum RowSize {
     half,
     hero,
     superhero,
+    splash,
 }
 
 /*
