@@ -25,11 +25,11 @@ const useData = (promise) => {
 
 With a CachedOrPromise:
 const useData = (createCachedOrPromise) => {
-    const initialState = isPromise(createCachedOrPromise) ? null : createCachedOrPromise.value;
+    const initialState = isCached(createCachedOrPromise) ? createCachedOrPromise.value : null;
     const [result, setResult] = useState(initialState) :D
     useEffect(()=>{
         //or call it again?
-        if(isNotCached(createCachedOrPromise)){
+        if(!isCached(createCachedOrPromise)){
             createCachedOrPromise.getValue().then(val => {setResult(val)})
         }
     },[])
@@ -49,17 +49,6 @@ interface CachedResult<T> {
 }
 
 export type CachedOrPromise<T> = CachedResult<T> | SlowPromiseGetter<T>
-
-const isNotCached = <T>(
-    cachedOrPromise: CachedOrPromise<T>,
-): cachedOrPromise is SlowPromiseGetter<T> => cachedOrPromise.type === 'promise'
-
-const asPromise = <T>(cachedOrPromise: CachedOrPromise<T>) => {
-    if (isNotCached(cachedOrPromise)) {
-        return cachedOrPromise.getValue()
-    }
-    return Promise.resolve(cachedOrPromise.value)
-}
 
 const createCachedOrPromise = <T>(
     [value, promiseGetter]: [T | null | undefined, () => Promise<T>],
@@ -85,4 +74,46 @@ const createCachedOrPromise = <T>(
     }
 }
 
-export { isNotCached, asPromise, createCachedOrPromise }
+/*
+Type refinement helper
+*/
+const isCached = <T>(
+    cachedOrPromise: CachedOrPromise<T>,
+): cachedOrPromise is CachedResult<T> => cachedOrPromise.type === 'value'
+
+/*
+If you wanna chain a bunch of CachedOrPromises but retain the
+behavior where .value is always cached and .getValue() is not
+(this allows for refreshes of the entire chain) you can use
+this helper
+*/
+const chain = <T, X>(
+    cachedOrPromise: CachedOrPromise<T>,
+    callback: (t: T) => CachedOrPromise<X>,
+) => {
+    let defaultValue = null
+    if (isCached(cachedOrPromise)) {
+        const cb = callback(cachedOrPromise.value)
+        if (isCached(cb)) {
+            defaultValue = cb.value
+        }
+    }
+    return createCachedOrPromise<X>(
+        [
+            defaultValue,
+            async () => {
+                const resp = await cachedOrPromise.getValue()
+                return callback(resp).getValue()
+            },
+        ],
+        {
+            savePromiseResultToValue: () => null,
+        },
+    )
+}
+chain.end = <X>(value: X) =>
+    createCachedOrPromise<X>([value, async () => value], {
+        savePromiseResultToValue: () => {},
+    })
+
+export { isCached, chain, createCachedOrPromise }

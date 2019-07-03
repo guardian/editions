@@ -1,7 +1,4 @@
-import {
-    CachedOrPromise,
-    isNotCached,
-} from 'src/helpers/fetch/cached-or-promise'
+import { CachedOrPromise, isCached } from 'src/helpers/fetch/cached-or-promise'
 import {
     ResponseHookCallbacks,
     FetchableResponse,
@@ -34,9 +31,9 @@ const useCachedOrPromise = <T>(
     effectDependencies: unknown[] = [],
 ): FetchableResponse<T> => {
     const response = useFetchableResponse<T>(
-        isNotCached<T>(promise) ? null : promise.value,
+        !isCached<T>(promise) ? null : promise.value,
         (isInitial, { onSuccess, onError }) => {
-            if (!isInitial || isNotCached(promise)) {
+            if (!isInitial || !isCached(promise)) {
                 promiseAsResponseEffect(promise, { onSuccess, onError })
             }
         },

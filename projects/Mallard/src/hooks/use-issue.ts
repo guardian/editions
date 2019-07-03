@@ -1,16 +1,12 @@
 import { useCachedOrPromise } from './use-cached-or-promise'
 import { fetchFromIssue } from 'src/helpers/fetch'
-import { Issue, Front, Article } from 'src/common'
+import { Issue, Front } from 'src/common'
 import { withResponse } from 'src/helpers/response'
 import { FSPaths, APIPaths } from 'src/paths'
 import { PathToArticle } from 'src/screens/article-screen'
 import { flattenCollections } from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
-import {
-    createCachedOrPromise,
-    isNotCached,
-    CachedOrPromise,
-} from 'src/helpers/fetch/cached-or-promise'
+import { CachedOrPromise, chain } from 'src/helpers/fetch/cached-or-promise'
 
 export const useIssueWithResponse = <T>(
     getter: CachedOrPromise<T>,
@@ -39,43 +35,20 @@ export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
 export const useFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
     useIssueWithResponse(getFrontsResponse(issue, front), [issue, front])
 
-export const getArticleResponse = ({
-    article,
-    issue,
-    front,
-}: PathToArticle) => {
-    const response = getFrontsResponse(issue, front)
-
-    const pickArticleFromFront = (front: Front): Article | null => {
+export const getArticleResponse = ({ article, issue, front }: PathToArticle) =>
+    chain(getFrontsResponse(issue, front), front => {
         const allArticles = flattenCollections(front.collections)
             .map(({ articles }) => articles)
             .reduce((acc, val) => acc.concat(val), [])
-        const articleContent = allArticles.find(({ key }) => key === article)
-        if (articleContent) {
-            return articleContent
-        }
-        return null
-    }
 
-    return createCachedOrPromise<Article>(
-        [
-            !isNotCached(response)
-                ? pickArticleFromFront(response.value)
-                : null,
-            async () => {
-                const resp = await response.getValue()
-                const articleContent = pickArticleFromFront(resp)
-                if (articleContent) {
-                    return articleContent
-                }
-                throw ERR_404_REMOTE
-            },
-        ],
-        {
-            savePromiseResultToValue: () => {},
-        },
-    )
-}
+        const articleContent = allArticles.find(({ key }) => key === article)
+
+        if (articleContent) {
+            return chain.end(articleContent)
+        }
+        throw ERR_404_REMOTE
+    })
+
 export const useArticleResponse = (path: PathToArticle) =>
     useIssueWithResponse(getArticleResponse(path), [
         path.article,
