@@ -60,6 +60,7 @@ export const getCollection = async (
         NestedArticleFragment,
     ] => [parseInt(fragment.id.replace('internal-code/page/', '')), fragment])
     const articleFragments = fromEntries(articleFragmentList)
+
     const ids: number[] = articleFragmentList.map(([id]) => id)
     const preview = live ? undefined : true
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
@@ -184,15 +185,20 @@ export const getFront = async (
     const tone = getFrontColor(id)
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
     if (!(id in config.fronts)) throw new Error('Front not found')
+    const collections = await Promise.all(
+        config.fronts[id].collections.map(id =>
+            getCollection(id, true, lastModifiedUpdater),
+        ),
+    )
+    collections.filter(hasFailed).forEach(failedCollection => {
+        console.error(failedCollection)
+    })
+
     const front = {
         ...config.fronts[id],
         ...tone,
         displayName: getDisplayName(id),
-        collections: (await Promise.all(
-            config.fronts[id].collections.map(id =>
-                getCollection(id, true, lastModifiedUpdater),
-            ),
-        )).filter(hasSucceeded),
+        collections: collections.filter(hasSucceeded),
         key: id,
     }
 
