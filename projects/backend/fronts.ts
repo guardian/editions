@@ -8,6 +8,7 @@ import {
     Card,
     Crossword,
     WithColor,
+    cardLayouts,
 } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
@@ -124,7 +125,7 @@ export const getCollection = async (
     return {
         key: id,
         displayName: collection.displayName,
-        cards: createCardsFromAllArticlesInCollection(articles),
+        cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
         preview,
     }
 }
