@@ -1,3 +1,5 @@
+import { cardLayouts } from './collection/card-layouts'
+
 interface WithKey {
     key: string
 }
@@ -194,6 +196,11 @@ export interface Crossword {
     dateSolutionAvailable?: CapiDateTime
 }
 
+export type CollectionCardLayout = number[]
+export interface CollectionCardLayouts {
+    [countOfArticles: number]: CollectionCardLayout
+}
+
 const issuePath = (issueId: string) => `${issueId}/issue`
 const frontPath = (issueId: string, frontId: string) =>
     `${issuePath(issueId)}/front/${frontId}`
@@ -206,4 +213,11 @@ export type ImageSize = typeof imageSizes[number]
 const mediaPath = (source: string, size: ImageSize, path: string) =>
     `media/${size}/${source}/${path}`
 
-export { issuePath, mediaPath, frontPath, collectionPath, issueSummaryPath }
+export {
+    issuePath,
+    mediaPath,
+    frontPath,
+    collectionPath,
+    issueSummaryPath,
+    cardLayouts,
+}
