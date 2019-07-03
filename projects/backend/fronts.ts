@@ -59,7 +59,6 @@ export const getCollection = async (
         number,
         NestedArticleFragment,
     ] => [parseInt(fragment.id.replace('internal-code/page/', '')), fragment])
-    const articleFragments = fromEntries(articleFragmentList)
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
     const preview = live ? undefined : true
@@ -78,7 +77,7 @@ export const getCollection = async (
             'Could not connect to CAPI',
         )
 
-    const articles: [string, CAPIArticle][] = Object.entries(articleFragments)
+    const articles: [string, CAPIArticle][] = articleFragmentList
         .filter(([key]) => {
             const inResponse =
                 key in capiPrintArticles || key in capiSearchArticles
