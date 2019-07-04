@@ -18,6 +18,7 @@ import { BlockElement } from 'src/common'
 import { render } from './html/render'
 import { CAPIArticle } from '../../../../common/src'
 import { getNavigationPosition } from 'src/helpers/positions'
+import { Gallery } from './types/gallery'
 
 /*
 This is the article view! For all of the articles.
@@ -58,13 +59,7 @@ const ArticleController = ({
             )
 
         case 'gallery':
-            return (
-                <FlexErrorMessage
-                    icon="😭"
-                    title={"We don't support the rendering of galleries yet."}
-                    style={{ backgroundColor: color.background }}
-                />
-            )
+            return <Gallery gallery={article} />
 
         case 'crossword':
             return (
