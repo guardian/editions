@@ -1,11 +1,11 @@
-import cdk = require('@aws-cdk/cdk')
+import cdk = require('@aws-cdk/core')
 import apigateway = require('@aws-cdk/aws-apigateway')
 import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
 import cloudfront = require('@aws-cdk/aws-cloudfront')
-import { CfnOutput } from '@aws-cdk/cdk'
+import { CfnOutput, Duration } from '@aws-cdk/core'
 
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -44,7 +44,7 @@ export class EditionsStack extends cdk.Stack {
         const frontsAccess = iam.Role.fromRoleArn(
             this,
             'fronts-role',
-            frontsRoleARN.stringValue,
+            frontsRoleARN.valueAsString,
         )
 
         const atomLambdaParam = new cdk.CfnParameter(this, 'atom-lambda-arn', {
@@ -53,34 +53,36 @@ export class EditionsStack extends cdk.Stack {
         })
 
         const backend = new lambda.Function(this, 'EditionsBackend', {
-            functionName: `editions-backend-${stageParameter.stringValue}`,
-            runtime: lambda.Runtime.NodeJS10x,
-            timeout: 60,
+            functionName: `editions-backend-${stageParameter.valueAsString}`,
+            runtime: lambda.Runtime.NODEJS_10_X,
+            timeout: Duration.seconds(60),
             code: Code.bucket(
                 deploy,
-                `${stackParameter.stringValue}/${stageParameter.stringValue}/backend/backend.zip`,
+                `${stackParameter.valueAsString}/${
+                    stageParameter.valueAsString
+                }/backend/backend.zip`,
             ),
             handler: 'index.handler',
             environment: {
-                CAPI_KEY: capiKeyParameter.stringValue,
-                arn: frontsRoleARN.stringValue,
-                stage: stageParameter.stringValue,
-                atomArn: atomLambdaParam.stringValue,
-                psurl: printSentURLParameter.stringValue,
+                CAPI_KEY: capiKeyParameter.valueAsString,
+                arn: frontsRoleARN.valueAsString,
+                stage: stageParameter.valueAsString,
+                atomArn: atomLambdaParam.valueAsString,
+                psurl: printSentURLParameter.valueAsString,
             },
         })
 
-        const policy = new iam.PolicyStatement(iam.PolicyStatementEffect.Allow)
-        policy.addResource(frontsAccess.roleArn)
-        policy.addAction('sts:AssumeRole')
+        const policy = new iam.PolicyStatement({
+            actions: ['sts:AssumeRole'],
+            resources: [frontsAccess.roleArn],
+        })
 
         backend.addToRolePolicy(policy)
 
-        const atomPolicy = new iam.PolicyStatement(
-            iam.PolicyStatementEffect.Allow,
-        )
-        atomPolicy.addResource(atomLambdaParam.stringValue)
-        atomPolicy.addAction('lambda:InvokeFunction')
+        const atomPolicy = new iam.PolicyStatement({
+            resources: [atomLambdaParam.valueAsString],
+            actions: ['lambda:InvokeFunction'],
+        })
 
         backend.addToRolePolicy(atomPolicy)
 
@@ -98,7 +100,9 @@ export class EditionsStack extends cdk.Stack {
             this,
             'backend-cloudfront-distribution',
             {
-                comment: `Cloudfront distribution for editions ${stageParameter.stringValue}`,
+                comment: `Cloudfront distribution for editions ${
+                    stageParameter.valueAsString
+                }`,
                 defaultRootObject: '',
                 originConfigs: [
                     {
@@ -114,6 +118,22 @@ export class EditionsStack extends cdk.Stack {
         new CfnOutput(this, 'Cloudfront-distribution', {
             description: 'URL for distribution',
             value: `https://${dist.domainName}`,
+        })
+
+        new lambda.Function(this, 'EditionsArchiver', {
+            functionName: `editions-archiver-${stageParameter.valueAsString}`,
+            runtime: lambda.Runtime.NODEJS_10_X,
+            timeout: Duration.seconds(60),
+            code: Code.bucket(
+                deploy,
+                `${stackParameter.valueAsString}/${
+                    stageParameter.valueAsString
+                }/archiver/archiver.zip`,
+            ),
+            handler: 'index.handler',
+            environment: {
+                backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
+            },
         })
     }
 }
