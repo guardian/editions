@@ -58,9 +58,7 @@ export class EditionsStack extends cdk.Stack {
             timeout: Duration.seconds(60),
             code: Code.bucket(
                 deploy,
-                `${stackParameter.valueAsString}/${
-                    stageParameter.valueAsString
-                }/backend/backend.zip`,
+                `${stackParameter.valueAsString}/${stageParameter.valueAsString}/backend/backend.zip`,
             ),
             handler: 'index.handler',
             environment: {
@@ -100,9 +98,7 @@ export class EditionsStack extends cdk.Stack {
             this,
             'backend-cloudfront-distribution',
             {
-                comment: `Cloudfront distribution for editions ${
-                    stageParameter.valueAsString
-                }`,
+                comment: `Cloudfront distribution for editions ${stageParameter.valueAsString}`,
                 defaultRootObject: '',
                 originConfigs: [
                     {
@@ -118,22 +114,6 @@ export class EditionsStack extends cdk.Stack {
         new CfnOutput(this, 'Cloudfront-distribution', {
             description: 'URL for distribution',
             value: `https://${dist.domainName}`,
-        })
-
-        new lambda.Function(this, 'EditionsArchiver', {
-            functionName: `editions-archiver-${stageParameter.valueAsString}`,
-            runtime: lambda.Runtime.NODEJS_10_X,
-            timeout: Duration.seconds(60),
-            code: Code.bucket(
-                deploy,
-                `${stackParameter.valueAsString}/${
-                    stageParameter.valueAsString
-                }/archiver/archiver.zip`,
-            ),
-            handler: 'index.handler',
-            environment: {
-                backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
-            },
         })
     }
 }
