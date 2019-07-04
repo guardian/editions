@@ -22,15 +22,16 @@ export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
 
 /*
- TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
- */
+We always try to prep the file system before accessing issuesDir
+*/
 export const prepFileSystem = (): Promise<void> =>
     RNFetchBlob.fs.mkdir(FSPaths.issuesDir).catch(() => Promise.resolve())
 
-/*
-This cleans EVERYTHING
-*/
-export const deleteAllFiles = async (): Promise<void> => {
+export const getIssueFiles = async () => {
+    await prepFileSystem()
+    return RNFetchBlob.fs.ls(FSPaths.issuesDir)
+}
+export const deleteIssueFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
     await prepFileSystem()
 }
@@ -106,16 +107,13 @@ const pathToFile = (basePath: string = '') => async (
 }
 
 export const getFileList = async (): Promise<File[]> => {
-    await prepFileSystem()
-    const fileListRaw = await RNFetchBlob.fs.ls(FSPaths.issuesDir)
+    const fileListRaw = await getIssueFiles()
     if (fileListRawMemo === fileListRaw.join()) {
         return fileListMemo
     } else {
-        const fileList = await RNFetchBlob.fs
-            .ls(FSPaths.issuesDir)
-            .then(files =>
-                Promise.all(files.map(pathToFile(FSPaths.issuesDir))),
-            )
+        const fileList = await getIssueFiles().then(files =>
+            Promise.all(files.map(pathToFile(FSPaths.issuesDir))),
+        )
         fileListRawMemo = fileListRaw.join()
         fileListMemo = fileList
         return fileList

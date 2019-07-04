@@ -8,7 +8,7 @@ import { Item } from 'src/components/lists/list'
 import {
     File,
     displayFileSize,
-    deleteAllFiles,
+    deleteIssueFiles,
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
@@ -135,7 +135,7 @@ export const DownloadScreen = () => {
                                         text: 'AWAY WITH IT ALL',
                                         style: 'cancel',
                                         onPress: async () => {
-                                            await deleteAllFiles()
+                                            await deleteIssueFiles()
                                             refreshIssues()
                                         },
                                     },
