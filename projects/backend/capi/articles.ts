@@ -11,7 +11,7 @@ import fromEntries from 'object.fromentries'
 import { IContent } from '@guardian/capi-ts/dist/Content'
 import { ICrossword } from '@guardian/capi-ts/dist/Crossword'
 import fetch from 'node-fetch'
-import striptags from 'striptags'
+import { cleanupHtml } from '../utils/html'
 
 interface Article {
     type: 'article'
@@ -67,7 +67,7 @@ const parseArticleResult = async (
         result &&
         result.fields &&
         result.fields.standfirst &&
-        striptags(result.fields.standfirst)
+        cleanupHtml(result.fields.standfirst)
 
     const byline = result && result.fields && result.fields.byline
 

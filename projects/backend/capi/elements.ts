@@ -3,6 +3,7 @@ import { BlockElement } from '../common'
 import { extractImage } from './assets'
 import { renderAtom } from './atoms'
 import { attempt, hasFailed } from '../utils/try'
+import { cleanupHtml } from '../utils/html'
 
 export const elementParser = (id: string) => async (
     element: IBlockElement,
@@ -22,7 +23,9 @@ export const elementParser = (id: string) => async (
                     id: 'image',
                     src: image.file, //This needs to be resized!!!
                     alt: element.imageTypeData.alt,
-                    caption: element.imageTypeData.caption,
+                    caption:
+                        element.imageTypeData.caption &&
+                        cleanupHtml(element.imageTypeData.caption),
                     copyright: element.imageTypeData.copyright,
                 }
             }
