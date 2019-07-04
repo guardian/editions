@@ -11,8 +11,10 @@ import { SettingsProvider } from 'src/hooks/use-settings'
 import { FileSystemProvider } from 'src/hooks/use-fs'
 import { StyleSheet } from 'react-native'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
+import { prepFileSystem } from './helpers/files'
 
 useScreens()
+prepFileSystem()
 
 const styles = StyleSheet.create({
     appContainer: {
