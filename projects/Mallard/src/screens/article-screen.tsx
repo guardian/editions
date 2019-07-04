@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
+import {
+    NavigationScreenProp,
+    NavigationEvents,
+    ScrollView,
+} from 'react-navigation'
 import { WithArticleAppearance, articleAppearances } from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
 import { CAPIArticle, Collection, Front, ColorFromPalette } from 'src/common'
-import { Dimensions } from 'react-native'
+import { Dimensions, Animated, View, Text } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
@@ -16,6 +20,8 @@ import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
 import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
 import { getNavigationPosition } from 'src/helpers/positions'
+import { ArticleNavigationProps } from 'src/navigation/helpers'
+import { UiBodyCopy } from '../components/styled-text'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -28,21 +34,114 @@ export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
 
-const ArticleScreenWithProps = ({
+export interface ArticleNavigator {
+    articles: PathToArticle[]
+}
+const ArticleScreenBody = ({
     path,
-    articlePrefill,
-    transitionProps,
-    navigation,
+    viewIsTransitioning,
+    onTopPositionChange,
 }: {
-    navigation: NavigationScreenProp<{}>
     path: PathToArticle
-    transitionProps?: ArticleTransitionProps
-    articlePrefill?: CAPIArticle
+    viewIsTransitioning: boolean
+    onTopPositionChange: (isAtTop: boolean) => void
 }) => {
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
     const articleResponse = useArticleResponse(path)
     const [{ isUsingProdDevtools }] = useSettings()
+    const { width } = Dimensions.get('window')
+
+    return (
+        <ScrollView
+            onTouchStart={() => {
+                //onTopPositionChange(true)
+            }}
+            scrollEventThrottle={8}
+            onScroll={ev => {
+                onTopPositionChange(ev.nativeEvent.contentOffset.y < 10)
+            }}
+            style={{ width }}
+        >
+            {articleResponse({
+                error: ({ message }) => (
+                    <FlexErrorMessage
+                        icon="😭"
+                        title={message}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                pending: () => (
+                    <FlexErrorMessage
+                        title={'loading'}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                success: article => (
+                    <>
+                        {isUsingProdDevtools ? (
+                            <Button
+                                onPress={() => {
+                                    setAppearance(app => {
+                                        if (app + 1 >= appearances.length) {
+                                            return 0
+                                        }
+                                        return app + 1
+                                    })
+                                }}
+                                style={{
+                                    position: 'absolute',
+                                    zIndex: 9999,
+                                    elevation: 999,
+                                    top: Dimensions.get('window').height - 600,
+                                    right: metrics.horizontal,
+                                    alignSelf: 'flex-end',
+                                }}
+                            >
+                                {`${appearances[appearance]} 🌈`}
+                            </Button>
+                        ) : null}
+                        <WithArticleAppearance
+                            value={appearances[appearance] as ColorFromPalette}
+                        >
+                            <ArticleController
+                                article={article.article}
+                                viewIsTransitioning={viewIsTransitioning}
+                            />
+                        </WithArticleAppearance>
+                    </>
+                ),
+            })}
+        </ScrollView>
+    )
+}
+
+const getData = (
+    navigator: ArticleNavigator,
+    currentArticle: PathToArticle,
+): {
+    isInScroller: boolean
+    startingPoint: number
+} => {
+    const startingPoint = navigator.articles.findIndex(
+        ({ article }) => currentArticle.article === article,
+    )
+    if (startingPoint < 0) return { isInScroller: false, startingPoint: 0 }
+    return { startingPoint, isInScroller: true }
+}
+
+const ArticleScreenWithProps = ({
+    path,
+    navigator,
+    transitionProps,
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+    path: PathToArticle
+    navigator: ArticleNavigator
+    transitionProps?: ArticleTransitionProps
+}) => {
+    const { width } = Dimensions.get('window')
 
     /*
     we don't wanna render a massive tree at once
@@ -52,84 +151,84 @@ const ArticleScreenWithProps = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+    const [articleIsAtTop, setArticleIsAtTop] = useState(true)
     const navigationPosition = getNavigationPosition('article')
 
+    const { isInScroller, startingPoint } = getData(navigator, path)
+    const [current, setCurrent] = useState(startingPoint)
     return (
         <ClipFromTop
-            easing={
-                (navigationPosition && navigationPosition.position) || undefined
-            }
+            easing={navigationPosition && navigationPosition.position}
             from={
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
         >
+            <NavigationEvents
+                onDidFocus={() => {
+                    requestAnimationFrame(() => {
+                        setViewIsTransitioning(false)
+                    })
+                }}
+            />
             <SlideCard
                 {...viewIsTransitioning}
+                enabled={articleIsAtTop}
                 onDismiss={() => navigation.goBack()}
             >
-                <NavigationEvents
-                    onDidFocus={() => {
-                        requestAnimationFrame(() => {
-                            setViewIsTransitioning(false)
-                        })
+                <View
+                    style={{
+                        padding: metrics.vertical,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     }}
-                />
-                {articleResponse({
-                    error: ({ message }) => (
-                        <FlexErrorMessage
-                            icon="😭"
-                            title={message}
-                            style={{ backgroundColor: color.background }}
+                >
+                    <UiBodyCopy>{`Article ${current + 1}/${
+                        navigator.articles.length
+                    }`}</UiBodyCopy>
+                </View>
+                <Animated.FlatList
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    scrollEventThrottle={1}
+                    onScroll={ev => {
+                        setCurrent(
+                            Math.floor(ev.nativeEvent.contentOffset.x / width),
+                        )
+                    }}
+                    maxToRenderPerBatch={1}
+                    windowSize={3}
+                    initialNumToRender={1}
+                    horizontal={true}
+                    initialScrollIndex={startingPoint}
+                    pagingEnabled
+                    getItemLayout={(_: never, index: number) => ({
+                        length: width,
+                        offset: width * index,
+                        index,
+                    })}
+                    keyExtractor={(item: ArticleNavigator['articles'][0]) =>
+                        item.article
+                    }
+                    data={
+                        isInScroller
+                            ? navigator.articles
+                            : [path, ...navigator.articles]
+                    }
+                    renderItem={({
+                        item,
+                    }: {
+                        item: ArticleNavigator['articles'][0]
+                        index: number
+                    }) => (
+                        <ArticleScreenBody
+                            path={item}
+                            onTopPositionChange={isAtTop => {
+                                setArticleIsAtTop(isAtTop)
+                            }}
+                            {...{ viewIsTransitioning }}
                         />
-                    ),
-                    pending: () =>
-                        articlePrefill ? (
-                            <ArticleController article={articlePrefill} />
-                        ) : (
-                            <FlexErrorMessage
-                                title={'loading'}
-                                style={{ backgroundColor: color.background }}
-                            />
-                        ),
-                    success: article => (
-                        <>
-                            {isUsingProdDevtools ? (
-                                <Button
-                                    onPress={() => {
-                                        setAppearance(app => {
-                                            if (app + 1 >= appearances.length) {
-                                                return 0
-                                            }
-                                            return app + 1
-                                        })
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        zIndex: 9999,
-                                        elevation: 999,
-                                        top:
-                                            Dimensions.get('window').height -
-                                            600,
-                                        right: metrics.horizontal,
-                                        alignSelf: 'flex-end',
-                                    }}
-                                >
-                                    {`${appearances[appearance]} 🌈`}
-                                </Button>
-                            ) : null}
-                            <WithArticleAppearance
-                                value={
-                                    appearances[appearance] as ColorFromPalette
-                                }
-                            >
-                                <ArticleController
-                                    article={article}
-                                    viewIsTransitioning={viewIsTransitioning}
-                                />
-                            </WithArticleAppearance>
-                        </>
-                    ),
-                })}
+                    )}
+                />
             </SlideCard>
         </ClipFromTop>
     )
@@ -138,20 +237,23 @@ const ArticleScreenWithProps = ({
 export const ArticleScreen = ({
     navigation,
 }: {
-    navigation: NavigationScreenProp<{}>
+    navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 }) => {
-    const articlePrefill = navigation.getParam('article') as
-        | CAPIArticle
-        | undefined
+    const path = navigation.getParam('path')
+    const navigator: ArticleNavigator = navigation.getParam(
+        'articleNavigator',
+        {
+            articles: [],
+        },
+    )
 
-    const path = navigation.getParam('path') as PathToArticle | undefined
     const transitionProps = navigation.getParam('transitionProps') as
         | ArticleTransitionProps
         | undefined
 
     if (!path || !path.article || !path.collection || !path.issue) {
         return (
-            <SlideCard onDismiss={() => navigation.goBack()}>
+            <SlideCard enabled={true} onDismiss={() => navigation.goBack()}>
                 <FlexErrorMessage
                     title={ERR_404_MISSING_PROPS}
                     style={{ backgroundColor: color.background }}
@@ -161,7 +263,12 @@ export const ArticleScreen = ({
     }
     return (
         <ArticleScreenWithProps
-            {...{ articlePrefill, path, navigation, transitionProps }}
+            {...{
+                path,
+                navigation,
+                navigator,
+                transitionProps,
+            }}
         />
     )
 }
