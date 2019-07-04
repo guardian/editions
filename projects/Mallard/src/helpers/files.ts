@@ -24,7 +24,7 @@ export const fileIsIssue = (file: File): file is IssueFile =>
 /*
  TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
  */
-export const makeCacheFolder = (): Promise<void> =>
+export const prepFileSystem = (): Promise<void> =>
     RNFetchBlob.fs.mkdir(FSPaths.issuesDir).catch(() => Promise.resolve())
 
 /*
@@ -32,7 +32,7 @@ This cleans EVERYTHING
 */
 export const deleteAllFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
-    await makeCacheFolder()
+    await prepFileSystem()
 }
 
 const fileName = (path: string) => {
@@ -106,6 +106,7 @@ const pathToFile = (basePath: string = '') => async (
 }
 
 export const getFileList = async (): Promise<File[]> => {
+    await prepFileSystem()
     const fileListRaw = await RNFetchBlob.fs.ls(FSPaths.issuesDir)
     if (fileListRawMemo === fileListRaw.join()) {
         return fileListMemo
@@ -145,7 +146,7 @@ export const downloadIssue = (issue: File['id']) => {
 
     return {
         promise: returnable.then(async res => {
-            await makeCacheFolder()
+            await prepFileSystem()
             await RNFetchBlob.fs.mv(
                 res.path(),
                 FSPaths.issueZip(
