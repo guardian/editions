@@ -32,7 +32,6 @@ export enum RowSize {
     half,
     hero,
     superhero,
-    splash,
 }
 
 /*
@@ -69,7 +68,7 @@ export const withSlots = (page: LazyPageLayout): PageLayout => {
 }
 
 export const getRowHeightForSize = (size: RowSize): string => {
-    const heights = {
+    const heights: { [size in RowSize]: string } = {
         [RowSize.row]: `${(1 / 6) * 100}%`,
         [RowSize.third]: `${(2 / 6) * 100}%`,
         [RowSize.half]: '50%',

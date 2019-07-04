@@ -11,7 +11,7 @@ import {
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
 
-export type ValidatorFn<T> = (response: unknown | T) => boolean
+export type ValidatorFn<T> = (response: any | T) => boolean
 
 const fetchFromApiSlow = async <T>(
     path: string,

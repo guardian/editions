@@ -100,11 +100,7 @@ const Article = ({
 
     return (
         <View style={styles.container}>
-            {appearanceName === 'longread' ? (
-                <LongReadHeader {...{ headline, image, kicker }} />
-            ) : (
-                <NewsHeader {...{ headline, image, kicker }} />
-            )}
+            <NewsHeader {...{ headline, image, kicker }} />
             <Standfirst
                 {...{ byline, standfirst }}
                 style={[

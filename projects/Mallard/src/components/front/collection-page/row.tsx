@@ -38,7 +38,7 @@ interface NavigationPropTypes {
     front: Front['key']
 }
 interface RowPropTypes {
-    translate: CollectionPropTypes['translate']
+    translate: Animated.AnimatedInterpolation
     index: number
     row: RowLayout
 }

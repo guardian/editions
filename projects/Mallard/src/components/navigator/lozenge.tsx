@@ -90,7 +90,7 @@ const Lozenge = ({
                 {children}
             </Animated.Text>
             <Animated.View
-                onLayout={ev => {
+                onLayout={(ev: any) => {
                     width.current = ev.nativeEvent.layout.width
                 }}
                 style={[

@@ -1,9 +1,9 @@
-import { Collection, Article, WithColor } from 'src/common'
+import { Collection, CAPIArticle, WithColor } from 'src/common'
 import { palette } from '@guardian/pasteup/palette'
 
 export interface FlatCard {
     collection: Collection
-    articles: Article[]
+    articles: CAPIArticle[]
 }
 
 const colorMap = {
@@ -25,7 +25,7 @@ export const flattenCollections = (collections: Collection[]): FlatCard[] =>
     collections
         .map(collection =>
             collection.cards.map(({ articles }) => ({
-                articles: Object.values(articles || {}),
+                articles: articles,
                 collection,
             })),
         )
