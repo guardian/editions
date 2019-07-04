@@ -5,7 +5,7 @@ import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { Row } from './row'
-import { Article, Issue, Collection, Front } from 'src/common'
+import { CAPIArticle, Issue, Collection, Front } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 })
 
 export interface PropTypes {
-    articles: Article[]
+    articles: CAPIArticle[]
     issue: Issue['key']
     front: Front['key']
     pageLayout?: PageLayout

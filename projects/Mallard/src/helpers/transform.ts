@@ -25,7 +25,7 @@ export const flattenCollections = (collections: Collection[]): FlatCard[] =>
     collections
         .map(collection =>
             collection.cards.map(({ articles }) => ({
-                articles: articles,
+                articles: Object.values(articles || {}),
                 collection,
             })),
         )

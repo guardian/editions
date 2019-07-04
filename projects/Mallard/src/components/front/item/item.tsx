@@ -1,11 +1,11 @@
-import React, { ReactNode, useRef, useCallback } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
 
 import { useArticleAppearance } from 'src/theme/appearance'
-import { Article } from 'src/common'
+import { CAPIArticle } from 'src/common'
 import {
     PathToArticle,
     ArticleTransitionProps,
@@ -24,7 +24,7 @@ import { color } from 'src/theme/color'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
-    article: Article
+    article: CAPIArticle
     path: PathToArticle
 }
 
@@ -143,12 +143,14 @@ const CoverItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ style, article, path }}>
             <View style={coverStyles.cover}>
-                <Image
-                    style={coverStyles.cover}
-                    source={{
-                        uri: article.image,
-                    }}
-                />
+                {'image' in article ? (
+                    <Image
+                        style={coverStyles.cover}
+                        source={{
+                            uri: article.image,
+                        }}
+                    />
+                ) : null}
                 <TextBlock
                     kicker={article.kicker}
                     headline={article.headline}
@@ -182,15 +184,17 @@ const imageStyles = StyleSheet.create({
 const ImageItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ style, article, path }}>
-            <Image
-                style={[
-                    imageStyles.image,
-                    size >= RowSize.hero && imageStyles.heroImage,
-                ]}
-                source={{
-                    uri: article.image,
-                }}
-            />
+            {'image' in article ? (
+                <Image
+                    style={[
+                        imageStyles.image,
+                        size >= RowSize.hero && imageStyles.heroImage,
+                    ]}
+                    source={{
+                        uri: article.image,
+                    }}
+                />
+            ) : null}
             <TextBlock
                 style={imageStyles.textBlock}
                 kicker={article.kicker}
@@ -231,12 +235,14 @@ const SplitImageItem = ({ style, article, path, size }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                <Image
-                    style={[splitImageStyles.image]}
-                    source={{
-                        uri: article.image,
-                    }}
-                />
+                {'image' in article ? (
+                    <Image
+                        style={[splitImageStyles.image]}
+                        source={{
+                            uri: article.image,
+                        }}
+                    />
+                ) : null}
             </View>
         </ItemTappable>
     )
@@ -268,21 +274,25 @@ const superHeroImageStyles = StyleSheet.create({
 const SuperHeroImageItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ article, path, style }} hasPadding={false}>
-            <Image
-                style={[superHeroImageStyles.image]}
-                source={{
-                    uri: article.image,
-                }}
-            />
+            {'image' in article ? (
+                <Image
+                    style={[superHeroImageStyles.image]}
+                    source={{
+                        uri: article.image,
+                    }}
+                />
+            ) : null}
             <TextBlock
                 style={[superHeroImageStyles.textBlock]}
                 kicker={article.kicker}
                 headline={article.headline}
                 {...{ size }}
             />
-            <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
-                {article.standfirst}
-            </StandfirstText>
+            {'standfirst' in article && article.standfirst ? (
+                <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
+                    {article.standfirst}
+                </StandfirstText>
+            ) : null}
         </ItemTappable>
     )
 }
@@ -321,19 +331,23 @@ const splashImageStyles = StyleSheet.create({
 const SplashImageItem = ({ style, article, path, size }: PropTypes) => {
     return (
         <ItemTappable {...{ article, path, style }} hasPadding={false}>
-            <Image
-                style={[splashImageStyles.image]}
-                source={{
-                    uri: article.image,
-                }}
-            />
+            {'image' in article ? (
+                <Image
+                    style={[splashImageStyles.image]}
+                    source={{
+                        uri: article.image,
+                    }}
+                />
+            ) : null}
             <View style={[splashImageStyles.splashHeadline]}>
                 <StandfirstText style={[splashImageStyles.textBlock]}>
                     {article.kicker}
                 </StandfirstText>
-                <StandfirstText style={[splashImageStyles.textStandBlock]}>
-                    {article.standfirst}
-                </StandfirstText>
+                {'standfirst' in article && article.standfirst ? (
+                    <StandfirstText style={[splashImageStyles.textStandBlock]}>
+                        {article.standfirst}
+                    </StandfirstText>
+                ) : null}
             </View>
         </ItemTappable>
     )

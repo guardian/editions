@@ -8,7 +8,6 @@ import { Issue, ColorFromPalette, Front as FrontType } from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
-import { FSPaths, APIPaths } from 'src/paths'
 import { FlatCard, flattenCollections, getColor } from 'src/helpers/transform'
 import { Wrapper } from './wrapper'
 import {

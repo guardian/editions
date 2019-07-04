@@ -5,7 +5,7 @@ import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
 import { PropTypes as CollectionPropTypes } from './collection-page'
-import { Article, Collection, Issue, Front } from 'src/common'
+import { CAPIArticle, Collection, Issue, Front } from 'src/common'
 import { getRowHeightForSize, RowLayout } from '../helpers'
 
 const styles = StyleSheet.create({
@@ -100,7 +100,7 @@ const RowWithOneArticle = ({
     front,
     ...rowProps
 }: {
-    article: Article
+    article: CAPIArticle
 } & NavigationPropTypes &
     RowPropTypes) => {
     const { Item } = row.columns[0]
@@ -135,7 +135,7 @@ const Row = ({
     front,
     ...rowProps
 }: {
-    articles: [Article] | [Article, Article]
+    articles: [CAPIArticle] | [CAPIArticle, CAPIArticle]
 } & NavigationPropTypes &
     RowPropTypes) => {
     const { appearance } = useArticleAppearance()
