@@ -9,6 +9,7 @@ import { CAPIArticle } from 'src/common'
 import {
     PathToArticle,
     ArticleTransitionProps,
+    ArticleNavigator,
 } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
@@ -21,11 +22,13 @@ import {
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
+import { navigateToArticle } from 'src/navigation/helpers'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
     article: CAPIArticle
     path: PathToArticle
+    articleNavigator: ArticleNavigator
 }
 
 export interface PropTypes extends TappablePropTypes {
@@ -51,6 +54,7 @@ const tappableStyles = StyleSheet.create({
 const ItemTappable = withNavigation(
     ({
         children,
+        articleNavigator,
         style,
         article,
         path,
@@ -93,10 +97,10 @@ const ItemTappable = withNavigation(
                             startAtHeightFromFrontsItem:
                                 height / getScaleForArticle(width),
                         }
-                        navigation.navigate('Article', {
-                            article,
+                        navigateToArticle(navigation, {
                             path,
                             transitionProps,
+                            articleNavigator,
                         })
                     }}
                 >
@@ -139,9 +143,9 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({ style, article, path, size }: PropTypes) => {
+const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
-        <ItemTappable {...{ style, article, path }}>
+        <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
                 {'image' in article ? (
                     <Image
@@ -181,9 +185,9 @@ const imageStyles = StyleSheet.create({
     },
 })
 
-const ImageItem = ({ style, article, path, size }: PropTypes) => {
+const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
-        <ItemTappable {...{ style, article, path }}>
+        <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article ? (
                 <Image
                     style={[
@@ -225,9 +229,9 @@ const splitImageStyles = StyleSheet.create({
     },
 })
 
-const SplitImageItem = ({ style, article, path, size }: PropTypes) => {
+const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
-        <ItemTappable {...{ style, article, path }}>
+        <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
                 <TextBlock
                     style={splitImageStyles.textBlock}
@@ -271,9 +275,9 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageItem = ({ style, article, path, size }: PropTypes) => {
+const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
-        <ItemTappable {...{ article, path, style }} hasPadding={false}>
+        <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article ? (
                 <Image
                     style={[superHeroImageStyles.image]}
@@ -328,9 +332,9 @@ const splashImageStyles = StyleSheet.create({
     },
 })
 
-const SplashImageItem = ({ style, article, path, size }: PropTypes) => {
+const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
-        <ItemTappable {...{ article, path, style }} hasPadding={false}>
+        <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article ? (
                 <Image
                     style={[splashImageStyles.image]}
@@ -353,9 +357,9 @@ const SplashImageItem = ({ style, article, path, size }: PropTypes) => {
     )
 }
 
-const SmallItem = ({ style, article, path, size }: PropTypes) => {
+const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
-        <ItemTappable {...{ style, article, path }}>
+        <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
                 kicker={article.kicker}
                 headline={article.headline}

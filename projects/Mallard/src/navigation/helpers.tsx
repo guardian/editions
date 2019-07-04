@@ -1,10 +1,10 @@
 import React from 'react'
+import { NavigationScreenProp } from 'react-navigation'
 import {
-    NavigationScreenProp,
-    NavigationNavigatorProps,
-} from 'react-navigation'
-import { NavigationContainerProps } from 'react-navigation'
-import { NavigationContainer } from 'react-navigation'
+    ArticleNavigator,
+    ArticleTransitionProps,
+    PathToArticle,
+} from 'src/screens/article-screen'
 
 /**
  *
@@ -20,4 +20,16 @@ const mapNavigationToProps = <T extends {}, P extends {}>(
     <Component {...props} {...mapper(props.navigation)} />
 )
 
-export { mapNavigationToProps }
+export interface ArticleNavigationProps {
+    transitionProps?: ArticleTransitionProps
+    path: PathToArticle
+    articleNavigator?: ArticleNavigator
+}
+const navigateToArticle = (
+    navigation: NavigationScreenProp<{}>,
+    navigationProps: ArticleNavigationProps,
+): void => {
+    navigation.navigate('Article', navigationProps)
+}
+
+export { mapNavigationToProps, navigateToArticle }

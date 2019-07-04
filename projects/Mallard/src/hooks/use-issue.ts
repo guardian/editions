@@ -4,7 +4,10 @@ import { Issue, Front } from 'src/common'
 import { withResponse } from 'src/helpers/response'
 import { FSPaths, APIPaths } from 'src/paths'
 import { PathToArticle } from 'src/screens/article-screen'
-import { flattenCollections } from 'src/helpers/transform'
+import {
+    flattenCollectionsToCards,
+    flattenFlatCardsToFront,
+} from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
 import { CachedOrPromise, chain } from 'src/helpers/fetch/cached-or-promise'
 
@@ -37,11 +40,12 @@ export const useFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
 
 export const getArticleResponse = ({ article, issue, front }: PathToArticle) =>
     chain(getFrontsResponse(issue, front), front => {
-        const allArticles = flattenCollections(front.collections)
-            .map(({ articles }) => articles)
-            .reduce((acc, val) => acc.concat(val), [])
-
-        const articleContent = allArticles.find(({ key }) => key === article)
+        const allArticles = flattenFlatCardsToFront(
+            flattenCollectionsToCards(front.collections),
+        )
+        const articleContent = allArticles.find(
+            ({ article: { key } }) => key === article,
+        )
 
         if (articleContent) {
             return chain.end(articleContent)

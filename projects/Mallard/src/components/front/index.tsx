@@ -8,7 +8,12 @@ import { Issue, ColorFromPalette, Front as FrontType } from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
-import { FlatCard, flattenCollections, getColor } from 'src/helpers/transform'
+import {
+    FlatCard,
+    getColor,
+    flattenFlatCardsToFront,
+    flattenCollectionsToCards,
+} from 'src/helpers/transform'
 import { Wrapper } from './wrapper'
 import {
     getTranslateForPage,
@@ -17,6 +22,7 @@ import {
 } from './helpers'
 import { WithArticleAppearance } from 'src/theme/appearance'
 import { useFrontsResponse } from 'src/hooks/use-issue'
+import { ArticleNavigator } from '../../screens/article-screen'
 
 const CollectionPageInFront = ({
     index,
@@ -67,8 +73,23 @@ const FrontWithResponse = ({
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const { width } = Dimensions.get('window')
-    const cards: FlatCard[] = useMemo(
-        () => flattenCollections(frontData.collections),
+    const [cards, articleNavigator]: [FlatCard[], ArticleNavigator] = useMemo(
+        () => {
+            const flatCollections = flattenCollectionsToCards(
+                frontData.collections,
+            )
+            const navigator = {
+                articles: flattenFlatCardsToFront(flatCollections).map(
+                    ({ article, collection }) => ({
+                        collection: collection.key,
+                        front: frontData.key,
+                        article: article.key,
+                        issue,
+                    }),
+                ),
+            }
+            return [flatCollections, navigator]
+        },
         frontData.collections.map(({ key }) => key), // eslint-disable-line react-hooks/exhaustive-deps
     )
     const stops = cards.length
@@ -140,10 +161,16 @@ const FrontWithResponse = ({
                     index: number
                 }) => (
                     <CollectionPageInFront
-                        articles={item.articles || []}
+                        articlesInCard={item.articles || []}
                         collection={item.collection.key}
                         front={frontData.key}
-                        {...{ scrollX, issue, index, appearance }}
+                        {...{
+                            scrollX,
+                            issue,
+                            index,
+                            appearance,
+                            articleNavigator,
+                        }}
                     />
                 )}
             />

@@ -21,12 +21,23 @@ export const getColor = (color: WithColor): string => {
     return colorMap[color.color]
 }
 
-export const flattenCollections = (collections: Collection[]): FlatCard[] =>
+export const flattenCollectionsToCards = (
+    collections: Collection[],
+): FlatCard[] =>
     collections
         .map(collection =>
             collection.cards.map(({ articles }) => ({
                 articles: Object.values(articles || {}),
                 collection,
             })),
+        )
+        .reduce((acc, val) => acc.concat(val), [])
+
+export const flattenFlatCardsToFront = (
+    flatCards: FlatCard[],
+): { article: CAPIArticle; collection: Collection }[] =>
+    flatCards
+        .map(({ articles, collection }) =>
+            articles.map(article => ({ article, collection })),
         )
         .reduce((acc, val) => acc.concat(val), [])

@@ -18,6 +18,8 @@ import {
     fiveStoryPage,
     sixStoryPage,
 } from '../layouts'
+import { PathToArticle } from 'src/screens/article-screen'
+import { ArticleNavigator } from '../../../screens/article-screen'
 
 const styles = StyleSheet.create({
     root: {
@@ -39,7 +41,8 @@ const styles = StyleSheet.create({
 })
 
 export interface PropTypes {
-    articles: CAPIArticle[]
+    articlesInCard: CAPIArticle[]
+    articleNavigator: ArticleNavigator
     issue: Issue['key']
     front: Front['key']
     pageLayout?: PageLayout
@@ -47,7 +50,8 @@ export interface PropTypes {
 }
 
 const CollectionPage = ({
-    articles,
+    articlesInCard,
+    articleNavigator,
     collection,
     translate,
     issue,
@@ -55,11 +59,11 @@ const CollectionPage = ({
     pageLayout,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const { appearance } = useArticleAppearance()
-    if (!articles.length) {
+    if (!articlesInCard.length) {
         return <FlexErrorMessage title={GENERIC_ERROR} />
     }
     if (!pageLayout) {
-        switch (articles.length) {
+        switch (articlesInCard.length) {
             // case 1:
             //     pageLayout = superHeroPage
             //     break
@@ -93,12 +97,12 @@ const CollectionPage = ({
                     articles={
                         row.columns[1]
                             ? [
-                                  articles[row.columns[0].slot],
-                                  articles[row.columns[1].slot],
+                                  articlesInCard[row.columns[0].slot],
+                                  articlesInCard[row.columns[1].slot],
                               ]
-                            : [articles[row.columns[0].slot]]
+                            : [articlesInCard[row.columns[0].slot]]
                     }
-                    {...{ collection, issue, translate, row }}
+                    {...{ collection, issue, translate, row, articleNavigator }}
                 />
             ))}
         </View>
