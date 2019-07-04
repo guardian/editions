@@ -87,7 +87,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     and its card so it's a bit less jarring
     */
     const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.99, sceneIndex],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
         outputRange: [0, 0.95, 1],
     })
 

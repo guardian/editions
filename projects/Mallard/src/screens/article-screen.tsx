@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
+import {
+    NavigationScreenProp,
+    NavigationEvents,
+    ScrollView,
+} from 'react-navigation'
 import { WithArticleAppearance, articleAppearances } from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
 import { CAPIArticle, Collection, Front, ColorFromPalette } from 'src/common'
@@ -34,12 +38,12 @@ export interface ArticleNavigator {
 }
 const ArticleScreenBody = ({
     path,
-    articlePrefill,
     viewIsTransitioning,
+    onTopPositionChange,
 }: {
     path: PathToArticle
-    articlePrefill?: CAPIArticle
     viewIsTransitioning: boolean
+    onTopPositionChange: (isAtTop: boolean) => void
 }) => {
     const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
@@ -48,7 +52,16 @@ const ArticleScreenBody = ({
     const { width } = Dimensions.get('window')
 
     return (
-        <View style={{ width }}>
+        <ScrollView
+            onTouchStart={() => {
+                //onTopPositionChange(true)
+            }}
+            scrollEventThrottle={8}
+            onScroll={ev => {
+                onTopPositionChange(ev.nativeEvent.contentOffset.y < 10)
+            }}
+            style={{ width }}
+        >
             {articleResponse({
                 error: ({ message }) => (
                     <FlexErrorMessage
@@ -57,15 +70,12 @@ const ArticleScreenBody = ({
                         style={{ backgroundColor: color.background }}
                     />
                 ),
-                pending: () =>
-                    articlePrefill ? (
-                        <ArticleController article={articlePrefill} />
-                    ) : (
-                        <FlexErrorMessage
-                            title={'loading'}
-                            style={{ backgroundColor: color.background }}
-                        />
-                    ),
+                pending: () => (
+                    <FlexErrorMessage
+                        title={'loading'}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
                 success: article => (
                     <>
                         {isUsingProdDevtools ? (
@@ -101,7 +111,7 @@ const ArticleScreenBody = ({
                     </>
                 ),
             })}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -140,6 +150,7 @@ const ArticleScreenWithProps = ({
     just the 'above the fold' content or the whole shebang
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
+    const [articleIsAtTop, setArticleIsAtTop] = useState(true)
     const navigationPosition = getNavigationPosition('article')
 
     const { isInScroller, startingPoint } = getData(navigator, path)
@@ -153,17 +164,21 @@ const ArticleScreenWithProps = ({
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
         >
+            <NavigationEvents
+                onDidFocus={() => {
+                    requestAnimationFrame(() => {
+                        setViewIsTransitioning(false)
+                    })
+                }}
+            />
             <SlideCard
                 {...viewIsTransitioning}
+                enabled={articleIsAtTop}
                 onDismiss={() => navigation.goBack()}
+                interpolator={
+                    navigationPosition && navigationPosition.raw.position
+                }
             >
-                <NavigationEvents
-                    onDidFocus={() => {
-                        requestAnimationFrame(() => {
-                            setViewIsTransitioning(false)
-                        })
-                    }}
-                />
                 <Animated.FlatList
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
@@ -195,6 +210,9 @@ const ArticleScreenWithProps = ({
                     }) => (
                         <ArticleScreenBody
                             path={item}
+                            onTopPositionChange={isAtTop => {
+                                setArticleIsAtTop(isAtTop)
+                            }}
                             {...{ viewIsTransitioning }}
                         />
                     )}
@@ -223,7 +241,7 @@ export const ArticleScreen = ({
 
     if (!path || !path.article || !path.collection || !path.issue) {
         return (
-            <SlideCard onDismiss={() => navigation.goBack()}>
+            <SlideCard enabled={true} onDismiss={() => navigation.goBack()}>
                 <FlexErrorMessage
                     title={ERR_404_MISSING_PROPS}
                     style={{ backgroundColor: color.background }}
