@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Highlight } from 'src/components/highlight'
 import { View, StyleSheet, SafeAreaView } from 'react-native'
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Footer = ({ children }: { children: ReactElement }) => (
+const Footer = ({ children }: { children: ReactNode }) => (
     <View style={styles.footer}>{children}</View>
 )
 

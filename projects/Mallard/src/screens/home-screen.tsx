@@ -92,15 +92,6 @@ export const HomeScreen = ({
                             />
                             <Footer>
                                 <Button onPress={retry}>Refresh</Button>
-                                <Button
-                                    onPress={() => {
-                                        navigation.navigate('Issue', {
-                                            path: null,
-                                        })
-                                    }}
-                                >
-                                    Go to latest
-                                </Button>
                             </Footer>
                         </>
                     ),
@@ -117,6 +108,17 @@ export const HomeScreen = ({
                         </FlexCenter>
                     ),
                 })}
+                <Footer>
+                    <Button
+                        onPress={() => {
+                            navigation.navigate('Issue', {
+                                path: null,
+                            })
+                        }}
+                    >
+                        Go to latest
+                    </Button>
+                </Footer>
                 {files.length > 0 && (
                     <>
                         <Heading>Issues on device</Heading>

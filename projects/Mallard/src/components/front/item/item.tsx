@@ -12,7 +12,7 @@ import {
 } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
-import { StandfirstText, HeadlineText } from 'src/components/styled-text'
+import { StandfirstText } from 'src/components/styled-text'
 import { RowSize, getRowHeightForSize } from '../helpers'
 import {
     setScreenPositionOfItem,
