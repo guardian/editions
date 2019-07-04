@@ -21,6 +21,7 @@ import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { ArticleNavigationProps } from 'src/navigation/helpers'
+import { UiBodyCopy } from '../components/styled-text'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -154,12 +155,10 @@ const ArticleScreenWithProps = ({
     const navigationPosition = getNavigationPosition('article')
 
     const { isInScroller, startingPoint } = getData(navigator, path)
-
+    const [current, setCurrent] = useState(startingPoint)
     return (
         <ClipFromTop
-            easing={
-                (navigationPosition && navigationPosition.position) || undefined
-            }
+            easing={navigationPosition && navigationPosition.position}
             from={
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
@@ -175,14 +174,27 @@ const ArticleScreenWithProps = ({
                 {...viewIsTransitioning}
                 enabled={articleIsAtTop}
                 onDismiss={() => navigation.goBack()}
-                interpolator={
-                    navigationPosition && navigationPosition.raw.position
-                }
             >
+                <View
+                    style={{
+                        padding: metrics.vertical,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <UiBodyCopy>{`Article ${current + 1}/${
+                        navigator.articles.length
+                    }`}</UiBodyCopy>
+                </View>
                 <Animated.FlatList
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}
+                    onScroll={ev => {
+                        setCurrent(
+                            Math.floor(ev.nativeEvent.contentOffset.x / width),
+                        )
+                    }}
                     maxToRenderPerBatch={1}
                     windowSize={3}
                     initialNumToRender={1}

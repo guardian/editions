@@ -28,7 +28,6 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
         paddingBottom: metrics.vertical,
-        paddingTop: metrics.headerHeight + metrics.vertical / 2,
     },
     kicker: {
         paddingBottom: metrics.vertical / 2,

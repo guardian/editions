@@ -2,6 +2,7 @@ import React, { useState, useEffect, ReactNode, useRef } from 'react'
 import { Animated, StyleSheet, View, PanResponder } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
+import { color } from 'src/theme/color'
 
 /*
 This is the swipey contraption that contains an article.
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
         flex: 0,
         flexShrink: 0,
         height: '100%',
+        backgroundColor: color.background,
     },
     flexGrow: {
         flexGrow: 1,
@@ -85,16 +87,14 @@ export const SlideCard = ({
                 },
             ]}
         >
-            {viewIsTransitioning ? null : (
-                <Header
-                    {...{
-                        scrollY,
-                        onDismiss,
-                    }}
-                />
-            )}
+            <Header
+                {...{
+                    scrollY,
+                    onDismiss,
+                }}
+            />
 
-            <View {...panResponder.panHandlers} style={[{ height: 1000 }]}>
+            <View {...panResponder.panHandlers} style={[{ flex: 1 }]}>
                 {children}
             </View>
         </Animated.View>

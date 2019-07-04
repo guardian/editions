@@ -38,12 +38,8 @@ const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
                             transform: [
                                 {
                                     scaleY: easing.interpolate({
-                                        inputRange: [0, 0.33, 1],
-                                        outputRange: [
-                                            1,
-                                            targetHeightScale / 4,
-                                            targetHeightScale,
-                                        ],
+                                        inputRange: [0, 0.5, 1],
+                                        outputRange: [1, 1, targetHeightScale],
                                     }),
                                 },
                             ],
