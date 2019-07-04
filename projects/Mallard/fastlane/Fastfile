@@ -35,7 +35,8 @@ platform :ios do
     )
     upload_to_testflight(
         distribute_external: true,
-        notify_external_testers: true
+        notify_external_testers: true,
+        changelog: "Thanks for testing the app! We've done some improvements"
     )
   end
 end
