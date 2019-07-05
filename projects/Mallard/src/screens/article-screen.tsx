@@ -136,7 +136,7 @@ const ArticleScreenWithProps = ({
     transitionProps,
     navigation,
 }: {
-    navigation: NavigationScreenProp<{}>
+    navigation: NavigationScreenProp<{}, ArticleNavigationProps>
     path: PathToArticle
     navigator: ArticleNavigator
     transitionProps?: ArticleTransitionProps
@@ -190,7 +190,7 @@ const ArticleScreenWithProps = ({
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}
-                    onScroll={ev => {
+                    onScroll={(ev: any) => {
                         setCurrent(
                             Math.floor(ev.nativeEvent.contentOffset.x / width),
                         )
