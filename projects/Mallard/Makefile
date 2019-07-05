@@ -1,6 +1,5 @@
 update-bundler:
-	gem install bundler -v 1.17.1
-	gem uninstall bundler -v 2.0.0.pre1
+	gem install --user-install bundler
 	bundle update --bundler
 
 debug-android:
