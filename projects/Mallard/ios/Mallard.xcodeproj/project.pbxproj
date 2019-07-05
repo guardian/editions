@@ -497,6 +497,7 @@
 		B3FAFC61256B42E39F76C701 /* libRNCWebView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCWebView.a; sourceTree = "<group>"; };
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		B5054F89755344149255BF5A /* RNScreens.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNScreens.xcodeproj; path = "../node_modules/react-native-screens/ios/RNScreens.xcodeproj"; sourceTree = "<group>"; };
+		C521D5F422CF666B00F493D5 /* Mallard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Mallard.entitlements; path = Mallard/Mallard.entitlements; sourceTree = "<group>"; };
 		C555A72822848D6C002DF16C /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		C73DD286DF1C4408BBB2D277 /* GuardianTextSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Bold.ttf"; path = "../src/assets/fonts/GuardianTextSans-Bold.ttf"; sourceTree = "<group>"; };
 		D91ACCF49F13465D84BB81D7 /* GHGuardianHeadline-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-LightItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -650,6 +651,7 @@
 		13B07FAE1A68108700A75B9A /* Mallard */ = {
 			isa = PBXGroup;
 			children = (
+				C521D5F422CF666B00F493D5 /* Mallard.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -989,6 +991,11 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 998P9U5NGJ;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
