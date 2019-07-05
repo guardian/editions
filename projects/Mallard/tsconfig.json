@@ -10,7 +10,8 @@
         "noEmit": true,
         "strict": true,
         "target": "esnext",
-        "baseUrl": "."
+        "baseUrl": ".",
+        "resolveJsonModule": true
     },
     "exclude": [
         "node_modules",
