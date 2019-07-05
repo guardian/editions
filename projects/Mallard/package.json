@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "pre-build": "node ./scripts/versioning.js",
+        "postinstall": "yarn pre-build",
         "start": "yarn pre-build && node node_modules/react-native/local-cli/cli.js start",
         "test": "jest",
         "shake-android": "echo '👋 📱' && adb shell input keyevent 82 && echo '🙌📲🙌'",
