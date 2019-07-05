@@ -19,7 +19,7 @@
 #  git_pull
 # end
 
-version = load_json(json_path: "../src/version-info.json")
+version = JSON.parse(open("../src/version-info.json").read)
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
