@@ -10,11 +10,13 @@ debug-ios:
 	xcodebuild -exportArchive -allowProvisioningUpdates -exportOptionsPlist ios/exports-plists/debug.plist -archivePath "./Mallard.xcarchive" -exportPath ./ >> build.log
 
 beta-ios:
+	bundle update --bundler
 	bundle install
 	yarn bundle-ios
 	fastlane ios beta
 
 beta-android:
+	bundle update --bundler
 	bundle install
 	mkdir -p android/app/src/main/assets
 	yarn bundle-android
