@@ -1,3 +1,8 @@
+update-bundler:
+	gem install bundler -v 1.17.1
+	gem uninstall bundler -v 2.0.0.pre1
+	bundle update --bundler
+
 debug-android:
 	mkdir -p android/app/src/main/assets
 	yarn bundle-android
@@ -9,15 +14,11 @@ debug-ios:
 	xcodebuild archive -allowProvisioningUpdates -project ios/Mallard.xcodeproj -configuration Debug -scheme Mallard -derivedDataPath ./ -archivePath "./Mallard.xcarchive" > build.log
 	xcodebuild -exportArchive -allowProvisioningUpdates -exportOptionsPlist ios/exports-plists/debug.plist -archivePath "./Mallard.xcarchive" -exportPath ./ >> build.log
 
-beta-ios:
-	bundle update --bundler
-	bundle install
+beta-ios: update-bundler
 	yarn bundle-ios
 	fastlane ios beta
 
-beta-android:
-	bundle update --bundler
-	bundle install
+beta-android: update-bundler
 	mkdir -p android/app/src/main/assets
 	yarn bundle-android
 	rm -rf android/app/src/main/res/drawable-*
