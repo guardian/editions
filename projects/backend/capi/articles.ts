@@ -61,7 +61,10 @@ const parseArticleResult = async (
     if (internalid == null)
         throw new Error(`internalid was undefined in ${path}!`)
 
-    const title = result && result.webTitle
+    const title = 
+          result && 
+          result.fields &&
+          result.fields.headline
 
     const standfirst =
         result &&
