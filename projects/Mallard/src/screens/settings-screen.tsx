@@ -17,7 +17,9 @@ import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { Heading } from 'src/components/layout/ui/row'
+import { Heading, Row } from 'src/components/layout/ui/row'
+import { getVersionInfo } from 'src/helpers/settings'
+import { metrics } from 'src/theme/spacing'
 
 const styles = StyleSheet.create({
     container,
@@ -148,9 +150,26 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 {`Thanks for helping us test the ${APP_DISPLAY_NAME} app!` +
                     `your feedback will be invaluable to the final product.`}
             </MonoTextBlock>
-            <MonoTextBlock>
+            <MonoTextBlock style={{ marginBottom: metrics.vertical * 4 }}>
                 {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
+            <List
+                onPress={() => {}}
+                data={[
+                    {
+                        key: '0',
+                        title: 'App version',
+                        explainer: getVersionInfo().version,
+                        data: {},
+                    },
+                    {
+                        key: '1',
+                        title: 'Build id',
+                        explainer: getVersionInfo().commitId,
+                        data: {},
+                    },
+                ]}
+            />
             {!isUsingProdDevtools ? (
                 <>
                     <View style={{ height: Dimensions.get('window').height }} />
