@@ -7,6 +7,7 @@ import {
     StyleProp,
     ViewStyle,
     TextStyle,
+    Text,
 } from 'react-native'
 import { UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'
@@ -23,6 +24,12 @@ const styles = StyleSheet.create({
         borderRadius: 999,
         padding: metrics.horizontal * 2,
         paddingVertical: metrics.vertical,
+    },
+    withIcon: {
+        paddingHorizontal: 0,
+        aspectRatio: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
 
@@ -46,26 +53,48 @@ const appearances: {
     }),
 }
 
+const iconStyles = StyleSheet.create({
+    root: {
+        fontFamily: 'GuardianIcons-Regular',
+        fontSize: 20,
+        lineHeight: 20,
+    },
+})
+
+const Icon = ({ children }: { children: string }) => (
+    <Text style={iconStyles.root}>{children}</Text>
+)
+
 const Button = ({
-    children,
     onPress,
     style,
     appearance,
+    ...innards
 }: {
-    children: string
     onPress: TouchableOpacityProps['onPress']
     style?: StyleProp<ViewStyle>
     appearance: ButtonAppearance
-}) => (
+} & ({ children: string } | { icon: string; alt: string })) => (
     <TouchableOpacity
         accessibilityRole="button"
+        accessibilityHint={'icon' in innards ? innards.alt : undefined}
         onPress={onPress}
         style={style}
     >
-        <View style={[styles.background, appearances[appearance].background]}>
-            <UiBodyCopy weight="bold" style={appearances[appearance].text}>
-                {children}
-            </UiBodyCopy>
+        <View
+            style={[
+                styles.background,
+                appearances[appearance].background,
+                'icon' in innards && styles.withIcon,
+            ]}
+        >
+            {'children' in innards ? (
+                <UiBodyCopy weight="bold" style={appearances[appearance].text}>
+                    {innards.children}
+                </UiBodyCopy>
+            ) : (
+                <Icon>{innards.icon}</Icon>
+            )}
         </View>
     </TouchableOpacity>
 )

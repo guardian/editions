@@ -15,7 +15,7 @@ export const metrics = {
     frontsPageHeight: 540,
     issueHeaderSplit: () => {
         const { width } = Dimensions.get('window')
-        return width * 0.7
+        return width * 0.6
     },
     slideCardSpacing:
         Platform.OS === 'ios'

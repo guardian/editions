@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         paddingTop: metrics.vertical * 2,
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'row',
     },
 })
 

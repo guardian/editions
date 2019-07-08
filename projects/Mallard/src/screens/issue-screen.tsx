@@ -47,9 +47,11 @@ const IssueHeader = withNavigation(
         return (
             <Header
                 action={
-                    <Button onPress={() => navigateToIssueList(navigation)}>
-                        Issues
-                    </Button>
+                    <Button
+                        icon=""
+                        alt="More issues"
+                        onPress={() => navigateToIssueList(navigation)}
+                    />
                 }
                 title={date}
                 subtitle={weekday}
@@ -82,25 +84,32 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
             />
             {response({
                 error: ({ message }, { retry }) => (
-                    <FlexErrorMessage
-                        title={GENERIC_ERROR}
-                        message={isUsingProdDevtools ? message : undefined}
-                        action={['Retry', retry]}
-                    />
+                    <>
+                        <IssueHeader />
+
+                        <FlexErrorMessage
+                            title={GENERIC_ERROR}
+                            message={isUsingProdDevtools ? message : undefined}
+                            action={['Retry', retry]}
+                        />
+                    </>
                 ),
                 pending: () => (
-                    <FlexCenter>
-                        <Spinner />
-                    </FlexCenter>
+                    <>
+                        <IssueHeader />
+                        <FlexCenter>
+                            <Spinner />
+                        </FlexCenter>
+                    </>
                 ),
-                success: issue => {
-                    return (
+                success: issue => (
+                    <>
+                        <IssueHeader issue={issue} />
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
-                            ListHeaderComponent={<IssueHeader issue={issue} />}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <Front
@@ -110,8 +119,8 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                 />
                             )}
                         />
-                    )
-                },
+                    </>
+                ),
             })}
         </View>
     )
