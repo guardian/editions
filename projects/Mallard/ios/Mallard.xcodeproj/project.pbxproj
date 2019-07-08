@@ -99,6 +99,8 @@
 		F799A66568FF47AE853CD184 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF6580F3D65D46FF80C28B71 /* libRNSVG.a */; };
 		4CC77A1D8C30452D9632D387 /* libRNSafeAreaInsets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A38A177D9A4DD6999F4E7F /* libRNSafeAreaInsets.a */; };
 		E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */; };
+		08536130EAF64EA0B1459747 /* libRNCMaskedView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ED867526A424F6790C05888 /* libRNCMaskedView.a */; };
+		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -517,6 +519,9 @@
 		0BE5D843E4C14A6ABCEC5C75 /* RNSafeAreaInsets.xcodeproj */ = {isa = PBXFileReference; name = "RNSafeAreaInsets.xcodeproj"; path = "../node_modules/@delightfulstudio/react-native-safe-area-insets/ios/RNSafeAreaInsets.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		97A38A177D9A4DD6999F4E7F /* libRNSafeAreaInsets.a */ = {isa = PBXFileReference; name = "libRNSafeAreaInsets.a"; path = "libRNSafeAreaInsets.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */ = {isa = PBXFileReference; name = "GuardianIcons-Regular.otf"; path = "../src/assets/fonts/GuardianIcons-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6B4B191CA6E247A7ADFEE706 /* RNCMaskedView.xcodeproj */ = {isa = PBXFileReference; name = "RNCMaskedView.xcodeproj"; path = "../node_modules/@react-native-community/masked-view/ios/RNCMaskedView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		8ED867526A424F6790C05888 /* libRNCMaskedView.a */ = {isa = PBXFileReference; name = "libRNCMaskedView.a"; path = "libRNCMaskedView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */ = {isa = PBXFileReference; name = "GuardianWeatherIcons-Regular.ttf"; path = "../src/assets/fonts/GuardianWeatherIcons-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -758,6 +763,7 @@
 				5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */,
 				E9D5A81177BD4E53AE3E6D4C /* SpaceMono-Regular copy.ttf */,
 				79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */,
+				1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1516,6 +1522,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				C555A75222848D6C002DF16C /* Icon-1024.png in Resources */,
 				E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */,
+				30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -127,7 +127,7 @@ const useFetchableResponse = <T>(
             responseHookCallbacks.onSuccess(initial)
         }
         fetcher(true, responseHookCallbacks)
-    }, effectDependencies)
+    }, [fetcher, initial, responseHookCallbacks])
 
     return {
         ...response,

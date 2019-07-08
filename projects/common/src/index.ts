@@ -27,6 +27,25 @@ export interface Card {
     articles: { [key: string]: CAPIArticle }
 }
 
+export interface Temperature {
+    "Value": number
+    "Unit": string
+    "UnitType": number
+}
+
+export interface Forecast  {
+    "DateTime": string
+    "EpochDateTime": number
+    "WeatherIcon": number
+    "IconPhrase": string
+    "HasPrecipitation": false,
+    "IsDaylight": true,
+    "Temperature": Temperature
+    "PrecipitationProbability": number
+    "MobileLink": string
+    "Link": string
+}
+
 export interface Article extends WithKey {
     type: 'article'
     headline: string

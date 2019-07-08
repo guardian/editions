@@ -16,12 +16,14 @@ import { FlexCenter } from 'src/components/layout/flex-center'
 import { useIssueWithResponse, getIssueResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
+
 import { getLatestIssue } from 'src/hooks/use-api'
 import { withNavigation } from 'react-navigation'
 import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { renderIssueDate } from 'src/helpers/issues'
 import { Container } from 'src/components/layout/ui/container'
+import { Weather } from 'src/components/weather'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -37,17 +39,20 @@ const IssueHeader = withNavigation(
             [issue && issue.key, issue],
         )
         return (
-            <Header
-                action={
-                    <Button
-                        icon=""
-                        alt="More issues"
-                        onPress={() => navigateToIssueList(navigation)}
-                    />
-                }
-                title={date}
-                subtitle={weekday}
-            />
+            <>
+                <Header
+                    action={
+                        <Button
+                            icon=""
+                            alt="More issues"
+                            onPress={() => navigateToIssueList(navigation)}
+                        />
+                    }
+                    title={date}
+                    subtitle={weekday}
+                />
+                <Weather />
+            </>
         )
     },
 )

@@ -139,4 +139,48 @@ const fetchFromIssue = <T>(
     )
 }
 
-export { fetchFromIssue, fetchFromApi }
+const fetchFromWeatherApi = async <T>(
+    path: string,
+    {
+        validator = () => true,
+    }: {
+        validator?: ValidatorFn<T>
+    } = {},
+): Promise<T> => {
+    return fetch('http://mobile-weather.guardianapis.com/' + path)
+        .then(res => {
+            if (res.status >= 500) {
+                throw new Error('Failed to fetch') // 500s don't return json
+            }
+            return res.json()
+        })
+        .then(data => {
+            if (data && validator(data)) {
+                return data
+            } else {
+                throw new Error(REQUEST_INVALID_RESPONSE_VALIDATION)
+            }
+        })
+}
+
+const fetchWeather = <T>(
+    endpointPath: string,
+    { validator }: { validator?: ValidatorFn<T> } = {},
+): CachedOrPromise<T> => {
+    const { retrieve, store } = withCache<T>('weather')
+    return createCachedOrPromise(
+        [
+            retrieve(endpointPath),
+            async () => {
+                return fetchFromWeatherApi<T>(endpointPath, {
+                    validator,
+                })
+            },
+        ],
+        {
+            savePromiseResultToValue: result => store(endpointPath, result),
+        },
+    )
+}
+
+export { fetchFromIssue, fetchFromApi, fetchWeather }
