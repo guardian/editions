@@ -146,16 +146,21 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
     const sceneIndex = scene.index
     const { height: windowHeight } = Dimensions.get('window')
 
-    const finalTranslate = windowHeight - 50
+    const finalTranslate = windowHeight - 100
 
     const translateY = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 1],
         outputRange: [0, finalTranslate],
     })
+    const borderRadius = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, 20],
+    })
 
     return {
         zIndex: 9999,
         elevation: 9999,
+        borderRadius,
         transform: [{ translateY }],
         overflow: 'hidden',
     }

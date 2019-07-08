@@ -73,7 +73,7 @@ export type AppAppearance = 'default' | 'primary'
 
 const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
-        backgroundColor: color.primary,
+        backgroundColor: color.primaryDarker,
         borderColor: color.lineOverPrimary,
         color: color.textOverPrimary,
         dimColor: color.textOverPrimary,

@@ -1,75 +1,45 @@
 import React, { ReactNode } from 'react'
-import {
-    Text,
-    View,
-    StyleSheet,
-    SafeAreaView,
-    Button,
-    StyleProp,
-    TextStyle,
-} from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { Title } from './title'
-import { IssueSplit } from '../layout/ui/issue-row'
+import { IssueTitle, IssueTitleProps, IssueRowSplit } from '../issue'
+import { useInsets } from 'src/hooks/use-insets'
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: color.palette.brand.dark,
+        backgroundColor: color.primary,
         padding: metrics.vertical,
         paddingHorizontal: metrics.horizontal,
         justifyContent: 'flex-end',
         flexDirection: 'row',
-    },
-    text: {
-        fontFamily: 'GTGuardianTitlepiece-Bold',
-        fontSize: 24,
-        lineHeight: 24,
-        color: color.textOverPrimary,
     },
     flex: {
         flexDirection: 'row',
     },
 })
 
-export enum HeaderTitleAppearance {
-    default,
-    ocean,
-}
-
-interface HeaderTitleProps {
-    title: string
-    subtitle?: string
-}
-
-const appearances: {
-    [key in HeaderTitleAppearance]: {
-        subtitle: StyleProp<TextStyle>
-    }
-} = {
-    [HeaderTitleAppearance.default]: StyleSheet.create({
-        subtitle: { color: color.palette.highlight.main },
-    }),
-    [HeaderTitleAppearance.ocean]: StyleSheet.create({
-        subtitle: { color: color.ui.tomato },
-    }),
-}
-
 const Header = ({
     action,
-    ...titleProps
+    ...IssueIssueTitleProps
 }: {
     action?: ReactNode
-} & HeaderTitleProps) => (
-    <View style={[styles.background]}>
-        <SafeAreaView style={[styles.flex]}>
-            <IssueSplit>
-                <View>
-                    <Title {...titleProps} />
+} & IssueTitleProps) => {
+    const { top: paddingTop } = useInsets()
+    return (
+        <View style={[styles.background]}>
+            <IssueRowSplit style={{ paddingTop }}>
+                <View
+                    style={{
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                        flexGrow: 1,
+                    }}
+                >
+                    <IssueTitle {...IssueIssueTitleProps} />
+                    {action}
                 </View>
-                {action}
-            </IssueSplit>
-        </SafeAreaView>
-    </View>
-)
+            </IssueRowSplit>
+        </View>
+    )
+}
 export { Header }

@@ -1,29 +1,12 @@
-import React, { useMemo, ReactNode } from 'react'
-import { Title, TitleAppearance } from 'src/components/header/title'
+import React, { useMemo } from 'react'
+import {
+    IssueTitle,
+    IssueTitleAppearance,
+    IssueRowSplit,
+} from 'src/components/issue'
 import { RowWrapper, RowWrapperProps } from './row'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { View, StyleSheet } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-
-const splitStyles = StyleSheet.create({
-    container: { flexDirection: 'row', justifyContent: 'flex-end' },
-    inner: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-})
-
-const IssueSplit = ({ children }: { children: ReactNode }) => {
-    const maxWidth = metrics.issueHeaderSplit()
-    return (
-        <View style={splitStyles.container}>
-            <View style={[splitStyles.inner, { width: maxWidth }]}>
-                {children}
-            </View>
-        </View>
-    )
-}
 
 const IssueRow = ({
     issue,
@@ -36,15 +19,15 @@ const IssueRow = ({
 
     return (
         <RowWrapper onPress={onPress}>
-            <IssueSplit>
-                <Title
+            <IssueRowSplit>
+                <IssueTitle
                     title={date}
                     subtitle={weekday}
-                    appearance={TitleAppearance.ocean}
+                    appearance={IssueTitleAppearance.ocean}
                 />
-            </IssueSplit>
+            </IssueRowSplit>
         </RowWrapper>
     )
 }
 
-export { IssueRow, IssueSplit }
+export { IssueRow }

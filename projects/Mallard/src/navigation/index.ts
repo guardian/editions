@@ -43,7 +43,7 @@ const routeNames = {
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
-        backgroundColor: color.palette.brand.dark,
+        backgroundColor: color.primary,
         borderBottomColor: color.text,
     },
     headerTintColor: color.textOverPrimary,

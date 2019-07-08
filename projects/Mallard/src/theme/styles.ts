@@ -6,7 +6,7 @@ const container = {
 }
 const primaryContainer = {
     flex: 1,
-    backgroundColor: color.primary,
+    backgroundColor: color.primaryDarker,
     color: color.textOverPrimary,
 }
 

@@ -4,6 +4,7 @@ import {
     Button as NativeButton,
     StyleSheet,
     Platform,
+    View,
 } from 'react-native'
 import { List, BaseList } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
@@ -12,12 +13,9 @@ import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { useFileList } from 'src/hooks/use-fs'
-import { Issue } from 'src/common'
-import { renderIssueDate } from 'src/helpers/issues'
 import { unzipIssue } from 'src/helpers/files'
-import { APP_DISPLAY_NAME, GENERIC_ERROR } from 'src/helpers/words'
+import { GENERIC_ERROR } from 'src/helpers/words'
 import { color } from 'src/theme/color'
-import { Header } from 'src/components/header'
 import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useSettings } from 'src/hooks/use-settings'
@@ -26,21 +24,7 @@ import { useIssueSummary } from 'src/hooks/use-api'
 import { Button } from 'src/components/button/button'
 import { Heading, Footer } from 'src/components/layout/ui/row'
 import { IssueRow } from 'src/components/layout/ui/issue-row'
-
-const demoIssues: Issue[] = [
-    {
-        key: 'alpha-edition',
-        name: 'PROD dummy',
-        date: new Date(Date.now()).getTime(),
-        fronts: [],
-    },
-    {
-        key: 'dd753c95-b0be-4f0c-98a8-3797374e71b6',
-        name: 'CODE dummy',
-        date: new Date(Date.now()).getTime(),
-        fronts: [],
-    },
-]
+import { useInsets } from 'src/hooks/use-insets'
 
 const styles = StyleSheet.create({
     container: { ...primaryContainer, paddingTop: metrics.vertical * 4 },
@@ -54,12 +38,20 @@ export const HomeScreen = ({
     const [files, { refreshIssues }] = useFileList()
     const issueSummary = useIssueSummary()
     const [{ isUsingProdDevtools }] = useSettings()
+    const { top: paddingTop } = useInsets()
 
     return (
         <WithAppAppearance value={'primary'}>
-            <Header title={APP_DISPLAY_NAME} />
             <ScrollView style={styles.container}>
-                <Heading>Issues</Heading>
+                <View style={{ paddingTop }}>
+                    <Button
+                        onPress={() => {
+                            navigation.navigate('Settings')
+                        }}
+                    >
+                        Go to settings
+                    </Button>
+                </View>
                 {issueSummary({
                     success: (issueList, { retry }) => (
                         <>
@@ -150,20 +142,7 @@ export const HomeScreen = ({
     )
 }
 
-HomeScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => ({
+HomeScreen.navigationOptions = {
     title: 'Home',
-    headerTitle: () => null,
-    headerRight: (
-        <NativeButton
-            onPress={() => {
-                navigation.navigate('Settings')
-            }}
-            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
-            title="Settings"
-        />
-    ),
-})
+    header: null,
+}
