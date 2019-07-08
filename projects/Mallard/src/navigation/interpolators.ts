@@ -134,7 +134,6 @@ const issueToArticleScreenInterpolator = (
     sceneProps: NavigationTransitionProps,
 ) => {
     const { scene } = sceneProps
-    console.log(scene.route.routeName)
     if (scene.route.routeName === routeNames.Issue) {
         return issueScreenInterpolator(sceneProps)
     } else {
@@ -142,4 +141,36 @@ const issueToArticleScreenInterpolator = (
     }
 }
 
-export { issueToArticleScreenInterpolator }
+const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
+    const { position, scene } = sceneProps
+    const sceneIndex = scene.index
+    const { height: windowHeight } = Dimensions.get('window')
+
+    const finalTranslate = windowHeight - 50
+
+    const translateY = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, finalTranslate],
+    })
+
+    return {
+        zIndex: 9999,
+        elevation: 9999,
+        transform: [{ translateY }],
+        overflow: 'hidden',
+    }
+}
+
+const issueToIssueListInterpolator = (
+    sceneProps: NavigationTransitionProps,
+) => {
+    const { scene } = sceneProps
+    console.log(scene.route.routeName)
+    if (scene.route.routeName === routeNames.Issue) {
+        return issueScreenToIssueList(sceneProps)
+    } else {
+        return null
+    }
+}
+
+export { issueToArticleScreenInterpolator, issueToIssueListInterpolator }

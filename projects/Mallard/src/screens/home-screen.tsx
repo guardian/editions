@@ -1,13 +1,11 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import {
-    Image,
     ScrollView,
     Button as NativeButton,
     StyleSheet,
-    View,
     Platform,
 } from 'react-native'
-import { List } from 'src/components/lists/list'
+import { List, BaseList } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
 import { primaryContainer } from 'src/theme/styles'
 import { ApiState } from './settings/api-screen'
@@ -27,6 +25,7 @@ import { FlexCenter } from 'src/components/layout/flex-center'
 import { useIssueSummary } from 'src/hooks/use-api'
 import { Button } from 'src/components/button/button'
 import { Heading, Footer } from 'src/components/layout/ui/row'
+import { IssueRow } from 'src/components/layout/ui/issue-row'
 
 const demoIssues: Issue[] = [
     {
@@ -53,18 +52,6 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [files, { refreshIssues }] = useFileList()
-    const issueList = useMemo(
-        () =>
-            demoIssues.map(issue => ({
-                key: issue.key,
-                title: renderIssueDate(issue.date).date,
-                explainer: issue.key,
-                data: {
-                    issue: issue.key,
-                },
-            })),
-        demoIssues.map(({ key }) => key),
-    )
     const issueSummary = useIssueSummary()
     const [{ isUsingProdDevtools }] = useSettings()
 
@@ -76,19 +63,18 @@ export const HomeScreen = ({
                 {issueSummary({
                     success: (issueList, { retry }) => (
                         <>
-                            <List
-                                data={issueList.map(issue => ({
-                                    title: renderIssueDate(issue.date * 1000)
-                                        .date,
-                                    explainer: issue.name,
-                                    key: issue.date + issue.name,
-                                    data: {
-                                        issue: issue.key,
-                                    },
-                                }))}
-                                onPress={path =>
-                                    navigation.navigate('Issue', { path })
-                                }
+                            <BaseList
+                                data={issueList}
+                                renderItem={({ item }) => (
+                                    <IssueRow
+                                        onPress={() => {
+                                            navigation.navigate('Issue', {
+                                                issue: item.key,
+                                            })
+                                        }}
+                                        issue={item}
+                                    ></IssueRow>
+                                )}
                             />
                             <Footer>
                                 <Button onPress={retry}>Refresh</Button>
@@ -158,17 +144,6 @@ export const HomeScreen = ({
                         />
                     </>
                 )}
-                {isUsingProdDevtools ? (
-                    <>
-                        <Heading>Hardcoded issues</Heading>
-                        <List
-                            data={issueList}
-                            onPress={path =>
-                                navigation.navigate('Issue', { path })
-                            }
-                        />
-                    </>
-                ) : null}
                 <ApiState />
             </ScrollView>
         </WithAppAppearance>

@@ -61,10 +61,6 @@ interface RowContentProps {
     explainer?: string
 }
 
-interface RowProps extends RowContentProps {
-    proxy?: ReactElement
-}
-
 const RowContents = ({ title, explainer }: RowContentProps) => (
     <>
         <UiBodyCopy>{title}</UiBodyCopy>
@@ -76,18 +72,16 @@ const RowContents = ({ title, explainer }: RowContentProps) => (
     </>
 )
 
-const Row = ({ proxy, ...contents }: RowProps) => {
-    const { backgroundColor } = useAppAppearance()
-
+const Row = ({
+    proxy,
+    onPress,
+    ...contents
+}: RowContentProps &
+    RowWrapperProps & {
+        proxy?: ReactElement
+    }) => {
     return (
-        <View
-            style={[
-                styles.item,
-                {
-                    backgroundColor,
-                },
-            ]}
-        >
+        <RowWrapper onPress={onPress}>
             {proxy ? (
                 <View style={styles.itemFlexer}>
                     <View style={styles.itemFlexerShrinker}>
@@ -98,17 +92,47 @@ const Row = ({ proxy, ...contents }: RowProps) => {
             ) : (
                 <RowContents {...contents} />
             )}
+        </RowWrapper>
+    )
+}
+
+export interface RowWrapperProps {
+    onPress?: () => void
+}
+
+const RowWrapper = ({
+    children,
+    onPress,
+}: {
+    children: ReactNode
+} & RowWrapperProps) => {
+    const { backgroundColor } = useAppAppearance()
+
+    return onPress ? (
+        <Highlight onPress={onPress}>
+            <View
+                style={[
+                    styles.item,
+                    {
+                        backgroundColor,
+                    },
+                ]}
+            >
+                {children}
+            </View>
+        </Highlight>
+    ) : (
+        <View
+            style={[
+                styles.item,
+                {
+                    backgroundColor,
+                },
+            ]}
+        >
+            {children}
         </View>
     )
 }
 
-const TappableRow = ({
-    onPress,
-    ...props
-}: RowProps & { onPress: () => void }) => (
-    <Highlight onPress={onPress}>
-        <Row {...props} />
-    </Highlight>
-)
-
-export { Separator, Row, TappableRow, Footer, Heading }
+export { Separator, Row, RowWrapper, Footer, Heading }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { StyleSheet, View, Platform } from 'react-native'
 import {
     NavigationScreenProp,
@@ -22,6 +22,7 @@ import { getLatestIssue } from 'src/hooks/use-api'
 import { withNavigation } from 'react-navigation'
 import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
+import { renderIssueDate } from 'src/helpers/issues'
 
 const styles = StyleSheet.create({
     container,
@@ -36,6 +37,13 @@ export interface PathToIssue {
 
 const IssueHeader = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+        const { date, weekday } = useMemo(
+            () =>
+                issue
+                    ? renderIssueDate(issue.date * 1000 || Date.now())
+                    : { date: 'Issue', weekday: 'undefined' },
+            [issue && issue.key, issue],
+        )
         return (
             <Header
                 action={
@@ -43,8 +51,8 @@ const IssueHeader = withNavigation(
                         Issues
                     </Button>
                 }
-                title={'Issue'}
-                subtitle={issue && issue.name}
+                title={date}
+                subtitle={weekday}
             />
         )
     },

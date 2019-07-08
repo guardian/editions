@@ -1,11 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
-import {
-    TappableRow,
-    Separator,
-    Heading,
-    Footer,
-} from 'src/components/layout/ui/row'
+import { Row, Separator, Heading, Footer } from 'src/components/layout/ui/row'
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { container } from 'src/theme/styles'
 import { GdprSwitchSettings } from 'src/helpers/settings'
@@ -48,14 +43,14 @@ const GdprConsent = () => {
                 data={Object.values(switches)}
                 keyExtractor={({ key }) => key}
                 renderItem={({ item }) => (
-                    <TappableRow
+                    <Row
                         title={item.name}
                         explainer={item.description}
                         onPress={() => {
                             setSetting(item.key, !settings[item.key])
                         }}
                         proxy={<ThreeWaySwitch value={settings[item.key]} />}
-                    ></TappableRow>
+                    ></Row>
                 )}
             />
             {isUsingProdDevtools ? (

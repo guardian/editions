@@ -21,7 +21,10 @@ import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
-import { issueToArticleScreenInterpolator } from './interpolators'
+import {
+    issueToArticleScreenInterpolator,
+    issueToIssueListInterpolator,
+} from './interpolators'
 
 const routeNames = {
     Issue: 'Issue',
@@ -94,8 +97,25 @@ const AppStack = createStackNavigator(
     {
         defaultNavigationOptions: {
             header: null,
+            gesturesEnabled: false,
         },
         initialRouteName: routeNames.Issue,
+        transparentCard: true,
+        mode: 'modal',
+        headerMode: 'none',
+        cardOverlayEnabled: true,
+        transitionConfig: () => ({
+            containerStyle: {
+                backgroundColor: 'transparent',
+            },
+            transitionSpec: {
+                duration: 500,
+                easing: Easing.elastic(0.5),
+                timing: Animated.timing,
+                useNativeDriver: true,
+            },
+            screenInterpolator: issueToIssueListInterpolator,
+        }),
     },
 )
 
