@@ -6,7 +6,7 @@ import { ColorFromPalette } from 'src/common'
 /*
 Types
 */
-interface AppAppearanceStyles {
+export interface AppAppearanceStyles {
     backgroundColor: string
     cardBackgroundColor: string
     borderColor: string
@@ -72,7 +72,7 @@ interface ArticleAppearanceStyles {
 
 export type AppAppearance = 'default' | 'primary'
 
-const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
+export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
         backgroundColor: color.primaryDarker,
         cardBackgroundColor: color.primaryDarker,

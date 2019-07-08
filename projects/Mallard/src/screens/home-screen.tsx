@@ -14,7 +14,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useIssueSummary } from 'src/hooks/use-api'
-import { Button } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 import { Heading, Footer } from 'src/components/layout/ui/row'
 import { IssueRow } from 'src/components/layout/ui/issue-row'
 import { useInsets } from 'src/hooks/use-insets'
@@ -77,22 +77,31 @@ export const HomeScreen = ({
                                     ></IssueRow>
                                 )}
                             />
-                            <Footer>
-                                <Button
-                                    onPress={retry}
-                                    icon={''}
-                                    alt={'refresh'}
-                                ></Button>
-                                <Button
-                                    onPress={() => {
-                                        navigation.navigate('Issue', {
-                                            path: null,
-                                        })
-                                    }}
-                                >
-                                    Go to latest
-                                </Button>
-                            </Footer>
+                            <View
+                                style={{
+                                    padding: metrics.horizontal,
+                                    paddingVertical: metrics.vertical * 4,
+                                }}
+                            >
+                                <IssueRowSplit>
+                                    <Button
+                                        onPress={retry}
+                                        icon={''}
+                                        alt={'refresh'}
+                                        appearance={ButtonAppearance.skeleton}
+                                    ></Button>
+                                    <Button
+                                        appearance={ButtonAppearance.skeleton}
+                                        onPress={() => {
+                                            navigation.navigate('Issue', {
+                                                path: null,
+                                            })
+                                        }}
+                                    >
+                                        Go to latest
+                                    </Button>
+                                </IssueRowSplit>
+                            </View>
                         </>
                     ),
                     error: ({ message }, { retry }) => (
