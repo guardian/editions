@@ -1,9 +1,8 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { List } from 'src/components/lists/list'
 import { MonoTextBlock } from 'src/components/styled-text'
-import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
 import { NavigationScreenProp } from 'react-navigation'
 import { TextInput } from 'react-native-gesture-handler'
@@ -11,10 +10,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { backends, defaultSettings } from 'src/helpers/settings/defaults'
 import { Heading } from 'src/components/layout/ui/row'
-
-const styles = StyleSheet.create({
-    container,
-})
+import { ScrollContainer } from 'src/components/layout/ui/container'
 
 const ApiState = () => {
     const [{ apiUrl }] = useSettings()
@@ -34,7 +30,7 @@ const ApiScreen = ({
     const [{ apiUrl }, setSetting] = useSettings()
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollContainer>
             <Heading>Selected backend</Heading>
             <TextInput
                 style={{
@@ -64,7 +60,7 @@ const ApiScreen = ({
                     data: { value },
                 }))}
             />
-        </ScrollView>
+        </ScrollContainer>
     )
 }
 ApiScreen.navigationOptions = {

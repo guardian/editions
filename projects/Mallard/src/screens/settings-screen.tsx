@@ -1,29 +1,18 @@
 import React from 'react'
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    Dimensions,
-    View,
-    Alert,
-} from 'react-native'
+import { Text, Dimensions, View, Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { List } from 'src/components/lists/list'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
-import { container } from 'src/theme/styles'
 import { useSettings } from 'src/hooks/use-settings'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { Heading, Row } from 'src/components/layout/ui/row'
+import { Heading } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
-
-const styles = StyleSheet.create({
-    container,
-})
+import { ScrollContainer } from 'src/components/layout/ui/container'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -129,7 +118,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { isUsingProdDevtools } = settings
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollContainer>
             <Heading>Settings</Heading>
             <List
                 onPress={({ onPress }) => onPress()}
@@ -192,7 +181,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             ) : (
                 <DevZone />
             )}
-        </ScrollView>
+        </ScrollContainer>
     )
 }
 SettingsScreen.navigationOptions = {

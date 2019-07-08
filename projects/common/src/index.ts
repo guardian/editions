@@ -64,9 +64,7 @@ export interface IssueSummary extends WithKey {
     date: number
 }
 
-export interface Issue extends WithKey {
-    name: string
-    date: number
+export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
 }
 

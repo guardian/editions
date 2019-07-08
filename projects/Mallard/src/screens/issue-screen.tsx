@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Button, Platform } from 'react-native'
+import React, { useState, useMemo } from 'react'
 import {
     NavigationScreenProp,
     NavigationEvents,
     FlatList,
+    NavigationInjectedProps,
 } from 'react-navigation'
 
-import { container } from 'src/theme/styles'
 import { Front } from 'src/components/front'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
@@ -14,31 +13,44 @@ import { Header } from 'src/components/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import {
-    useIssueResponse,
-    useIssueWithResponse,
-    getIssueResponse,
-} from 'src/hooks/use-issue'
+import { useIssueWithResponse, getIssueResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
-import { color } from 'src/theme/color'
-import { withResponse } from '../helpers/response'
-import { useLatestIssue, getLatestIssue } from 'src/hooks/use-api'
-
-const styles = StyleSheet.create({
-    container,
-    contentContainer: {
-        flexGrow: 1,
-    },
-})
+import { getLatestIssue } from 'src/hooks/use-api'
+import { withNavigation } from 'react-navigation'
+import { Button } from 'src/components/button/button'
+import { navigateToIssueList } from 'src/navigation/helpers'
+import { renderIssueDate } from 'src/helpers/issues'
+import { Container } from 'src/components/layout/ui/container'
 
 export interface PathToIssue {
     issue: Issue['key']
 }
 
-const IssueHeader = ({ issue }: { issue: Issue }) => {
-    return <Header title={'Issue/'} subtitle={issue.name} />
-}
+const IssueHeader = withNavigation(
+    ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+        const { date, weekday } = useMemo(
+            () =>
+                issue
+                    ? renderIssueDate(issue.date * 1000 || Date.now())
+                    : { date: 'Issue', weekday: 'undefined' },
+            [issue && issue.key, issue],
+        )
+        return (
+            <Header
+                action={
+                    <Button
+                        icon=""
+                        alt="More issues"
+                        onPress={() => navigateToIssueList(navigation)}
+                    />
+                }
+                title={date}
+                subtitle={weekday}
+            />
+        )
+    },
+)
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueWithResponse(
@@ -55,9 +67,8 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
-
     return (
-        <View style={styles.container}>
+        <Container>
             <NavigationEvents
                 onDidFocus={() => {
                     setViewIsTransitioning(false)
@@ -65,25 +76,32 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
             />
             {response({
                 error: ({ message }, { retry }) => (
-                    <FlexErrorMessage
-                        title={GENERIC_ERROR}
-                        message={isUsingProdDevtools ? message : undefined}
-                        action={['Retry', retry]}
-                    />
+                    <>
+                        <IssueHeader />
+
+                        <FlexErrorMessage
+                            title={GENERIC_ERROR}
+                            message={isUsingProdDevtools ? message : undefined}
+                            action={['Retry', retry]}
+                        />
+                    </>
                 ),
                 pending: () => (
-                    <FlexCenter>
-                        <Spinner />
-                    </FlexCenter>
+                    <>
+                        <IssueHeader />
+                        <FlexCenter>
+                            <Spinner />
+                        </FlexCenter>
+                    </>
                 ),
-                success: issue => {
-                    return (
+                success: issue => (
+                    <>
+                        <IssueHeader issue={issue} />
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
-                            ListHeaderComponent={<IssueHeader issue={issue} />}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <Front
@@ -93,10 +111,10 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                 />
                             )}
                         />
-                    )
-                },
+                    </>
+                ),
             })}
-        </View>
+        </Container>
     )
 }
 
@@ -109,21 +127,3 @@ export const IssueScreen = ({
     if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
     return <IssueScreenWithPath path={path} />
 }
-
-IssueScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => ({
-    title: 'Issue',
-    headerTitle: () => null,
-    headerRight: (
-        <Button
-            onPress={() => {
-                navigation.navigate('Home')
-            }}
-            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
-            title="More issues"
-        />
-    ),
-})

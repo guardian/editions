@@ -5,6 +5,7 @@ import {
     ArticleTransitionProps,
     PathToArticle,
 } from 'src/screens/article-screen'
+import { routeNames } from '.'
 
 /**
  *
@@ -29,7 +30,11 @@ const navigateToArticle = (
     navigation: NavigationScreenProp<{}>,
     navigationProps: ArticleNavigationProps,
 ): void => {
-    navigation.navigate('Article', navigationProps)
+    navigation.navigate(routeNames.Article, navigationProps)
 }
 
-export { mapNavigationToProps, navigateToArticle }
+const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
+    navigation.navigate(routeNames.IssueList, {})
+}
+
+export { mapNavigationToProps, navigateToArticle, navigateToIssueList }

@@ -660,6 +660,11 @@
   resolved "https://registry.yarnpkg.com/@creditkarma/thrift-server-core/-/thrift-server-core-0.13.6.tgz#065e9f83300e7fff66049f8a32c5ffba546dd1bb"
   integrity sha512-mggZtxkk6C89HVVmA+s5lAO6bxyENxLCbse+Jd1Q8HQ6jbOk5t94nHNV8ZMacuk056WNe5QVUequM4KJO8LcoA==
 
+"@delightfulstudio/react-native-safe-area-insets@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@delightfulstudio/react-native-safe-area-insets/-/react-native-safe-area-insets-0.2.1.tgz#6fb144c729b98e7e018dfcf25cb1ccf25aa8dbc2"
+  integrity sha512-rwQW2BgXn1Nr6vmPv1J8C3EMI1yU07RRvbnc6pHgCySDKAqmhNiKJk4x50G373bxmvNfDsft4/zoGG8+xgF21A==
+
 "@guardian/capi-ts@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@guardian/capi-ts/-/capi-ts-0.1.0.tgz#c218e08c7ae00324d7aa90e502e52a739e751abe"
