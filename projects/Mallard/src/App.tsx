@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const navigationPersistenceKey = __DEV__ ? 'nav-32576844129734322' : null
+const navigationPersistenceKey = __DEV__ ? 'nav-' : null
 
 export default class App extends React.Component<{}, {}> {
     /**

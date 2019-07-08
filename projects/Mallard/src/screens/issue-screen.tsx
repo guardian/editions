@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Button, Platform } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
 import {
     NavigationScreenProp,
     NavigationEvents,
     FlatList,
+    NavigationInjectedProps,
 } from 'react-navigation'
 
 import { container } from 'src/theme/styles'
@@ -14,16 +15,13 @@ import { Header } from 'src/components/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import {
-    useIssueResponse,
-    useIssueWithResponse,
-    getIssueResponse,
-} from 'src/hooks/use-issue'
+import { useIssueWithResponse, getIssueResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
-import { color } from 'src/theme/color'
-import { withResponse } from '../helpers/response'
-import { useLatestIssue, getLatestIssue } from 'src/hooks/use-api'
+import { getLatestIssue } from 'src/hooks/use-api'
+import { withNavigation } from 'react-navigation'
+import { Button } from 'src/components/button/button'
+import { navigateToIssueList } from 'src/navigation/helpers'
 
 const styles = StyleSheet.create({
     container,
@@ -36,9 +34,21 @@ export interface PathToIssue {
     issue: Issue['key']
 }
 
-const IssueHeader = ({ issue }: { issue: Issue }) => {
-    return <Header title={'Issue/'} subtitle={issue.name} />
-}
+const IssueHeader = withNavigation(
+    ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+        return (
+            <Header
+                action={
+                    <Button onPress={() => navigateToIssueList(navigation)}>
+                        Issues
+                    </Button>
+                }
+                title={'Issue'}
+                subtitle={issue && issue.name}
+            />
+        )
+    },
+)
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueWithResponse(
@@ -55,7 +65,6 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
-
     return (
         <View style={styles.container}>
             <NavigationEvents
@@ -109,21 +118,3 @@ export const IssueScreen = ({
     if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
     return <IssueScreenWithPath path={path} />
 }
-
-IssueScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => ({
-    title: 'Issue',
-    headerTitle: () => null,
-    headerRight: (
-        <Button
-            onPress={() => {
-                navigation.navigate('Home')
-            }}
-            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
-            title="More issues"
-        />
-    ),
-})

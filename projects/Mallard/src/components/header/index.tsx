@@ -22,14 +22,27 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = ({ title, subtitle }: { title: string; subtitle?: string }) => (
+const Header = ({
+    title,
+    subtitle,
+    action,
+}: {
+    title: string
+    subtitle?: string
+    action?: ReactNode
+}) => (
     <View style={[styles.background]}>
-        <View>
-            <Text style={styles.text}>{title}</Text>
-            {subtitle && (
-                <Text style={[styles.text, styles.subtitle]}>{subtitle}</Text>
-            )}
-        </View>
+        <SafeAreaView>
+            {action}
+            <View>
+                <Text style={styles.text}>{title}</Text>
+                {subtitle && (
+                    <Text style={[styles.text, styles.subtitle]}>
+                        {subtitle}
+                    </Text>
+                )}
+            </View>
+        </SafeAreaView>
     </View>
 )
 export { Header }

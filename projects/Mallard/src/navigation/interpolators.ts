@@ -5,6 +5,7 @@ import {
     setNavigationPosition,
 } from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
+import { routeNames } from '.'
 
 export const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
@@ -133,7 +134,8 @@ const issueToArticleScreenInterpolator = (
     sceneProps: NavigationTransitionProps,
 ) => {
     const { scene } = sceneProps
-    if (scene.route.routeName === 'Main') {
+    console.log(scene.route.routeName)
+    if (scene.route.routeName === routeNames.Issue) {
         return issueScreenInterpolator(sceneProps)
     } else {
         return articleScreenInterpolator(sceneProps)
