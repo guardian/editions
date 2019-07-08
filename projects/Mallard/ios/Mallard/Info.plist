@@ -66,6 +66,7 @@
 		<string>GuardianTextEgyptian-Reg.ttf</string>
 		<string>GuardianTextEgyptian-RegularIt.ttf</string>
 		<string>GuardianTextEgyptian-RegIt.ttf</string>
+		<string>GuardianIcons-Regular.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
