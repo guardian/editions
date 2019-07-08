@@ -6,6 +6,7 @@ import {
 } from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
 import { routeNames } from '.'
+import { supportsTransparentCards } from 'src/helpers/features'
 
 export const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
@@ -146,7 +147,9 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
     const sceneIndex = scene.index
     const { height: windowHeight } = Dimensions.get('window')
 
-    const finalTranslate = windowHeight - 100
+    const finalTranslate = supportsTransparentCards()
+        ? windowHeight - 100
+        : windowHeight
 
     const translateY = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 1],
@@ -170,7 +173,6 @@ const issueToIssueListInterpolator = (
     sceneProps: NavigationTransitionProps,
 ) => {
     const { scene } = sceneProps
-    console.log(scene.route.routeName)
     if (scene.route.routeName === routeNames.Issue) {
         return issueScreenToIssueList(sceneProps)
     } else {

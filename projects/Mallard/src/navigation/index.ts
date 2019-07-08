@@ -11,7 +11,7 @@ import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
 import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
-import { Animated, Easing } from 'react-native'
+import { Animated, Easing, Platform } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import {
     OnboardingIntroScreen,
@@ -25,6 +25,7 @@ import {
     issueToArticleScreenInterpolator,
     issueToIssueListInterpolator,
 } from './interpolators'
+import { supportsTransparentCards } from 'src/helpers/features'
 
 const routeNames = {
     Issue: 'Issue',
@@ -100,7 +101,7 @@ const AppStack = createStackNavigator(
             gesturesEnabled: false,
         },
         initialRouteName: routeNames.Issue,
-        transparentCard: true,
+        transparentCard: supportsTransparentCards(),
         mode: 'modal',
         headerMode: 'none',
         cardOverlayEnabled: true,
