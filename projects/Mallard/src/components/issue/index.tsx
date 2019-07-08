@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { IssueTitleText } from '../styled-text'
 
 const splitStyles = StyleSheet.create({
     container: { flexDirection: 'row', justifyContent: 'flex-end' },
@@ -38,9 +39,6 @@ const IssueRowSplit = ({
 
 const styles = StyleSheet.create({
     text: {
-        fontFamily: 'GTGuardianTitlepiece-Bold',
-        fontSize: 24,
-        lineHeight: 24,
         color: color.textOverPrimary,
     },
 })
@@ -74,11 +72,13 @@ const IssueTitle = ({
     appearance,
 }: IssueTitleProps & { appearance: IssueTitleAppearance }) => (
     <View>
-        <Text style={styles.text}>{title}</Text>
+        <IssueTitleText style={styles.text}>{title}</IssueTitleText>
         {subtitle && (
-            <Text style={[styles.text, appearances[appearance].subtitle]}>
+            <IssueTitleText
+                style={[styles.text, appearances[appearance].subtitle]}
+            >
                 {subtitle}
-            </Text>
+            </IssueTitleText>
         )}
     </View>
 )

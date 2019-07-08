@@ -25,10 +25,31 @@ import { Button } from 'src/components/button/button'
 import { Heading, Footer } from 'src/components/layout/ui/row'
 import { IssueRow } from 'src/components/layout/ui/issue-row'
 import { useInsets } from 'src/hooks/use-insets'
+import { Highlight } from 'src/components/highlight'
+import { IssueTitleText } from 'src/components/styled-text'
+import { IssueRowSplit } from 'src/components/issue'
 
 const styles = StyleSheet.create({
-    container: { ...primaryContainer, paddingTop: metrics.vertical * 4 },
+    container: { ...primaryContainer, paddingTop: metrics.vertical * 2 },
 })
+
+const SettingsLink = ({ onPress }: { onPress: () => void }) => (
+    <Highlight onPress={onPress}>
+        <View
+            style={{
+                padding: metrics.horizontal,
+                paddingVertical: metrics.vertical * 2,
+                backgroundColor: color.palette.highlight.main,
+                borderBottomColor: color.palette.neutral[100],
+                borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+        >
+            <IssueRowSplit>
+                <IssueTitleText>Settings</IssueTitleText>
+            </IssueRowSplit>
+        </View>
+    </Highlight>
+)
 
 export const HomeScreen = ({
     navigation,
@@ -44,13 +65,11 @@ export const HomeScreen = ({
         <WithAppAppearance value={'primary'}>
             <ScrollView style={styles.container}>
                 <View style={{ paddingTop }}>
-                    <Button
+                    <SettingsLink
                         onPress={() => {
                             navigation.navigate('Settings')
                         }}
-                    >
-                        Go to settings
-                    </Button>
+                    />
                 </View>
                 {issueSummary({
                     success: (issueList, { retry }) => (
