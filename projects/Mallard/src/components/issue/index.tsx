@@ -1,12 +1,5 @@
 import React, { ReactNode } from 'react'
-import {
-    Text,
-    StyleSheet,
-    StyleProp,
-    TextStyle,
-    View,
-    ViewStyle,
-} from 'react-native'
+import { StyleSheet, StyleProp, TextStyle, View, ViewStyle } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { IssueTitleText } from '../styled-text'

@@ -107,7 +107,7 @@ const RowWrapper = ({
 }: {
     children: ReactNode
 } & RowWrapperProps) => {
-    const { backgroundColor } = useAppAppearance()
+    const { cardBackgroundColor: backgroundColor } = useAppAppearance()
 
     return onPress ? (
         <Highlight onPress={onPress}>

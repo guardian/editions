@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react'
-import { StyleSheet, View, Platform } from 'react-native'
 import {
     NavigationScreenProp,
     NavigationEvents,
@@ -7,7 +6,6 @@ import {
     NavigationInjectedProps,
 } from 'react-navigation'
 
-import { container } from 'src/theme/styles'
 import { Front } from 'src/components/front'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
@@ -23,13 +21,7 @@ import { withNavigation } from 'react-navigation'
 import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { renderIssueDate } from 'src/helpers/issues'
-
-const styles = StyleSheet.create({
-    container,
-    contentContainer: {
-        flexGrow: 1,
-    },
-})
+import { Container } from 'src/components/layout/ui/container'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -76,7 +68,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
     return (
-        <View style={styles.container}>
+        <Container>
             <NavigationEvents
                 onDidFocus={() => {
                     setViewIsTransitioning(false)
@@ -122,7 +114,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                     </>
                 ),
             })}
-        </View>
+        </Container>
     )
 }
 

@@ -1,14 +1,7 @@
 import React from 'react'
-import {
-    ScrollView,
-    Button as NativeButton,
-    StyleSheet,
-    Platform,
-    View,
-} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { List, BaseList } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
-import { primaryContainer } from 'src/theme/styles'
 import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
@@ -28,10 +21,7 @@ import { useInsets } from 'src/hooks/use-insets'
 import { Highlight } from 'src/components/highlight'
 import { IssueTitleText } from 'src/components/styled-text'
 import { IssueRowSplit } from 'src/components/issue'
-
-const styles = StyleSheet.create({
-    container: { ...primaryContainer, paddingTop: metrics.vertical * 2 },
-})
+import { ScrollContainer } from 'src/components/layout/ui/container'
 
 const SettingsLink = ({ onPress }: { onPress: () => void }) => (
     <Highlight onPress={onPress}>
@@ -63,7 +53,7 @@ export const HomeScreen = ({
 
     return (
         <WithAppAppearance value={'primary'}>
-            <ScrollView style={styles.container}>
+            <ScrollContainer>
                 <View style={{ paddingTop }}>
                     <SettingsLink
                         onPress={() => {
@@ -158,7 +148,7 @@ export const HomeScreen = ({
                     </>
                 )}
                 <ApiState />
-            </ScrollView>
+            </ScrollContainer>
         </WithAppAppearance>
     )
 }

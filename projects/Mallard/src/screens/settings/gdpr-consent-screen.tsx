@@ -2,14 +2,10 @@ import React from 'react'
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
 import { Row, Separator, Heading, Footer } from 'src/components/layout/ui/row'
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
-import { container } from 'src/theme/styles'
 import { GdprSwitchSettings } from 'src/helpers/settings'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Button } from 'src/components/button/button'
-
-const styles = StyleSheet.create({
-    container,
-})
+import { ScrollContainer } from 'src/components/layout/ui/container'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -63,9 +59,9 @@ const GdprConsent = () => {
 }
 
 const GdprConsentScreen = () => (
-    <ScrollView style={styles.container}>
+    <ScrollContainer>
         <GdprConsent></GdprConsent>
-    </ScrollView>
+    </ScrollContainer>
 )
 
 export { GdprConsent, GdprConsentScreen }
