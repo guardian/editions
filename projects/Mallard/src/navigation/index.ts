@@ -101,22 +101,26 @@ const AppStack = createStackNavigator(
             gesturesEnabled: false,
         },
         initialRouteName: routeNames.Issue,
-        transparentCard: supportsTransparentCards(),
-        mode: 'modal',
-        headerMode: 'none',
-        cardOverlayEnabled: true,
-        transitionConfig: () => ({
-            containerStyle: {
-                backgroundColor: 'transparent',
-            },
-            transitionSpec: {
-                duration: 500,
-                easing: Easing.elastic(0.5),
-                timing: Animated.timing,
-                useNativeDriver: true,
-            },
-            screenInterpolator: issueToIssueListInterpolator,
-        }),
+        ...(supportsTransparentCards()
+            ? {
+                  transparentCard: true,
+                  mode: 'modal',
+                  headerMode: 'none',
+                  cardOverlayEnabled: true,
+                  transitionConfig: () => ({
+                      containerStyle: {
+                          backgroundColor: 'transparent',
+                      },
+                      transitionSpec: {
+                          duration: 500,
+                          easing: Easing.elastic(0.5),
+                          timing: Animated.timing,
+                          useNativeDriver: true,
+                      },
+                      screenInterpolator: issueToIssueListInterpolator,
+                  }),
+              }
+            : {}),
     },
 )
 

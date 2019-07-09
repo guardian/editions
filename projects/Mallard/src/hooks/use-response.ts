@@ -127,7 +127,7 @@ const useFetchableResponse = <T>(
             responseHookCallbacks.onSuccess(initial)
         }
         fetcher(true, responseHookCallbacks)
-    }, [fetcher, initial, responseHookCallbacks])
+    }, effectDependencies) // eslint-disable-line react-hooks/exhaustive-deps
 
     return {
         ...response,
