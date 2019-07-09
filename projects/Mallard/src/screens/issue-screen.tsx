@@ -39,20 +39,17 @@ const IssueHeader = withNavigation(
             [issue && issue.key, issue],
         )
         return (
-            <>
-                <Header
-                    action={
-                        <Button
-                            icon=""
-                            alt="More issues"
-                            onPress={() => navigateToIssueList(navigation)}
-                        />
-                    }
-                    title={date}
-                    subtitle={weekday}
-                />
-                <Weather />
-            </>
+            <Header
+                action={
+                    <Button
+                        icon=""
+                        alt="More issues"
+                        onPress={() => navigateToIssueList(navigation)}
+                    />
+                }
+                title={date}
+                subtitle={weekday}
+            />
         )
     },
 )
@@ -107,6 +104,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                             windowSize={3}
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
+                            ListHeaderComponent={<Weather />}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <Front
