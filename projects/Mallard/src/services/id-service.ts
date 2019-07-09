@@ -1,7 +1,7 @@
 import { ID_AUTH_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
 
-const fetchAuth = (init: RequestInit = {}) =>
-    fetch(ID_AUTH_URL, {
+const fetchAuth = async (init: RequestInit = {}) => {
+    const res = await fetch(`${ID_AUTH_URL}`, {
         ...init,
         method: 'POST',
         headers: {
@@ -9,15 +9,23 @@ const fetchAuth = (init: RequestInit = {}) =>
             'X-GU-ID-Client-Access-Token': `Bearer ${ID_ACCESS_TOKEN}`,
         },
     })
-        .then(res => {
-            if (res.status !== 200) {
-                throw new Error('Invalid credentials')
-            }
-            return res.json()
-        })
-        .then(json => json.accessToken.accessToken)
+    const json = await res.json()
 
-const fetchUserAccessToken = (email: string, password: string) =>
+    if (res.status !== 200) {
+        console.log(json)
+        throw new Error(
+            json.errors
+                ? json.errors
+                      .map((err: any) => `${err.message}: ${err.description}`)
+                      .join(', ')
+                : 'Invalid credentials',
+        )
+    }
+
+    return json.accessToken.accessToken
+}
+
+const fetchUserAccessTokenWithIdentity = (email: string, password: string) =>
     fetchAuth({
         headers: {
             'Content-Type': 'application/json',
@@ -28,14 +36,24 @@ const fetchUserAccessToken = (email: string, password: string) =>
         }),
     })
 
+const fetchUserAccessTokenWithFacebook = (token: string) =>
+    fetchAuth({
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `facebook-access-token=${token}`,
+    })
+
 const fetchMembershipAccessToken = (userAccessToken: string) =>
     fetchAuth({
-        method: 'POST',
         headers: {
-            'X-GU-ID-Client-Access-Token': `Bearer ${ID_ACCESS_TOKEN}`,
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: `user-access-token=${userAccessToken}&target-client-id=membership`,
     })
 
-export { fetchUserAccessToken, fetchMembershipAccessToken }
+export {
+    fetchUserAccessTokenWithIdentity,
+    fetchUserAccessTokenWithFacebook,
+    fetchMembershipAccessToken,
+}

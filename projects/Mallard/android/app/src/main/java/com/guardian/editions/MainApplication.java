@@ -3,7 +3,6 @@ package com.guardian.editions;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.oblador.keychain.KeychainPackage;
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -33,7 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new FBSDKPackage(),
             new KeychainPackage(),
             new RNCMaskedViewPackage(),
             new RNCWebViewPackage(),

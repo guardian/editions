@@ -5,15 +5,22 @@ import {
 import { fetchMembershipData } from 'src/services/membership-service'
 import {
     fetchMembershipAccessToken,
-    fetchUserAccessToken,
+    fetchUserAccessTokenWithIdentity,
+    fetchUserAccessTokenWithFacebook,
 } from 'src/services/id-service'
 
-const fetchAndPersistUserAccessToken = async (
+const fetchAndPersistUserAccessTokenWithIdentity = async (
     email: string,
     password: string,
 ) => {
-    const token = await fetchUserAccessToken(email, password)
+    const token = await fetchUserAccessTokenWithIdentity(email, password)
     await userAccessTokenKeychain.set(email, token)
+    return token
+}
+
+const fetchAndPersistUserAccessTokenWithFacebook = async (fbToken: string) => {
+    const token = await fetchUserAccessTokenWithFacebook(fbToken)
+    await userAccessTokenKeychain.set('token::facebook', token)
     return token
 }
 
@@ -35,4 +42,8 @@ const getMembershipDataForKeychainUser = async () => {
     return fetchMembershipData(newMembershipToken)
 }
 
-export { fetchAndPersistUserAccessToken, getMembershipDataForKeychainUser }
+export {
+    fetchAndPersistUserAccessTokenWithIdentity,
+    fetchAndPersistUserAccessTokenWithFacebook,
+    getMembershipDataForKeychainUser,
+}

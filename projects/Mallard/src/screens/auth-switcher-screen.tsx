@@ -1,10 +1,74 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, TextInput, TextInputProps, Button, Text } from 'react-native'
 import {
-    fetchAndPersistUserAccessToken,
+    fetchAndPersistUserAccessTokenWithIdentity,
     getMembershipDataForKeychainUser,
+    fetchAndPersistUserAccessTokenWithFacebook,
 } from 'src/authentication/helpers'
-import { LoginButton, AccessToken } from 'react-native-fbsdk'
+import WebView from 'react-native-webview'
+import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes'
+
+const parseURL = (url: string) => {
+    const [path, searchString = ''] = url.split('?')
+    const paramString = searchString.split('&')
+    const init: { [key: string]: string } = {}
+    const params = paramString.reduce((acc, p) => {
+        const [key, value] = p.split('=')
+        return { ...acc, [key]: decodeURIComponent(value) }
+    }, init)
+
+    return {
+        path,
+        params,
+    }
+}
+
+interface WebAuthProps {
+    uri: string
+    tokenParamKey: string
+    onSuccess: (token: string) => void
+    stateParamKey?: string
+    redirectURI: string
+}
+
+const WebAuth = ({
+    uri,
+    tokenParamKey,
+    onSuccess,
+    redirectURI,
+}: WebAuthProps) => {
+    const [shouldShow, setShouldShow] = useState(false)
+    return (
+        <WebView
+            style={{ display: shouldShow ? 'flex' : 'none' }}
+            source={{ uri }}
+            onNavigationStateChange={(e: WebViewNavigation) => {
+                const { path, params } = parseURL(e.url)
+                const token = params[tokenParamKey]
+                return path === redirectURI && token
+                    ? onSuccess(token)
+                    : !shouldShow && setShouldShow(true)
+            }}
+        />
+    )
+}
+
+interface FBWebAuthProps {
+    clientId: string
+    onSuccess: (token: string) => void
+    redirectURI: string
+}
+
+const FBWebAuth = ({ clientId, onSuccess, redirectURI }: FBWebAuthProps) => (
+    <WebAuth
+        tokenParamKey="#access_token"
+        redirectURI={redirectURI}
+        uri={encodeURI(
+            `https://www.facebook.com/v3.3/dialog/oauth?client_id=${clientId}&response_type=token&redirect_uri=${redirectURI}`,
+        )}
+        onSuccess={onSuccess}
+    />
+)
 
 const AuthInput = (props: TextInputProps) => (
     <TextInput
@@ -53,7 +117,10 @@ const AuthSwitcherScreen = ({
     const onSubmit = useCallback(async () => {
         try {
             setAuthStatus(AuthStatus.authenticating)
-            const data = await fetchAndPersistUserAccessToken(email, password)
+            const data = await fetchAndPersistUserAccessTokenWithIdentity(
+                email,
+                password,
+            )
             if (!data) {
                 setAuthStatus(AuthStatus.unathed)
             } else {
@@ -88,6 +155,24 @@ const AuthSwitcherScreen = ({
         case AuthStatus.authenticating:
         case AuthStatus.unathed: {
             return (
+                <FBWebAuth
+                    redirectURI="https://www.theguardian.com/uk"
+                    clientId="180444840287"
+                    onSuccess={async token => {
+                        console.log('fb token', token)
+                        const data = await fetchAndPersistUserAccessTokenWithFacebook(
+                            token,
+                        )
+                        if (!data) {
+                            setAuthStatus(AuthStatus.unathed)
+                        } else {
+                            onAuthenticated()
+                            console.log(data)
+                        }
+                    }}
+                />
+            )
+            return (
                 <View
                     style={[
                         {
@@ -100,26 +185,6 @@ const AuthSwitcherScreen = ({
                     ]}
                 >
                     {error && <Text>{error}</Text>}
-                    <LoginButton
-                        onLoginFinished={(error, result) => {
-                            if (error) {
-                                console.log('login has error: ' + result.error)
-                                setError(result.error)
-                            } else if (result.isCancelled) {
-                                console.log('login is cancelled.')
-                            } else {
-                                AccessToken.getCurrentAccessToken().then(
-                                    data => {
-                                        if (data) {
-                                            console.log(
-                                                data.accessToken.toString(),
-                                            )
-                                        }
-                                    },
-                                )
-                            }
-                        }}
-                    />
                     <AuthInput
                         editable={authStatus !== AuthStatus.authenticating}
                         autoCorrect={false}

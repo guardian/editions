@@ -154,7 +154,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-fbsdk')
     implementation project(':react-native-keychain')
     implementation project(':@react-native-community_masked-view')
     implementation project(':react-native-webview')

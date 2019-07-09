@@ -10,6 +10,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTLinkingManager.h>
 
 @implementation AppDelegate
 
@@ -29,19 +30,6 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
-  
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  
-  BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                                openURL:url
-                                                      sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                                             annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-                  ];
-  // Add any custom logic here.
-  return handled;
-}
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
@@ -50,6 +38,14 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  
+  return [RCTLinkingManager application:application openURL:url
+                              sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
 @end
