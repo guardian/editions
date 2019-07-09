@@ -6,7 +6,7 @@ const APIPaths = {
     collection: collectionPath,
     front: frontPath,
     media: mediaPath,
-    mediaBackend: 'https://d2cf1ljtg904cv.cloudfront.net/',
+    mediaBackend: 'https://d2cf1ljtg904cv.cloudfront.net/', // TODO: Use s3 issue paths.
 }
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
