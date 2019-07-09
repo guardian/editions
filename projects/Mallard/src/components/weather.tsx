@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
     temperature: {
         color: '#E05E00',
         fontSize: 13,
-        fontFamily: 'DS3DisplaySans',
+        fontFamily: 'GuardianTextSans-Regular',
     },
     dateTime: {
         color: '#000000',
         fontSize: 13,
-        fontFamily: 'DS3DisplaySans',
+        fontFamily: 'GuardianTextSans-Regular',
     },
     locationNameContainer: {
         flex: 5,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     locationName: {
-        fontFamily: 'TS3 Text Sans',
+        fontFamily: 'GuardianTextSans-Regular',
         fontSize: 13,
         color: '#000000',
     },
