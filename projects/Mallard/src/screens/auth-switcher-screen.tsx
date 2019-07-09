@@ -59,12 +59,13 @@ interface FBWebAuthProps {
     redirectURI: string
 }
 
+// TODO: add state
 const FBWebAuth = ({ clientId, onSuccess, redirectURI }: FBWebAuthProps) => (
     <WebAuth
         tokenParamKey="#access_token"
         redirectURI={redirectURI}
         uri={encodeURI(
-            `https://www.facebook.com/v3.3/dialog/oauth?client_id=${clientId}&response_type=token&redirect_uri=${redirectURI}`,
+            `https://www.facebook.com/v3.3/dialog/oauth?client_id=${clientId}&response_type=token&redirect_uri=${redirectURI}&scope=public_profile,email&auth_type=reauthenticate`,
         )}
         onSuccess={onSuccess}
     />
