@@ -31,7 +31,7 @@ export interface Article extends WithKey {
     type: 'article'
     headline: string
     kicker: string
-    image: ImageWithColours | Image
+    image: Image
     byline: string
     standfirst: string
     elements: BlockElement[]
@@ -52,7 +52,7 @@ export interface GalleryArticle extends WithKey {
     kicker: string
     byline?: string
     standfirst?: string
-    image?: ImageWithColours | Image
+    image?: Image
     elements: BlockElement[]
 }
 
@@ -211,24 +211,26 @@ export interface Image {
     source: string
     path: string
 }
-export interface ImageWithColours extends Image {
-    palette: {
-        //the palette from node-vibrant
-        Vibrant?: string
-        Muted?: string
-        DarkVibrant?: string
-        DarkMuted?: string
-        LightVibrant?: string
-        LightMuted?: string
-    }
+export interface Palette {
+    //the palette from node-vibrant
+    Vibrant?: string
+    Muted?: string
+    DarkVibrant?: string
+    DarkMuted?: string
+    LightVibrant?: string
+    LightMuted?: string
 }
 export type ImageSize = typeof imageSizes[number]
+
 const mediaPath = (
     issue: string,
-    source: string,
     size: ImageSize,
+    source: string,
     path: string,
-) => `media/${size}/${source}/${path}`
+) => `${issuePath(issue)}/media/${size}/${source}/${path}`
+
+const coloursPath = (issue: string, source: string, path: string) =>
+    `${issuePath(issue)}/colours/${source}/${path}`
 
 export {
     issuePath,
@@ -237,4 +239,5 @@ export {
     collectionPath,
     issueSummaryPath,
     cardLayouts,
+    coloursPath,
 }

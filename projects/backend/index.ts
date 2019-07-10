@@ -5,8 +5,8 @@ import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController, collectionsController } from './controllers/fronts'
-import { imageController } from './controllers/image'
-import { ImageSize } from '../common/src/index'
+import { imageController, imageColourController } from './controllers/image'
+import { ImageSize, coloursPath } from '../common/src/index'
 import {
     issuePath,
     mediaPath,
@@ -24,9 +24,11 @@ app.get('/' + issuePath(':issueId'), issueController)
 app.get('/' + frontPath(':issueId', '*?'), frontController)
 
 app.get(
-    '/' + mediaPath(':issueId', ':source', ':size' as ImageSize, '*?'),
+    '/' + mediaPath(':issueId', ':size' as ImageSize, ':source', '*?'),
     imageController,
 )
+
+app.get('/' + coloursPath(':issueId', ':source', '*?'), imageColourController)
 
 app.get(
     '/' + collectionPath(':issueId', ':collectionId'),
