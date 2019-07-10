@@ -1,18 +1,18 @@
 import { ID_AUTH_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
+import { createSearchParams } from 'src/authentication/helpers'
 
-const fetchAuth = async (init: RequestInit = {}) => {
+const fetchAuth = async (params: { [key: string]: string }) => {
     const res = await fetch(`${ID_AUTH_URL}`, {
-        ...init,
         method: 'POST',
         headers: {
-            ...(init.headers || {}),
             'X-GU-ID-Client-Access-Token': `Bearer ${ID_ACCESS_TOKEN}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: createSearchParams(params),
     })
     const json = await res.json()
 
     if (res.status !== 200) {
-        console.log(json)
         throw new Error(
             json.errors
                 ? json.errors
@@ -26,32 +26,17 @@ const fetchAuth = async (init: RequestInit = {}) => {
 }
 
 const fetchUserAccessTokenWithIdentity = (email: string, password: string) =>
-    fetchAuth({
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-    })
+    fetchAuth({ email, password })
 
 export type TokenType = 'facebook' | 'google'
 
 const fetchUserAccessTokenWithType = (tokenType: TokenType, token: string) =>
-    fetchAuth({
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `${tokenType}-access-token=${token}`,
-    })
+    fetchAuth({ [`${tokenType}-access-token`]: token })
 
 const fetchMembershipAccessToken = (userAccessToken: string) =>
     fetchAuth({
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `user-access-token=${userAccessToken}&target-client-id=membership`,
+        'user-access-token': userAccessToken,
+        'target-client-id': 'membership',
     })
 
 export {
