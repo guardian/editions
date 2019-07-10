@@ -1,5 +1,4 @@
 import { s3fetch, s3Latest } from './s3'
-import { Diff } from 'utility-types'
 import {
     Front,
     Collection,
@@ -27,7 +26,6 @@ import {
 
 export const parseCollection = async (
     collectionResponse: CollectionResponse,
-    lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
@@ -173,9 +171,7 @@ export const getFront = async (
     const front = issueResponse.fronts.find(_ => _.name === id)
     if (!front) throw new Error('Front not found')
     const collections = await Promise.all(
-        front.collections.map(collection =>
-            parseCollection(collection, lastModifiedUpdater),
-        ),
+        front.collections.map(collection => parseCollection(collection)),
     )
     collections.filter(hasFailed).forEach(failedCollection => {
         console.error(failedCollection)
@@ -191,120 +187,3 @@ export const getFront = async (
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107
-
-interface CollectionFromResponse {
-    live: NestedArticleFragment[]
-    previously?: NestedArticleFragment[]
-    draft?: NestedArticleFragment[]
-    lastUpdated?: number
-    updatedBy?: string
-    updatedEmail?: string
-    platform?: string
-    displayName: string
-    groups?: string[]
-    metadata?: { type: string }[]
-    uneditable?: boolean
-}
-interface ArticleFragmentRootMeta {
-    group?: string
-    headline?: string
-    trailText?: string
-    byline?: string
-    customKicker?: string
-    href?: string
-    imageSrc?: string
-    imageSrcThumb?: string
-    imageSrcWidth?: string
-    imageSrcHeight?: string
-    imageSrcOrigin?: string
-    imageCutoutSrc?: string
-    imageCutoutSrcWidth?: string
-    imageCutoutSrcHeight?: string
-    imageCutoutSrcOrigin?: string
-    isBreaking?: boolean
-    isBoosted?: boolean
-    showLivePlayable?: boolean
-    showMainVideo?: boolean
-    showBoostedHeadline?: boolean
-    showQuotedHeadline?: boolean
-    showByline?: boolean
-    imageCutoutReplace?: boolean
-    imageReplace?: boolean
-    imageHide?: boolean
-    showKickerTag?: boolean
-    showKickerSection?: boolean
-    showKickerCustom?: boolean
-    snapUri?: string
-    snapType?: string
-    snapCss?: string
-    imageSlideshowReplace?: boolean
-    slideshow?: {
-        src?: string
-        thumb?: string
-        width?: string
-        height?: string
-        origin?: string
-    }[]
-}
-
-interface NestedArticleFragmentRootFields {
-    id: string
-    frontPublicationDate: number
-    publishedBy?: string
-}
-
-type NestedArticleFragment = NestedArticleFragmentRootFields & {
-    meta: {
-        supporting?: Diff<NestedArticleFragment, { supporting: unknown }>[]
-        group?: string | null
-    }
-}
-
-//the following types are stubs of https://github.com/guardian/facia-tool/blob/6970833aa5302522e25045c49302edb07a2b0a54/client-v2/src/types/FaciaApi.ts#L49-L56
-
-interface FrontsConfigResponse {
-    fronts: {
-        [id: string]: FrontConfigResponse
-    }
-    collections: {
-        [id: string]: CollectionConfigResponse
-    }
-}
-
-interface FrontConfigResponse {
-    collections: string[]
-    priority?: unknown
-    canonical?: string
-    group?: string
-    isHidden?: boolean
-    isImageDisplayed?: boolean
-    imageHeight?: number
-    imageWidth?: number
-    imageUrl?: string
-    onPageDescription?: string
-    description?: string
-    title?: string
-    webTitle?: string
-    navSection?: string
-}
-
-interface CollectionConfigResponse {
-    displayName: string
-    type: string
-    backfill?: unknown
-    href?: string
-    groups?: string[]
-    metadata?: unknown[]
-    uneditable?: boolean
-    showTags?: boolean
-    hideKickers?: boolean
-    excludedFromRss?: boolean
-    description?: string
-    showSections?: boolean
-    showDateHeader?: boolean
-    showLatestUpdate?: boolean
-    excludeFromRss?: boolean
-    hideShowMore?: boolean
-    platform?: unknown
-    frontsToolSettings?: unknown
-}

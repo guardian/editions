@@ -250,7 +250,6 @@ export {
     issuePath,
     mediaPath,
     frontPath,
-    collectionPath,
     issueSummaryPath,
     cardLayouts,
     coloursPath,
