@@ -10,7 +10,7 @@ const Crossword = ({
     crosswordArticle: CrosswordArticle
 }) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
-    const uri =
+    const sourceUri =
         (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
         'crosswords.bundle/index.html'
 
@@ -18,15 +18,11 @@ const Crossword = ({
         <View style={{ backgroundColor: color.background }}>
             <WebView
                 originWhitelist={['*']}
-                source={{ uri }}
+                source={{ uri: sourceUri }}
                 onMessage={event => {
                     setHeight(parseInt(event.nativeEvent.data))
                 }}
-                injectedJavaScript={`window.onload = function() {
-                            window.crosswordData = ${JSON.stringify(
-                                crosswordArticle.crossword,
-                            )}
-                        };`}
+                allowFileAccess={true}
                 javaScriptEnabled={true}
                 style={{ flex: 1, minHeight: height }}
             />

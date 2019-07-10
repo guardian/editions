@@ -45,7 +45,7 @@
 		4CC77A1D8C30452D9632D387 /* libRNSafeAreaInsets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A38A177D9A4DD6999F4E7F /* libRNSafeAreaInsets.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		C510567A22D5ED9B00ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C510567922D5ED9B00ED3078 /* crosswords.bundle */; };
+		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
 		C521D6F022CF763C00F493D5 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C521D6EF22CF763C00F493D5 /* StoreKit.framework */; };
 		C521D6F222CF764700F493D5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C521D6F122CF764700F493D5 /* CloudKit.framework */; };
 		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -514,7 +514,7 @@
 		B3FAFC61256B42E39F76C701 /* libRNCWebView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCWebView.a; sourceTree = "<group>"; };
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		B5054F89755344149255BF5A /* RNScreens.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNScreens.xcodeproj; path = "../node_modules/react-native-screens/ios/RNScreens.xcodeproj"; sourceTree = "<group>"; };
-		C510567922D5ED9B00ED3078 /* crosswords.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = crosswords.bundle; path = ../html/crosswords.bundle; sourceTree = "<group>"; };
+		C51056C222D60C1700ED3078 /* crosswords.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = crosswords.bundle; path = ../html/crosswords.bundle; sourceTree = "<group>"; };
 		C521D66822CF6FAA00F493D5 /* Mallard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Mallard.entitlements; path = Mallard/Mallard.entitlements; sourceTree = "<group>"; };
 		C521D6EF22CF763C00F493D5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		C521D6F122CF764700F493D5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -674,8 +674,8 @@
 		13B07FAE1A68108700A75B9A /* Mallard */ = {
 			isa = PBXGroup;
 			children = (
-				C510567922D5ED9B00ED3078 /* crosswords.bundle */,
 				C521D66822CF6FAA00F493D5 /* Mallard.entitlements */,
+				C51056C222D60C1700ED3078 /* crosswords.bundle */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1543,7 +1543,7 @@
 				C54937A722B149BB00B1D9A2 /* GuardianTextEgyptian-RegIt.ttf in Resources */,
 				C54937A822B149BB00B1D9A2 /* GuardianTextSans-Bold.ttf in Resources */,
 				C54937A922B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */,
-				C510567A22D5ED9B00ED3078 /* crosswords.bundle in Resources */,
+				C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */,
 				C54937AA22B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */,
 				C54937AB22B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */,
 				C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */,

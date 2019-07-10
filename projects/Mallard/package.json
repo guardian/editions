@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "pre-build": "node ./scripts/versioning.js",
+        "pre-build": "yarn build-crossword && node ./scripts/versioning.js",
         "convert-svg": "node ./scripts/svgs.js",
         "postinstall": "yarn pre-build",
         "start": "yarn pre-build && node node_modules/react-native/local-cli/cli.js start",
@@ -17,7 +17,8 @@
         "fix": "cd ../.. && yarn fix-mallard",
         "bundle-android": "yarn pre-build && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
         "bundle-ios": "yarn pre-build && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
-        "rn-link": "react-native link"
+        "rn-link": "react-native link",
+        "build-crossword": "cd ../../projects/editions-crossword-renderer-app && yarn build"
     },
     "rnpm": {
         "assets": [
