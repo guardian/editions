@@ -6,8 +6,23 @@ import { fetchMembershipData } from 'src/services/membership-service'
 import {
     fetchMembershipAccessToken,
     fetchUserAccessTokenWithIdentity,
-    fetchUserAccessTokenWithFacebook,
+    fetchUserAccessTokenWithType,
+    TokenType,
 } from 'src/services/id-service'
+
+const parseSearchString = (searchString: string) => {
+    const paramString = searchString.split('&')
+    const init: { [key: string]: string } = {}
+    return paramString.reduce((acc, p) => {
+        const [key, value] = p.split('=')
+        return { ...acc, [key]: decodeURIComponent(value) }
+    }, init)
+}
+
+const createSearchParams = (params: { [key: string]: string } = {}) =>
+    Object.entries(params)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')
 
 const fetchAndPersistUserAccessTokenWithIdentity = async (
     email: string,
@@ -18,9 +33,12 @@ const fetchAndPersistUserAccessTokenWithIdentity = async (
     return token
 }
 
-const fetchAndPersistUserAccessTokenWithFacebook = async (fbToken: string) => {
-    const token = await fetchUserAccessTokenWithFacebook(fbToken)
-    await userAccessTokenKeychain.set('token::facebook', token)
+const fetchAndPersistUserAccessTokenWithType = async (
+    tokenType: TokenType,
+    authToken: string,
+): Promise<string> => {
+    const token = await fetchUserAccessTokenWithType(tokenType, authToken)
+    await userAccessTokenKeychain.set(`token::${tokenType}`, token)
     return token
 }
 
@@ -44,6 +62,8 @@ const getMembershipDataForKeychainUser = async () => {
 
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
-    fetchAndPersistUserAccessTokenWithFacebook,
+    fetchAndPersistUserAccessTokenWithType,
     getMembershipDataForKeychainUser,
+    parseSearchString,
+    createSearchParams,
 }

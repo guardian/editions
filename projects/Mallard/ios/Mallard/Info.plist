@@ -26,10 +26,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>gu-edition</string>
+			<string>fb180444840287</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>gu-edition</string>
+				<string>fb180444840287</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.googleusercontent.apps.774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n</string>
 			</array>
 		</dict>
 	</array>

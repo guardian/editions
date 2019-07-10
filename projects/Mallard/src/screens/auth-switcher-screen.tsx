@@ -1,96 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, TextInput, TextInputProps, Button, Text } from 'react-native'
+import { View, TextInput, Button, Text } from 'react-native'
 import {
     fetchAndPersistUserAccessTokenWithIdentity,
     getMembershipDataForKeychainUser,
-    fetchAndPersistUserAccessTokenWithFacebook,
 } from 'src/authentication/helpers'
-import WebView from 'react-native-webview'
-import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes'
-
-const parseURL = (url: string) => {
-    const [path, searchString = ''] = url.split('?')
-    const paramString = searchString.split('&')
-    const init: { [key: string]: string } = {}
-    const params = paramString.reduce((acc, p) => {
-        const [key, value] = p.split('=')
-        return { ...acc, [key]: decodeURIComponent(value) }
-    }, init)
-
-    return {
-        path,
-        params,
-    }
-}
-
-interface WebAuthProps {
-    uri: string
-    tokenParamKey: string
-    onSuccess: (token: string) => void
-    stateParamKey?: string
-    redirectURI: string
-}
-
-const WebAuth = ({
-    uri,
-    tokenParamKey,
-    onSuccess,
-    redirectURI,
-}: WebAuthProps) => {
-    const [shouldShow, setShouldShow] = useState(false)
-    return (
-        <WebView
-            style={{ display: shouldShow ? 'flex' : 'none' }}
-            source={{ uri }}
-            onNavigationStateChange={(e: WebViewNavigation) => {
-                const { path, params } = parseURL(e.url)
-                const token = params[tokenParamKey]
-                return path === redirectURI && token
-                    ? onSuccess(token)
-                    : !shouldShow && setShouldShow(true)
-            }}
-        />
-    )
-}
-
-interface FBWebAuthProps {
-    clientId: string
-    onSuccess: (token: string) => void
-    redirectURI: string
-}
-
-// TODO: add state
-const FBWebAuth = ({ clientId, onSuccess, redirectURI }: FBWebAuthProps) => (
-    <WebAuth
-        tokenParamKey="#access_token"
-        redirectURI={redirectURI}
-        uri={encodeURI(
-            `https://www.facebook.com/v3.3/dialog/oauth?client_id=${clientId}&response_type=token&redirect_uri=${redirectURI}&scope=public_profile,email&auth_type=reauthenticate`,
-        )}
-        onSuccess={onSuccess}
-    />
-)
-
-const AuthInput = (props: TextInputProps) => (
-    <TextInput
-        {...props}
-        style={[
-            {
-                borderColor: 'black',
-                borderRadius: 4,
-                borderWidth: 1,
-                color: 'black',
-                padding: 5,
-                marginBottom: 10,
-            },
-        ]}
-    />
-)
+import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
+import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
 
 enum AuthStatus {
     pending = 0,
     authed = 1,
-    unathed = 2,
+    unauthed = 2,
     authenticating = 3,
 }
 
@@ -115,30 +35,37 @@ const AuthSwitcherScreen = ({
         setError(null)
     }, [])
 
-    const onSubmit = useCallback(async () => {
+    const [validatorString] = useState(Math.random().toString())
+
+    const handleAuthClick = async (authPromise: Promise<string>) => {
+        setError(null)
         try {
             setAuthStatus(AuthStatus.authenticating)
-            const data = await fetchAndPersistUserAccessTokenWithIdentity(
-                email,
-                password,
-            )
+            const data = await authPromise
             if (!data) {
-                setAuthStatus(AuthStatus.unathed)
+                setAuthStatus(AuthStatus.unauthed)
             } else {
-                onAuthenticated()
-                console.log(data)
+                // TODO: check this person can actually use the app
+                getMembershipDataForKeychainUser().then(data => {
+                    if (!data) {
+                        setAuthStatus(AuthStatus.unauthed)
+                    } else {
+                        console.log(data)
+                        onAuthenticated()
+                    }
+                })
             }
         } catch (err) {
-            setAuthStatus(AuthStatus.unathed)
-            setError(err.message)
+            setAuthStatus(AuthStatus.unauthed)
+            setError(err instanceof Error ? err.message : err)
         }
-    }, [email, password, onAuthenticated])
+    }
 
     // try to auth on mount
     useEffect(() => {
         getMembershipDataForKeychainUser().then(data => {
             if (!data) {
-                setAuthStatus(AuthStatus.unathed)
+                setAuthStatus(AuthStatus.unauthed)
             } else {
                 onAuthenticated()
             }
@@ -154,25 +81,7 @@ const AuthSwitcherScreen = ({
             return <Text>Redirecting</Text>
         }
         case AuthStatus.authenticating:
-        case AuthStatus.unathed: {
-            return (
-                <FBWebAuth
-                    redirectURI="https://www.theguardian.com/uk"
-                    clientId="180444840287"
-                    onSuccess={async token => {
-                        console.log('fb token', token)
-                        const data = await fetchAndPersistUserAccessTokenWithFacebook(
-                            token,
-                        )
-                        if (!data) {
-                            setAuthStatus(AuthStatus.unathed)
-                        } else {
-                            onAuthenticated()
-                            console.log(data)
-                        }
-                    }}
-                />
-            )
+        case AuthStatus.unauthed: {
             return (
                 <View
                     style={[
@@ -186,7 +95,35 @@ const AuthSwitcherScreen = ({
                     ]}
                 >
                     {error && <Text>{error}</Text>}
-                    <AuthInput
+                    <Button
+                        onPress={() =>
+                            handleAuthClick(
+                                facebookAuthWithDeepRedirect(validatorString),
+                            )
+                        }
+                        title="Login with Facebook"
+                    >
+                        Login with Facebook
+                    </Button>
+                    <Button
+                        onPress={() =>
+                            handleAuthClick(
+                                googleAuthWithDeepRedirect(validatorString),
+                            )
+                        }
+                        title="Login with Google"
+                    >
+                        Login with Google
+                    </Button>
+                    <TextInput
+                        style={{
+                            borderColor: 'black',
+                            borderRadius: 4,
+                            borderWidth: 1,
+                            color: 'black',
+                            padding: 5,
+                            marginBottom: 10,
+                        }}
                         editable={authStatus !== AuthStatus.authenticating}
                         autoCorrect={false}
                         autoCapitalize="none"
@@ -195,8 +132,16 @@ const AuthSwitcherScreen = ({
                         value={email}
                         placeholder="Email"
                         onChangeText={onEmailChange}
-                    ></AuthInput>
-                    <AuthInput
+                    ></TextInput>
+                    <TextInput
+                        style={{
+                            borderColor: 'black',
+                            borderRadius: 4,
+                            borderWidth: 1,
+                            color: 'black',
+                            padding: 5,
+                            marginBottom: 10,
+                        }}
                         editable={authStatus !== AuthStatus.authenticating}
                         autoCorrect={false}
                         autoCapitalize="none"
@@ -205,8 +150,18 @@ const AuthSwitcherScreen = ({
                         placeholder="Password"
                         secureTextEntry
                         onChangeText={onPasswordChange}
-                    ></AuthInput>
-                    <Button title="submit" onPress={onSubmit}>
+                    ></TextInput>
+                    <Button
+                        title="submit"
+                        onPress={() =>
+                            handleAuthClick(
+                                fetchAndPersistUserAccessTokenWithIdentity(
+                                    email,
+                                    password,
+                                ),
+                            )
+                        }
+                    >
                         Submit
                     </Button>
                 </View>

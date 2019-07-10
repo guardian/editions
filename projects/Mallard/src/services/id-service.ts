@@ -36,12 +36,14 @@ const fetchUserAccessTokenWithIdentity = (email: string, password: string) =>
         }),
     })
 
-const fetchUserAccessTokenWithFacebook = (token: string) =>
+export type TokenType = 'facebook' | 'google'
+
+const fetchUserAccessTokenWithType = (tokenType: TokenType, token: string) =>
     fetchAuth({
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `facebook-access-token=${token}`,
+        body: `${tokenType}-access-token=${token}`,
     })
 
 const fetchMembershipAccessToken = (userAccessToken: string) =>
@@ -54,6 +56,6 @@ const fetchMembershipAccessToken = (userAccessToken: string) =>
 
 export {
     fetchUserAccessTokenWithIdentity,
-    fetchUserAccessTokenWithFacebook,
+    fetchUserAccessTokenWithType,
     fetchMembershipAccessToken,
 }
