@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, Dimensions, Linking, Animated } from 'react-native'
+import { View, StyleSheet, Dimensions, Linking, Animated, Platform } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -16,7 +16,7 @@ import {
 } from './article-standfirst'
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
-import { CAPIArticle } from '../../../../common/src'
+import { CAPIArticle, CrosswordArticle } from '../../../../common/src'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { Gallery } from './types/gallery'
 
@@ -62,13 +62,7 @@ const ArticleController = ({
             return <Gallery gallery={article} />
 
         case 'crossword':
-            return (
-                <FlexErrorMessage
-                    icon="😭"
-                    title={"We don't support the rendering of crosswords yet."}
-                    style={{ backgroundColor: color.background }}
-                />
-            )
+            return <Crossword crosswordArticle={article}/>
 
         default:
             const message: never = article
@@ -81,6 +75,31 @@ const ArticleController = ({
             )
     }
 }
+
+const Crossword = ({ crosswordArticle }: { crosswordArticle: CrosswordArticle }) => {
+    const [height, setHeight] = useState(Dimensions.get('window').height)
+
+    return (
+        <View style={{ backgroundColor: color.background }}>
+            <WebView
+                    originWhitelist={['*']}
+                    source={{uri: "file:///android_asset/crossword/index.html"}}
+                    onMessage={event => {
+                        setHeight(parseInt(event.nativeEvent.data))
+                    }}
+                    injectedJavaScript={
+                        `window.onload = function() {
+                            window.crosswordData = ${JSON.stringify(crosswordArticle.crossword)}
+                        };`
+                    }
+                    javaScriptEnabled={true}
+                    style={{ flex: 1, minHeight: height }}
+                />
+        </View>
+    )
+}
+
+export { Crossword }
 
 const Article = ({
     article,
