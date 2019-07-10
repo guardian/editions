@@ -28,22 +28,22 @@ export interface Card {
 }
 
 export interface Temperature {
-    "Value": number
-    "Unit": string
-    "UnitType": number
+    Value: number
+    Unit: string
+    UnitType: number
 }
 
-export interface Forecast  {
-    "DateTime": string
-    "EpochDateTime": number
-    "WeatherIcon": number
-    "IconPhrase": string
-    "HasPrecipitation": false,
-    "IsDaylight": true,
-    "Temperature": Temperature
-    "PrecipitationProbability": number
-    "MobileLink": string
-    "Link": string
+export interface Forecast {
+    DateTime: string
+    EpochDateTime: number
+    WeatherIcon: number
+    IconPhrase: string
+    HasPrecipitation: false
+    IsDaylight: true
+    Temperature: Temperature
+    PrecipitationProbability: number
+    MobileLink: string
+    Link: string
 }
 
 export interface Article extends WithKey {
@@ -79,7 +79,7 @@ export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
 
 export interface IssueSummary extends WithKey {
     name: string
-    date: number
+    date: string
 }
 
 export interface Issue extends IssueSummary, WithKey {
@@ -87,9 +87,7 @@ export interface Issue extends IssueSummary, WithKey {
 }
 
 export interface Collection extends WithKey {
-    displayName: string
     cards: Card[]
-    preview?: true
 }
 
 export type Front = WithColor &
@@ -220,8 +218,7 @@ export interface CollectionCardLayouts {
 const issuePath = (issueId: string) => `${issueId}/issue`
 const frontPath = (issueId: string, frontId: string) =>
     `${issuePath(issueId)}/front/${frontId}`
-const collectionPath = (issueId: string, collectionId: string) =>
-    `${issuePath(issueId)}/collection/${collectionId}`
+
 const issueSummaryPath = () => 'issues'
 export const imageSizes = ['sample', 'phone', 'tablet'] as const
 export interface Image {

@@ -1,4 +1,4 @@
-import { s3fetch } from './s3'
+import { s3fetch, s3Latest } from './s3'
 import { Diff } from 'utility-types'
 import {
     Front,
@@ -19,33 +19,23 @@ import {
 import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
 import { getImageFromURL } from './image'
+import {
+    IssueResponse,
+    CollectionResponse,
+    ItemResponseMeta,
+} from './fronts/issue'
 
-export const getCollection = async (
-    id: string,
-    live: boolean = true,
+export const parseCollection = async (
+    collectionResponse: CollectionResponse,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<Collection>> => {
-    const resp = await attempt(
-        s3fetch(`frontsapi/collection/${id}/collection.json`),
-    )
-    if (hasFailed(resp))
-        return withFailureMessage(resp, 'Could not fetch from S3')
-
-    lastModifiedUpdater(resp.lastModified)
-
-    const deserialized = await attempt(resp.json())
-    if (hasFailed(deserialized))
-        return withFailureMessage(deserialized, 'Response was not valid json')
-
-    const collection = deserialized as CollectionFromResponse
-
-    const articleFragmentList = collection.live.map((fragment): [
+    const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
-        NestedArticleFragment,
-    ] => [parseInt(fragment.id.replace('internal-code/page/', '')), fragment])
+        ItemResponseMeta,
+    ] => [itemResponse.internalPageCode, itemResponse.meta])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-    const preview = live ? undefined : true
+
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
         attempt(getArticles(ids, 'printsent')),
         attempt(getArticles(ids, 'search')),
@@ -70,10 +60,9 @@ export const getCollection = async (
             }
             return inResponse
         })
-        .map(([key, fragment]): [string, CAPIArticle] => {
+        .map(([key, meta]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
-            const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
+            const kicker = (meta && meta.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageOverride =
                 meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
@@ -136,10 +125,8 @@ export const getCollection = async (
         })
 
     return {
-        key: id,
-        displayName: collection.displayName,
+        key: collectionResponse.id,
         cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
-        preview,
     }
 }
 
@@ -171,35 +158,36 @@ const getFrontColor = (front: string): WithColor => {
 }
 
 export const getFront = async (
+    issue: string,
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Front> => {
-    const resp = await s3fetch('frontsapi/config/config.json')
+    const issuePath = await s3Latest(`daily-edition/${issue}/`)
+    const resp = await s3fetch(issuePath)
     if (!resp.ok) throw new Error('failed s3')
     lastModifiedUpdater(resp.lastModified)
     //But ALEX, won't this always be now, as the fronts config will change regularly?
     //Yes. We don't intend to read it from here forever. Comment out as needed.
     const tone = getFrontColor(id)
-    const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
-    if (!(id in config.fronts)) throw new Error('Front not found')
+    const issueResponse: IssueResponse = (await resp.json()) as IssueResponse
+    const front = issueResponse.fronts.find(_ => _.name === id)
+    if (!front) throw new Error('Front not found')
     const collections = await Promise.all(
-        config.fronts[id].collections.map(id =>
-            getCollection(id, true, lastModifiedUpdater),
+        front.collections.map(collection =>
+            parseCollection(collection, lastModifiedUpdater),
         ),
     )
     collections.filter(hasFailed).forEach(failedCollection => {
         console.error(failedCollection)
     })
 
-    const front = {
-        ...config.fronts[id],
+    return {
+        ...front,
         ...tone,
         displayName: getDisplayName(id),
         collections: collections.filter(hasSucceeded),
         key: id,
     }
-
-    return front
 }
 
 //from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107

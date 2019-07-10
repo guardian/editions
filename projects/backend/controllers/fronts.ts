@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import { lastModified } from '../lastModified'
-import { getFront, getCollection } from '../fronts'
-import { hasFailed } from '../utils/try'
+import { getFront } from '../fronts'
 
 export const frontController = (req: Request, res: Response) => {
     const id: string = req.params[0]
+    const issue: string = req.params.issueId
     const [date, updater] = lastModified()
     console.log(`Request for ${req.url} fetching front ${id}`)
-    getFront(id, updater)
+    getFront(issue, id, updater)
         .then(data => {
             res.setHeader('Last-Modifed', date())
             res.setHeader('Content-Type', 'application/json')
@@ -15,29 +15,6 @@ export const frontController = (req: Request, res: Response) => {
         })
         .catch(error => {
             console.error('Error in the fronts controller.')
-            console.error(error)
-            res.sendStatus(500)
-        })
-}
-
-export const collectionsController = (req: Request, res: Response) => {
-    const id: string = req.params.collectionId
-    const [date, updater] = lastModified()
-
-    getCollection(id, true, updater)
-        .then(data => {
-            if (hasFailed(data)) {
-                console.error('Exception in the collections controller.')
-                console.error(JSON.stringify(data))
-                res.sendStatus(500)
-                return
-            }
-            res.setHeader('Last-Modifed', date())
-            res.setHeader('Content-Type', 'application/json')
-            res.send(JSON.stringify(data))
-        })
-        .catch(error => {
-            console.error('Exception in the collections controller.')
             console.error(error)
             res.sendStatus(500)
         })

@@ -1,18 +1,28 @@
 import { Request, Response } from 'express'
 
-import { s3fetch } from '../s3'
+import { s3fetch, s3Latest } from '../s3'
 import { Issue, IssueSummary } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
+import { IssueResponse } from '../fronts/issue'
 
 const getIssue = async (
     issue: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Issue | 'notfound'> => {
-    const x = await s3fetch(`frontsapi/edition/${issue}/edition.json`)
+    const latest = await s3Latest(`daily-edition/${issue}/`)
+
+    const x = await s3fetch(latest)
     if (x.status === 404) return 'notfound'
     if (!x.ok) throw new Error('failed s3')
     lastModifiedUpdater(x.lastModified)
-    return x.json().then(res => ({ ...res, key: issue })) as Promise<Issue>
+    const data = (await x.json()) as IssueResponse
+    const fronts = data.fronts.map(_ => _.name)
+    return {
+        name: data.name,
+        key: data.id,
+        date: data.issueDate,
+        fronts,
+    }
 }
 
 export const issueController = (req: Request, res: Response) => {
@@ -31,9 +41,9 @@ export const issueController = (req: Request, res: Response) => {
 const getIssuesSummary = async (): Promise<IssueSummary[] | 'notfound'> => {
     return Promise.resolve([
         {
-            key: 'alpha-edition',
+            key: '2019-03-11',
             name: 'Daily Edition',
-            date: 1561561497,
+            date: '2019-03-11T00:00:00Z',
         },
     ])
 }

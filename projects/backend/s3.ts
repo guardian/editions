@@ -16,7 +16,8 @@ const s3 = new S3({
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
 
-const stage = process.env.stage || 'PROD'
+const stage = process.env.stage || 'code'
+const bucket = `published-editions-${stage.toLowerCase()}`
 
 interface S3Response {
     status: number
@@ -27,13 +28,38 @@ interface S3Response {
     etag: string | undefined
 }
 
+export const s3Latest = async (prefix: string): Promise<string> => {
+    console.log(prefix, 'ssss')
+    const response = await s3
+        .listObjectsV2({
+            Bucket: bucket,
+            Prefix: prefix,
+        })
+        .promise()
+    const contents = response.Contents
+    console.log(JSON.stringify(response))
+    if (!contents) throw new Error(`Nothing at ${prefix}`)
+    const keydates = contents
+        .map(({ Key, LastModified }) => ({
+            Key,
+            LastModified,
+        }))
+        .filter(
+            (x): x is { Key: string; LastModified: Date } =>
+                x.Key !== null && x.LastModified !== null,
+        )
+    const latest = keydates.reduce((a, b) =>
+        a.LastModified < b.LastModified ? b : a,
+    )
+    return latest.Key
+}
+
 export const s3fetch = (key: string): Promise<S3Response> => {
-    const k = `${stage}/${key}`
     return new Promise((resolve, reject) => {
         s3.getObject(
             {
-                Key: k,
-                Bucket: 'facia-tool-store',
+                Key: key,
+                Bucket: bucket,
             },
             (error, result) => {
                 if (error && error.code == 'NoSuchKey') {
