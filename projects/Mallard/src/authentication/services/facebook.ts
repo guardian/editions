@@ -1,10 +1,7 @@
-import {
-    fetchAndPersistUserAccessTokenWithType,
-    parseSearchString,
-    createSearchParams,
-} from '../helpers'
+import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { FACEBOOK_CLIENT_ID } from '../constants'
+import { createSearchParams, parseSearchString } from 'src/helpers/url'
 
 const facebookRedirectURI = `fb${FACEBOOK_CLIENT_ID}://authorize`
 

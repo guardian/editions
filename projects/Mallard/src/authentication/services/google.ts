@@ -1,10 +1,7 @@
-import {
-    createSearchParams,
-    parseSearchString,
-    fetchAndPersistUserAccessTokenWithType,
-} from '../helpers'
+import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { GOOGLE_CLIENT_ID } from '../constants'
+import { createSearchParams, parseSearchString } from 'src/helpers/url'
 
 const googleRedirectURI = `com.googleusercontent.apps.${GOOGLE_CLIENT_ID}:authorize`
 

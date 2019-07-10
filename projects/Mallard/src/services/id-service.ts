@@ -1,5 +1,5 @@
 import { ID_AUTH_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
-import { createSearchParams } from 'src/authentication/helpers'
+import { createSearchParams } from 'src/helpers/url'
 
 const fetchAuth = async (params: { [key: string]: string }) => {
     const res = await fetch(`${ID_AUTH_URL}`, {
