@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GHGuardianHeadline-Black.ttf</string>
@@ -66,6 +66,8 @@
 		<string>GuardianTextEgyptian-Reg.ttf</string>
 		<string>GuardianTextEgyptian-RegularIt.ttf</string>
 		<string>GuardianTextEgyptian-RegIt.ttf</string>
+		<string>GuardianIcons-Regular.otf</string>
+		<string>GuardianWeatherIcons-Regular.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -82,7 +84,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>ITSAppUsesNonExemptEncryption</key>
+	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
 </plist>

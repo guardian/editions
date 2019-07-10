@@ -38,3 +38,9 @@ $ yarn run wifi-android
 ```bash
 $ yarn run-ios
 ```
+
+## Tips and tricks
+
+### Adding images
+
+If you wanna add static svgs, put them in the `assets/svgs` folder and run `yarn convert-svg`

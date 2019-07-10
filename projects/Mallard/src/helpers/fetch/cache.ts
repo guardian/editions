@@ -1,12 +1,14 @@
 let cacheStore: {
     api: { [path: string]: any }
     issue: { [path: string]: any }
+    weather: { [path: string]: any }
 } = {
     api: {},
     issue: {},
+    weather: {},
 }
 
-type CacheType = 'api' | 'issue'
+type CacheType = 'api' | 'issue' | 'weather'
 
 const withCache = <T>(cacheType: CacheType) => ({
     store: (path: string, data: T) => {
@@ -25,6 +27,11 @@ const clearCache = () => {
     }
     for (let url in cacheStore['issue']) {
         delete cacheStore['issue'][url]
+        console.log(`deleted ${url}`)
+    }
+
+    for (let url in cacheStore['weather']) {
+        delete cacheStore['weather'][url]
         console.log(`deleted ${url}`)
     }
 }

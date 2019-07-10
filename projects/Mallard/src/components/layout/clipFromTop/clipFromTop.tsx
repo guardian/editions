@@ -1,6 +1,7 @@
 import React, { useState, ReactNode } from 'react'
-import { Animated, Dimensions, Platform, StyleSheet } from 'react-native'
+import { Animated, Dimensions, StyleSheet } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
+import { supportsAnimatedClipView } from 'src/helpers/features'
 
 /*
 This is part of the transition from articles to fronts
@@ -57,7 +58,7 @@ const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
 
 const ClipFromTop = ({ children, from, easing }: MaybePropTypes) => {
     /* android struggles animating masks sadface */
-    if (Platform.OS !== 'ios' || from == undefined || easing == undefined)
+    if (!supportsAnimatedClipView() || from == undefined || easing == undefined)
         return <>{children}</>
     return (
         <MaskClipFromTop from={from} easing={easing}>
