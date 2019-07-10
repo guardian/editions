@@ -11,7 +11,7 @@ const ID_ACCESS_TOKEN =
 const FACEBOOK_CLIENT_ID = '180444840287'
 const GOOGLE_CLIENT_ID =
     Platform.OS === 'android'
-        ? 'XXX'
+        ? 'XXX' // TODO: implement
         : '774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n'
 
 export {
