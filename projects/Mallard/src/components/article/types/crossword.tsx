@@ -12,7 +12,7 @@ const Crossword = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const uri =
         (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
-        'Web.bundle/loader.html'
+        'crosswords.bundle/index.html'
 
     return (
         <View style={{ backgroundColor: color.background }}>
