@@ -27,7 +27,6 @@ import {
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { AuthSwitcherScreen } from 'src/screens/auth-switcher-screen'
-import { SignoutScreen } from 'src/screens/signout-screen'
 
 const routeNames = {
     Issue: 'Issue',
@@ -196,11 +195,6 @@ const RootNavigator = createAppContainer(
             Authed: AuthedStack,
             Unauthed: mapNavigationToProps(AuthSwitcherScreen, nav => ({
                 onAuthenticated: () => nav.navigate('Authed'),
-            })),
-            Signout: mapNavigationToProps(SignoutScreen, nav => ({
-                onSignout: () => {
-                    nav.navigate('Unauthed')
-                },
             })),
         },
         {
