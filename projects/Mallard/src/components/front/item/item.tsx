@@ -154,8 +154,8 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
                         source={{
                             uri: `${APIPaths.mediaBackend}${APIPaths.media(
                                 'article',
-                                article.image.source,
                                 'phone',
+                                article.image.source,
                                 article.image.path,
                             )}`,
                         }}
@@ -203,8 +203,8 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
                             'issue',
-                            article.image.source,
                             'phone',
+                            article.image.source,
                             article.image.path,
                         )}`,
                     }}
@@ -256,8 +256,8 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                         source={{
                             uri: `${APIPaths.mediaBackend}${APIPaths.media(
                                 'issue',
-                                article.image.source,
                                 'phone',
+                                article.image.source,
                                 article.image.path,
                             )}`,
                         }}
@@ -300,8 +300,8 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
                             'issue',
-                            article.image.source,
                             'phone',
+                            article.image.source,
                             article.image.path,
                         )}`,
                     }}
@@ -362,8 +362,8 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
                             'issue',
-                            article.image.source,
                             'phone',
+                            article.image.source,
                             article.image.path,
                         )}`,
                     }}

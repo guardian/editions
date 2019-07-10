@@ -75,8 +75,8 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
                                 accessibilityLabel={element.alt}
                                 uri={`${APIPaths.mediaBackend}${APIPaths.media(
                                     'issue',
-                                    element.src.source,
                                     'phone',
+                                    element.src.source,
                                     element.src.path,
                                 )}`}
                                 style={styles.image}

@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
 const ArticleImage = ({ image, style }: { image: ImageT; style?: {} }) => {
     const imagePath = `${APIPaths.mediaBackend}${APIPaths.media(
         'issue',
-        image.source,
         'phone',
+        image.source,
         image.path,
     )}`
     return (
