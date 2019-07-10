@@ -34,8 +34,8 @@ const getGoogleTokenFromCode = (code: string) =>
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: createSearchParams({
-            code: code,
-            client_id: '774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n',
+            code,
+            client_id: GOOGLE_CLIENT_ID,
             redirect_uri: googleRedirectURI,
             grant_type: 'authorization_code',
         }),
