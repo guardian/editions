@@ -42,7 +42,7 @@ const fetchAndPersistUserAccessTokenWithType = async (
     return token
 }
 
-const getMembershipDataForKeychainUser = async () => {
+const fetchMembershipDataForKeychainUser = async () => {
     const membershipToken = await membershipAccessTokenKeychain.get()
     if (membershipToken) return fetchMembershipData(membershipToken.password)
 
@@ -63,7 +63,7 @@ const getMembershipDataForKeychainUser = async () => {
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchAndPersistUserAccessTokenWithType,
-    getMembershipDataForKeychainUser,
+    fetchMembershipDataForKeychainUser,
     parseSearchString,
     createSearchParams,
 }

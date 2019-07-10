@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, TextInput, Button, Text } from 'react-native'
 import {
     fetchAndPersistUserAccessTokenWithIdentity,
-    getMembershipDataForKeychainUser,
+    fetchMembershipDataForKeychainUser,
 } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
@@ -45,11 +45,11 @@ const AuthSwitcherScreen = ({
             if (!data) {
                 setAuthStatus(AuthStatus.unauthed)
             } else {
-                // TODO: check this person can actually use the app
-                getMembershipDataForKeychainUser().then(data => {
+                fetchMembershipDataForKeychainUser().then(data => {
                     if (!data) {
                         setAuthStatus(AuthStatus.unauthed)
                     } else {
+                        // TODO: check this person can actually use the app
                         console.log(data)
                         onAuthenticated()
                     }
@@ -63,10 +63,12 @@ const AuthSwitcherScreen = ({
 
     // try to auth on mount
     useEffect(() => {
-        getMembershipDataForKeychainUser().then(data => {
+        fetchMembershipDataForKeychainUser().then(data => {
             if (!data) {
                 setAuthStatus(AuthStatus.unauthed)
             } else {
+                // TODO: check this person can actually use the app
+                console.log(data)
                 onAuthenticated()
             }
         })
