@@ -11,6 +11,7 @@ import {
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { UiBodyCopy } from 'src/components/styled-text'
+import { APIPaths } from 'src/paths'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -72,7 +73,12 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
                             <GalleryImage
                                 key={index}
                                 accessibilityLabel={element.alt}
-                                uri={element.src}
+                                uri={`${APIPaths.mediaBackend}${APIPaths.media(
+                                    'issue',
+                                    'phone',
+                                    element.src.source,
+                                    element.src.path,
+                                )}`}
                                 style={styles.image}
                             />
                             {element.caption || element.copyright ? (

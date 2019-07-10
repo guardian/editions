@@ -1,11 +1,9 @@
 import { s3fetch } from './s3'
-import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
 import {
     Front,
     Collection,
     CAPIArticle,
-    Card,
     Crossword,
     WithColor,
     cardLayouts,
@@ -20,6 +18,7 @@ import {
 } from './utils/try'
 import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
+import { getImageFromURL } from './image'
 
 export const getCollection = async (
     id: string,
@@ -71,11 +70,13 @@ export const getCollection = async (
             }
             return inResponse
         })
-        .map(([key, fragment]) => {
+        .map(([key, fragment]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
+            const imageOverride =
+                meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
 
             switch (article.type) {
                 case 'crossword':
@@ -91,6 +92,13 @@ export const getCollection = async (
                     ]
 
                 case 'gallery':
+                    const galleryImage = imageOverride || article.image
+                    if (galleryImage == null) {
+                        throw new Error(
+                            `No image found in article: ${article.path}`,
+                        )
+                    }
+
                     return [
                         article.path,
                         {
@@ -98,12 +106,18 @@ export const getCollection = async (
                             key: article.path,
                             headline,
                             kicker,
-                            imageURL:
-                                (meta && meta.imageSrc) || article.imageURL,
+                            image: galleryImage,
                         },
                     ]
 
                 case 'article':
+                    const articleImage = imageOverride || article.image
+                    if (articleImage == null) {
+                        throw new Error(
+                            `No image found in article: ${article.path}`,
+                        )
+                    }
+
                     return [
                         article.path,
                         {
@@ -111,8 +125,7 @@ export const getCollection = async (
                             key: article.path,
                             headline,
                             kicker,
-                            imageURL:
-                                (meta && meta.imageSrc) || article.imageURL,
+                            image: articleImage,
                         },
                     ]
 

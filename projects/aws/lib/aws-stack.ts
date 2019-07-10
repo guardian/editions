@@ -35,6 +35,11 @@ export class EditionsStack extends cdk.Stack {
             description: 'fronts access',
         })
 
+        const imageSalt = new cdk.CfnParameter(this, 'image-signing-key', {
+            type: 'String',
+            description: 'image signing',
+        })
+
         const deploy = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
@@ -67,6 +72,7 @@ export class EditionsStack extends cdk.Stack {
                 stage: stageParameter.valueAsString,
                 atomArn: atomLambdaParam.valueAsString,
                 psurl: printSentURLParameter.valueAsString,
+                IMAGE_SALT: imageSalt.valueAsString,
             },
         })
 
@@ -103,7 +109,12 @@ export class EditionsStack extends cdk.Stack {
                 originConfigs: [
                     {
                         originPath: '/prod', //This is hard coded and could be the deployment id
-                        behaviors: [{ isDefaultBehavior: true }],
+                        behaviors: [
+                            {
+                                isDefaultBehavior: true,
+                                defaultTtl: Duration.seconds(10),
+                            },
+                        ],
                         customOriginSource: {
                             domainName: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
                         },
