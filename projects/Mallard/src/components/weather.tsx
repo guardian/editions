@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, FlatList, View } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
@@ -121,12 +121,12 @@ const Weather = () => {
             )
         }
 
-        return null
+        return <></>
     }
 
     return weatherResponse({
-        error: ({ message }) => null,
-        pending: () => null,
+        error: ({ message }) => <></>,
+        pending: () => <></>,
         success: forecasts => renderWeather(forecasts),
     })
 }
