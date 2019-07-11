@@ -1,5 +1,4 @@
-import { s3fetch } from './s3'
-import { Diff } from 'utility-types'
+import { s3fetch, s3Latest } from './s3'
 import {
     Front,
     Collection,
@@ -15,37 +14,27 @@ import {
     Attempt,
     withFailureMessage,
     hasSucceeded,
+    failure,
 } from './utils/try'
 import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
 import { getImageFromURL } from './image'
+import {
+    IssueResponse,
+    CollectionResponse,
+    ItemResponseMeta,
+} from './fronts/issue'
 
-export const getCollection = async (
-    id: string,
-    live: boolean = true,
-    lastModifiedUpdater: LastModifiedUpdater,
+export const parseCollection = async (
+    collectionResponse: CollectionResponse,
 ): Promise<Attempt<Collection>> => {
-    const resp = await attempt(
-        s3fetch(`frontsapi/collection/${id}/collection.json`),
-    )
-    if (hasFailed(resp))
-        return withFailureMessage(resp, 'Could not fetch from S3')
-
-    lastModifiedUpdater(resp.lastModified)
-
-    const deserialized = await attempt(resp.json())
-    if (hasFailed(deserialized))
-        return withFailureMessage(deserialized, 'Response was not valid json')
-
-    const collection = deserialized as CollectionFromResponse
-
-    const articleFragmentList = collection.live.map((fragment): [
+    const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
-        NestedArticleFragment,
-    ] => [parseInt(fragment.id.replace('internal-code/page/', '')), fragment])
+        ItemResponseMeta,
+    ] => [itemResponse.internalPageCode, itemResponse.meta])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-    const preview = live ? undefined : true
+
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
         attempt(getArticles(ids, 'printsent')),
         attempt(getArticles(ids, 'search')),
@@ -70,10 +59,9 @@ export const getCollection = async (
             }
             return inResponse
         })
-        .map(([key, fragment]): [string, CAPIArticle] => {
+        .map(([key, meta]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
-            const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
+            const kicker = (meta && meta.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
             const imageOverride =
                 meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
@@ -136,10 +124,8 @@ export const getCollection = async (
         })
 
     return {
-        key: id,
-        displayName: collection.displayName,
+        key: collectionResponse.id,
         cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
-        preview,
     }
 }
 
@@ -171,152 +157,53 @@ const getFrontColor = (front: string): WithColor => {
 }
 
 export const getFront = async (
+    issue: string,
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<Front> => {
-    const resp = await s3fetch('frontsapi/config/config.json')
-    if (!resp.ok) throw new Error('failed s3')
+): Promise<Attempt<Front>> => {
+    const latest = await s3Latest(`daily-edition/${issue}/`)
+    if (hasFailed(latest)) {
+        return withFailureMessage(
+            latest,
+            `Could not get latest issue for ${issue} and ${id}.`,
+        )
+    }
+    const issuePath = latest.key
+    const resp = await s3fetch(issuePath)
+
+    if (hasFailed(resp)) {
+        return withFailureMessage(
+            resp,
+            `Attempt to fetch ${issue} and ${id} failed.`,
+        )
+    }
+
     lastModifiedUpdater(resp.lastModified)
-    //But ALEX, won't this always be now, as the fronts config will change regularly?
-    //Yes. We don't intend to read it from here forever. Comment out as needed.
+
     const tone = getFrontColor(id)
-    const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
-    if (!(id in config.fronts)) throw new Error('Front not found')
+    const issueResponse: IssueResponse = (await resp.json()) as IssueResponse
+    const front = issueResponse.fronts.find(_ => _.name === id)
+    if (!front) {
+        return failure({ httpStatus: 404, error: new Error('Front not found') })
+    }
+
     const collections = await Promise.all(
-        config.fronts[id].collections.map(id =>
-            getCollection(id, true, lastModifiedUpdater),
-        ),
+        front.collections.map(collection => parseCollection(collection)),
     )
+
     collections.filter(hasFailed).forEach(failedCollection => {
-        console.error(failedCollection)
+        console.error(
+            `silently removing collection from ${issue}/${id} ${JSON.stringify(
+                failedCollection,
+            )}`,
+        )
     })
 
-    const front = {
-        ...config.fronts[id],
+    return {
+        ...front,
         ...tone,
         displayName: getDisplayName(id),
         collections: collections.filter(hasSucceeded),
         key: id,
     }
-
-    return front
-}
-
-//from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107
-
-interface CollectionFromResponse {
-    live: NestedArticleFragment[]
-    previously?: NestedArticleFragment[]
-    draft?: NestedArticleFragment[]
-    lastUpdated?: number
-    updatedBy?: string
-    updatedEmail?: string
-    platform?: string
-    displayName: string
-    groups?: string[]
-    metadata?: { type: string }[]
-    uneditable?: boolean
-}
-interface ArticleFragmentRootMeta {
-    group?: string
-    headline?: string
-    trailText?: string
-    byline?: string
-    customKicker?: string
-    href?: string
-    imageSrc?: string
-    imageSrcThumb?: string
-    imageSrcWidth?: string
-    imageSrcHeight?: string
-    imageSrcOrigin?: string
-    imageCutoutSrc?: string
-    imageCutoutSrcWidth?: string
-    imageCutoutSrcHeight?: string
-    imageCutoutSrcOrigin?: string
-    isBreaking?: boolean
-    isBoosted?: boolean
-    showLivePlayable?: boolean
-    showMainVideo?: boolean
-    showBoostedHeadline?: boolean
-    showQuotedHeadline?: boolean
-    showByline?: boolean
-    imageCutoutReplace?: boolean
-    imageReplace?: boolean
-    imageHide?: boolean
-    showKickerTag?: boolean
-    showKickerSection?: boolean
-    showKickerCustom?: boolean
-    snapUri?: string
-    snapType?: string
-    snapCss?: string
-    imageSlideshowReplace?: boolean
-    slideshow?: {
-        src?: string
-        thumb?: string
-        width?: string
-        height?: string
-        origin?: string
-    }[]
-}
-
-interface NestedArticleFragmentRootFields {
-    id: string
-    frontPublicationDate: number
-    publishedBy?: string
-}
-
-type NestedArticleFragment = NestedArticleFragmentRootFields & {
-    meta: {
-        supporting?: Diff<NestedArticleFragment, { supporting: unknown }>[]
-        group?: string | null
-    }
-}
-
-//the following types are stubs of https://github.com/guardian/facia-tool/blob/6970833aa5302522e25045c49302edb07a2b0a54/client-v2/src/types/FaciaApi.ts#L49-L56
-
-interface FrontsConfigResponse {
-    fronts: {
-        [id: string]: FrontConfigResponse
-    }
-    collections: {
-        [id: string]: CollectionConfigResponse
-    }
-}
-
-interface FrontConfigResponse {
-    collections: string[]
-    priority?: unknown
-    canonical?: string
-    group?: string
-    isHidden?: boolean
-    isImageDisplayed?: boolean
-    imageHeight?: number
-    imageWidth?: number
-    imageUrl?: string
-    onPageDescription?: string
-    description?: string
-    title?: string
-    webTitle?: string
-    navSection?: string
-}
-
-interface CollectionConfigResponse {
-    displayName: string
-    type: string
-    backfill?: unknown
-    href?: string
-    groups?: string[]
-    metadata?: unknown[]
-    uneditable?: boolean
-    showTags?: boolean
-    hideKickers?: boolean
-    excludedFromRss?: boolean
-    description?: string
-    showSections?: boolean
-    showDateHeader?: boolean
-    showLatestUpdate?: boolean
-    excludeFromRss?: boolean
-    hideShowMore?: boolean
-    platform?: unknown
-    frontsToolSettings?: unknown
 }
