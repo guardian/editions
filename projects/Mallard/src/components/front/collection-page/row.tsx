@@ -4,9 +4,9 @@ import { Multiline } from '../../multiline'
 import { metrics } from 'src/theme/spacing'
 
 import { useArticleAppearance } from 'src/theme/appearance'
-import { PropTypes as CollectionPropTypes } from './collection-page'
-import { Article, Collection, Issue, Front } from 'src/common'
+import { CAPIArticle, Collection, Issue, Front } from 'src/common'
 import { getRowHeightForSize, RowLayout } from '../helpers'
+import { ArticleNavigator } from '../../../screens/article-screen'
 
 const styles = StyleSheet.create({
     row: {
@@ -33,12 +33,13 @@ const styles = StyleSheet.create({
 })
 
 interface NavigationPropTypes {
+    articleNavigator: ArticleNavigator
     collection: Collection['key']
     issue: Issue['key']
     front: Front['key']
 }
 interface RowPropTypes {
-    translate: CollectionPropTypes['translate']
+    translate: Animated.AnimatedInterpolation
     index: number
     row: RowLayout
 }
@@ -95,12 +96,13 @@ shows 1 article
 const RowWithOneArticle = ({
     article,
     collection,
+    articleNavigator,
     issue,
     row,
     front,
     ...rowProps
 }: {
-    article: Article
+    article: CAPIArticle
 } & NavigationPropTypes &
     RowPropTypes) => {
     const { Item } = row.columns[0]
@@ -115,6 +117,7 @@ const RowWithOneArticle = ({
                     issue,
                     front,
                 }}
+                articleNavigator={articleNavigator}
                 article={article}
             />
         </RowWithChildren>
@@ -133,9 +136,10 @@ const Row = ({
     issue,
     row,
     front,
+    articleNavigator,
     ...rowProps
 }: {
-    articles: [Article] | [Article, Article]
+    articles: [CAPIArticle] | [CAPIArticle, CAPIArticle]
 } & NavigationPropTypes &
     RowPropTypes) => {
     const { appearance } = useArticleAppearance()
@@ -145,7 +149,7 @@ const Row = ({
         return (
             <RowWithOneArticle
                 {...rowProps}
-                {...{ issue, collection, front, row }}
+                {...{ issue, collection, front, row, articleNavigator }}
                 article={articles[0]}
             />
         )
@@ -162,9 +166,9 @@ const Row = ({
                         article: articles[0].key,
                         collection,
                         front,
-
                         issue,
                     }}
+                    articleNavigator={articleNavigator}
                     article={articles[0]}
                     size={row.size}
                 />
@@ -182,6 +186,7 @@ const Row = ({
                         front,
                         issue,
                     }}
+                    articleNavigator={articleNavigator}
                     article={articles[1]}
                     size={row.size}
                 />

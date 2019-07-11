@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Animated } from 'react-native'
 import { HeadlineText, HeadlineKickerText } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from './article-image'
+import { getNavigationPosition } from 'src/helpers/positions'
+import { Image } from '../../common'
 
 interface Style {
     /* kicker */
@@ -19,7 +21,7 @@ interface Style {
 export interface PropTypes {
     headline: string
     kicker?: string | null
-    image?: string | null
+    image?: Image | null
 }
 
 const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
@@ -27,7 +29,6 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
         paddingBottom: metrics.vertical,
-        paddingTop: metrics.headerHeight + metrics.vertical / 2,
     },
     kicker: {
         paddingBottom: metrics.vertical / 2,
@@ -43,6 +44,7 @@ const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
 
 const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
     const { appearance } = useArticleAppearance()
+    const navigationPosition = getNavigationPosition('article')
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
             {image ? (
@@ -61,15 +63,26 @@ const NewsHeader = ({ headline, image, kicker }: PropTypes) => {
                     </HeadlineKickerText>
                 </View>
             ) : null}
-            <HeadlineText
+            <Animated.View
                 style={[
-                    newsHeaderStyles.headline,
-                    appearance.text,
-                    appearance.headline,
+                    navigationPosition && {
+                        opacity: navigationPosition.position.interpolate({
+                            inputRange: [0.4, 1],
+                            outputRange: [0, 1],
+                        }),
+                    },
                 ]}
             >
-                {headline}
-            </HeadlineText>
+                <HeadlineText
+                    style={[
+                        newsHeaderStyles.headline,
+                        appearance.text,
+                        appearance.headline,
+                    ]}
+                >
+                    {headline}
+                </HeadlineText>
+            </Animated.View>
         </View>
     )
 }

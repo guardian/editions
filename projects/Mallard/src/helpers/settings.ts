@@ -1,15 +1,38 @@
 import AsyncStorage from '@react-native-community/async-storage'
-export interface Settings {
+import { defaultSettings } from './settings/defaults'
+import versionInfo from '../version-info.json'
+/*
+Consent switches can be 'unset' or null
+*/
+export type GdprSwitchSetting = null | boolean
+export interface GdprSwitchSettings {
+    gdprAllowPerformance: GdprSwitchSetting
+    gdprAllowTracking: GdprSwitchSetting
+}
+export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
+    'gdprAllowPerformance',
+    'gdprAllowTracking',
+]
+
+interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
+}
+
+interface UserSettings {
     hasOnboarded: boolean
 }
+
+export interface Settings
+    extends GdprSwitchSettings,
+        UserSettings,
+        DevSettings {}
 
 /*
 we can only store strings to memory
 so we need to convert them
 */
-type UnsanitizedSetting = Settings[keyof Settings]
+export type UnsanitizedSetting = Settings[keyof Settings]
 const sanitize = (value: UnsanitizedSetting): string => {
     if (typeof value !== 'string') {
         return JSON.stringify(value)
@@ -24,25 +47,8 @@ const unsanitize = (value: string): UnsanitizedSetting => {
     }
 }
 
-/*
-Default settings.
-This is a bit of a mess
-*/
-export const backends = [
-    {
-        title: 'PROD',
-        value: 'https://d2cf1ljtg904cv.cloudfront.net/',
-    },
-    {
-        title: 'CODE',
-        value: 'https://d2mztzjulnpyb8.cloudfront.net/',
-    },
-]
-
-export const defaultSettings: Settings = {
-    apiUrl: backends[0].value,
-    isUsingProdDevtools: false,
-    hasOnboarded: false,
+export const getVersionInfo = () => {
+    return versionInfo as { version: string; commitId: string }
 }
 
 /*
@@ -74,9 +80,9 @@ export const getAllSettings = async (): Promise<Settings> => {
 
 export const storeSetting = (
     setting: keyof Settings,
-    value: string | boolean,
+    value: UnsanitizedSetting,
 ) => {
-    return AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
+    AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
 }
 
 export const shouldShowOnboarding = (settings: Settings) =>

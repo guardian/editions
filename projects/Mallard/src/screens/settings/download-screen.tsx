@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ScrollView, Button, View, Alert, Clipboard } from 'react-native'
-import { List, ListHeading } from 'src/components/lists/list'
+import { List } from 'src/components/lists/list'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useFileList, useDownloadQueue, DownloadQueue } from 'src/hooks/use-fs'
@@ -8,18 +8,19 @@ import { Item } from 'src/components/lists/list'
 import {
     File,
     displayFileSize,
-    deleteAllFiles,
+    deleteIssueFiles,
     unzipIssue,
     deleteOtherFiles,
     displayPerc,
     getJson,
 } from 'src/helpers/files'
 import { FSPaths } from 'src/paths'
+import { Heading } from 'src/components/layout/ui/row'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
         <>
-            <ListHeading>Active downloads</ListHeading>
+            <Heading>Active downloads</Heading>
             <List
                 data={Object.entries(queue)
                     .sort((a, b) => b[0].localeCompare(a[0]))
@@ -134,7 +135,7 @@ export const DownloadScreen = () => {
                                         text: 'AWAY WITH IT ALL',
                                         style: 'cancel',
                                         onPress: async () => {
-                                            await deleteAllFiles()
+                                            await deleteIssueFiles()
                                             refreshIssues()
                                         },
                                     },
@@ -147,7 +148,7 @@ export const DownloadScreen = () => {
             </View>
             <ScrollView style={{ flex: 1 }}>
                 {Object.keys(queue).length > 0 && <Queue queue={queue} />}
-                <ListHeading>On device</ListHeading>
+                <Heading>On device</Heading>
                 <List
                     data={fileList}
                     onPress={({ type, id, path }) => {

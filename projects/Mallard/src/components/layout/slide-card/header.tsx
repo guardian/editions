@@ -11,10 +11,6 @@ import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     headerContainer: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
         height: metrics.headerHeight,
         zIndex: 90,
         alignContent: 'stretch',

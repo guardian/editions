@@ -1,7 +1,13 @@
 import { s3fetch } from './s3'
-import fromEntries from 'object.fromentries'
 import { Diff } from 'utility-types'
-import { Front, Collection, Article, Card } from './common'
+import {
+    Front,
+    Collection,
+    CAPIArticle,
+    Crossword,
+    WithColor,
+    cardLayouts,
+} from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -11,23 +17,8 @@ import {
     hasSucceeded,
 } from './utils/try'
 import { getArticles } from './capi/articles'
-
-const createCardsFromAllArticlesInCollection = (
-    maxCardSize: number,
-    articles: [string, Article][],
-): Card[] => {
-    const chunk = (arr: [string, Article][], size: number) =>
-        Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-            arr.slice(i * size, i * size + size),
-        )
-
-    return chunk(articles, maxCardSize).map(groupOfArticles => {
-        return {
-            layout: null,
-            articles: fromEntries(groupOfArticles),
-        }
-    })
-}
+import { createCardsFromAllArticlesInCollection } from './utils/collection'
+import { getImageFromURL } from './image'
 
 export const getCollection = async (
     id: string,
@@ -52,7 +43,7 @@ export const getCollection = async (
         number,
         NestedArticleFragment,
     ] => [parseInt(fragment.id.replace('internal-code/page/', '')), fragment])
-    const articleFragments = fromEntries(articleFragmentList)
+
     const ids: number[] = articleFragmentList.map(([id]) => id)
     const preview = live ? undefined : true
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
@@ -70,7 +61,7 @@ export const getCollection = async (
             'Could not connect to CAPI',
         )
 
-    const articles: [string, Article][] = Object.entries(articleFragments)
+    const articles: [string, CAPIArticle][] = articleFragmentList
         .filter(([key]) => {
             const inResponse =
                 key in capiPrintArticles || key in capiSearchArticles
@@ -79,29 +70,75 @@ export const getCollection = async (
             }
             return inResponse
         })
-        .map(([key, fragment]) => {
+        .map(([key, fragment]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
             const meta = fragment && (fragment.meta as ArticleFragmentRootMeta)
             const kicker = (meta && meta.customKicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline = (meta && meta.headline) || article.headline
-            const imageURL = (meta && meta.imageSrc) || article.imageURL
+            const imageOverride =
+                meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
 
-            return [
-                article.path,
-                {
-                    ...article,
-                    key: article.path,
-                    kicker,
-                    headline,
-                    imageURL,
-                },
-            ]
+            switch (article.type) {
+                case 'crossword':
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            crossword: (article.crossword as unknown) as Crossword,
+                        },
+                    ]
+
+                case 'gallery':
+                    const galleryImage = imageOverride || article.image
+                    if (galleryImage == null) {
+                        throw new Error(
+                            `No image found in article: ${article.path}`,
+                        )
+                    }
+
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            image: galleryImage,
+                        },
+                    ]
+
+                case 'article':
+                    const articleImage = imageOverride || article.image
+                    if (articleImage == null) {
+                        throw new Error(
+                            `No image found in article: ${article.path}`,
+                        )
+                    }
+
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            image: articleImage,
+                        },
+                    ]
+
+                default:
+                    const msg: never = article
+                    throw new TypeError(`Unknown type: ${msg}`)
+            }
         })
 
     return {
         key: id,
         displayName: collection.displayName,
-        cards: createCardsFromAllArticlesInCollection(5, articles),
+        cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
         preview,
     }
 }
@@ -109,6 +146,28 @@ export const getCollection = async (
 const getDisplayName = (front: string) => {
     const split = front.split('/').pop() || front
     return split.charAt(0).toUpperCase() + split.slice(1)
+}
+
+const getFrontColor = (front: string): WithColor => {
+    switch (front.split('/').pop() || front) {
+        case 'topstories':
+            return { color: 'neutral' }
+        case 'news':
+        case 'new':
+            return { color: 'news' }
+        case 'opinion':
+        case 'journal':
+            return { color: 'opinion' }
+        case 'sport':
+            return { color: 'sport' }
+        case 'life':
+        case 'review':
+        case 'guide':
+        case 'weekend':
+        case 'food':
+            return { color: 'lifestyle' }
+    }
+    return { color: 'neutral' }
 }
 
 export const getFront = async (
@@ -120,17 +179,23 @@ export const getFront = async (
     lastModifiedUpdater(resp.lastModified)
     //But ALEX, won't this always be now, as the fronts config will change regularly?
     //Yes. We don't intend to read it from here forever. Comment out as needed.
-
+    const tone = getFrontColor(id)
     const config: FrontsConfigResponse = (await resp.json()) as FrontsConfigResponse
     if (!(id in config.fronts)) throw new Error('Front not found')
+    const collections = await Promise.all(
+        config.fronts[id].collections.map(id =>
+            getCollection(id, true, lastModifiedUpdater),
+        ),
+    )
+    collections.filter(hasFailed).forEach(failedCollection => {
+        console.error(failedCollection)
+    })
+
     const front = {
         ...config.fronts[id],
+        ...tone,
         displayName: getDisplayName(id),
-        collections: (await Promise.all(
-            config.fronts[id].collections.map(id =>
-                getCollection(id, true, lastModifiedUpdater),
-            ),
-        )).filter(hasSucceeded),
+        collections: collections.filter(hasSucceeded),
         key: id,
     }
 

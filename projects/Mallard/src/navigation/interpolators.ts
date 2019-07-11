@@ -1,33 +1,62 @@
 import { NavigationTransitionProps } from 'react-navigation'
 import { Dimensions, LayoutRectangle } from 'react-native'
-import { getScreenPositionOfItem } from 'src/helpers/positions'
+import {
+    getScreenPositionOfItem,
+    setNavigationPosition,
+} from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
+import { routeNames } from '.'
+import { supportsTransparentCards } from 'src/helpers/features'
 
 export const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
 }
 
+const minScale = 0.9
+const minOpacity = 0.9
+const radius = 20
+
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+    const { height: windowHeight } = Dimensions.get('window')
 
+    /*
+    these ones r easy
+    */
     const scale = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
-        outputRange: [1, 1, 0.75],
+        outputRange: [1, 1, minScale],
     })
     const borderRadius = position.interpolate({
         inputRange: [sceneIndex, sceneIndex + 1],
         extrapolate: 'clamp',
-        outputRange: [0, 20],
+        outputRange: [0, radius],
     })
     const opacity = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
+        inputRange: [sceneIndex, sceneIndex + 0.1],
         extrapolate: 'clamp',
-        outputRange: [1, 0.5, 0.2],
+        outputRange: [1, minOpacity],
+    })
+
+    /*
+    we wanna control how far from the top edge
+    this window lands, to do so we calculate how
+    many px it has to move up to account for the
+    scale and then we mess with that number
+    as we please
+    */
+    const translateOffset = (windowHeight - windowHeight * minScale) * -0.5
+    const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
+
+    const translateY = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, finalTranslate],
     })
 
     return {
         transform: [
+            { translateY },
             {
                 scale,
             },
@@ -41,6 +70,8 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+
+    setNavigationPosition('article', [position, sceneIndex])
 
     /*
     we are assuming our final article
@@ -60,8 +91,8 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     and its card so it's a bit less jarring
     */
     const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.8, sceneIndex],
-        outputRange: [0, 0.9, 1],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
+        outputRange: [0, 0.95, 1],
     })
 
     /*
@@ -81,8 +112,8 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const yScaleDiff = (windowHeight - windowHeight * scaler) / 2
     const translater = y - yScaleDiff
     const translateY = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex],
-        outputRange: [translater, metrics.slideCardSpacing],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.75, sceneIndex],
+        outputRange: [translater, translater, metrics.slideCardSpacing],
     })
 
     /*
@@ -97,6 +128,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 
     return {
         opacity,
+        marginBottom: metrics.slideCardSpacing,
         transform: [{ translateX }, { translateY }, { scale }],
     }
 }
@@ -105,11 +137,100 @@ const issueToArticleScreenInterpolator = (
     sceneProps: NavigationTransitionProps,
 ) => {
     const { scene } = sceneProps
-    if (scene.route.routeName === 'Main') {
+    if (scene.route.routeName === routeNames.Issue) {
         return issueScreenInterpolator(sceneProps)
     } else {
         return articleScreenInterpolator(sceneProps)
     }
 }
 
-export { issueToArticleScreenInterpolator }
+const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
+    const { position, scene } = sceneProps
+    const sceneIndex = scene.index
+    const { height: windowHeight } = Dimensions.get('window')
+
+    const finalTranslate = supportsTransparentCards()
+        ? windowHeight - 100
+        : windowHeight
+
+    const translateY = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, finalTranslate],
+    })
+    const borderRadius = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, radius],
+    })
+
+    return {
+        zIndex: 9999,
+        elevation: 9999,
+        borderRadius,
+        transform: [{ translateY }],
+        overflow: 'hidden',
+    }
+}
+
+const IssueListToIssueScreen = (sceneProps: NavigationTransitionProps) => {
+    const { position, scene } = sceneProps
+    const sceneIndex = scene.index
+    const { height: windowHeight } = Dimensions.get('window')
+
+    /*
+    these ones r easy
+    */
+    const scale = position.interpolate({
+        inputRange: [sceneIndex - 1, sceneIndex - 0.1, sceneIndex],
+        outputRange: [minScale, 1, 1],
+    })
+    const borderRadius = position.interpolate({
+        inputRange: [sceneIndex - 1, sceneIndex],
+        extrapolate: 'clamp',
+        outputRange: [radius, 0],
+    })
+    const opacity = position.interpolate({
+        inputRange: [sceneIndex - 1, sceneIndex],
+        extrapolate: 'clamp',
+        outputRange: [0, minOpacity],
+    })
+
+    /*
+    we wanna control how far from the top edge
+    this window lands, to do so we calculate how
+    many px it has to move up to account for the
+    scale and then we mess with that number
+    as we please
+    */
+    const translateOffset = (windowHeight - windowHeight * minScale) * -0.5
+    const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
+
+    const translateY = position.interpolate({
+        inputRange: [sceneIndex, sceneIndex + 1],
+        outputRange: [0, finalTranslate],
+    })
+
+    return {
+        transform: [
+            { translateY },
+            {
+                scale,
+            },
+        ],
+        opacity,
+        borderRadius,
+        overflow: 'hidden',
+    }
+}
+
+const issueToIssueListInterpolator = (
+    sceneProps: NavigationTransitionProps,
+) => {
+    const { scene } = sceneProps
+    if (scene.route.routeName === routeNames.Issue) {
+        return issueScreenToIssueList(sceneProps)
+    } else {
+        return IssueListToIssueScreen(sceneProps)
+    }
+}
+
+export { issueToArticleScreenInterpolator, issueToIssueListInterpolator }

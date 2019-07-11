@@ -1,54 +1,64 @@
-import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useState, useMemo } from 'react'
 import {
     NavigationScreenProp,
     NavigationEvents,
     FlatList,
+    NavigationInjectedProps,
 } from 'react-navigation'
 
-import { container } from 'src/theme/styles'
 import { Front } from 'src/components/front'
 import { Issue } from 'src/common'
 import { Header } from 'src/components/header'
 
-import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
-import { ERR_404_MISSING_PROPS, GENERIC_ERROR } from 'src/helpers/words'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { useJsonOrEndpoint } from 'src/hooks/use-fetch'
-import { withResponse } from 'src/hooks/use-response'
+import { useIssueWithResponse, getIssueResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 import { useSettings } from 'src/hooks/use-settings'
-import { FSPaths, APIPaths } from 'src/paths'
 
-const styles = StyleSheet.create({
-    container,
-    contentContainer: {
-        flexGrow: 1,
-    },
-})
+import { getLatestIssue } from 'src/hooks/use-api'
+import { withNavigation } from 'react-navigation'
+import { Button } from 'src/components/button/button'
+import { navigateToIssueList } from 'src/navigation/helpers'
+import { renderIssueDate } from 'src/helpers/issues'
+import { Container } from 'src/components/layout/ui/container'
+import { Weather } from 'src/components/weather'
 
-const useIssueResponse = (issue: Issue['key']) =>
-    withResponse<Issue>(
-        useJsonOrEndpoint<Issue>(
-            issue,
-            FSPaths.issue(issue),
-            APIPaths.issue(issue),
-            {
-                validator: res => res.fronts != null,
-            },
-        ),
-    )
 export interface PathToIssue {
     issue: Issue['key']
 }
 
-const IssueHeader = ({ issue }: { issue: Issue }) => {
-    return <Header title={'Issue/'} subtitle={issue.name} />
-}
+const IssueHeader = withNavigation(
+    ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+        const { date, weekday } = useMemo(
+            () =>
+                issue
+                    ? renderIssueDate(issue.date * 1000 || Date.now())
+                    : { date: 'Issue', weekday: 'undefined' },
+            [issue && issue.key, issue],
+        )
+        return (
+            <Header
+                action={
+                    <Button
+                        icon=""
+                        alt="More issues"
+                        onPress={() => navigateToIssueList(navigation)}
+                    />
+                }
+                title={date}
+                subtitle={weekday}
+            />
+        )
+    },
+)
 
-const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
-    const issueResponse = useIssueResponse(path.issue)
-
+const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
+    const response = useIssueWithResponse(
+        path ? getIssueResponse(path.issue) : getLatestIssue(),
+        [path ? path.issue : 'latest'],
+    )
     /*
     we don't wanna render a massive tree at once
     as the navigator is trying to push the screen bc this
@@ -59,34 +69,42 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
     */
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [{ isUsingProdDevtools }] = useSettings()
-
     return (
-        <View style={styles.container}>
+        <Container>
             <NavigationEvents
                 onDidFocus={() => {
                     setViewIsTransitioning(false)
                 }}
             />
-            {issueResponse({
-                error: ({ message }) => (
-                    <FlexErrorMessage
-                        title={GENERIC_ERROR}
-                        message={isUsingProdDevtools ? message : undefined}
-                    />
+            {response({
+                error: ({ message }, { retry }) => (
+                    <>
+                        <IssueHeader />
+
+                        <FlexErrorMessage
+                            title={GENERIC_ERROR}
+                            message={isUsingProdDevtools ? message : undefined}
+                            action={['Retry', retry]}
+                        />
+                    </>
                 ),
                 pending: () => (
-                    <FlexCenter>
-                        <Spinner />
-                    </FlexCenter>
+                    <>
+                        <IssueHeader />
+                        <FlexCenter>
+                            <Spinner />
+                        </FlexCenter>
+                    </>
                 ),
                 success: issue => (
                     <>
+                        <IssueHeader issue={issue} />
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
-                            ListHeaderComponent={<IssueHeader issue={issue} />}
+                            ListHeaderComponent={<Weather />}
                             keyExtractor={item => item}
                             renderItem={({ item }) => (
                                 <Front
@@ -99,7 +117,7 @@ const IssueScreenWithProps = ({ path }: { path: PathToIssue }) => {
                     </>
                 ),
             })}
-        </View>
+        </Container>
     )
 }
 
@@ -109,8 +127,6 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue)
-        return <FlexErrorMessage title={ERR_404_MISSING_PROPS} />
-
-    return <IssueScreenWithProps path={path} />
+    if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
+    return <IssueScreenWithPath path={path} />
 }

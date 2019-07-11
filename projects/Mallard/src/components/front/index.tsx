@@ -1,133 +1,61 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    ReactNode,
-    useMemo,
-} from 'react'
-import { View, Dimensions, Animated, FlatList, StyleSheet } from 'react-native'
-import { useJsonOrEndpoint } from '../../hooks/use-fetch'
-import { metrics } from 'src/theme/spacing'
-import { CollectionPage } from './collection-page/collection-page'
+import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
+import { Dimensions, Animated } from 'react-native'
+import { CollectionPage, PropTypes } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
-import { ArticleAppearance } from 'src/theme/appearance'
-import { Front as FrontType } from '../../../../backend/common'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, Collection, Article } from 'src/common'
-import { color as themeColor } from '../../theme/color'
-import { withResponse } from 'src/hooks/use-response'
-import { FlexErrorMessage } from '../layout/errors/flex-error-message'
+import { Issue, ColorFromPalette, Front as FrontType } from 'src/common'
+import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
-import { FSPaths, APIPaths } from 'src/paths'
-import { FlatCard, flattenCollections } from 'src/helpers/transform'
+import {
+    FlatCard,
+    getColor,
+    flattenFlatCardsToFront,
+    flattenCollectionsToCards,
+} from 'src/helpers/transform'
+import { Wrapper } from './wrapper'
+import {
+    getTranslateForPage,
+    AnimatedFlatListRef,
+    getNearestPage,
+} from './helpers'
+import { WithArticleAppearance } from 'src/theme/appearance'
+import { useFrontsResponse } from 'src/hooks/use-issue'
+import { ArticleNavigator } from '../../screens/article-screen'
 
-interface AnimatedFlatListRef {
-    _component: FlatList<FrontType['collections'][0]>
-}
-
-const useFrontsResponse = (issue: Issue['key'], front: FrontType['key']) => {
-    const resp = useJsonOrEndpoint<FrontType>(
-        issue,
-        FSPaths.front(issue, front),
-        APIPaths.front(issue, front),
-        {
-            validator: res => res.collections != null,
-        },
-    )
-    return withResponse<FrontType>(resp)
-}
-
-/*
-Map the position of the tap on the screen to
-the position of the tap on the scrubber itself (which has padding).
-This is coupled to the visual layout and we can be a bit more
-clever but also for now this works
-*/
-const getScrollPos = (screenX: number) => {
-    const { width } = Dimensions.get('window')
-    return screenX + (metrics.horizontal * 6 * screenX) / width
-}
-
-const getNearestPage = (screenX: number, pageCount: number): number => {
-    const { width } = Dimensions.get('window')
-    return Math.round((getScrollPos(screenX) * (pageCount - 1)) / width)
-}
-
-const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
-    const { width } = Dimensions.get('window')
-    return scrollX.interpolate({
-        inputRange: [width * (page - 1), width * page, width * (page + 1)],
-        outputRange: [
-            metrics.frontsPageSides * -1.75,
-            0,
-            metrics.frontsPageSides * 1.75,
-        ],
-    })
-}
-
-const Page = ({
-    articles,
-    issue,
-    appearance,
+const CollectionPageInFront = ({
     index,
-    collection,
-    front,
+    appearance,
     scrollX,
+    ...collectionPageProps
 }: {
-    appearance: ArticleAppearance
     index: number
+    appearance: ColorFromPalette
     scrollX: Animated.Value
-    articles: Article[]
-    collection: Collection['key']
-    front: FrontType['key']
-    issue: Issue['key']
-}) => {
+} & PropTypes) => {
     const { width } = Dimensions.get('window')
-    const translateX = getTranslateForPage(scrollX, index)
+    const translate = getTranslateForPage(scrollX, index)
     return (
-        <View style={{ width }}>
-            <CollectionPage
-                articles={Object.values(articles)}
-                translate={translateX}
-                {...{ issue, collection, front, appearance }}
-                style={[
-                    {
-                        flex: 1,
-                        transform: [
-                            {
-                                translateX,
-                            },
-                        ],
-                    },
-                ]}
-            />
-        </View>
-    )
-}
-
-const wrapperStyles = StyleSheet.create({
-    inner: { height: metrics.frontsPageHeight },
-})
-
-const Wrapper: FunctionComponent<{
-    scrubber: ReactNode
-    children: ReactNode
-}> = ({ children, scrubber }) => {
-    return (
-        <>
-            <View
-                style={{
-                    padding: metrics.horizontal,
-                    marginBottom: 0,
-                    marginTop: metrics.vertical * 2,
-                }}
-            >
-                {scrubber}
-            </View>
-            <View style={wrapperStyles.inner}>{children}</View>
-        </>
+        <Animated.View
+            style={[
+                {
+                    width,
+                    transform: [
+                        {
+                            translateX: translate,
+                        },
+                    ],
+                },
+            ]}
+        >
+            <WithArticleAppearance value={appearance}>
+                <CollectionPage
+                    translate={translate}
+                    {...collectionPageProps}
+                />
+            </WithArticleAppearance>
+        </Animated.View>
     )
 }
 
@@ -138,12 +66,30 @@ const FrontWithResponse = ({
     issue: Issue['key']
     frontData: FrontType
 }) => {
-    const color = themeColor.palette.news.bright
+    const color = getColor(frontData)
+    const appearance =
+        frontData.color === 'custom' ? 'neutral' : frontData.color
+
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
     const { width } = Dimensions.get('window')
-    const cards: FlatCard[] = useMemo(
-        () => flattenCollections(frontData.collections),
+    const [cards, articleNavigator]: [FlatCard[], ArticleNavigator] = useMemo(
+        () => {
+            const flatCollections = flattenCollectionsToCards(
+                frontData.collections,
+            )
+            const navigator = {
+                articles: flattenFlatCardsToFront(flatCollections).map(
+                    ({ article, collection }) => ({
+                        collection: collection.key,
+                        front: frontData.key,
+                        article: article.key,
+                        issue,
+                    }),
+                ),
+            }
+            return [flatCollections, navigator]
+        },
         frontData.collections.map(({ key }) => key), // eslint-disable-line react-hooks/exhaustive-deps
     )
     const stops = cards.length
@@ -214,12 +160,17 @@ const FrontWithResponse = ({
                     item: FlatCard
                     index: number
                 }) => (
-                    <Page
-                        appearance={'news'}
-                        articles={item.articles || []}
+                    <CollectionPageInFront
+                        articlesInCard={item.articles || []}
                         collection={item.collection.key}
                         front={frontData.key}
-                        {...{ scrollX, issue, index }}
+                        {...{
+                            scrollX,
+                            issue,
+                            index,
+                            appearance,
+                            articleNavigator,
+                        }}
                     />
                 )}
             />
@@ -234,7 +185,6 @@ export const Front: FunctionComponent<{
 }> = ({ front, issue }) => {
     const frontsResponse = useFrontsResponse(issue, front)
     const [{ isUsingProdDevtools }] = useSettings()
-    const { width } = Dimensions.get('window')
 
     return frontsResponse({
         pending: () => (

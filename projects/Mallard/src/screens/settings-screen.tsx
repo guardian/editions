@@ -1,49 +1,164 @@
 import React from 'react'
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    Dimensions,
-    View,
-    Alert,
-} from 'react-native'
+import { Text, Dimensions, View, Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import { List, ListHeading } from 'src/components/lists/list'
-import { NavigationScreenProp } from 'react-navigation'
-import { container } from 'src/theme/styles'
+import { List } from 'src/components/lists/list'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { useSettings } from 'src/hooks/use-settings'
-import { clearLocalCache } from 'src/hooks/use-fetch'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
+import { clearCache } from 'src/helpers/fetch/cache'
+import { Heading } from 'src/components/layout/ui/row'
+import { getVersionInfo } from 'src/helpers/settings'
+import { metrics } from 'src/theme/spacing'
+import { ScrollContainer } from 'src/components/layout/ui/container'
 
-const styles = StyleSheet.create({
-    container,
+const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
+    const [settings, setSetting] = useSettings()
+    const { apiUrl } = settings
+    return (
+        <>
+            <Heading>💣 DEVELOPER ZONE 💣</Heading>
+            <MonoTextBlock>
+                Only wander here if you know what you are doing!!
+            </MonoTextBlock>
+            <List
+                onPress={({ onPress }) => onPress()}
+                data={[
+                    {
+                        key: 'Downloads',
+                        title: 'Manage issues',
+                        data: {
+                            onPress: () => {
+                                navigation.navigate('Downloads')
+                            },
+                        },
+                    },
+                    {
+                        key: 'Endpoints',
+                        title: 'API Endpoint',
+                        explainer: apiUrl,
+                        data: {
+                            onPress: () => {
+                                navigation.navigate('Endpoints')
+                            },
+                        },
+                    },
+                    {
+                        key: 'Clear caches',
+                        title: 'Clear caches',
+                        data: {
+                            onPress: () => {
+                                Alert.alert(
+                                    'Clear caches',
+                                    'You sure?',
+                                    [
+                                        {
+                                            text: 'Delete fetch cache',
+                                            onPress: () => {
+                                                clearCache()
+                                            },
+                                        },
+                                        {
+                                            text: 'Delete EVERYTHING',
+                                            onPress: () => {
+                                                AsyncStorage.clear()
+                                            },
+                                        },
+                                        {
+                                            style: 'cancel',
+                                            text: `No don't do it`,
+                                        },
+                                    ],
+                                    { cancelable: false },
+                                )
+                            },
+                        },
+                    },
+                    {
+                        key: 'Re-start onboarding',
+                        title: 'Re-start onboarding',
+                        data: {
+                            onPress: () => {
+                                // go back to the main to simulate a fresh app
+                                setSetting('hasOnboarded', false)
+                                navigation.navigate('Onboarding')
+                            },
+                        },
+                    },
+                    {
+                        key: 'Hide this menu',
+                        title: 'Hide this menu',
+                        explainer:
+                            'Scroll down and tap the duck to bring it back',
+                        data: {
+                            onPress: () => {
+                                setSetting('isUsingProdDevtools', false)
+                            },
+                        },
+                    },
+                ]}
+            />
+            <Heading>Your settings</Heading>
+            <List
+                onPress={() => {}}
+                data={Object.entries(settings).map(([title, explainer]) => ({
+                    key: title,
+                    title,
+                    explainer: explainer + '',
+                }))}
+            />
+        </>
+    )
 })
 
-const SettingsScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
+const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
-    const { apiUrl, isUsingProdDevtools } = settings
+    const { isUsingProdDevtools } = settings
 
     return (
-        <ScrollView style={styles.container}>
-            <ListHeading>{`About ${APP_DISPLAY_NAME}`}</ListHeading>
+        <ScrollContainer>
+            <Heading>Settings</Heading>
+            <List
+                onPress={({ onPress }) => onPress()}
+                data={[
+                    {
+                        key: 'Consent settings',
+                        title: 'Consent settings',
+                        data: {
+                            onPress: () => {
+                                navigation.navigate('GdprConsent')
+                            },
+                        },
+                    },
+                ]}
+            />
+            <Heading>{`About ${APP_DISPLAY_NAME}`}</Heading>
             <MonoTextBlock>
-                {`Thanks for helping us test the ${APP_DISPLAY_NAME} app! your
-                feedback will be invaluable to the final product.`}
+                {`Thanks for helping us test the ${APP_DISPLAY_NAME} app!` +
+                    `your feedback will be invaluable to the final product.`}
             </MonoTextBlock>
-            <MonoTextBlock>
-                Come back soon to see relevant settings.
-            </MonoTextBlock>
-            <ListHeading>{`Send Feedback`}</ListHeading>
-            <MonoTextBlock>
+            <MonoTextBlock style={{ marginBottom: metrics.vertical * 4 }}>
                 {`Send us feedback to ${FEEDBACK_EMAIL}`}
             </MonoTextBlock>
+            <List
+                onPress={() => {}}
+                data={[
+                    {
+                        key: '0',
+                        title: 'App version',
+                        explainer: getVersionInfo().version,
+                        data: {},
+                    },
+                    {
+                        key: '1',
+                        title: 'Build id',
+                        explainer: getVersionInfo().commitId,
+                        data: {},
+                    },
+                ]}
+            />
             {!isUsingProdDevtools ? (
                 <>
                     <View style={{ height: Dimensions.get('window').height }} />
@@ -64,104 +179,9 @@ const SettingsScreen = ({
                     </Highlight>
                 </>
             ) : (
-                <>
-                    <ListHeading>💣 DEVELOPER ZONE 💣</ListHeading>
-                    <MonoTextBlock>
-                        Only wander here if you know what you are doing!!
-                    </MonoTextBlock>
-                    <List
-                        onPress={({ onPress }) => onPress()}
-                        data={[
-                            {
-                                key: 'Downloads',
-                                title: 'Manage issues',
-                                data: {
-                                    onPress: () => {
-                                        navigation.navigate('Downloads')
-                                    },
-                                },
-                            },
-                            {
-                                key: 'Endpoints',
-                                title: 'API Endpoint',
-                                explainer: apiUrl,
-                                data: {
-                                    onPress: () => {
-                                        navigation.navigate('Endpoints')
-                                    },
-                                },
-                            },
-                            {
-                                key: 'Clear caches',
-                                title: 'Clear caches',
-                                data: {
-                                    onPress: () => {
-                                        Alert.alert(
-                                            'Clear caches',
-                                            'You sure?',
-                                            [
-                                                {
-                                                    text: 'Delete fetch cache',
-                                                    onPress: () => {
-                                                        clearLocalCache()
-                                                    },
-                                                },
-                                                {
-                                                    text: 'Delete EVERYTHING',
-                                                    onPress: () => {
-                                                        AsyncStorage.clear()
-                                                    },
-                                                },
-                                                {
-                                                    style: 'cancel',
-                                                    text: `No don't do it`,
-                                                },
-                                            ],
-                                            { cancelable: false },
-                                        )
-                                    },
-                                },
-                            },
-                            {
-                                key: 'Re-start onboarding',
-                                title: 'Re-start onboarding',
-                                data: {
-                                    onPress: () => {
-                                        // go back to the main to simulate a fresh app
-                                        setSetting('hasOnboarded', false)
-                                        navigation.navigate(
-                                            'OnboardingSwitcher',
-                                        )
-                                    },
-                                },
-                            },
-                            {
-                                key: 'Hide this menu',
-                                title: 'Hide this menu',
-                                explainer:
-                                    'Scroll down and tap the duck to bring it back',
-                                data: {
-                                    onPress: () => {
-                                        setSetting('isUsingProdDevtools', false)
-                                    },
-                                },
-                            },
-                        ]}
-                    />
-                    <ListHeading>Your settings</ListHeading>
-                    <List
-                        onPress={() => {}}
-                        data={Object.entries(settings).map(
-                            ([title, explainer]) => ({
-                                key: title,
-                                title,
-                                explainer: explainer + '',
-                            }),
-                        )}
-                    />
-                </>
+                <DevZone />
             )}
-        </ScrollView>
+        </ScrollContainer>
     )
 }
 SettingsScreen.navigationOptions = {

@@ -22,17 +22,18 @@ export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
 
 /*
- TODO: for now it's cool to fail this silently, BUT it means that either folder exists already (yay! we want that) or that something far more broken is broken (no thats bad)
- */
-export const makeCacheFolder = (): Promise<void> =>
+We always try to prep the file system before accessing issuesDir
+*/
+export const prepFileSystem = (): Promise<void> =>
     RNFetchBlob.fs.mkdir(FSPaths.issuesDir).catch(() => Promise.resolve())
 
-/*
-This cleans EVERYTHING
-*/
-export const deleteAllFiles = async (): Promise<void> => {
+export const getIssueFiles = async () => {
+    await prepFileSystem()
+    return RNFetchBlob.fs.ls(FSPaths.issuesDir)
+}
+export const deleteIssueFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
-    await makeCacheFolder()
+    await prepFileSystem()
 }
 
 const fileName = (path: string) => {
@@ -106,15 +107,13 @@ const pathToFile = (basePath: string = '') => async (
 }
 
 export const getFileList = async (): Promise<File[]> => {
-    const fileListRaw = await RNFetchBlob.fs.ls(FSPaths.issuesDir)
+    const fileListRaw = await getIssueFiles()
     if (fileListRawMemo === fileListRaw.join()) {
         return fileListMemo
     } else {
-        const fileList = await RNFetchBlob.fs
-            .ls(FSPaths.issuesDir)
-            .then(files =>
-                Promise.all(files.map(pathToFile(FSPaths.issuesDir))),
-            )
+        const fileList = await getIssueFiles().then(files =>
+            Promise.all(files.map(pathToFile(FSPaths.issuesDir))),
+        )
         fileListRawMemo = fileListRaw.join()
         fileListMemo = fileList
         return fileList
@@ -145,7 +144,7 @@ export const downloadIssue = (issue: File['id']) => {
 
     return {
         promise: returnable.then(async res => {
-            await makeCacheFolder()
+            await prepFileSystem()
             await RNFetchBlob.fs.mv(
                 res.path(),
                 FSPaths.issueZip(
@@ -166,6 +165,11 @@ export const unzipIssue = (issue: File['id']) => {
         RNFetchBlob.fs.unlink(zipFilePath),
     )
 }
+
+export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
+    (await getFileList()).find(
+        file => fileIsIssue(file) && file.issue.key === issue,
+    ) !== undefined
 
 /*
 Cheeky size helper

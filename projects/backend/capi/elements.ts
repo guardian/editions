@@ -1,8 +1,9 @@
 import { IBlockElement, ElementType } from '@guardian/capi-ts'
 import { BlockElement } from '../common'
-import { extractImage } from './assets'
+import { getImage } from './assets'
 import { renderAtom } from './atoms'
 import { attempt, hasFailed } from '../utils/try'
+import { cleanupHtml } from '../utils/html'
 
 export const elementParser = (id: string) => async (
     element: IBlockElement,
@@ -16,13 +17,15 @@ export const elementParser = (id: string) => async (
                 }
             }
         case ElementType.IMAGE:
-            const image = extractImage(element.assets)
-            if (element.imageTypeData && image.file) {
+            const image = getImage(element.assets)
+            if (element.imageTypeData && image) {
                 return {
                     id: 'image',
-                    src: image.file, //This needs to be resized!!!
+                    src: image,
                     alt: element.imageTypeData.alt,
-                    caption: element.imageTypeData.caption,
+                    caption:
+                        element.imageTypeData.caption &&
+                        cleanupHtml(element.imageTypeData.caption),
                     copyright: element.imageTypeData.copyright,
                 }
             }

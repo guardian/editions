@@ -6,7 +6,7 @@ import { hasFailed } from '../utils/try'
 export const frontController = (req: Request, res: Response) => {
     const id: string = req.params[0]
     const [date, updater] = lastModified()
-
+    console.log(`Request for ${req.url} fetching front ${id}`)
     getFront(id, updater)
         .then(data => {
             res.setHeader('Last-Modifed', date())

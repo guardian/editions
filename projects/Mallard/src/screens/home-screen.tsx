@@ -1,54 +1,45 @@
-import React, { useMemo } from 'react'
-import {
-    Image,
-    ScrollView,
-    Button,
-    StyleSheet,
-    View,
-    Platform,
-} from 'react-native'
-import { List, ListHeading } from 'src/components/lists/list'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { List, BaseList } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
-import { primaryContainer } from 'src/theme/styles'
 import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { useFileList } from 'src/hooks/use-fs'
-import { Issue } from 'src/common'
-import { renderIssueDate } from 'src/helpers/issues'
 import { unzipIssue } from 'src/helpers/files'
-import { APP_DISPLAY_NAME, GENERIC_ERROR } from 'src/helpers/words'
+import { GENERIC_ERROR } from 'src/helpers/words'
 import { color } from 'src/theme/color'
-import { Header } from 'src/components/header'
-import { issueSummaryPath, IssueSummary } from '../../../common/src'
-import { useEndpoint } from 'src/hooks/use-fetch'
-import { withResponse } from 'src/hooks/use-response'
 import { Spinner } from 'src/components/spinner'
-import { FlexErrorMessage } from 'src/components/layout/errors/flex-error-message'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
+import { useIssueSummary } from 'src/hooks/use-api'
+import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Heading, Footer } from 'src/components/layout/ui/row'
+import { IssueRow } from 'src/components/layout/ui/issue-row'
+import { useInsets } from 'src/hooks/use-insets'
+import { Highlight } from 'src/components/highlight'
+import { IssueTitleText } from 'src/components/styled-text'
+import { IssueRowSplit } from 'src/components/issue'
+import { ScrollContainer } from 'src/components/layout/ui/container'
 
-const demoIssues: Issue[] = [
-    {
-        key: 'alpha-edition',
-        name: 'PROD dummy',
-        date: new Date(Date.now()).getTime(),
-        fronts: [],
-    },
-    {
-        key: 'dd753c95-b0be-4f0c-98a8-3797374e71b6',
-        name: 'CODE dummy',
-        date: new Date(Date.now()).getTime(),
-        fronts: [],
-    },
-]
-
-const styles = StyleSheet.create({
-    container: { ...primaryContainer, paddingTop: metrics.vertical * 4 },
-})
-
-const useIssueSummary = () =>
-    withResponse(useEndpoint<IssueSummary[]>(issueSummaryPath()))
+const SettingsLink = ({ onPress }: { onPress: () => void }) => (
+    <Highlight onPress={onPress}>
+        <View
+            style={{
+                padding: metrics.horizontal,
+                paddingVertical: metrics.vertical * 2,
+                backgroundColor: color.palette.highlight.main,
+                borderBottomColor: color.palette.neutral[100],
+                borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+        >
+            <IssueRowSplit>
+                <IssueTitleText>Settings</IssueTitleText>
+            </IssueRowSplit>
+        </View>
+    </Highlight>
+)
 
 export const HomeScreen = ({
     navigation,
@@ -56,46 +47,68 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [files, { refreshIssues }] = useFileList()
-    const issueList = useMemo(
-        () =>
-            demoIssues.map(issue => ({
-                key: issue.key,
-                title: renderIssueDate(issue.date).date,
-                explainer: issue.key,
-                data: {
-                    issue: issue.key,
-                },
-            })),
-        demoIssues.map(({ key }) => key),
-    )
     const issueSummary = useIssueSummary()
     const [{ isUsingProdDevtools }] = useSettings()
+    const { top: paddingTop } = useInsets()
 
     return (
         <WithAppAppearance value={'primary'}>
-            <Header title={APP_DISPLAY_NAME} />
-            <ScrollView style={styles.container}>
-                <ListHeading>Issues</ListHeading>
+            <ScrollContainer>
+                <View style={{ paddingTop }}>
+                    <SettingsLink
+                        onPress={() => {
+                            navigation.navigate('Settings')
+                        }}
+                    />
+                </View>
                 {issueSummary({
-                    success: issueList => (
-                        <List
-                            data={issueList.map(issue => ({
-                                title: renderIssueDate(issue.date * 1000).date,
-                                explainer: issue.name,
-                                key: issue.date + issue.name,
-                                data: {
-                                    issue: issue.key,
-                                },
-                            }))}
-                            onPress={path =>
-                                navigation.navigate('Issue', { path })
-                            }
-                        />
+                    success: (issueList, { retry }) => (
+                        <>
+                            <BaseList
+                                data={issueList}
+                                renderItem={({ item }) => (
+                                    <IssueRow
+                                        onPress={() => {
+                                            navigation.navigate('Issue', {
+                                                issue: item.key,
+                                            })
+                                        }}
+                                        issue={item}
+                                    ></IssueRow>
+                                )}
+                            />
+                            <View
+                                style={{
+                                    padding: metrics.horizontal,
+                                    paddingVertical: metrics.vertical * 4,
+                                }}
+                            >
+                                <IssueRowSplit>
+                                    <Button
+                                        onPress={retry}
+                                        icon={''}
+                                        alt={'refresh'}
+                                        appearance={ButtonAppearance.skeleton}
+                                    ></Button>
+                                    <Button
+                                        appearance={ButtonAppearance.skeleton}
+                                        onPress={() => {
+                                            navigation.navigate('Issue', {
+                                                path: null,
+                                            })
+                                        }}
+                                    >
+                                        Go to latest
+                                    </Button>
+                                </IssueRowSplit>
+                            </View>
+                        </>
                     ),
-                    error: ({ message }) => (
+                    error: ({ message }, { retry }) => (
                         <FlexErrorMessage
                             title={GENERIC_ERROR}
                             message={isUsingProdDevtools ? message : undefined}
+                            action={['Retry', retry]}
                         />
                     ),
                     pending: () => (
@@ -106,7 +119,7 @@ export const HomeScreen = ({
                 })}
                 {files.length > 0 && (
                     <>
-                        <ListHeading>Issues on device</ListHeading>
+                        <Heading>Issues on device</Heading>
                         <List
                             data={files
                                 .filter(
@@ -143,37 +156,13 @@ export const HomeScreen = ({
                         />
                     </>
                 )}
-                {isUsingProdDevtools ? (
-                    <>
-                        <ListHeading>Hardcoded issues</ListHeading>
-                        <List
-                            data={issueList}
-                            onPress={path =>
-                                navigation.navigate('Issue', { path })
-                            }
-                        />
-                    </>
-                ) : null}
                 <ApiState />
-            </ScrollView>
+            </ScrollContainer>
         </WithAppAppearance>
     )
 }
 
-HomeScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => ({
+HomeScreen.navigationOptions = {
     title: 'Home',
-    headerTitle: () => null,
-    headerRight: (
-        <Button
-            onPress={() => {
-                navigation.navigate('Settings')
-            }}
-            color={Platform.OS === 'ios' ? color.textOverPrimary : undefined}
-            title="Settings"
-        />
-    ),
-})
+    header: null,
+}

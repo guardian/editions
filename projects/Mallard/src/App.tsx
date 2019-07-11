@@ -10,8 +10,11 @@ import { RootNavigator } from 'src/navigation'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { FileSystemProvider } from 'src/hooks/use-fs'
 import { StyleSheet } from 'react-native'
+import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
+import { prepFileSystem } from './helpers/files'
 
 useScreens()
+prepFileSystem()
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -20,6 +23,8 @@ const styles = StyleSheet.create({
     },
 })
 
+const navigationPersistenceKey = __DEV__ ? 'nav-' : null
+
 export default class App extends React.Component<{}, {}> {
     /**
      * When the component is mounted. This happens asynchronously and simply
@@ -27,18 +32,22 @@ export default class App extends React.Component<{}, {}> {
      */
     render() {
         return (
-            <FileSystemProvider>
-                <SettingsProvider>
-                    <StatusBar
-                        animated={true}
-                        barStyle="light-content"
-                        backgroundColor="#041f4a"
-                    />
-                    <View style={styles.appContainer}>
-                        <RootNavigator />
-                    </View>
-                </SettingsProvider>
-            </FileSystemProvider>
+            <ErrorBoundary>
+                <FileSystemProvider>
+                    <SettingsProvider>
+                        <StatusBar
+                            animated={true}
+                            barStyle="light-content"
+                            backgroundColor="#041f4a"
+                        />
+                        <View style={styles.appContainer}>
+                            <RootNavigator
+                                persistenceKey={navigationPersistenceKey}
+                            />
+                        </View>
+                    </SettingsProvider>
+                </FileSystemProvider>
+            </ErrorBoundary>
         )
     }
 }

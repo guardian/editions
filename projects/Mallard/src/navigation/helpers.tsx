@@ -1,10 +1,11 @@
 import React from 'react'
+import { NavigationScreenProp } from 'react-navigation'
 import {
-    NavigationScreenProp,
-    NavigationNavigatorProps,
-} from 'react-navigation'
-import { NavigationContainerProps } from 'react-navigation'
-import { NavigationContainer } from 'react-navigation'
+    ArticleNavigator,
+    ArticleTransitionProps,
+    PathToArticle,
+} from 'src/screens/article-screen'
+import { routeNames } from '.'
 
 /**
  *
@@ -19,20 +20,21 @@ const mapNavigationToProps = <T extends {}, P extends {}>(
 ) => (props: T & { navigation: NavigationScreenProp<P> }) => (
     <Component {...props} {...mapper(props.navigation)} />
 )
-/**
- *
- * @param Container - a NavigationContainer that we want to persist route changes between sessions
- * @param key - the key
- */
-const withPersistenceKey = (
-    Container: NavigationContainer,
-    key: string | null,
-) => {
-    const Wrapper = (
-        props: NavigationContainerProps & NavigationNavigatorProps<any>,
-    ) => <Container {...props} persistenceKey={key} />
-    Wrapper.router = Container.router
-    return Wrapper
+
+export interface ArticleNavigationProps {
+    transitionProps?: ArticleTransitionProps
+    path: PathToArticle
+    articleNavigator?: ArticleNavigator
+}
+const navigateToArticle = (
+    navigation: NavigationScreenProp<{}>,
+    navigationProps: ArticleNavigationProps,
+): void => {
+    navigation.navigate(routeNames.Article, navigationProps)
 }
 
-export { mapNavigationToProps, withPersistenceKey }
+const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
+    navigation.navigate(routeNames.IssueList, {})
+}
+
+export { mapNavigationToProps, navigateToArticle, navigateToIssueList }

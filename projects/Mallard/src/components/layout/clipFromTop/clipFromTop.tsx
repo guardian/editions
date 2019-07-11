@@ -1,60 +1,48 @@
-import React, { useState, useEffect, ReactNode } from 'react'
-import {
-    Animated,
-    Dimensions,
-    Easing,
-    Platform,
-    StyleSheet,
-} from 'react-native'
+import React, { useState, ReactNode } from 'react'
+import { Animated, Dimensions, StyleSheet } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
+import { supportsAnimatedClipView } from 'src/helpers/features'
 
-/* 
+/*
 This is part of the transition from articles to fronts
-and it crops the bottom end of the article so it feels 
+and it crops the bottom end of the article so it feels
 as if it's coming out of its card
 */
 
 const clipperStyles = StyleSheet.create({
-    flex: { flex: 1 },
+    flex: { flex: 0 },
     bg: { backgroundColor: 'black' },
 })
 
 interface MaybePropTypes {
     children: ReactNode
     from?: number
+    easing?: Animated.AnimatedInterpolation
 }
 
 interface PropTypes extends MaybePropTypes {
     from: number
+    easing: Animated.AnimatedInterpolation
 }
 
-const MaskClipFromTop = ({ children, from }: PropTypes) => {
+const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
     const [windowHeight] = useState(() => Dimensions.get('window').height)
-    const [height] = useState(
-        () => new Animated.Value((from * 2) / windowHeight),
-    )
-    useEffect(() => {
-        Animated.sequence([
-            Animated.delay(50),
-            Animated.timing(height, {
-                toValue: 2,
-                duration: 300,
-                easing: Easing.inOut(Easing.linear),
-                useNativeDriver: true,
-            }),
-        ]).start()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+    const targetHeightScale = (windowHeight / from) * 2
     return (
         <MaskedView
             style={clipperStyles.flex}
             maskElement={
                 <Animated.View
                     style={[
+                        { height: from },
                         {
                             transform: [
-                                { translateY: windowHeight / -2 },
-                                { scaleY: height },
+                                {
+                                    scaleY: easing.interpolate({
+                                        inputRange: [0, 0.5, 1],
+                                        outputRange: [1, 1, targetHeightScale],
+                                    }),
+                                },
                             ],
                         },
                         clipperStyles.flex,
@@ -68,10 +56,15 @@ const MaskClipFromTop = ({ children, from }: PropTypes) => {
     )
 }
 
-const ClipFromTop = ({ children, from }: MaybePropTypes) => {
+const ClipFromTop = ({ children, from, easing }: MaybePropTypes) => {
     /* android struggles animating masks sadface */
-    if (Platform.OS !== 'ios' || from == undefined) return <>{children}</>
-    return <MaskClipFromTop from={from}>{children}</MaskClipFromTop>
+    if (!supportsAnimatedClipView() || from == undefined || easing == undefined)
+        return <>{children}</>
+    return (
+        <MaskClipFromTop from={from} easing={easing}>
+            {children}
+        </MaskClipFromTop>
+    )
 }
 
 export { ClipFromTop }
