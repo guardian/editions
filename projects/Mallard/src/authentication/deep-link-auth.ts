@@ -15,6 +15,7 @@ interface Emitter<T> {
 const authWithDeepRedirect = (
     authUrl: string,
     extractTokenAndValidateState: (url: string) => Promise<string>,
+    /* mocks for testing */
     linkingEmitter: Emitter<{ url: string }> & {
         openURL: (url: string) => void
     } = Linking,

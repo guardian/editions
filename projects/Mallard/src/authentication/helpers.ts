@@ -32,6 +32,7 @@ const fetchAndPersistUserAccessTokenWithType = async (
 }
 
 const fetchMembershipDataForKeychainUser = async (
+    /* mocks for testing */
     membershipTokenStore = membershipAccessTokenKeychain,
     userTokenStore = userAccessTokenKeychain,
     fetchMembershipDataImpl = fetchMembershipData,
