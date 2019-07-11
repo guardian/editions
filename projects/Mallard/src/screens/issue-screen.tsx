@@ -31,11 +31,11 @@ export interface PathToIssue {
 
 const IssueHeader = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
-        const { date, weekday } = useMemo(
+        const { date, weekday } = useMemo<{ date: string; weekday?: string }>(
             () =>
                 issue
                     ? renderIssueDate(issue.date * 1000 || Date.now())
-                    : { date: 'Issue', weekday: 'undefined' },
+                    : { date: 'Issue' },
             [issue && issue.key, issue],
         )
         return (
