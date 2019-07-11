@@ -26,9 +26,9 @@ const days = [
 ]
 
 export const renderIssueDate = (
-    dateString: Issue['date'],
+    dateInt: Issue['date'],
 ): { date: string; weekday: string } => {
-    const date = new Date(dateString)
+    const date = new Date(dateInt)
     return {
         date:
             date.getDate() +

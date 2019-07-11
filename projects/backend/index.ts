@@ -4,10 +4,16 @@ import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import express = require('express')
 import { issueController, issuesSummaryController } from './controllers/issue'
-import { frontController } from './controllers/fronts'
+import { frontController, collectionsController } from './controllers/fronts'
 import { imageController, imageColourController } from './controllers/image'
 import { ImageSize, coloursPath } from '../common/src/index'
-import { issuePath, mediaPath, frontPath, issueSummaryPath } from './common'
+import {
+    issuePath,
+    mediaPath,
+    frontPath,
+    collectionPath,
+    issueSummaryPath,
+} from './common'
 
 const app = express()
 
@@ -23,6 +29,11 @@ app.get(
 )
 
 app.get('/' + coloursPath(':issueId', ':source', '*?'), imageColourController)
+
+app.get(
+    '/' + collectionPath(':issueId', ':collectionId'),
+    collectionsController,
+)
 
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
