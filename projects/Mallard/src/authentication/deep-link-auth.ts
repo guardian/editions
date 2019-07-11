@@ -9,21 +9,21 @@ import { Linking, AppState } from 'react-native'
  */
 const authWithDeepRedirect = (
     authUrl: string,
-    extractTokenAndValidateState: (url: string) => Promise<string | false>,
+    extractTokenAndValidateState: (url: string) => Promise<string>,
 ): Promise<string> => {
     Linking.openURL(authUrl)
-    return new Promise((res, rej) => {
+    return new Promise(async (res, rej) => {
         const linkHandler = async ({ url }: { url: string }) => {
-            const maybeToken = await extractTokenAndValidateState(url)
-            // `once` doesn't seem to work
             Linking.removeEventListener('url', linkHandler)
-            if (maybeToken !== false) {
-                res(maybeToken)
-            } else {
-                rej('Something went wrong')
+            // eslint-disable-next-line
+            AppState.removeEventListener('change', appChangeHandler)
+
+            try {
+                res(await extractTokenAndValidateState(url))
+            } catch (e) {
+                rej(e)
             }
         }
-        Linking.addEventListener('url', linkHandler)
 
         const appChangeHandler = (currentState: string) => {
             if (currentState === 'active') {
@@ -36,6 +36,7 @@ const authWithDeepRedirect = (
             }
         }
 
+        Linking.addEventListener('url', linkHandler)
         AppState.addEventListener('change', appChangeHandler)
     })
 }

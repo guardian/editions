@@ -2,6 +2,7 @@ import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { GOOGLE_CLIENT_ID } from '../constants'
 import { createSearchParams, parseSearchString } from 'src/helpers/url'
+import invariant from 'invariant'
 
 const googleRedirectURI = `com.googleusercontent.apps.${GOOGLE_CLIENT_ID}:authorize`
 
@@ -42,14 +43,19 @@ const getGoogleTokenFromCode = (code: string) =>
 
 const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
     getGoogleOAuthURL(validatorString).then(authUrl =>
-        authWithDeepRedirect(authUrl, url => {
-            if (url.startsWith(googleRedirectURI)) {
-                const params = parseSearchString(url.split('?')[1])
-                return params.state === validatorString
-                    ? getGoogleTokenFromCode(params.code)
-                    : Promise.resolve(false)
-            }
-            return Promise.resolve(false)
+        authWithDeepRedirect(authUrl, async url => {
+            invariant(url.startsWith(googleRedirectURI), 'Login cancelled')
+
+            const params = parseSearchString(url.split('?')[1])
+
+            invariant(
+                params.state === validatorString,
+                'Login session expired, please try again',
+            )
+
+            invariant(params.code, 'Something went wrong')
+
+            return getGoogleTokenFromCode(params.code)
         }).then(fbToken =>
             fetchAndPersistUserAccessTokenWithType('google', fbToken),
         ),

@@ -14,6 +14,13 @@ enum AuthStatus {
     authenticating = 3,
 }
 
+const useRandomState = () =>
+    useState(
+        Math.random()
+            .toString()
+            .split('.')[1],
+    )[0]
+
 const AuthSwitcherScreen = ({
     onAuthenticated,
 }: {
@@ -35,7 +42,7 @@ const AuthSwitcherScreen = ({
         setError(null)
     }, [])
 
-    const [validatorString] = useState(Math.random().toString())
+    const validatorString = useRandomState()
 
     const handleAuthClick = async (authPromise: Promise<string>) => {
         setError(null)
