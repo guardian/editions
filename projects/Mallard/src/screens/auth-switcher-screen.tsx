@@ -22,6 +22,35 @@ const useRandomState = () =>
             .split('.')[1],
     )[0]
 
+const createTryAuth = ({
+    onSuccess,
+    onError,
+}: {
+    onSuccess: () => void
+    onError: (err: string) => void
+}) => async (authPromise: Promise<unknown>) => {
+    try {
+        await authPromise
+        const membershipData = await fetchMembershipDataForKeychainUser()
+
+        if (!membershipData) {
+            onError('Could not find membership data')
+            return
+        }
+
+        if (!canViewEdition(membershipData)) {
+            onSuccess()
+            return
+        }
+
+        onError(
+            'You are unable to access editions with your current subscription',
+        )
+    } catch (err) {
+        onError(err instanceof Error ? err.message : err)
+    }
+}
+
 const AuthSwitcherScreen = ({
     onAuthenticated,
 }: {
@@ -45,57 +74,23 @@ const AuthSwitcherScreen = ({
 
     const validatorString = useRandomState()
 
+    const tryAuth = createTryAuth({
+        onError: err => {
+            setAuthStatus(AuthStatus.unauthed)
+            setError(err)
+        },
+        onSuccess: onAuthenticated,
+    })
+
     const handleAuthClick = async (authPromise: Promise<string>) => {
         setError(null)
-        try {
-            setAuthStatus(AuthStatus.authenticating)
-            const data = await authPromise
-
-            if (!data) {
-                setAuthStatus(AuthStatus.unauthed)
-                return
-            }
-
-            const membershipData = await fetchMembershipDataForKeychainUser()
-
-            if (!membershipData) {
-                setAuthStatus(AuthStatus.unauthed)
-                return
-            }
-
-            if (canViewEdition(membershipData)) {
-                onAuthenticated()
-                return
-            }
-
-            setError(
-                'You are unable to access editions with your current subscription',
-            )
-            setAuthStatus(AuthStatus.unauthed)
-        } catch (err) {
-            setAuthStatus(AuthStatus.unauthed)
-            setError(err instanceof Error ? err.message : err)
-        }
+        setAuthStatus(AuthStatus.authenticating)
+        tryAuth(authPromise)
     }
 
     // try to auth on mount
     useEffect(() => {
-        fetchMembershipDataForKeychainUser().then(data => {
-            if (!data) {
-                setAuthStatus(AuthStatus.unauthed)
-                return
-            }
-
-            if (canViewEdition(data)) {
-                onAuthenticated()
-                return
-            }
-
-            setError(
-                'You are unable to access editions with your current subscription',
-            )
-            setAuthStatus(AuthStatus.unauthed)
-        })
+        tryAuth(fetchMembershipDataForKeychainUser())
     }, []) // don't want to change on new deps as we only want this to run on mount
 
     switch (authStatus) {
