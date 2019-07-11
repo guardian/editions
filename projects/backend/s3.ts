@@ -1,4 +1,11 @@
 import {
+    attempt,
+    hasFailed,
+    Attempt,
+    withFailureMessage,
+    failure,
+} from './utils/try'
+import {
     S3,
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
@@ -20,24 +27,33 @@ const stage = process.env.stage || 'code'
 const bucket = `published-editions-${stage.toLowerCase()}`
 
 interface S3Response {
-    status: number
-    ok: true
     text: () => Promise<string>
     json: () => Promise<{}>
     lastModified?: Date
     etag: string | undefined
 }
 
-export const s3Latest = async (prefix: string): Promise<string> => {
-    console.log(prefix, 'ssss')
-    const response = await s3
-        .listObjectsV2({
-            Bucket: bucket,
-            Prefix: prefix,
+export const s3Latest = async (
+    prefix: string,
+): Promise<Attempt<{ key: string }>> => {
+    const response = await attempt(
+        s3
+            .listObjectsV2({
+                Bucket: bucket,
+                Prefix: prefix,
+            })
+            .promise(),
+    )
+    if (hasFailed(response)) {
+        return withFailureMessage(response, 'S3 Access failed')
+    }
+    if (response.KeyCount === 0) {
+        return failure({
+            httpStatus: 404,
+            error: new Error(`No keys returned from listObject of ${prefix}`),
         })
-        .promise()
+    }
     const contents = response.Contents
-    console.log(JSON.stringify(response))
     if (!contents) throw new Error(`Nothing at ${prefix}`)
     const keydates = contents
         .map(({ Key, LastModified }) => ({
@@ -51,11 +67,11 @@ export const s3Latest = async (prefix: string): Promise<string> => {
     const latest = keydates.reduce((a, b) =>
         a.LastModified < b.LastModified ? b : a,
     )
-    return latest.Key
+    return { key: latest.Key }
 }
 
-export const s3fetch = (key: string): Promise<S3Response> => {
-    return new Promise((resolve, reject) => {
+export const s3fetch = (key: string): Promise<Attempt<S3Response>> => {
+    return new Promise(resolve => {
         s3.getObject(
             {
                 Key: key,
@@ -63,26 +79,47 @@ export const s3fetch = (key: string): Promise<S3Response> => {
             },
             (error, result) => {
                 if (error && error.code == 'NoSuchKey') {
-                    reject({ status: 404, ok: false })
+                    resolve(
+                        failure({
+                            httpStatus: 404,
+                            error: new Error(`Could not find key ${key}`),
+                        }),
+                    )
                     return
                 }
-                if (result == null) debugger
-                if (error) reject(error)
+                if (error)
+                    resolve(
+                        failure({
+                            httpStatus: 500,
+                            error,
+                            messages: [error.message],
+                        }),
+                    )
 
                 if (result == undefined) {
-                    reject(new Error('No result!.'))
+                    resolve(
+                        failure({
+                            httpStatus: 500,
+                            error: new Error(
+                                `Neither result nor error in s3 response for ${key}`,
+                            ),
+                        }),
+                    )
                     return
                 }
                 const body = result.Body
 
                 if (body == undefined) {
-                    reject(new Error('Not found.'))
+                    resolve(
+                        failure({
+                            httpStatus: 500,
+                            error: new Error(`Undefined body for ${key}`),
+                        }),
+                    )
                     return
                 }
 
                 resolve({
-                    status: 200,
-                    ok: true,
                     text: async () => body.toString(),
                     json: async () => JSON.parse(body.toString()),
                     lastModified: result.LastModified,

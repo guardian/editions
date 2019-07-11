@@ -14,6 +14,7 @@ import {
     Attempt,
     withFailureMessage,
     hasSucceeded,
+    failure,
 } from './utils/try'
 import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
@@ -159,22 +160,43 @@ export const getFront = async (
     issue: string,
     id: string,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<Front> => {
-    const issuePath = await s3Latest(`daily-edition/${issue}/`)
+): Promise<Attempt<Front>> => {
+    const latest = await s3Latest(`daily-edition/${issue}/`)
+    if (hasFailed(latest)) {
+        return withFailureMessage(
+            latest,
+            `Could not get latest issue for ${issue} and ${id}.`,
+        )
+    }
+    const issuePath = latest.key
     const resp = await s3fetch(issuePath)
-    if (!resp.ok) throw new Error('failed s3')
+
+    if (hasFailed(resp)) {
+        return withFailureMessage(
+            resp,
+            `Attempt to fetch ${issue} and ${id} failed.`,
+        )
+    }
+
     lastModifiedUpdater(resp.lastModified)
-    //But ALEX, won't this always be now, as the fronts config will change regularly?
-    //Yes. We don't intend to read it from here forever. Comment out as needed.
+
     const tone = getFrontColor(id)
     const issueResponse: IssueResponse = (await resp.json()) as IssueResponse
     const front = issueResponse.fronts.find(_ => _.name === id)
-    if (!front) throw new Error('Front not found')
+    if (!front) {
+        return failure({ httpStatus: 404, error: new Error('Front not found') })
+    }
+
     const collections = await Promise.all(
         front.collections.map(collection => parseCollection(collection)),
     )
+
     collections.filter(hasFailed).forEach(failedCollection => {
-        console.error(failedCollection)
+        console.error(
+            `silently removing collection from ${issue}/${id} ${JSON.stringify(
+                failedCollection,
+            )}`,
+        )
     })
 
     return {
@@ -185,5 +207,3 @@ export const getFront = async (
         key: id,
     }
 }
-
-//from https://github.com/guardian/facia-tool/blob/681fe8e6c37e815b15bf470fcd4c5ef4a940c18c/client-v2/src/shared/types/Collection.ts#L95-L107
