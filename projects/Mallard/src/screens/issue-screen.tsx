@@ -34,7 +34,7 @@ const IssueHeader = withNavigation(
         const { date, weekday } = useMemo(
             () =>
                 issue
-                    ? renderIssueDate(issue.date)
+                    ? renderIssueDate(issue.date * 1000 || Date.now())
                     : { date: 'Issue', weekday: 'undefined' },
             [issue && issue.key, issue],
         )
