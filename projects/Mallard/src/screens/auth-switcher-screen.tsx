@@ -3,6 +3,7 @@ import { View, TextInput, Button, Text } from 'react-native'
 import {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchMembershipDataForKeychainUser,
+    canViewEdition,
 } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
@@ -49,19 +50,28 @@ const AuthSwitcherScreen = ({
         try {
             setAuthStatus(AuthStatus.authenticating)
             const data = await authPromise
+
             if (!data) {
                 setAuthStatus(AuthStatus.unauthed)
-            } else {
-                fetchMembershipDataForKeychainUser().then(data => {
-                    if (!data) {
-                        setAuthStatus(AuthStatus.unauthed)
-                    } else {
-                        // TODO: check this person can actually use the app
-                        console.log(data)
-                        onAuthenticated()
-                    }
-                })
+                return
             }
+
+            const membershipData = await fetchMembershipDataForKeychainUser()
+
+            if (!membershipData) {
+                setAuthStatus(AuthStatus.unauthed)
+                return
+            }
+
+            if (canViewEdition(membershipData)) {
+                onAuthenticated()
+                return
+            }
+
+            setError(
+                'You are unable to access editions with your current subscription',
+            )
+            setAuthStatus(AuthStatus.unauthed)
         } catch (err) {
             setAuthStatus(AuthStatus.unauthed)
             setError(err instanceof Error ? err.message : err)
@@ -73,11 +83,18 @@ const AuthSwitcherScreen = ({
         fetchMembershipDataForKeychainUser().then(data => {
             if (!data) {
                 setAuthStatus(AuthStatus.unauthed)
-            } else {
-                // TODO: check this person can actually use the app
-                console.log(data)
-                onAuthenticated()
+                return
             }
+
+            if (canViewEdition(data)) {
+                onAuthenticated()
+                return
+            }
+
+            setError(
+                'You are unable to access editions with your current subscription',
+            )
+            setAuthStatus(AuthStatus.unauthed)
         })
     }, []) // don't want to change on new deps as we only want this to run on mount
 

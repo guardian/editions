@@ -2,7 +2,10 @@ import {
     membershipAccessTokenKeychain,
     userAccessTokenKeychain,
 } from './keychain'
-import { fetchMembershipData } from 'src/services/membership-service'
+import {
+    fetchMembershipData,
+    MembersDataAPIResponse,
+} from 'src/services/membership-service'
 import {
     fetchMembershipAccessToken,
     fetchUserAccessTokenWithIdentity,
@@ -52,8 +55,12 @@ const fetchMembershipDataForKeychainUser = async (
     return fetchMembershipDataImpl(newMembershipToken)
 }
 
+const canViewEdition = (membersDataApiResponse: MembersDataAPIResponse) =>
+    membersDataApiResponse.contentAccess.digitalPack
+
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchAndPersistUserAccessTokenWithType,
     fetchMembershipDataForKeychainUser,
+    canViewEdition,
 }
