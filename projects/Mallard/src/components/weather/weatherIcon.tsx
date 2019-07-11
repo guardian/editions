@@ -69,7 +69,7 @@ const iconColours: { [iconCode: string]: string } = {
     '\ue936': 'rgb(75, 198, 223)',
     '\ue937': 'rgb(75, 198, 223)',
     '\ue938': 'rgb(118, 118, 118)',
-    '\ue938': 'rgb(189, 189, 189)',
+    '\ue939': 'rgb(189, 189, 189)',
     '\ue93a': 'rgb(118, 118, 118)',
     '\ue93b': 'rgb(189, 189, 189)',
     '\ue93c': 'rgb(118, 118, 118)',
@@ -233,7 +233,7 @@ export const WeatherIcon = ({
     }
 }
 
-const renderIcon = (iconCodes: string[], fontSize) => {
+const renderIcon = (iconCodes: string[], fontSize: number) => {
     return (
         <View
             style={{ ...styles.container, height: fontSize, width: fontSize }}
