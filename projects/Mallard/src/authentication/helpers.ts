@@ -28,22 +28,28 @@ const fetchAndPersistUserAccessTokenWithType = async (
     return token
 }
 
-const fetchMembershipDataForKeychainUser = async () => {
-    const membershipToken = await membershipAccessTokenKeychain.get()
-    if (membershipToken) return fetchMembershipData(membershipToken.password)
+const fetchMembershipDataForKeychainUser = async (
+    membershipTokenStore = membershipAccessTokenKeychain,
+    userTokenStore = userAccessTokenKeychain,
+    fetchMembershipDataImpl = fetchMembershipData,
+    fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
+) => {
+    const membershipToken = await membershipTokenStore.get()
+    if (membershipToken)
+        return fetchMembershipDataImpl(membershipToken.password)
 
     // no cached membership token, try and get the userToken so we can generate a new membership token
-    const userToken = await userAccessTokenKeychain.get()
+    const userToken = await userTokenStore.get()
     if (!userToken) {
         // no userToken - we need to be logged in again
         return null
     }
-    const newMembershipToken = await fetchMembershipAccessToken(
+    const newMembershipToken = await fetchMembershipAccessTokenImpl(
         userToken.password,
     )
     // cache the new token
-    membershipAccessTokenKeychain.set(userToken.username, newMembershipToken)
-    return fetchMembershipData(newMembershipToken)
+    membershipTokenStore.set(userToken.username, newMembershipToken)
+    return fetchMembershipDataImpl(newMembershipToken)
 }
 
 export {
