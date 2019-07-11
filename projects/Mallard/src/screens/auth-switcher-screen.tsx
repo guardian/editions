@@ -103,6 +103,9 @@ const AuthSwitcherScreen = ({
                         },
                     ]}
                 >
+                    {authStatus === AuthStatus.authenticating && (
+                        <Text>Loading spinner ...</Text>
+                    )}
                     {error && <Text>{error}</Text>}
                     <Button
                         onPress={() =>
