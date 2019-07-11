@@ -31,7 +31,7 @@ export interface PathToIssue {
 
 const IssueHeader = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
-        const { date, weekday } = useMemo(
+        const { date, weekday } = useMemo<{ date: string; weekday?: string }>(
             () =>
                 issue
                     ? renderIssueDate(issue.date)
