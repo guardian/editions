@@ -48,11 +48,14 @@ end
 platform :android do
   desc "Push a new internal testing build to Google Play"
   lane :beta do
-    gradle(properties: {
-        "versionName" => version["version"]
-    })
     gradle(task: 'clean', project_dir: 'android/')
-    gradle(task: 'assemble', build_type: 'Release', project_dir: 'android/')
+    gradle(task: 'assemble',
+           build_type: 'Release',
+           project_dir: 'android/',
+           properties: {
+               "versionName" => version["version"]
+           }
+    )
     supply(
       track: 'internal',
       package_name: 'com.guardian.editions'
