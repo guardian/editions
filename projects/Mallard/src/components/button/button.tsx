@@ -86,11 +86,13 @@ const Icon = ({
 const Button = ({
     onPress,
     style,
+    center,
     appearance,
     ...innards
 }: {
     onPress: TouchableOpacityProps['onPress']
     style?: StyleProp<ViewStyle>
+    center?: boolean
     appearance: ButtonAppearance
 } & ({ children: string } | { icon: string; alt: string })) => {
     const appStyles = useAppAppearance()
@@ -113,7 +115,13 @@ const Button = ({
                 ]}
             >
                 {'children' in innards ? (
-                    <UiBodyCopy weight="bold" style={buttonStyles.text}>
+                    <UiBodyCopy
+                        weight="bold"
+                        style={[
+                            buttonStyles.text,
+                            { textAlign: center ? 'center' : 'auto' },
+                        ]}
+                    >
                         {innards.children}
                     </UiBodyCopy>
                 ) : (

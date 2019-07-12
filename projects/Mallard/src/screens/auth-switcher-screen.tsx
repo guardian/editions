@@ -1,5 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, TextInput, Button, Text } from 'react-native'
+import {
+    View,
+    TextInput,
+    Text,
+    KeyboardAvoidingView,
+    Keyboard,
+} from 'react-native'
 import {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchMembershipDataForKeychainUser,
@@ -7,10 +13,16 @@ import {
 } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
+import { Button } from 'src/components/button/button'
+import { appAppearances } from 'src/theme/appearance'
+import { metrics } from 'src/theme/spacing'
+import { TitlepieceText } from 'src/components/styled-text'
+import { FadeIn } from 'src/components/bounce-fade-in'
+import { Spinner } from 'src/components/spinner'
 
 enum AuthStatus {
     pending = 0,
-    authed = 1,
+    authed = 1, // can't guarantee the callback will navigate away so will leave this here
     unauthed = 2,
     authenticating = 3,
 }
@@ -25,15 +37,18 @@ const useRandomState = () =>
 const tryAuth = async (
     authPromise: Promise<unknown>,
     {
+        onStart = () => {},
         onSuccess,
         onError,
     }: {
+        onStart?: () => void
         onSuccess: () => void
         onError: (err: string) => void
     },
 ) => {
     try {
         await authPromise
+        onStart()
         const membershipData = await fetchMembershipDataForKeychainUser()
 
         if (!membershipData) {
@@ -52,6 +67,43 @@ const tryAuth = async (
     } catch (err) {
         onError(err instanceof Error ? err.message : err)
     }
+}
+
+const LoginPage = ({
+    children,
+    showSpinner,
+}: {
+    children: React.ReactNode
+    showSpinner: boolean
+}) => {
+    return (
+        <View style={{ flex: 1 }}>
+            <KeyboardAvoidingView
+                style={[
+                    {
+                        backgroundColor: appAppearances.primary.backgroundColor,
+                        flex: 1,
+                        justifyContent: 'center',
+                        padding: 10,
+                    },
+                ]}
+                behavior="padding"
+            >
+                <View
+                    style={{
+                        left: 10,
+                        position: 'absolute',
+                        top: 100,
+                        width: '100%',
+                        alignItems: 'center',
+                    }}
+                >
+                    {showSpinner && <Spinner />}
+                </View>
+                <FadeIn duration={1000}>{children}</FadeIn>
+            </KeyboardAvoidingView>
+        </View>
+    )
 }
 
 const AuthSwitcherScreen = ({
@@ -79,8 +131,10 @@ const AuthSwitcherScreen = ({
 
     const handleAuthClick = async (authPromise: Promise<string>) => {
         setError(null)
-        setAuthStatus(AuthStatus.authenticating)
         tryAuth(authPromise, {
+            onStart: () => {
+                setAuthStatus(AuthStatus.authenticating)
+            },
             onError: err => {
                 setAuthStatus(AuthStatus.unauthed)
                 setError(err)
@@ -99,106 +153,124 @@ const AuthSwitcherScreen = ({
         })
     }, []) // don't want to change on new deps as we only want this to run on mount
 
-    switch (authStatus) {
-        case AuthStatus.pending: {
-            return <Text>Loading</Text>
-        }
-        case AuthStatus.authed: {
-            // this should never show
-            return <Text>Redirecting</Text>
-        }
-        case AuthStatus.authenticating:
-        // Intentional fall through
-        case AuthStatus.unauthed: {
-            return (
-                <View
-                    style={[
-                        {
-                            alignItems: 'stretch',
-                            backgroundColor: 'white',
-                            flex: 1,
-                            justifyContent: 'center',
-                            padding: 10,
-                        },
-                    ]}
-                >
-                    {authStatus === AuthStatus.authenticating && (
-                        <Text>Loading spinner ...</Text>
-                    )}
-                    {error && <Text>{error}</Text>}
-                    <Button
-                        onPress={() =>
-                            handleAuthClick(
-                                facebookAuthWithDeepRedirect(validatorString),
-                            )
-                        }
-                        title="Login with Facebook"
-                    >
-                        Login with Facebook
-                    </Button>
-                    <Button
-                        onPress={() =>
-                            handleAuthClick(
-                                googleAuthWithDeepRedirect(validatorString),
-                            )
-                        }
-                        title="Login with Google"
-                    >
-                        Login with Google
-                    </Button>
-                    <TextInput
-                        style={{
-                            borderColor: 'black',
-                            borderRadius: 4,
-                            borderWidth: 1,
-                            color: 'black',
-                            padding: 5,
-                            marginBottom: 10,
-                        }}
-                        editable={authStatus !== AuthStatus.authenticating}
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        textContentType="emailAddress"
-                        keyboardType="email-address"
-                        value={email}
-                        placeholder="Email"
-                        onChangeText={onEmailChange}
-                    ></TextInput>
-                    <TextInput
-                        style={{
-                            borderColor: 'black',
-                            borderRadius: 4,
-                            borderWidth: 1,
-                            color: 'black',
-                            padding: 5,
-                            marginBottom: 10,
-                        }}
-                        editable={authStatus !== AuthStatus.authenticating}
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        textContentType="password"
-                        value={password}
-                        placeholder="Password"
-                        secureTextEntry
-                        onChangeText={onPasswordChange}
-                    ></TextInput>
-                    <Button
-                        title="submit"
-                        onPress={() =>
-                            handleAuthClick(
-                                fetchAndPersistUserAccessTokenWithIdentity(
-                                    email,
-                                    password,
-                                ),
-                            )
-                        }
-                    >
-                        Submit
-                    </Button>
-                </View>
-            )
-        }
-    }
+    return (
+        <>
+            <LoginPage showSpinner={authStatus === AuthStatus.authenticating}>
+                {authStatus !== AuthStatus.pending ? (
+                    <>
+                        <TitlepieceText
+                            style={{
+                                color: 'white',
+                                fontSize: 50,
+                                lineHeight: 50,
+                                marginBottom: 50,
+                                textAlign: 'center',
+                            }}
+                        >
+                            Log in
+                        </TitlepieceText>
+                        {error && <Text>{error}</Text>}
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginBottom: 10,
+                            }}
+                        >
+                            <Button
+                                style={{
+                                    flex: 1,
+                                }}
+                                center
+                                onPress={() =>
+                                    handleAuthClick(
+                                        facebookAuthWithDeepRedirect(
+                                            validatorString,
+                                        ),
+                                    )
+                                }
+                            >
+                                Facebook
+                            </Button>
+                            <Button
+                                style={{
+                                    flex: 1,
+                                    marginLeft: 10,
+                                }}
+                                center
+                                onPress={() =>
+                                    handleAuthClick(
+                                        googleAuthWithDeepRedirect(
+                                            validatorString,
+                                        ),
+                                    )
+                                }
+                            >
+                                Google
+                            </Button>
+                        </View>
+                        <TextInput
+                            style={{
+                                backgroundColor: 'white',
+                                borderWidth: 1,
+                                borderRadius: 999,
+                                color: 'black',
+                                marginBottom: 10,
+                                padding: metrics.horizontal * 2,
+                                paddingVertical: metrics.vertical,
+                            }}
+                            onSubmitEditing={Keyboard.dismiss}
+                            returnKeyType="done"
+                            placeholderTextColor="grey"
+                            editable={authStatus !== AuthStatus.authenticating}
+                            autoCorrect={false}
+                            autoCapitalize="none"
+                            textContentType="emailAddress"
+                            keyboardType="email-address"
+                            value={email}
+                            placeholder="Email"
+                            onChangeText={onEmailChange}
+                        ></TextInput>
+                        <TextInput
+                            style={{
+                                backgroundColor: 'white',
+                                borderWidth: 1,
+                                borderRadius: 999,
+                                color: 'black',
+                                marginBottom: 10,
+                                padding: metrics.horizontal * 2,
+                                paddingVertical: metrics.vertical,
+                            }}
+                            placeholderTextColor="grey"
+                            editable={authStatus !== AuthStatus.authenticating}
+                            onSubmitEditing={Keyboard.dismiss}
+                            returnKeyType="done"
+                            autoCorrect={false}
+                            autoCapitalize="none"
+                            textContentType="password"
+                            value={password}
+                            placeholder="Password"
+                            secureTextEntry
+                            onChangeText={onPasswordChange}
+                        ></TextInput>
+                        <Button
+                            center
+                            onPress={() =>
+                                handleAuthClick(
+                                    fetchAndPersistUserAccessTokenWithIdentity(
+                                        email,
+                                        password,
+                                    ),
+                                )
+                            }
+                        >
+                            Submit
+                        </Button>
+                    </>
+                ) : null}
+            </LoginPage>
+        </>
+    )
 }
 
 export { AuthSwitcherScreen }
