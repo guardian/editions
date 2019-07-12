@@ -13,7 +13,7 @@ import {
 } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
-import { Button } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 import { appAppearances } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { TitlepieceText } from 'src/components/styled-text'
@@ -187,6 +187,7 @@ const AuthSwitcherScreen = ({
                         }}
                     >
                         <Button
+                            appearance={ButtonAppearance.skeletonLight}
                             style={{
                                 flex: 1,
                             }}
@@ -202,6 +203,7 @@ const AuthSwitcherScreen = ({
                             Facebook
                         </Button>
                         <Button
+                            appearance={ButtonAppearance.skeletonLight}
                             style={{
                                 flex: 1,
                                 marginLeft: 10,

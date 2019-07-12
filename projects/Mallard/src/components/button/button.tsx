@@ -19,6 +19,7 @@ export enum ButtonAppearance {
     skeleton,
     tomato,
     apricot,
+    skeletonLight,
 }
 
 const styles = StyleSheet.create({
@@ -57,6 +58,14 @@ const getButtonAppearance = (
         },
         text: { color: appAppearance.color },
     }),
+    [ButtonAppearance.skeletonLight]: StyleSheet.create({
+        background: {
+            backgroundColor: undefined,
+            borderWidth: 1,
+            borderColor: color.palette.neutral[100],
+        },
+        text: { color: color.palette.neutral[100] },
+    }),
     [ButtonAppearance.tomato]: StyleSheet.create({
         background: { backgroundColor: color.ui.tomato },
         text: { color: color.palette.neutral[100] },
@@ -86,17 +95,21 @@ const Icon = ({
 const Button = ({
     onPress,
     style,
+    buttonStyles,
+    textStyles,
     center,
     appearance,
     ...innards
 }: {
     onPress: TouchableOpacityProps['onPress']
     style?: StyleProp<ViewStyle>
+    buttonStyles?: StyleProp<ViewStyle>
+    textStyles?: StyleProp<TextStyle>
     center?: boolean
     appearance: ButtonAppearance
 } & ({ children: string } | { icon: string; alt: string })) => {
     const appStyles = useAppAppearance()
-    const buttonStyles = useMemo(() => getButtonAppearance(appStyles), [
+    const defaultButtonStyles = useMemo(() => getButtonAppearance(appStyles), [
         appStyles,
     ])[appearance]
 
@@ -110,22 +123,24 @@ const Button = ({
             <View
                 style={[
                     styles.background,
-                    buttonStyles.background,
+                    defaultButtonStyles.background,
                     'icon' in innards && styles.withIcon,
+                    buttonStyles,
                 ]}
             >
                 {'children' in innards ? (
                     <UiBodyCopy
                         weight="bold"
                         style={[
-                            buttonStyles.text,
+                            defaultButtonStyles.text,
                             { textAlign: center ? 'center' : 'auto' },
+                            textStyles,
                         ]}
                     >
                         {innards.children}
                     </UiBodyCopy>
                 ) : (
-                    <Icon style={buttonStyles.text}>{innards.icon}</Icon>
+                    <Icon style={defaultButtonStyles.text}>{innards.icon}</Icon>
                 )}
             </View>
         </TouchableOpacity>
