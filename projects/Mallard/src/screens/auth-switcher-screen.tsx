@@ -22,13 +22,16 @@ const useRandomState = () =>
             .split('.')[1],
     )[0]
 
-const createTryAuth = ({
-    onSuccess,
-    onError,
-}: {
-    onSuccess: () => void
-    onError: (err: string) => void
-}) => async (authPromise: Promise<unknown>) => {
+const tryAuth = async (
+    authPromise: Promise<unknown>,
+    {
+        onSuccess,
+        onError,
+    }: {
+        onSuccess: () => void
+        onError: (err: string) => void
+    },
+) => {
     try {
         await authPromise
         const membershipData = await fetchMembershipDataForKeychainUser()
@@ -74,23 +77,26 @@ const AuthSwitcherScreen = ({
 
     const validatorString = useRandomState()
 
-    const tryAuth = createTryAuth({
-        onError: err => {
-            setAuthStatus(AuthStatus.unauthed)
-            setError(err)
-        },
-        onSuccess: onAuthenticated,
-    })
-
     const handleAuthClick = async (authPromise: Promise<string>) => {
         setError(null)
         setAuthStatus(AuthStatus.authenticating)
-        tryAuth(authPromise)
+        tryAuth(authPromise, {
+            onError: err => {
+                setAuthStatus(AuthStatus.unauthed)
+                setError(err)
+            },
+            onSuccess: onAuthenticated,
+        })
     }
 
     // try to auth on mount
     useEffect(() => {
-        tryAuth(fetchMembershipDataForKeychainUser())
+        tryAuth(fetchMembershipDataForKeychainUser(), {
+            onError: () => {
+                setAuthStatus(AuthStatus.unauthed)
+            },
+            onSuccess: onAuthenticated,
+        })
     }, []) // don't want to change on new deps as we only want this to run on mount
 
     switch (authStatus) {
