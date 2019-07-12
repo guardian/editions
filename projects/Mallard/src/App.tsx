@@ -12,7 +12,7 @@ import { FileSystemProvider } from 'src/hooks/use-fs'
 import { StyleSheet } from 'react-native'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { prepFileSystem } from './helpers/files'
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-community/async-storage'
 
 useScreens()
 prepFileSystem()
@@ -24,27 +24,27 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = "nav-"
+const persistenceKey = 'nav-'
 const persistNavigationState = async (navState: any) => {
-  try {
-    await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
-  } catch(e) {
-    console.log('Unable to persist state')
-  }
+    try {
+        await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
+    } catch (e) {
+        console.log('Unable to persist state')
+    }
 }
 
 const loadNavigationState = async () => {
     try {
         const jsonString = await AsyncStorage.getItem(persistenceKey)
-        return jsonString && JSON.parse(jsonString);
-    } catch(e) {
-        console.log('Unable to load the navigation state');
+        return jsonString && JSON.parse(jsonString)
+    } catch (e) {
+        console.log('Unable to load the navigation state')
     }
 }
 
 const rootNavigationProps = __DEV__ && {
     persistNavigationState,
-    loadNavigationState
+    loadNavigationState,
 }
 
 export default class App extends React.Component<{}, {}> {
@@ -63,9 +63,7 @@ export default class App extends React.Component<{}, {}> {
                             backgroundColor="#041f4a"
                         />
                         <View style={styles.appContainer}>
-                            <RootNavigator
-                                {...rootNavigationProps}
-                            />
+                            <RootNavigator {...rootNavigationProps} />
                         </View>
                     </SettingsProvider>
                 </FileSystemProvider>
