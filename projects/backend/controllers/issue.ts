@@ -53,9 +53,9 @@ export const issueController = (req: Request, res: Response) => {
 const getIssuesSummary = async (): Promise<IssueSummary[] | 'notfound'> => {
     return Promise.resolve([
         {
-            key: '2019-03-11',
+            key: '2019-07-09',
             name: 'Daily Edition',
-            date: '2019-03-11T00:00:00Z',
+            date: '2019-07-09T00:00:00Z',
         },
     ])
 }
