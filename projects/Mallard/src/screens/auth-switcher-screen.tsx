@@ -154,122 +154,128 @@ const AuthSwitcherScreen = ({
     }, []) // don't want to change on new deps as we only want this to run on mount
 
     return (
-        <>
-            <LoginPage showSpinner={authStatus === AuthStatus.authenticating}>
-                {authStatus !== AuthStatus.pending ? (
-                    <>
-                        <TitlepieceText
+        <LoginPage showSpinner={authStatus === AuthStatus.authenticating}>
+            {authStatus !== AuthStatus.pending ? (
+                <>
+                    <TitlepieceText
+                        style={{
+                            color: 'white',
+                            fontSize: 50,
+                            lineHeight: 50,
+                            marginBottom: 50,
+                            textAlign: 'center',
+                        }}
+                    >
+                        Log in
+                    </TitlepieceText>
+                    {error && (
+                        <Text
                             style={{
                                 color: 'white',
-                                fontSize: 50,
-                                lineHeight: 50,
-                                marginBottom: 50,
+                                padding: 10,
                                 textAlign: 'center',
                             }}
                         >
-                            Log in
-                        </TitlepieceText>
-                        {error && <Text>{error}</Text>}
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginBottom: 10,
-                            }}
-                        >
-                            <Button
-                                style={{
-                                    flex: 1,
-                                }}
-                                center
-                                onPress={() =>
-                                    handleAuthClick(
-                                        facebookAuthWithDeepRedirect(
-                                            validatorString,
-                                        ),
-                                    )
-                                }
-                            >
-                                Facebook
-                            </Button>
-                            <Button
-                                style={{
-                                    flex: 1,
-                                    marginLeft: 10,
-                                }}
-                                center
-                                onPress={() =>
-                                    handleAuthClick(
-                                        googleAuthWithDeepRedirect(
-                                            validatorString,
-                                        ),
-                                    )
-                                }
-                            >
-                                Google
-                            </Button>
-                        </View>
-                        <TextInput
-                            style={{
-                                backgroundColor: 'white',
-                                borderWidth: 1,
-                                borderRadius: 999,
-                                color: 'black',
-                                marginBottom: 10,
-                                padding: metrics.horizontal * 2,
-                                paddingVertical: metrics.vertical,
-                            }}
-                            onSubmitEditing={Keyboard.dismiss}
-                            returnKeyType="done"
-                            placeholderTextColor="grey"
-                            editable={authStatus !== AuthStatus.authenticating}
-                            autoCorrect={false}
-                            autoCapitalize="none"
-                            textContentType="emailAddress"
-                            keyboardType="email-address"
-                            value={email}
-                            placeholder="Email"
-                            onChangeText={onEmailChange}
-                        ></TextInput>
-                        <TextInput
-                            style={{
-                                backgroundColor: 'white',
-                                borderWidth: 1,
-                                borderRadius: 999,
-                                color: 'black',
-                                marginBottom: 10,
-                                padding: metrics.horizontal * 2,
-                                paddingVertical: metrics.vertical,
-                            }}
-                            placeholderTextColor="grey"
-                            editable={authStatus !== AuthStatus.authenticating}
-                            onSubmitEditing={Keyboard.dismiss}
-                            returnKeyType="done"
-                            autoCorrect={false}
-                            autoCapitalize="none"
-                            textContentType="password"
-                            value={password}
-                            placeholder="Password"
-                            secureTextEntry
-                            onChangeText={onPasswordChange}
-                        ></TextInput>
+                            {error}
+                        </Text>
+                    )}
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 10,
+                        }}
+                    >
                         <Button
+                            style={{
+                                flex: 1,
+                            }}
                             center
                             onPress={() =>
                                 handleAuthClick(
-                                    fetchAndPersistUserAccessTokenWithIdentity(
-                                        email,
-                                        password,
+                                    facebookAuthWithDeepRedirect(
+                                        validatorString,
                                     ),
                                 )
                             }
                         >
-                            Submit
+                            Facebook
                         </Button>
-                    </>
-                ) : null}
-            </LoginPage>
-        </>
+                        <Button
+                            style={{
+                                flex: 1,
+                                marginLeft: 10,
+                            }}
+                            center
+                            onPress={() =>
+                                handleAuthClick(
+                                    googleAuthWithDeepRedirect(validatorString),
+                                )
+                            }
+                        >
+                            Google
+                        </Button>
+                    </View>
+                    <TextInput
+                        style={{
+                            backgroundColor: 'white',
+                            borderWidth: 1,
+                            borderRadius: 999,
+                            color: 'black',
+                            marginBottom: 10,
+                            padding: metrics.horizontal * 2,
+                            paddingVertical: metrics.vertical,
+                        }}
+                        onSubmitEditing={Keyboard.dismiss}
+                        returnKeyType="done"
+                        placeholderTextColor="grey"
+                        editable={authStatus !== AuthStatus.authenticating}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        textContentType="emailAddress"
+                        keyboardType="email-address"
+                        value={email}
+                        placeholder="Email"
+                        onChangeText={onEmailChange}
+                    ></TextInput>
+                    <TextInput
+                        style={{
+                            backgroundColor: 'white',
+                            borderWidth: 1,
+                            borderRadius: 999,
+                            color: 'black',
+                            marginBottom: 10,
+                            padding: metrics.horizontal * 2,
+                            paddingVertical: metrics.vertical,
+                        }}
+                        placeholderTextColor="grey"
+                        editable={authStatus !== AuthStatus.authenticating}
+                        onSubmitEditing={Keyboard.dismiss}
+                        returnKeyType="done"
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        textContentType="password"
+                        value={password}
+                        placeholder="Password"
+                        secureTextEntry
+                        onChangeText={onPasswordChange}
+                    ></TextInput>
+                    <Button
+                        center
+                        onPress={() =>
+                            handleAuthClick(
+                                fetchAndPersistUserAccessTokenWithIdentity(
+                                    email,
+                                    password,
+                                ),
+                            )
+                        }
+                    >
+                        Submit
+                    </Button>
+                </>
+            ) : null}
+        </LoginPage>
     )
 }
 
