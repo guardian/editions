@@ -127,7 +127,6 @@ const Article = ({
                 <WebView
                     originWhitelist={['*']}
                     scrollEnabled={false}
-                    useWebKit={false}
                     source={{ html: html }}
                     onShouldStartLoadWithRequest={event => {
                         if (event.url !== 'about:blank') {
