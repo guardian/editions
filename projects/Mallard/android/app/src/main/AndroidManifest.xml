@@ -20,7 +20,7 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
-     <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
@@ -32,7 +32,7 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="com.googleusercontent.apps.774465807556-5oq58e8pnfqn9sptsivri5kcs9mthef9" />
+            <data android:scheme="5oq58e8pnfqn9sptsivri5kcs9mthef9" />
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
