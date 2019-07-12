@@ -2,14 +2,14 @@ import { MEMBERS_DATA_API_URL } from 'src/authentication/constants'
 
 export interface MembersDataAPIResponse {
     userId: string
-    showSupportMessaging: true
+    showSupportMessaging: boolean
     contentAccess: {
-        member: false
-        paidMember: false
-        recurringContributor: false
-        digitalPack: false
-        paperSubscriber: false
-        guardianWeeklySubscriber: false
+        member: boolean
+        paidMember: boolean
+        recurringContributor: boolean
+        digitalPack: boolean
+        paperSubscriber: boolean
+        guardianWeeklySubscriber: boolean
     }
 }
 
