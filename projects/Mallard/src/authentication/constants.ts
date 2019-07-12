@@ -9,9 +9,11 @@ const ID_ACCESS_TOKEN =
     'aefdcf7fcb30a12a54c2dbb08da1d9d6193665f0c4cbe15c1d6d7be9e8933ad5'
 
 const FACEBOOK_CLIENT_ID = '180444840287'
+
+// TODO: do this for production apps
 const GOOGLE_CLIENT_ID =
     Platform.OS === 'android'
-        ? 'XXX' // TODO: implement
+        ? '774465807556-5oq58e8pnfqn9sptsivri5kcs9mthef9'
         : '774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n'
 
 export {

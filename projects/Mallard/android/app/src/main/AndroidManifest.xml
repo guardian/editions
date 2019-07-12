@@ -28,6 +28,12 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="fb180444840287" />
         </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="com.googleusercontent.apps.774465807556-5oq58e8pnfqn9sptsivri5kcs9mthef9" />
+        </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>

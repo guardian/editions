@@ -102,6 +102,7 @@ const AuthSwitcherScreen = ({
             return <Text>Redirecting</Text>
         }
         case AuthStatus.authenticating:
+        // Intentional fall through
         case AuthStatus.unauthed: {
             return (
                 <View
