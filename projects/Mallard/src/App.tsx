@@ -42,6 +42,11 @@ const loadNavigationState = async () => {
     }
 }
 
+const rootNavigationProps = __DEV__ && {
+    persistNavigationState,
+    loadNavigationState
+}
+
 export default class App extends React.Component<{}, {}> {
     /**
      * When the component is mounted. This happens asynchronously and simply
@@ -59,8 +64,7 @@ export default class App extends React.Component<{}, {}> {
                         />
                         <View style={styles.appContainer}>
                             <RootNavigator
-                                persistNavigationState={persistNavigationState}
-                                loadNavigationState={loadNavigationState}
+                                {...rootNavigationProps}
                             />
                         </View>
                     </SettingsProvider>
