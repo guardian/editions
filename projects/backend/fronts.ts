@@ -173,7 +173,9 @@ export const getFront = async (
     }
 
     const collections = await Promise.all(
-        front.collections.map(collection => parseCollection(collection)),
+        front.collections
+            .filter(collection => collection.items.length > 0)
+            .map(collection => parseCollection(collection)),
     )
 
     collections.filter(hasFailed).forEach(failedCollection => {
