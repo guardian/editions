@@ -22,6 +22,11 @@ const Crossword = ({
                 onMessage={event => {
                     setHeight(parseInt(event.nativeEvent.data))
                 }}
+                injectedJavaScript={`window.onload = function() {
+                    window.crosswordData = ${JSON.stringify(
+                        crosswordArticle.crossword,
+                    )}
+                };`}
                 allowFileAccess={true}
                 javaScriptEnabled={true}
                 style={{ flex: 1, minHeight: height }}
