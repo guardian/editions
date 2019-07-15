@@ -3,6 +3,7 @@ import { View, Dimensions, Platform } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { CrosswordArticle } from 'src/common'
+import { bundles } from 'src/html-bundle-info.json'
 
 const Crossword = ({
     crosswordArticle,
@@ -12,8 +13,9 @@ const Crossword = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
     let sourceUri =
         (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
-        'crosswords.bundle/index.html'
-    sourceUri = 'http://localhost:8001'
+        bundles.crosswords.key +
+        '.bundle/index.html'
+    sourceUri = 'http://localhost:' + bundles.crosswords.watchPort
     return (
         <View style={{ backgroundColor: color.background }}>
             <WebView
