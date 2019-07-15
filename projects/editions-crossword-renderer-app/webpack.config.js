@@ -30,6 +30,10 @@ module.exports = {
         new HtmlWebPackPlugin({
             template: './src/index.html',
             filename: './index.html',
+            meta: {
+                viewport:
+                    'width=device-width, initial-scale=1, shrink-to-fit=no',
+            },
         }),
     ],
 }
