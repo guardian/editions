@@ -343,12 +343,12 @@ const splashImageStyles = StyleSheet.create({
         bottom: 0,
         flex: 0,
         zIndex: 10000,
-        width: '50%',
+        width: '60%',
         color: color.palette.neutral[100],
     },
     textStandBlock: {
-        fontSize: 16,
-        lineHeight: 20,
+        fontSize: 14,
+        lineHeight: 18,
         color: color.palette.neutral[100],
     },
 })
@@ -370,7 +370,10 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 />
             ) : null}
             <View style={[splashImageStyles.splashHeadline]}>
-                <HeadlineCardText style={[splashImageStyles.textBlock]}>
+                <HeadlineCardText
+                    adjustsFontSizeToFit={true}
+                    style={[splashImageStyles.textBlock]}
+                >
                     {article.kicker}
                 </HeadlineCardText>
                 {'standfirst' in article && article.standfirst ? (
