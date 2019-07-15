@@ -50,7 +50,7 @@ export interface Article extends WithKey {
     type: 'article'
     headline: string
     kicker: string
-    image: Image
+    image?: Image
     byline: string
     standfirst: string
     elements: BlockElement[]

@@ -80,13 +80,6 @@ export const parseCollection = async (
                     ]
 
                 case 'gallery':
-                    const galleryImage = imageOverride || article.image
-                    if (galleryImage == null) {
-                        throw new Error(
-                            `No image found in article: ${article.path}`,
-                        )
-                    }
-
                     return [
                         article.path,
                         {
@@ -94,18 +87,10 @@ export const parseCollection = async (
                             key: article.path,
                             headline,
                             kicker,
-                            image: galleryImage,
                         },
                     ]
 
                 case 'article':
-                    const articleImage = imageOverride || article.image
-                    if (articleImage == null) {
-                        throw new Error(
-                            `No image found in article: ${article.path}`,
-                        )
-                    }
-
                     return [
                         article.path,
                         {
@@ -113,7 +98,7 @@ export const parseCollection = async (
                             key: article.path,
                             headline,
                             kicker,
-                            image: articleImage,
+                            image: imageOverride || article.image,
                         },
                     ]
 
