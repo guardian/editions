@@ -46,32 +46,29 @@ export interface Forecast {
     Link: string
 }
 
-export interface Article extends WithKey {
-    type: 'article'
+export interface Content extends WithKey {
+    type: string
     headline: string
     kicker: string
+    image?: Image
+    standfirst?: string
+    byline?: string
+}
+export interface Article extends Content {
+    type: 'article'
     image?: Image
     byline: string
     standfirst: string
     elements: BlockElement[]
 }
 
-export interface CrosswordArticle extends WithKey {
+export interface CrosswordArticle extends Content {
     type: 'crossword'
-    headline: string
-    kicker: string
-    byline?: string
-    standfirst?: string
     crossword: Crossword
 }
 
-export interface GalleryArticle extends WithKey {
+export interface GalleryArticle extends Content {
     type: 'gallery'
-    headline: string
-    kicker: string
-    byline?: string
-    standfirst?: string
-    image?: Image
     elements: BlockElement[]
 }
 
@@ -215,10 +212,13 @@ export type CollectionCardLayout = number[]
 export interface CollectionCardLayouts {
     [countOfArticles: number]: CollectionCardLayout
 }
+const issueDir = (issueId: string) => `${issueId}/issue`
 
-const issuePath = (issueId: string) => `${issueId}/issue`
+const issuePath = (issueId: string) => `${issueDir(issueId)}`
+
+// const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
 const frontPath = (issueId: string, frontId: string) =>
-    `${issuePath(issueId)}/front/${frontId}`
+    `${issueDir(issueId)}/front/${frontId}`
 
 const issueSummaryPath = () => 'issues'
 export const imageSizes = ['sample', 'phone', 'tablet'] as const
@@ -242,10 +242,10 @@ const mediaPath = (
     size: ImageSize,
     source: string,
     path: string,
-) => `${issuePath(issue)}/media/${size}/${source}/${path}`
+) => `${issueDir(issue)}/media/${size}/${source}/${path}`
 
 const coloursPath = (issue: string, source: string, path: string) =>
-    `${issuePath(issue)}/colours/${source}/${path}`
+    `${issueDir(issue)}/colours/${source}/${path}`
 
 export {
     issuePath,

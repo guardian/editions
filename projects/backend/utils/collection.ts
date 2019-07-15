@@ -1,9 +1,9 @@
-import fromEntries from 'object.fromentries'
 import { CAPIArticle, Card } from '../common'
 import {
     CollectionCardLayouts,
     CollectionCardLayout,
 } from '../../common/src/index'
+import { fromPairs } from 'ramda'
 
 const chunk = <T>(arr: T[], size: number) =>
     Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -37,7 +37,7 @@ export const createCardsFromAllArticlesInCollection = (
                 ...cards,
                 {
                     layout: null,
-                    articles: fromEntries(
+                    articles: fromPairs(
                         articles.slice(itemsSoFar, itemsSoFar + current),
                     ),
                 },
@@ -57,7 +57,7 @@ export const createCardsFromAllArticlesInCollection = (
                 groupOfArticles => {
                     return {
                         layout: null,
-                        articles: fromEntries(groupOfArticles),
+                        articles: fromPairs(groupOfArticles),
                     }
                 },
             ),

@@ -1,24 +1,15 @@
-import { S3, SharedIniFileCredentials } from 'aws-sdk'
+import { s3, bucket } from './s3'
 
-const creds = process.env.arn
-    ? {}
-    : {
-          credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
-      }
-const s3 = new S3({
-    region: 'eu-west-1',
-    ...creds,
-})
-
-export const uploadForIssue = (issue: string) => (
+export const upload = (
+    root: 'data' | 'media',
     key: string,
-    body: {},
-): Promise<unknown> => {
+    body: {} | Buffer,
+) => {
     return s3
         .putObject({
-            Body: JSON.stringify(body),
-            Bucket: 'editions-store',
-            Key: `issue/${issue}/${key}`,
+            Body: body instanceof Buffer ? body : JSON.stringify(body),
+            Bucket: bucket,
+            Key: `${root}/${key}`,
             ACL: 'public-read',
         })
         .promise()

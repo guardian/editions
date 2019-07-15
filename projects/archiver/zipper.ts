@@ -1,38 +1,38 @@
-import { S3, SharedIniFileCredentials } from 'aws-sdk'
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
-
-const creds = process.env.arn
-    ? {}
-    : {
-          credentials: new SharedIniFileCredentials({ profile: 'frontend' }),
-      }
-const s3 = new S3({
-    region: 'eu-west-1',
-    ...creds,
-})
+import { s3, bucket } from './s3'
 
 const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
 
-export const zipIssue = async (issue: string) => {
+const removeInitial = (s: string, remove: string) => {
+    if (!s.startsWith(remove)) return s
+    return s.substr(remove.length)
+}
+
+export const zip = async (
+    name: string,
+    root: 'data' | 'media',
+    prefix: string,
+) => {
     const output = new PassThrough()
     const upload = s3
         .upload({
-            Bucket: 'editions-store',
-            Key: `zips/${issue}.zip`,
+            Bucket: bucket,
+            Key: `zips/${name}.zip`,
             Body: output,
             ACL: 'public-read',
         })
         .promise()
-    const prefix = `issue/${issue}/`
+
     const objects = await s3
         .listObjectsV2({
-            Bucket: 'editions-store',
-            Prefix: prefix,
+            Bucket: bucket,
+            Prefix: `${root}/${prefix}`,
         })
         .promise()
     const files = (objects.Contents || []).map(obj => obj.Key).filter(notNull)
+
     console.log('Got file names')
 
     const archive = archiver('zip')
@@ -44,12 +44,14 @@ export const zipIssue = async (issue: string) => {
         files.map(async file => {
             console.log(`getting ${file}`)
             const s3response = await s3
-                .getObject({ Bucket: 'editions-store', Key: file })
+                .getObject({ Bucket: bucket, Key: file })
                 .promise()
             if (s3response.Body == null) return false
             console.log(`adding ${file} to zip`)
 
-            archive.append(s3response.Body as string, { name: file })
+            archive.append(s3response.Body as string, {
+                name: removeInitial(file, root),
+            })
         }),
     )
     console.log('Finished adding to zip, finalizing.')

@@ -40,6 +40,17 @@ export class EditionsStack extends cdk.Stack {
             description: 'image signing',
         })
 
+        const archiveBucketParameter = new cdk.CfnParameter(
+            this,
+            'archive-bucket-param',
+            {
+                type: 'String',
+                description: 'Archive Bucket',
+                default: 'editions-store',
+                allowedValues: ['editions-store', 'editions-store-code'],
+            },
+        )
+
         const deploy = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
@@ -127,18 +138,34 @@ export class EditionsStack extends cdk.Stack {
             value: `https://${dist.domainName}`,
         })
 
-        new lambda.Function(this, 'EditionsArchiver', {
+        const archive = s3.Bucket.fromBucketName(
+            this,
+            'archive-bucket',
+            archiveBucketParameter.valueAsString,
+        )
+
+        const archiver = new lambda.Function(this, 'EditionsArchiver', {
             functionName: `editions-archiver-${stageParameter.valueAsString}`,
             runtime: lambda.Runtime.NODEJS_10_X,
-            timeout: Duration.seconds(60),
+            timeout: Duration.minutes(5),
+            memorySize: 256,
             code: Code.bucket(
                 deploy,
                 `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
             ),
             handler: 'index.handler',
             environment: {
-                backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
+                stage: stageParameter.valueAsString,
+                bucket: archive.bucketName,
+                backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com/prod/`, //Yes, this (the region) really should not be hard coded.
             },
         })
+
+        const archiverPolicy = new iam.PolicyStatement({
+            actions: ['*'],
+            resources: [archive.arnForObjects('*'), archive.bucketArn],
+        })
+
+        archiver.addToRolePolicy(archiverPolicy)
     }
 }
