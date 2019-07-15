@@ -21,44 +21,56 @@ const cardStyles = {
 
 const styles = StyleSheet.create({
     headlineText: {
+        flexShrink: 0,
         fontFamily: 'GHGuardianHeadline-Regular',
         fontSize: 30,
         lineHeight: 34,
         color: color.text,
     },
     issueTitleText: {
+        flexShrink: 0,
         fontFamily: 'GTGuardianTitlepiece-Bold',
         fontSize: 24,
         lineHeight: 24,
     },
     titlepieceText: {
+        flexShrink: 0,
         fontFamily: 'GTGuardianTitlepiece-Bold',
         fontSize: 30,
         lineHeight: 30,
     },
     headlineKickerText: {
+        flexShrink: 0,
         fontFamily: 'GTGuardianTitlepiece-Bold',
         marginBottom: metrics.vertical / 8,
         ...cardStyles.default,
     },
     headlineCardText: {
+        flexShrink: 0,
         ...cardStyles.default,
     },
     standfirstText: {
+        flexShrink: 0,
         fontFamily: 'GuardianTextEgyptian-Reg',
         fontSize: 17,
         lineHeight: 21,
     },
     serifBodyCopy: {
+        flexShrink: 0,
         fontFamily: 'GuardianTextEgyptian-Reg',
         fontSize: 17,
         lineHeight: 21,
     },
     bodyCopy: {
+        flexShrink: 0,
         fontSize: 17,
         fontFamily: 'GuardianTextSans-Regular',
     },
-    explainerCopy: { fontSize: 15, fontFamily: 'GuardianTextSans-Regular' },
+    explainerCopy: {
+        flexShrink: 0,
+        fontSize: 15,
+        fontFamily: 'GuardianTextSans-Regular',
+    },
 })
 
 export const TitlepieceText = ({
