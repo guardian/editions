@@ -84,6 +84,7 @@ export interface IssueSummary extends WithKey {
 
 export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
+    id: string
 }
 
 export interface Collection extends WithKey {
