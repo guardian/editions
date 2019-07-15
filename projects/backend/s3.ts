@@ -23,8 +23,8 @@ const s3 = new S3({
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
 
-const stage = process.env.stage || 'code'
-const bucket = `published-editions-${stage.toLowerCase()}`
+// const stage = process.env.stage || 'code'
+const bucket = `published-editions-prod` //${stage.toLowerCase()}`
 
 interface S3Response {
     text: () => Promise<string>

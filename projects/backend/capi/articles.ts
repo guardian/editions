@@ -168,7 +168,31 @@ const parseArticleResult = async (
             return crosswordArticle
 
         default:
-            throw new Error(`${path} isn't an article, crossword or gallery.`)
+            return [
+                internalid,
+                {
+                    type: 'article',
+                    id: internalid,
+                    path: path,
+                    headline: title,
+                    kicker,
+                    image: maybeImage,
+                    byline: byline || '',
+                    standfirst: standfirst || '',
+                    elements: [
+                        {
+                            id: 'html',
+                            html: `We can't render content type ${
+                                ContentType[result.type]
+                            } currently`,
+                        },
+                        {
+                            id: 'html',
+                            html: `<pre>${JSON.stringify(result.apiUrl)}</pre>`,
+                        },
+                    ],
+                },
+            ]
     }
 }
 

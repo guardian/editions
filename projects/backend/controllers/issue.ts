@@ -12,7 +12,11 @@ const getIssue = async (
 ): Promise<Issue | 'notfound'> => {
     console.log('Attempting to get latest issue for', issue)
     const latest = await s3Latest(`daily-edition/${issue}/`)
-    if (hasFailed(latest)) return 'notfound'
+    if (hasFailed(latest)) {
+        console.error(`Could not get latest issue.`)
+        console.error(JSON.stringify(latest))
+        return 'notfound'
+    }
     const { key } = latest
     console.log(`Fetching ${key} for ${issue}`)
 

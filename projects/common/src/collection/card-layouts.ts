@@ -1,6 +1,7 @@
 import { CollectionCardLayouts } from '..'
 
 export const cardLayouts: CollectionCardLayouts = {
+    0: [],
     1: [1],
     2: [1, 1],
     3: [1, 2],
