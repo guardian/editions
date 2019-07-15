@@ -8,7 +8,6 @@ import { Row } from './row'
 import { CAPIArticle, Issue, Collection, Front } from 'src/common'
 import { PageLayout } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { GENERIC_ERROR } from 'src/helpers/words'
 import {
     splashPage,
     twoStoryPage,

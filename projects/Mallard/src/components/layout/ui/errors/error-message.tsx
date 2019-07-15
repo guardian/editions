@@ -26,9 +26,11 @@ const ErrorMessage = ({
     return (
         <>
             {!!icon && <Text style={{ fontSize: 40 }}>{icon}</Text>}
-            <UiBodyCopy weight="bold" style={{ textAlign: 'center' }}>
-                {title}
-            </UiBodyCopy>
+            {!!title && (
+                <UiBodyCopy weight="bold" style={{ textAlign: 'center' }}>
+                    {title}
+                </UiBodyCopy>
+            )}
             {!!message && (
                 <UiExplainerCopy style={{ textAlign: 'center' }}>
                     {message}

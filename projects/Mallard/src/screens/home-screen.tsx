@@ -7,11 +7,9 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { useFileList } from 'src/hooks/use-fs'
 import { unzipIssue } from 'src/helpers/files'
-import { GENERIC_ERROR } from 'src/helpers/words'
 import { color } from 'src/theme/color'
 import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { useSettings } from 'src/hooks/use-settings'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useIssueSummary } from 'src/hooks/use-api'
 import { Button, ButtonAppearance } from 'src/components/button/button'
@@ -48,7 +46,6 @@ export const HomeScreen = ({
 }) => {
     const [files, { refreshIssues }] = useFileList()
     const issueSummary = useIssueSummary()
-    const [{ isUsingProdDevtools }] = useSettings()
     const { top: paddingTop } = useInsets()
 
     return (
