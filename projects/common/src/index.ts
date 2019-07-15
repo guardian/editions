@@ -79,6 +79,7 @@ export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
 
 export interface IssueSummary extends WithKey {
     name: string
+    id: string
     date: string
 }
 

@@ -27,7 +27,8 @@ const getIssue = async (
     const fronts = data.fronts.map(_ => _.name)
     return {
         name: data.name,
-        key: data.id,
+        key: issue,
+        id: data.id,
         date: data.issueDate,
         fronts,
     }
