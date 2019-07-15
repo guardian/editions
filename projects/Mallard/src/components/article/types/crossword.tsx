@@ -10,10 +10,10 @@ const Crossword = ({
     crosswordArticle: CrosswordArticle
 }) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
-    const sourceUri =
+    let sourceUri =
         (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
         'crosswords.bundle/index.html'
-
+    sourceUri = 'http://localhost:8001'
     return (
         <View style={{ backgroundColor: color.background }}>
             <WebView
