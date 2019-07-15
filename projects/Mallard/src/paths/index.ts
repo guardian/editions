@@ -1,10 +1,11 @@
-import { issuePath, collectionPath, frontPath } from 'src/common'
+import { issuePath, mediaPath, frontPath } from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
 
 const APIPaths = {
     issue: issuePath,
-    collection: collectionPath,
     front: frontPath,
+    media: mediaPath,
+    mediaBackend: 'https://d2cf1ljtg904cv.cloudfront.net/', // TODO: Use s3 issue paths.
 }
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`

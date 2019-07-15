@@ -28,32 +28,31 @@ export interface Card {
 }
 
 export interface Temperature {
-    "Value": number
-    "Unit": string
-    "UnitType": number
+    Value: number
+    Unit: string
+    UnitType: number
 }
 
-export interface Forecast  {
-    "DateTime": string
-    "EpochDateTime": number
-    "WeatherIcon": number
-    "IconPhrase": string
-    "HasPrecipitation": false,
-    "IsDaylight": true,
-    "Temperature": Temperature
-    "PrecipitationProbability": number
-    "MobileLink": string
-    "Link": string
+export interface Forecast {
+    DateTime: string
+    EpochDateTime: number
+    WeatherIcon: number
+    IconPhrase: string
+    HasPrecipitation: false
+    IsDaylight: true
+    Temperature: Temperature
+    PrecipitationProbability: number
+    MobileLink: string
+    Link: string
 }
 
 export interface Article extends WithKey {
     type: 'article'
     headline: string
     kicker: string
-    image: string
+    image: Image
     byline: string
     standfirst: string
-    imageURL?: string
     elements: BlockElement[]
 }
 
@@ -72,7 +71,7 @@ export interface GalleryArticle extends WithKey {
     kicker: string
     byline?: string
     standfirst?: string
-    imageURL?: string
+    image?: Image
     elements: BlockElement[]
 }
 
@@ -80,7 +79,7 @@ export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
 
 export interface IssueSummary extends WithKey {
     name: string
-    date: number
+    date: string
 }
 
 export interface Issue extends IssueSummary, WithKey {
@@ -88,9 +87,7 @@ export interface Issue extends IssueSummary, WithKey {
 }
 
 export interface Collection extends WithKey {
-    displayName: string
     cards: Card[]
-    preview?: true
 }
 
 export type Front = WithColor &
@@ -120,7 +117,7 @@ export interface HTMLElement {
 }
 export interface ImageElement {
     id: 'image'
-    src: string
+    src: Image
     alt?: string
     caption?: string
     copyright?: string
@@ -221,20 +218,39 @@ export interface CollectionCardLayouts {
 const issuePath = (issueId: string) => `${issueId}/issue`
 const frontPath = (issueId: string, frontId: string) =>
     `${issuePath(issueId)}/front/${frontId}`
-const collectionPath = (issueId: string, collectionId: string) =>
-    `${issuePath(issueId)}/collection/${collectionId}`
-const issueSummaryPath = () => 'issues'
-export const imageSizes = ['small', 'notsmall'] as const
 
+const issueSummaryPath = () => 'issues'
+export const imageSizes = ['sample', 'phone', 'tablet'] as const
+export interface Image {
+    source: string
+    path: string
+}
+export interface Palette {
+    //the palette from node-vibrant
+    Vibrant?: string
+    Muted?: string
+    DarkVibrant?: string
+    DarkMuted?: string
+    LightVibrant?: string
+    LightMuted?: string
+}
 export type ImageSize = typeof imageSizes[number]
-const mediaPath = (source: string, size: ImageSize, path: string) =>
-    `media/${size}/${source}/${path}`
+
+const mediaPath = (
+    issue: string,
+    size: ImageSize,
+    source: string,
+    path: string,
+) => `${issuePath(issue)}/media/${size}/${source}/${path}`
+
+const coloursPath = (issue: string, source: string, path: string) =>
+    `${issuePath(issue)}/colours/${source}/${path}`
 
 export {
     issuePath,
     mediaPath,
     frontPath,
-    collectionPath,
     issueSummaryPath,
     cardLayouts,
+    coloursPath,
 }

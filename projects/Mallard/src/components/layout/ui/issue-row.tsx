@@ -12,10 +12,9 @@ const IssueRow = ({
     issue,
     onPress,
 }: { issue: IssueSummary } & RowWrapperProps) => {
-    const { date, weekday } = useMemo(
-        () => renderIssueDate(issue.date * 1000),
-        [issue.date],
-    )
+    const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
+        issue.date,
+    ])
 
     return (
         <RowWrapper onPress={onPress}>

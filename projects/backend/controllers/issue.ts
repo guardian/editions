@@ -1,25 +1,48 @@
 import { Request, Response } from 'express'
 
-import { s3fetch } from '../s3'
+import { s3fetch, s3Latest } from '../s3'
 import { Issue, IssueSummary } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
+import { IssueResponse } from '../fronts/issue'
+import { hasFailed } from '../utils/try'
 
 const getIssue = async (
     issue: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Issue | 'notfound'> => {
-    const x = await s3fetch(`frontsapi/edition/${issue}/edition.json`)
-    if (x.status === 404) return 'notfound'
-    if (!x.ok) throw new Error('failed s3')
+    console.log('Attempting to get latest issue for', issue)
+    const latest = await s3Latest(`daily-edition/${issue}/`)
+    if (hasFailed(latest)) return 'notfound'
+    const { key } = latest
+    console.log(`Fetching ${key} for ${issue}`)
+
+    const x = await s3fetch(key)
+
+    if (hasFailed(x)) {
+        return 'notfound'
+    }
+
     lastModifiedUpdater(x.lastModified)
-    return x.json().then(res => ({ ...res, key: issue })) as Promise<Issue>
+    const data = (await x.json()) as IssueResponse
+    const fronts = data.fronts.map(_ => _.name)
+    return {
+        name: data.name,
+        key: data.id,
+        date: data.issueDate,
+        fronts,
+    }
 }
 
 export const issueController = (req: Request, res: Response) => {
     const id: string = req.params.issueId
     const [date, updater] = lastModified()
+    console.log(`${req.url}: request for issue ${id}`)
     getIssue(id, updater)
         .then(data => {
+            if (data === 'notfound') {
+                res.sendStatus(404)
+                return
+            }
             res.setHeader('Last-Modifed', date())
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
@@ -30,14 +53,15 @@ export const issueController = (req: Request, res: Response) => {
 const getIssuesSummary = async (): Promise<IssueSummary[] | 'notfound'> => {
     return Promise.resolve([
         {
-            key: 'alpha-edition',
+            key: '2019-07-09',
             name: 'Daily Edition',
-            date: 1561561497,
+            date: '2019-07-09T00:00:00Z',
         },
     ])
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
+    console.log('Issue summary requested.')
     getIssuesSummary()
         .then(data => {
             res.setHeader('Content-Type', 'application/json')
