@@ -79,12 +79,12 @@ export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
 
 export interface IssueSummary extends WithKey {
     name: string
-    id: string
     date: string
 }
 
 export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
+    id: string
 }
 
 export interface Collection extends WithKey {
