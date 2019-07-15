@@ -42,7 +42,7 @@
         "react-native-svg": "^9.4.0",
         "react-native-webview": "^5.11.0",
         "react-native-zip-archive": "^4.0.1",
-        "react-navigation": "3.9.1",
+        "react-navigation": "3.11.0",
         "react-navigation-fluid-transitions": "^0.3.2",
         "rn-fetch-blob": "^0.10.15"
     },
