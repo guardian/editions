@@ -14,5 +14,7 @@
 	<string>998P9U5NGJ</string>
 	<key>thinning</key>
 	<string>&lt;none&gt;</string>
+	<key>iCloudContainerEnvironment</key>
+	<string>Production</string>
 </dict>
 </plist>
