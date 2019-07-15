@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Clipboard } from 'react-native'
+import { Text, Clipboard, TouchableOpacity } from 'react-native'
 import { UiExplainerCopy, UiBodyCopy } from 'src/components/styled-text'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -35,19 +35,15 @@ const ErrorMessage = ({
                 </UiExplainerCopy>
             )}
             {isUsingProdDevtools && debugMessage ? (
-                <>
+                <TouchableOpacity
+                    onPress={() => {
+                        Clipboard.setString(debugMessage)
+                    }}
+                >
                     <UiExplainerCopy style={{ textAlign: 'center' }}>
                         {debugMessage}
                     </UiExplainerCopy>
-                    <Button
-                        style={{ marginTop: metrics.vertical }}
-                        onPress={() => {
-                            Clipboard.setString(debugMessage)
-                        }}
-                    >
-                        Copy
-                    </Button>
-                </>
+                </TouchableOpacity>
             ) : null}
             {!!action && (
                 <Button
