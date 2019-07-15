@@ -1,4 +1,5 @@
 import { Platform } from 'react-native'
+import { bundles } from 'src/html-bundle-info.json'
 
 /* this tricks vs code into thinking we are using emotion */
 export const css = (
@@ -24,6 +25,24 @@ export const generateAssetsFontCss = (fontFamily: string) => {
             src: url("${fileName}")
         }
     `
+}
+
+export const getBundleUri = (
+    key: keyof typeof bundles,
+    use: 'auto' | 'dev' | 'prod' = 'auto',
+): string => {
+    const uris = {
+        dev: 'http://localhost:' + bundles[key].watchPort,
+        prod:
+            'http://localhost:' +
+            (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
+            bundles[key].key +
+            '.bundle/index.html',
+    }
+    if (use === 'auto') {
+        return __DEV__ ? uris.dev : uris.prod
+    }
+    return uris[use]
 }
 
 /* makes some HTML and posts the height back */

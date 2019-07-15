@@ -50,6 +50,8 @@ const ArticleController = ({
     article: CAPIArticle
     viewIsTransitioning?: boolean
 }) => {
+    return <Crossword crosswordArticle={article} />
+
     switch (article.type) {
         case 'article':
             return (

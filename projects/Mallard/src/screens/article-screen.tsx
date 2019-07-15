@@ -8,7 +8,7 @@ import {
 import { WithArticleAppearance, articleAppearances } from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
 import { CAPIArticle, Collection, Front, ColorFromPalette } from 'src/common'
-import { Dimensions, Animated, View, Text } from 'react-native'
+import { Dimensions, Animated, View, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
@@ -37,6 +37,11 @@ export interface ArticleTransitionProps {
 export interface ArticleNavigator {
     articles: PathToArticle[]
 }
+
+const styles = StyleSheet.create({
+    flex: { flex: 1 },
+})
+
 const ArticleScreenBody = ({
     path,
     viewIsTransitioning,
@@ -54,14 +59,12 @@ const ArticleScreenBody = ({
 
     return (
         <ScrollView
-            onTouchStart={() => {
-                //onTopPositionChange(true)
-            }}
             scrollEventThrottle={8}
             onScroll={ev => {
                 onTopPositionChange(ev.nativeEvent.contentOffset.y < 10)
             }}
             style={{ width }}
+            contentContainerStyle={styles.flex}
         >
             {articleResponse({
                 error: ({ message }) => (
@@ -156,6 +159,13 @@ const ArticleScreenWithProps = ({
 
     const { isInScroller, startingPoint } = getData(navigator, path)
     const [current, setCurrent] = useState(startingPoint)
+
+    /*
+    some article types (crosswords) dont want a
+    navigator or a card and would rather go fullscreen
+    */
+    const prefersFullscreen = true
+
     return (
         <ClipFromTop
             easing={navigationPosition && navigationPosition.position}
@@ -170,66 +180,82 @@ const ArticleScreenWithProps = ({
                     })
                 }}
             />
-            <SlideCard
-                {...viewIsTransitioning}
-                enabled={articleIsAtTop}
-                onDismiss={() => navigation.goBack()}
-            >
-                <View
-                    style={{
-                        padding: metrics.vertical,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
+            {prefersFullscreen ? (
+                <SlideCard
+                    {...viewIsTransitioning}
+                    enabled={false}
+                    onDismiss={() => navigation.goBack()}
                 >
-                    <UiBodyCopy>{`Article ${current + 1}/${
-                        navigator.articles.length
-                    }`}</UiBodyCopy>
-                </View>
-                <Animated.FlatList
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    scrollEventThrottle={1}
-                    onScroll={(ev: any) => {
-                        setCurrent(
-                            Math.floor(ev.nativeEvent.contentOffset.x / width),
-                        )
-                    }}
-                    maxToRenderPerBatch={1}
-                    windowSize={3}
-                    initialNumToRender={1}
-                    horizontal={true}
-                    initialScrollIndex={startingPoint}
-                    pagingEnabled
-                    getItemLayout={(_: never, index: number) => ({
-                        length: width,
-                        offset: width * index,
-                        index,
-                    })}
-                    keyExtractor={(item: ArticleNavigator['articles'][0]) =>
-                        item.article
-                    }
-                    data={
-                        isInScroller
-                            ? navigator.articles
-                            : [path, ...navigator.articles]
-                    }
-                    renderItem={({
-                        item,
-                    }: {
-                        item: ArticleNavigator['articles'][0]
-                        index: number
-                    }) => (
-                        <ArticleScreenBody
-                            path={item}
-                            onTopPositionChange={isAtTop => {
-                                setArticleIsAtTop(isAtTop)
-                            }}
-                            {...{ viewIsTransitioning }}
-                        />
-                    )}
-                />
-            </SlideCard>
+                    <ArticleScreenBody
+                        path={path}
+                        onTopPositionChange={() => {}}
+                        {...{ viewIsTransitioning }}
+                    />
+                </SlideCard>
+            ) : (
+                <SlideCard
+                    {...viewIsTransitioning}
+                    enabled={articleIsAtTop}
+                    onDismiss={() => navigation.goBack()}
+                >
+                    <View
+                        style={{
+                            padding: metrics.vertical,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <UiBodyCopy>{`Article ${current + 1}/${
+                            navigator.articles.length
+                        }`}</UiBodyCopy>
+                    </View>
+                    <Animated.FlatList
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        scrollEventThrottle={1}
+                        onScroll={(ev: any) => {
+                            setCurrent(
+                                Math.floor(
+                                    ev.nativeEvent.contentOffset.x / width,
+                                ),
+                            )
+                        }}
+                        maxToRenderPerBatch={1}
+                        windowSize={3}
+                        initialNumToRender={1}
+                        horizontal={true}
+                        initialScrollIndex={startingPoint}
+                        pagingEnabled
+                        getItemLayout={(_: never, index: number) => ({
+                            length: width,
+                            offset: width * index,
+                            index,
+                        })}
+                        keyExtractor={(item: ArticleNavigator['articles'][0]) =>
+                            item.article
+                        }
+                        data={
+                            isInScroller
+                                ? navigator.articles
+                                : [path, ...navigator.articles]
+                        }
+                        renderItem={({
+                            item,
+                        }: {
+                            item: ArticleNavigator['articles'][0]
+                            index: number
+                        }) => (
+                            <ArticleScreenBody
+                                path={item}
+                                onTopPositionChange={isAtTop => {
+                                    setArticleIsAtTop(isAtTop)
+                                }}
+                                {...{ viewIsTransitioning }}
+                            />
+                        )}
+                    />
+                </SlideCard>
+            )}
         </ClipFromTop>
     )
 }
