@@ -21,7 +21,9 @@ const useInsets = () => {
         }
         updateInsets()
         Dimensions.addEventListener('change', () => {
-            updateInsets()
+            requestAnimationFrame(() => {
+                updateInsets()
+            })
         })
     }, [])
     return insets
