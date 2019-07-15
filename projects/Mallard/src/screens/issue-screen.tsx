@@ -82,8 +82,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                         <IssueHeader />
 
                         <FlexErrorMessage
-                            title={GENERIC_ERROR}
-                            message={isUsingProdDevtools ? message : undefined}
+                            debugMessage={message}
                             action={['Retry', retry]}
                         />
                     </>

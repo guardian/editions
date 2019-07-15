@@ -184,7 +184,6 @@ export const Front: FunctionComponent<{
     viewIsTransitioning: boolean
 }> = ({ front, issue }) => {
     const frontsResponse = useFrontsResponse(issue, front)
-    const [{ isUsingProdDevtools }] = useSettings()
 
     return frontsResponse({
         pending: () => (
@@ -196,10 +195,7 @@ export const Front: FunctionComponent<{
         ),
         error: err => (
             <Wrapper scrubber={<NavigatorSkeleton />}>
-                <FlexErrorMessage
-                    title={GENERIC_ERROR}
-                    message={isUsingProdDevtools ? err.message : undefined}
-                />
+                <FlexErrorMessage debugMessage={err.message} />
             </Wrapper>
         ),
         success: frontData => <FrontWithResponse {...{ frontData, issue }} />,
