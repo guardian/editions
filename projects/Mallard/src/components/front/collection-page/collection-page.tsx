@@ -60,7 +60,7 @@ const CollectionPage = ({
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const { appearance } = useArticleAppearance()
     if (!articlesInCard.length) {
-        return <FlexErrorMessage title={GENERIC_ERROR} />
+        return <FlexErrorMessage />
     }
     if (!pageLayout) {
         switch (articlesInCard.length) {

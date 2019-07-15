@@ -106,8 +106,7 @@ export const HomeScreen = ({
                     ),
                     error: ({ message }, { retry }) => (
                         <FlexErrorMessage
-                            title={GENERIC_ERROR}
-                            message={isUsingProdDevtools ? message : undefined}
+                            debugMessage={message}
                             action={['Retry', retry]}
                         />
                     ),
