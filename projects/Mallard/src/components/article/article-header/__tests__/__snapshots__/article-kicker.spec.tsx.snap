@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArticleKicker should display a default Kicker 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "borderBottomWidth": 0.5,
+        "marginBottom": 3,
+        "paddingBottom": 6,
+        "width": "100%",
+      },
+      Object {
+        "backgroundColor": "#ffffff",
+        "borderColor": "#dcdcdc",
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "flexShrink": 0,
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 19,
+          "lineHeight": 22,
+          "marginBottom": 1.5,
+        },
+        Array [
+          Object {
+            "color": "#121212",
+          },
+        ],
+      ]
+    }
+  >
+    Opinion
+  </Text>
+</View>
+`;
+
+exports[`ArticleKicker should display a long read style kicker 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "borderBottomWidth": 0.5,
+        "marginBottom": 3,
+        "paddingBottom": 6,
+        "width": "100%",
+      },
+      Object {
+        "backgroundColor": "#ffffff",
+        "borderColor": "#dcdcdc",
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "flexShrink": 0,
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 19,
+          "lineHeight": 22,
+          "marginBottom": 1.5,
+        },
+        Array [
+          Object {
+            "color": "#121212",
+          },
+        ],
+      ]
+    }
+  >
+    Opinion
+  </Text>
+</View>
+`;
