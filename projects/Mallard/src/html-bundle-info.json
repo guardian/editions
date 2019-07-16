@@ -1,12 +1,12 @@
 {
-    "hey!": "this file is generated at build time. do not edit manually. Bump up the version by editing ./VERSION",
-    "bundles": {
-        "crosswords": {
-            "key": "crosswords",
-            "project": "editions-crossword-renderer-app",
-            "watchPort": 8001,
-            "watchScript": "yarn watch",
-            "buildScript": "yarn build"
-        }
-    }
+	"hey!": "this file is generated at build time. do not edit manually. Bump up the version by editing ./VERSION",
+	"bundles": {
+		"crosswords": {
+			"key": "crosswords",
+			"project": "editions-crossword-renderer-app",
+			"watchPort": 8001,
+			"watchScript": "yarn watch",
+			"buildScript": "yarn build"
+		}
+	}
 }

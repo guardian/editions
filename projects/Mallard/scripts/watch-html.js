@@ -3,9 +3,13 @@ const bundles = require('../html/manifest')
 const fs = require('fs')
 const chalk = require('chalk')
 const { resolve } = require('path')
+const kill = require('kill-port')
 
-const startWatchers = () => {
-    for (const { project, watchScript, key } of Object.values(bundles)) {
+const startWatchers = async () => {
+    for (const { project, watchScript, key, watchPort } of Object.values(
+        bundles,
+    )) {
+        await kill(watchPort, 'tcp')
         exec(
             [`cd ../../projects/${project}`, watchScript].join(' && '),
             (err, stdout, stderr) => {
