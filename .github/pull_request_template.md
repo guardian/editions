@@ -21,5 +21,5 @@ the breakage for reference.
 <!--
 Please try to add visuals! 
 This is super worthwhile for historical reasons as well
-as to allow other contributors who aren't developers to collaborare
+as to allow other contributors who aren't developers to collaborate
 -->
