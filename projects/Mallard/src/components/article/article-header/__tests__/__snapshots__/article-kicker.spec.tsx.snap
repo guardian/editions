@@ -35,7 +35,7 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
       ]
     }
   >
-    Opinion
+    Sport
   </Text>
 </View>
 `;
@@ -75,7 +75,9 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
       ]
     }
   >
-    Opinion
+    Sport
   </Text>
 </View>
 `;
+
+exports[`ArticleKicker should return null if the kicker is "Opinion" 1`] = `null`;
