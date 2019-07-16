@@ -38,6 +38,9 @@ const fetchFromApiSlow = async <T>(
                 throw new Error(REQUEST_INVALID_RESPONSE_VALIDATION)
             }
         })
+        .catch(err => {
+            throw new Error(`${err.message} @ [${apiUrl + path}]`)
+        })
 }
 
 const fetchFromFileSystemSlow = <T>(

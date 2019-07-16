@@ -13,7 +13,7 @@ import {
 } from 'src/screens/article-screen'
 
 import { TextBlock } from './text-block'
-import { StandfirstText } from 'src/components/styled-text'
+import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
 import { RowSize, getRowHeightForSize } from '../helpers'
 import {
     setScreenPositionOfItem,
@@ -334,19 +334,19 @@ const splashImageStyles = StyleSheet.create({
     },
     textBlock: {
         fontSize: 40,
-        lineHeight: 30,
+        lineHeight: 40,
         color: color.palette.neutral[100],
     },
     splashHeadline: {
+        ...tappableStyles.padding,
         position: 'absolute',
         bottom: 0,
         flex: 0,
         zIndex: 10000,
-        width: '50%',
+        width: '60%',
         color: color.palette.neutral[100],
     },
     textStandBlock: {
-        ...tappableStyles.padding,
         fontSize: 14,
         lineHeight: 18,
         color: color.palette.neutral[100],
@@ -370,9 +370,12 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 />
             ) : null}
             <View style={[splashImageStyles.splashHeadline]}>
-                <StandfirstText style={[splashImageStyles.textBlock]}>
+                <HeadlineCardText
+                    adjustsFontSizeToFit={true}
+                    style={[splashImageStyles.textBlock]}
+                >
                     {article.kicker}
-                </StandfirstText>
+                </HeadlineCardText>
                 {'standfirst' in article && article.standfirst ? (
                     <StandfirstText style={[splashImageStyles.textStandBlock]}>
                         {article.standfirst}

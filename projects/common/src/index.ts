@@ -50,7 +50,7 @@ export interface Article extends WithKey {
     type: 'article'
     headline: string
     kicker: string
-    image: Image
+    image?: Image
     byline: string
     standfirst: string
     elements: BlockElement[]
@@ -84,6 +84,7 @@ export interface IssueSummary extends WithKey {
 
 export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
+    id: string
 }
 
 export interface Collection extends WithKey {
