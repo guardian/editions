@@ -5,8 +5,8 @@ import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
-import { newsHeaderStyles, longReadHeaderStyles } from './article-header-styles';
-import { ArticleKicker } from './article-kicker';
+import { newsHeaderStyles, longReadHeaderStyles } from './article-header-styles'
+import { ArticleKicker } from './article-kicker'
 import { Image } from '../../../common'
 
 export interface PropTypes {
@@ -70,7 +70,9 @@ const LongReadHeader = ({ headline, image, kicker }: PropTypes) => {
                     appearance.backgrounds,
                 ]}
             >
-                {kicker ? <ArticleKicker kicker={kicker} type='longRead' /> : null}
+                {kicker ? (
+                    <ArticleKicker kicker={kicker} type="longRead" />
+                ) : null}
                 <HeadlineText
                     style={[
                         longReadHeaderStyles.headline,

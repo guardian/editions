@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 interface Style {
@@ -12,7 +12,9 @@ interface Style {
     textBackground: {}
 }
 
-export const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
+export const newsHeaderStyles: StyleSheet.NamedStyles<
+    Style
+> = StyleSheet.create({
     background: {
         alignItems: 'flex-start',
         paddingHorizontal: metrics.horizontal,
@@ -28,9 +30,11 @@ export const newsHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create
     headline: {
         marginRight: metrics.horizontal * 2,
     },
-});
+})
 
-export const longReadHeaderStyles: StyleSheet.NamedStyles<Style> = StyleSheet.create({
+export const longReadHeaderStyles: StyleSheet.NamedStyles<
+    Style
+> = StyleSheet.create({
     background: {
         flexShrink: 0,
         alignItems: 'flex-start',
