@@ -9,7 +9,7 @@ const startWatchers = async () => {
     for (const { project, watchScript, key, watchPort } of Object.values(
         bundles,
     )) {
-        await kill(watchPort, 'tcp')
+        await kill(watchPort, 'tcp').catch(() => {})
         exec(
             [`cd ../../projects/${project}`, watchScript].join(' && '),
             (err, stdout, stderr) => {
