@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import Crossword from 'react-crossword'
 import crossy from './crossy'
 class CrosswordView extends Component {
@@ -14,11 +13,8 @@ class CrosswordView extends Component {
             )
         }
 
-        return 'sdsd'
+        return null
     }
 }
-
-const wrapper = document.getElementById('crossword-container')
-wrapper ? ReactDOM.render(<CrosswordView />, wrapper) : false
 
 export default CrosswordView

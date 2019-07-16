@@ -58,9 +58,14 @@ const getArticleNavigationProps = (
     })
 
     if (!path || !path.article || !path.collection || !path.issue) {
-        error()
+        return error()
     } else {
-        success({ path, articleNavigator, transitionProps, prefersFullScreen })
+        return success({
+            path,
+            articleNavigator,
+            transitionProps,
+            prefersFullScreen,
+        })
     }
 }
 

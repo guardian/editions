@@ -10,17 +10,22 @@ const startWatchers = async () => {
         bundles,
     )) {
         await kill(watchPort, 'tcp').catch(() => {})
-        exec(
-            [`cd ../../projects/${project}`, watchScript].join(' && '),
-            (err, stdout, stderr) => {
-                if (err || stderr) {
-                    console.error('Failed watching bundle ' + key)
-                    console.error(stderr)
-                    return
-                }
-                console.log(chalk.green(`Watching ${key}`))
-            },
-        )
+        setTimeout(() => {
+            console.log(chalk.green(`Watching ${key}`))
+            exec(
+                [`cd ../../projects/${project}`, watchScript].join(' && '),
+                (err, stdout, stderr) => {
+                    if (err || stderr) {
+                        console.error(
+                            chalk.red('Failed watching bundle ' + key),
+                        )
+                        console.error(stderr)
+                        process.exit(1)
+                        return
+                    }
+                },
+            )
+        }, 2000)
     }
 }
 
