@@ -14,7 +14,7 @@ import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { resetCredentials } from 'src/authentication/keychain'
-import { useIsSignedIn } from 'src/hooks/use-is-signed-in'
+import { useSignInStatus, SignInStatus } from 'src/hooks/use-sign-in-status'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -118,18 +118,20 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
-    const isSignedIn = useIsSignedIn()
+    const status = useSignInStatus()
 
     const signInListItems =
-        isSignedIn === null
+        status === SignInStatus.pending
             ? []
             : [
                   {
-                      key: `Sign ${isSignedIn ? 'out' : 'in'}`,
-                      title: `Sign ${isSignedIn ? 'out' : 'in'}`,
+                      key: `Sign ${
+                          status === SignInStatus.signedIn ? 'out' : 'in'
+                      }`,
+                      title: `Sign ${SignInStatus.signedIn ? 'out' : 'in'}`,
                       data: {
                           onPress: async () => {
-                              if (isSignedIn) {
+                              if (status === SignInStatus.signedIn) {
                                   await resetCredentials()
                               }
                               navigation.navigate('SignIn')
