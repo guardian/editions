@@ -102,6 +102,7 @@ const ItemTappable = withNavigation(
                             path,
                             transitionProps,
                             articleNavigator,
+                            prefersFullScreen: article.type === 'crossword',
                         })
                     }}
                 >

@@ -1,0 +1,30 @@
+{
+    "name": "editions-crossword-renderer-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "watch": "webpack-dev-server",
+        "build": "webpack --mode production",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/core": "^7.4.5",
+        "@babel/preset-env": "^7.4.5",
+        "@babel/preset-react": "^7.0.0",
+        "babel-loader": "^8.0.6",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
+        "webpack": "^4.33.0",
+        "webpack-cli": "^3.3.2"
+    },
+    "dependencies": {
+        "react": "^16.8.6",
+        "react-crossword": "^0.1.7",
+        "react-dom": "^16.8.6",
+        "webpack-dev-server": "^3.7.2"
+    }
+}

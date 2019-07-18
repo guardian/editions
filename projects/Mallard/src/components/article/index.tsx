@@ -16,9 +16,10 @@ import {
 } from './article-standfirst'
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
-import { CAPIArticle } from '../../../../common/src'
+import { CAPIArticle } from 'src/common'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { Gallery } from './types/gallery'
+import { Crossword } from './types/crossword'
 
 /*
 This is the article view! For all of the articles.
@@ -62,13 +63,7 @@ const ArticleController = ({
             return <Gallery gallery={article} />
 
         case 'crossword':
-            return (
-                <FlexErrorMessage
-                    icon="😭"
-                    title={"We don't support the rendering of crosswords yet."}
-                    style={{ backgroundColor: color.background }}
-                />
-            )
+            return <Crossword crosswordArticle={article} />
 
         default:
             const message: never = article
