@@ -17,6 +17,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.guardian.editions.greeting.GreetingPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
             new AsyncStoragePackage(),
             new RNFetchBlobPackage(),
             new RNScreensPackage(),
-            new RNGestureHandlerPackage()
+            new RNGestureHandlerPackage(),
+            new GreetingPackage()
       );
     }
 

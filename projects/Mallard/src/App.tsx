@@ -4,7 +4,7 @@
 
 import React from 'react'
 import { useScreens } from 'react-native-screens'
-import { StatusBar, View } from 'react-native'
+import { NativeModules, StatusBar, Text, View } from 'react-native'
 
 import { RootNavigator } from 'src/navigation'
 import { SettingsProvider } from 'src/hooks/use-settings'
@@ -51,6 +51,10 @@ const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
 export default class App extends React.Component<{}, {}> {
+    state = {
+        greeting: '',
+    }
+
     async componentDidCatch(e: Error) {
         /**
          * use an heuristic to check whether this is a react-nav error
@@ -60,6 +64,12 @@ export default class App extends React.Component<{}, {}> {
             await AsyncStorage.removeItem(persistenceKey)
             this.forceUpdate()
         }
+    }
+
+    componentDidMount() {
+        NativeModules.Greeting.getGreeting((greeting: string) =>
+            this.setState(prev => ({ greeting: greeting })),
+        )
     }
     /**
      * When the component is mounted. This happens asynchronously and simply
@@ -75,6 +85,7 @@ export default class App extends React.Component<{}, {}> {
                             barStyle="light-content"
                             backgroundColor="#041f4a"
                         />
+                        <Text>Hello - {this.state.greeting}</Text>
                         <View style={styles.appContainer}>
                             <RootNavigator {...rootNavigationProps} />
                         </View>
