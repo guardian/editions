@@ -7,11 +7,11 @@ import {
 } from '@creditkarma/thrift-server-core'
 import { getImage } from './assets'
 import { elementParser } from './elements'
-import fromEntries from 'object.fromentries'
 import { IContent } from '@guardian/capi-ts/dist/Content'
 import { ICrossword } from '@guardian/capi-ts/dist/Crossword'
 import fetch from 'node-fetch'
 import { cleanupHtml } from '../utils/html'
+import { fromPairs } from 'ramda'
 
 interface Article {
     type: 'article'
@@ -234,7 +234,7 @@ export const getArticles = async (
         }
         const firstArray = Object.entries(first)
         const lastArray = Object.entries(last)
-        return fromEntries(firstArray.concat(lastArray))
+        return fromPairs(firstArray.concat(lastArray))
     }
     console.log('Making CAPI query', endpoint)
     console.log('Debug link:', endpoint.replace('thrift', 'json'))
@@ -259,5 +259,5 @@ export const getArticles = async (
         }
     })
     const articleEntries = articlePromises.filter(hasSucceeded)
-    return fromEntries(articleEntries)
+    return fromPairs(articleEntries)
 }

@@ -17,6 +17,9 @@
         },
         {
             "path": "projects/editions-crossword-renderer-app"
+        },
+        {
+            "path": "projects/archiver"
         }
     ],
     "settings": {
