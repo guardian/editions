@@ -10,6 +10,7 @@ import {
     SharedIniFileCredentials,
     ChainableTemporaryCredentials,
 } from 'aws-sdk'
+import { notNull } from './common'
 
 const s3 = new S3({
     region: 'eu-west-1',
@@ -23,8 +24,8 @@ const s3 = new S3({
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
 
-// const stage = process.env.stage || 'code'
-const bucket = `published-editions-prod` //${stage.toLowerCase()}`
+const stage = process.env.stage || 'code'
+const bucket = `published-editions-${stage.toLowerCase()}`
 
 interface S3Response {
     text: () => Promise<string>
@@ -70,6 +71,31 @@ export const s3Latest = async (
     return { key: latest.Key }
 }
 
+export const s3List = async (prefix: string): Promise<Attempt<string[]>> => {
+    const response = await attempt(
+        s3
+            .listObjectsV2({
+                Bucket: bucket,
+                Prefix: prefix,
+                Delimiter: '/',
+            })
+            .promise(),
+    )
+    if (hasFailed(response)) {
+        return withFailureMessage(response, 'S3 Access failed')
+    }
+    if (response.KeyCount === 0) {
+        return failure({
+            httpStatus: 404,
+            error: new Error(`No keys returned from listObject of ${prefix}`),
+        })
+    }
+    const contents = response.CommonPrefixes
+
+    if (!contents) throw new Error(`Nothing at ${prefix}`)
+
+    return contents.map(_ => _.Prefix).filter(notNull)
+}
 export const s3fetch = (key: string): Promise<Attempt<S3Response>> => {
     return new Promise(resolve => {
         s3.getObject(

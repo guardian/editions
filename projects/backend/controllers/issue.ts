@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 
-import { s3fetch, s3Latest } from '../s3'
-import { Issue, IssueSummary } from '../common'
+import { s3fetch, s3Latest, s3List } from '../s3'
+import { Issue, notNull, IssueSummary } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
 import { IssueResponse } from '../fronts/issue'
-import { hasFailed } from '../utils/try'
+import { hasFailed, Attempt } from '../utils/try'
 
 const getIssue = async (
     issue: string,
@@ -55,20 +55,39 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
-const getIssuesSummary = async (): Promise<IssueSummary[] | 'notfound'> => {
-    return Promise.resolve([
-        {
-            key: '2019-07-09',
-            name: 'Daily Edition',
-            date: '2019-07-09T00:00:00Z',
-        },
-    ])
+const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
+    const issueKeys = await s3List('daily-edition/')
+    if (hasFailed(issueKeys)) {
+        console.error('Error in issue index controller')
+        console.error(JSON.stringify(issueKeys))
+        return issueKeys
+    }
+    const issueDates = issueKeys.map(_ => _.split('/')).map(([, date]) => date)
+    return issueDates
+        .map(key => {
+            const date = new Date(key)
+            if (isNaN(date.getTime())) {
+                console.warn(`Issue with path ${key} is not a valid date`)
+                return null
+            }
+            return {
+                key,
+                name: 'Daily Edition',
+                date: date.toISOString(),
+            }
+        })
+        .filter(notNull)
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
     console.log('Issue summary requested.')
     getIssuesSummary()
         .then(data => {
+            if (hasFailed(data)) {
+                console.error(JSON.stringify(data))
+                res.sendStatus(data.httpStatus || 500)
+                return
+            }
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })
