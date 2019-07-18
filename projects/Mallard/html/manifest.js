@@ -5,5 +5,6 @@ module.exports = {
         watchPort: 8001,
         watchScript: 'yarn watch',
         buildScript: 'yarn build',
+        buildPath: 'dist',
     },
 }
