@@ -22,6 +22,7 @@ const fetchFromApiSlow = async <T>(
     } = {},
 ): Promise<T> => {
     const apiUrl = await getSetting('apiUrl')
+    const url = apiUrl + path
     return fetch(url)
         .then(res => {
             if (res.status >= 500) {
