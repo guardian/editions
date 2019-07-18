@@ -7,6 +7,14 @@ module.exports = {
         'prettier',
         'prettier/@typescript-eslint',
     ],
+    settings: {
+        react: {
+            version: (() => {
+                const mallardPackage = require('./projects/Mallard/package.json')
+                return mallardPackage.dependencies.react.substring(1)
+            })(),
+        },
+    },
     rules: {
         'prettier/prettier': 'error',
         '@typescript-eslint/explicit-member-accessibility': 'off',
