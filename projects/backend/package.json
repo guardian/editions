@@ -19,7 +19,9 @@
         "build": "ncc build index.ts -o dist -m",
         "start": "ts-node-dev index.ts",
         "validate": "cd ../.. && yarn validate-backend",
-        "fix": "cd ../.. && yarn fix-backend"
+        "fix": "cd ../.. && yarn fix-backend",
+        "test": "jest --coverage",
+        "test:watch": "jest --watch"
     },
     "dependencies": {
         "@creditkarma/thrift-server-core": "^0.13.6",
@@ -32,6 +34,7 @@
         "aws-serverless-express": "^3.3.6",
         "encoding": "^0.1.12",
         "express": "^4.16.4",
+        "jest": "^24.8.0",
         "moment": "^2.24.0",
         "node-fetch": "^2.6.0",
         "node-vibrant": "^3.1.3",
