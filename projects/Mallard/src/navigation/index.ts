@@ -168,37 +168,33 @@ const OnboardingStack = createStackNavigator(
     },
 )
 
-const AuthedStack = createSwitchNavigator(
-    {
-        Main: ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
-            const [settings] = useSettings()
-            useEffect(() => {
-                if (shouldShowOnboarding(settings)) {
-                    navigation.navigate('Onboarding')
-                } else {
-                    navigation.navigate('App')
-                }
-            })
-            return null
-        },
-        App: AppStack,
-        Onboarding: OnboardingStack,
-    },
-    {
-        initialRouteName: 'Main',
-    },
-)
-
 const RootNavigator = createAppContainer(
     createSwitchNavigator(
         {
-            Authed: AuthedStack,
-            Unauthed: mapNavigationToProps(AuthSwitcherScreen, nav => ({
-                onAuthenticated: () => nav.navigate('Authed'),
+            Main: ({
+                navigation,
+            }: {
+                navigation: NavigationScreenProp<{}>
+            }) => {
+                const [settings] = useSettings()
+                useEffect(() => {
+                    if (shouldShowOnboarding(settings)) {
+                        navigation.navigate('Onboarding')
+                    } else {
+                        navigation.navigate('App')
+                    }
+                })
+                return null
+            },
+            App: AppStack,
+            Onboarding: OnboardingStack,
+            SignIn: mapNavigationToProps(AuthSwitcherScreen, nav => ({
+                onAuthenticated: () => nav.navigate('App'),
+                onDismiss: () => nav.navigate('App'),
             })),
         },
         {
-            initialRouteName: 'Unauthed',
+            initialRouteName: 'Main',
         },
     ),
 )

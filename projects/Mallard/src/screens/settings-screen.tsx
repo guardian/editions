@@ -14,6 +14,7 @@ import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { resetCredentials } from 'src/authentication/keychain'
+import { useIsSignedIn } from 'src/hooks/use-is-signed-in'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -27,16 +28,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             <List
                 onPress={({ onPress }) => onPress()}
                 data={[
-                    {
-                        key: 'Sign out',
-                        title: 'Sign out',
-                        data: {
-                            onPress: async () => {
-                                await resetCredentials()
-                                navigation.navigate('Unauthed')
-                            },
-                        },
-                    },
                     {
                         key: 'Downloads',
                         title: 'Manage issues',
@@ -127,6 +118,25 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
+    const isSignedIn = useIsSignedIn()
+
+    const signInListItems =
+        isSignedIn === null
+            ? []
+            : [
+                  {
+                      key: `Sign ${isSignedIn ? 'out' : 'in'}`,
+                      title: `Sign ${isSignedIn ? 'out' : 'in'}`,
+                      data: {
+                          onPress: async () => {
+                              if (isSignedIn) {
+                                  await resetCredentials()
+                              }
+                              navigation.navigate('SignIn')
+                          },
+                      },
+                  },
+              ]
 
     return (
         <ScrollContainer>
@@ -134,6 +144,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             <List
                 onPress={({ onPress }) => onPress()}
                 data={[
+                    ...signInListItems,
                     {
                         key: 'Consent settings',
                         title: 'Consent settings',

@@ -108,8 +108,10 @@ const LoginPage = ({
 
 const AuthSwitcherScreen = ({
     onAuthenticated,
+    onDismiss,
 }: {
     onAuthenticated: () => void
+    onDismiss: () => void
 }) => {
     const [authStatus, setAuthStatus] = useState(AuthStatus.pending)
 
@@ -264,6 +266,9 @@ const AuthSwitcherScreen = ({
                     ></TextInput>
                     <Button
                         center
+                        buttonStyles={{
+                            marginBottom: 10,
+                        }}
                         onPress={() =>
                             handleAuthClick(
                                 fetchAndPersistUserAccessTokenWithIdentity(
@@ -274,6 +279,13 @@ const AuthSwitcherScreen = ({
                         }
                     >
                         Submit
+                    </Button>
+                    <Button
+                        appearance={ButtonAppearance.skeletonLight}
+                        center
+                        onPress={onDismiss}
+                    >
+                        Not now
                     </Button>
                 </>
             ) : null}
