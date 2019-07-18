@@ -91,5 +91,8 @@ export const issuesSummaryController = (req: Request, res: Response) => {
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })
-        .catch(e => console.error(e))
+        .catch(e => {
+            console.error(e)
+            res.sendStatus(500)
+        })
 }
