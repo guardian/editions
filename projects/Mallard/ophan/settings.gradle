@@ -1,4 +1,4 @@
-rootProject.name = 'greeting'
+rootProject.name = 'ophan'
 
 
 enableFeaturePreview('GRADLE_METADATA')

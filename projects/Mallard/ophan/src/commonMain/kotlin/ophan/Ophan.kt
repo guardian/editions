@@ -1,4 +1,4 @@
-package greeting
+package ophan
 
 expect object Platform {
     fun name(): String

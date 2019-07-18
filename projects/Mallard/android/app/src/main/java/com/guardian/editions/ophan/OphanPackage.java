@@ -1,4 +1,4 @@
-package com.guardian.editions.greeting;
+package com.guardian.editions.ophan;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -10,11 +10,11 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-public class GreetingPackage implements ReactPackage {
+public class OphanPackage implements ReactPackage {
     @Nonnull
     @Override
     public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
-        return Collections.singletonList(new GreetingModule(reactContext));
+        return Collections.singletonList(new OphanModule(reactContext));
     }
 
     @Nonnull

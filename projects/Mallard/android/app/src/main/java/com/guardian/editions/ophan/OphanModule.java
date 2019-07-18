@@ -1,4 +1,4 @@
-package com.guardian.editions.greeting;
+package com.guardian.editions.ophan;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -7,11 +7,11 @@ import com.facebook.react.bridge.ReactMethod;
 
 import javax.annotation.Nonnull;
 
-import greeting.GreetingKt;
+import ophan.OphanKt;
 
-class GreetingModule extends ReactContextBaseJavaModule {
+class OphanModule extends ReactContextBaseJavaModule {
 
-    public GreetingModule(@Nonnull ReactApplicationContext reactContext) {
+    public OphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
@@ -23,7 +23,7 @@ class GreetingModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getGreeting(Callback callback) {
-        String kotlinGreeting = GreetingKt.hello();
+        String kotlinGreeting = OphanKt.hello();
         callback.invoke(kotlinGreeting);
     }
 }

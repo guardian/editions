@@ -19,7 +19,7 @@ include ':react-native-screens'
 project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screens/android')
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
-include ':greeting'
-project(':greeting').projectDir = new File(rootProject.projectDir, '../greeting/')
+include ':ophan'
+project(':ophan').projectDir = new File(rootProject.projectDir, '../ophan/')
 
 include ':app'
