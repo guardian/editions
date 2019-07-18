@@ -1,5 +1,5 @@
 import * as Keychain from 'react-native-keychain'
-import { ID_AUTH_URL, MEMBERS_DATA_API_URL } from './constants'
+import { ID_API_URL, MEMBERS_DATA_API_URL } from './constants'
 
 const createServiceTokenStore = (service: string) => ({
     get: () => Keychain.getGenericPassword({ service }),
@@ -8,7 +8,7 @@ const createServiceTokenStore = (service: string) => ({
     reset: () => Keychain.resetGenericPassword({ service }),
 })
 
-const userAccessTokenKeychain = createServiceTokenStore(ID_AUTH_URL)
+const userAccessTokenKeychain = createServiceTokenStore(ID_API_URL)
 const membershipAccessTokenKeychain = createServiceTokenStore(
     MEMBERS_DATA_API_URL,
 )

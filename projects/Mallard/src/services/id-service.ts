@@ -1,4 +1,4 @@
-import { ID_AUTH_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
+import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
 import { createSearchParams } from 'src/helpers/url'
 
 interface ErrorReponse {
@@ -9,7 +9,7 @@ const hasErrorsArray = (json: any): json is ErrorReponse =>
     json && Array.isArray(json.errors)
 
 const fetchAuth = async (params: { [key: string]: string }) => {
-    const res = await fetch(`${ID_AUTH_URL}`, {
+    const res = await fetch(`${ID_API_URL}/auth`, {
         method: 'POST',
         headers: {
             'X-GU-ID-Client-Access-Token': `Bearer ${ID_ACCESS_TOKEN}`,
