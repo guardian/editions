@@ -1,7 +1,7 @@
 import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { GOOGLE_CLIENT_ID } from '../constants'
-import { createSearchParams, parseSearchString } from 'src/helpers/url'
+import qs from 'query-string'
 import invariant from 'invariant'
 
 const googleRedirectURI = `com.googleusercontent.apps.${GOOGLE_CLIENT_ID}:authorize`
@@ -11,7 +11,7 @@ const getGoogleOAuthURL = (validatorString: string) =>
         .then(res => res.json())
         .then(
             json =>
-                `${json.authorization_endpoint}?${createSearchParams({
+                `${json.authorization_endpoint}?${qs.stringify({
                     client_id: `${GOOGLE_CLIENT_ID}.apps.googleusercontent.com`,
                     response_type: 'code',
                     redirect_uri: googleRedirectURI,
@@ -31,7 +31,7 @@ const getGoogleTokenFromCode = (code: string) =>
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: createSearchParams({
+        body: qs.stringify({
             code,
             client_id: GOOGLE_CLIENT_ID,
             redirect_uri: googleRedirectURI,
@@ -46,7 +46,7 @@ const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
         authWithDeepRedirect(authUrl, async url => {
             invariant(url.startsWith(googleRedirectURI), 'Login cancelled')
 
-            const params = parseSearchString(url.split('?')[1])
+            const params = qs.parse(url.split('?')[1])
 
             invariant(
                 params.state === validatorString,
@@ -55,7 +55,7 @@ const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
 
             invariant(params.code, 'Something went wrong')
 
-            return getGoogleTokenFromCode(params.code)
+            return getGoogleTokenFromCode(params.code as string)
         }).then(fbToken =>
             fetchAndPersistUserAccessTokenWithType('google', fbToken),
         ),

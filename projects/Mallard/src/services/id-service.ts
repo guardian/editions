@@ -1,5 +1,5 @@
 import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
-import { createSearchParams } from 'src/helpers/url'
+import qs from 'query-string'
 
 interface ErrorReponse {
     errors: { message: string; description: string }[]
@@ -15,7 +15,7 @@ const fetchAuth = async (params: { [key: string]: string }) => {
             'X-GU-ID-Client-Access-Token': `Bearer ${ID_ACCESS_TOKEN}`,
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: createSearchParams(params),
+        body: qs.stringify(params),
     })
     const json = await res.json()
 

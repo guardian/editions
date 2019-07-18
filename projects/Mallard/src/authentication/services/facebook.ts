@@ -1,13 +1,13 @@
 import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { FACEBOOK_CLIENT_ID } from '../constants'
-import { createSearchParams, parseSearchString } from 'src/helpers/url'
+import qs from 'query-string'
 import invariant from 'invariant'
 
 const facebookRedirectURI = `fb${FACEBOOK_CLIENT_ID}://authorize`
 
 const getFacebookOAuthURL = (validatorString: string) =>
-    `https://www.facebook.com/v3.3/dialog/oauth?${createSearchParams({
+    `https://www.facebook.com/v3.3/dialog/oauth?${qs.stringify({
         client_id: FACEBOOK_CLIENT_ID,
         response_type: 'token',
         redirect_uri: facebookRedirectURI,
@@ -26,7 +26,7 @@ const facebookAuthWithDeepRedirect = (
     authWithDeepRedirect(getFacebookOAuthURL(validatorString), async url => {
         invariant(url.startsWith(facebookRedirectURI), 'Login cancelled')
 
-        const params = parseSearchString(url.split('#')[1])
+        const params = qs.parse(url.split('#')[1])
 
         invariant(
             params.state === validatorString,
@@ -35,7 +35,7 @@ const facebookAuthWithDeepRedirect = (
 
         invariant(params.access_token, 'Something went wrong')
 
-        return params.access_token
+        return params.access_token as string
     }).then(fbToken =>
         fetchAndPersistUserAccessTokenWithType('facebook', fbToken),
     )
