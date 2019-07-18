@@ -65,3 +65,6 @@ src/version-info.json
 
 # Crossies
 html/crosswords.bundle/
+
+#jest files
+coverage

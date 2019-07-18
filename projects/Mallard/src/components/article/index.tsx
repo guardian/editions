@@ -9,7 +9,7 @@ import {
     LongReadHeader,
     NewsHeader,
     PropTypes as ArticleHeaderPropTypes,
-} from './article-header'
+} from './article-header/article-header'
 import {
     Standfirst,
     PropTypes as StandfirstPropTypes,
