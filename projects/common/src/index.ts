@@ -247,6 +247,9 @@ const mediaPath = (
 const coloursPath = (issue: string, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
 
+export const notNull = <T>(value: T | null | undefined): value is T =>
+    value !== null && value !== undefined
+
 export {
     issuePath,
     mediaPath,
