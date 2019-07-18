@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import Crossword from 'react-crossword'
-import crossy from './crossy'
 class CrosswordView extends Component {
     render() {
         let { crosswordData } = window
-        if (!crosswordData) crosswordData = crossy
         if (crosswordData) {
             return (
                 <div id="crossword-view">
@@ -13,7 +11,7 @@ class CrosswordView extends Component {
             )
         }
 
-        return null
+        return <div>Failed to load crossword</div>
     }
 }
 
