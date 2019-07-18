@@ -1,7 +1,7 @@
 const parseSearchString = (searchString: string) => {
-    const paramString = searchString.split('&')
+    const paramArr = searchString.split('&')
     const init: { [key: string]: string } = {}
-    return paramString.reduce((acc, p) => {
+    return paramArr.reduce((acc, p) => {
         const [key, value] = p.split('=')
         return { ...acc, [key]: decodeURIComponent(value) }
     }, init)
