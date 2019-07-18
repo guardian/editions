@@ -27,6 +27,10 @@ export interface ArticleNavigationProps {
     transitionProps?: ArticleTransitionProps
     path: PathToArticle
     articleNavigator?: ArticleNavigator
+    /*
+    some article types (crosswords) don't want a
+    navigator or a card and would rather go fullscreen
+    */
     prefersFullScreen?: boolean
 }
 export type ArticleRequiredNavigationProps = RequiredExcept<

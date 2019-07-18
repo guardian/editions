@@ -142,6 +142,7 @@ const ArticleScreenWithProps = ({
     articleNavigator,
     transitionProps,
     navigation,
+    prefersFullScreen,
 }: ArticleRequiredNavigationProps & {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 }) => {
@@ -161,12 +162,6 @@ const ArticleScreenWithProps = ({
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
 
-    /*
-    some article types (crosswords) dont want a
-    navigator or a card and would rather go fullscreen
-    */
-    const prefersFullscreen = true
-
     return (
         <ClipFromTop
             easing={navigationPosition && navigationPosition.position}
@@ -181,7 +176,7 @@ const ArticleScreenWithProps = ({
                     })
                 }}
             />
-            {prefersFullscreen ? (
+            {prefersFullScreen ? (
                 <SlideCard
                     {...viewIsTransitioning}
                     enabled={false}
