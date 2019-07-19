@@ -15,6 +15,7 @@ import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { resetCredentials } from 'src/authentication/keychain'
 import { useSignInStatus, SignInStatus } from 'src/hooks/use-sign-in-status'
+import { routeNames } from 'src/navigation'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -136,7 +137,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                               if (status === SignInStatus.signedIn) {
                                   await resetCredentials()
                               }
-                              navigation.navigate('SignIn')
+                              navigation.navigate(routeNames.SignIn)
                           },
                       },
                   },

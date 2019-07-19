@@ -36,6 +36,7 @@ const routeNames = {
     Settings: 'Settings',
     Endpoints: 'Endpoints',
     GdprConsent: 'GdprConsent',
+    SignIn: 'SignIn',
     onboarding: {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',
@@ -188,10 +189,13 @@ const RootNavigator = createAppContainer(
             },
             App: AppStack,
             Onboarding: OnboardingStack,
-            SignIn: mapNavigationToProps(AuthSwitcherScreen, nav => ({
-                onAuthenticated: () => nav.navigate('App'),
-                onDismiss: () => nav.navigate('App'),
-            })),
+            [routeNames.SignIn]: mapNavigationToProps(
+                AuthSwitcherScreen,
+                nav => ({
+                    onAuthenticated: () => nav.navigate('App'),
+                    onDismiss: () => nav.navigate('App'),
+                }),
+            ),
         },
         {
             initialRouteName: 'Main',
