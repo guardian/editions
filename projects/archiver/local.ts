@@ -1,5 +1,4 @@
 import { run } from './main'
-import AWS from 'aws-sdk'
 //When run from terminal
 
 const date = process.argv[2] || '2019-07-09'
