@@ -16,7 +16,7 @@ const getGoogleOAuthURL = (validatorString: string) =>
                     response_type: 'code',
                     redirect_uri: googleRedirectURI,
                     // I think these are the two scopes required by identity and are what the apps use
-                    scope: ['profile', 'email'].join('%20'),
+                    scope: 'profile email',
                     // always re-authenticate when clicking the fb login button
                     // seeing it means the user will have logged out
                     prompt: 'select_account',
