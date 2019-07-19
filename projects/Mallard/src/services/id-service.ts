@@ -8,11 +8,15 @@ interface ErrorReponse {
 const hasErrorsArray = (json: any): json is ErrorReponse =>
     json && Array.isArray(json.errors)
 
-const fetchAuth = async (params: { [key: string]: string }) => {
-    const res = await fetch(`${ID_API_URL}/auth`, {
+const fetchAuth = async (
+    params: { [key: string]: string },
+    authUrl = ID_API_URL,
+    token = ID_ACCESS_TOKEN,
+) => {
+    const res = await fetch(`${authUrl}/auth`, {
         method: 'POST',
         headers: {
-            'X-GU-ID-Client-Access-Token': `Bearer ${ID_ACCESS_TOKEN}`,
+            'X-GU-ID-Client-Access-Token': `Bearer ${token}`,
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: qs.stringify(params),
@@ -47,6 +51,7 @@ const fetchMembershipAccessToken = (userAccessToken: string) =>
     })
 
 export {
+    fetchAuth,
     fetchUserAccessTokenWithIdentity,
     fetchUserAccessTokenWithType,
     fetchMembershipAccessToken,
