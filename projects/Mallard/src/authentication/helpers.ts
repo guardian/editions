@@ -27,7 +27,7 @@ const fetchAndPersistUserAccessTokenWithType = async (
     authToken: string,
 ): Promise<string> => {
     const token = await fetchUserAccessTokenWithType(tokenType, authToken)
-    await userAccessTokenKeychain.set(`token::${tokenType}`, token)
+    await userAccessTokenKeychain.set(`gu-editions::token::${tokenType}`, token)
     return token
 }
 
