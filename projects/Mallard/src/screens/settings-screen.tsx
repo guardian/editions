@@ -128,7 +128,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                       key: `Sign ${
                           status === SignInStatus.signedIn ? 'out' : 'in'
                       }`,
-                      title: `Sign ${SignInStatus.signedIn ? 'out' : 'in'}`,
+                      title: `Sign ${
+                          status === SignInStatus.signedIn ? 'out' : 'in'
+                      }`,
                       data: {
                           onPress: async () => {
                               if (status === SignInStatus.signedIn) {
