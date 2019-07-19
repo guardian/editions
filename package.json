@@ -20,6 +20,7 @@
         "install-backend": "cd projects/backend && yarn --mutex network",
         "install-archiver": "cd projects/archiver && yarn --mutex network",
         "install-aws": "cd projects/aws && yarn --mutex network",
+        "install-crosswords": "cd projects/editions-crossword-renderer-app && yarn --mutex network",
         "postinstall": "run-p -ln --aggregate-output install-*",
         "build-archiver": "cd projects/archiver && yarn build",
         "build-backend": "cd projects/backend && yarn build",
