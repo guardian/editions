@@ -20,18 +20,18 @@ import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
 import { getImageFromURL } from './image'
 import {
-    IssueResponse,
-    CollectionResponse,
-    ItemResponseMeta,
+    PublishedIssue,
+    PublishedCollection,
+    PublishedFurtniture,
 } from './fronts/issue'
 
 export const parseCollection = async (
-    collectionResponse: CollectionResponse,
+    collectionResponse: PublishedCollection,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
-        ItemResponseMeta,
-    ] => [itemResponse.internalPageCode, itemResponse.meta])
+        PublishedFurtniture,
+    ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
 
@@ -59,12 +59,16 @@ export const parseCollection = async (
             }
             return inResponse
         })
-        .map(([key, meta]): [string, CAPIArticle] => {
+        .map(([key, furniture]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const kicker = (meta && meta.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
-            const headline = (meta && meta.headline) || article.headline
+            const kicker =
+                (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
+            const headline =
+                (furniture && furniture.headlineOverride) || article.headline
             const imageOverride =
-                meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
+                furniture &&
+                furniture.imageSrcOverride &&
+                getImageFromURL(furniture.imageSrcOverride.src)
 
             switch (article.type) {
                 case 'crossword':
@@ -166,7 +170,7 @@ export const getFront = async (
     lastModifiedUpdater(resp.lastModified)
 
     const tone = getFrontColor(id)
-    const issueResponse: IssueResponse = (await resp.json()) as IssueResponse
+    const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
     const front = issueResponse.fronts.find(_ => _.name === id)
     if (!front) {
         return failure({ httpStatus: 404, error: new Error('Front not found') })
