@@ -5,7 +5,6 @@
     "scripts": {
         "pre-run": "yarn watch-html & node ./scripts/versioning.js",
         "pre-bundle": "yarn exit-if-metro-running && yarn bundle-html && node ./scripts/versioning.js",
-        "postinstall": "yarn pre-bundle",
         "start": "yarn pre-run && node node_modules/react-native/local-cli/cli.js start",
         "test": "jest --coverage",
         "test:watch": "jest --watch",
