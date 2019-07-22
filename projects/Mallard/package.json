@@ -16,7 +16,7 @@
         "run-ipad": "yarn pre-run && react-native run-ios --simulator=\"iPad Air 2\"",
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard",
-        "exit-if-metro-running": "lsof -ni tcp:8081 | grep \"node\" && exit 1",
+        "exit-if-metro-running": "lsof -ni tcp:8081 | grep \"node\" && echo \"Build already running on other build agent, please requeue\" && exit 1",
         "kill-metro": "lsof -ti tcp:8081 | xargs kill",
         "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
         "bundle-ios": "yarn pre-bundle && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
