@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { s3fetch, s3Latest, s3List } from '../s3'
 import { Issue, notNull, IssueSummary } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
-import { IssueResponse } from '../fronts/issue'
+import { PublishedIssue } from '../fronts/issue'
 import { hasFailed, Attempt } from '../utils/try'
 
 const getIssue = async (
@@ -27,7 +27,7 @@ const getIssue = async (
     }
 
     lastModifiedUpdater(x.lastModified)
-    const data = (await x.json()) as IssueResponse
+    const data = (await x.json()) as PublishedIssue
     const fronts = data.fronts.map(_ => _.name)
     return {
         name: data.name,
