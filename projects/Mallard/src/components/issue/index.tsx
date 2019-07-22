@@ -13,7 +13,7 @@ const splitStyles = StyleSheet.create({
     },
 })
 
-const IssueRowSplit = ({
+const GridRowSplit = ({
     children,
     style,
 }: {
@@ -22,7 +22,7 @@ const IssueRowSplit = ({
         Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
     >
 }) => {
-    const width = metrics.issueHeaderSplit()
+    const width = metrics.gridRowSplit()
     return (
         <View style={[splitStyles.container, style]}>
             <View style={[splitStyles.inner, { width }]}>{children}</View>
@@ -79,4 +79,4 @@ IssueTitle.defaultProps = {
     appearance: IssueTitleAppearance.default,
 }
 
-export { IssueTitle, IssueRowSplit }
+export { IssueTitle, GridRowSplit }
