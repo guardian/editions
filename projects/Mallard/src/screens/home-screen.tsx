@@ -91,7 +91,7 @@ export const HomeScreen = ({
                                         appearance={ButtonAppearance.skeleton}
                                         onPress={() => {
                                             navigation.navigate('Issue', {
-                                                path: null,
+                                                issue: null,
                                             })
                                         }}
                                     >
