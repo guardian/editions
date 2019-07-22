@@ -1,9 +1,10 @@
 import React from 'react'
 import { View, StyleSheet, Animated, StyleProp } from 'react-native'
-import { StandfirstText, BodyCopy } from '../styled-text'
+import { StandfirstText } from '../../styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance, useArticleToneColor } from 'src/theme/appearance'
-import { Multiline } from '../multiline'
+import { Multiline } from '../../multiline'
+import { ArticleByline } from '../article-byline/article-byline'
 
 export interface PropTypes {
     standfirst: string
@@ -26,8 +27,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const Standfirst = ({ standfirst, byline, style }: PropTypes) => {
-    const { appearance, name } = useArticleAppearance()
+const ArticleStandfirst = ({ standfirst, byline, style }: PropTypes) => {
+    const { appearance } = useArticleAppearance()
     const color = useArticleToneColor()
     return (
         <Animated.View
@@ -48,21 +49,16 @@ const Standfirst = ({ standfirst, byline, style }: PropTypes) => {
                 ]}
             >
                 <Multiline
-                    count={name === 'opinion' ? 8 : 4}
+                    count={4}
                     color={
                         StyleSheet.flatten([appearance.text, appearance.byline])
                             .color
                     }
                 />
-                <BodyCopy
-                    weight={'bold'}
-                    style={[appearance.text, appearance.byline, { color }]}
-                >
-                    {byline}
-                </BodyCopy>
+                <ArticleByline>{byline}</ArticleByline>
             </View>
         </Animated.View>
     )
 }
 
-export { Standfirst }
+export { ArticleStandfirst }

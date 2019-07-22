@@ -2,9 +2,12 @@ import React from 'react'
 import { View } from 'react-native'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { HeadlineKickerText } from 'src/components/styled-text'
-import { longReadHeaderStyles, newsHeaderStyles } from './article-header-styles'
+import {
+    longReadHeaderStyles,
+    newsHeaderStyles,
+} from '../article-header/styles'
 
-const dontDisplayKicker = ['Opinion']
+const dontDisplayKicker = ['opinion']
 
 export interface ArticleKickerProps {
     kicker: string
@@ -12,9 +15,9 @@ export interface ArticleKickerProps {
 }
 
 export const ArticleKicker = ({ kicker, type }: ArticleKickerProps) => {
-    const { appearance } = useArticleAppearance()
+    const { appearance, name } = useArticleAppearance()
 
-    if (dontDisplayKicker.includes(kicker)) {
+    if (dontDisplayKicker.includes(name)) {
         return null
     }
 

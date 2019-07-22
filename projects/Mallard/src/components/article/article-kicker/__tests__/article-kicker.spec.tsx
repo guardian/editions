@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { ArticleKicker } from '../article-kicker'
 
