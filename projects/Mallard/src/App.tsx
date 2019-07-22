@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'nav-'
+const persistenceKey = 'dev-nav-key'
 const persistNavigationState = async (navState: any) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
@@ -47,7 +47,20 @@ const rootNavigationProps = __DEV__ && {
     loadNavigationState,
 }
 
+const isReactNavPersistenceError = (e: Error) =>
+    __DEV__ && e.message.includes('There is no route defined for')
+
 export default class App extends React.Component<{}, {}> {
+    async componentDidCatch(e: Error) {
+        /**
+         * use an heuristic to check whether this is a react-nav error
+         * if it is then ditch our persistence and try to re-render
+         */
+        if (isReactNavPersistenceError(e)) {
+            await AsyncStorage.removeItem(persistenceKey)
+            this.forceUpdate()
+        }
+    }
     /**
      * When the component is mounted. This happens asynchronously and simply
      * re-renders when we're good to go.

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     outer: {
         padding: metrics.horizontal,
         marginBottom: 0,
-        marginTop: metrics.vertical * 2,
+        marginTop: 0,
     },
 })
 

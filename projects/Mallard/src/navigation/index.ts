@@ -11,7 +11,7 @@ import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
 import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
-import { Animated, Easing, Platform } from 'react-native'
+import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import {
     OnboardingIntroScreen,
@@ -26,6 +26,7 @@ import {
     issueToIssueListInterpolator,
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
+import { AuthSwitcherScreen } from 'src/screens/auth-switcher-screen'
 
 const routeNames = {
     Issue: 'Issue',
@@ -35,6 +36,7 @@ const routeNames = {
     Settings: 'Settings',
     Endpoints: 'Endpoints',
     GdprConsent: 'GdprConsent',
+    SignIn: 'SignIn',
     onboarding: {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',
@@ -187,6 +189,13 @@ const RootNavigator = createAppContainer(
             },
             App: AppStack,
             Onboarding: OnboardingStack,
+            [routeNames.SignIn]: mapNavigationToProps(
+                AuthSwitcherScreen,
+                nav => ({
+                    onAuthenticated: () => nav.navigate('App'),
+                    onDismiss: () => nav.navigate('App'),
+                }),
+            ),
         },
         {
             initialRouteName: 'Main',

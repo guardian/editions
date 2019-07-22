@@ -1,5 +1,5 @@
 import { attempt, hasFailed, hasSucceeded } from '../utils/try'
-import { SearchResponseCodec, ContentType } from '@guardian/capi-ts'
+import { SearchResponseCodec, ContentType, TagType } from '@guardian/capi-ts'
 import { BlockElement, Image } from '../common'
 import {
     BufferedTransport,
@@ -8,10 +8,12 @@ import {
 import { getImage } from './assets'
 import { elementParser } from './elements'
 import { IContent } from '@guardian/capi-ts/dist/Content'
+import { ITag } from '@guardian/capi-ts/dist/Tag'
 import { ICrossword } from '@guardian/capi-ts/dist/Crossword'
 import fetch from 'node-fetch'
 import { cleanupHtml } from '../utils/html'
 import { fromPairs } from 'ramda'
+import { kickerPicker } from './kickerPicker'
 
 interface Article {
     type: 'article'
@@ -71,7 +73,7 @@ const parseArticleResult = async (
     const byline = result && result.fields && result.fields.byline
 
     const parser = elementParser(path)
-    const kicker = result.tags[0] && result.tags[0].webTitle
+    const kicker = kickerPicker(result, title, byline)
 
     const maybeMainImage =
         result &&
