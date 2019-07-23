@@ -134,7 +134,14 @@ const Article = ({
                     onMessage={event => {
                         setHeight(parseInt(event.nativeEvent.data))
                     }}
-                    style={{ flex: 1, minHeight: height }}
+                    style={{
+                        flex: 1,
+                        minHeight: height,
+                    }}
+                    // The below lines fixes crashes on Android
+                    // there seems to be other approaches using opacity / overflow styles detailed here
+                    // https://github.com/react-native-community/react-native-webview/issues/429
+                    androidHardwareAccelerationDisabled={true}
                 />
             </Animated.View>
         </View>
