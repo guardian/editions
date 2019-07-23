@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
         flex: 0,
     },
     baseWeatherIcon: {
+        bottom: 0,
         fontFamily: 'GuardianWeatherIcons-Regular',
         position: 'absolute',
     },
