@@ -3,7 +3,11 @@ import { Text, Dimensions, View, Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { List } from 'src/components/lists/list'
-import { withNavigation, NavigationInjectedProps } from 'react-navigation'
+import {
+    withNavigation,
+    NavigationInjectedProps,
+    NavigationScreenProp,
+} from 'react-navigation'
 import { useSettings } from 'src/hooks/use-settings'
 import { MonoTextBlock } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
@@ -16,6 +20,7 @@ import { ScrollContainer } from 'src/components/layout/ui/container'
 import { resetCredentials } from 'src/authentication/keychain'
 import { useSignInStatus, SignInStatus } from 'src/hooks/use-sign-in-status'
 import { routeNames } from 'src/navigation'
+import { Button } from 'src/components/button/button'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -211,8 +216,19 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         </ScrollContainer>
     )
 }
-SettingsScreen.navigationOptions = {
+SettingsScreen.navigationOptions = ({
+    navigation,
+}: {
+    navigation: NavigationScreenProp<{}>
+}) => ({
     title: 'Settings',
-}
+    headerTitleStyle: {
+        textAlign: 'center',
+        flex: 1,
+    },
+    headerLeft: () => (
+        <Button onPress={() => navigation.goBack(null)}>Back</Button>
+    ),
+})
 
 export { SettingsScreen }

@@ -6,7 +6,7 @@ const useAlphaIn = (duration: number, easing = Easing.linear) => {
 
     useEffect(() => {
         Animated.timing(value, { duration, toValue: 1, easing }).start()
-    }, [])
+    }, [duration, easing, value])
 
     return value
 }

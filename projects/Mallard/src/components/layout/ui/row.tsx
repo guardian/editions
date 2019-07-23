@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical,
+        paddingVertical: metrics.vertical / 1.5,
+        paddingBottom: metrics.vertical * 1.5,
         marginVertical: StyleSheet.hairlineWidth,
     },
     itemFlexer: {

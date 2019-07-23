@@ -1,23 +1,29 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, StyleProp, TextStyle, View, ViewStyle } from 'react-native'
 import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
 import { IssueTitleText } from '../styled-text'
+import { metrics } from 'src/theme/spacing'
 
 const splitStyles = StyleSheet.create({
-    container: { flexDirection: 'row', justifyContent: 'flex-end' },
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '100%',
+    },
     inner: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         flex: 0,
     },
 })
 
 const GridRowSplit = ({
     children,
+    proxy,
     style,
 }: {
     children: ReactNode
+    proxy?: ReactNode
     style?: StyleProp<
         Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
     >
@@ -25,6 +31,7 @@ const GridRowSplit = ({
     const width = metrics.gridRowSplit()
     return (
         <View style={[splitStyles.container, style]}>
+            {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
             <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
     )
@@ -44,6 +51,7 @@ export enum IssueTitleAppearance {
 export interface IssueTitleProps {
     title: string
     subtitle?: string
+    style?: StyleProp<ViewStyle>
 }
 
 const appearances: {
@@ -63,10 +71,11 @@ const IssueTitle = ({
     title,
     subtitle,
     appearance,
+    style,
 }: IssueTitleProps & { appearance: IssueTitleAppearance }) => (
-    <View>
+    <View style={style}>
         <IssueTitleText style={styles.text}>{title}</IssueTitleText>
-        {subtitle && (
+        {!!subtitle && (
             <IssueTitleText
                 style={[styles.text, appearances[appearance].subtitle]}
             >
