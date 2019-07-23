@@ -30,17 +30,21 @@ const kickerPicker = (
     if (seriesTag) return seriesTag.webTitle
 
     if (
-        (toneTag && toneTag.id && toneTag.id == 'tone/letters') ||
-        toneTag.id == 'tone/analysis' ||
-        toneTag.id == 'tone/obituaries'
+        toneTag &&
+        toneTag.id &&
+        (toneTag.id == 'tone/letters' ||
+            toneTag.id == 'tone/analysis' ||
+            toneTag.id == 'tone/obituaries')
     )
         return toneTag.webTitle
 
     if (
-        (toneTag && toneTag.id && toneTag.id == 'tone/reviews') ||
-        toneTag.id == 'tone/editorials' ||
-        toneTag.id == 'tone/matchreports' ||
-        toneTag.id == 'tone/explainers'
+        toneTag &&
+        toneTag.id &&
+        (toneTag.id == 'tone/reviews' ||
+            toneTag.id == 'tone/editorials' ||
+            toneTag.id == 'tone/matchreports' ||
+            toneTag.id == 'tone/explainers')
     )
         return toneTag.webTitle.substring(0, toneTag.webTitle.length - 1)
 
