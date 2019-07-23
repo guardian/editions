@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import {
     NavigationScreenProp,
     NavigationEvents,
@@ -8,20 +8,16 @@ import {
 
 import { Front } from 'src/components/front'
 import { Issue } from 'src/common'
-import { Header } from 'src/components/header'
+import { IssueHeader } from 'src/components/layout/header/header'
 
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { GENERIC_ERROR } from 'src/helpers/words'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { useIssueWithResponse, getIssueResponse } from 'src/hooks/use-issue'
+import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
-import { useSettings } from 'src/hooks/use-settings'
 
-import { getLatestIssue } from 'src/hooks/use-api'
 import { withNavigation } from 'react-navigation'
-import { Button } from 'src/components/button/button'
-import { navigateToIssueList } from 'src/navigation/helpers'
-import { renderIssueDate } from 'src/helpers/issues'
+import { Button, ButtonAppearance } from 'src/components/button/button'
+import { navigateToIssueList, navigateToSettings } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
 
@@ -29,36 +25,42 @@ export interface PathToIssue {
     issue: Issue['key']
 }
 
-const IssueHeader = withNavigation(
+const Header = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
-        const { date, weekday } = useMemo<{ date: string; weekday?: string }>(
-            () =>
-                issue
-                    ? renderIssueDate(issue.date)
-                    : { date: 'Issue', weekday: 'undefined' },
-            [issue && issue.key, issue],
+        const settings = (
+            <Button
+                icon=""
+                alt="Settings"
+                onPress={() => {
+                    navigateToSettings(navigation)
+                }}
+                appearance={ButtonAppearance.skeleton}
+            />
         )
+
         return (
-            <Header
+            <IssueHeader
+                leftAction={settings}
+                accessibilityHint="More issues"
+                onPress={() => {
+                    navigateToIssueList(navigation)
+                }}
                 action={
                     <Button
                         icon=""
                         alt="More issues"
-                        onPress={() => navigateToIssueList(navigation)}
+                        onPress={() => {
+                            navigateToIssueList(navigation)
+                        }}
                     />
                 }
-                title={date}
-                subtitle={weekday}
+                issue={issue}
             />
         )
     },
 )
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    const response = useIssueWithResponse(
-        path ? getIssueResponse(path.issue) : getLatestIssue(),
-        [path ? path.issue : 'latest'],
-    )
     /*
     we don't wanna render a massive tree at once
     as the navigator is trying to push the screen bc this
@@ -67,8 +69,9 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     we can pass this prop to identify if we wanna render
     just the 'above the fold' content or the whole shebang
     */
+    const response = useIssueOrLatestResponse(path && path.issue)
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
-    const [{ isUsingProdDevtools }] = useSettings()
+
     return (
         <Container>
             <NavigationEvents
@@ -79,7 +82,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
             {response({
                 error: ({ message }, { retry }) => (
                     <>
-                        <IssueHeader />
+                        <Header />
 
                         <FlexErrorMessage
                             debugMessage={message}
@@ -89,7 +92,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 pending: () => (
                     <>
-                        <IssueHeader />
+                        <Header />
                         <FlexCenter>
                             <Spinner />
                         </FlexCenter>
@@ -97,7 +100,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 success: issue => (
                     <>
-                        <IssueHeader issue={issue} />
+                        <Header issue={issue} />
                         <FlatList
                             data={issue.fronts}
                             windowSize={3}
@@ -125,7 +128,7 @@ export const IssueScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const path = navigation.state.params as PathToIssue | undefined
+    const path = navigation.getParam('path') as PathToIssue | undefined
     if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
     return <IssueScreenWithPath path={path} />
 }

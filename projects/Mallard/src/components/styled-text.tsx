@@ -11,6 +11,7 @@ import {
 import { useAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
+import { getFont } from 'src/theme/typography'
 
 const cardStyles = {
     default: {
@@ -51,25 +52,19 @@ const styles = StyleSheet.create({
     },
     standfirstText: {
         flexShrink: 0,
-        fontFamily: 'GuardianTextEgyptian-Reg',
-        fontSize: 17,
-        lineHeight: 21,
+        ...getFont('text', 1),
     },
     serifBodyCopy: {
         flexShrink: 0,
-        fontFamily: 'GuardianTextEgyptian-Reg',
-        fontSize: 17,
-        lineHeight: 21,
+        ...getFont('text', 1),
     },
     bodyCopy: {
         flexShrink: 0,
-        fontSize: 17,
-        fontFamily: 'GuardianTextSans-Regular',
+        ...getFont('sans', 1),
     },
     explainerCopy: {
         flexShrink: 0,
-        fontSize: 15,
-        fontFamily: 'GuardianTextSans-Regular',
+        ...getFont('sans', 0.9),
     },
 })
 
