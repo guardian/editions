@@ -69,7 +69,7 @@ const CollectionPage = ({
             //     break
             //THIS IS JUST FOR DEVELOPMENT TODO: Make this layout work from API
             case 1:
-                pageLayout = splashPage
+                pageLayout = superHeroPage
                 break
             case 2:
                 pageLayout = twoStoryPage
