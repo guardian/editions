@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, ListRenderItem } from 'react-native'
+import { FlatList, ListRenderItem, FlatListProps } from 'react-native'
 import { Separator, Row } from 'src/components/layout/ui/row'
 /*
 An item is what the list uses to draw its own row –
@@ -20,19 +20,14 @@ D contains things like the route a row points or the text content of it
 export type OnPressHandler<D> = (item: D) => void
 
 export const BaseList = <I extends {}>({
-    data,
-    renderItem,
-}: {
-    data: I[]
-    renderItem: ListRenderItem<I>
-}) => {
+    ...flatListProps
+}: FlatListProps<I>) => {
     return (
         <FlatList
             ItemSeparatorComponent={Separator}
             ListFooterComponent={Separator}
             ListHeaderComponent={Separator}
-            data={data}
-            renderItem={renderItem}
+            {...flatListProps}
         />
     )
 }

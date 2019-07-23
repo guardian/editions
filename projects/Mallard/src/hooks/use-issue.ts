@@ -10,6 +10,7 @@ import {
 } from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
 import { CachedOrPromise, chain } from 'src/helpers/fetch/cached-or-promise'
+import { getLatestIssue } from './use-api'
 
 export const useIssueWithResponse = <T>(
     getter: CachedOrPromise<T>,
@@ -25,6 +26,11 @@ export const getIssueResponse = (issue: Issue['key']) =>
 
 export const useIssueResponse = (issue: Issue['key']) =>
     useIssueWithResponse(getIssueResponse(issue), [issue])
+
+export const useIssueOrLatestResponse = (issue?: Issue['key']) =>
+    useIssueWithResponse(issue ? getIssueResponse(issue) : getLatestIssue(), [
+        issue || 'latest',
+    ])
 
 export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
     fetchFromIssue<Front>(
