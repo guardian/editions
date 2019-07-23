@@ -52,41 +52,68 @@ const navOptionsWithGraunHeader = {
     headerTintColor: color.textOverPrimary,
 }
 
+const transitionOptionsOverArtboard = (bounces: boolean) => ({
+    containerStyle: {
+        backgroundColor: color.artboardBackground,
+    },
+    transitionSpec: {
+        duration: bounces ? 500 : 400,
+        easing: Easing.elastic(bounces ? 1 : 0.5),
+        timing: Animated.timing,
+        useNativeDriver: true,
+    },
+})
+
 const AppStack = createStackNavigator(
     {
         [routeNames.Issue]: createStackNavigator(
             {
-                [routeNames.Issue]: IssueScreen,
-                [routeNames.Article]: ArticleScreen,
+                [routeNames.Issue]: createStackNavigator(
+                    {
+                        [routeNames.Issue]: IssueScreen,
+                        [routeNames.Article]: ArticleScreen,
+                    },
+                    {
+                        transparentCard: true,
+                        initialRouteName: routeNames.Issue,
+                        mode: 'modal',
+                        headerMode: 'none',
+                        cardOverlayEnabled: true,
+                        transitionConfig: () => ({
+                            ...transitionOptionsOverArtboard(true),
+                            screenInterpolator: issueToArticleScreenInterpolator,
+                        }),
+                        defaultNavigationOptions: {
+                            gesturesEnabled: false,
+                        },
+                    },
+                ),
+                [routeNames.IssueList]: HomeScreen,
             },
             {
-                transparentCard: true,
-                initialRouteName: routeNames.Issue,
-                mode: 'modal',
-                headerMode: 'none',
-                cardOverlayEnabled: true,
-                transitionConfig: () => ({
-                    containerStyle: {
-                        backgroundColor: 'transparent',
-                    },
-                    transitionSpec: {
-                        duration: 500,
-                        easing: Easing.elastic(1.1),
-                        timing: Animated.timing,
-                        useNativeDriver: true,
-                    },
-                    screenInterpolator: issueToArticleScreenInterpolator,
-                }),
                 defaultNavigationOptions: {
+                    header: null,
                     gesturesEnabled: false,
                 },
+                initialRouteName: routeNames.Issue,
+                ...(supportsTransparentCards()
+                    ? {
+                          transparentCard: true,
+                          mode: 'modal',
+                          headerMode: 'none',
+                          cardOverlayEnabled: true,
+                          transitionConfig: () => ({
+                              ...transitionOptionsOverArtboard(false),
+                              screenInterpolator: issueToIssueListInterpolator,
+                          }),
+                      }
+                    : {}),
             },
         ),
         _: createStackNavigator(
             {
-                [routeNames.IssueList]: HomeScreen,
-                [routeNames.Downloads]: DownloadScreen,
                 [routeNames.Settings]: SettingsScreen,
+                [routeNames.Downloads]: DownloadScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
             },
@@ -94,35 +121,17 @@ const AppStack = createStackNavigator(
                 defaultNavigationOptions: {
                     ...navOptionsWithGraunHeader,
                 },
+                initialRouteName: routeNames.Settings,
             },
         ),
     },
     {
+        mode: 'modal',
+        headerMode: 'none',
+        initialRouteName: routeNames.Issue,
         defaultNavigationOptions: {
-            header: null,
             gesturesEnabled: false,
         },
-        initialRouteName: routeNames.Issue,
-        ...(supportsTransparentCards()
-            ? {
-                  transparentCard: true,
-                  mode: 'modal',
-                  headerMode: 'none',
-                  cardOverlayEnabled: true,
-                  transitionConfig: () => ({
-                      containerStyle: {
-                          backgroundColor: 'transparent',
-                      },
-                      transitionSpec: {
-                          duration: 500,
-                          easing: Easing.elastic(0.5),
-                          timing: Animated.timing,
-                          useNativeDriver: true,
-                      },
-                      screenInterpolator: issueToIssueListInterpolator,
-                  }),
-              }
-            : {}),
     },
 )
 

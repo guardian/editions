@@ -11,11 +11,12 @@ import {
 import { useAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
+import { getFont } from 'src/theme/typography'
 
 const cardStyles = {
     default: {
-        fontSize: 19,
-        lineHeight: 22,
+        fontSize: 18,
+        lineHeight: 21,
     },
 }
 
@@ -23,8 +24,9 @@ const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
         fontFamily: 'GHGuardianHeadline-Regular',
-        fontSize: 28,
-        lineHeight: 30,
+        fontSize: 30,
+        lineHeight: 32,
+        marginTop: 4,
         color: color.text,
     },
     issueTitleText: {
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
     headlineKickerText: {
         flexShrink: 0,
         fontFamily: 'GTGuardianTitlepiece-Bold',
-        marginBottom: metrics.vertical,
+        marginTop: 2,
         ...cardStyles.default,
     },
     headlineCardText: {
@@ -51,25 +53,19 @@ const styles = StyleSheet.create({
     },
     standfirstText: {
         flexShrink: 0,
-        fontFamily: 'GuardianTextEgyptian-Reg',
-        fontSize: 17,
-        lineHeight: 21,
+        ...getFont('text', 1),
     },
     serifBodyCopy: {
         flexShrink: 0,
-        fontFamily: 'GuardianTextEgyptian-Reg',
-        fontSize: 17,
-        lineHeight: 21,
+        ...getFont('text', 1),
     },
     bodyCopy: {
         flexShrink: 0,
-        fontSize: 17,
-        fontFamily: 'GuardianTextSans-Regular',
+        ...getFont('sans', 1),
     },
     explainerCopy: {
         flexShrink: 0,
-        fontSize: 15,
-        fontFamily: 'GuardianTextSans-Regular',
+        ...getFont('sans', 0.9),
     },
 })
 
