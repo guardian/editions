@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
         elevation: 2,
         flex: 1,
         margin: metrics.frontsPageSides,
-        marginVertical: metrics.vertical,
+        marginBottom: 32,
+        marginTop: 8,
     },
 })
 

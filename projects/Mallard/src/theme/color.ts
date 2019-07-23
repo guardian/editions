@@ -31,7 +31,7 @@ export const color = {
     /*
     Border colors
     */
-    line: palette.neutral[86],
+    line: palette.neutral[60],
     lineOverPrimary: palette.brand.pastel,
 
     /*

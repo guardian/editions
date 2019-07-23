@@ -14,7 +14,7 @@ export interface PropTypes {
 const styles = StyleSheet.create({
     background: {
         alignItems: 'flex-start',
-        paddingHorizontal: metrics.horizontal,
+        marginHorizontal: metrics.horizontal,
         borderBottomWidth: StyleSheet.hairlineWidth,
         paddingTop: metrics.vertical / 2,
     },
