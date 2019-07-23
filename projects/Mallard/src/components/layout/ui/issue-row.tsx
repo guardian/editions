@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import {
     IssueTitle,
     IssueTitleAppearance,
-    IssueRowSplit,
+    GridRowSplit,
 } from 'src/components/issue'
 import { RowWrapper, RowWrapperProps } from './row'
 import { IssueSummary } from 'src/common'
@@ -18,13 +18,13 @@ const IssueRow = ({
 
     return (
         <RowWrapper onPress={onPress}>
-            <IssueRowSplit>
+            <GridRowSplit>
                 <IssueTitle
                     title={date}
                     subtitle={weekday}
                     appearance={IssueTitleAppearance.ocean}
                 />
-            </IssueRowSplit>
+            </GridRowSplit>
         </RowWrapper>
     )
 }

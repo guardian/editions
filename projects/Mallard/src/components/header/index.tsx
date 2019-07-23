@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { IssueTitle, IssueTitleProps, IssueRowSplit } from '../issue'
+import { IssueTitle, IssueTitleProps, GridRowSplit } from '../issue'
 import { useInsets } from 'src/hooks/use-insets'
 
 const styles = StyleSheet.create({
@@ -27,7 +27,7 @@ const Header = ({
     const { top: paddingTop } = useInsets()
     return (
         <View style={[styles.background]}>
-            <IssueRowSplit style={{ paddingTop }}>
+            <GridRowSplit style={{ paddingTop }}>
                 <View
                     style={{
                         justifyContent: 'space-between',
@@ -38,7 +38,7 @@ const Header = ({
                     <IssueTitle {...IssueIssueTitleProps} />
                     {action}
                 </View>
-            </IssueRowSplit>
+            </GridRowSplit>
         </View>
     )
 }

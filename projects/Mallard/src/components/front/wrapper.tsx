@@ -5,7 +5,8 @@ import { metrics } from 'src/theme/spacing'
 const styles = StyleSheet.create({
     inner: { height: metrics.frontsPageHeight },
     outer: {
-        padding: metrics.horizontal,
+        paddingLeft: metrics.horizontal,
+        paddingRight: metrics.horizontal,
         marginBottom: 0,
         marginTop: 0,
     },
