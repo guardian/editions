@@ -21,7 +21,7 @@ export const newsHeaderStyles: StyleSheet.NamedStyles<
         paddingBottom: metrics.vertical,
     },
     kicker: {
-        paddingBottom: metrics.vertical / 2,
+        paddingBottom: metrics.vertical * 1.5,
         marginBottom: metrics.vertical / 4,
         borderBottomWidth: StyleSheet.hairlineWidth,
         width: '100%',
