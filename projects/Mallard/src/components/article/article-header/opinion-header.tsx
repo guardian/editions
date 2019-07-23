@@ -11,7 +11,7 @@ import { ArticleHeaderProps } from './types'
 import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
-import Quote from 'src/components/icons/Quote';
+import Quote from 'src/components/icons/Quote'
 
 const OpinionHeader = ({
     byline,
@@ -23,27 +23,33 @@ const OpinionHeader = ({
     const { appearance } = useArticleAppearance()
     const navigationPosition = getNavigationPosition('article')
     return (
-        <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
-            {image ? (
-                <ArticleImage
-                    style={{
-                        aspectRatio: 1.5,
-                        marginBottom: metrics.vertical / 4,
-                    }}
-                    image={image}
-                />
-            ) : null}
-            {kicker ? <ArticleKicker kicker={kicker} type="news" /> : null}
-            <Animated.View style={animationStyles(navigationPosition)}>
-                <Quote />
-                <ArticleHeadline type="news">{headline}</ArticleHeadline>
-                <ArticleByline>{byline}</ArticleByline>
-            </Animated.View>
+        <>
+            <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
+                {image ? (
+                    <ArticleImage
+                        style={{
+                            aspectRatio: 1.5,
+                            marginBottom: metrics.vertical / 4,
+                        }}
+                        image={image}
+                    />
+                ) : null}
+                {kicker ? <ArticleKicker kicker={kicker} type="news" /> : null}
+                <Animated.View style={animationStyles(navigationPosition)}>
+                    <ArticleHeadline type="news">
+                        <Quote />
+                        {headline}
+                    </ArticleHeadline>
+                    <ArticleByline>{byline}</ArticleByline>
+                </Animated.View>
+            </View>
             <Multiline count={4} />
-            <ArticleStandfirst
-                {...{ byline, standfirst, navigationPosition }}
-            />
-        </View>
+            <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
+                <ArticleStandfirst
+                    {...{ standfirst, navigationPosition }}
+                />
+            </View>
+        </>
     )
 }
 

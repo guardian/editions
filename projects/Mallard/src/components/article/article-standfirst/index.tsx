@@ -7,18 +7,10 @@ import { animationStyles } from '../styles'
 
 export interface PropTypes {
     standfirst: string
-    byline: string
-    style?: StyleProp<{}>
     navigationPosition?: any
 }
 
 const styles = StyleSheet.create({
-    background: {
-        alignItems: 'flex-start',
-        marginHorizontal: metrics.horizontal,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        paddingTop: metrics.vertical / 2,
-    },
     bylineBackground: {
         marginTop: metrics.vertical,
         marginBottom: metrics.vertical,
@@ -29,22 +21,18 @@ const styles = StyleSheet.create({
 
 const ArticleStandfirst = ({
     standfirst,
-    byline,
     navigationPosition,
 }: PropTypes) => {
-    const { appearance } = useArticleAppearance()
+    const { appearance, name } = useArticleAppearance()
     return (
         <Animated.View
             style={
                 animationStyles(navigationPosition)
             }
         >
-            <StandfirstText style={[appearance.text, appearance.standfirst]}>
-                {standfirst}
-            </StandfirstText>
             <View
                 style={[
-                    styles.bylineBackground,
+                    name !== 'opinion' && styles.bylineBackground,
                     appearance.backgrounds,
                     {
                         justifyContent: 'flex-end',
@@ -53,6 +41,9 @@ const ArticleStandfirst = ({
                     },
                 ]}
             >
+                <StandfirstText style={[appearance.text, appearance.standfirst]}>
+                    {standfirst.replace(/\s/g, ' ')}
+                </StandfirstText>
             </View>
         </Animated.View>
     )

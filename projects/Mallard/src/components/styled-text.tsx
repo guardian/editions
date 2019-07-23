@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
         fontFamily: 'GHGuardianHeadline-Regular',
-        fontSize: 30,
-        lineHeight: 32,
+        fontSize: 28,
+        lineHeight: 30,
         marginTop: 4,
         color: color.text,
     },
@@ -155,10 +155,10 @@ export const BodyCopy = ({
             {...props}
             style={[
                 styles.serifBodyCopy,
-                style,
                 weight === 'bold' && {
                     fontFamily: 'GuardianTextEgyptian-Bold',
                 },
+                style
             ]}
         />
     )

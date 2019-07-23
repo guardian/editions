@@ -99,7 +99,7 @@ const ArticleScreenBody = ({
                 ),
                 success: article => (
                     <>
-                        {isUsingProdDevtools ? (
+                        {/* {isUsingProdDevtools ? ( */}
                             <Button
                                 onPress={() => {
                                     setAppearance(app => {
@@ -120,7 +120,7 @@ const ArticleScreenBody = ({
                             >
                                 {`${appearances[modifiedAppearance]} 🌈`}
                             </Button>
-                        ) : null}
+                        {/* ) : null} */}
                         <WithArticleAppearance
                             value={
                                 appearances[

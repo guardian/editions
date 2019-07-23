@@ -148,16 +148,24 @@ export const articleAppearances: {
         cardBackgrounds: {},
         contrastCardBackgrounds: {},
         text: {
-            color: color.palette.opinion.main,
+            color: color.palette.opinion.bright,
         },
         headline: {
+            color: 'black',
             fontFamily: 'GHGuardianHeadline-Light',
         },
         kicker: {},
         byline: {
-            marginBottom: metrics.vertical,
+            fontFamily: 'GTGuardianTitlepiece-Bold',
+            fontSize: 28,
+            lineHeight: 30,
+            marginTop: 5,
+            marginBottom: metrics.vertical
         },
-        standfirst: {},
+        standfirst: {
+            color: 'black',
+            paddingBottom: 5
+        },
     },
     sport: {
         backgrounds: {
