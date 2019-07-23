@@ -52,3 +52,11 @@ export const longReadHeaderStyles: StyleSheet.NamedStyles<
         marginEnd: metrics.horizontal * 2,
     },
 })
+
+export const animationStyles = (navigationPosition: any) =>
+    navigationPosition && {
+        opacity: navigationPosition.position.interpolate({
+            inputRange: [0.4, 1],
+            outputRange: [0, 1],
+        }),
+    }

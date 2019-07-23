@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, Animated } from 'react-native'
-import { HeadlineText } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
@@ -12,8 +11,9 @@ import { ArticleHeaderProps } from './types'
 import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
+import Quote from 'src/components/icons/Quote';
 
-const NewsHeader = ({
+const OpinionHeader = ({
     byline,
     headline,
     image,
@@ -35,15 +35,16 @@ const NewsHeader = ({
             ) : null}
             {kicker ? <ArticleKicker kicker={kicker} type="news" /> : null}
             <Animated.View style={animationStyles(navigationPosition)}>
+                <Quote />
                 <ArticleHeadline type="news">{headline}</ArticleHeadline>
+                <ArticleByline>{byline}</ArticleByline>
             </Animated.View>
+            <Multiline count={4} />
             <ArticleStandfirst
                 {...{ byline, standfirst, navigationPosition }}
             />
-            <Multiline count={4} />
-            <ArticleByline>{byline}</ArticleByline>
         </View>
     )
 }
 
-export { NewsHeader }
+export { OpinionHeader }

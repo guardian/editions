@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { ArticleKicker } from '../article-kicker'
+import { ArticleKicker } from '..'
 
 describe('ArticleKicker', () => {
     it('should display a default Kicker', () => {

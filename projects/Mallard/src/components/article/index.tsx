@@ -5,12 +5,12 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useArticleAppearance } from 'src/theme/appearance'
-import { LongReadHeader, NewsHeader } from './article-header/article-header'
+import { LongReadHeader, NewsHeader, OpinionHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
 import {
     ArticleStandfirst,
     PropTypes as StandfirstPropTypes,
-} from './article-standfirst/article-standfirst'
+} from './article-standfirst'
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
 import { CAPIArticle } from 'src/common'
@@ -92,19 +92,15 @@ const Article = ({
 
     return (
         <View style={styles.container}>
-            <NewsHeader {...{ headline, image, kicker }} />
-            <ArticleStandfirst
-                {...{ byline, standfirst }}
-                style={[
-                    navigationPosition && {
-                        opacity: navigationPosition.position.interpolate({
-                            inputRange: [0.6, 1],
-                            outputRange: [0, 1],
-                        }),
-                    },
-                ]}
-            />
-
+            {appearanceName === 'opinion' ? (
+                <OpinionHeader
+                    {...{ byline, headline, image, kicker, standfirst }}
+                />
+            ) : (
+                <NewsHeader
+                    {...{ byline, headline, image, kicker, standfirst }}
+                />
+            )}
             <Animated.View
                 style={[
                     { backgroundColor: color.background, flex: 1 },

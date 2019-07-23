@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { ArticleStandfirst } from '../article-standfirst'
+import { ArticleStandfirst } from '..'
 
 describe('ArticleStandfirst', () => {
     it('should display a default Standfirst', () => {
