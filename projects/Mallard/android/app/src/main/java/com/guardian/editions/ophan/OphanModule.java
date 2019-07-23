@@ -18,7 +18,7 @@ class OphanModule extends ReactContextBaseJavaModule {
     @Nonnull
     @Override
     public String getName() {
-        return "Greeting";
+        return "Ophan";
     }
 
     @ReactMethod

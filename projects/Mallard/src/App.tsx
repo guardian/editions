@@ -67,7 +67,7 @@ export default class App extends React.Component<{}, {}> {
     }
 
     componentDidMount() {
-        NativeModules.Greeting.getGreeting((greeting: string) =>
+        NativeModules.Ophan.getGreeting((greeting: string) =>
             this.setState(prev => ({ greeting: greeting })),
         )
     }
