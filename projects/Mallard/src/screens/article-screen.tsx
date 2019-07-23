@@ -43,7 +43,7 @@ export interface ArticleNavigator {
 }
 
 const styles = StyleSheet.create({
-    flex: { flex: 1 },
+    flex: { flexGrow: 1 },
 })
 
 const ArticleScreenBody = ({
