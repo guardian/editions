@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
         fontFamily: 'GHGuardianHeadline-Regular',
-        fontSize: 30,
-        lineHeight: 34,
+        fontSize: 28,
+        lineHeight: 30,
         color: color.text,
     },
     issueTitleText: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     headlineKickerText: {
         flexShrink: 0,
         fontFamily: 'GTGuardianTitlepiece-Bold',
-        marginBottom: metrics.vertical / 8,
+        marginBottom: metrics.vertical,
         ...cardStyles.default,
     },
     headlineCardText: {

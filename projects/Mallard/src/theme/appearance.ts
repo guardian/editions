@@ -2,6 +2,7 @@ import { color } from './color'
 import { createContext, useContext } from 'react'
 import merge from 'deepmerge'
 import { ColorFromPalette } from 'src/common'
+import { metrics } from './spacing'
 
 /*
 Types
@@ -64,6 +65,7 @@ interface ArticleAppearanceStyles {
     */
     byline: {
         color?: string
+        marginBottom?: number
     }
     /*
     Feel free to add more stuff as needed!!
@@ -109,7 +111,9 @@ export const articleAppearances: {
         },
         headline: {},
         kicker: {},
-        byline: {},
+        byline: {
+            marginBottom: metrics.vertical,
+        },
         standfirst: {},
     },
     news: {
@@ -121,7 +125,9 @@ export const articleAppearances: {
             color: color.dimText,
         },
         kicker: {},
-        byline: {},
+        byline: {
+            marginBottom: metrics.vertical,
+        },
         standfirst: {
             color: color.text,
         },
@@ -139,7 +145,9 @@ export const articleAppearances: {
             fontFamily: 'GHGuardianHeadline-Light',
         },
         kicker: {},
-        byline: {},
+        byline: {
+            marginBottom: metrics.vertical,
+        },
         standfirst: {},
     },
     sport: {
@@ -158,7 +166,9 @@ export const articleAppearances: {
             color: color.text,
         },
         kicker: {},
-        byline: {},
+        byline: {
+            marginBottom: metrics.vertical,
+        },
         standfirst: { color: color.text },
     },
     culture: {
@@ -174,7 +184,9 @@ export const articleAppearances: {
             color: color.text,
         },
         kicker: {},
-        byline: {},
+        byline: {
+            marginBottom: metrics.vertical,
+        },
         standfirst: {
             color: color.text,
         },
@@ -192,7 +204,9 @@ export const articleAppearances: {
         kicker: {
             color: color.palette.lifestyle.main,
         },
-        byline: {},
+        byline: {
+            marginBottom: metrics.vertical,
+        },
         standfirst: {},
     },
 }
