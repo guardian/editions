@@ -7,6 +7,9 @@ import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
 import { fetchWeather } from 'src/helpers/fetch'
+import { GridRowSplit } from './issue'
+
+const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
     weatherContainer: {
@@ -14,6 +17,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: 'auto',
         height: 60,
+        marginBottom: 24,
         paddingLeft: metrics.horizontal,
         paddingRight: metrics.horizontal,
     },
@@ -26,7 +30,7 @@ const styles = StyleSheet.create({
         borderColor: '#BDBDBD',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingLeft: 10,
+        paddingLeft: 4,
         paddingTop: 2,
     },
     temperature: {
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
         lineHeight: 13,
     },
     locationNameContainer: {
-        flex: 7.5,
+        flex: 1,
         height: 60,
         flexDirection: 'row',
     },
@@ -97,29 +101,41 @@ const Weather = () => {
                         <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
                         <Text style={styles.locationName}>{'London'}</Text>
                     </View>
-                    {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
-                    {[0, 2, 4, 6, 8].map(idx => {
-                        return (
-                            <View style={styles.forecastItem} key={idx}>
-                                <WeatherIcon
-                                    iconNumber={forecasts[idx].WeatherIcon}
-                                    fontSize={30}
-                                />
-                                <Text style={styles.temperature}>
-                                    {Math.round(
-                                        forecasts[idx].Temperature.Value,
-                                    ) +
-                                        ' ' +
-                                        forecasts[idx].Temperature.Unit}
-                                </Text>
-                                <Text style={styles.dateTime}>
-                                    {Moment(forecasts[idx].DateTime).format(
-                                        'h a',
-                                    )}
-                                </Text>
-                            </View>
-                        )
-                    })}
+                    <GridRowSplit>
+                        {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
+                        {[0, 2, 4, 6, 8].map(idx => {
+                            return (
+                                <View style={styles.forecastItem} key={idx}>
+                                    <WeatherIcon
+                                        iconNumber={forecasts[idx].WeatherIcon}
+                                        fontSize={30}
+                                    />
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode="clip"
+                                        style={styles.temperature}
+                                    >
+                                        {Math.round(
+                                            forecasts[idx].Temperature.Value,
+                                        ) +
+                                            ' ' +
+                                            forecasts[idx].Temperature.Unit}
+                                    </Text>
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode="clip"
+                                        style={styles.dateTime}
+                                    >
+                                        {Moment(forecasts[idx].DateTime).format(
+                                            `h${
+                                                narrowSpace /* Narrow space for iPhone 5 */
+                                            }a`,
+                                        )}
+                                    </Text>
+                                </View>
+                            )
+                        })}
+                    </GridRowSplit>
                 </View>
             )
         }

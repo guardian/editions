@@ -18,7 +18,7 @@ import { IssueRow } from 'src/components/layout/ui/issue-row'
 import { useInsets } from 'src/hooks/use-insets'
 import { Highlight } from 'src/components/highlight'
 import { IssueTitleText } from 'src/components/styled-text'
-import { IssueRowSplit } from 'src/components/issue'
+import { GridRowSplit } from 'src/components/issue'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 
 const SettingsLink = ({ onPress }: { onPress: () => void }) => (
@@ -32,9 +32,9 @@ const SettingsLink = ({ onPress }: { onPress: () => void }) => (
                 borderBottomWidth: StyleSheet.hairlineWidth,
             }}
         >
-            <IssueRowSplit>
+            <GridRowSplit>
                 <IssueTitleText>Settings</IssueTitleText>
-            </IssueRowSplit>
+            </GridRowSplit>
         </View>
     </Highlight>
 )
@@ -80,7 +80,7 @@ export const HomeScreen = ({
                                     paddingVertical: metrics.vertical * 4,
                                 }}
                             >
-                                <IssueRowSplit>
+                                <GridRowSplit>
                                     <Button
                                         onPress={retry}
                                         icon={''}
@@ -97,7 +97,7 @@ export const HomeScreen = ({
                                     >
                                         Go to latest
                                     </Button>
-                                </IssueRowSplit>
+                                </GridRowSplit>
                             </View>
                         </>
                     ),
