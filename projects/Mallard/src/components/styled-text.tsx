@@ -14,8 +14,8 @@ import { color } from 'src/theme/color'
 
 const cardStyles = {
     default: {
-        fontSize: 19,
-        lineHeight: 22,
+        fontSize: 18,
+        lineHeight: 21,
     },
 }
 
@@ -23,8 +23,9 @@ const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
         fontFamily: 'GHGuardianHeadline-Regular',
-        fontSize: 28,
-        lineHeight: 30,
+        fontSize: 30,
+        lineHeight: 32,
+        marginTop: 4,
         color: color.text,
     },
     issueTitleText: {
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     headlineKickerText: {
         flexShrink: 0,
         fontFamily: 'GTGuardianTitlepiece-Bold',
-        marginBottom: metrics.vertical,
+        marginTop: 2,
         ...cardStyles.default,
     },
     headlineCardText: {
