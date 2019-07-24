@@ -4,6 +4,7 @@ import merge from 'deepmerge'
 import { ColorFromPalette } from 'src/common'
 import { metrics } from './spacing'
 import { getColor } from 'src/helpers/transform'
+import { Appearance } from '../../../common/src'
 
 /*
 Types
@@ -237,5 +238,8 @@ export const useArticleAppearance = (): {
     }
 }
 
+export const getAppearancePillar = (app: Appearance) =>
+    app.type === 'custom' ? 'neutral' : app.name
+
 export const useArticleToneColor = () =>
-    getColor({ color: useArticleAppearance().name })
+    getColor({ type: 'pillar', name: useArticleAppearance().name })

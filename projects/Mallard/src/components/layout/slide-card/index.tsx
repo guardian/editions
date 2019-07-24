@@ -54,7 +54,6 @@ export const SlideCard = ({
             if (gestureState.dy > 10) {
                 blocked = true
             }
-            console.log(enabled)
             return enabled && blocked
         },
         onPanResponderTerminationRequest: () => false,

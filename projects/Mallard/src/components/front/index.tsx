@@ -20,7 +20,10 @@ import {
     AnimatedFlatListRef,
     getNearestPage,
 } from './helpers'
-import { WithArticleAppearance } from 'src/theme/appearance'
+import {
+    WithArticleAppearance,
+    getAppearancePillar,
+} from 'src/theme/appearance'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
 
@@ -66,9 +69,8 @@ const FrontWithResponse = ({
     issue: Issue['key']
     frontData: FrontType
 }) => {
-    const color = getColor(frontData)
-    const appearance =
-        frontData.color === 'custom' ? 'neutral' : frontData.color
+    const color = getColor(frontData.appearance)
+    const appearance = getAppearancePillar(frontData.appearance)
 
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -87,6 +89,7 @@ const FrontWithResponse = ({
                         issue,
                     }),
                 ),
+                appearance: frontData.appearance,
             }
             return [flatCollections, navigator]
         },
