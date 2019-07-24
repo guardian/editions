@@ -90,6 +90,7 @@ const FrontWithResponse = ({
                     }),
                 ),
                 appearance: frontData.appearance,
+                frontName: frontData.displayName || '',
             }
             return [flatCollections, navigator]
         },

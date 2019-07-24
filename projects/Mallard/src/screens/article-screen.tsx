@@ -48,6 +48,7 @@ export interface ArticleTransitionProps {
 export interface ArticleNavigator {
     articles: PathToArticle[]
     appearance: Appearance
+    frontName: string
 }
 
 const styles = StyleSheet.create({
@@ -225,7 +226,7 @@ const ArticleScreenWithProps = ({
                         }}
                     >
                         <Navigator
-                            title={'h'}
+                            title={articleNavigator.frontName.slice(0, 1)}
                             fill={getColor(articleNavigator.appearance)}
                             stops={2}
                             position={sliderPos}
