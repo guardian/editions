@@ -4,10 +4,11 @@ import { StandfirstText } from '../../styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { animationStyles } from '../styles'
+import { NavigationPosition } from 'src/helpers/positions'
 
 export interface PropTypes {
     standfirst: string
-    navigationPosition?: any
+    navigationPosition?: NavigationPosition
 }
 
 const styles = StyleSheet.create({
