@@ -102,16 +102,19 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                     <>
                         <Header issue={issue} />
                         <FlatList
-                            data={issue.fronts}
+                            data={issue.fronts.map((key, index) => ({
+                                key,
+                                index,
+                            }))}
                             windowSize={3}
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
                             ListHeaderComponent={<Weather />}
-                            keyExtractor={item => item}
+                            keyExtractor={item => `${item.index}${item.key}`}
                             renderItem={({ item }) => (
                                 <Front
                                     issue={issue.key}
-                                    front={item}
+                                    front={item.key}
                                     {...{ viewIsTransitioning }}
                                 />
                             )}
