@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
 export enum IssueTitleAppearance {
     default,
     ocean,
+    tertiary,
 }
 
 export interface IssueTitleProps {
@@ -56,6 +57,7 @@ export interface IssueTitleProps {
 
 const appearances: {
     [key in IssueTitleAppearance]: {
+        title?: StyleProp<TextStyle>
         subtitle: StyleProp<TextStyle>
     }
 } = {
@@ -64,6 +66,13 @@ const appearances: {
     }),
     [IssueTitleAppearance.ocean]: StyleSheet.create({
         subtitle: { color: color.palette.sport.bright },
+    }),
+    [IssueTitleAppearance.tertiary]: StyleSheet.create({
+        title: { color: color.palette.brand.main },
+        subtitle: {
+            color: color.palette.brand.main,
+            fontFamily: 'GHGuardianHeadline-Regular',
+        },
     }),
 }
 
@@ -74,7 +83,9 @@ const IssueTitle = ({
     style,
 }: IssueTitleProps & { appearance: IssueTitleAppearance }) => (
     <View style={style}>
-        <IssueTitleText style={styles.text}>{title}</IssueTitleText>
+        <IssueTitleText style={[styles.text, appearances[appearance].title]}>
+            {title}
+        </IssueTitleText>
         {!!subtitle && (
             <IssueTitleText
                 style={[styles.text, appearances[appearance].subtitle]}

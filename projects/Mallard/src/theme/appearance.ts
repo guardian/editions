@@ -73,7 +73,7 @@ interface ArticleAppearanceStyles {
     */
 }
 
-export type AppAppearance = 'default' | 'primary'
+export type AppAppearance = 'default' | 'primary' | 'tertiary'
 
 export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
@@ -89,6 +89,13 @@ export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
         borderColor: color.line,
         color: color.text,
         dimColor: color.dimText,
+    },
+    tertiary: {
+        backgroundColor: color.dimBackground,
+        cardBackgroundColor: color.dimBackground,
+        borderColor: '#052962',
+        color: '#052962',
+        dimColor: '#052962',
     },
 }
 
