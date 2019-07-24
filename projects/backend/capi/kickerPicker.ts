@@ -2,6 +2,9 @@ import { TagType } from '@guardian/capi-ts'
 import { IContent } from '@guardian/capi-ts/dist/Content'
 import { ITag } from '@guardian/capi-ts/dist/Tag'
 
+const tagTitleIsAlreadyInHeadline = (tag: ITag, headline: string) =>
+    headline.toLowerCase().includes(tag.webTitle.toLowerCase())
+
 /*
  - Use series tag if we have one
  - Use tone for {"Letters", "Analysis", "Obituaries"}
@@ -11,60 +14,44 @@ import { ITag } from '@guardian/capi-ts/dist/Tag'
  - Use second tag if top tag features in the headline
  - Otherwise use top tag
  */
-const kickerPicker = (
-    article: IContent,
-    headline: string,
-    byline: string | undefined,
-) => {
-    let seriesTag: ITag | undefined = article.tags.filter(
-        tag => tag.type == TagType.SERIES,
-    )[0]
-
-    let toneTag: ITag | undefined = article.tags.filter(
-        tag => tag.type == TagType.TONE,
-    )[0]
-
-    let topTag: ITag | undefined = article.tags[0]
-    let secondTag: ITag | undefined = article.tags[1]
+const kickerPicker = (article: IContent, headline: string, byline?: string) => {
+    const seriesTag = article.tags.find(tag => tag.type === TagType.SERIES)
+    const toneTag = article.tags.find(tag => tag.type === TagType.TONE)
 
     if (seriesTag) return seriesTag.webTitle
 
-    if (
-        toneTag &&
-        toneTag.id &&
-        (toneTag.id == 'tone/letters' ||
-            toneTag.id == 'tone/analysis' ||
-            toneTag.id == 'tone/obituaries')
-    )
-        return toneTag.webTitle
+    if (toneTag && toneTag.id) {
+        if (
+            toneTag.id === 'tone/letters' ||
+            toneTag.id === 'tone/analysis' ||
+            toneTag.id === 'tone/obituaries'
+        )
+            return toneTag.webTitle
+
+        if (
+            toneTag.id === 'tone/reviews' ||
+            toneTag.id === 'tone/editorials' ||
+            toneTag.id === 'tone/matchreports' ||
+            toneTag.id === 'tone/explainers'
+        )
+            return toneTag.webTitle.slice(0, -1)
+
+        if (toneTag.id === 'tone/comment') return byline
+    }
+
+    const topTag: ITag | undefined = article.tags[0]
+    const secondTag: ITag | undefined = article.tags[1]
+
+    if (!topTag) return
 
     if (
-        toneTag &&
-        toneTag.id &&
-        (toneTag.id == 'tone/reviews' ||
-            toneTag.id == 'tone/editorials' ||
-            toneTag.id == 'tone/matchreports' ||
-            toneTag.id == 'tone/explainers')
-    )
-        return toneTag.webTitle.substring(0, toneTag.webTitle.length - 1)
-
-    if (toneTag && toneTag.id && toneTag.id == 'tone/comment') return byline
-
-    if (
-        topTag &&
-        headline.toLowerCase().includes(topTag.webTitle.toLowerCase()) &&
-        secondTag &&
-        headline.toLowerCase().includes(secondTag.webTitle.toLowerCase())
+        !tagTitleIsAlreadyInHeadline(topTag, headline) ||
+        !secondTag ||
+        tagTitleIsAlreadyInHeadline(secondTag, headline)
     )
         return topTag.webTitle
 
-    if (
-        topTag &&
-        headline.toLowerCase().includes(topTag.webTitle.toLowerCase())
-    )
-        return secondTag && secondTag.webTitle
-
-    return topTag && topTag.webTitle
+    return secondTag.webTitle
 }
 
 export { kickerPicker }
