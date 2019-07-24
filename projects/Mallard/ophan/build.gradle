@@ -20,7 +20,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
-                implementation 'com.gu.kotlin:multiplatform-ophan:0.0.7'
+                api 'com.gu.kotlin:multiplatform-ophan:0.0.7'
             }
         }
         androidMain {
