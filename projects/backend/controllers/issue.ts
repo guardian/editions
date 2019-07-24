@@ -55,8 +55,12 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
-const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
-    const issueKeys = await s3List('daily-edition/')
+export const getIssuesSummary = async (
+    pageSize = 7,
+    /* mock for tests */
+    getIssueKeys = () => s3List('daily-edition/'),
+): Promise<Attempt<IssueSummary[]>> => {
+    const issueKeys = await getIssueKeys()
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
         console.error(JSON.stringify(issueKeys))
@@ -70,13 +74,16 @@ const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
                 console.warn(`Issue with path ${key} is not a valid date`)
                 return null
             }
-            return {
-                key,
-                name: 'Daily Edition',
-                date: date.toISOString(),
-            }
+            return { key, date }
         })
         .filter(notNull)
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .map(({ key, date }) => ({
+            key,
+            name: 'Daily Edition',
+            date: date.toISOString(),
+        }))
+        .slice(0, pageSize)
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
