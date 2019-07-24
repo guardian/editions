@@ -124,22 +124,45 @@ const getDisplayName = (front: string) => {
 }
 
 const getFrontColor = (front: string): WithColor => {
-    switch (front.split('/').pop() || front) {
+    switch ((front.split('/').pop() || front).toLowerCase()) {
+        case 'special1':
+        case 'special2':
         case 'topstories':
+        case 'crossword':
+        case 'special 1':
+        case 'special 2':
+        case 'top stories':
+        case 'crosswords':
             return { color: 'neutral' }
-        case 'news':
-        case 'new':
+        case 'uknewsguardian':
+        case 'uknewsobserver':
+        case 'worldnewsguardian':
+        case 'worldnewsobserver':
+        case 'uk news':
+        case 'world news':
             return { color: 'news' }
-        case 'opinion':
         case 'journal':
+        case 'comment':
+        case 'opinion':
             return { color: 'opinion' }
+        case 'arts':
+        case 'filmandmusic':
+        case 'guide':
+        case 'newreview':
+        case 'books':
+        case 'culture':
+        case 'books':
+            return { color: 'culture' }
         case 'sport':
             return { color: 'sport' }
-        case 'life':
-        case 'review':
-        case 'guide':
+        case 'features':
         case 'weekend':
+        case 'magazine':
         case 'food':
+        case 'observerfood':
+        case 'lifestyle':
+        case 'food':
+        case 'the fashion':
             return { color: 'lifestyle' }
     }
     return { color: 'neutral' }
