@@ -21,30 +21,48 @@ import { navigateToIssue } from 'src/navigation/helpers'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { Issue } from 'src/common'
 import { useSettings } from 'src/hooks/use-settings'
+import { navigateToSettings } from 'src/navigation/helpers'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 
-const HomeScreenHeader = ({
-    issue,
-    onReturn,
-}: {
-    issue?: Issue['key']
-    onReturn: () => void
-    onSettings: () => void
-}) => {
-    const action = <Button icon="" alt="Return to issue" onPress={onReturn} />
-    const response = useIssueOrLatestResponse(issue)
-    return response({
-        error: () => <IssueHeader action={action} />,
-        pending: () => <IssueHeader action={action} />,
-        success: issue => (
-            <IssueHeader
-                issue={issue}
-                accessibilityHint={'Return to issue'}
-                onPress={onReturn}
-                action={action}
+const HomeScreenHeader = withNavigation(
+    ({
+        issue,
+        navigation,
+        onReturn,
+    }: {
+        issue?: Issue['key']
+        onReturn: () => void
+        onSettings: () => void
+    } & NavigationInjectedProps) => {
+        const action = (
+            <Button icon="" alt="Return to issue" onPress={onReturn} />
+        )
+        const response = useIssueOrLatestResponse(issue)
+        const settings = (
+            <Button
+                icon={'\uE040'}
+                alt="Settings"
+                onPress={() => {
+                    navigateToSettings(navigation)
+                }}
+                appearance={ButtonAppearance.skeleton}
             />
-        ),
-    })
-}
+        )
+        return response({
+            error: () => <IssueHeader action={action} />,
+            pending: () => <IssueHeader action={action} />,
+            success: issue => (
+                <IssueHeader
+                    leftAction={settings}
+                    issue={issue}
+                    accessibilityHint={'Return to issue'}
+                    onPress={onReturn}
+                    action={action}
+                />
+            ),
+        })
+    },
+)
 
 export const HomeScreen = ({
     navigation,
@@ -57,7 +75,7 @@ export const HomeScreen = ({
     const from = navigation.getParam('from', undefined)
 
     return (
-        <WithAppAppearance value={'primary'}>
+        <WithAppAppearance value={'tertiary'}>
             <ScrollContainer>
                 <HomeScreenHeader
                     issue={
@@ -83,7 +101,7 @@ export const HomeScreen = ({
                     success: (issueList, { retry }) => (
                         <>
                             <BaseList
-                                style={{ paddingTop: metrics.vertical * 4 }}
+                                style={{ paddingTop: 0 }}
                                 data={issueList}
                                 renderItem={({ item }) => (
                                     <IssueRow
@@ -94,7 +112,7 @@ export const HomeScreen = ({
                                                         'Sorry, downloading is not supported yet',
                                                     )
                                                 }}
-                                                icon={''}
+                                                icon={'\uE077'}
                                                 alt={'Download'}
                                                 appearance={
                                                     ButtonAppearance.skeleton
