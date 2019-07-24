@@ -102,6 +102,11 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                     <>
                         <Header issue={issue} />
                         <FlatList
+                            // this is horrible but in the worst case where we get duplicate ids
+                            // (which we have done in the past) then we shouldn't break the rendering
+                            // even if it does mean showing the same front twice
+                            // we could filter out duplicates but in this case it'd probably be more
+                            // obvious for someone previewing if we did render it twice
                             data={issue.fronts.map((key, index) => ({
                                 key,
                                 index,
@@ -110,7 +115,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                             maxToRenderPerBatch={2}
                             initialNumToRender={1}
                             ListHeaderComponent={<Weather />}
-                            keyExtractor={item => `${item.index}${item.key}`}
+                            keyExtractor={item => `${item.index}::${item.key}`}
                             renderItem={({ item }) => (
                                 <Front
                                     issue={issue.key}
