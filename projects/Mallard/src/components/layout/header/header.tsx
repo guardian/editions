@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ViewProps } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import {
@@ -38,17 +38,23 @@ type TouchableHeaderProps =
     | { onPress: () => void; accessibilityHint: string }
     | {}
 
-type HeaderProps = {
+export type HeaderProps = {
     action?: ReactNode
     leftAction?: ReactNode
+    onLayout?: ViewProps['onLayout']
 } & IssueTitleProps &
     TouchableHeaderProps
 
-const Header = ({ action, leftAction, ...otherProps }: HeaderProps) => {
+const Header = ({
+    action,
+    leftAction,
+    onLayout,
+    ...otherProps
+}: HeaderProps) => {
     const { top: paddingTop } = useInsets()
     return (
         <WithAppAppearance value={'primary'}>
-            <View style={[styles.background]}>
+            <View onLayout={onLayout} style={[styles.background]}>
                 <GridRowSplit proxy={leftAction} style={{ paddingTop }}>
                     <View style={styles.headerSplit}>
                         <View style={styles.headerTitle}>
