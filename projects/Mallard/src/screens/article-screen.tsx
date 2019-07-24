@@ -30,6 +30,8 @@ import {
     ArticleRequiredNavigationProps,
 } from 'src/navigation/helpers'
 import { UiBodyCopy } from '../components/styled-text'
+import { Navigator } from 'src/components/navigator'
+import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getColor } from 'src/helpers/transform'
 
 export interface PathToArticle {
@@ -177,6 +179,11 @@ const ArticleScreenWithProps = ({
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
 
+    const sliderPos = useAlphaIn(200, 0, current).interpolate({
+        inputRange: [0, articleNavigator.articles.length - 1],
+        outputRange: [0, 1],
+    })
+
     return (
         <ClipFromTop
             easing={navigationPosition && navigationPosition.position}
@@ -199,6 +206,7 @@ const ArticleScreenWithProps = ({
                 >
                     <ArticleScreenBody
                         path={path}
+                        appearance={appearance}
                         onTopPositionChange={() => {}}
                         {...{ viewIsTransitioning }}
                     />
@@ -213,12 +221,15 @@ const ArticleScreenWithProps = ({
                         style={{
                             padding: metrics.vertical,
                             justifyContent: 'center',
-                            alignItems: 'center',
+                            alignItems: 'stretch',
                         }}
                     >
-                        <UiBodyCopy>{`Article ${current + 1}/${
-                            articleNavigator.articles.length
-                        }`}</UiBodyCopy>
+                        <Navigator
+                            title={'h'}
+                            fill={getColor(articleNavigator.appearance)}
+                            stops={2}
+                            position={sliderPos}
+                        />
                     </View>
                     <Animated.FlatList
                         showsHorizontalScrollIndicator={false}
