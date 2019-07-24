@@ -17,7 +17,7 @@ import { Spinner } from 'src/components/spinner'
 
 import { withNavigation } from 'react-navigation'
 import { Button, ButtonAppearance } from 'src/components/button/button'
-import { navigateToIssueList, navigateToSettings } from 'src/navigation/helpers'
+import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
 
@@ -27,20 +27,8 @@ export interface PathToIssue {
 
 const Header = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
-        const settings = (
-            <Button
-                icon=""
-                alt="Settings"
-                onPress={() => {
-                    navigateToSettings(navigation)
-                }}
-                appearance={ButtonAppearance.skeleton}
-            />
-        )
-
         return (
             <IssueHeader
-                leftAction={settings}
                 accessibilityHint="More issues"
                 onPress={() => {
                     navigateToIssueList(navigation)

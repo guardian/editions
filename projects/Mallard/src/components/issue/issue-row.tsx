@@ -45,7 +45,7 @@ const IssueRow = ({
                         <IssueTitle
                             title={weekday}
                             subtitle={date}
-                            appearance={IssueTitleAppearance.ocean}
+                            appearance={IssueTitleAppearance.tertiary}
                         />
                     </Highlight>
                 </View>
