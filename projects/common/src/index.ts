@@ -54,6 +54,7 @@ export interface Content extends WithKey {
     image?: Image
     standfirst?: string
     byline?: string
+    bylineImages?: { thumbnail?: Image; cutout?: Image }
 }
 export interface Article extends Content {
     type: 'article'

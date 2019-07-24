@@ -14,7 +14,8 @@ const tagTitleIsAlreadyInHeadline = (tag: ITag, headline: string) =>
  - Use second tag if top tag features in the headline
  - Otherwise use top tag
  */
-const kickerPicker = (article: IContent, headline: string, byline?: string) => {
+const kickerPicker = (article: IContent, headline: string) => {
+    const byline = article.fields && article.fields.byline
     const seriesTag = article.tags.find(tag => tag.type === TagType.SERIES)
     const toneTag = article.tags.find(tag => tag.type === TagType.TONE)
 
