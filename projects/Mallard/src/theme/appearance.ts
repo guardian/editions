@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react'
 import merge from 'deepmerge'
 import { ColorFromPalette } from 'src/common'
 import { metrics } from './spacing'
+import { getColor } from 'src/helpers/transform'
 
 /*
 Types
@@ -235,3 +236,6 @@ export const useArticleAppearance = (): {
             : articleAppearances.neutral,
     }
 }
+
+export const useArticleToneColor = () =>
+    getColor({ color: useArticleAppearance().name })

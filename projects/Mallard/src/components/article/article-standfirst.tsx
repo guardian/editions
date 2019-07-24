@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet, Animated, StyleProp } from 'react-native'
 import { StandfirstText, BodyCopy } from '../styled-text'
 import { metrics } from 'src/theme/spacing'
-import { useArticleAppearance } from 'src/theme/appearance'
+import { useArticleAppearance, useArticleToneColor } from 'src/theme/appearance'
 import { Multiline } from '../multiline'
 
 export interface PropTypes {
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
 
 const Standfirst = ({ standfirst, byline, style }: PropTypes) => {
     const { appearance, name } = useArticleAppearance()
+    const color = useArticleToneColor()
     return (
         <Animated.View
             style={[styles.background, appearance.backgrounds, style]}
@@ -55,7 +56,7 @@ const Standfirst = ({ standfirst, byline, style }: PropTypes) => {
                 />
                 <BodyCopy
                     weight={'bold'}
-                    style={[appearance.text, appearance.byline]}
+                    style={[appearance.text, appearance.byline, { color }]}
                 >
                     {byline}
                 </BodyCopy>

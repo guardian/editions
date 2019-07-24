@@ -8,7 +8,7 @@ import {
     TextProps,
     ViewStyle,
 } from 'react-native'
-import { useAppAppearance } from 'src/theme/appearance'
+import { useAppAppearance, useArticleToneColor } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
@@ -106,7 +106,16 @@ export const HeadlineKickerText = ({
     children: string
     style?: StyleProp<TextStyle>
 } & TextProps) => {
-    return <Text {...props} style={[styles.headlineKickerText, style]} />
+    return (
+        <Text
+            {...props}
+            style={[
+                styles.headlineKickerText,
+                style,
+                { color: useArticleToneColor() },
+            ]}
+        />
+    )
 }
 
 export const StandfirstText = ({
