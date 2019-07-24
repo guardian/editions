@@ -160,11 +160,11 @@ export const articleAppearances: {
             fontSize: 28,
             lineHeight: 30,
             marginTop: 5,
-            marginBottom: metrics.vertical
+            marginBottom: metrics.vertical,
         },
         standfirst: {
             color: 'black',
-            paddingBottom: 5
+            paddingBottom: 5,
         },
     },
     sport: {

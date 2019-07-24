@@ -19,17 +19,10 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleStandfirst = ({
-    standfirst,
-    navigationPosition,
-}: PropTypes) => {
+const ArticleStandfirst = ({ standfirst, navigationPosition }: PropTypes) => {
     const { appearance, name } = useArticleAppearance()
     return (
-        <Animated.View
-            style={
-                animationStyles(navigationPosition)
-            }
-        >
+        <Animated.View style={animationStyles(navigationPosition)}>
             <View
                 style={[
                     name !== 'opinion' && styles.bylineBackground,
@@ -41,8 +34,10 @@ const ArticleStandfirst = ({
                     },
                 ]}
             >
-                <StandfirstText style={[appearance.text, appearance.standfirst]}>
-                    {standfirst.replace(/\s/g, ' ')}
+                <StandfirstText
+                    style={[appearance.text, appearance.standfirst]}
+                >
+                    {standfirst}
                 </StandfirstText>
             </View>
         </Animated.View>

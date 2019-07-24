@@ -45,9 +45,7 @@ const OpinionHeader = ({
             </View>
             <Multiline count={4} />
             <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
-                <ArticleStandfirst
-                    {...{ standfirst, navigationPosition }}
-                />
+                <ArticleStandfirst {...{ standfirst, navigationPosition }} />
             </View>
         </>
     )

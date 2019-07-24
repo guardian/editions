@@ -7,12 +7,12 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
       Object {
         "borderBottomWidth": 0.5,
         "marginBottom": 3,
-        "paddingBottom": 6,
+        "paddingBottom": 18,
         "width": "100%",
       },
       Object {
         "backgroundColor": "#ffffff",
-        "borderColor": "#dcdcdc",
+        "borderColor": "#999999",
       },
     ]
   }
@@ -23,9 +23,9 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
         Object {
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 19,
-          "lineHeight": 22,
-          "marginBottom": 1.5,
+          "fontSize": 18,
+          "lineHeight": 21,
+          "marginTop": 2,
         },
         Array [
           Object {
@@ -47,12 +47,12 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
       Object {
         "borderBottomWidth": 0.5,
         "marginBottom": 3,
-        "paddingBottom": 6,
+        "paddingBottom": 18,
         "width": "100%",
       },
       Object {
         "backgroundColor": "#ffffff",
-        "borderColor": "#dcdcdc",
+        "borderColor": "#999999",
       },
     ]
   }
@@ -63,9 +63,9 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
         Object {
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 19,
-          "lineHeight": 22,
-          "marginBottom": 1.5,
+          "fontSize": 18,
+          "lineHeight": 21,
+          "marginTop": 2,
         },
         Array [
           Object {
@@ -87,12 +87,12 @@ exports[`ArticleKicker should return null if the kicker is "Opinion" 1`] = `
       Object {
         "borderBottomWidth": 0.5,
         "marginBottom": 3,
-        "paddingBottom": 6,
+        "paddingBottom": 18,
         "width": "100%",
       },
       Object {
         "backgroundColor": "#ffffff",
-        "borderColor": "#dcdcdc",
+        "borderColor": "#999999",
       },
     ]
   }
@@ -103,9 +103,9 @@ exports[`ArticleKicker should return null if the kicker is "Opinion" 1`] = `
         Object {
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 19,
-          "lineHeight": 22,
-          "marginBottom": 1.5,
+          "fontSize": 18,
+          "lineHeight": 21,
+          "marginTop": 2,
         },
         Array [
           Object {

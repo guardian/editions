@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Animated } from 'react-native'
+import { View, Animated, Alert } from 'react-native'
 import { HeadlineText } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
@@ -22,6 +22,7 @@ const NewsHeader = ({
 }: ArticleHeaderProps) => {
     const { appearance } = useArticleAppearance()
     const navigationPosition = getNavigationPosition('article')
+    Alert.alert(JSON.stringify(image))
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
             {image ? (

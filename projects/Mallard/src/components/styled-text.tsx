@@ -158,7 +158,7 @@ export const BodyCopy = ({
                 weight === 'bold' && {
                     fontFamily: 'GuardianTextEgyptian-Bold',
                 },
-                style
+                style,
             ]}
         />
     )

@@ -10,15 +10,17 @@ exports[`ArticleByline should display a default Byline 1`] = `
         "fontSize": 17,
         "lineHeight": 21,
       },
+      Object {
+        "fontFamily": "GuardianTextEgyptian-Bold",
+      },
       Array [
         Object {
           "color": "#121212",
         },
-        Object {},
+        Object {
+          "marginBottom": 12,
+        },
       ],
-      Object {
-        "fontFamily": "GuardianTextEgyptian-Bold",
-      },
     ]
   }
 >

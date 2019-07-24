@@ -22,37 +22,30 @@ const LongReadHeader = ({
     const { appearance } = useArticleAppearance()
     const navigationPosition = getNavigationPosition('article')
     return (
+        <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
+            {image ? (
+                <ArticleImage
+                    style={StyleSheet.absoluteFillObject}
+                    image={image}
+                />
+            ) : null}
             <View
                 style={[
-                    longReadHeaderStyles.background,
+                    longReadHeaderStyles.textBackground,
                     appearance.backgrounds,
                 ]}
             >
-                {image ? (
-                    <ArticleImage
-                        style={StyleSheet.absoluteFillObject}
-                        image={image}
-                    />
+                {kicker ? (
+                    <ArticleKicker kicker={kicker} type="longRead" />
                 ) : null}
-                <View
-                    style={[
-                        longReadHeaderStyles.textBackground,
-                        appearance.backgrounds,
-                    ]}
-                >
-                    {kicker ? (
-                        <ArticleKicker kicker={kicker} type="longRead" />
-                    ) : null}
-                    <ArticleHeadline type="longRead">
-                        {headline}
-                    </ArticleHeadline>
-                </View>
-                <ArticleStandfirst
-                    {...{ byline, standfirst, navigationPosition }}
-                />
-                <Multiline count={4} />
-                <ArticleByline>{byline}</ArticleByline>
+                <ArticleHeadline type="longRead">{headline}</ArticleHeadline>
             </View>
+            <ArticleStandfirst
+                {...{ byline, standfirst, navigationPosition }}
+            />
+            <Multiline count={4} />
+            <ArticleByline>{byline}</ArticleByline>
+        </View>
     )
 }
 
