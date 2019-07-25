@@ -21,7 +21,6 @@ const NewsHeader = ({
 }: ArticleHeaderProps) => {
     const { appearance } = useArticleAppearance()
     const navigationPosition = getNavigationPosition('article')
-    Alert.alert(JSON.stringify(image))
     return (
         <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
             {image ? (
