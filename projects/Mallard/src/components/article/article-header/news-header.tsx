@@ -31,7 +31,7 @@ const NewsHeader = ({
                     }}
                     image={image}
                 />
-            ) : null}
+            ) : null}...
             {kicker ? <ArticleKicker kicker={kicker} type="news" /> : null}
             <Animated.View style={animationStyles(navigationPosition)}>
                 <ArticleHeadline type="news">{headline}</ArticleHeadline>
