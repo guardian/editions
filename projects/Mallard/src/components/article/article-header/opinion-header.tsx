@@ -5,7 +5,6 @@ import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { animationStyles, newsHeaderStyles } from '../styles'
-import { ArticleKicker } from '../article-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
 import { Multiline } from '../../multiline'
@@ -17,7 +16,6 @@ const OpinionHeader = ({
     byline,
     headline,
     image,
-    kicker,
     standfirst,
 }: ArticleHeaderProps) => {
     const { appearance } = useArticleAppearance()
@@ -34,7 +32,6 @@ const OpinionHeader = ({
                         image={image}
                     />
                 ) : null}
-                {kicker ? <ArticleKicker kicker={kicker} type="news" /> : null}
                 <Animated.View style={animationStyles(navigationPosition)}>
                     <ArticleHeadline type="news">
                         <Quote />

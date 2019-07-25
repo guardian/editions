@@ -20,7 +20,7 @@ Array [
     <Image
       source={
         Object {
-          "uri": "https://d2cf1ljtg904cv.cloudfront.net/issue/issue/media/phone/media/path/to/image.png",
+          "uri": "https://d2cf1ljtg904cv.cloudfront.net/issue/media/phone/media/path/to/image.png",
         }
       }
       style={
@@ -36,46 +36,6 @@ Array [
         ]
       }
     />
-    <View
-      style={
-        Array [
-          Object {
-            "borderBottomWidth": 0.5,
-            "marginBottom": 3,
-            "paddingBottom": 18,
-            "width": "100%",
-          },
-          Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#999999",
-          },
-        ]
-      }
-    >
-      <Text
-        style={
-          Array [
-            Object {
-              "flexShrink": 0,
-              "fontFamily": "GTGuardianTitlepiece-Bold",
-              "fontSize": 18,
-              "lineHeight": 21,
-              "marginTop": 2,
-            },
-            Array [
-              Object {
-                "color": "#121212",
-              },
-            ],
-            Object {
-              "color": "#121212",
-            },
-          ]
-        }
-      >
-        News
-      </Text>
-    </View>
     <View>
       <Text
         style={

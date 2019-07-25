@@ -15,10 +15,4 @@ describe('ArticleKicker', () => {
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
-    it('should return null if the kicker is "Opinion"', () => {
-        const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <ArticleKicker kicker="Opinion" />,
-        ).toJSON()
-        expect(component).toMatchSnapshot()
-    })
 })

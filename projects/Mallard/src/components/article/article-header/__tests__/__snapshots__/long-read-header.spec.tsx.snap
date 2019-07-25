@@ -21,7 +21,7 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
   <Image
     source={
       Object {
-        "uri": "https://d2cf1ljtg904cv.cloudfront.net/issue/issue/media/phone/media/path/to/image.png",
+        "uri": "https://d2cf1ljtg904cv.cloudfront.net/issue/media/phone/media/path/to/image.png",
       }
     }
     style={

@@ -4,20 +4,13 @@ import { useArticleAppearance } from 'src/theme/appearance'
 import { HeadlineKickerText } from 'src/components/styled-text'
 import { longReadHeaderStyles, newsHeaderStyles } from '../styles'
 
-const dontDisplayKicker = ['opinion']
-
 export interface ArticleKickerProps {
     kicker: string
     type?: 'news' | 'longRead'
 }
 
 export const ArticleKicker = ({ kicker, type }: ArticleKickerProps) => {
-    const { appearance, name } = useArticleAppearance()
-
-    if (dontDisplayKicker.includes(name)) {
-        return null
-    }
-
+    const { appearance } = useArticleAppearance()
     return (
         <View
             style={[
