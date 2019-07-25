@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 const ArticleStandfirst = ({ standfirst, navigationPosition }: PropTypes) => {
     const { appearance, name } = useArticleAppearance()
     return (
-        <Animated.View style={animationStyles(navigationPosition)}>
+        <Animated.View style={navigationPosition && animationStyles(navigationPosition)}>
             <View
                 style={[
                     name !== 'opinion' && styles.bylineBackground,
