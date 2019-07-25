@@ -9,21 +9,23 @@ const issueList = [
     'daily-edition/2019-03-25/',
 ]
 
-const getIssues = () => Promise.resolve(issueList)
+jest.mock('../../s3', () => ({
+    s3List: () => Promise.resolve(issueList),
+}))
 
 const getNthKey = (n: number) => issueList[n].split('/')[1]
 
 describe('getIssuesSummary', () => {
     it('returns the correct number of issues', async () => {
-        const issues = await getIssuesSummary(3, getIssues)
+        const issues = await getIssuesSummary(3)
         expect(issues).toHaveLength(3)
 
-        const issues2 = await getIssuesSummary(10, getIssues)
+        const issues2 = await getIssuesSummary(10)
         expect(issues2).toHaveLength(5)
     })
 
     it('returns the most recent issues', async () => {
-        const issues = await getIssuesSummary(3, getIssues)
+        const issues = await getIssuesSummary(3)
         expect(issues).not.toHaveFailed(issues)
         expect((issues as IssueSummary[]).map(i => i.key)).toEqual([
             getNthKey(2),

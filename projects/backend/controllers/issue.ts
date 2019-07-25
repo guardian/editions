@@ -57,10 +57,8 @@ export const issueController = (req: Request, res: Response) => {
 
 export const getIssuesSummary = async (
     pageSize = 7,
-    /* mock for tests */
-    getIssueKeys = () => s3List('daily-edition/'),
 ): Promise<Attempt<IssueSummary[]>> => {
-    const issueKeys = await getIssueKeys()
+    const issueKeys = await s3List('daily-edition/')
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
         console.error(JSON.stringify(issueKeys))
