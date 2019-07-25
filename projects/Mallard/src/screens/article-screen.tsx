@@ -5,7 +5,11 @@ import {
     NavigationEvents,
     ScrollView,
 } from 'react-navigation'
-import { WithArticleAppearance, articleAppearances } from 'src/theme/appearance'
+import {
+    WithArticleAppearance,
+    articleAppearances,
+    getAppearancePillar,
+} from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
 import { CAPIArticle, Collection, Front, ColorFromPalette } from 'src/common'
 import { Dimensions, Animated, View, Text, StyleSheet } from 'react-native'
@@ -15,7 +19,7 @@ import { color } from 'src/theme/color'
 import { PathToArticle } from './article-screen'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
-import { Issue } from '../../../backend/common'
+import { Issue, Appearance } from '../../../backend/common'
 import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
 import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
@@ -26,6 +30,9 @@ import {
     ArticleRequiredNavigationProps,
 } from 'src/navigation/helpers'
 import { UiBodyCopy } from '../components/styled-text'
+import { Navigator } from 'src/components/navigator'
+import { useAlphaIn } from 'src/hooks/use-alpha-in'
+import { getColor } from 'src/helpers/transform'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -40,6 +47,8 @@ export interface ArticleTransitionProps {
 
 export interface ArticleNavigator {
     articles: PathToArticle[]
+    appearance: Appearance
+    frontName: string
 }
 
 const styles = StyleSheet.create({
@@ -48,15 +57,19 @@ const styles = StyleSheet.create({
 
 const ArticleScreenBody = ({
     path,
+    appearance,
     viewIsTransitioning,
     onTopPositionChange,
 }: {
     path: PathToArticle
+    appearance: string
     viewIsTransitioning: boolean
     onTopPositionChange: (isAtTop: boolean) => void
 }) => {
-    const [appearance, setAppearance] = useState(0)
     const appearances = Object.keys(articleAppearances)
+    const [modifiedAppearance, setAppearance] = useState(
+        appearances.indexOf(appearance) || 0,
+    )
     const articleResponse = useArticleResponse(path)
     const [{ isUsingProdDevtools }] = useSettings()
     const { width } = Dimensions.get('window')
@@ -105,11 +118,15 @@ const ArticleScreenBody = ({
                                     alignSelf: 'flex-end',
                                 }}
                             >
-                                {`${appearances[appearance]} 🌈`}
+                                {`${appearances[modifiedAppearance]} 🌈`}
                             </Button>
                         ) : null}
                         <WithArticleAppearance
-                            value={appearances[appearance] as ColorFromPalette}
+                            value={
+                                appearances[
+                                    modifiedAppearance
+                                ] as ColorFromPalette
+                            }
                         >
                             <ArticleController
                                 article={article.article}
@@ -147,6 +164,7 @@ const ArticleScreenWithProps = ({
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 }) => {
     const { width } = Dimensions.get('window')
+    const appearance = getAppearancePillar(articleNavigator.appearance)
 
     /*
     we don't wanna render a massive tree at once
@@ -161,6 +179,11 @@ const ArticleScreenWithProps = ({
 
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
+
+    const sliderPos = useAlphaIn(200, 0, current).interpolate({
+        inputRange: [0, articleNavigator.articles.length - 1],
+        outputRange: [0, 1],
+    })
 
     return (
         <ClipFromTop
@@ -184,6 +207,7 @@ const ArticleScreenWithProps = ({
                 >
                     <ArticleScreenBody
                         path={path}
+                        appearance={appearance}
                         onTopPositionChange={() => {}}
                         {...{ viewIsTransitioning }}
                     />
@@ -198,12 +222,15 @@ const ArticleScreenWithProps = ({
                         style={{
                             padding: metrics.vertical,
                             justifyContent: 'center',
-                            alignItems: 'center',
+                            alignItems: 'stretch',
                         }}
                     >
-                        <UiBodyCopy>{`Article ${current + 1}/${
-                            articleNavigator.articles.length
-                        }`}</UiBodyCopy>
+                        <Navigator
+                            title={articleNavigator.frontName.slice(0, 1)}
+                            fill={getColor(articleNavigator.appearance)}
+                            stops={2}
+                            position={sliderPos}
+                        />
                     </View>
                     <Animated.FlatList
                         showsHorizontalScrollIndicator={false}
@@ -243,6 +270,7 @@ const ArticleScreenWithProps = ({
                         }) => (
                             <ArticleScreenBody
                                 path={item}
+                                appearance={appearance}
                                 onTopPositionChange={isAtTop => {
                                     setArticleIsAtTop(isAtTop)
                                 }}

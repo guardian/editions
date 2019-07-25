@@ -60,6 +60,8 @@ const getArticleNavigationProps = (
     const transitionProps = navigation.getParam('transitionProps')
     const articleNavigator = navigation.getParam('articleNavigator', {
         articles: [],
+        appearance: { type: 'pillar', name: 'neutral' },
+        frontName: '',
     })
 
     if (!path || !path.article || !path.collection || !path.issue) {

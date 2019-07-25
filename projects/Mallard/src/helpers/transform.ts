@@ -1,4 +1,4 @@
-import { Collection, CAPIArticle, WithColor } from 'src/common'
+import { Collection, CAPIArticle, Appearance } from 'src/common'
 import { palette } from '@guardian/pasteup/palette'
 
 export interface FlatCard {
@@ -15,10 +15,18 @@ const colorMap = {
     neutral: palette.neutral[7],
 }
 
-export const getColor = (color: WithColor): string => {
-    if (!color.color) return colorMap['neutral']
-    if (color.color === 'custom') return color.customColor
-    return colorMap[color.color]
+export const getColor = (app: Appearance): string => {
+    switch (app.type) {
+        case 'pillar': {
+            return colorMap[app.name]
+        }
+        case 'custom': {
+            return app.color
+        }
+        default: {
+            return colorMap.neutral
+        }
+    }
 }
 
 export const flattenCollectionsToCards = (

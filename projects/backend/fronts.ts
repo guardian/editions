@@ -4,7 +4,7 @@ import {
     Collection,
     CAPIArticle,
     Crossword,
-    WithColor,
+    Appearance,
     cardLayouts,
 } from './common'
 import { LastModifiedUpdater } from './lastModified'
@@ -123,7 +123,7 @@ const getDisplayName = (front: string) => {
     return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
-const getFrontColor = (front: string): WithColor => {
+const getFrontColor = (front: string): Appearance => {
     switch ((front.split('/').pop() || front).toLowerCase()) {
         case 'special1':
         case 'special2':
@@ -133,18 +133,18 @@ const getFrontColor = (front: string): WithColor => {
         case 'special 2':
         case 'top stories':
         case 'crosswords':
-            return { color: 'neutral' }
+            return { type: 'pillar', name: 'neutral' }
         case 'uknewsguardian':
         case 'uknewsobserver':
         case 'worldnewsguardian':
         case 'worldnewsobserver':
         case 'uk news':
         case 'world news':
-            return { color: 'news' }
+            return { type: 'pillar', name: 'news' }
         case 'journal':
         case 'comment':
         case 'opinion':
-            return { color: 'opinion' }
+            return { type: 'pillar', name: 'opinion' }
         case 'arts':
         case 'filmandmusic':
         case 'guide':
@@ -152,9 +152,9 @@ const getFrontColor = (front: string): WithColor => {
         case 'books':
         case 'culture':
         case 'books':
-            return { color: 'culture' }
+            return { type: 'pillar', name: 'culture' }
         case 'sport':
-            return { color: 'sport' }
+            return { type: 'pillar', name: 'sport' }
         case 'features':
         case 'weekend':
         case 'magazine':
@@ -163,9 +163,9 @@ const getFrontColor = (front: string): WithColor => {
         case 'lifestyle':
         case 'food':
         case 'the fashion':
-            return { color: 'lifestyle' }
+            return { type: 'pillar', name: 'lifestyle' }
     }
-    return { color: 'neutral' }
+    return { type: 'pillar', name: 'neutral' }
 }
 
 export const getFront = async (
@@ -192,7 +192,7 @@ export const getFront = async (
 
     lastModifiedUpdater(resp.lastModified)
 
-    const tone = getFrontColor(id)
+    const appearance = getFrontColor(id)
     const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
     const front = issueResponse.fronts.find(_ => _.name === id)
     if (!front) {
@@ -215,7 +215,7 @@ export const getFront = async (
 
     return {
         ...front,
-        ...tone,
+        appearance,
         displayName: getDisplayName(id),
         collections: collections.filter(hasSucceeded),
         key: id,

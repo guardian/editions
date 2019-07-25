@@ -12,15 +12,16 @@ export type ColorFromPalette =
     | 'lifestyle'
     | 'neutral'
 
-interface WithCustomColor {
-    color: 'custom'
-    customColor: string
+interface ColorAppearance {
+    type: 'custom'
+    color: string
 }
-interface WithPillar {
-    color: ColorFromPalette
+interface PillarAppearance {
+    type: 'pillar'
+    name: ColorFromPalette
 }
 
-export type WithColor = WithCustomColor | WithPillar
+export type Appearance = PillarAppearance | ColorAppearance
 
 export interface Card {
     layout: null
@@ -88,23 +89,23 @@ export interface Collection extends WithKey {
     cards: Card[]
 }
 
-export type Front = WithColor &
-    WithKey & {
-        collections: Collection[]
-        displayName?: string
-        canonical?: string
-        group?: string
-        isHidden?: boolean
-        isImageDisplayed?: boolean
-        imageHeight?: number
-        imageWidth?: number
-        imageUrl?: string
-        onPageDescription?: string
-        description?: string
-        title?: string
-        webTitle?: string
-        navSection?: string
-    }
+export type Front = WithKey & {
+    collections: Collection[]
+    displayName?: string
+    canonical?: string
+    group?: string
+    isHidden?: boolean
+    isImageDisplayed?: boolean
+    imageHeight?: number
+    imageWidth?: number
+    imageUrl?: string
+    onPageDescription?: string
+    description?: string
+    title?: string
+    webTitle?: string
+    navSection?: string
+    appearance: Appearance
+}
 
 export interface UnknownElement {
     id: 'unknown'
