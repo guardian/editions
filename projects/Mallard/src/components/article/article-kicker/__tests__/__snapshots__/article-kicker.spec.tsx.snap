@@ -32,6 +32,9 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
             "color": "#121212",
           },
         ],
+        Object {
+          "color": "#121212",
+        },
       ]
     }
   >
@@ -72,6 +75,9 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
             "color": "#121212",
           },
         ],
+        Object {
+          "color": "#121212",
+        },
       ]
     }
   >
@@ -112,6 +118,9 @@ exports[`ArticleKicker should return null if the kicker is "Opinion" 1`] = `
             "color": "#121212",
           },
         ],
+        Object {
+          "color": "#121212",
+        },
       ]
     }
   >

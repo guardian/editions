@@ -66,6 +66,9 @@ exports[`NewsHeader should show a full featured news header 1`] = `
               "color": "#121212",
             },
           ],
+          Object {
+            "color": "#121212",
+          },
         ]
       }
     >
@@ -417,6 +420,9 @@ exports[`NewsHeader should show a full featured news header 1`] = `
           },
           Object {
             "marginBottom": 12,
+          },
+          Object {
+            "color": "#121212",
           },
         ],
       ]
@@ -788,6 +794,9 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
           },
           Object {
             "marginBottom": 12,
+          },
+          Object {
+            "color": "#121212",
           },
         ],
       ]

@@ -1,6 +1,6 @@
 import React from 'react'
 import { BodyCopy } from '../../styled-text'
-import { useArticleAppearance } from 'src/theme/appearance'
+import { useArticleAppearance, useArticleToneColor } from 'src/theme/appearance'
 
 interface ArticleBylineProps {
     children: string
@@ -8,8 +8,12 @@ interface ArticleBylineProps {
 
 const ArticleByline = ({ children }: ArticleBylineProps) => {
     const { appearance } = useArticleAppearance()
+    const color = useArticleToneColor()
     return (
-        <BodyCopy weight={'bold'} style={[appearance.text, appearance.byline]}>
+        <BodyCopy
+            weight={'bold'}
+            style={[appearance.text, appearance.byline, { color }]}
+        >
             {children}
         </BodyCopy>
     )

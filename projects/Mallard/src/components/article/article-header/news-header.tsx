@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, Animated, Alert } from 'react-native'
-import { HeadlineText } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
@@ -9,9 +8,9 @@ import { animationStyles, newsHeaderStyles } from '../styles'
 import { ArticleKicker } from '../article-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
-import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
+import { ArticleMultiline } from '../article-multiline'
 
 const NewsHeader = ({
     byline,
@@ -41,7 +40,7 @@ const NewsHeader = ({
             <ArticleStandfirst
                 {...{ byline, standfirst, navigationPosition }}
             />
-            <Multiline count={4} />
+            <ArticleMultiline />
             <ArticleByline>{byline}</ArticleByline>
         </View>
     )

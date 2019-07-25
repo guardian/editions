@@ -86,6 +86,9 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
                 "color": "#121212",
               },
             ],
+            Object {
+              "color": "#121212",
+            },
           ]
         }
       >
@@ -434,6 +437,9 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
           },
           Object {
             "marginBottom": 12,
+          },
+          Object {
+            "color": "#121212",
           },
         ],
       ]
@@ -819,6 +825,9 @@ exports[`LongReadHeader should show long read header without an image or a kicke
           },
           Object {
             "marginBottom": 12,
+          },
+          Object {
+            "color": "#121212",
           },
         ],
       ]

@@ -20,6 +20,9 @@ exports[`ArticleByline should display a default Byline 1`] = `
         Object {
           "marginBottom": 12,
         },
+        Object {
+          "color": "#121212",
+        },
       ],
     ]
   }

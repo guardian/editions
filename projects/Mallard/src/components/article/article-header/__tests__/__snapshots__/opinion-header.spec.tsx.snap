@@ -67,6 +67,9 @@ Array [
                 "color": "#121212",
               },
             ],
+            Object {
+              "color": "#121212",
+            },
           ]
         }
       >
@@ -226,6 +229,9 @@ Array [
               },
               Object {
                 "marginBottom": 12,
+              },
+              Object {
+                "color": "#121212",
               },
             ],
           ]
@@ -724,6 +730,9 @@ Array [
               },
               Object {
                 "marginBottom": 12,
+              },
+              Object {
+                "color": "#121212",
               },
             ],
           ]
