@@ -7,7 +7,6 @@ describe('ArticleStandfirst', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
             <ArticleStandfirst
                 standfirst="This is a test Standfirst"
-                byline="Byline McJournalist"
             />,
         ).toJSON()
         expect(component).toMatchSnapshot()
@@ -16,8 +15,6 @@ describe('ArticleStandfirst', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
             <ArticleStandfirst
                 standfirst="This is a test Standfirst"
-                byline="Byline McJournalist"
-                style={{ backgroundColor: 'black' }}
             />,
         ).toJSON()
         expect(component).toMatchSnapshot()

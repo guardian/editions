@@ -54,7 +54,7 @@ export const longReadHeaderStyles: StyleSheet.NamedStyles<
     },
 })
 
-export const animationStyles = (navigationPosition: NavigationPosition) =>
+export const animationStyles = (navigationPosition: NavigationPosition | undefined) =>
     navigationPosition && {
         opacity: navigationPosition.position.interpolate({
             inputRange: [0.4, 1],

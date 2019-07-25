@@ -1,10 +1,10 @@
-import React, { Children } from 'react'
+import React from 'react'
 import { HeadlineText } from 'src/components/styled-text'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { longReadHeaderStyles, newsHeaderStyles } from '../styles'
 
 export interface ArticleHeadlineProps {
-    children: string
+    children: any
     type: 'news' | 'longRead'
 }
 

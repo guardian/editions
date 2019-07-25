@@ -61,13 +61,18 @@ interface ArticleAppearanceStyles {
     */
     standfirst: {
         color?: string
+        paddingBottom?: number
     }
     /*
     Overrides for the byline
     */
     byline: {
         color?: string
+        fontFamily?: string
+        fontSize?: number
+        lineHeight?: number
         marginBottom?: number
+        marginTop?: number
     }
     /*
     Feel free to add more stuff as needed!!
