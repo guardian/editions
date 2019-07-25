@@ -1,12 +1,8 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { CrosswordArticle } from 'src/common'
 import { getBundleUri } from 'src/helpers/webview'
-
-type Headline =
-    | { type: 'text'; text: string }
-    | { type: 'svg'; text: string; render: ReactNode }
 
 const styles = StyleSheet.create({ flex: { flex: 1 } })
 
