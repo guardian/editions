@@ -213,6 +213,10 @@ export type CollectionCardLayout = number[]
 export interface CollectionCardLayouts {
     [countOfArticles: number]: CollectionCardLayout
 }
+export interface CollectionCardLayoutsForFront {
+    default: CollectionCardLayouts
+    [frontName: string]: CollectionCardLayouts
+}
 const issueDir = (issueId: string) => `${issueId}`
 
 const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
