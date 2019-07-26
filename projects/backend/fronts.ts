@@ -25,6 +25,11 @@ import {
     PublishedFurtniture,
     PublishedFront,
 } from './fronts/issue'
+import {
+    getCrosswordType,
+    getCrosswordName,
+    getCrosswordKicker,
+} from './utils/crossword'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -73,13 +78,14 @@ export const parseCollection = async (
 
             switch (article.type) {
                 case 'crossword':
+                    const type = getCrosswordType(article.path)
                     return [
                         article.path,
                         {
                             ...article,
                             key: article.path,
-                            headline: article.crossword.name,
-                            kicker: article.crossword.number.toString(),
+                            headline: getCrosswordName(type),
+                            kicker: getCrosswordKicker(article.crossword),
                             image: getImageFromURL(
                                 'https://media.guim.co.uk/3671bfc12549d3ebac611f96eb0dc234a620e008/0_41_5232_3139/5232.jpg',
                             ),
