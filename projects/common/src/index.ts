@@ -227,7 +227,7 @@ export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
 export const issueSummaryPath = () => 'issues'
-export const imageSizes = ['sample', 'phone', 'tablet'] as const
+export const imageSizes = ['phone', 'tablet'] as const
 export interface Image {
     source: string
     path: string
@@ -241,7 +241,7 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-export type ImageSize = typeof imageSizes[number]
+export type ImageSize = typeof imageSizes[number] | 'sample'
 
 export const mediaPath = (
     issue: string,
