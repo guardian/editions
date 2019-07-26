@@ -12,17 +12,16 @@ import {
 import {
     attempt,
     Attempt,
-    hasSucceeded,
     hasFailed,
     withFailureMessage,
 } from '../backend/utils/try'
 import { PassThrough, Readable } from 'stream'
 import { ImageSize } from '../common/src'
 
-export const URL = 'https://d2cf1ljtg904cv.cloudfront.net/'
-// process.env.backend !== undefined
-//     ? `https://${process.env.backend}`
-//     : 'http://localhost:3131/'
+export const URL =
+    process.env.backend !== undefined
+        ? `https://${process.env.backend}`
+        : 'http://localhost:3131/'
 
 export const getIssue = async (id: string) => {
     const path = `${URL}${issuePath(id)}`
