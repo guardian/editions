@@ -91,6 +91,7 @@
 		<string>GuardianTextEgyptian-RegIt.ttf</string>
 		<string>GuardianIcons-Regular.otf</string>
 		<string>GuardianWeatherIcons-Regular.ttf</string>
+		<string>guardianIcons_1.12.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

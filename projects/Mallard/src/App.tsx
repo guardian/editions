@@ -12,10 +12,12 @@ import { FileSystemProvider } from 'src/hooks/use-fs'
 import { StyleSheet } from 'react-native'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { prepFileSystem } from './helpers/files'
+import { push } from './helpers/push-notifications';
 import AsyncStorage from '@react-native-community/async-storage'
 
 useScreens()
 prepFileSystem()
+push()
 
 const styles = StyleSheet.create({
     appContainer: {
