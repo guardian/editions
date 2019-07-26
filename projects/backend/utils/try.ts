@@ -42,5 +42,7 @@ export const attempt = <T>(promise: Promise<T>): Promise<Attempt<T>> =>
     new Promise(resolve => {
         promise
             .then(success => resolve(success))
-            .catch(error => resolve({ __failure: true, error }))
+            .catch(error => {
+                resolve({ __failure: true, error })
+            })
     })

@@ -6,9 +6,13 @@ import { attempt, hasFailed, hasSucceeded, Attempt } from '../backend/utils/try'
 import { Front, issuePath, frontPath } from './common'
 import { upload } from './upload'
 import { zip } from './zipper'
-import { getImagesFromFront, uploadImage } from './media'
+import {
+    getImagesFromFront,
+    getAndUploadColours,
+    getAndUploadImage,
+} from './media'
 import { unnest } from 'ramda'
-import { imageSizes, issueDir } from '../common/src/index'
+import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
 
 export const run = async (id: string): Promise<void> => {
@@ -19,45 +23,53 @@ export const run = async (id: string): Promise<void> => {
         throw new Error('Failed to download issue.')
     }
     console.log('Downloaded issue', id)
+
     const maybeFronts = await Promise.all(
         issue.fronts.map(
-            async (frontid): Promise<[string, Attempt<Front>]> => [
-                frontid,
-                await attempt(getFront(id, frontid)),
-            ],
+            async (frontid): Promise<Attempt<[string, Front]>> =>
+                await getFront(id, frontid),
         ),
     )
-    maybeFronts.forEach(([id, attempt]) => {
+
+    maybeFronts.forEach(attempt => {
         if (hasFailed(attempt)) {
             console.warn(`Front ${id} failed with ${attempt.error}`)
         }
     })
 
-    console.log(`Fetched fronts ${JSON.stringify(maybeFronts.map(_ => _[0]))}`)
+    const fronts = maybeFronts.filter(hasSucceeded)
+
+    console.log(`Fetched fronts ${JSON.stringify(fronts.map(_ => _[0]))}`)
 
     const frontUploads = await Promise.all(
-        maybeFronts.map(async ([frontId, maybeFront]) => {
-            if (hasFailed(maybeFront)) return maybeFront
+        fronts.map(async ([frontId, maybeFront]) => {
             return attempt(upload(frontPath(id, frontId), maybeFront))
         }),
     )
 
     frontUploads
         .filter(hasFailed)
-        .map(failure => console.error(JSON.stringify(failure)))
+        .forEach(failure => console.error(JSON.stringify(failure)))
 
     console.log('Uploaded fronts')
-
-    const images = unnest(
-        maybeFronts
-            .map(([, maybeFront]) => maybeFront)
-            .filter(hasSucceeded)
-            .map(getImagesFromFront),
+    const images = unnest(fronts.map(([, front]) => getImagesFromFront(front)))
+    const imagesWithSizes: [Image, ImageSize][] = unnest(
+        images.map(image =>
+            imageSizes.map((size): [Image, ImageSize] => [image, size]),
+        ),
     )
+
+    const colourUploads = await Promise.all(
+        images.map(image => getAndUploadColours(id, image)),
+    )
+    //TODO: handle failure etc
 
     let imageUploads = await Promise.all(
-        images.map(async image => uploadImage(id, image)),
+        imagesWithSizes.map(async ([image, size]) =>
+            attempt(getAndUploadImage(id, image, size)),
+        ),
     )
+
     imageUploads
         .filter(hasFailed)
         .map(failure => console.error(JSON.stringify(failure)))
@@ -72,12 +84,10 @@ export const run = async (id: string): Promise<void> => {
 
     console.log('data zip uploaded')
     await Promise.all(
-        imageSizes
-            .filter(_ => _ !== 'sample') //don't keep the sample sized images no
-            .map(async size => {
-                await zip(`${id}-${size}`, `${issueDir(id)}/media/${size}/`)
-                console.log(` ${size} media zip uploaded`)
-            }),
+        imageSizes.map(async size => {
+            await zip(`${id}-${size}`, `${issueDir(id)}/media/${size}/`)
+            console.log(` ${size} media zip uploaded`)
+        }),
     )
     console.log('Media zips uploaded.')
 }
