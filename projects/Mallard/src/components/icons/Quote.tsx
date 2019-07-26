@@ -1,7 +1,7 @@
 import React from 'react'
 import Svg, { Path } from 'react-native-svg'
 
-const Quote = ({ fill = '#FF7F0F', height = 22, width = 35 }) => (
+const Quote = ({ fill = '#FF7F0F', height = 25, width = 38 }) => (
     <Svg width={width} height={height} fill="none">
         <Path
             fill-rule="evenodd"

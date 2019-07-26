@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
+import { NavigationPosition } from 'src/helpers/positions'
 
 interface Style {
     /* kicker */
@@ -52,3 +53,13 @@ export const longReadHeaderStyles: StyleSheet.NamedStyles<
         marginEnd: metrics.horizontal * 2,
     },
 })
+
+export const animationStyles = (
+    navigationPosition: NavigationPosition | undefined,
+) =>
+    navigationPosition && {
+        opacity: navigationPosition.position.interpolate({
+            inputRange: [0.4, 1],
+            outputRange: [0, 1],
+        }),
+    }
