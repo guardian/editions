@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArticleStandfirst should be able to asborb an injected style 1`] = `
+<View>
+  <View
+    style={
+      Array [
+        Object {
+          "marginBottom": 12,
+          "marginTop": 12,
+          "paddingTop": 3,
+          "width": "100%",
+        },
+        Object {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#999999",
+        },
+        Object {
+          "alignContent": "stretch",
+          "alignItems": "stretch",
+          "justifyContent": "flex-end",
+        },
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "flexShrink": 0,
+            "fontFamily": "GuardianTextEgyptian-Reg",
+            "fontSize": 17,
+            "lineHeight": 21,
+          },
+          Array [
+            Object {
+              "color": "#121212",
+            },
+            Object {},
+          ],
+        ]
+      }
+    >
+      This is a test Standfirst
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`ArticleStandfirst should display a default Standfirst 1`] = `
+<View>
+  <View
+    style={
+      Array [
+        Object {
+          "marginBottom": 12,
+          "marginTop": 12,
+          "paddingTop": 3,
+          "width": "100%",
+        },
+        Object {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#999999",
+        },
+        Object {
+          "alignContent": "stretch",
+          "alignItems": "stretch",
+          "justifyContent": "flex-end",
+        },
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "flexShrink": 0,
+            "fontFamily": "GuardianTextEgyptian-Reg",
+            "fontSize": 17,
+            "lineHeight": 21,
+          },
+          Array [
+            Object {
+              "color": "#121212",
+            },
+            Object {},
+          ],
+        ]
+      }
+    >
+      This is a test Standfirst
+    </Text>
+  </View>
+</View>
+`;
