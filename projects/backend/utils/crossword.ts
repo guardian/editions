@@ -1,5 +1,8 @@
 import { capitalizeFirstLetter, addCommas } from './format'
-import { ICrossword } from '@guardian/capi-ts/dist/Crossword'
+import { CrosswordArticle as CAPICrosswordArticle } from '../capi/articles'
+import { CAPIArticle, Crossword, CrosswordArticle } from '../common'
+import { getImageFromURL } from '../image'
+import { ICrossword } from '@guardian/capi-ts'
 
 const crosswordTypes = ['quick', 'cryptic', 'speedy', 'everyman'] as const
 
@@ -18,4 +21,28 @@ const getCrosswordName = (type: CrosswordType): string =>
 const getCrosswordKicker = (crossword: ICrossword) =>
     addCommas(crossword.number)
 
-export { CrosswordType, getCrosswordType, getCrosswordName, getCrosswordKicker }
+//TODO: get images according to type
+const getCrosswordImage = () =>
+    getImageFromURL(
+        'https://media.guim.co.uk/3671bfc12549d3ebac611f96eb0dc234a620e008/0_41_5232_3139/5232.jpg',
+    )
+
+type CrosswordArticleOverrides = Pick<
+    CAPIArticle,
+    'headline' | 'kicker' | 'image'
+> &
+    Pick<CrosswordArticle, 'crossword'>
+
+const getCrosswordArticleOverrides = (
+    article: CAPICrosswordArticle,
+): CrosswordArticleOverrides => {
+    const type = getCrosswordType(article.path)
+    return {
+        headline: getCrosswordName(type),
+        kicker: getCrosswordKicker(article.crossword),
+        image: getCrosswordImage(),
+        crossword: (article.crossword as unknown) as Crossword,
+    }
+}
+
+export { CrosswordType, getCrosswordArticleOverrides }
