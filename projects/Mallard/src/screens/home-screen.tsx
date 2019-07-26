@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, Alert } from 'react-native'
 import { List, BaseList } from 'src/components/lists/list'
 import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
@@ -67,11 +67,9 @@ const HomeScreenHeader = withNavigation(
 const IssueList = withNavigation(
     ({
         issueList,
-        onRetry,
         navigation,
     }: {
         issueList: IssueSummary[]
-        onRetry: () => void
     } & NavigationInjectedProps) => {
         const [{ isUsingProdDevtools }] = useSettings()
         return (
@@ -169,14 +167,10 @@ export const HomeScreen = ({
                     }}
                 />
                 {issueSummary({
-                    success: (issueList, { retry }) => (
-                        <IssueList issueList={issueList} onRetry={retry} />
-                    ),
+                    success: issueList => <IssueList issueList={issueList} />,
                     error: ({ message }, stale, { retry }) => (
                         <>
-                            {stale ? (
-                                <IssueList issueList={stale} onRetry={retry} />
-                            ) : null}
+                            {stale ? <IssueList issueList={stale} /> : null}
                             <FlexErrorMessage
                                 debugMessage={message}
                                 action={['Retry', retry]}

@@ -12,8 +12,11 @@ export const getIssueSummary = () =>
     })
 
 export const useIssueSummary = () => {
-    const resp = useCachedOrPromise(getIssueSummary())
-    return { response: withResponse<IssueSummary[]>(resp), retry: resp.retry }
+    const response = useCachedOrPromise(getIssueSummary())
+    return {
+        response: withResponse<IssueSummary[]>(response),
+        retry: response.retry,
+    }
 }
 
 export const getLatestIssue = () => {
