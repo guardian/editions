@@ -49,8 +49,10 @@ const HomeScreenHeader = withNavigation(
             />
         )
         return response({
-            error: () => <IssueHeader action={action} />,
-            pending: () => <IssueHeader action={action} />,
+            error: () => <IssueHeader leftAction={settings} action={action} />,
+            pending: () => (
+                <IssueHeader leftAction={settings} action={action} />
+            ),
             success: issue => (
                 <IssueHeader
                     leftAction={settings}
