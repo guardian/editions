@@ -20,13 +20,13 @@ const getSignature = (path: string) => {
 }
 
 const sizes: { [k in ImageSize]: number } = {
-    phone: 1000,
-    tablet: 1000,
+    phone: 1500,
+    tablet: 5555,
     sample: 200,
 }
 
 export const getImageURL = (image: Image, size: ImageSize) => {
-    const newPath = `${image.path}?q=25&dpr=2&w=${sizes[size]}`
+    const newPath = `${image.path}?q=85&dpr=2&w=${sizes[size]}`
     return `https://i.guim.co.uk/img/${
         image.source
     }/${newPath}&s=${getSignature(newPath)}`

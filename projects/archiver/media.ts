@@ -16,7 +16,9 @@ export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
 export const getImagesFromFront = (front: Front): Image[] => {
     const allCards = unnest(front.collections.map(_ => _.cards))
     const articles = unnest(allCards.map(_ => Object.values(_.articles)))
-    return unnest(articles.map(getImagesFromArticle))
+    const images = unnest(articles.map(getImagesFromArticle))
+    console.log(`Found ${images.length} images in ${front.displayName}.`)
+    return images
 }
 
 export const uploadImage = async (id: string, image: Image) => {
@@ -28,7 +30,7 @@ export const uploadImage = async (id: string, image: Image) => {
         console.error(JSON.stringify(colours))
         return colours
     }
-    const colourUpload = attempt(upload('data', colourPath, colours))
+    const colourUpload = attempt(upload(colourPath, colours))
 
     return Promise.all([
         ...allSizes.map(([path, file]) => {
@@ -38,7 +40,7 @@ export const uploadImage = async (id: string, image: Image) => {
                 return file
             }
 
-            return attempt(upload('media', path, file))
+            return attempt(upload(path, file))
         }),
         colourUpload,
     ])
