@@ -23,7 +23,7 @@ export const zip = async (
     const objects = await s3
         .listObjectsV2({
             Bucket: bucket,
-            Prefix: `${prefix}`,
+            Prefix: prefix,
         })
         .promise()
     const files = (objects.Contents || []).map(obj => obj.Key).filter(notNull)

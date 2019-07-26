@@ -29,7 +29,7 @@ export const getImageURL = (image: Image, size: ImageSize) => {
     const newPath = `${image.path}?q=85&dpr=2&w=${sizes[size]}`
     return `https://i.guim.co.uk/img/${
         image.source
-        }/${newPath}&s=${getSignature(newPath)}`
+    }/${newPath}&s=${getSignature(newPath)}`
 }
 
 export const getPalette = async (image: Image) => {
