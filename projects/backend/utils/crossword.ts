@@ -22,10 +22,13 @@ const getCrosswordKicker = (crossword: ICrossword) =>
     addCommas(crossword.number)
 
 //TODO: get images according to type
-const getCrosswordImage = () =>
-    getImageFromURL(
-        'https://media.guim.co.uk/3671bfc12549d3ebac611f96eb0dc234a620e008/0_41_5232_3139/5232.jpg',
+const getCrosswordImage = (type: CrosswordType) => {
+    if (type === 'cryptic') {
+    }
+    return getImageFromURL(
+        'https://media.guim.co.uk/5343defdf72e314f6cb37705343e8d2cb00f2cd1/0_0_2048_2048/2048.jpg',
     )
+}
 
 type CrosswordArticleOverrides = Pick<
     CAPIArticle,
