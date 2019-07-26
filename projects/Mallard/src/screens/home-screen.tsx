@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { View, Alert } from 'react-native'
 import { List, BaseList } from 'src/components/lists/list'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
@@ -74,11 +74,6 @@ const IssueList = withNavigation(
         onRetry: () => void
     } & NavigationInjectedProps) => {
         const [{ isUsingProdDevtools }] = useSettings()
-
-        /* Refresh this list every time it's drawn */
-        useEffect(() => {
-            onRetry()
-        }, [])
         return (
             <>
                 <BaseList
@@ -118,12 +113,6 @@ const IssueList = withNavigation(
                     >
                         <GridRowSplit>
                             <Button
-                                onPress={onRetry}
-                                icon={''}
-                                alt={'refresh'}
-                                appearance={ButtonAppearance.skeleton}
-                            ></Button>
-                            <Button
                                 appearance={ButtonAppearance.skeleton}
                                 onPress={() => {
                                     navigateToIssue(navigation, {
@@ -147,11 +136,17 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [files, { refreshIssues }] = useFileList()
-    const issueSummary = useIssueSummary()
+    const { response: issueSummary, retry } = useIssueSummary()
     const from = navigation.getParam('from', undefined)
+    const [{ isUsingProdDevtools }] = useSettings()
 
     return (
         <WithAppAppearance value={'tertiary'}>
+            <NavigationEvents
+                onDidFocus={() => {
+                    retry()
+                }}
+            />
             <ScrollContainer>
                 <HomeScreenHeader
                     issue={
@@ -190,7 +185,12 @@ export const HomeScreen = ({
                     ),
                     pending: (stale, { retry }) =>
                         stale ? (
-                            <IssueList issueList={stale} onRetry={retry} />
+                            <>
+                                <IssueList issueList={stale} onRetry={retry} />
+                                {isUsingProdDevtools ? (
+                                    <Spinner></Spinner>
+                                ) : null}
+                            </>
                         ) : (
                             <FlexCenter>
                                 <Spinner></Spinner>

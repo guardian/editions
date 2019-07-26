@@ -11,8 +11,10 @@ export const getIssueSummary = () =>
         validator: res => res.length > 0,
     })
 
-export const useIssueSummary = () =>
-    withResponse<IssueSummary[]>(useCachedOrPromise(getIssueSummary()))
+export const useIssueSummary = () => {
+    const resp = useCachedOrPromise(getIssueSummary())
+    return { response: withResponse<IssueSummary[]>(resp), retry: resp.retry }
+}
 
 export const getLatestIssue = () => {
     return chain<IssueSummary[], Issue>(getIssueSummary(), summary =>
