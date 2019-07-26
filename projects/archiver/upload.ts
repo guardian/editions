@@ -1,15 +1,11 @@
 import { s3, bucket } from './s3'
 
-export const upload = (
-    root: 'data' | 'media',
-    key: string,
-    body: {} | Buffer,
-) => {
+export const upload = (key: string, body: {} | Buffer) => {
     return s3
         .putObject({
             Body: body instanceof Buffer ? body : JSON.stringify(body),
             Bucket: bucket,
-            Key: `${root}/${key}`,
+            Key: `${key}`,
             ACL: 'public-read',
         })
         .promise()

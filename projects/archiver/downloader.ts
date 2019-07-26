@@ -9,9 +9,12 @@ import {
     Front,
     Image,
 } from './common'
-import { attempt, Attempt } from '../backend/utils/try'
+import { attempt, Attempt, hasSucceeded } from '../backend/utils/try'
 
-const URL = `https://${process.env.backend || 'localhost:3131/'}`
+const URL =
+    process.env.backend !== undefined
+        ? `https://${process.env.backend}`
+        : 'http://localhost:3131/'
 
 export const getIssue = async (id: string) => {
     const path = `${URL}${issuePath(id)}`
@@ -47,7 +50,17 @@ export const getImage = async (
             .map(
                 async ([path, bufferPromise]): Promise<
                     [string, Attempt<Buffer>]
-                > => [path, await bufferPromise],
+                > => {
+                    const resolved = await bufferPromise
+                    console.log(
+                        `${
+                            hasSucceeded(resolved)
+                                ? 'successfully fetched'
+                                : 'failed to download'
+                        }  ${path}`,
+                    )
+                    return [path, resolved]
+                },
             ),
     )
 }
