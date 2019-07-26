@@ -26,7 +26,7 @@ const getCrosswordImage = (type: CrosswordType) => {
     if (type === 'cryptic') {
     }
     return getImageFromURL(
-        'https://media.guim.co.uk/5343defdf72e314f6cb37705343e8d2cb00f2cd1/0_0_2048_2048/2048.jpg',
+        'https://media.guim.co.uk/0789ff75f7095cd56f5d74a098289baed429772a/0_0_2048_2048/1000.jpg',
     )
 }
 
