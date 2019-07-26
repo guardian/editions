@@ -177,10 +177,10 @@ export const HomeScreen = ({
                             />
                         </>
                     ),
-                    pending: (stale, { retry }) =>
+                    pending: stale =>
                         stale ? (
                             <>
-                                <IssueList issueList={stale} onRetry={retry} />
+                                <IssueList issueList={stale} />
                                 {isUsingProdDevtools ? (
                                     <Spinner></Spinner>
                                 ) : null}
