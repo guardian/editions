@@ -8,13 +8,16 @@ import { upload } from './upload'
 import { zip } from './zipper'
 import { getImagesFromFront, uploadImage } from './media'
 import { unnest } from 'ramda'
-import { imageSizes } from '../common/src/index'
+import { imageSizes, issueDir } from '../common/src/index'
 import { bucket } from './s3'
 
 export const run = async (id: string): Promise<void> => {
     console.log(`Attempting to upload ${id} to ${bucket}`)
     const issue = await attempt(getIssue(id))
-    if (hasFailed(issue)) throw new Error('OH NO')
+    if (hasFailed(issue)) {
+        console.log(JSON.stringify(issue))
+        throw new Error('Failed to download issue.')
+    }
     console.log('Downloaded issue', id)
     const maybeFronts = await Promise.all(
         issue.fronts.map(
@@ -30,12 +33,12 @@ export const run = async (id: string): Promise<void> => {
         }
     })
 
-    console.log('Fetched fronts')
+    console.log(`Fetched fronts ${JSON.stringify(maybeFronts.map(_ => _[0]))}`)
 
     const frontUploads = await Promise.all(
         maybeFronts.map(async ([frontId, maybeFront]) => {
             if (hasFailed(maybeFront)) return maybeFront
-            return attempt(upload('data', frontPath(id, frontId), maybeFront))
+            return attempt(upload(frontPath(id, frontId), maybeFront))
         }),
     )
 
@@ -52,28 +55,27 @@ export const run = async (id: string): Promise<void> => {
             .map(getImagesFromFront),
     )
 
-    await Promise.all(
-        images.map(async image => {
-            uploadImage(id, image)
-        }),
+    let imageUploads = await Promise.all(
+        images.map(async image => uploadImage(id, image)),
     )
+    imageUploads
+        .filter(hasFailed)
+        .map(failure => console.error(JSON.stringify(failure)))
 
     console.log('Uploaded images')
 
-    await upload('data', issuePath(id), issue)
+    await upload(issuePath(id), issue)
     console.log('Uploaded issue.')
+
     console.log('Compressing')
-    await zip(id, 'data', issuePath(id))
+    await zip(id, issueDir(id), 'media')
+
     console.log('data zip uploaded')
     await Promise.all(
         imageSizes
             .filter(_ => _ !== 'sample') //don't keep the sample sized images no
             .map(async size => {
-                await zip(
-                    `id-${size}`,
-                    `media`,
-                    `${issuePath(id)}/media/${size}/`,
-                )
+                await zip(`${id}-${size}`, `${issueDir(id)}/media/${size}/`)
                 console.log(` ${size} media zip uploaded`)
             }),
     )

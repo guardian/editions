@@ -5,15 +5,10 @@ import { s3, bucket } from './s3'
 const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
 
-const removeInitial = (s: string, remove: string) => {
-    if (!s.startsWith(remove)) return s
-    return s.substr(remove.length)
-}
-
 export const zip = async (
     name: string,
-    root: 'data' | 'media',
     prefix: string,
+    excludePath?: string,
 ) => {
     const output = new PassThrough()
     const upload = s3
@@ -28,12 +23,16 @@ export const zip = async (
     const objects = await s3
         .listObjectsV2({
             Bucket: bucket,
-            Prefix: `${root}/${prefix}`,
+            Prefix: prefix,
         })
         .promise()
     const files = (objects.Contents || []).map(obj => obj.Key).filter(notNull)
 
     console.log('Got file names')
+    const matches =
+        excludePath !== undefined
+            ? files.filter(name => !name.startsWith(`${prefix}/${excludePath}`))
+            : files
 
     const archive = archiver('zip')
     archive.on('warning', err => {
@@ -41,16 +40,16 @@ export const zip = async (
     })
     archive.pipe(output)
     await Promise.all(
-        files.map(async file => {
+        matches.map(async file => {
             console.log(`getting ${file}`)
             const s3response = await s3
                 .getObject({ Bucket: bucket, Key: file })
                 .promise()
             if (s3response.Body == null) return false
-            console.log(`adding ${file} to zip`)
+            console.log(`adding ${file} to zip ${name}`)
 
             archive.append(s3response.Body as string, {
-                name: removeInitial(file, root),
+                name: file,
             })
         }),
     )
