@@ -24,9 +24,12 @@ const getCrosswordKicker = (crossword: ICrossword) =>
 //TODO: get images according to type
 const getCrosswordImage = (type: CrosswordType) => {
     if (type === 'cryptic') {
+        return getImageFromURL(
+            'https://media.guim.co.uk/70609fd8e274ee8b2cbb19f7537c9a4f3bd6328a/0_0_2048_2048/1000.jpg',
+        )
     }
     return getImageFromURL(
-        'https://media.guim.co.uk/0789ff75f7095cd56f5d74a098289baed429772a/0_0_2048_2048/1000.jpg',
+        'https://media.guim.co.uk/ddcfc3a9c1963f8769d02c27db1cea6312057f81/0_0_2048_2048/1000.jpg',
     )
 }
 
@@ -43,7 +46,7 @@ const getCrosswordArticleOverrides = (
     return {
         headline: getCrosswordName(type),
         kicker: getCrosswordKicker(article.crossword),
-        image: getCrosswordImage(),
+        image: getCrosswordImage(type),
         crossword: (article.crossword as unknown) as Crossword,
     }
 }
