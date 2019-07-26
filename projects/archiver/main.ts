@@ -62,7 +62,11 @@ export const run = async (id: string): Promise<void> => {
     const colourUploads = await Promise.all(
         images.map(image => getAndUploadColours(id, image)),
     )
-    //TODO: handle failure etc
+
+    colourUploads.filter(hasFailed).forEach(error => {
+        console.error('Uploading colour failed.')
+        console.error(error)
+    })
 
     let imageUploads = await Promise.all(
         imagesWithSizes.map(async ([image, size]) =>
