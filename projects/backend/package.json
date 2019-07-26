@@ -18,7 +18,7 @@
     },
     "scripts": {
         "build": "ncc build index.ts -o dist -m",
-        "start": "ts-node-dev index.ts",
+        "start": "ts-node-dev --ignore-watch node_modules index.ts",
         "validate": "cd ../.. && yarn validate-backend",
         "fix": "cd ../.. && yarn fix-backend",
         "test": "jest --coverage",
