@@ -37,10 +37,12 @@ export interface Error {
 type Response<T> =
     | {
           state: 'pending'
+          staleResponse: T | null
       }
     | {
           state: 'error'
           error: Error
+          staleResponse: T | null
       }
     | {
           state: 'success'
@@ -64,16 +66,24 @@ const useResponse = <T>(
               }
             : {
                   state: 'pending',
+                  staleResponse: null,
               },
     )
     const onSuccess = (response: T) => {
         setResponse({ state: 'success', response })
     }
     const onError = (error: Error) => {
-        setResponse({ state: 'error', error })
+        setResponse({
+            state: 'error',
+            error,
+            staleResponse: 'response' in response ? response.response : null,
+        })
     }
     const onPending = () => {
-        setResponse({ state: 'pending' })
+        setResponse({
+            state: 'pending',
+            staleResponse: 'response' in response ? response.response : null,
+        })
     }
     return [
         response,

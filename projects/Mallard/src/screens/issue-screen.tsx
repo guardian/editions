@@ -68,7 +68,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 }}
             />
             {response({
-                error: ({ message }, { retry }) => (
+                error: ({ message }, _, { retry }) => (
                     <>
                         <Header />
 
