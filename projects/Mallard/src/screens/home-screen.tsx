@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Alert } from 'react-native'
 import { List, BaseList } from 'src/components/lists/list'
 import { NavigationScreenProp } from 'react-navigation'
@@ -74,6 +74,11 @@ const IssueList = withNavigation(
         onRetry: () => void
     } & NavigationInjectedProps) => {
         const [{ isUsingProdDevtools }] = useSettings()
+
+        /* Refresh this list every time it's drawn */
+        useEffect(() => {
+            onRetry()
+        }, [])
         return (
             <>
                 <BaseList
@@ -135,6 +140,7 @@ const IssueList = withNavigation(
         )
     },
 )
+
 export const HomeScreen = ({
     navigation,
 }: {
@@ -142,7 +148,6 @@ export const HomeScreen = ({
 }) => {
     const [files, { refreshIssues }] = useFileList()
     const issueSummary = useIssueSummary()
-    const [{ isUsingProdDevtools }] = useSettings()
     const from = navigation.getParam('from', undefined)
 
     return (
