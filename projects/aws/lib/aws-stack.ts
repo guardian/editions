@@ -178,7 +178,7 @@ export class EditionsStack extends cdk.Stack {
 
         archiver.addToRolePolicy(archiverPolicy)
 
-        new iam.Role(this, 'arhiver-invocation-role', {
+        const invoactionRole = new iam.Role(this, 'arhiver-invocation-role', {
             assumedBy: new iam.AccountPrincipal(
                 toolsAccountParameter.valueAsString,
             ),
@@ -192,6 +192,12 @@ export class EditionsStack extends cdk.Stack {
                     ],
                 }),
             },
+        })
+
+        new CfnOutput(this, 'invocation-role-output', {
+            description: 'Role ARN for tools invocation',
+            value: invoactionRole.roleArn,
+            exportName: 'invocation-role',
         })
     }
 }
