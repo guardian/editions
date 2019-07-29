@@ -16,7 +16,7 @@ export const color = {
     background: palette.neutral[100],
     text: palette.neutral[7],
     dimBackground: palette.neutral[93],
-    dimText: palette.neutral[30],
+    dimText: palette.neutral[20],
     darkBackground: palette.neutral[20],
     textOverDarkBackground: palette.neutral[100],
     artboardBackground: palette.neutral[7],
