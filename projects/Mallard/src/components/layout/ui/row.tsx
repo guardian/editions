@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 1.5,
+        paddingVertical: metrics.vertical,
+        paddingBottom: metrics.vertical * 1.5,
         marginVertical: StyleSheet.hairlineWidth,
     },
     itemFlexer: {
@@ -64,7 +65,7 @@ interface RowContentProps {
 
 const RowContents = ({ title, explainer }: RowContentProps) => (
     <>
-        <UiBodyCopy>{title}</UiBodyCopy>
+        <UiBodyCopy weight="bold">{title}</UiBodyCopy>
         {explainer && (
             <UiExplainerCopy style={{ marginTop: metrics.vertical / 8 }}>
                 {explainer}
@@ -96,6 +97,26 @@ const Row = ({
         </RowWrapper>
     )
 }
+
+const tallRowStyles = StyleSheet.create({
+    split: { marginBottom: metrics.vertical / 2 },
+})
+
+const TallRow = ({
+    proxy,
+    onPress,
+    ...contents
+}: RowContentProps &
+    RowWrapperProps & {
+        proxy: ReactElement
+    }) => (
+    <RowWrapper onPress={onPress}>
+        <View style={tallRowStyles.split}>
+            <RowContents {...contents} />
+        </View>
+        {proxy}
+    </RowWrapper>
+)
 
 export interface RowWrapperProps {
     onPress?: () => void
@@ -136,4 +157,4 @@ const RowWrapper = ({
     )
 }
 
-export { Separator, Row, RowWrapper, Footer, Heading }
+export { Separator, Row, TallRow, RowWrapper, Footer, Heading }

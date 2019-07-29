@@ -1,11 +1,18 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
-import { Row, Separator, Heading, Footer } from 'src/components/layout/ui/row'
+import {
+    Row,
+    Separator,
+    Heading,
+    Footer,
+    TallRow,
+} from 'src/components/layout/ui/row'
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { GdprSwitchSettings } from 'src/helpers/settings'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Button } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
+import { WithAppAppearance } from 'src/theme/appearance'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -39,14 +46,18 @@ const GdprConsent = () => {
                 data={Object.values(switches)}
                 keyExtractor={({ key }) => key}
                 renderItem={({ item }) => (
-                    <Row
+                    <TallRow
                         title={item.name}
                         explainer={item.description}
-                        onPress={() => {
-                            setSetting(item.key, !settings[item.key])
-                        }}
-                        proxy={<ThreeWaySwitch value={settings[item.key]} />}
-                    ></Row>
+                        proxy={
+                            <ThreeWaySwitch
+                                onValueChange={value =>
+                                    setSetting(item.key, value)
+                                }
+                                value={settings[item.key]}
+                            />
+                        }
+                    ></TallRow>
                 )}
             />
             {isUsingProdDevtools ? (
@@ -59,9 +70,11 @@ const GdprConsent = () => {
 }
 
 const GdprConsentScreen = () => (
-    <ScrollContainer>
-        <GdprConsent></GdprConsent>
-    </ScrollContainer>
+    <WithAppAppearance value={'settings'}>
+        <ScrollContainer>
+            <GdprConsent></GdprConsent>
+        </ScrollContainer>
+    </WithAppAppearance>
 )
 
 export { GdprConsent, GdprConsentScreen }

@@ -3,50 +3,50 @@ import { View, Text, StyleSheet } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { TouchableOpacity } from 'react-native'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 
 export type ThreeWaySwitchValue = null | boolean
 
 const styles = StyleSheet.create({
-    edge: {
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: color.ui.shark,
+    firstChild: {
+        marginRight: metrics.horizontal / 2,
+    },
+    row: {
         flexDirection: 'row',
-        borderRadius: 2,
-    },
-    side: {
-        color: color.ui.shark,
-        padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 2,
-    },
-    selectedSide: {
-        backgroundColor: color.ui.shark,
-        color: color.textOverPrimary,
     },
 })
 
-const ThreeWaySwitch = ({ value }: { value: ThreeWaySwitchValue }) => {
-    return (
-        <View style={styles.edge}>
-            <Text style={[styles.side, value === true && styles.selectedSide]}>
-                Yes
-            </Text>
-            <Text style={[styles.side, value === false && styles.selectedSide]}>
-                No
-            </Text>
-        </View>
-    )
-}
-
-const TouchableThreeWaySwitch = ({
+const ThreeWaySwitch = ({
     value,
     onValueChange,
 }: {
     value: ThreeWaySwitchValue
-    onValueChange?: () => void
-}) => (
-    <TouchableOpacity onPress={onValueChange}>
-        <ThreeWaySwitch value={value} />
-    </TouchableOpacity>
-)
-
-export { ThreeWaySwitch, TouchableThreeWaySwitch }
+    onValueChange: (value: boolean | null) => void
+}) => {
+    return (
+        <View style={styles.row}>
+            <Button
+                style={styles.firstChild}
+                onPress={() => onValueChange(true)}
+                appearance={
+                    value === true
+                        ? ButtonAppearance.skeletonActive
+                        : ButtonAppearance.skeleton
+                }
+            >
+                On
+            </Button>
+            <Button
+                onPress={() => onValueChange(false)}
+                appearance={
+                    value === false
+                        ? ButtonAppearance.skeletonActive
+                        : ButtonAppearance.skeleton
+                }
+            >
+                Off
+            </Button>
+        </View>
+    )
+}
+export { ThreeWaySwitch }

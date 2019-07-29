@@ -22,6 +22,7 @@ export enum ButtonAppearance {
     tomato,
     apricot,
     skeletonLight,
+    skeletonActive,
 }
 
 const height =
@@ -70,6 +71,14 @@ const getButtonAppearance = (
             borderColor: appAppearance.color,
         },
         text: { color: appAppearance.color },
+    }),
+    [ButtonAppearance.skeletonActive]: StyleSheet.create({
+        background: {
+            backgroundColor: appAppearance.color,
+            borderWidth: 1,
+            borderColor: appAppearance.color,
+        },
+        text: { color: appAppearance.cardBackgroundColor },
     }),
     [ButtonAppearance.skeletonLight]: StyleSheet.create({
         background: {
