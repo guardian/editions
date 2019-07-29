@@ -205,7 +205,7 @@ export const UiExplainerCopy = ({
     style,
     ...props
 }: {
-    children: string
+    children: Element
     style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (

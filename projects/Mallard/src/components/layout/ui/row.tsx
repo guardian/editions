@@ -60,7 +60,7 @@ const Separator = () => {
 
 interface RowContentProps {
     title: string
-    explainer?: string
+    explainer?: Element
 }
 
 const RowContents = ({ title, explainer }: RowContentProps) => (

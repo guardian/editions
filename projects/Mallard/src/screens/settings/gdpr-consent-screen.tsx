@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
+import {
+    View,
+    StyleSheet,
+    ScrollView,
+    FlatList,
+    Linking,
+    Text,
+} from 'react-native'
 import {
     Row,
     Separator,
@@ -14,6 +21,8 @@ import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { UiBodyCopy } from 'src/components/styled-text'
+import { Link } from 'src/components/link'
+import { PRIVACY_LINK, COOKIE_LINK } from 'src/helpers/words'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -55,7 +64,16 @@ const GdprConsent = () => {
             <TallRow
                 title={''}
                 explainer={
-                    'Below you can manage your privacy settings for cookies and similar technologies for this service. These technologies are provided by us and by our third-party partners. To find out more, read our privacy policy and cookie policy. If you disable a category, you may need to restart the app for your changes to fully take effect.'
+                    <>
+                        Below you can manage your privacy settings for cookies
+                        and similar technologies for this service. These
+                        technologies are provided by us and by our third-party
+                        partners. To find out more, read our{' '}
+                        <Link href={PRIVACY_LINK}>privacy policy</Link> and{' '}
+                        <Link href={COOKIE_LINK}>cookie policy</Link>. If you
+                        disable a category, you may need to restart the app for
+                        your changes to fully take effect.
+                    </>
                 }
                 proxy={
                     <Button
