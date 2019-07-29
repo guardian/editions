@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useArticleAppearance } from 'src/theme/appearance'
 import { HeadlineKickerText } from 'src/components/styled-text'
 import { longReadHeaderStyles, newsHeaderStyles } from '../styles'
 import { metrics } from 'src/theme/spacing'
+import { useArticle } from 'src/hooks/use-article'
 
 export interface ArticleKickerProps {
     kicker: string
@@ -15,19 +15,16 @@ const styles = StyleSheet.create({
 })
 
 export const ArticleKicker = ({ kicker, type }: ArticleKickerProps) => {
-    const { appearance } = useArticleAppearance()
+    const [color] = useArticle()
     return (
         <View
             style={[
                 type && type === 'news'
                     ? newsHeaderStyles.kicker
                     : longReadHeaderStyles.kicker,
-                appearance.backgrounds,
             ]}
         >
-            <HeadlineKickerText
-                style={[appearance.text, appearance.kicker, styles.kicker]}
-            >
+            <HeadlineKickerText style={[styles.kicker, { color: color.main }]}>
                 {kicker}
             </HeadlineKickerText>
         </View>

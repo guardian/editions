@@ -4,13 +4,18 @@ interface WithKey {
     key: string
 }
 
-export type ColorFromPalette =
-    | 'news'
-    | 'opinion'
-    | 'sport'
-    | 'culture'
-    | 'lifestyle'
-    | 'neutral'
+export const articlePillars = [
+    'news',
+    'opinion',
+    'sport',
+    'culture',
+    'lifestyle',
+    'neutral',
+] as const
+export const articleTypes = ['article', 'opinion'] as const
+
+export type PillarFromPalette = typeof articlePillars[number]
+export type ArticleType = typeof articleTypes[number]
 
 interface ColorAppearance {
     type: 'custom'
@@ -18,7 +23,7 @@ interface ColorAppearance {
 }
 interface PillarAppearance {
     type: 'pillar'
-    name: ColorFromPalette
+    name: PillarFromPalette
 }
 
 export type Appearance = PillarAppearance | ColorAppearance

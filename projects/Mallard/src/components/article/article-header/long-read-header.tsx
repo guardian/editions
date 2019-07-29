@@ -1,7 +1,5 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { HeadlineText } from 'src/components/styled-text'
-import { useArticleAppearance } from 'src/theme/appearance'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { ArticleImage } from '../article-image'
 import { longReadHeaderStyles } from '../styles'
@@ -19,22 +17,16 @@ const LongReadHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const { appearance } = useArticleAppearance()
     const navigationPosition = getNavigationPosition('article')
     return (
-        <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
+        <View style={[longReadHeaderStyles.background]}>
             {image ? (
                 <ArticleImage
                     style={StyleSheet.absoluteFillObject}
                     image={image}
                 />
             ) : null}
-            <View
-                style={[
-                    longReadHeaderStyles.textBackground,
-                    appearance.backgrounds,
-                ]}
-            >
+            <View style={[longReadHeaderStyles.textBackground]}>
                 {kicker ? (
                     <ArticleKicker kicker={kicker} type="longRead" />
                 ) : null}

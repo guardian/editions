@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, Animated, Alert } from 'react-native'
+import { View, Animated, Alert, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { animationStyles, newsHeaderStyles } from '../styles'
@@ -12,6 +11,15 @@ import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { ArticleMultiline } from '../article-multiline'
 
+const styles = StyleSheet.create({
+    bylineBackground: {
+        marginTop: metrics.vertical,
+        marginBottom: metrics.vertical,
+        paddingTop: metrics.vertical / 4,
+        width: '100%',
+    },
+})
+
 const NewsHeader = ({
     byline,
     headline,
@@ -19,10 +27,9 @@ const NewsHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const { appearance } = useArticleAppearance()
     const navigationPosition = getNavigationPosition('article')
     return (
-        <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
+        <View style={[newsHeaderStyles.background]}>
             {image ? (
                 <ArticleImage
                     style={{
@@ -38,6 +45,7 @@ const NewsHeader = ({
                 <ArticleHeadline type="news">{headline}</ArticleHeadline>
             </Animated.View>
             <ArticleStandfirst
+                style={styles.bylineBackground}
                 {...{ byline, standfirst, navigationPosition }}
             />
             <ArticleMultiline />
