@@ -5,7 +5,16 @@ import { Alert } from 'react-native';
 const push = () => PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function(token) {
+    // Alert.alert('TOKEN:', JSON.stringify(token));
     fetchFromNotificationService(token)
+  },
+
+  onError: function(e){
+    // Alert.alert(JSON.stringify(e))
+  },
+
+  isLoaded: function(loaded) {
+    // Alert.alert(loaded)
   },
 
   // (required) Called when a remote or local notification  is opened or received
@@ -20,7 +29,9 @@ const push = () => PushNotification.configure({
   },
 
   // ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)
-  senderID: 'YOUR GCM (OR FCM) SENDER ID',
+  senderID: '43377569438',
+
+  requestPermissions: true,
 
   // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {

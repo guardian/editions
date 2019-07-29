@@ -1,0 +1,40 @@
+{
+    "project_info": {
+      "project_number": "43377569438",
+      "firebase_url": "https://guardian-daily-edition-c-d5ba4.firebaseio.com",
+      "project_id": "guardian-daily-edition-code",
+      "storage_bucket": "guardian-daily-edition-code.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:43377569438:android:fe3039069f699f9e",
+          "android_client_info": {
+            "package_name": "com.guardian.editions"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "43377569438-gulak5fg8cpkipr9tj3hf88a85ctgh3d.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyBp-_JDUg_df3qFciVgE1P3wtxWeGXFIk4"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "43377569438-gulak5fg8cpkipr9tj3hf88a85ctgh3d.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

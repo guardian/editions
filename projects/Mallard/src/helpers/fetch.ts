@@ -10,7 +10,7 @@ import {
 } from './fetch/cached-or-promise'
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -189,12 +189,15 @@ const fetchWeather = <T>(
 }
 
 const fetchFromNotificationService = (deviceToken: {token: string, os: string}) => {
-    const registerDeviceUrl = `https://notifications.code.dev-guardianapis.com//device/register`;
+    const registerDeviceUrl = `https://notifications.code.dev-guardianapis.com/device/register`;
     const {token, os} = deviceToken;
     const options = {
         deviceToken: token,
-        platform: os,
-        topics: []
+        platform: Platform.OS === "ios" ? "ios-edition" : "android-edition",
+        topics: [{
+            name: "newsstand",
+            type: "newsstand"
+        }]
     }
     return fetch(registerDeviceUrl, {
         method: 'post',
