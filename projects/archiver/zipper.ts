@@ -39,6 +39,7 @@ export const zip = async (
         console.error('Error in attempting to compress', err)
     })
     archive.pipe(output)
+
     await Promise.all(
         matches.map(async file => {
             console.log(`getting ${file}`)
@@ -48,12 +49,12 @@ export const zip = async (
             if (s3response.Body == null) return false
             console.log(`adding ${file} to zip ${name}`)
 
-            archive.append(s3response.Body as string, {
+            archive.append(s3response.Body as Buffer, {
                 name: file,
             })
         }),
     )
-    console.log('Finished adding to zip, finalizing.')
+    console.log(`Finished adding to zip ${name}.zip, finalizing.`)
     await archive.finalize()
-    await upload
+    return upload
 }
