@@ -58,8 +58,12 @@ const scale = {
     },
     headline: {
         1: {
-            fontSize: 18,
-            lineHeight: 21,
+            fontSize: 19,
+            lineHeight: 22,
+        },
+        1.25: {
+            fontSize: 24,
+            lineHeight: 27,
         },
         1.5: {
             fontSize: 28,

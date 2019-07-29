@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Animated } from 'react-native'
+import { View, Animated, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
@@ -11,6 +11,15 @@ import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import Quote from 'src/components/icons/Quote'
+import { getFont } from 'src/theme/typography'
+
+const styles = StyleSheet.create({
+    byline: {
+        marginTop: metrics.vertical / 3,
+        marginBottom: metrics.vertical,
+        ...getFont('titlepiece', 1),
+    },
+})
 
 const OpinionHeader = ({
     byline,
@@ -37,7 +46,9 @@ const OpinionHeader = ({
                         <Quote />
                         {headline}
                     </ArticleHeadline>
-                    <ArticleByline>{byline}</ArticleByline>
+                    <ArticleByline style={styles.byline}>
+                        {byline}
+                    </ArticleByline>
                 </Animated.View>
             </View>
             <Multiline count={4} />

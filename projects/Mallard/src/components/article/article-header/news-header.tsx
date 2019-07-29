@@ -41,7 +41,9 @@ const NewsHeader = ({
                 {...{ byline, standfirst, navigationPosition }}
             />
             <ArticleMultiline />
-            <ArticleByline>{byline}</ArticleByline>
+            <ArticleByline style={newsHeaderStyles.byline}>
+                {byline}
+            </ArticleByline>
         </View>
     )
 }

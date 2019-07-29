@@ -1,13 +1,6 @@
 import React from 'react'
-import {
-    Text,
-    View,
-    StyleSheet,
-    TextStyle,
-    StyleProp,
-    TextProps,
-} from 'react-native'
-import { useAppAppearance, useArticleToneColor } from 'src/theme/appearance'
+import { Text, StyleSheet, TextStyle, StyleProp, TextProps } from 'react-native'
+import { useAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 
@@ -27,7 +20,6 @@ const styles = StyleSheet.create({
     },
     headlineKickerText: {
         flexShrink: 0,
-        marginTop: 2,
         ...getFont('titlepiece', 1),
     },
     headlineCardText: {
@@ -97,16 +89,7 @@ export const HeadlineKickerText = ({
     children: string
     style?: StyleProp<TextStyle>
 } & TextProps) => {
-    return (
-        <Text
-            {...props}
-            style={[
-                styles.headlineKickerText,
-                style,
-                { color: useArticleToneColor() },
-            ]}
-        />
-    )
+    return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
 
 export const StandfirstText = ({

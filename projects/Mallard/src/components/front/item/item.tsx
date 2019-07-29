@@ -286,7 +286,7 @@ const superHeroImageStyles = StyleSheet.create({
     textStandBlock: {
         ...tappableStyles.padding,
         ...getFont('text', 0.9),
-        color: color.palette.neutral[60],
+        color: color.palette.neutral[46],
         position: 'absolute',
         bottom: 0,
     },
@@ -369,10 +369,7 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 />
             ) : null}
             <View style={[splashImageStyles.splashHeadline]}>
-                <HeadlineCardText
-                    adjustsFontSizeToFit={true}
-                    style={[splashImageStyles.textBlock]}
-                >
+                <HeadlineCardText style={[splashImageStyles.textBlock]}>
                     {article.kicker}
                 </HeadlineCardText>
                 {'standfirst' in article && article.standfirst ? (
