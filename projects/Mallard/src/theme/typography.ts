@@ -1,6 +1,9 @@
 const families = {
-    sans: 'GuardianTextSans-Regular',
-    text: 'GuardianTextEgyptian-Reg',
+    sans: {
+        regular: 'GuardianTextSans-Regular',
+        bold: 'GuardianTextSans-Bold',
+    },
+    text: { regular: 'GuardianTextEgyptian-Reg' },
 }
 
 type FontFamily = keyof typeof families
@@ -35,10 +38,11 @@ const scale = {
 export const getFont = <F extends FontFamily>(
     family: F,
     level: keyof typeof scale[F],
+    weight: keyof typeof families[F] = 'regular',
 ) => {
     const scaleForLevel = scale[family][level]
     return {
-        fontFamily: families[family],
+        fontFamily: families[family][weight],
         ...scaleForLevel,
     }
 }

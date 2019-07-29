@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     text: {
         flexShrink: 0,
-        ...getFont('sans', 1),
+        ...getFont('sans', 1, 'bold'),
     },
     withIcon: {
         paddingHorizontal: 0,
@@ -153,7 +153,6 @@ const Button = ({
             >
                 {'children' in innards ? (
                     <UiBodyCopy
-                        weight="bold"
                         style={[
                             styles.text,
                             { textAlign: center ? 'center' : 'auto' },
