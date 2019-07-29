@@ -26,6 +26,8 @@ const ThreeWaySwitch = ({
     return (
         <View style={styles.row}>
             <Button
+                accessible={value === true}
+                accessibilityHint={'Tap to turn Off'}
                 style={styles.firstChild}
                 onPress={() => onValueChange(true)}
                 appearance={
@@ -37,6 +39,8 @@ const ThreeWaySwitch = ({
                 On
             </Button>
             <Button
+                accessible={value === false}
+                accessibilityHint={'Tap to turn On'}
                 onPress={() => onValueChange(false)}
                 appearance={
                     value === false
