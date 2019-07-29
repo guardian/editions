@@ -21,7 +21,7 @@ export const useIssueSummary = () => {
 
 export const getLatestIssue = () => {
     return chain<IssueSummary[], Issue>(getIssueSummary(), summary =>
-        getIssueResponse(summary[summary.length - 1].key),
+        getIssueResponse(summary[0].key),
     )
 }
 export const useLatestIssue = () =>
