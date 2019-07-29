@@ -1,14 +1,14 @@
 import PushNotification from 'react-native-push-notification';
+import { fetchFromNotificationService } from 'src/helpers/fetch'
 import { Alert } from 'react-native';
 
 const push = () => PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function(token) {
-    Alert.alert(token)
-    console.log('TOKEN:', token);
+    fetchFromNotificationService(token)
   },
 
-  // (required) Called when a remote or local notification is opened or received
+  // (required) Called when a remote or local notification  is opened or received
   onNotification: function(notification) {
     Alert.alert(notification)
     console.log('NOTIFICATION:', notification);
@@ -24,9 +24,9 @@ const push = () => PushNotification.configure({
 
   // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {
-    alert: true,
-    badge: true,
-    sound: true
+    alert: false,
+    badge: false,
+    sound: false
   },
 
   // Should the initial notification be popped automatically
