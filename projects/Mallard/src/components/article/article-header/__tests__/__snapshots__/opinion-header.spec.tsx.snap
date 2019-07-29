@@ -46,11 +46,11 @@ Array [
               "fontFamily": "GHGuardianHeadline-Regular",
               "fontSize": 28,
               "lineHeight": 30,
-              "marginTop": 4,
             },
             Array [
               Object {
                 "marginRight": 24,
+                "marginTop": 3,
               },
               Object {
                 "color": "#121212",
@@ -176,22 +176,21 @@ Array [
           Array [
             Object {
               "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
+              "fontFamily": "GuardianTextEgyptian-Bold",
               "fontSize": 17,
               "lineHeight": 21,
-            },
-            Object {
-              "fontFamily": "GuardianTextEgyptian-Bold",
             },
             Array [
               Object {
                 "color": "#121212",
               },
+              Object {},
               Object {
+                "fontFamily": "GTGuardianTitlepiece-Bold",
+                "fontSize": 18,
+                "lineHeight": 18,
                 "marginBottom": 12,
-              },
-              Object {
-                "color": "#121212",
+                "marginTop": 4,
               },
             ],
           ]
@@ -547,11 +546,11 @@ Array [
               "fontFamily": "GHGuardianHeadline-Regular",
               "fontSize": 28,
               "lineHeight": 30,
-              "marginTop": 4,
             },
             Array [
               Object {
                 "marginRight": 24,
+                "marginTop": 3,
               },
               Object {
                 "color": "#121212",
@@ -677,22 +676,21 @@ Array [
           Array [
             Object {
               "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
+              "fontFamily": "GuardianTextEgyptian-Bold",
               "fontSize": 17,
               "lineHeight": 21,
-            },
-            Object {
-              "fontFamily": "GuardianTextEgyptian-Bold",
             },
             Array [
               Object {
                 "color": "#121212",
               },
+              Object {},
               Object {
+                "fontFamily": "GTGuardianTitlepiece-Bold",
+                "fontSize": 18,
+                "lineHeight": 18,
                 "marginBottom": 12,
-              },
-              Object {
-                "color": "#121212",
+                "marginTop": 4,
               },
             ],
           ]

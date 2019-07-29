@@ -78,17 +78,17 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
               "flexShrink": 0,
               "fontFamily": "GTGuardianTitlepiece-Bold",
               "fontSize": 18,
-              "lineHeight": 21,
-              "marginTop": 2,
+              "lineHeight": 18,
             },
             Array [
               Object {
                 "color": "#121212",
               },
+              Object {},
+              Object {
+                "marginTop": 2.4,
+              },
             ],
-            Object {
-              "color": "#121212",
-            },
           ]
         }
       >
@@ -104,7 +104,6 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
             "lineHeight": 30,
-            "marginTop": 4,
           },
           Array [
             Object {},
@@ -424,23 +423,16 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
       Array [
         Object {
           "flexShrink": 0,
-          "fontFamily": "GuardianTextEgyptian-Reg",
+          "fontFamily": "GuardianTextEgyptian-Bold",
           "fontSize": 17,
           "lineHeight": 21,
-        },
-        Object {
-          "fontFamily": "GuardianTextEgyptian-Bold",
         },
         Array [
           Object {
             "color": "#121212",
           },
-          Object {
-            "marginBottom": 12,
-          },
-          Object {
-            "color": "#121212",
-          },
+          Object {},
+          undefined,
         ],
       ]
     }
@@ -492,7 +484,6 @@ exports[`LongReadHeader should show long read header without an image or a kicke
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
             "lineHeight": 30,
-            "marginTop": 4,
           },
           Array [
             Object {},
@@ -812,23 +803,16 @@ exports[`LongReadHeader should show long read header without an image or a kicke
       Array [
         Object {
           "flexShrink": 0,
-          "fontFamily": "GuardianTextEgyptian-Reg",
+          "fontFamily": "GuardianTextEgyptian-Bold",
           "fontSize": 17,
           "lineHeight": 21,
-        },
-        Object {
-          "fontFamily": "GuardianTextEgyptian-Bold",
         },
         Array [
           Object {
             "color": "#121212",
           },
-          Object {
-            "marginBottom": 12,
-          },
-          Object {
-            "color": "#121212",
-          },
+          Object {},
+          undefined,
         ],
       ]
     }

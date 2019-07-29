@@ -178,7 +178,6 @@ export const articleAppearances: {
         byline: {},
         standfirst: {
             color: color.palette.neutral[7],
-            paddingBottom: 5,
         },
     },
     sport: {

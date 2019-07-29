@@ -6,23 +6,16 @@ exports[`ArticleByline should display a default Byline 1`] = `
     Array [
       Object {
         "flexShrink": 0,
-        "fontFamily": "GuardianTextEgyptian-Reg",
+        "fontFamily": "GuardianTextEgyptian-Bold",
         "fontSize": 17,
         "lineHeight": 21,
-      },
-      Object {
-        "fontFamily": "GuardianTextEgyptian-Bold",
       },
       Array [
         Object {
           "color": "#121212",
         },
-        Object {
-          "marginBottom": 12,
-        },
-        Object {
-          "color": "#121212",
-        },
+        Object {},
+        undefined,
       ],
     ]
   }
