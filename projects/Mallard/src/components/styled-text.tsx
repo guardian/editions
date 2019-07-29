@@ -63,6 +63,10 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         ...getFont('sans', 1),
     },
+    bodyCopyBold: {
+        flexShrink: 0,
+        ...getFont('sans', 1, 'bold'),
+    },
     explainerCopy: {
         flexShrink: 0,
         ...getFont('sans', 0.9),
@@ -181,12 +185,9 @@ export const UiBodyCopy = ({
         <Text
             {...props}
             style={[
-                styles.bodyCopy,
+                weight === 'bold' ? styles.bodyCopyBold : styles.bodyCopy,
                 {
                     color: useAppAppearance().color,
-                },
-                weight === 'bold' && {
-                    fontFamily: 'GuardianTextSans-Bold',
                 },
                 style,
             ]}
@@ -204,7 +205,7 @@ export const UiExplainerCopy = ({
     style,
     ...props
 }: {
-    children: string
+    children: Element
     style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (
