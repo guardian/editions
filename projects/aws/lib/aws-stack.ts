@@ -51,6 +51,15 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
+        const toolsAccountParameter = new cdk.CfnParameter(
+            this,
+            'tools-account-param',
+            {
+                type: 'String',
+                description: 'Account id for tools account.',
+            },
+        )
+
         const deploy = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
@@ -168,5 +177,21 @@ export class EditionsStack extends cdk.Stack {
         })
 
         archiver.addToRolePolicy(archiverPolicy)
+
+        new iam.Role(this, 'arhiver-invocation-role', {
+            assumedBy: new iam.AccountPrincipal(
+                toolsAccountParameter.valueAsString,
+            ),
+            inlinePolicies: {
+                runPolicy: new iam.PolicyDocument({
+                    statements: [
+                        new iam.PolicyStatement({
+                            actions: ['lambda:InvokeFunction'],
+                            resources: [archiver.functionArn],
+                        }),
+                    ],
+                }),
+            },
+        })
     }
 }
