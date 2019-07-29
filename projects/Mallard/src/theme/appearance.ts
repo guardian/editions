@@ -5,6 +5,7 @@ import { ColorFromPalette } from 'src/common'
 import { metrics } from './spacing'
 import { getColor } from 'src/helpers/transform'
 import { Appearance } from '../../../common/src'
+import { getFont } from './typography'
 
 /*
 Types
@@ -168,10 +169,8 @@ export const articleAppearances: {
         },
         kicker: {},
         byline: {
-            fontFamily: 'GTGuardianTitlepiece-Bold',
-            fontSize: 28,
-            lineHeight: 30,
-            marginTop: 5,
+            ...getFont('titlepiece', 1),
+            marginTop: metrics.vertical / 3,
             marginBottom: metrics.vertical,
         },
         standfirst: {

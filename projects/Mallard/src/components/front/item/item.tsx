@@ -24,6 +24,7 @@ import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
 import { navigateToArticle } from 'src/navigation/helpers'
 import { APIPaths } from 'src/paths'
+import { getFont } from 'src/theme/typography'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -284,8 +285,7 @@ const superHeroImageStyles = StyleSheet.create({
     },
     textStandBlock: {
         ...tappableStyles.padding,
-        fontSize: 14,
-        lineHeight: 18,
+        ...getFont('text', 0.9),
         color: color.palette.neutral[60],
         position: 'absolute',
         bottom: 0,
@@ -334,8 +334,7 @@ const splashImageStyles = StyleSheet.create({
         height: '100%',
     },
     textBlock: {
-        fontSize: 40,
-        lineHeight: 40,
+        ...getFont('headline', 2),
         color: color.palette.neutral[100],
     },
     splashHeadline: {
@@ -348,8 +347,7 @@ const splashImageStyles = StyleSheet.create({
         color: color.palette.neutral[100],
     },
     textStandBlock: {
-        fontSize: 14,
-        lineHeight: 18,
+        ...getFont('text', 0.9),
         color: color.palette.neutral[100],
     },
 })

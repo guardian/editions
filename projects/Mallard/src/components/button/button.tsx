@@ -100,9 +100,7 @@ const getButtonAppearance = (
 
 const iconStyles = StyleSheet.create({
     root: {
-        fontFamily: 'GuardianIcons-Regular',
-        fontSize: 20,
-        lineHeight: 20,
+        ...getFont('icon', 1),
     },
 })
 
