@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Animated, StyleSheet } from 'react-native'
+import { View, Animated, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
@@ -15,9 +15,8 @@ import { getFont } from 'src/theme/typography'
 
 const styles = StyleSheet.create({
     byline: {
-        marginTop: metrics.vertical / 3,
-        marginBottom: metrics.vertical,
-        ...getFont('titlepiece', 1),
+        fontFamily: getFont('titlepiece', 1).fontFamily,
+        width: '100%',
     },
 })
 
@@ -45,10 +44,17 @@ const OpinionHeader = ({
                     <ArticleHeadline type="news">
                         <Quote />
                         {headline}
+                        <Text
+                            style={[
+                                appearance.text,
+                                appearance.byline,
+                                styles.byline,
+                            ]}
+                        >
+                            {'\n'}
+                            {byline}
+                        </Text>
                     </ArticleHeadline>
-                    <ArticleByline style={styles.byline}>
-                        {byline}
-                    </ArticleByline>
                 </Animated.View>
             </View>
             <Multiline count={4} />
