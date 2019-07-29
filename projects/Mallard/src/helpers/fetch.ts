@@ -201,7 +201,10 @@ const fetchFromNotificationService = (deviceToken: {token: string, os: string}) 
     }
     return fetch(registerDeviceUrl, {
         method: 'post',
-        body: JSON.stringify(options)
+        body: JSON.stringify(options),
+        headers: {
+            'Content-Type': 'application/json',
+        }
     }).then(response => Alert.alert(JSON.stringify(response)))
     .catch(e => Alert.alert('didnt work'))
 }
