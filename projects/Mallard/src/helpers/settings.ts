@@ -7,11 +7,11 @@ Consent switches can be 'unset' or null
 export type GdprSwitchSetting = null | boolean
 export interface GdprSwitchSettings {
     gdprAllowPerformance: GdprSwitchSetting
-    gdprAllowTracking: GdprSwitchSetting
+    gdprAllowFunctionality: GdprSwitchSetting
 }
 export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
     'gdprAllowPerformance',
-    'gdprAllowTracking',
+    'gdprAllowFunctionality',
 ]
 
 interface DevSettings {

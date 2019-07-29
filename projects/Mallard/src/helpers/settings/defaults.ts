@@ -24,5 +24,5 @@ export const defaultSettings: Settings = {
     isUsingProdDevtools: false,
     hasOnboarded: false,
     gdprAllowPerformance: null,
-    gdprAllowTracking: null,
+    gdprAllowFunctionality: null,
 }
