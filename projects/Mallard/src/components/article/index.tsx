@@ -6,10 +6,7 @@ import { metrics } from 'src/theme/spacing'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { LongReadHeader, NewsHeader, OpinionHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
-import {
-    ArticleStandfirst,
-    PropTypes as StandfirstPropTypes,
-} from './article-standfirst'
+import { PropTypes as StandfirstPropTypes } from './article-standfirst'
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
 import { CAPIArticle } from 'src/common'
@@ -92,6 +89,10 @@ const Article = ({
         <View style={styles.container}>
             {type === 'opinion' ? (
                 <OpinionHeader
+                    {...{ byline, headline, image, kicker, standfirst }}
+                />
+            ) : type === 'longread' ? (
+                <LongReadHeader
                     {...{ byline, headline, image, kicker, standfirst }}
                 />
             ) : (

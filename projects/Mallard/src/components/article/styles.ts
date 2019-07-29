@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { NavigationPosition } from 'src/helpers/positions'
+import { color } from 'src/theme/color'
 
 interface Style {
     /* kicker */
@@ -50,12 +51,13 @@ export const longReadHeaderStyles: StyleSheet.NamedStyles<
     kicker: {
         ...newsHeaderStyles.kicker,
     },
-    byline: {},
-    headline: {},
+    byline: { color: color.palette.neutral[100] },
+    headline: { color: color.palette.neutral[100] },
     textBackground: {
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 2,
         marginEnd: metrics.horizontal * 2,
+        backgroundColor: color.palette.neutral[7],
     },
 })
 
