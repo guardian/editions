@@ -186,6 +186,9 @@ export const UiBodyCopy = ({
             {...props}
             style={[
                 weight === 'bold' ? styles.bodyCopyBold : styles.bodyCopy,
+                {
+                    color: useAppAppearance().color,
+                },
                 style,
             ]}
         >

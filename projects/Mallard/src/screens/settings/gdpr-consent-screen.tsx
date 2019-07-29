@@ -10,14 +10,24 @@ import {
 import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
 import { GdprSwitchSettings } from 'src/helpers/settings'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
-import { Button } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { WithAppAppearance } from 'src/theme/appearance'
+import { UiBodyCopy } from 'src/components/styled-text'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
     name: string
+    services: string
     description: string
+}
+type EssentialGdprSwitch = Omit<GdprSwitch, 'key'>
+
+const essentials: EssentialGdprSwitch = {
+    name: 'Essential',
+    services: 'Ophan - Braze - YouTube Player',
+    description:
+        'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
 }
 
 const GdprConsent = () => {
@@ -27,18 +37,45 @@ const GdprConsent = () => {
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
             name: 'Performance (NOT IN USE)',
-            description: 'Basic tracking used to give you a better experience',
+            services: 'Google Analytics - Fabric - Nielsen - ComScore - Sentry',
+            description:
+                'Enabling these allows us to measure how you use our services. We use this information to get a better sense of how our users engage with our journalism and to improve our services, so that users have a better experience. For example, we collect information about which of our pages are most frequently visited, and by which types of users. If you disable this, we will not be able to measure your use of our services, and we will have less information about their performance.',
         },
-        gdprAllowTracking: {
-            key: 'gdprAllowTracking',
-            name: 'Tracking (NOT IN USE)',
-            description: 'Basic tracking used to give you a better experience',
+        gdprAllowFunctionality: {
+            key: 'gdprAllowFunctionality',
+            name: 'Functionality (NOT IN USE)',
+            services: 'Google - Facebook - Branch',
+            description:
+                'Enabling these allow us to provide you with a range of functionality and store related information. For example, you can use social media credentials such as your Google account to log into your Guardian account. If you disable this, some features of our services may not function.',
         },
     }
 
     return (
         <View>
-            <Heading>Your privacy</Heading>
+            <TallRow
+                title={''}
+                explainer={
+                    'Below you can manage your privacy settings for cookies and similar technologies for this service. These technologies are provided by us and by our third-party partners. To find out more, read our privacy policy and cookie policy. If you disable a category, you may need to restart the app for your changes to fully take effect.'
+                }
+                proxy={
+                    <Button
+                        appearance={ButtonAppearance.skeleton}
+                        onPress={() => {
+                            for (const { key } of Object.values(switches)) {
+                                setSetting(key, true)
+                            }
+                        }}
+                    >
+                        Enable all
+                    </Button>
+                }
+            ></TallRow>
+            <Separator></Separator>
+            <TallRow
+                title={essentials.name + '\n' + essentials.services}
+                explainer={essentials.description}
+            ></TallRow>
+
             <FlatList
                 ItemSeparatorComponent={Separator}
                 ListFooterComponent={Separator}
@@ -60,6 +97,12 @@ const GdprConsent = () => {
                     ></TallRow>
                 )}
             />
+            <Footer>
+                <UiBodyCopy>
+                    You can change the above setting any time by selecting
+                    privacy settings in the settings menu
+                </UiBodyCopy>
+            </Footer>
             {isUsingProdDevtools ? (
                 <Footer>
                     <Button onPress={DEVMODE_resetAll}>Reset</Button>

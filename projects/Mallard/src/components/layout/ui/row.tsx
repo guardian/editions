@@ -99,7 +99,10 @@ const Row = ({
 }
 
 const tallRowStyles = StyleSheet.create({
-    split: { marginBottom: metrics.vertical / 2 },
+    split: {
+        marginBottom: metrics.vertical,
+        alignItems: 'flex-start',
+    },
 })
 
 const TallRow = ({
@@ -108,7 +111,7 @@ const TallRow = ({
     ...contents
 }: RowContentProps &
     RowWrapperProps & {
-        proxy: ReactElement
+        proxy?: ReactElement
     }) => (
     <RowWrapper onPress={onPress}>
         <View style={tallRowStyles.split}>
