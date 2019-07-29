@@ -12,7 +12,7 @@ const fetchAuth = async (
     params: { [key: string]: string },
     authUrl = ID_API_URL,
     token = ID_ACCESS_TOKEN,
-) => {
+): Promise<string> => {
     const res = await fetch(`${authUrl}/auth`, {
         method: 'POST',
         headers: {
