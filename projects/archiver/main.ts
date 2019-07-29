@@ -15,26 +15,30 @@ import { unnest } from 'ramda'
 import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
 import { generateIndex } from './summary'
+interface Record {
+    s3: { bucket: { name: string }; object: { key: string } }
+} //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
 
-const fetch = async (id: string): Promise<void> => {
+const fetch = async (source: string, id: string): Promise<void> => {
     console.log(`Attempting to upload ${id} to ${bucket}`)
-    const issue = await attempt(getIssue(id))
+    const path = `${source}/${id}`
+    const issue = await attempt(getIssue(path))
     if (hasFailed(issue)) {
         console.log(JSON.stringify(issue))
         throw new Error('Failed to download issue.')
     }
-    console.log('Downloaded issue', id)
+    console.log('Downloaded issue', path)
 
     const maybeFronts = await Promise.all(
         issue.fronts.map(
             async (frontid): Promise<Attempt<[string, Front]>> =>
-                await getFront(id, frontid),
+                await getFront(path, frontid),
         ),
     )
 
     maybeFronts.forEach(attempt => {
         if (hasFailed(attempt)) {
-            console.warn(`Front ${id} failed with ${attempt.error}`)
+            console.warn(`Front failed with ${attempt.error}`)
         }
     })
 
@@ -99,6 +103,7 @@ const compress = async (id: string) => {
     )
     console.log('Media zips uploaded.')
 }
+
 const summary = async () => {
     const index = await attempt(generateIndex())
     if (hasFailed(index)) {
@@ -109,20 +114,54 @@ const summary = async () => {
     return
 }
 
-export const run = async (id: string): Promise<void> => {
-    await fetch(id)
+export const run = async (source: string, id: string): Promise<void> => {
+    await fetch(source, id)
     await summary()
     await compress(id)
 }
+
+const s3Event = async (records: Record[]) => {
+    const keys = records.map(record => decodeURIComponent(record.s3.object.key))
+    const key = keys[0]
+    keys.slice(1).map(key => `Unexpected additional key ${key} not processed`)
+    //TODO: feed these failures to the publication
+    const [, id, filename] = key.split('/')
+    if (filename === undefined || id === undefined) {
+        throw new Error(`${key} does not correspond to an issue`)
+    }
+    const source = filename.replace('.json', '')
+    const result = await run(source, id)
+    if (keys.length > 1) {
+        throw new Error('Too many keys 🔑🗝🎹')
+        //Throw so the lambda fails, but at least try to publish one of them
+    }
+    return result
+}
+
 //When run in AWS
 export const handler: Handler<
-    { id?: string; index?: boolean },
+    {
+        id?: string
+        source?: string
+        index?: boolean
+        Records: Record[]
+    },
     void
 > = async event => {
-    console.log('Archiver lambda called with:')
-    console.log(JSON.stringify(event))
-    if (event.index) return summary()
-    const id = event.id
-    if (!(id && typeof id === 'string')) throw new Error('Nope')
-    return run(id)
+    try {
+        if (event.index) return summary()
+        if (event.Records) return s3Event(event.Records)
+        const id = event.id
+        if (!(id && typeof id === 'string')) throw new Error('No ID in event')
+        if (event.index) return summary()
+        const source = event.source
+        if (!(source && typeof source === 'string'))
+            throw new Error('No source in event')
+
+        return run(source, id)
+    } catch (e) {
+        console.error(e)
+        console.log('Archiver lambda called with:')
+        console.log(JSON.stringify(event))
+    }
 }

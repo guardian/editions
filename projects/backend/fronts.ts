@@ -1,4 +1,4 @@
-import { s3fetch, s3Latest } from './s3'
+import { s3fetch, Path } from './s3'
 import { Front, Collection, CAPIArticle, Appearance } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
@@ -20,6 +20,7 @@ import {
 } from './fronts/issue'
 import { getCrosswordArticleOverrides } from './utils/crossword'
 import { notNull } from '../common/src'
+import { isPreview } from './preview'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -199,17 +200,14 @@ const getFrontColor = (front: string): Appearance => {
 export const getFront = async (
     issue: string,
     id: string,
+    source: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<Front>> => {
-    const latest = await s3Latest(`daily-edition/${issue}/`)
-    if (hasFailed(latest)) {
-        return withFailureMessage(
-            latest,
-            `Could not get latest issue for ${issue} and ${id}.`,
-        )
+    const path: Path = {
+        key: `daily-edition/${issue}/${source}.json`,
+        bucket: isPreview ? 'preview' : 'published',
     }
-    const issuePath = latest.key
-    const resp = await s3fetch(issuePath)
+    const resp = await s3fetch(path)
 
     if (hasFailed(resp)) {
         return withFailureMessage(

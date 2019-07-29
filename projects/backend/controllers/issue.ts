@@ -1,48 +1,20 @@
 import { Request, Response } from 'express'
 
-import { s3fetch, s3Latest, s3List } from '../s3'
-import { Issue, notNull, IssueSummary } from '../common'
-import { lastModified, LastModifiedUpdater } from '../lastModified'
-import { PublishedIssue } from '../fronts/issue'
+import { s3List } from '../s3'
+import { notNull, IssueSummary } from '../common'
+import { lastModified } from '../lastModified'
 import { hasFailed, Attempt } from '../utils/try'
-
-const getIssue = async (
-    issue: string,
-    lastModifiedUpdater: LastModifiedUpdater,
-): Promise<Issue | 'notfound'> => {
-    console.log('Attempting to get latest issue for', issue)
-    const latest = await s3Latest(`daily-edition/${issue}/`)
-    if (hasFailed(latest)) {
-        console.error(`Could not get latest issue.`)
-        console.error(JSON.stringify(latest))
-        return 'notfound'
-    }
-    const { key } = latest
-    console.log(`Fetching ${key} for ${issue}`)
-
-    const x = await s3fetch(key)
-
-    if (hasFailed(x)) {
-        return 'notfound'
-    }
-
-    lastModifiedUpdater(x.lastModified)
-    const data = (await x.json()) as PublishedIssue
-    const fronts = data.fronts.map(_ => _.name)
-    return {
-        name: data.name,
-        key: issue,
-        id: data.id,
-        date: data.issueDate,
-        fronts,
-    }
-}
+import { getIssue } from '../issue'
+import { isPreview } from '../preview'
 
 export const issueController = (req: Request, res: Response) => {
     const id: string = req.params.issueId
+    const source: string = decodeURIComponent(
+        isPreview ? 'preview' : req.params.source,
+    )
     const [date, updater] = lastModified()
     console.log(`${req.url}: request for issue ${id}`)
-    getIssue(id, updater)
+    getIssue(id, source, updater)
         .then(data => {
             if (data === 'notfound') {
                 res.sendStatus(404)
@@ -58,7 +30,10 @@ export const issueController = (req: Request, res: Response) => {
 export const getIssuesSummary = async (
     pageSize = 7,
 ): Promise<Attempt<IssueSummary[]>> => {
-    const issueKeys = await s3List('daily-edition/')
+    const issueKeys = await s3List({
+        key: 'daily-edition/',
+        bucket: isPreview ? 'preview' : 'published',
+    })
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
         console.error(JSON.stringify(issueKeys))
