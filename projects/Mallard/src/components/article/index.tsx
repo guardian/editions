@@ -66,7 +66,6 @@ const ArticleController = ({
             const message: never = article
             return (
                 <FlexErrorMessage
-                    icon="😭"
                     title={message}
                     style={{ backgroundColor: color.background }}
                 />

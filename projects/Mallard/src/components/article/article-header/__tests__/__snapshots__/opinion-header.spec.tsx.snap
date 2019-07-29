@@ -46,11 +46,11 @@ Array [
               "fontFamily": "GHGuardianHeadline-Regular",
               "fontSize": 28,
               "lineHeight": 30,
-              "marginTop": 4,
             },
             Array [
               Object {
                 "marginRight": 24,
+                "marginTop": 3,
               },
               Object {
                 "color": "#121212",
@@ -170,34 +170,24 @@ Array [
           </RNSVGGroup>
         </RNSVGSvgView>
         Theresa May makes final speech as PM
-      </Text>
-      <Text
-        style={
-          Array [
-            Object {
-              "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
-              "fontSize": 17,
-              "lineHeight": 21,
-            },
-            Object {
-              "fontFamily": "GuardianTextEgyptian-Bold",
-            },
+        <Text
+          style={
             Array [
               Object {
                 "color": "#121212",
               },
+              Object {},
               Object {
-                "marginBottom": 12,
+                "fontFamily": "GTGuardianTitlepiece-Bold",
+                "width": "100%",
               },
-              Object {
-                "color": "#121212",
-              },
-            ],
-          ]
-        }
-      >
-        Andrew Sparrow
+            ]
+          }
+        >
+          
+
+          Andrew Sparrow
+        </Text>
       </Text>
     </View>
   </View>,
@@ -547,11 +537,11 @@ Array [
               "fontFamily": "GHGuardianHeadline-Regular",
               "fontSize": 28,
               "lineHeight": 30,
-              "marginTop": 4,
             },
             Array [
               Object {
                 "marginRight": 24,
+                "marginTop": 3,
               },
               Object {
                 "color": "#121212",
@@ -671,34 +661,24 @@ Array [
           </RNSVGGroup>
         </RNSVGSvgView>
         Theresa May makes final speech as PM
-      </Text>
-      <Text
-        style={
-          Array [
-            Object {
-              "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
-              "fontSize": 17,
-              "lineHeight": 21,
-            },
-            Object {
-              "fontFamily": "GuardianTextEgyptian-Bold",
-            },
+        <Text
+          style={
             Array [
               Object {
                 "color": "#121212",
               },
+              Object {},
               Object {
-                "marginBottom": 12,
+                "fontFamily": "GTGuardianTitlepiece-Bold",
+                "width": "100%",
               },
-              Object {
-                "color": "#121212",
-              },
-            ],
-          ]
-        }
-      >
-        Andrew Sparrow
+            ]
+          }
+        >
+          
+
+          Andrew Sparrow
+        </Text>
       </Text>
     </View>
   </View>,

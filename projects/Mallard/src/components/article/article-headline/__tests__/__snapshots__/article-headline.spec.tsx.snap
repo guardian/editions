@@ -10,7 +10,6 @@ exports[`ArticleHeadline should show a long read headling 1`] = `
         "fontFamily": "GHGuardianHeadline-Regular",
         "fontSize": 28,
         "lineHeight": 30,
-        "marginTop": 4,
       },
       Array [
         Object {},
@@ -36,11 +35,11 @@ exports[`ArticleHeadline should show a news headling 1`] = `
         "fontFamily": "GHGuardianHeadline-Regular",
         "fontSize": 28,
         "lineHeight": 30,
-        "marginTop": 4,
       },
       Array [
         Object {
           "marginRight": 24,
+          "marginTop": 3,
         },
         Object {
           "color": "#121212",

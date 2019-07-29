@@ -2,23 +2,25 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 
 import { List } from 'src/components/lists/list'
-import { MonoTextBlock } from 'src/components/styled-text'
+import { UiBodyCopy } from 'src/components/styled-text'
 import { useSettings } from 'src/hooks/use-settings'
 import { NavigationScreenProp } from 'react-navigation'
 import { TextInput } from 'react-native-gesture-handler'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { backends, defaultSettings } from 'src/helpers/settings/defaults'
-import { Heading } from 'src/components/layout/ui/row'
+import { Heading, Footer } from 'src/components/layout/ui/row'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 
 const ApiState = () => {
     const [{ apiUrl }] = useSettings()
     if (apiUrl === defaultSettings.apiUrl) return null
     return (
-        <MonoTextBlock>
-            {`API backend pointing to ${apiUrl}. This is not PROD!`}
-        </MonoTextBlock>
+        <Footer>
+            <UiBodyCopy>
+                {`API backend pointing to ${apiUrl}. This is not PROD!`}
+            </UiBodyCopy>
+        </Footer>
     )
 }
 

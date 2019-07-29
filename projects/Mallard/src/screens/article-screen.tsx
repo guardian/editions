@@ -86,7 +86,6 @@ const ArticleScreenBody = ({
             {articleResponse({
                 error: ({ message }) => (
                     <FlexErrorMessage
-                        icon="😭"
                         title={message}
                         style={{ backgroundColor: color.background }}
                     />
