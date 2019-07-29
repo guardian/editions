@@ -46,9 +46,9 @@ const OpinionHeader = ({
                 ) : null}
                 <Animated.View style={animationStyles(navigationPosition)}>
                     <ArticleHeadline type="news">
-                        <Quote />
+                        <Quote fill={color.main} />
                         {headline}
-                        <Text style={[{ color: color.dark }, styles.byline]}>
+                        <Text style={[{ color: color.main }, styles.byline]}>
                             {'\n'}
                             {byline}
                         </Text>
