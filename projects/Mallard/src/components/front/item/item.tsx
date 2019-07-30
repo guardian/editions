@@ -4,7 +4,6 @@ import { metrics } from 'src/theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { CAPIArticle } from 'src/common'
 import {
     PathToArticle,
@@ -14,7 +13,11 @@ import {
 
 import { TextBlock } from './text-block'
 import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
-import { RowSize, getRowHeightForSize } from '../helpers'
+import {
+    RowSize,
+    getRowHeightForSize,
+    useCardBackgroundStyle,
+} from '../helpers'
 import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
@@ -24,6 +27,7 @@ import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
 import { navigateToArticle } from 'src/navigation/helpers'
 import { APIPaths } from 'src/paths'
+import { getFont } from 'src/theme/typography'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -66,7 +70,6 @@ const ItemTappable = withNavigation(
         hasPadding?: boolean
     } & TappablePropTypes &
         NavigationInjectedProps) => {
-        const { appearance } = useArticleAppearance()
         const tappableRef = useRef<View>()
 
         return (
@@ -110,8 +113,7 @@ const ItemTappable = withNavigation(
                         style={[
                             tappableStyles.root,
                             hasPadding && tappableStyles.padding,
-                            appearance.backgrounds,
-                            appearance.cardBackgrounds,
+                            useCardBackgroundStyle(),
                         ]}
                     >
                         {children}
@@ -284,9 +286,8 @@ const superHeroImageStyles = StyleSheet.create({
     },
     textStandBlock: {
         ...tappableStyles.padding,
-        fontSize: 14,
-        lineHeight: 18,
-        color: color.palette.neutral[60],
+        ...getFont('text', 0.9),
+        color: color.palette.neutral[46],
         position: 'absolute',
         bottom: 0,
     },
@@ -334,8 +335,7 @@ const splashImageStyles = StyleSheet.create({
         height: '100%',
     },
     textBlock: {
-        fontSize: 40,
-        lineHeight: 40,
+        ...getFont('headline', 2),
         color: color.palette.neutral[100],
     },
     splashHeadline: {
@@ -348,8 +348,7 @@ const splashImageStyles = StyleSheet.create({
         color: color.palette.neutral[100],
     },
     textStandBlock: {
-        fontSize: 14,
-        lineHeight: 18,
+        ...getFont('text', 0.9),
         color: color.palette.neutral[100],
     },
 })
@@ -371,10 +370,7 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 />
             ) : null}
             <View style={[splashImageStyles.splashHeadline]}>
-                <HeadlineCardText
-                    adjustsFontSizeToFit={true}
-                    style={[splashImageStyles.textBlock]}
-                >
+                <HeadlineCardText style={[splashImageStyles.textBlock]}>
                     {article.kicker}
                 </HeadlineCardText>
                 {'standfirst' in article && article.standfirst ? (

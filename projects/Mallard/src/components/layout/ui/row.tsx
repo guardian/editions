@@ -1,7 +1,13 @@
 import React, { ReactElement, ReactNode } from 'react'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Highlight } from 'src/components/highlight'
-import { View, StyleSheet, SafeAreaView } from 'react-native'
+import {
+    View,
+    StyleSheet,
+    SafeAreaView,
+    ViewStyle,
+    StyleProp,
+} from 'react-native'
 import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 
@@ -27,15 +33,18 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
         paddingTop: metrics.vertical * 2,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
         flexDirection: 'row',
     },
 })
 
-const Footer = ({ children }: { children: ReactNode }) => (
-    <View style={styles.footer}>{children}</View>
-)
+const Footer = ({
+    children,
+    style,
+}: {
+    children: ReactNode
+    style?: StyleProp<ViewStyle>
+}) => <View style={[styles.footer, style]}>{children}</View>
 
 const Heading = ({ children }: { children: string }) => (
     <View style={styles.heading}>

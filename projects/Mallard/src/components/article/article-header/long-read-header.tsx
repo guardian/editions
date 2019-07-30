@@ -1,16 +1,16 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { HeadlineText } from 'src/components/styled-text'
-import { useArticleAppearance } from 'src/theme/appearance'
-import { getNavigationPosition } from 'src/helpers/positions'
 import { ArticleImage } from '../article-image'
 import { longReadHeaderStyles } from '../styles'
-import { ArticleKicker } from '../article-kicker'
-import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
 import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
-import { ArticleHeadline } from '../article-headline'
+import {
+    HeadlineText,
+    HeadlineKickerText,
+    StandfirstText,
+} from 'src/components/styled-text'
+import { color } from 'src/theme/color'
 
 const LongReadHeader = ({
     byline,
@@ -19,32 +19,37 @@ const LongReadHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const { appearance } = useArticleAppearance()
-    const navigationPosition = getNavigationPosition('article')
     return (
-        <View style={[longReadHeaderStyles.background, appearance.backgrounds]}>
+        <View style={[longReadHeaderStyles.background]}>
             {image ? (
                 <ArticleImage
                     style={StyleSheet.absoluteFillObject}
                     image={image}
                 />
             ) : null}
-            <View
-                style={[
-                    longReadHeaderStyles.textBackground,
-                    appearance.backgrounds,
-                ]}
-            >
+            <View style={[longReadHeaderStyles.textBackground]}>
                 {kicker ? (
-                    <ArticleKicker kicker={kicker} type="longRead" />
+                    <View style={longReadHeaderStyles.kicker}>
+                        <HeadlineKickerText
+                            style={{ color: color.palette.neutral[100] }}
+                        >
+                            {kicker}
+                        </HeadlineKickerText>
+                    </View>
                 ) : null}
-                <ArticleHeadline type="longRead">{headline}</ArticleHeadline>
+                <HeadlineText style={longReadHeaderStyles.headline}>
+                    {headline}
+                </HeadlineText>
             </View>
-            <ArticleStandfirst
-                {...{ byline, standfirst, navigationPosition }}
-            />
-            <Multiline count={4} />
-            <ArticleByline>{byline}</ArticleByline>
+            <View style={[longReadHeaderStyles.textBackground]}>
+                <StandfirstText style={{ color: color.palette.neutral[100] }}>
+                    {standfirst}
+                </StandfirstText>
+                <Multiline count={4} color={color.palette.neutral[100]} />
+                <ArticleByline style={{ color: color.palette.neutral[100] }}>
+                    {byline}
+                </ArticleByline>
+            </View>
         </View>
     )
 }

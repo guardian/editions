@@ -4,13 +4,19 @@ import Vibrant from 'node-vibrant'
 
 const salt = process.env.IMAGE_SALT
 
-export const getImageFromURL = (url: string): Image => {
-    const parsed = new URL(url)
-    const path = parsed.pathname.slice(1) //remove leading slash
-    const host = parsed.hostname
-    const hostparts = host.split('.')
-    const source = hostparts[0]
-    return { source, path }
+export const getImageFromURL = (url: string): Image | undefined => {
+    try {
+        const parsed = new URL(url)
+        const path = parsed.pathname.slice(1) //remove leading slash
+        const host = parsed.hostname
+        const hostparts = host.split('.')
+        const source = hostparts[0]
+        return { source, path }
+    } catch (e) {
+        console.error(`Encountered error parsing ${url}`)
+        console.error(JSON.stringify(e))
+        return
+    }
 }
 
 const getSignature = (path: string) => {

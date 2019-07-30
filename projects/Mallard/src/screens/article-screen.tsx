@@ -5,13 +5,17 @@ import {
     NavigationEvents,
     ScrollView,
 } from 'react-navigation'
-import {
-    WithArticleAppearance,
-    articleAppearances,
-    getAppearancePillar,
-} from 'src/theme/appearance'
 import { ArticleController } from 'src/components/article'
-import { CAPIArticle, Collection, Front, ColorFromPalette } from 'src/common'
+import {
+    CAPIArticle,
+    Collection,
+    Front,
+    articlePillars,
+    Appearance,
+    articleTypes,
+    Issue,
+    PillarFromPalette,
+} from 'src/common'
 import { Dimensions, Animated, View, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
@@ -19,7 +23,6 @@ import { color } from 'src/theme/color'
 import { PathToArticle } from './article-screen'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
-import { Issue, Appearance } from '../../../backend/common'
 import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
 import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
@@ -29,10 +32,10 @@ import {
     getArticleNavigationProps,
     ArticleRequiredNavigationProps,
 } from 'src/navigation/helpers'
-import { UiBodyCopy } from '../components/styled-text'
 import { Navigator } from 'src/components/navigator'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getColor } from 'src/helpers/transform'
+import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -57,19 +60,19 @@ const styles = StyleSheet.create({
 
 const ArticleScreenBody = ({
     path,
-    appearance,
     viewIsTransitioning,
     onTopPositionChange,
+    pillar,
 }: {
     path: PathToArticle
-    appearance: string
     viewIsTransitioning: boolean
     onTopPositionChange: (isAtTop: boolean) => void
+    pillar: PillarFromPalette
 }) => {
-    const appearances = Object.keys(articleAppearances)
-    const [modifiedAppearance, setAppearance] = useState(
-        appearances.indexOf(appearance) || 0,
+    const [modifiedPillar, setPillar] = useState(
+        articlePillars.indexOf(pillar) || 0,
     )
+    const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
     const [{ isUsingProdDevtools }] = useSettings()
     const { width } = Dimensions.get('window')
@@ -86,7 +89,6 @@ const ArticleScreenBody = ({
             {articleResponse({
                 error: ({ message }) => (
                     <FlexErrorMessage
-                        icon="😭"
                         title={message}
                         style={{ backgroundColor: color.background }}
                     />
@@ -100,39 +102,68 @@ const ArticleScreenBody = ({
                 success: article => (
                     <>
                         {isUsingProdDevtools ? (
-                            <Button
-                                onPress={() => {
-                                    setAppearance(app => {
-                                        if (app + 1 >= appearances.length) {
-                                            return 0
-                                        }
-                                        return app + 1
-                                    })
-                                }}
-                                style={{
-                                    position: 'absolute',
-                                    zIndex: 9999,
-                                    elevation: 999,
-                                    top: Dimensions.get('window').height - 600,
-                                    right: metrics.horizontal,
-                                    alignSelf: 'flex-end',
-                                }}
-                            >
-                                {`${appearances[modifiedAppearance]} 🌈`}
-                            </Button>
+                            <>
+                                <Button
+                                    onPress={() => {
+                                        setPillar(app => {
+                                            if (
+                                                app + 1 >=
+                                                articlePillars.length
+                                            ) {
+                                                return 0
+                                            }
+                                            return app + 1
+                                        })
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        zIndex: 9999,
+                                        elevation: 999,
+                                        top:
+                                            Dimensions.get('window').height -
+                                            600,
+                                        right: metrics.horizontal,
+                                        alignSelf: 'flex-end',
+                                    }}
+                                >
+                                    {`${articlePillars[modifiedPillar]} 🌈`}
+                                </Button>
+                                <Button
+                                    onPress={() => {
+                                        setType(app => {
+                                            if (
+                                                app + 1 >=
+                                                articleTypes.length
+                                            ) {
+                                                return 0
+                                            }
+                                            return app + 1
+                                        })
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        zIndex: 9999,
+                                        elevation: 999,
+                                        top:
+                                            Dimensions.get('window').height -
+                                            560,
+                                        right: metrics.horizontal,
+                                        alignSelf: 'flex-end',
+                                    }}
+                                >
+                                    {`${articleTypes[modifiedType]} 🌈`}
+                                </Button>
+                            </>
                         ) : null}
-                        <WithArticleAppearance
-                            value={
-                                appearances[
-                                    modifiedAppearance
-                                ] as ColorFromPalette
-                            }
+                        <WithArticle
+                            type={articleTypes[modifiedType]}
+                            pillar={articlePillars[modifiedPillar]}
                         >
                             <ArticleController
                                 article={article.article}
                                 viewIsTransitioning={viewIsTransitioning}
                             />
-                        </WithArticleAppearance>
+                        </WithArticle>
                     </>
                 ),
             })}
@@ -164,7 +195,7 @@ const ArticleScreenWithProps = ({
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 }) => {
     const { width } = Dimensions.get('window')
-    const appearance = getAppearancePillar(articleNavigator.appearance)
+    const pillar = getAppearancePillar(articleNavigator.appearance)
 
     /*
     we don't wanna render a massive tree at once
@@ -207,7 +238,7 @@ const ArticleScreenWithProps = ({
                 >
                     <ArticleScreenBody
                         path={path}
-                        appearance={appearance}
+                        pillar={pillar}
                         onTopPositionChange={() => {}}
                         {...{ viewIsTransitioning }}
                     />
@@ -270,7 +301,7 @@ const ArticleScreenWithProps = ({
                         }) => (
                             <ArticleScreenBody
                                 path={item}
-                                appearance={appearance}
+                                pillar={pillar}
                                 onTopPositionChange={isAtTop => {
                                     setArticleIsAtTop(isAtTop)
                                 }}

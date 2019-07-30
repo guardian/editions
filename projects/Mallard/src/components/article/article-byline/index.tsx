@@ -1,19 +1,18 @@
 import React from 'react'
 import { BodyCopy } from '../../styled-text'
-import { useArticleAppearance, useArticleToneColor } from 'src/theme/appearance'
+import { StyleProp, TextStyle } from 'react-native'
+import { useArticle } from 'src/hooks/use-article'
 
 interface ArticleBylineProps {
     children: string
+    style?: StyleProp<TextStyle>
 }
 
-const ArticleByline = ({ children }: ArticleBylineProps) => {
-    const { appearance } = useArticleAppearance()
-    const color = useArticleToneColor()
+const ArticleByline = ({ children, style }: ArticleBylineProps) => {
+    const [color] = useArticle()
+
     return (
-        <BodyCopy
-            weight={'bold'}
-            style={[appearance.text, appearance.byline, { color }]}
-        >
+        <BodyCopy weight={'bold'} style={[{ color: color.main }, style]}>
             {children}
         </BodyCopy>
     )

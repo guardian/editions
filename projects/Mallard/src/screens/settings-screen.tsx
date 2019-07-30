@@ -9,11 +9,11 @@ import {
     NavigationScreenProp,
 } from 'react-navigation'
 import { useSettings } from 'src/hooks/use-settings'
-import { MonoTextBlock } from 'src/components/styled-text'
+import { UiBodyCopy } from 'src/components/styled-text'
 import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { Heading } from 'src/components/layout/ui/row'
+import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
@@ -29,9 +29,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     return (
         <>
             <Heading>💣 DEVELOPER ZONE 💣</Heading>
-            <MonoTextBlock>
-                Only wander here if you know what you are doing!!
-            </MonoTextBlock>
+            <Footer>
+                <UiBodyCopy>
+                    Only wander here if you know what you are doing!!
+                </UiBodyCopy>
+            </Footer>
             <List
                 onPress={({ onPress }) => onPress()}
                 data={[
@@ -169,13 +171,17 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     ]}
                 />
                 <Heading>{`About ${APP_DISPLAY_NAME}`}</Heading>
-                <MonoTextBlock>
-                    {`Thanks for helping us test the ${APP_DISPLAY_NAME} app!` +
-                        `your feedback will be invaluable to the final product.`}
-                </MonoTextBlock>
-                <MonoTextBlock style={{ marginBottom: metrics.vertical * 4 }}>
-                    {`Send us feedback to ${FEEDBACK_EMAIL}`}
-                </MonoTextBlock>
+                <Footer>
+                    <UiBodyCopy>
+                        {`Thanks for helping us test the ${APP_DISPLAY_NAME} app!` +
+                            `your feedback will be invaluable to the final product.`}
+                    </UiBodyCopy>
+                </Footer>
+                <Footer style={{ marginBottom: metrics.vertical * 4 }}>
+                    <UiBodyCopy>
+                        {`Send us feedback to ${FEEDBACK_EMAIL}`}
+                    </UiBodyCopy>
+                </Footer>
                 <List
                     onPress={() => {}}
                     data={[
