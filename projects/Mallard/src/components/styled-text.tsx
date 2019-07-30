@@ -86,7 +86,7 @@ export const HeadlineKickerText = ({
     style,
     ...props
 }: {
-    children: string
+    children: React.ReactNode | React.ReactNode[]
     style?: StyleProp<TextStyle>
 } & TextProps) => {
     return <Text {...props} style={[styles.headlineKickerText, style]} />
