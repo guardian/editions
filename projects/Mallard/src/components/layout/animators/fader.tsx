@@ -3,7 +3,7 @@ import {
     getNavigationPosition,
     SaveableNavigationPositions,
 } from 'src/helpers/positions'
-import { Animated } from 'react-native'
+import { Animated, StyleSheet } from 'react-native'
 
 /*
 This is part of the transition from articles to fronts
@@ -21,6 +21,10 @@ export interface PropTypes {
     position: SaveableNavigationPositions
 }
 
+const faderStyles = StyleSheet.create({
+    wrapper: { width: '100%' },
+})
+
 const Fader = ({ buildOrder, children, position }: PropTypes) => {
     const navigationPosition = getNavigationPosition(position)
     if (buildOrder === 0) {
@@ -35,7 +39,7 @@ const Fader = ({ buildOrder, children, position }: PropTypes) => {
                         outputRange: [0, 1, 1],
                     }),
                 },
-                { width: '100%' },
+                faderStyles.wrapper,
             ]}
         >
             {children}
