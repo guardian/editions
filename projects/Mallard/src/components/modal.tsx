@@ -1,8 +1,35 @@
-import React, { useState, useMemo } from 'react'
-import { Animated } from 'react-native'
+import React, { useState, useMemo, useContext } from 'react'
+import { Animated, StyleSheet } from 'react-native'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 
 type ModalRenderer = (close: () => void) => React.ReactNode
+
+const styles = StyleSheet.create({
+    overlay: {
+        backgroundColor: 'black',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        elevation: 9999,
+        zIndex: 9999,
+    },
+    modalWrapper: {
+        alignItems: 'stretch',
+        padding: 10,
+        position: 'absolute',
+        justifyContent: 'center',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        flex: 1,
+        flexDirection: 'column',
+        elevation: 9999,
+        zIndex: 9999,
+    },
+})
 
 const ModalContext = React.createContext<{
     open: (render: ModalRenderer) => void
@@ -11,6 +38,8 @@ const ModalContext = React.createContext<{
     open: () => {},
     close: () => {},
 })
+
+const useModal = () => useContext(ModalContext)
 
 const Modal = ({ children }: { children: React.ReactNode }) => {
     const [render, setState] = useState<ModalRenderer | null>(null)
@@ -30,41 +59,27 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
             {render && (
                 <>
                     <Animated.View
-                        style={{
-                            backgroundColor: 'black',
-                            opacity: val,
-                            position: 'absolute',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            elevation: 9999,
-                            zIndex: 9999,
-                        }}
+                        style={[
+                            styles.overlay,
+                            {
+                                opacity: val,
+                            },
+                        ]}
                     ></Animated.View>
                     <Animated.View
-                        style={{
-                            alignItems: 'stretch',
-                            padding: 10,
-                            position: 'absolute',
-                            justifyContent: 'center',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            flex: 1,
-                            transform: [
-                                {
-                                    translateY: val.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [20, 0],
-                                    }),
-                                },
-                            ],
-                            flexDirection: 'column',
-                            elevation: 9999,
-                            zIndex: 9999,
-                        }}
+                        style={[
+                            styles.modalWrapper,
+                            {
+                                transform: [
+                                    {
+                                        translateY: val.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: [20, 0],
+                                        }),
+                                    },
+                                ],
+                            },
+                        ]}
                     >
                         {render(close)}
                     </Animated.View>
@@ -74,4 +89,4 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export { Modal, ModalContext }
+export { Modal, useModal }

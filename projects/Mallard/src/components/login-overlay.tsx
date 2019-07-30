@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useCanViewEditionStatus } from 'src/hooks/use-sign-in-status'
-import { View, StyleSheet, PanResponder, Text } from 'react-native'
+import { View, StyleSheet, PanResponder } from 'react-native'
 import { NavigationEvents } from 'react-navigation'
 import { useForceUpdate } from 'src/hooks/use-force-update'
-import { ModalContext } from './modal'
+import { useModal } from './modal'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 
 const overlayStyles = StyleSheet.create({
@@ -30,7 +30,7 @@ const ModalOpener = ({
     forceOpen?: boolean
     renderModal: (close: () => void) => React.ReactNode
 }) => {
-    const { open, close } = useContext(ModalContext)
+    const { open, close } = useModal()
 
     const swipeUpHandlers = useMemo(
         () =>
