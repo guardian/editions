@@ -60,12 +60,10 @@ const styles = StyleSheet.create({
 
 const ArticleScreenBody = ({
     path,
-    viewIsTransitioning,
     onTopPositionChange,
     pillar,
 }: {
     path: PathToArticle
-    viewIsTransitioning: boolean
     onTopPositionChange: (isAtTop: boolean) => void
     pillar: PillarFromPalette
 }) => {
@@ -159,10 +157,7 @@ const ArticleScreenBody = ({
                             type={articleTypes[modifiedType]}
                             pillar={articlePillars[modifiedPillar]}
                         >
-                            <ArticleController
-                                article={article.article}
-                                viewIsTransitioning={viewIsTransitioning}
-                            />
+                            <ArticleController article={article.article} />
                         </WithArticle>
                     </>
                 ),
@@ -197,14 +192,6 @@ const ArticleScreenWithProps = ({
     const { width } = Dimensions.get('window')
     const pillar = getAppearancePillar(articleNavigator.appearance)
 
-    /*
-    we don't wanna render a massive tree at once
-    as the navigator is trying to push the screen bc this
-    delays the tap response
-     we can pass this prop to identify if we wanna render
-    just the 'above the fold' content or the whole shebang
-    */
-    const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
     const [articleIsAtTop, setArticleIsAtTop] = useState(true)
     const navigationPosition = getNavigationPosition('article')
 
@@ -223,16 +210,8 @@ const ArticleScreenWithProps = ({
                 transitionProps && transitionProps.startAtHeightFromFrontsItem
             }
         >
-            <NavigationEvents
-                onDidFocus={() => {
-                    requestAnimationFrame(() => {
-                        setViewIsTransitioning(false)
-                    })
-                }}
-            />
             {prefersFullScreen ? (
                 <SlideCard
-                    {...viewIsTransitioning}
                     enabled={false}
                     onDismiss={() => navigation.goBack()}
                 >
@@ -240,12 +219,10 @@ const ArticleScreenWithProps = ({
                         path={path}
                         pillar={pillar}
                         onTopPositionChange={() => {}}
-                        {...{ viewIsTransitioning }}
                     />
                 </SlideCard>
             ) : (
                 <SlideCard
-                    {...viewIsTransitioning}
                     enabled={articleIsAtTop}
                     onDismiss={() => navigation.goBack()}
                 >
@@ -305,7 +282,6 @@ const ArticleScreenWithProps = ({
                                 onTopPositionChange={isAtTop => {
                                     setArticleIsAtTop(isAtTop)
                                 }}
-                                {...{ viewIsTransitioning }}
                             />
                         )}
                     />

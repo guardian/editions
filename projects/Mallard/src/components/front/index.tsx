@@ -182,7 +182,6 @@ const FrontWithResponse = ({
 export const Front: FunctionComponent<{
     front: string
     issue: Issue['key']
-    viewIsTransitioning: boolean
 }> = ({ front, issue }) => {
     const frontsResponse = useFrontsResponse(issue, front)
 
