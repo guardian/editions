@@ -15,7 +15,7 @@ import { unnest } from 'ramda'
 import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
 
-export const run = async (id: string): Promise<void> => {
+const fetch = async (id: string): Promise<void> => {
     console.log(`Attempting to upload ${id} to ${bucket}`)
     const issue = await attempt(getIssue(id))
     if (hasFailed(issue)) {
@@ -47,11 +47,6 @@ export const run = async (id: string): Promise<void> => {
         }),
     )
 
-    frontUploads
-        .filter(hasFailed)
-        .forEach(failure => console.error(JSON.stringify(failure)))
-
-    console.log('Uploaded fronts')
     const images = unnest(fronts.map(([, front]) => getImagesFromFront(front)))
     const imagesWithSizes: [Image, ImageSize][] = unnest(
         images.map(image =>
@@ -80,9 +75,17 @@ export const run = async (id: string): Promise<void> => {
 
     console.log('Uploaded images')
 
+    frontUploads
+        .filter(hasFailed)
+        .forEach(failure => console.error(JSON.stringify(failure)))
+
+    console.log('Uploaded fronts')
+
     await upload(issuePath(id), issue)
     console.log('Uploaded issue.')
+}
 
+const compress = async (id: string) => {
     console.log('Compressing')
     await zip(id, issueDir(id), 'media')
 
@@ -96,6 +99,10 @@ export const run = async (id: string): Promise<void> => {
     console.log('Media zips uploaded.')
 }
 
+export const run = async (id: string): Promise<void> => {
+    await fetch(id)
+    await compress(id)
+}
 //When run in AWS
 export const handler: Handler<{ id?: string }, void> = async event => {
     const id = event.id

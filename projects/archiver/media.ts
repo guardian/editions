@@ -3,9 +3,7 @@ import { unnest } from 'ramda'
 import { getColours, getImage } from './downloader'
 import { hasFailed, attempt } from '../backend/utils/try'
 import { upload } from './upload'
-import { ImageSize, mediaPath } from '../common/src'
-import { PassThrough } from 'stream'
-import fetch, { Response } from 'node-fetch'
+import { ImageSize } from '../common/src'
 
 export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const image = article.image ? [article.image] : []
@@ -41,5 +39,6 @@ export const getAndUploadImage = async (
     size: ImageSize,
 ) => {
     const [path, data] = await getImage(issue, image, size)
+    if (hasFailed(data)) return data
     return upload(path, data)
 }
