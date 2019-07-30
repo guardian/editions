@@ -1,6 +1,16 @@
 import { attempt, hasFailed, hasSucceeded } from '../utils/try'
-import { SearchResponseCodec, ContentType, TagType } from '@guardian/capi-ts'
-import { BlockElement, Image } from '../common'
+import {
+    SearchResponseCodec,
+    ContentType,
+    ICapiDateTime as CapiDateTime64,
+    ICrossword,
+} from '@guardian/capi-ts'
+import {
+    Article,
+    GalleryArticle,
+    CrosswordArticle,
+    CapiDateTime as CapiDateTime32,
+} from '../common'
 import {
     BufferedTransport,
     CompactProtocol,
@@ -8,49 +18,34 @@ import {
 import { getImage } from './assets'
 import { elementParser } from './elements'
 import { IContent } from '@guardian/capi-ts/dist/Content'
-import { ITag } from '@guardian/capi-ts/dist/Tag'
-import { ICrossword } from '@guardian/capi-ts/dist/Crossword'
 import fetch from 'node-fetch'
 import { cleanupHtml } from '../utils/html'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
+import { getBylineImages } from './byline'
 
-interface Article {
-    type: 'article'
-    id: number
+type NotInCAPI = 'key'
+type OptionalInCAPI = 'kicker' | 'bylineImages'
+interface CAPIExtras {
     path: string
-    headline: string
-    kicker?: string
-    image?: Image
-    byline: string
-    standfirst: string
-    elements: BlockElement[]
 }
 
-interface GalleryArticle {
-    type: 'gallery'
-    id: number
-    path: string
-    headline: string
-    kicker?: string
-    image?: Image
-    byline: string
-    standfirst: string
-    elements: BlockElement[]
-}
+type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
+    Partial<Pick<Article, OptionalInCAPI>> &
+    CAPIExtras
+type CGallery = Omit<GalleryArticle, NotInCAPI | OptionalInCAPI> &
+    Partial<Pick<Article, OptionalInCAPI>> &
+    CAPIExtras
+export type CCrossword = Omit<CrosswordArticle, NotInCAPI | OptionalInCAPI> &
+    Partial<Pick<Article, OptionalInCAPI>> &
+    CAPIExtras
 
-export interface CrosswordArticle {
-    type: 'crossword'
-    id: number
-    path: string
-    headline: string
-    kicker?: string
-    byline?: string
-    standfirst?: string
-    crossword: ICrossword
-}
+type CAPIContent = CArticle | CGallery | CCrossword
 
-export type CAPIContent = Article | CrosswordArticle | GalleryArticle
+const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
+    iso8601: date.iso8601,
+    dateTime: date.dateTime.toNumber(),
+})
 
 const parseArticleResult = async (
     result: IContent,
@@ -61,22 +56,19 @@ const parseArticleResult = async (
     if (internalid == null)
         throw new Error(`internalid was undefined in ${path}!`)
 
-    const title =
-        result && ((result.fields && result.fields.headline) || result.webTitle)
+    const title = (result.fields && result.fields.headline) || result.webTitle
 
     const standfirst =
-        result &&
         result.fields &&
         result.fields.standfirst &&
         cleanupHtml(result.fields.standfirst)
 
-    const byline = result && result.fields && result.fields.byline
-
     const parser = elementParser(path)
-    const kicker = kickerPicker(result, title, byline)
+    const kicker = kickerPicker(result, title)
+    const byline = result.fields && result.fields.byline
+    const bylineImages = getBylineImages(result)
 
     const maybeMainImage =
-        result &&
         result.blocks &&
         result.blocks.main &&
         result.blocks.main.elements &&
@@ -84,7 +76,6 @@ const parseArticleResult = async (
         getImage(result.blocks.main.elements[0].assets)
 
     const maybeThumbnailElement =
-        result &&
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
     const maybeThumbnailImage =
@@ -99,7 +90,6 @@ const parseArticleResult = async (
         )
     }
     const blocks =
-        result &&
         result.blocks &&
         result.blocks.body &&
         result.blocks.body.map(_ => _.elements)
@@ -114,16 +104,16 @@ const parseArticleResult = async (
 
     switch (result.type) {
         case ContentType.ARTICLE:
-            const article: [number, Article] = [
+            const article: [number, CArticle] = [
                 internalid,
                 {
                     type: 'article',
-                    id: internalid,
                     path: path,
                     headline: title,
                     kicker,
                     image: maybeImage,
                     byline: byline || '',
+                    bylineImages,
                     standfirst: standfirst || '',
                     elements,
                 },
@@ -131,11 +121,10 @@ const parseArticleResult = async (
             return article
 
         case ContentType.GALLERY:
-            const galleryArticle: [number, GalleryArticle] = [
+            const galleryArticle: [number, CGallery] = [
                 internalid,
                 {
                     type: 'gallery',
-                    id: internalid,
                     path: path,
                     headline: title,
                     kicker,
@@ -153,17 +142,35 @@ const parseArticleResult = async (
                 throw new Error(
                     `No crossword defined in Crossword article: ${path}`,
                 )
+            const crossword64 = result.crossword
+            const dateSolutionAvailable =
+                crossword64.dateSolutionAvailable &&
+                truncateDateTime(crossword64.dateSolutionAvailable)
+            const date = truncateDateTime(crossword64.date)
 
-            const crosswordArticle: [number, CrosswordArticle] = [
+            const entries = crossword64.entries.map(entry => {
+                const separatorLocations =
+                    entry.separatorLocations &&
+                    fromPairs([...entry.separatorLocations.entries()])
+                return { ...entry, separatorLocations }
+            })
+
+            const crossword = {
+                ...crossword64,
+                date,
+                dateSolutionAvailable,
+                entries,
+            }
+
+            const crosswordArticle: [number, CAPIContent] = [
                 internalid,
                 {
                     type: 'crossword',
-                    id: internalid,
                     path: path,
                     headline: title,
                     byline: byline || '',
                     standfirst: standfirst || '',
-                    crossword: result.crossword,
+                    crossword,
                 },
             ]
 
@@ -174,7 +181,6 @@ const parseArticleResult = async (
                 internalid,
                 {
                     type: 'article',
-                    id: internalid,
                     path: path,
                     headline: title,
                     kicker,

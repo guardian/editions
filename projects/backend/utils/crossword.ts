@@ -1,12 +1,11 @@
 import { capitalizeFirstLetter, addCommas } from './format'
-import { CrosswordArticle as CAPICrosswordArticle } from '../capi/articles'
+import { CCrossword } from '../capi/articles'
 import { CAPIArticle, Crossword, CrosswordArticle } from '../common'
 import { getImageFromURL } from '../image'
-import { ICrossword } from '@guardian/capi-ts'
 
 const crosswordTypes = ['quick', 'cryptic', 'speedy', 'everyman'] as const
 
-type CrosswordType = typeof crosswordTypes[number] | null
+export type CrosswordType = typeof crosswordTypes[number] | null
 
 const getCrosswordType = (path: string): CrosswordType => {
     for (const key of crosswordTypes) {
@@ -18,8 +17,7 @@ const getCrosswordType = (path: string): CrosswordType => {
 const getCrosswordName = (type: CrosswordType): string =>
     type ? capitalizeFirstLetter(type) + ' crossword' : 'Crossword'
 
-const getCrosswordKicker = (crossword: ICrossword) =>
-    addCommas(crossword.number)
+const getCrosswordKicker = (crossword: Crossword) => addCommas(crossword.number)
 
 //TODO: get images according to type
 const getCrosswordImage = (type: CrosswordType) => {
@@ -39,16 +37,14 @@ type CrosswordArticleOverrides = Pick<
 > &
     Pick<CrosswordArticle, 'crossword'>
 
-const getCrosswordArticleOverrides = (
-    article: CAPICrosswordArticle,
+export const getCrosswordArticleOverrides = (
+    article: CCrossword,
 ): CrosswordArticleOverrides => {
     const type = getCrosswordType(article.path)
     return {
         headline: getCrosswordName(type),
         kicker: getCrosswordKicker(article.crossword),
         image: getCrosswordImage(type),
-        crossword: (article.crossword as unknown) as Crossword,
+        crossword: article.crossword,
     }
 }
-
-export { CrosswordType, getCrosswordArticleOverrides }
