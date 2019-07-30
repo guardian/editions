@@ -1,4 +1,4 @@
-import fetch, { Response } from 'node-fetch'
+import fetch from 'node-fetch'
 import {
     mediaPath,
     coloursPath,
@@ -15,7 +15,6 @@ import {
     hasFailed,
     withFailureMessage,
 } from '../backend/utils/try'
-import { PassThrough, Readable } from 'stream'
 import { ImageSize } from '../common/src'
 
 export const URL =
@@ -46,38 +45,6 @@ export const getFront = async (
             `Failed to download front ${id} from ${issue}`,
         )
     return [id, maybeFront]
-}
-
-export const getImages = async (
-    issue: string,
-    image: Image,
-): Promise<[string, Attempt<Readable>][]> => {
-    const paths = imageSizes.map(size =>
-        mediaPath(issue, size, image.source, image.path),
-    )
-
-    return Promise.all(
-        paths
-            .map((path): [string, Promise<Attempt<Response>>] => {
-                const url = `${URL}${path}`
-                const resp = attempt(fetch(url))
-                return [path, resp]
-            })
-            .map(
-                async ([path, promiseMaybeResponse]): Promise<
-                    [string, Attempt<Readable>]
-                > => {
-                    const maybeResponse = await promiseMaybeResponse
-
-                    if (hasFailed(maybeResponse)) return [path, maybeResponse]
-                    const stream = new PassThrough()
-
-                    maybeResponse.body.pipe(stream)
-
-                    return [path, stream]
-                },
-            ),
-    )
 }
 
 export const getImage = async (
