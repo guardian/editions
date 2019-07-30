@@ -3,6 +3,7 @@ import {
     SearchResponseCodec,
     ContentType,
     ICapiDateTime as CapiDateTime64,
+    ICrossword,
 } from '@guardian/capi-ts'
 import {
     Article,
@@ -35,7 +36,7 @@ type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
 type CGallery = Omit<GalleryArticle, NotInCAPI | OptionalInCAPI> &
     Partial<Pick<Article, OptionalInCAPI>> &
     CAPIExtras
-type CCrossword = Omit<CrosswordArticle, NotInCAPI | OptionalInCAPI> &
+export type CCrossword = Omit<CrosswordArticle, NotInCAPI | OptionalInCAPI> &
     Partial<Pick<Article, OptionalInCAPI>> &
     CAPIExtras
 
