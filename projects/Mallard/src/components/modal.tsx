@@ -16,10 +16,11 @@ const modalStyles = StyleSheet.create({
         ...getFont('titlepiece', 1.5),
     },
     text: {
-        marginBottom: 20,
+        marginBottom: 10,
         ...getFont('titlepiece', 1),
     },
     button: {
+        marginTop: 10,
         marginRight: 10,
     },
 })
@@ -44,7 +45,7 @@ const ModalCard = ({
     <View style={modalStyles.wrapper}>
         <Text style={modalStyles.title}>{title}</Text>
         <Text style={modalStyles.text}>{text}</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             {actions.map(({ label, onPress }) => (
                 <Button
                     style={modalStyles.button}

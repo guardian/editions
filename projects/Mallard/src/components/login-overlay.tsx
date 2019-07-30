@@ -61,10 +61,12 @@ const ModalOpener = ({
 const LoginOverlay = ({
     children,
     onLoginPress,
+    onReLogin,
     onLoginDismiss,
 }: {
     children: React.ReactNode
     onLoginPress: () => void
+    onReLogin: () => void
     onLoginDismiss: () => void
 }) => {
     const handler = useCanViewEditionStatus()
@@ -84,7 +86,10 @@ const LoginOverlay = ({
                             title: 'Invalid account',
                             text: 'You need to upgrade your account',
                             actions: [
-                                { label: 'Login', onPress: onLoginPress },
+                                {
+                                    label: 'Login with another account',
+                                    onPress: onReLogin,
+                                },
                                 { label: 'Not now', onPress: onLoginDismiss },
                             ],
                         })}
