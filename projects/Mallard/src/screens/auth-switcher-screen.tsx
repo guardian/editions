@@ -231,7 +231,7 @@ const AuthSwitcherScreen = ({
                 onSubmitEditing={Keyboard.dismiss}
                 returnKeyType="done"
                 placeholderTextColor="grey"
-                editable={isLoading}
+                editable={!isLoading}
                 autoCorrect={false}
                 autoCapitalize="none"
                 textContentType="emailAddress"
@@ -251,7 +251,7 @@ const AuthSwitcherScreen = ({
                     paddingVertical: metrics.vertical,
                 }}
                 placeholderTextColor="grey"
-                editable={isLoading}
+                editable={!isLoading}
                 onSubmitEditing={Keyboard.dismiss}
                 returnKeyType="done"
                 autoCorrect={false}
