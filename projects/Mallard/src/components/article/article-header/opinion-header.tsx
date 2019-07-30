@@ -38,7 +38,7 @@ const OpinionHeader = ({
         <View style={[styles.background]}>
             <View style={[newsHeaderStyles.background]}>
                 {image ? (
-                    <ArticleFader delay={1}>
+                    <ArticleFader buildOrder={1}>
                         <ArticleImage
                             style={{
                                 aspectRatio: 1.5,
@@ -48,7 +48,7 @@ const OpinionHeader = ({
                         />
                     </ArticleFader>
                 ) : null}
-                <ArticleFader delay={2}>
+                <ArticleFader buildOrder={2}>
                     <ArticleHeadline>
                         <Quote fill={color.main} />
                         {headline}
@@ -59,7 +59,7 @@ const OpinionHeader = ({
                     </ArticleHeadline>
                 </ArticleFader>
             </View>
-            <ArticleFader delay={3}>
+            <ArticleFader buildOrder={3}>
                 <Multiline count={4} />
                 <View style={[newsHeaderStyles.background]}>
                     <ArticleStandfirst

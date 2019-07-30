@@ -34,7 +34,7 @@ const NewsHeader = ({
     return (
         <View style={[newsHeaderStyles.background]}>
             {image ? (
-                <ArticleFader delay={1}>
+                <ArticleFader buildOrder={1}>
                     <ArticleImage
                         style={{
                             aspectRatio: 1.5,
@@ -46,21 +46,21 @@ const NewsHeader = ({
             ) : null}
 
             {kicker ? (
-                <ArticleFader delay={2}>
+                <ArticleFader buildOrder={2}>
                     <ArticleKicker kicker={kicker} />
                 </ArticleFader>
             ) : null}
-            <ArticleFader delay={3}>
+            <ArticleFader buildOrder={3}>
                 <ArticleHeadline>{headline}</ArticleHeadline>
             </ArticleFader>
-            <ArticleFader delay={4}>
+            <ArticleFader buildOrder={4}>
                 <ArticleStandfirst
                     style={styles.bylineBackground}
                     {...{ byline, standfirst, navigationPosition }}
                 />
                 <ArticleMultiline />
             </ArticleFader>
-            <ArticleFader delay={5}>
+            <ArticleFader buildOrder={5}>
                 <ArticleByline style={newsHeaderStyles.byline}>
                     {byline}
                 </ArticleByline>
