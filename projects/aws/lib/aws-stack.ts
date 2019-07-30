@@ -149,7 +149,7 @@ export class EditionsStack extends cdk.Stack {
             functionName: `editions-archiver-${stageParameter.valueAsString}`,
             runtime: lambda.Runtime.NODEJS_10_X,
             timeout: Duration.minutes(5),
-            memorySize: 512,
+            memorySize: 1500,
             code: Code.bucket(
                 deploy,
                 `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
