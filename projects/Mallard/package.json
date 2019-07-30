@@ -4,8 +4,8 @@
     "private": true,
     "scripts": {
         "pre-run": "yarn watch-html & node ./scripts/versioning.js",
-        "pre-bundle": "yarn bundle-html && node ./scripts/versioning.js",
-        "postinstall": "yarn pre-bundle",
+        "pre-bundle": "yarn bundle-html",
+        "postinstall": "node ./scripts/versioning.js",
         "start": "yarn pre-run && node node_modules/react-native/local-cli/cli.js start",
         "test": "jest --coverage",
         "test:watch": "jest --watch",
@@ -33,11 +33,10 @@
         "@guardian/pasteup": "^1.0.0-alpha.11",
         "@react-native-community/async-storage": "^1.5.0",
         "@react-native-community/masked-view": "^0.1.1",
-        "@types/fetch-mock": "^7.3.1",
-        "@types/invariant": "^2.2.30",
         "chalk": "^2.4.2",
         "convert-svg-to-png": "^0.5.0",
         "deepmerge": "^3.2.0",
+        "events": "^3.0.0",
         "invariant": "^2.2.4",
         "kill-port": "^1.5.1",
         "moment": "^2.24.0",
@@ -58,6 +57,9 @@
         "rn-fetch-blob": "^0.10.15"
     },
     "devDependencies": {
+        "@types/events": "^3.0.0",
+        "@types/fetch-mock": "^7.3.1",
+        "@types/invariant": "^2.2.30",
         "@babel/core": "^7.5.5",
         "@babel/runtime": "^7.5.5",
         "@types/jest": "^24.0.12",
