@@ -23,13 +23,13 @@ interface CollectionCardAppearanceInfo {
 export const collectionCardAppearanceInfo: {
     [key in CollectionCardAppearance]: CollectionCardAppearanceInfo
 } = {
-    [CollectionCardAppearance.splashPage]: { fits: 1 },
-    [CollectionCardAppearance.superHeroPage]: { fits: 1 },
-    [CollectionCardAppearance.twoStoryPage]: { fits: 1 },
-    [CollectionCardAppearance.threeStoryPage]: { fits: 1 },
-    [CollectionCardAppearance.fourStoryPage]: { fits: 1 },
-    [CollectionCardAppearance.fiveStoryPage]: { fits: 1 },
-    [CollectionCardAppearance.sixStoryPage]: { fits: 1 },
+    splash: { fits: 1 },
+    super: { fits: 1 },
+    two: { fits: 1 },
+    three: { fits: 1 },
+    four: { fits: 1 },
+    five: { fits: 1 },
+    six: { fits: 1 },
 }
 
 export const defaultAppearances: {
