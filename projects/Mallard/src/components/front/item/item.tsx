@@ -4,7 +4,6 @@ import { metrics } from 'src/theme/spacing'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { Highlight } from '../../highlight'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { CAPIArticle } from 'src/common'
 import {
     PathToArticle,
@@ -14,7 +13,11 @@ import {
 
 import { TextBlock } from './text-block'
 import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
-import { RowSize, getRowHeightForSize } from '../helpers'
+import {
+    RowSize,
+    getRowHeightForSize,
+    useCardBackgroundStyle,
+} from '../helpers'
 import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
@@ -67,7 +70,6 @@ const ItemTappable = withNavigation(
         hasPadding?: boolean
     } & TappablePropTypes &
         NavigationInjectedProps) => {
-        const { appearance } = useArticleAppearance()
         const tappableRef = useRef<View>()
 
         return (
@@ -111,8 +113,7 @@ const ItemTappable = withNavigation(
                         style={[
                             tappableStyles.root,
                             hasPadding && tappableStyles.padding,
-                            appearance.backgrounds,
-                            appearance.cardBackgrounds,
+                            useCardBackgroundStyle(),
                         ]}
                     >
                         {children}

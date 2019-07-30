@@ -4,7 +4,7 @@ import { CollectionPage, PropTypes } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, ColorFromPalette, Front as FrontType } from 'src/common'
+import { Issue, PillarFromPalette, Front as FrontType } from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { useSettings } from 'src/hooks/use-settings'
@@ -20,12 +20,9 @@ import {
     AnimatedFlatListRef,
     getNearestPage,
 } from './helpers'
-import {
-    WithArticleAppearance,
-    getAppearancePillar,
-} from 'src/theme/appearance'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
+import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
 
 const CollectionPageInFront = ({
     index,
@@ -34,7 +31,7 @@ const CollectionPageInFront = ({
     ...collectionPageProps
 }: {
     index: number
-    appearance: ColorFromPalette
+    appearance: PillarFromPalette
     scrollX: Animated.Value
 } & PropTypes) => {
     const { width } = Dimensions.get('window')
@@ -52,12 +49,12 @@ const CollectionPageInFront = ({
                 },
             ]}
         >
-            <WithArticleAppearance value={appearance}>
+            <WithArticle type={'article'} pillar={appearance}>
                 <CollectionPage
                     translate={translate}
                     {...collectionPageProps}
                 />
-            </WithArticleAppearance>
+            </WithArticle>
         </Animated.View>
     )
 }

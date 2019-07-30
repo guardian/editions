@@ -5,7 +5,7 @@ import { ArticleHeadline } from '..'
 describe('ArticleHeadline', () => {
     it('should show a news headling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <ArticleHeadline type="news">
+            <ArticleHeadline>
                 England’s Suzy Petty hopes to help GB hockey team make it to
                 Olympics
             </ArticleHeadline>,
@@ -14,7 +14,7 @@ describe('ArticleHeadline', () => {
     })
     it('should show a long read headling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <ArticleHeadline type="longRead">
+            <ArticleHeadline>
                 England’s Suzy Petty hopes to help GB hockey team make it to
                 Olympics
             </ArticleHeadline>,

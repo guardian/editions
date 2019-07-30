@@ -3,18 +3,12 @@
 exports[`ArticleKicker should display a default Kicker 1`] = `
 <View
   style={
-    Array [
-      Object {
-        "borderBottomWidth": 0.5,
-        "marginBottom": 3,
-        "paddingBottom": 18,
-        "width": "100%",
-      },
-      Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "#999999",
-      },
-    ]
+    Object {
+      "borderBottomWidth": 0.5,
+      "marginBottom": 3,
+      "paddingBottom": 18,
+      "width": "100%",
+    }
   }
 >
   <Text
@@ -28,11 +22,10 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
         },
         Array [
           Object {
-            "color": "#121212",
-          },
-          Object {},
-          Object {
             "marginTop": 2.4,
+          },
+          Object {
+            "color": "#121212",
           },
         ],
       ]
@@ -46,18 +39,12 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
 exports[`ArticleKicker should display a long read style kicker 1`] = `
 <View
   style={
-    Array [
-      Object {
-        "borderBottomWidth": 0.5,
-        "marginBottom": 3,
-        "paddingBottom": 18,
-        "width": "100%",
-      },
-      Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "#999999",
-      },
-    ]
+    Object {
+      "borderBottomWidth": 0.5,
+      "marginBottom": 3,
+      "paddingBottom": 18,
+      "width": "100%",
+    }
   }
 >
   <Text
@@ -71,11 +58,10 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
         },
         Array [
           Object {
-            "color": "#121212",
-          },
-          Object {},
-          Object {
             "marginTop": 2.4,
+          },
+          Object {
+            "color": "#121212",
           },
         ],
       ]
