@@ -205,13 +205,7 @@ const RootNavigator = createAppContainer(
                     initialRouteName: 'Main',
                 },
             ),
-            [routeNames.SignIn]: mapNavigationToProps(
-                AuthSwitcherScreen,
-                nav => ({
-                    onAuthenticated: () => nav.goBack(),
-                    onDismiss: () => nav.goBack(),
-                }),
-            ),
+            [routeNames.SignIn]: AuthSwitcherScreen,
         },
         {
             initialRouteName: 'Authed',

@@ -38,7 +38,6 @@ import { getColor } from 'src/helpers/transform'
 import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 import { LoginOverlay } from 'src/components/login-overlay'
 import { routeNames } from 'src/navigation'
-import { resetCredentials } from 'src/authentication/storage'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -225,11 +224,7 @@ const ArticleScreenWithProps = ({
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
-                        onReLogin={async () => {
-                            await resetCredentials()
-                            navigation.navigate(routeNames.SignIn)
-                        }}
-                        onLoginDismiss={() => navigation.goBack()}
+                        onDismiss={() => navigation.goBack()}
                     >
                         <ArticleScreenBody
                             path={path}
@@ -247,11 +242,7 @@ const ArticleScreenWithProps = ({
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
-                        onReLogin={async () => {
-                            await resetCredentials()
-                            navigation.navigate(routeNames.SignIn)
-                        }}
-                        onLoginDismiss={() => navigation.goBack()}
+                        onDismiss={() => navigation.goBack()}
                     >
                         <View
                             style={{

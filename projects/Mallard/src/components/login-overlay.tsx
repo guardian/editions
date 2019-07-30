@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
-import { useCanViewEditionStatus } from 'src/hooks/use-sign-in-status'
 import { View, StyleSheet, PanResponder } from 'react-native'
-import { NavigationEvents } from 'react-navigation'
-import { useForceUpdate } from 'src/hooks/use-force-update'
 import { useModal } from './modal'
-import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
+import { useAuth } from 'src/authentication/auth-context'
+import { SignInModalCard } from './sign-in-modal-card'
+import { SubNotFoundModalCard } from './sub-not-found-modal-card'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
@@ -23,7 +22,6 @@ const overlayStyles = StyleSheet.create({
 
 const ModalOpener = ({
     children,
-    forceOpen = false,
     renderModal,
 }: {
     children: React.ReactNode
@@ -56,90 +54,47 @@ const ModalOpener = ({
 
 const LoginOverlay = ({
     children,
+    onDismiss,
     onLoginPress,
-    onReLogin,
-    onLoginDismiss,
 }: {
     children: React.ReactNode
+    onDismiss: () => void
     onLoginPress: () => void
-    onReLogin: () => void
-    onLoginDismiss: () => void
 }) => {
-    const handler = useCanViewEditionStatus()
-    // need this to re-check, whether we can view editions in-lieu of better state management
-    const forceUpdate = useForceUpdate()
+    const handler = useAuth()
 
-    return (
-        <>
-            <NavigationEvents onDidFocus={forceUpdate} />
-            {handler({
-                pending: () => <>{children}</>,
-                canView: () => <>{children}</>,
-                cannotView: () => (
-                    <ModalOpener
-                        renderModal={close => (
-                            <OnboardingCard
-                                title="Subscription not found"
-                                appearance={CardAppearance.blue}
-                                mainActions={[
-                                    {
-                                        label: 'Sign-in with different account',
-                                        onPress: () => {
-                                            close()
-                                            onReLogin()
-                                        },
-                                    },
-                                    {
-                                        label: 'Close',
-                                        onPress: () => {
-                                            close()
-                                            onLoginDismiss()
-                                        },
-                                    },
-                                ]}
-                            >
-                                We were unable to find a subscription with that
-                                account
-                            </OnboardingCard>
-                        )}
-                    >
-                        {children}
-                    </ModalOpener>
-                ),
-                notLoggedIn: () => (
-                    <ModalOpener
-                        renderModal={close => (
-                            <OnboardingCard
-                                title="Already a subscriber?"
-                                subtitle="Sign in to continue with the app"
-                                appearance={CardAppearance.blue}
-                                mainActions={[
-                                    {
-                                        label: 'Continue',
-                                        onPress: () => {
-                                            close()
-                                            onLoginPress()
-                                        },
-                                    },
-                                    {
-                                        label: 'Close',
-                                        onPress: () => {
-                                            close()
-                                            onLoginDismiss()
-                                        },
-                                    },
-                                ]}
-                            >
-                                Not subscribed yet? Learn more ...
-                            </OnboardingCard>
-                        )}
-                    >
-                        {children}
-                    </ModalOpener>
-                ),
-            })}
-        </>
-    )
+    return handler({
+        pending: () => <>{children}</>,
+        signedIn: canView =>
+            canView ? (
+                <>{children}</>
+            ) : (
+                <ModalOpener
+                    renderModal={close => (
+                        <SubNotFoundModalCard
+                            onDismiss={onDismiss}
+                            onLoginPress={onLoginPress}
+                            close={close}
+                        />
+                    )}
+                >
+                    {children}
+                </ModalOpener>
+            ),
+        signedOut: () => (
+            <ModalOpener
+                renderModal={close => (
+                    <SignInModalCard
+                        onDismiss={onDismiss}
+                        onLoginPress={onLoginPress}
+                        close={close}
+                    />
+                )}
+            >
+                {children}
+            </ModalOpener>
+        ),
+    })
 }
 
 export { LoginOverlay }
