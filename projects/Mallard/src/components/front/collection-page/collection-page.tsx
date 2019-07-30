@@ -4,21 +4,18 @@ import { metrics } from 'src/theme/spacing'
 
 import { color } from 'src/theme/color'
 import { Row } from './row'
-import { CAPIArticle, Issue, Collection, Front } from 'src/common'
-import { PageLayout, useCardBackgroundStyle } from '../helpers'
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import {
-    splashPage,
-    twoStoryPage,
-    superHeroPage,
-    threeStoryPage,
-    fourStoryPage,
-    fiveStoryPage,
-    sixStoryPage,
-} from '../layouts'
-import { PathToArticle } from 'src/screens/article-screen'
+    CAPIArticle,
+    Issue,
+    Collection,
+    Front,
+    defaultAppearances,
+    CollectionCardAppearance,
+} from 'src/common'
+import { useCardBackgroundStyle } from '../helpers'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
-import { useArticle } from 'src/hooks/use-article'
 
 const styles = StyleSheet.create({
     root: {
@@ -45,8 +42,30 @@ export interface PropTypes {
     articleNavigator: ArticleNavigator
     issue: Issue['key']
     front: Front['key']
-    pageLayout?: PageLayout
+    appearance: CollectionCardAppearance | null
     collection: Collection['key']
+}
+
+const getPageLayout = (
+    appearance: CollectionCardAppearance | null,
+    length: number,
+) => {
+    if (!appearance) {
+        if (
+            length === 1 ||
+            length === 2 ||
+            length === 3 ||
+            length === 4 ||
+            length === 5 ||
+            length === 6
+        ) {
+            console.log(length)
+            return layouts[defaultAppearances[length]]
+        }
+        return layouts[defaultAppearances[6]]
+    } else {
+        return layouts[appearance]
+    }
 }
 
 const CollectionPage = ({
@@ -56,37 +75,15 @@ const CollectionPage = ({
     translate,
     issue,
     front,
-    pageLayout,
+    appearance,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const background = useCardBackgroundStyle()
     if (!articlesInCard.length) {
         return <FlexErrorMessage />
     }
-    if (!pageLayout) {
-        switch (articlesInCard.length) {
-            // case 1:
-            //     pageLayout = superHeroPage
-            //     break
-            //THIS IS JUST FOR DEVELOPMENT TODO: Make this layout work from API
-            case 1:
-                pageLayout = superHeroPage
-                break
-            case 2:
-                pageLayout = twoStoryPage
-                break
-            case 3:
-                pageLayout = threeStoryPage
-                break
-            case 4:
-                pageLayout = fourStoryPage
-                break
-            case 5:
-                pageLayout = fiveStoryPage
-                break
-            default:
-                pageLayout = sixStoryPage
-        }
-    }
+
+    const pageLayout = getPageLayout(appearance, articlesInCard.length)
+
     return (
         <View style={[styles.root, background]}>
             {pageLayout.map((row, index) => (

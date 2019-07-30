@@ -1,4 +1,47 @@
-import { CollectionCardLayoutsForFront } from '../index'
+export enum CollectionCardAppearance {
+    splashPage = 'splash',
+    superHeroPage = 'super',
+    twoStoryPage = 'two',
+    threeStoryPage = 'three',
+    fourStoryPage = 'four',
+    fiveStoryPage = 'five',
+    sixStoryPage = 'six',
+}
+
+export type CollectionCardLayout = (number | CollectionCardAppearance)[]
+
+export interface CollectionCardLayouts {
+    [countOfArticles: number]: CollectionCardLayout
+}
+export interface CollectionCardLayoutsForFront {
+    default: CollectionCardLayouts
+    [frontName: string]: CollectionCardLayouts
+}
+interface CollectionCardAppearanceInfo {
+    fits: 1 | 2 | 3 | 4 | 5 | 6
+}
+export const collectionCardAppearanceInfo: {
+    [key in CollectionCardAppearance]: CollectionCardAppearanceInfo
+} = {
+    [CollectionCardAppearance.splashPage]: { fits: 1 },
+    [CollectionCardAppearance.superHeroPage]: { fits: 1 },
+    [CollectionCardAppearance.twoStoryPage]: { fits: 1 },
+    [CollectionCardAppearance.threeStoryPage]: { fits: 1 },
+    [CollectionCardAppearance.fourStoryPage]: { fits: 1 },
+    [CollectionCardAppearance.fiveStoryPage]: { fits: 1 },
+    [CollectionCardAppearance.sixStoryPage]: { fits: 1 },
+}
+
+export const defaultAppearances: {
+    [key in 1 | 2 | 3 | 4 | 5 | 6]: CollectionCardAppearance
+} = {
+    1: CollectionCardAppearance.superHeroPage,
+    2: CollectionCardAppearance.twoStoryPage,
+    3: CollectionCardAppearance.threeStoryPage,
+    4: CollectionCardAppearance.fourStoryPage,
+    5: CollectionCardAppearance.fiveStoryPage,
+    6: CollectionCardAppearance.sixStoryPage,
+}
 
 export const cardLayouts: CollectionCardLayoutsForFront = {
     Crosswords: {
@@ -7,7 +50,7 @@ export const cardLayouts: CollectionCardLayoutsForFront = {
     },
     default: {
         0: [],
-        1: [1],
+        1: [CollectionCardAppearance.splashPage],
         2: [1, 1],
         3: [1, 2],
         4: [1, 3],

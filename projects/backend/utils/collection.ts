@@ -3,6 +3,7 @@ import {
     CollectionCardLayouts,
     CollectionCardLayout,
     cardLayouts,
+    collectionCardAppearanceInfo,
 } from '../../common/src/index'
 import { fromPairs } from 'ramda'
 import { PublishedFront } from '../fronts/issue'
@@ -38,18 +39,25 @@ export const createCardsFromAllArticlesInCollection = (
         itemsSoFar: number
         cards: Card[]
     }>(
-        ({ itemsSoFar, cards }, current) => ({
-            itemsSoFar: itemsSoFar + current,
-            cards: [
-                ...cards,
-                {
-                    layout: null,
-                    articles: fromPairs(
-                        articles.slice(itemsSoFar, itemsSoFar + current),
-                    ),
-                },
-            ],
-        }),
+        ({ itemsSoFar, cards }, current) => {
+            const count =
+                typeof current === 'number'
+                    ? current
+                    : collectionCardAppearanceInfo[current].fits
+            return {
+                itemsSoFar: itemsSoFar + count,
+                cards: [
+                    ...cards,
+                    {
+                        appearance:
+                            typeof current === 'number' ? null : current,
+                        articles: fromPairs(
+                            articles.slice(itemsSoFar, itemsSoFar + count),
+                        ),
+                    },
+                ],
+            }
+        },
         { itemsSoFar: 0, cards: [] },
     )
 
@@ -63,7 +71,7 @@ export const createCardsFromAllArticlesInCollection = (
             ...chunk(articles.slice(itemsSoFar), maxCardSize).map(
                 groupOfArticles => {
                     return {
-                        layout: null,
+                        appearance: null,
                         articles: fromPairs(groupOfArticles),
                     }
                 },
