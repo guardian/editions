@@ -224,6 +224,7 @@ const ArticleScreenWithProps = ({
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
+                        onLoginDismiss={() => navigation.goBack()}
                     >
                         <ArticleScreenBody
                             path={path}
@@ -241,6 +242,7 @@ const ArticleScreenWithProps = ({
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
+                        onLoginDismiss={() => navigation.goBack()}
                     >
                         <View
                             style={{

@@ -61,9 +61,11 @@ const ModalOpener = ({
 const LoginOverlay = ({
     children,
     onLoginPress,
+    onLoginDismiss,
 }: {
     children: React.ReactNode
     onLoginPress: () => void
+    onLoginDismiss: () => void
 }) => {
     const handler = useCanViewEditionStatus()
     // need this to re-check, whether we can view editions in-lieu of better state management
@@ -78,12 +80,12 @@ const LoginOverlay = ({
                 cannotView: () => (
                     <ModalOpener
                         forceOpen
-                        getModalProps={close => ({
+                        getModalProps={() => ({
                             title: 'Invalid account',
                             text: 'You need to upgrade your account',
                             actions: [
                                 { label: 'Login', onPress: onLoginPress },
-                                { label: 'Not now', onPress: close },
+                                { label: 'Not now', onPress: onLoginDismiss },
                             ],
                         })}
                     >
