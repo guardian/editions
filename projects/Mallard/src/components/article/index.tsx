@@ -5,13 +5,10 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { useArticleAppearance } from 'src/theme/appearance'
+import { LongReadHeader, NewsHeader, OpinionHeader } from './article-header'
+import { ArticleHeaderProps } from './article-header/types'
 import {
-    LongReadHeader,
-    NewsHeader,
-    PropTypes as ArticleHeaderPropTypes,
-} from './article-header/article-header'
-import {
-    Standfirst,
+    ArticleStandfirst,
     PropTypes as StandfirstPropTypes,
 } from './article-standfirst'
 import { BlockElement } from 'src/common'
@@ -69,7 +66,6 @@ const ArticleController = ({
             const message: never = article
             return (
                 <FlexErrorMessage
-                    icon="😭"
                     title={message}
                     style={{ backgroundColor: color.background }}
                 />
@@ -86,7 +82,7 @@ const Article = ({
     standfirst,
 }: {
     article?: BlockElement[]
-} & ArticleHeaderPropTypes &
+} & ArticleHeaderProps &
     StandfirstPropTypes) => {
     const { name: appearanceName } = useArticleAppearance()
     const [height, setHeight] = useState(Dimensions.get('window').height)
@@ -95,19 +91,15 @@ const Article = ({
 
     return (
         <View style={styles.container}>
-            <NewsHeader {...{ headline, image, kicker }} />
-            <Standfirst
-                {...{ byline, standfirst }}
-                style={[
-                    navigationPosition && {
-                        opacity: navigationPosition.position.interpolate({
-                            inputRange: [0.6, 1],
-                            outputRange: [0, 1],
-                        }),
-                    },
-                ]}
-            />
-
+            {appearanceName === 'opinion' ? (
+                <OpinionHeader
+                    {...{ byline, headline, image, kicker, standfirst }}
+                />
+            ) : (
+                <NewsHeader
+                    {...{ byline, headline, image, kicker, standfirst }}
+                />
+            )}
             <Animated.View
                 style={[
                     { backgroundColor: color.background, flex: 1 },

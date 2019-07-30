@@ -1,10 +1,5 @@
 import { ReactElement } from 'react'
-import {
-    FetchableResponse,
-    Error,
-    ResponseHookCallbacks,
-} from 'src/hooks/use-response'
-import { CachedOrPromise } from './fetch/cached-or-promise'
+import { FetchableResponse, Error } from 'src/hooks/use-response'
 
 interface WithResponseCallbacks<T> {
     retry: () => void
@@ -16,15 +11,24 @@ export const withResponse = <T>(response: FetchableResponse<T>) => ({
     error,
 }: {
     success: (resp: T, callbacks: WithResponseCallbacks<T>) => ReactElement
-    pending: (callbacks: WithResponseCallbacks<T>) => ReactElement
-    error: (error: Error, callbacks: WithResponseCallbacks<T>) => ReactElement
+    pending: (
+        stale: T | null,
+        callbacks: WithResponseCallbacks<T>,
+    ) => ReactElement
+    error: (
+        error: Error,
+        stale: T | null,
+        callbacks: WithResponseCallbacks<T>,
+    ) => ReactElement
 }): ReactElement => {
     switch (response.state) {
         case 'success':
             return success(response.response, { retry: response.retry })
         case 'error':
-            return error(response.error, { retry: response.retry })
+            return error(response.error, response.staleResponse, {
+                retry: response.retry,
+            })
         case 'pending':
-            return pending({ retry: response.retry })
+            return pending(response.staleResponse, { retry: response.retry })
     }
 }

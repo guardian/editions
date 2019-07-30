@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArticleByline should display a default Byline 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "flexShrink": 0,
+        "fontFamily": "GuardianTextEgyptian-Bold",
+        "fontSize": 17,
+        "lineHeight": 21,
+      },
+      Array [
+        Object {
+          "color": "#121212",
+        },
+        Object {},
+        undefined,
+      ],
+    ]
+  }
+>
+  Gary Younge
+</Text>
+`;

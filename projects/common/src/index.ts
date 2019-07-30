@@ -1,4 +1,4 @@
-import { cardLayouts } from './collection/card-layouts'
+export { cardLayouts } from './collection/card-layouts'
 
 interface WithKey {
     key: string
@@ -214,16 +214,21 @@ export type CollectionCardLayout = number[]
 export interface CollectionCardLayouts {
     [countOfArticles: number]: CollectionCardLayout
 }
-const issueDir = (issueId: string) => `${issueId}`
+export interface CollectionCardLayoutsForFront {
+    default: CollectionCardLayouts
+    [frontName: string]: CollectionCardLayouts
+}
 
-const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
+export const issueDir = (issueId: string) => `${issueId}`
+
+export const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-const frontPath = (issueId: string, frontId: string) =>
+export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
-const issueSummaryPath = () => 'issues'
-export const imageSizes = ['sample', 'phone', 'tablet'] as const
+export const issueSummaryPath = () => 'issues'
+export const imageSizes = ['phone', 'tablet'] as const
 export interface Image {
     source: string
     path: string
@@ -237,26 +242,17 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-export type ImageSize = typeof imageSizes[number]
+export type ImageSize = typeof imageSizes[number] | 'sample'
 
-const mediaPath = (
+export const mediaPath = (
     issue: string,
     size: ImageSize,
     source: string,
     path: string,
 ) => `${issueDir(issue)}/media/${size}/${source}/${path}`
 
-const coloursPath = (issue: string, source: string, path: string) =>
+export const coloursPath = (issue: string, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
-
-export {
-    issuePath,
-    mediaPath,
-    frontPath,
-    issueSummaryPath,
-    cardLayouts,
-    coloursPath,
-}

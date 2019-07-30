@@ -5,6 +5,7 @@ import { ColorFromPalette } from 'src/common'
 import { metrics } from './spacing'
 import { getColor } from 'src/helpers/transform'
 import { Appearance } from '../../../common/src'
+import { getFont } from './typography'
 
 /*
 Types
@@ -57,6 +58,12 @@ interface ArticleAppearanceStyles {
         color?: string
     }
     /*
+    Overrides for the kicker in a card
+    */
+    cardKicker: {
+        color?: string
+    }
+    /*
     Overrides for the standfirst
     */
     standfirst: {
@@ -67,14 +74,13 @@ interface ArticleAppearanceStyles {
     */
     byline: {
         color?: string
-        marginBottom?: number
     }
     /*
     Feel free to add more stuff as needed!!
     */
 }
 
-export type AppAppearance = 'default' | 'primary' | 'tertiary'
+export type AppAppearance = 'default' | 'primary' | 'tertiary' | 'settings'
 
 export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
     primary: {
@@ -98,6 +104,13 @@ export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
         color: '#052962',
         dimColor: '#052962',
     },
+    settings: {
+        backgroundColor: color.background,
+        cardBackgroundColor: color.background,
+        borderColor: color.line,
+        color: color.palette.brand.dark,
+        dimColor: color.text,
+    },
 }
 
 /*
@@ -120,9 +133,8 @@ export const articleAppearances: {
         },
         headline: {},
         kicker: {},
-        byline: {
-            marginBottom: metrics.vertical,
-        },
+        cardKicker: {},
+        byline: {},
         standfirst: {},
     },
     news: {
@@ -133,9 +145,14 @@ export const articleAppearances: {
         headline: {
             color: color.dimText,
         },
-        kicker: {},
+        kicker: {
+            color: color.palette.news.main,
+        },
+        cardKicker: {
+            color: color.text,
+        },
         byline: {
-            marginBottom: metrics.vertical,
+            color: color.palette.news.main,
         },
         standfirst: {
             color: color.text,
@@ -148,16 +165,20 @@ export const articleAppearances: {
         cardBackgrounds: {},
         contrastCardBackgrounds: {},
         text: {
-            color: color.palette.opinion.main,
+            color: color.palette.opinion.bright,
         },
         headline: {
+            color: color.palette.neutral[7],
             fontFamily: 'GHGuardianHeadline-Light',
         },
         kicker: {},
-        byline: {
-            marginBottom: metrics.vertical,
+        cardKicker: {
+            color: color.text,
         },
-        standfirst: {},
+        byline: {},
+        standfirst: {
+            color: color.palette.neutral[7],
+        },
     },
     sport: {
         backgrounds: {
@@ -175,9 +196,8 @@ export const articleAppearances: {
             color: color.text,
         },
         kicker: {},
-        byline: {
-            marginBottom: metrics.vertical,
-        },
+        cardKicker: {},
+        byline: {},
         standfirst: { color: color.text },
     },
     culture: {
@@ -193,9 +213,8 @@ export const articleAppearances: {
             color: color.text,
         },
         kicker: {},
-        byline: {
-            marginBottom: metrics.vertical,
-        },
+        cardKicker: {},
+        byline: {},
         standfirst: {
             color: color.text,
         },
@@ -213,9 +232,8 @@ export const articleAppearances: {
         kicker: {
             color: color.palette.lifestyle.main,
         },
-        byline: {
-            marginBottom: metrics.vertical,
-        },
+        cardKicker: {},
+        byline: {},
         standfirst: {},
     },
 }

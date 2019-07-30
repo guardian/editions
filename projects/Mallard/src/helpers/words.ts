@@ -5,6 +5,8 @@ export const LOCAL_JSON_INVALID_RESPONSE_VALIDATION =
 
 export const APP_DISPLAY_NAME = 'Daily Edition'
 export const FEEDBACK_EMAIL = 'editions.product@theguardian.com'
+export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
+export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
 
 export const GENERIC_ERROR = `Sorry! This didn't work`
 export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${FEEDBACK_EMAIL} and tell us what happened?`

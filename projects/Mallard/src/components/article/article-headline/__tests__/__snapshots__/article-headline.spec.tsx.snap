@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArticleHeadline should show a long read headling 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "#121212",
+        "flexShrink": 0,
+        "fontFamily": "GHGuardianHeadline-Regular",
+        "fontSize": 28,
+        "lineHeight": 30,
+      },
+      Array [
+        Object {},
+        Object {
+          "color": "#121212",
+        },
+        Object {},
+      ],
+    ]
+  }
+>
+  England’s Suzy Petty hopes to help GB hockey team make it to Olympics
+</Text>
+`;
+
+exports[`ArticleHeadline should show a news headling 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "#121212",
+        "flexShrink": 0,
+        "fontFamily": "GHGuardianHeadline-Regular",
+        "fontSize": 28,
+        "lineHeight": 30,
+      },
+      Array [
+        Object {
+          "marginRight": 24,
+          "marginTop": 3,
+        },
+        Object {
+          "color": "#121212",
+        },
+        Object {},
+      ],
+    ]
+  }
+>
+  England’s Suzy Petty hopes to help GB hockey team make it to Olympics
+</Text>
+`;

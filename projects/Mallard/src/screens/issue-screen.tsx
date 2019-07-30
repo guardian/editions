@@ -16,7 +16,7 @@ import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 
 import { withNavigation } from 'react-navigation'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
@@ -68,7 +68,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 }}
             />
             {response({
-                error: ({ message }, { retry }) => (
+                error: ({ message }, _, { retry }) => (
                     <>
                         <Header />
 

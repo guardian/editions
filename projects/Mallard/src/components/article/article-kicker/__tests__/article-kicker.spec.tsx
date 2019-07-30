@@ -1,6 +1,6 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { ArticleKicker } from '../article-kicker'
+import { ArticleKicker } from '..'
 
 describe('ArticleKicker', () => {
     it('should display a default Kicker', () => {
@@ -12,12 +12,6 @@ describe('ArticleKicker', () => {
     it('should display a long read style kicker', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
             <ArticleKicker kicker="Sport" type="longRead" />,
-        ).toJSON()
-        expect(component).toMatchSnapshot()
-    })
-    it('should return null if the kicker is "Opinion"', () => {
-        const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <ArticleKicker kicker="Opinion" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })

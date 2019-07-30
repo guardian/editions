@@ -3,6 +3,7 @@ import { View, ViewStyle, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
 
 export enum CardAppearance {
     tomato,
@@ -16,8 +17,7 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
     squareText: {
-        fontSize: 60,
-        lineHeight: 60,
+        ...getFont('titlepiece', 2.5),
     },
     explainer: {
         backgroundColor: color.background,

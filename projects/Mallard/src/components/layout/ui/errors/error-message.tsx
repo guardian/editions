@@ -8,24 +8,16 @@ import { useSettings } from 'src/hooks/use-settings'
 
 export interface PropTypes {
     title?: string
-    icon?: string
     message?: string
     debugMessage?: string
     action?: [string, () => void]
 }
 
-const ErrorMessage = ({
-    icon,
-    title,
-    message,
-    debugMessage,
-    action,
-}: PropTypes) => {
+const ErrorMessage = ({ title, message, debugMessage, action }: PropTypes) => {
     const [{ isUsingProdDevtools }] = useSettings()
 
     return (
         <>
-            {!!icon && <Text style={{ fontSize: 40 }}>{icon}</Text>}
             {!!title && (
                 <UiBodyCopy weight="bold" style={{ textAlign: 'center' }}>
                     {title}
