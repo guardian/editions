@@ -200,7 +200,10 @@ const ArticleScreenWithProps = ({
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
 
-    const sliderPos = useAlphaIn(200, 0, current).interpolate({
+    const sliderPos = useAlphaIn(200, {
+        initialValue: 0,
+        currentValue: current,
+    }).interpolate({
         inputRange: [0, articleNavigator.articles.length - 1],
         outputRange: [0, 1],
     })

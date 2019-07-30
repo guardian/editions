@@ -1,106 +1,59 @@
-import React, { useRef, useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useCanViewEditionStatus } from 'src/hooks/use-sign-in-status'
-import { View, StyleSheet, Text, PanResponder } from 'react-native'
-import { Button } from './button/button'
+import { View, StyleSheet, PanResponder } from 'react-native'
 import { NavigationEvents } from 'react-navigation'
 import { useForceUpdate } from 'src/hooks/use-force-update'
 import { ModalContext, ModalCardProps } from './modal'
-
-const messageStyles = StyleSheet.create({
-    message: {
-        color: 'white',
-        backgroundColor: 'blue',
-        padding: 10,
-    },
-    text: {
-        color: 'white',
-    },
-})
-
-const InvalidAccountMessage = ({
-    onLoginPress,
-}: {
-    onLoginPress: () => void
-}) => {
-    return (
-        <View style={messageStyles.message}>
-            <Text style={messageStyles.text}>
-                You need to upgrade your account
-            </Text>
-            <Button onPress={onLoginPress}>Login</Button>
-        </View>
-    )
-}
-
-const LoginMessage = ({ onLoginPress }: { onLoginPress: () => void }) => {
-    return (
-        <View style={messageStyles.message}>
-            <Text style={messageStyles.text}>Why dont you login!?</Text>
-            <Button onPress={onLoginPress}>Login</Button>
-        </View>
-    )
-}
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
         overflow: 'hidden',
         flex: 1,
     },
-    overlay: {
-        backgroundColor: 'black',
-        bottom: 0,
-        left: 0,
-        opacity: 0.25,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-    },
-    contentWrapper: {
-        overflow: 'hidden',
-        flex: 1,
-    },
-    messageWrapper: {
-        flex: 1,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 9999,
-        elevation: 9999,
-    },
 })
 
-const ScrollBlockingMessage = ({
+/**
+ * This allows us to open a modal using a component in the view.
+ *
+ * The primary use case here is for opening with a scrolling interaction.
+ * However, if `true` is passed as `forceOpen` then it will
+ * open the modal straight away.
+ */
+
+const ModalOpener = ({
     children,
+    forceOpen = false,
     getModalProps,
 }: {
     children: React.ReactNode
+    forceOpen?: boolean
     getModalProps: (close: () => void) => ModalCardProps
 }) => {
     const { open, close } = useContext(ModalContext)
 
-    // need this to re-check, whether we can view editions in-lieu of better state management
-    const swipeUpHandlers = useRef(
-        PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponder: () => true,
-            onPanResponderMove: (_, gesture) => {
-                gesture.dy < 10 && open(getModalProps(close))
-            },
-        }),
+    const swipeUpHandlers = useMemo(
+        () =>
+            PanResponder.create({
+                onStartShouldSetPanResponder: () => true,
+                onMoveShouldSetPanResponder: () => true,
+                onPanResponderMove: (_, gesture) => {
+                    gesture.dy < -10 && open(getModalProps(close))
+                },
+            }),
+        [getModalProps, open, close],
     )
 
     // ensure the modal is closed on unmount
-    useEffect(() => () => close(), [])
+    useEffect(() => {
+        if (forceOpen) {
+            open(getModalProps(close))
+        }
+        return () => close()
+    }, [getModalProps, open, close, forceOpen])
 
     return (
-        <View
-            style={overlayStyles.wrapper}
-            {...swipeUpHandlers.current.panHandlers}
-        >
-            <View style={overlayStyles.contentWrapper} pointerEvents="box-only">
-                {children}
-            </View>
+        <View style={overlayStyles.wrapper} {...swipeUpHandlers.panHandlers}>
+            {children}
         </View>
     )
 }
@@ -118,12 +71,13 @@ const LoginOverlay = ({
 
     return (
         <>
-            <NavigationEvents onDidFocus={() => forceUpdate()} />
+            <NavigationEvents onDidFocus={forceUpdate} />
             {handler({
                 pending: () => <>{children}</>,
                 canView: () => <>{children}</>,
                 cannotView: () => (
-                    <ScrollBlockingMessage
+                    <ModalOpener
+                        forceOpen
                         getModalProps={close => ({
                             title: 'Invalid account',
                             text: 'You need to upgrade your account',
@@ -134,10 +88,10 @@ const LoginOverlay = ({
                         })}
                     >
                         {children}
-                    </ScrollBlockingMessage>
+                    </ModalOpener>
                 ),
                 notLoggedIn: () => (
-                    <ScrollBlockingMessage
+                    <ModalOpener
                         getModalProps={close => ({
                             title: 'Log in',
                             text: 'You need to log in',
@@ -148,7 +102,7 @@ const LoginOverlay = ({
                         })}
                     >
                         {children}
-                    </ScrollBlockingMessage>
+                    </ModalOpener>
                 ),
             })}
         </>
