@@ -188,9 +188,7 @@ const fetchWeather = <T>(
     )
 }
 
-const fetchFromNotificationService = async (deviceToken: {
-    token: string
-}) => {
+const fetchFromNotificationService = async (deviceToken: { token: string }) => {
     const registerDeviceUrl = await getSetting('notificationServiceRegister')
     const { token } = deviceToken
     const options = {

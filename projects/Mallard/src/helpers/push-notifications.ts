@@ -1,13 +1,13 @@
 import PushNotification from 'react-native-push-notification'
-import { Alert } from "react-native";
+import { Alert } from 'react-native'
 import { fetchFromNotificationService } from 'src/helpers/fetch'
 
 const pushNotifcationRegistration = () =>
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
-            if(token){
+            if (token) {
                 fetchFromNotificationService(token)
-            }  
+            }
         },
 
         onNotification: (notification: any) => {
@@ -22,7 +22,7 @@ const pushNotifcationRegistration = () =>
             alert: false,
             badge: false,
             sound: false,
-        }
+        },
     })
 
 export { pushNotifcationRegistration }
