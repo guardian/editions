@@ -2,8 +2,10 @@ import { CAPIArticle, Card } from '../common'
 import {
     CollectionCardLayouts,
     CollectionCardLayout,
+    cardLayouts,
 } from '../../common/src/index'
 import { fromPairs } from 'ramda'
+import { PublishedFront } from '../fronts/issue'
 
 const chunk = <T>(arr: T[], size: number) =>
     Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -13,16 +15,21 @@ const chunk = <T>(arr: T[], size: number) =>
 const maxCardSize = 6
 
 const getCardLayoutForArticles = (
-    layouts: CollectionCardLayouts,
+    layout: CollectionCardLayouts,
     articleLength: number,
-): CollectionCardLayout =>
-    layouts[articleLength] || Object.values(layouts).pop()
+): CollectionCardLayout => {
+    return layout[articleLength] || Object.values(layout).pop()
+}
 
 export const createCardsFromAllArticlesInCollection = (
-    layouts: CollectionCardLayouts,
     articles: [string, CAPIArticle][],
+    front: PublishedFront,
 ): Card[] => {
-    const layout = getCardLayoutForArticles(layouts, articles.length)
+    const cardLayout = cardLayouts[front.name]
+        ? cardLayouts[front.name]
+        : cardLayouts.default
+
+    const layout = getCardLayoutForArticles(cardLayout, articles.length)
 
     /*
     fill the layout with articles

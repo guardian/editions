@@ -9,10 +9,6 @@ exports[`NewsHeader should show a full featured news header 1`] = `
         "paddingBottom": 12,
         "paddingHorizontal": 12,
       },
-      Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "#999999",
-      },
     ]
   }
 >
@@ -37,18 +33,12 @@ exports[`NewsHeader should show a full featured news header 1`] = `
   />
   <View
     style={
-      Array [
-        Object {
-          "borderBottomWidth": 0.5,
-          "marginBottom": 3,
-          "paddingBottom": 18,
-          "width": "100%",
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
-        },
-      ]
+      Object {
+        "borderBottomWidth": 0.5,
+        "marginBottom": 3,
+        "paddingBottom": 18,
+        "width": "100%",
+      }
     }
   >
     <Text
@@ -58,17 +48,16 @@ exports[`NewsHeader should show a full featured news header 1`] = `
             "flexShrink": 0,
             "fontFamily": "GTGuardianTitlepiece-Bold",
             "fontSize": 18,
-            "lineHeight": 21,
-            "marginTop": 2,
+            "lineHeight": 18,
           },
           Array [
+            Object {
+              "marginTop": 2.4,
+            },
             Object {
               "color": "#121212",
             },
           ],
-          Object {
-            "color": "#121212",
-          },
         ]
       }
     >
@@ -85,17 +74,11 @@ exports[`NewsHeader should show a full featured news header 1`] = `
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
             "lineHeight": 30,
-            "marginTop": 4,
           },
-          Array [
-            Object {
-              "marginRight": 24,
-            },
-            Object {
-              "color": "#121212",
-            },
-            Object {},
-          ],
+          Object {
+            "marginRight": 24,
+            "marginTop": 3,
+          },
         ]
       }
     >
@@ -107,19 +90,15 @@ exports[`NewsHeader should show a full featured news header 1`] = `
       style={
         Array [
           Object {
+            "alignContent": "stretch",
+            "alignItems": "stretch",
+            "justifyContent": "flex-end",
+          },
+          Object {
             "marginBottom": 12,
             "marginTop": 12,
             "paddingTop": 3,
             "width": "100%",
-          },
-          Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#999999",
-          },
-          Object {
-            "alignContent": "stretch",
-            "alignItems": "stretch",
-            "justifyContent": "flex-end",
           },
         ]
       }
@@ -133,12 +112,9 @@ exports[`NewsHeader should show a full featured news header 1`] = `
               "fontSize": 17,
               "lineHeight": 21,
             },
-            Array [
-              Object {
-                "color": "#121212",
-              },
-              Object {},
-            ],
+            Object {
+              "color": "#333333",
+            },
           ]
         }
       >
@@ -212,7 +188,7 @@ exports[`NewsHeader should show a full featured news header 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -260,7 +236,7 @@ exports[`NewsHeader should show a full featured news header 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -308,7 +284,7 @@ exports[`NewsHeader should show a full featured news header 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -356,7 +332,7 @@ exports[`NewsHeader should show a full featured news header 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -407,12 +383,9 @@ exports[`NewsHeader should show a full featured news header 1`] = `
       Array [
         Object {
           "flexShrink": 0,
-          "fontFamily": "GuardianTextEgyptian-Reg",
+          "fontFamily": "GuardianTextEgyptian-Bold",
           "fontSize": 17,
           "lineHeight": 21,
-        },
-        Object {
-          "fontFamily": "GuardianTextEgyptian-Bold",
         },
         Array [
           Object {
@@ -420,9 +393,6 @@ exports[`NewsHeader should show a full featured news header 1`] = `
           },
           Object {
             "marginBottom": 12,
-          },
-          Object {
-            "color": "#121212",
           },
         ],
       ]
@@ -442,10 +412,6 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
         "paddingBottom": 12,
         "paddingHorizontal": 12,
       },
-      Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "#999999",
-      },
     ]
   }
 >
@@ -459,17 +425,11 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
             "lineHeight": 30,
-            "marginTop": 4,
           },
-          Array [
-            Object {
-              "marginRight": 24,
-            },
-            Object {
-              "color": "#121212",
-            },
-            Object {},
-          ],
+          Object {
+            "marginRight": 24,
+            "marginTop": 3,
+          },
         ]
       }
     >
@@ -481,19 +441,15 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
       style={
         Array [
           Object {
+            "alignContent": "stretch",
+            "alignItems": "stretch",
+            "justifyContent": "flex-end",
+          },
+          Object {
             "marginBottom": 12,
             "marginTop": 12,
             "paddingTop": 3,
             "width": "100%",
-          },
-          Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#999999",
-          },
-          Object {
-            "alignContent": "stretch",
-            "alignItems": "stretch",
-            "justifyContent": "flex-end",
           },
         ]
       }
@@ -507,12 +463,9 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
               "fontSize": 17,
               "lineHeight": 21,
             },
-            Array [
-              Object {
-                "color": "#121212",
-              },
-              Object {},
-            ],
+            Object {
+              "color": "#333333",
+            },
           ]
         }
       >
@@ -586,7 +539,7 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -634,7 +587,7 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -682,7 +635,7 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -730,7 +683,7 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
         fill={
           Array [
             0,
-            4279374354,
+            4288256409,
           ]
         }
         fillOpacity={1}
@@ -781,12 +734,9 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
       Array [
         Object {
           "flexShrink": 0,
-          "fontFamily": "GuardianTextEgyptian-Reg",
+          "fontFamily": "GuardianTextEgyptian-Bold",
           "fontSize": 17,
           "lineHeight": 21,
-        },
-        Object {
-          "fontFamily": "GuardianTextEgyptian-Bold",
         },
         Array [
           Object {
@@ -794,9 +744,6 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
           },
           Object {
             "marginBottom": 12,
-          },
-          Object {
-            "color": "#121212",
           },
         ],
       ]

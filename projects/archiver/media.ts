@@ -1,8 +1,12 @@
 import { Front, ImageElement, CAPIArticle, Image } from './common'
 import { unnest } from 'ramda'
-import { getImage, getColours } from './downloader'
+import { getColours, getImage } from './downloader'
 import { hasFailed, attempt } from '../backend/utils/try'
 import { upload } from './upload'
+import { ImageSize, mediaPath } from '../common/src'
+import { PassThrough } from 'stream'
+import fetch, { Response } from 'node-fetch'
+
 export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const image = article.image ? [article.image] : []
     const elements = article.type === 'article' ? article.elements : []
@@ -21,27 +25,21 @@ export const getImagesFromFront = (front: Front): Image[] => {
     return images
 }
 
-export const uploadImage = async (id: string, image: Image) => {
-    const allSizes = await getImage(id, image)
-
+export const getAndUploadColours = async (id: string, image: Image) => {
     const [colourPath, colours] = await getColours(id, image)
     if (hasFailed(colours)) {
         console.error(`Could not get colours for ${colourPath}`)
         console.error(JSON.stringify(colours))
         return colours
     }
-    const colourUpload = attempt(upload(colourPath, colours))
+    return attempt(upload(colourPath, colours))
+}
 
-    return Promise.all([
-        ...allSizes.map(([path, file]) => {
-            if (hasFailed(file)) {
-                console.error(`Could not fetch ${path}`)
-                console.log(JSON.stringify(file))
-                return file
-            }
-
-            return attempt(upload(path, file))
-        }),
-        colourUpload,
-    ])
+export const getAndUploadImage = async (
+    issue: string,
+    image: Image,
+    size: ImageSize,
+) => {
+    const [path, data] = await getImage(issue, image, size)
+    return upload(path, data)
 }

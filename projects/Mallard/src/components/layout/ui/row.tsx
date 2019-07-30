@@ -1,7 +1,13 @@
 import React, { ReactElement, ReactNode } from 'react'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Highlight } from 'src/components/highlight'
-import { View, StyleSheet, SafeAreaView } from 'react-native'
+import {
+    View,
+    StyleSheet,
+    SafeAreaView,
+    ViewStyle,
+    StyleProp,
+} from 'react-native'
 import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
 
@@ -14,6 +20,7 @@ const styles = StyleSheet.create({
     item: {
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 1.5,
+        paddingBottom: metrics.vertical * 1.5,
         marginVertical: StyleSheet.hairlineWidth,
     },
     itemFlexer: {
@@ -26,15 +33,18 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
         paddingTop: metrics.vertical * 2,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
         flexDirection: 'row',
     },
 })
 
-const Footer = ({ children }: { children: ReactNode }) => (
-    <View style={styles.footer}>{children}</View>
-)
+const Footer = ({
+    children,
+    style,
+}: {
+    children: ReactNode
+    style?: StyleProp<ViewStyle>
+}) => <View style={[styles.footer, style]}>{children}</View>
 
 const Heading = ({ children }: { children: string }) => (
     <View style={styles.heading}>
@@ -59,12 +69,12 @@ const Separator = () => {
 
 interface RowContentProps {
     title: string
-    explainer?: string
+    explainer?: Element
 }
 
 const RowContents = ({ title, explainer }: RowContentProps) => (
     <>
-        <UiBodyCopy>{title}</UiBodyCopy>
+        <UiBodyCopy weight="bold">{title}</UiBodyCopy>
         {explainer && (
             <UiExplainerCopy style={{ marginTop: metrics.vertical / 8 }}>
                 {explainer}
@@ -96,6 +106,29 @@ const Row = ({
         </RowWrapper>
     )
 }
+
+const tallRowStyles = StyleSheet.create({
+    split: {
+        marginBottom: metrics.vertical,
+        alignItems: 'flex-start',
+    },
+})
+
+const TallRow = ({
+    proxy,
+    onPress,
+    ...contents
+}: RowContentProps &
+    RowWrapperProps & {
+        proxy?: ReactElement
+    }) => (
+    <RowWrapper onPress={onPress}>
+        <View style={tallRowStyles.split}>
+            <RowContents {...contents} />
+        </View>
+        {proxy}
+    </RowWrapper>
+)
 
 export interface RowWrapperProps {
     onPress?: () => void
@@ -136,4 +169,4 @@ const RowWrapper = ({
     )
 }
 
-export { Separator, Row, RowWrapper, Footer, Heading }
+export { Separator, Row, TallRow, RowWrapper, Footer, Heading }

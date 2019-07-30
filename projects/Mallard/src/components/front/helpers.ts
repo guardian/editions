@@ -4,6 +4,8 @@ import { FlatList } from 'react-native'
 import { Dimensions, Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Front } from 'src/common'
+import { useArticle } from 'src/hooks/use-article'
+import { useAppAppearance } from 'src/theme/appearance'
 
 type Item = FunctionComponent<PropTypes>
 
@@ -105,4 +107,18 @@ export const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
             metrics.frontsPageSides * 1.75,
         ],
     })
+}
+
+/*get the card bg */
+export const useCardBackgroundStyle = () => {
+    const [color, { pillar }] = useArticle()
+    const appColor = useAppAppearance()
+    return pillar !== 'news' && pillar !== 'sport'
+        ? { backgroundColor: color.faded }
+        : { backgroundColor: appColor.cardBackgroundColor }
+}
+
+export const useKickerColorStyle = () => {
+    const [color, { pillar }] = useArticle()
+    return pillar !== 'news' ? { color: color.main } : {}
 }

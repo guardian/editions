@@ -1,55 +1,30 @@
 import React from 'react'
-import {
-    Text,
-    View,
-    StyleSheet,
-    TextStyle,
-    StyleProp,
-    TextProps,
-    ViewStyle,
-} from 'react-native'
-import { useAppAppearance, useArticleToneColor } from 'src/theme/appearance'
-import { metrics } from 'src/theme/spacing'
+import { Text, StyleSheet, TextStyle, StyleProp, TextProps } from 'react-native'
+import { useAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
-
-const cardStyles = {
-    default: {
-        fontSize: 18,
-        lineHeight: 21,
-    },
-}
 
 const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
-        fontFamily: 'GHGuardianHeadline-Regular',
-        fontSize: 28,
-        lineHeight: 30,
-        marginTop: 4,
+        ...getFont('headline', 1.5),
         color: color.text,
     },
     issueTitleText: {
         flexShrink: 0,
-        fontFamily: 'GTGuardianTitlepiece-Bold',
-        fontSize: 24,
-        lineHeight: 24,
+        ...getFont('titlepiece', 1.25),
     },
     titlepieceText: {
         flexShrink: 0,
-        fontFamily: 'GTGuardianTitlepiece-Bold',
-        fontSize: 30,
-        lineHeight: 30,
+        ...getFont('titlepiece', 1.5),
     },
     headlineKickerText: {
         flexShrink: 0,
-        fontFamily: 'GTGuardianTitlepiece-Bold',
-        marginTop: 2,
-        ...cardStyles.default,
+        ...getFont('titlepiece', 1),
     },
     headlineCardText: {
         flexShrink: 0,
-        ...cardStyles.default,
+        ...getFont('headline', 1),
     },
     standfirstText: {
         flexShrink: 0,
@@ -59,9 +34,17 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         ...getFont('text', 1),
     },
+    serifBodyCopyBold: {
+        flexShrink: 0,
+        ...getFont('text', 1, 'bold'),
+    },
     bodyCopy: {
         flexShrink: 0,
         ...getFont('sans', 1),
+    },
+    bodyCopyBold: {
+        flexShrink: 0,
+        ...getFont('sans', 1, 'bold'),
     },
     explainerCopy: {
         flexShrink: 0,
@@ -106,16 +89,7 @@ export const HeadlineKickerText = ({
     children: string
     style?: StyleProp<TextStyle>
 } & TextProps) => {
-    return (
-        <Text
-            {...props}
-            style={[
-                styles.headlineKickerText,
-                style,
-                { color: useArticleToneColor() },
-            ]}
-        />
-    )
+    return <Text {...props} style={[styles.headlineKickerText, style]} />
 }
 
 export const StandfirstText = ({
@@ -143,7 +117,7 @@ export const HeadlineCardText = ({
 
 export const BodyCopy = ({
     style,
-    weight,
+    weight = 'regular',
     ...props
 }: {
     children: string
@@ -154,39 +128,32 @@ export const BodyCopy = ({
         <Text
             {...props}
             style={[
-                styles.serifBodyCopy,
-                weight === 'bold' && {
-                    fontFamily: 'GuardianTextEgyptian-Bold',
-                },
+                weight === 'bold'
+                    ? styles.serifBodyCopyBold
+                    : styles.serifBodyCopy,
                 style,
             ]}
         />
     )
 }
-BodyCopy.defaultProps = {
-    weight: 'regular',
-}
 
 export const UiBodyCopy = ({
     children,
     style,
-    weight,
+    weight = 'regular',
     ...props
 }: {
     children: string
-    weight: 'regular' | 'bold'
+    weight?: 'regular' | 'bold'
     style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (
         <Text
             {...props}
             style={[
-                styles.bodyCopy,
+                weight === 'bold' ? styles.bodyCopyBold : styles.bodyCopy,
                 {
                     color: useAppAppearance().color,
-                },
-                weight === 'bold' && {
-                    fontFamily: 'GuardianTextSans-Bold',
                 },
                 style,
             ]}
@@ -195,16 +162,13 @@ export const UiBodyCopy = ({
         </Text>
     )
 }
-UiBodyCopy.defaultProps = {
-    weight: 'regular',
-}
 
 export const UiExplainerCopy = ({
     children,
     style,
     ...props
 }: {
-    children: string
+    children: Element
     style?: StyleProp<TextStyle>
 } & TextProps) => {
     return (
@@ -220,32 +184,5 @@ export const UiExplainerCopy = ({
         >
             {children}
         </Text>
-    )
-}
-
-export const MonoTextBlock = ({
-    children,
-    style,
-    ...props
-}: {
-    children: string
-    style?: StyleProp<ViewStyle>
-}) => {
-    return (
-        <View
-            {...props}
-            style={[
-                style,
-                {
-                    padding: metrics.vertical,
-                    paddingHorizontal: metrics.horizontal,
-                    alignItems: 'center',
-                },
-            ]}
-        >
-            <UiExplainerCopy style={{ textAlign: 'center' }}>
-                {children}
-            </UiExplainerCopy>
-        </View>
     )
 }

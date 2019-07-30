@@ -3,10 +3,10 @@ import { StyleSheet, Animated, View } from 'react-native'
 import { Multiline } from '../../multiline'
 import { metrics } from 'src/theme/spacing'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { CAPIArticle, Collection, Issue, Front } from 'src/common'
 import { getRowHeightForSize, RowLayout } from '../helpers'
 import { ArticleNavigator } from '../../../screens/article-screen'
+import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     row: {
@@ -55,7 +55,6 @@ const RowWithChildren = ({
 }: {
     children: ReactNode
 } & RowPropTypes) => {
-    const { appearance } = useArticleAppearance()
     const height = useMemo(() => getRowHeightForSize(row.size), [row.size])
     return (
         <Animated.View
@@ -78,12 +77,7 @@ const RowWithChildren = ({
                 },
             ]}
         >
-            {index !== 0 ? (
-                <Multiline
-                    color={appearance.backgrounds.borderColor}
-                    count={2}
-                />
-            ) : null}
+            {index !== 0 ? <Multiline color={color.line} count={2} /> : null}
             {children}
         </Animated.View>
     )
@@ -142,8 +136,6 @@ const Row = ({
     articles: [CAPIArticle] | [CAPIArticle, CAPIArticle]
 } & NavigationPropTypes &
     RowPropTypes) => {
-    const { appearance } = useArticleAppearance()
-
     if (row.columns.length !== 2 || !articles[1]) {
         if (!articles[0]) return null
         return (
@@ -177,7 +169,7 @@ const Row = ({
                         styles.card,
                         styles.rightItem,
                         {
-                            borderColor: appearance.backgrounds.borderColor,
+                            borderColor: color.line,
                         },
                     ]}
                     path={{

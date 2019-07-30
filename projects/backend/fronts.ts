@@ -1,12 +1,5 @@
 import { s3fetch, s3Latest } from './s3'
-import {
-    Front,
-    Collection,
-    CAPIArticle,
-    Crossword,
-    Appearance,
-    cardLayouts,
-} from './common'
+import { Front, Collection, CAPIArticle, Appearance } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -23,10 +16,13 @@ import {
     PublishedIssue,
     PublishedCollection,
     PublishedFurtniture,
+    PublishedFront,
 } from './fronts/issue'
+import { getCrosswordArticleOverrides } from './utils/crossword'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
+    front: PublishedFront,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
@@ -34,7 +30,6 @@ export const parseCollection = async (
     ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
         attempt(getArticles(ids, 'printsent')),
         attempt(getArticles(ids, 'search')),
@@ -76,10 +71,8 @@ export const parseCollection = async (
                         article.path,
                         {
                             ...article,
+                            ...getCrosswordArticleOverrides(article),
                             key: article.path,
-                            headline,
-                            kicker,
-                            crossword: (article.crossword as unknown) as Crossword,
                         },
                     ]
 
@@ -114,7 +107,7 @@ export const parseCollection = async (
 
     return {
         key: collectionResponse.id,
-        cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
+        cards: createCardsFromAllArticlesInCollection(articles, front),
     }
 }
 
@@ -202,7 +195,7 @@ export const getFront = async (
     const collections = await Promise.all(
         front.collections
             .filter(collection => collection.items.length > 0)
-            .map(collection => parseCollection(collection)),
+            .map(collection => parseCollection(collection, front)),
     )
 
     collections.filter(hasFailed).forEach(failedCollection => {

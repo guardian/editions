@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, Animated } from 'react-native'
+import { View, Animated, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { useArticleAppearance } from 'src/theme/appearance'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { animationStyles, newsHeaderStyles } from '../styles'
@@ -11,6 +10,19 @@ import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import Quote from 'src/components/icons/Quote'
+import { getFont } from 'src/theme/typography'
+import { color } from 'src/theme/color'
+import { useArticle } from 'src/hooks/use-article'
+
+const styles = StyleSheet.create({
+    background: {
+        backgroundColor: color.palette.opinion.faded,
+    },
+    byline: {
+        fontFamily: getFont('titlepiece', 1).fontFamily,
+        width: '100%',
+    },
+})
 
 const OpinionHeader = ({
     byline,
@@ -18,11 +30,11 @@ const OpinionHeader = ({
     image,
     standfirst,
 }: ArticleHeaderProps) => {
-    const { appearance } = useArticleAppearance()
+    const [color] = useArticle()
     const navigationPosition = getNavigationPosition('article')
     return (
-        <>
-            <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
+        <View style={[styles.background]}>
+            <View style={[newsHeaderStyles.background]}>
                 {image ? (
                     <ArticleImage
                         style={{
@@ -33,18 +45,21 @@ const OpinionHeader = ({
                     />
                 ) : null}
                 <Animated.View style={animationStyles(navigationPosition)}>
-                    <ArticleHeadline type="news">
-                        <Quote />
+                    <ArticleHeadline>
+                        <Quote fill={color.main} />
                         {headline}
+                        <Text style={[{ color: color.main }, styles.byline]}>
+                            {'\n'}
+                            {byline}
+                        </Text>
                     </ArticleHeadline>
-                    <ArticleByline>{byline}</ArticleByline>
                 </Animated.View>
             </View>
             <Multiline count={4} />
-            <View style={[newsHeaderStyles.background, appearance.backgrounds]}>
+            <View style={[newsHeaderStyles.background]}>
                 <ArticleStandfirst {...{ standfirst, navigationPosition }} />
             </View>
-        </>
+        </View>
     )
 }
 

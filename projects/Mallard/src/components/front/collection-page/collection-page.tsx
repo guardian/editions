@@ -2,11 +2,10 @@ import React from 'react'
 import { StyleSheet, Animated, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { Row } from './row'
 import { CAPIArticle, Issue, Collection, Front } from 'src/common'
-import { PageLayout } from '../helpers'
+import { PageLayout, useCardBackgroundStyle } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import {
     splashPage,
@@ -19,6 +18,7 @@ import {
 } from '../layouts'
 import { PathToArticle } from 'src/screens/article-screen'
 import { ArticleNavigator } from '../../../screens/article-screen'
+import { useArticle } from 'src/hooks/use-article'
 
 const styles = StyleSheet.create({
     root: {
@@ -58,7 +58,7 @@ const CollectionPage = ({
     front,
     pageLayout,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
-    const { appearance } = useArticleAppearance()
+    const background = useCardBackgroundStyle()
     if (!articlesInCard.length) {
         return <FlexErrorMessage />
     }
@@ -88,7 +88,7 @@ const CollectionPage = ({
         }
     }
     return (
-        <View style={[styles.root, appearance.backgrounds]}>
+        <View style={[styles.root, background]}>
             {pageLayout.map((row, index) => (
                 <Row
                     index={index}

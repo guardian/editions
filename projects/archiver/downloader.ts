@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import fetch, { Response } from 'node-fetch'
 import {
     mediaPath,
     coloursPath,
@@ -9,9 +9,16 @@ import {
     Front,
     Image,
 } from './common'
-import { attempt, Attempt, hasSucceeded } from '../backend/utils/try'
+import {
+    attempt,
+    Attempt,
+    hasFailed,
+    withFailureMessage,
+} from '../backend/utils/try'
+import { PassThrough, Readable } from 'stream'
+import { ImageSize } from '../common/src'
 
-const URL =
+export const URL =
     process.env.backend !== undefined
         ? `https://${process.env.backend}`
         : 'http://localhost:3131/'
@@ -26,43 +33,68 @@ export const getIssue = async (id: string) => {
     return json as Issue
 }
 
-export const getFront = async (issue: string, id: string) => {
+export const getFront = async (
+    issue: string,
+    id: string,
+): Promise<Attempt<[string, Front]>> => {
     const path = `${URL}${frontPath(issue, id)}`
     const response = await fetch(path)
-    return (await response.json()) as Front
+    const maybeFront = await attempt(response.json() as Promise<Front>)
+    if (hasFailed(maybeFront))
+        return withFailureMessage(
+            maybeFront,
+            `Failed to download front ${id} from ${issue}`,
+        )
+    return [id, maybeFront]
+}
+
+export const getImages = async (
+    issue: string,
+    image: Image,
+): Promise<[string, Attempt<Readable>][]> => {
+    const paths = imageSizes.map(size =>
+        mediaPath(issue, size, image.source, image.path),
+    )
+
+    return Promise.all(
+        paths
+            .map((path): [string, Promise<Attempt<Response>>] => {
+                const url = `${URL}${path}`
+                const resp = attempt(fetch(url))
+                return [path, resp]
+            })
+            .map(
+                async ([path, promiseMaybeResponse]): Promise<
+                    [string, Attempt<Readable>]
+                > => {
+                    const maybeResponse = await promiseMaybeResponse
+
+                    if (hasFailed(maybeResponse)) return [path, maybeResponse]
+                    const stream = new PassThrough()
+
+                    maybeResponse.body.pipe(stream)
+
+                    return [path, stream]
+                },
+            ),
+    )
 }
 
 export const getImage = async (
     issue: string,
     image: Image,
-): Promise<[string, Attempt<Buffer>][]> => {
-    const paths = imageSizes
-        .filter(_ => _ !== 'sample') //don't keep the sample sized images no
-        .map(size => mediaPath(issue, size, image.source, image.path))
+    size: ImageSize,
+): Promise<[string, Attempt<Buffer>]> => {
+    const path = mediaPath(issue, size, image.source, image.path)
 
-    return Promise.all(
-        paths
-            .map((path): [string, Promise<Attempt<Buffer>>] => {
-                const url = `${URL}${path}`
-                const buffer = attempt(fetch(url).then(resp => resp.buffer()))
-                return [path, buffer]
-            })
-            .map(
-                async ([path, bufferPromise]): Promise<
-                    [string, Attempt<Buffer>]
-                > => {
-                    const resolved = await bufferPromise
-                    console.log(
-                        `${
-                            hasSucceeded(resolved)
-                                ? 'successfully fetched'
-                                : 'failed to download'
-                        }  ${path}`,
-                    )
-                    return [path, resolved]
-                },
-            ),
-    )
+    const url = `${URL}${path}`
+    const resp = attempt(fetch(url))
+
+    const maybeResponse = await resp
+
+    if (hasFailed(maybeResponse)) return [path, maybeResponse]
+
+    return [path, await maybeResponse.buffer()]
 }
 
 export const getColours = async (

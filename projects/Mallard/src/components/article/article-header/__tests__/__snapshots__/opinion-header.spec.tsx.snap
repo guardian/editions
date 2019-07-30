@@ -1,7 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OpinionHeader should show a full featured opinion header 1`] = `
-Array [
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#fef9f5",
+      },
+    ]
+  }
+>
   <View
     style={
       Array [
@@ -9,10 +17,6 @@ Array [
           "alignItems": "flex-start",
           "paddingBottom": 12,
           "paddingHorizontal": 12,
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
         },
       ]
     }
@@ -46,17 +50,11 @@ Array [
               "fontFamily": "GHGuardianHeadline-Regular",
               "fontSize": 28,
               "lineHeight": 30,
-              "marginTop": 4,
             },
-            Array [
-              Object {
-                "marginRight": 24,
-              },
-              Object {
-                "color": "#121212",
-              },
-              Object {},
-            ],
+            Object {
+              "marginRight": 24,
+              "marginTop": 3,
+            },
           ]
         }
       >
@@ -127,7 +125,7 @@ Array [
               fill={
                 Array [
                   0,
-                  4294934287,
+                  4279374354,
                 ]
               }
               fillOpacity={1}
@@ -170,37 +168,26 @@ Array [
           </RNSVGGroup>
         </RNSVGSvgView>
         Theresa May makes final speech as PM
-      </Text>
-      <Text
-        style={
-          Array [
-            Object {
-              "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
-              "fontSize": 17,
-              "lineHeight": 21,
-            },
-            Object {
-              "fontFamily": "GuardianTextEgyptian-Bold",
-            },
+        <Text
+          style={
             Array [
               Object {
                 "color": "#121212",
               },
               Object {
-                "marginBottom": 12,
+                "fontFamily": "GTGuardianTitlepiece-Bold",
+                "width": "100%",
               },
-              Object {
-                "color": "#121212",
-              },
-            ],
-          ]
-        }
-      >
-        Andrew Sparrow
+            ]
+          }
+        >
+          
+
+          Andrew Sparrow
+        </Text>
       </Text>
     </View>
-  </View>,
+  </View>
   <RNSVGSvgView
     bbHeight={16}
     bbWidth="100%"
@@ -456,7 +443,7 @@ Array [
         y={12}
       />
     </RNSVGGroup>
-  </RNSVGSvgView>,
+  </RNSVGSvgView>
   <View
     style={
       Array [
@@ -464,10 +451,6 @@ Array [
           "alignItems": "flex-start",
           "paddingBottom": 12,
           "paddingHorizontal": 12,
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
         },
       ]
     }
@@ -477,20 +460,11 @@ Array [
         style={
           Array [
             Object {
-              "marginBottom": 12,
-              "marginTop": 12,
-              "paddingTop": 3,
-              "width": "100%",
-            },
-            Object {
-              "backgroundColor": "#ffffff",
-              "borderColor": "#999999",
-            },
-            Object {
               "alignContent": "stretch",
               "alignItems": "stretch",
               "justifyContent": "flex-end",
             },
+            undefined,
           ]
         }
       >
@@ -503,12 +477,9 @@ Array [
                 "fontSize": 17,
                 "lineHeight": 21,
               },
-              Array [
-                Object {
-                  "color": "#121212",
-                },
-                Object {},
-              ],
+              Object {
+                "color": "#333333",
+              },
             ]
           }
         >
@@ -516,12 +487,20 @@ Array [
         </Text>
       </View>
     </View>
-  </View>,
-]
+  </View>
+</View>
 `;
 
 exports[`OpinionHeader should show opinion header without an image or a kicker 1`] = `
-Array [
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#fef9f5",
+      },
+    ]
+  }
+>
   <View
     style={
       Array [
@@ -529,10 +508,6 @@ Array [
           "alignItems": "flex-start",
           "paddingBottom": 12,
           "paddingHorizontal": 12,
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
         },
       ]
     }
@@ -547,17 +522,11 @@ Array [
               "fontFamily": "GHGuardianHeadline-Regular",
               "fontSize": 28,
               "lineHeight": 30,
-              "marginTop": 4,
             },
-            Array [
-              Object {
-                "marginRight": 24,
-              },
-              Object {
-                "color": "#121212",
-              },
-              Object {},
-            ],
+            Object {
+              "marginRight": 24,
+              "marginTop": 3,
+            },
           ]
         }
       >
@@ -628,7 +597,7 @@ Array [
               fill={
                 Array [
                   0,
-                  4294934287,
+                  4279374354,
                 ]
               }
               fillOpacity={1}
@@ -671,37 +640,26 @@ Array [
           </RNSVGGroup>
         </RNSVGSvgView>
         Theresa May makes final speech as PM
-      </Text>
-      <Text
-        style={
-          Array [
-            Object {
-              "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
-              "fontSize": 17,
-              "lineHeight": 21,
-            },
-            Object {
-              "fontFamily": "GuardianTextEgyptian-Bold",
-            },
+        <Text
+          style={
             Array [
               Object {
                 "color": "#121212",
               },
               Object {
-                "marginBottom": 12,
+                "fontFamily": "GTGuardianTitlepiece-Bold",
+                "width": "100%",
               },
-              Object {
-                "color": "#121212",
-              },
-            ],
-          ]
-        }
-      >
-        Andrew Sparrow
+            ]
+          }
+        >
+          
+
+          Andrew Sparrow
+        </Text>
       </Text>
     </View>
-  </View>,
+  </View>
   <RNSVGSvgView
     bbHeight={16}
     bbWidth="100%"
@@ -957,7 +915,7 @@ Array [
         y={12}
       />
     </RNSVGGroup>
-  </RNSVGSvgView>,
+  </RNSVGSvgView>
   <View
     style={
       Array [
@@ -965,10 +923,6 @@ Array [
           "alignItems": "flex-start",
           "paddingBottom": 12,
           "paddingHorizontal": 12,
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
         },
       ]
     }
@@ -978,20 +932,11 @@ Array [
         style={
           Array [
             Object {
-              "marginBottom": 12,
-              "marginTop": 12,
-              "paddingTop": 3,
-              "width": "100%",
-            },
-            Object {
-              "backgroundColor": "#ffffff",
-              "borderColor": "#999999",
-            },
-            Object {
               "alignContent": "stretch",
               "alignItems": "stretch",
               "justifyContent": "flex-end",
             },
+            undefined,
           ]
         }
       >
@@ -1004,12 +949,9 @@ Array [
                 "fontSize": 17,
                 "lineHeight": 21,
               },
-              Array [
-                Object {
-                  "color": "#121212",
-                },
-                Object {},
-              ],
+              Object {
+                "color": "#333333",
+              },
             ]
           }
         >
@@ -1017,6 +959,6 @@ Array [
         </Text>
       </View>
     </View>
-  </View>,
-]
+  </View>
+</View>
 `;
