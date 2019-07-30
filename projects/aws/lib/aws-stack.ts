@@ -51,12 +51,21 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        const toolsAccountParameter = new cdk.CfnParameter(
+        const cmsFrontsAccountIdParameter = new cdk.CfnParameter(
             this,
-            'tools-account-param',
+            'cmsFronts-account-id-param',
             {
                 type: 'String',
-                description: 'Account id for tools account.',
+                description: 'Account id for cmsFronts account.',
+            },
+        )
+
+        const publishedEditionsBucketnameParameter = new cdk.CfnParameter(
+            this,
+            'published-editions-bucket-name-param',
+            {
+                type: 'String',
+                description: 'Name for published editions bucket',
             },
         )
 
@@ -178,26 +187,16 @@ export class EditionsStack extends cdk.Stack {
 
         archiver.addToRolePolicy(archiverPolicy)
 
-        const invoactionRole = new iam.Role(this, 'arhiver-invocation-role', {
-            assumedBy: new iam.AccountPrincipal(
-                toolsAccountParameter.valueAsString,
-            ),
-            inlinePolicies: {
-                runPolicy: new iam.PolicyDocument({
-                    statements: [
-                        new iam.PolicyStatement({
-                            actions: ['lambda:InvokeFunction'],
-                            resources: [archiver.functionArn],
-                        }),
-                    ],
-                }),
+        new lambda.CfnPermission(
+            this,
+            'PublishedEditionsArchiverInvokePermission',
+            {
+                principal: 's3.amazonaws.com',
+                functionName: archiver.functionName,
+                action: 'lambda:InvokeFunction',
+                sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
+                sourceArn: `arn:aws:s3:::${publishedEditionsBucketnameParameter.valueAsString}`
             },
-        })
-
-        new CfnOutput(this, 'invocation-role-output', {
-            description: 'Role ARN for tools invocation',
-            value: invoactionRole.roleArn,
-            exportName: 'invocation-role',
-        })
+        )
     }
 }
