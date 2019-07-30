@@ -3,10 +3,10 @@ import { View, ViewStyle, StyleProp } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { RowSize } from '../helpers'
+import { RowSize, useKickerColorStyle } from '../helpers'
 import { getFont } from 'src/theme/typography'
+import { useArticle } from 'src/hooks/use-article'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
 
@@ -27,7 +27,9 @@ const styles = {
 }
 
 const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
-    const { appearance } = useArticleAppearance()
+    const [color, {}] = useArticle()
+    const kickerStyle = useKickerColorStyle()
+
     switch (textBlockAppearance) {
         case 'highlight':
             return {
@@ -40,7 +42,7 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
                 rootStyle: [
                     styles.root,
                     styles.rootWithHighlight,
-                    appearance.contrastCardBackgrounds,
+                    { backgroundColor: color.main },
                 ],
                 kickerStyle: styles.contrastText,
                 headlineStyle: styles.contrastText,
@@ -48,16 +50,8 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
         default:
             return {
                 rootStyle: styles.root,
-                kickerStyle: [
-                    appearance.text,
-                    appearance.kicker,
-                    appearance.cardKicker,
-                ],
-                headlineStyle: [
-                    styles.headline,
-                    appearance.text,
-                    appearance.headline,
-                ],
+                kickerStyle,
+                headlineStyle: [styles.headline],
             }
     }
 }

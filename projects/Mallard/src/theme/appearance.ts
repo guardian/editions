@@ -1,11 +1,5 @@
 import { color } from './color'
 import { createContext, useContext } from 'react'
-import merge from 'deepmerge'
-import { ColorFromPalette } from 'src/common'
-import { metrics } from './spacing'
-import { getColor } from 'src/helpers/transform'
-import { Appearance } from '../../../common/src'
-import { getFont } from './typography'
 
 /*
 Types
@@ -16,68 +10,6 @@ export interface AppAppearanceStyles {
     borderColor: string
     color: string
     dimColor: string
-}
-interface ArticleAppearanceStyles {
-    /*
-    You can spread this over any 'hero'
-    background in the article page
-    */
-    backgrounds: {
-        backgroundColor?: string
-        borderColor?: string
-    }
-    /*
-    Card bg overrides
-    */
-    cardBackgrounds: {
-        backgroundColor?: string
-    }
-    /*
-    Contrast-y cards
-    */
-    contrastCardBackgrounds: {
-        backgroundColor?: string
-    }
-    /*
-    Spread this over text and icons
-    */
-    text: {
-        color?: string
-    }
-    /*
-    Overrides for the headline
-    */
-    headline: {
-        color?: string
-        fontFamily?: string
-    }
-    /*
-    Overrides for the kicker
-    */
-    kicker: {
-        color?: string
-    }
-    /*
-    Overrides for the kicker in a card
-    */
-    cardKicker: {
-        color?: string
-    }
-    /*
-    Overrides for the standfirst
-    */
-    standfirst: {
-        color?: string
-    }
-    /*
-    Overrides for the byline
-    */
-    byline: {
-        color?: string
-    }
-    /*
-    Feel free to add more stuff as needed!!
-    */
 }
 
 export type AppAppearance = 'default' | 'primary' | 'tertiary' | 'settings'
@@ -114,157 +46,10 @@ export const appAppearances: { [key in AppAppearance]: AppAppearanceStyles } = {
 }
 
 /*
-COLOURS
-*/
-export const articleAppearances: {
-    [key in ColorFromPalette]: ArticleAppearanceStyles
-} = {
-    neutral: {
-        backgrounds: {
-            backgroundColor: color.background,
-            borderColor: color.line,
-        },
-        contrastCardBackgrounds: {
-            backgroundColor: color.palette.neutral[7],
-        },
-        cardBackgrounds: {},
-        text: {
-            color: color.text,
-        },
-        headline: {},
-        kicker: {},
-        cardKicker: {},
-        byline: {},
-        standfirst: {},
-    },
-    news: {
-        backgrounds: {},
-        cardBackgrounds: {},
-        contrastCardBackgrounds: {},
-        text: {},
-        headline: {
-            color: color.dimText,
-        },
-        kicker: {
-            color: color.palette.news.main,
-        },
-        cardKicker: {
-            color: color.text,
-        },
-        byline: {
-            color: color.palette.news.main,
-        },
-        standfirst: {
-            color: color.text,
-        },
-    },
-    opinion: {
-        backgrounds: {
-            backgroundColor: color.palette.opinion.faded,
-        },
-        cardBackgrounds: {},
-        contrastCardBackgrounds: {},
-        text: {
-            color: color.palette.opinion.bright,
-        },
-        headline: {
-            color: color.palette.neutral[7],
-            fontFamily: 'GHGuardianHeadline-Light',
-        },
-        kicker: {},
-        cardKicker: {
-            color: color.text,
-        },
-        byline: {},
-        standfirst: {
-            color: color.palette.neutral[7],
-        },
-    },
-    sport: {
-        backgrounds: {
-            backgroundColor: color.palette.sport.faded,
-        },
-        cardBackgrounds: {},
-        contrastCardBackgrounds: {
-            backgroundColor: color.palette.sport.main,
-        },
-        text: {
-            color: color.palette.sport.main,
-        },
-        headline: {
-            fontFamily: 'GHGuardianHeadline-Light',
-            color: color.text,
-        },
-        kicker: {},
-        cardKicker: {},
-        byline: {},
-        standfirst: { color: color.text },
-    },
-    culture: {
-        backgrounds: {
-            backgroundColor: color.palette.culture.faded,
-        },
-        cardBackgrounds: {},
-        contrastCardBackgrounds: {},
-        text: {
-            color: color.palette.culture.main,
-        },
-        headline: {
-            color: color.text,
-        },
-        kicker: {},
-        cardKicker: {},
-        byline: {},
-        standfirst: {
-            color: color.text,
-        },
-    },
-    lifestyle: {
-        backgrounds: {
-            backgroundColor: color.palette.lifestyle.faded,
-        },
-        cardBackgrounds: {},
-        contrastCardBackgrounds: {},
-        text: {},
-        headline: {
-            //fontFamily: 'GHGuardianHeadline-Bold',
-        },
-        kicker: {
-            color: color.palette.lifestyle.main,
-        },
-        cardKicker: {},
-        byline: {},
-        standfirst: {},
-    },
-}
-
-/*
   Exports
  */
 const AppAppearanceContext = createContext<AppAppearance>('default')
-const ArticleAppearanceContext = createContext<ColorFromPalette>('neutral')
 
 export const WithAppAppearance = AppAppearanceContext.Provider
 export const useAppAppearance = (): AppAppearanceStyles =>
     appAppearances[useContext(AppAppearanceContext)]
-
-export const WithArticleAppearance = ArticleAppearanceContext.Provider
-
-export const useArticleAppearance = (): {
-    name: ColorFromPalette
-    appearance: ArticleAppearanceStyles
-} => {
-    const name = useContext(ArticleAppearanceContext)
-    return {
-        name,
-        appearance: name
-            ? merge(articleAppearances.neutral, articleAppearances[name])
-            : articleAppearances.neutral,
-    }
-}
-
-export const getAppearancePillar = (app: Appearance) =>
-    app.type === 'custom' ? 'neutral' : app.name
-
-export const useArticleToneColor = () =>
-    getColor({ type: 'pillar', name: useArticleAppearance().name })

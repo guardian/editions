@@ -11,7 +11,7 @@ describe('ArticleKicker', () => {
     })
     it('should display a long read style kicker', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <ArticleKicker kicker="Sport" type="longRead" />,
+            <ArticleKicker kicker="Sport" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })

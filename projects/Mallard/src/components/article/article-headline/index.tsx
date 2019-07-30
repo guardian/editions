@@ -1,25 +1,14 @@
 import React from 'react'
 import { HeadlineText } from 'src/components/styled-text'
-import { useArticleAppearance } from 'src/theme/appearance'
-import { longReadHeaderStyles, newsHeaderStyles } from '../styles'
+import { newsHeaderStyles } from '../styles'
 
 export interface ArticleHeadlineProps {
     children: any
-    type: 'news' | 'longRead'
 }
 
-const ArticleHeadline = ({ children, type }: ArticleHeadlineProps) => {
-    const { appearance } = useArticleAppearance()
+const ArticleHeadline = ({ children }: ArticleHeadlineProps) => {
     return (
-        <HeadlineText
-            style={[
-                type === 'news'
-                    ? newsHeaderStyles.headline
-                    : longReadHeaderStyles.headline,
-                appearance.text,
-                appearance.headline,
-            ]}
-        >
+        <HeadlineText style={newsHeaderStyles.headline}>
             {children}
         </HeadlineText>
     )
