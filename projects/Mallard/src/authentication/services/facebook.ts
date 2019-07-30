@@ -32,13 +32,13 @@ const facebookAuthWithDeepRedirect = (
     validatorString: string,
 ): Promise<string> =>
     authWithDeepRedirect(getFacebookOAuthURL(validatorString), async url => {
-        invariant(url.startsWith(facebookRedirectURI), 'Login cancelled')
+        invariant(url.startsWith(facebookRedirectURI), 'Sign-in cancelled')
 
         const params = qs.parse(url.split('#')[1])
 
         invariant(
             params.state === validatorString,
-            'Login session expired, please try again',
+            'Sign-in session expired, please try again',
         )
 
         invariant(params.access_token, 'Something went wrong')

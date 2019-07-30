@@ -42,7 +42,7 @@ const authWithDeepRedirect = (
                 // otherwise, if they navigate back without authenticating, remove the listener and cancel the login
                 linkingEmitter.removeEventListener('url', linkHandler)
                 AppState.removeEventListener('change', appChangeHandler)
-                rej('Login cancelled')
+                rej('Sign-in cancelled')
             }
         }
 

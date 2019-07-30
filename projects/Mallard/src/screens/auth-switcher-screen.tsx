@@ -176,7 +176,7 @@ const AuthSwitcherScreen = ({
                             textAlign: 'center',
                         }}
                     >
-                        Log in
+                        Sign in
                     </TitlepieceText>
                     {error && (
                         <Text

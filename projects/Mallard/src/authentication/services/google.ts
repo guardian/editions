@@ -61,13 +61,13 @@ const getGoogleTokenFromCode = (code: string) =>
 const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
     getGoogleOAuthURL(validatorString).then(authUrl =>
         authWithDeepRedirect(authUrl, async url => {
-            invariant(url.startsWith(googleRedirectURI), 'Login cancelled')
+            invariant(url.startsWith(googleRedirectURI), 'Sign-in cancelled')
 
             const params = qs.parse(url.split('?')[1])
 
             invariant(
                 params.state === validatorString,
-                'Login session expired, please try again',
+                'Sign-in session expired, please try again',
             )
 
             invariant(params.code, 'Something went wrong')
