@@ -15,10 +15,11 @@ export const color = {
     */
     background: palette.neutral[100],
     text: palette.neutral[7],
-    dimBackground: palette.neutral[97],
+    dimBackground: palette.neutral[93],
     dimText: palette.neutral[20],
     darkBackground: palette.neutral[20],
     textOverDarkBackground: palette.neutral[100],
+    artboardBackground: palette.neutral[7],
     skeleton: palette.neutral[60],
 
     /*
@@ -31,7 +32,7 @@ export const color = {
     /*
     Border colors
     */
-    line: palette.neutral[86],
+    line: palette.neutral[60],
     lineOverPrimary: palette.brand.pastel,
 
     /*

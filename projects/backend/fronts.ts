@@ -1,12 +1,5 @@
 import { s3fetch, s3Latest } from './s3'
-import {
-    Front,
-    Collection,
-    CAPIArticle,
-    Crossword,
-    WithColor,
-    cardLayouts,
-} from './common'
+import { Front, Collection, CAPIArticle, Appearance } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -20,21 +13,23 @@ import { getArticles } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
 import { getImageFromURL } from './image'
 import {
-    IssueResponse,
-    CollectionResponse,
-    ItemResponseMeta,
+    PublishedIssue,
+    PublishedCollection,
+    PublishedFurtniture,
+    PublishedFront,
 } from './fronts/issue'
+import { getCrosswordArticleOverrides } from './utils/crossword'
 
 export const parseCollection = async (
-    collectionResponse: CollectionResponse,
+    collectionResponse: PublishedCollection,
+    front: PublishedFront,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
-        ItemResponseMeta,
-    ] => [itemResponse.internalPageCode, itemResponse.meta])
+        PublishedFurtniture,
+    ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
         attempt(getArticles(ids, 'printsent')),
         attempt(getArticles(ids, 'search')),
@@ -59,12 +54,16 @@ export const parseCollection = async (
             }
             return inResponse
         })
-        .map(([key, meta]): [string, CAPIArticle] => {
+        .map(([key, furniture]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const kicker = (meta && meta.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
-            const headline = (meta && meta.headline) || article.headline
+            const kicker =
+                (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
+            const headline =
+                (furniture && furniture.headlineOverride) || article.headline
             const imageOverride =
-                meta && meta.imageSrc && getImageFromURL(meta.imageSrc)
+                furniture &&
+                furniture.imageSrcOverride &&
+                getImageFromURL(furniture.imageSrcOverride.src)
 
             switch (article.type) {
                 case 'crossword':
@@ -72,10 +71,8 @@ export const parseCollection = async (
                         article.path,
                         {
                             ...article,
+                            ...getCrosswordArticleOverrides(article),
                             key: article.path,
-                            headline,
-                            kicker,
-                            crossword: (article.crossword as unknown) as Crossword,
                         },
                     ]
 
@@ -110,7 +107,7 @@ export const parseCollection = async (
 
     return {
         key: collectionResponse.id,
-        cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
+        cards: createCardsFromAllArticlesInCollection(articles, front),
     }
 }
 
@@ -119,26 +116,49 @@ const getDisplayName = (front: string) => {
     return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
-const getFrontColor = (front: string): WithColor => {
-    switch (front.split('/').pop() || front) {
+const getFrontColor = (front: string): Appearance => {
+    switch ((front.split('/').pop() || front).toLowerCase()) {
+        case 'special1':
+        case 'special2':
         case 'topstories':
-            return { color: 'neutral' }
-        case 'news':
-        case 'new':
-            return { color: 'news' }
-        case 'opinion':
+        case 'crossword':
+        case 'special 1':
+        case 'special 2':
+        case 'top stories':
+        case 'crosswords':
+            return { type: 'pillar', name: 'neutral' }
+        case 'uknewsguardian':
+        case 'uknewsobserver':
+        case 'worldnewsguardian':
+        case 'worldnewsobserver':
+        case 'uk news':
+        case 'world news':
+            return { type: 'pillar', name: 'news' }
         case 'journal':
-            return { color: 'opinion' }
-        case 'sport':
-            return { color: 'sport' }
-        case 'life':
-        case 'review':
+        case 'comment':
+        case 'opinion':
+            return { type: 'pillar', name: 'opinion' }
+        case 'arts':
+        case 'filmandmusic':
         case 'guide':
+        case 'newreview':
+        case 'books':
+        case 'culture':
+        case 'books':
+            return { type: 'pillar', name: 'culture' }
+        case 'sport':
+            return { type: 'pillar', name: 'sport' }
+        case 'features':
         case 'weekend':
+        case 'magazine':
         case 'food':
-            return { color: 'lifestyle' }
+        case 'observerfood':
+        case 'lifestyle':
+        case 'food':
+        case 'the fashion':
+            return { type: 'pillar', name: 'lifestyle' }
     }
-    return { color: 'neutral' }
+    return { type: 'pillar', name: 'neutral' }
 }
 
 export const getFront = async (
@@ -165,8 +185,8 @@ export const getFront = async (
 
     lastModifiedUpdater(resp.lastModified)
 
-    const tone = getFrontColor(id)
-    const issueResponse: IssueResponse = (await resp.json()) as IssueResponse
+    const appearance = getFrontColor(id)
+    const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
     const front = issueResponse.fronts.find(_ => _.name === id)
     if (!front) {
         return failure({ httpStatus: 404, error: new Error('Front not found') })
@@ -175,7 +195,7 @@ export const getFront = async (
     const collections = await Promise.all(
         front.collections
             .filter(collection => collection.items.length > 0)
-            .map(collection => parseCollection(collection)),
+            .map(collection => parseCollection(collection, front)),
     )
 
     collections.filter(hasFailed).forEach(failedCollection => {
@@ -188,7 +208,7 @@ export const getFront = async (
 
     return {
         ...front,
-        ...tone,
+        appearance,
         displayName: getDisplayName(id),
         collections: collections.filter(hasSucceeded),
         key: id,

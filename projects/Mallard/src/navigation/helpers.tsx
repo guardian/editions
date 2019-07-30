@@ -6,6 +6,7 @@ import {
     PathToArticle,
 } from 'src/screens/article-screen'
 import { routeNames } from '.'
+import { PathToIssue } from 'src/screens/issue-screen'
 
 type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
 
@@ -59,6 +60,8 @@ const getArticleNavigationProps = (
     const transitionProps = navigation.getParam('transitionProps')
     const articleNavigator = navigation.getParam('articleNavigator', {
         articles: [],
+        appearance: { type: 'pillar', name: 'neutral' },
+        frontName: '',
     })
 
     if (!path || !path.article || !path.collection || !path.issue) {
@@ -74,7 +77,21 @@ const getArticleNavigationProps = (
 }
 
 const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
-    navigation.navigate(routeNames.IssueList, {})
+    navigation.navigate(routeNames.IssueList, { from: navigation.state.params })
+}
+
+export interface IssueNavigationProps {
+    path?: PathToIssue
+}
+const navigateToIssue = (
+    navigation: NavigationScreenProp<{}>,
+    navigationProps: IssueNavigationProps,
+): void => {
+    navigation.navigate(routeNames.Issue, navigationProps)
+}
+
+const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
+    navigation.navigate(routeNames.Settings)
 }
 
 export {
@@ -82,4 +99,6 @@ export {
     navigateToArticle,
     navigateToIssueList,
     getArticleNavigationProps,
+    navigateToIssue,
+    navigateToSettings,
 }

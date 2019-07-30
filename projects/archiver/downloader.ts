@@ -9,9 +9,18 @@ import {
     Front,
     Image,
 } from './common'
-import { attempt, Attempt } from '../backend/utils/try'
+import {
+    attempt,
+    Attempt,
+    hasFailed,
+    withFailureMessage,
+} from '../backend/utils/try'
+import { ImageSize } from '../common/src'
 
-const URL = `https://${process.env.backend || 'localhost:3131/'}`
+export const URL =
+    process.env.backend !== undefined
+        ? `https://${process.env.backend}`
+        : 'http://localhost:3131/'
 
 export const getIssue = async (id: string) => {
     const path = `${URL}${issuePath(id)}`
@@ -23,33 +32,36 @@ export const getIssue = async (id: string) => {
     return json as Issue
 }
 
-export const getFront = async (issue: string, id: string) => {
+export const getFront = async (
+    issue: string,
+    id: string,
+): Promise<Attempt<[string, Front]>> => {
     const path = `${URL}${frontPath(issue, id)}`
     const response = await fetch(path)
-    return (await response.json()) as Front
+    const maybeFront = await attempt(response.json() as Promise<Front>)
+    if (hasFailed(maybeFront))
+        return withFailureMessage(
+            maybeFront,
+            `Failed to download front ${id} from ${issue}`,
+        )
+    return [id, maybeFront]
 }
 
 export const getImage = async (
     issue: string,
     image: Image,
-): Promise<[string, Attempt<Buffer>][]> => {
-    const paths = imageSizes
-        .filter(_ => _ !== 'sample') //don't keep the sample sized images no
-        .map(size => mediaPath(issue, size, image.source, image.path))
+    size: ImageSize,
+): Promise<[string, Attempt<Buffer>]> => {
+    const path = mediaPath(issue, size, image.source, image.path)
 
-    return Promise.all(
-        paths
-            .map((path): [string, Promise<Attempt<Buffer>>] => {
-                const url = `${URL}${path}`
-                const buffer = attempt(fetch(url).then(resp => resp.buffer()))
-                return [path, buffer]
-            })
-            .map(
-                async ([path, bufferPromise]): Promise<
-                    [string, Attempt<Buffer>]
-                > => [path, await bufferPromise],
-            ),
-    )
+    const url = `${URL}${path}`
+    const resp = attempt(fetch(url))
+
+    const maybeResponse = await resp
+
+    if (hasFailed(maybeResponse)) return [path, maybeResponse]
+
+    return [path, await maybeResponse.buffer()]
 }
 
 export const getColours = async (

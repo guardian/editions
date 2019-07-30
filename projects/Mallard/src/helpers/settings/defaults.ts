@@ -13,6 +13,10 @@ export const backends = [
         title: 'CODE',
         value: 'https://d2mztzjulnpyb8.cloudfront.net/',
     },
+    {
+        title: 'DEV',
+        value: 'http://localhost:3131/',
+    },
 ]
 
 export const defaultSettings: Settings = {
@@ -20,5 +24,5 @@ export const defaultSettings: Settings = {
     isUsingProdDevtools: false,
     hasOnboarded: false,
     gdprAllowPerformance: null,
-    gdprAllowTracking: null,
+    gdprAllowFunctionality: null,
 }

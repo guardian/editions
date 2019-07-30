@@ -153,7 +153,7 @@ const AuthSwitcherScreen = ({
             },
             onSuccess: onAuthenticated,
         })
-    }, []) // don't want to change on new deps as we only want this to run on mount
+    }, [onAuthenticated]) // don't want to change on new deps as we only want this to run on mount
 
     return (
         <LoginPage showSpinner={authStatus === AuthStatus.authenticating}>

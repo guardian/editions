@@ -8,9 +8,7 @@
             "type": "node",
             "name": "vscode-jest-tests",
             "request": "launch",
-            "args": [
-                "--runInBand"
-            ],
+            "args": ["--runInBand"],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
@@ -18,16 +16,17 @@
         },
         {
             "name": "ts-node",
-			"type": "node",
-			"request": "launch",
-			"args": ["${workspaceRoot}/index.ts"],
-			"runtimeArgs": ["-r", "ts-node/register"],
-			"cwd": "${workspaceRoot}",
-			"protocol": "inspector",
-			"internalConsoleOptions": "openOnSessionStart",
-			"env": {
-				"TS_NODE_IGNORE": "false"
-			}
+            "type": "node",
+            "request": "launch",
+            "args": ["${workspaceRoot}/local.ts"],
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "TS_NODE_IGNORE": "false",
+                "AWS_DEFAULT_PROFILE": "frontend"
+            }
         }
     ]
 }

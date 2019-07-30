@@ -1,30 +1,38 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, StyleProp, TextStyle, View, ViewStyle } from 'react-native'
 import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
 import { IssueTitleText } from '../styled-text'
+import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
 
 const splitStyles = StyleSheet.create({
-    container: { flexDirection: 'row', justifyContent: 'flex-end' },
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '100%',
+    },
     inner: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         flex: 0,
     },
 })
 
-const IssueRowSplit = ({
+const GridRowSplit = ({
     children,
+    proxy,
     style,
 }: {
     children: ReactNode
+    proxy?: ReactNode
     style?: StyleProp<
         Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
     >
 }) => {
-    const width = metrics.issueHeaderSplit()
+    const width = metrics.gridRowSplit()
     return (
         <View style={[splitStyles.container, style]}>
+            {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
             <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
     )
@@ -39,15 +47,18 @@ const styles = StyleSheet.create({
 export enum IssueTitleAppearance {
     default,
     ocean,
+    tertiary,
 }
 
 export interface IssueTitleProps {
     title: string
     subtitle?: string
+    style?: StyleProp<ViewStyle>
 }
 
 const appearances: {
     [key in IssueTitleAppearance]: {
+        title?: StyleProp<TextStyle>
         subtitle: StyleProp<TextStyle>
     }
 } = {
@@ -57,16 +68,26 @@ const appearances: {
     [IssueTitleAppearance.ocean]: StyleSheet.create({
         subtitle: { color: color.palette.sport.bright },
     }),
+    [IssueTitleAppearance.tertiary]: StyleSheet.create({
+        title: { color: color.palette.brand.main },
+        subtitle: {
+            color: color.palette.brand.main,
+            fontFamily: families.headline.regular,
+        },
+    }),
 }
 
 const IssueTitle = ({
     title,
     subtitle,
     appearance,
+    style,
 }: IssueTitleProps & { appearance: IssueTitleAppearance }) => (
-    <View>
-        <IssueTitleText style={styles.text}>{title}</IssueTitleText>
-        {subtitle && (
+    <View style={style}>
+        <IssueTitleText style={[styles.text, appearances[appearance].title]}>
+            {title}
+        </IssueTitleText>
+        {!!subtitle && (
             <IssueTitleText
                 style={[styles.text, appearances[appearance].subtitle]}
             >
@@ -79,4 +100,4 @@ IssueTitle.defaultProps = {
     appearance: IssueTitleAppearance.default,
 }
 
-export { IssueTitle, IssueRowSplit }
+export { IssueTitle, GridRowSplit }

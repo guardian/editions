@@ -1,24 +1,35 @@
-export interface IssueResponse {
+export interface PublishedIssue {
     id: string
     name: string
-    fronts: FrontResponse[]
+    fronts: PublishedFront[]
     issueDate: string
 }
-export interface FrontResponse {
+export interface PublishedFront {
     id: string
     name: string
-    collections: CollectionResponse[]
+    collections: PublishedCollection[]
 }
-export interface CollectionResponse {
+export interface PublishedCollection {
     id: string
-    items: ItemResponse[]
+    items: PublishedArticle[]
 }
-export interface ItemResponse {
+export interface PublishedArticle {
     internalPageCode: number
-    meta: ItemResponseMeta
+    furniture: PublishedFurtniture
 }
-export interface ItemResponseMeta {
+export interface PublishedImage {
+    height: number
+    width: number
+    src: string
+}
+export interface PublishedFurtniture {
     kicker?: string
-    headline?: string
-    imageSrc?: string
+    headlineOverride?: string
+    trailTextOverride?: string
+    bylineOverride?: string
+    showByline: boolean
+    showQuotedHeadline: boolean
+    mediaType: 'UseArticleTrail' | 'Hide' | 'Cutout' | 'Slideshow' | 'Image'
+    imageSrcOverride?: PublishedImage
+    slideshowImages?: PublishedImage[]
 }

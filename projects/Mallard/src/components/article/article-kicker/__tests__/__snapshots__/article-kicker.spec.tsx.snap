@@ -3,18 +3,12 @@
 exports[`ArticleKicker should display a default Kicker 1`] = `
 <View
   style={
-    Array [
-      Object {
-        "borderBottomWidth": 0.5,
-        "marginBottom": 3,
-        "paddingBottom": 6,
-        "width": "100%",
-      },
-      Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "#dcdcdc",
-      },
-    ]
+    Object {
+      "borderBottomWidth": 0.5,
+      "marginBottom": 3,
+      "paddingBottom": 18,
+      "width": "100%",
+    }
   }
 >
   <Text
@@ -23,11 +17,13 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
         Object {
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 19,
-          "lineHeight": 22,
-          "marginBottom": 1.5,
+          "fontSize": 18,
+          "lineHeight": 18,
         },
         Array [
+          Object {
+            "marginTop": 2.4,
+          },
           Object {
             "color": "#121212",
           },
@@ -43,18 +39,12 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
 exports[`ArticleKicker should display a long read style kicker 1`] = `
 <View
   style={
-    Array [
-      Object {
-        "borderBottomWidth": 0.5,
-        "marginBottom": 3,
-        "paddingBottom": 6,
-        "width": "100%",
-      },
-      Object {
-        "backgroundColor": "#ffffff",
-        "borderColor": "#dcdcdc",
-      },
-    ]
+    Object {
+      "borderBottomWidth": 0.5,
+      "marginBottom": 3,
+      "paddingBottom": 18,
+      "width": "100%",
+    }
   }
 >
   <Text
@@ -63,11 +53,13 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
         Object {
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 19,
-          "lineHeight": 22,
-          "marginBottom": 1.5,
+          "fontSize": 18,
+          "lineHeight": 18,
         },
         Array [
+          Object {
+            "marginTop": 2.4,
+          },
           Object {
             "color": "#121212",
           },
@@ -79,5 +71,3 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
   </Text>
 </View>
 `;
-
-exports[`ArticleKicker should return null if the kicker is "Opinion" 1`] = `null`;

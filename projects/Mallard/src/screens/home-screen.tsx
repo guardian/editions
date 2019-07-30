@@ -1,42 +1,133 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View, Alert } from 'react-native'
 import { List, BaseList } from 'src/components/lists/list'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
 import { ApiState } from './settings/api-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
 import { useFileList } from 'src/hooks/use-fs'
 import { unzipIssue } from 'src/helpers/files'
-import { color } from 'src/theme/color'
 import { Spinner } from 'src/components/spinner'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { useIssueSummary } from 'src/hooks/use-api'
 import { Button, ButtonAppearance } from 'src/components/button/button'
-import { Heading, Footer } from 'src/components/layout/ui/row'
-import { IssueRow } from 'src/components/layout/ui/issue-row'
-import { useInsets } from 'src/hooks/use-insets'
-import { Highlight } from 'src/components/highlight'
-import { IssueTitleText } from 'src/components/styled-text'
-import { IssueRowSplit } from 'src/components/issue'
+import { Heading } from 'src/components/layout/ui/row'
+import { IssueRow } from 'src/components/issue/issue-row'
+import { GridRowSplit } from 'src/components/issue/issue-title'
 import { ScrollContainer } from 'src/components/layout/ui/container'
+import { IssueHeader } from 'src/components/layout/header/header'
+import { navigateToIssue } from 'src/navigation/helpers'
+import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
+import { Issue, IssueSummary } from 'src/common'
+import { useSettings } from 'src/hooks/use-settings'
+import { navigateToSettings } from 'src/navigation/helpers'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 
-const SettingsLink = ({ onPress }: { onPress: () => void }) => (
-    <Highlight onPress={onPress}>
-        <View
-            style={{
-                padding: metrics.horizontal,
-                paddingVertical: metrics.vertical * 2,
-                backgroundColor: color.palette.highlight.main,
-                borderBottomColor: color.palette.neutral[100],
-                borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-        >
-            <IssueRowSplit>
-                <IssueTitleText>Settings</IssueTitleText>
-            </IssueRowSplit>
-        </View>
-    </Highlight>
+const HomeScreenHeader = withNavigation(
+    ({
+        issue,
+        navigation,
+        onReturn,
+    }: {
+        issue?: Issue['key']
+        onReturn: () => void
+        onSettings: () => void
+    } & NavigationInjectedProps) => {
+        const action = (
+            <Button icon="" alt="Return to issue" onPress={onReturn} />
+        )
+        const response = useIssueOrLatestResponse(issue)
+        const settings = (
+            <Button
+                icon={'\uE040'}
+                alt="Settings"
+                onPress={() => {
+                    navigateToSettings(navigation)
+                }}
+                appearance={ButtonAppearance.skeleton}
+            />
+        )
+        return response({
+            error: () => <IssueHeader leftAction={settings} action={action} />,
+            pending: () => (
+                <IssueHeader leftAction={settings} action={action} />
+            ),
+            success: issue => (
+                <IssueHeader
+                    leftAction={settings}
+                    issue={issue}
+                    accessibilityHint={'Return to issue'}
+                    onPress={onReturn}
+                    action={action}
+                />
+            ),
+        })
+    },
+)
+
+const IssueList = withNavigation(
+    ({
+        issueList,
+        navigation,
+    }: {
+        issueList: IssueSummary[]
+    } & NavigationInjectedProps) => {
+        const [{ isUsingProdDevtools }] = useSettings()
+        return (
+            <>
+                <BaseList
+                    style={{ paddingTop: 0 }}
+                    data={issueList}
+                    renderItem={({ item }) => (
+                        <IssueRow
+                            proxy={
+                                <Button
+                                    onPress={() => {
+                                        Alert.alert(
+                                            'Sorry, downloading is not supported yet',
+                                        )
+                                    }}
+                                    icon={'\uE077'}
+                                    alt={'Download'}
+                                    appearance={ButtonAppearance.skeleton}
+                                ></Button>
+                            }
+                            onPress={() => {
+                                navigateToIssue(navigation, {
+                                    path: {
+                                        issue: item.key,
+                                    },
+                                })
+                            }}
+                            issue={item}
+                        ></IssueRow>
+                    )}
+                />
+                {isUsingProdDevtools ? (
+                    <View
+                        style={{
+                            padding: metrics.horizontal,
+                            paddingVertical: metrics.vertical * 4,
+                        }}
+                    >
+                        <GridRowSplit>
+                            <Button
+                                appearance={ButtonAppearance.skeleton}
+                                onPress={() => {
+                                    navigateToIssue(navigation, {
+                                        path: undefined,
+                                    })
+                                }}
+                            >
+                                Go to latest
+                            </Button>
+                        </GridRowSplit>
+                    </View>
+                ) : null}
+            </>
+        )
+    },
 )
 
 export const HomeScreen = ({
@@ -45,73 +136,62 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const [files, { refreshIssues }] = useFileList()
-    const issueSummary = useIssueSummary()
-    const { top: paddingTop } = useInsets()
+    const { response: issueSummary, retry } = useIssueSummary()
+    const from = navigation.getParam('from', undefined)
+    const [{ isUsingProdDevtools }] = useSettings()
 
     return (
-        <WithAppAppearance value={'primary'}>
+        <WithAppAppearance value={'tertiary'}>
+            <NavigationEvents
+                onDidFocus={() => {
+                    retry()
+                }}
+            />
             <ScrollContainer>
-                <View style={{ paddingTop }}>
-                    <SettingsLink
-                        onPress={() => {
-                            navigation.navigate('Settings')
-                        }}
-                    />
-                </View>
+                <HomeScreenHeader
+                    issue={
+                        from && from.path && from.path.issue
+                            ? from.path.issue
+                            : undefined
+                    }
+                    onSettings={() => {
+                        navigation.navigate('Settings')
+                    }}
+                    onReturn={() => {
+                        navigateToIssue(navigation, {
+                            path: {
+                                issue:
+                                    from && from.path && from.path.issue
+                                        ? from.path.issue
+                                        : undefined,
+                            },
+                        })
+                    }}
+                />
                 {issueSummary({
-                    success: (issueList, { retry }) => (
+                    success: issueList => <IssueList issueList={issueList} />,
+                    error: ({ message }, stale, { retry }) => (
                         <>
-                            <BaseList
-                                data={issueList}
-                                renderItem={({ item }) => (
-                                    <IssueRow
-                                        onPress={() => {
-                                            navigation.navigate('Issue', {
-                                                issue: item.key,
-                                            })
-                                        }}
-                                        issue={item}
-                                    ></IssueRow>
-                                )}
+                            {stale ? <IssueList issueList={stale} /> : null}
+                            <FlexErrorMessage
+                                debugMessage={message}
+                                action={['Retry', retry]}
                             />
-                            <View
-                                style={{
-                                    padding: metrics.horizontal,
-                                    paddingVertical: metrics.vertical * 4,
-                                }}
-                            >
-                                <IssueRowSplit>
-                                    <Button
-                                        onPress={retry}
-                                        icon={''}
-                                        alt={'refresh'}
-                                        appearance={ButtonAppearance.skeleton}
-                                    ></Button>
-                                    <Button
-                                        appearance={ButtonAppearance.skeleton}
-                                        onPress={() => {
-                                            navigation.navigate('Issue', {
-                                                path: null,
-                                            })
-                                        }}
-                                    >
-                                        Go to latest
-                                    </Button>
-                                </IssueRowSplit>
-                            </View>
                         </>
                     ),
-                    error: ({ message }, { retry }) => (
-                        <FlexErrorMessage
-                            debugMessage={message}
-                            action={['Retry', retry]}
-                        />
-                    ),
-                    pending: () => (
-                        <FlexCenter>
-                            <Spinner></Spinner>
-                        </FlexCenter>
-                    ),
+                    pending: stale =>
+                        stale ? (
+                            <>
+                                <IssueList issueList={stale} />
+                                {isUsingProdDevtools ? (
+                                    <Spinner></Spinner>
+                                ) : null}
+                            </>
+                        ) : (
+                            <FlexCenter>
+                                <Spinner></Spinner>
+                            </FlexCenter>
+                        ),
                 })}
                 {files.length > 0 && (
                     <>

@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         height: '100%',
         backgroundColor: color.background,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        overflow: 'hidden',
     },
     flexGrow: {
         flexGrow: 1,
@@ -51,7 +54,6 @@ export const SlideCard = ({
             if (gestureState.dy > 10) {
                 blocked = true
             }
-            console.log(enabled)
             return enabled && blocked
         },
         onPanResponderTerminationRequest: () => false,

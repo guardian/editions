@@ -1,26 +1,32 @@
-import { cardLayouts } from './collection/card-layouts'
+export { cardLayouts } from './collection/card-layouts'
 
 interface WithKey {
     key: string
 }
 
-export type ColorFromPalette =
-    | 'news'
-    | 'opinion'
-    | 'sport'
-    | 'culture'
-    | 'lifestyle'
-    | 'neutral'
+export const articlePillars = [
+    'news',
+    'opinion',
+    'sport',
+    'culture',
+    'lifestyle',
+    'neutral',
+] as const
+export const articleTypes = ['article', 'opinion', 'longread'] as const
 
-interface WithCustomColor {
-    color: 'custom'
-    customColor: string
+export type PillarFromPalette = typeof articlePillars[number]
+export type ArticleType = typeof articleTypes[number]
+
+interface ColorAppearance {
+    type: 'custom'
+    color: string
 }
-interface WithPillar {
-    color: ColorFromPalette
+interface PillarAppearance {
+    type: 'pillar'
+    name: PillarFromPalette
 }
 
-export type WithColor = WithCustomColor | WithPillar
+export type Appearance = PillarAppearance | ColorAppearance
 
 export interface Card {
     layout: null
@@ -53,6 +59,7 @@ export interface Content extends WithKey {
     image?: Image
     standfirst?: string
     byline?: string
+    bylineImages?: { thumbnail?: Image; cutout?: Image }
 }
 export interface Article extends Content {
     type: 'article'
@@ -88,23 +95,23 @@ export interface Collection extends WithKey {
     cards: Card[]
 }
 
-export type Front = WithColor &
-    WithKey & {
-        collections: Collection[]
-        displayName?: string
-        canonical?: string
-        group?: string
-        isHidden?: boolean
-        isImageDisplayed?: boolean
-        imageHeight?: number
-        imageWidth?: number
-        imageUrl?: string
-        onPageDescription?: string
-        description?: string
-        title?: string
-        webTitle?: string
-        navSection?: string
-    }
+export type Front = WithKey & {
+    collections: Collection[]
+    displayName?: string
+    canonical?: string
+    group?: string
+    isHidden?: boolean
+    isImageDisplayed?: boolean
+    imageHeight?: number
+    imageWidth?: number
+    imageUrl?: string
+    onPageDescription?: string
+    description?: string
+    title?: string
+    webTitle?: string
+    navSection?: string
+    appearance: Appearance
+}
 
 export interface UnknownElement {
     id: 'unknown'
@@ -212,16 +219,21 @@ export type CollectionCardLayout = number[]
 export interface CollectionCardLayouts {
     [countOfArticles: number]: CollectionCardLayout
 }
-const issueDir = (issueId: string) => `${issueId}/issue`
+export interface CollectionCardLayoutsForFront {
+    default: CollectionCardLayouts
+    [frontName: string]: CollectionCardLayouts
+}
 
-const issuePath = (issueId: string) => `${issueDir(issueId)}`
+export const issueDir = (issueId: string) => `${issueId}`
+
+export const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-const frontPath = (issueId: string, frontId: string) =>
+export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
-const issueSummaryPath = () => 'issues'
-export const imageSizes = ['sample', 'phone', 'tablet'] as const
+export const issueSummaryPath = () => 'issues'
+export const imageSizes = ['phone', 'tablet'] as const
 export interface Image {
     source: string
     path: string
@@ -235,26 +247,17 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-export type ImageSize = typeof imageSizes[number]
+export type ImageSize = typeof imageSizes[number] | 'sample'
 
-const mediaPath = (
+export const mediaPath = (
     issue: string,
     size: ImageSize,
     source: string,
     path: string,
 ) => `${issueDir(issue)}/media/${size}/${source}/${path}`
 
-const coloursPath = (issue: string, source: string, path: string) =>
+export const coloursPath = (issue: string, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
-
-export {
-    issuePath,
-    mediaPath,
-    frontPath,
-    issueSummaryPath,
-    cardLayouts,
-    coloursPath,
-}

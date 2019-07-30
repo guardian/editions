@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, PixelRatio } from 'react-native'
 import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
@@ -7,13 +7,19 @@ import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
 import { fetchWeather } from 'src/helpers/fetch'
+import { GridRowSplit } from './issue/issue-title'
+import { color } from 'src/theme/color'
+import { getFont } from 'src/theme/typography'
+
+const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
     weatherContainer: {
         display: 'flex',
         flexDirection: 'row',
         width: 'auto',
-        height: 60,
+        marginBottom: 24,
+        height: 60 * PixelRatio.getFontScale(),
         paddingLeft: metrics.horizontal,
         paddingRight: metrics.horizontal,
     },
@@ -21,40 +27,35 @@ const styles = StyleSheet.create({
         flex: 2,
         height: 'auto',
         borderLeftWidth: 1,
-        borderLeftColor: '#BDBDBD',
+        borderLeftColor: color.line,
         borderStyle: 'solid',
-        borderColor: '#BDBDBD',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'flex-start',
-        paddingLeft: 10,
         paddingTop: 2,
+        paddingLeft: 4,
     },
     temperature: {
         color: '#E05E00',
-        fontSize: 13,
-        fontFamily: 'GuardianTextSans-Regular',
-        lineHeight: 13,
+        ...getFont('sans', 0.5),
     },
     dateTime: {
         color: '#000000',
-        fontSize: 13,
-        fontFamily: 'GuardianTextSans-Regular',
-        lineHeight: 13,
+        ...getFont('sans', 0.5),
     },
     locationNameContainer: {
-        flex: 7.5,
+        flex: 1,
         height: 60,
         flexDirection: 'row',
     },
     locationName: {
-        fontFamily: 'GuardianTextSans-Regular',
-        fontSize: 13,
+        ...getFont('sans', 0.5),
         color: '#000000',
         lineHeight: 35,
     },
     locationPinIcon: {
         fontFamily: 'GuardianIcons-Regular',
         fontSize: 30,
+        marginLeft: '-1%',
         color: '#ACACAC',
     },
     root: {
@@ -93,33 +94,52 @@ const Weather = () => {
         if (forecasts && forecasts.length >= 9) {
             return (
                 <View style={styles.weatherContainer}>
-                    <View style={styles.locationNameContainer}>
-                        <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
-                        <Text style={styles.locationName}>{'London'}</Text>
-                    </View>
-                    {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
-                    {[0, 2, 4, 6, 8].map(idx => {
-                        return (
-                            <View style={styles.forecastItem} key={idx}>
-                                <WeatherIcon
-                                    iconNumber={forecasts[idx].WeatherIcon}
-                                    fontSize={30}
-                                />
-                                <Text style={styles.temperature}>
-                                    {Math.round(
-                                        forecasts[idx].Temperature.Value,
-                                    ) +
-                                        ' ' +
-                                        forecasts[idx].Temperature.Unit}
+                    <GridRowSplit
+                        proxy={
+                            <View style={styles.locationNameContainer}>
+                                <Text style={styles.locationPinIcon}>
+                                    {'\uE01B'}
                                 </Text>
-                                <Text style={styles.dateTime}>
-                                    {Moment(forecasts[idx].DateTime).format(
-                                        'h a',
-                                    )}
+                                <Text style={styles.locationName}>
+                                    {'London'}
                                 </Text>
                             </View>
-                        )
-                    })}
+                        }
+                    >
+                        {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
+                        {[0, 2, 4, 6, 8].map(idx => {
+                            return (
+                                <View style={styles.forecastItem} key={idx}>
+                                    <WeatherIcon
+                                        iconNumber={forecasts[idx].WeatherIcon}
+                                        fontSize={30}
+                                    />
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode="clip"
+                                        style={styles.temperature}
+                                    >
+                                        {Math.round(
+                                            forecasts[idx].Temperature.Value,
+                                        ) +
+                                            ' ' +
+                                            forecasts[idx].Temperature.Unit}
+                                    </Text>
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode="clip"
+                                        style={styles.dateTime}
+                                    >
+                                        {Moment(forecasts[idx].DateTime).format(
+                                            `h${
+                                                narrowSpace /* Narrow space for iPhone 5 */
+                                            }a`,
+                                        )}
+                                    </Text>
+                                </View>
+                            )
+                        })}
+                    </GridRowSplit>
                 </View>
             )
         }
@@ -128,7 +148,7 @@ const Weather = () => {
     }
 
     return weatherResponse({
-        error: ({ message }) => <></>,
+        error: ({}) => <></>,
         pending: () => <></>,
         success: forecasts => renderWeather(forecasts),
     })

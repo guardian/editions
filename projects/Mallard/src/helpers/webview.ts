@@ -29,17 +29,16 @@ export const generateAssetsFontCss = (fontFamily: string) => {
 
 export const getBundleUri = (
     key: keyof typeof bundles,
-    use: 'auto' | 'dev' | 'prod' = 'auto',
+    use?: 'dev' | 'prod',
 ): string => {
     const uris = {
         dev: 'http://localhost:' + bundles[key].watchPort,
         prod:
-            'http://localhost:' +
             (Platform.OS === 'android' ? 'file:///android_asset/' : '') +
             bundles[key].key +
             '.bundle/index.html',
     }
-    if (use === 'auto') {
+    if (!use) {
         return __DEV__ ? uris.dev : uris.prod
     }
     return uris[use]

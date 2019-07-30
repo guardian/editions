@@ -4,13 +4,19 @@ import Vibrant from 'node-vibrant'
 
 const salt = process.env.IMAGE_SALT
 
-export const getImageFromURL = (url: string): Image => {
-    const parsed = new URL(url)
-    const path = parsed.pathname.slice(1) //remove leading slash
-    const host = parsed.hostname
-    const hostparts = host.split('.')
-    const source = hostparts[0]
-    return { source, path }
+export const getImageFromURL = (url: string): Image | undefined => {
+    try {
+        const parsed = new URL(url)
+        const path = parsed.pathname.slice(1) //remove leading slash
+        const host = parsed.hostname
+        const hostparts = host.split('.')
+        const source = hostparts[0]
+        return { source, path }
+    } catch (e) {
+        console.error(`Encountered error parsing ${url}`)
+        console.error(JSON.stringify(e))
+        return
+    }
 }
 
 const getSignature = (path: string) => {
@@ -20,13 +26,13 @@ const getSignature = (path: string) => {
 }
 
 const sizes: { [k in ImageSize]: number } = {
-    phone: 1000,
-    tablet: 1000,
+    phone: 1500,
+    tablet: 5555,
     sample: 200,
 }
 
 export const getImageURL = (image: Image, size: ImageSize) => {
-    const newPath = `${image.path}?q=25&dpr=2&w=${sizes[size]}`
+    const newPath = `${image.path}?q=85&dpr=2&w=${sizes[size]}`
     return `https://i.guim.co.uk/img/${
         image.source
     }/${newPath}&s=${getSignature(newPath)}`

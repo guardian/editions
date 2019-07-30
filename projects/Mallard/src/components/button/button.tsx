@@ -8,11 +8,13 @@ import {
     ViewStyle,
     TextStyle,
     Text,
+    PixelRatio,
 } from 'react-native'
 import { UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { AppAppearanceStyles, useAppAppearance } from 'src/theme/appearance'
+import { getFont } from 'src/theme/typography'
 
 export enum ButtonAppearance {
     default,
@@ -20,19 +22,31 @@ export enum ButtonAppearance {
     tomato,
     apricot,
     skeletonLight,
+    skeletonActive,
 }
+
+const height =
+    getFont('sans', 1).fontSize * PixelRatio.getFontScale() +
+    metrics.vertical * 2.5
 
 const styles = StyleSheet.create({
     background: {
         borderRadius: 999,
-        padding: metrics.horizontal * 2,
-        paddingVertical: metrics.vertical,
+        paddingHorizontal: metrics.horizontal * 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height,
+    },
+    text: {
+        flexShrink: 0,
+        ...getFont('sans', 1, 'bold'),
     },
     withIcon: {
         paddingHorizontal: 0,
         aspectRatio: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        width: height,
     },
 })
 
@@ -58,6 +72,14 @@ const getButtonAppearance = (
         },
         text: { color: appAppearance.color },
     }),
+    [ButtonAppearance.skeletonActive]: StyleSheet.create({
+        background: {
+            backgroundColor: appAppearance.color,
+            borderWidth: 1,
+            borderColor: appAppearance.color,
+        },
+        text: { color: appAppearance.cardBackgroundColor },
+    }),
     [ButtonAppearance.skeletonLight]: StyleSheet.create({
         background: {
             backgroundColor: undefined,
@@ -78,9 +100,7 @@ const getButtonAppearance = (
 
 const iconStyles = StyleSheet.create({
     root: {
-        fontFamily: 'GuardianIcons-Regular',
-        fontSize: 20,
-        lineHeight: 20,
+        ...getFont('icon', 1),
     },
 })
 
@@ -101,13 +121,13 @@ const Button = ({
     appearance,
     ...innards
 }: {
-    onPress: TouchableOpacityProps['onPress']
     style?: StyleProp<ViewStyle>
     buttonStyles?: StyleProp<ViewStyle>
     textStyles?: StyleProp<TextStyle>
     center?: boolean
     appearance: ButtonAppearance
-} & ({ children: string } | { icon: string; alt: string })) => {
+} & ({ children: string } | { icon: string; alt: string }) &
+    TouchableOpacityProps) => {
     const appStyles = useAppAppearance()
     const defaultButtonStyles = useMemo(() => getButtonAppearance(appStyles), [
         appStyles,
@@ -119,6 +139,7 @@ const Button = ({
             accessibilityHint={'icon' in innards ? innards.alt : undefined}
             onPress={onPress}
             style={style}
+            {...innards}
         >
             <View
                 style={[
@@ -130,10 +151,10 @@ const Button = ({
             >
                 {'children' in innards ? (
                     <UiBodyCopy
-                        weight="bold"
                         style={[
-                            defaultButtonStyles.text,
+                            styles.text,
                             { textAlign: center ? 'center' : 'auto' },
+                            defaultButtonStyles.text,
                             textStyles,
                         ]}
                     >

@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { s3fetch, s3Latest, s3List } from '../s3'
 import { Issue, notNull, IssueSummary } from '../common'
 import { lastModified, LastModifiedUpdater } from '../lastModified'
-import { IssueResponse } from '../fronts/issue'
+import { PublishedIssue } from '../fronts/issue'
 import { hasFailed, Attempt } from '../utils/try'
 
 const getIssue = async (
@@ -27,7 +27,7 @@ const getIssue = async (
     }
 
     lastModifiedUpdater(x.lastModified)
-    const data = (await x.json()) as IssueResponse
+    const data = (await x.json()) as PublishedIssue
     const fronts = data.fronts.map(_ => _.name)
     return {
         name: data.name,
@@ -55,7 +55,9 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
-const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
+export const getIssuesSummary = async (
+    pageSize = 7,
+): Promise<Attempt<IssueSummary[]>> => {
     const issueKeys = await s3List('daily-edition/')
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
@@ -70,13 +72,16 @@ const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
                 console.warn(`Issue with path ${key} is not a valid date`)
                 return null
             }
-            return {
-                key,
-                name: 'Daily Edition',
-                date: date.toISOString(),
-            }
+            return { key, date }
         })
         .filter(notNull)
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .map(({ key, date }) => ({
+            key,
+            name: 'Daily Edition',
+            date: date.toISOString(),
+        }))
+        .slice(0, pageSize)
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
