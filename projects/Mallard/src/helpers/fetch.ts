@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
 import {
@@ -10,7 +11,6 @@ import {
 } from './fetch/cached-or-promise'
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
-import { Alert, Platform } from 'react-native';
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -188,25 +188,35 @@ const fetchWeather = <T>(
     )
 }
 
-const fetchFromNotificationService = (deviceToken: {token: string, os: string}) => {
-    const registerDeviceUrl = `https://notifications.code.dev-guardianapis.com/device/register`;
-    const {token, os} = deviceToken;
+const fetchFromNotificationService = async (deviceToken: {
+    token: string
+}) => {
+    const registerDeviceUrl = await getSetting('notificationServiceRegister')
+    const { token } = deviceToken
     const options = {
         deviceToken: token,
-        platform: Platform.OS === "ios" ? "ios-edition" : "android-edition",
-        topics: [{
-            name: "newsstand",
-            type: "newsstand"
-        }]
+        platform: Platform.OS === 'ios' ? 'ios-edition' : 'android-edition',
+        topics: [
+            {
+                name: 'newsstand',
+                type: 'newsstand',
+            },
+        ],
     }
-    return fetch(registerDeviceUrl, {
+    return fetch(registerDeviceUrl as string, {
         method: 'post',
         body: JSON.stringify(options),
         headers: {
             'Content-Type': 'application/json',
-        }
-    }).then(response => Alert.alert(JSON.stringify(response)))
-    .catch(e => Alert.alert('didnt work'))
+        },
+    })
+        .then(response => console.log('Response', JSON.stringify(response)))
+        .catch(e => console.log('Error', JSON.stringify(e)))
 }
 
-export { fetchFromIssue, fetchFromApi, fetchWeather, fetchFromNotificationService }
+export {
+    fetchFromIssue,
+    fetchFromApi,
+    fetchWeather,
+    fetchFromNotificationService,
+}
