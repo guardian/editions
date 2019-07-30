@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCanViewEditionStatus } from 'src/hooks/use-sign-in-status'
-import { View, StyleSheet, PanResponder } from 'react-native'
+import { View, StyleSheet, PanResponder, Text } from 'react-native'
 import { NavigationEvents } from 'react-navigation'
 import { useForceUpdate } from 'src/hooks/use-force-update'
-import { ModalContext, ModalCardProps } from './modal'
+import { ModalContext } from './modal'
+import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
@@ -23,11 +24,11 @@ const overlayStyles = StyleSheet.create({
 const ModalOpener = ({
     children,
     forceOpen = false,
-    getModalProps,
+    renderModal,
 }: {
     children: React.ReactNode
     forceOpen?: boolean
-    getModalProps: (close: () => void) => ModalCardProps
+    renderModal: (close: () => void) => React.ReactNode
 }) => {
     const { open, close } = useContext(ModalContext)
 
@@ -37,19 +38,14 @@ const ModalOpener = ({
                 onStartShouldSetPanResponder: () => true,
                 onMoveShouldSetPanResponder: () => true,
                 onPanResponderMove: (_, gesture) => {
-                    gesture.dy < -10 && open(getModalProps(close))
+                    gesture.dy < -10 && open(renderModal)
                 },
             }),
-        [getModalProps, open, close],
+        [renderModal, open],
     )
 
     // ensure the modal is closed on unmount
-    useEffect(() => {
-        if (forceOpen) {
-            open(getModalProps(close))
-        }
-        return () => close()
-    }, [getModalProps, open, close, forceOpen])
+    useEffect(() => () => close(), [])
 
     return (
         <View style={overlayStyles.wrapper} {...swipeUpHandlers.panHandlers}>
@@ -81,32 +77,62 @@ const LoginOverlay = ({
                 canView: () => <>{children}</>,
                 cannotView: () => (
                     <ModalOpener
-                        forceOpen
-                        getModalProps={() => ({
-                            title: 'Invalid account',
-                            text: 'You need to upgrade your account',
-                            actions: [
-                                {
-                                    label: 'Login with another account',
-                                    onPress: onReLogin,
-                                },
-                                { label: 'Not now', onPress: onLoginDismiss },
-                            ],
-                        })}
+                        renderModal={close => (
+                            <OnboardingCard
+                                title="Subscription not found"
+                                appearance={CardAppearance.blue}
+                                mainActions={[
+                                    {
+                                        label: 'Sign-in with different account',
+                                        onPress: () => {
+                                            close()
+                                            onReLogin()
+                                        },
+                                    },
+                                    {
+                                        label: 'Close',
+                                        onPress: () => {
+                                            close()
+                                            onLoginDismiss()
+                                        },
+                                    },
+                                ]}
+                            >
+                                We were unable to find a subscription with that
+                                account
+                            </OnboardingCard>
+                        )}
                     >
                         {children}
                     </ModalOpener>
                 ),
                 notLoggedIn: () => (
                     <ModalOpener
-                        getModalProps={close => ({
-                            title: 'Log in',
-                            text: 'You need to log in',
-                            actions: [
-                                { label: 'Login', onPress: onLoginPress },
-                                { label: 'Not now', onPress: close },
-                            ],
-                        })}
+                        renderModal={close => (
+                            <OnboardingCard
+                                title="Already a subscriber?"
+                                subtitle="Sign in to continue with the app"
+                                appearance={CardAppearance.blue}
+                                mainActions={[
+                                    {
+                                        label: 'Continue',
+                                        onPress: () => {
+                                            close()
+                                            onLoginPress()
+                                        },
+                                    },
+                                    {
+                                        label: 'Close',
+                                        onPress: () => {
+                                            close()
+                                            onLoginDismiss()
+                                        },
+                                    },
+                                ]}
+                            >
+                                Not subscribed yet? Learn more ...
+                            </OnboardingCard>
+                        )}
                     >
                         {children}
                     </ModalOpener>

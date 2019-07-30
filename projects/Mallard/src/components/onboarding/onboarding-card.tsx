@@ -4,10 +4,12 @@ import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import { Button, ButtonAppearance } from '../button/button'
 
 export enum CardAppearance {
     tomato,
     apricot,
+    blue,
 }
 
 const styles = StyleSheet.create({
@@ -16,15 +18,18 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
-    squareText: {
+    title: {
         ...getFont('titlepiece', 2.5),
+    },
+    subtitle: {
+        ...getFont('titlepiece', 1.5),
     },
     explainer: {
         backgroundColor: color.background,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
-    subtitle: {
+    explainerTitle: {
         marginBottom: metrics.vertical * 2,
     },
 })
@@ -43,18 +48,26 @@ const appearances: {
         background: { backgroundColor: color.ui.apricot },
         text: { color: color.palette.neutral[100] },
     }),
+    [CardAppearance.blue]: StyleSheet.create({
+        background: { backgroundColor: '#5da8db' },
+        text: { color: color.primary },
+    }),
 }
 
 const OnboardingCard = ({
     children,
     title,
     subtitle,
+    mainActions,
+    explainerTitle,
     style,
     appearance,
 }: {
     children: string
     title: string
     subtitle?: string
+    mainActions?: { label: string; onPress: () => void }[]
+    explainerTitle?: string
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
 }) => (
@@ -62,19 +75,45 @@ const OnboardingCard = ({
         <View style={[styles.square, appearances[appearance].background]}>
             <TitlepieceText
                 accessibilityRole="header"
-                style={[styles.squareText, appearances[appearance].text]}
+                style={[styles.title, appearances[appearance].text]}
             >
                 {title}
             </TitlepieceText>
-        </View>
-        <View style={styles.explainer}>
             {subtitle && (
-                <TitlepieceText style={styles.subtitle}>
+                <TitlepieceText
+                    style={[styles.subtitle, appearances[appearance].text]}
+                >
                     {subtitle}
                 </TitlepieceText>
             )}
-            <UiExplainerCopy>{children}</UiExplainerCopy>
+            {mainActions && (
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                    {mainActions.map(({ label, onPress }) => (
+                        <Button
+                            style={{
+                                marginTop: 10,
+                                marginRight: 10,
+                            }}
+                            appearance={ButtonAppearance.light}
+                            key={label}
+                            onPress={onPress}
+                        >
+                            {label}
+                        </Button>
+                    ))}
+                </View>
+            )}
         </View>
+        {(explainerTitle || children) && (
+            <View style={styles.explainer}>
+                {explainerTitle && (
+                    <TitlepieceText style={styles.explainerTitle}>
+                        {explainerTitle}
+                    </TitlepieceText>
+                )}
+                {children && <UiExplainerCopy>{children}</UiExplainerCopy>}
+            </View>
+        )}
     </View>
 )
 OnboardingCard.defaultProps = {

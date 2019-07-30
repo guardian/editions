@@ -56,7 +56,7 @@ const tryAuth = async (
             return
         }
 
-        if (!canViewEdition(membershipData)) {
+        if (canViewEdition(membershipData)) {
             onSuccess()
             return
         }
