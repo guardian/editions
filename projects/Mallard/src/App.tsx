@@ -14,6 +14,7 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { prepFileSystem } from './helpers/files'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import AsyncStorage from '@react-native-community/async-storage'
+import { Modal } from './components/modal'
 
 useScreens()
 prepFileSystem()
@@ -44,7 +45,7 @@ const loadNavigationState = async () => {
     }
 }
 
-const rootNavigationProps = __DEV__ && {
+const rootNavigationProps = null && {
     persistNavigationState,
     loadNavigationState,
 }
@@ -77,9 +78,11 @@ export default class App extends React.Component<{}, {}> {
                             barStyle="light-content"
                             backgroundColor="#041f4a"
                         />
-                        <View style={styles.appContainer}>
-                            <RootNavigator {...rootNavigationProps} />
-                        </View>
+                        <Modal>
+                            <View style={styles.appContainer}>
+                                <RootNavigator {...rootNavigationProps} />
+                            </View>
+                        </Modal>
                     </SettingsProvider>
                 </FileSystemProvider>
             </ErrorBoundary>

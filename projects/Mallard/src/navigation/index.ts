@@ -179,35 +179,44 @@ const OnboardingStack = createStackNavigator(
 )
 
 const RootNavigator = createAppContainer(
-    createSwitchNavigator(
+    createStackNavigator(
         {
-            Main: ({
-                navigation,
-            }: {
-                navigation: NavigationScreenProp<{}>
-            }) => {
-                const [settings] = useSettings()
-                useEffect(() => {
-                    if (shouldShowOnboarding(settings)) {
-                        navigation.navigate('Onboarding')
-                    } else {
-                        navigation.navigate('App')
-                    }
-                })
-                return null
-            },
-            App: AppStack,
-            Onboarding: OnboardingStack,
+            Authed: createSwitchNavigator(
+                {
+                    Main: ({
+                        navigation,
+                    }: {
+                        navigation: NavigationScreenProp<{}>
+                    }) => {
+                        const [settings] = useSettings()
+                        useEffect(() => {
+                            if (shouldShowOnboarding(settings)) {
+                                navigation.navigate('Onboarding')
+                            } else {
+                                navigation.navigate('App')
+                            }
+                        })
+                        return null
+                    },
+                    App: AppStack,
+                    Onboarding: OnboardingStack,
+                },
+                {
+                    initialRouteName: 'Main',
+                },
+            ),
             [routeNames.SignIn]: mapNavigationToProps(
                 AuthSwitcherScreen,
                 nav => ({
-                    onAuthenticated: () => nav.navigate('App'),
-                    onDismiss: () => nav.navigate('App'),
+                    onAuthenticated: () => nav.goBack(),
+                    onDismiss: () => nav.goBack(),
                 }),
             ),
         },
         {
-            initialRouteName: 'Main',
+            initialRouteName: 'Authed',
+            mode: 'modal',
+            headerMode: 'none',
         },
     ),
 )

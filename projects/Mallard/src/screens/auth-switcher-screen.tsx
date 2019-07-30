@@ -35,7 +35,6 @@ const useRandomState = () =>
     )[0]
 
 const tryAuth = async (
-    authPromise: Promise<unknown>,
     {
         onStart = () => {},
         onSuccess,
@@ -45,6 +44,7 @@ const tryAuth = async (
         onSuccess: () => void
         onError: (err: string) => void
     },
+    authPromise: Promise<unknown> = Promise.resolve(null),
 ) => {
     try {
         await authPromise
@@ -133,21 +133,24 @@ const AuthSwitcherScreen = ({
 
     const handleAuthClick = async (authPromise: Promise<string>) => {
         setError(null)
-        tryAuth(authPromise, {
-            onStart: () => {
-                setAuthStatus(AuthStatus.authenticating)
+        tryAuth(
+            {
+                onStart: () => {
+                    setAuthStatus(AuthStatus.authenticating)
+                },
+                onError: err => {
+                    setAuthStatus(AuthStatus.unauthed)
+                    setError(err)
+                },
+                onSuccess: onAuthenticated,
             },
-            onError: err => {
-                setAuthStatus(AuthStatus.unauthed)
-                setError(err)
-            },
-            onSuccess: onAuthenticated,
-        })
+            authPromise,
+        )
     }
 
     // try to auth on mount
     useEffect(() => {
-        tryAuth(fetchMembershipDataForKeychainUser(), {
+        tryAuth({
             onError: () => {
                 setAuthStatus(AuthStatus.unauthed)
             },
@@ -156,7 +159,12 @@ const AuthSwitcherScreen = ({
     }, [onAuthenticated]) // don't want to change on new deps as we only want this to run on mount
 
     return (
-        <LoginPage showSpinner={authStatus === AuthStatus.authenticating}>
+        <LoginPage
+            showSpinner={
+                authStatus === AuthStatus.authenticating ||
+                authStatus === AuthStatus.pending
+            }
+        >
             {authStatus !== AuthStatus.pending ? (
                 <>
                     <TitlepieceText

@@ -17,8 +17,11 @@ import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { resetCredentials } from 'src/authentication/keychain'
-import { useSignInStatus, SignInStatus } from 'src/hooks/use-sign-in-status'
+import { resetCredentials } from 'src/authentication/storage'
+import {
+    useCanViewEditionStatus,
+    useIsSignedIn,
+} from 'src/hooks/use-sign-in-status'
 import { routeNames } from 'src/navigation'
 import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
@@ -127,29 +130,34 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
-    const status = useSignInStatus()
+    const handler = useIsSignedIn()
 
-    const signInListItems =
-        status === SignInStatus.pending
-            ? []
-            : [
-                  {
-                      key: `Sign ${
-                          status === SignInStatus.signedIn ? 'out' : 'in'
-                      }`,
-                      title: `Sign ${
-                          status === SignInStatus.signedIn ? 'out' : 'in'
-                      }`,
-                      data: {
-                          onPress: async () => {
-                              if (status === SignInStatus.signedIn) {
-                                  await resetCredentials()
-                              }
-                              navigation.navigate(routeNames.SignIn)
-                          },
-                      },
-                  },
-              ]
+    const signInListItems = handler({
+        pending: () => [],
+        signedIn: () => [
+            {
+                key: `Sign out`,
+                title: `Sign out`,
+                data: {
+                    onPress: async () => {
+                        await resetCredentials()
+                        navigation.navigate(routeNames.SignIn)
+                    },
+                },
+            },
+        ],
+        signedOut: () => [
+            {
+                key: `Sign out`,
+                title: `Sign out`,
+                data: {
+                    onPress: () => {
+                        navigation.navigate(routeNames.SignIn)
+                    },
+                },
+            },
+        ],
+    })
 
     return (
         <WithAppAppearance value={'settings'}>

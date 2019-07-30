@@ -1,9 +1,9 @@
 import {
     membershipAccessTokenKeychain,
     userAccessTokenKeychain,
-} from './keychain'
+} from './storage'
 import {
-    fetchMembershipData,
+    fetchMembershipDataAndCache,
     MembersDataAPIResponse,
 } from 'src/services/membership-service'
 import {
@@ -60,7 +60,7 @@ const fetchMembershipDataForKeychainUser = async (
     /* mocks for testing */
     membershipTokenStore = membershipAccessTokenKeychain,
     userTokenStore = userAccessTokenKeychain,
-    fetchMembershipDataImpl = fetchMembershipData,
+    fetchMembershipDataImpl = fetchMembershipDataAndCache,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
 ): Promise<MembersDataAPIResponse | null> => {
     const membershipToken = await membershipTokenStore.get()

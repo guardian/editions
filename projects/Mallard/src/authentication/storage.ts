@@ -1,5 +1,6 @@
 import * as Keychain from 'react-native-keychain'
 import { ID_API_URL, MEMBERS_DATA_API_URL } from './constants'
+import { currentMembershipDataCache } from 'src/services/membership-service'
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -19,13 +20,14 @@ const membershipAccessTokenKeychain = createServiceTokenStore(
 )
 
 /**
- * Removes all the relevent keychain entries that mark a user as logged in
+ * Removes all the relevent keychain, storage entries that mark a user as logged in
  * and returns a boolean indicating whether all these operations succeeded
  */
 const resetCredentials = (): Promise<boolean> =>
     Promise.all([
         userAccessTokenKeychain.reset(),
         membershipAccessTokenKeychain.reset(),
+        currentMembershipDataCache.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
