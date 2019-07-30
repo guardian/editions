@@ -14,6 +14,7 @@ import {
 import { unnest } from 'ramda'
 import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
+import { generateIndex } from './summary'
 
 const fetch = async (id: string): Promise<void> => {
     console.log(`Attempting to upload ${id} to ${bucket}`)
@@ -98,13 +99,27 @@ const compress = async (id: string) => {
     )
     console.log('Media zips uploaded.')
 }
+const summary = async () => {
+    const index = await attempt(generateIndex())
+    if (hasFailed(index)) {
+        console.error('Could not fetch index')
+        return
+    }
+    await upload('issues', index)
+    return
+}
 
 export const run = async (id: string): Promise<void> => {
     await fetch(id)
+    await summary()
     await compress(id)
 }
 //When run in AWS
-export const handler: Handler<{ id?: string }, void> = async event => {
+export const handler: Handler<
+    { id?: string; index?: boolean },
+    void
+> = async event => {
+    if (event.index) return summary()
     const id = event.id
     if (!(id && typeof id === 'string')) throw new Error('Nope')
     return run(id)
