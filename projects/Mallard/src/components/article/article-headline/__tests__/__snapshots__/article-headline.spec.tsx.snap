@@ -11,13 +11,10 @@ exports[`ArticleHeadline should show a long read headling 1`] = `
         "fontSize": 28,
         "lineHeight": 30,
       },
-      Array [
-        Object {},
-        Object {
-          "color": "#121212",
-        },
-        Object {},
-      ],
+      Object {
+        "marginRight": 24,
+        "marginTop": 3,
+      },
     ]
   }
 >
@@ -36,16 +33,10 @@ exports[`ArticleHeadline should show a news headling 1`] = `
         "fontSize": 28,
         "lineHeight": 30,
       },
-      Array [
-        Object {
-          "marginRight": 24,
-          "marginTop": 3,
-        },
-        Object {
-          "color": "#121212",
-        },
-        Object {},
-      ],
+      Object {
+        "marginRight": 24,
+        "marginTop": 3,
+      },
     ]
   }
 >

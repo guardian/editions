@@ -6,20 +6,11 @@ exports[`ArticleStandfirst should be able to asborb an injected style 1`] = `
     style={
       Array [
         Object {
-          "marginBottom": 12,
-          "marginTop": 12,
-          "paddingTop": 3,
-          "width": "100%",
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
-        },
-        Object {
           "alignContent": "stretch",
           "alignItems": "stretch",
           "justifyContent": "flex-end",
         },
+        undefined,
       ]
     }
   >
@@ -32,12 +23,9 @@ exports[`ArticleStandfirst should be able to asborb an injected style 1`] = `
             "fontSize": 17,
             "lineHeight": 21,
           },
-          Array [
-            Object {
-              "color": "#121212",
-            },
-            Object {},
-          ],
+          Object {
+            "color": "#333333",
+          },
         ]
       }
     >
@@ -53,20 +41,11 @@ exports[`ArticleStandfirst should display a default Standfirst 1`] = `
     style={
       Array [
         Object {
-          "marginBottom": 12,
-          "marginTop": 12,
-          "paddingTop": 3,
-          "width": "100%",
-        },
-        Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#999999",
-        },
-        Object {
           "alignContent": "stretch",
           "alignItems": "stretch",
           "justifyContent": "flex-end",
         },
+        undefined,
       ]
     }
   >
@@ -79,12 +58,9 @@ exports[`ArticleStandfirst should display a default Standfirst 1`] = `
             "fontSize": 17,
             "lineHeight": 21,
           },
-          Array [
-            Object {
-              "color": "#121212",
-            },
-            Object {},
-          ],
+          Object {
+            "color": "#333333",
+          },
         ]
       }
     >
