@@ -40,9 +40,9 @@ const NewsHeader = ({
                 />
             ) : null}
 
-            {kicker ? <ArticleKicker kicker={kicker} type="news" /> : null}
+            {kicker ? <ArticleKicker kicker={kicker} /> : null}
             <Animated.View style={animationStyles(navigationPosition)}>
-                <ArticleHeadline type="news">{headline}</ArticleHeadline>
+                <ArticleHeadline>{headline}</ArticleHeadline>
             </Animated.View>
             <ArticleStandfirst
                 style={styles.bylineBackground}
