@@ -1,15 +1,16 @@
 import React from 'react'
-import { View, Animated, Alert, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
-import { animationStyles, newsHeaderStyles } from '../styles'
+import { newsHeaderStyles } from '../styles'
 import { ArticleKicker } from '../article-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { ArticleMultiline } from '../article-multiline'
+import { getFader } from 'src/components/layout/animators/fader'
 
 const styles = StyleSheet.create({
     bylineBackground: {
@@ -20,25 +21,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleFader = ({
-    delay,
-    children,
-}: {
-    delay: number
-    children: Element
-}) => {
-    const navigationPosition = getNavigationPosition('article')
-    return (
-        <Animated.View
-            style={[
-                animationStyles(navigationPosition, delay),
-                { width: '100%' },
-            ]}
-        >
-            {children}
-        </Animated.View>
-    )
-}
+const ArticleFader = getFader('article')
 
 const NewsHeader = ({
     byline,

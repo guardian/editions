@@ -14,8 +14,8 @@ import {
     withNavigation,
     NavigationInjectedProps,
     NavigationEvents,
+    AnimatedValue,
 } from 'react-navigation'
-import { Highlight } from '../../highlight'
 
 import { CAPIArticle } from 'src/common'
 import {
@@ -35,7 +35,6 @@ import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
     setScreenPositionFromView,
-    getNavigationPosition,
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
@@ -70,6 +69,26 @@ const tappableStyles = StyleSheet.create({
     },
 })
 
+/*
+To help smooth out the transition
+we fade the card contents out on tap
+and then back in when the view regains focus
+*/
+const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
+    direction === 'in'
+        ? Animated.timing(opacity, {
+              duration: 250,
+              delay: 250,
+              toValue: 1,
+              easing: Easing.linear,
+              useNativeDriver: true,
+          }).start()
+        : Animated.timing(opacity, {
+              duration: 250,
+              toValue: 0,
+              useNativeDriver: true,
+          }).start()
+
 const ItemTappable = withNavigation(
     ({
         children,
@@ -78,7 +97,7 @@ const ItemTappable = withNavigation(
         article,
         path,
         navigation,
-        hasPadding,
+        hasPadding = true,
     }: {
         children: ReactNode
         hasPadding?: boolean
@@ -89,10 +108,10 @@ const ItemTappable = withNavigation(
         return (
             <Animated.View
                 style={[style, { opacity }]}
-                ref={(view: Animated.View) => {
+                ref={(view: any) => {
                     if (view) tappableRef.current = view._component as View
                 }}
-                onLayout={ev => {
+                onLayout={(ev: any) => {
                     setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
                     tappableRef.current &&
                         setScreenPositionFromView(
@@ -110,13 +129,7 @@ const ItemTappable = withNavigation(
             >
                 <NavigationEvents
                     onWillFocus={() => {
-                        Animated.timing(opacity, {
-                            duration: 250,
-                            delay: 250,
-                            toValue: 1,
-                            easing: Easing.linear,
-                            useNativeDriver: true,
-                        }).start()
+                        fade(opacity, 'in')
                     }}
                 />
 
@@ -129,11 +142,7 @@ const ItemTappable = withNavigation(
                             startAtHeightFromFrontsItem:
                                 height / getScaleForArticle(width),
                         }
-                        Animated.timing(opacity, {
-                            duration: 2,
-                            toValue: 0,
-                            useNativeDriver: true,
-                        }).start()
+                        fade(opacity, 'out')
                         navigateToArticle(navigation, {
                             path,
                             transitionProps,
@@ -156,9 +165,6 @@ const ItemTappable = withNavigation(
         )
     },
 )
-ItemTappable.defaultProps = {
-    hasPadding: true,
-}
 
 /*
 COVER ITEM

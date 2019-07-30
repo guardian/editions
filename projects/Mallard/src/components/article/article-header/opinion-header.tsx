@@ -1,18 +1,20 @@
 import React from 'react'
-import { View, Animated, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
-import { animationStyles, newsHeaderStyles } from '../styles'
+import { newsHeaderStyles } from '../styles'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
 import { Multiline } from '../../multiline'
-import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import Quote from 'src/components/icons/Quote'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
+import { getFader } from 'src/components/layout/animators/fader'
+
+const ArticleFader = getFader('article')
 
 const styles = StyleSheet.create({
     background: {
@@ -36,15 +38,17 @@ const OpinionHeader = ({
         <View style={[styles.background]}>
             <View style={[newsHeaderStyles.background]}>
                 {image ? (
-                    <ArticleImage
-                        style={{
-                            aspectRatio: 1.5,
-                            marginBottom: metrics.vertical / 4,
-                        }}
-                        image={image}
-                    />
+                    <ArticleFader delay={1}>
+                        <ArticleImage
+                            style={{
+                                aspectRatio: 1.5,
+                                marginBottom: metrics.vertical / 4,
+                            }}
+                            image={image}
+                        />
+                    </ArticleFader>
                 ) : null}
-                <Animated.View style={animationStyles(navigationPosition)}>
+                <ArticleFader delay={2}>
                     <ArticleHeadline>
                         <Quote fill={color.main} />
                         {headline}
@@ -53,12 +57,16 @@ const OpinionHeader = ({
                             {byline}
                         </Text>
                     </ArticleHeadline>
-                </Animated.View>
+                </ArticleFader>
             </View>
-            <Multiline count={4} />
-            <View style={[newsHeaderStyles.background]}>
-                <ArticleStandfirst {...{ standfirst, navigationPosition }} />
-            </View>
+            <ArticleFader delay={3}>
+                <Multiline count={4} />
+                <View style={[newsHeaderStyles.background]}>
+                    <ArticleStandfirst
+                        {...{ standfirst, navigationPosition }}
+                    />
+                </View>
+            </ArticleFader>
         </View>
     )
 }

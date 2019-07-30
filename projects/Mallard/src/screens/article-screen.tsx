@@ -16,14 +16,14 @@ import {
     Issue,
     PillarFromPalette,
 } from 'src/common'
-import { Dimensions, Animated, View, Text, StyleSheet } from 'react-native'
+import { Dimensions, Animated, View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
 import { PathToArticle } from './article-screen'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
-import { ClipFromTop } from 'src/components/layout/clipFromTop/clipFromTop'
+import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { useSettings } from 'src/hooks/use-settings'
 import { Button } from 'src/components/button/button'
 import { getNavigationPosition } from 'src/helpers/positions'
