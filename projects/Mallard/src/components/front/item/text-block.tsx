@@ -83,12 +83,13 @@ const TextBlock = ({
                 style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
             >
                 {kicker}
+                <HeadlineCardText
+                    style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
+                >
+                    {' '}
+                    {headline}
+                </HeadlineCardText>
             </HeadlineKickerText>
-            <HeadlineCardText
-                style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
-            >
-                {headline}
-            </HeadlineCardText>
         </View>
     )
 }

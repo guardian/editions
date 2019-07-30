@@ -119,6 +119,6 @@ export const useCardBackgroundStyle = () => {
 }
 
 export const useKickerColorStyle = () => {
-    const [color, { pillar }] = useArticle()
-    return pillar !== 'news' ? { color: color.main } : {}
+    const [color] = useArticle()
+    return { color: color.main }
 }

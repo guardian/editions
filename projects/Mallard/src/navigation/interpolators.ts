@@ -69,6 +69,7 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+    const isOpen = sceneProps.position.__getValue() === 1
 
     setNavigationPosition('article', [position, sceneIndex])
 
@@ -89,10 +90,15 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     subtly blend the actual article page
     and its card so it's a bit less jarring
     */
-    const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
-        outputRange: [0, 0.95, 1],
-    })
+    const opacity = isOpen
+        ? position.interpolate({
+              inputRange: [sceneIndex - 1, sceneIndex - 0.8, sceneIndex],
+              outputRange: [0, 0, 1],
+          })
+        : position.interpolate({
+              inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
+              outputRange: [0, 0.95, 1],
+          })
 
     /*
     we need to scale the article's X to

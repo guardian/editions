@@ -1,7 +1,19 @@
-import React, { ReactNode, useRef } from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
+import React, { ReactNode, useRef, useState } from 'react'
+import {
+    View,
+    StyleSheet,
+    StyleProp,
+    ViewStyle,
+    Image,
+    Animated,
+    Easing,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { withNavigation, NavigationInjectedProps } from 'react-navigation'
+import {
+    withNavigation,
+    NavigationInjectedProps,
+    NavigationEvents,
+} from 'react-navigation'
 import { Highlight } from '../../highlight'
 
 import { CAPIArticle } from 'src/common'
@@ -22,6 +34,7 @@ import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
     setScreenPositionFromView,
+    getNavigationPosition,
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
@@ -71,11 +84,13 @@ const ItemTappable = withNavigation(
     } & TappablePropTypes &
         NavigationInjectedProps) => {
         const tappableRef = useRef<View>()
-
+        const [opacity] = useState(() => new Animated.Value(1))
         return (
-            <View
-                style={style}
-                ref={(view: View) => (tappableRef.current = view)}
+            <Animated.View
+                style={[style, { opacity }]}
+                ref={(view: Animated.View) => {
+                    if (view) tappableRef.current = view._component as View
+                }}
                 onLayout={ev => {
                     setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
                     tappableRef.current &&
@@ -92,6 +107,17 @@ const ItemTappable = withNavigation(
                         )
                 }}
             >
+                <NavigationEvents
+                    onWillFocus={payload => {
+                        Animated.timing(opacity, {
+                            duration: 250,
+                            toValue: 1,
+                            easing: Easing.linear,
+                            useNativeDriver: true,
+                        }).start()
+                    }}
+                />
+
                 <Highlight
                     onPress={() => {
                         const { width, height } = getScreenPositionOfItem(
@@ -101,6 +127,11 @@ const ItemTappable = withNavigation(
                             startAtHeightFromFrontsItem:
                                 height / getScaleForArticle(width),
                         }
+                        Animated.timing(opacity, {
+                            duration: 2,
+                            toValue: 0,
+                            useNativeDriver: true,
+                        }).start()
                         navigateToArticle(navigation, {
                             path,
                             transitionProps,
@@ -119,7 +150,7 @@ const ItemTappable = withNavigation(
                         {children}
                     </View>
                 </Highlight>
-            </View>
+            </Animated.View>
         )
     },
 )
