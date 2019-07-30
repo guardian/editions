@@ -63,10 +63,11 @@ export const longReadHeaderStyles: StyleSheet.NamedStyles<
 
 export const animationStyles = (
     navigationPosition: NavigationPosition | undefined,
+    delay: number = 1,
 ) =>
     navigationPosition && {
         opacity: navigationPosition.position.interpolate({
-            inputRange: [0.4, 1],
-            outputRange: [0, 1],
+            inputRange: [0.4 + 0.2 / delay, 0.7, 1],
+            outputRange: [0, 1, 1],
         }),
     }

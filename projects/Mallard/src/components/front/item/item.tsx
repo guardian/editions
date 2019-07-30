@@ -7,6 +7,7 @@ import {
     Image,
     Animated,
     Easing,
+    TouchableWithoutFeedback,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import {
@@ -108,9 +109,10 @@ const ItemTappable = withNavigation(
                 }}
             >
                 <NavigationEvents
-                    onWillFocus={payload => {
+                    onWillFocus={() => {
                         Animated.timing(opacity, {
                             duration: 250,
+                            delay: 250,
                             toValue: 1,
                             easing: Easing.linear,
                             useNativeDriver: true,
@@ -118,7 +120,7 @@ const ItemTappable = withNavigation(
                     }}
                 />
 
-                <Highlight
+                <TouchableWithoutFeedback
                     onPress={() => {
                         const { width, height } = getScreenPositionOfItem(
                             article.key,
@@ -149,7 +151,7 @@ const ItemTappable = withNavigation(
                     >
                         {children}
                     </View>
-                </Highlight>
+                </TouchableWithoutFeedback>
             </Animated.View>
         )
     },

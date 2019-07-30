@@ -20,6 +20,26 @@ const styles = StyleSheet.create({
     },
 })
 
+const ArticleFader = ({
+    delay,
+    children,
+}: {
+    delay: number
+    children: Element
+}) => {
+    const navigationPosition = getNavigationPosition('article')
+    return (
+        <Animated.View
+            style={[
+                animationStyles(navigationPosition, delay),
+                { width: '100%' },
+            ]}
+        >
+            {children}
+        </Animated.View>
+    )
+}
+
 const NewsHeader = ({
     byline,
     headline,
@@ -31,27 +51,37 @@ const NewsHeader = ({
     return (
         <View style={[newsHeaderStyles.background]}>
             {image ? (
-                <ArticleImage
-                    style={{
-                        aspectRatio: 1.5,
-                        marginBottom: metrics.vertical / 4,
-                    }}
-                    image={image}
-                />
+                <ArticleFader delay={1}>
+                    <ArticleImage
+                        style={{
+                            aspectRatio: 1.5,
+                            marginBottom: metrics.vertical / 4,
+                        }}
+                        image={image}
+                    />
+                </ArticleFader>
             ) : null}
 
-            {kicker ? <ArticleKicker kicker={kicker} /> : null}
-            <Animated.View style={animationStyles(navigationPosition)}>
+            {kicker ? (
+                <ArticleFader delay={2}>
+                    <ArticleKicker kicker={kicker} />
+                </ArticleFader>
+            ) : null}
+            <ArticleFader delay={3}>
                 <ArticleHeadline>{headline}</ArticleHeadline>
-            </Animated.View>
-            <ArticleStandfirst
-                style={styles.bylineBackground}
-                {...{ byline, standfirst, navigationPosition }}
-            />
-            <ArticleMultiline />
-            <ArticleByline style={newsHeaderStyles.byline}>
-                {byline}
-            </ArticleByline>
+            </ArticleFader>
+            <ArticleFader delay={4}>
+                <ArticleStandfirst
+                    style={styles.bylineBackground}
+                    {...{ byline, standfirst, navigationPosition }}
+                />
+                <ArticleMultiline />
+            </ArticleFader>
+            <ArticleFader delay={5}>
+                <ArticleByline style={newsHeaderStyles.byline}>
+                    {byline}
+                </ArticleByline>
+            </ArticleFader>
         </View>
     )
 }
