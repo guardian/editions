@@ -2,7 +2,7 @@ import {
     CAPIArticle,
     Card,
     FrontCardsForArticleCount,
-    getCardAppearanceInfo,
+    getCardAppearanceInfoAndOverrides,
     getCardsForFront,
 } from '../common'
 import { fromPairs } from 'ramda'
@@ -36,16 +36,20 @@ export const createCardsFromAllArticlesInCollection = (
         cards: Card[]
     }>(
         ({ itemsSoFar, cards }, current) => {
-            const { appearance, fits } = getCardAppearanceInfo(current)
+            const { appearance, fits } = getCardAppearanceInfoAndOverrides(
+                current,
+                articles.slice(itemsSoFar).map(([, a]) => a),
+            )
+            const articlesSlice = fromPairs(
+                articles.slice(itemsSoFar, itemsSoFar + fits),
+            )
             return {
                 itemsSoFar: itemsSoFar + fits,
                 cards: [
                     ...cards,
                     {
                         appearance,
-                        articles: fromPairs(
-                            articles.slice(itemsSoFar, itemsSoFar + fits),
-                        ),
+                        articles: articlesSlice,
                     },
                 ],
             }
