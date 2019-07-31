@@ -23,7 +23,6 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
     style={
       Array [
         Object {
-          "backgroundColor": "rgba(0,0,0,.25)",
           "width": "100%",
         },
         Object {
@@ -41,23 +40,14 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
       Array [
         Object {
           "backgroundColor": "#121212",
-          "marginEnd": 24,
-          "padding": 12,
-          "paddingVertical": 6,
+          "marginEnd": 28,
+          "padding": 14,
+          "paddingVertical": 5,
         },
       ]
     }
   >
-    <View
-      style={
-        Object {
-          "borderBottomWidth": 0.5,
-          "marginBottom": 3,
-          "paddingBottom": 18,
-          "width": "100%",
-        }
-      }
-    >
+    <View>
       <Text
         style={
           Array [
@@ -84,7 +74,7 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
             "flexShrink": 0,
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
-            "lineHeight": 30,
+            "lineHeight": 32,
           },
           Object {
             "color": "#ffffff",
@@ -100,9 +90,9 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
       Array [
         Object {
           "backgroundColor": "#121212",
-          "marginEnd": 24,
-          "padding": 12,
-          "paddingVertical": 6,
+          "marginEnd": 28,
+          "padding": 14,
+          "paddingVertical": 5,
         },
       ]
     }
@@ -390,6 +380,9 @@ exports[`LongReadHeader should show a full featured long read header 1`] = `
             "lineHeight": 21,
           },
           Array [
+            Object {
+              "paddingBottom": 10,
+            },
             Object {
               "color": "#121212",
             },
@@ -425,9 +418,9 @@ exports[`LongReadHeader should show long read header without an image or a kicke
       Array [
         Object {
           "backgroundColor": "#121212",
-          "marginEnd": 24,
-          "padding": 12,
-          "paddingVertical": 6,
+          "marginEnd": 28,
+          "padding": 14,
+          "paddingVertical": 5,
         },
       ]
     }
@@ -440,7 +433,7 @@ exports[`LongReadHeader should show long read header without an image or a kicke
             "flexShrink": 0,
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
-            "lineHeight": 30,
+            "lineHeight": 32,
           },
           Object {
             "color": "#ffffff",
@@ -456,9 +449,9 @@ exports[`LongReadHeader should show long read header without an image or a kicke
       Array [
         Object {
           "backgroundColor": "#121212",
-          "marginEnd": 24,
-          "padding": 12,
-          "paddingVertical": 6,
+          "marginEnd": 28,
+          "padding": 14,
+          "paddingVertical": 5,
         },
       ]
     }
@@ -746,6 +739,9 @@ exports[`LongReadHeader should show long read header without an image or a kicke
             "lineHeight": 21,
           },
           Array [
+            Object {
+              "paddingBottom": 10,
+            },
             Object {
               "color": "#121212",
             },

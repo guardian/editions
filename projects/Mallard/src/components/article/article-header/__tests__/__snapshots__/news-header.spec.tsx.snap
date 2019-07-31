@@ -6,37 +6,410 @@ exports[`NewsHeader should show a full featured news header 1`] = `
     Array [
       Object {
         "alignItems": "flex-start",
-        "paddingBottom": 12,
-        "paddingHorizontal": 12,
+        "paddingBottom": 10,
+        "paddingHorizontal": 7,
       },
     ]
   }
 >
-  <Image
-    source={
-      Object {
-        "uri": "https://d2cf1ljtg904cv.cloudfront.net/issue/media/phone/media/path/to/image.png",
-      }
-    }
-    style={
-      Array [
-        Object {
-          "backgroundColor": "rgba(0,0,0,.25)",
-          "width": "100%",
-        },
-        Object {
-          "aspectRatio": 1.5,
-          "marginBottom": 3,
-        },
-      ]
-    }
-  />
   <View
     style={
       Object {
-        "borderBottomWidth": 0.5,
-        "marginBottom": 3,
-        "paddingBottom": 18,
+        "width": "100%",
+      }
+    }
+  >
+    <Image
+      source={
+        Object {
+          "uri": "https://d2cf1ljtg904cv.cloudfront.net/issue/media/phone/media/path/to/image.png",
+        }
+      }
+      style={
+        Array [
+          Object {
+            "width": "100%",
+          },
+          Object {
+            "aspectRatio": 1.5,
+            "marginBottom": 2.5,
+          },
+        ]
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "borderBottomWidth": 1,
+          "borderColor": "#dcdcdc",
+          "marginTop": 5,
+          "paddingBottom": 20,
+          "width": "100%",
+        }
+      }
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "flexShrink": 0,
+              "fontFamily": "GTGuardianTitlepiece-Bold",
+              "fontSize": 18,
+              "lineHeight": 18,
+            },
+            Object {
+              "color": "#121212",
+            },
+          ]
+        }
+      >
+        News
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#121212",
+            "flexShrink": 0,
+            "fontFamily": "GHGuardianHeadline-Regular",
+            "fontSize": 28,
+            "lineHeight": 32,
+          },
+          Array [
+            Object {
+              "marginRight": 28,
+              "marginTop": 5,
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      Theresa May makes final speech as PM
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignContent": "stretch",
+            "alignItems": "stretch",
+            "justifyContent": "flex-end",
+          },
+          Object {
+            "marginBottom": 10,
+            "marginTop": 10,
+            "paddingTop": 2.5,
+            "width": "100%",
+          },
+        ]
+      }
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "flexShrink": 0,
+              "fontFamily": "GuardianTextEgyptian-Reg",
+              "fontSize": 17,
+              "lineHeight": 21,
+            },
+            Array [
+              Object {
+                "color": "#333333",
+              },
+              undefined,
+            ],
+          ]
+        }
+      >
+        Rolling coverage of the day’s political developments as they happen
+      </Text>
+    </View>
+    <RNSVGSvgView
+      bbHeight={16}
+      bbWidth="100%"
+      fill="none"
+      height={16}
+      style={
+        Array [
+          Object {
+            "backgroundColor": "transparent",
+            "borderWidth": 0,
+          },
+          undefined,
+          null,
+          Object {
+            "flex": 0,
+            "height": 16,
+            "width": "100%",
+          },
+        ]
+      }
+      width="100%"
+    >
+      <RNSVGGroup
+        fill={null}
+        fillOpacity={1}
+        fillRule={1}
+        font={Object {}}
+        matrix={
+          Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ]
+        }
+        opacity={1}
+        originX={0}
+        originY={0}
+        propList={
+          Array [
+            "fill",
+          ]
+        }
+        rotation={0}
+        scaleX={1}
+        scaleY={1}
+        skewX={0}
+        skewY={0}
+        stroke={null}
+        strokeDasharray={null}
+        strokeDashoffset={null}
+        strokeLinecap={0}
+        strokeLinejoin={0}
+        strokeMiterlimit={4}
+        strokeOpacity={1}
+        strokeWidth={1}
+        vectorEffect={0}
+        x={0}
+        y={0}
+      >
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={0}
+        />
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={4}
+        />
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={8}
+        />
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={12}
+        />
+      </RNSVGGroup>
+    </RNSVGSvgView>
+  </View>
+  <View
+    style={
+      Object {
         "width": "100%",
       }
     }
@@ -46,360 +419,27 @@ exports[`NewsHeader should show a full featured news header 1`] = `
         Array [
           Object {
             "flexShrink": 0,
-            "fontFamily": "GTGuardianTitlepiece-Bold",
-            "fontSize": 18,
-            "lineHeight": 18,
+            "fontFamily": "GuardianTextEgyptian-Bold",
+            "fontSize": 17,
+            "lineHeight": 21,
           },
           Array [
             Object {
-              "marginTop": 2.4,
+              "paddingBottom": 10,
             },
             Object {
               "color": "#121212",
+            },
+            Object {
+              "marginBottom": 10,
             },
           ],
         ]
       }
     >
-      News
+      Andrew Sparrow
     </Text>
   </View>
-  <View>
-    <Text
-      style={
-        Array [
-          Object {
-            "color": "#121212",
-            "flexShrink": 0,
-            "fontFamily": "GHGuardianHeadline-Regular",
-            "fontSize": 28,
-            "lineHeight": 30,
-          },
-          Object {
-            "marginRight": 24,
-            "marginTop": 3,
-          },
-        ]
-      }
-    >
-      Theresa May makes final speech as PM
-    </Text>
-  </View>
-  <View>
-    <View
-      style={
-        Array [
-          Object {
-            "alignContent": "stretch",
-            "alignItems": "stretch",
-            "justifyContent": "flex-end",
-          },
-          Object {
-            "marginBottom": 12,
-            "marginTop": 12,
-            "paddingTop": 3,
-            "width": "100%",
-          },
-        ]
-      }
-    >
-      <Text
-        style={
-          Array [
-            Object {
-              "flexShrink": 0,
-              "fontFamily": "GuardianTextEgyptian-Reg",
-              "fontSize": 17,
-              "lineHeight": 21,
-            },
-            Object {
-              "color": "#333333",
-            },
-          ]
-        }
-      >
-        Rolling coverage of the day’s political developments as they happen
-      </Text>
-    </View>
-  </View>
-  <RNSVGSvgView
-    bbHeight={16}
-    bbWidth="100%"
-    fill="none"
-    height={16}
-    style={
-      Array [
-        Object {
-          "backgroundColor": "transparent",
-          "borderWidth": 0,
-        },
-        undefined,
-        null,
-        Object {
-          "flex": 0,
-          "height": 16,
-          "width": "100%",
-        },
-      ]
-    }
-    width="100%"
-  >
-    <RNSVGGroup
-      fill={null}
-      fillOpacity={1}
-      fillRule={1}
-      font={Object {}}
-      matrix={
-        Array [
-          1,
-          0,
-          0,
-          1,
-          0,
-          0,
-        ]
-      }
-      opacity={1}
-      originX={0}
-      originY={0}
-      propList={
-        Array [
-          "fill",
-        ]
-      }
-      rotation={0}
-      scaleX={1}
-      scaleY={1}
-      skewX={0}
-      skewY={0}
-      stroke={null}
-      strokeDasharray={null}
-      strokeDashoffset={null}
-      strokeLinecap={0}
-      strokeLinejoin={0}
-      strokeMiterlimit={4}
-      strokeOpacity={1}
-      strokeWidth={1}
-      vectorEffect={0}
-      x={0}
-      y={0}
-    >
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={0}
-      />
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={4}
-      />
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={8}
-      />
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={12}
-      />
-    </RNSVGGroup>
-  </RNSVGSvgView>
-  <Text
-    style={
-      Array [
-        Object {
-          "flexShrink": 0,
-          "fontFamily": "GuardianTextEgyptian-Bold",
-          "fontSize": 17,
-          "lineHeight": 21,
-        },
-        Array [
-          Object {
-            "color": "#121212",
-          },
-          Object {
-            "marginBottom": 12,
-          },
-        ],
-      ]
-    }
-  >
-    Andrew Sparrow
-  </Text>
 </View>
 `;
 
@@ -409,13 +449,19 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
     Array [
       Object {
         "alignItems": "flex-start",
-        "paddingBottom": 12,
-        "paddingHorizontal": 12,
+        "paddingBottom": 10,
+        "paddingHorizontal": 7,
       },
     ]
   }
 >
-  <View>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
     <Text
       style={
         Array [
@@ -424,19 +470,28 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
             "flexShrink": 0,
             "fontFamily": "GHGuardianHeadline-Regular",
             "fontSize": 28,
-            "lineHeight": 30,
+            "lineHeight": 32,
           },
-          Object {
-            "marginRight": 24,
-            "marginTop": 3,
-          },
+          Array [
+            Object {
+              "marginRight": 28,
+              "marginTop": 5,
+            },
+            undefined,
+          ],
         ]
       }
     >
       Theresa May makes final speech as PM
     </Text>
   </View>
-  <View>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
     <View
       style={
         Array [
@@ -446,9 +501,9 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
             "justifyContent": "flex-end",
           },
           Object {
-            "marginBottom": 12,
-            "marginTop": 12,
-            "paddingTop": 3,
+            "marginBottom": 10,
+            "marginTop": 10,
+            "paddingTop": 2.5,
             "width": "100%",
           },
         ]
@@ -463,88 +518,45 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
               "fontSize": 17,
               "lineHeight": 21,
             },
-            Object {
-              "color": "#333333",
-            },
+            Array [
+              Object {
+                "color": "#333333",
+              },
+              undefined,
+            ],
           ]
         }
       >
         Rolling coverage of the day’s political developments as they happen
       </Text>
     </View>
-  </View>
-  <RNSVGSvgView
-    bbHeight={16}
-    bbWidth="100%"
-    fill="none"
-    height={16}
-    style={
-      Array [
-        Object {
-          "backgroundColor": "transparent",
-          "borderWidth": 0,
-        },
-        undefined,
-        null,
-        Object {
-          "flex": 0,
-          "height": 16,
-          "width": "100%",
-        },
-      ]
-    }
-    width="100%"
-  >
-    <RNSVGGroup
-      fill={null}
-      fillOpacity={1}
-      fillRule={1}
-      font={Object {}}
-      matrix={
+    <RNSVGSvgView
+      bbHeight={16}
+      bbWidth="100%"
+      fill="none"
+      height={16}
+      style={
         Array [
-          1,
-          0,
-          0,
-          1,
-          0,
-          0,
+          Object {
+            "backgroundColor": "transparent",
+            "borderWidth": 0,
+          },
+          undefined,
+          null,
+          Object {
+            "flex": 0,
+            "height": 16,
+            "width": "100%",
+          },
         ]
       }
-      opacity={1}
-      originX={0}
-      originY={0}
-      propList={
-        Array [
-          "fill",
-        ]
-      }
-      rotation={0}
-      scaleX={1}
-      scaleY={1}
-      skewX={0}
-      skewY={0}
-      stroke={null}
-      strokeDasharray={null}
-      strokeDashoffset={null}
-      strokeLinecap={0}
-      strokeLinejoin={0}
-      strokeMiterlimit={4}
-      strokeOpacity={1}
-      strokeWidth={1}
-      vectorEffect={0}
-      x={0}
-      y={0}
+      width="100%"
     >
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
+      <RNSVGGroup
+        fill={null}
         fillOpacity={1}
         fillRule={1}
-        height={1}
+        font={Object {}}
         matrix={
           Array [
             1,
@@ -564,8 +576,6 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
           ]
         }
         rotation={0}
-        rx={0}
-        ry={0}
         scaleX={1}
         scaleY={1}
         skewX={0}
@@ -579,177 +589,236 @@ exports[`NewsHeader should show news header without an image or a kicker 1`] = `
         strokeOpacity={1}
         strokeWidth={1}
         vectorEffect={0}
-        width="100%"
         x={0}
         y={0}
-      />
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={4}
-      />
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={8}
-      />
-      <RNSVGRect
-        fill={
-          Array [
-            0,
-            4288256409,
-          ]
-        }
-        fillOpacity={1}
-        fillRule={1}
-        height={1}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
-        propList={
-          Array [
-            "fill",
-          ]
-        }
-        rotation={0}
-        rx={0}
-        ry={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
-        stroke={null}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
-        strokeWidth={1}
-        vectorEffect={0}
-        width="100%"
-        x={0}
-        y={12}
-      />
-    </RNSVGGroup>
-  </RNSVGSvgView>
-  <Text
+      >
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={0}
+        />
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={4}
+        />
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={8}
+        />
+        <RNSVGRect
+          fill={
+            Array [
+              0,
+              4288256409,
+            ]
+          }
+          fillOpacity={1}
+          fillRule={1}
+          height={1}
+          matrix={
+            Array [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+            ]
+          }
+          opacity={1}
+          originX={0}
+          originY={0}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+          rotation={0}
+          rx={0}
+          ry={0}
+          scaleX={1}
+          scaleY={1}
+          skewX={0}
+          skewY={0}
+          stroke={null}
+          strokeDasharray={null}
+          strokeDashoffset={null}
+          strokeLinecap={0}
+          strokeLinejoin={0}
+          strokeMiterlimit={4}
+          strokeOpacity={1}
+          strokeWidth={1}
+          vectorEffect={0}
+          width="100%"
+          x={0}
+          y={12}
+        />
+      </RNSVGGroup>
+    </RNSVGSvgView>
+  </View>
+  <View
     style={
-      Array [
-        Object {
-          "flexShrink": 0,
-          "fontFamily": "GuardianTextEgyptian-Bold",
-          "fontSize": 17,
-          "lineHeight": 21,
-        },
-        Array [
-          Object {
-            "color": "#121212",
-          },
-          Object {
-            "marginBottom": 12,
-          },
-        ],
-      ]
+      Object {
+        "width": "100%",
+      }
     }
   >
-    Andrew Sparrow
-  </Text>
+    <Text
+      style={
+        Array [
+          Object {
+            "flexShrink": 0,
+            "fontFamily": "GuardianTextEgyptian-Bold",
+            "fontSize": 17,
+            "lineHeight": 21,
+          },
+          Array [
+            Object {
+              "paddingBottom": 10,
+            },
+            Object {
+              "color": "#121212",
+            },
+            Object {
+              "marginBottom": 10,
+            },
+          ],
+        ]
+      }
+    >
+      Andrew Sparrow
+    </Text>
+  </View>
 </View>
 `;

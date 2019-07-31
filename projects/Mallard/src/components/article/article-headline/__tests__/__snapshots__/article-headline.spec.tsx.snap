@@ -9,12 +9,15 @@ exports[`ArticleHeadline should show a long read headling 1`] = `
         "flexShrink": 0,
         "fontFamily": "GHGuardianHeadline-Regular",
         "fontSize": 28,
-        "lineHeight": 30,
+        "lineHeight": 32,
       },
-      Object {
-        "marginRight": 24,
-        "marginTop": 3,
-      },
+      Array [
+        Object {
+          "marginRight": 28,
+          "marginTop": 5,
+        },
+        undefined,
+      ],
     ]
   }
 >
@@ -31,12 +34,15 @@ exports[`ArticleHeadline should show a news headling 1`] = `
         "flexShrink": 0,
         "fontFamily": "GHGuardianHeadline-Regular",
         "fontSize": 28,
-        "lineHeight": 30,
+        "lineHeight": 32,
       },
-      Object {
-        "marginRight": 24,
-        "marginTop": 3,
-      },
+      Array [
+        Object {
+          "marginRight": 28,
+          "marginTop": 5,
+        },
+        undefined,
+      ],
     ]
   }
 >
