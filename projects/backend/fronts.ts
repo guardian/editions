@@ -69,7 +69,9 @@ export const parseCollection = async (
             const showByline = furniture.showByline //TODO
             const showQuotedHeadline = furniture.showQuotedHeadline // TODO
             const mediaType = furniture.mediaType // TODO// TODO
-            const slideshowImages = furniture.slideshowImages // TODO
+            const slideshowImages =
+                furniture.slideshowImages &&
+                furniture.slideshowImages.map(_ => _.src).map(getImageFromURL)
 
             const imageOverride =
                 furniture &&
@@ -86,6 +88,10 @@ export const parseCollection = async (
                             key: article.path,
                             trail,
                             byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -99,6 +105,10 @@ export const parseCollection = async (
                             kicker,
                             trail,
                             byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -112,7 +122,11 @@ export const parseCollection = async (
                             kicker,
                             trail,
                             image: imageOverride || article.image,
-                            byline,
+                            byline: byline || '',
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 

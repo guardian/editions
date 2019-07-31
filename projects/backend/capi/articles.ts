@@ -24,7 +24,12 @@ import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 
-type NotInCAPI = 'key'
+type NotInCAPI =
+    | 'key'
+    | 'showByline'
+    | 'showQuotedHeadline'
+    | 'mediaType'
+    | 'slideshowImages'
 
 type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail'
 

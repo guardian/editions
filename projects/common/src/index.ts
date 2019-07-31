@@ -69,7 +69,7 @@ export interface Content extends WithKey {
     showByline: boolean
     showQuotedHeadline: boolean
     mediaType: MediaType
-    slideshowImages: Image[]
+    slideshowImages?: Image[]
 }
 export interface Article extends Content {
     type: 'article'
