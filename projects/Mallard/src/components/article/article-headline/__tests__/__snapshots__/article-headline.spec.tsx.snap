@@ -9,7 +9,7 @@ exports[`ArticleHeadline should show a long read headling 1`] = `
         "flexShrink": 0,
         "fontFamily": "GHGuardianHeadline-Regular",
         "fontSize": 28,
-        "lineHeight": 30,
+        "lineHeight": 32,
       },
       Object {
         "marginRight": 24,
@@ -31,7 +31,7 @@ exports[`ArticleHeadline should show a news headling 1`] = `
         "flexShrink": 0,
         "fontFamily": "GHGuardianHeadline-Regular",
         "fontSize": 28,
-        "lineHeight": 30,
+        "lineHeight": 32,
       },
       Object {
         "marginRight": 24,
