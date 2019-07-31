@@ -179,6 +179,10 @@ export class EditionsStack extends cdk.Stack {
                 backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com/prod/`, //Yes, this (the region) really should not be hard coded.
             },
         })
+        new CfnOutput(this, 'archiver-arn', {
+            description: 'ARN for achiver lambda',
+            value: archiver.functionArn,
+        })
 
         const archiverPolicy = new iam.PolicyStatement({
             actions: ['*'],
