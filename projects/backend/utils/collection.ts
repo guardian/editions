@@ -18,19 +18,8 @@ const maxCardSize = 6
 const getCardLayoutForArticles = (
     layout: FrontCardsForArticleCount,
     articleLength: number,
-): FrontCardsForArticleCount[0] => {
-    if (
-        articleLength === 1 ||
-        articleLength === 2 ||
-        articleLength === 3 ||
-        articleLength === 4 ||
-        articleLength === 5 ||
-        articleLength === 6
-    ) {
-        return layout[articleLength]
-    }
-    return Object.values(layout).pop()
-}
+): FrontCardsForArticleCount[0] =>
+    layout[articleLength] || Object.values(layout).pop()
 
 export const createCardsFromAllArticlesInCollection = (
     articles: [string, CAPIArticle][],
