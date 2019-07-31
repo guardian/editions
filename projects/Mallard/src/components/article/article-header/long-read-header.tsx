@@ -29,17 +29,13 @@ const LongReadHeader = ({
             ) : null}
             <View style={[longReadHeaderStyles.textBackground]}>
                 {kicker ? (
-                    <View style={longReadHeaderStyles.kicker}>
-                        <HeadlineKickerText
-                            style={{ color: color.palette.neutral[100] }}
-                        >
-                            {kicker}
-                        </HeadlineKickerText>
-                    </View>
+                    <HeadlineKickerText
+                        style={{ color: color.palette.neutral[100] }}
+                    >
+                        {kicker}
+                    </HeadlineKickerText>
                 ) : null}
-                <HeadlineText style={longReadHeaderStyles.headline}>
-                    {headline}
-                </HeadlineText>
+                <HeadlineText>{headline}</HeadlineText>
             </View>
             <View style={[longReadHeaderStyles.textBackground]}>
                 <StandfirstText style={{ color: color.palette.neutral[100] }}>
