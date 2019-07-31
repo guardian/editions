@@ -12,6 +12,9 @@ exports[`ArticleByline should display a default Byline 1`] = `
       },
       Array [
         Object {
+          "paddingBottom": 10,
+        },
+        Object {
           "color": "#121212",
         },
         undefined,

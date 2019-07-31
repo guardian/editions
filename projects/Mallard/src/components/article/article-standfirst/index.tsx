@@ -1,28 +1,28 @@
 import React from 'react'
-import { View, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleProp, ViewStyle, TextStyle, StyleSheet } from 'react-native'
 import { StandfirstText } from '../../styled-text'
 import { NavigationPosition } from 'src/helpers/positions'
 import { color } from 'src/theme/color'
 
 export interface PropTypes {
     standfirst: string
-    navigationPosition?: NavigationPosition
     style?: StyleProp<ViewStyle>
+    textStyle?: StyleProp<TextStyle>
 }
 
-const ArticleStandfirst = ({ standfirst, style }: PropTypes) => {
+const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'flex-end',
+        alignContent: 'stretch',
+        alignItems: 'stretch',
+    },
+    text: { color: color.dimText },
+})
+
+const ArticleStandfirst = ({ standfirst, style, textStyle }: PropTypes) => {
     return (
-        <View
-            style={[
-                {
-                    justifyContent: 'flex-end',
-                    alignContent: 'stretch',
-                    alignItems: 'stretch',
-                },
-                style,
-            ]}
-        >
-            <StandfirstText style={{ color: color.dimText }}>
+        <View style={[styles.container, style]}>
+            <StandfirstText style={[styles.text, textStyle]}>
                 {standfirst}
             </StandfirstText>
         </View>
