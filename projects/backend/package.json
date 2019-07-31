@@ -25,6 +25,7 @@
         "test:watch": "jest --watch"
     },
     "dependencies": {
+        "@babel/runtime": "^7.5.5",
         "@creditkarma/thrift-server-core": "^0.13.6",
         "@guardian/capi-ts": "^0.1.0",
         "@types/aws-lambda": "^8.10.25",
