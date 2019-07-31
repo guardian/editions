@@ -25,18 +25,39 @@ interface PropTypes extends MaybePropTypes {
     easing: Animated.AnimatedInterpolation
 }
 
+const topOffset = 100
+const AnimatedMaskedView = Animated.createAnimatedComponent(MaskedView)
+
 const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
     const [windowHeight] = useState(() => Dimensions.get('window').height)
     const targetHeightScale = (windowHeight / from) * 2
     return (
-        <MaskedView
-            style={clipperStyles.flex}
+        <AnimatedMaskedView
+            style={[
+                clipperStyles.flex,
+                {
+                    transform: [
+                        {
+                            translateY: easing.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [topOffset * -1, 0],
+                            }),
+                        },
+                    ],
+                },
+            ]}
             maskElement={
                 <Animated.View
                     style={[
                         { height: from },
                         {
                             transform: [
+                                {
+                                    translateY: easing.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [topOffset, 0],
+                                    }),
+                                },
                                 {
                                     scaleY: easing.interpolate({
                                         inputRange: [0, 0.5, 1],
@@ -52,7 +73,7 @@ const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
             }
         >
             {children}
-        </MaskedView>
+        </AnimatedMaskedView>
     )
 }
 
