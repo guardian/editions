@@ -2,13 +2,13 @@ import {
     Collection,
     CAPIArticle,
     Appearance,
-    CollectionCardAppearance,
+    FrontCardAppearance,
 } from 'src/common'
 import { palette } from '@guardian/pasteup/palette'
 
 export interface FlatCard {
     collection: Collection
-    appearance: CollectionCardAppearance | null
+    appearance: FrontCardAppearance | null
     articles: CAPIArticle[]
 }
 

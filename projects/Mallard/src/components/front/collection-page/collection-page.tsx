@@ -9,8 +9,8 @@ import {
     Issue,
     Collection,
     Front,
-    defaultAppearances,
-    CollectionCardAppearance,
+    defaultCardAppearances,
+    FrontCardAppearance,
 } from 'src/common'
 import { useCardBackgroundStyle } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
@@ -42,12 +42,12 @@ export interface PropTypes {
     articleNavigator: ArticleNavigator
     issue: Issue['key']
     front: Front['key']
-    appearance: CollectionCardAppearance | null
+    appearance: FrontCardAppearance | null
     collection: Collection['key']
 }
 
 const getPageLayout = (
-    appearance: CollectionCardAppearance | null,
+    appearance: FrontCardAppearance | null,
     length: number,
 ) => {
     if (!appearance) {
@@ -59,10 +59,9 @@ const getPageLayout = (
             length === 5 ||
             length === 6
         ) {
-            console.log(length)
-            return layouts[defaultAppearances[length]]
+            return layouts[defaultCardAppearances[length]]
         }
-        return layouts[defaultAppearances[6]]
+        return layouts[defaultCardAppearances[6]]
     } else {
         return layouts[appearance]
     }

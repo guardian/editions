@@ -1,10 +1,10 @@
-import { CAPIArticle, Card } from '../common'
 import {
-    CollectionCardLayouts,
-    CollectionCardLayout,
-    cardLayouts,
-    collectionCardAppearanceInfo,
-} from '../../common/src/index'
+    CAPIArticle,
+    Card,
+    FrontCardsForArticleCount,
+    getCardAppearanceInfo,
+    getCardsForFront,
+} from '../common'
 import { fromPairs } from 'ramda'
 import { PublishedFront } from '../fronts/issue'
 
@@ -16,20 +16,27 @@ const chunk = <T>(arr: T[], size: number) =>
 const maxCardSize = 6
 
 const getCardLayoutForArticles = (
-    layout: CollectionCardLayouts,
+    layout: FrontCardsForArticleCount,
     articleLength: number,
-): CollectionCardLayout => {
-    return layout[articleLength] || Object.values(layout).pop()
+): FrontCardsForArticleCount[0] => {
+    if (
+        articleLength === 1 ||
+        articleLength === 2 ||
+        articleLength === 3 ||
+        articleLength === 4 ||
+        articleLength === 5 ||
+        articleLength === 6
+    ) {
+        return layout[articleLength]
+    }
+    return Object.values(layout).pop()
 }
 
 export const createCardsFromAllArticlesInCollection = (
     articles: [string, CAPIArticle][],
     front: PublishedFront,
 ): Card[] => {
-    const cardLayout = cardLayouts[front.name]
-        ? cardLayouts[front.name]
-        : cardLayouts.default
-
+    const cardLayout = getCardsForFront(front.name)
     const layout = getCardLayoutForArticles(cardLayout, articles.length)
 
     /*
@@ -40,19 +47,15 @@ export const createCardsFromAllArticlesInCollection = (
         cards: Card[]
     }>(
         ({ itemsSoFar, cards }, current) => {
-            const count =
-                typeof current === 'number'
-                    ? current
-                    : collectionCardAppearanceInfo[current].fits
+            const { appearance, fits } = getCardAppearanceInfo(current)
             return {
-                itemsSoFar: itemsSoFar + count,
+                itemsSoFar: itemsSoFar + fits,
                 cards: [
                     ...cards,
                     {
-                        appearance:
-                            typeof current === 'number' ? null : current,
+                        appearance,
                         articles: fromPairs(
-                            articles.slice(itemsSoFar, itemsSoFar + count),
+                            articles.slice(itemsSoFar, itemsSoFar + fits),
                         ),
                     },
                 ],

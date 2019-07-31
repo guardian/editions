@@ -1,4 +1,4 @@
-import { CollectionCardAppearance } from './collection/card-layouts'
+import { FrontCardAppearance } from './collection/card-layouts'
 export * from './collection/card-layouts'
 
 interface WithKey {
@@ -30,7 +30,7 @@ interface PillarAppearance {
 export type Appearance = PillarAppearance | ColorAppearance
 
 export interface Card {
-    appearance: CollectionCardAppearance | null
+    appearance: FrontCardAppearance | null
     articles: { [key: string]: CAPIArticle }
 }
 
