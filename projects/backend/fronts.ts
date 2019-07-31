@@ -65,7 +65,7 @@ export const parseCollection = async (
                 article.trail ||
                 ''
             const byline =
-                (furniture && furniture.bylineOverride) || 'article.???' //TODO
+                (furniture && furniture.bylineOverride) || article.byline || ''
             const showByline = furniture.showByline //TODO
             const showQuotedHeadline = furniture.showQuotedHeadline // TODO
             const mediaType = furniture.mediaType // TODO// TODO
@@ -85,6 +85,7 @@ export const parseCollection = async (
                             ...getCrosswordArticleOverrides(article),
                             key: article.path,
                             trail,
+                            byline,
                         },
                     ]
 
@@ -97,6 +98,7 @@ export const parseCollection = async (
                             headline,
                             kicker,
                             trail,
+                            byline,
                         },
                     ]
 
@@ -110,6 +112,7 @@ export const parseCollection = async (
                             kicker,
                             trail,
                             image: imageOverride || article.image,
+                            byline,
                         },
                     ]
 
