@@ -195,7 +195,7 @@ export class EditionsStack extends cdk.Stack {
                 functionName: archiver.functionName,
                 action: 'lambda:InvokeFunction',
                 sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
-                sourceArn: `arn:aws:s3:::${publishedEditionsBucketnameParameter.valueAsString}`
+                sourceArn: `arn:aws:s3:::${publishedEditionsBucketnameParameter.valueAsString}`,
             },
         )
     }
