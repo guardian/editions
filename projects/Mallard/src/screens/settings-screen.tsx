@@ -131,10 +131,10 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
 
     const signInListItems = handler({
         pending: () => [],
-        signedIn: () => [
+        signedIn: (_, data) => [
             {
                 key: `Sign out`,
-                title: `Sign out`,
+                title: `Sign out of ${data.userDetails.publicFields.displayName}`,
                 data: {
                     onPress: async () => {
                         await signOut()

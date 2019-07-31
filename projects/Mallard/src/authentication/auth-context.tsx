@@ -1,12 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import {
-    MembersDataAPIResponse,
-    currentMembershipDataCache,
-} from 'src/services/membership-service'
-import { canViewEdition } from './helpers'
+import { canViewEdition, userDataCache, UserData } from './helpers'
 import { resetCredentials } from './storage'
 
-type AuthInfo = MembersDataAPIResponse
+type AuthInfo = UserData
 
 const SENTINEL: unique symbol = Symbol('auth-not-loaded')
 
@@ -25,7 +21,7 @@ const useAuth = () => {
 
     useEffect(() => {
         if (data === SENTINEL) {
-            currentMembershipDataCache.get().then(data => {
+            userDataCache.get().then(data => {
                 setData(data)
             })
         }
@@ -38,7 +34,7 @@ const useAuth = () => {
     }: {
         pending: () => T
         signedOut: () => T
-        signedIn: (canViewEdition: boolean, data: MembersDataAPIResponse) => T
+        signedIn: (canViewEdition: boolean, data: AuthInfo) => T
     }) => {
         switch (data) {
             case SENTINEL: {
@@ -48,7 +44,7 @@ const useAuth = () => {
                 return signedOut()
             }
             default: {
-                return signedIn(canViewEdition(data), data)
+                return signedIn(canViewEdition(data.membershipData), data)
             }
         }
     }

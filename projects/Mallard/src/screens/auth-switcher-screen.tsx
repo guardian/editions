@@ -8,8 +8,9 @@ import {
 } from 'react-native'
 import {
     fetchAndPersistUserAccessTokenWithIdentity,
-    fetchMembershipDataForKeychainUser,
+    fetchUserDataForKeychainUser,
     canViewEdition,
+    UserData,
 } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
@@ -41,7 +42,7 @@ const tryAuth = async (
         onError,
     }: {
         onStart?: () => void
-        onSuccess: (data: MembersDataAPIResponse) => void
+        onSuccess: (data: UserData) => void
         onError: (err: string) => void
     },
     authRunner: () => Promise<unknown> = () => Promise.resolve(null),
@@ -49,7 +50,7 @@ const tryAuth = async (
     try {
         await authRunner()
         onStart()
-        const membershipData = await fetchMembershipDataForKeychainUser()
+        const membershipData = await fetchUserDataForKeychainUser()
 
         if (!membershipData) {
             onError('Could not find membership data')
@@ -140,7 +141,7 @@ const AuthSwitcherScreen = ({
                 onSuccess: data => {
                     setIsLoading(false)
                     setData(data)
-                    if (!canViewEdition(data)) {
+                    if (!canViewEdition(data.membershipData)) {
                         open(close => (
                             <SubNotFoundModalCard
                                 onDismiss={() => navigation.goBack()}

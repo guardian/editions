@@ -8,6 +8,22 @@ interface ErrorReponse {
 const hasErrorsArray = (json: any): json is ErrorReponse =>
     json && Array.isArray(json.errors)
 
+const maybeThrowErrors = async (res: Response) => {
+    const json = await res.json()
+
+    if (res.status !== 200) {
+        throw new Error(
+            hasErrorsArray(json)
+                ? json.errors
+                      .map(err => `${err.message}: ${err.description}`)
+                      .join(', ')
+                : 'Invalid credentials',
+        )
+    }
+
+    return json
+}
+
 const fetchAuth = async (
     params: { [key: string]: string },
     authUrl = ID_API_URL,
@@ -21,19 +37,7 @@ const fetchAuth = async (
         },
         body: qs.stringify(params),
     })
-    const json = await res.json()
-
-    if (res.status !== 200) {
-        throw new Error(
-            hasErrorsArray(json)
-                ? json.errors
-                      .map(err => `${err.message}: ${err.description}`)
-                      .join(', ')
-                : 'Invalid credentials',
-        )
-    }
-
-    return json.accessToken.accessToken
+    return maybeThrowErrors(res).then(json => json.accessToken.accessToken)
 }
 
 const fetchUserAccessTokenWithIdentity = (email: string, password: string) =>
@@ -50,9 +54,56 @@ const fetchMembershipAccessToken = (userAccessToken: string) =>
         'target-client-id': 'membership',
     })
 
+export interface User {
+    id: string
+    dates: {
+        accountCreatedDate: string
+    }
+    adData: {}
+    consents: {
+        id: string
+        actor: string
+        version: number
+        consented: boolean
+        timestamp: string
+        privacyPolicyVersion: number
+    }[]
+    userGroups: {
+        path: string
+        packageCode: string
+    }[]
+    socialLinks: {
+        network: string
+        socialId: string
+    }[]
+    publicFields: {
+        displayName: string
+    }
+    statusFields: {
+        hasRepermissioned: boolean
+        userEmailValidated: boolean
+        allowThirdPartyProfiling: boolean
+    }
+    primaryEmailAddress: string
+    hasPassword: boolean
+}
+
+const fetchUserDetails = async (
+    userAccessToken: string,
+    authUrl = ID_API_URL,
+): Promise<User> => {
+    const res = await fetch(`${authUrl}/user/me`, {
+        headers: {
+            Authorization: `Bearer ${userAccessToken}`,
+        },
+    })
+    return maybeThrowErrors(res).then(json => json.user)
+}
+
 export {
     fetchAuth,
     fetchUserAccessTokenWithIdentity,
     fetchUserAccessTokenWithType,
     fetchMembershipAccessToken,
+    fetchUserDetails,
 }

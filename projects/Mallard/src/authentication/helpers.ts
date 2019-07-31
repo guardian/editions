@@ -1,9 +1,10 @@
 import {
     membershipAccessTokenKeychain,
     userAccessTokenKeychain,
+    resetCredentials,
 } from './storage'
 import {
-    fetchMembershipDataAndCache,
+    fetchMembershipData,
     MembersDataAPIResponse,
 } from 'src/services/membership-service'
 import {
@@ -11,7 +12,10 @@ import {
     fetchUserAccessTokenWithIdentity,
     fetchUserAccessTokenWithType,
     TokenType,
+    fetchUserDetails,
+    User,
 } from 'src/services/id-service'
+import AsyncStorage from '@react-native-community/async-storage'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -48,6 +52,25 @@ const fetchAndPersistUserAccessTokenWithType = async (
 }
 
 /**
+ * A wrapper around AsyncStorage, with json handling and standardizing the interface
+ * between AsyncStorage and the keychain helper below
+ */
+const createAsyncCache = <T extends object>(key: string) => ({
+    set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
+    get: (): Promise<T | null> =>
+        AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
+    reset: (): Promise<boolean> =>
+        AsyncStorage.removeItem(key).then(() => true),
+})
+
+export interface UserData {
+    userDetails: User
+    membershipData: MembersDataAPIResponse
+}
+
+const userDataCache = createAsyncCache<UserData>('user-data-cache')
+
+/**
  * This should be used when you know you want to query members-data-api
  * for live data i.e. when the user has attempted to login or when we
  * want to revalidate a user's signin status (do they still have the right
@@ -56,29 +79,51 @@ const fetchAndPersistUserAccessTokenWithType = async (
  * N.b. this function does NOT check whether the user has sufficient permissions,
  * it simply returns the record of permission for a user
  */
-const fetchMembershipDataForKeychainUser = async (
+const fetchUserDataForKeychainUser = async (
     /* mocks for testing */
     membershipTokenStore = membershipAccessTokenKeychain,
     userTokenStore = userAccessTokenKeychain,
-    fetchMembershipDataImpl = fetchMembershipDataAndCache,
+    fetchMembershipDataImpl = fetchMembershipData,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
-): Promise<MembersDataAPIResponse | null> => {
-    const membershipToken = await membershipTokenStore.get()
-    if (membershipToken)
-        return fetchMembershipDataImpl(membershipToken.password)
+): Promise<UserData | null> => {
+    const [userToken, membershipToken] = await Promise.all([
+        userTokenStore.get(),
+        membershipTokenStore.get(),
+    ])
 
-    // no cached membership token, try and get the userToken so we can generate a new membership token
-    const userToken = await userTokenStore.get()
     if (!userToken) {
         // no userToken - we need to be logged in again
+        // make sure everything is reset before doing that
+        await resetCredentials()
         return null
     }
-    const newMembershipToken = await fetchMembershipAccessTokenImpl(
-        userToken.password,
-    )
-    // cache the new token
-    membershipTokenStore.set(userToken.username, newMembershipToken)
-    return fetchMembershipDataImpl(newMembershipToken)
+
+    let newMembershipToken: string | null = null
+
+    if (!membershipToken) {
+        // if there's not a membership token then something went wrong,
+        // but we can fetch it again
+        newMembershipToken = await fetchMembershipAccessTokenImpl(
+            userToken.password,
+        )
+        membershipTokenStore.set(userToken.username, newMembershipToken)
+    } else {
+        newMembershipToken = membershipToken.password
+    }
+
+    const [userDetails, membershipData] = await Promise.all([
+        fetchUserDetails(userToken.password),
+        fetchMembershipDataImpl(newMembershipToken),
+    ])
+
+    const userData = {
+        userDetails,
+        membershipData,
+    }
+
+    userDataCache.set(userData)
+
+    return userData
 }
 
 /**
@@ -92,6 +137,7 @@ const canViewEdition = (
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchAndPersistUserAccessTokenWithType,
-    fetchMembershipDataForKeychainUser,
+    fetchUserDataForKeychainUser,
     canViewEdition,
+    userDataCache,
 }
