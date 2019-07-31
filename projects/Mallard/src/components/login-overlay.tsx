@@ -16,8 +16,6 @@ const overlayStyles = StyleSheet.create({
  * This allows us to open a modal using a component in the view.
  *
  * The primary use case here is for opening with a scrolling interaction.
- * However, if `true` is passed as `forceOpen` then it will
- * open the modal straight away.
  */
 
 const ModalOpener = ({

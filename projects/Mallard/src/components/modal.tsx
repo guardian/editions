@@ -65,7 +65,7 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
                                 opacity: val,
                             },
                         ]}
-                    ></Animated.View>
+                    />
                     <Animated.View
                         style={[
                             styles.modalWrapper,

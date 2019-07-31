@@ -181,7 +181,7 @@ const OnboardingStack = createStackNavigator(
 const RootNavigator = createAppContainer(
     createStackNavigator(
         {
-            Authed: createSwitchNavigator(
+            AppRoot: createSwitchNavigator(
                 {
                     Main: ({
                         navigation,
@@ -208,7 +208,7 @@ const RootNavigator = createAppContainer(
             [routeNames.SignIn]: AuthSwitcherScreen,
         },
         {
-            initialRouteName: 'Authed',
+            initialRouteName: 'AppRoot',
             mode: 'modal',
             headerMode: 'none',
         },
