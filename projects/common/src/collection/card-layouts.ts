@@ -24,13 +24,13 @@ export interface FrontCardAppearanceInfo {
 const frontCardAppearanceInfo: {
     [key in FrontCardAppearance]: FrontCardAppearanceInfo
 } = {
-    splash: { fits: 1 },
-    super: { fits: 1 },
-    two: { fits: 2 },
-    three: { fits: 3 },
-    four: { fits: 4 },
-    five: { fits: 5 },
-    six: { fits: 6 },
+    [FrontCardAppearance.splashPage]: { fits: 1 },
+    [FrontCardAppearance.superHeroPage]: { fits: 1 },
+    [FrontCardAppearance.twoStoryPage]: { fits: 2 },
+    [FrontCardAppearance.threeStoryPage]: { fits: 3 },
+    [FrontCardAppearance.fourStoryPage]: { fits: 4 },
+    [FrontCardAppearance.fiveStoryPage]: { fits: 5 },
+    [FrontCardAppearance.sixStoryPage]: { fits: 6 },
 }
 
 export const defaultCardAppearances: {
