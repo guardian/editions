@@ -84,7 +84,9 @@ const fetchUserDataForKeychainUser = async (
     membershipTokenStore = membershipAccessTokenKeychain,
     userTokenStore = userAccessTokenKeychain,
     fetchMembershipDataImpl = fetchMembershipData,
+    fetchUserDetailsImpl = fetchUserDetails,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
+    resetCredentialsImpl = resetCredentials,
 ): Promise<UserData | null> => {
     const [userToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
@@ -94,7 +96,7 @@ const fetchUserDataForKeychainUser = async (
     if (!userToken) {
         // no userToken - we need to be logged in again
         // make sure everything is reset before doing that
-        await resetCredentials()
+        await resetCredentialsImpl()
         return null
     }
 
@@ -112,7 +114,7 @@ const fetchUserDataForKeychainUser = async (
     }
 
     const [userDetails, membershipData] = await Promise.all([
-        fetchUserDetails(userToken.password),
+        fetchUserDetailsImpl(userToken.password),
         fetchMembershipDataImpl(newMembershipToken),
     ])
 
