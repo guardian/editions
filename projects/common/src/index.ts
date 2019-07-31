@@ -56,6 +56,7 @@ export interface Content extends WithKey {
     type: string
     headline: string
     kicker: string
+    trail: string
     image?: Image
     standfirst?: string
     byline?: string
