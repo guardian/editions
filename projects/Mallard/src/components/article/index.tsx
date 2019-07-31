@@ -15,6 +15,7 @@ import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
+import { ReviewHeader } from './article-header/review-header'
 
 /*
 This is the article view! For all of the articles.
@@ -61,11 +62,7 @@ const ArticleController = ({ article }: { article: CAPIArticle }) => {
 
 const Article = ({
     article,
-    headline,
-    image,
-    kicker,
-    byline,
-    standfirst,
+    ...headerProps
 }: {
     article?: BlockElement[]
 } & ArticleHeaderProps &
@@ -76,17 +73,13 @@ const Article = ({
     return (
         <View style={styles.container}>
             {type === 'opinion' ? (
-                <OpinionHeader
-                    {...{ byline, headline, image, kicker, standfirst }}
-                />
+                <OpinionHeader {...headerProps} />
+            ) : type === 'review' ? (
+                <ReviewHeader {...headerProps} />
             ) : type === 'longread' ? (
-                <LongReadHeader
-                    {...{ byline, headline, image, kicker, standfirst }}
-                />
+                <LongReadHeader {...headerProps} />
             ) : (
-                <NewsHeader
-                    {...{ byline, headline, image, kicker, standfirst }}
-                />
+                <NewsHeader {...headerProps} />
             )}
             <Fader buildOrder={10} position={'article'}>
                 <View style={[{ backgroundColor: color.background, flex: 1 }]}>

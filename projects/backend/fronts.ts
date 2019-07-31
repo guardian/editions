@@ -19,6 +19,7 @@ import {
     PublishedFront,
 } from './fronts/issue'
 import { getCrosswordArticleOverrides } from './utils/crossword'
+import { notNull } from '../common/src'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -60,6 +61,22 @@ export const parseCollection = async (
                 (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline =
                 (furniture && furniture.headlineOverride) || article.headline
+            const trail =
+                (furniture && furniture.trailTextOverride) ||
+                article.trail ||
+                ''
+            const byline =
+                (furniture && furniture.bylineOverride) || article.byline
+            const showByline = furniture.showByline //TODO
+            const showQuotedHeadline = furniture.showQuotedHeadline // TODO
+            const mediaType = furniture.mediaType // TODO// TODO
+            const slideshowImages =
+                furniture.slideshowImages &&
+                furniture.slideshowImages
+                    .map(_ => _.src)
+                    .map(getImageFromURL)
+                    .filter(notNull)
+
             const imageOverride =
                 furniture &&
                 furniture.imageSrcOverride &&
@@ -73,6 +90,12 @@ export const parseCollection = async (
                             ...article,
                             ...getCrosswordArticleOverrides(article),
                             key: article.path,
+                            trail,
+                            byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -84,6 +107,12 @@ export const parseCollection = async (
                             key: article.path,
                             headline,
                             kicker,
+                            trail,
+                            byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -95,7 +124,13 @@ export const parseCollection = async (
                             key: article.path,
                             headline,
                             kicker,
+                            trail,
                             image: imageOverride || article.image,
+                            byline: byline || '',
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 

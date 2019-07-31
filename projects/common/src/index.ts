@@ -13,7 +13,12 @@ export const articlePillars = [
     'lifestyle',
     'neutral',
 ] as const
-export const articleTypes = ['article', 'opinion', 'longread'] as const
+export const articleTypes = [
+    'article',
+    'review',
+    'opinion',
+    'longread',
+] as const
 
 export type PillarFromPalette = typeof articlePillars[number]
 export type ArticleType = typeof articleTypes[number]
@@ -52,15 +57,25 @@ export interface Forecast {
     MobileLink: string
     Link: string
 }
-
+export type MediaType =
+    | 'UseArticleTrail'
+    | 'Hide'
+    | 'Cutout'
+    | 'Slideshow'
+    | 'Image'
 export interface Content extends WithKey {
     type: string
     headline: string
     kicker: string
+    trail: string
     image?: Image
     standfirst?: string
     byline?: string
     bylineImages?: { thumbnail?: Image; cutout?: Image }
+    showByline: boolean
+    showQuotedHeadline: boolean
+    mediaType: MediaType
+    slideshowImages?: Image[]
 }
 export interface Article extends Content {
     type: 'article'
