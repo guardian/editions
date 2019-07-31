@@ -60,6 +60,15 @@ export const parseCollection = async (
                 (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline =
                 (furniture && furniture.headlineOverride) || article.headline
+            const trail =
+                (furniture && furniture.trailTextOverride) || 'article.???' //TODO
+            const byline =
+                (furniture && furniture.bylineOverride) || 'article.???' //TODO
+            const showByline = furniture.showByline //TODO
+            const showQuotedHeadline = furniture.showQuotedHeadline // TODO
+            const mediaType = furniture.mediaType // TODO// TODO
+            const slideshowImages = furniture.slideshowImages // TODO
+
             const imageOverride =
                 furniture &&
                 furniture.imageSrcOverride &&
