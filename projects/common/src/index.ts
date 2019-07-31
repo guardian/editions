@@ -12,7 +12,12 @@ export const articlePillars = [
     'lifestyle',
     'neutral',
 ] as const
-export const articleTypes = ['article', 'opinion', 'longread'] as const
+export const articleTypes = [
+    'article',
+    'review',
+    'opinion',
+    'longread',
+] as const
 
 export type PillarFromPalette = typeof articlePillars[number]
 export type ArticleType = typeof articleTypes[number]

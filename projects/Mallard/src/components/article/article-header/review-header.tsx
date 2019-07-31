@@ -13,6 +13,8 @@ import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
+import { ArticleByline } from '../article-byline'
+import { ArticleKicker } from '../article-kicker'
 
 const ArticleFader = getFader('article')
 
@@ -26,16 +28,24 @@ const styles = StyleSheet.create({
     },
 })
 
-const OpinionHeader = ({
+const style = StyleSheet.create({
+    sides: { paddingHorizontal: metrics.articleSides },
+    headline: { paddingBottom: metrics.vertical * 4 },
+    standfirst: { paddingBottom: metrics.vertical * 1 },
+})
+
+const ReviewHeader = ({
     byline,
+    kicker,
     headline,
     image,
     standfirst,
 }: ArticleHeaderProps) => {
     const [color] = useArticle()
+    const navigationPosition = getNavigationPosition('article')
     return (
-        <View style={[styles.background]}>
-            <View style={[newsHeaderStyles.background]}>
+        <View style={[{ backgroundColor: color.faded }]}>
+            <View style={style.sides}>
                 {image ? (
                     <ArticleFader buildOrder={1}>
                         <ArticleImage
@@ -47,25 +57,39 @@ const OpinionHeader = ({
                         />
                     </ArticleFader>
                 ) : null}
+                {kicker ? (
+                    <ArticleFader buildOrder={2}>
+                        <ArticleKicker kicker={kicker} />
+                    </ArticleFader>
+                ) : null}
                 <ArticleFader buildOrder={2}>
-                    <ArticleHeadline>
-                        <Quote fill={color.main} />
-                        {headline}
-                        <Text style={[{ color: color.main }, styles.byline]}>
-                            {'\n'}
-                            {byline}
-                        </Text>
-                    </ArticleHeadline>
+                    <View style={style.headline}>
+                        <ArticleHeadline
+                            weight={'bold'}
+                            textStyle={{ color: color.dark }}
+                        >
+                            {headline}
+                        </ArticleHeadline>
+                    </View>
                 </ArticleFader>
             </View>
             <ArticleFader buildOrder={3}>
-                <Multiline count={4} />
-                <View style={[newsHeaderStyles.background]}>
-                    <ArticleStandfirst {...{ standfirst }} />
+                <ArticleStandfirst
+                    style={[style.sides, style.standfirst]}
+                    textStyle={{ color: color.dark }}
+                    {...{ standfirst }}
+                />
+                <Multiline color={color.dark} count={4} />
+                <View style={style.sides}>
+                    <ArticleByline
+                        style={[newsHeaderStyles.byline, { color: color.dark }]}
+                    >
+                        {byline}
+                    </ArticleByline>
                 </View>
             </ArticleFader>
         </View>
     )
 }
 
-export { OpinionHeader }
+export { ReviewHeader }

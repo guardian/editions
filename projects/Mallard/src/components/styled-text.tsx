@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
         ...getFont('headline', 1.5),
         color: color.text,
     },
+    headlineTextBold: {
+        flexShrink: 0,
+        ...getFont('headline', 1.5, 'bold'),
+        color: color.text,
+    },
     issueTitleText: {
         flexShrink: 0,
         ...getFont('titlepiece', 1.25),
@@ -72,14 +77,28 @@ export const IssueTitleText = ({
     return <Text {...props} style={[styles.issueTitleText, style]} />
 }
 
+export type HeadlineTextProps = {
+    children: string
+    weight?: 'regular' | 'bold'
+    style?: StyleProp<TextStyle>
+} & TextProps
+
 export const HeadlineText = ({
     style,
+    weight = 'regular',
     ...props
-}: {
-    children: string
-    style?: StyleProp<TextStyle>
-} & TextProps) => {
-    return <Text {...props} style={[styles.headlineText, style]} />
+}: HeadlineTextProps) => {
+    return (
+        <Text
+            {...props}
+            style={[
+                weight === 'regular'
+                    ? styles.headlineText
+                    : styles.headlineTextBold,
+                style,
+            ]}
+        />
+    )
 }
 
 export const HeadlineKickerText = ({
