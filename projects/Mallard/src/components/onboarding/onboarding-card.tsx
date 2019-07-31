@@ -63,7 +63,7 @@ const OnboardingCard = ({
     style,
     appearance,
 }: {
-    children: string
+    children?: string
     title: string
     subtitle?: string
     mainActions?: { label: string; onPress: () => void }[]

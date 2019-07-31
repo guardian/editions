@@ -25,6 +25,7 @@ import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
 import { SubNotFoundModalCard } from 'src/components/sub-not-found-modal-card'
 import { routeNames } from 'src/navigation'
+import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 
 const useRandomState = () =>
     useState(
@@ -149,6 +150,8 @@ const AuthSwitcherScreen = ({
                                 close={close}
                             />
                         ))
+                    } else {
+                        open(close => <SubFoundModalCard close={close} />)
                     }
                     navigation.goBack()
                 },
