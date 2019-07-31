@@ -1,3 +1,5 @@
+import { MediaType } from '../common'
+
 export interface PublishedIssue {
     id: string
     name: string
@@ -29,7 +31,7 @@ export interface PublishedFurtniture {
     bylineOverride?: string
     showByline: boolean
     showQuotedHeadline: boolean
-    mediaType: 'UseArticleTrail' | 'Hide' | 'Cutout' | 'Slideshow' | 'Image'
+    mediaType: MediaType
     imageSrcOverride?: PublishedImage
     slideshowImages?: PublishedImage[]
 }

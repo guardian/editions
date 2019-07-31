@@ -24,8 +24,15 @@ import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 
-type NotInCAPI = 'key'
-type OptionalInCAPI = 'kicker' | 'bylineImages'
+type NotInCAPI =
+    | 'key'
+    | 'showByline'
+    | 'showQuotedHeadline'
+    | 'mediaType'
+    | 'slideshowImages'
+
+type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail'
+
 interface CAPIExtras {
     path: string
 }
@@ -65,6 +72,9 @@ const parseArticleResult = async (
 
     const parser = elementParser(path)
     const kicker = kickerPicker(result, title)
+
+    const trail = result.fields && result.fields.trailText
+
     const byline = result.fields && result.fields.byline
     const bylineImages = getBylineImages(result)
 
@@ -111,6 +121,7 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     kicker,
+                    trail,
                     image: maybeImage,
                     byline: byline || '',
                     bylineImages,
@@ -127,6 +138,7 @@ const parseArticleResult = async (
                     type: 'gallery',
                     path: path,
                     headline: title,
+                    trail,
                     kicker,
                     image: maybeImage,
                     byline: byline || '',
@@ -166,6 +178,7 @@ const parseArticleResult = async (
                 internalid,
                 {
                     type: 'crossword',
+                    trail,
                     path: path,
                     headline: title,
                     byline: byline || '',
@@ -183,6 +196,7 @@ const parseArticleResult = async (
                     type: 'article',
                     path: path,
                     headline: title,
+                    trail,
                     kicker,
                     image: maybeImage,
                     byline: byline || '',
