@@ -3,16 +3,26 @@ import { unnest } from 'ramda'
 import { getColours, getImage } from './downloader'
 import { hasFailed, attempt } from '../backend/utils/try'
 import { upload } from './upload'
-import { ImageSize } from '../common/src'
+import { ImageSize, notNull } from '../common/src'
 
 export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
-    const image = article.image ? [article.image] : []
+    const image = article.image
     const elements = article.type === 'article' ? article.elements : []
+    const slideshowImages = article.slideshowImages || []
+    const bylineImages =
+        (article.bylineImages && [
+            article.bylineImages.cutout,
+            article.bylineImages.thumbnail,
+        ]) ||
+        []
+
     const images = elements
         .filter((element): element is ImageElement => element.id === 'image')
         .map(element => element.src)
 
-    return [...images, ...image]
+    return [...images, ...slideshowImages, ...bylineImages, image].filter(
+        notNull,
+    )
 }
 
 export const getImagesFromFront = (front: Front): Image[] => {
