@@ -49,24 +49,10 @@ const Header = withNavigation(
 )
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    /*
-    we don't wanna render a massive tree at once
-    as the navigator is trying to push the screen bc this
-    delays the tap response
-
-    we can pass this prop to identify if we wanna render
-    just the 'above the fold' content or the whole shebang
-    */
     const response = useIssueOrLatestResponse(path && path.issue)
-    const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
     return (
         <Container>
-            <NavigationEvents
-                onDidFocus={() => {
-                    setViewIsTransitioning(false)
-                }}
-            />
             {response({
                 error: ({ message }, _, { retry }) => (
                     <>
@@ -105,11 +91,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                             ListHeaderComponent={<Weather />}
                             keyExtractor={item => `${item.index}::${item.key}`}
                             renderItem={({ item }) => (
-                                <Front
-                                    issue={issue.key}
-                                    front={item.key}
-                                    {...{ viewIsTransitioning }}
-                                />
+                                <Front issue={issue.key} front={item.key} />
                             )}
                         />
                     </>

@@ -5,7 +5,6 @@ import { Image as ImageT } from '../../common'
 const styles = StyleSheet.create({
     image: {
         width: '100%',
-        backgroundColor: 'rgba(0,0,0,.25)',
     },
 })
 
