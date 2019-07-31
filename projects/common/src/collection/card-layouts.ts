@@ -1,4 +1,4 @@
-import { CAPIArticle } from 'src/common'
+import { CAPIArticle } from '../index'
 
 type PossibleCardlengths = 1 | 2 | 3 | 4 | 5 | 6
 
