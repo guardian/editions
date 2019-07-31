@@ -119,6 +119,8 @@ export const handler: Handler<
     { id?: string; index?: boolean },
     void
 > = async event => {
+    console.log('HELLO')
+    console.log(JSON.stringify(event))
     if (event.index) return summary()
     const id = event.id
     if (!(id && typeof id === 'string')) throw new Error('Nope')
