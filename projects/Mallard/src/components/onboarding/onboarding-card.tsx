@@ -20,12 +20,6 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
-    title: {
-        ...getFont('titlepiece', 2.5),
-    },
-    subtitle: {
-        ...getFont('titlepiece', 1.5),
-    },
     explainer: {
         backgroundColor: color.background,
         padding: metrics.horizontal,
@@ -64,6 +58,7 @@ const OnboardingCard = ({
     explainerTitle,
     style,
     appearance,
+    size = 'big',
 }: {
     children?: string
     title: string
@@ -72,19 +67,27 @@ const OnboardingCard = ({
     explainerTitle?: string
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
+    size?: 'big' | 'small'
 }) => (
     <View style={style}>
         <View style={[styles.square, appearances[appearance].background]}>
-            <View>
+            <View style={{ flexGrow: 1 }}>
                 <TitlepieceText
                     accessibilityRole="header"
-                    style={[styles.title, appearances[appearance].text]}
+                    style={[
+                        getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
+                        { marginBottom: size === 'big' ? 16 : 8 },
+                        appearances[appearance].text,
+                    ]}
                 >
                     {title}
                 </TitlepieceText>
                 {subtitle && (
                     <TitlepieceText
-                        style={[styles.subtitle, appearances[appearance].text]}
+                        style={[
+                            getFont('titlepiece', size === 'big' ? 1.5 : 1.25),
+                            appearances[appearance].text,
+                        ]}
                     >
                         {subtitle}
                     </TitlepieceText>

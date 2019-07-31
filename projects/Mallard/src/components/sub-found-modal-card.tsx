@@ -6,6 +6,7 @@ const SubFoundModalCard = ({ close }: { close: () => void }) => (
         title="Subscription found"
         subtitle="Enjoy the Guardian and thank you for your support"
         appearance={CardAppearance.blue}
+        size="small"
         mainActions={[
             {
                 label: 'Close',

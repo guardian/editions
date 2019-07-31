@@ -13,6 +13,7 @@ const SubNotFoundModalCard = ({
     <OnboardingCard
         title="Subscription not found"
         appearance={CardAppearance.blue}
+        size="small"
         mainActions={[
             {
                 label: 'Sign-in with different account',
