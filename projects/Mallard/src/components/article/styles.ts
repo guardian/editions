@@ -60,13 +60,3 @@ export const longReadHeaderStyles: StyleSheet.NamedStyles<
         backgroundColor: color.palette.neutral[7],
     },
 })
-
-export const animationStyles = (
-    navigationPosition: NavigationPosition | undefined,
-) =>
-    navigationPosition && {
-        opacity: navigationPosition.position.interpolate({
-            inputRange: [0.4, 1],
-            outputRange: [0, 1],
-        }),
-    }

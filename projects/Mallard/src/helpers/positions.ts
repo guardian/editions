@@ -66,7 +66,7 @@ export interface NavigationPosition {
     }
 }
 
-type SaveableNavigationPositions = 'article'
+export type SaveableNavigationPositions = 'article'
 
 const interpolators: {
     [key in SaveableNavigationPositions]?: NavigationPosition
