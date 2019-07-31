@@ -1,4 +1,3 @@
-import { fromPairs } from 'ramda'
 import { CAPIArticle } from 'src/common'
 
 type PossibleCardlengths = 1 | 2 | 3 | 4 | 5 | 6
