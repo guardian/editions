@@ -55,7 +55,9 @@ const useAuth = () => {
 }
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [data, setData] = useState<AuthInfo | null>(null)
+    const [data, setData] = useState<AuthInfo | typeof SENTINEL | null>(
+        SENTINEL,
+    )
     return (
         <AuthContext.Provider
             value={{
