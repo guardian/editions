@@ -119,7 +119,7 @@ export const handler: Handler<
     { id?: string; index?: boolean },
     void
 > = async event => {
-    console.log('HELLO')
+    console.log('Archiver lambda called with:')
     console.log(JSON.stringify(event))
     if (event.index) return summary()
     const id = event.id
