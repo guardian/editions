@@ -15,6 +15,8 @@ export enum CardAppearance {
 const styles = StyleSheet.create({
     square: {
         aspectRatio: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-around',
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
@@ -73,36 +75,40 @@ const OnboardingCard = ({
 }) => (
     <View style={style}>
         <View style={[styles.square, appearances[appearance].background]}>
-            <TitlepieceText
-                accessibilityRole="header"
-                style={[styles.title, appearances[appearance].text]}
-            >
-                {title}
-            </TitlepieceText>
-            {subtitle && (
+            <View>
                 <TitlepieceText
-                    style={[styles.subtitle, appearances[appearance].text]}
+                    accessibilityRole="header"
+                    style={[styles.title, appearances[appearance].text]}
                 >
-                    {subtitle}
+                    {title}
                 </TitlepieceText>
-            )}
-            {mainActions && (
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {mainActions.map(({ label, onPress }) => (
-                        <Button
-                            style={{
-                                marginTop: 10,
-                                marginRight: 10,
-                            }}
-                            appearance={ButtonAppearance.light}
-                            key={label}
-                            onPress={onPress}
-                        >
-                            {label}
-                        </Button>
-                    ))}
-                </View>
-            )}
+                {subtitle && (
+                    <TitlepieceText
+                        style={[styles.subtitle, appearances[appearance].text]}
+                    >
+                        {subtitle}
+                    </TitlepieceText>
+                )}
+            </View>
+            <View>
+                {mainActions && (
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {mainActions.map(({ label, onPress }) => (
+                            <Button
+                                style={{
+                                    marginTop: 10,
+                                    marginRight: 10,
+                                }}
+                                appearance={ButtonAppearance.light}
+                                key={label}
+                                onPress={onPress}
+                            >
+                                {label}
+                            </Button>
+                        ))}
+                    </View>
+                )}
+            </View>
         </View>
         {(explainerTitle || children) && (
             <View style={styles.explainer}>
