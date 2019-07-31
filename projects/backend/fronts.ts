@@ -19,6 +19,7 @@ import {
     PublishedFront,
 } from './fronts/issue'
 import { getCrosswordArticleOverrides } from './utils/crossword'
+import { notNull } from '../common/src'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -71,7 +72,10 @@ export const parseCollection = async (
             const mediaType = furniture.mediaType // TODO// TODO
             const slideshowImages =
                 furniture.slideshowImages &&
-                furniture.slideshowImages.map(_ => _.src).map(getImageFromURL)
+                furniture.slideshowImages
+                    .map(_ => _.src)
+                    .map(getImageFromURL)
+                    .filter(notNull)
 
             const imageOverride =
                 furniture &&
