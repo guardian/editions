@@ -1,4 +1,5 @@
-export { cardLayouts } from './collection/card-layouts'
+import { FrontCardAppearance } from './collection/card-layouts'
+export * from './collection/card-layouts'
 
 interface WithKey {
     key: string
@@ -29,7 +30,7 @@ interface PillarAppearance {
 export type Appearance = PillarAppearance | ColorAppearance
 
 export interface Card {
-    layout: null
+    appearance: FrontCardAppearance | null
     articles: { [key: string]: CAPIArticle }
 }
 
@@ -223,15 +224,6 @@ export interface Crossword {
     pdf?: string
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime
-}
-
-export type CollectionCardLayout = number[]
-export interface CollectionCardLayouts {
-    [countOfArticles: number]: CollectionCardLayout
-}
-export interface CollectionCardLayoutsForFront {
-    default: CollectionCardLayouts
-    [frontName: string]: CollectionCardLayouts
 }
 
 export const issueDir = (issueId: string) => `${issueId}`
