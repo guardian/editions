@@ -86,8 +86,7 @@ const TextBlock = ({
                 <HeadlineCardText
                     style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
                 >
-                    {' '}
-                    {headline}
+                    {' ' + headline}
                 </HeadlineCardText>
             </HeadlineKickerText>
         </View>
