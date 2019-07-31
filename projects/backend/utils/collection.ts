@@ -2,7 +2,7 @@ import {
     CAPIArticle,
     Card,
     FrontCardsForArticleCount,
-    getCardAppearanceInfo,
+    getCardAppearanceInfoAndOverrides,
     getCardsForFront,
 } from '../common'
 import { fromPairs } from 'ramda'
@@ -18,19 +18,8 @@ const maxCardSize = 6
 const getCardLayoutForArticles = (
     layout: FrontCardsForArticleCount,
     articleLength: number,
-): FrontCardsForArticleCount[0] => {
-    if (
-        articleLength === 1 ||
-        articleLength === 2 ||
-        articleLength === 3 ||
-        articleLength === 4 ||
-        articleLength === 5 ||
-        articleLength === 6
-    ) {
-        return layout[articleLength]
-    }
-    return Object.values(layout).pop()
-}
+): FrontCardsForArticleCount[0] =>
+    layout[articleLength] || Object.values(layout).pop()
 
 export const createCardsFromAllArticlesInCollection = (
     articles: [string, CAPIArticle][],
@@ -47,16 +36,20 @@ export const createCardsFromAllArticlesInCollection = (
         cards: Card[]
     }>(
         ({ itemsSoFar, cards }, current) => {
-            const { appearance, fits } = getCardAppearanceInfo(current)
+            const { appearance, fits } = getCardAppearanceInfoAndOverrides(
+                current,
+                articles.slice(itemsSoFar).map(([, a]) => a),
+            )
+            const articlesSlice = fromPairs(
+                articles.slice(itemsSoFar, itemsSoFar + fits),
+            )
             return {
                 itemsSoFar: itemsSoFar + fits,
                 cards: [
                     ...cards,
                     {
                         appearance,
-                        articles: fromPairs(
-                            articles.slice(itemsSoFar, itemsSoFar + fits),
-                        ),
+                        articles: articlesSlice,
                     },
                 ],
             }

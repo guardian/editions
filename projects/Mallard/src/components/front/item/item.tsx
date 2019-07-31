@@ -373,51 +373,30 @@ const splashImageStyles = StyleSheet.create({
         flex: 0,
         height: '100%',
     },
-    textBlock: {
-        ...getFont('headline', 2),
-        color: color.palette.neutral[100],
-    },
-    splashHeadline: {
-        ...tappableStyles.padding,
-        position: 'absolute',
-        bottom: 0,
-        flex: 0,
-        zIndex: 10000,
-        width: '60%',
-        color: color.palette.neutral[100],
-    },
-    textStandBlock: {
-        ...getFont('text', 0.9),
-        color: color.palette.neutral[100],
+    hidden: {
+        opacity: 0,
     },
 })
 
-const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
+    if (!article.image)
+        return <SuperHeroImageItem {...tappableProps} {...{ article }} />
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
-                <Image
-                    style={[splashImageStyles.image]}
-                    source={{
-                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                            'issue',
-                            'phone',
-                            article.image.source,
-                            article.image.path,
-                        )}`,
-                    }}
-                />
-            ) : null}
-            <View style={[splashImageStyles.splashHeadline]}>
-                <HeadlineCardText style={[splashImageStyles.textBlock]}>
-                    {article.kicker}
-                </HeadlineCardText>
-                {'standfirst' in article && article.standfirst ? (
-                    <StandfirstText style={[splashImageStyles.textStandBlock]}>
-                        {article.standfirst}
-                    </StandfirstText>
-                ) : null}
-            </View>
+            <Image
+                style={[splashImageStyles.image]}
+                source={{
+                    uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                        'issue',
+                        'phone',
+                        article.image.source,
+                        article.image.path,
+                    )}`,
+                }}
+            />
+            <HeadlineCardText style={[splashImageStyles.hidden]}>
+                {article.kicker}
+            </HeadlineCardText>
         </ItemTappable>
     )
 }
