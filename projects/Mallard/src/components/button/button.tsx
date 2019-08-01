@@ -22,6 +22,7 @@ export enum ButtonAppearance {
     tomato,
     apricot,
     skeletonLight,
+    skeletonActive,
 }
 
 const height =
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     },
     text: {
         flexShrink: 0,
-        ...getFont('sans', 1),
+        ...getFont('sans', 1, 'bold'),
     },
     withIcon: {
         paddingHorizontal: 0,
@@ -71,6 +72,14 @@ const getButtonAppearance = (
         },
         text: { color: appAppearance.color },
     }),
+    [ButtonAppearance.skeletonActive]: StyleSheet.create({
+        background: {
+            backgroundColor: appAppearance.color,
+            borderWidth: 1,
+            borderColor: appAppearance.color,
+        },
+        text: { color: appAppearance.cardBackgroundColor },
+    }),
     [ButtonAppearance.skeletonLight]: StyleSheet.create({
         background: {
             backgroundColor: undefined,
@@ -91,9 +100,7 @@ const getButtonAppearance = (
 
 const iconStyles = StyleSheet.create({
     root: {
-        fontFamily: 'GuardianIcons-Regular',
-        fontSize: 20,
-        lineHeight: 20,
+        ...getFont('icon', 1),
     },
 })
 
@@ -144,7 +151,6 @@ const Button = ({
             >
                 {'children' in innards ? (
                     <UiBodyCopy
-                        weight="bold"
                         style={[
                             styles.text,
                             { textAlign: center ? 'center' : 'auto' },

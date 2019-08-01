@@ -16,7 +16,7 @@ import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { Spinner } from 'src/components/spinner'
 
 import { withNavigation } from 'react-navigation'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
@@ -49,26 +49,12 @@ const Header = withNavigation(
 )
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    /*
-    we don't wanna render a massive tree at once
-    as the navigator is trying to push the screen bc this
-    delays the tap response
-
-    we can pass this prop to identify if we wanna render
-    just the 'above the fold' content or the whole shebang
-    */
     const response = useIssueOrLatestResponse(path && path.issue)
-    const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
     return (
         <Container>
-            <NavigationEvents
-                onDidFocus={() => {
-                    setViewIsTransitioning(false)
-                }}
-            />
             {response({
-                error: ({ message }, { retry }) => (
+                error: ({ message }, _, { retry }) => (
                     <>
                         <Header />
 
@@ -105,11 +91,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                             ListHeaderComponent={<Weather />}
                             keyExtractor={item => `${item.index}::${item.key}`}
                             renderItem={({ item }) => (
-                                <Front
-                                    issue={issue.key}
-                                    front={item.key}
-                                    {...{ viewIsTransitioning }}
-                                />
+                                <Front issue={issue.key} front={item.key} />
                             )}
                         />
                     </>

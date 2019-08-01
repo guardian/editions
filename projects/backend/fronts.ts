@@ -1,12 +1,5 @@
 import { s3fetch, s3Latest } from './s3'
-import {
-    Front,
-    Collection,
-    CAPIArticle,
-    Crossword,
-    Appearance,
-    cardLayouts,
-} from './common'
+import { Front, Collection, CAPIArticle, Appearance } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -23,10 +16,14 @@ import {
     PublishedIssue,
     PublishedCollection,
     PublishedFurtniture,
+    PublishedFront,
 } from './fronts/issue'
+import { getCrosswordArticleOverrides } from './utils/crossword'
+import { notNull } from '../common/src'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
+    front: PublishedFront,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
@@ -34,7 +31,6 @@ export const parseCollection = async (
     ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
-
     const [capiPrintArticles, capiSearchArticles] = await Promise.all([
         attempt(getArticles(ids, 'printsent')),
         attempt(getArticles(ids, 'search')),
@@ -65,6 +61,22 @@ export const parseCollection = async (
                 (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline =
                 (furniture && furniture.headlineOverride) || article.headline
+            const trail =
+                (furniture && furniture.trailTextOverride) ||
+                article.trail ||
+                ''
+            const byline =
+                (furniture && furniture.bylineOverride) || article.byline
+            const showByline = furniture.showByline //TODO
+            const showQuotedHeadline = furniture.showQuotedHeadline // TODO
+            const mediaType = furniture.mediaType // TODO// TODO
+            const slideshowImages =
+                furniture.slideshowImages &&
+                furniture.slideshowImages
+                    .map(_ => _.src)
+                    .map(getImageFromURL)
+                    .filter(notNull)
+
             const imageOverride =
                 furniture &&
                 furniture.imageSrcOverride &&
@@ -76,10 +88,14 @@ export const parseCollection = async (
                         article.path,
                         {
                             ...article,
+                            ...getCrosswordArticleOverrides(article),
                             key: article.path,
-                            headline,
-                            kicker,
-                            crossword: (article.crossword as unknown) as Crossword,
+                            trail,
+                            byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -91,6 +107,12 @@ export const parseCollection = async (
                             key: article.path,
                             headline,
                             kicker,
+                            trail,
+                            byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -102,7 +124,13 @@ export const parseCollection = async (
                             key: article.path,
                             headline,
                             kicker,
+                            trail,
                             image: imageOverride || article.image,
+                            byline: byline || '',
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
                         },
                     ]
 
@@ -114,7 +142,7 @@ export const parseCollection = async (
 
     return {
         key: collectionResponse.id,
-        cards: createCardsFromAllArticlesInCollection(cardLayouts, articles),
+        cards: createCardsFromAllArticlesInCollection(articles, front),
     }
 }
 
@@ -202,7 +230,7 @@ export const getFront = async (
     const collections = await Promise.all(
         front.collections
             .filter(collection => collection.items.length > 0)
-            .map(collection => parseCollection(collection)),
+            .map(collection => parseCollection(collection, front)),
     )
 
     collections.filter(hasFailed).forEach(failedCollection => {

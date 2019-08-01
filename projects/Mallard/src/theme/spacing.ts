@@ -4,14 +4,15 @@ export const spacing = [0, 3, 6, 12, 18, 30]
 
 const headerHeight = spacing[5]
 const basicMetrics = {
-    horizontal: spacing[3],
-    vertical: spacing[3],
+    horizontal: 14,
+    vertical: 10,
 }
 
 export const metrics = {
     ...basicMetrics,
     headerHeight,
     frontsPageSides: basicMetrics.horizontal * 1.5,
+    articleSides: basicMetrics.horizontal / 2,
     frontsPageHeight: 540,
     gridRowSplit: () => {
         const { width } = Dimensions.get('window')

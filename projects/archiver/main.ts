@@ -6,82 +6,122 @@ import { attempt, hasFailed, hasSucceeded, Attempt } from '../backend/utils/try'
 import { Front, issuePath, frontPath } from './common'
 import { upload } from './upload'
 import { zip } from './zipper'
-import { getImagesFromFront, uploadImage } from './media'
+import {
+    getImagesFromFront,
+    getAndUploadColours,
+    getAndUploadImage,
+} from './media'
 import { unnest } from 'ramda'
-import { imageSizes } from '../common/src/index'
+import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
+import { generateIndex } from './summary'
 
-export const run = async (id: string): Promise<void> => {
+const fetch = async (id: string): Promise<void> => {
     console.log(`Attempting to upload ${id} to ${bucket}`)
     const issue = await attempt(getIssue(id))
-    if (hasFailed(issue)) throw new Error('OH NO')
+    if (hasFailed(issue)) {
+        console.log(JSON.stringify(issue))
+        throw new Error('Failed to download issue.')
+    }
     console.log('Downloaded issue', id)
+
     const maybeFronts = await Promise.all(
         issue.fronts.map(
-            async (frontid): Promise<[string, Attempt<Front>]> => [
-                frontid,
-                await attempt(getFront(id, frontid)),
-            ],
+            async (frontid): Promise<Attempt<[string, Front]>> =>
+                await getFront(id, frontid),
         ),
     )
-    maybeFronts.forEach(([id, attempt]) => {
+
+    maybeFronts.forEach(attempt => {
         if (hasFailed(attempt)) {
             console.warn(`Front ${id} failed with ${attempt.error}`)
         }
     })
 
-    console.log('Fetched fronts')
+    const fronts = maybeFronts.filter(hasSucceeded)
+
+    console.log(`Fetched fronts ${JSON.stringify(fronts.map(_ => _[0]))}`)
 
     const frontUploads = await Promise.all(
-        maybeFronts.map(async ([frontId, maybeFront]) => {
-            if (hasFailed(maybeFront)) return maybeFront
-            return attempt(upload('data', frontPath(id, frontId), maybeFront))
+        fronts.map(async ([frontId, maybeFront]) => {
+            return attempt(upload(frontPath(id, frontId), maybeFront))
         }),
     )
 
-    frontUploads
+    const images = unnest(fronts.map(([, front]) => getImagesFromFront(front)))
+    const imagesWithSizes: [Image, ImageSize][] = unnest(
+        images.map(image =>
+            imageSizes.map((size): [Image, ImageSize] => [image, size]),
+        ),
+    )
+
+    const colourUploads = await Promise.all(
+        images.map(image => getAndUploadColours(id, image)),
+    )
+
+    colourUploads.filter(hasFailed).forEach(error => {
+        console.error('Uploading colour failed.')
+        console.error(error)
+    })
+
+    let imageUploads = await Promise.all(
+        imagesWithSizes.map(async ([image, size]) =>
+            attempt(getAndUploadImage(id, image, size)),
+        ),
+    )
+
+    imageUploads
         .filter(hasFailed)
         .map(failure => console.error(JSON.stringify(failure)))
 
-    console.log('Uploaded fronts')
-
-    const images = unnest(
-        maybeFronts
-            .map(([, maybeFront]) => maybeFront)
-            .filter(hasSucceeded)
-            .map(getImagesFromFront),
-    )
-
-    await Promise.all(
-        images.map(async image => {
-            uploadImage(id, image)
-        }),
-    )
-
     console.log('Uploaded images')
 
-    await upload('data', issuePath(id), issue)
+    frontUploads
+        .filter(hasFailed)
+        .forEach(failure => console.error(JSON.stringify(failure)))
+
+    console.log('Uploaded fronts')
+
+    await upload(issuePath(id), issue)
     console.log('Uploaded issue.')
+}
+
+const compress = async (id: string) => {
     console.log('Compressing')
-    await zip(id, 'data', issuePath(id))
+    await zip(id, issueDir(id), 'media')
+
     console.log('data zip uploaded')
     await Promise.all(
-        imageSizes
-            .filter(_ => _ !== 'sample') //don't keep the sample sized images no
-            .map(async size => {
-                await zip(
-                    `id-${size}`,
-                    `media`,
-                    `${issuePath(id)}/media/${size}/`,
-                )
-                console.log(` ${size} media zip uploaded`)
-            }),
+        imageSizes.map(async size => {
+            await zip(`${id}-${size}`, `${issueDir(id)}/media/${size}/`)
+            console.log(` ${size} media zip uploaded`)
+        }),
     )
     console.log('Media zips uploaded.')
 }
+const summary = async () => {
+    const index = await attempt(generateIndex())
+    if (hasFailed(index)) {
+        console.error('Could not fetch index')
+        return
+    }
+    await upload('issues', index)
+    return
+}
 
+export const run = async (id: string): Promise<void> => {
+    await fetch(id)
+    await summary()
+    await compress(id)
+}
 //When run in AWS
-export const handler: Handler<{ id?: string }, void> = async event => {
+export const handler: Handler<
+    { id?: string; index?: boolean },
+    void
+> = async event => {
+    console.log('Archiver lambda called with:')
+    console.log(JSON.stringify(event))
+    if (event.index) return summary()
     const id = event.id
     if (!(id && typeof id === 'string')) throw new Error('Nope')
     return run(id)

@@ -1,0 +1,60 @@
+import React from 'react'
+import {
+    getNavigationPosition,
+    SaveableNavigationPositions,
+} from 'src/helpers/positions'
+import { Animated, StyleSheet } from 'react-native'
+
+/*
+This is part of the transition from articles to fronts
+and it fades content in and out with a user chosen delay.
+
+The build order is an int X-1 on purpose to abstract the details
+of how and when to fade to this component. We will likely
+wanna mess with the actual animation numbers later on to make them
+more/less staggered
+*/
+
+export interface PropTypes {
+    buildOrder: number
+    children: Element
+    position: SaveableNavigationPositions
+}
+
+const faderStyles = StyleSheet.create({
+    wrapper: { width: '100%' },
+})
+
+const fadeOffset = 0.5
+
+const Fader = ({ buildOrder, children, position }: PropTypes) => {
+    const navigationPosition = getNavigationPosition(position)
+    if (buildOrder > 6) buildOrder = 6
+    return (
+        <Animated.View
+            style={[
+                navigationPosition && {
+                    opacity: navigationPosition.position.interpolate({
+                        inputRange: [
+                            0.2 + buildOrder / 10,
+                            0.4 + buildOrder / 10,
+                            1,
+                        ],
+                        outputRange: [0, 1, 1],
+                    }),
+                },
+                faderStyles.wrapper,
+            ]}
+        >
+            {children}
+        </Animated.View>
+    )
+}
+
+const getFader = (position: PropTypes['position']) => (
+    props: Omit<PropTypes, 'position'>,
+) => {
+    return <Fader position={position} {...props}></Fader>
+}
+
+export { Fader, getFader }

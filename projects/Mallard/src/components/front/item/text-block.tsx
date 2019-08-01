@@ -3,9 +3,10 @@ import { View, ViewStyle, StyleProp } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { RowSize } from '../helpers'
+import { RowSize, useKickerColorStyle } from '../helpers'
+import { getFont } from 'src/theme/typography'
+import { useArticle } from 'src/hooks/use-article'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
 
@@ -26,7 +27,9 @@ const styles = {
 }
 
 const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
-    const { appearance } = useArticleAppearance()
+    const [color, {}] = useArticle()
+    const kickerStyle = useKickerColorStyle()
+
     switch (textBlockAppearance) {
         case 'highlight':
             return {
@@ -39,7 +42,7 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
                 rootStyle: [
                     styles.root,
                     styles.rootWithHighlight,
-                    appearance.contrastCardBackgrounds,
+                    { backgroundColor: color.main },
                 ],
                 kickerStyle: styles.contrastText,
                 headlineStyle: styles.contrastText,
@@ -47,12 +50,8 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
         default:
             return {
                 rootStyle: styles.root,
-                kickerStyle: [appearance.text, appearance.kicker],
-                headlineStyle: [
-                    styles.headline,
-                    appearance.text,
-                    appearance.headline,
-                ],
+                kickerStyle,
+                headlineStyle: [styles.headline],
             }
     }
 }
@@ -73,7 +72,10 @@ const TextBlock = ({
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
-    const fontSize = size >= RowSize.hero ? 24 : 18
+    const { fontSize } = getFont(
+        'headline',
+        size >= RowSize.superhero ? 1.5 : size >= RowSize.hero ? 1.25 : 1,
+    )
 
     return (
         <View style={[rootStyle, style]}>
@@ -81,12 +83,12 @@ const TextBlock = ({
                 style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
             >
                 {kicker}
+                <HeadlineCardText
+                    style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
+                >
+                    {' ' + headline}
+                </HeadlineCardText>
             </HeadlineKickerText>
-            <HeadlineCardText
-                style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
-            >
-                {headline}
-            </HeadlineCardText>
         </View>
     )
 }

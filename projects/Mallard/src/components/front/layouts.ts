@@ -6,6 +6,7 @@ import {
     SplitImageItem,
     SmallItem,
 } from './item/item'
+import { FrontCardAppearance } from 'src/common'
 
 const splashPage: PageLayout = withSlots([
     {
@@ -100,12 +101,14 @@ const sixStoryPage: PageLayout = withSlots([
     },
 ])
 
-export {
-    splashPage,
-    superHeroPage,
-    twoStoryPage,
-    threeStoryPage,
-    fourStoryPage,
-    fiveStoryPage,
-    sixStoryPage,
+const layouts: { [key in FrontCardAppearance]: PageLayout } = {
+    [FrontCardAppearance.splashPage]: splashPage,
+    [FrontCardAppearance.superHeroPage]: superHeroPage,
+    [FrontCardAppearance.twoStoryPage]: twoStoryPage,
+    [FrontCardAppearance.threeStoryPage]: threeStoryPage,
+    [FrontCardAppearance.fourStoryPage]: fourStoryPage,
+    [FrontCardAppearance.fiveStoryPage]: fiveStoryPage,
+    [FrontCardAppearance.sixStoryPage]: sixStoryPage,
 }
+
+export { layouts }

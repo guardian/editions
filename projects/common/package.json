@@ -1,0 +1,9 @@
+{
+    "name": "@guardian/editions-common",
+    "@notes": "metro bundler needs babel here to not crap out :(.",
+    "dependencies": {
+        "@babel/runtime": "^7.5.5",
+        "@types/ramda": "^0.26.18",
+        "ramda": "^0.26.1"
+    }
+}

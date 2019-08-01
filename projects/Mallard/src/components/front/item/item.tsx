@@ -1,10 +1,22 @@
-import React, { ReactNode, useRef } from 'react'
-import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native'
+import React, { ReactNode, useRef, useState } from 'react'
+import {
+    View,
+    StyleSheet,
+    StyleProp,
+    ViewStyle,
+    Image,
+    Animated,
+    Easing,
+    TouchableWithoutFeedback,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { withNavigation, NavigationInjectedProps } from 'react-navigation'
-import { Highlight } from '../../highlight'
+import {
+    withNavigation,
+    NavigationInjectedProps,
+    NavigationEvents,
+    AnimatedValue,
+} from 'react-navigation'
 
-import { useArticleAppearance } from 'src/theme/appearance'
 import { CAPIArticle } from 'src/common'
 import {
     PathToArticle,
@@ -14,7 +26,11 @@ import {
 
 import { TextBlock } from './text-block'
 import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
-import { RowSize, getRowHeightForSize } from '../helpers'
+import {
+    RowSize,
+    getRowHeightForSize,
+    useCardBackgroundStyle,
+} from '../helpers'
 import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
@@ -24,6 +40,7 @@ import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
 import { navigateToArticle } from 'src/navigation/helpers'
 import { APIPaths } from 'src/paths'
+import { getFont } from 'src/theme/typography'
 
 interface TappablePropTypes {
     style: StyleProp<ViewStyle>
@@ -52,6 +69,26 @@ const tappableStyles = StyleSheet.create({
     },
 })
 
+/*
+To help smooth out the transition
+we fade the card contents out on tap
+and then back in when the view regains focus
+*/
+const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
+    direction === 'in'
+        ? Animated.timing(opacity, {
+              duration: 250,
+              delay: 250,
+              toValue: 1,
+              easing: Easing.linear,
+              useNativeDriver: true,
+          }).start()
+        : Animated.timing(opacity, {
+              duration: 250,
+              toValue: 0,
+              useNativeDriver: true,
+          }).start()
+
 const ItemTappable = withNavigation(
     ({
         children,
@@ -60,20 +97,21 @@ const ItemTappable = withNavigation(
         article,
         path,
         navigation,
-        hasPadding,
+        hasPadding = true,
     }: {
         children: ReactNode
         hasPadding?: boolean
     } & TappablePropTypes &
         NavigationInjectedProps) => {
-        const { appearance } = useArticleAppearance()
         const tappableRef = useRef<View>()
-
+        const [opacity] = useState(() => new Animated.Value(1))
         return (
-            <View
-                style={style}
-                ref={(view: View) => (tappableRef.current = view)}
-                onLayout={ev => {
+            <Animated.View
+                style={[style, { opacity }]}
+                ref={(view: any) => {
+                    if (view) tappableRef.current = view._component as View
+                }}
+                onLayout={(ev: any) => {
                     setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
                     tappableRef.current &&
                         setScreenPositionFromView(
@@ -89,7 +127,13 @@ const ItemTappable = withNavigation(
                         )
                 }}
             >
-                <Highlight
+                <NavigationEvents
+                    onWillFocus={() => {
+                        fade(opacity, 'in')
+                    }}
+                />
+
+                <TouchableWithoutFeedback
                     onPress={() => {
                         const { width, height } = getScreenPositionOfItem(
                             article.key,
@@ -98,6 +142,7 @@ const ItemTappable = withNavigation(
                             startAtHeightFromFrontsItem:
                                 height / getScaleForArticle(width),
                         }
+                        fade(opacity, 'out')
                         navigateToArticle(navigation, {
                             path,
                             transitionProps,
@@ -110,20 +155,16 @@ const ItemTappable = withNavigation(
                         style={[
                             tappableStyles.root,
                             hasPadding && tappableStyles.padding,
-                            appearance.backgrounds,
-                            appearance.cardBackgrounds,
+                            useCardBackgroundStyle(),
                         ]}
                     >
                         {children}
                     </View>
-                </Highlight>
-            </View>
+                </TouchableWithoutFeedback>
+            </Animated.View>
         )
     },
 )
-ItemTappable.defaultProps = {
-    hasPadding: true,
-}
 
 /*
 COVER ITEM
@@ -284,9 +325,8 @@ const superHeroImageStyles = StyleSheet.create({
     },
     textStandBlock: {
         ...tappableStyles.padding,
-        fontSize: 14,
-        lineHeight: 18,
-        color: color.palette.neutral[60],
+        ...getFont('text', 0.9),
+        color: color.palette.neutral[46],
         position: 'absolute',
         bottom: 0,
     },
@@ -333,56 +373,30 @@ const splashImageStyles = StyleSheet.create({
         flex: 0,
         height: '100%',
     },
-    textBlock: {
-        fontSize: 40,
-        lineHeight: 40,
-        color: color.palette.neutral[100],
-    },
-    splashHeadline: {
-        ...tappableStyles.padding,
-        position: 'absolute',
-        bottom: 0,
-        flex: 0,
-        zIndex: 10000,
-        width: '60%',
-        color: color.palette.neutral[100],
-    },
-    textStandBlock: {
-        fontSize: 14,
-        lineHeight: 18,
-        color: color.palette.neutral[100],
+    hidden: {
+        opacity: 0,
     },
 })
 
-const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
+    if (!article.image)
+        return <SuperHeroImageItem {...tappableProps} {...{ article }} />
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
-                <Image
-                    style={[splashImageStyles.image]}
-                    source={{
-                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                            'issue',
-                            'phone',
-                            article.image.source,
-                            article.image.path,
-                        )}`,
-                    }}
-                />
-            ) : null}
-            <View style={[splashImageStyles.splashHeadline]}>
-                <HeadlineCardText
-                    adjustsFontSizeToFit={true}
-                    style={[splashImageStyles.textBlock]}
-                >
-                    {article.kicker}
-                </HeadlineCardText>
-                {'standfirst' in article && article.standfirst ? (
-                    <StandfirstText style={[splashImageStyles.textStandBlock]}>
-                        {article.standfirst}
-                    </StandfirstText>
-                ) : null}
-            </View>
+            <Image
+                style={[splashImageStyles.image]}
+                source={{
+                    uri: `${APIPaths.mediaBackend}${APIPaths.media(
+                        'issue',
+                        'phone',
+                        article.image.source,
+                        article.image.path,
+                    )}`,
+                }}
+            />
+            <HeadlineCardText style={[splashImageStyles.hidden]}>
+                {article.kicker}
+            </HeadlineCardText>
         </ItemTappable>
     )
 }

@@ -1,16 +1,27 @@
-import { cardLayouts } from './collection/card-layouts'
+import { FrontCardAppearance } from './collection/card-layouts'
+export * from './collection/card-layouts'
 
 interface WithKey {
     key: string
 }
 
-export type ColorFromPalette =
-    | 'news'
-    | 'opinion'
-    | 'sport'
-    | 'culture'
-    | 'lifestyle'
-    | 'neutral'
+export const articlePillars = [
+    'news',
+    'opinion',
+    'sport',
+    'culture',
+    'lifestyle',
+    'neutral',
+] as const
+export const articleTypes = [
+    'article',
+    'review',
+    'opinion',
+    'longread',
+] as const
+
+export type PillarFromPalette = typeof articlePillars[number]
+export type ArticleType = typeof articleTypes[number]
 
 interface ColorAppearance {
     type: 'custom'
@@ -18,13 +29,13 @@ interface ColorAppearance {
 }
 interface PillarAppearance {
     type: 'pillar'
-    name: ColorFromPalette
+    name: PillarFromPalette
 }
 
 export type Appearance = PillarAppearance | ColorAppearance
 
 export interface Card {
-    layout: null
+    appearance: FrontCardAppearance | null
     articles: { [key: string]: CAPIArticle }
 }
 
@@ -46,14 +57,25 @@ export interface Forecast {
     MobileLink: string
     Link: string
 }
-
+export type MediaType =
+    | 'UseArticleTrail'
+    | 'Hide'
+    | 'Cutout'
+    | 'Slideshow'
+    | 'Image'
 export interface Content extends WithKey {
     type: string
     headline: string
     kicker: string
+    trail: string
     image?: Image
     standfirst?: string
     byline?: string
+    bylineImages?: { thumbnail?: Image; cutout?: Image }
+    showByline: boolean
+    showQuotedHeadline: boolean
+    mediaType: MediaType
+    slideshowImages?: Image[]
 }
 export interface Article extends Content {
     type: 'article'
@@ -209,20 +231,16 @@ export interface Crossword {
     dateSolutionAvailable?: CapiDateTime
 }
 
-export type CollectionCardLayout = number[]
-export interface CollectionCardLayouts {
-    [countOfArticles: number]: CollectionCardLayout
-}
-const issueDir = (issueId: string) => `${issueId}`
+export const issueDir = (issueId: string) => `${issueId}`
 
-const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
+export const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-const frontPath = (issueId: string, frontId: string) =>
+export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
-const issueSummaryPath = () => 'issues'
-export const imageSizes = ['sample', 'phone', 'tablet'] as const
+export const issueSummaryPath = () => 'issues'
+export const imageSizes = ['phone', 'tablet'] as const
 export interface Image {
     source: string
     path: string
@@ -236,26 +254,17 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-export type ImageSize = typeof imageSizes[number]
+export type ImageSize = typeof imageSizes[number] | 'sample'
 
-const mediaPath = (
+export const mediaPath = (
     issue: string,
     size: ImageSize,
     source: string,
     path: string,
 ) => `${issueDir(issue)}/media/${size}/${source}/${path}`
 
-const coloursPath = (issue: string, source: string, path: string) =>
+export const coloursPath = (issue: string, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
-
-export {
-    issuePath,
-    mediaPath,
-    frontPath,
-    issueSummaryPath,
-    cardLayouts,
-    coloursPath,
-}

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArticleKicker should display a default Kicker 1`] = `
+<View
+  style={
+    Object {
+      "borderBottomWidth": 1,
+      "borderColor": "#dcdcdc",
+      "marginTop": 5,
+      "paddingBottom": 20,
+      "width": "100%",
+    }
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "flexShrink": 0,
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 18,
+          "lineHeight": 18,
+        },
+        Object {
+          "color": "#121212",
+        },
+      ]
+    }
+  >
+    Sport
+  </Text>
+</View>
+`;
+
+exports[`ArticleKicker should display a long read style kicker 1`] = `
+<View
+  style={
+    Object {
+      "borderBottomWidth": 1,
+      "borderColor": "#dcdcdc",
+      "marginTop": 5,
+      "paddingBottom": 20,
+      "width": "100%",
+    }
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "flexShrink": 0,
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 18,
+          "lineHeight": 18,
+        },
+        Object {
+          "color": "#121212",
+        },
+      ]
+    }
+  >
+    Sport
+  </Text>
+</View>
+`;

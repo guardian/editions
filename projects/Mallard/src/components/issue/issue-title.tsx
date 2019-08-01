@@ -3,6 +3,7 @@ import { StyleSheet, StyleProp, TextStyle, View, ViewStyle } from 'react-native'
 import { color } from 'src/theme/color'
 import { IssueTitleText } from '../styled-text'
 import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
 
 const splitStyles = StyleSheet.create({
     container: {
@@ -71,7 +72,7 @@ const appearances: {
         title: { color: color.palette.brand.main },
         subtitle: {
             color: color.palette.brand.main,
-            fontFamily: 'GHGuardianHeadline-Regular',
+            fontFamily: families.headline.regular,
         },
     }),
 }

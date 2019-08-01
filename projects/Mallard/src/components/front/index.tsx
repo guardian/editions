@@ -4,10 +4,8 @@ import { CollectionPage, PropTypes } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, ColorFromPalette, Front as FrontType } from 'src/common'
+import { Issue, PillarFromPalette, Front as FrontType } from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
-import { GENERIC_ERROR } from 'src/helpers/words'
-import { useSettings } from 'src/hooks/use-settings'
 import {
     FlatCard,
     getColor,
@@ -20,21 +18,18 @@ import {
     AnimatedFlatListRef,
     getNearestPage,
 } from './helpers'
-import {
-    WithArticleAppearance,
-    getAppearancePillar,
-} from 'src/theme/appearance'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
+import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
 
 const CollectionPageInFront = ({
     index,
-    appearance,
+    pillar,
     scrollX,
     ...collectionPageProps
 }: {
     index: number
-    appearance: ColorFromPalette
+    pillar: PillarFromPalette
     scrollX: Animated.Value
 } & PropTypes) => {
     const { width } = Dimensions.get('window')
@@ -52,12 +47,12 @@ const CollectionPageInFront = ({
                 },
             ]}
         >
-            <WithArticleAppearance value={appearance}>
+            <WithArticle type={'article'} pillar={pillar}>
                 <CollectionPage
                     translate={translate}
                     {...collectionPageProps}
                 />
-            </WithArticleAppearance>
+            </WithArticle>
         </Animated.View>
     )
 }
@@ -70,7 +65,7 @@ const FrontWithResponse = ({
     frontData: FrontType
 }) => {
     const color = getColor(frontData.appearance)
-    const appearance = getAppearancePillar(frontData.appearance)
+    const pillar = getAppearancePillar(frontData.appearance)
 
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -166,13 +161,14 @@ const FrontWithResponse = ({
                 }) => (
                     <CollectionPageInFront
                         articlesInCard={item.articles || []}
+                        appearance={item.appearance}
                         collection={item.collection.key}
                         front={frontData.key}
                         {...{
                             scrollX,
                             issue,
                             index,
-                            appearance,
+                            pillar,
                             articleNavigator,
                         }}
                     />
@@ -185,7 +181,6 @@ const FrontWithResponse = ({
 export const Front: FunctionComponent<{
     front: string
     issue: Issue['key']
-    viewIsTransitioning: boolean
 }> = ({ front, issue }) => {
     const frontsResponse = useFrontsResponse(issue, front)
 

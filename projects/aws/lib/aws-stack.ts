@@ -51,6 +51,24 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
+        const cmsFrontsAccountIdParameter = new cdk.CfnParameter(
+            this,
+            'cmsFronts-account-id-param',
+            {
+                type: 'String',
+                description: 'Account id for cmsFronts account.',
+            },
+        )
+
+        const publishedEditionsBucketnameParameter = new cdk.CfnParameter(
+            this,
+            'published-editions-bucket-name-param',
+            {
+                type: 'String',
+                description: 'Name for published editions bucket',
+            },
+        )
+
         const deploy = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
@@ -71,6 +89,7 @@ export class EditionsStack extends cdk.Stack {
         const backend = new lambda.Function(this, 'EditionsBackend', {
             functionName: `editions-backend-${stageParameter.valueAsString}`,
             runtime: lambda.Runtime.NODEJS_10_X,
+            memorySize: 512,
             timeout: Duration.seconds(60),
             code: Code.bucket(
                 deploy,
@@ -148,7 +167,7 @@ export class EditionsStack extends cdk.Stack {
             functionName: `editions-archiver-${stageParameter.valueAsString}`,
             runtime: lambda.Runtime.NODEJS_10_X,
             timeout: Duration.minutes(5),
-            memorySize: 256,
+            memorySize: 1500,
             code: Code.bucket(
                 deploy,
                 `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
@@ -160,6 +179,10 @@ export class EditionsStack extends cdk.Stack {
                 backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com/prod/`, //Yes, this (the region) really should not be hard coded.
             },
         })
+        new CfnOutput(this, 'archiver-arn', {
+            description: 'ARN for achiver lambda',
+            value: archiver.functionArn,
+        })
 
         const archiverPolicy = new iam.PolicyStatement({
             actions: ['*'],
@@ -167,5 +190,23 @@ export class EditionsStack extends cdk.Stack {
         })
 
         archiver.addToRolePolicy(archiverPolicy)
+
+        const publishedBucket = s3.Bucket.fromBucketName(
+            this,
+            'published-bucket',
+            publishedEditionsBucketnameParameter.valueAsString,
+        )
+
+        new lambda.CfnPermission(
+            this,
+            'PublishedEditionsArchiverInvokePermission',
+            {
+                principal: 's3.amazonaws.com',
+                functionName: archiver.functionName,
+                action: 'lambda:InvokeFunction',
+                sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
+                sourceArn: publishedBucket.bucketArn,
+            },
+        )
     }
 }
