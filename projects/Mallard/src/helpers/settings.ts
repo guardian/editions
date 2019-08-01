@@ -17,6 +17,7 @@ export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
 interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
+    notificationServiceRegister: string
 }
 
 interface UserSettings {

@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
 import {
@@ -187,4 +188,33 @@ const fetchWeather = <T>(
     )
 }
 
-export { fetchFromIssue, fetchFromApi, fetchWeather }
+const fetchFromNotificationService = async (deviceToken: { token: string }) => {
+    const registerDeviceUrl = await getSetting('notificationServiceRegister')
+    const { token } = deviceToken
+    const options = {
+        deviceToken: token,
+        platform: Platform.OS === 'ios' ? 'ios-edition' : 'android-edition',
+        topics: [
+            {
+                name: 'newsstand',
+                type: 'newsstand',
+            },
+        ],
+    }
+    return fetch(registerDeviceUrl as string, {
+        method: 'post',
+        body: JSON.stringify(options),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => console.log('Response', JSON.stringify(response)))
+        .catch(e => console.log('Error', JSON.stringify(e)))
+}
+
+export {
+    fetchFromIssue,
+    fetchFromApi,
+    fetchWeather,
+    fetchFromNotificationService,
+}

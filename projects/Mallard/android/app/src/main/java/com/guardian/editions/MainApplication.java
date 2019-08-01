@@ -3,6 +3,7 @@ package com.guardian.editions;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.oblador.keychain.KeychainPackage;
 import org.reactnative.maskedview.RNCMaskedViewPackage;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativePushNotificationPackage(),
             new ReactNativeConfigPackage(),
             new KeychainPackage(),
             new RNCMaskedViewPackage(),

@@ -19,10 +19,18 @@ export const backends = [
     },
 ]
 
+export const notificationServiceRegister = {
+    prod: 'https://notifications.guardianapis.com/device/register',
+    code: 'https://notifications.code.dev-guardianapis.com/device/register',
+}
+
 export const defaultSettings: Settings = {
     apiUrl: backends[0].value,
     isUsingProdDevtools: false,
     hasOnboarded: false,
     gdprAllowPerformance: null,
     gdprAllowFunctionality: null,
+    notificationServiceRegister: __DEV__
+        ? notificationServiceRegister.code
+        : notificationServiceRegister.prod,
 }
