@@ -12,7 +12,7 @@ const getValueFromKey = map => key => {
 const writeToEnvFileinCWD = data =>
     fs.writeFileSync(path.join(process.cwd(), '.env'), data)
 
-const fetchRequiredEnvVars = strings =>
+const writeRequiredEnvVars = strings =>
     writeToEnvFileinCWD(
         strings[0]
             .split(NEWLINE)
@@ -22,4 +22,4 @@ const fetchRequiredEnvVars = strings =>
             .join(NEWLINE),
     )
 
-module.exports = { fetchRequiredEnvVars }
+module.exports = { writeRequiredEnvVars }

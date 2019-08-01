@@ -1,6 +1,6 @@
-const { fetchRequiredEnvVars } = require('./scripts/helpers/helpers.js')
+const { writeRequiredEnvVars } = require('./scripts/helpers/helpers.js')
 
-fetchRequiredEnvVars`
+writeRequiredEnvVars`
 ID_ACCESS_TOKEN
 ID_API_URL
 `
