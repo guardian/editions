@@ -26,12 +26,10 @@ const styles = StyleSheet.create({
 export const SlideCard = ({
     enabled,
     children,
-    viewIsTransitioning,
     onDismiss,
 }: {
     enabled: boolean
     children: ReactNode
-    viewIsTransitioning?: boolean
     onDismiss: () => void
 }) => {
     const [scrollY] = useState(() => new Animated.Value(1))

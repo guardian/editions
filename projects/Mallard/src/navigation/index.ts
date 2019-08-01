@@ -57,7 +57,7 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
         backgroundColor: color.artboardBackground,
     },
     transitionSpec: {
-        duration: bounces ? 500 : 400,
+        duration: bounces ? 600 : 400,
         easing: Easing.elastic(bounces ? 1 : 0.5),
         timing: Animated.timing,
         useNativeDriver: true,

@@ -69,6 +69,7 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
 const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
+    const isClosing = sceneProps.position.__getValue() === 1
 
     setNavigationPosition('article', [position, sceneIndex])
 
@@ -89,20 +90,30 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     subtly blend the actual article page
     and its card so it's a bit less jarring
     */
-    const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
-        outputRange: [0, 0.95, 1],
-    })
+    const opacity = isClosing
+        ? position.interpolate({
+              inputRange: [sceneIndex - 1, sceneIndex - 0.75, sceneIndex],
+              outputRange: [0, 1, 1],
+          })
+        : position.interpolate({
+              inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
+              outputRange: [0, 0.95, 1],
+          })
 
     /*
     we need to scale the article's X to
     whatever its card width is
     */
     const scaler = getScaleForArticle(width)
-    const scale = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex],
-        outputRange: [scaler, 1],
-    })
+    const scale = isClosing
+        ? position.interpolate({
+              inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
+              outputRange: [scaler, scaler, 1],
+          })
+        : position.interpolate({
+              inputRange: [sceneIndex - 1, sceneIndex],
+              outputRange: [scaler, 1],
+          })
 
     /*
     yScaleDiff calculates how many pixels we need to offset
@@ -111,7 +122,7 @@ const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const yScaleDiff = (windowHeight - windowHeight * scaler) / 2
     const translater = y - yScaleDiff
     const translateY = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.75, sceneIndex],
+        inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
         outputRange: [translater, translater, metrics.slideCardSpacing],
     })
 

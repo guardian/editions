@@ -1,9 +1,10 @@
-import { CAPIArticle, Card } from '../common'
 import {
-    CollectionCardLayouts,
-    CollectionCardLayout,
-    cardLayouts,
-} from '../../common/src/index'
+    CAPIArticle,
+    Card,
+    FrontCardsForArticleCount,
+    getCardAppearanceInfoAndOverrides,
+    getCardsForFront,
+} from '../common'
 import { fromPairs } from 'ramda'
 import { PublishedFront } from '../fronts/issue'
 
@@ -15,20 +16,16 @@ const chunk = <T>(arr: T[], size: number) =>
 const maxCardSize = 6
 
 const getCardLayoutForArticles = (
-    layout: CollectionCardLayouts,
+    layout: FrontCardsForArticleCount,
     articleLength: number,
-): CollectionCardLayout => {
-    return layout[articleLength] || Object.values(layout).pop()
-}
+): FrontCardsForArticleCount[0] =>
+    layout[articleLength] || Object.values(layout).pop()
 
 export const createCardsFromAllArticlesInCollection = (
     articles: [string, CAPIArticle][],
     front: PublishedFront,
 ): Card[] => {
-    const cardLayout = cardLayouts[front.name]
-        ? cardLayouts[front.name]
-        : cardLayouts.default
-
+    const cardLayout = getCardsForFront(front.name)
     const layout = getCardLayoutForArticles(cardLayout, articles.length)
 
     /*
@@ -38,18 +35,25 @@ export const createCardsFromAllArticlesInCollection = (
         itemsSoFar: number
         cards: Card[]
     }>(
-        ({ itemsSoFar, cards }, current) => ({
-            itemsSoFar: itemsSoFar + current,
-            cards: [
-                ...cards,
-                {
-                    layout: null,
-                    articles: fromPairs(
-                        articles.slice(itemsSoFar, itemsSoFar + current),
-                    ),
-                },
-            ],
-        }),
+        ({ itemsSoFar, cards }, current) => {
+            const { appearance, fits } = getCardAppearanceInfoAndOverrides(
+                current,
+                articles.slice(itemsSoFar).map(([, a]) => a),
+            )
+            const articlesSlice = fromPairs(
+                articles.slice(itemsSoFar, itemsSoFar + fits),
+            )
+            return {
+                itemsSoFar: itemsSoFar + fits,
+                cards: [
+                    ...cards,
+                    {
+                        appearance,
+                        articles: articlesSlice,
+                    },
+                ],
+            }
+        },
         { itemsSoFar: 0, cards: [] },
     )
 
@@ -63,7 +67,7 @@ export const createCardsFromAllArticlesInCollection = (
             ...chunk(articles.slice(itemsSoFar), maxCardSize).map(
                 groupOfArticles => {
                     return {
-                        layout: null,
+                        appearance: null,
                         articles: fromPairs(groupOfArticles),
                     }
                 },

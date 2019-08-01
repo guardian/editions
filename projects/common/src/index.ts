@@ -1,4 +1,5 @@
-export { cardLayouts } from './collection/card-layouts'
+import { FrontCardAppearance } from './collection/card-layouts'
+export * from './collection/card-layouts'
 
 interface WithKey {
     key: string
@@ -12,7 +13,12 @@ export const articlePillars = [
     'lifestyle',
     'neutral',
 ] as const
-export const articleTypes = ['article', 'opinion', 'longread'] as const
+export const articleTypes = [
+    'article',
+    'review',
+    'opinion',
+    'longread',
+] as const
 
 export type PillarFromPalette = typeof articlePillars[number]
 export type ArticleType = typeof articleTypes[number]
@@ -29,7 +35,7 @@ interface PillarAppearance {
 export type Appearance = PillarAppearance | ColorAppearance
 
 export interface Card {
-    layout: null
+    appearance: FrontCardAppearance | null
     articles: { [key: string]: CAPIArticle }
 }
 
@@ -51,15 +57,25 @@ export interface Forecast {
     MobileLink: string
     Link: string
 }
-
+export type MediaType =
+    | 'UseArticleTrail'
+    | 'Hide'
+    | 'Cutout'
+    | 'Slideshow'
+    | 'Image'
 export interface Content extends WithKey {
     type: string
     headline: string
     kicker: string
+    trail: string
     image?: Image
     standfirst?: string
     byline?: string
     bylineImages?: { thumbnail?: Image; cutout?: Image }
+    showByline: boolean
+    showQuotedHeadline: boolean
+    mediaType: MediaType
+    slideshowImages?: Image[]
 }
 export interface Article extends Content {
     type: 'article'
@@ -213,15 +229,6 @@ export interface Crossword {
     pdf?: string
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime
-}
-
-export type CollectionCardLayout = number[]
-export interface CollectionCardLayouts {
-    [countOfArticles: number]: CollectionCardLayout
-}
-export interface CollectionCardLayoutsForFront {
-    default: CollectionCardLayouts
-    [frontName: string]: CollectionCardLayouts
 }
 
 export const issueDir = (issueId: string) => `${issueId}`

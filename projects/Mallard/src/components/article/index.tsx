@@ -14,6 +14,8 @@ import { getNavigationPosition } from 'src/helpers/positions'
 import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
+import { Fader } from '../layout/animators/fader'
+import { ReviewHeader } from './article-header/review-header'
 
 /*
 This is the article view! For all of the articles.
@@ -34,24 +36,12 @@ const styles = StyleSheet.create({
 
 export interface ArticleControllerPropTypes {
     article: CAPIArticle
-    viewIsTransitioning: boolean
 }
 
-const ArticleController = ({
-    article,
-    viewIsTransitioning,
-}: {
-    article: CAPIArticle
-    viewIsTransitioning?: boolean
-}) => {
+const ArticleController = ({ article }: { article: CAPIArticle }) => {
     switch (article.type) {
         case 'article':
-            return (
-                <Article
-                    article={viewIsTransitioning ? undefined : article.elements}
-                    {...article}
-                />
-            )
+            return <Article article={article.elements} {...article} />
 
         case 'gallery':
             return <Gallery gallery={article} />
@@ -72,70 +62,53 @@ const ArticleController = ({
 
 const Article = ({
     article,
-    headline,
-    image,
-    kicker,
-    byline,
-    standfirst,
+    ...headerProps
 }: {
     article?: BlockElement[]
 } & ArticleHeaderProps &
     StandfirstPropTypes) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const html = useMemo(() => (article ? render(article) : ''), [article])
-    const navigationPosition = getNavigationPosition('article')
     const [, { type }] = useArticle()
     return (
         <View style={styles.container}>
             {type === 'opinion' ? (
-                <OpinionHeader
-                    {...{ byline, headline, image, kicker, standfirst }}
-                />
+                <OpinionHeader {...headerProps} />
+            ) : type === 'review' ? (
+                <ReviewHeader {...headerProps} />
             ) : type === 'longread' ? (
-                <LongReadHeader
-                    {...{ byline, headline, image, kicker, standfirst }}
-                />
+                <LongReadHeader {...headerProps} />
             ) : (
-                <NewsHeader
-                    {...{ byline, headline, image, kicker, standfirst }}
-                />
+                <NewsHeader {...headerProps} />
             )}
-            <Animated.View
-                style={[
-                    { backgroundColor: color.background, flex: 1 },
-                    navigationPosition && {
-                        opacity: navigationPosition.position.interpolate({
-                            inputRange: [0.75, 1],
-                            outputRange: [0, 1],
-                        }),
-                    },
-                ]}
-            >
-                <WebView
-                    originWhitelist={['*']}
-                    scrollEnabled={false}
-                    useWebKit={false}
-                    source={{ html: html }}
-                    onShouldStartLoadWithRequest={event => {
-                        if (event.url !== 'about:blank') {
-                            Linking.openURL(event.url)
-                            return false
-                        }
-                        return true
-                    }}
-                    onMessage={event => {
-                        setHeight(parseInt(event.nativeEvent.data))
-                    }}
-                    style={{
-                        flex: 1,
-                        minHeight: height,
-                    }}
-                    // The below lines fixes crashes on Android
-                    // there seems to be other approaches using opacity / overflow styles detailed here
-                    // https://github.com/react-native-community/react-native-webview/issues/429
-                    androidHardwareAccelerationDisabled={true}
-                />
-            </Animated.View>
+            <Fader buildOrder={10} position={'article'}>
+                <View style={[{ backgroundColor: color.background, flex: 1 }]}>
+                    <WebView
+                        originWhitelist={['*']}
+                        scrollEnabled={false}
+                        useWebKit={false}
+                        source={{ html: html }}
+                        onShouldStartLoadWithRequest={event => {
+                            if (event.url !== 'about:blank') {
+                                Linking.openURL(event.url)
+                                return false
+                            }
+                            return true
+                        }}
+                        onMessage={event => {
+                            setHeight(parseInt(event.nativeEvent.data))
+                        }}
+                        style={{
+                            flex: 1,
+                            minHeight: height,
+                        }}
+                        // The below lines fixes crashes on Android
+                        // there seems to be other approaches using opacity / overflow styles detailed here
+                        // https://github.com/react-native-community/react-native-webview/issues/429
+                        androidHardwareAccelerationDisabled={true}
+                    />
+                </View>
+            </Fader>
         </View>
     )
 }

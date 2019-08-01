@@ -1,14 +1,27 @@
 import React from 'react'
-import { HeadlineText } from 'src/components/styled-text'
-import { newsHeaderStyles } from '../styles'
+import { HeadlineText, HeadlineTextProps } from 'src/components/styled-text'
+import { StyleSheet, StyleProp, TextStyle } from 'react-native'
+import { metrics } from 'src/theme/spacing'
 
-export interface ArticleHeadlineProps {
+export type ArticleHeadlineProps = {
     children: any
-}
+    textStyle?: StyleProp<TextStyle>
+} & Pick<HeadlineTextProps, 'weight'>
 
-const ArticleHeadline = ({ children }: ArticleHeadlineProps) => {
+const styles = StyleSheet.create({
+    headline: {
+        marginRight: metrics.horizontal * 2,
+        marginTop: metrics.vertical / 2,
+    },
+})
+
+const ArticleHeadline = ({
+    children,
+    textStyle,
+    weight,
+}: ArticleHeadlineProps) => {
     return (
-        <HeadlineText style={newsHeaderStyles.headline}>
+        <HeadlineText {...{ weight }} style={[styles.headline, textStyle]}>
             {children}
         </HeadlineText>
     )
