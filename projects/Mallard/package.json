@@ -54,7 +54,7 @@
         "react-native-zip-archive": "^4.0.1",
         "react-navigation": "3.11.0",
         "react-navigation-fluid-transitions": "^0.3.2",
-        "rn-fetch-blob": "^0.10.15"
+        "rn-fetch-blob": "0.10.15"
     },
     "devDependencies": {
         "@types/events": "^3.0.0",
