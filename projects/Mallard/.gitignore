@@ -22,6 +22,9 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+# Sentry
+sentry.properties
+
 # Android/IntelliJ
 #
 build/
