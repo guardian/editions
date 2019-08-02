@@ -1,5 +1,6 @@
 {
     "scripts": {
+        "validate-tests": "yarn test",
         "validate-mallard": "eslint 'projects/Mallard/src/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json",
         "validate-mallard-tsc": "cd projects/Mallard && yarn tsc",
         "validate-backend": "eslint 'projects/backend/**/*.{ts,tsx}' --parser-options=project:./projects/backend/tsconfig.json",
