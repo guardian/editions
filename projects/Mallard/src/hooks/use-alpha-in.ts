@@ -31,7 +31,7 @@ const useAlphaIn = (
                 }).start()
             }
         }
-    }, [duration, currentValue, easing]) // ignore changes to easing
+    }, [duration, currentValue, easing, out, initialValue]) // ignore changes to easing
 
     return animated.current
 }
