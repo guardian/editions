@@ -20,6 +20,8 @@ import { Button, ButtonAppearance } from 'src/components/button/button'
 import { navigateToIssueList, navigateToSettings } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
+import { NativeModules, Alert } from 'react-native'
+
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -72,6 +74,11 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
     const [viewIsTransitioning, setViewIsTransitioning] = useState(true)
 
+    //const track = new Promise(() => null);
+    
+    NativeModules.Ophan.sendTestAppScreenEvent("issue_front")//, track)
+    //track.then(res => Alert.alert("done")).catch(e => Alert.alert(JSON.stringify(e)))
+ 
     return (
         <Container>
             <NavigationEvents
