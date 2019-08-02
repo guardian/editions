@@ -3,19 +3,34 @@ import { useEffect, useRef } from 'react'
 
 const useAlphaIn = (
     duration: number,
-    initialValue = 0,
-    currentValue = 1,
-    easing = Easing.linear,
+    {
+        initialValue = 0,
+        currentValue = 1,
+        easing = Easing.linear,
+        out = false,
+    } = {},
 ) => {
     const animated = useRef(new Animated.Value(initialValue))
 
     useEffect(() => {
-        Animated.timing(animated.current, {
+        const { current: val } = animated
+        Animated.timing(val, {
             duration,
             toValue: currentValue,
             easing,
             useNativeDriver: true,
         }).start()
+
+        return () => {
+            if (out) {
+                Animated.timing(val, {
+                    duration,
+                    toValue: initialValue,
+                    easing,
+                    useNativeDriver: true,
+                }).start()
+            }
+        }
     }, [duration, currentValue, easing]) // ignore changes to easing
 
     return animated.current

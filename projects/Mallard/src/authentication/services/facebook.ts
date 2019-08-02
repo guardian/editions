@@ -20,17 +20,25 @@ const getFacebookOAuthURL = (validatorString: string) =>
         state: validatorString,
     })}`
 
+/**
+ * Attempts to login with facebook OAuth
+ *
+ * Due to its dependency on `authWithDeepRedirect` it expects that auth to be completed
+ * with a deep link back into the app. The `invariant` calls will throw if they fail.
+ *
+ * They have been written here with strings that currently are ok to show in the UI.
+ */
 const facebookAuthWithDeepRedirect = (
     validatorString: string,
 ): Promise<string> =>
     authWithDeepRedirect(getFacebookOAuthURL(validatorString), async url => {
-        invariant(url.startsWith(facebookRedirectURI), 'Login cancelled')
+        invariant(url.startsWith(facebookRedirectURI), 'Sign-in cancelled')
 
         const params = qs.parse(url.split('#')[1])
 
         invariant(
             params.state === validatorString,
-            'Login session expired, please try again',
+            'Sign-in session expired, please try again',
         )
 
         invariant(params.access_token, 'Something went wrong')

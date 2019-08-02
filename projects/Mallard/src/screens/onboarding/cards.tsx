@@ -27,7 +27,7 @@ const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
             <OnboardingCard
                 style={styles.card}
                 title="Welcome to the Guardian daily"
-                subtitle="Thank you for being a beta user"
+                explainerTitle="Thank you for being a beta user"
             >
                 {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
             </OnboardingCard>
@@ -52,7 +52,7 @@ const OnboardingConsent = ({
                 style={styles.card}
                 appearance={CardAppearance.apricot}
                 title="We care about your privacy"
-                subtitle="We won’t share your data without asking"
+                explainerTitle="We won’t share your data without asking"
             >
                 {`(temporary copy) By clicking agree you are agreeing to The Guardian’s privacy policy and data usage`}
             </OnboardingCard>

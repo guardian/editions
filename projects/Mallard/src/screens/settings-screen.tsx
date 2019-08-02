@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Text, Dimensions, View, Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -17,11 +17,10 @@ import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { resetCredentials } from 'src/authentication/keychain'
-import { useSignInStatus, SignInStatus } from 'src/hooks/use-sign-in-status'
 import { routeNames } from 'src/navigation'
 import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
+import { useAuth, AuthContext } from 'src/authentication/auth-context'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -127,29 +126,35 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
-    const status = useSignInStatus()
+    const handler = useAuth()
+    const { signOut } = useContext(AuthContext)
 
-    const signInListItems =
-        status === SignInStatus.pending
-            ? []
-            : [
-                  {
-                      key: `Sign ${
-                          status === SignInStatus.signedIn ? 'out' : 'in'
-                      }`,
-                      title: `Sign ${
-                          status === SignInStatus.signedIn ? 'out' : 'in'
-                      }`,
-                      data: {
-                          onPress: async () => {
-                              if (status === SignInStatus.signedIn) {
-                                  await resetCredentials()
-                              }
-                              navigation.navigate(routeNames.SignIn)
-                          },
-                      },
-                  },
-              ]
+    const signInListItems = handler({
+        pending: () => [],
+        signedIn: (_, data) => [
+            {
+                key: `Sign out`,
+                title: `Sign out of ${data.userDetails.publicFields.displayName}`,
+                data: {
+                    onPress: async () => {
+                        await signOut()
+                        navigation.navigate(routeNames.SignIn)
+                    },
+                },
+            },
+        ],
+        signedOut: () => [
+            {
+                key: `Sign in`,
+                title: `Sign in`,
+                data: {
+                    onPress: () => {
+                        navigation.navigate(routeNames.SignIn)
+                    },
+                },
+            },
+        ],
+    })
 
     return (
         <WithAppAppearance value={'settings'}>

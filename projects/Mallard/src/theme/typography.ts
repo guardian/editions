@@ -87,6 +87,10 @@ const scale = {
             fontSize: 30,
             lineHeight: 30,
         },
+        2: {
+            fontSize: 45,
+            lineHeight: 45,
+        },
         2.5: {
             fontSize: 60,
             lineHeight: 60,

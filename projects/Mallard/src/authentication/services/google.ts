@@ -25,6 +25,15 @@ const getGoogleOAuthURL = (validatorString: string) =>
                 })}`,
         )
 
+/**
+ * Unlike Facebook, Google will not return a token directly, instead will return a code
+ * that we then have to exchange for a token. This is ostensibly so that a user can't
+ * intercept a token an pretend to be the app (tokens are signed to the app rather than a user).
+ *
+ * This normally requires a client secret to prove that we are the app, but given the nature of the
+ * problem with storing secrets in apps, this restriction is relaxed for iOS / Android apps
+ * and we can simply call the endpoint without a secret. See https://developers.google.com/identity/protocols/OAuth2InstalledApp#exchange-authorization-code under `client_secret`.
+ */
 const getGoogleTokenFromCode = (code: string) =>
     fetch('https://www.googleapis.com/oauth2/v4/token', {
         method: 'POST',
@@ -41,16 +50,24 @@ const getGoogleTokenFromCode = (code: string) =>
         .then(res => res.json())
         .then(json => json.access_token)
 
+/**
+ * Attempts to login with facebook OAuth
+ *
+ * Due to its dependency on `authWithDeepRedirect` it expects that auth to be completed
+ * with a deep link back into the app. The `invariant` calls will throw if they fail.
+ *
+ * They have been written here with strings that currently are ok to show in the UI.
+ */
 const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
     getGoogleOAuthURL(validatorString).then(authUrl =>
         authWithDeepRedirect(authUrl, async url => {
-            invariant(url.startsWith(googleRedirectURI), 'Login cancelled')
+            invariant(url.startsWith(googleRedirectURI), 'Sign-in cancelled')
 
             const params = qs.parse(url.split('?')[1])
 
             invariant(
                 params.state === validatorString,
-                'Login session expired, please try again',
+                'Sign-in session expired, please try again',
             )
 
             invariant(params.code, 'Something went wrong')

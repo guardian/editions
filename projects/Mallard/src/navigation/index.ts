@@ -179,35 +179,38 @@ const OnboardingStack = createStackNavigator(
 )
 
 const RootNavigator = createAppContainer(
-    createSwitchNavigator(
+    createStackNavigator(
         {
-            Main: ({
-                navigation,
-            }: {
-                navigation: NavigationScreenProp<{}>
-            }) => {
-                const [settings] = useSettings()
-                useEffect(() => {
-                    if (shouldShowOnboarding(settings)) {
-                        navigation.navigate('Onboarding')
-                    } else {
-                        navigation.navigate('App')
-                    }
-                })
-                return null
-            },
-            App: AppStack,
-            Onboarding: OnboardingStack,
-            [routeNames.SignIn]: mapNavigationToProps(
-                AuthSwitcherScreen,
-                nav => ({
-                    onAuthenticated: () => nav.navigate('App'),
-                    onDismiss: () => nav.navigate('App'),
-                }),
+            AppRoot: createSwitchNavigator(
+                {
+                    Main: ({
+                        navigation,
+                    }: {
+                        navigation: NavigationScreenProp<{}>
+                    }) => {
+                        const [settings] = useSettings()
+                        useEffect(() => {
+                            if (shouldShowOnboarding(settings)) {
+                                navigation.navigate('Onboarding')
+                            } else {
+                                navigation.navigate('App')
+                            }
+                        })
+                        return null
+                    },
+                    App: AppStack,
+                    Onboarding: OnboardingStack,
+                },
+                {
+                    initialRouteName: 'Main',
+                },
             ),
+            [routeNames.SignIn]: AuthSwitcherScreen,
         },
         {
-            initialRouteName: 'Main',
+            initialRouteName: 'AppRoot',
+            mode: 'modal',
+            headerMode: 'none',
         },
     ),
 )

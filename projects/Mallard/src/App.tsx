@@ -14,6 +14,8 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { prepFileSystem } from './helpers/files'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import AsyncStorage from '@react-native-community/async-storage'
+import { AuthProvider } from './authentication/auth-context'
+import { Modal } from './components/modal'
 
 useScreens()
 prepFileSystem()
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-2'
+const persistenceKey = 'dev-nav-key-23'
 const persistNavigationState = async (navState: any) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
@@ -72,14 +74,18 @@ export default class App extends React.Component<{}, {}> {
             <ErrorBoundary>
                 <FileSystemProvider>
                     <SettingsProvider>
-                        <StatusBar
-                            animated={true}
-                            barStyle="light-content"
-                            backgroundColor="#041f4a"
-                        />
-                        <View style={styles.appContainer}>
-                            <RootNavigator {...rootNavigationProps} />
-                        </View>
+                        <AuthProvider>
+                            <Modal>
+                                <StatusBar
+                                    animated={true}
+                                    barStyle="light-content"
+                                    backgroundColor="#041f4a"
+                                />
+                                <View style={styles.appContainer}>
+                                    <RootNavigator {...rootNavigationProps} />
+                                </View>
+                            </Modal>
+                        </AuthProvider>
                     </SettingsProvider>
                 </FileSystemProvider>
             </ErrorBoundary>

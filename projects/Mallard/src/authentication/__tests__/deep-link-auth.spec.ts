@@ -59,7 +59,7 @@ describe('deep-link-auth', () => {
                 error = e
             }
 
-            await expect(error).toBe('Login cancelled')
+            await expect(error).toBe('Sign-in cancelled')
         })
 
         it('will throw if the validator throws', async () => {
