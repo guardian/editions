@@ -18,6 +18,7 @@ import {
     OnboardingConsentScreen,
 } from 'src/screens/onboarding-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
+import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
@@ -37,6 +38,7 @@ const routeNames = {
     Endpoints: 'Endpoints',
     GdprConsent: 'GdprConsent',
     SignIn: 'SignIn',
+    CasSignIn: 'CasSignIn',
     onboarding: {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',
@@ -116,6 +118,7 @@ const AppStack = createStackNavigator(
                 [routeNames.Downloads]: DownloadScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
+                [routeNames.CasSignIn]: CasSignInScreen,
             },
             {
                 defaultNavigationOptions: {

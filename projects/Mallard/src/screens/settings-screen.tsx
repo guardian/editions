@@ -41,7 +41,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         title: 'Manage issues',
                         data: {
                             onPress: () => {
-                                navigation.navigate('Downloads')
+                                navigation.navigate(routeNames.Downloads)
                             },
                         },
                     },
@@ -51,7 +51,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         explainer: apiUrl,
                         data: {
                             onPress: () => {
-                                navigation.navigate('Endpoints')
+                                navigation.navigate(routeNames.Endpoints)
                             },
                         },
                     },
@@ -165,11 +165,20 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={[
                         ...signInListItems,
                         {
+                            key: 'Activate with subscriber ID',
+                            title: 'Activate with subscriber ID',
+                            data: {
+                                onPress: () => {
+                                    navigation.navigate(routeNames.CasSignIn)
+                                },
+                            },
+                        },
+                        {
                             key: 'Consent settings',
                             title: 'Consent settings',
                             data: {
                                 onPress: () => {
-                                    navigation.navigate('GdprConsent')
+                                    navigation.navigate(routeNames.GdprConsent)
                                 },
                             },
                         },
