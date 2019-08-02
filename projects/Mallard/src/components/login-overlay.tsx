@@ -41,7 +41,7 @@ const ModalOpener = ({
     )
 
     // ensure the modal is closed on unmount
-    useEffect(() => () => close(), [])
+    useEffect(() => () => close(), [close])
 
     return (
         <View style={overlayStyles.wrapper} {...swipeUpHandlers.panHandlers}>
