@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     View,
     KeyboardAvoidingView,
@@ -115,9 +115,7 @@ const LoginInput = ({
             ></TextInput>
         </View>
         {error && (
-            <UiBodyCopy weight="bold" style={loginInputStyles.error}>
-                {error}
-            </UiBodyCopy>
+            <UiBodyCopy style={loginInputStyles.error}>{error}</UiBodyCopy>
         )}
     </View>
 )
@@ -136,12 +134,14 @@ const loginHeaderStyles = StyleSheet.create({
     dismissButton: {
         paddingHorizontal: 0,
         backgroundColor: 'transparent',
-        borderColor: color.palette.neutral[100],
+        borderColor: color.primary,
         borderWidth: 1,
     },
-    dismissText: { color: color.palette.neutral[100] },
+    dismissText: {
+        color: color.primary,
+    },
     title: {
-        color: color.palette.neutral[100],
+        color: color.primary,
     },
 })
 
