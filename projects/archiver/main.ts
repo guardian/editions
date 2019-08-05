@@ -153,7 +153,6 @@ export const handler: Handler<
         if (event.Records) return s3Event(event.Records)
         const id = event.id
         if (!(id && typeof id === 'string')) throw new Error('No ID in event')
-        if (event.index) return summary()
         const source = event.source
         if (!(source && typeof source === 'string'))
             throw new Error('No source in event')
