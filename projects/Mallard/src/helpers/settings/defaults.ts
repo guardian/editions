@@ -15,7 +15,7 @@ export const backends = [
     },
     {
         title: 'CODE published',
-        valued: 'https://editions-store-code.s3-eu-west-1.amazonaws.com/',
+        value: 'https://editions-store-code.s3-eu-west-1.amazonaws.com/',
     },
     {
         title: 'CODE preview',
