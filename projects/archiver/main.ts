@@ -15,6 +15,7 @@ import { unnest } from 'ramda'
 import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
 import { generateIndex } from './summary'
+import pAll from 'p-all'
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
@@ -68,11 +69,12 @@ const fetch = async (source: string, id: string): Promise<void> => {
         console.error(error)
     })
 
-    let imageUploads = await Promise.all(
-        imagesWithSizes.map(async ([image, size]) =>
+    const imageUploadActions = imagesWithSizes.map(
+        ([image, size]) => async () =>
             attempt(getAndUploadImage(source, id, image, size)),
-        ),
     )
+
+    const imageUploads = await pAll(imageUploadActions, { concurrency: 20 })
 
     imageUploads
         .filter(hasFailed)
