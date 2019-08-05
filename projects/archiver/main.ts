@@ -60,7 +60,7 @@ const fetch = async (source: string, id: string): Promise<void> => {
     )
 
     const colourUploads = await Promise.all(
-        images.map(image => getAndUploadColours(id, image)),
+        images.map(image => getAndUploadColours(source, id, image)),
     )
 
     colourUploads.filter(hasFailed).forEach(error => {
@@ -70,7 +70,7 @@ const fetch = async (source: string, id: string): Promise<void> => {
 
     let imageUploads = await Promise.all(
         imagesWithSizes.map(async ([image, size]) =>
-            attempt(getAndUploadImage(id, image, size)),
+            attempt(getAndUploadImage(source, id, image, size)),
         ),
     )
 

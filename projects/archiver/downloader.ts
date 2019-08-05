@@ -2,7 +2,6 @@ import fetch from 'node-fetch'
 import {
     mediaPath,
     coloursPath,
-    imageSizes,
     issuePath,
     frontPath,
     Issue,
@@ -48,13 +47,14 @@ export const getFront = async (
 }
 
 export const getImage = async (
+    source: string,
     issue: string,
     image: Image,
     size: ImageSize,
 ): Promise<[string, Attempt<Buffer>]> => {
     const path = mediaPath(issue, size, image.source, image.path)
 
-    const url = `${URL}${path}`
+    const url = `${URL}${source}/${path}`
     const resp = attempt(fetch(url))
 
     const maybeResponse = await resp
@@ -65,9 +65,12 @@ export const getImage = async (
 }
 
 export const getColours = async (
+    source: string,
     issue: string,
     image: Image,
 ): Promise<[string, Attempt<{}>]> => {
-    const path = coloursPath(issue, image.source, image.path)
-    return [path, await attempt(fetch(`${URL}${path}`).then(_ => _.json()))]
+    const path = coloursPath(`${source}/${issue}`, image.source, image.path)
+    const url = `${URL}${source}/${path}`
+    const response = await attempt(fetch(url).then(_ => _.json()))
+    return [path, response]
 }
