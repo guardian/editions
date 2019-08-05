@@ -181,7 +181,7 @@ const LoginHeader = ({
             <View
                 style={{
                     alignItems: 'flex-end',
-                    marginBottom: metrics.vertical,
+                    marginBottom: metrics.vertical / 2,
                 }}
             >
                 <Button
