@@ -256,6 +256,8 @@ export interface Palette {
 }
 export type ImageSize = typeof imageSizes[number] | 'sample'
 
+// These have issueids in the path, but you'll need to change the archiver if you want to use them.
+
 export const mediaPath = (
     issue: string,
     size: ImageSize,

@@ -11,8 +11,9 @@ MemWatch.on('leak', ev => {
     console.error('>>>LEAK LEAK LEAK')
 })
 console.log('Node process running on', process.pid)
-const date = process.argv[2] || '2019-07-09'
-run(date)
+const date = process.argv[2]
+const source = process.argv[3]
+run(date, source)
     .then(() => {
         process.exit(0)
     })

@@ -3,7 +3,7 @@ import {
     SearchResponseCodec,
     ContentType,
     ICapiDateTime as CapiDateTime64,
-    ICrossword,
+    IContent,
 } from '@guardian/capi-ts'
 import {
     Article,
@@ -17,7 +17,6 @@ import {
 } from '@creditkarma/thrift-server-core'
 import { getImage } from './assets'
 import { elementParser } from './elements'
-import { IContent } from '@guardian/capi-ts/dist/Content'
 import fetch from 'node-fetch'
 import { cleanupHtml } from '../utils/html'
 import { fromPairs } from 'ramda'

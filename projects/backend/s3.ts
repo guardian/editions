@@ -12,6 +12,17 @@ import {
 } from 'aws-sdk'
 import { notNull } from './common'
 
+export interface Path {
+    key: string
+    bucket: 'published' | 'preview'
+}
+const stage = process.env.stage || 'code'
+
+const getBucket = (bucketType: Path['bucket']) =>
+    `${bucketType}-editions-${stage.toLowerCase()}`
+
+console.log(`Creating S3 client with role arn: ${process.env.arn}`)
+
 const s3 = new S3({
     region: 'eu-west-1',
     credentials: process.env.arn
@@ -24,9 +35,6 @@ const s3 = new S3({
         : new SharedIniFileCredentials({ profile: 'cmsFronts' }),
 })
 
-const stage = process.env.stage || 'code'
-const bucket = `published-editions-${stage.toLowerCase()}`
-
 interface S3Response {
     text: () => Promise<string>
     json: () => Promise<{}>
@@ -34,81 +42,53 @@ interface S3Response {
     etag: string | undefined
 }
 
-export const s3Latest = async (
-    prefix: string,
-): Promise<Attempt<{ key: string }>> => {
+export const s3List = async (path: Path): Promise<Attempt<string[]>> => {
     const response = await attempt(
         s3
             .listObjectsV2({
-                Bucket: bucket,
-                Prefix: prefix,
-            })
-            .promise(),
-    )
-    if (hasFailed(response)) {
-        return withFailureMessage(response, 'S3 Access failed')
-    }
-    if (response.KeyCount === 0) {
-        return failure({
-            httpStatus: 404,
-            error: new Error(`No keys returned from listObject of ${prefix}`),
-        })
-    }
-    const contents = response.Contents
-    if (!contents) throw new Error(`Nothing at ${prefix}`)
-    const keydates = contents
-        .map(({ Key, LastModified }) => ({
-            Key,
-            LastModified,
-        }))
-        .filter(
-            (x): x is { Key: string; LastModified: Date } =>
-                x.Key !== null && x.LastModified !== null,
-        )
-    const latest = keydates.reduce((a, b) =>
-        a.LastModified < b.LastModified ? b : a,
-    )
-    return { key: latest.Key }
-}
-
-export const s3List = async (prefix: string): Promise<Attempt<string[]>> => {
-    const response = await attempt(
-        s3
-            .listObjectsV2({
-                Bucket: bucket,
-                Prefix: prefix,
+                Bucket: getBucket(path.bucket),
+                Prefix: path.key,
                 Delimiter: '/',
             })
             .promise(),
     )
     if (hasFailed(response)) {
-        return withFailureMessage(response, 'S3 Access failed')
+        return withFailureMessage(
+            response,
+            `S3 Access failed for path ${JSON.stringify(path)} in ${getBucket(
+                path.bucket,
+            )}`,
+        )
     }
     if (response.KeyCount === 0) {
         return failure({
             httpStatus: 404,
-            error: new Error(`No keys returned from listObject of ${prefix}`),
+            error: new Error(
+                `No keys returned from listObject of ${JSON.stringify(path)}`,
+            ),
         })
     }
     const contents = response.CommonPrefixes
 
-    if (!contents) throw new Error(`Nothing at ${prefix}`)
+    if (!contents) throw new Error(`Nothing at ${JSON.stringify(path)}`)
 
     return contents.map(_ => _.Prefix).filter(notNull)
 }
-export const s3fetch = (key: string): Promise<Attempt<S3Response>> => {
+export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
     return new Promise(resolve => {
         s3.getObject(
             {
-                Key: key,
-                Bucket: bucket,
+                Key: path.key,
+                Bucket: getBucket(path.bucket),
             },
             (error, result) => {
                 if (error && error.code == 'NoSuchKey') {
                     resolve(
                         failure({
                             httpStatus: 404,
-                            error: new Error(`Could not find key ${key}`),
+                            error: new Error(
+                                `Could not find key ${JSON.stringify(path)}`,
+                            ),
                         }),
                     )
                     return
@@ -127,7 +107,9 @@ export const s3fetch = (key: string): Promise<Attempt<S3Response>> => {
                         failure({
                             httpStatus: 500,
                             error: new Error(
-                                `Neither result nor error in s3 response for ${key}`,
+                                `Neither result nor error in s3 response for  ${JSON.stringify(
+                                    path,
+                                )}`,
                             ),
                         }),
                     )
@@ -139,7 +121,9 @@ export const s3fetch = (key: string): Promise<Attempt<S3Response>> => {
                     resolve(
                         failure({
                             httpStatus: 500,
-                            error: new Error(`Undefined body for ${key}`),
+                            error: new Error(
+                                `Undefined body for ${JSON.stringify(path)}`,
+                            ),
                         }),
                     )
                     return

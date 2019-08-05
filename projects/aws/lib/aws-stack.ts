@@ -1,7 +1,7 @@
 import cdk = require('@aws-cdk/core')
 import apigateway = require('@aws-cdk/aws-apigateway')
 import lambda = require('@aws-cdk/aws-lambda')
-import { Code } from '@aws-cdk/aws-lambda'
+import { Code, FunctionProps } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
 import cloudfront = require('@aws-cdk/aws-cloudfront')
@@ -86,8 +86,10 @@ export class EditionsStack extends cdk.Stack {
             description: 'lambda access',
         })
 
-        const backend = new lambda.Function(this, 'EditionsBackend', {
-            functionName: `editions-backend-${stageParameter.valueAsString}`,
+        const backendProps = (
+            publicationStage: 'preview' | 'published',
+        ): FunctionProps => ({
+            functionName: `editions-${publicationStage}-backend-${stageParameter.valueAsString}`,
             runtime: lambda.Runtime.NODEJS_10_X,
             memorySize: 512,
             timeout: Duration.seconds(60),
@@ -103,32 +105,49 @@ export class EditionsStack extends cdk.Stack {
                 atomArn: atomLambdaParam.valueAsString,
                 psurl: printSentURLParameter.valueAsString,
                 IMAGE_SALT: imageSalt.valueAsString,
+                publicationStage,
             },
+            initialPolicy: [
+                new iam.PolicyStatement({
+                    actions: ['sts:AssumeRole'],
+                    resources: [frontsAccess.roleArn],
+                }),
+                new iam.PolicyStatement({
+                    resources: [atomLambdaParam.valueAsString],
+                    actions: ['lambda:InvokeFunction'],
+                }),
+            ],
         })
 
-        const policy = new iam.PolicyStatement({
-            actions: ['sts:AssumeRole'],
-            resources: [frontsAccess.roleArn],
-        })
+        const previewBackend = new lambda.Function(
+            this,
+            'EditionsPreviewBackend',
+            backendProps('preview'),
+        )
 
-        backend.addToRolePolicy(policy)
-
-        const atomPolicy = new iam.PolicyStatement({
-            resources: [atomLambdaParam.valueAsString],
-            actions: ['lambda:InvokeFunction'],
-        })
-
-        backend.addToRolePolicy(atomPolicy)
+        const publishedBackend = new lambda.Function(
+            this,
+            'EditionsPublishedBackend',
+            backendProps('published'),
+        )
 
         const gateway = new apigateway.LambdaRestApi(
             this,
-            'editions-backend-apigateway',
+            'editions-preview-backend-apigateway',
             {
-                handler: backend,
+                handler: previewBackend,
+            },
+        )
+        const publishedGateway = new apigateway.LambdaRestApi(
+            this,
+            'editions-published-backend-apigateway',
+            {
+                handler: publishedBackend,
             },
         )
 
         const gatewayId = gateway.restApiId
+        const publishedGatewayId = publishedGateway.restApiId
 
         const dist = new cloudfront.CloudFrontWebDistribution(
             this,
@@ -176,20 +195,20 @@ export class EditionsStack extends cdk.Stack {
             environment: {
                 stage: stageParameter.valueAsString,
                 bucket: archive.bucketName,
-                backend: `${gatewayId}.execute-api.eu-west-1.amazonaws.com/prod/`, //Yes, this (the region) really should not be hard coded.
+                backend: `${publishedGatewayId}.execute-api.eu-west-1.amazonaws.com/prod/`, //Yes, this (the region) really should not be hard coded.
             },
+            initialPolicy: [
+                new iam.PolicyStatement({
+                    actions: ['*'],
+                    resources: [archive.arnForObjects('*'), archive.bucketArn],
+                }),
+            ],
         })
+
         new CfnOutput(this, 'archiver-arn', {
             description: 'ARN for achiver lambda',
             value: archiver.functionArn,
         })
-
-        const archiverPolicy = new iam.PolicyStatement({
-            actions: ['*'],
-            resources: [archive.arnForObjects('*'), archive.bucketArn],
-        })
-
-        archiver.addToRolePolicy(archiverPolicy)
 
         const publishedBucket = s3.Bucket.fromBucketName(
             this,

@@ -9,7 +9,8 @@ deployments:
             prefixStack: false
             bucket: editions-dist
             fileName: backend.zip
-            functionNames: [editions-backend-]
+            functionNames:
+                [editions-preview-backend-, editions-published-backend-]
     archiver:
         type: aws-lambda
         dependencies: [cloudformation]
