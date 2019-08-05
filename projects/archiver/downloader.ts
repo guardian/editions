@@ -69,7 +69,7 @@ export const getColours = async (
     issue: string,
     image: Image,
 ): Promise<[string, Attempt<{}>]> => {
-    const path = coloursPath(`${source}/${issue}`, image.source, image.path)
+    const path = coloursPath(issue, image.source, image.path)
     const url = `${URL}${source}/${path}`
     const response = await attempt(fetch(url).then(_ => _.json()))
     return [path, response]
