@@ -166,7 +166,9 @@ const Button = ({
                         {innards.children}
                     </UiBodyCopy>
                 ) : (
-                    <Icon style={defaultButtonStyles.text}>{innards.icon}</Icon>
+                    <Icon style={[defaultButtonStyles.text, textStyles]}>
+                        {innards.icon}
+                    </Icon>
                 )}
             </View>
         </TouchableOpacity>

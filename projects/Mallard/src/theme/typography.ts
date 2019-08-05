@@ -77,23 +77,23 @@ const scale = {
     titlepiece: {
         1: {
             fontSize: 18,
-            lineHeight: 18,
+            lineHeight: 20,
         },
         1.25: {
             fontSize: 24,
-            lineHeight: 24,
+            lineHeight: 26,
         },
         1.5: {
             fontSize: 30,
-            lineHeight: 30,
+            lineHeight: 33,
         },
         2: {
             fontSize: 45,
-            lineHeight: 45,
+            lineHeight: 50,
         },
         2.5: {
             fontSize: 60,
-            lineHeight: 60,
+            lineHeight: 66,
         },
     },
 }

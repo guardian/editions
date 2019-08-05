@@ -14,9 +14,7 @@ const maybeThrowErrors = async (res: Response) => {
     if (res.status !== 200) {
         throw new Error(
             hasErrorsArray(json)
-                ? json.errors
-                      .map(err => `${err.message}: ${err.description}`)
-                      .join(', ')
+                ? json.errors.map(err => err.description).join(', ')
                 : 'Invalid credentials',
         )
     }

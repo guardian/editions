@@ -45,7 +45,7 @@ const appearances: {
         text: { color: color.palette.neutral[100] },
     }),
     [CardAppearance.blue]: StyleSheet.create({
-        background: { backgroundColor: '#5da8db' },
+        background: { backgroundColor: '#399fdc' },
         text: { color: color.primary },
     }),
 }
