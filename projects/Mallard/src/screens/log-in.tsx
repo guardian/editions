@@ -43,27 +43,6 @@ const SocialButton = ({
     </Button>
 )
 
-const Shadow = () => (
-    <View
-        style={{
-            backgroundColor: 'transparent',
-            bottom: 0,
-            left: 0,
-            overflow: 'hidden',
-            position: 'absolute',
-            right: 0,
-            shadowColor: 'black',
-            shadowRadius: 2,
-            shadowOpacity: 1,
-            shadowOffset: {
-                height: 2,
-                width: 0,
-            },
-            top: 0,
-        }}
-    />
-)
-
 const LoginInput = ({
     secureTextEntry,
     label,
@@ -93,7 +72,6 @@ const LoginInput = ({
             {label}
         </UiBodyCopy>
         <View>
-            {/** <Shadow /> */}
             <TextInput
                 style={{
                     borderColor: error ? color.error : color.primary,
