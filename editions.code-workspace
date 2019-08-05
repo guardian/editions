@@ -20,6 +20,9 @@
         },
         {
             "path": "projects/archiver"
+        },
+        {
+            "path": "docs"
         }
     ],
     "settings": {
