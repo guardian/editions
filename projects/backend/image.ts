@@ -26,8 +26,10 @@ const getSignature = (path: string) => {
 }
 
 const sizes: { [k in ImageSize]: number } = {
-    phone: 1500,
-    tablet: 5555,
+    phone: 375,
+    tablet: 740,
+    tabletL: 980,
+    tabletXL: 1140,
     sample: 200,
 }
 
