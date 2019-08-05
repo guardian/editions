@@ -196,8 +196,8 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
         platform: Platform.OS === 'ios' ? 'ios-edition' : 'android-edition',
         topics: [
             {
-                name: 'newsstand',
-                type: 'newsstand',
+                name: 'uk',
+                type: 'editions',
             },
         ],
     }
