@@ -173,33 +173,39 @@ const LoginHeader = ({
             style={{
                 paddingVertical: metrics.vertical,
                 paddingHorizontal: metrics.horizontal,
-                paddingTop: insets.top + metrics.vertical * 2,
+                paddingTop: insets.top,
                 backgroundColor: '#399fdc',
-                flexDirection: 'row',
+                flexDirection: 'column',
             }}
         >
-            <TitlepieceText
+            <View
                 style={{
-                    flex: 1,
-                    flexGrow: 1,
-                    color: color.palette.neutral[100],
+                    alignItems: 'flex-end',
+                    marginBottom: metrics.vertical,
                 }}
             >
-                {children}
-            </TitlepieceText>
-            <Button
-                buttonStyles={{
-                    paddingHorizontal: 0,
-                    aspectRatio: 1,
-                    backgroundColor: 'transparent',
-                    borderColor: color.palette.neutral[100],
-                    borderWidth: 1,
-                }}
-                textStyles={{ color: color.palette.neutral[100] }}
-                onPress={onDismiss}
-            >
-                X
-            </Button>
+                <Button
+                    icon=""
+                    alt="Dismiss"
+                    buttonStyles={{
+                        paddingHorizontal: 0,
+                        backgroundColor: 'transparent',
+                        borderColor: color.palette.neutral[100],
+                        borderWidth: 1,
+                    }}
+                    textStyles={{ color: color.palette.neutral[100] }}
+                    onPress={onDismiss}
+                />
+            </View>
+            <View>
+                <TitlepieceText
+                    style={{
+                        color: color.palette.neutral[100],
+                    }}
+                >
+                    {children}
+                </TitlepieceText>
+            </View>
         </View>
     )
 }
