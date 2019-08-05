@@ -11,7 +11,7 @@ const pushNotifcationRegistration = () =>
         },
 
         onNotification: (notification: any) => {
-            Alert.alert('NOTIFICATION:', notification)
+            Alert.alert('NOTIFICATION:', JSON.stringify(notification))
             // Process the silent notification here
 
             // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
