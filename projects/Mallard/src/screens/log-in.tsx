@@ -4,7 +4,6 @@ import {
     KeyboardAvoidingView,
     Keyboard,
     TextInputProps,
-    Text,
 } from 'react-native'
 import { Spinner } from 'src/components/spinner'
 import { TitlepieceText, UiBodyCopy } from 'src/components/styled-text'
@@ -13,6 +12,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import { metrics } from 'src/theme/spacing'
 import { useInsets } from 'src/hooks/use-insets'
 import { color } from 'src/theme/color'
+import { Link } from 'src/components/link'
 
 const SocialButton = ({
     children,
@@ -178,7 +178,13 @@ const LoginHeader = ({
                 flexDirection: 'row',
             }}
         >
-            <TitlepieceText style={{ flex: 1, flexGrow: 1 }}>
+            <TitlepieceText
+                style={{
+                    flex: 1,
+                    flexGrow: 1,
+                    color: color.palette.neutral[100],
+                }}
+            >
                 {children}
             </TitlepieceText>
             <Button
@@ -186,9 +192,10 @@ const LoginHeader = ({
                     paddingHorizontal: 0,
                     aspectRatio: 1,
                     backgroundColor: 'transparent',
-                    borderColor: color.primary,
+                    borderColor: color.palette.neutral[100],
                     borderWidth: 1,
                 }}
+                textStyles={{ color: color.palette.neutral[100] }}
                 onPress={onDismiss}
             >
                 X
@@ -242,19 +249,10 @@ const LoginLayout = ({
                 ]}
                 behavior="padding"
             >
-                <View
-                    style={{
-                        left: 10,
-                        position: 'absolute',
-                        top: 100,
-                        width: '100%',
-                        alignItems: 'center',
-                    }}
-                >
+                <View style={{ alignItems: 'center' }}>
                     {isLoading && <Spinner />}
                 </View>
                 <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-                {errorMessage && <Text>{errorMessage}</Text>}
                 <View
                     style={{
                         flexDirection: 'column',
@@ -298,62 +296,89 @@ const LoginLayout = ({
                             onChangeText={onInputChange(password.setValue)}
                         />
                     )}
+                    {errorMessage && (
+                        <UiBodyCopy
+                            style={{ color: color.error, marginBottom: 10 }}
+                        >
+                            {errorMessage}
+                        </UiBodyCopy>
+                    )}
                     <View
                         style={{
                             alignItems: 'flex-start',
-                            flexDirection: 'row',
+                            flexDirection: 'column',
                             flex: 1,
                         }}
                     >
-                        {hasInputEmail && (
+                        <View
+                            style={{
+                                alignItems: 'flex-start',
+                                flexDirection: 'row',
+                                flex: 0,
+                            }}
+                        >
+                            {hasInputEmail && (
+                                <Button
+                                    center
+                                    style={{
+                                        flex: 0,
+                                    }}
+                                    buttonStyles={{
+                                        borderColor: color.primary,
+                                        borderWidth: 1,
+                                        marginBottom: 10,
+                                        marginRight: metrics.horizontal / 2,
+                                        backgroundColor: 'transparent',
+                                    }}
+                                    textStyles={{ color: color.primary }}
+                                    onPress={() => {
+                                        setHasInputEmail(false)
+                                    }}
+                                >
+                                    Back
+                                </Button>
+                            )}
                             <Button
                                 center
                                 style={{
                                     flex: 0,
                                 }}
                                 buttonStyles={{
-                                    borderColor: color.primary,
-                                    borderWidth: 1,
                                     marginBottom: 10,
-                                    marginRight: metrics.horizontal / 2,
-                                    backgroundColor: 'transparent',
+                                    backgroundColor: color.primary,
                                 }}
-                                textStyles={{ color: color.primary }}
+                                textStyles={{ color: 'white' }}
                                 onPress={() => {
-                                    setHasInputEmail(false)
+                                    if (hasInputEmail) {
+                                        if (password.error) {
+                                            setShowError(true)
+                                        } else {
+                                            onSubmit()
+                                        }
+                                    } else {
+                                        if (email.error) {
+                                            setShowError(true)
+                                        } else {
+                                            setHasInputEmail(true)
+                                        }
+                                    }
                                 }}
                             >
-                                Back
+                                {!hasInputEmail
+                                    ? emailProgressText
+                                    : 'Sign me in'}
                             </Button>
-                        )}
-                        <Button
-                            center
-                            style={{
-                                flex: 0,
-                            }}
-                            buttonStyles={{
-                                marginBottom: 10,
-                                backgroundColor: color.primary,
-                            }}
-                            textStyles={{ color: 'white' }}
-                            onPress={() => {
-                                if (hasInputEmail) {
-                                    if (password.error) {
-                                        setShowError(true)
-                                    } else {
-                                        onSubmit()
-                                    }
-                                } else {
-                                    if (email.error) {
-                                        setShowError(true)
-                                    } else {
-                                        setHasInputEmail(true)
-                                    }
-                                }
-                            }}
-                        >
-                            {hasInputEmail ? emailProgressText : 'Submit'}
-                        </Button>
+                        </View>
+                        <View>
+                            {hasInputEmail && (
+                                <Link
+                                    style={{ color: color.primary }}
+                                    href="https://profile.theguardian.com/reset"
+                                >
+                                    Forgot password?
+                                </Link>
+                            )}
+                        </View>
                     </View>
                 </View>
             </KeyboardAvoidingView>

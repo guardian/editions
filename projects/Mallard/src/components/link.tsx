@@ -1,9 +1,8 @@
-import { string } from 'prop-types'
 import { color } from 'src/theme/color'
 import React from 'react'
-import { Text, Linking, StyleSheet } from 'react-native'
+import { Text, Linking, StyleSheet, TextProps } from 'react-native'
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     link: {
         color: color.primary,
         textDecorationLine: 'underline',
@@ -12,13 +11,15 @@ const style = StyleSheet.create({
 
 export const Link = ({
     children,
+    style,
     href,
 }: {
     children: string
+    style: TextProps['style']
     href: string
 }) => (
     <Text
-        style={style.link}
+        style={[style, styles.link]}
         onPress={() => {
             Linking.openURL(href)
         }}
