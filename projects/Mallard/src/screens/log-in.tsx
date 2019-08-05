@@ -173,7 +173,7 @@ const LoginHeader = ({
     )
 }
 
-const loginLayoutStyles = StyleSheet.create({
+const loginStyles = StyleSheet.create({
     wrapper: {
         flex: 1,
     },
@@ -217,11 +217,12 @@ const loginLayoutStyles = StyleSheet.create({
     },
 })
 
-const LoginLayout = ({
+const Login = ({
     title,
-    socialButtons,
     email,
     password,
+    onFacebookPress,
+    onGooglePress,
     onSubmit,
     onDismiss,
     isLoading,
@@ -231,7 +232,8 @@ const LoginLayout = ({
     resetLink,
 }: {
     title: string
-    socialButtons: React.ReactNode
+    onFacebookPress: () => void
+    onGooglePress: () => void
     email: FormField
     password: FormField
     onSubmit: () => void
@@ -251,20 +253,33 @@ const LoginLayout = ({
     }
 
     return (
-        <View style={loginLayoutStyles.wrapper}>
+        <View style={loginStyles.wrapper}>
             <KeyboardAvoidingView
-                style={loginLayoutStyles.keyboardAvoider}
+                style={loginStyles.keyboardAvoider}
                 behavior="padding"
             >
                 <View style={{ alignItems: 'center' }}>
                     {isLoading && <Spinner />}
                 </View>
                 <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-                <View style={loginLayoutStyles.inputsContainer}>
+                <View style={loginStyles.inputsContainer}>
                     {!hasInputEmail && (
                         <>
-                            <View>{socialButtons}</View>
-                            <TitlepieceText style={loginLayoutStyles.or}>
+                            <View>
+                                <SocialButton
+                                    onPress={onFacebookPress}
+                                    iconURL=""
+                                >
+                                    Continue with Facebook
+                                </SocialButton>
+                                <SocialButton
+                                    onPress={onGooglePress}
+                                    iconURL=""
+                                >
+                                    Continue with Google
+                                </SocialButton>
+                            </View>
+                            <TitlepieceText style={loginStyles.or}>
                                 or
                             </TitlepieceText>
                         </>
@@ -292,18 +307,18 @@ const LoginLayout = ({
                         />
                     )}
                     {errorMessage && (
-                        <UiBodyCopy style={loginLayoutStyles.error}>
+                        <UiBodyCopy style={loginStyles.error}>
                             {errorMessage}
                         </UiBodyCopy>
                     )}
-                    <View style={loginLayoutStyles.actionsContainer}>
-                        <View style={loginLayoutStyles.actionRow}>
+                    <View style={loginStyles.actionsContainer}>
+                        <View style={loginStyles.actionRow}>
                             {hasInputEmail && (
                                 <Button
                                     center
-                                    style={loginLayoutStyles.buttonContainer}
+                                    style={loginStyles.buttonContainer}
                                     buttonStyles={[
-                                        loginLayoutStyles.button,
+                                        loginStyles.button,
                                         {
                                             borderColor: color.primary,
                                             borderWidth: 1,
@@ -320,9 +335,9 @@ const LoginLayout = ({
                             )}
                             <Button
                                 center
-                                style={loginLayoutStyles.buttonContainer}
+                                style={loginStyles.buttonContainer}
                                 buttonStyles={[
-                                    loginLayoutStyles.button,
+                                    loginStyles.button,
                                     {
                                         backgroundColor: color.primary,
                                     },
@@ -349,10 +364,10 @@ const LoginLayout = ({
                                     : submitText}
                             </Button>
                         </View>
-                        <View style={loginLayoutStyles.actionRow}>
+                        <View style={loginStyles.actionRow}>
                             {hasInputEmail && (
                                 <Link
-                                    style={loginLayoutStyles.resetLink}
+                                    style={loginStyles.resetLink}
                                     href={resetLink}
                                 >
                                     Forgot password?
@@ -366,49 +381,4 @@ const LoginLayout = ({
     )
 }
 
-const LogIn = ({
-    email,
-    password,
-    onSubmit,
-    isLoading,
-    onFacebookPress,
-    onGooglePress,
-    onDismiss,
-    errorMessage,
-}: {
-    email: FormField
-    password: FormField
-    onSubmit: () => void
-    isLoading: boolean
-    onFacebookPress: () => void
-    onGooglePress: () => void
-    onDismiss: () => void
-    errorMessage: string | null
-}) => {
-    return (
-        <LoginLayout
-            title="Sign-in to activate your subscription"
-            resetLink="https://profile.theguardian.com/reset"
-            email={email}
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-            emailProgressText="Next"
-            submitText="Sign me in"
-            password={password}
-            onSubmit={onSubmit}
-            onDismiss={onDismiss}
-            socialButtons={
-                <>
-                    <SocialButton onPress={onFacebookPress} iconURL="">
-                        Continue with Facebook
-                    </SocialButton>
-                    <SocialButton onPress={onGooglePress} iconURL="">
-                        Continue with Google
-                    </SocialButton>
-                </>
-            }
-        />
-    )
-}
-
-export { LogIn }
+export { Login }

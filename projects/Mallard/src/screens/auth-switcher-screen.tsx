@@ -13,7 +13,7 @@ import { useModal } from 'src/components/modal'
 import { SubNotFoundModalCard } from 'src/components/sub-not-found-modal-card'
 import { routeNames } from 'src/navigation'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
-import { LogIn } from './log-in'
+import { Login } from './log-in'
 import isEmail from 'validator/lib/isEmail'
 import { useFormField } from 'src/hooks/use-form-field'
 
@@ -116,7 +116,11 @@ const AuthSwitcherScreen = ({
     }
 
     return (
-        <LogIn
+        <Login
+            title="Sign-in to activate your subscription"
+            resetLink="https://profile.theguardian.com/reset"
+            emailProgressText="Next"
+            submitText="Sign me in"
             email={email}
             password={password}
             isLoading={isLoading}
