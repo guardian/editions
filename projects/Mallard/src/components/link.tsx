@@ -19,7 +19,7 @@ export const Link = ({
     href: string
 }) => (
     <Text
-        style={[style, styles.link]}
+        style={[styles.link, style]}
         onPress={() => {
             Linking.openURL(href)
         }}

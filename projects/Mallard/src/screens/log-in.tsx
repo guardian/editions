@@ -4,6 +4,7 @@ import {
     KeyboardAvoidingView,
     Keyboard,
     TextInputProps,
+    StyleSheet,
 } from 'react-native'
 import { Spinner } from 'src/components/spinner'
 import { TitlepieceText, UiBodyCopy } from 'src/components/styled-text'
@@ -16,6 +17,20 @@ import { Link } from 'src/components/link'
 import { getFont } from 'src/theme/typography'
 import { FormField } from 'src/hooks/use-form-field'
 
+const socialButtonStyles = StyleSheet.create({
+    button: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginVertical: metrics.vertical,
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: color.primary,
+    },
+    buttonText: {
+        color: color.primary,
+    },
+})
+
 const SocialButton = ({
     children,
     onPress,
@@ -26,22 +41,29 @@ const SocialButton = ({
     iconURL: string
 }) => (
     <Button
-        buttonStyles={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            marginVertical: metrics.vertical,
-            backgroundColor: 'white',
-            borderWidth: 1,
-            borderColor: color.primary,
-        }}
-        textStyles={{
-            color: color.primary,
-        }}
+        buttonStyles={socialButtonStyles.button}
+        textStyles={socialButtonStyles.buttonText}
         onPress={onPress}
     >
         {children}
     </Button>
 )
+
+const loginInputStyles = StyleSheet.create({
+    label: {
+        color: color.primary,
+        marginBottom: metrics.vertical,
+    },
+    input: {
+        paddingVertical: metrics.vertical,
+        paddingHorizontal: metrics.horizontal,
+        borderWidth: 1,
+    },
+    error: {
+        color: color.error,
+        marginTop: metrics.vertical,
+    },
+})
 
 const LoginInput = ({
     secureTextEntry,
@@ -65,22 +87,19 @@ const LoginInput = ({
     error: string | null
 }) => (
     <View style={{ marginBottom: metrics.vertical * 2 }}>
-        <UiBodyCopy
-            weight="bold"
-            style={{ color: color.primary, marginBottom: metrics.vertical }}
-        >
+        <UiBodyCopy weight="bold" style={loginInputStyles.label}>
             {label}
         </UiBodyCopy>
         <View>
             <TextInput
-                style={{
-                    borderColor: error ? color.error : color.primary,
-                    borderWidth: 1,
-                    color: editable ? 'black' : 'grey',
-                    ...getFont('sans', 1),
-                    paddingVertical: metrics.vertical,
-                    paddingHorizontal: metrics.horizontal,
-                }}
+                style={[
+                    loginInputStyles.input,
+                    {
+                        borderColor: error ? color.error : color.primary,
+                        color: editable ? 'black' : 'grey',
+                        ...getFont('sans', 1),
+                    },
+                ]}
                 accessibilityLabel={accessibilityLabel}
                 textContentType={textContentType}
                 secureTextEntry={secureTextEntry}
@@ -96,18 +115,35 @@ const LoginInput = ({
             ></TextInput>
         </View>
         {error && (
-            <UiBodyCopy
-                weight="bold"
-                style={{
-                    color: color.error,
-                    marginTop: metrics.vertical,
-                }}
-            >
+            <UiBodyCopy weight="bold" style={loginInputStyles.error}>
                 {error}
             </UiBodyCopy>
         )}
     </View>
 )
+
+const loginHeaderStyles = StyleSheet.create({
+    wrapper: {
+        paddingVertical: metrics.vertical,
+        paddingHorizontal: metrics.horizontal,
+        backgroundColor: '#399fdc',
+        flexDirection: 'column',
+    },
+    actionRow: {
+        alignItems: 'flex-end',
+        marginBottom: metrics.vertical / 2,
+    },
+    dismissButton: {
+        paddingHorizontal: 0,
+        backgroundColor: 'transparent',
+        borderColor: color.palette.neutral[100],
+        borderWidth: 1,
+    },
+    dismissText: { color: color.palette.neutral[100] },
+    title: {
+        color: color.palette.neutral[100],
+    },
+})
 
 const LoginHeader = ({
     children,
@@ -118,40 +154,18 @@ const LoginHeader = ({
 }) => {
     const insets = useInsets()
     return (
-        <View
-            style={{
-                paddingVertical: metrics.vertical,
-                paddingHorizontal: metrics.horizontal,
-                paddingTop: insets.top,
-                backgroundColor: '#399fdc',
-                flexDirection: 'column',
-            }}
-        >
-            <View
-                style={{
-                    alignItems: 'flex-end',
-                    marginBottom: metrics.vertical / 2,
-                }}
-            >
+        <View style={[loginHeaderStyles.wrapper, { paddingTop: insets.top }]}>
+            <View style={loginHeaderStyles.actionRow}>
                 <Button
                     icon=""
                     alt="Dismiss"
-                    buttonStyles={{
-                        paddingHorizontal: 0,
-                        backgroundColor: 'transparent',
-                        borderColor: color.palette.neutral[100],
-                        borderWidth: 1,
-                    }}
-                    textStyles={{ color: color.palette.neutral[100] }}
+                    buttonStyles={loginHeaderStyles.dismissButton}
+                    textStyles={loginHeaderStyles.dismissText}
                     onPress={onDismiss}
                 />
             </View>
             <View>
-                <TitlepieceText
-                    style={{
-                        color: color.palette.neutral[100],
-                    }}
-                >
+                <TitlepieceText style={loginHeaderStyles.title}>
                     {children}
                 </TitlepieceText>
             </View>
@@ -159,9 +173,49 @@ const LoginHeader = ({
     )
 }
 
-const isValidEmail = (email: string) => (email ? null : 'Email is invalid')
-const isValidPassword = (password: string) =>
-    password ? null : 'Password is invalid'
+const loginLayoutStyles = StyleSheet.create({
+    wrapper: {
+        flex: 1,
+    },
+    keyboardAvoider: {
+        backgroundColor: 'white',
+        flex: 1,
+        justifyContent: 'center',
+    },
+    inputsContainer: {
+        flexDirection: 'column',
+        flexGrow: 1,
+        paddingHorizontal: metrics.horizontal,
+        paddingVertical: metrics.vertical,
+    },
+    or: {
+        color: color.primary,
+        marginVertical: metrics.vertical * 2,
+    },
+    error: { color: color.error, marginBottom: 10 },
+    actionsContainer: {
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+        flex: 1,
+    },
+    actionRow: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        flex: 0,
+    },
+    buttonContainer: {
+        flex: 0,
+        marginRight: metrics.horizontal / 2,
+    },
+    button: {
+        marginBottom: 10,
+    },
+    resetLink: {
+        color: color.primary,
+        paddingVertical: 8,
+        ...getFont('sans', 1),
+    },
+})
 
 const LoginLayout = ({
     title,
@@ -173,6 +227,8 @@ const LoginLayout = ({
     isLoading,
     errorMessage,
     emailProgressText,
+    submitText,
+    resetLink,
 }: {
     title: string
     socialButtons: React.ReactNode
@@ -183,6 +239,8 @@ const LoginLayout = ({
     isLoading: boolean
     errorMessage: string | null
     emailProgressText: string
+    submitText: string
+    resetLink: string
 }) => {
     const [hasInputEmail, setHasInputEmail] = useState(false)
     const [showError, setShowError] = useState(false)
@@ -193,38 +251,20 @@ const LoginLayout = ({
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={loginLayoutStyles.wrapper}>
             <KeyboardAvoidingView
-                style={[
-                    {
-                        backgroundColor: 'white',
-                        flex: 1,
-                        justifyContent: 'center',
-                    },
-                ]}
+                style={loginLayoutStyles.keyboardAvoider}
                 behavior="padding"
             >
                 <View style={{ alignItems: 'center' }}>
                     {isLoading && <Spinner />}
                 </View>
                 <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-                <View
-                    style={{
-                        flexDirection: 'column',
-                        flexGrow: 1,
-                        paddingHorizontal: metrics.horizontal,
-                        paddingVertical: metrics.vertical,
-                    }}
-                >
+                <View style={loginLayoutStyles.inputsContainer}>
                     {!hasInputEmail && (
                         <>
                             <View>{socialButtons}</View>
-                            <TitlepieceText
-                                style={{
-                                    color: color.primary,
-                                    marginVertical: metrics.vertical * 2,
-                                }}
-                            >
+                            <TitlepieceText style={loginLayoutStyles.or}>
                                 or
                             </TitlepieceText>
                         </>
@@ -252,39 +292,24 @@ const LoginLayout = ({
                         />
                     )}
                     {errorMessage && (
-                        <UiBodyCopy
-                            style={{ color: color.error, marginBottom: 10 }}
-                        >
+                        <UiBodyCopy style={loginLayoutStyles.error}>
                             {errorMessage}
                         </UiBodyCopy>
                     )}
-                    <View
-                        style={{
-                            alignItems: 'flex-start',
-                            flexDirection: 'column',
-                            flex: 1,
-                        }}
-                    >
-                        <View
-                            style={{
-                                alignItems: 'flex-start',
-                                flexDirection: 'row',
-                                flex: 0,
-                            }}
-                        >
+                    <View style={loginLayoutStyles.actionsContainer}>
+                        <View style={loginLayoutStyles.actionRow}>
                             {hasInputEmail && (
                                 <Button
                                     center
-                                    style={{
-                                        flex: 0,
-                                    }}
-                                    buttonStyles={{
-                                        borderColor: color.primary,
-                                        borderWidth: 1,
-                                        marginBottom: 10,
-                                        marginRight: metrics.horizontal / 2,
-                                        backgroundColor: 'transparent',
-                                    }}
+                                    style={loginLayoutStyles.buttonContainer}
+                                    buttonStyles={[
+                                        loginLayoutStyles.button,
+                                        {
+                                            borderColor: color.primary,
+                                            borderWidth: 1,
+                                            backgroundColor: 'transparent',
+                                        },
+                                    ]}
                                     textStyles={{ color: color.primary }}
                                     onPress={() => {
                                         setHasInputEmail(false)
@@ -295,13 +320,13 @@ const LoginLayout = ({
                             )}
                             <Button
                                 center
-                                style={{
-                                    flex: 0,
-                                }}
-                                buttonStyles={{
-                                    marginBottom: 10,
-                                    backgroundColor: color.primary,
-                                }}
+                                style={loginLayoutStyles.buttonContainer}
+                                buttonStyles={[
+                                    loginLayoutStyles.button,
+                                    {
+                                        backgroundColor: color.primary,
+                                    },
+                                ]}
                                 textStyles={{ color: 'white' }}
                                 onPress={() => {
                                     if (hasInputEmail) {
@@ -321,14 +346,14 @@ const LoginLayout = ({
                             >
                                 {!hasInputEmail
                                     ? emailProgressText
-                                    : 'Sign me in'}
+                                    : submitText}
                             </Button>
                         </View>
-                        <View>
+                        <View style={loginLayoutStyles.actionRow}>
                             {hasInputEmail && (
                                 <Link
-                                    style={{ color: color.primary }}
-                                    href="https://profile.theguardian.com/reset"
+                                    style={loginLayoutStyles.resetLink}
+                                    href={resetLink}
                                 >
                                     Forgot password?
                                 </Link>
@@ -363,10 +388,12 @@ const LogIn = ({
     return (
         <LoginLayout
             title="Sign-in to activate your subscription"
+            resetLink="https://profile.theguardian.com/reset"
             email={email}
             isLoading={isLoading}
             errorMessage={errorMessage}
             emailProgressText="Next"
+            submitText="Sign me in"
             password={password}
             onSubmit={onSubmit}
             onDismiss={onDismiss}
