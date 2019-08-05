@@ -13,6 +13,7 @@ import { metrics } from 'src/theme/spacing'
 import { useInsets } from 'src/hooks/use-insets'
 import { color } from 'src/theme/color'
 import { Link } from 'src/components/link'
+import { getFont } from 'src/theme/typography'
 
 const SocialButton = ({
     children,
@@ -116,21 +117,23 @@ const LoginInput = ({
     onChangeText: TextInputProps['onChangeText']
     error: string | null
 }) => (
-    <>
+    <View style={{ marginBottom: metrics.vertical * 2 }}>
         <UiBodyCopy
             weight="bold"
             style={{ color: color.primary, marginBottom: metrics.vertical }}
         >
             {label}
         </UiBodyCopy>
-        <View style={{ marginBottom: metrics.vertical * 2 }}>
+        <View>
             {/** <Shadow /> */}
             <TextInput
                 style={{
                     borderColor: error ? color.error : color.primary,
                     borderWidth: 1,
                     color: editable ? 'black' : 'grey',
-                    padding: metrics.horizontal,
+                    ...getFont('sans', 1),
+                    paddingVertical: metrics.vertical,
+                    paddingHorizontal: metrics.horizontal,
                 }}
                 accessibilityLabel={accessibilityLabel}
                 textContentType={textContentType}
@@ -151,13 +154,13 @@ const LoginInput = ({
                 weight="bold"
                 style={{
                     color: color.error,
-                    marginBottom: metrics.vertical,
+                    marginTop: metrics.vertical,
                 }}
             >
                 {error}
             </UiBodyCopy>
         )}
-    </>
+    </View>
 )
 
 const LoginHeader = ({
