@@ -15,7 +15,7 @@ export const Link = ({
     href,
 }: {
     children: string
-    style: TextProps['style']
+    style?: TextProps['style']
     href: string
 }) => (
     <Text
