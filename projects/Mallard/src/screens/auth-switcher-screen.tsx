@@ -14,6 +14,7 @@ import { SubNotFoundModalCard } from 'src/components/sub-not-found-modal-card'
 import { routeNames } from 'src/navigation'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { LogIn, useFormField } from './log-in'
+import isEmail from 'validator/lib/isEmail'
 
 const useRandomState = () =>
     useState(
@@ -60,7 +61,12 @@ const AuthSwitcherScreen = ({
     const [error, setError] = useState<string | null>(null)
 
     const email = useFormField('', {
-        validator: email => (email ? null : 'Invalid email'),
+        validator: email =>
+            email
+                ? isEmail(email)
+                    ? null
+                    : 'Please enter a valid email'
+                : 'Please enter an email',
         onSet: () => setError(null),
     })
     const password = useFormField('', {

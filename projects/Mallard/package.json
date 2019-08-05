@@ -58,7 +58,8 @@
         "react-native-zip-archive": "^4.0.1",
         "react-navigation": "3.11.0",
         "react-navigation-fluid-transitions": "^0.3.2",
-        "rn-fetch-blob": "0.10.15"
+        "rn-fetch-blob": "0.10.15",
+        "validator": "^11.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.5.5",
@@ -72,6 +73,7 @@
         "@types/react-native-push-notification": "^3.0.5",
         "@types/react-navigation": "^3.0.7",
         "@types/react-test-renderer": "^16.8.1",
+        "@types/validator": "^10.11.2",
         "babel-jest": "^24.8.0",
         "fetch-mock": "^7.3.7",
         "jest": "^24.8.0",
