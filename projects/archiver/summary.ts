@@ -31,6 +31,5 @@ export const generateIndex = async () => {
             name: 'Daily Edition',
             date: date.toISOString(),
         }))
-        .slice(0, 7)
     return issues
 }
