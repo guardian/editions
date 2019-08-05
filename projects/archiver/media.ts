@@ -33,8 +33,12 @@ export const getImagesFromFront = (front: Front): Image[] => {
     return images
 }
 
-export const getAndUploadColours = async (id: string, image: Image) => {
-    const [colourPath, colours] = await getColours(id, image)
+export const getAndUploadColours = async (
+    source: string,
+    id: string,
+    image: Image,
+) => {
+    const [colourPath, colours] = await getColours(source, id, image)
     if (hasFailed(colours)) {
         console.error(`Could not get colours for ${colourPath}`)
         console.error(JSON.stringify(colours))
@@ -44,11 +48,12 @@ export const getAndUploadColours = async (id: string, image: Image) => {
 }
 
 export const getAndUploadImage = async (
+    source: string,
     issue: string,
     image: Image,
     size: ImageSize,
 ) => {
-    const [path, data] = await getImage(issue, image, size)
+    const [path, data] = await getImage(source, issue, image, size)
     if (hasFailed(data)) return data
     return upload(path, data)
 }

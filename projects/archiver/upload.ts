@@ -1,6 +1,9 @@
 import { s3, bucket } from './s3'
 
-export const upload = (key: string, body: {} | Buffer) => {
+export const upload = (
+    key: string,
+    body: {} | Buffer,
+): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
         s3.upload(
             {
