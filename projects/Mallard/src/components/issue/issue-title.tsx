@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { StyleSheet, StyleProp, TextStyle, View, ViewStyle } from 'react-native'
 import { color } from 'src/theme/color'
 import { IssueTitleText } from '../styled-text'
-import { metrics } from 'src/theme/spacing'
+import { useLiveMetrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 
 const splitStyles = StyleSheet.create({
@@ -29,11 +29,13 @@ const GridRowSplit = ({
         Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
     >
 }) => {
-    const width = metrics.gridRowSplit()
+    const { gridRowSplit } = useLiveMetrics()
     return (
         <View style={[splitStyles.container, style]}>
             {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
-            <View style={[splitStyles.inner, { width }]}>{children}</View>
+            <View style={[splitStyles.inner, { width: gridRowSplit }]}>
+                {children}
+            </View>
         </View>
     )
 }

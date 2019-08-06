@@ -1,7 +1,7 @@
 import React, { useState, ReactElement } from 'react'
 import { View, LayoutRectangle, StyleSheet } from 'react-native'
 
-const Breakpoints = ({
+const WithBreakpoints = ({
     children,
 }: {
     children: {
@@ -29,7 +29,4 @@ const Breakpoints = ({
     )
 }
 
-const IPAD_VERTICAL = 700
-const IPAD_LANDSCAPE = 1000
-
-export { Breakpoints, IPAD_VERTICAL, IPAD_LANDSCAPE }
+export { WithBreakpoints }

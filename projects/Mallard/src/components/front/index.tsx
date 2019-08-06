@@ -21,7 +21,7 @@ import {
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
-import { Breakpoints } from 'src/components/layout/ui/breakpoints'
+import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 
 const CollectionPageInFront = ({
     index,
@@ -94,7 +94,7 @@ const FrontWithResponse = ({
     )
     const stops = cards.length
     return (
-        <Breakpoints>
+        <WithBreakpoints>
             {{
                 0: ({ width }) => (
                     <Wrapper
@@ -190,7 +190,7 @@ const FrontWithResponse = ({
                     </Wrapper>
                 ),
             }}
-        </Breakpoints>
+        </WithBreakpoints>
     )
 }
 

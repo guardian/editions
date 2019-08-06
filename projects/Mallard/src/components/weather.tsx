@@ -17,7 +17,7 @@ import { fetchWeather } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
-import { Breakpoints } from './layout/ui/breakpoints'
+import { WithBreakpoints } from './layout/ui/with-breakpoints'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -37,17 +37,18 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
-        paddingTop: 2,
-        paddingLeft: 4,
         height: 60 * PixelRatio.getFontScale(),
     },
     forecastItemLong: {
         borderLeftWidth: 1,
         flex: 2,
         borderLeftColor: color.line,
+        paddingTop: 2,
+        paddingLeft: 4,
     },
     forecastItemNarrow: {
         marginBottom: metrics.vertical * 2,
+        marginTop: metrics.vertical * 1.5,
         flex: 0,
     },
     temperature: {
@@ -106,12 +107,17 @@ const useWeatherResponse = () => {
 const WeatherIconView = ({
     forecast,
     style,
+    iconSize = 1,
 }: {
     forecast: Forecast
     style?: StyleProp<ViewStyle>
+    iconSize?: number
 }) => (
     <View style={[styles.forecastItem, style]}>
-        <WeatherIcon iconNumber={forecast.WeatherIcon} fontSize={30} />
+        <WeatherIcon
+            iconNumber={forecast.WeatherIcon}
+            fontSize={30 * iconSize}
+        />
         <Text numberOfLines={1} ellipsizeMode="clip" style={styles.temperature}>
             {Math.round(forecast.Temperature.Value) +
                 ' ' +
@@ -130,7 +136,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
         const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
         return (
-            <Breakpoints>
+            <WithBreakpoints>
                 {{
                     0: () => (
                         <View style={styles.weatherContainerNarrow}>
@@ -140,6 +146,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
                                         style={styles.forecastItemNarrow}
                                         key={forecast.EpochDateTime}
                                         forecast={forecast}
+                                        iconSize={1.5}
                                     />
                                 )
                             })}
@@ -172,7 +179,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
                         </View>
                     ),
                 }}
-            </Breakpoints>
+            </WithBreakpoints>
         )
     }
 

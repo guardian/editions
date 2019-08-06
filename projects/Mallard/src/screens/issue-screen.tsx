@@ -20,14 +20,11 @@ import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
-import {
-    Breakpoints,
-    IPAD_VERTICAL,
-    IPAD_LANDSCAPE,
-} from 'src/components/layout/ui/breakpoints'
+import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -42,6 +39,9 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         borderRightColor: color.line,
         borderRightWidth: 1,
+    },
+    sideBySideFeed: {
+        paddingTop: metrics.vertical,
     },
 })
 
@@ -123,7 +123,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 success: issue => (
                     <>
-                        <Breakpoints>
+                        <WithBreakpoints>
                             {{
                                 0: () => (
                                     <>
@@ -140,19 +140,22 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                         />
                                     </>
                                 ),
-                                [IPAD_VERTICAL]: () => (
+                                [Breakpoints.tabletVertical]: () => (
                                     <>
                                         <Header issue={issue} />
                                         <View style={{ flexDirection: 'row' }}>
                                             <View style={styles.sideWeather}>
-                                                <Weather></Weather>
+                                                <Weather />
                                             </View>
-                                            <IssueFronts issue={issue} />
+                                            <IssueFronts
+                                                style={styles.sideBySideFeed}
+                                                issue={issue}
+                                            />
                                         </View>
                                     </>
                                 ),
                             }}
-                        </Breakpoints>
+                        </WithBreakpoints>
                     </>
                 ),
             })}

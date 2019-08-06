@@ -1,4 +1,6 @@
-import { Platform, StatusBar, Dimensions } from 'react-native'
+import { Platform, StatusBar, Dimensions, PixelRatio } from 'react-native'
+import { useState } from 'react'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export const spacing = [0, 3, 6, 12, 18, 30]
 
@@ -14,12 +16,21 @@ export const metrics = {
     frontsPageSides: basicMetrics.horizontal * 1.5,
     articleSides: basicMetrics.horizontal / 2,
     frontsPageHeight: 540,
-    gridRowSplit: () => {
-        const { width } = Dimensions.get('window')
-        return width * 0.6
-    },
     slideCardSpacing:
         Platform.OS === 'ios'
             ? spacing[5] * 2
             : StatusBar.currentHeight || spacing[5] + spacing[5],
+}
+
+export const useLiveMetrics = () => {
+    const [dimensions, setDimensions] = useState(Dimensions.get('screen'))
+    Dimensions.addEventListener('change', ev => {
+        setDimensions(ev.screen)
+    })
+    return {
+        gridRowSplit:
+            (dimensions.width > Breakpoints.tabletVertical
+                ? 200
+                : dimensions.width * 0.6) * PixelRatio.getFontScale(),
+    }
 }
