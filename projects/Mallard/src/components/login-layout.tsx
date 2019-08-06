@@ -11,7 +11,7 @@ const loginHeaderStyles = StyleSheet.create({
     wrapper: {
         paddingVertical: metrics.vertical,
         paddingHorizontal: metrics.horizontal,
-        backgroundColor: '#399fdc',
+        backgroundColor: '#279DDC',
         flexDirection: 'column',
     },
     actionRow: {
