@@ -18,7 +18,7 @@ interface AuthAttempt {
     status: AuthStatus
 }
 
-const createAttempt = (
+const createAuthAttempt = (
     status: AuthStatus,
     type: 'live' | 'cached',
     time = Date.now(),
@@ -50,6 +50,10 @@ const assertUnreachable = (x: never): never => {
     throw new Error('This should be unreachable')
 }
 
+/**
+ * This will check whether a user is authenticated via any of the varied means:
+ * CAS, Identity etc.
+ */
 const useAuth = () => {
     const { status } = useContext(AuthContext)
 
@@ -88,6 +92,14 @@ const useAuth = () => {
     }
 }
 
+/**
+ * Use useIdentity to see whether a user is logged in
+ *
+ * This does _not_ mean they are authenticated, just that they are signed in
+ * with a Guardian account. We may want to keep people logged in who's identity account
+ * doesn't allow them access to editions as they may be authed to view editions by another
+ * route (CAS, IAP, etc.)
+ */
 const useIdentity = () => {
     const { status } = useContext(AuthContext)
     return <T extends unknown>({
@@ -139,14 +151,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsFetching(true)
         if (isInternetReachable) {
             liveAuthChain().then(status => {
-                setAuthAttempt(createAttempt(status, 'live'))
+                setAuthAttempt(createAuthAttempt(status, 'live'))
                 setIsFetching(false)
             })
         } else {
             // all cached attempts are retried when we get internet connection
             // back
             cachedAuthChain().then(status => {
-                setAuthAttempt(createAttempt(status, 'cached'))
+                setAuthAttempt(createAuthAttempt(status, 'cached'))
                 setIsFetching(false)
             })
         }
@@ -157,10 +169,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             value={{
                 status: authAttempt.status,
                 setStatus: (status: AuthStatus) =>
-                    setAuthAttempt(createAttempt(status, 'live')),
+                    setAuthAttempt(createAuthAttempt(status, 'live')),
                 signOut: async () => {
                     await resetCredentials()
-                    setAuthAttempt(createAttempt(unauthed, 'live'))
+                    setAuthAttempt(createAuthAttempt(unauthed, 'live'))
                 },
             }}
         >
@@ -175,5 +187,5 @@ export {
     useAuth,
     useIdentity,
     needsReauth,
-    createAttempt,
+    createAuthAttempt,
 }
