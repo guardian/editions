@@ -9,9 +9,11 @@ export interface CasExpiry {
     subscriptionCode: string
 }
 
-interface CasError {
-    message: string
-    code: number
+interface CasErrorResponse {
+    error: {
+        message: string
+        code: number
+    }
 }
 
 /**
@@ -40,8 +42,12 @@ const fetchCasSubscription = async (
     const json = await res.json()
 
     if (res.status !== 200) {
-        const casError: CasError = json
-        throw new Error(`${casError.message}`)
+        const casErrorRes: CasErrorResponse = json
+        throw new Error(
+            casErrorRes.error
+                ? casErrorRes.error.message
+                : 'Something went wrong',
+        )
     }
 
     return json.expiry

@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useContext } from 'react'
-import { View, Text, TextInput, Image } from 'react-native'
-import { TitlepieceText } from 'src/components/styled-text'
-import { metrics } from 'src/theme/spacing'
-import { Button } from 'src/components/button/button'
+import { View, Text, Image } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { fetchAndPersistCASExpiry } from 'src/authentication/helpers'
 import { AuthContext } from 'src/authentication/auth-context'
 import { CASAuthStatus } from 'src/authentication/credentials-chain'
+import { LoginLayout } from 'src/components/login-layout'
+import { LoginInput } from 'src/components/login-input'
+import { LoginButton } from 'src/components/login-button'
 
 const CasSignInScreen = ({
     navigation,
@@ -16,16 +16,17 @@ const CasSignInScreen = ({
     const { setStatus } = useContext(AuthContext)
     const [subscriberID, setSubscriberID] = useState('')
 
-    const [error, setError] = useState<string | null>(null)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const onSubscriberIdChange = useCallback(value => {
-        setError(null)
+        setErrorMessage(null)
         setSubscriberID(value)
     }, [])
 
     const [password, setPassword] = useState('')
     const onPasswordChange = useCallback(value => {
-        setError(null)
+        setErrorMessage(null)
         setPassword(value)
     }, [])
 
@@ -36,62 +37,43 @@ const CasSignInScreen = ({
                 password,
             )
             setStatus(CASAuthStatus(expiry))
-        } catch (e) {
-            setError(e)
+        } catch (err) {
+            setErrorMessage(
+                (err instanceof Error ? err.message : err) ||
+                    'Something went wrong',
+            )
+        } finally {
+            setIsLoading(false)
         }
     }
 
     return (
-        <View>
+        <LoginLayout
+            title="Activate your subscription"
+            onDismiss={() => navigation.goBack()}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+        >
             <View>
-                <TitlepieceText>Activate your subscription</TitlepieceText>
-            </View>
-            {error && <Text>{error}</Text>}
-            <View>
-                <Text>Subscriber ID (including all zeros)</Text>
-                <TextInput
-                    style={{
-                        backgroundColor: 'white',
-                        borderWidth: 1,
-                        borderRadius: 999,
-                        color: 'black',
-                        marginBottom: 10,
-                        padding: metrics.horizontal * 2,
-                        paddingVertical: metrics.vertical,
-                    }}
-                    returnKeyType="done"
-                    placeholderTextColor="grey"
-                    autoCorrect={false}
-                    autoCapitalize="none"
+                <LoginInput
+                    error={null}
                     onChangeText={onSubscriberIdChange}
-                ></TextInput>
-                <Text>Postcode or surname</Text>
-                <TextInput
-                    style={{
-                        backgroundColor: 'white',
-                        borderWidth: 1,
-                        borderRadius: 999,
-                        color: 'black',
-                        marginBottom: 10,
-                        padding: metrics.horizontal * 2,
-                        paddingVertical: metrics.vertical,
-                    }}
-                    placeholderTextColor="grey"
-                    returnKeyType="done"
-                    autoCorrect={false}
-                    autoCapitalize="none"
+                    keyboardType="number-pad"
+                    label="Subscriber ID (including all zeros)"
+                    accessibilityLabel="subscriber id input"
+                    value={subscriberID}
+                />
+                <LoginInput
+                    error={null}
                     onChangeText={onPasswordChange}
-                ></TextInput>
-                <Button
-                    center
-                    buttonStyles={{
-                        marginBottom: 10,
-                    }}
-                    onPress={handleSubmit}
-                >
+                    label="Postcode or surname"
+                    accessibilityLabel="postcode or surname input"
+                    value={password}
+                />
+                <LoginButton type="cta" onPress={handleSubmit}>
                     Submit
-                </Button>
-                <Text>What&apos;s a subscriber ID</Text>
+                </LoginButton>
+                <Text>What&apos;s a subscriber ID?</Text>
                 <Text>
                     You can find your subscriber ID on your subscription
                     confirmation email. If you collect your paper, your
@@ -104,7 +86,7 @@ const CasSignInScreen = ({
                     source={require(`src/assets/images/cas-voucher.jpg`)}
                 />
             </View>
-        </View>
+        </LoginLayout>
     )
 }
 
