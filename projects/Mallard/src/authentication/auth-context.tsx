@@ -124,6 +124,7 @@ const useIdentity = () => {
 }
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [isFetching, setIsFetching] = useState(false)
     const [authAttempt, setAuthAttempt] = useState<AuthAttempt>({
         time: 0,
         type: 'cached',
@@ -132,20 +133,24 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { isInternetReachable } = useNetInfo()
 
     useEffect(() => {
-        if (!needsReauth(authAttempt, !!isInternetReachable)) return
+        if (isFetching || !needsReauth(authAttempt, !!isInternetReachable))
+            return
 
+        setIsFetching(true)
         if (isInternetReachable) {
-            liveAuthChain().then(status =>
-                setAuthAttempt(createAttempt(status, 'live')),
-            )
+            liveAuthChain().then(status => {
+                setAuthAttempt(createAttempt(status, 'live'))
+                setIsFetching(false)
+            })
         } else {
             // all cached attempts are retried when we get internet connection
             // back
-            cachedAuthChain().then(status =>
-                setAuthAttempt(createAttempt(status, 'cached')),
-            )
+            cachedAuthChain().then(status => {
+                setAuthAttempt(createAttempt(status, 'cached'))
+                setIsFetching(false)
+            })
         }
-    }, [isInternetReachable, authAttempt])
+    }, [isInternetReachable, authAttempt, isFetching])
 
     return (
         <AuthContext.Provider
