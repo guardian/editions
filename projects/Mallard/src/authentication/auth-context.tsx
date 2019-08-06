@@ -137,9 +137,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setAuthAttempt(createAttempt(status, 'live')),
             )
         } else {
-            // this sets the time to be immediately requiring a reauth as soon
-            // as we get network, but the user is authed until then if they were
-            // authed previously
+            // all cached attempts are retried when we get internet connection
+            // back
             cachedAuthChain().then(status =>
                 setAuthAttempt(createAttempt(status, 'cached')),
             )
