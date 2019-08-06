@@ -1,3 +1,4 @@
+import DeviceInfo from 'react-native-device-info'
 import { CAS_ENDPOINT_URL } from '../constants'
 
 export interface CasExpiry {
@@ -29,8 +30,8 @@ const fetchCasSubscription = async (
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            appId: 'uk.co.guardian.editions', // Will change.
-            deviceId: 'MADE_IT_UP', // TODO - need to get this from somewhere: https://www.npmjs.com/package/react-native-device-info ?
+            appId: DeviceInfo.getBundleId(),
+            deviceId: DeviceInfo.getUniqueID(),
             subscriberId: subscriberID,
             password: password,
         }),
