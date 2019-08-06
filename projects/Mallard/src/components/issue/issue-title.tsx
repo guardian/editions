@@ -9,7 +9,6 @@ const splitStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'center',
         width: '100%',
     },
     inner: {
