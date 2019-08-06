@@ -21,8 +21,9 @@ interface AuthAttempt {
 const createAttempt = (
     status: AuthStatus,
     type: 'live' | 'cached',
+    time = Date.now(),
 ): AuthAttempt => ({
-    time: Date.now(),
+    time,
     type,
     status,
 })
@@ -37,12 +38,13 @@ const AuthContext = createContext<{
     signOut: () => Promise.resolve(),
 })
 
-const AUTH_EXPIRY = 86400000 // ms in a day
+const AUTH_TTL = 86400000 // ms in a day
 
-const needsReauth = (attempt: AuthAttempt, isInternetReachable: boolean) =>
-    (attempt.type === 'cached' && isInternetReachable) ||
-    (isPending(attempt.status) ||
-        (isAuthed(attempt.status) && attempt.time < Date.now() - AUTH_EXPIRY))
+const needsReauth = (prevAttempt: AuthAttempt, isInternetReachable: boolean) =>
+    (prevAttempt.type === 'cached' && isInternetReachable) ||
+    (isPending(prevAttempt.status) ||
+        (isAuthed(prevAttempt.status) &&
+            prevAttempt.time < Date.now() - AUTH_TTL))
 
 const assertUnreachable = (x: never): never => {
     throw new Error('This should be unreachable')
@@ -162,4 +164,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export { AuthProvider, AuthContext, useAuth, useIdentity }
+export {
+    AuthProvider,
+    AuthContext,
+    useAuth,
+    useIdentity,
+    needsReauth,
+    createAttempt,
+}
