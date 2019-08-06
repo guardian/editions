@@ -23,9 +23,9 @@ export const metrics = {
 }
 
 export const useLiveMetrics = () => {
-    const [dimensions, setDimensions] = useState(Dimensions.get('screen'))
+    const [dimensions, setDimensions] = useState(Dimensions.get('window'))
     Dimensions.addEventListener('change', ev => {
-        setDimensions(ev.screen)
+        setDimensions(ev.window)
     })
     return {
         gridRowSplit:
