@@ -224,6 +224,9 @@ const ArticleScreenWithProps = ({
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
+                        onOpenCASLogin={() =>
+                            navigation.navigate(routeNames.CasSignIn)
+                        }
                         onDismiss={() => navigation.goBack()}
                     >
                         <ArticleScreenBody
@@ -241,6 +244,9 @@ const ArticleScreenWithProps = ({
                     <LoginOverlay
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
+                        }
+                        onOpenCASLogin={() =>
+                            navigation.navigate(routeNames.CasSignIn)
                         }
                         onDismiss={() => navigation.goBack()}
                     >

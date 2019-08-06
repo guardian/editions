@@ -100,6 +100,9 @@ const AuthSwitcherScreen = ({
                         open(close => (
                             <SubNotFoundModalCard
                                 onDismiss={() => navigation.goBack()}
+                                onOpenCASLogin={() =>
+                                    navigation.navigate(routeNames.CasSignIn)
+                                }
                                 onLoginPress={() =>
                                     navigation.navigate(routeNames.SignIn)
                                 }

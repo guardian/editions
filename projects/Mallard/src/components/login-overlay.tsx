@@ -53,10 +53,12 @@ const ModalOpener = ({
 const LoginOverlay = ({
     children,
     onDismiss,
+    onOpenCASLogin,
     onLoginPress,
 }: {
     children: React.ReactNode
     onDismiss: () => void
+    onOpenCASLogin: () => void
     onLoginPress: () => void
 }) => {
     const handler = useAuth()
@@ -70,6 +72,7 @@ const LoginOverlay = ({
                     renderModal={close => (
                         <SubNotFoundModalCard
                             onDismiss={onDismiss}
+                            onOpenCASLogin={onOpenCASLogin}
                             onLoginPress={onLoginPress}
                             close={close}
                         />
