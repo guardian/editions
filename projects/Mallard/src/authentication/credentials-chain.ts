@@ -140,6 +140,7 @@ const cachedAuthChain = () =>
     runAuthChain([cachedIdentityAuthProvider, cachedCasAuthProvider])
 
 export {
+    runAuthChain,
     liveAuthChain,
     cachedAuthChain,
     pending,
