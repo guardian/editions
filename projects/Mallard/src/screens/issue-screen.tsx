@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactElement } from 'react'
 import {
     NavigationScreenProp,
     NavigationEvents,
@@ -20,6 +20,12 @@ import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
+import {
+    Responsive,
+    IPAD_VERTICAL,
+    IPAD_LANDSCAPE,
+} from 'src/components/layout/ui/responsive'
+import { Text, View, ViewStyle, StyleProp } from 'react-native'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -48,6 +54,35 @@ const Header = withNavigation(
     },
 )
 
+const IssueFronts = ({
+    issue,
+    withWeather = true,
+    style,
+}: {
+    issue: Issue
+    withWeather?: boolean
+    style?: StyleProp<ViewStyle>
+}) => (
+    <FlatList
+        // this is horrible but in the worst case where we get duplicate ids
+        // (which we have done in the past) then we shouldn't break the rendering
+        // even if it does mean showing the same front twice
+        // we could filter out duplicates but in this case it'd probably be more
+        // obvious for someone previewing if we did render it twice
+        data={issue.fronts.map((key, index) => ({
+            key,
+            index,
+        }))}
+        style={style}
+        windowSize={3}
+        maxToRenderPerBatch={2}
+        initialNumToRender={1}
+        ListHeaderComponent={withWeather ? <Weather /> : null}
+        keyExtractor={item => `${item.index}::${item.key}`}
+        renderItem={({ item }) => <Front issue={issue.key} front={item.key} />}
+    />
+)
+
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
 
@@ -74,26 +109,35 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 success: issue => (
                     <>
-                        <Header issue={issue} />
-                        <FlatList
-                            // this is horrible but in the worst case where we get duplicate ids
-                            // (which we have done in the past) then we shouldn't break the rendering
-                            // even if it does mean showing the same front twice
-                            // we could filter out duplicates but in this case it'd probably be more
-                            // obvious for someone previewing if we did render it twice
-                            data={issue.fronts.map((key, index) => ({
-                                key,
-                                index,
-                            }))}
-                            windowSize={3}
-                            maxToRenderPerBatch={2}
-                            initialNumToRender={1}
-                            ListHeaderComponent={<Weather />}
-                            keyExtractor={item => `${item.index}::${item.key}`}
-                            renderItem={({ item }) => (
-                                <Front issue={issue.key} front={item.key} />
-                            )}
-                        />
+                        <Responsive>
+                            {{
+                                0: () => (
+                                    <>
+                                        <Header issue={issue} />
+                                        <IssueFronts issue={issue} />
+                                    </>
+                                ),
+                                [IPAD_VERTICAL]: () => (
+                                    <>
+                                        <Header issue={issue} />
+                                        <View>
+                                            <Weather
+                                                style={{
+                                                    position: 'absolute',
+                                                    width: 100,
+                                                    backgroundColor: 'tomato',
+                                                }}
+                                            ></Weather>
+                                            <IssueFronts
+                                                style={{ paddingLeft: 100 }}
+                                                withWeather={false}
+                                                issue={issue}
+                                            />
+                                        </View>
+                                    </>
+                                ),
+                            }}
+                        </Responsive>
                     </>
                 ),
             })}

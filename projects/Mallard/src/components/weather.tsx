@@ -1,5 +1,12 @@
 import React from 'react'
-import { Text, StyleSheet, View, PixelRatio } from 'react-native'
+import {
+    Text,
+    StyleSheet,
+    View,
+    PixelRatio,
+    StyleProp,
+    ViewStyle,
+} from 'react-native'
 import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
@@ -10,6 +17,7 @@ import { fetchWeather } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
+import { Responsive } from './layout/ui/responsive'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -87,70 +95,94 @@ const useWeatherResponse = () => {
     )
 }
 
-const Weather = () => {
-    let weatherResponse = useWeatherResponse()
-
-    const renderWeather = (forecasts: Forecast[]) => {
-        if (forecasts && forecasts.length >= 9) {
-            return (
-                <View style={styles.weatherContainer}>
-                    <GridRowSplit
-                        proxy={
-                            <View style={styles.locationNameContainer}>
-                                <Text style={styles.locationPinIcon}>
-                                    {'\uE01B'}
-                                </Text>
-                                <Text style={styles.locationName}>
-                                    {'London'}
-                                </Text>
-                            </View>
-                        }
-                    >
-                        {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
-                        {[0, 2, 4, 6, 8].map(idx => {
-                            return (
-                                <View style={styles.forecastItem} key={idx}>
-                                    <WeatherIcon
-                                        iconNumber={forecasts[idx].WeatherIcon}
-                                        fontSize={30}
-                                    />
-                                    <Text
-                                        numberOfLines={1}
-                                        ellipsizeMode="clip"
-                                        style={styles.temperature}
-                                    >
-                                        {Math.round(
-                                            forecasts[idx].Temperature.Value,
-                                        ) +
-                                            ' ' +
-                                            forecasts[idx].Temperature.Unit}
-                                    </Text>
-                                    <Text
-                                        numberOfLines={1}
-                                        ellipsizeMode="clip"
-                                        style={styles.dateTime}
-                                    >
-                                        {Moment(forecasts[idx].DateTime).format(
-                                            `h${
-                                                narrowSpace /* Narrow space for iPhone 5 */
-                                            }a`,
-                                        )}
-                                    </Text>
-                                </View>
-                            )
-                        })}
-                    </GridRowSplit>
-                </View>
-            )
-        }
-
-        return <></>
+const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
+    if (forecasts && forecasts.length >= 9) {
+        return (
+            <Responsive>
+                {{
+                    0: () => (
+                        <View style={styles.weatherContainer}>
+                            <Text>tiny</Text>
+                        </View>
+                    ),
+                    110: () => (
+                        <View style={styles.weatherContainer}>
+                            <GridRowSplit
+                                proxy={
+                                    <View style={styles.locationNameContainer}>
+                                        <Text style={styles.locationPinIcon}>
+                                            {'\uE01B'}
+                                        </Text>
+                                        <Text style={styles.locationName}>
+                                            {'London'}
+                                        </Text>
+                                    </View>
+                                }
+                            >
+                                {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
+                                {[0, 2, 4, 6, 8].map(idx => {
+                                    return (
+                                        <View
+                                            style={styles.forecastItem}
+                                            key={idx}
+                                        >
+                                            <WeatherIcon
+                                                iconNumber={
+                                                    forecasts[idx].WeatherIcon
+                                                }
+                                                fontSize={30}
+                                            />
+                                            <Text
+                                                numberOfLines={1}
+                                                ellipsizeMode="clip"
+                                                style={styles.temperature}
+                                            >
+                                                {Math.round(
+                                                    forecasts[idx].Temperature
+                                                        .Value,
+                                                ) +
+                                                    ' ' +
+                                                    forecasts[idx].Temperature
+                                                        .Unit}
+                                            </Text>
+                                            <Text
+                                                numberOfLines={1}
+                                                ellipsizeMode="clip"
+                                                style={styles.dateTime}
+                                            >
+                                                {Moment(
+                                                    forecasts[idx].DateTime,
+                                                ).format(
+                                                    `h${
+                                                        narrowSpace /* Narrow space for iPhone 5 */
+                                                    }a`,
+                                                )}
+                                            </Text>
+                                        </View>
+                                    )
+                                })}
+                            </GridRowSplit>
+                        </View>
+                    ),
+                }}
+            </Responsive>
+        )
     }
+
+    return <></>
+}
+
+const Weather = ({ style }: { style?: StyleProp<ViewStyle> }) => {
+    let weatherResponse = useWeatherResponse()
 
     return weatherResponse({
         error: ({}) => <></>,
         pending: () => <></>,
-        success: forecasts => renderWeather(forecasts),
+        success: forecasts => (
+            <View style={style}>
+                <WeatherWithForecast forecasts={forecasts} />
+            </View>
+        ),
     })
 }
 
