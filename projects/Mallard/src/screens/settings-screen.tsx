@@ -20,7 +20,11 @@ import { ScrollContainer } from 'src/components/layout/ui/container'
 import { routeNames } from 'src/navigation'
 import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
-import { useAuth, AuthContext } from 'src/authentication/auth-context'
+import {
+    useIdentity,
+    AuthContext,
+    useAuth,
+} from 'src/authentication/auth-context'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -126,35 +130,52 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
-    const handler = useAuth()
+    const signInHandler = useIdentity()
+    const authHandler = useAuth()
     const { signOut } = useContext(AuthContext)
 
-    const signInListItems = handler({
-        pending: () => [],
-        signedIn: (_, data) => [
-            {
-                key: `Sign out`,
-                title: `Sign out of ${data.userDetails.publicFields.displayName}`,
-                data: {
-                    onPress: async () => {
-                        await signOut()
-                        navigation.navigate(routeNames.SignIn)
+    const signInListItems = [
+        ...signInHandler({
+            pending: () => [],
+            signedIn: data => [
+                {
+                    key: `Sign out`,
+                    title: `Sign out of ${data.userDetails.publicFields.displayName}`,
+                    data: {
+                        onPress: async () => {
+                            await signOut()
+                        },
                     },
                 },
-            },
-        ],
-        signedOut: () => [
-            {
-                key: `Sign in`,
-                title: `Sign in`,
-                data: {
-                    onPress: () => {
-                        navigation.navigate(routeNames.SignIn)
+            ],
+            signedOut: () => [
+                {
+                    key: `Sign in`,
+                    title: `Sign in`,
+                    data: {
+                        onPress: () => {
+                            navigation.navigate(routeNames.SignIn)
+                        },
                     },
                 },
-            },
-        ],
-    })
+            ],
+        }),
+        ...authHandler({
+            pending: () => [],
+            authed: () => [],
+            unauthed: () => [
+                {
+                    key: 'Activate with subscriber ID',
+                    title: 'Activate with subscriber ID',
+                    data: {
+                        onPress: () => {
+                            navigation.navigate(routeNames.CasSignIn)
+                        },
+                    },
+                },
+            ],
+        }),
+    ]
 
     return (
         <WithAppAppearance value={'settings'}>
@@ -164,15 +185,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     onPress={({ onPress }) => onPress()}
                     data={[
                         ...signInListItems,
-                        {
-                            key: 'Activate with subscriber ID',
-                            title: 'Activate with subscriber ID',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(routeNames.CasSignIn)
-                                },
-                            },
-                        },
                         {
                             key: 'Consent settings',
                             title: 'Consent settings',

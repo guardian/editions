@@ -1,32 +1,93 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import { canViewEdition, userDataCache, UserData } from './helpers'
 import { resetCredentials } from './storage'
+import { useNetInfo } from '@react-native-community/netinfo'
+import {
+    liveAuthChain,
+    cachedAuthChain,
+    AuthStatus,
+    pending,
+    isAuthed,
+    unauthed,
+    isPending,
+} from './credentials-chain'
+import { UserData, canViewEdition } from './helpers'
 
-type AuthInfo = UserData
+interface AuthAttempt {
+    time: number
+    type: 'live' | 'cached'
+    status: AuthStatus
+}
 
-const SENTINEL: unique symbol = Symbol('auth-not-loaded')
+const createAttempt = (
+    status: AuthStatus,
+    type: 'live' | 'cached',
+): AuthAttempt => ({
+    time: Date.now(),
+    type,
+    status,
+})
 
 const AuthContext = createContext<{
-    data: AuthInfo | typeof SENTINEL | null
-    setData: (data: AuthInfo | null) => void
+    status: AuthStatus
+    setStatus: (status: AuthStatus) => void
     signOut: () => Promise<void>
 }>({
-    data: SENTINEL,
-    setData: () => {},
+    status: pending,
+    setStatus: () => {},
     signOut: () => Promise.resolve(),
 })
 
+const AUTH_EXPIRY = 86400000 // ms in a day
+
+const needsReauth = (attempt: AuthAttempt, isInternetReachable: boolean) =>
+    (attempt.type === 'cached' && isInternetReachable) ||
+    (isPending(attempt.status) ||
+        (isAuthed(attempt.status) && attempt.time < Date.now() - AUTH_EXPIRY))
+
+const assertUnreachable = (x: never): never => {
+    throw new Error('This should be unreachable')
+}
+
 const useAuth = () => {
-    const { data, setData } = useContext(AuthContext)
+    const { status } = useContext(AuthContext)
 
-    useEffect(() => {
-        if (data === SENTINEL) {
-            userDataCache.get().then(data => {
-                setData(data)
-            })
+    return <T extends unknown>({
+        pending,
+        authed,
+        unauthed,
+    }: {
+        pending: () => T
+        unauthed: (signedIn: boolean) => T
+        authed: () => T
+    }) => {
+        switch (status.type) {
+            case 'pending': {
+                return pending()
+            }
+            case 'unauthed': {
+                return unauthed(false)
+            }
+            case 'authed': {
+                switch (status.data.type) {
+                    case 'identity': {
+                        return canViewEdition(status.data.info.membershipData)
+                            ? authed()
+                            : unauthed(true)
+                    }
+                    default: {
+                        return authed()
+                    }
+                }
+            }
+            default: {
+                return assertUnreachable(status)
+            }
         }
-    }, [data, setData])
+    }
+}
 
+const useIdentity = () => {
+    const { status } = useContext(AuthContext)
     return <T extends unknown>({
         pending,
         signedIn,
@@ -34,34 +95,66 @@ const useAuth = () => {
     }: {
         pending: () => T
         signedOut: () => T
-        signedIn: (canViewEdition: boolean, data: AuthInfo) => T
+        signedIn: (data: UserData) => T
     }) => {
-        switch (data) {
-            case SENTINEL: {
+        switch (status.type) {
+            case 'pending': {
                 return pending()
             }
-            case null: {
+            case 'unauthed': {
                 return signedOut()
             }
+            case 'authed': {
+                switch (status.data.type) {
+                    case 'identity': {
+                        return signedIn(status.data.info)
+                    }
+                    default: {
+                        return signedOut()
+                    }
+                }
+            }
             default: {
-                return signedIn(canViewEdition(data.membershipData), data)
+                return assertUnreachable(status)
             }
         }
     }
 }
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [data, setData] = useState<AuthInfo | typeof SENTINEL | null>(
-        SENTINEL,
-    )
+    const [authAttempt, setAuthAttempt] = useState<AuthAttempt>({
+        time: 0,
+        type: 'cached',
+        status: pending,
+    })
+    const { isInternetReachable } = useNetInfo()
+
+    useEffect(() => {
+        if (!needsReauth(authAttempt, !!isInternetReachable)) return
+
+        if (isInternetReachable) {
+            liveAuthChain().then(status =>
+                setAuthAttempt(createAttempt(status, 'live')),
+            )
+        } else {
+            // this sets the time to be immediately requiring a reauth as soon
+            // as we get network, but the user is authed until then if they were
+            // authed previously
+            cachedAuthChain().then(status =>
+                setAuthAttempt(createAttempt(status, 'cached')),
+            )
+        }
+    }, [isInternetReachable, authAttempt])
+
     return (
         <AuthContext.Provider
             value={{
-                data,
-                setData,
+                status: authAttempt.status,
+                setStatus: (status: AuthStatus) =>
+                    setAuthAttempt(createAttempt(status, 'live')),
                 signOut: async () => {
                     await resetCredentials()
-                    setData(null)
+                    setAuthAttempt(createAttempt(unauthed, 'live'))
                 },
             }}
         >
@@ -70,4 +163,4 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export { AuthProvider, AuthContext, useAuth }
+export { AuthProvider, AuthContext, useAuth, useIdentity }

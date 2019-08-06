@@ -16,6 +16,7 @@ import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Login } from './log-in'
 import isEmail from 'validator/lib/isEmail'
 import { useFormField } from 'src/hooks/use-form-field'
+import { IdentityAuthStatus } from 'src/authentication/credentials-chain'
 
 const useRandomState = () =>
     useState(
@@ -77,7 +78,7 @@ const AuthSwitcherScreen = ({
 
     const validatorString = useRandomState()
 
-    const { setData, signOut } = useContext(AuthContext)
+    const { setStatus, signOut } = useContext(AuthContext)
     const { open } = useModal()
 
     const handleAuthClick = async (authRunner: () => Promise<string>) => {
@@ -94,7 +95,7 @@ const AuthSwitcherScreen = ({
                 },
                 onSuccess: data => {
                     setIsLoading(false)
-                    setData(data)
+                    setStatus(IdentityAuthStatus(data))
                     if (!canViewEdition(data.membershipData)) {
                         open(close => (
                             <SubNotFoundModalCard

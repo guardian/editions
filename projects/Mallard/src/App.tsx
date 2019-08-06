@@ -46,7 +46,7 @@ const loadNavigationState = async () => {
     }
 }
 
-const rootNavigationProps = __DEV__ && {
+const rootNavigationProps = null && {
     persistNavigationState,
     loadNavigationState,
 }

@@ -1,5 +1,5 @@
 import * as Keychain from 'react-native-keychain'
-import { ID_API_URL, MEMBERS_DATA_API_URL } from './constants'
+import { ID_API_URL, MEMBERS_DATA_API_URL, CAS_ENDPOINT_URL } from './constants'
 import { userDataCache } from './helpers'
 
 /**
@@ -18,6 +18,7 @@ const userAccessTokenKeychain = createServiceTokenStore(ID_API_URL)
 const membershipAccessTokenKeychain = createServiceTokenStore(
     MEMBERS_DATA_API_URL,
 )
+const casCredentialsKeychain = createServiceTokenStore(CAS_ENDPOINT_URL)
 
 /**
  * Removes all the relevent keychain, storage entries that mark a user as logged in
@@ -28,10 +29,12 @@ const resetCredentials = (): Promise<boolean> =>
         userAccessTokenKeychain.reset(),
         membershipAccessTokenKeychain.reset(),
         userDataCache.reset(),
+        casCredentialsKeychain.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
     userAccessTokenKeychain,
     membershipAccessTokenKeychain,
+    casCredentialsKeychain,
     resetCredentials,
 }

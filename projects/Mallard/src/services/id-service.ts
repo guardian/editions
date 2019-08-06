@@ -38,6 +38,12 @@ const fetchAuth = async (
     return maybeThrowErrors(res).then(json => json.accessToken.accessToken)
 }
 
+/**
+ * DO NOT USE THESE DIRECTLY
+ *
+ * In most cases you will want to use the method that caches the result of this request
+ * in order that re-authentication can use the cached credentials
+ */
 const fetchUserAccessTokenWithIdentity = (email: string, password: string) =>
     fetchAuth({ email, password })
 

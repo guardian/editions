@@ -63,10 +63,9 @@ const LoginOverlay = ({
 
     return handler({
         pending: () => <>{children}</>,
-        signedIn: canView =>
-            canView ? (
-                <>{children}</>
-            ) : (
+        authed: () => <>{children}</>,
+        unauthed: signedIn =>
+            signedIn ? (
                 <ModalOpener
                     renderModal={close => (
                         <SubNotFoundModalCard
@@ -78,20 +77,19 @@ const LoginOverlay = ({
                 >
                     {children}
                 </ModalOpener>
+            ) : (
+                <ModalOpener
+                    renderModal={close => (
+                        <SignInModalCard
+                            onDismiss={onDismiss}
+                            onLoginPress={onLoginPress}
+                            close={close}
+                        />
+                    )}
+                >
+                    {children}
+                </ModalOpener>
             ),
-        signedOut: () => (
-            <ModalOpener
-                renderModal={close => (
-                    <SignInModalCard
-                        onDismiss={onDismiss}
-                        onLoginPress={onLoginPress}
-                        close={close}
-                    />
-                )}
-            >
-                {children}
-            </ModalOpener>
-        ),
     })
 }
 

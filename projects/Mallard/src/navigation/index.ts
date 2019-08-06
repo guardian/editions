@@ -118,7 +118,6 @@ const AppStack = createStackNavigator(
                 [routeNames.Downloads]: DownloadScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
-                [routeNames.CasSignIn]: CasSignInScreen,
             },
             {
                 defaultNavigationOptions: {
@@ -209,6 +208,7 @@ const RootNavigator = createAppContainer(
                 },
             ),
             [routeNames.SignIn]: AuthSwitcherScreen,
+            [routeNames.CasSignIn]: CasSignInScreen,
         },
         {
             initialRouteName: 'AppRoot',

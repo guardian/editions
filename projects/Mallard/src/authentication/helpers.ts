@@ -2,6 +2,7 @@ import {
     membershipAccessTokenKeychain,
     userAccessTokenKeychain,
     resetCredentials,
+    casCredentialsKeychain,
 } from './storage'
 import {
     fetchMembershipData,
@@ -16,6 +17,7 @@ import {
     User,
 } from 'src/services/id-service'
 import AsyncStorage from '@react-native-community/async-storage'
+import { fetchCasSubscription, CasExpiry } from './content-auth'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -62,6 +64,25 @@ const createAsyncCache = <T extends object>(key: string) => ({
     reset: (): Promise<boolean> =>
         AsyncStorage.removeItem(key).then(() => true),
 })
+
+const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
+
+/**
+ * This helper attempts to get CAS expiry information with a subscriber id and password.
+ *
+ * It will also cache the parameters and result if successful.
+ *
+ * This method will throw an error if it was unsuccesful.
+ */
+const fetchAndPersistCASExpiry = async (
+    subscriberId: string,
+    password: string,
+) => {
+    const expiry = await fetchCasSubscription(subscriberId, password)
+    casCredentialsKeychain.set(subscriberId, password)
+    casDataCache.set(expiry)
+    return expiry
+}
 
 export interface UserData {
     userDetails: User
@@ -128,6 +149,12 @@ const fetchUserDataForKeychainUser = async (
     return userData
 }
 
+const fetchCASExpiryForKeychainCredentials = async () => {
+    const creds = await casCredentialsKeychain.get()
+    if (!creds) return null
+    return fetchCasSubscription(creds.username, creds.password)
+}
+
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
@@ -140,6 +167,9 @@ export {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchAndPersistUserAccessTokenWithType,
     fetchUserDataForKeychainUser,
+    fetchCASExpiryForKeychainCredentials,
     canViewEdition,
     userDataCache,
+    casDataCache,
+    fetchAndPersistCASExpiry,
 }

@@ -13,6 +13,12 @@ export interface MembersDataAPIResponse {
     }
 }
 
+/**
+ * DO NOT USE THIS DIRECTLY
+ *
+ * In most cases you will want to use the method that caches the result of this request
+ * in order that re-authentication can use the cached credentials
+ */
 const fetchMembershipData = async (
     membershipAccessToken: string,
 ): Promise<MembersDataAPIResponse> => {
