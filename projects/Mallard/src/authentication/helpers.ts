@@ -3,6 +3,8 @@ import {
     userAccessTokenKeychain,
     resetCredentials,
     casCredentialsKeychain,
+    casDataCache,
+    userDataCache,
 } from './storage'
 import {
     fetchMembershipData,
@@ -16,11 +18,7 @@ import {
     fetchUserDetails,
     User,
 } from 'src/services/id-service'
-import AsyncStorage from '@react-native-community/async-storage'
-import {
-    fetchCasSubscription,
-    CasExpiry,
-} from '../services/content-auth-service'
+import { fetchCasSubscription } from '../services/content-auth-service'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -57,20 +55,6 @@ const fetchAndPersistUserAccessTokenWithType = async (
 }
 
 /**
- * A wrapper around AsyncStorage, with json handling and standardizing the interface
- * between AsyncStorage and the keychain helper below
- */
-const createAsyncCache = <T extends object>(key: string) => ({
-    set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
-    get: (): Promise<T | null> =>
-        AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
-    reset: (): Promise<boolean> =>
-        AsyncStorage.removeItem(key).then(() => true),
-})
-
-const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
-
-/**
  * This helper attempts to get CAS expiry information with a subscriber id and password.
  *
  * It will also cache the parameters and result if successful.
@@ -91,8 +75,6 @@ export interface UserData {
     userDetails: User
     membershipData: MembersDataAPIResponse
 }
-
-const userDataCache = createAsyncCache<UserData>('user-data-cache')
 
 /**
  * This should be used when you know you want to query members-data-api
@@ -172,7 +154,5 @@ export {
     fetchUserDataForKeychainUser,
     fetchCASExpiryForKeychainCredentials,
     canViewEdition,
-    userDataCache,
-    casDataCache,
     fetchAndPersistCASExpiry,
 }

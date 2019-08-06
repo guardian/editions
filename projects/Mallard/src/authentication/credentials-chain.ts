@@ -1,11 +1,10 @@
 import {
     fetchUserDataForKeychainUser,
-    userDataCache,
     UserData,
-    casDataCache,
     fetchCASExpiryForKeychainCredentials,
 } from './helpers'
 import { CasExpiry } from '../services/content-auth-service'
+import { userDataCache, casDataCache } from './storage'
 
 interface IdentityAuth {
     type: 'identity'
