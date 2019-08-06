@@ -5,7 +5,7 @@ import {
     casDataCache,
     fetchCASExpiryForKeychainCredentials,
 } from './helpers'
-import { CasExpiry } from './content-auth'
+import { CasExpiry } from '../services/content-auth-service'
 
 interface IdentityAuth {
     type: 'identity'

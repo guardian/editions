@@ -1,5 +1,9 @@
 import * as Keychain from 'react-native-keychain'
-import { ID_API_URL, MEMBERS_DATA_API_URL, CAS_ENDPOINT_URL } from './constants'
+import {
+    ID_API_URL,
+    MEMBERS_DATA_API_URL,
+    CAS_ENDPOINT_URL,
+} from '../constants'
 import { userDataCache } from './helpers'
 
 /**

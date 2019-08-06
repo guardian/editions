@@ -1,4 +1,4 @@
-import { CAS_ENDPOINT_URL } from './constants'
+import { CAS_ENDPOINT_URL } from '../constants'
 
 export interface CasExpiry {
     content: string
@@ -39,7 +39,7 @@ const fetchCasSubscription = async (
     const json = await res.json()
 
     if (res.status !== 200) {
-        let casError: CasError = json
+        const casError: CasError = json
         throw new Error(`${casError.message}`)
     }
 

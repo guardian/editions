@@ -1,4 +1,4 @@
-import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/authentication/constants'
+import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/constants'
 import qs from 'query-string'
 
 interface ErrorReponse {

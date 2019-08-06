@@ -1,4 +1,4 @@
-import { MEMBERS_DATA_API_URL } from 'src/authentication/constants'
+import { MEMBERS_DATA_API_URL } from 'src/constants'
 
 export interface MembersDataAPIResponse {
     userId: string

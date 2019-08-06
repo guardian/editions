@@ -17,7 +17,10 @@ import {
     User,
 } from 'src/services/id-service'
 import AsyncStorage from '@react-native-community/async-storage'
-import { fetchCasSubscription, CasExpiry } from './content-auth'
+import {
+    fetchCasSubscription,
+    CasExpiry,
+} from '../services/content-auth-service'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
