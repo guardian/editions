@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
-        height: 60 * PixelRatio.getFontScale(),
     },
     forecastItemLong: {
+        height: 60 * PixelRatio.getFontScale(),
         borderLeftWidth: 1,
         flex: 2,
         borderLeftColor: color.line,
@@ -47,9 +47,12 @@ const styles = StyleSheet.create({
         paddingLeft: 4,
     },
     forecastItemNarrow: {
-        marginBottom: metrics.vertical * 2,
-        marginTop: metrics.vertical * 1.5,
-        flex: 0,
+        paddingTop: metrics.vertical * 0.6,
+        paddingBottom: metrics.vertical * 1.2,
+        flexShrink: 0,
+        flexGrow: 0,
+        borderBottomColor: color.line,
+        borderBottomWidth: 1,
     },
     temperature: {
         color: '#E05E00',
