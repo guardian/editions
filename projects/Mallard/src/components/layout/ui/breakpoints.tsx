@@ -1,15 +1,16 @@
 import React, { useState, ReactElement } from 'react'
-import { View } from 'react-native'
+import { View, LayoutRectangle, StyleSheet } from 'react-native'
 
-const Responsive = ({
+const Breakpoints = ({
     children,
 }: {
     children: {
-        0: () => ReactElement
-        [fromSize: number]: () => ReactElement
+        0: (l: LayoutRectangle) => ReactElement
+        [fromSize: number]: (l: LayoutRectangle) => ReactElement
     }
 }) => {
     const [maxSize, setMaxSize] = useState<keyof typeof children>(0)
+    const [metrics, setMetrics] = useState<LayoutRectangle | null>(null)
     return (
         <View
             onLayout={ev => {
@@ -19,15 +20,16 @@ const Responsive = ({
                         max = parseInt(key)
                     }
                 }
+                setMetrics(ev.nativeEvent.layout)
                 setMaxSize(max)
             }}
         >
-            {children[maxSize]()}
+            {metrics && children[maxSize](metrics)}
         </View>
     )
 }
 
-const IPAD_VERTICAL = 800
+const IPAD_VERTICAL = 700
 const IPAD_LANDSCAPE = 1000
 
-export { Responsive, IPAD_VERTICAL, IPAD_LANDSCAPE }
+export { Breakpoints, IPAD_VERTICAL, IPAD_LANDSCAPE }

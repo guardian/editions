@@ -21,10 +21,10 @@ import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
 import {
-    Responsive,
+    Breakpoints,
     IPAD_VERTICAL,
     IPAD_LANDSCAPE,
-} from 'src/components/layout/ui/responsive'
+} from 'src/components/layout/ui/breakpoints'
 import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
@@ -123,7 +123,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 success: issue => (
                     <>
-                        <Responsive>
+                        <Breakpoints>
                             {{
                                 0: () => (
                                     <>
@@ -152,7 +152,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                     </>
                                 ),
                             }}
-                        </Responsive>
+                        </Breakpoints>
                     </>
                 ),
             })}

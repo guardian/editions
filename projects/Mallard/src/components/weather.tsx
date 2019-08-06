@@ -17,7 +17,7 @@ import { fetchWeather } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
-import { Responsive } from './layout/ui/responsive'
+import { Breakpoints } from './layout/ui/breakpoints'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -130,7 +130,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
         const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
         return (
-            <Responsive>
+            <Breakpoints>
                 {{
                     0: () => (
                         <View style={styles.weatherContainerNarrow}>
@@ -172,7 +172,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
                         </View>
                     ),
                 }}
-            </Responsive>
+            </Breakpoints>
         )
     }
 
