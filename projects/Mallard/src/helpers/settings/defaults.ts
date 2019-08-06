@@ -7,11 +7,11 @@ This is a bit of a mess
 export const backends = [
     {
         title: 'PROD',
-        value: 'https://d2cf1ljtg904cv.cloudfront.net/',
+        value: 'https://editions-store.s3-eu-west-1.amazonaws.com/',
     },
     {
         title: 'CODE',
-        value: 'https://d2mztzjulnpyb8.cloudfront.net/',
+        value: 'https://editions-store-code.s3-eu-west-1.amazonaws.com/',
     },
     {
         title: 'DEV',
