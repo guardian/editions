@@ -25,11 +25,25 @@ import {
     IPAD_VERTICAL,
     IPAD_LANDSCAPE,
 } from 'src/components/layout/ui/responsive'
-import { Text, View, ViewStyle, StyleProp } from 'react-native'
+import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
+import { metrics } from 'src/theme/spacing'
+import { color } from 'src/theme/color'
 
 export interface PathToIssue {
     issue: Issue['key']
 }
+
+const styles = StyleSheet.create({
+    weatherWide: {
+        marginHorizontal: metrics.horizontal,
+    },
+    sideWeather: {
+        width: 78,
+        flexShrink: 0,
+        borderRightColor: color.line,
+        borderRightWidth: 1,
+    },
+})
 
 const Header = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
@@ -56,11 +70,11 @@ const Header = withNavigation(
 
 const IssueFronts = ({
     issue,
-    withWeather = true,
+    ListHeaderComponent,
     style,
 }: {
     issue: Issue
-    withWeather?: boolean
+    ListHeaderComponent?: ReactElement
     style?: StyleProp<ViewStyle>
 }) => (
     <FlatList
@@ -77,7 +91,7 @@ const IssueFronts = ({
         windowSize={3}
         maxToRenderPerBatch={2}
         initialNumToRender={1}
-        ListHeaderComponent={withWeather ? <Weather /> : null}
+        ListHeaderComponent={ListHeaderComponent}
         keyExtractor={item => `${item.index}::${item.key}`}
         renderItem={({ item }) => <Front issue={issue.key} front={item.key} />}
     />
@@ -114,25 +128,26 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                 0: () => (
                                     <>
                                         <Header issue={issue} />
-                                        <IssueFronts issue={issue} />
+                                        <IssueFronts
+                                            ListHeaderComponent={
+                                                <View
+                                                    style={styles.weatherWide}
+                                                >
+                                                    <Weather />
+                                                </View>
+                                            }
+                                            issue={issue}
+                                        />
                                     </>
                                 ),
                                 [IPAD_VERTICAL]: () => (
                                     <>
                                         <Header issue={issue} />
-                                        <View>
-                                            <Weather
-                                                style={{
-                                                    position: 'absolute',
-                                                    width: 100,
-                                                    backgroundColor: 'tomato',
-                                                }}
-                                            ></Weather>
-                                            <IssueFronts
-                                                style={{ paddingLeft: 100 }}
-                                                withWeather={false}
-                                                issue={issue}
-                                            />
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <View style={styles.sideWeather}>
+                                                <Weather></Weather>
+                                            </View>
+                                            <IssueFronts issue={issue} />
                                         </View>
                                     </>
                                 ),

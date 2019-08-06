@@ -22,25 +22,33 @@ import { Responsive } from './layout/ui/responsive'
 const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
-    weatherContainer: {
+    weatherContainerLong: {
         display: 'flex',
         flexDirection: 'row',
         width: 'auto',
         marginBottom: 24,
-        height: 60 * PixelRatio.getFontScale(),
+    },
+    weatherContainerNarrow: {
+        height: 'auto',
+        flexDirection: 'column',
         paddingLeft: metrics.horizontal,
-        paddingRight: metrics.horizontal,
     },
     forecastItem: {
-        flex: 2,
-        height: 'auto',
-        borderLeftWidth: 1,
-        borderLeftColor: color.line,
         borderStyle: 'solid',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
         paddingTop: 2,
         paddingLeft: 4,
+        height: 60 * PixelRatio.getFontScale(),
+    },
+    forecastItemLong: {
+        borderLeftWidth: 1,
+        flex: 2,
+        borderLeftColor: color.line,
+    },
+    forecastItemNarrow: {
+        marginBottom: metrics.vertical * 2,
+        flex: 0,
     },
     temperature: {
         color: '#E05E00',
@@ -95,18 +103,50 @@ const useWeatherResponse = () => {
     )
 }
 
+const WeatherIconView = ({
+    forecast,
+    style,
+}: {
+    forecast: Forecast
+    style?: StyleProp<ViewStyle>
+}) => (
+    <View style={[styles.forecastItem, style]}>
+        <WeatherIcon iconNumber={forecast.WeatherIcon} fontSize={30} />
+        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.temperature}>
+            {Math.round(forecast.Temperature.Value) +
+                ' ' +
+                forecast.Temperature.Unit}
+        </Text>
+        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.dateTime}>
+            {Moment(forecast.DateTime).format(
+                `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
+            )}
+        </Text>
+    </View>
+)
+
 const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
     if (forecasts && forecasts.length >= 9) {
+        /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
+        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
         return (
             <Responsive>
                 {{
                     0: () => (
-                        <View style={styles.weatherContainer}>
-                            <Text>tiny</Text>
+                        <View style={styles.weatherContainerNarrow}>
+                            {intervals.map(forecast => {
+                                return (
+                                    <WeatherIconView
+                                        style={styles.forecastItemNarrow}
+                                        key={forecast.EpochDateTime}
+                                        forecast={forecast}
+                                    />
+                                )
+                            })}
                         </View>
                     ),
                     110: () => (
-                        <View style={styles.weatherContainer}>
+                        <View style={styles.weatherContainerLong}>
                             <GridRowSplit
                                 proxy={
                                     <View style={styles.locationNameContainer}>
@@ -119,46 +159,13 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
                                     </View>
                                 }
                             >
-                                {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
-                                {[0, 2, 4, 6, 8].map(idx => {
+                                {intervals.map(forecast => {
                                     return (
-                                        <View
-                                            style={styles.forecastItem}
-                                            key={idx}
-                                        >
-                                            <WeatherIcon
-                                                iconNumber={
-                                                    forecasts[idx].WeatherIcon
-                                                }
-                                                fontSize={30}
-                                            />
-                                            <Text
-                                                numberOfLines={1}
-                                                ellipsizeMode="clip"
-                                                style={styles.temperature}
-                                            >
-                                                {Math.round(
-                                                    forecasts[idx].Temperature
-                                                        .Value,
-                                                ) +
-                                                    ' ' +
-                                                    forecasts[idx].Temperature
-                                                        .Unit}
-                                            </Text>
-                                            <Text
-                                                numberOfLines={1}
-                                                ellipsizeMode="clip"
-                                                style={styles.dateTime}
-                                            >
-                                                {Moment(
-                                                    forecasts[idx].DateTime,
-                                                ).format(
-                                                    `h${
-                                                        narrowSpace /* Narrow space for iPhone 5 */
-                                                    }a`,
-                                                )}
-                                            </Text>
-                                        </View>
+                                        <WeatherIconView
+                                            style={styles.forecastItemLong}
+                                            key={forecast.EpochDateTime}
+                                            forecast={forecast}
+                                        />
                                     )
                                 })}
                             </GridRowSplit>
@@ -172,17 +179,13 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
     return <></>
 }
 
-const Weather = ({ style }: { style?: StyleProp<ViewStyle> }) => {
+const Weather = () => {
     let weatherResponse = useWeatherResponse()
 
     return weatherResponse({
         error: ({}) => <></>,
         pending: () => <></>,
-        success: forecasts => (
-            <View style={style}>
-                <WeatherWithForecast forecasts={forecasts} />
-            </View>
-        ),
+        success: forecasts => <WeatherWithForecast forecasts={forecasts} />,
     })
 }
 
