@@ -33,6 +33,7 @@ export const color = {
     Border colors
     */
     line: palette.neutral[60],
+    dimLine: palette.neutral[85],
     lineOverPrimary: palette.brand.pastel,
 
     /*
