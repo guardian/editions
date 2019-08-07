@@ -126,20 +126,20 @@ const CollectionPage = ({
                 const article = articlesInCard[index]
                 return (
                     <View
+                        key={index}
                         style={[
                             styles.itemHolder,
                             getItemPosition(story.fits, layout.size),
                         ]}
                     >
                         <Item
-                            style={{}}
-                            size={size}
                             path={{
                                 article: article.key,
                                 collection,
                                 issue,
                                 front,
                             }}
+                            size={size}
                             articleNavigator={articleNavigator}
                             article={article}
                         />

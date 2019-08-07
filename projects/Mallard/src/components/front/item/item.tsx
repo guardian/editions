@@ -44,7 +44,7 @@ import { APIPaths } from 'src/paths'
 import { getFont } from 'src/theme/typography'
 
 interface TappablePropTypes {
-    style: StyleProp<ViewStyle>
+    style?: StyleProp<ViewStyle>
     article: CAPIArticle
     path: PathToArticle
     articleNavigator: ArticleNavigator
@@ -187,11 +187,7 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({
-    article,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
@@ -244,11 +240,7 @@ const isHeroImage = ({ story, layout }: ItemSizes) => {
         : story.height > 4
 }
 
-const ImageItem = ({
-    article,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article && article.image ? (
@@ -297,11 +289,7 @@ const splitImageStyles = StyleSheet.create({
     },
 })
 
-const SplitImageItem = ({
-    article,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
@@ -354,11 +342,7 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageItem = ({
-    article,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
@@ -427,11 +411,7 @@ const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
     )
 }
 
-const SmallItem = ({
-    article,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
