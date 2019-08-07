@@ -3,15 +3,15 @@ import { StyleSheet, View, KeyboardAvoidingView } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { useInsets } from 'src/hooks/use-insets'
-import { Button } from './button/button'
-import { TitlepieceText, UiBodyCopy } from './styled-text'
-import { Spinner } from './spinner'
+import { Button } from '../button/button'
+import { TitlepieceText, UiBodyCopy } from '../styled-text'
+import { Spinner } from '../spinner'
 
 const loginHeaderStyles = StyleSheet.create({
     wrapper: {
         paddingVertical: metrics.vertical,
         paddingHorizontal: metrics.horizontal,
-        backgroundColor: '#279DDC',
+        backgroundColor: color.ui.sea,
         flexDirection: 'column',
     },
     actionRow: {
@@ -69,6 +69,7 @@ const loginLayoutStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
+    spinnerContainer: { alignItems: 'center' },
     inputsContainer: {
         flexDirection: 'column',
         flexGrow: 1,
@@ -97,7 +98,7 @@ const LoginLayout = ({
             behavior="padding"
         >
             <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-            <View style={{ alignItems: 'center' }}>
+            <View style={loginLayoutStyles.spinnerContainer}>
                 {isLoading && <Spinner />}
             </View>
             <View style={loginLayoutStyles.inputsContainer}>

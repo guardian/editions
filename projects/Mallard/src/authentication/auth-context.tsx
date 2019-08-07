@@ -11,6 +11,7 @@ import {
     isPending,
 } from './credentials-chain'
 import { UserData, canViewEdition } from './helpers'
+import { AUTH_TTL } from 'src/constants'
 
 interface AuthAttempt {
     time: number
@@ -38,9 +39,10 @@ const AuthContext = createContext<{
     signOut: () => Promise.resolve(),
 })
 
-const AUTH_TTL = 86400000 // ms in a day
-
-const needsReauth = (prevAttempt: AuthAttempt, isInternetReachable: boolean) =>
+const needsReauth = (
+    prevAttempt: AuthAttempt,
+    { isInternetReachable }: { isInternetReachable: boolean | null },
+) =>
     (prevAttempt.type === 'cached' && isInternetReachable) ||
     (isPending(prevAttempt.status) ||
         (isAuthed(prevAttempt.status) &&
@@ -145,7 +147,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { isInternetReachable } = useNetInfo()
 
     useEffect(() => {
-        if (isFetching || !needsReauth(authAttempt, !!isInternetReachable))
+        if (isFetching || !needsReauth(authAttempt, { isInternetReachable }))
             return
 
         setIsFetching(true)

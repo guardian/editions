@@ -6,6 +6,8 @@ const { ID_API_URL, MEMBERS_DATA_API_URL, ID_ACCESS_TOKEN } = Config
 
 const FACEBOOK_CLIENT_ID = '180444840287'
 
+const AUTH_TTL = 86400000 // ms in a day
+
 const CAS_ENDPOINT_URL = 'https://content-auth.guardian.co.uk/subs'
 
 const GOOGLE_CLIENT_ID =
@@ -22,4 +24,5 @@ export {
     ID_ACCESS_TOKEN,
     FACEBOOK_CLIENT_ID,
     GOOGLE_CLIENT_ID,
+    AUTH_TTL,
 }

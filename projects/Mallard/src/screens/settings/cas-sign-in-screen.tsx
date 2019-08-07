@@ -1,12 +1,16 @@
 import React, { useState, useCallback, useContext } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { fetchAndPersistCASExpiry } from 'src/authentication/helpers'
 import { AuthContext } from 'src/authentication/auth-context'
 import { CASAuthStatus } from 'src/authentication/credentials-chain'
-import { LoginLayout } from 'src/components/login-layout'
-import { LoginInput } from 'src/components/login-input'
-import { LoginButton } from 'src/components/login-button'
+import { LoginLayout } from 'src/components/login/login-layout'
+import { LoginInput } from 'src/components/login/login-input'
+import { LoginButton } from 'src/components/login/login-button'
+
+const styles = StyleSheet.create({
+    image: { height: 200, width: undefined },
+})
 
 const CasSignInScreen = ({
     navigation,
@@ -82,7 +86,7 @@ const CasSignInScreen = ({
 
                 <Image
                     resizeMode="contain"
-                    style={{ height: 200, width: undefined }}
+                    style={styles.image}
                     source={require(`src/assets/images/cas-voucher.jpg`)}
                 />
             </View>

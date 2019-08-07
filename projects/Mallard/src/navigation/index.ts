@@ -27,7 +27,7 @@ import {
     issueToIssueListInterpolator,
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
-import { AuthSwitcherScreen } from 'src/screens/auth-switcher-screen'
+import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 
 const routeNames = {
     Issue: 'Issue',

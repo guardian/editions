@@ -1,6 +1,6 @@
 import React from 'react'
 import { color } from 'src/theme/color'
-import { Button } from './button/button'
+import { Button } from '../button/button'
 import { StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { palette } from '@guardian/pasteup/palette'
@@ -25,7 +25,7 @@ const customButtonStyles = {
             color: palette.neutral[100],
         },
     }),
-    default: {
+    default: StyleSheet.create({
         buttonStyles: {
             borderColor: color.primary,
             borderWidth: 1,
@@ -34,7 +34,7 @@ const customButtonStyles = {
         textStyle: {
             color: color.primary,
         },
-    },
+    }),
 }
 
 const LoginButton = ({

@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 import { View, StyleSheet, PanResponder } from 'react-native'
-import { useModal } from './modal'
+import { useModal } from '../modal'
 import { useAuth } from 'src/authentication/auth-context'
-import { SignInModalCard } from './sign-in-modal-card'
-import { SubNotFoundModalCard } from './sub-not-found-modal-card'
+import { SignInModalCard } from '../sign-in-modal-card'
+import { SubNotFoundModalCard } from '../sub-not-found-modal-card'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {

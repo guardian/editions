@@ -7,9 +7,9 @@ import { color } from 'src/theme/color'
 import { Link } from 'src/components/link'
 import { getFont } from 'src/theme/typography'
 import { FormField } from 'src/hooks/use-form-field'
-import { LoginLayout } from 'src/components/login-layout'
-import { EmailInput, PasswordInput } from 'src/components/login-input'
-import { LoginButton } from 'src/components/login-button'
+import { LoginLayout } from 'src/components/login/login-layout'
+import { EmailInput, PasswordInput } from 'src/components/login/login-input'
+import { LoginButton } from 'src/components/login/login-button'
 
 const socialButtonStyles = StyleSheet.create({
     button: {

@@ -8,10 +8,11 @@ import {
 } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { UiBodyCopy } from './styled-text'
+import { UiBodyCopy } from '../styled-text'
 import { getFont } from 'src/theme/typography'
 
 const loginInputStyles = StyleSheet.create({
+    container: { marginBottom: metrics.vertical * 2 },
     label: {
         color: color.primary,
         marginBottom: metrics.vertical,
@@ -50,7 +51,7 @@ const LoginInput = ({
     onChangeText,
     error,
 }: LoginInputProps) => (
-    <View style={{ marginBottom: metrics.vertical * 2 }}>
+    <View style={loginInputStyles.container}>
         <UiBodyCopy weight="bold" style={loginInputStyles.label}>
             {label}
         </UiBodyCopy>
@@ -60,7 +61,7 @@ const LoginInput = ({
                     loginInputStyles.input,
                     {
                         borderColor: error ? color.error : color.primary,
-                        color: editable ? 'black' : 'grey',
+                        color: editable ? color.text : color.dimText,
                         ...getFont('sans', 1),
                     },
                 ]}

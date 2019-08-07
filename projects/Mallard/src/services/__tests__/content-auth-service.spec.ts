@@ -7,7 +7,7 @@ describe('content-auth-service', () => {
     describe('fetchCasSubscription', () => {
         beforeEach(fetchMock.resetBehavior)
 
-        it('creates a form-encoded string from the params in the body', async () => {
+        it('creates a JSON string from the params in the body', async () => {
             fetchMock.post(`begin:${CAS_ENDPOINT_URL}`, {
                 expiry: 'expiry',
             })
