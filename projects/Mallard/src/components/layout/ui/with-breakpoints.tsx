@@ -1,14 +1,12 @@
-import React, { useState, ReactElement } from 'react'
+import React, { useState, ReactNode, FunctionComponent } from 'react'
 import { View, LayoutRectangle, StyleSheet } from 'react-native'
 
-const WithBreakpoints = ({
-    children,
-}: {
+const WithBreakpoints: FunctionComponent<{
     children: {
-        0: (l: LayoutRectangle) => ReactElement
-        [fromSize: number]: (l: LayoutRectangle) => ReactElement
+        0: (l: LayoutRectangle) => ReactNode
+        [fromSize: number]: (l: LayoutRectangle) => ReactNode
     }
-}) => {
+}> = ({ children }) => {
     const [maxSize, setMaxSize] = useState<keyof typeof children>(0)
     const [metrics, setMetrics] = useState<LayoutRectangle | null>(null)
     return (
