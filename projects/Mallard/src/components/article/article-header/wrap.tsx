@@ -24,9 +24,8 @@ const styles = StyleSheet.create({
     wide: {
         marginLeft:
             metrics.article.leftRailLandscape -
-            metrics.article.sidesLandscape -
-            metrics.article.sides,
-        maxWidth: metrics.article.maxWidth,
+            (metrics.article.sidesLandscape - metrics.article.sides),
+        maxWidth: metrics.article.maxWidthLandscape,
     },
 })
 
@@ -54,7 +53,7 @@ const Wrap = ({
                     outerStyle &&
                     'backgroundColor' in StyleSheet.flatten(outerStyle)
                         ? {
-                              paddingTop: metrics.vertical * 2,
+                              marginTop: metrics.vertical * 2,
                           }
                         : {},
                 ]}
