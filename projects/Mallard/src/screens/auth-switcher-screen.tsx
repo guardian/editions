@@ -1,11 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
-import {
-    View,
-    TextInput,
-    Text,
-    KeyboardAvoidingView,
-    Keyboard,
-} from 'react-native'
+import React, { useState, useContext } from 'react'
 import {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchUserDataForKeychainUser,
@@ -14,19 +7,15 @@ import {
 } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
-import { Button, ButtonAppearance } from 'src/components/button/button'
-import { appAppearances } from 'src/theme/appearance'
-import { metrics } from 'src/theme/spacing'
-import { TitlepieceText } from 'src/components/styled-text'
-import { FadeIn } from 'src/components/bounce-fade-in'
-import { Spinner } from 'src/components/spinner'
-import { MembersDataAPIResponse } from 'src/services/membership-service'
 import { AuthContext } from 'src/authentication/auth-context'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
 import { SubNotFoundModalCard } from 'src/components/sub-not-found-modal-card'
 import { routeNames } from 'src/navigation'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
+import { Login } from './log-in'
+import isEmail from 'validator/lib/isEmail'
+import { useFormField } from 'src/hooks/use-form-field'
 
 const useRandomState = () =>
     useState(
@@ -63,43 +52,6 @@ const tryAuth = async (
     }
 }
 
-const LoginPage = ({
-    children,
-    showSpinner,
-}: {
-    children: React.ReactNode
-    showSpinner: boolean
-}) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <KeyboardAvoidingView
-                style={[
-                    {
-                        backgroundColor: appAppearances.primary.backgroundColor,
-                        flex: 1,
-                        justifyContent: 'center',
-                        padding: 10,
-                    },
-                ]}
-                behavior="padding"
-            >
-                <View
-                    style={{
-                        left: 10,
-                        position: 'absolute',
-                        top: 100,
-                        width: '100%',
-                        alignItems: 'center',
-                    }}
-                >
-                    {showSpinner && <Spinner />}
-                </View>
-                <FadeIn duration={1000}>{children}</FadeIn>
-            </KeyboardAvoidingView>
-        </View>
-    )
-}
-
 const AuthSwitcherScreen = ({
     navigation,
 }: {
@@ -109,17 +61,19 @@ const AuthSwitcherScreen = ({
 
     const [error, setError] = useState<string | null>(null)
 
-    const [email, setEmail] = useState('')
-    const onEmailChange = useCallback(value => {
-        setEmail(value)
-        setError(null)
-    }, [])
-
-    const [password, setPassword] = useState('')
-    const onPasswordChange = useCallback(value => {
-        setPassword(value)
-        setError(null)
-    }, [])
+    const email = useFormField('', {
+        validator: email =>
+            email
+                ? isEmail(email)
+                    ? null
+                    : 'Please enter a valid email'
+                : 'Please enter an email',
+        onSet: () => setError(null),
+    })
+    const password = useFormField('', {
+        validator: password => (password ? null : 'Invalid password'),
+        onSet: () => setError(null),
+    })
 
     const validatorString = useRandomState()
 
@@ -162,134 +116,35 @@ const AuthSwitcherScreen = ({
     }
 
     return (
-        <LoginPage showSpinner={isLoading}>
-            <TitlepieceText
-                style={{
-                    color: 'white',
-                    fontSize: 50,
-                    lineHeight: 50,
-                    marginBottom: 50,
-                    textAlign: 'center',
-                }}
-            >
-                Sign in
-            </TitlepieceText>
-            {error && (
-                <Text
-                    style={{
-                        color: 'white',
-                        padding: 10,
-                        textAlign: 'center',
-                    }}
-                >
-                    {error}
-                </Text>
-            )}
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    marginBottom: 10,
-                }}
-            >
-                <Button
-                    appearance={ButtonAppearance.skeletonLight}
-                    style={{
-                        flex: 1,
-                    }}
-                    center
-                    onPress={() =>
-                        handleAuthClick(() =>
-                            facebookAuthWithDeepRedirect(validatorString),
-                        )
-                    }
-                >
-                    Facebook
-                </Button>
-                <Button
-                    appearance={ButtonAppearance.skeletonLight}
-                    style={{
-                        flex: 1,
-                        marginLeft: 10,
-                    }}
-                    center
-                    onPress={() =>
-                        handleAuthClick(() =>
-                            googleAuthWithDeepRedirect(validatorString),
-                        )
-                    }
-                >
-                    Google
-                </Button>
-            </View>
-            <TextInput
-                style={{
-                    backgroundColor: 'white',
-                    borderWidth: 1,
-                    borderRadius: 999,
-                    color: 'black',
-                    marginBottom: 10,
-                    padding: metrics.horizontal * 2,
-                    paddingVertical: metrics.vertical,
-                }}
-                onSubmitEditing={Keyboard.dismiss}
-                returnKeyType="done"
-                placeholderTextColor="grey"
-                editable={!isLoading}
-                autoCorrect={false}
-                autoCapitalize="none"
-                textContentType="emailAddress"
-                keyboardType="email-address"
-                value={email}
-                placeholder="Email"
-                onChangeText={onEmailChange}
-            ></TextInput>
-            <TextInput
-                style={{
-                    backgroundColor: 'white',
-                    borderWidth: 1,
-                    borderRadius: 999,
-                    color: 'black',
-                    marginBottom: 10,
-                    padding: metrics.horizontal * 2,
-                    paddingVertical: metrics.vertical,
-                }}
-                placeholderTextColor="grey"
-                editable={!isLoading}
-                onSubmitEditing={Keyboard.dismiss}
-                returnKeyType="done"
-                autoCorrect={false}
-                autoCapitalize="none"
-                textContentType="password"
-                value={password}
-                placeholder="Password"
-                secureTextEntry
-                onChangeText={onPasswordChange}
-            ></TextInput>
-            <Button
-                center
-                buttonStyles={{
-                    marginBottom: 10,
-                }}
-                onPress={() =>
-                    handleAuthClick(() =>
-                        fetchAndPersistUserAccessTokenWithIdentity(
-                            email,
-                            password,
-                        ),
-                    )
-                }
-            >
-                Submit
-            </Button>
-            <Button
-                appearance={ButtonAppearance.skeletonLight}
-                center
-                onPress={() => navigation.goBack()}
-            >
-                Not now
-            </Button>
-        </LoginPage>
+        <Login
+            title="Sign-in to activate your subscription"
+            resetLink="https://profile.theguardian.com/reset"
+            emailProgressText="Next"
+            submitText="Sign me in"
+            email={email}
+            password={password}
+            isLoading={isLoading}
+            onDismiss={() => navigation.goBack()}
+            onFacebookPress={() =>
+                handleAuthClick(() =>
+                    facebookAuthWithDeepRedirect(validatorString),
+                )
+            }
+            onGooglePress={() =>
+                handleAuthClick(() =>
+                    googleAuthWithDeepRedirect(validatorString),
+                )
+            }
+            onSubmit={() =>
+                handleAuthClick(() =>
+                    fetchAndPersistUserAccessTokenWithIdentity(
+                        email.value,
+                        password.value,
+                    ),
+                )
+            }
+            errorMessage={error}
+        />
     )
 }
 
