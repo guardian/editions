@@ -15,6 +15,7 @@ expect object Platform {
 
 fun hello(): String = "Hello from ${Platform.name()}!"
 
+@UseExperimental(io.ktor.util.InternalAPI::class)
 class OphanApi(
         private val dispatcher: OphanDispatcher
 ) {

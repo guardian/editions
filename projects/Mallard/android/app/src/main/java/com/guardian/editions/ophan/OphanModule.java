@@ -40,9 +40,9 @@ class OphanModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendTestAppScreenEvent(String screenName) {
+    public void sendTestAppScreenEvent() {
         try {
-            ophanApi.sendTestAppScreenEvent(screenName);
+            ophanApi.sendTestAppScreenEvent("issue_front");
             //promise.resolve(null);
         } catch (Throwable e) {
             //promise.reject(e);
