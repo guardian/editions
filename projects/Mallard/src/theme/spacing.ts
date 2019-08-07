@@ -1,4 +1,4 @@
-import { Platform, StatusBar, Dimensions } from 'react-native'
+import { Platform, StatusBar, Dimensions, PixelRatio } from 'react-native'
 
 const spacing = [0, 3, 6, 12, 18, 30]
 
@@ -20,9 +20,9 @@ export const metrics = {
         maxWidthLandscape: 640,
         leftRailLandscape: 100,
     },
-    gridRowSplit: () => {
-        const { width } = Dimensions.get('window')
-        return width * 0.6
+    gridRowSplit: {
+        narrow: (width: number) => width * 0.6,
+        wide: 200,
     },
     slideCardSpacing:
         Platform.OS === 'ios'

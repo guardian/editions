@@ -1,5 +1,12 @@
 import React from 'react'
-import { Text, StyleSheet, View, PixelRatio } from 'react-native'
+import {
+    Text,
+    StyleSheet,
+    View,
+    PixelRatio,
+    StyleProp,
+    ViewStyle,
+} from 'react-native'
 import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
@@ -10,29 +17,42 @@ import { fetchWeather } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
+import { WithBreakpoints } from './layout/ui/with-breakpoints'
 
 const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
-    weatherContainer: {
+    weatherContainerLong: {
         display: 'flex',
         flexDirection: 'row',
         width: 'auto',
         marginBottom: 24,
-        height: 60 * PixelRatio.getFontScale(),
+    },
+    weatherContainerNarrow: {
+        height: 'auto',
+        flexDirection: 'column',
         paddingLeft: metrics.horizontal,
-        paddingRight: metrics.horizontal,
     },
     forecastItem: {
-        flex: 2,
-        height: 'auto',
-        borderLeftWidth: 1,
-        borderLeftColor: color.line,
         borderStyle: 'solid',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
+    },
+    forecastItemLong: {
+        height: 60 * PixelRatio.getFontScale(),
+        borderLeftWidth: 1,
+        flex: 2,
+        borderLeftColor: color.line,
         paddingTop: 2,
         paddingLeft: 4,
+    },
+    forecastItemNarrow: {
+        paddingTop: metrics.vertical * 0.6,
+        paddingBottom: metrics.vertical * 1.2,
+        flexShrink: 0,
+        flexGrow: 0,
+        borderBottomColor: color.line,
+        borderBottomWidth: 1,
     },
     temperature: {
         color: '#E05E00',
@@ -87,70 +107,95 @@ const useWeatherResponse = () => {
     )
 }
 
+const WeatherIconView = ({
+    forecast,
+    style,
+    iconSize = 1,
+}: {
+    forecast: Forecast
+    style?: StyleProp<ViewStyle>
+    iconSize?: number
+}) => (
+    <View style={[styles.forecastItem, style]}>
+        <WeatherIcon
+            iconNumber={forecast.WeatherIcon}
+            fontSize={30 * iconSize}
+        />
+        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.temperature}>
+            {Math.round(forecast.Temperature.Value) +
+                ' ' +
+                forecast.Temperature.Unit}
+        </Text>
+        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.dateTime}>
+            {Moment(forecast.DateTime).format(
+                `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
+            )}
+        </Text>
+    </View>
+)
+
+const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
+    if (forecasts && forecasts.length >= 9) {
+        /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
+        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
+        return (
+            <WithBreakpoints>
+                {{
+                    0: () => (
+                        <View style={styles.weatherContainerNarrow}>
+                            {intervals.map(forecast => {
+                                return (
+                                    <WeatherIconView
+                                        style={styles.forecastItemNarrow}
+                                        key={forecast.EpochDateTime}
+                                        forecast={forecast}
+                                        iconSize={1.5}
+                                    />
+                                )
+                            })}
+                        </View>
+                    ),
+                    110: () => (
+                        <View style={styles.weatherContainerLong}>
+                            <GridRowSplit
+                                proxy={
+                                    <View style={styles.locationNameContainer}>
+                                        <Text style={styles.locationPinIcon}>
+                                            {'\uE01B'}
+                                        </Text>
+                                        <Text style={styles.locationName}>
+                                            {'London'}
+                                        </Text>
+                                    </View>
+                                }
+                            >
+                                {intervals.map(forecast => {
+                                    return (
+                                        <WeatherIconView
+                                            style={styles.forecastItemLong}
+                                            key={forecast.EpochDateTime}
+                                            forecast={forecast}
+                                        />
+                                    )
+                                })}
+                            </GridRowSplit>
+                        </View>
+                    ),
+                }}
+            </WithBreakpoints>
+        )
+    }
+
+    return <></>
+}
+
 const Weather = () => {
     let weatherResponse = useWeatherResponse()
-
-    const renderWeather = (forecasts: Forecast[]) => {
-        if (forecasts && forecasts.length >= 9) {
-            return (
-                <View style={styles.weatherContainer}>
-                    <GridRowSplit
-                        proxy={
-                            <View style={styles.locationNameContainer}>
-                                <Text style={styles.locationPinIcon}>
-                                    {'\uE01B'}
-                                </Text>
-                                <Text style={styles.locationName}>
-                                    {'London'}
-                                </Text>
-                            </View>
-                        }
-                    >
-                        {/*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/}
-                        {[0, 2, 4, 6, 8].map(idx => {
-                            return (
-                                <View style={styles.forecastItem} key={idx}>
-                                    <WeatherIcon
-                                        iconNumber={forecasts[idx].WeatherIcon}
-                                        fontSize={30}
-                                    />
-                                    <Text
-                                        numberOfLines={1}
-                                        ellipsizeMode="clip"
-                                        style={styles.temperature}
-                                    >
-                                        {Math.round(
-                                            forecasts[idx].Temperature.Value,
-                                        ) +
-                                            ' ' +
-                                            forecasts[idx].Temperature.Unit}
-                                    </Text>
-                                    <Text
-                                        numberOfLines={1}
-                                        ellipsizeMode="clip"
-                                        style={styles.dateTime}
-                                    >
-                                        {Moment(forecasts[idx].DateTime).format(
-                                            `h${
-                                                narrowSpace /* Narrow space for iPhone 5 */
-                                            }a`,
-                                        )}
-                                    </Text>
-                                </View>
-                            )
-                        })}
-                    </GridRowSplit>
-                </View>
-            )
-        }
-
-        return <></>
-    }
 
     return weatherResponse({
         error: ({}) => <></>,
         pending: () => <></>,
-        success: forecasts => renderWeather(forecasts),
+        success: forecasts => <WeatherWithForecast forecasts={forecasts} />,
     })
 }
 
