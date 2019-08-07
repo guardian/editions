@@ -3,6 +3,27 @@ import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 
+const styles = StyleSheet.create({
+    outer: {
+        alignItems: 'stretch',
+        paddingHorizontal: metrics.articleSides,
+    },
+    tablet: {
+        maxWidth: metrics.articlePage.maxWidth,
+        borderRightColor: color.palette.neutral[7],
+        borderRightWidth: 1,
+        paddingLeft: metrics.articleSidesWide - metrics.articleSides,
+        paddingRight: metrics.articleSidesWide,
+    },
+    wide: {
+        marginLeft:
+            metrics.articlePage.leftRailLandscape -
+            metrics.articleSidesWide -
+            metrics.articleSides,
+        maxWidth: metrics.articlePage.maxWidth,
+    },
+})
+
 const Wrap = ({
     style,
     isTopMost = false,
@@ -17,28 +38,12 @@ const Wrap = ({
     children: ReactNode
 }) => {
     return (
-        <View
-            style={[
-                outerStyle,
-                {
-                    alignItems: 'stretch',
-                    paddingHorizontal: metrics.articleSides,
-                },
-            ]}
-        >
+        <View style={[outerStyle, styles.outer]}>
             <View
                 style={[
                     style,
-                    {
-                        maxWidth: 560,
-                        borderRightColor: color.palette.neutral[7],
-                        borderRightWidth: 1,
-                    },
-                    {
-                        paddingLeft:
-                            metrics.articleSidesWide - metrics.articleSides,
-                        paddingRight: metrics.articleSidesWide,
-                    },
+                    styles.tablet,
+                    styles.wide,
                     isTopMost &&
                     outerStyle &&
                     'backgroundColor' in StyleSheet.flatten(outerStyle)

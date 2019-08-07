@@ -15,7 +15,11 @@ export const metrics = {
     articleSides: basicMetrics.horizontal / 2,
     articleSidesWide: basicMetrics.horizontal * 1.5,
     frontsPageHeight: 540,
-    articleMaxWidth: 500,
+    articlePage: {
+        maxWidth: 540,
+        maxWidthLandscape: 640,
+        leftRailLandscape: 100,
+    },
     gridRowSplit: () => {
         const { width } = Dimensions.get('window')
         return width * 0.6
