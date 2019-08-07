@@ -17,16 +17,16 @@ const styles = StyleSheet.create({
     },
 })
 
-const getRatingAsText = (rating: number) => {
-    let ratingAsText = ['☆', '☆', '☆', '☆', '☆']
-    for (let i = 0; i < rating; i++) {
-        ratingAsText[i] = '★'
-    }
-    if (rating % 1 > 0) {
-        ratingAsText[rating - (rating % 1)] = ''
-    }
-    return ratingAsText
-}
+const getRatingAsText = (rating: number) =>
+    ['☆', '☆', '☆', '☆', '☆'].map((s, index) => {
+        if (index + 1 <= rating) {
+            return '★'
+        }
+        if (index + 0.01 <= rating) {
+            return ''
+        }
+        return s
+    })
 
 const Stars = ({ rating }: { rating: number }) => {
     const ratingAsText = useMemo(() => getRatingAsText(rating), [rating])
