@@ -36,7 +36,11 @@ const OpinionHeader = ({
 }: ArticleHeaderProps) => {
     const [articleColor] = useArticle()
     return (
-        <Wrap style={styles.innerWrap} outerStyle={[styles.background]}>
+        <Wrap
+            isTopMost
+            style={styles.innerWrap}
+            outerStyle={[styles.background]}
+        >
             {image ? (
                 <ArticleFader buildOrder={1}>
                     <ArticleImage

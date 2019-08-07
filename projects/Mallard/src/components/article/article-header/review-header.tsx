@@ -29,7 +29,7 @@ const ReviewHeader = ({
 }: ArticleHeaderProps) => {
     const [color] = useArticle()
     return (
-        <Wrap outerStyle={[{ backgroundColor: color.faded }]}>
+        <Wrap isTopMost outerStyle={[{ backgroundColor: color.faded }]}>
             {image ? (
                 <ArticleFader buildOrder={1}>
                     <ArticleImage
@@ -58,12 +58,12 @@ const ReviewHeader = ({
             </ArticleFader>
             <ArticleFader buildOrder={3}>
                 <ArticleStandfirst
-                    style={[style.sides, style.standfirst]}
+                    style={[style.standfirst]}
                     textStyle={{ color: color.dark }}
                     {...{ standfirst }}
                 />
                 <Multiline color={color.dark} count={4} />
-                <View style={style.sides}>
+                <View>
                     <ArticleByline
                         style={[style.byline, { color: color.dark }]}
                     >

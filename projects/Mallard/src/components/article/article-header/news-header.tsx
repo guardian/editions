@@ -36,7 +36,7 @@ const NewsHeader = ({
 }: ArticleHeaderProps) => {
     const navigationPosition = getNavigationPosition('article')
     return (
-        <Wrap style={[styles.background]}>
+        <Wrap isTopMost style={[styles.background]}>
             {image ? (
                 <ArticleFader buildOrder={1}>
                     <ArticleImage
