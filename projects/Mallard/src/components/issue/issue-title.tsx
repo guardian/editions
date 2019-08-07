@@ -2,8 +2,10 @@ import React, { ReactNode } from 'react'
 import { StyleSheet, StyleProp, TextStyle, View, ViewStyle } from 'react-native'
 import { color } from 'src/theme/color'
 import { IssueTitleText } from '../styled-text'
-import { useLiveMetrics } from 'src/theme/spacing'
+import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
+import { WithBreakpoints } from '../layout/ui/with-breakpoints'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const splitStyles = StyleSheet.create({
     container: {
@@ -28,14 +30,24 @@ const GridRowSplit = ({
         Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
     >
 }) => {
-    const { gridRowSplit } = useLiveMetrics()
-    return (
+    const Inner = ({ width }: { width: number }) => (
         <View style={[splitStyles.container, style]}>
             {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
-            <View style={[splitStyles.inner, { width: gridRowSplit }]}>
-                {children}
-            </View>
+            <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
+    )
+
+    return (
+        <WithBreakpoints>
+            {{
+                0: ({ width }) => (
+                    <Inner width={metrics.gridRowSplit.narrow(width)} />
+                ),
+                [Breakpoints.tabletVertical]: () => (
+                    <Inner width={metrics.gridRowSplit.wide} />
+                ),
+            }}
+        </WithBreakpoints>
     )
 }
 
