@@ -35,7 +35,7 @@ const CollectionPageInFront = ({
     scrollX: Animated.Value
     width: number
 } & PropTypes) => {
-    const translate = getTranslateForPage(scrollX, index)
+    const translate = getTranslateForPage(width, scrollX, index)
     return (
         <Animated.View
             style={[
@@ -112,6 +112,7 @@ const FrontWithResponse = ({
                                             {
                                                 offset:
                                                     getNearestPage(
+                                                        width,
                                                         screenX,
                                                         stops,
                                                     ) * width,
@@ -135,9 +136,9 @@ const FrontWithResponse = ({
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}
                             scrollEventThrottle={1}
-                            maxToRenderPerBatch={1}
-                            windowSize={3}
-                            initialNumToRender={1}
+                            maxToRenderPerBatch={2}
+                            windowSize={4}
+                            initialNumToRender={2}
                             horizontal={true}
                             pagingEnabled
                             ref={(flatList: AnimatedFlatListRef) =>

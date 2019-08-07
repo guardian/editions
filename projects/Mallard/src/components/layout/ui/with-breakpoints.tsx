@@ -16,7 +16,10 @@ const WithBreakpoints = ({
             onLayout={ev => {
                 let max = 0
                 for (let key of Object.keys(children)) {
-                    if (ev.nativeEvent.layout.width >= parseInt(key)) {
+                    if (
+                        ev.nativeEvent.layout.width >= parseInt(key) &&
+                        max < parseInt(key)
+                    ) {
                         max = parseInt(key)
                     }
                 }
