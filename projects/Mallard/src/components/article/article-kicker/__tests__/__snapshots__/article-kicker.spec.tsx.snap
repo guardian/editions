@@ -19,7 +19,7 @@ exports[`ArticleKicker should display a default Kicker 1`] = `
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 18,
-          "lineHeight": 18,
+          "lineHeight": 20,
         },
         Object {
           "color": "#121212",
@@ -51,7 +51,7 @@ exports[`ArticleKicker should display a long read style kicker 1`] = `
           "flexShrink": 0,
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 18,
-          "lineHeight": 18,
+          "lineHeight": 20,
         },
         Object {
           "color": "#121212",

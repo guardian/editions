@@ -4,7 +4,7 @@ import { metrics } from 'src/theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { color } from 'src/theme/color'
-import { RowSize, useKickerColorStyle } from '../helpers'
+import { useKickerColorStyle, ItemSizes, PageLayoutSizes } from '../helpers'
 import { getFont } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
 
@@ -66,16 +66,21 @@ const TextBlock = ({
     kicker: string
     headline: string
     textBlockAppearance: TextBlockAppearance
-    size: RowSize
+    size: ItemSizes
     style?: StyleProp<ViewStyle>
 }) => {
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
-    const { fontSize } = getFont(
-        'headline',
-        size >= RowSize.superhero ? 1.5 : size >= RowSize.hero ? 1.25 : 1,
-    )
+
+    const getFontSize = ({ layout, story }: ItemSizes) => {
+        if (layout === PageLayoutSizes.tablet) {
+            return story.height >= 4 ? 1.5 : story.height >= 3 ? 1.25 : 1
+        }
+        return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
+    }
+
+    const { fontSize } = getFont('headline', getFontSize(size))
 
     return (
         <View style={[rootStyle, style]}>

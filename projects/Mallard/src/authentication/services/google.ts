@@ -1,6 +1,6 @@
 import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
-import { GOOGLE_CLIENT_ID } from '../constants'
+import { GOOGLE_CLIENT_ID } from '../../constants'
 import qs from 'query-string'
 import invariant from 'invariant'
 

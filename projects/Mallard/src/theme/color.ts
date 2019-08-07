@@ -33,6 +33,7 @@ export const color = {
     Border colors
     */
     line: palette.neutral[60],
+    dimLine: palette.neutral[85],
     lineOverPrimary: palette.brand.pastel,
 
     /*
@@ -47,6 +48,7 @@ export const color = {
         tomato: palette.news.bright,
         apricot: palette.opinion.bright,
         shark: palette.sport.main,
+        sea: '#279DDC',
     },
 
     /*
