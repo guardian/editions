@@ -78,7 +78,7 @@ const twoStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 3, 4),
+                fits: toFit(0, 0, 3, 3),
             },
             {
                 item: SplitImageItem,

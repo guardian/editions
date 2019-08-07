@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react'
+import React, { useState, ReactElement, ReactNode } from 'react'
 import {
     NavigationScreenProp,
     NavigationEvents,
@@ -68,6 +68,13 @@ const Header = withNavigation(
     },
 )
 
+const frontWrapperStyles = StyleSheet.create({
+    root: { height: metrics.fronts.blockHeight },
+})
+const FrontWrapper = ({ children }: { children: ReactNode }) => (
+    <View style={frontWrapperStyles.root}>{children}</View>
+)
+
 const IssueFronts = ({
     issue,
     ListHeaderComponent,
@@ -93,7 +100,16 @@ const IssueFronts = ({
         initialNumToRender={1}
         ListHeaderComponent={ListHeaderComponent}
         keyExtractor={item => `${item.index}::${item.key}`}
-        renderItem={({ item }) => <Front issue={issue.key} front={item.key} />}
+        getItemLayout={(_, index) => ({
+            length: metrics.fronts.blockHeight,
+            offset: metrics.fronts.blockHeight * index,
+            index,
+        })}
+        renderItem={({ item }) => (
+            <FrontWrapper>
+                <Front issue={issue.key} front={item.key} />
+            </FrontWrapper>
+        )}
     />
 )
 

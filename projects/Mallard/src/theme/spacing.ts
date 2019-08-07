@@ -13,7 +13,10 @@ export const metrics = {
     headerHeight,
     frontsPageSides: basicMetrics.horizontal * 1.5,
     articleSides: basicMetrics.horizontal / 2,
-    frontsPageHeight: 540,
+    fronts: {
+        cardHeight: 540,
+        blockHeight: 600,
+    },
     gridRowSplit: {
         narrow: (width: number) => width * 0.6,
         wide: 200,

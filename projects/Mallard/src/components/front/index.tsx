@@ -164,6 +164,7 @@ const FrontWithResponse = ({
                                 ],
                                 { useNativeDriver: true },
                             )}
+                            extraData={{ width }}
                             data={cards}
                             renderItem={({
                                 item,
