@@ -15,6 +15,7 @@ export const metrics = {
     articleSides: basicMetrics.horizontal / 2,
     fronts: {
         cardHeight: 540,
+        cardMaxWidth: 540,
         blockHeight: 600,
     },
     gridRowSplit: {

@@ -117,7 +117,7 @@ const CollectionPage = ({
     }
 
     const layout = getPageLayout(appearance, articlesInCard.length)[
-        width > Breakpoints.tabletVertical - 100
+        width > metrics.fronts.cardMaxWidth - 100
             ? PageLayoutSizes.tablet
             : PageLayoutSizes.mobile
     ]
