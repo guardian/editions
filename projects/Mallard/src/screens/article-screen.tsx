@@ -38,6 +38,7 @@ import { getColor } from 'src/helpers/transform'
 import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 import { LoginOverlay } from 'src/components/login-overlay'
 import { routeNames } from 'src/navigation'
+import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -64,10 +65,12 @@ const ArticleScreenBody = ({
     path,
     onTopPositionChange,
     pillar,
+    width,
 }: {
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
     pillar: PillarFromPalette
+    width: number
 }) => {
     const [modifiedPillar, setPillar] = useState(
         articlePillars.indexOf(pillar) || 0,
@@ -75,7 +78,6 @@ const ArticleScreenBody = ({
     const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
     const [{ isUsingProdDevtools }] = useSettings()
-    const { width } = Dimensions.get('window')
 
     return (
         <ScrollView
@@ -191,7 +193,6 @@ const ArticleScreenWithProps = ({
 }: ArticleRequiredNavigationProps & {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 }) => {
-    const { width } = Dimensions.get('window')
     const pillar = getAppearancePillar(articleNavigator.appearance)
 
     const [articleIsAtTop, setArticleIsAtTop] = useState(true)
@@ -226,11 +227,18 @@ const ArticleScreenWithProps = ({
                         }
                         onDismiss={() => navigation.goBack()}
                     >
-                        <ArticleScreenBody
-                            path={path}
-                            pillar={pillar}
-                            onTopPositionChange={() => {}}
-                        />
+                        <WithBreakpoints>
+                            {{
+                                0: ({ width }) => (
+                                    <ArticleScreenBody
+                                        path={path}
+                                        width={width}
+                                        pillar={pillar}
+                                        onTopPositionChange={() => {}}
+                                    />
+                                ),
+                            }}
+                        </WithBreakpoints>
                     </LoginOverlay>
                 </SlideCard>
             ) : (
@@ -258,51 +266,65 @@ const ArticleScreenWithProps = ({
                                 position={sliderPos}
                             />
                         </View>
-                        <Animated.FlatList
-                            showsHorizontalScrollIndicator={false}
-                            showsVerticalScrollIndicator={false}
-                            scrollEventThrottle={1}
-                            onScroll={(ev: any) => {
-                                setCurrent(
-                                    Math.floor(
-                                        ev.nativeEvent.contentOffset.x / width,
-                                    ),
-                                )
+                        <WithBreakpoints>
+                            {{
+                                0: ({ width }) => (
+                                    <Animated.FlatList
+                                        showsHorizontalScrollIndicator={false}
+                                        showsVerticalScrollIndicator={false}
+                                        scrollEventThrottle={1}
+                                        onScroll={(ev: any) => {
+                                            setCurrent(
+                                                Math.floor(
+                                                    ev.nativeEvent.contentOffset
+                                                        .x / width,
+                                                ),
+                                            )
+                                        }}
+                                        maxToRenderPerBatch={1}
+                                        windowSize={3}
+                                        initialNumToRender={1}
+                                        horizontal={true}
+                                        initialScrollIndex={startingPoint}
+                                        pagingEnabled
+                                        getItemLayout={(
+                                            _: never,
+                                            index: number,
+                                        ) => ({
+                                            length: width,
+                                            offset: width * index,
+                                            index,
+                                        })}
+                                        keyExtractor={(
+                                            item: ArticleNavigator['articles'][0],
+                                        ) => item.article}
+                                        data={
+                                            isInScroller
+                                                ? articleNavigator.articles
+                                                : [
+                                                      path,
+                                                      ...articleNavigator.articles,
+                                                  ]
+                                        }
+                                        renderItem={({
+                                            item,
+                                        }: {
+                                            item: ArticleNavigator['articles'][0]
+                                            index: number
+                                        }) => (
+                                            <ArticleScreenBody
+                                                width={width}
+                                                path={item}
+                                                pillar={pillar}
+                                                onTopPositionChange={isAtTop => {
+                                                    setArticleIsAtTop(isAtTop)
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                ),
                             }}
-                            maxToRenderPerBatch={1}
-                            windowSize={3}
-                            initialNumToRender={1}
-                            horizontal={true}
-                            initialScrollIndex={startingPoint}
-                            pagingEnabled
-                            getItemLayout={(_: never, index: number) => ({
-                                length: width,
-                                offset: width * index,
-                                index,
-                            })}
-                            keyExtractor={(
-                                item: ArticleNavigator['articles'][0],
-                            ) => item.article}
-                            data={
-                                isInScroller
-                                    ? articleNavigator.articles
-                                    : [path, ...articleNavigator.articles]
-                            }
-                            renderItem={({
-                                item,
-                            }: {
-                                item: ArticleNavigator['articles'][0]
-                                index: number
-                            }) => (
-                                <ArticleScreenBody
-                                    path={item}
-                                    pillar={pillar}
-                                    onTopPositionChange={isAtTop => {
-                                        setArticleIsAtTop(isAtTop)
-                                    }}
-                                />
-                            )}
-                        />
+                        </WithBreakpoints>
                     </LoginOverlay>
                 </SlideCard>
             )}

@@ -2,11 +2,13 @@ import React, { ReactNode } from 'react'
 import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 
 export enum WrapLayout {
     narrow,
     tablet,
-    wide,
+    tabletLandscape,
 }
 
 const styles = StyleSheet.create({
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
         paddingLeft: metrics.article.sidesLandscape - metrics.article.sides,
         paddingRight: metrics.article.sidesLandscape,
     },
-    wide: {
+    tabletLandscape: {
         marginLeft:
             metrics.article.leftRailLandscape -
             (metrics.article.sidesLandscape - metrics.article.sides),
@@ -44,22 +46,48 @@ const Wrap = ({
 }) => {
     return (
         <View style={[outerStyle, styles.outer]}>
-            <View
-                style={[
-                    style,
-                    styles.tablet,
-                    styles.wide,
-                    isTopMost &&
-                    outerStyle &&
-                    'backgroundColor' in StyleSheet.flatten(outerStyle)
-                        ? {
-                              marginTop: metrics.vertical * 2,
-                          }
-                        : {},
-                ]}
-            >
-                {children(WrapLayout.narrow)}
-            </View>
+            <WithBreakpoints>
+                {{
+                    0: () => <>{children(WrapLayout.narrow)}</>,
+                    [Breakpoints.tabletVertical]: () => (
+                        <View
+                            style={[
+                                style,
+                                styles.tablet,
+                                isTopMost &&
+                                outerStyle &&
+                                'backgroundColor' in
+                                    StyleSheet.flatten(outerStyle)
+                                    ? {
+                                          marginTop: metrics.vertical * 2,
+                                      }
+                                    : {},
+                            ]}
+                        >
+                            {children(WrapLayout.tablet)}
+                        </View>
+                    ),
+                    [Breakpoints.tabletLandscape]: () => (
+                        <View
+                            style={[
+                                style,
+                                styles.tablet,
+                                styles.tabletLandscape,
+                                isTopMost &&
+                                outerStyle &&
+                                'backgroundColor' in
+                                    StyleSheet.flatten(outerStyle)
+                                    ? {
+                                          marginTop: metrics.vertical * 2,
+                                      }
+                                    : {},
+                            ]}
+                        >
+                            {children(WrapLayout.tabletLandscape)}
+                        </View>
+                    ),
+                }}
+            </WithBreakpoints>
         </View>
     )
 }

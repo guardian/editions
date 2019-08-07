@@ -1,4 +1,4 @@
-import { Platform, StatusBar, Dimensions, PixelRatio } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
 
 const spacing = [0, 3, 6, 12, 18, 30]
 
