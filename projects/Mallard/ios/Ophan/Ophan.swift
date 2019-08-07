@@ -27,13 +27,13 @@ class Ophan: NSObject {
     callback([OphanKt.hello()])
   }
   
-  @objc(sendTestAppScreenEvent)
-  func sendTestAppScreenEvent() -> Void {
+  @objc(sendTestAppScreenEvent:)
+  func sendTestAppScreenEvent(_ screenName: String) -> Void {
     print("Current thread \(Thread.current)")
   
     DispatchQueue.main.async {
       print("Current thread \(Thread.current)")
-      self.ophanApi.sendTestAppScreenEvent(screenName: "issue_front");
+      self.ophanApi.sendTestAppScreenEvent(screenName: screenName);
     }
   }
 }

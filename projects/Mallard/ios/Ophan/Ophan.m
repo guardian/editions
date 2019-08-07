@@ -12,6 +12,6 @@
 
 RCT_EXTERN_METHOD(getGreeting: (RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(sendTestAppScreenEvent)//: (NSString *)screenName)
+RCT_EXTERN_METHOD(sendTestAppScreenEvent: (NSString *)screenName)
 
 @end

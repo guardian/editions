@@ -76,7 +76,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
 
     //const track = new Promise(() => null);
     
-    NativeModules.Ophan.sendTestAppScreenEvent()//"issue_front")//, track)
+    NativeModules.Ophan.sendTestAppScreenEvent("something_else")
     //track.then(res => Alert.alert("done")).catch(e => Alert.alert(JSON.stringify(e)))
  
     return (
