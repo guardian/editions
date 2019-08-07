@@ -15,6 +15,7 @@ import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
 import { ArticleByline } from '../article-byline'
 import { ArticleKicker } from '../article-kicker'
+import { Stars } from 'src/components/stars/stars'
 
 const ArticleFader = getFader('article')
 
@@ -49,6 +50,7 @@ const ReviewHeader = ({
                 {image ? (
                     <ArticleFader buildOrder={1}>
                         <ArticleImage
+                            proxy={<Stars rating={4} />}
                             style={{
                                 aspectRatio: 1.5,
                                 marginBottom: metrics.vertical / 4,

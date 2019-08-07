@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, Image } from 'react-native'
+import React, { ReactNode } from 'react'
+import { StyleSheet, ImageBackground, View } from 'react-native'
 import { APIPaths } from 'src/paths'
 import { Image as ImageT } from '../../common'
 const styles = StyleSheet.create({
@@ -8,7 +8,15 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleImage = ({ image, style }: { image: ImageT; style?: {} }) => {
+const ArticleImage = ({
+    image,
+    style,
+    proxy,
+}: {
+    image: ImageT
+    style?: {}
+    proxy: ReactNode
+}) => {
     const imagePath = `${APIPaths.mediaBackend}${APIPaths.media(
         'issue',
         'phone',
@@ -16,12 +24,16 @@ const ArticleImage = ({ image, style }: { image: ImageT; style?: {} }) => {
         image.path,
     )}`
     return (
-        <Image
+        <ImageBackground
             style={[styles.image, style]}
             source={{
                 uri: imagePath,
             }}
-        />
+        >
+            <View style={{ position: 'absolute', bottom: 0, left: 0 }}>
+                {proxy}
+            </View>
+        </ImageBackground>
     )
 }
 
