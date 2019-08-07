@@ -3,10 +3,12 @@ import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 
 const SubNotFoundModalCard = ({
     close,
+    onOpenCASLogin,
     onLoginPress,
     onDismiss,
 }: {
     close: () => void
+    onOpenCASLogin: () => void
     onLoginPress: () => void
     onDismiss: () => void
 }) => (
@@ -20,6 +22,13 @@ const SubNotFoundModalCard = ({
                 onPress: () => {
                     close()
                     onLoginPress()
+                },
+            },
+            {
+                label: 'Activate with subscriber ID',
+                onPress: () => {
+                    close()
+                    onOpenCASLogin()
                 },
             },
             {

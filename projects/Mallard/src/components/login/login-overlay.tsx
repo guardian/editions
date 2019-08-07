@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 import { View, StyleSheet, PanResponder } from 'react-native'
-import { useModal } from './modal'
+import { useModal } from '../modal'
 import { useAuth } from 'src/authentication/auth-context'
-import { SignInModalCard } from './sign-in-modal-card'
-import { SubNotFoundModalCard } from './sub-not-found-modal-card'
+import { SignInModalCard } from '../sign-in-modal-card'
+import { SubNotFoundModalCard } from '../sub-not-found-modal-card'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
@@ -53,23 +53,37 @@ const ModalOpener = ({
 const LoginOverlay = ({
     children,
     onDismiss,
+    onOpenCASLogin,
     onLoginPress,
 }: {
     children: React.ReactNode
     onDismiss: () => void
+    onOpenCASLogin: () => void
     onLoginPress: () => void
 }) => {
     const handler = useAuth()
 
     return handler({
         pending: () => <>{children}</>,
-        signedIn: canView =>
-            canView ? (
-                <>{children}</>
-            ) : (
+        authed: () => <>{children}</>,
+        unauthed: signedIn =>
+            signedIn ? (
                 <ModalOpener
                     renderModal={close => (
                         <SubNotFoundModalCard
+                            onDismiss={onDismiss}
+                            onOpenCASLogin={onOpenCASLogin}
+                            onLoginPress={onLoginPress}
+                            close={close}
+                        />
+                    )}
+                >
+                    {children}
+                </ModalOpener>
+            ) : (
+                <ModalOpener
+                    renderModal={close => (
+                        <SignInModalCard
                             onDismiss={onDismiss}
                             onLoginPress={onLoginPress}
                             close={close}
@@ -79,19 +93,6 @@ const LoginOverlay = ({
                     {children}
                 </ModalOpener>
             ),
-        signedOut: () => (
-            <ModalOpener
-                renderModal={close => (
-                    <SignInModalCard
-                        onDismiss={onDismiss}
-                        onLoginPress={onLoginPress}
-                        close={close}
-                    />
-                )}
-            >
-                {children}
-            </ModalOpener>
-        ),
     })
 }
 
