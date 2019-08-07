@@ -355,7 +355,10 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 {...{ size }}
             />
             {'standfirst' in article && article.standfirst ? (
-                <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
+                <StandfirstText
+                    allowFontScaling={false}
+                    style={[superHeroImageStyles.textStandBlock]}
+                >
                     {article.standfirst}
                 </StandfirstText>
             ) : null}
