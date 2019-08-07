@@ -4,12 +4,13 @@ import { color } from 'src/theme/color'
 import { IssueTitleText } from '../styled-text'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
+import { WithBreakpoints } from '../layout/ui/with-breakpoints'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const splitStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'center',
         width: '100%',
     },
     inner: {
@@ -29,12 +30,24 @@ const GridRowSplit = ({
         Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
     >
 }) => {
-    const width = metrics.gridRowSplit()
-    return (
+    const Inner = ({ width }: { width: number }) => (
         <View style={[splitStyles.container, style]}>
             {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
             <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
+    )
+
+    return (
+        <WithBreakpoints>
+            {{
+                0: ({ width }) => (
+                    <Inner width={metrics.gridRowSplit.narrow(width)} />
+                ),
+                [Breakpoints.tabletVertical]: () => (
+                    <Inner width={metrics.gridRowSplit.wide} />
+                ),
+            }}
+        </WithBreakpoints>
     )
 }
 

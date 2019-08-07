@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     },
     headerSplit: {
         flexDirection: 'row',
+        alignItems: 'center',
         flexGrow: 1,
     },
     headerTitle: {
