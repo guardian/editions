@@ -1,12 +1,4 @@
-import {
-    PageLayout,
-    RowSize,
-    withSlots,
-    NewPageLayout,
-    SizeXY,
-    StartingCoordinatesXY,
-    PageLayoutSizes,
-} from './helpers'
+import { PageLayout, PageLayoutSizes, ItemFit } from './helpers'
 import {
     SplashImageItem,
     SuperHeroImageItem,
@@ -16,136 +8,144 @@ import {
 } from './item/item'
 import { FrontCardAppearance } from 'src/common'
 
-const splashPage: PageLayout = withSlots([
-    {
-        size: RowSize.superhero,
-        columns: [SplashImageItem],
-    },
-])
-
-const superHeroPage: PageLayout = withSlots([
-    {
-        size: RowSize.superhero,
-        columns: [SuperHeroImageItem],
-    },
-])
-
-const twoStoryPage: PageLayout = withSlots([
-    {
-        size: RowSize.hero,
-        columns: [ImageItem],
-    },
-    {
-        size: RowSize.third,
-        columns: [SplitImageItem],
-    },
-])
-
-const toSize = ([width, height]: [number, number]): SizeXY => ({
+const toFit = (
+    ...[top, left, width, height]: [number, number, number, number]
+): ItemFit => ({
+    top,
+    left,
     width,
     height,
 })
 
-export const newThreeStoryPage: NewPageLayout = {
+const splashPage: PageLayout = {
     size: PageLayoutSizes.mobile,
     items: [
         {
-            item: ImageItem,
-            fits: {
-                top: 0,
-                left: 0,
-                width: 2,
-                height: 4,
-            },
-        },
-        {
-            item: SmallItem,
-            fits: {
-                top: 4,
-                left: 0,
-                width: 1,
-                height: 2,
-            },
-        },
-        {
-            item: SmallItem,
-            fits: {
-                top: 4,
-                left: 1,
-                width: 1,
-                height: 2,
-            },
+            item: SplashImageItem,
+            fits: toFit(0, 0, 2, 6),
         },
     ],
 }
 
-const threeStoryPage: PageLayout = withSlots([
-    {
-        size: RowSize.hero,
-        columns: [ImageItem],
-    },
-    {
-        size: RowSize.third,
-        columns: [SmallItem, SmallItem],
-    },
-])
+const superHeroPage: PageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: SuperHeroImageItem,
+            fits: toFit(0, 0, 2, 6),
+        },
+    ],
+}
 
-const fourStoryPage: PageLayout = withSlots([
-    {
-        size: RowSize.half,
-        columns: [ImageItem, ImageItem],
-    },
-    {
-        size: RowSize.half,
-        columns: [ImageItem, ImageItem],
-    },
-])
+const twoStoryPage: PageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: ImageItem,
+            fits: toFit(0, 0, 2, 4),
+        },
+        {
+            item: SplitImageItem,
+            fits: toFit(4, 0, 2, 2),
+        },
+    ],
+}
 
-const fiveStoryPage: PageLayout = withSlots([
-    {
-        size: RowSize.half,
-        columns: [ImageItem, ImageItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-])
+const threeStoryPage: PageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: ImageItem,
+            fits: toFit(0, 0, 2, 4),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(4, 0, 1, 2),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(4, 1, 1, 2),
+        },
+    ],
+}
 
-const sixStoryPage: PageLayout = withSlots([
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-    {
-        size: RowSize.row,
-        columns: [SmallItem],
-    },
-])
+const fourStoryPage: PageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: ImageItem,
+            fits: toFit(0, 0, 1, 3),
+        },
+        {
+            item: ImageItem,
+            fits: toFit(0, 1, 1, 3),
+        },
+        {
+            item: ImageItem,
+            fits: toFit(3, 0, 1, 3),
+        },
+        {
+            item: ImageItem,
+            fits: toFit(3, 1, 1, 3),
+        },
+    ],
+}
+
+const fiveStoryPage: PageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: ImageItem,
+            fits: toFit(0, 0, 1, 3),
+        },
+        {
+            item: ImageItem,
+            fits: toFit(0, 1, 1, 3),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(3, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(4, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(5, 0, 2, 1),
+        },
+    ],
+}
+
+const sixStoryPage: PageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: SmallItem,
+            fits: toFit(0, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(1, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(2, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(3, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(4, 0, 2, 1),
+        },
+        {
+            item: SmallItem,
+            fits: toFit(5, 0, 2, 1),
+        },
+    ],
+}
 
 const layouts: { [key in FrontCardAppearance]: PageLayout } = {
     [FrontCardAppearance.splashPage]: splashPage,

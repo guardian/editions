@@ -12,15 +12,9 @@ import {
     defaultCardAppearances,
     FrontCardAppearance,
 } from 'src/common'
-import {
-    useCardBackgroundStyle,
-    RowSize,
-    NewPageLayout,
-    ItemFit,
-    getPageLayoutSizeXY,
-} from '../helpers'
+import { useCardBackgroundStyle, getItemPosition } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { layouts, newThreeStoryPage } from '../layouts'
+import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
 
 const styles = StyleSheet.create({
@@ -73,16 +67,6 @@ const getPageLayout = (
     }
 }
 
-const getItemPosition = (itemFit: ItemFit, layout: NewPageLayout['size']) => {
-    const layoutSize = getPageLayoutSizeXY(layout)
-    return {
-        left: `${(itemFit.left / layoutSize.width) * 100}%`,
-        top: `${(itemFit.top / layoutSize.height) * 100}%`,
-        height: `${(itemFit.height / layoutSize.height) * 100}%`,
-        width: `${(itemFit.width / layoutSize.width) * 100}%`,
-    }
-}
-
 const CollectionPage = ({
     articlesInCard,
     articleNavigator,
@@ -97,8 +81,7 @@ const CollectionPage = ({
         return <FlexErrorMessage />
     }
 
-    const pageLayout = getPageLayout(appearance, articlesInCard.length)
-    const layout = newThreeStoryPage
+    const layout = getPageLayout(appearance, articlesInCard.length)
 
     return (
         <View style={[styles.root, background]}>
@@ -119,11 +102,10 @@ const CollectionPage = ({
                     >
                         <Item
                             style={{}}
-                            REPLACEMEFORSIZE={{
+                            size={{
                                 story: story.fits,
                                 layout: layout.size,
                             }}
-                            size={RowSize.superhero}
                             path={{
                                 article: article.key,
                                 collection,
@@ -136,27 +118,6 @@ const CollectionPage = ({
                     </View>
                 )
             })}
-        </View>
-    )
-
-    return (
-        <View style={[styles.root, background]}>
-            {pageLayout.map((row, index) => (
-                <Row
-                    index={index}
-                    key={index}
-                    front={front}
-                    articles={
-                        row.columns[1]
-                            ? [
-                                  articlesInCard[row.columns[0].slot],
-                                  articlesInCard[row.columns[1].slot],
-                              ]
-                            : [articlesInCard[row.columns[0].slot]]
-                    }
-                    {...{ collection, issue, translate, row, articleNavigator }}
-                />
-            ))}
         </View>
     )
 }

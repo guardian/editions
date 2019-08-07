@@ -60,13 +60,13 @@ const TextBlock = ({
     kicker,
     headline,
     textBlockAppearance,
-    REPLACEMEFORSIZE,
+    size,
     style,
 }: {
     kicker: string
     headline: string
     textBlockAppearance: TextBlockAppearance
-    REPLACEMEFORSIZE: ItemSizes
+    size: ItemSizes
     style?: StyleProp<ViewStyle>
 }) => {
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
@@ -80,7 +80,7 @@ const TextBlock = ({
         return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
     }
 
-    const { fontSize } = getFont('headline', getFontSize(REPLACEMEFORSIZE))
+    const { fontSize } = getFont('headline', getFontSize(size))
 
     return (
         <View style={[rootStyle, style]}>

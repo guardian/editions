@@ -27,11 +27,8 @@ import {
 import { TextBlock } from './text-block'
 import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
 import {
-    RowSize,
-    getRowHeightForSize,
+    getItemPosition,
     useCardBackgroundStyle,
-    ItemFit,
-    SizeXY,
     ItemSizes,
     PageLayoutSizes,
 } from '../helpers'
@@ -54,8 +51,7 @@ interface TappablePropTypes {
 }
 
 export interface PropTypes extends TappablePropTypes {
-    size: RowSize
-    REPLACEMEFORSIZE: ItemSizes
+    size: ItemSizes
 }
 
 /*
@@ -193,7 +189,7 @@ const coverStyles = StyleSheet.create({
 
 const CoverItem = ({
     article,
-    REPLACEMEFORSIZE,
+    size,
     ...tappableProps
 }: PropTypes) => {
     return (
@@ -217,7 +213,7 @@ const CoverItem = ({
                     headline={article.headline}
                     textBlockAppearance={'pillarColor'}
                     style={coverStyles.text}
-                    {...{ REPLACEMEFORSIZE }}
+                    {...{ size }}
                 />
             </View>
         </ItemTappable>
@@ -250,7 +246,7 @@ const isHeroImage = ({ story, layout }: ItemSizes) => {
 
 const ImageItem = ({
     article,
-    REPLACEMEFORSIZE,
+    size,
     ...tappableProps
 }: PropTypes) => {
     return (
@@ -259,7 +255,7 @@ const ImageItem = ({
                 <Image
                     style={[
                         imageStyles.image,
-                        isHeroImage(REPLACEMEFORSIZE) && imageStyles.heroImage,
+                        isHeroImage(size) && imageStyles.heroImage,
                     ]}
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
@@ -275,7 +271,7 @@ const ImageItem = ({
                 style={imageStyles.textBlock}
                 kicker={article.kicker}
                 headline={article.headline}
-                {...{ REPLACEMEFORSIZE }}
+                {...{ size }}
             />
         </ItemTappable>
     )
@@ -303,7 +299,7 @@ const splitImageStyles = StyleSheet.create({
 
 const SplitImageItem = ({
     article,
-    REPLACEMEFORSIZE,
+    size,
     ...tappableProps
 }: PropTypes) => {
     return (
@@ -313,7 +309,7 @@ const SplitImageItem = ({
                     style={splitImageStyles.textBlock}
                     kicker={article.kicker}
                     headline={article.headline}
-                    {...{ REPLACEMEFORSIZE }}
+                    {...{ size }}
                 />
                 {'image' in article && article.image ? (
                     <Image
@@ -341,7 +337,10 @@ const superHeroImageStyles = StyleSheet.create({
     image: {
         width: '100%',
         flex: 0,
-        height: getRowHeightForSize(RowSize.hero),
+        height: getItemPosition(
+            { width: 2, height: 4, top: 0, left: 0 },
+            PageLayoutSizes.mobile,
+        ).height,
     },
     textBlock: {
         ...tappableStyles.padding,
@@ -357,7 +356,7 @@ const superHeroImageStyles = StyleSheet.create({
 
 const SuperHeroImageItem = ({
     article,
-    REPLACEMEFORSIZE,
+    size,
     ...tappableProps
 }: PropTypes) => {
     return (
@@ -379,7 +378,7 @@ const SuperHeroImageItem = ({
                 style={[superHeroImageStyles.textBlock]}
                 kicker={article.kicker}
                 headline={article.headline}
-                {...{ REPLACEMEFORSIZE }}
+                {...{ size }}
             />
             {'standfirst' in article && article.standfirst ? (
                 <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
@@ -430,7 +429,7 @@ const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
 
 const SmallItem = ({
     article,
-    REPLACEMEFORSIZE,
+    size,
     ...tappableProps
 }: PropTypes) => {
     return (
@@ -438,7 +437,7 @@ const SmallItem = ({
             <TextBlock
                 kicker={article.kicker}
                 headline={article.headline}
-                {...{ REPLACEMEFORSIZE }}
+                {...{ size }}
             />
         </ItemTappable>
     )
