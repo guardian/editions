@@ -354,9 +354,9 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
-            {'standfirst' in article && article.standfirst ? (
+            {'trail' in article && article.trail ? (
                 <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
-                    {article.standfirst}
+                    {article.trail}
                 </StandfirstText>
             ) : null}
         </ItemTappable>
