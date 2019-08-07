@@ -1,4 +1,4 @@
-app_identifier("uk.co.guardian.editions") # The bundle identifier of your app
+app_identifier("uk.co.guardian.gce") # The bundle identifier of your app
 apple_id("apps.automation@guardian.co.uk") # Your Apple email address
 
 itc_team_id("304191") # App Store Connect Team ID
