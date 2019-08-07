@@ -13,11 +13,16 @@ export interface AnimatedFlatListRef {
     _component: FlatList<Front['collections'][0]>
 }
 
-export type StartingCoordinatesXY = { top: number; left: number }
-export type SizeXY = { width: number; height: number }
-export type ItemFit = StartingCoordinatesXY & SizeXY
+type Size = {
+    width: number
+    height: number
+}
 
-export type ItemSizes = { story: SizeXY; layout: PageLayoutSizes }
+export type ItemFit = Size & {
+    top: number
+    left: number
+}
+export type ItemSizes = { story: ItemFit; layout: PageLayoutSizes }
 
 export enum PageLayoutSizes {
     mobile,
@@ -31,7 +36,7 @@ export type PageLayout = {
     }[]
 }
 
-export const getPageLayoutSizeXY = (size: PageLayoutSizes): SizeXY => {
+export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
     if (size === PageLayoutSizes.tablet) {
         return { width: 3, height: 4 }
     }

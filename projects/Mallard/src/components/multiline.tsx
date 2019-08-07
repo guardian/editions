@@ -31,7 +31,12 @@ const Multiline = ({
         )
     }
     return (
-        <Svg {...style} width={width} height={pixel * count * gap} fill="none">
+        <Svg
+            {...style}
+            width={width}
+            height={pixel * count * gap - 1}
+            fill="none"
+        >
             {lines}
         </Svg>
     )

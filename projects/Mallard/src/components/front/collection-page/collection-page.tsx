@@ -15,6 +15,7 @@ import {
     useCardBackgroundStyle,
     getItemPosition,
     getPageLayoutSizeXY,
+    ItemSizes,
 } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from '../layouts'
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     itemHolder: {
-        borderColor: color.line,
         position: 'absolute',
     },
     multiline: {
@@ -49,6 +49,17 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         width: '100%',
+    },
+    sideBorder: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 3,
+        width: 1,
+        backgroundColor: color.dimLine,
+    },
+    endCapSideBorder: {
+        bottom: 0,
     },
 })
 
@@ -82,6 +93,12 @@ const getPageLayout = (
     }
 }
 
+const isNotRightMostStory = ({ story, layout }: ItemSizes) =>
+    story.left + story.width < getPageLayoutSizeXY(layout).width
+
+const isNotBottomMostStory = ({ story, layout }: ItemSizes) =>
+    story.top + story.height < getPageLayoutSizeXY(layout).height
+
 const CollectionPage = ({
     articlesInCard,
     articleNavigator,
@@ -100,26 +117,23 @@ const CollectionPage = ({
     return (
         <View style={[styles.root, background]}>
             {layout.items.map((story, index) => {
-                const Item = story.item
                 if (!articlesInCard[index]) return null
+                const size = {
+                    story: story.fits,
+                    layout: layout.size,
+                }
+                const Item = story.item
                 const article = articlesInCard[index]
                 return (
                     <View
                         style={[
                             styles.itemHolder,
                             getItemPosition(story.fits, layout.size),
-                            story.fits.left + story.fits.width <
-                                getPageLayoutSizeXY(layout.size).width && {
-                                borderRightWidth: 1,
-                            },
                         ]}
                     >
                         <Item
                             style={{}}
-                            size={{
-                                story: story.fits,
-                                layout: layout.size,
-                            }}
+                            size={size}
                             path={{
                                 article: article.key,
                                 collection,
@@ -129,11 +143,19 @@ const CollectionPage = ({
                             articleNavigator={articleNavigator}
                             article={article}
                         />
-                        {story.fits.top + story.fits.height <
-                        getPageLayoutSizeXY(layout.size).height ? (
+                        {isNotRightMostStory(size) ? (
+                            <View
+                                style={[
+                                    styles.sideBorder,
+                                    !isNotBottomMostStory(size) &&
+                                        styles.endCapSideBorder,
+                                ]}
+                            />
+                        ) : null}
+                        {isNotBottomMostStory(size) ? (
                             <Multiline
                                 style={styles.multiline}
-                                color={color.line}
+                                color={color.dimLine}
                                 count={2}
                             />
                         ) : null}
