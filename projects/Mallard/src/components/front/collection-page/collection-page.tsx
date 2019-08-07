@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Animated, View, Text } from 'react-native'
+import { StyleSheet, Animated, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 import { color } from 'src/theme/color'
