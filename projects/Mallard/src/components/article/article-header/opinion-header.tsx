@@ -41,33 +41,44 @@ const OpinionHeader = ({
             style={styles.innerWrap}
             outerStyle={[styles.background]}
         >
-            {image ? (
-                <ArticleFader buildOrder={1}>
-                    <ArticleImage
-                        style={{
-                            aspectRatio: 1.5,
-                            marginBottom: metrics.vertical / 4,
-                        }}
-                        image={image}
-                    />
-                </ArticleFader>
-            ) : null}
-            <ArticleFader buildOrder={2}>
-                <ArticleHeadline textStyle={{ marginBottom: metrics.vertical }}>
-                    <Quote fill={articleColor.main} />
-                    {headline}
-                    <Text style={[{ color: articleColor.main }, styles.byline]}>
-                        {'\n'}
-                        {byline}
-                    </Text>
-                </ArticleHeadline>
-            </ArticleFader>
-            <ArticleFader buildOrder={3}>
-                <Multiline count={4} color={color.line} />
-                <View style={[styles.innerWrap]}>
-                    <ArticleStandfirst {...{ standfirst }} />
-                </View>
-            </ArticleFader>
+            {() => (
+                <>
+                    {image ? (
+                        <ArticleFader buildOrder={1}>
+                            <ArticleImage
+                                style={{
+                                    aspectRatio: 1.5,
+                                    marginBottom: metrics.vertical / 4,
+                                }}
+                                image={image}
+                            />
+                        </ArticleFader>
+                    ) : null}
+                    <ArticleFader buildOrder={2}>
+                        <ArticleHeadline
+                            textStyle={{ marginBottom: metrics.vertical }}
+                        >
+                            <Quote fill={articleColor.main} />
+                            {headline}
+                            <Text
+                                style={[
+                                    { color: articleColor.main },
+                                    styles.byline,
+                                ]}
+                            >
+                                {'\n'}
+                                {byline}
+                            </Text>
+                        </ArticleHeadline>
+                    </ArticleFader>
+                    <ArticleFader buildOrder={3}>
+                        <Multiline count={4} color={color.line} />
+                        <View style={[styles.innerWrap]}>
+                            <ArticleStandfirst {...{ standfirst }} />
+                        </View>
+                    </ArticleFader>
+                </>
+            )}
         </Wrap>
     )
 }

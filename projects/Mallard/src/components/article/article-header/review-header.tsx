@@ -30,47 +30,51 @@ const ReviewHeader = ({
     const [color] = useArticle()
     return (
         <Wrap isTopMost outerStyle={[{ backgroundColor: color.faded }]}>
-            {image ? (
-                <ArticleFader buildOrder={1}>
-                    <ArticleImage
-                        style={{
-                            aspectRatio: 1.5,
-                            marginBottom: metrics.vertical / 4,
-                        }}
-                        image={image}
-                    />
-                </ArticleFader>
-            ) : null}
-            {kicker ? (
-                <ArticleFader buildOrder={2}>
-                    <ArticleKicker kicker={kicker} />
-                </ArticleFader>
-            ) : null}
-            <ArticleFader buildOrder={2}>
-                <View style={style.headline}>
-                    <ArticleHeadline
-                        weight={'bold'}
-                        textStyle={{ color: color.dark }}
-                    >
-                        {headline}
-                    </ArticleHeadline>
-                </View>
-            </ArticleFader>
-            <ArticleFader buildOrder={3}>
-                <ArticleStandfirst
-                    style={[style.standfirst]}
-                    textStyle={{ color: color.dark }}
-                    {...{ standfirst }}
-                />
-                <Multiline color={color.dark} count={4} />
-                <View>
-                    <ArticleByline
-                        style={[style.byline, { color: color.dark }]}
-                    >
-                        {byline}
-                    </ArticleByline>
-                </View>
-            </ArticleFader>
+            {() => (
+                <>
+                    {image ? (
+                        <ArticleFader buildOrder={1}>
+                            <ArticleImage
+                                style={{
+                                    aspectRatio: 1.5,
+                                    marginBottom: metrics.vertical / 4,
+                                }}
+                                image={image}
+                            />
+                        </ArticleFader>
+                    ) : null}
+                    {kicker ? (
+                        <ArticleFader buildOrder={2}>
+                            <ArticleKicker kicker={kicker} />
+                        </ArticleFader>
+                    ) : null}
+                    <ArticleFader buildOrder={2}>
+                        <View style={style.headline}>
+                            <ArticleHeadline
+                                weight={'bold'}
+                                textStyle={{ color: color.dark }}
+                            >
+                                {headline}
+                            </ArticleHeadline>
+                        </View>
+                    </ArticleFader>
+                    <ArticleFader buildOrder={3}>
+                        <ArticleStandfirst
+                            style={[style.standfirst]}
+                            textStyle={{ color: color.dark }}
+                            {...{ standfirst }}
+                        />
+                        <Multiline color={color.dark} count={4} />
+                        <View>
+                            <ArticleByline
+                                style={[style.byline, { color: color.dark }]}
+                            >
+                                {byline}
+                            </ArticleByline>
+                        </View>
+                    </ArticleFader>
+                </>
+            )}
         </Wrap>
     )
 }

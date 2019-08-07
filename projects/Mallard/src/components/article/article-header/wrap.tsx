@@ -3,6 +3,12 @@ import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 
+export enum WrapLayout {
+    narrow,
+    tablet,
+    wide,
+}
+
 const styles = StyleSheet.create({
     outer: {
         alignItems: 'stretch',
@@ -35,7 +41,7 @@ const Wrap = ({
     >
     isTopMost?: boolean
     outerStyle?: StyleProp<Pick<ViewStyle, 'backgroundColor' | 'flex'>>
-    children: ReactNode
+    children: (l: WrapLayout) => ReactNode
 }) => {
     return (
         <View style={[outerStyle, styles.outer]}>
@@ -53,7 +59,7 @@ const Wrap = ({
                         : {},
                 ]}
             >
-                {children}
+                {children(WrapLayout.narrow)}
             </View>
         </View>
     )
