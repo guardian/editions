@@ -9,7 +9,7 @@ import {
 import { FrontCardAppearance } from 'src/common'
 
 const toFit = (
-    ...[top, left, width, height]: [number, number, number, number]
+    ...[left, top, height, width]: [number, number, number, number]
 ): ItemFit => ({
     top,
     left,
@@ -18,133 +18,271 @@ const toFit = (
 })
 
 const splashPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: SplashImageItem,
-            fits: toFit(0, 0, 2, 6),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: SplashImageItem,
+                fits: toFit(0, 0, 6, 2),
+            },
+        ],
+    },
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: SplashImageItem,
+                fits: toFit(0, 0, 4, 3),
+            },
+        ],
+    },
 }
 
 const superHeroPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: SuperHeroImageItem,
-            fits: toFit(0, 0, 2, 6),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: SuperHeroImageItem,
+                fits: toFit(0, 0, 6, 2),
+            },
+        ],
+    },
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: SuperHeroImageItem,
+                fits: toFit(0, 0, 4, 3),
+            },
+        ],
+    },
 }
 
 const twoStoryPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: ImageItem,
-            fits: toFit(0, 0, 2, 4),
-        },
-        {
-            item: SplitImageItem,
-            fits: toFit(4, 0, 2, 2),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 4, 2),
+            },
+            {
+                item: SplitImageItem,
+                fits: toFit(0, 4, 2, 2),
+            },
+        ],
+    },
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 3, 4),
+            },
+            {
+                item: SplitImageItem,
+                fits: toFit(0, 3, 1, 3),
+            },
+        ],
+    },
 }
 
 const threeStoryPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: ImageItem,
-            fits: toFit(0, 0, 2, 4),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(4, 0, 1, 2),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(4, 1, 1, 2),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 4, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 4, 2, 1),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(1, 4, 2, 1),
+            },
+        ],
+    },
+
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 4, 2),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(2, 0, 2, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(2, 2, 2, 1),
+            },
+        ],
+    },
 }
 
 const fourStoryPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: ImageItem,
-            fits: toFit(0, 0, 1, 3),
-        },
-        {
-            item: ImageItem,
-            fits: toFit(0, 1, 1, 3),
-        },
-        {
-            item: ImageItem,
-            fits: toFit(3, 0, 1, 3),
-        },
-        {
-            item: ImageItem,
-            fits: toFit(3, 1, 1, 3),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 3, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(1, 0, 3, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(0, 3, 3, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(1, 3, 3, 1),
+            },
+        ],
+    },
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(1, 0, 3, 2),
+            },
+            {
+                item: SplitImageItem,
+                fits: toFit(1, 3, 1, 2),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 2, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(0, 2, 2, 1),
+            },
+        ],
+    },
 }
 
 const fiveStoryPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: ImageItem,
-            fits: toFit(0, 0, 1, 3),
-        },
-        {
-            item: ImageItem,
-            fits: toFit(0, 1, 1, 3),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(3, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(4, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(5, 0, 2, 1),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 3, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(1, 0, 3, 1),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 3, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 4, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 5, 1, 2),
+            },
+        ],
+    },
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: ImageItem,
+                fits: toFit(0, 0, 3, 2),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(2, 0, 2, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(2, 2, 2, 1),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 3, 1, 1),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(1, 3, 1, 1),
+            },
+        ],
+    },
 }
 
 const sixStoryPage: PageLayout = {
-    size: PageLayoutSizes.mobile,
-    items: [
-        {
-            item: SmallItem,
-            fits: toFit(0, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(1, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(2, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(3, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(4, 0, 2, 1),
-        },
-        {
-            item: SmallItem,
-            fits: toFit(5, 0, 2, 1),
-        },
-    ],
+    [PageLayoutSizes.mobile]: {
+        size: PageLayoutSizes.mobile,
+        items: [
+            {
+                item: SmallItem,
+                fits: toFit(0, 0, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 1, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 2, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 3, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 4, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 5, 1, 2),
+            },
+        ],
+    },
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: SmallItem,
+                fits: toFit(0, 0, 1, 2),
+            },
+            {
+                item: SmallItem,
+                fits: toFit(0, 1, 1, 2),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(2, 0, 2, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(2, 2, 2, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(0, 2, 2, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toFit(1, 2, 2, 1),
+            },
+        ],
+    },
 }
 
 const layouts: { [key in FrontCardAppearance]: PageLayout } = {

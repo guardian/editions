@@ -1,5 +1,6 @@
 import React, { useState, ReactElement } from 'react'
 import { View, LayoutRectangle, StyleSheet } from 'react-native'
+import { getClosestBreakpoint } from 'src/theme/breakpoints'
 
 const WithBreakpoints = ({
     children,
@@ -14,17 +15,13 @@ const WithBreakpoints = ({
     return (
         <View
             onLayout={ev => {
-                let max = 0
-                for (let key of Object.keys(children)) {
-                    if (
-                        ev.nativeEvent.layout.width >= parseInt(key) &&
-                        max < parseInt(key)
-                    ) {
-                        max = parseInt(key)
-                    }
-                }
                 setMetrics(ev.nativeEvent.layout)
-                setMaxSize(max)
+                setMaxSize(
+                    getClosestBreakpoint(
+                        (Object.keys(children) as unknown[]) as number[],
+                        ev.nativeEvent.layout.width,
+                    ),
+                )
             }}
         >
             {metrics && children[maxSize](metrics)}

@@ -31,12 +31,14 @@ export enum PageLayoutSizes {
     mobile,
     tablet,
 }
-export interface PageLayout {
-    size: PageLayoutSizes
-    items: {
-        item: Item
-        fits: ItemFit
-    }[]
+export type PageLayout = {
+    [key in PageLayoutSizes]: {
+        size: key
+        items: {
+            item: Item
+            fits: ItemFit
+        }[]
+    }
 }
 
 export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
@@ -50,10 +52,7 @@ export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
 This resolves where each article goes
 */
 
-export const getItemPosition = (
-    itemFit: ItemFit,
-    layout: PageLayout['size'],
-) => {
+export const getItemPosition = (itemFit: ItemFit, layout: PageLayoutSizes) => {
     const layoutSize = getPageLayoutSizeXY(layout)
     return {
         left: `${(itemFit.left / layoutSize.width) * 100}%`,

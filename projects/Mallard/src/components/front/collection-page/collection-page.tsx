@@ -16,11 +16,13 @@ import {
     getItemPosition,
     getPageLayoutSizeXY,
     ItemSizes,
+    PageLayoutSizes,
 } from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const styles = StyleSheet.create({
     root: {
@@ -114,7 +116,11 @@ const CollectionPage = ({
         return <FlexErrorMessage />
     }
 
-    const layout = getPageLayout(appearance, articlesInCard.length)
+    const layout = getPageLayout(appearance, articlesInCard.length)[
+        width > Breakpoints.tabletVertical - 100
+            ? PageLayoutSizes.tablet
+            : PageLayoutSizes.mobile
+    ]
 
     return (
         <View style={[styles.root, background]}>
