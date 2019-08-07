@@ -2,10 +2,12 @@ import React, { ReactNode } from 'react'
 import { StyleSheet, ImageBackground, View } from 'react-native'
 import { APIPaths } from 'src/paths'
 import { Image as ImageT } from '../../common'
+
 const styles = StyleSheet.create({
     image: {
         width: '100%',
     },
+    proxy: { position: 'absolute', bottom: 0, left: 0 },
 })
 
 const ArticleImage = ({
@@ -15,7 +17,7 @@ const ArticleImage = ({
 }: {
     image: ImageT
     style?: {}
-    proxy: ReactNode
+    proxy?: ReactNode
 }) => {
     const imagePath = `${APIPaths.mediaBackend}${APIPaths.media(
         'issue',
@@ -30,9 +32,7 @@ const ArticleImage = ({
                 uri: imagePath,
             }}
         >
-            <View style={{ position: 'absolute', bottom: 0, left: 0 }}>
-                {proxy}
-            </View>
+            {proxy && <View style={styles.proxy}>{proxy}</View>}
         </ImageBackground>
     )
 }
