@@ -16,6 +16,7 @@ import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
 import { ReviewHeader } from './article-header/review-header'
+import { Wrap } from './article-header/wrap'
 
 /*
 This is the article view! For all of the articles.
@@ -82,7 +83,11 @@ const Article = ({
                 <NewsHeader {...headerProps} />
             )}
             <Fader buildOrder={10} position={'article'}>
-                <View style={[{ backgroundColor: color.background, flex: 1 }]}>
+                <Wrap
+                    outerStyle={[
+                        { backgroundColor: color.background, flex: 1 },
+                    ]}
+                >
                     <WebView
                         originWhitelist={['*']}
                         scrollEnabled={false}
@@ -100,6 +105,7 @@ const Article = ({
                         }}
                         style={{
                             flex: 1,
+                            marginHorizontal: metrics.articleSides * -1,
                             minHeight: height,
                         }}
                         // The below lines fixes crashes on Android
@@ -107,7 +113,7 @@ const Article = ({
                         // https://github.com/react-native-community/react-native-webview/issues/429
                         androidHardwareAccelerationDisabled={true}
                     />
-                </View>
+                </Wrap>
             </Fader>
         </View>
     )

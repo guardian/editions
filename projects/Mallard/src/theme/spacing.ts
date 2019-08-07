@@ -13,7 +13,9 @@ export const metrics = {
     headerHeight,
     frontsPageSides: basicMetrics.horizontal * 1.5,
     articleSides: basicMetrics.horizontal / 2,
+    articleSidesWide: basicMetrics.horizontal * 1.5,
     frontsPageHeight: 540,
+    articleMaxWidth: 500,
     gridRowSplit: () => {
         const { width } = Dimensions.get('window')
         return width * 0.6

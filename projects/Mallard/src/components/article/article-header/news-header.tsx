@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
 import { getNavigationPosition } from 'src/helpers/positions'
-import { newsHeaderStyles } from '../styles'
 import { ArticleKicker } from '../article-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
@@ -11,8 +10,13 @@ import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
+import { Wrap } from './wrap'
 
 const styles = StyleSheet.create({
+    background: {
+        paddingBottom: metrics.vertical,
+    },
+    byline: { marginBottom: metrics.vertical },
     bylineBackground: {
         marginTop: metrics.vertical,
         marginBottom: metrics.vertical,
@@ -32,7 +36,7 @@ const NewsHeader = ({
 }: ArticleHeaderProps) => {
     const navigationPosition = getNavigationPosition('article')
     return (
-        <View style={[newsHeaderStyles.background]}>
+        <Wrap style={[styles.background]}>
             {image ? (
                 <ArticleFader buildOrder={1}>
                     <ArticleImage
@@ -61,11 +65,9 @@ const NewsHeader = ({
                 <ArticleMultiline />
             </ArticleFader>
             <ArticleFader buildOrder={5}>
-                <ArticleByline style={newsHeaderStyles.byline}>
-                    {byline}
-                </ArticleByline>
+                <ArticleByline style={styles.byline}>{byline}</ArticleByline>
             </ArticleFader>
-        </View>
+        </Wrap>
     )
 }
 
