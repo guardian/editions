@@ -6,21 +6,21 @@ import { color } from 'src/theme/color'
 const styles = StyleSheet.create({
     outer: {
         alignItems: 'stretch',
-        paddingHorizontal: metrics.articleSides,
+        paddingHorizontal: metrics.article.sides,
     },
     tablet: {
-        maxWidth: metrics.articlePage.maxWidth,
+        maxWidth: metrics.article.maxWidth,
         borderRightColor: color.palette.neutral[7],
         borderRightWidth: 1,
-        paddingLeft: metrics.articleSidesWide - metrics.articleSides,
-        paddingRight: metrics.articleSidesWide,
+        paddingLeft: metrics.article.sidesLandscape - metrics.article.sides,
+        paddingRight: metrics.article.sidesLandscape,
     },
     wide: {
         marginLeft:
-            metrics.articlePage.leftRailLandscape -
-            metrics.articleSidesWide -
-            metrics.articleSides,
-        maxWidth: metrics.articlePage.maxWidth,
+            metrics.article.leftRailLandscape -
+            metrics.article.sidesLandscape -
+            metrics.article.sides,
+        maxWidth: metrics.article.maxWidth,
     },
 })
 

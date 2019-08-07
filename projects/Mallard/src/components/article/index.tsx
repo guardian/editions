@@ -105,7 +105,7 @@ const Article = ({
                         }}
                         style={{
                             flex: 1,
-                            marginHorizontal: metrics.articleSides * -1,
+                            marginHorizontal: metrics.article.sides * -1,
                             minHeight: height,
                         }}
                         // The below lines fixes crashes on Android

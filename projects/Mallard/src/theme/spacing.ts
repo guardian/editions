@@ -1,6 +1,6 @@
 import { Platform, StatusBar, Dimensions } from 'react-native'
 
-export const spacing = [0, 3, 6, 12, 18, 30]
+const spacing = [0, 3, 6, 12, 18, 30]
 
 const headerHeight = spacing[5]
 const basicMetrics = {
@@ -12,10 +12,10 @@ export const metrics = {
     ...basicMetrics,
     headerHeight,
     frontsPageSides: basicMetrics.horizontal * 1.5,
-    articleSides: basicMetrics.horizontal / 2,
-    articleSidesWide: basicMetrics.horizontal * 1.5,
     frontsPageHeight: 540,
-    articlePage: {
+    article: {
+        sides: basicMetrics.horizontal / 2,
+        sidesLandscape: basicMetrics.horizontal * 1.5,
         maxWidth: 540,
         maxWidthLandscape: 640,
         leftRailLandscape: 100,
