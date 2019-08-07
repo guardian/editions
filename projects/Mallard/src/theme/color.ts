@@ -48,6 +48,7 @@ export const color = {
         tomato: palette.news.bright,
         apricot: palette.opinion.bright,
         shark: palette.sport.main,
+        sea: '#279DDC',
     },
 
     /*

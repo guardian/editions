@@ -1,4 +1,4 @@
-import { MEMBERS_DATA_API_URL } from 'src/authentication/constants'
+import { MEMBERS_DATA_API_URL } from 'src/constants'
 
 export interface MembersDataAPIResponse {
     userId: string
@@ -13,6 +13,12 @@ export interface MembersDataAPIResponse {
     }
 }
 
+/**
+ * DO NOT USE THIS DIRECTLY
+ *
+ * In most cases you will want to use the method that caches the result of this request
+ * in order that re-authentication can use the cached credentials
+ */
 const fetchMembershipData = async (
     membershipAccessToken: string,
 ): Promise<MembersDataAPIResponse> => {

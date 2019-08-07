@@ -60,12 +60,7 @@ describe('idService', () => {
             }
 
             expect(error).toBeInstanceOf(Error)
-            expect(error.message).toEqual(
-                expect.stringContaining('error-message'),
-            )
-            expect(error.message).toEqual(
-                expect.stringContaining('error-description'),
-            )
+            expect(error.message).toBe('error-description')
         })
     })
 })

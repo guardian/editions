@@ -1,38 +1,5 @@
 import { fetchUserDataForKeychainUser } from '../helpers'
-
-const membershipResponse = {
-    userId: 'uid',
-    showSupportMessaging: true,
-    contentAccess: {
-        member: false,
-        paidMember: false,
-        recurringContributor: false,
-        digitalPack: false,
-        paperSubscriber: false,
-        guardianWeeklySubscriber: false,
-    },
-}
-
-const userResponse = {
-    id: '123',
-    dates: {
-        accountCreatedDate: '2019',
-    },
-    adData: {},
-    consents: [],
-    userGroups: [],
-    socialLinks: [],
-    publicFields: {
-        displayName: 'User Name',
-    },
-    statusFields: {
-        hasRepermissioned: false,
-        userEmailValidated: true,
-        allowThirdPartyProfiling: false,
-    },
-    primaryEmailAddress: 'username@example.com',
-    hasPassword: true,
-}
+import { membershipResponse, userResponse } from './fixtures'
 
 const getMockStore = (val?: string) => ({
     get: jest.fn(() =>
