@@ -36,7 +36,7 @@ import { Navigator } from 'src/components/navigator'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getColor } from 'src/helpers/transform'
 import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
-import { LoginOverlay } from 'src/components/login-overlay'
+import { LoginOverlay } from 'src/components/login/login-overlay'
 import { routeNames } from 'src/navigation'
 
 export interface PathToArticle {
@@ -224,6 +224,9 @@ const ArticleScreenWithProps = ({
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
+                        onOpenCASLogin={() =>
+                            navigation.navigate(routeNames.CasSignIn)
+                        }
                         onDismiss={() => navigation.goBack()}
                     >
                         <ArticleScreenBody
@@ -241,6 +244,9 @@ const ArticleScreenWithProps = ({
                     <LoginOverlay
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
+                        }
+                        onOpenCASLogin={() =>
+                            navigation.navigate(routeNames.CasSignIn)
                         }
                         onDismiss={() => navigation.goBack()}
                     >

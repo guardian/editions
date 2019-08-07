@@ -44,3 +44,7 @@ $ yarn run-ios
 ### Adding images
 
 If you wanna add static svgs, put them in the `assets/svgs` folder and run `yarn convert-svg`
+
+### iPad testing
+
+To test the iPad version, run `yarn run-ipad`. To test responsive layouts, you can enter multitasking inside the iPad simulator (swipe up from the bottom of the window) and drag another app from the dock to the side until it goes into split view.

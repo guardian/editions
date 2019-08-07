@@ -18,6 +18,7 @@ import {
     OnboardingConsentScreen,
 } from 'src/screens/onboarding-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
+import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
@@ -26,7 +27,7 @@ import {
     issueToIssueListInterpolator,
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
-import { AuthSwitcherScreen } from 'src/screens/auth-switcher-screen'
+import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 
 const routeNames = {
     Issue: 'Issue',
@@ -37,6 +38,7 @@ const routeNames = {
     Endpoints: 'Endpoints',
     GdprConsent: 'GdprConsent',
     SignIn: 'SignIn',
+    CasSignIn: 'CasSignIn',
     onboarding: {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',
@@ -206,6 +208,7 @@ const RootNavigator = createAppContainer(
                 },
             ),
             [routeNames.SignIn]: AuthSwitcherScreen,
+            [routeNames.CasSignIn]: CasSignInScreen,
         },
         {
             initialRouteName: 'AppRoot',
