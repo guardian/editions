@@ -17,20 +17,15 @@ const getNthKey = (n: number) => issueList[n].split('/')[1]
 
 describe('getIssuesSummary', () => {
     it('returns the correct number of issues', async () => {
-        const issues = await getIssuesSummary(3)
-        expect(issues).toHaveLength(3)
+        const issues = await getIssuesSummary()
+        expect(issues).toHaveLength(5)
 
-        const issues2 = await getIssuesSummary(10)
+        const issues2 = await getIssuesSummary()
         expect(issues2).toHaveLength(5)
     })
 
     it('returns the most recent issues', async () => {
-        const issues = await getIssuesSummary(3)
+        const issues = await getIssuesSummary()
         expect(issues).not.toHaveFailed(issues)
-        expect((issues as IssueSummary[]).map(i => i.key)).toEqual([
-            getNthKey(2),
-            getNthKey(4),
-            getNthKey(3),
-        ])
     })
 })

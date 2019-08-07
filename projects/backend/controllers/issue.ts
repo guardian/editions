@@ -27,9 +27,7 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
-export const getIssuesSummary = async (
-    pageSize = 7,
-): Promise<Attempt<IssueSummary[]>> => {
+export const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
     const issueKeys = await s3List({
         key: 'daily-edition/',
         bucket: isPreview ? 'preview' : 'published',
@@ -56,7 +54,6 @@ export const getIssuesSummary = async (
             name: 'Daily Edition',
             date: date.toISOString(),
         }))
-        .slice(0, pageSize)
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
