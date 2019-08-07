@@ -28,6 +28,31 @@ type LazyPageLayout = AbstractPageLayout<Item>
 export type PageLayout = AbstractPageLayout<ItemLayoutDefinition>
 export type RowLayout = AbstractRowLayout<ItemLayoutDefinition>
 
+export type StartingCoordinatesXY = { top: number; left: number }
+export type SizeXY = { width: number; height: number }
+export type ItemFit = StartingCoordinatesXY & SizeXY
+
+export type ItemSizes = { story: SizeXY; layout: PageLayoutSizes }
+
+export enum PageLayoutSizes {
+    mobile,
+    tablet,
+}
+export type NewPageLayout = {
+    size: PageLayoutSizes
+    items: {
+        item: Item
+        fits: ItemFit
+    }[]
+}
+
+export const getPageLayoutSizeXY = (size: PageLayoutSizes): SizeXY => {
+    if (size === PageLayoutSizes.tablet) {
+        return { width: 3, height: 4 }
+    }
+    return { width: 2, height: 6 }
+}
+
 export enum RowSize {
     row,
     third,
@@ -39,6 +64,7 @@ export enum RowSize {
 /*
 This resolves where each article goes
 */
+
 export const withSlots = (page: LazyPageLayout): PageLayout => {
     let slot = 0
     return page.map(({ columns, ...row }) => {

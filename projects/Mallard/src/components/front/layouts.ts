@@ -1,4 +1,12 @@
-import { PageLayout, RowSize, withSlots } from './helpers'
+import {
+    PageLayout,
+    RowSize,
+    withSlots,
+    NewPageLayout,
+    SizeXY,
+    StartingCoordinatesXY,
+    PageLayoutSizes,
+} from './helpers'
 import {
     SplashImageItem,
     SuperHeroImageItem,
@@ -32,6 +40,44 @@ const twoStoryPage: PageLayout = withSlots([
         columns: [SplitImageItem],
     },
 ])
+
+const toSize = ([width, height]: [number, number]): SizeXY => ({
+    width,
+    height,
+})
+
+export const newThreeStoryPage: NewPageLayout = {
+    size: PageLayoutSizes.mobile,
+    items: [
+        {
+            item: ImageItem,
+            fits: {
+                top: 0,
+                left: 0,
+                width: 2,
+                height: 4,
+            },
+        },
+        {
+            item: SmallItem,
+            fits: {
+                top: 4,
+                left: 0,
+                width: 1,
+                height: 2,
+            },
+        },
+        {
+            item: SmallItem,
+            fits: {
+                top: 4,
+                left: 1,
+                width: 1,
+                height: 2,
+            },
+        },
+    ],
+}
 
 const threeStoryPage: PageLayout = withSlots([
     {

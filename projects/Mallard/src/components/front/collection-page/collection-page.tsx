@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Animated, View } from 'react-native'
+import { StyleSheet, Animated, View, Text } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 import { color } from 'src/theme/color'
@@ -12,9 +12,15 @@ import {
     defaultCardAppearances,
     FrontCardAppearance,
 } from 'src/common'
-import { useCardBackgroundStyle } from '../helpers'
+import {
+    useCardBackgroundStyle,
+    RowSize,
+    NewPageLayout,
+    ItemFit,
+    getPageLayoutSizeXY,
+} from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { layouts } from '../layouts'
+import { layouts, newThreeStoryPage } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
 
 const styles = StyleSheet.create({
@@ -67,6 +73,16 @@ const getPageLayout = (
     }
 }
 
+const getItemPosition = (itemFit: ItemFit, layout: NewPageLayout['size']) => {
+    const layoutSize = getPageLayoutSizeXY(layout)
+    return {
+        left: `${(itemFit.left / layoutSize.width) * 100}%`,
+        top: `${(itemFit.top / layoutSize.height) * 100}%`,
+        height: `${(itemFit.height / layoutSize.height) * 100}%`,
+        width: `${(itemFit.width / layoutSize.width) * 100}%`,
+    }
+}
+
 const CollectionPage = ({
     articlesInCard,
     articleNavigator,
@@ -82,6 +98,46 @@ const CollectionPage = ({
     }
 
     const pageLayout = getPageLayout(appearance, articlesInCard.length)
+    const layout = newThreeStoryPage
+
+    return (
+        <View style={[styles.root, background]}>
+            {layout.items.map((story, index) => {
+                const Item = story.item
+                if (!articlesInCard[index]) return null
+                const article = articlesInCard[index]
+                return (
+                    <View
+                        style={[
+                            {
+                                borderColor: 'blue',
+                                borderWidth: 2,
+                                position: 'absolute',
+                            },
+                            getItemPosition(story.fits, layout.size),
+                        ]}
+                    >
+                        <Item
+                            style={{}}
+                            REPLACEMEFORSIZE={{
+                                story: story.fits,
+                                layout: layout.size,
+                            }}
+                            size={RowSize.superhero}
+                            path={{
+                                article: article.key,
+                                collection,
+                                issue,
+                                front,
+                            }}
+                            articleNavigator={articleNavigator}
+                            article={article}
+                        />
+                    </View>
+                )
+            })}
+        </View>
+    )
 
     return (
         <View style={[styles.root, background]}>

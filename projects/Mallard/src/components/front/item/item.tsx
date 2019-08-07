@@ -30,6 +30,10 @@ import {
     RowSize,
     getRowHeightForSize,
     useCardBackgroundStyle,
+    ItemFit,
+    SizeXY,
+    ItemSizes,
+    PageLayoutSizes,
 } from '../helpers'
 import {
     setScreenPositionOfItem,
@@ -51,6 +55,7 @@ interface TappablePropTypes {
 
 export interface PropTypes extends TappablePropTypes {
     size: RowSize
+    REPLACEMEFORSIZE: ItemSizes
 }
 
 /*
@@ -186,7 +191,11 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const CoverItem = ({
+    article,
+    REPLACEMEFORSIZE,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
@@ -208,7 +217,7 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     textBlockAppearance={'pillarColor'}
                     style={coverStyles.text}
-                    {...{ size }}
+                    {...{ REPLACEMEFORSIZE }}
                 />
             </View>
         </ItemTappable>
@@ -233,14 +242,24 @@ const imageStyles = StyleSheet.create({
     },
 })
 
-const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const isHeroImage = ({ story, layout }: ItemSizes) => {
+    return layout === PageLayoutSizes.tablet
+        ? story.height > 2
+        : story.height > 4
+}
+
+const ImageItem = ({
+    article,
+    REPLACEMEFORSIZE,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article && article.image ? (
                 <Image
                     style={[
                         imageStyles.image,
-                        size >= RowSize.hero && imageStyles.heroImage,
+                        isHeroImage(REPLACEMEFORSIZE) && imageStyles.heroImage,
                     ]}
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
@@ -256,7 +275,7 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 style={imageStyles.textBlock}
                 kicker={article.kicker}
                 headline={article.headline}
-                {...{ size }}
+                {...{ REPLACEMEFORSIZE }}
             />
         </ItemTappable>
     )
@@ -282,7 +301,11 @@ const splitImageStyles = StyleSheet.create({
     },
 })
 
-const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SplitImageItem = ({
+    article,
+    REPLACEMEFORSIZE,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
@@ -290,7 +313,7 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     style={splitImageStyles.textBlock}
                     kicker={article.kicker}
                     headline={article.headline}
-                    {...{ size }}
+                    {...{ REPLACEMEFORSIZE }}
                 />
                 {'image' in article && article.image ? (
                     <Image
@@ -332,7 +355,11 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SuperHeroImageItem = ({
+    article,
+    REPLACEMEFORSIZE,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
@@ -352,7 +379,7 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 style={[superHeroImageStyles.textBlock]}
                 kicker={article.kicker}
                 headline={article.headline}
-                {...{ size }}
+                {...{ REPLACEMEFORSIZE }}
             />
             {'standfirst' in article && article.standfirst ? (
                 <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
@@ -401,13 +428,17 @@ const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
     )
 }
 
-const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SmallItem = ({
+    article,
+    REPLACEMEFORSIZE,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
                 kicker={article.kicker}
                 headline={article.headline}
-                {...{ size }}
+                {...{ REPLACEMEFORSIZE }}
             />
         </ItemTappable>
     )
