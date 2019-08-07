@@ -4,8 +4,8 @@ import { color as themeColor } from 'src/theme/color'
 import Svg, { Rect } from 'react-native-svg'
 import { StyleSheet, StyleProp } from 'react-native'
 
-const pixel = StyleSheet.hairlineWidth * 2
-const gap = 4
+const pixel = 1
+const gap = 2
 
 const Multiline = ({
     color,
@@ -31,7 +31,12 @@ const Multiline = ({
         )
     }
     return (
-        <Svg {...style} width={width} height={pixel * count * gap} fill="none">
+        <Svg
+            {...style}
+            width={width}
+            height={pixel * count * gap - 1}
+            fill="none"
+        >
             {lines}
         </Svg>
     )

@@ -3,7 +3,6 @@ import { StyleSheet, Animated, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 import { color } from 'src/theme/color'
-import { Row } from './row'
 import {
     CAPIArticle,
     Issue,
@@ -12,10 +11,16 @@ import {
     defaultCardAppearances,
     FrontCardAppearance,
 } from 'src/common'
-import { useCardBackgroundStyle } from '../helpers'
+import {
+    useCardBackgroundStyle,
+    getItemPosition,
+    getPageLayoutSizeXY,
+    ItemSizes,
+} from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
+import { Multiline } from 'src/components/multiline'
 
 const styles = StyleSheet.create({
     root: {
@@ -34,6 +39,27 @@ const styles = StyleSheet.create({
         margin: metrics.frontsPageSides,
         marginBottom: 32,
         marginTop: 8,
+    },
+    itemHolder: {
+        position: 'absolute',
+    },
+    multiline: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+    },
+    sideBorder: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 3,
+        width: 1,
+        backgroundColor: color.dimLine,
+    },
+    endCapSideBorder: {
+        bottom: 0,
     },
 })
 
@@ -68,11 +94,16 @@ const getPageLayout = (
     }
 }
 
+const isNotRightMostStory = ({ story, layout }: ItemSizes) =>
+    story.left + story.width < getPageLayoutSizeXY(layout).width
+
+const isNotBottomMostStory = ({ story, layout }: ItemSizes) =>
+    story.top + story.height < getPageLayoutSizeXY(layout).height
+
 const CollectionPage = ({
     articlesInCard,
     articleNavigator,
     collection,
-    translate,
     issue,
     front,
     appearance,
@@ -83,26 +114,56 @@ const CollectionPage = ({
         return <FlexErrorMessage />
     }
 
-    const pageLayout = getPageLayout(appearance, articlesInCard.length)
+    const layout = getPageLayout(appearance, articlesInCard.length)
 
     return (
         <View style={[styles.root, background]}>
-            {pageLayout.map((row, index) => (
-                <Row
-                    index={index}
-                    key={index}
-                    front={front}
-                    articles={
-                        row.columns[1]
-                            ? [
-                                  articlesInCard[row.columns[0].slot],
-                                  articlesInCard[row.columns[1].slot],
-                              ]
-                            : [articlesInCard[row.columns[0].slot]]
-                    }
-                    {...{ collection, issue, translate, row, articleNavigator }}
-                />
-            ))}
+            {layout.items.map((story, index) => {
+                if (!articlesInCard[index]) return null
+                const size = {
+                    story: story.fits,
+                    layout: layout.size,
+                }
+                const Item = story.item
+                const article = articlesInCard[index]
+                return (
+                    <View
+                        key={index}
+                        style={[
+                            styles.itemHolder,
+                            getItemPosition(story.fits, layout.size),
+                        ]}
+                    >
+                        <Item
+                            path={{
+                                article: article.key,
+                                collection,
+                                issue,
+                                front,
+                            }}
+                            size={size}
+                            articleNavigator={articleNavigator}
+                            article={article}
+                        />
+                        {isNotRightMostStory(size) ? (
+                            <View
+                                style={[
+                                    styles.sideBorder,
+                                    !isNotBottomMostStory(size) &&
+                                        styles.endCapSideBorder,
+                                ]}
+                            />
+                        ) : null}
+                        {isNotBottomMostStory(size) ? (
+                            <Multiline
+                                style={styles.multiline}
+                                color={color.dimLine}
+                                count={2}
+                            />
+                        ) : null}
+                    </View>
+                )
+            })}
         </View>
     )
 }
