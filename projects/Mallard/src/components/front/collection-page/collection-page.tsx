@@ -44,6 +44,7 @@ export interface PropTypes {
     front: Front['key']
     appearance: FrontCardAppearance | null
     collection: Collection['key']
+    width: number
 }
 
 const getPageLayout = (
@@ -75,6 +76,7 @@ const CollectionPage = ({
     issue,
     front,
     appearance,
+    width,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const background = useCardBackgroundStyle()
     if (!articlesInCard.length) {

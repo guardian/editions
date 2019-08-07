@@ -33,7 +33,6 @@ const CollectionPageInFront = ({
     index: number
     pillar: PillarFromPalette
     scrollX: Animated.Value
-    width: number
 } & PropTypes) => {
     const translate = getTranslateForPage(width, scrollX, index)
     return (
@@ -52,6 +51,7 @@ const CollectionPageInFront = ({
             <WithArticle type={'article'} pillar={pillar}>
                 <CollectionPage
                     translate={translate}
+                    width={width}
                     {...collectionPageProps}
                 />
             </WithArticle>
