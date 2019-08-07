@@ -3,7 +3,6 @@ import { StyleSheet, Animated, View, Text } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 import { color } from 'src/theme/color'
-import { Row } from './row'
 import {
     CAPIArticle,
     Issue,
@@ -12,10 +11,15 @@ import {
     defaultCardAppearances,
     FrontCardAppearance,
 } from 'src/common'
-import { useCardBackgroundStyle, getItemPosition } from '../helpers'
+import {
+    useCardBackgroundStyle,
+    getItemPosition,
+    getPageLayoutSizeXY,
+} from '../helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
+import { Multiline } from 'src/components/multiline'
 
 const styles = StyleSheet.create({
     root: {
@@ -34,6 +38,17 @@ const styles = StyleSheet.create({
         margin: metrics.frontsPageSides,
         marginBottom: 32,
         marginTop: 8,
+    },
+    itemHolder: {
+        borderColor: color.line,
+        position: 'absolute',
+    },
+    multiline: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
     },
 })
 
@@ -71,7 +86,6 @@ const CollectionPage = ({
     articlesInCard,
     articleNavigator,
     collection,
-    translate,
     issue,
     front,
     appearance,
@@ -92,12 +106,12 @@ const CollectionPage = ({
                 return (
                     <View
                         style={[
-                            {
-                                borderColor: 'blue',
-                                borderWidth: 2,
-                                position: 'absolute',
-                            },
+                            styles.itemHolder,
                             getItemPosition(story.fits, layout.size),
+                            story.fits.left + story.fits.width <
+                                getPageLayoutSizeXY(layout.size).width && {
+                                borderRightWidth: 1,
+                            },
                         ]}
                     >
                         <Item
@@ -115,6 +129,14 @@ const CollectionPage = ({
                             articleNavigator={articleNavigator}
                             article={article}
                         />
+                        {story.fits.top + story.fits.height <
+                        getPageLayoutSizeXY(layout.size).height ? (
+                            <Multiline
+                                style={styles.multiline}
+                                color={color.line}
+                                count={2}
+                            />
+                        ) : null}
                     </View>
                 )
             })}
