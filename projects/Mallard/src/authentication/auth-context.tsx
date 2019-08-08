@@ -41,9 +41,9 @@ const AuthContext = createContext<{
 
 const needsReauth = (
     prevAttempt: AuthAttempt,
-    { isInternetReachable }: { isInternetReachable: boolean | null },
+    { isConnected }: { isConnected: boolean | null },
 ) =>
-    (prevAttempt.type === 'cached' && isInternetReachable) ||
+    (prevAttempt.type === 'cached' && isConnected) ||
     (isPending(prevAttempt.status) ||
         (isAuthed(prevAttempt.status) &&
             prevAttempt.time < Date.now() - AUTH_TTL))
@@ -144,14 +144,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         type: 'cached',
         status: pending,
     })
-    const { isInternetReachable } = useNetInfo()
+    const { isConnected } = useNetInfo()
 
     useEffect(() => {
-        if (isFetching || !needsReauth(authAttempt, { isInternetReachable }))
-            return
+        if (isFetching || !needsReauth(authAttempt, { isConnected })) return
 
         setIsFetching(true)
-        if (isInternetReachable) {
+        if (isConnected) {
             liveAuthChain().then(status => {
                 setAuthAttempt(createAuthAttempt(status, 'live'))
                 setIsFetching(false)
@@ -164,7 +163,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsFetching(false)
             })
         }
-    }, [isInternetReachable, authAttempt, isFetching])
+    }, [isConnected, authAttempt, isFetching])
 
     return (
         <AuthContext.Provider
