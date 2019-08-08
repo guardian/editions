@@ -35,8 +35,9 @@ const Fader = ({ children, position }: PropTypes) => {
 
     return (
         <Animated.View
-            ref={(view: any) => {
-                if (view) faderRef.current = view._component as View
+            ref={(view: { _component: unknown }) => {
+                if (view && view._component)
+                    faderRef.current = view._component as View
             }}
             onLayout={() => {
                 faderRef.current &&
