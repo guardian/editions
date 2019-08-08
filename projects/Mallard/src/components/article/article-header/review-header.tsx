@@ -41,6 +41,7 @@ const ReviewHeader = ({
     headline,
     image,
     standfirst,
+    starRating,
 }: ArticleHeaderProps) => {
     const [color] = useArticle()
     const navigationPosition = getNavigationPosition('article')
@@ -50,7 +51,7 @@ const ReviewHeader = ({
                 {image ? (
                     <ArticleFader buildOrder={1}>
                         <ArticleImage
-                            proxy={<Stars rating={4} />}
+                            proxy={starRating && <Stars rating={starRating} />}
                             style={{
                                 aspectRatio: 1.5,
                                 marginBottom: metrics.vertical / 4,
