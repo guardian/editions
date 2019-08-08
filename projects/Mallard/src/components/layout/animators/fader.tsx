@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useLayoutEffect } from 'react'
 import {
     getNavigationPosition,
     SaveableNavigationPositions,
@@ -9,14 +9,12 @@ import { Animated, StyleSheet } from 'react-native'
 This is part of the transition from articles to fronts
 and it fades content in and out with a user chosen delay.
 
-The build order is an int X-1 on purpose to abstract the details
-of how and when to fade to this component. We will likely
-wanna mess with the actual animation numbers later on to make them
-more/less staggered
+The build order is calculated at render time and it seems
+to work but it is UGLY
 */
 
 export interface PropTypes {
-    buildOrder: number
+    first?: boolean
     children: Element
     position: SaveableNavigationPositions
 }
@@ -25,19 +23,38 @@ const faderStyles = StyleSheet.create({
     wrapper: { width: '100%' },
 })
 
-const fadeOffset = 0.5
+let globalBuildOrder = 1
 
-const Fader = ({ buildOrder, children, position }: PropTypes) => {
+const Fader = ({ children, position, first }: PropTypes) => {
     const navigationPosition = getNavigationPosition(position)
-    if (buildOrder > 6) buildOrder = 6
+    const buildOrder = useRef(globalBuildOrder)
+    useLayoutEffect(() => {
+        if (first) {
+            globalBuildOrder = 0
+            buildOrder.current = 0
+        }
+    }, [first])
+    useLayoutEffect(() => {
+        globalBuildOrder++
+        buildOrder.current = globalBuildOrder
+    }, [])
+    useLayoutEffect(() => {
+        if (globalBuildOrder > 5) globalBuildOrder = 5
+    }, [globalBuildOrder])
+
+    // for <Fader first/> we just wanna reset the count and not actually fade anything
+    if (!children) {
+        return null
+    }
+
     return (
         <Animated.View
             style={[
                 navigationPosition && {
                     opacity: navigationPosition.position.interpolate({
                         inputRange: [
-                            0.2 + buildOrder / 10,
-                            0.4 + buildOrder / 10,
+                            0.2 + buildOrder.current / 10,
+                            0.4 + buildOrder.current / 10,
                             1,
                         ],
                         outputRange: [0, 1, 1],

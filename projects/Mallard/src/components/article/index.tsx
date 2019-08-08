@@ -72,6 +72,7 @@ const Article = ({
     const [, { type }] = useArticle()
     return (
         <View style={styles.container}>
+            <Fader first position={'article'} />
             {type === 'opinion' ? (
                 <OpinionHeader {...headerProps} />
             ) : type === 'review' ? (
@@ -81,39 +82,37 @@ const Article = ({
             ) : (
                 <NewsHeader {...headerProps} />
             )}
-            <Fader buildOrder={10} position={'article'}>
+            <Fader position={'article'}>
                 <Wrap
                     outerStyle={[
                         { backgroundColor: color.background, flex: 1 },
                     ]}
                 >
-                    {() => (
-                        <WebView
-                            originWhitelist={['*']}
-                            scrollEnabled={false}
-                            useWebKit={false}
-                            source={{ html: html }}
-                            onShouldStartLoadWithRequest={event => {
-                                if (event.url !== 'about:blank') {
-                                    Linking.openURL(event.url)
-                                    return false
-                                }
-                                return true
-                            }}
-                            onMessage={event => {
-                                setHeight(parseInt(event.nativeEvent.data))
-                            }}
-                            style={{
-                                flex: 1,
-                                marginHorizontal: metrics.article.sides * -1,
-                                minHeight: height,
-                            }}
-                            // The below lines fixes crashes on Android
-                            // there seems to be other approaches using opacity / overflow styles detailed here
-                            // https://github.com/react-native-community/react-native-webview/issues/429
-                            androidHardwareAccelerationDisabled={true}
-                        />
-                    )}
+                    <WebView
+                        originWhitelist={['*']}
+                        scrollEnabled={false}
+                        useWebKit={false}
+                        source={{ html: html }}
+                        onShouldStartLoadWithRequest={event => {
+                            if (event.url !== 'about:blank') {
+                                Linking.openURL(event.url)
+                                return false
+                            }
+                            return true
+                        }}
+                        onMessage={event => {
+                            setHeight(parseInt(event.nativeEvent.data))
+                        }}
+                        style={{
+                            flex: 1,
+                            marginHorizontal: metrics.article.sides * -1,
+                            minHeight: height,
+                        }}
+                        // The below lines fixes crashes on Android
+                        // there seems to be other approaches using opacity / overflow styles detailed here
+                        // https://github.com/react-native-community/react-native-webview/issues/429
+                        androidHardwareAccelerationDisabled={true}
+                    />
                 </Wrap>
             </Fader>
         </View>

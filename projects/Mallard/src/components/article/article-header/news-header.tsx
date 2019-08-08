@@ -10,17 +10,17 @@ import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
-import { Wrap } from './wrap'
+import { Wrap, MultilineWrap } from './wrap'
 
 const styles = StyleSheet.create({
     background: {
         paddingBottom: metrics.vertical,
     },
     byline: { marginBottom: metrics.vertical },
-    bylineBackground: {
-        marginTop: metrics.vertical,
-        marginBottom: metrics.vertical,
-        paddingTop: metrics.vertical / 4,
+    standfirst: {
+        flex: 0,
+        marginTop: metrics.vertical * 4,
+        marginBottom: metrics.vertical / 4,
         width: '100%',
     },
 })
@@ -36,44 +36,44 @@ const NewsHeader = ({
 }: ArticleHeaderProps) => {
     const navigationPosition = getNavigationPosition('article')
     return (
-        <Wrap isTopMost style={[styles.background]}>
-            {() => (
-                <>
-                    {image ? (
-                        <ArticleFader buildOrder={1}>
-                            <ArticleImage
-                                style={{
-                                    aspectRatio: 1.5,
-                                    marginBottom: metrics.vertical / 4,
-                                }}
-                                image={image}
-                            />
-                        </ArticleFader>
-                    ) : null}
+        <MultilineWrap
+            isTopMost
+            style={[styles.background]}
+            byline={
+                <ArticleFader>
+                    <ArticleByline style={styles.byline}>
+                        {byline}
+                    </ArticleByline>
+                </ArticleFader>
+            }
+        >
+            {image ? (
+                <ArticleFader>
+                    <ArticleImage
+                        style={{
+                            aspectRatio: 1.5,
+                            marginBottom: metrics.vertical / 4,
+                        }}
+                        image={image}
+                    />
+                </ArticleFader>
+            ) : null}
 
-                    {kicker ? (
-                        <ArticleFader buildOrder={2}>
-                            <ArticleKicker kicker={kicker} />
-                        </ArticleFader>
-                    ) : null}
-                    <ArticleFader buildOrder={3}>
-                        <ArticleHeadline>{headline}</ArticleHeadline>
-                    </ArticleFader>
-                    <ArticleFader buildOrder={4}>
-                        <ArticleStandfirst
-                            style={styles.bylineBackground}
-                            {...{ byline, standfirst, navigationPosition }}
-                        />
-                        <ArticleMultiline />
-                    </ArticleFader>
-                    <ArticleFader buildOrder={5}>
-                        <ArticleByline style={styles.byline}>
-                            {byline}
-                        </ArticleByline>
-                    </ArticleFader>
-                </>
-            )}
-        </Wrap>
+            {kicker ? (
+                <ArticleFader>
+                    <ArticleKicker kicker={kicker} />
+                </ArticleFader>
+            ) : null}
+            <ArticleFader>
+                <ArticleHeadline>{headline}</ArticleHeadline>
+            </ArticleFader>
+            <ArticleFader>
+                <ArticleStandfirst
+                    style={styles.standfirst}
+                    {...{ standfirst }}
+                />
+            </ArticleFader>
+        </MultilineWrap>
     )
 }
 

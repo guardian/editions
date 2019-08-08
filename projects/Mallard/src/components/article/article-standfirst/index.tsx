@@ -13,17 +13,24 @@ export interface PropTypes {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'flex-end',
-        alignContent: 'stretch',
+        alignContent: 'flex-end',
         alignItems: 'stretch',
+        flexShrink: 1,
+        flexGrow: 0,
     },
-    text: { color: color.dimText },
+    text: {
+        color: color.dimText,
+        flexShrink: 1,
+        flexGrow: 0,
+        justifyContent: 'flex-end',
+    },
 })
 
 const ArticleStandfirst = ({ standfirst, style, textStyle }: PropTypes) => {
     return (
         <View style={[styles.container, style]}>
             <StandfirstText style={[styles.text, textStyle]}>
-                {standfirst}
+                {standfirst.trim()}
             </StandfirstText>
         </View>
     )

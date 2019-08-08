@@ -4,6 +4,7 @@ import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { ArticleMultiline } from '../article-multiline'
 
 export enum WrapLayout {
     narrow,
@@ -16,75 +17,84 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         paddingHorizontal: metrics.article.sides,
     },
-    tablet: {
-        maxWidth: metrics.article.maxWidth,
+    wrapper: {
         borderRightColor: color.palette.neutral[7],
         borderRightWidth: 1,
+        maxWidth: metrics.article.maxWidth,
+    },
+    wrapperLandscape: {
+        maxWidth: metrics.article.maxWidthLandscape,
+    },
+    wrapperHeader: {
+        marginLeft: metrics.article.sides * -1,
+    },
+    padding: {
         paddingLeft: metrics.article.sidesLandscape - metrics.article.sides,
         paddingRight: metrics.article.sidesLandscape,
     },
-    tabletLandscape: {
-        marginLeft:
-            metrics.article.leftRailLandscape -
-            (metrics.article.sidesLandscape - metrics.article.sides),
-        maxWidth: metrics.article.maxWidthLandscape,
+    paddingLandscape: {
+        paddingLeft: metrics.article.leftRailLandscape,
     },
 })
 
-const Wrap = ({
+interface PropTypes {
+    style?: StyleProp<ViewStyle>
+    isTopMost?: boolean
+    backgroundColor?: ViewStyle['backgroundColor']
+    borderColor?: ViewStyle['borderColor']
+    children: ReactNode
+    header?: ReactNode
+}
+
+const InnerWrapper = ({
     style,
     isTopMost = false,
-    outerStyle,
     children,
-}: {
-    style?: StyleProp<
-        Pick<ViewStyle, 'paddingTop' | 'paddingBottom' | 'paddingVertical'>
+    backgroundColor,
+    borderColor,
+    landscape = false,
+    header,
+}: PropTypes & { landscape?: boolean }) => (
+    <View
+        style={[
+            style,
+            styles.wrapper,
+            landscape && styles.wrapperLandscape,
+            { borderRightColor: borderColor },
+            isTopMost && backgroundColor
+                ? {
+                      marginTop: metrics.vertical * 2,
+                  }
+                : {},
+        ]}
     >
-    isTopMost?: boolean
-    outerStyle?: StyleProp<Pick<ViewStyle, 'backgroundColor' | 'flex'>>
-    children: (l: WrapLayout) => ReactNode
-}) => {
+        <View style={styles.wrapperHeader}>{header}</View>
+        <View style={[styles.padding, landscape && styles.paddingLandscape]}>
+            {children}
+        </View>
+    </View>
+)
+
+const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
     return (
-        <View style={[outerStyle, styles.outer]}>
+        <View style={[styles.outer, { backgroundColor }]}>
             <WithBreakpoints>
                 {{
-                    0: () => <>{children(WrapLayout.narrow)}</>,
+                    0: () => <>{children}</>,
                     [Breakpoints.tabletVertical]: () => (
-                        <View
-                            style={[
-                                style,
-                                styles.tablet,
-                                isTopMost &&
-                                outerStyle &&
-                                'backgroundColor' in
-                                    StyleSheet.flatten(outerStyle)
-                                    ? {
-                                          marginTop: metrics.vertical * 2,
-                                      }
-                                    : {},
-                            ]}
+                        <InnerWrapper
+                            {...{ children, backgroundColor, ...props }}
                         >
-                            {children(WrapLayout.tablet)}
-                        </View>
+                            {children}
+                        </InnerWrapper>
                     ),
                     [Breakpoints.tabletLandscape]: () => (
-                        <View
-                            style={[
-                                style,
-                                styles.tablet,
-                                styles.tabletLandscape,
-                                isTopMost &&
-                                outerStyle &&
-                                'backgroundColor' in
-                                    StyleSheet.flatten(outerStyle)
-                                    ? {
-                                          marginTop: metrics.vertical * 2,
-                                      }
-                                    : {},
-                            ]}
+                        <InnerWrapper
+                            {...{ children, backgroundColor, ...props }}
+                            landscape
                         >
-                            {children(WrapLayout.tabletLandscape)}
-                        </View>
+                            {children}
+                        </InnerWrapper>
                     ),
                 }}
             </WithBreakpoints>
@@ -92,4 +102,27 @@ const Wrap = ({
     )
 }
 
-export { Wrap }
+const multiStyles = StyleSheet.create({
+    border: {
+        paddingBottom: metrics.vertical / 2,
+        borderBottomColor: color.dimLine,
+        borderBottomWidth: 1,
+    },
+})
+const MultilineWrap = ({
+    byline,
+    ...props
+}: Exclude<PropTypes, 'header'> & { byline: ReactNode }) => (
+    <>
+        <Wrap {...props} />
+        <Wrap
+            borderColor={props.borderColor}
+            style={multiStyles.border}
+            header={<ArticleMultiline />}
+        >
+            {byline}
+        </Wrap>
+    </>
+)
+
+export { Wrap, MultilineWrap }

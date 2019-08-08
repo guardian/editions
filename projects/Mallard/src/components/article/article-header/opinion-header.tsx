@@ -11,14 +11,11 @@ import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
-import { Wrap } from './wrap'
+import { Wrap, MultilineWrap } from './wrap'
 
 const ArticleFader = getFader('article')
 
 const styles = StyleSheet.create({
-    background: {
-        backgroundColor: color.palette.opinion.faded,
-    },
     innerWrap: {
         paddingBottom: metrics.vertical,
     },
@@ -36,50 +33,40 @@ const OpinionHeader = ({
 }: ArticleHeaderProps) => {
     const [articleColor] = useArticle()
     return (
-        <Wrap
+        <MultilineWrap
             isTopMost
             style={styles.innerWrap}
-            outerStyle={[styles.background]}
+            backgroundColor={color.palette.opinion.faded}
+            byline={
+                <ArticleFader>
+                    <View style={[styles.innerWrap]}>
+                        <ArticleStandfirst {...{ standfirst }} />
+                    </View>
+                </ArticleFader>
+            }
         >
-            {() => (
-                <>
-                    {image ? (
-                        <ArticleFader buildOrder={1}>
-                            <ArticleImage
-                                style={{
-                                    aspectRatio: 1.5,
-                                    marginBottom: metrics.vertical / 4,
-                                }}
-                                image={image}
-                            />
-                        </ArticleFader>
-                    ) : null}
-                    <ArticleFader buildOrder={2}>
-                        <ArticleHeadline
-                            textStyle={{ marginBottom: metrics.vertical }}
-                        >
-                            <Quote fill={articleColor.main} />
-                            {headline}
-                            <Text
-                                style={[
-                                    { color: articleColor.main },
-                                    styles.byline,
-                                ]}
-                            >
-                                {'\n'}
-                                {byline}
-                            </Text>
-                        </ArticleHeadline>
-                    </ArticleFader>
-                    <ArticleFader buildOrder={3}>
-                        <Multiline count={4} color={color.line} />
-                        <View style={[styles.innerWrap]}>
-                            <ArticleStandfirst {...{ standfirst }} />
-                        </View>
-                    </ArticleFader>
-                </>
-            )}
-        </Wrap>
+            {image ? (
+                <ArticleFader>
+                    <ArticleImage
+                        style={{
+                            aspectRatio: 1.5,
+                            marginBottom: metrics.vertical / 4,
+                        }}
+                        image={image}
+                    />
+                </ArticleFader>
+            ) : null}
+            <ArticleFader>
+                <ArticleHeadline textStyle={{ marginBottom: metrics.vertical }}>
+                    <Quote fill={articleColor.main} />
+                    {headline}
+                    <Text style={[{ color: articleColor.main }, styles.byline]}>
+                        {'\n'}
+                        {byline}
+                    </Text>
+                </ArticleHeadline>
+            </ArticleFader>
+        </MultilineWrap>
     )
 }
 
