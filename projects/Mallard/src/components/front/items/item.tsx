@@ -232,6 +232,9 @@ const imageStyles = StyleSheet.create({
 
 const getImageHeight = ({ story, layout }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
+        if (story.height >= 4) {
+            return '50%'
+        }
         if (story.height >= 3) {
             return '66.66%'
         }
