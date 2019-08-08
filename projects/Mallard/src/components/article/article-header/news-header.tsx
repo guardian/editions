@@ -34,17 +34,12 @@ const NewsHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const navigationPosition = getNavigationPosition('article')
     return (
         <MultilineWrap
             isTopMost
             style={[styles.background]}
             byline={
-                <ArticleFader>
-                    <ArticleByline style={styles.byline}>
-                        {byline}
-                    </ArticleByline>
-                </ArticleFader>
+                <ArticleByline style={styles.byline}>{byline}</ArticleByline>
             }
         >
             {image ? (

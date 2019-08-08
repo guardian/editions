@@ -82,8 +82,8 @@ const Article = ({
             ) : (
                 <NewsHeader {...headerProps} />
             )}
-            <Fader position={'article'}>
-                <Wrap>
+            <Wrap>
+                <Fader position={'article'}>
                     <WebView
                         originWhitelist={['*']}
                         scrollEnabled={false}
@@ -109,8 +109,8 @@ const Article = ({
                         // https://github.com/react-native-community/react-native-webview/issues/429
                         androidHardwareAccelerationDisabled={true}
                     />
-                </Wrap>
-            </Fader>
+                </Fader>
+            </Wrap>
         </View>
     )
 }

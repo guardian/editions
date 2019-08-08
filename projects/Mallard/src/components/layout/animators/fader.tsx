@@ -3,7 +3,7 @@ import {
     getNavigationPosition,
     SaveableNavigationPositions,
 } from 'src/helpers/positions'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, Text, View, Dimensions } from 'react-native'
 
 /*
 This is part of the transition from articles to fronts
@@ -23,38 +23,35 @@ const faderStyles = StyleSheet.create({
     wrapper: { width: '100%' },
 })
 
-let globalBuildOrder = 1
+const clamp = (number: number, min: number, max: number) => {
+    if (number > max) return max
+    if (number < min) return min
+    return number
+}
 
-const Fader = ({ children, position, first }: PropTypes) => {
+const Fader = ({ children, position }: PropTypes) => {
     const navigationPosition = getNavigationPosition(position)
-    const buildOrder = useRef(globalBuildOrder)
-    useLayoutEffect(() => {
-        if (first) {
-            globalBuildOrder = 0
-            buildOrder.current = 0
-        }
-    }, [first])
-    useLayoutEffect(() => {
-        globalBuildOrder++
-        buildOrder.current = globalBuildOrder
-    }, [])
-    useLayoutEffect(() => {
-        if (globalBuildOrder > 5) globalBuildOrder = 5
-    }, [globalBuildOrder])
-
-    // for <Fader first/> we just wanna reset the count and not actually fade anything
-    if (!children) {
-        return null
-    }
+    const buildOrder = useRef(0)
+    const faderRef = useRef<View>()
 
     return (
         <Animated.View
+            ref={(view: any) => {
+                if (view) faderRef.current = view._component as View
+            }}
+            onLayout={() => {
+                faderRef.current &&
+                    faderRef.current.measureInWindow((x, y) => {
+                        buildOrder.current =
+                            (y / Dimensions.get('window').height) * 6
+                    })
+            }}
             style={[
                 navigationPosition && {
                     opacity: navigationPosition.position.interpolate({
                         inputRange: [
-                            0.2 + buildOrder.current / 10,
-                            0.4 + buildOrder.current / 10,
+                            clamp(0.2 + buildOrder.current / 10, 0, 1),
+                            clamp(0.4 + buildOrder.current / 10, 0.4, 1),
                             1,
                         ],
                         outputRange: [0, 1, 1],

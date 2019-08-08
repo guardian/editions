@@ -5,6 +5,7 @@ import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 import { ArticleMultiline } from '../article-multiline'
+import { getFader } from 'src/components/layout/animators/fader'
 
 export enum WrapLayout {
     narrow,
@@ -102,6 +103,7 @@ const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
     )
 }
 
+const ArticleFader = getFader('article')
 const multiStyles = StyleSheet.create({
     border: {
         paddingBottom: metrics.vertical / 2,
@@ -115,13 +117,19 @@ const MultilineWrap = ({
 }: Exclude<PropTypes, 'header'> & { byline: ReactNode }) => (
     <>
         <Wrap {...props} />
-        <Wrap
-            borderColor={props.borderColor}
-            style={multiStyles.border}
-            header={<ArticleMultiline />}
-        >
-            {byline}
-        </Wrap>
+        {byline && (
+            <Wrap
+                borderColor={props.borderColor}
+                style={multiStyles.border}
+                header={
+                    <ArticleFader>
+                        <ArticleMultiline />
+                    </ArticleFader>
+                }
+            >
+                <ArticleFader>{byline}</ArticleFader>
+            </Wrap>
+        )}
     </>
 )
 
