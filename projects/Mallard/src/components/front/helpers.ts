@@ -13,72 +13,54 @@ export interface AnimatedFlatListRef {
     _component: FlatList<Front['collections'][0]>
 }
 
-interface ItemLayoutDefinition {
-    Item: Item
-    slot: number
-}
-interface AbstractRowLayout<I> {
-    size: RowSize
-    columns: [I] | [I, I]
+interface Size {
+    width: number
+    height: number
 }
 
-type AbstractPageLayout<I> = AbstractRowLayout<I>[]
-type LazyPageLayout = AbstractPageLayout<Item>
+export type ItemFit = Size & {
+    top: number
+    left: number
+}
+export interface ItemSizes {
+    story: ItemFit
+    layout: PageLayoutSizes
+}
 
-export type PageLayout = AbstractPageLayout<ItemLayoutDefinition>
-export type RowLayout = AbstractRowLayout<ItemLayoutDefinition>
+export enum PageLayoutSizes {
+    mobile,
+    tablet,
+}
+export interface PageLayout {
+    size: PageLayoutSizes
+    items: {
+        item: Item
+        fits: ItemFit
+    }[]
+}
 
-export enum RowSize {
-    row,
-    third,
-    half,
-    hero,
-    superhero,
+export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
+    if (size === PageLayoutSizes.tablet) {
+        return { width: 3, height: 4 }
+    }
+    return { width: 2, height: 6 }
 }
 
 /*
 This resolves where each article goes
 */
-export const withSlots = (page: LazyPageLayout): PageLayout => {
-    let slot = 0
-    return page.map(({ columns, ...row }) => {
-        if (columns.length === 1) {
-            return {
-                ...row,
-                columns: [
-                    {
-                        slot: slot++,
-                        Item: columns[0],
-                    },
-                ],
-            }
-        }
-        return {
-            ...row,
-            columns: [
-                {
-                    slot: slot++,
-                    Item: columns[0],
-                },
-                {
-                    slot: slot++,
-                    Item: columns[1],
-                },
-            ],
-        }
-    })
-}
 
-export const getRowHeightForSize = (size: RowSize): string => {
-    const heights: { [size in RowSize]: string } = {
-        [RowSize.row]: `${(1 / 6) * 100}%`,
-        [RowSize.third]: `${(2 / 6) * 100}%`,
-        [RowSize.half]: '50%',
-        [RowSize.hero]: `${(4 / 6) * 100}%`,
-        [RowSize.superhero]: '100%',
+export const getItemPosition = (
+    itemFit: ItemFit,
+    layout: PageLayout['size'],
+) => {
+    const layoutSize = getPageLayoutSizeXY(layout)
+    return {
+        left: `${(itemFit.left / layoutSize.width) * 100}%`,
+        top: `${(itemFit.top / layoutSize.height) * 100}%`,
+        height: `${(itemFit.height / layoutSize.height) * 100}%`,
+        width: `${(itemFit.width / layoutSize.width) * 100}%`,
     }
-
-    return heights[size]
 }
 
 /*
@@ -87,18 +69,23 @@ the position of the tap on the scrubber itself (which has padding).
 This is coupled to the visual layout and we can be a bit more
 clever but also for now this works
 */
-export const getScrollPos = (screenX: number) => {
-    const { width } = Dimensions.get('window')
+export const getScrollPos = (width: number, screenX: number) => {
     return screenX + (metrics.horizontal * 6 * screenX) / width
 }
 
-export const getNearestPage = (screenX: number, pageCount: number): number => {
-    const { width } = Dimensions.get('window')
-    return Math.round((getScrollPos(screenX) * (pageCount - 1)) / width)
+export const getNearestPage = (
+    width: number,
+    screenX: number,
+    pageCount: number,
+): number => {
+    return Math.round((getScrollPos(width, screenX) * (pageCount - 1)) / width)
 }
 
-export const getTranslateForPage = (scrollX: Animated.Value, page: number) => {
-    const { width } = Dimensions.get('window')
+export const getTranslateForPage = (
+    width: number,
+    scrollX: Animated.Value,
+    page: number,
+) => {
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
         outputRange: [

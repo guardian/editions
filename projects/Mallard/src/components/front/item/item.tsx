@@ -27,9 +27,10 @@ import {
 import { TextBlock } from './text-block'
 import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
 import {
-    RowSize,
-    getRowHeightForSize,
+    getItemPosition,
     useCardBackgroundStyle,
+    ItemSizes,
+    PageLayoutSizes,
 } from '../helpers'
 import {
     setScreenPositionOfItem,
@@ -43,14 +44,14 @@ import { APIPaths } from 'src/paths'
 import { getFont } from 'src/theme/typography'
 
 interface TappablePropTypes {
-    style: StyleProp<ViewStyle>
+    style?: StyleProp<ViewStyle>
     article: CAPIArticle
     path: PathToArticle
     articleNavigator: ArticleNavigator
 }
 
 export interface PropTypes extends TappablePropTypes {
-    size: RowSize
+    size: ItemSizes
 }
 
 /*
@@ -233,6 +234,12 @@ const imageStyles = StyleSheet.create({
     },
 })
 
+const isHeroImage = ({ story, layout }: ItemSizes) => {
+    return layout === PageLayoutSizes.tablet
+        ? story.height > 2
+        : story.height > 4
+}
+
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
@@ -240,7 +247,7 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 <Image
                     style={[
                         imageStyles.image,
-                        size >= RowSize.hero && imageStyles.heroImage,
+                        isHeroImage(size) && imageStyles.heroImage,
                     ]}
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
@@ -318,7 +325,10 @@ const superHeroImageStyles = StyleSheet.create({
     image: {
         width: '100%',
         flex: 0,
-        height: getRowHeightForSize(RowSize.hero),
+        height: getItemPosition(
+            { width: 2, height: 4, top: 0, left: 0 },
+            PageLayoutSizes.mobile,
+        ).height,
     },
     textBlock: {
         ...tappableStyles.padding,
@@ -354,12 +364,12 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
-            {'standfirst' in article && article.standfirst ? (
+            {'trail' in article && article.trail ? (
                 <StandfirstText
                     allowFontScaling={false}
                     style={[superHeroImageStyles.textStandBlock]}
                 >
-                    {article.standfirst}
+                    {article.trail}
                 </StandfirstText>
             ) : null}
         </ItemTappable>
