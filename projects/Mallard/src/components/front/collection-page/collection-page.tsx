@@ -22,7 +22,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
-import { Breakpoints } from 'src/theme/breakpoints'
+import { useIssueScreenSize, IssueScreenSize } from 'src/screens/issue/context'
 
 const styles = StyleSheet.create({
     root: {
@@ -109,15 +109,15 @@ const CollectionPage = ({
     issue,
     front,
     appearance,
-    width,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const background = useCardBackgroundStyle()
+    const { size } = useIssueScreenSize()
     if (!articlesInCard.length) {
         return <FlexErrorMessage />
     }
 
     const layout = getPageLayout(appearance, articlesInCard.length)[
-        width > metrics.fronts.cardMaxWidth - 100
+        size === IssueScreenSize.tablet
             ? PageLayoutSizes.tablet
             : PageLayoutSizes.mobile
     ]
@@ -146,6 +146,13 @@ const CollectionPage = ({
                                 collection,
                                 issue,
                                 front,
+                            }}
+                            style={{
+                                flex: 1,
+                                flexShrink: 1,
+                                flexGrow: 1,
+                                height: '100%',
+                                width: '100%',
                             }}
                             size={size}
                             articleNavigator={articleNavigator}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Dimensions, Animated } from 'react-native'
+import { Animated } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page/collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
@@ -22,25 +22,32 @@ import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
-import { metrics } from 'src/theme/spacing'
+import { useIssueScreenSize, IssueScreenSize } from 'src/screens/issue/context'
 
 const CollectionPageInFront = ({
     index,
     pillar,
     scrollX,
-    width,
     ...collectionPageProps
 }: {
     index: number
     pillar: PillarFromPalette
     scrollX: Animated.Value
 } & PropTypes) => {
-    const translate = getTranslateForPage(width, scrollX, index)
+    const { card, size } = useIssueScreenSize()
+    const translate = getTranslateForPage(
+        card.width,
+        scrollX,
+        index,
+        size === IssueScreenSize.small ? 1 : 0.5,
+    )
     return (
         <Animated.View
             style={[
                 {
-                    width,
+                    width: card.width,
+                },
+                {
                     transform: [
                         {
                             translateX: translate,
@@ -52,7 +59,6 @@ const CollectionPageInFront = ({
             <WithArticle type={'article'} pillar={pillar}>
                 <CollectionPage
                     translate={translate}
-                    width={width}
                     {...collectionPageProps}
                 />
             </WithArticle>
@@ -94,15 +100,11 @@ const FrontWithResponse = ({
         frontData.collections.map(({ key }) => key), // eslint-disable-line react-hooks/exhaustive-deps
     )
     const stops = cards.length
-
+    const { card, container } = useIssueScreenSize()
     return (
         <WithBreakpoints>
             {{
-                0: ({ width }) => {
-                    const maxWidth =
-                        width > metrics.fronts.cardMaxWidth
-                            ? metrics.fronts.cardMaxWidth
-                            : width
+                0: ({}) => {
                     return (
                         <Wrapper
                             scrubber={
@@ -119,10 +121,10 @@ const FrontWithResponse = ({
                                                 {
                                                     offset:
                                                         getNearestPage(
-                                                            width,
+                                                            container.width,
                                                             screenX,
                                                             stops,
-                                                        ) * width,
+                                                        ) * container.width,
                                                 },
                                             )
                                         }
@@ -130,7 +132,7 @@ const FrontWithResponse = ({
                                     position={scrollX.interpolate({
                                         inputRange: [
                                             0,
-                                            width *
+                                            container.width *
                                                 (stops <= 0
                                                     ? stops
                                                     : stops - 1) +
@@ -147,13 +149,13 @@ const FrontWithResponse = ({
                                 scrollEventThrottle={1}
                                 horizontal={true}
                                 decelerationRate="fast"
-                                snapToInterval={maxWidth}
+                                snapToInterval={card.width}
                                 ref={(flatList: AnimatedFlatListRef) =>
                                     (flatListRef.current = flatList)
                                 }
                                 getItemLayout={(_: never, index: number) => ({
-                                    length: maxWidth,
-                                    offset: maxWidth * index,
+                                    length: card.width,
+                                    offset: card.width * index,
                                     index,
                                 })}
                                 keyExtractor={(item: FlatCard, index: number) =>
@@ -171,7 +173,11 @@ const FrontWithResponse = ({
                                     ],
                                     { useNativeDriver: true },
                                 )}
-                                extraData={{ width }}
+                                extraData={{
+                                    ...card,
+                                    cw: container.width,
+                                    ch: container.height,
+                                }}
                                 data={cards}
                                 renderItem={({
                                     item,
@@ -185,7 +191,7 @@ const FrontWithResponse = ({
                                         appearance={item.appearance}
                                         collection={item.collection.key}
                                         front={frontData.key}
-                                        width={maxWidth}
+                                        width={card.width}
                                         {...{
                                             scrollX,
                                             issue,

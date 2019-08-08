@@ -84,13 +84,14 @@ export const getTranslateForPage = (
     width: number,
     scrollX: Animated.Value,
     page: number,
+    multiplier: number = 1,
 ) => {
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
         outputRange: [
-            metrics.frontsPageSides * -1.75,
+            metrics.frontsPageSides * (-1.75 * multiplier),
             0,
-            metrics.frontsPageSides * 1.75,
+            metrics.frontsPageSides * (1.75 * multiplier),
         ],
     })
 }
