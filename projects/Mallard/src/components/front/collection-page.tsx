@@ -62,6 +62,13 @@ const styles = StyleSheet.create({
     endCapSideBorder: {
         bottom: 0,
     },
+    item: {
+        flex: 1,
+        flexShrink: 1,
+        flexGrow: 1,
+        height: '100%',
+        width: '100%',
+    },
 })
 
 export interface PropTypes {
@@ -142,13 +149,7 @@ const CollectionPage = ({
                                 issue,
                                 front,
                             }}
-                            style={{
-                                flex: 1,
-                                flexShrink: 1,
-                                flexGrow: 1,
-                                height: '100%',
-                                width: '100%',
-                            }}
+                            style={styles.item}
                             size={size}
                             articleNavigator={articleNavigator}
                             article={article}
