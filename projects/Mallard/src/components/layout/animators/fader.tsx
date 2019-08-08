@@ -15,7 +15,7 @@ to work but it is UGLY
 
 export interface PropTypes {
     first?: boolean
-    children: Element
+    children?: Element
     position: SaveableNavigationPositions
 }
 

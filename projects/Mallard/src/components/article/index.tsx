@@ -83,11 +83,7 @@ const Article = ({
                 <NewsHeader {...headerProps} />
             )}
             <Fader position={'article'}>
-                <Wrap
-                    outerStyle={[
-                        { backgroundColor: color.background, flex: 1 },
-                    ]}
-                >
+                <Wrap>
                     <WebView
                         originWhitelist={['*']}
                         scrollEnabled={false}
