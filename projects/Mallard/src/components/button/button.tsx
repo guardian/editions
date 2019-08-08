@@ -115,7 +115,11 @@ const Icon = ({
 }: {
     children: string
     style?: StyleProp<Pick<TextStyle, 'color'>>
-}) => <Text style={[iconStyles.root, style]}>{children}</Text>
+}) => (
+    <Text allowFontScaling={false} style={[iconStyles.root, style]}>
+        {children}
+    </Text>
+)
 
 const Button = ({
     onPress,

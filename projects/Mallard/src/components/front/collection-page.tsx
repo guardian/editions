@@ -16,11 +16,12 @@ import {
     getItemPosition,
     getPageLayoutSizeXY,
     ItemSizes,
-} from '../helpers'
+} from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { layouts } from '../layouts'
-import { ArticleNavigator } from '../../../screens/article-screen'
+import { layouts } from './helpers/layouts'
+import { ArticleNavigator } from '../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
 
 const styles = StyleSheet.create({
     root: {
@@ -61,6 +62,13 @@ const styles = StyleSheet.create({
     endCapSideBorder: {
         bottom: 0,
     },
+    item: {
+        flex: 1,
+        flexShrink: 1,
+        flexGrow: 1,
+        height: '100%',
+        width: '100%',
+    },
 })
 
 export interface PropTypes {
@@ -70,6 +78,7 @@ export interface PropTypes {
     front: Front['key']
     appearance: FrontCardAppearance | null
     collection: Collection['key']
+    width: number
 }
 
 const getPageLayout = (
@@ -108,11 +117,12 @@ const CollectionPage = ({
     appearance,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const background = useCardBackgroundStyle()
+    const { size } = useIssueScreenSize()
     if (!articlesInCard.length) {
         return <FlexErrorMessage />
     }
 
-    const layout = getPageLayout(appearance, articlesInCard.length)
+    const layout = getPageLayout(appearance, articlesInCard.length)[size]
 
     return (
         <View style={[styles.root, background]}>
@@ -139,6 +149,7 @@ const CollectionPage = ({
                                 issue,
                                 front,
                             }}
+                            style={styles.item}
                             size={size}
                             articleNavigator={articleNavigator}
                             article={article}

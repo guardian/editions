@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react'
-import { PropTypes } from './item/item'
+import { PropTypes } from '../items/item'
 import { FlatList } from 'react-native'
-import { Dimensions, Animated } from 'react-native'
+import { Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Front } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -31,12 +31,14 @@ export enum PageLayoutSizes {
     mobile,
     tablet,
 }
-export interface PageLayout {
-    size: PageLayoutSizes
-    items: {
-        item: Item
-        fits: ItemFit
-    }[]
+export type PageLayout = {
+    [key in PageLayoutSizes]: {
+        size: key
+        items: {
+            item: Item
+            fits: ItemFit
+        }[]
+    }
 }
 
 export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
@@ -50,10 +52,7 @@ export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
 This resolves where each article goes
 */
 
-export const getItemPosition = (
-    itemFit: ItemFit,
-    layout: PageLayout['size'],
-) => {
+export const getItemPosition = (itemFit: ItemFit, layout: PageLayoutSizes) => {
     const layoutSize = getPageLayoutSizeXY(layout)
     return {
         left: `${(itemFit.left / layoutSize.width) * 100}%`,
@@ -85,13 +84,14 @@ export const getTranslateForPage = (
     width: number,
     scrollX: Animated.Value,
     page: number,
+    multiplier: number = 1,
 ) => {
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
         outputRange: [
-            metrics.frontsPageSides * -1.75,
+            metrics.frontsPageSides * (-1.75 * multiplier),
             0,
-            metrics.frontsPageSides * 1.75,
+            metrics.frontsPageSides * (1.75 * multiplier),
         ],
     })
 }

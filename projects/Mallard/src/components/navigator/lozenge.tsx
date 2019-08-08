@@ -69,6 +69,7 @@ const Lozenge = ({
         >
             <Animated.Text
                 accessibilityRole="header"
+                allowFontScaling={false}
                 style={[
                     styles.text,
                     position && {
@@ -147,7 +148,9 @@ const Lozenge = ({
                           },
                 ]}
             >
-                <Text style={[styles.text]}>{children[0]}</Text>
+                <Text allowFontScaling={false} style={[styles.text]}>
+                    {children[0]}
+                </Text>
             </Animated.View>
         </Animated.View>
     )

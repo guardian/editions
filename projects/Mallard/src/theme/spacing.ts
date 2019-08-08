@@ -1,4 +1,4 @@
-import { Platform, StatusBar, Dimensions, PixelRatio } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
 
 export const spacing = [0, 3, 6, 12, 18, 30]
 
@@ -8,12 +8,19 @@ const basicMetrics = {
     vertical: 10,
 }
 
+const XY = (width: number, height: number) => ({ width, height })
+
 export const metrics = {
     ...basicMetrics,
     headerHeight,
     frontsPageSides: basicMetrics.horizontal * 1.5,
     articleSides: basicMetrics.horizontal / 2,
-    frontsPageHeight: 540,
+    fronts: {
+        cardContainerHeightExtra: 60,
+        cardSize: XY(540, 600),
+        cardSizeTablet: XY(650, 725),
+        cardSizeTabletShort: XY(650, 660),
+    },
     gridRowSplit: {
         narrow: (width: number) => width * 0.6,
         wide: 200,
