@@ -20,7 +20,25 @@ class Ophan: NSObject {
     deviceId: "testDeviceId",
     userId: "testUserId",
     logger: SimpleLogger()
-  );
+  )
+  
+  var callback: (() -> ())?
+  
+  func foo() {
+    print("foo")
+  }
+  
+  override init() {
+    super.init()
+    callback = {
+      self.foo()
+    }
+    print("Initialising new Ophan instance on thread \(Thread.current)")
+  }
+  
+  deinit {
+    print("Deinitialising Ophan instance on thread \(Thread.current)")
+  }
   
   @objc(getGreeting:)
   func getGreeting(_ callback: RCTResponseSenderBlock) -> Void {
@@ -33,7 +51,7 @@ class Ophan: NSObject {
   
     DispatchQueue.main.async {
       print("Current thread \(Thread.current)")
-      self.ophanApi.sendTestAppScreenEvent(screenName: screenName);
+      self.ophanApi.sendTestAppScreenEvent(screenName: screenName)
     }
   }
 }
