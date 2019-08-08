@@ -241,6 +241,7 @@ const renderIcon = (iconCodes: string[], fontSize: number) => {
             {iconCodes.map(code => {
                 return (
                     <Text
+                        allowFontScaling={false}
                         key={code}
                         style={{
                             ...styles.baseWeatherIcon,
