@@ -83,6 +83,7 @@ export interface Article extends Content {
     byline: string
     standfirst: string
     elements: BlockElement[]
+    starRating?: number
 }
 
 export interface CrosswordArticle extends Content {
