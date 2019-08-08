@@ -1,16 +1,15 @@
-import React, { useRef, useLayoutEffect } from 'react'
+import React, { useRef } from 'react'
 import {
     getNavigationPosition,
     SaveableNavigationPositions,
 } from 'src/helpers/positions'
-import { Animated, StyleSheet, Text, View, Dimensions } from 'react-native'
+import { Animated, StyleSheet, View, Dimensions } from 'react-native'
 
 /*
 This is part of the transition from articles to fronts
 and it fades content in and out with a user chosen delay.
 
-The build order is calculated at render time and it seems
-to work but it is UGLY
+The build order goes up/down according to screen position
 */
 
 export interface PropTypes {
