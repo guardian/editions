@@ -35,7 +35,9 @@ describe('content-auth-service', () => {
         it('throws an error on non-200 responses', async () => {
             fetchMock.post(`begin:${CAS_ENDPOINT_URL}`, {
                 body: JSON.stringify({
-                    message: 'error-message',
+                    error: {
+                        message: 'error-message',
+                    },
                 }),
                 status: 419,
             })
