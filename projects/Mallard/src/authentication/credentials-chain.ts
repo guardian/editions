@@ -10,7 +10,11 @@ import {
     legacyCASExpiryCache,
     iapReceiptCache,
 } from './storage'
-import { ReceiptIOS, fetchActiveIOSSubscriptionReceipt } from '../services/iap'
+import {
+    ReceiptIOS,
+    fetchActiveIOSSubscriptionReceipt,
+    isReceiptActive,
+} from '../services/iap'
 
 interface IdentityAuth {
     type: 'identity'
@@ -116,7 +120,8 @@ const authTypeFromCAS = (info: CasExpiry | null): CASAuth | false =>
     }
 
 const authTypeFromIAP = (info: ReceiptIOS | null): IAPAuth | false =>
-    !!info && {
+    !!info &&
+    isReceiptActive(info) && {
         type: 'iap',
         info,
     }

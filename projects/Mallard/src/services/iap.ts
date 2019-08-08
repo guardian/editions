@@ -36,7 +36,7 @@ const getMostRecentTransactionReceipt = (purchases: Purchase[]) => {
         .transactionReceipt
 }
 
-const receiptIsCurrentlyActive = (receipt: ReceiptIOS) => {
+const isReceiptActive = (receipt: ReceiptIOS) => {
     const expirationInMilliseconds = Number(receipt.expires_date_ms)
     const nowInMilliseconds = Date.now()
     return expirationInMilliseconds > nowInMilliseconds
@@ -52,9 +52,9 @@ const fetchActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> =
     if (!decodedReceipt) return null
     return (
         (decodedReceipt.latest_receipt_info as ReceiptIOS[]).find(
-            receiptIsCurrentlyActive,
+            isReceiptActive,
         ) || null
     )
 }
 
-export { fetchActiveIOSSubscriptionReceipt }
+export { fetchActiveIOSSubscriptionReceipt, isReceiptActive }
