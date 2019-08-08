@@ -4,7 +4,13 @@ import {
     fetchCASExpiryForKeychainCredentials,
 } from './helpers'
 import { CasExpiry } from '../services/content-auth-service'
-import { userDataCache, casDataCache, legacyCASExpiryCache } from './storage'
+import {
+    userDataCache,
+    casDataCache,
+    legacyCASExpiryCache,
+    iapReceiptCache,
+} from './storage'
+import { ReceiptIOS, fetchActiveIOSSubscriptionReceipt } from '../services/iap'
 
 interface IdentityAuth {
     type: 'identity'
@@ -14,6 +20,12 @@ interface IdentityAuth {
 interface CASAuth {
     type: 'cas'
     info: CasExpiry
+}
+
+// eslint-disable-next-line
+interface IAPAuth {
+    type: 'iap'
+    info: ReceiptIOS
 }
 
 const IdentityAuthStatus = (info: UserData): Authed<IdentityAuth> => ({
@@ -32,7 +44,7 @@ const CASAuthStatus = (info: CasExpiry): Authed<CASAuth> => ({
     },
 })
 
-export type AuthType = IdentityAuth | CASAuth
+export type AuthType = IdentityAuth | CASAuth | IAPAuth
 
 interface Pending {
     type: 'pending'
@@ -103,6 +115,12 @@ const authTypeFromCAS = (info: CasExpiry | null): CASAuth | false =>
         info,
     }
 
+const authTypeFromIAP = (info: ReceiptIOS | null): IAPAuth | false =>
+    !!info && {
+        type: 'iap',
+        info,
+    }
+
 /**
  * Live
  *
@@ -116,8 +134,11 @@ const identityAuthProvider = () =>
 const casAuthProvider = () =>
     fetchCASExpiryForKeychainCredentials().then(authTypeFromCAS)
 
+const iapAuthProvider = () =>
+    fetchActiveIOSSubscriptionReceipt().then(authTypeFromIAP)
+
 const liveAuthChain = () =>
-    runAuthChain([identityAuthProvider, casAuthProvider])
+    runAuthChain([identityAuthProvider, casAuthProvider, iapAuthProvider])
 
 /**
  * Cached
@@ -139,8 +160,14 @@ const cachedCasAuthProvider = async () => {
     return auth || authTypeFromCAS(legacyCASExpiryCache.get())
 }
 
+const cachedIAPAuthProvider = () => iapReceiptCache.get().then(authTypeFromIAP)
+
 const cachedAuthChain = () =>
-    runAuthChain([cachedIdentityAuthProvider, cachedCasAuthProvider])
+    runAuthChain([
+        cachedIdentityAuthProvider,
+        cachedCasAuthProvider,
+        cachedIAPAuthProvider,
+    ])
 
 export {
     runAuthChain,

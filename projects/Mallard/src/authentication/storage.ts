@@ -3,6 +3,7 @@ import { UserData } from './helpers'
 import AsyncStorage from '@react-native-community/async-storage'
 import { CasExpiry } from 'src/services/content-auth-service'
 import { Settings } from 'react-native'
+import { ReceiptIOS } from '../services/iap'
 import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
@@ -47,6 +48,8 @@ const createAsyncCache = <T extends object>(key: string) => ({
 const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
 
 const userDataCache = createAsyncCache<UserData>('user-data-cache')
+
+const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -98,6 +101,7 @@ const resetCredentials = (): Promise<boolean> =>
         casDataCache.reset(),
         _legacyUserAccessTokenKeychain.reset(),
         legacyCASExpiryCache.reset(),
+        iapReceiptCache.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
@@ -111,4 +115,5 @@ export {
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
+    iapReceiptCache,
 }
