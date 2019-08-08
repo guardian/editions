@@ -1,6 +1,7 @@
 import { pickClosestBreakpoint, Breakpoints } from './breakpoints'
 import { Dimensions } from 'react-native'
 import { BreakpointList } from 'src/theme/breakpoints'
+import { FontSizes } from 'src/theme/typography'
 
 export const families = {
     icon: {
@@ -154,10 +155,13 @@ const scale = {
     },
 }
 
+export type FontSizes<F extends FontFamily> = keyof typeof scale[F]
+export type FontWeights<F extends FontFamily> = keyof typeof families[F]
+
 export const getFont = <F extends FontFamily>(
     family: F,
-    level: keyof typeof scale[F],
-    weight: keyof typeof families[F] = 'regular',
+    level: FontSizes<F>,
+    weight: FontWeights<F> = 'regular',
 ) => {
     const fontAtLevel = (scale[family][level] as unknown) as BreakpointList<{
         fontSize: number

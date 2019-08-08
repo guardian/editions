@@ -442,11 +442,24 @@ const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
     )
 }
 
+const SmallItemLargeText = ({ article, size, ...tappableProps }: PropTypes) => {
+    return (
+        <ItemTappable {...tappableProps} {...{ article }}>
+            <TextBlock
+                kicker={article.kicker}
+                headline={article.headline}
+                fontSize={1.25}
+            />
+        </ItemTappable>
+    )
+}
+
 export {
     SplashImageItem,
     SuperHeroImageItem,
     ImageItem,
     SplitImageItem,
     SmallItem,
+    SmallItemLargeText,
     CoverItem,
 }

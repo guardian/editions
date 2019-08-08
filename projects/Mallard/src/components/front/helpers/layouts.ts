@@ -5,6 +5,7 @@ import {
     ImageItem,
     SplitImageItem,
     SmallItem,
+    SmallItemLargeText,
 } from '../items/item'
 import { FrontCardAppearance } from 'src/common'
 
@@ -229,11 +230,11 @@ const sixStoryPage: PageLayout = {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: SmallItem,
+                item: SmallItemLargeText,
                 fits: toFit(0, 0, 1, 2),
             },
             {
-                item: SmallItem,
+                item: SmallItemLargeText,
                 fits: toFit(0, 1, 1, 2),
             },
             {

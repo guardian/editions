@@ -9,7 +9,7 @@ import {
     ItemSizes,
     PageLayoutSizes,
 } from '../helpers/helpers'
-import { getFont } from 'src/theme/typography'
+import { getFont, FontSizes } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
@@ -68,8 +68,6 @@ const getFontSize = ({ layout, story }: ItemSizes) => {
         }
         if (story.width >= 2) {
             if (story.height >= 3) return 1.5
-            // 2x1s are text only so we bump them up
-            if (story.height === 1) return 1.25
             return 1
         }
         return 1
@@ -81,21 +79,21 @@ const TextBlock = ({
     kicker,
     headline,
     textBlockAppearance,
-    size,
     style,
+    ...sizes
 }: {
     kicker: string
     headline: string
     textBlockAppearance: TextBlockAppearance
-    size: ItemSizes
     style?: StyleProp<ViewStyle>
-}) => {
+} & ({ size: ItemSizes } | { fontSize: FontSizes<'headline'> })) => {
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
-
-    const { fontSize } = getFont('headline', getFontSize(size))
-
+    const fontSize = getFont(
+        'headline',
+        'fontSize' in sizes ? sizes.fontSize : getFontSize(sizes.size),
+    ).fontSize
     return (
         <View style={[rootStyle, style]}>
             <HeadlineKickerText
