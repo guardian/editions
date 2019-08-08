@@ -4,9 +4,6 @@ import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 
 const styles = StyleSheet.create({
-    wrapper: {
-        height: metrics.fronts.blockHeight,
-    },
     outer: {
         paddingLeft: metrics.horizontal,
         paddingRight: metrics.horizontal,
@@ -24,10 +21,10 @@ const Wrapper = ({
 }) => {
     const { card } = useIssueScreenSize()
     return (
-        <View style={styles.wrapper}>
+        <>
             <View style={styles.outer}>{scrubber}</View>
             <View style={{ height: card.height }}>{children}</View>
-        </View>
+        </>
     )
 }
 

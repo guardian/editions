@@ -16,8 +16,6 @@ export const metrics = {
     frontsPageSides: basicMetrics.horizontal * 1.5,
     articleSides: basicMetrics.horizontal / 2,
     fronts: {
-        cardMaxWidth: 540,
-        blockHeight: 600,
         cardContainerHeightExtra: 60,
         cardSize: XY(540, 600),
         cardSizeTablet: XY(650, 725),
