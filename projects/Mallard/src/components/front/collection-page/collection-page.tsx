@@ -22,7 +22,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { layouts } from '../layouts'
 import { ArticleNavigator } from '../../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
-import { useIssueScreenSize, IssueScreenSize } from 'src/screens/issue/context'
+import { useIssueScreenSize, IssueScreenSize } from 'src/screens/issue/use-size'
 
 const styles = StyleSheet.create({
     root: {
@@ -116,11 +116,7 @@ const CollectionPage = ({
         return <FlexErrorMessage />
     }
 
-    const layout = getPageLayout(appearance, articlesInCard.length)[
-        size === IssueScreenSize.tablet
-            ? PageLayoutSizes.tablet
-            : PageLayoutSizes.mobile
-    ]
+    const layout = getPageLayout(appearance, articlesInCard.length)[size]
 
     return (
         <View style={[styles.root, background]}>

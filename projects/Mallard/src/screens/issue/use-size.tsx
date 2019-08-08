@@ -1,21 +1,17 @@
 import { createContext, useContext } from 'react'
 import { metrics } from 'src/theme/spacing'
 import { Dimensions, LayoutRectangle, Alert } from 'react-native'
+import { PageLayoutSizes } from 'src/components/front/helpers'
 
-export enum IssueScreenSize {
-    'small',
-    'tablet',
-}
-
-const BreakpointContext = createContext<[IssueScreenSize, LayoutRectangle]>([
-    IssueScreenSize.small,
+const BreakpointContext = createContext<[PageLayoutSizes, LayoutRectangle]>([
+    PageLayoutSizes.mobile,
     { ...Dimensions.get('window'), x: 0, y: 0 },
 ])
 
 const useIssueScreenSize = () => {
     const [size, layout] = useContext(BreakpointContext)
     const card =
-        size === IssueScreenSize.small
+        size === PageLayoutSizes.mobile
             ? metrics.fronts.cardSize
             : layout.height > 980
             ? metrics.fronts.cardSizeTablet
@@ -31,5 +27,6 @@ const useIssueScreenSize = () => {
 
     return { size, card, container, layout }
 }
+
 const WithIssueScreenSize = BreakpointContext.Provider
 export { useIssueScreenSize, WithIssueScreenSize }

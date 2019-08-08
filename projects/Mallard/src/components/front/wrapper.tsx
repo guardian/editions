@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { useIssueScreenSize } from 'src/screens/issue/context'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
 
 const styles = StyleSheet.create({
     wrapper: {

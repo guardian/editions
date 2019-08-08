@@ -63,15 +63,19 @@ const scale = {
         },
         1.25: {
             fontSize: 24,
-            lineHeight: 27,
+            lineHeight: 29,
         },
         1.5: {
             fontSize: 28,
             lineHeight: 32,
         },
+        1.75: {
+            fontSize: 34,
+            lineHeight: 38,
+        },
         2: {
             fontSize: 40,
-            lineHeight: 40,
+            lineHeight: 44,
         },
     },
     titlepiece: {

@@ -1,7 +1,6 @@
-import React, { useState, ReactElement, ReactNode } from 'react'
+import React, { ReactElement } from 'react'
 import {
     NavigationScreenProp,
-    NavigationEvents,
     FlatList,
     NavigationInjectedProps,
 } from 'react-navigation'
@@ -25,11 +24,8 @@ import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
-import {
-    WithIssueScreenSize,
-    IssueScreenSize,
-    useIssueScreenSize,
-} from './issue/context'
+import { WithIssueScreenSize, useIssueScreenSize } from './issue/use-size'
+import { PageLayoutSizes } from 'src/components/front/helpers'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -148,7 +144,10 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                             {{
                                 0: metrics => (
                                     <WithIssueScreenSize
-                                        value={[IssueScreenSize.small, metrics]}
+                                        value={[
+                                            PageLayoutSizes.mobile,
+                                            metrics,
+                                        ]}
                                     >
                                         <Header issue={issue} />
                                         <IssueFronts
@@ -166,7 +165,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                 [Breakpoints.tabletVertical]: metrics => (
                                     <WithIssueScreenSize
                                         value={[
-                                            IssueScreenSize.tablet,
+                                            PageLayoutSizes.tablet,
                                             metrics,
                                         ]}
                                     >

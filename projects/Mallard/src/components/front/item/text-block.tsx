@@ -56,6 +56,23 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
     }
 }
 
+const getFontSize = ({ layout, story }: ItemSizes) => {
+    if (layout === PageLayoutSizes.tablet) {
+        if (story.width >= 3) {
+            if (story.height >= 3) return 2
+            if (story.height >= 2) return 1.5
+        }
+        if (story.width >= 2) {
+            if (story.height >= 3) return 1.75
+            // 2x1s are text only so we bump them up
+            if (story.height === 1) return 1.5
+            return 1.25
+        }
+        return 1.25
+    }
+    return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
+}
+
 const TextBlock = ({
     kicker,
     headline,
@@ -72,13 +89,6 @@ const TextBlock = ({
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
-
-    const getFontSize = ({ layout, story }: ItemSizes) => {
-        if (layout === PageLayoutSizes.tablet) {
-            return story.height >= 4 ? 1.5 : story.height >= 3 ? 1.25 : 1
-        }
-        return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
-    }
 
     const { fontSize } = getFont('headline', getFontSize(size))
 

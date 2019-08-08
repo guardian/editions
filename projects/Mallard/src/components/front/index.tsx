@@ -17,12 +17,13 @@ import {
     getTranslateForPage,
     AnimatedFlatListRef,
     getNearestPage,
+    PageLayoutSizes,
 } from './helpers'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
-import { useIssueScreenSize, IssueScreenSize } from 'src/screens/issue/context'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
 
 const CollectionPageInFront = ({
     index,
@@ -39,7 +40,7 @@ const CollectionPageInFront = ({
         card.width,
         scrollX,
         index,
-        size === IssueScreenSize.small ? 1 : 0.5,
+        size === PageLayoutSizes.mobile ? 1 : 0.5,
     )
     return (
         <Animated.View
