@@ -97,10 +97,12 @@ const TextBlock = ({
     return (
         <View style={[rootStyle, style]}>
             <HeadlineKickerText
+                allowFontScaling={false}
                 style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
             >
                 {kicker}
                 <HeadlineCardText
+                    allowFontScaling={false}
                     style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
                 >
                     {' ' + headline}
