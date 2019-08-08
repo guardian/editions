@@ -1,6 +1,6 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
 import { Animated } from 'react-native'
-import { CollectionPage, PropTypes } from './collection-page/collection-page'
+import { CollectionPage, PropTypes } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
@@ -12,13 +12,13 @@ import {
     flattenFlatCardsToFront,
     flattenCollectionsToCards,
 } from 'src/helpers/transform'
-import { Wrapper } from './wrapper'
+import { Wrapper } from './helpers/wrapper'
 import {
     getTranslateForPage,
     AnimatedFlatListRef,
     getNearestPage,
     PageLayoutSizes,
-} from './helpers'
+} from './helpers/helpers'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { WithArticle, getAppearancePillar } from '../../hooks/use-article'

@@ -5,7 +5,7 @@ import {
     ImageItem,
     SplitImageItem,
     SmallItem,
-} from './item/item'
+} from '../items/item'
 import { FrontCardAppearance } from 'src/common'
 
 const toFit = (

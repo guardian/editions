@@ -25,7 +25,7 @@ import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { WithIssueScreenSize, useIssueScreenSize } from './issue/use-size'
-import { PageLayoutSizes } from 'src/components/front/helpers'
+import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 
 export interface PathToIssue {
     issue: Issue['key']

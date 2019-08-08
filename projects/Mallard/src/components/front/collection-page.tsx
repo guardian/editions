@@ -16,13 +16,12 @@ import {
     getItemPosition,
     getPageLayoutSizeXY,
     ItemSizes,
-    PageLayoutSizes,
-} from '../helpers'
+} from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { layouts } from '../layouts'
-import { ArticleNavigator } from '../../../screens/article-screen'
+import { layouts } from './helpers/layouts'
+import { ArticleNavigator } from '../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
-import { useIssueScreenSize, IssueScreenSize } from 'src/screens/issue/use-size'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
 
 const styles = StyleSheet.create({
     root: {

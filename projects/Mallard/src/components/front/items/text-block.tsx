@@ -4,7 +4,11 @@ import { metrics } from 'src/theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { color } from 'src/theme/color'
-import { useKickerColorStyle, ItemSizes, PageLayoutSizes } from '../helpers'
+import {
+    useKickerColorStyle,
+    ItemSizes,
+    PageLayoutSizes,
+} from '../helpers/helpers'
 import { getFont } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
 
@@ -59,16 +63,16 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
 const getFontSize = ({ layout, story }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
         if (story.width >= 3) {
-            if (story.height >= 3) return 2
-            if (story.height >= 2) return 1.5
+            if (story.height >= 3) return 1.75
+            if (story.height >= 2) return 1.25
         }
         if (story.width >= 2) {
-            if (story.height >= 3) return 1.75
+            if (story.height >= 3) return 1.5
             // 2x1s are text only so we bump them up
-            if (story.height === 1) return 1.5
-            return 1.25
+            if (story.height === 1) return 1.25
+            return 1
         }
-        return 1.25
+        return 1
     }
     return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
 }

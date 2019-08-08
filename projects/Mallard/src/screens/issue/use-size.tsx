@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
 import { metrics } from 'src/theme/spacing'
-import { Dimensions, LayoutRectangle, Alert } from 'react-native'
-import { PageLayoutSizes } from 'src/components/front/helpers'
+import { Dimensions, LayoutRectangle } from 'react-native'
+import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 
 const BreakpointContext = createContext<[PageLayoutSizes, LayoutRectangle]>([
     PageLayoutSizes.mobile,

@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react'
-import { PropTypes } from './item/item'
+import { PropTypes } from '../items/item'
 import { FlatList } from 'react-native'
 import { Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
