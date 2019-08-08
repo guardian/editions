@@ -98,10 +98,14 @@ const parseArticleResult = async (
                 maybeThumbnailImage.path}).`,
         )
     }
+
+    const starRating = result.fields && result.fields.starRating
+
     const blocks =
         result.blocks &&
         result.blocks.body &&
         result.blocks.body.map(_ => _.elements)
+
     const body = blocks && blocks.reduce((acc, cur) => [...acc, ...cur], [])
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
@@ -126,6 +130,7 @@ const parseArticleResult = async (
                     bylineImages,
                     standfirst: standfirst || '',
                     elements,
+                    starRating,
                 },
             ]
             return article
@@ -143,6 +148,7 @@ const parseArticleResult = async (
                     byline: byline || '',
                     standfirst: standfirst || '',
                     elements,
+                    starRating,
                 },
             ]
 
