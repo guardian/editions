@@ -1,26 +1,27 @@
 import { ReactElement } from 'react'
 import { FetchableResponse, Error } from 'src/hooks/use-response'
 
-interface WithResponseCallbacks<T> {
+interface WithResponseCallbacks {
     retry: () => void
 }
+
+export interface WithResponseArgs<T> {
+    success: (resp: T, callbacks: WithResponseCallbacks) => ReactElement
+    pending: (stale: T | null, callbacks: WithResponseCallbacks) => ReactElement
+    error: (
+        error: Error,
+        stale: T | null,
+        callbacks: WithResponseCallbacks,
+    ) => ReactElement
+}
+
+export type WithResponse<T> = (_: WithResponseArgs<T>) => ReactElement
 
 export const withResponse = <T>(response: FetchableResponse<T>) => ({
     success,
     pending,
     error,
-}: {
-    success: (resp: T, callbacks: WithResponseCallbacks<T>) => ReactElement
-    pending: (
-        stale: T | null,
-        callbacks: WithResponseCallbacks<T>,
-    ) => ReactElement
-    error: (
-        error: Error,
-        stale: T | null,
-        callbacks: WithResponseCallbacks<T>,
-    ) => ReactElement
-}): ReactElement => {
+}: WithResponseArgs<T>): ReactElement => {
     switch (response.state) {
         case 'success':
             return success(response.response, { retry: response.retry })

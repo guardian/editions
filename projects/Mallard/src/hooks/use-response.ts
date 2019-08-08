@@ -34,7 +34,7 @@ export interface Error {
     name?: string
 }
 
-type Response<T> =
+export type Response<T> =
     | {
           state: 'pending'
           staleResponse: T | null

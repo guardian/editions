@@ -201,8 +201,11 @@ const FrontWithResponse = ({
 export const Front: FunctionComponent<{
     front: string
     issue: Issue['key']
-}> = ({ front, issue }) => {
-    const frontsResponse = useFrontsResponse(issue, front)
+    refresh: unknown
+}> = ({ front, issue, refresh }) => {
+    const frontsResponse = useFrontsResponse(issue, front, refresh)
+    //So this could/should be able to expose a refresh method,
+    //but I've no idea how to wire this into the cache
 
     return frontsResponse({
         pending: () => (

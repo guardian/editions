@@ -90,6 +90,7 @@ const fetchFromApi = <T>(
             ],
             {
                 savePromiseResultToValue: () => {},
+                clear: () => {}, //TODO: Make this clear the cache.
             },
         )
     }
@@ -105,6 +106,7 @@ const fetchFromApi = <T>(
             savePromiseResultToValue: result => {
                 store(endpointPath, result)
             },
+            clear: () => clear(endpointPath),
         },
     )
 }
@@ -119,7 +121,7 @@ const fetchFromIssue = <T>(
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
     */
-    const { retrieve, store } = withCache<T>('issue')
+    const { retrieve, store, clear } = withCache<T>('issue')
     return createCachedOrPromise(
         [
             retrieve(endpointPath),
@@ -140,6 +142,7 @@ const fetchFromIssue = <T>(
             savePromiseResultToValue: result => {
                 store(endpointPath, result)
             },
+            clear: () => clear(endpointPath),
         },
     )
 }
@@ -172,7 +175,7 @@ const fetchWeather = <T>(
     endpointPath: string,
     { validator }: { validator?: ValidatorFn<T> } = {},
 ): CachedOrPromise<T> => {
-    const { retrieve, store } = withCache<T>('weather')
+    const { retrieve, store, clear } = withCache<T>('weather')
     return createCachedOrPromise(
         [
             retrieve(endpointPath),
@@ -184,6 +187,7 @@ const fetchWeather = <T>(
         ],
         {
             savePromiseResultToValue: result => store(endpointPath, result),
+            clear: () => clear(endpointPath),
         },
     )
 }

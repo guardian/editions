@@ -46,6 +46,7 @@ interface CachedResult<T> {
     type: 'value'
     value: T
     getValue: () => Promise<T>
+    clear: () => void
 }
 
 export type CachedOrPromise<T> = CachedResult<T> | SlowPromiseGetter<T>
@@ -54,7 +55,11 @@ const createCachedOrPromise = <T>(
     [value, promiseGetter]: [T | null | undefined, () => Promise<T>],
     {
         savePromiseResultToValue,
-    }: { savePromiseResultToValue: (result: T) => void },
+        clear,
+    }: {
+        savePromiseResultToValue: (result: T) => void
+        clear: () => void
+    },
 ): CachedOrPromise<T> => {
     const getValue = async () => {
         const val = await promiseGetter()
@@ -66,6 +71,7 @@ const createCachedOrPromise = <T>(
             type: 'value',
             value,
             getValue,
+            clear,
         }
     }
     return {
@@ -108,12 +114,14 @@ const chain = <T, X>(
         ],
         {
             savePromiseResultToValue: () => null,
+            clear: () => {}, //TODO: what is the behaivour here?
         },
     )
 }
 chain.end = <X>(value: X) =>
     createCachedOrPromise<X>([value, async () => value], {
         savePromiseResultToValue: () => {},
+        clear: () => {}, //TODO: also here
     })
 
 export { isCached, chain, createCachedOrPromise }

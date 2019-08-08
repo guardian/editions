@@ -20,7 +20,7 @@ import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
-import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
+import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
@@ -105,7 +105,7 @@ const IssueFronts = ({
             })}
             renderItem={({ item }) => (
                 <View style={{ height: container.height }}>
-                    <Front issue={issue.key} front={item.key} />
+                    <Front issue={issue.key} front={item.key} refresh={false} />
                 </View>
             )}
         />

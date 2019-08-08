@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import {
-    NavigationScreenProp,
-    NavigationEvents,
-    ScrollView,
-} from 'react-navigation'
+import { NavigationScreenProp, ScrollView } from 'react-navigation'
 import { ArticleController } from 'src/components/article'
 import {
     CAPIArticle,
@@ -73,7 +69,7 @@ const ArticleScreenBody = ({
         articlePillars.indexOf(pillar) || 0,
     )
     const [modifiedType, setType] = useState(0)
-    const articleResponse = useArticleResponse(path)
+    const articleResponse = useArticleResponse(path, false) //TODO: propagate refresh
     const [{ isUsingProdDevtools }] = useSettings()
     const { width } = Dimensions.get('window')
 
