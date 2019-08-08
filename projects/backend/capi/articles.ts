@@ -148,7 +148,6 @@ const parseArticleResult = async (
                     byline: byline || '',
                     standfirst: standfirst || '',
                     elements,
-                    starRating,
                 },
             ]
 
