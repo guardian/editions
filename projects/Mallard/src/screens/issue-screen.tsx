@@ -95,9 +95,7 @@ const IssueFronts = ({
                 ...container,
             }}
             style={style}
-            windowSize={3}
-            maxToRenderPerBatch={2}
-            initialNumToRender={1}
+            removeClippedSubviews={false}
             ListHeaderComponent={ListHeaderComponent}
             keyExtractor={item => `${item.index}::${item.key}`}
             getItemLayout={(_, index) => ({
