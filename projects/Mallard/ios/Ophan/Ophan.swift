@@ -12,27 +12,19 @@ import ophan
 @objc(Ophan)
 class Ophan: NSObject {
   
-  let ophanApi = OphanApi(
+  let ophanApi = OphanKt.getOphanApi(
     appVersion: "0.0.1",
     appOs: "iOS",
     deviceName: "Unknown",
     deviceManufacturer: "Apple",
     deviceId: "testDeviceId",
     userId: "testUserId",
+    recordStore: DictRecordStore(),
     logger: SimpleLogger()
   )
   
-  var callback: (() -> ())?
-  
-  func foo() {
-    print("foo")
-  }
-  
   override init() {
     super.init()
-    callback = {
-      self.foo()
-    }
     print("Initialising new Ophan instance on thread \(Thread.current)")
   }
   
@@ -63,6 +55,24 @@ class SimpleLogger: Multiplatform_ophanLogger {
   
   func warn(tag: String, message: String, error: KotlinThrowable?) {
     print("W: " + tag + ": " + message + "\n")
+  }
+  
+}
+
+class DictRecordStore: Multiplatform_ophanRecordStore {
+  
+  var dict: [String: KotlinByteArray] = [:]
+  
+  func getRecords() -> [KotlinByteArray] {
+    return Array(dict.values)
+  }
+  
+  func putRecord(key: String, record: KotlinByteArray) {
+    self.dict[key] = record
+  }
+  
+  func removeRecord(key: String) {
+    self.dict[key] = nil
   }
   
 }

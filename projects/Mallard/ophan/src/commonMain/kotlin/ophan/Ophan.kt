@@ -1,7 +1,9 @@
 package ophan
 
+import com.gu.ophan.DefaultCoroutineContextFactory
 import com.gu.ophan.Logger
 import com.gu.ophan.OphanDispatcher
+import com.gu.ophan.RecordStore
 import ophan.thrift.componentEvent.Action
 import ophan.thrift.componentEvent.ComponentEvent
 import ophan.thrift.componentEvent.ComponentType
@@ -20,8 +22,6 @@ class OphanApi(
         private val dispatcher: OphanDispatcher
 ) {
 
-    private var lastPageView: Event? = null
-
     constructor(
             appVersion: String,
             appOs: String,
@@ -29,26 +29,23 @@ class OphanApi(
             deviceManufacturer: String,
             deviceId: String,
             userId: String,
+            recordStore: RecordStore,
             logger: Logger
     ) : this(OphanDispatcher(
             App(appVersion, "TestEditions", appOs, Edition.UK),
             Device(deviceName, deviceManufacturer),
             deviceId,
             userId,
+            DefaultCoroutineContextFactory().getCoroutineContext(),
+            recordStore,
             logger
     ))
-
-    fun sendPageView() {
-        // Make a page view event
-        // Send it
-        lastPageView = TODO()
-    }
 
     fun sendTestAppScreenEvent(screenName: String) {
         val event = Event.Builder()
                 .eventId("ffdfdfdfdssfdsf")
                 .eventType(EventType.COMPONENT_EVENT)
-                .viewId(lastPageView?.viewId)
+                .viewId(null) /* TODO */
                 .componentEvent(ComponentEvent.Builder()
                         .component(ComponentV2.Builder()
                                 .componentType(ComponentType.APP_SCREEN)
@@ -65,8 +62,26 @@ class OphanApi(
                 .build()
         dispatcher.dispatchEvent(event)
     }
-
-    fun sendTimeOnPageEvent(timeMs: Long) {
-
-    }
 }
+
+fun getOphanApi(
+        appVersion: String,
+        appOs: String,
+        deviceName: String,
+        deviceManufacturer: String,
+        deviceId: String,
+        userId: String,
+        recordStore: RecordStore,
+        logger: Logger
+) = getThreadSafeOphanApi(appVersion, appOs, deviceName, deviceManufacturer, deviceId, userId, recordStore, logger)
+
+expect fun getThreadSafeOphanApi(
+        appVersion: String,
+        appOs: String,
+        deviceName: String,
+        deviceManufacturer: String,
+        deviceId: String,
+        userId: String,
+        recordStore: RecordStore,
+        logger: Logger
+): OphanApi

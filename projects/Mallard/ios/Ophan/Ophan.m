@@ -14,4 +14,9 @@ RCT_EXTERN_METHOD(getGreeting: (RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(sendTestAppScreenEvent: (NSString *)screenName)
 
++ (BOOL)requiresMainQueueSetup
+{
+  return YES;  // only do this if your module initialization relies on calling UIKit!
+}
+
 @end
