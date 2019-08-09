@@ -81,7 +81,7 @@ export type HeadlineTextProps = {
     children: string
     weight?: 'regular' | 'bold'
     style?: StyleProp<TextStyle>
-} & TextProps & { onTextLayout: any }
+} & TextProps & { onTextLayout?: any }
 
 export const HeadlineText = ({
     style,
