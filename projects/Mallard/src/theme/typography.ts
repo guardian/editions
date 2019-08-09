@@ -19,6 +19,7 @@ export const families = {
         regular: 'GTGuardianTitlepiece-Bold',
     },
     headline: {
+        light: 'GHGuardianHeadline-Light',
         regular: 'GHGuardianHeadline-Regular',
         bold: 'GHGuardianHeadline-Bold',
     },

@@ -32,6 +32,7 @@ const OpinionHeader = ({
     standfirst,
 }: ArticleHeaderProps) => {
     const [articleColor] = useArticle()
+    const font = getFont('headline', 1.5, 'light')
     return (
         <MultilineWrap
             isTopMost
@@ -59,8 +60,15 @@ const OpinionHeader = ({
                 </ArticleFader>
             ) : null}
             <ArticleFader>
-                <ArticleHeadline textStyle={{ marginBottom: metrics.vertical }}>
-                    <Quote fill={articleColor.main} />
+                <ArticleHeadline
+                    icon={{
+                        width: 60,
+                        height: font.lineHeight,
+                        element: () => <Quote fill={articleColor.main} />,
+                    }}
+                    weight="light"
+                    textStyle={[{ marginBottom: metrics.vertical }, font]}
+                >
                     {headline}
                     <Text style={[{ color: articleColor.main }, styles.byline]}>
                         {'\n'}

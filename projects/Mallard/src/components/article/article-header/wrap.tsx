@@ -105,8 +105,10 @@ const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
 
 const ArticleFader = getFader('article')
 const multiStyles = StyleSheet.create({
-    border: {
+    byline: {
         paddingBottom: metrics.vertical / 2,
+    },
+    bylineBorder: {
         borderBottomColor: color.dimLine,
         borderBottomWidth: 1,
     },
@@ -129,7 +131,10 @@ const MultilineWrap = ({
                     bylineHasBackgroundColor ? props.backgroundColor : undefined
                 }
                 borderColor={props.borderColor}
-                style={multiStyles.border}
+                style={[
+                    multiStyles.byline,
+                    !bylineHasBackgroundColor && multiStyles.bylineBorder,
+                ]}
                 header={
                     multilineBleeds && (
                         <ArticleFader>
