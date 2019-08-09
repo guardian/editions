@@ -1,4 +1,4 @@
-import { PageLayout, PageLayoutSizes, ItemFit } from './helpers'
+import { PageLayout, PageLayoutSizes } from './helpers'
 import {
     SplashImageItem,
     SuperHeroImageItem,
@@ -8,15 +8,7 @@ import {
     SmallItemLargeText,
 } from '../items/item'
 import { FrontCardAppearance } from 'src/common'
-
-const toFit = (
-    ...[left, top, height, width]: [number, number, number, number]
-): ItemFit => ({
-    top,
-    left,
-    width,
-    height,
-})
+import { toRectangle } from 'src/helpers/sizes'
 
 const splashPage: PageLayout = {
     [PageLayoutSizes.mobile]: {
@@ -24,7 +16,7 @@ const splashPage: PageLayout = {
         items: [
             {
                 item: SplashImageItem,
-                fits: toFit(0, 0, 6, 2),
+                fits: toRectangle(0, 0, 6, 2),
             },
         ],
     },
@@ -33,7 +25,7 @@ const splashPage: PageLayout = {
         items: [
             {
                 item: SplashImageItem,
-                fits: toFit(0, 0, 4, 3),
+                fits: toRectangle(0, 0, 4, 3),
             },
         ],
     },
@@ -45,7 +37,7 @@ const superHeroPage: PageLayout = {
         items: [
             {
                 item: SuperHeroImageItem,
-                fits: toFit(0, 0, 6, 2),
+                fits: toRectangle(0, 0, 6, 2),
             },
         ],
     },
@@ -54,7 +46,7 @@ const superHeroPage: PageLayout = {
         items: [
             {
                 item: SuperHeroImageItem,
-                fits: toFit(0, 0, 4, 3),
+                fits: toRectangle(0, 0, 4, 3),
             },
         ],
     },
@@ -66,11 +58,11 @@ const twoStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 4, 2),
+                fits: toRectangle(0, 0, 4, 2),
             },
             {
                 item: SplitImageItem,
-                fits: toFit(0, 4, 2, 2),
+                fits: toRectangle(0, 4, 2, 2),
             },
         ],
     },
@@ -79,11 +71,11 @@ const twoStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 3, 3),
+                fits: toRectangle(0, 0, 3, 3),
             },
             {
                 item: SplitImageItem,
-                fits: toFit(0, 3, 1, 3),
+                fits: toRectangle(0, 3, 1, 3),
             },
         ],
     },
@@ -95,15 +87,15 @@ const threeStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 4, 2),
+                fits: toRectangle(0, 0, 4, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 4, 2, 1),
+                fits: toRectangle(0, 4, 2, 1),
             },
             {
                 item: SmallItem,
-                fits: toFit(1, 4, 2, 1),
+                fits: toRectangle(1, 4, 2, 1),
             },
         ],
     },
@@ -113,15 +105,15 @@ const threeStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 4, 2),
+                fits: toRectangle(0, 0, 4, 2),
             },
             {
                 item: ImageItem,
-                fits: toFit(2, 0, 2, 1),
+                fits: toRectangle(2, 0, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(2, 2, 2, 1),
+                fits: toRectangle(2, 2, 2, 1),
             },
         ],
     },
@@ -133,19 +125,19 @@ const fourStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 3, 1),
+                fits: toRectangle(0, 0, 3, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(1, 0, 3, 1),
+                fits: toRectangle(1, 0, 3, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(0, 3, 3, 1),
+                fits: toRectangle(0, 3, 3, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(1, 3, 3, 1),
+                fits: toRectangle(1, 3, 3, 1),
             },
         ],
     },
@@ -154,19 +146,19 @@ const fourStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(1, 0, 3, 2),
+                fits: toRectangle(1, 0, 3, 2),
             },
             {
                 item: SplitImageItem,
-                fits: toFit(1, 3, 1, 2),
+                fits: toRectangle(1, 3, 1, 2),
             },
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 2, 1),
+                fits: toRectangle(0, 0, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(0, 2, 2, 1),
+                fits: toRectangle(0, 2, 2, 1),
             },
         ],
     },
@@ -178,23 +170,23 @@ const fiveStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 3, 1),
+                fits: toRectangle(0, 0, 3, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(1, 0, 3, 1),
+                fits: toRectangle(1, 0, 3, 1),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 3, 1, 2),
+                fits: toRectangle(0, 3, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 4, 1, 2),
+                fits: toRectangle(0, 4, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 5, 1, 2),
+                fits: toRectangle(0, 5, 1, 2),
             },
         ],
     },
@@ -203,23 +195,23 @@ const fiveStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toFit(0, 0, 3, 2),
+                fits: toRectangle(0, 0, 3, 2),
             },
             {
                 item: ImageItem,
-                fits: toFit(2, 0, 2, 1),
+                fits: toRectangle(2, 0, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(2, 2, 2, 1),
+                fits: toRectangle(2, 2, 2, 1),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 3, 1, 1),
+                fits: toRectangle(0, 3, 1, 1),
             },
             {
                 item: SmallItem,
-                fits: toFit(1, 3, 1, 1),
+                fits: toRectangle(1, 3, 1, 1),
             },
         ],
     },
@@ -231,27 +223,27 @@ const sixStoryPage: PageLayout = {
         items: [
             {
                 item: SmallItemLargeText,
-                fits: toFit(0, 0, 1, 2),
+                fits: toRectangle(0, 0, 1, 2),
             },
             {
                 item: SmallItemLargeText,
-                fits: toFit(0, 1, 1, 2),
+                fits: toRectangle(0, 1, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 2, 1, 2),
+                fits: toRectangle(0, 2, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 3, 1, 2),
+                fits: toRectangle(0, 3, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 4, 1, 2),
+                fits: toRectangle(0, 4, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 5, 1, 2),
+                fits: toRectangle(0, 5, 1, 2),
             },
         ],
     },
@@ -260,27 +252,27 @@ const sixStoryPage: PageLayout = {
         items: [
             {
                 item: SmallItem,
-                fits: toFit(0, 0, 1, 2),
+                fits: toRectangle(0, 0, 1, 2),
             },
             {
                 item: SmallItem,
-                fits: toFit(0, 1, 1, 2),
+                fits: toRectangle(0, 1, 1, 2),
             },
             {
                 item: ImageItem,
-                fits: toFit(2, 0, 2, 1),
+                fits: toRectangle(2, 0, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(2, 2, 2, 1),
+                fits: toRectangle(2, 2, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(0, 2, 2, 1),
+                fits: toRectangle(0, 2, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toFit(1, 2, 2, 1),
+                fits: toRectangle(1, 2, 2, 1),
             },
         ],
     },
