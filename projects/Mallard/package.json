@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "pre-run": "yarn fetch-dev-env && yarn watch-html & node ./scripts/versioning.js",
-        "pre-bundle": "yarn write-prod-env && yarn bundle-html",
+        "pre-bundle": "yarn write-prod-env && yarn bundle-html && yarn get-settings-pages-html",
         "postinstall": "node ./scripts/versioning.js",
         "start": "yarn pre-run && node node_modules/react-native/local-cli/cli.js start",
         "test": "jest --coverage",
@@ -23,7 +23,8 @@
         "watch-html": "node ./scripts/watch-html.js",
         "convert-svg": "node ./scripts/svgs.js",
         "fetch-dev-env": "aws s3 cp s3://editions-config/Mallard/dev/.env ./.env --region=eu-west-1 --profile=frontend",
-        "write-prod-env": "node .env.production.js"
+        "write-prod-env": "node .env.production.js",
+        "get-settings-pages-html": "node ./scripts/get-settings-pages-html.js"
     },
     "rnpm": {
         "assets": [
@@ -43,6 +44,7 @@
         "invariant": "^2.2.4",
         "kill-port": "^1.5.1",
         "moment": "^2.24.0",
+        "node-fetch": "^2.6.0",
         "nodegit": "^0.24.3",
         "query-string": "^6.8.1",
         "react": "^16.8.6",
