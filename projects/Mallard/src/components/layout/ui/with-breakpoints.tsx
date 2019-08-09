@@ -1,28 +1,22 @@
 import React, { useState, ReactNode, FunctionComponent } from 'react'
-import { View, LayoutRectangle, StyleSheet } from 'react-native'
+import { View, LayoutRectangle } from 'react-native'
+import { getClosestBreakpoint, BreakpointList } from 'src/theme/breakpoints'
 
 const WithBreakpoints: FunctionComponent<{
-    children: {
-        0: (l: LayoutRectangle) => ReactNode
-        [fromSize: number]: (l: LayoutRectangle) => ReactNode
-    }
+    children: BreakpointList<(l: LayoutRectangle) => ReactNode>
 }> = ({ children }) => {
     const [maxSize, setMaxSize] = useState<keyof typeof children>(0)
     const [metrics, setMetrics] = useState<LayoutRectangle | null>(null)
     return (
         <View
             onLayout={ev => {
-                let max = 0
-                for (let key of Object.keys(children)) {
-                    if (
-                        ev.nativeEvent.layout.width >= parseInt(key) &&
-                        max < parseInt(key)
-                    ) {
-                        max = parseInt(key)
-                    }
-                }
                 setMetrics(ev.nativeEvent.layout)
-                setMaxSize(max)
+                setMaxSize(
+                    getClosestBreakpoint(
+                        (Object.keys(children) as unknown[]) as number[],
+                        ev.nativeEvent.layout.width,
+                    ),
+                )
             }}
         >
             {metrics && children[maxSize](metrics)}

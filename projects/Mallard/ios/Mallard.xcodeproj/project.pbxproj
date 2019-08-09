@@ -528,14 +528,14 @@
 			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
 			remoteInfo = RCTBlob;
 		};
-		C5214A8E22FC485C00F2E5B4 /* PBXContainerItemProxy */ = {
+		C521492222FB17F700F2E5B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A70EB17FF4504C6D97FC3456 /* RNDeviceInfo.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = DA5891D81BA9A9FC002B4DB2;
 			remoteInfo = RNDeviceInfo;
 		};
-		C5214A9022FC485C00F2E5B4 /* PBXContainerItemProxy */ = {
+		C521492422FB17F700F2E5B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A70EB17FF4504C6D97FC3456 /* RNDeviceInfo.xcodeproj */;
 			proxyType = 2;
@@ -1116,11 +1116,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C5214A8A22FC485C00F2E5B4 /* Products */ = {
+		C521491C22FB17F700F2E5B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C5214A8F22FC485C00F2E5B4 /* libRNDeviceInfo.a */,
-				C5214A9122FC485C00F2E5B4 /* libRNDeviceInfo-tvOS.a */,
+				C521492322FB17F700F2E5B4 /* libRNDeviceInfo.a */,
+				C521492522FB17F700F2E5B4 /* libRNDeviceInfo-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1326,7 +1326,7 @@
 					ProjectRef = 853A3F573E72498B91AA0E6E /* RNCWebView.xcodeproj */;
 				},
 				{
-					ProductGroup = C5214A8A22FC485C00F2E5B4 /* Products */;
+					ProductGroup = C521491C22FB17F700F2E5B4 /* Products */;
 					ProjectRef = A70EB17FF4504C6D97FC3456 /* RNDeviceInfo.xcodeproj */;
 				},
 				{
@@ -1772,18 +1772,18 @@
 			remoteRef = ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		C5214A8F22FC485C00F2E5B4 /* libRNDeviceInfo.a */ = {
+		C521492322FB17F700F2E5B4 /* libRNDeviceInfo.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNDeviceInfo.a;
-			remoteRef = C5214A8E22FC485C00F2E5B4 /* PBXContainerItemProxy */;
+			remoteRef = C521492222FB17F700F2E5B4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		C5214A9122FC485C00F2E5B4 /* libRNDeviceInfo-tvOS.a */ = {
+		C521492522FB17F700F2E5B4 /* libRNDeviceInfo-tvOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libRNDeviceInfo-tvOS.a";
-			remoteRef = C5214A9022FC485C00F2E5B4 /* PBXContainerItemProxy */;
+			remoteRef = C521492422FB17F700F2E5B4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

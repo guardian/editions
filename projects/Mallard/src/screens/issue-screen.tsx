@@ -1,7 +1,6 @@
-import React, { useState, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import {
     NavigationScreenProp,
-    NavigationEvents,
     FlatList,
     NavigationInjectedProps,
 } from 'react-navigation'
@@ -25,6 +24,8 @@ import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { WithIssueScreenSize, useIssueScreenSize } from './issue/use-size'
+import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -76,26 +77,42 @@ const IssueFronts = ({
     issue: Issue
     ListHeaderComponent?: ReactElement
     style?: StyleProp<ViewStyle>
-}) => (
-    <FlatList
-        // this is horrible but in the worst case where we get duplicate ids
-        // (which we have done in the past) then we shouldn't break the rendering
-        // even if it does mean showing the same front twice
-        // we could filter out duplicates but in this case it'd probably be more
-        // obvious for someone previewing if we did render it twice
-        data={issue.fronts.map((key, index) => ({
-            key,
-            index,
-        }))}
-        style={style}
-        windowSize={3}
-        maxToRenderPerBatch={2}
-        initialNumToRender={1}
-        ListHeaderComponent={ListHeaderComponent}
-        keyExtractor={item => `${item.index}::${item.key}`}
-        renderItem={({ item }) => <Front issue={issue.key} front={item.key} />}
-    />
-)
+}) => {
+    const { container } = useIssueScreenSize()
+
+    return (
+        <FlatList
+            // this is horrible but in the worst case where we get duplicate ids
+            // (which we have done in the past) then we shouldn't break the rendering
+            // even if it does mean showing the same front twice
+            // we could filter out duplicates but in this case it'd probably be more
+            // obvious for someone previewing if we did render it twice
+            data={issue.fronts.map((key, index) => ({
+                key,
+                index,
+            }))}
+            extraData={{
+                ...container,
+            }}
+            style={style}
+            windowSize={3}
+            maxToRenderPerBatch={2}
+            initialNumToRender={1}
+            ListHeaderComponent={ListHeaderComponent}
+            keyExtractor={item => `${item.index}::${item.key}`}
+            getItemLayout={(_, index) => ({
+                length: container.height,
+                offset: container.height * index,
+                index,
+            })}
+            renderItem={({ item }) => (
+                <View style={{ height: container.height }}>
+                    <Front issue={issue.key} front={item.key} />
+                </View>
+            )}
+        />
+    )
+}
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
@@ -125,8 +142,13 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                     <>
                         <WithBreakpoints>
                             {{
-                                0: () => (
-                                    <>
+                                0: metrics => (
+                                    <WithIssueScreenSize
+                                        value={[
+                                            PageLayoutSizes.mobile,
+                                            metrics,
+                                        ]}
+                                    >
                                         <Header issue={issue} />
                                         <IssueFronts
                                             ListHeaderComponent={
@@ -138,10 +160,15 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                             }
                                             issue={issue}
                                         />
-                                    </>
+                                    </WithIssueScreenSize>
                                 ),
-                                [Breakpoints.tabletVertical]: () => (
-                                    <>
+                                [Breakpoints.tabletVertical]: metrics => (
+                                    <WithIssueScreenSize
+                                        value={[
+                                            PageLayoutSizes.tablet,
+                                            metrics,
+                                        ]}
+                                    >
                                         <Header issue={issue} />
                                         <View style={{ flexDirection: 'row' }}>
                                             <View style={styles.sideWeather}>
@@ -152,7 +179,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                                 issue={issue}
                                             />
                                         </View>
-                                    </>
+                                    </WithIssueScreenSize>
                                 ),
                             }}
                         </WithBreakpoints>
