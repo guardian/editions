@@ -11,7 +11,7 @@ export interface BreakpointList<T> {
 export const getClosestBreakpoint = (breakpoints: number[], size: number) => {
     let max = 0
     for (let key of breakpoints) {
-        if (size >= key && max < key) {
+        if (size >= key) {
             max = key
         }
     }

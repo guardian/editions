@@ -1,6 +1,7 @@
 import React, { useState, ReactNode, FunctionComponent } from 'react'
 import { View, LayoutRectangle } from 'react-native'
 import { getClosestBreakpoint, BreakpointList } from 'src/theme/breakpoints'
+import { UiBodyCopy } from 'src/components/styled-text'
 
 const WithBreakpoints: FunctionComponent<{
     children: BreakpointList<(l: LayoutRectangle) => ReactNode>

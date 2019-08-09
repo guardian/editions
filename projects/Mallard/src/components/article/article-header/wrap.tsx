@@ -92,7 +92,7 @@ const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
                     [Breakpoints.tabletLandscape]: () => (
                         <InnerWrapper
                             {...{ children, backgroundColor, ...props }}
-                            landscape
+                            landscape={true}
                         >
                             {children}
                         </InnerWrapper>
