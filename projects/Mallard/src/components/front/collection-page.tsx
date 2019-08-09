@@ -63,11 +63,7 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
     item: {
-        flex: 1,
-        flexShrink: 1,
-        flexGrow: 1,
-        height: '100%',
-        width: '100%',
+        ...StyleSheet.absoluteFillObject,
     },
 })
 
