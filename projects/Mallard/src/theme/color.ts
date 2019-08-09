@@ -49,6 +49,7 @@ export const color = {
         apricot: palette.opinion.bright,
         shark: palette.sport.main,
         sea: '#279DDC',
+        supportBlue: '#41A9E0',
     },
 
     /*
