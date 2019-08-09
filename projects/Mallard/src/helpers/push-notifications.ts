@@ -9,7 +9,6 @@ const pushNotifcationRegistration = () =>
                 fetchFromNotificationService(token)
             }
         },
-
         onNotification: (notification: any) => {
             Alert.alert('NOTIFICATION:', JSON.stringify(notification))
             // Process the silent notification here
