@@ -3,6 +3,7 @@ import { View, StyleProp, ViewStyle, TextStyle, StyleSheet } from 'react-native'
 import { StandfirstText } from '../../styled-text'
 import { NavigationPosition } from 'src/helpers/positions'
 import { color } from 'src/theme/color'
+import { getFont } from 'src/theme/typography'
 
 export interface PropTypes {
     standfirst: string
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
         flexShrink: 1,
         flexGrow: 0,
         justifyContent: 'flex-end',
+        ...getFont('text', 1.25),
     },
 })
 

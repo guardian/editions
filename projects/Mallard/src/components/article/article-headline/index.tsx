@@ -6,7 +6,7 @@ import { metrics } from 'src/theme/spacing'
 export type ArticleHeadlineProps = {
     children: any
     textStyle?: StyleProp<TextStyle>
-    icon: { width: number; height: number; element: () => ReactNode }
+    icon?: { width: number; height: number; element: () => ReactNode }
 } & Pick<HeadlineTextProps, 'weight'>
 
 const styles = StyleSheet.create({

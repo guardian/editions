@@ -21,17 +21,22 @@ const styles = StyleSheet.create({
     wrapper: {
         borderRightColor: color.palette.neutral[7],
         borderRightWidth: 1,
-        maxWidth: metrics.article.maxWidth,
+        width: metrics.article.maxWidth,
     },
     wrapperLandscape: {
-        maxWidth: metrics.article.maxWidthLandscape,
+        width:
+            metrics.article.maxWidthLandscape +
+            metrics.article.leftRailLandscape,
     },
     wrapperHeader: {
         marginLeft: metrics.article.sides * -1,
     },
+    wrapperHeaderMobile: {
+        marginHorizontal: metrics.article.sides * -1,
+    },
     padding: {
-        paddingLeft: metrics.article.sidesLandscape - metrics.article.sides,
-        paddingRight: metrics.article.sidesLandscape,
+        paddingLeft: metrics.article.sidesLandscape,
+        paddingRight: metrics.article.sidesLandscape * 1.25,
     },
     paddingLandscape: {
         paddingLeft: metrics.article.leftRailLandscape,
@@ -69,7 +74,7 @@ const InnerWrapper = ({
                 : {},
         ]}
     >
-        <View style={styles.wrapperHeader}>{header}</View>
+        {header && <View style={styles.wrapperHeader}>{header}</View>}
         <View style={[styles.padding, landscape && styles.paddingLandscape]}>
             {children}
         </View>
@@ -78,10 +83,17 @@ const InnerWrapper = ({
 
 const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
     return (
-        <View style={[styles.outer, { backgroundColor }]}>
+        <View style={{ backgroundColor }}>
             <WithBreakpoints>
                 {{
-                    0: () => <>{children}</>,
+                    0: () => (
+                        <>
+                            {props.header}
+                            <View style={[props.style, styles.outer]}>
+                                {children}
+                            </View>
+                        </>
+                    ),
                     [Breakpoints.tabletVertical]: () => (
                         <InnerWrapper
                             {...{ children, backgroundColor, ...props }}

@@ -69,8 +69,18 @@ const scale = {
         },
         1: {
             0: {
+                fontSize: 16,
+                lineHeight: 20,
+            },
+            [Breakpoints.tabletVertical]: {
                 fontSize: 17,
-                lineHeight: 21,
+                lineHeight: 24,
+            },
+        },
+        1.25: {
+            0: {
+                fontSize: 19,
+                lineHeight: 24,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 20,
@@ -129,6 +139,10 @@ const scale = {
     titlepiece: {
         1: {
             0: {
+                fontSize: 16,
+                lineHeight: 18,
+            },
+            [Breakpoints.tabletVertical]: {
                 fontSize: 18,
                 lineHeight: 20,
             },

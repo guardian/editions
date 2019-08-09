@@ -18,8 +18,8 @@ export const metrics = {
         sides: basicMetrics.horizontal / 2,
         sidesLandscape: basicMetrics.horizontal * 1.5,
         maxWidth: 540,
-        maxWidthLandscape: 640,
-        leftRailLandscape: 100,
+        maxWidthLandscape: 620,
+        leftRailLandscape: 120,
     },
     fronts: {
         cardContainerHeightExtra: 60,
