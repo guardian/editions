@@ -113,20 +113,36 @@ const multiStyles = StyleSheet.create({
 })
 const MultilineWrap = ({
     byline,
+    bylineHasBackgroundColor = false,
+    multilineBleeds = true,
     ...props
-}: Exclude<PropTypes, 'header'> & { byline: ReactNode }) => (
+}: Exclude<PropTypes, 'header'> & {
+    byline: ReactNode
+    bylineHasBackgroundColor?: boolean
+    multilineBleeds?: boolean
+}) => (
     <>
         <Wrap {...props} />
         {byline && (
             <Wrap
+                backgroundColor={
+                    bylineHasBackgroundColor ? props.backgroundColor : undefined
+                }
                 borderColor={props.borderColor}
                 style={multiStyles.border}
                 header={
+                    multilineBleeds && (
+                        <ArticleFader>
+                            <ArticleMultiline />
+                        </ArticleFader>
+                    )
+                }
+            >
+                {!multilineBleeds && (
                     <ArticleFader>
                         <ArticleMultiline />
                     </ArticleFader>
-                }
-            >
+                )}
                 <ArticleFader>{byline}</ArticleFader>
             </Wrap>
         )}
