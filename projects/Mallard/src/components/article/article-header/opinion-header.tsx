@@ -4,14 +4,13 @@ import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
-import { Multiline } from '../../multiline'
 import { ArticleHeadline } from '../article-headline'
 import Quote from 'src/components/icons/Quote'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
-import { Wrap, MultilineWrap } from './wrap'
+import { MultilineWrap } from './wrap'
 
 const ArticleFader = getFader('article')
 
@@ -62,7 +61,7 @@ const OpinionHeader = ({
             <ArticleFader>
                 <ArticleHeadline
                     icon={{
-                        width: 60,
+                        width: 70,
                         height: font.lineHeight,
                         element: () => <Quote fill={articleColor.main} />,
                     }}

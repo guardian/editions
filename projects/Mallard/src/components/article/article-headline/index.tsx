@@ -1,6 +1,13 @@
 import React, { ReactNode } from 'react'
 import { HeadlineText, HeadlineTextProps } from 'src/components/styled-text'
-import { StyleSheet, StyleProp, TextStyle, Text, View } from 'react-native'
+import {
+    StyleSheet,
+    StyleProp,
+    TextStyle,
+    Text,
+    View,
+    PixelRatio,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
 
 export type ArticleHeadlineProps = {
@@ -14,18 +21,34 @@ const styles = StyleSheet.create({
         marginRight: metrics.horizontal * 2,
         marginTop: metrics.vertical / 2,
     },
+    icon: {
+        position: 'absolute',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+    },
+    dash: {
+        opacity: 0,
+        fontSize: PixelRatio.roundToNearestPixel(4),
+    },
 })
 
+/*
+This is super cursed. Basically, in order to add inline icons
+of any arbitrary px width without messing up the line height we add
+invisible 4px em dashes at the start of the text to fill up the space and
+then the icon floats over the whole thing as an absolute box
+*/
 const IconDashes = ({ length = 1 }) => {
     const lines = []
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < Math.floor(length / 4); i++) {
         lines.push(
             <Text
                 key={i}
-                accessible={false}
-                style={{ opacity: 0, fontSize: 1 }}
+                accessibilityElementsHidden={true}
+                importantForAccessibility="no-hide-descendants"
+                style={[styles.dash]}
             >
-                {'—'}
+                {'0'}
             </Text>,
         )
     }
@@ -42,13 +65,13 @@ const ArticleHeadline = ({
         <>
             {icon && (
                 <View
-                    style={{
-                        position: 'absolute',
-                        alignItems: 'flex-start',
-                        justifyContent: 'flex-end',
-                        width: icon.width,
-                        height: icon.height,
-                    }}
+                    style={[
+                        styles.icon,
+                        {
+                            width: icon.width,
+                            height: icon.height,
+                        },
+                    ]}
                 >
                     {icon.element()}
                 </View>
