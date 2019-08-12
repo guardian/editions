@@ -16,7 +16,8 @@ export enum WrapLayout {
 const styles = StyleSheet.create({
     outer: {
         alignItems: 'stretch',
-        paddingHorizontal: metrics.article.sides,
+        paddingRight: metrics.article.sides,
+        marginLeft: metrics.article.sides,
     },
     wrapper: {
         borderRightColor: color.palette.neutral[7],
@@ -96,8 +97,14 @@ const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
                 {{
                     0: () => (
                         <>
-                            {props.header}
-                            <View style={[props.style, styles.outer]}>
+                            <View
+                                style={[
+                                    props.style,
+                                    props.innerStyle,
+                                    styles.outer,
+                                ]}
+                            >
+                                {props.header}
                                 {children}
                             </View>
                         </>
@@ -135,13 +142,9 @@ const multiStyles = StyleSheet.create({
 })
 const MultilineWrap = ({
     byline,
-    bylineHasBackgroundColor = false,
-    multilineBleeds = true,
     ...props
 }: Exclude<PropTypes, 'header'> & {
     byline: ReactNode
-    bylineHasBackgroundColor?: boolean
-    multilineBleeds?: boolean
 }) => (
     <>
         <Wrap {...props} />

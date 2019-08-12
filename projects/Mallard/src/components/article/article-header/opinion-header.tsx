@@ -35,8 +35,6 @@ const OpinionHeader = ({
     return (
         <MultilineWrap
             isTopMost
-            bylineHasBackgroundColor
-            multilineBleeds={false}
             style={styles.innerWrap}
             backgroundColor={color.palette.opinion.faded}
             byline={
