@@ -29,12 +29,6 @@ const styles = StyleSheet.create({
             metrics.article.maxWidthLandscape +
             metrics.article.leftRailLandscape,
     },
-    wrapperHeader: {
-        marginLeft: metrics.article.sidesLandscape * 1,
-    },
-    wrapperHeaderMobile: {
-        marginHorizontal: metrics.article.sides * -1,
-    },
     padding: {
         marginLeft: metrics.article.sidesLandscape,
         paddingRight: metrics.article.sidesLandscape * 1.25,
@@ -77,7 +71,9 @@ const InnerWrapper = ({
                 : {},
         ]}
     >
-        {header && <View style={styles.wrapperHeader}>{header}</View>}
+        {header && (
+            <View style={[styles.padding, { paddingRight: 0 }]}>{header}</View>
+        )}
         <View
             style={[
                 innerStyle,
