@@ -424,14 +424,14 @@
 			remoteGlobalIDString = B5027B1B2237B30F00F1AABA;
 			remoteInfo = "RNCNetInfo-tvOS";
 		};
-		A1844CD12302B96900F4AA53 /* PBXContainerItemProxy */ = {
+		A1844BCC2301C3F500F4AA53 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 350A99D1AB074D79813F88E6 /* RNIap.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNIap;
 		};
-		A1844CD32302B96900F4AA53 /* PBXContainerItemProxy */ = {
+		A1844BCE2301C3F500F4AA53 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 350A99D1AB074D79813F88E6 /* RNIap.xcodeproj */;
 			proxyType = 2;
@@ -1040,11 +1040,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A1844CCD2302B96900F4AA53 /* Products */ = {
+		A1844BC82301C3F500F4AA53 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A1844CD22302B96900F4AA53 /* libRNIap.a */,
-				A1844CD42302B96900F4AA53 /* libRNIap.a */,
+				A1844BCD2301C3F500F4AA53 /* libRNIap.a */,
+				A1844BCF2301C3F500F4AA53 /* libRNIap.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1367,7 +1367,7 @@
 					ProjectRef = 3DA6B7E32F1A492799562BFE /* RNGestureHandler.xcodeproj */;
 				},
 				{
-					ProductGroup = A1844CCD2302B96900F4AA53 /* Products */;
+					ProductGroup = A1844BC82301C3F500F4AA53 /* Products */;
 					ProjectRef = 350A99D1AB074D79813F88E6 /* RNIap.xcodeproj */;
 				},
 				{
@@ -1700,18 +1700,18 @@
 			remoteRef = A17C2BAD22F8919A005B4D42 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A1844CD22302B96900F4AA53 /* libRNIap.a */ = {
+		A1844BCD2301C3F500F4AA53 /* libRNIap.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNIap.a;
-			remoteRef = A1844CD12302B96900F4AA53 /* PBXContainerItemProxy */;
+			remoteRef = A1844BCC2301C3F500F4AA53 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A1844CD42302B96900F4AA53 /* libRNIap.a */ = {
+		A1844BCF2301C3F500F4AA53 /* libRNIap.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNIap.a;
-			remoteRef = A1844CD32302B96900F4AA53 /* PBXContainerItemProxy */;
+			remoteRef = A1844BCE2301C3F500F4AA53 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A1EFE3B222CCE4020058AC0A /* libRNCMaskedView.a */ = {
