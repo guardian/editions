@@ -100,14 +100,14 @@ const Article = ({
                             setHeight(parseInt(event.nativeEvent.data))
                         }}
                         style={{
-                            flex: 1,
-                            marginHorizontal: metrics.article.sides * -1,
                             minHeight: height,
+                            marginHorizontal: metrics.article.sides * -1,
+                            /*
+                                The below line fixes crashes on Android
+                                https://github.com/react-native-community/react-native-webview/issues/429
+                                */
+                            opacity: 0.99,
                         }}
-                        // The below lines fixes crashes on Android
-                        // there seems to be other approaches using opacity / overflow styles detailed here
-                        // https://github.com/react-native-community/react-native-webview/issues/429
-                        androidHardwareAccelerationDisabled={true}
                     />
                 </Fader>
             </Wrap>
