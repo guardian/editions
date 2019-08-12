@@ -5,6 +5,9 @@ import {
     casCredentialsKeychain,
     casDataCache,
     userDataCache,
+    getLegacyUserAccessToken,
+    legacyCASUsernameCache,
+    legacyCASPasswordCache,
 } from './storage'
 import {
     fetchMembershipData,
@@ -94,12 +97,15 @@ const fetchUserDataForKeychainUser = async (
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
     resetCredentialsImpl = resetCredentials,
 ): Promise<UserData | null> => {
-    const [userToken, membershipToken] = await Promise.all([
+    const [userToken, legacyUserToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
+        getLegacyUserAccessToken(),
         membershipTokenStore.get(),
     ])
 
-    if (!userToken) {
+    const actualUserToken = userToken || legacyUserToken
+
+    if (!actualUserToken) {
         // no userToken - we need to be logged in again
         // make sure everything is reset before doing that
         await resetCredentialsImpl()
@@ -112,15 +118,15 @@ const fetchUserDataForKeychainUser = async (
         // if there's not a membership token then something went wrong,
         // but we can fetch it again
         newMembershipToken = await fetchMembershipAccessTokenImpl(
-            userToken.password,
+            actualUserToken.password,
         )
-        membershipTokenStore.set(userToken.username, newMembershipToken)
+        membershipTokenStore.set(actualUserToken.username, newMembershipToken)
     } else {
         newMembershipToken = membershipToken.password
     }
 
     const [userDetails, membershipData] = await Promise.all([
-        fetchUserDetailsImpl(userToken.password),
+        fetchUserDetailsImpl(actualUserToken.password),
         fetchMembershipDataImpl(newMembershipToken),
     ])
 
@@ -136,7 +142,12 @@ const fetchUserDataForKeychainUser = async (
 
 const fetchCASExpiryForKeychainCredentials = async () => {
     const creds = await casCredentialsKeychain.get()
-    if (!creds) return null
+    if (!creds) {
+        const username = legacyCASUsernameCache.get()
+        const password = legacyCASPasswordCache.get()
+        if (!username || !password) return null
+        return fetchCasSubscription(username, password)
+    }
     return fetchCasSubscription(creds.username, creds.password)
 }
 

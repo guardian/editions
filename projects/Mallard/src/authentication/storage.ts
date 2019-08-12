@@ -1,12 +1,30 @@
 import * as Keychain from 'react-native-keychain'
-import {
-    ID_API_URL,
-    MEMBERS_DATA_API_URL,
-    CAS_ENDPOINT_URL,
-} from '../constants'
 import { UserData } from './helpers'
 import AsyncStorage from '@react-native-community/async-storage'
 import { CasExpiry } from 'src/services/content-auth-service'
+import { Settings } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
+
+/**
+ * this is ostensibly used to find the legacy binary data from the old GCE app
+ */
+const createSyncBinaryCacheIOS = <T = any>(key: string) => ({
+    set: (value: T) => Settings.set({ [key]: value }),
+    get: (): T => Settings.get(key),
+    reset: (): void => Settings.set({ [key]: void 0 }),
+})
+
+const legacyCASUsernameCache = createSyncBinaryCacheIOS<string>(
+    'printSubscriberID',
+)
+
+const legacyCASPasswordCache = createSyncBinaryCacheIOS<string>(
+    'printSubscriberPostcode',
+)
+
+const legacyCASExpiryCache = createSyncBinaryCacheIOS<CasExpiry>(
+    `${DeviceInfo.getBundleId()}_expiryDict`,
+)
 
 /**
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
@@ -36,11 +54,25 @@ const createServiceTokenStore = (service: string) => ({
     reset: () => Keychain.resetGenericPassword({ service }),
 })
 
-const userAccessTokenKeychain = createServiceTokenStore(ID_API_URL)
+const userAccessTokenKeychain = createServiceTokenStore('UserAccessToken')
 const membershipAccessTokenKeychain = createServiceTokenStore(
-    MEMBERS_DATA_API_URL,
+    'MembershipServiceAccessToken',
 )
-const casCredentialsKeychain = createServiceTokenStore(CAS_ENDPOINT_URL)
+const casCredentialsKeychain = createServiceTokenStore('CASCredentials')
+
+const _legacyUserAccessTokenKeychain = createServiceTokenStore('AccessToken')
+
+const getLegacyUserAccessToken = async (): ReturnType<
+    typeof _legacyUserAccessTokenKeychain.get
+> => {
+    const token = await _legacyUserAccessTokenKeychain.get()
+    if (!token) return token
+
+    return {
+        ...token,
+        password: JSON.parse(token.password).accessToken,
+    }
+}
 
 /**
  * Removes all the relevent keychain, storage entries that mark a user as logged in
@@ -53,6 +85,8 @@ const resetCredentials = (): Promise<boolean> =>
         userDataCache.reset(),
         casCredentialsKeychain.reset(),
         casDataCache.reset(),
+        _legacyUserAccessTokenKeychain.reset(),
+        legacyCASExpiryCache.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
@@ -62,4 +96,8 @@ export {
     resetCredentials,
     casDataCache,
     userDataCache,
+    getLegacyUserAccessToken,
+    legacyCASExpiryCache,
+    legacyCASUsernameCache,
+    legacyCASPasswordCache,
 }
