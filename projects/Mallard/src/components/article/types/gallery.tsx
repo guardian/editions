@@ -53,19 +53,25 @@ const GalleryImage = ({
 }
 
 const styles = StyleSheet.create({
+    background: {
+        backgroundColor: color.photoBackground,
+        paddingHorizontal: metrics.articleSides,
+        paddingTop: metrics.vertical / 2,
+    },
     image: {
         marginBottom: metrics.vertical * 2,
         width: '100%',
     },
     caption: {
-        paddingHorizontal: metrics.horizontal,
         marginBottom: metrics.vertical * 2,
-        marginTop: metrics.vertical * -1,
+        marginTop: metrics.vertical * -1.5,
+        color: color.textOverPhotoBackground,
     },
 })
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
+    console.log(gallery)
     return (
-        <View style={{ backgroundColor: color.background }}>
+        <View style={styles.background}>
             {gallery.elements.map((element, index) => {
                 if (element.id === 'image') {
                     return (
