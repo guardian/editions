@@ -67,6 +67,11 @@ const membershipAccessTokenKeychain = createServiceTokenStore(
 )
 const casCredentialsKeychain = createServiceTokenStore('CASCredentials')
 
+/**
+ * For the legacy token we're not going to expose the whole store as we're never going
+ * to write to if from the application and additionally, the token is set in a JSON object
+ * in the old app so we need to fetch that out in the `getLegacyUserAccessToken` helper.
+ */
 const _legacyUserAccessTokenKeychain = createServiceTokenStore('AccessToken')
 
 const getLegacyUserAccessToken = async (): ReturnType<
