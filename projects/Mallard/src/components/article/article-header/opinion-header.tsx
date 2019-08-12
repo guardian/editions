@@ -61,9 +61,11 @@ const OpinionHeader = ({
             <ArticleFader>
                 <ArticleHeadline
                     icon={{
-                        width: 70,
+                        width: 80,
                         height: font.lineHeight,
-                        element: () => <Quote fill={articleColor.main} />,
+                        element: () => (
+                            <Quote scale={1.2} fill={articleColor.main} />
+                        ),
                     }}
                     weight="light"
                     textStyle={[{ marginBottom: metrics.vertical }, font]}

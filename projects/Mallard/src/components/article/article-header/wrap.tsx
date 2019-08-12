@@ -29,22 +29,23 @@ const styles = StyleSheet.create({
             metrics.article.leftRailLandscape,
     },
     wrapperHeader: {
-        marginLeft: metrics.article.sides * -1,
+        marginLeft: metrics.article.sidesLandscape * 1,
     },
     wrapperHeaderMobile: {
         marginHorizontal: metrics.article.sides * -1,
     },
     padding: {
-        paddingLeft: metrics.article.sidesLandscape,
+        marginLeft: metrics.article.sidesLandscape,
         paddingRight: metrics.article.sidesLandscape * 1.25,
     },
     paddingLandscape: {
-        paddingLeft: metrics.article.leftRailLandscape,
+        marginLeft: metrics.article.leftRailLandscape,
     },
 })
 
 interface PropTypes {
     style?: StyleProp<ViewStyle>
+    innerStyle?: StyleProp<ViewStyle>
     isTopMost?: boolean
     backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
@@ -54,6 +55,7 @@ interface PropTypes {
 
 const InnerWrapper = ({
     style,
+    innerStyle,
     isTopMost = false,
     children,
     backgroundColor,
@@ -75,7 +77,13 @@ const InnerWrapper = ({
         ]}
     >
         {header && <View style={styles.wrapperHeader}>{header}</View>}
-        <View style={[styles.padding, landscape && styles.paddingLandscape]}>
+        <View
+            style={[
+                innerStyle,
+                styles.padding,
+                landscape && styles.paddingLandscape,
+            ]}
+        >
             {children}
         </View>
     </View>
@@ -139,27 +147,16 @@ const MultilineWrap = ({
         <Wrap {...props} />
         {byline && (
             <Wrap
-                backgroundColor={
-                    bylineHasBackgroundColor ? props.backgroundColor : undefined
-                }
+                backgroundColor={props.backgroundColor}
                 borderColor={props.borderColor}
-                style={[
-                    multiStyles.byline,
-                    !bylineHasBackgroundColor && multiStyles.bylineBorder,
-                ]}
+                style={[multiStyles.byline]}
+                innerStyle={!props.backgroundColor && multiStyles.bylineBorder}
                 header={
-                    multilineBleeds && (
-                        <ArticleFader>
-                            <ArticleMultiline />
-                        </ArticleFader>
-                    )
-                }
-            >
-                {!multilineBleeds && (
                     <ArticleFader>
                         <ArticleMultiline />
                     </ArticleFader>
-                )}
+                }
+            >
                 <ArticleFader>{byline}</ArticleFader>
             </Wrap>
         )}
