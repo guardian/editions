@@ -22,6 +22,7 @@ import { cleanupHtml } from '../utils/html'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
+import { rationaliseAtoms } from './atoms'
 
 type NotInCAPI =
     | 'key'
@@ -69,7 +70,9 @@ const parseArticleResult = async (
         result.fields.standfirst &&
         cleanupHtml(result.fields.standfirst)
 
-    const parser = elementParser(path)
+    const atomData = rationaliseAtoms(result.atoms)
+
+    const parser = elementParser(path, atomData)
     const kicker = kickerPicker(result, title)
 
     const trail = result.fields && result.fields.trailText

@@ -1,9 +1,19 @@
-import { Front, ImageElement, CAPIArticle, Image } from './common'
+import { Front, CAPIArticle, Image } from './common'
 import { unnest } from 'ramda'
 import { getColours, getImage } from './downloader'
 import { hasFailed, attempt } from '../backend/utils/try'
 import { upload } from './upload'
-import { ImageSize, notNull } from '../common/src'
+import { ImageSize, notNull, BlockElement } from '../common/src'
+
+const getImageFromElement = (element: BlockElement): Image | undefined => {
+    switch (element.id) {
+        case 'image':
+            return element.src
+        case 'media⚛︎':
+            return element.image
+    }
+    return undefined
+}
 
 export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const image = article.image
@@ -16,9 +26,7 @@ export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
         ]) ||
         []
 
-    const images = elements
-        .filter((element): element is ImageElement => element.id === 'image')
-        .map(element => element.src)
+    const images = elements.map(getImageFromElement)
 
     return [...images, ...slideshowImages, ...bylineImages, image].filter(
         notNull,

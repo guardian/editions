@@ -162,12 +162,23 @@ export interface AtomElement {
     css?: string[]
     js?: string[]
 }
+
+export interface MediaAtomElement {
+    id: 'media⚛︎'
+    image?: Image
+    html: string
+    platform?: 'youtube' | 'dailymotion' | 'mainstream' | 'url'
+    assetId?: string
+    title?: string
+}
+
 export type BlockElement =
     | HTMLElement
     | ImageElement
     | UnknownElement
     | TweetElement
     | AtomElement
+    | MediaAtomElement
     | PullquoteElement
 
 export interface CrosswordDimensions {
