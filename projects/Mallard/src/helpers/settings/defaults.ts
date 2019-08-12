@@ -6,18 +6,26 @@ This is a bit of a mess
 */
 export const backends = [
     {
-        title: 'PROD',
+        title: 'PROD published',
+        value: 'https://editions-store.s3-eu-west-1.amazonaws.com/',
+    },
+    {
+        title: 'PROD preview',
         value: 'https://d2cf1ljtg904cv.cloudfront.net/',
     },
     {
-        title: 'CODE',
+        title: 'CODE published',
+        value: 'https://editions-store-code.s3-eu-west-1.amazonaws.com/',
+    },
+    {
+        title: 'CODE preview',
         value: 'https://d2mztzjulnpyb8.cloudfront.net/',
     },
     {
         title: 'DEV',
         value: 'http://localhost:3131/',
     },
-]
+] as const
 
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',

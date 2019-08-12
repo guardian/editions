@@ -7,7 +7,7 @@ import { ImageSize, notNull } from '../common/src'
 
 export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const image = article.image
-    const elements = article.type === 'article' ? article.elements : []
+    const elements = article.type !== 'crossword' ? article.elements : []
     const slideshowImages = article.slideshowImages || []
     const bylineImages =
         (article.bylineImages && [

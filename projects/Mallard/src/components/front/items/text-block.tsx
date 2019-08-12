@@ -4,8 +4,12 @@ import { metrics } from 'src/theme/spacing'
 import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
 
 import { color } from 'src/theme/color'
-import { useKickerColorStyle, ItemSizes, PageLayoutSizes } from '../helpers'
-import { getFont } from 'src/theme/typography'
+import {
+    useKickerColorStyle,
+    ItemSizes,
+    PageLayoutSizes,
+} from '../helpers/helpers'
+import { getFont, FontSizes } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
@@ -56,32 +60,40 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
     }
 }
 
+const getFontSize = ({ layout, story }: ItemSizes) => {
+    if (layout === PageLayoutSizes.tablet) {
+        if (story.width >= 3) {
+            if (story.height >= 3) return 1.75
+            if (story.height >= 2) return 1.25
+        }
+        if (story.width >= 2) {
+            if (story.height >= 3) return 1.5
+            return 1
+        }
+        return 1
+    }
+    return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
+}
+
 const TextBlock = ({
     kicker,
     headline,
     textBlockAppearance,
-    size,
     style,
+    ...sizes
 }: {
     kicker: string
     headline: string
     textBlockAppearance: TextBlockAppearance
-    size: ItemSizes
     style?: StyleProp<ViewStyle>
-}) => {
+} & ({ size: ItemSizes } | { fontSize: FontSizes<'headline'> })) => {
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
-
-    const getFontSize = ({ layout, story }: ItemSizes) => {
-        if (layout === PageLayoutSizes.tablet) {
-            return story.height >= 4 ? 1.5 : story.height >= 3 ? 1.25 : 1
-        }
-        return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
-    }
-
-    const { fontSize } = getFont('headline', getFontSize(size))
-
+    const fontSize = getFont(
+        'headline',
+        'fontSize' in sizes ? sizes.fontSize : getFontSize(sizes.size),
+    ).fontSize
     return (
         <View style={[rootStyle, style]}>
             <HeadlineKickerText
