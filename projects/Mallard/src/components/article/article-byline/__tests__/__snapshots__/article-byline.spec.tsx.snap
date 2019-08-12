@@ -8,7 +8,7 @@ exports[`ArticleByline should display a default Byline 1`] = `
         "flexShrink": 0,
         "fontFamily": "GuardianTextEgyptian-Bold",
         "fontSize": 17,
-        "lineHeight": 21,
+        "lineHeight": 24,
       },
       Array [
         Object {
