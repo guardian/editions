@@ -3,7 +3,6 @@ import { UserData } from './helpers'
 import AsyncStorage from '@react-native-community/async-storage'
 import { CasExpiry } from 'src/services/content-auth-service'
 import { Settings } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
 import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
