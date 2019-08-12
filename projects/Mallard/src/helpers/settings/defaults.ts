@@ -8,24 +8,33 @@ export const backends = [
     {
         title: 'PROD published',
         value: 'https://editions-store.s3-eu-west-1.amazonaws.com/',
+        preview: false,
     },
     {
         title: 'PROD preview',
         value: 'https://d2cf1ljtg904cv.cloudfront.net/',
+        preview: true,
     },
     {
         title: 'CODE published',
         value: 'https://editions-store-code.s3-eu-west-1.amazonaws.com/',
+        preview: false,
     },
     {
         title: 'CODE preview',
         value: 'https://d2mztzjulnpyb8.cloudfront.net/',
+        preview: true,
     },
     {
         title: 'DEV',
         value: 'http://localhost:3131/',
+        preview: true,
     },
-] as const
+] as {
+    title: string
+    value: string
+    preview: boolean
+}[]
 
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
@@ -41,4 +50,9 @@ export const defaultSettings: Settings = {
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
+}
+
+export const isPreview = (settings: Settings): boolean => {
+    const backend = backends.find(backend => backend.value === settings.apiUrl)
+    return (backend && backend.preview) || false
 }

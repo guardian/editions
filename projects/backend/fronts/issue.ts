@@ -13,6 +13,7 @@ export interface PublishedFront {
 }
 export interface PublishedCollection {
     id: string
+    name: string
     items: PublishedArticle[]
 }
 export interface PublishedArticle {

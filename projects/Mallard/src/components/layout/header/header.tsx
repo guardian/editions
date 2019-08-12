@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Alert } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import {
@@ -13,6 +13,7 @@ import { useIssueDate } from 'src/helpers/issues'
 import { Issue } from 'src/common'
 import { Highlight } from 'src/components/highlight'
 import { getFont } from 'src/theme/typography'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 
 const styles = StyleSheet.create({
     background: {
