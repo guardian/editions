@@ -4,9 +4,16 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { CasExpiry } from 'src/services/content-auth-service'
 import { Settings } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import {
+    LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
+    LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
+    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
+} from 'src/constants'
 
 /**
- * this is ostensibly used to find the legacy binary data from the old GCE app
+ * this is ostensibly used to get the legacy data from the old GCE app
+ * `Settings` only works on iOS but we only ever had a legacy app on iOS
+ * and not Android.
  */
 const createSyncBinaryCacheIOS = <T = any>(key: string) => ({
     set: (value: T) => Settings.set({ [key]: value }),
@@ -15,15 +22,15 @@ const createSyncBinaryCacheIOS = <T = any>(key: string) => ({
 })
 
 const legacyCASUsernameCache = createSyncBinaryCacheIOS<string>(
-    'printSubscriberID',
+    LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
 )
 
 const legacyCASPasswordCache = createSyncBinaryCacheIOS<string>(
-    'printSubscriberPostcode',
+    LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 )
 
 const legacyCASExpiryCache = createSyncBinaryCacheIOS<CasExpiry>(
-    `${DeviceInfo.getBundleId()}_expiryDict`,
+    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
 )
 
 /**
