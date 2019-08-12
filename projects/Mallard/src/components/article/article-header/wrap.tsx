@@ -46,6 +46,7 @@ interface PropTypes {
     borderColor?: ViewStyle['borderColor']
     children: ReactNode
     header?: ReactNode
+    footer?: ReactNode
 }
 
 const InnerWrapper = ({
@@ -57,6 +58,7 @@ const InnerWrapper = ({
     borderColor,
     landscape = false,
     header,
+    footer,
 }: PropTypes & { landscape?: boolean }) => (
     <View
         style={[
@@ -83,6 +85,9 @@ const InnerWrapper = ({
         >
             {children}
         </View>
+        {footer && (
+            <View style={[styles.padding, { paddingRight: 0 }]}>{footer}</View>
+        )}
     </View>
 )
 
@@ -102,6 +107,7 @@ const Wrap = ({ children, backgroundColor, ...props }: PropTypes) => {
                             >
                                 {props.header}
                                 {children}
+                                {props.footer}
                             </View>
                         </>
                     ),
@@ -149,11 +155,17 @@ const MultilineWrap = ({
                 backgroundColor={props.backgroundColor}
                 borderColor={props.borderColor}
                 style={[multiStyles.byline]}
-                innerStyle={!props.backgroundColor && multiStyles.bylineBorder}
                 header={
                     <ArticleFader>
                         <ArticleMultiline />
                     </ArticleFader>
+                }
+                footer={
+                    !props.backgroundColor && (
+                        <ArticleFader>
+                            <View style={multiStyles.bylineBorder} />
+                        </ArticleFader>
+                    )
                 }
             >
                 <ArticleFader>{byline}</ArticleFader>
