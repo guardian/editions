@@ -15,21 +15,21 @@ import {
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
  * and not Android.
  */
-const createSyncBinaryCacheIOS = <T = any>(key: string) => ({
+const createSyncCacheIOS = <T = any>(key: string) => ({
     set: (value: T) => Settings.set({ [key]: value }),
     get: (): T => Settings.get(key),
     reset: (): void => Settings.set({ [key]: void 0 }),
 })
 
-const legacyCASUsernameCache = createSyncBinaryCacheIOS<string>(
+const legacyCASUsernameCache = createSyncCacheIOS<string>(
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
 )
 
-const legacyCASPasswordCache = createSyncBinaryCacheIOS<string>(
+const legacyCASPasswordCache = createSyncCacheIOS<string>(
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 )
 
-const legacyCASExpiryCache = createSyncBinaryCacheIOS<CasExpiry>(
+const legacyCASExpiryCache = createSyncCacheIOS<CasExpiry>(
     LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
 )
 
