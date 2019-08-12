@@ -43,7 +43,6 @@ const ReviewHeader = ({
                     </ArticleByline>
                 </ArticleFader>
             }
-            isTopMost
             backgroundColor={color.faded}
             borderColor={color.dark}
         >

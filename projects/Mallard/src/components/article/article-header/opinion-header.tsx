@@ -34,7 +34,6 @@ const OpinionHeader = ({
     const font = getFont('headline', 1.5, 'light')
     return (
         <MultilineWrap
-            isTopMost
             style={styles.innerWrap}
             backgroundColor={color.palette.opinion.faded}
             byline={

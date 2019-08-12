@@ -36,7 +36,6 @@ const NewsHeader = ({
 }: ArticleHeaderProps) => {
     return (
         <MultilineWrap
-            isTopMost
             style={[styles.background]}
             byline={
                 <ArticleByline style={styles.byline}>{byline}</ArticleByline>
