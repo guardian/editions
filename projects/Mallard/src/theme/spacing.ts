@@ -16,10 +16,12 @@ export const metrics = {
     frontsPageSides: basicMetrics.horizontal * 1.5,
     article: {
         sides: basicMetrics.horizontal / 2,
-        sidesLandscape: basicMetrics.horizontal * 1.5,
+        sidesTablet: basicMetrics.horizontal * 1.5,
         maxWidth: 540,
         maxWidthLandscape: 620,
         leftRailLandscape: 120,
+        rightRail: 200,
+        rightRailLandscape: 260,
     },
     fronts: {
         cardContainerHeightExtra: 60,
