@@ -5,7 +5,6 @@ import Svg, { Rect } from 'react-native-svg'
 import { StyleSheet, StyleProp } from 'react-native'
 
 const pixel = 1
-const gap = 2
 
 const Multiline = ({
     color,
@@ -18,6 +17,8 @@ const Multiline = ({
     style?: StyleProp<{}>
     width?: string | number
 }) => {
+    const gap = count < 4 ? 2 : 3
+
     const lines = []
     for (let i = 0; i < count; i++) {
         lines.push(
