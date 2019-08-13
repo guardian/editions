@@ -1,3 +1,5 @@
+import { ReceiptIOS } from 'src/services/iap'
+
 const membershipResponse = {
     userId: 'uid',
     showSupportMessaging: true,
@@ -51,4 +53,40 @@ const casExpiry = ({
     subscriptionCode,
 })
 
-export { membershipResponse, userResponse, userData, casExpiry }
+const receiptIOS = ({
+    expires_date = '',
+    expires_date_ms = `${Date.now()}`,
+    expires_date_pst = '',
+    is_in_intro_offer_period = '',
+    is_trial_period = '',
+    original_purchase_date = '',
+    original_purchase_date_ms = '',
+    original_purchase_date_pst = '',
+    original_transaction_id = '',
+    product_id = '',
+    purchase_date = '',
+    purchase_date_ms = '',
+    purchase_date_pst = '',
+    quantity = '',
+    transaction_id = '',
+    web_order_line_item_id = '',
+} = {}): ReceiptIOS => ({
+    expires_date,
+    expires_date_ms,
+    expires_date_pst,
+    is_in_intro_offer_period,
+    is_trial_period,
+    original_purchase_date,
+    original_purchase_date_ms,
+    original_purchase_date_pst,
+    original_transaction_id,
+    product_id,
+    purchase_date,
+    purchase_date_ms,
+    purchase_date_pst,
+    quantity,
+    transaction_id,
+    web_order_line_item_id,
+})
+
+export { receiptIOS, membershipResponse, userResponse, userData, casExpiry }

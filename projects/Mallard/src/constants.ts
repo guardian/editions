@@ -2,7 +2,12 @@ import { Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import Config from 'react-native-config'
 
-const { ID_API_URL, MEMBERS_DATA_API_URL, ID_ACCESS_TOKEN } = Config
+const {
+    ID_API_URL,
+    MEMBERS_DATA_API_URL,
+    ID_ACCESS_TOKEN,
+    ITUNES_CONNECT_SHARED_SECRET,
+} = Config
 
 const FACEBOOK_CLIENT_ID = '180444840287'
 
@@ -32,4 +37,5 @@ export {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
     LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
+    ITUNES_CONNECT_SHARED_SECRET,
 }
