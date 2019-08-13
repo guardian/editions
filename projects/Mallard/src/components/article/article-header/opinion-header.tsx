@@ -2,23 +2,21 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
-import { getNavigationPosition } from 'src/helpers/positions'
-import { newsHeaderStyles } from '../styles'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
-import { Multiline } from '../../multiline'
 import { ArticleHeadline } from '../article-headline'
 import Quote from 'src/components/icons/Quote'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
+import { MultilineWrap } from './wrap'
 
 const ArticleFader = getFader('article')
 
 const styles = StyleSheet.create({
-    background: {
-        backgroundColor: color.palette.opinion.faded,
+    innerWrap: {
+        paddingBottom: metrics.vertical,
     },
     byline: {
         fontFamily: getFont('titlepiece', 1).fontFamily,
@@ -32,39 +30,51 @@ const OpinionHeader = ({
     image,
     standfirst,
 }: ArticleHeaderProps) => {
-    const [color] = useArticle()
+    const [articleColor] = useArticle()
+    const font = getFont('headline', 1.5, 'light')
     return (
-        <View style={[styles.background]}>
-            <View style={[newsHeaderStyles.background]}>
-                {image ? (
-                    <ArticleFader buildOrder={1}>
-                        <ArticleImage
-                            style={{
-                                aspectRatio: 1.5,
-                                marginBottom: metrics.vertical / 4,
-                            }}
-                            image={image}
-                        />
-                    </ArticleFader>
-                ) : null}
-                <ArticleFader buildOrder={2}>
-                    <ArticleHeadline>
-                        <Quote fill={color.main} />
-                        {headline}
-                        <Text style={[{ color: color.main }, styles.byline]}>
-                            {'\n'}
-                            {byline}
-                        </Text>
-                    </ArticleHeadline>
+        <MultilineWrap
+            style={styles.innerWrap}
+            backgroundColor={color.palette.opinion.faded}
+            byline={
+                <ArticleFader>
+                    <View style={[styles.innerWrap]}>
+                        <ArticleStandfirst {...{ standfirst }} />
+                    </View>
                 </ArticleFader>
-            </View>
-            <ArticleFader buildOrder={3}>
-                <Multiline count={4} />
-                <View style={[newsHeaderStyles.background]}>
-                    <ArticleStandfirst {...{ standfirst }} />
-                </View>
+            }
+        >
+            {image ? (
+                <ArticleFader>
+                    <ArticleImage
+                        style={{
+                            aspectRatio: 1.5,
+                            marginBottom: metrics.vertical / 4,
+                        }}
+                        image={image}
+                    />
+                </ArticleFader>
+            ) : null}
+            <ArticleFader>
+                <ArticleHeadline
+                    icon={{
+                        width: 80,
+                        height: font.lineHeight,
+                        element: () => (
+                            <Quote scale={1.2} fill={articleColor.main} />
+                        ),
+                    }}
+                    weight="light"
+                    textStyle={[{ marginBottom: metrics.vertical }, font]}
+                >
+                    {headline}
+                    <Text style={[{ color: articleColor.main }, styles.byline]}>
+                        {'\n'}
+                        {byline}
+                    </Text>
+                </ArticleHeadline>
             </ArticleFader>
-        </View>
+        </MultilineWrap>
     )
 }
 

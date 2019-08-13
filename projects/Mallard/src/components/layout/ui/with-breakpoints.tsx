@@ -1,12 +1,11 @@
-import React, { useState, ReactElement } from 'react'
-import { View, LayoutRectangle, StyleSheet } from 'react-native'
+import React, { useState, ReactNode, FunctionComponent } from 'react'
+import { View, LayoutRectangle } from 'react-native'
 import { getClosestBreakpoint, BreakpointList } from 'src/theme/breakpoints'
+import { UiBodyCopy } from 'src/components/styled-text'
 
-const WithBreakpoints = ({
-    children,
-}: {
-    children: BreakpointList<(l: LayoutRectangle) => ReactElement>
-}) => {
+const WithBreakpoints: FunctionComponent<{
+    children: BreakpointList<(l: LayoutRectangle) => ReactNode>
+}> = ({ children }) => {
     const [maxSize, setMaxSize] = useState<keyof typeof children>(0)
     const [metrics, setMetrics] = useState<LayoutRectangle | null>(null)
     return (

@@ -2,8 +2,15 @@ import React from 'react'
 import Svg, { Path } from 'react-native-svg'
 import { color } from 'src/theme/color'
 
-const Quote = ({ fill = color.text, height = 25, width = 38 }) => (
-    <Svg width={width} height={height} fill="none">
+const height = 25
+const width = 38
+const Quote = ({ fill = color.text, scale = 1 }) => (
+    <Svg
+        style={{ transform: [{ scale }] }}
+        width={width}
+        height={height}
+        fill="none"
+    >
         <Path
             fill-rule="evenodd"
             clip-rule="evenodd"

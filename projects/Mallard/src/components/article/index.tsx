@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, Dimensions, Linking, Animated } from 'react-native'
+import { View, StyleSheet, Dimensions, Linking } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -10,12 +10,12 @@ import { PropTypes as StandfirstPropTypes } from './article-standfirst'
 import { BlockElement } from 'src/common'
 import { render } from './html/render'
 import { CAPIArticle } from 'src/common'
-import { getNavigationPosition } from 'src/helpers/positions'
 import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
 import { ReviewHeader } from './article-header/review-header'
+import { Wrap } from './article-header/wrap'
 
 /*
 This is the article view! For all of the articles.
@@ -72,6 +72,7 @@ const Article = ({
     const [, { type }] = useArticle()
     return (
         <View style={styles.container}>
+            <Fader first position={'article'} />
             {type === 'opinion' ? (
                 <OpinionHeader {...headerProps} />
             ) : type === 'review' ? (
@@ -81,8 +82,8 @@ const Article = ({
             ) : (
                 <NewsHeader {...headerProps} />
             )}
-            <Fader buildOrder={10} position={'article'}>
-                <View style={[{ backgroundColor: color.background, flex: 1 }]}>
+            <Wrap>
+                <Fader position={'article'}>
                     <WebView
                         originWhitelist={['*']}
                         scrollEnabled={false}
@@ -99,16 +100,17 @@ const Article = ({
                             setHeight(parseInt(event.nativeEvent.data))
                         }}
                         style={{
-                            flex: 1,
                             minHeight: height,
+                            marginHorizontal: metrics.article.sides * -1,
+                            /*
+                                The below line fixes crashes on Android
+                                https://github.com/react-native-community/react-native-webview/issues/429
+                                */
+                            opacity: 0.99,
                         }}
-                        // The below lines fixes crashes on Android
-                        // there seems to be other approaches using opacity / overflow styles detailed here
-                        // https://github.com/react-native-community/react-native-webview/issues/429
-                        androidHardwareAccelerationDisabled={true}
                     />
-                </View>
-            </Fader>
+                </Fader>
+            </Wrap>
         </View>
     )
 }

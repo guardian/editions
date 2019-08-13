@@ -1,23 +1,20 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {
     getNavigationPosition,
     SaveableNavigationPositions,
 } from 'src/helpers/positions'
-import { Animated, StyleSheet } from 'react-native'
+import { Animated, StyleSheet, View, Dimensions } from 'react-native'
 
 /*
 This is part of the transition from articles to fronts
 and it fades content in and out with a user chosen delay.
 
-The build order is an int X-1 on purpose to abstract the details
-of how and when to fade to this component. We will likely
-wanna mess with the actual animation numbers later on to make them
-more/less staggered
+The build order goes up/down according to screen position
 */
 
 export interface PropTypes {
-    buildOrder: number
-    children: Element
+    first?: boolean
+    children?: Element
     position: SaveableNavigationPositions
 }
 
@@ -25,19 +22,39 @@ const faderStyles = StyleSheet.create({
     wrapper: { width: '100%' },
 })
 
-const fadeOffset = 0.5
+const clamp = (number: number, min: number, max: number) => {
+    if (number > max) return max
+    if (number < min) return min
+    return number
+}
 
-const Fader = ({ buildOrder, children, position }: PropTypes) => {
+const Fader = ({ children, position }: PropTypes) => {
     const navigationPosition = getNavigationPosition(position)
-    if (buildOrder > 6) buildOrder = 6
+    const buildOrder = useRef(0)
+    const faderRef = useRef<View>()
+
     return (
         <Animated.View
+            ref={(view: { _component: unknown }) => {
+                if (view && view._component)
+                    faderRef.current = view._component as View
+            }}
+            onLayout={() => {
+                faderRef.current &&
+                    faderRef.current.measureInWindow((x, y) => {
+                        buildOrder.current =
+                            (y / Dimensions.get('window').height) * 6
+                    })
+            }}
             style={[
                 navigationPosition && {
                     opacity: navigationPosition.position.interpolate({
+                        /*
+                        we wanna prevent any value except the final
+                        one to be 1 because otherwise the animation will throw */
                         inputRange: [
-                            0.2 + buildOrder / 10,
-                            0.4 + buildOrder / 10,
+                            clamp(0.2 + buildOrder.current / 10, 0, 1),
+                            clamp(0.4 + buildOrder.current / 10, 0.4, 1),
                             1,
                         ],
                         outputRange: [0, 1, 1],

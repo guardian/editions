@@ -12,7 +12,13 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
-      undefined,
+      Object {
+        "transform": Array [
+          Object {
+            "scale": 1,
+          },
+        ],
+      },
       null,
       Object {
         "flex": 0,
