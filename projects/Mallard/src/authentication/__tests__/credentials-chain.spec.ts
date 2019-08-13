@@ -4,8 +4,9 @@ import {
     CASAuthStatus,
     isAuthed,
     authTypeFromCAS,
+    authTypeFromIAP,
 } from '../credentials-chain'
-import { userData, casExpiry } from './fixtures'
+import { userData, casExpiry, receiptIOS } from './fixtures'
 
 /**
  * This helper ensures an ordering or resolving promises, any promise
@@ -92,6 +93,30 @@ describe('credentials-chain', () => {
         it('returns false when the CAS expiry is in the past', () => {
             expect(
                 authTypeFromCAS(casExpiry({ expiryDate: '2012-12-12' })),
+            ).toBe(false)
+        })
+    })
+
+    describe('authTypeFromIAP', () => {
+        it('returns an IAP auth when the IAP receipt expiry is in the future', () => {
+            expect(
+                authTypeFromIAP(
+                    receiptIOS({
+                        expires_date_ms: `${Date.now() + 1000}`,
+                    }),
+                ),
+            ).toMatchObject({
+                type: 'iap',
+            })
+        })
+
+        it('returns false when the IAP receipt expiry is in the past', () => {
+            expect(
+                authTypeFromIAP(
+                    receiptIOS({
+                        expires_date_ms: `${Date.now() - 1000}`,
+                    }),
+                ),
             ).toBe(false)
         })
     })

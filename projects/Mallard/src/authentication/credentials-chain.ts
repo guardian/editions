@@ -187,4 +187,5 @@ export {
     CASAuthStatus,
     /* exported for testing */
     authTypeFromCAS,
+    authTypeFromIAP,
 }
