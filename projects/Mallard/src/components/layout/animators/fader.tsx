@@ -49,6 +49,9 @@ const Fader = ({ children, position }: PropTypes) => {
             style={[
                 navigationPosition && {
                     opacity: navigationPosition.position.interpolate({
+                        /*
+                        we wanna prevent any value except the final
+                        one to be 1 because otherwise the animation will throw */
                         inputRange: [
                             clamp(0.2 + buildOrder.current / 10, 0, 1),
                             clamp(0.4 + buildOrder.current / 10, 0.4, 1),
