@@ -6,6 +6,7 @@ import { metrics } from 'src/theme/spacing'
 import { Front } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useAppAppearance } from 'src/theme/appearance'
+import { Rectangle, Size } from 'src/helpers/sizes'
 
 type Item = FunctionComponent<PropTypes>
 
@@ -13,17 +14,8 @@ export interface AnimatedFlatListRef {
     _component: FlatList<Front['collections'][0]>
 }
 
-interface Size {
-    width: number
-    height: number
-}
-
-export type ItemFit = Size & {
-    top: number
-    left: number
-}
 export interface ItemSizes {
-    story: ItemFit
+    story: Rectangle
     layout: PageLayoutSizes
 }
 
@@ -36,7 +28,7 @@ export type PageLayout = {
         size: key
         items: {
             item: Item
-            fits: ItemFit
+            fits: Rectangle
         }[]
     }
 }
@@ -52,7 +44,10 @@ export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
 This resolves where each article goes
 */
 
-export const getItemPosition = (itemFit: ItemFit, layout: PageLayoutSizes) => {
+export const getItemPosition = (
+    itemFit: Rectangle,
+    layout: PageLayoutSizes,
+) => {
     const layoutSize = getPageLayoutSizeXY(layout)
     return {
         left: `${(itemFit.left / layoutSize.width) * 100}%`,

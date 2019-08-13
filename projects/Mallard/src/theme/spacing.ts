@@ -1,6 +1,6 @@
 import { Platform, StatusBar } from 'react-native'
 
-export const spacing = [0, 3, 6, 12, 18, 30]
+const spacing = [0, 3, 6, 12, 18, 30]
 
 const headerHeight = spacing[5]
 const basicMetrics = {
@@ -14,7 +14,15 @@ export const metrics = {
     ...basicMetrics,
     headerHeight,
     frontsPageSides: basicMetrics.horizontal * 1.5,
-    articleSides: basicMetrics.horizontal / 2,
+    article: {
+        sides: basicMetrics.horizontal / 2,
+        sidesTablet: basicMetrics.horizontal * 1.5,
+        maxWidth: 540,
+        maxWidthLandscape: 620,
+        leftRailLandscape: 120,
+        rightRail: 200,
+        rightRailLandscape: 260,
+    },
     fronts: {
         cardContainerHeightExtra: 60,
         cardSize: XY(540, 600),

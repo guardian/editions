@@ -25,6 +25,7 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('any')
+            const getLegacyUserAccessToken = getMockPromise(false as const)
             const resetMock = getMockPromise(true)
 
             const data = await fetchUserDataForKeychainUser(
@@ -33,6 +34,7 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
+                getLegacyUserAccessToken,
                 resetMock,
             )
 
@@ -50,6 +52,7 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
+            const getLegacyUserAccessToken = getMockPromise(false as const)
             const resetMock = getMockPromise(true)
 
             const data = await fetchUserDataForKeychainUser(
@@ -58,6 +61,36 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
+                getLegacyUserAccessToken,
+                resetMock,
+            )
+
+            expect(data).toEqual({
+                userDetails: userResponse,
+                membershipData: membershipResponse,
+            })
+            expect(resetMock).not.toHaveBeenCalled()
+            expect(userStore.get).toBeCalledTimes(1)
+            expect(fetchUserData).toBeCalledTimes(1)
+            expect(fetchMembershipData).toBeCalledTimes(1)
+        })
+
+        it('queries the membership and user data when it finds a legacy user token', async () => {
+            const membershipStore = getMockStore('mtoken')
+            const userStore = getMockStore()
+            const fetchMembershipData = getMockPromise(membershipResponse)
+            const fetchUserData = getMockPromise(userResponse)
+            const fetchMembershipToken = getMockPromise('mtoken')
+            const getLegacyUserAccessToken = getMockStore('token').get
+            const resetMock = getMockPromise(true)
+
+            const data = await fetchUserDataForKeychainUser(
+                membershipStore,
+                userStore,
+                fetchMembershipData,
+                fetchUserData,
+                fetchMembershipToken,
+                getLegacyUserAccessToken,
                 resetMock,
             )
 
@@ -77,6 +110,7 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
+            const getLegacyUserAccessToken = getMockPromise(false as const)
             const resetMock = getMockPromise(true)
 
             const data = await fetchUserDataForKeychainUser(
@@ -85,6 +119,7 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
+                getLegacyUserAccessToken,
                 resetMock,
             )
 
@@ -104,6 +139,7 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
+            const getLegacyUserAccessToken = getMockPromise(false as const)
             const resetMock = getMockPromise(true)
 
             const data = await fetchUserDataForKeychainUser(
@@ -112,6 +148,7 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
+                getLegacyUserAccessToken,
                 resetMock,
             )
 

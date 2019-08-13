@@ -16,7 +16,7 @@ const styles = css`
     }
     #app {
         font-family: 'GuardianTextEgyptian-Reg';
-        padding: ${metrics.vertical}px ${metrics.horizontal}px;
+        padding: ${metrics.vertical}px ${metrics.article.sides}px;
     }
     #app p {
         margin-bottom: ${metrics.vertical * 2}px;
