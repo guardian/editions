@@ -125,10 +125,9 @@ const GalleryCoverItem = ({
             bleeds
             wide
             borderColor={color.palette.neutral[60]}
-            style={styles.spacer}
             rightRail={
                 <View>
-                    <HeadlineText>{headline}</HeadlineText>
+                    <HeadlineText weight="bold">{headline}</HeadlineText>
                     {standfirst && (
                         <StandfirstText>{standfirst}</StandfirstText>
                     )}
