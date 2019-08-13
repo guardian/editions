@@ -107,6 +107,9 @@ PODS:
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
+  - RNSentry (1.0.0-beta.7):
+    - React
+    - Sentry (~> 4.4.0)
   - RNSVG (9.6.2):
     - React
   - RNZipArchive (4.1.3):
@@ -116,12 +119,9 @@ PODS:
   - RNZipArchive/Core (4.1.3):
     - React
     - SSZipArchive (= 2.2.2)
-  - Sentry (4.1.3):
-    - Sentry/Core (= 4.1.3)
-  - Sentry/Core (4.1.3)
-  - SentryReactNative (0.43.2):
-    - React
-    - Sentry (~> 4.1.3)
+  - Sentry (4.4.0):
+    - Sentry/Core (= 4.4.0)
+  - Sentry/Core (4.4.0)
   - SSZipArchive (2.2.2)
   - yoga (0.60.4.React)
 
@@ -160,9 +160,9 @@ DEPENDENCIES:
   - RNIap (from `../node_modules/react-native-iap`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNZipArchive (from `../node_modules/react-native-zip-archive`)
-  - SentryReactNative (from `../node_modules/react-native-sentry`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -240,12 +240,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keychain"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNZipArchive:
     :path: "../node_modules/react-native-zip-archive"
-  SentryReactNative:
-    :path: "../node_modules/react-native-sentry"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -285,10 +285,10 @@ SPEC CHECKSUMS:
   RNIap: 89befcc43b4077663968b1e3d0c1e3fbd0a1eaca
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+  RNSentry: d446ef79c292000e48b09d02578bba9ca66815a6
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
   RNZipArchive: 655499eab4610068319ff118ee9317496c6f019e
-  Sentry: 4e8a17b61ddd116f89536cc81d567fdee1ebca96
-  SentryReactNative: 07237139c00366ea2e75ae3e5c566e7a71c27a90
+  Sentry: 26650184fe71eb7476dfd2737acb5ea6cc64b4b1
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   yoga: c2c050f6ae6e222534760cc82f559b89214b67e2
 
