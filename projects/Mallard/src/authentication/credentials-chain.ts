@@ -4,7 +4,17 @@ import {
     fetchCASExpiryForKeychainCredentials,
 } from './helpers'
 import { CasExpiry } from '../services/content-auth-service'
-import { userDataCache, casDataCache } from './storage'
+import {
+    userDataCache,
+    casDataCache,
+    legacyCASExpiryCache,
+    iapReceiptCache,
+} from './storage'
+import {
+    ReceiptIOS,
+    fetchActiveIOSSubscriptionReceipt,
+    isReceiptActive,
+} from '../services/iap'
 
 interface IdentityAuth {
     type: 'identity'
@@ -14,6 +24,12 @@ interface IdentityAuth {
 interface CASAuth {
     type: 'cas'
     info: CasExpiry
+}
+
+// eslint-disable-next-line
+interface IAPAuth {
+    type: 'iap'
+    info: ReceiptIOS
 }
 
 const IdentityAuthStatus = (info: UserData): Authed<IdentityAuth> => ({
@@ -32,7 +48,7 @@ const CASAuthStatus = (info: CasExpiry): Authed<CASAuth> => ({
     },
 })
 
-export type AuthType = IdentityAuth | CASAuth
+export type AuthType = IdentityAuth | CASAuth | IAPAuth
 
 interface Pending {
     type: 'pending'
@@ -97,8 +113,16 @@ const authTypeFromIdentity = (info: UserData | null): IdentityAuth | false =>
     }
 
 const authTypeFromCAS = (info: CasExpiry | null): CASAuth | false =>
-    !!info && {
+    !!info &&
+    new Date(info.expiryDate).getTime() > Date.now() && {
         type: 'cas',
+        info,
+    }
+
+const authTypeFromIAP = (info: ReceiptIOS | null): IAPAuth | false =>
+    !!info &&
+    isReceiptActive(info) && {
+        type: 'iap',
         info,
     }
 
@@ -115,8 +139,11 @@ const identityAuthProvider = () =>
 const casAuthProvider = () =>
     fetchCASExpiryForKeychainCredentials().then(authTypeFromCAS)
 
+const iapAuthProvider = () =>
+    fetchActiveIOSSubscriptionReceipt().then(authTypeFromIAP)
+
 const liveAuthChain = () =>
-    runAuthChain([identityAuthProvider, casAuthProvider])
+    runAuthChain([identityAuthProvider, casAuthProvider, iapAuthProvider])
 
 /**
  * Cached
@@ -133,10 +160,19 @@ const liveAuthChain = () =>
 const cachedIdentityAuthProvider = () =>
     userDataCache.get().then(authTypeFromIdentity)
 
-const cachedCasAuthProvider = () => casDataCache.get().then(authTypeFromCAS)
+const cachedCasAuthProvider = async () => {
+    const auth = await casDataCache.get().then(authTypeFromCAS)
+    return auth || authTypeFromCAS(legacyCASExpiryCache.get())
+}
+
+const cachedIAPAuthProvider = () => iapReceiptCache.get().then(authTypeFromIAP)
 
 const cachedAuthChain = () =>
-    runAuthChain([cachedIdentityAuthProvider, cachedCasAuthProvider])
+    runAuthChain([
+        cachedIdentityAuthProvider,
+        cachedCasAuthProvider,
+        cachedIAPAuthProvider,
+    ])
 
 export {
     runAuthChain,
@@ -149,4 +185,7 @@ export {
     getIdentityData,
     IdentityAuthStatus,
     CASAuthStatus,
+    /* exported for testing */
+    authTypeFromCAS,
+    authTypeFromIAP,
 }
