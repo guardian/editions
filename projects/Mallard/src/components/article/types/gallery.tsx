@@ -20,6 +20,7 @@ import { APIPaths, imagePath } from 'src/paths'
 import { Wrap } from '../wrap/wrap'
 import { palette } from '@guardian/pasteup/palette'
 import { Multiline } from 'src/components/multiline'
+import { ArticleByline } from '../article-byline'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -122,6 +123,7 @@ const GalleryCoverItem = ({
     return (
         <Wrap
             bleeds
+            wide
             borderColor={color.palette.neutral[60]}
             style={styles.spacer}
             rightRail={
@@ -131,9 +133,14 @@ const GalleryCoverItem = ({
                         <StandfirstText>{standfirst}</StandfirstText>
                     )}
                     {byline && (
-                        <View>
+                        <View
+                            style={{
+                                marginTop: metrics.vertical,
+                                marginBottom: metrics.vertical / 2,
+                            }}
+                        >
                             <Multiline></Multiline>
-                            <UiBodyCopy>{byline}</UiBodyCopy>
+                            <ArticleByline>{byline}</ArticleByline>
                         </View>
                     )}
                 </View>

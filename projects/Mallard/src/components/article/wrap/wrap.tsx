@@ -22,13 +22,14 @@ interface ChildPropTypes {
 interface ContentWrapperPropTypes extends ChildPropTypes {
     tablet?: boolean
     bleeds?: boolean
+    wide?: boolean
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
     >
 }
 
 interface TabletWrapperPropTypes
-    extends Exclude<ContentWrapperPropTypes, 'tablet'> {
+    extends Exclude<ContentWrapperPropTypes, 'tablet' | 'wide'> {
     backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
     rightRail?: ReactNode
@@ -58,28 +59,34 @@ const contentWrapStyles = StyleSheet.create({
         paddingRight: metrics.article.sidesTablet * 1.25,
     },
 })
-const ContentWrapper = ({
+
+const BleedyContentWrapper = ({
     header,
     footer,
     children,
+}: Pick<ContentWrapperPropTypes, 'header' | 'footer' | 'children'>) => (
+    <>
+        {header}
+        {footer}
+        {children}
+    </>
+)
+
+const ContentWrapper = ({
     tablet,
     style,
     bleeds,
-}: ContentWrapperPropTypes) =>
-    bleeds ? (
-        <>
-            {header}
-            {footer}
-            {children}
-        </>
-    ) : (
+    ...children
+}: ContentWrapperPropTypes) => {
+    if (bleeds) return <BleedyContentWrapper {...children} />
+    return (
         <View
             style={[
                 contentWrapStyles.root,
                 tablet && contentWrapStyles.rootTablet,
             ]}
         >
-            {header}
+            {children.header}
             <View
                 style={[
                     style,
@@ -87,11 +94,12 @@ const ContentWrapper = ({
                     tablet && contentWrapStyles.innerTablet,
                 ]}
             >
-                {children}
+                {children.children}
             </View>
-            {footer}
+            {children.footer}
         </View>
     )
+}
 
 const tabletWrapStyles = StyleSheet.create({
     root: {
@@ -151,14 +159,50 @@ const TabletWrapper = ({
     </View>
 )
 
-const Wrap = ({ children, backgroundColor, ...props }: WrapperPropTypes) => {
+const TabletWideVerticalWrapper = ({
+    children,
+    backgroundColor,
+    ...props
+}: WrapperPropTypes) => (
+    <View style={props.style}>
+        {props.bleeds ? (
+            <BleedyContentWrapper header={props.header} footer={props.footer}>
+                {children}
+            </BleedyContentWrapper>
+        ) : (
+            <TabletWrapper
+                {...{
+                    children,
+                    backgroundColor,
+                    ...props,
+                }}
+                rightRail={null}
+            />
+        )}
+        {props.rightRail && (
+            <TabletWrapper
+                backgroundColor={backgroundColor}
+                borderColor={props.borderColor}
+                rightRail={null}
+            >
+                {props.rightRail}
+            </TabletWrapper>
+        )}
+    </View>
+)
+
+const Wrap = ({
+    wide = false,
+    backgroundColor,
+    ...props
+}: WrapperPropTypes) => {
     return (
         <View style={[{ backgroundColor }]}>
             <WithBreakpoints>
                 {{
                     0: () => (
                         <View style={props.style}>
-                            <ContentWrapper {...{ children, ...props }} />
+                            <ContentWrapper {...props} />
                             {props.rightRail && (
                                 <ContentWrapper>
                                     {props.rightRail}
@@ -166,14 +210,24 @@ const Wrap = ({ children, backgroundColor, ...props }: WrapperPropTypes) => {
                             )}
                         </View>
                     ),
-                    [Breakpoints.tabletVertical]: () => (
-                        <TabletWrapper
-                            {...{ children, backgroundColor, ...props }}
-                        />
-                    ),
+
+                    [Breakpoints.tabletVertical]: () =>
+                        wide ? (
+                            <TabletWideVerticalWrapper
+                                {...{ backgroundColor, ...props }}
+                            />
+                        ) : (
+                            <TabletWrapper
+                                {...{
+                                    backgroundColor,
+                                    ...props,
+                                }}
+                            />
+                        ),
+
                     [Breakpoints.tabletLandscape]: () => (
                         <TabletWrapper
-                            {...{ children, backgroundColor, ...props }}
+                            {...{ backgroundColor, ...props }}
                             landscape={true}
                         />
                     ),
