@@ -15,8 +15,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.2.0'
+        classpath("com.android.tools.build:gradle:3.4.1")
+        classpath("com.google.gms:google-services:4.2.0")
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -32,10 +32,14 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
     }
 
     configurations.all {
-            resolutionStrategy { 
+            resolutionStrategy {
                 force 'com.google.android.gms:play-services-gcm:16.1.0'
            }
 }

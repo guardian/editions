@@ -2,22 +2,8 @@ package com.guardian.editions;
 
 import android.app.Application;
 
+import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.dooboolab.RNIap.RNIapPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.reactnativecommunity.netinfo.NetInfoPackage;
-import io.sentry.RNSentryPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
-import com.oblador.keychain.KeychainPackage;
-import org.reactnative.maskedview.RNCMaskedViewPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
-import com.rnziparchive.RNZipArchivePackage;
-import com.horcrux.svg.SvgPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.swmansion.rnscreens.RNScreensPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -36,24 +22,25 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new RNIapPackage(),
-            new RNDeviceInfo(),
-            new NetInfoPackage(),
-            new RNSentryPackage(),
-            new ReactNativePushNotificationPackage(),
-            new ReactNativeConfigPackage(),
-            new KeychainPackage(),
-            new RNCMaskedViewPackage(),
-            new RNCWebViewPackage(),
-            new RNZipArchivePackage(),
-            new SvgPackage(),
-            new AsyncStoragePackage(),
-            new RNFetchBlobPackage(),
-            new RNScreensPackage(),
-            new RNGestureHandlerPackage()
-      );
+        @SuppressWarnings("UnnecessaryLocalVariable")
+        List<ReactPackage> packages = new PackageList(this).getPackages();
+
+        //     packages.add(new MainReactPackage());
+        //     packages.add(new RNDeviceInfo());
+        //     packages.add(new NetInfoPackage());
+        //     packages.add(new RNSentryPackage());
+        //     packages.add(new ReactNativePushNotificationPackage());
+        //     packages.add(new ReactNativeConfigPackage());
+        //     packages.add(new KeychainPackage());
+        //     packages.add(new RNCMaskedViewPackage());
+        //     packages.add(new RNCWebViewPackage());
+        //     packages.add(new RNZipArchivePackage());
+        //     packages.add(new SvgPackage());
+        //     packages.add(new AsyncStoragePackage());
+        //     packages.add(new RNFetchBlobPackage());
+        //     packages.add(new RNScreensPackage());
+        //     packages.add(new RNGestureHandlerPackage());
+        return packages;
     }
 
     @Override
