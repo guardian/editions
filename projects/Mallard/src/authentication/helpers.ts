@@ -8,6 +8,7 @@ import {
     getLegacyUserAccessToken,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
+    iapReceiptCache,
 } from './storage'
 import {
     fetchMembershipData,
@@ -22,6 +23,7 @@ import {
     User,
 } from 'src/services/id-service'
 import { fetchCasSubscription } from '../services/content-auth-service'
+import { fetchActiveIOSSubscriptionReceipt } from '../services/iap'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -72,6 +74,13 @@ const fetchAndPersistCASExpiry = async (
     casCredentialsKeychain.set(subscriberId, password)
     casDataCache.set(expiry)
     return expiry
+}
+
+const fetchAndPersistIAPReceipt = async () => {
+    const receipt = await fetchActiveIOSSubscriptionReceipt()
+    if (!receipt) return null
+    iapReceiptCache.set(receipt)
+    return receipt
 }
 
 export interface UserData {
@@ -167,4 +176,5 @@ export {
     fetchCASExpiryForKeychainCredentials,
     canViewEdition,
     fetchAndPersistCASExpiry,
+    fetchAndPersistIAPReceipt,
 }
