@@ -38,7 +38,6 @@ target 'Mallard' do
         " && RNC_ROOT=./node_modules/react-native-config/"\
         " && export SYMROOT=$RNC_ROOT/ios/ReactNativeConfig"\
         " && ruby $RNC_ROOT/ios/ReactNativeConfig/BuildDotenvConfig.ruby"\
-        " && echo 'hello alex'"
 
         target.build_phases << phase
         target.build_phases.move(phase,0)
