@@ -1,10 +1,10 @@
 package com.guardian.editions.ophan;
 
 import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.gu.ophan.InMemoryRecordStore;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +20,8 @@ class OphanModule extends ReactContextBaseJavaModule {
             "Unknown",
             "testDeviceId",
             "testUserId",
-            new LogcatLogger()
+            new LogcatLogger(),
+            new InMemoryRecordStore()
     );
 
     public OphanModule(@Nonnull ReactApplicationContext reactContext) {

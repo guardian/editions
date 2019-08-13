@@ -1,6 +1,5 @@
 package ophan
 
-import com.gu.ophan.DefaultCoroutineContextFactory
 import com.gu.ophan.Logger
 import com.gu.ophan.OphanDispatcher
 import com.gu.ophan.RecordStore
@@ -29,16 +28,15 @@ class OphanApi(
             deviceManufacturer: String,
             deviceId: String,
             userId: String,
-            recordStore: RecordStore,
-            logger: Logger
+            logger: Logger,
+            recordStore: RecordStore
     ) : this(OphanDispatcher(
             App(appVersion, "TestEditions", appOs, Edition.UK),
             Device(deviceName, deviceManufacturer),
             deviceId,
             userId,
-            DefaultCoroutineContextFactory().getCoroutineContext(),
-            recordStore,
-            logger
+            logger,
+            recordStore
     ))
 
     fun sendTestAppScreenEvent(screenName: String) {
@@ -63,25 +61,3 @@ class OphanApi(
         dispatcher.dispatchEvent(event)
     }
 }
-
-fun getOphanApi(
-        appVersion: String,
-        appOs: String,
-        deviceName: String,
-        deviceManufacturer: String,
-        deviceId: String,
-        userId: String,
-        recordStore: RecordStore,
-        logger: Logger
-) = getThreadSafeOphanApi(appVersion, appOs, deviceName, deviceManufacturer, deviceId, userId, recordStore, logger)
-
-expect fun getThreadSafeOphanApi(
-        appVersion: String,
-        appOs: String,
-        deviceName: String,
-        deviceManufacturer: String,
-        deviceId: String,
-        userId: String,
-        recordStore: RecordStore,
-        logger: Logger
-): OphanApi

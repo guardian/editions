@@ -8,13 +8,13 @@ actual object Platform {
     actual fun name(): String = "iOS"
 }
 
-actual fun getThreadSafeOphanApi(
+fun getThreadSafeOphanApi(
         appVersion: String,
         appOs: String,
         deviceName: String,
         deviceManufacturer: String,
         deviceId: String,
         userId: String,
-        recordStore: RecordStore,
-        logger: Logger
-): OphanApi = OphanApi(appVersion, appOs, deviceName, deviceManufacturer, deviceId, userId, recordStore, logger).freeze()
+        logger: Logger,
+        recordStore: RecordStore
+): OphanApi = OphanApi(appVersion, appOs, deviceName, deviceManufacturer, deviceId, userId, logger, recordStore).freeze()

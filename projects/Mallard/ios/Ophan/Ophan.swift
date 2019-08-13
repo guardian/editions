@@ -12,15 +12,15 @@ import ophan
 @objc(Ophan)
 class Ophan: NSObject {
   
-  let ophanApi = OphanKt.getOphanApi(
+  let ophanApi = OphanKt_.getThreadSafeOphanApi (
     appVersion: "0.0.1",
     appOs: "iOS",
     deviceName: "Unknown",
     deviceManufacturer: "Apple",
     deviceId: "testDeviceId",
     userId: "testUserId",
-    recordStore: DictRecordStore(),
-    logger: SimpleLogger()
+    logger: SimpleLogger(),
+    recordStore: DictRecordStore()
   )
   
   override init() {
