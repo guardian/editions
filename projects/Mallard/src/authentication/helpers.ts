@@ -5,6 +5,10 @@ import {
     casCredentialsKeychain,
     casDataCache,
     userDataCache,
+    getLegacyUserAccessToken,
+    legacyCASUsernameCache,
+    legacyCASPasswordCache,
+    iapReceiptCache,
 } from './storage'
 import {
     fetchMembershipData,
@@ -19,6 +23,7 @@ import {
     User,
 } from 'src/services/id-service'
 import { fetchCasSubscription } from '../services/content-auth-service'
+import { fetchActiveIOSSubscriptionReceipt } from '../services/iap'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -71,6 +76,13 @@ const fetchAndPersistCASExpiry = async (
     return expiry
 }
 
+const fetchAndPersistIAPReceipt = async () => {
+    const receipt = await fetchActiveIOSSubscriptionReceipt()
+    if (!receipt) return null
+    iapReceiptCache.set(receipt)
+    return receipt
+}
+
 export interface UserData {
     userDetails: User
     membershipData: MembersDataAPIResponse
@@ -92,14 +104,18 @@ const fetchUserDataForKeychainUser = async (
     fetchMembershipDataImpl = fetchMembershipData,
     fetchUserDetailsImpl = fetchUserDetails,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
+    getLegacyUserAccessTokenImpl = getLegacyUserAccessToken,
     resetCredentialsImpl = resetCredentials,
 ): Promise<UserData | null> => {
-    const [userToken, membershipToken] = await Promise.all([
+    const [userToken, legacyUserToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
+        getLegacyUserAccessTokenImpl(),
         membershipTokenStore.get(),
     ])
 
-    if (!userToken) {
+    const actualUserToken = userToken || legacyUserToken
+
+    if (!actualUserToken) {
         // no userToken - we need to be logged in again
         // make sure everything is reset before doing that
         await resetCredentialsImpl()
@@ -112,15 +128,15 @@ const fetchUserDataForKeychainUser = async (
         // if there's not a membership token then something went wrong,
         // but we can fetch it again
         newMembershipToken = await fetchMembershipAccessTokenImpl(
-            userToken.password,
+            actualUserToken.password,
         )
-        membershipTokenStore.set(userToken.username, newMembershipToken)
+        membershipTokenStore.set(actualUserToken.username, newMembershipToken)
     } else {
         newMembershipToken = membershipToken.password
     }
 
     const [userDetails, membershipData] = await Promise.all([
-        fetchUserDetailsImpl(userToken.password),
+        fetchUserDetailsImpl(actualUserToken.password),
         fetchMembershipDataImpl(newMembershipToken),
     ])
 
@@ -136,7 +152,12 @@ const fetchUserDataForKeychainUser = async (
 
 const fetchCASExpiryForKeychainCredentials = async () => {
     const creds = await casCredentialsKeychain.get()
-    if (!creds) return null
+    if (!creds) {
+        const username = legacyCASUsernameCache.get()
+        const password = legacyCASPasswordCache.get()
+        if (!username || !password) return null
+        return fetchCasSubscription(username, password)
+    }
     return fetchCasSubscription(creds.username, creds.password)
 }
 
@@ -155,4 +176,5 @@ export {
     fetchCASExpiryForKeychainCredentials,
     canViewEdition,
     fetchAndPersistCASExpiry,
+    fetchAndPersistIAPReceipt,
 }
