@@ -10,9 +10,6 @@ import {
     PixelRatio,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { Rectangle as RectangleType } from 'src/helpers/sizes'
-import Svg, { Rect } from 'react-native-svg'
-import { color } from 'src/theme/color'
 import { useTextBoxes, TextBoxes } from 'src/components/layout/text-boxes'
 
 export type ArticleHeadlineProps = {
