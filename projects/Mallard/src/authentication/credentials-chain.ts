@@ -4,7 +4,7 @@ import {
     fetchCASExpiryForKeychainCredentials,
 } from './helpers'
 import { CasExpiry } from '../services/content-auth-service'
-import { userDataCache, casDataCache } from './storage'
+import { userDataCache, casDataCache, legacyCASExpiryCache } from './storage'
 
 interface IdentityAuth {
     type: 'identity'
@@ -97,7 +97,8 @@ const authTypeFromIdentity = (info: UserData | null): IdentityAuth | false =>
     }
 
 const authTypeFromCAS = (info: CasExpiry | null): CASAuth | false =>
-    !!info && {
+    !!info &&
+    new Date(info.expiryDate).getTime() > Date.now() && {
         type: 'cas',
         info,
     }
@@ -133,7 +134,10 @@ const liveAuthChain = () =>
 const cachedIdentityAuthProvider = () =>
     userDataCache.get().then(authTypeFromIdentity)
 
-const cachedCasAuthProvider = () => casDataCache.get().then(authTypeFromCAS)
+const cachedCasAuthProvider = async () => {
+    const auth = await casDataCache.get().then(authTypeFromCAS)
+    return auth || authTypeFromCAS(legacyCASExpiryCache.get())
+}
 
 const cachedAuthChain = () =>
     runAuthChain([cachedIdentityAuthProvider, cachedCasAuthProvider])
@@ -149,4 +153,6 @@ export {
     getIdentityData,
     IdentityAuthStatus,
     CASAuthStatus,
+    /* exported for testing */
+    authTypeFromCAS,
 }

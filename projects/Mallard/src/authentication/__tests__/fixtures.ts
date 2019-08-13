@@ -37,12 +37,18 @@ const userData = {
     membershipData: membershipResponse,
 }
 
-const casExpiry = {
-    content: '',
-    expiryDate: '',
-    expiryType: '',
-    provider: '',
-    subscriptionCode: '123',
-}
+const casExpiry = ({
+    content = '',
+    expiryDate = '2012-05-05',
+    expiryType = '',
+    provider = '',
+    subscriptionCode = 'G99123456',
+} = {}) => ({
+    content,
+    expiryDate,
+    expiryType,
+    provider,
+    subscriptionCode,
+})
 
 export { membershipResponse, userResponse, userData, casExpiry }
