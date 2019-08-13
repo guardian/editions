@@ -31,6 +31,7 @@ import { color } from 'src/theme/color'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
+    const { status } = useContext(AuthContext)
     const { apiUrl } = settings
     return (
         <>
@@ -120,11 +121,23 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             <Heading>Your settings</Heading>
             <List
                 onPress={() => {}}
-                data={Object.entries(settings).map(([title, explainer]) => ({
-                    key: title,
-                    title,
-                    explainer: explainer + '',
-                }))}
+                data={Object.entries(settings)
+                    .map(([title, explainer]) => ({
+                        key: title,
+                        title,
+                        explainer: explainer + '',
+                    }))
+                    .concat([
+                        {
+                            key: 'Authentication details',
+                            title: 'Authentication details',
+                            explainer: `Signed in status ${status.type} : ${
+                                status.type === 'authed'
+                                    ? status.data.type
+                                    : '_'
+                            }`,
+                        },
+                    ])}
             />
         </>
     )
