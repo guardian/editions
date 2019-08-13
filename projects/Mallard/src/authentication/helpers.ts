@@ -95,11 +95,12 @@ const fetchUserDataForKeychainUser = async (
     fetchMembershipDataImpl = fetchMembershipData,
     fetchUserDetailsImpl = fetchUserDetails,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
+    getLegacyUserAccessTokenImpl = getLegacyUserAccessToken,
     resetCredentialsImpl = resetCredentials,
 ): Promise<UserData | null> => {
     const [userToken, legacyUserToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
-        getLegacyUserAccessToken(),
+        getLegacyUserAccessTokenImpl(),
         membershipTokenStore.get(),
     ])
 

@@ -153,4 +153,6 @@ export {
     getIdentityData,
     IdentityAuthStatus,
     CASAuthStatus,
+    /* exported for testing */
+    authTypeFromCAS,
 }

@@ -3,6 +3,7 @@ import {
     IdentityAuthStatus,
     CASAuthStatus,
     isAuthed,
+    authTypeFromCAS,
 } from '../credentials-chain'
 import { userData, casExpiry } from './fixtures'
 
@@ -15,7 +16,7 @@ import { userData, casExpiry } from './fixtures'
  *  ```js
  *  const val = await Promise.race([
  *     createOrderPromise(2, IdentityAuthStatus(userData).data),
- *     createOrderPromise(1, CASAuthStatus(casExpiry).data),
+ *     createOrderPromise(1, CASAuthStatus(casExpiry()).data),
  *  ])
  *  expect(val.type).toBe('cas')
  * ```
@@ -30,7 +31,7 @@ describe('credentials-chain', () => {
         it('runs the chain in serial', async () => {
             const res: any = await runAuthChain([
                 () => createOrderPromise(2, IdentityAuthStatus(userData).data),
-                () => createOrderPromise(1, CASAuthStatus(casExpiry).data),
+                () => createOrderPromise(1, CASAuthStatus(casExpiry()).data),
             ])
 
             expect(isAuthed(res)).toBe(true)
@@ -40,7 +41,7 @@ describe('credentials-chain', () => {
         it('returns the value of the first truthy Promise in the chain', async () => {
             const res: any = await runAuthChain([
                 async () => IdentityAuthStatus(userData).data,
-                async () => CASAuthStatus(casExpiry).data,
+                async () => CASAuthStatus(casExpiry()).data,
             ])
 
             expect(isAuthed(res)).toBe(true)
@@ -52,7 +53,7 @@ describe('credentials-chain', () => {
                 async () => {
                     throw new Error()
                 },
-                async () => CASAuthStatus(casExpiry).data,
+                async () => CASAuthStatus(casExpiry()).data,
             ])
 
             expect(res.data.type).toBe('cas')
@@ -61,7 +62,7 @@ describe('credentials-chain', () => {
         it('tries the next provider if the current one returns false', async () => {
             const res: any = await runAuthChain([
                 async () => false,
-                async () => CASAuthStatus(casExpiry).data,
+                async () => CASAuthStatus(casExpiry()).data,
             ])
 
             expect(res.data.type).toBe('cas')
@@ -76,6 +77,22 @@ describe('credentials-chain', () => {
             ])
 
             expect(isAuthed(res)).not.toBe(true)
+        })
+    })
+
+    describe('authTypeFromCAS', () => {
+        it('returns a CAS auth when the expiry is in the future', () => {
+            expect(
+                authTypeFromCAS(casExpiry({ expiryDate: '2025-12-12' })),
+            ).toMatchObject({
+                type: 'cas',
+            })
+        })
+
+        it('returns false when the CAS expiry is in the past', () => {
+            expect(
+                authTypeFromCAS(casExpiry({ expiryDate: '2012-12-12' })),
+            ).toBe(false)
         })
     })
 })
