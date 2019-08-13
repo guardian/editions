@@ -28,7 +28,6 @@ target 'Mallard' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-config', :path => '../node_modules/react-native-config'
 #   https://github.com/luggit/react-native-config/issues/187
     post_install do |installer|
     installer.pods_project.targets.each do |target|
