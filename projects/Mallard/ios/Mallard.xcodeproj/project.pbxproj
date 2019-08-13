@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		0486168BC45B39E42251CB3F /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA5FE54DF21C63865903DF36 /* libPods-Mallard-tvOS.a */; };
