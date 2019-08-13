@@ -6,7 +6,7 @@ describe('auth-context', () => {
     describe('needsReauth', () => {
         it('returns false when the previous attempt was `authed` and the attempt was created more recently than a day ago', () => {
             const res = needsReauth(
-                createAuthAttempt(CASAuthStatus(casExpiry), 'live'),
+                createAuthAttempt(CASAuthStatus(casExpiry()), 'live'),
                 { isConnected: true },
             )
 
@@ -15,7 +15,7 @@ describe('auth-context', () => {
 
         it('returns true when the previous attempt was `authed` and the attempt was created longer than a day ago', () => {
             const res = needsReauth(
-                createAuthAttempt(CASAuthStatus(casExpiry), 'live', 0),
+                createAuthAttempt(CASAuthStatus(casExpiry()), 'live', 0),
                 { isConnected: true },
             )
 
@@ -32,7 +32,7 @@ describe('auth-context', () => {
 
         it('returns true when the previous attempt was `cached` and `isConnected` is true', () => {
             const res = needsReauth(
-                createAuthAttempt(CASAuthStatus(casExpiry), 'cached'),
+                createAuthAttempt(CASAuthStatus(casExpiry()), 'cached'),
                 { isConnected: true },
             )
 
@@ -41,7 +41,7 @@ describe('auth-context', () => {
 
         it('returns false when the previous attempt was `cached` and `isConnected` is false', () => {
             const res = needsReauth(
-                createAuthAttempt(CASAuthStatus(casExpiry), 'cached'),
+                createAuthAttempt(CASAuthStatus(casExpiry()), 'cached'),
                 { isConnected: false },
             )
 
@@ -50,14 +50,14 @@ describe('auth-context', () => {
 
         it('returns false when the previous attempt was `live` and `isConnected` changes', () => {
             const res1 = needsReauth(
-                createAuthAttempt(CASAuthStatus(casExpiry), 'live'),
+                createAuthAttempt(CASAuthStatus(casExpiry()), 'live'),
                 { isConnected: true },
             )
 
             expect(res1).toBe(false)
 
             const res2 = needsReauth(
-                createAuthAttempt(CASAuthStatus(casExpiry), 'live'),
+                createAuthAttempt(CASAuthStatus(casExpiry()), 'live'),
                 { isConnected: false },
             )
 
