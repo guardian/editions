@@ -148,7 +148,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
     const authHandler = useAuth()
-    const { signOut } = useContext(AuthContext)
+    const { signOut, restorePurchases } = useContext(AuthContext)
 
     const styles = StyleSheet.create({
         signOut: {
@@ -217,7 +217,18 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             <ScrollContainer>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={[...signInListItems]}
+                    data={[
+                        ...signInListItems,
+                        {
+                            key: 'Restore purchases',
+                            title: 'Restore purchases',
+                            data: {
+                                onPress: () => {
+                                    restorePurchases()
+                                },
+                            },
+                        },
+                    ]}
                 />
                 <Heading>{``}</Heading>
                 <List

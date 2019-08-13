@@ -2,6 +2,7 @@ import RNIAP, { Purchase } from 'react-native-iap'
 import { Platform } from 'react-native'
 import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants'
 import { ReceiptValidationResponse } from 'react-native-iap/apple'
+import { authTypeFromIAP } from 'src/authentication/credentials-chain'
 
 export interface ReceiptIOS {
     expires_date: string
@@ -59,6 +60,11 @@ const restoreActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null>
     return findValidReceipt(decodedReceipt)
 }
 
+const tryToRestoreActiveIOSSubscriptionToAuth = () =>
+    restoreActiveIOSSubscriptionReceipt()
+        .then(authTypeFromIAP)
+        .catch(() => false as const)
+
 // This will attempt to look for the existing receipt without trying to restore those purchases
 const fetchActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> => {
     if (Platform.OS !== 'ios') return null
@@ -73,4 +79,8 @@ const fetchActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> =
     return findValidReceipt(decodedReceipt)
 }
 
-export { fetchActiveIOSSubscriptionReceipt, isReceiptActive }
+export {
+    fetchActiveIOSSubscriptionReceipt,
+    tryToRestoreActiveIOSSubscriptionToAuth,
+    isReceiptActive,
+}
