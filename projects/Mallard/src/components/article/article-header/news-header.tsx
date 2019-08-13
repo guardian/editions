@@ -10,7 +10,7 @@ import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
-import { Wrap, MultilineWrap } from './wrap'
+import { Wrap, MultilineWrap } from '../wrap/wrap'
 
 const styles = StyleSheet.create({
     background: {

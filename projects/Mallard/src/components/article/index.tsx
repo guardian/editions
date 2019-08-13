@@ -15,7 +15,7 @@ import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
 import { ReviewHeader } from './article-header/review-header'
-import { Wrap } from './article-header/wrap'
+import { Wrap } from './wrap/wrap'
 
 /*
 This is the article view! For all of the articles.

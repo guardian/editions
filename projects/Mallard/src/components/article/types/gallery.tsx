@@ -15,6 +15,7 @@ import { UiBodyCopy } from 'src/components/styled-text'
 import { APIPaths } from 'src/paths'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { Wrap } from '../wrap/wrap'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -82,21 +83,26 @@ const Caption = ({
 const styles = StyleSheet.create({
     background: {
         backgroundColor: color.photoBackground,
-        paddingHorizontal: metrics.articleSides,
-        paddingTop: metrics.vertical / 2,
     },
     image: {
         width: '100%',
     },
-    caption: {
-        marginTop: metrics.vertical / 2,
-    },
     spacer: {
-        marginBottom: metrics.vertical * 2,
+        paddingTop: metrics.vertical * 1,
+        paddingBottom: metrics.vertical * 2,
     },
 })
 
 const GalleryItem = ({ element }: { element: ImageElement }) => {
+    return (
+        <Wrap style={styles.spacer} rightRail={<Caption element={element} />}>
+            <GalleryImage
+                accessibilityLabel={element.alt}
+                src={element.src}
+                style={styles.image}
+            />
+        </Wrap>
+    )
     return (
         <WithBreakpoints>
             {{
@@ -107,7 +113,7 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
                             src={element.src}
                             style={styles.image}
                         />
-                        <Caption element={element} style={styles.caption} />
+                        <Caption element={element} />
                     </View>
                 ),
                 [Breakpoints.tabletVertical]: () => (
@@ -121,8 +127,8 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
                             style={[
                                 {
                                     flexShrink: 1,
-                                    marginLeft: metrics.articleSides * 2,
-                                    marginRight: metrics.articleSides * 2,
+                                    marginLeft: metrics.article.sides * 2,
+                                    marginRight: metrics.article.sides * 2,
                                 },
                             ]}
                         >
