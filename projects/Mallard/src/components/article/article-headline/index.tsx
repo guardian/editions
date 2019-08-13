@@ -5,6 +5,7 @@ import { metrics } from 'src/theme/spacing'
 import { Rectangle as RectangleType } from 'src/helpers/sizes'
 import Svg, { Rect } from 'react-native-svg'
 import { color } from 'src/theme/color'
+import { useTextBoxes, TextBoxes } from 'src/components/layout/text-boxes'
 
 export type ArticleHeadlineProps = {
     children: any
@@ -29,17 +30,7 @@ const ArticleHeadline = ({
     weight,
     hasHighlight = false,
 }: ArticleHeadlineProps) => {
-    const [boxes, setBoxes] = useState<RectangleType[]>([])
-    const onTextLayout = (ev: any) => {
-        setBoxes(
-            ev.nativeEvent.lines.map((line: any) => ({
-                x: line.x,
-                y: line.y + 2,
-                height: line.height * 1.1,
-                width: line.width,
-            })),
-        )
-    }
+    const [onTextLayout, boxes] = useTextBoxes()
     return (
         <View>
             <HeadlineText
@@ -51,16 +42,7 @@ const ArticleHeadline = ({
             </HeadlineText>
             {hasHighlight && boxes.length > 0 && (
                 <View style={styles.highlightBg}>
-                    <Svg width={'100%'} height={400}>
-                        {boxes.map(({ top: x, left: y, ...props }) => (
-                            <Rect
-                                fill={color.palette.highlight.main}
-                                x={x}
-                                y={y}
-                                {...props}
-                            ></Rect>
-                        ))}
-                    </Svg>
+                    <TextBoxes boxes={boxes} />
                 </View>
             )}
         </View>
