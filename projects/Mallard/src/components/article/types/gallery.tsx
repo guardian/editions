@@ -11,11 +11,15 @@ import {
 } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { UiBodyCopy } from 'src/components/styled-text'
-import { APIPaths } from 'src/paths'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
-import { Breakpoints } from 'src/theme/breakpoints'
+import {
+    UiBodyCopy,
+    HeadlineText,
+    StandfirstText,
+} from 'src/components/styled-text'
+import { APIPaths, imagePath } from 'src/paths'
 import { Wrap } from '../wrap/wrap'
+import { palette } from '@guardian/pasteup/palette'
+import { Multiline } from 'src/components/multiline'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -88,8 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     spacer: {
-        paddingTop: metrics.vertical * 1,
-        paddingBottom: metrics.vertical * 2,
+        paddingVertical: metrics.vertical * 0.5,
     },
 })
 
@@ -103,55 +106,82 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
             />
         </Wrap>
     )
+}
+
+const GalleryCoverItem = ({
+    element,
+    headline,
+    byline,
+    standfirst,
+}: {
+    element?: ImageType
+    headline: GalleryArticle['headline']
+    byline: GalleryArticle['byline']
+    standfirst: GalleryArticle['standfirst']
+}) => {
     return (
-        <WithBreakpoints>
-            {{
-                0: () => (
-                    <View style={styles.spacer}>
-                        <GalleryImage
-                            accessibilityLabel={element.alt}
-                            src={element.src}
-                            style={styles.image}
-                        />
-                        <Caption element={element} />
-                    </View>
-                ),
-                [Breakpoints.tabletVertical]: () => (
-                    <View style={[styles.spacer, { flexDirection: 'row' }]}>
-                        <GalleryImage
-                            accessibilityLabel={element.alt}
-                            src={element.src}
-                            style={[styles.image, { width: '75%' }]}
-                        />
-                        <View
-                            style={[
-                                {
-                                    flexShrink: 1,
-                                    marginLeft: metrics.article.sides * 2,
-                                    marginRight: metrics.article.sides * 2,
-                                },
-                            ]}
-                        >
-                            <Caption element={element} />
+        <Wrap
+            bleeds
+            borderColor={color.palette.neutral[60]}
+            style={styles.spacer}
+            rightRail={
+                <View>
+                    <HeadlineText>{headline}</HeadlineText>
+                    {standfirst && (
+                        <StandfirstText>{standfirst}</StandfirstText>
+                    )}
+                    {byline && (
+                        <View>
+                            <Multiline></Multiline>
+                            <UiBodyCopy>{byline}</UiBodyCopy>
                         </View>
-                    </View>
-                ),
-            }}
-        </WithBreakpoints>
+                    )}
+                </View>
+            }
+        >
+            {element && (
+                <Image
+                    style={{ width: '100%', flexGrow: 1, minHeight: 400 }}
+                    source={{
+                        uri: imagePath(element),
+                    }}
+                />
+            )}
+        </Wrap>
     )
 }
 
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
     console.log(gallery)
     return (
-        <View style={styles.background}>
-            {gallery.elements.map((element, index) => {
-                if (element.id === 'image') {
-                    return <GalleryItem element={element} />
-                }
-                return <Text key={index}>{element.id}</Text>
-            })}
-        </View>
+        <>
+            <View
+                style={[
+                    styles.background,
+                    { backgroundColor: color.palette.neutral[60] },
+                ]}
+            >
+                <GalleryCoverItem
+                    element={gallery.image}
+                    headline={gallery.headline}
+                    byline={gallery.byline}
+                    standfirst={gallery.standfirst}
+                ></GalleryCoverItem>
+            </View>
+            <View
+                style={[
+                    styles.background,
+                    { paddingVertical: metrics.vertical * 0.5 },
+                ]}
+            >
+                {gallery.elements.map((element, index) => {
+                    if (element.id === 'image') {
+                        return <GalleryItem element={element} />
+                    }
+                    return <Text key={index}>{element.id}</Text>
+                })}
+            </View>
+        </>
     )
 }
 

@@ -62,7 +62,7 @@ const LoginOverlay = ({
     onLoginPress: () => void
 }) => {
     const handler = useAuth()
-
+    return children
     return handler({
         pending: () => <>{children}</>,
         authed: () => <>{children}</>,

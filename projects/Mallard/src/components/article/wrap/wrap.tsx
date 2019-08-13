@@ -21,6 +21,7 @@ interface ChildPropTypes {
 
 interface ContentWrapperPropTypes extends ChildPropTypes {
     tablet?: boolean
+    bleeds?: boolean
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
     >
@@ -63,23 +64,34 @@ const ContentWrapper = ({
     children,
     tablet,
     style,
-}: ContentWrapperPropTypes) => (
-    <View
-        style={[contentWrapStyles.root, tablet && contentWrapStyles.rootTablet]}
-    >
-        {header}
+    bleeds,
+}: ContentWrapperPropTypes) =>
+    bleeds ? (
+        <>
+            {header}
+            {footer}
+            {children}
+        </>
+    ) : (
         <View
             style={[
-                style,
-                contentWrapStyles.inner,
-                tablet && contentWrapStyles.innerTablet,
+                contentWrapStyles.root,
+                tablet && contentWrapStyles.rootTablet,
             ]}
         >
-            {children}
+            {header}
+            <View
+                style={[
+                    style,
+                    contentWrapStyles.inner,
+                    tablet && contentWrapStyles.innerTablet,
+                ]}
+            >
+                {children}
+            </View>
+            {footer}
         </View>
-        {footer}
-    </View>
-)
+    )
 
 const tabletWrapStyles = StyleSheet.create({
     root: {
@@ -102,7 +114,10 @@ const tabletWrapStyles = StyleSheet.create({
         width: metrics.article.rightRailLandscape,
     },
     rightRailContent: {
-        maxWidth: metrics.article.rightRail,
+        maxWidth: metrics.article.rightRail + metrics.article.sidesTablet * 1.5,
+        paddingRight: metrics.article.sidesTablet * 1.5,
+        paddingLeft: metrics.article.sidesTablet / 2,
+        marginTop: metrics.vertical * -0.25,
     },
 })
 const TabletWrapper = ({

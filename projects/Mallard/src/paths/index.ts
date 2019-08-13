@@ -1,4 +1,4 @@
-import { issuePath, mediaPath, frontPath } from 'src/common'
+import { issuePath, mediaPath, frontPath, Image } from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
 
 const APIPaths = {
@@ -9,6 +9,14 @@ const APIPaths = {
 }
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
+
+const imagePath = (image: Image) =>
+    `${APIPaths.mediaBackend}${APIPaths.media(
+        'issue',
+        'phone',
+        image.source,
+        image.path,
+    )}`
 
 const issueRoot = (issueId: string) => `${issuesDir}/${issueId}`
 
@@ -23,4 +31,4 @@ const FSPaths = {
         `${issueRoot(issueId)}/front/${frontId}`,
 }
 
-export { FSPaths, APIPaths }
+export { FSPaths, APIPaths, imagePath }
