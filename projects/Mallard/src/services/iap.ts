@@ -1,6 +1,7 @@
 import RNIAP, { Purchase } from 'react-native-iap'
 import { Platform } from 'react-native'
 import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants'
+import { ReceiptValidationResponse } from 'react-native-iap/apple'
 
 export interface ReceiptIOS {
     expires_date: string
@@ -42,19 +43,34 @@ const isReceiptActive = (receipt: ReceiptIOS) => {
     return expirationInMilliseconds > nowInMilliseconds
 }
 
-// The essence of this came from here: https://github.com/dooboolab/react-native-iap/issues/275#issuecomment-433582389
-const fetchActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> => {
+const findValidReceipt = (receipt: ReceiptValidationResponse) =>
+    (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptActive) || null
+
+/**
+ * This will attempt to restore existing purchases
+ */
+const restoreActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> => {
     if (Platform.OS !== 'ios') return null
     const purchases = await RNIAP.getAvailablePurchases()
     const mostRecentReceipt = getMostRecentTransactionReceipt(purchases)
     if (!mostRecentReceipt) return null
     const decodedReceipt = await fetchDecodeReceipt(mostRecentReceipt)
     if (!decodedReceipt) return null
-    return (
-        (decodedReceipt.latest_receipt_info as ReceiptIOS[]).find(
-            isReceiptActive,
-        ) || null
-    )
+    return findValidReceipt(decodedReceipt)
+}
+
+// This will attempt to look for the existing receipt without trying to restore those purchases
+const fetchActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> => {
+    if (Platform.OS !== 'ios') return null
+    let receipt: string | undefined
+    try {
+        receipt = await RNIAP.requestReceiptIOS()
+    } catch (e) {
+        return null
+    }
+    const decodedReceipt = await fetchDecodeReceipt(receipt)
+    if (!decodedReceipt) return null
+    return findValidReceipt(decodedReceipt)
 }
 
 export { fetchActiveIOSSubscriptionReceipt, isReceiptActive }
