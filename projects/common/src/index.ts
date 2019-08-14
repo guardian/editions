@@ -104,7 +104,7 @@ export interface IssueSummary extends WithKey {
     name: string
     date: string
     assets?: {
-        [P in ImageSize]: string[]
+        [P in ImageSize]?: string[]
     } & { data: string[] }
 }
 
