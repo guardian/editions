@@ -228,7 +228,6 @@ const sixStoryPage: PageLayout = {
             {
                 item: SmallItem,
                 fits: toRectangle(0, 1, 1, 2),
-
             },
             {
                 item: SmallItem,
