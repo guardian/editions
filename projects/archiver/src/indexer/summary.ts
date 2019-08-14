@@ -1,9 +1,10 @@
 import { s3, bucket } from '../../s3'
 import { upload } from '../../upload'
-import { notNull } from '../../common'
+import { notNull, IssueSummary } from '../../common'
 import { attempt, hasFailed } from '../../../backend/utils/try'
 import { groupBy } from 'ramda'
 import { fromPairs } from 'ramda'
+import { imageSizes, ImageSize } from '../../../common/src'
 
 const zips = 'zips/'
 
@@ -28,29 +29,42 @@ export const generateIndex = async () => {
         return issue[0]
     })(filenames)
 
-    const index = Object.entries(issues).map(([issue, filenames]) => {
-        const dateFromIssue = new Date(issue)
-        if (isNaN(dateFromIssue.getTime())) {
-            console.warn(`Issue with path ${issue} is not a valid date`)
-        }
-        const date = isNaN(dateFromIssue.getTime()) ? new Date() : dateFromIssue
-        return {
-            key: issue,
-            name: 'Daily Edition',
-            date,
-            assets: fromPairs(
-                filenames.map(filename => {
-                    const breakpoint = filename
-                        .replace(issue, '')
-                        .replace('.zip', '')
-                        .replace('-', '')
+    const index: IssueSummary[] = Object.entries(issues).map(
+        ([issue, filenames]) => {
+            const dateFromIssue = new Date(issue)
+            if (isNaN(dateFromIssue.getTime())) {
+                console.warn(`Issue with path ${issue} is not a valid date`)
+                return null
+            }
+            const date = dateFromIssue.toISOString()
+            return {
+                key: issue,
+                name: 'Daily Edition',
+                date,
+                assets: fromPairs(
+                    filenames
+                        .map((filename):
+                            | [ImageSize | 'data', string]
+                            | null => {
+                            const breakpointString = filename
+                                .replace(issue, '')
+                                .replace('.zip', '')
+                                .replace('-', '')
 
-                    if (breakpoint === '') return ['data', filename]
-                    return [breakpoint, filename]
-                }),
-            ),
-        }
-    })
+                            if (breakpointString === '')
+                                return ['data', filename]
+
+                            const breakpoint = imageSizes.find(
+                                size => size === breakpointString,
+                            )
+                            if (breakpoint === undefined) return null
+                            return [breakpoint, filename]
+                        })
+                        .filter(notNull),
+                ),
+            }
+        },
+    )
 
     return index
 }
