@@ -4,13 +4,6 @@ import { useModal } from '../modal'
 import { useAuth } from 'src/authentication/auth-context'
 import { SignInModalCard } from '../sign-in-modal-card'
 import { SubNotFoundModalCard } from '../sub-not-found-modal-card'
-import { navigateToIssue } from 'src/navigation/helpers'
-import {
-    NavigationScreenProp,
-    withNavigation,
-    NavigationInjectedProps,
-} from 'react-navigation'
-import { routeNames } from 'src/navigation'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
@@ -19,32 +12,12 @@ const overlayStyles = StyleSheet.create({
     },
 })
 
-const useInterval = (
-    callback: () => void,
-    delay: number,
-    shouldFire: boolean,
-) => {
-    const cb = useRef<() => void>(() => {})
-    const sf = useRef(shouldFire)
-
-    // Remember the latest callback.
+const usePropToRef = <T extends any>(value: T) => {
+    const ref = useRef(value)
     useEffect(() => {
-        cb.current = callback
-    }, [callback])
-
-    // Remember the latest shouldFire.
-    useEffect(() => {
-        sf.current = shouldFire
-    }, [shouldFire])
-
-    useEffect(() => {
-        const id = setInterval(() => {
-            if (sf.current) {
-                cb.current()
-            }
-        }, delay)
-        return () => clearInterval(id)
-    }, [delay])
+        ref.current = value
+    })
+    return ref
 }
 
 /**
@@ -53,28 +26,42 @@ const useInterval = (
  * The primary use case here is for opening with a scrolling interaction.
  */
 
+/**
+ * Because there are various ways to get back to this component without logging in
+ * or it unmounting we need to keep checking whether the user has actually logged in
+ * when they're on this page.
+ *
+ * In order to do this, it sets up an interval which will check whether we need to show
+ * the login modal based on whether the component is focused and whether a modal is
+ * already open.
+ *
+ * It might be slighlty nicer to do this after some user event like a touch. However,
+ * because we're using transparent cards, this component doesn't actually receive
+ * certain gesture events on Android. This could be fixed in future but for the time being
+ * this seems ok for release.
+ */
+
 const ModalOpener = ({
     children,
+    isFocused,
     renderModal,
 }: {
     children: React.ReactNode
-    forceOpen?: boolean
+    isFocused: () => boolean
     renderModal: (close: () => void) => React.ReactNode
 }) => {
     const { open, close, isOpen } = useModal()
+    const isOpenRef = usePropToRef(isOpen)
+    const renderModalRef = usePropToRef(renderModal)
 
-    // we use an interval here to make sure that if there's ever a bug
-    // where we don't close this screen after the modal closes, then we
-    // re-check that someone's subscription is valid a bit later
-    useInterval(
-        () => {
-            if (!isOpen) {
-                open(renderModal)
+    useEffect(() => {
+        const id = setInterval(() => {
+            if (!isOpenRef.current && isFocused()) {
+                open(renderModalRef.current)
             }
-        },
-        5000,
-        !isOpen,
-    )
+        }, 7000)
+        return () => clearTimeout(id)
+    }, [])
 
     // ensure the modal is closed on unmount
     useEffect(() => () => close(), [close])
@@ -84,11 +71,13 @@ const ModalOpener = ({
 
 const LoginOverlay = ({
     children,
+    isFocused,
     onDismiss,
     onOpenCASLogin,
     onLoginPress,
 }: {
     children: React.ReactNode
+    isFocused: () => boolean
     onDismiss: () => void
     onOpenCASLogin: () => void
     onLoginPress: () => void
@@ -101,6 +90,7 @@ const LoginOverlay = ({
         unauthed: signedIn =>
             signedIn ? (
                 <ModalOpener
+                    isFocused={isFocused}
                     renderModal={close => (
                         <SubNotFoundModalCard
                             onDismiss={onDismiss}
@@ -114,6 +104,7 @@ const LoginOverlay = ({
                 </ModalOpener>
             ) : (
                 <ModalOpener
+                    isFocused={isFocused}
                     renderModal={close => (
                         <SignInModalCard
                             onDismiss={onDismiss}
