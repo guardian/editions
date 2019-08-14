@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image, ImageSourcePropType } from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -23,21 +23,33 @@ const socialButtonStyles = StyleSheet.create({
     buttonText: {
         color: color.primary,
     },
+    icon: {
+        marginRight: 10,
+        height: 20,
+        width: 20,
+    },
 })
 
 const SocialButton = ({
     children,
     onPress,
-    iconURL,
+    iconRequire,
 }: {
     children: string
     onPress: () => void
-    iconURL: string
+    iconRequire: ImageSourcePropType
 }) => (
     <Button
         buttonStyles={socialButtonStyles.button}
         textStyles={socialButtonStyles.buttonText}
         onPress={onPress}
+        icon={
+            <Image
+                resizeMode="contain"
+                style={socialButtonStyles.icon}
+                source={iconRequire}
+            />
+        }
     >
         {children}
     </Button>
@@ -110,10 +122,16 @@ const Login = ({
             {!hasInputEmail && (
                 <>
                     <View>
-                        <SocialButton onPress={onFacebookPress} iconURL="">
+                        <SocialButton
+                            onPress={onFacebookPress}
+                            iconRequire={require('src/assets/images/fb.png')}
+                        >
                             Continue with Facebook
                         </SocialButton>
-                        <SocialButton onPress={onGooglePress} iconURL="">
+                        <SocialButton
+                            onPress={onGooglePress}
+                            iconRequire={require('src/assets/images/google.png')}
+                        >
                             Continue with Google
                         </SocialButton>
                     </View>
