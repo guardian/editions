@@ -222,11 +222,11 @@ const sixStoryPage: PageLayout = {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: SmallItemLargeText,
+                item: SmallItem,
                 fits: toRectangle(0, 0, 1, 2),
             },
             {
-                item: SmallItemLargeText,
+                item: SmallItem,
                 fits: toRectangle(0, 1, 1, 2),
             },
             {
@@ -251,11 +251,11 @@ const sixStoryPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: SmallItem,
+                item: SmallItemLargeText,
                 fits: toRectangle(0, 0, 1, 2),
             },
             {
-                item: SmallItem,
+                item: SmallItemLargeText,
                 fits: toRectangle(0, 1, 1, 2),
             },
             {
