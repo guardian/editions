@@ -1,9 +1,16 @@
-import React, { useEffect, useMemo } from 'react'
-import { View, StyleSheet, PanResponder } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, StyleSheet } from 'react-native'
 import { useModal } from '../modal'
 import { useAuth } from 'src/authentication/auth-context'
 import { SignInModalCard } from '../sign-in-modal-card'
 import { SubNotFoundModalCard } from '../sub-not-found-modal-card'
+import { navigateToIssue } from 'src/navigation/helpers'
+import {
+    NavigationScreenProp,
+    withNavigation,
+    NavigationInjectedProps,
+} from 'react-navigation'
+import { routeNames } from 'src/navigation'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
@@ -11,6 +18,22 @@ const overlayStyles = StyleSheet.create({
         flex: 1,
     },
 })
+
+const useTimeout = (callback: () => void, delay: number) => {
+    const cb = useRef<() => void>(() => {})
+
+    // Remember the latest callback.
+    useEffect(() => {
+        cb.current = callback
+    }, [callback])
+
+    useEffect(() => {
+        const id = setTimeout(() => {
+            cb.current()
+        }, delay)
+        return () => clearTimeout(id)
+    }, [delay])
+}
 
 /**
  * This allows us to open a modal using a component in the view.
@@ -26,28 +49,18 @@ const ModalOpener = ({
     forceOpen?: boolean
     renderModal: (close: () => void) => React.ReactNode
 }) => {
-    const { open, close } = useModal()
+    const { open, close, isOpen } = useModal()
 
-    const swipeUpHandlers = useMemo(
-        () =>
-            PanResponder.create({
-                onStartShouldSetPanResponder: () => true,
-                onMoveShouldSetPanResponder: () => true,
-                onPanResponderMove: (_, gesture) => {
-                    gesture.dy < -10 && open(renderModal)
-                },
-            }),
-        [renderModal, open],
-    )
+    useTimeout(() => {
+        if (!isOpen) {
+            open(renderModal)
+        }
+    }, 5000)
 
     // ensure the modal is closed on unmount
     useEffect(() => () => close(), [close])
 
-    return (
-        <View style={overlayStyles.wrapper} {...swipeUpHandlers.panHandlers}>
-            {children}
-        </View>
-    )
+    return <View style={overlayStyles.wrapper}>{children}</View>
 }
 
 const LoginOverlay = ({
