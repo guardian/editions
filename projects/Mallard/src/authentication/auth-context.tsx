@@ -12,6 +12,7 @@ import {
 } from './credentials-chain'
 import { UserData, canViewEdition } from './helpers'
 import { AUTH_TTL } from 'src/constants'
+import { tryToRestoreActiveIOSSubscriptionToAuth } from 'src/services/iap'
 
 interface AuthAttempt {
     time: number
@@ -33,10 +34,12 @@ const AuthContext = createContext<{
     status: AuthStatus
     setStatus: (status: AuthStatus) => void
     signOut: () => Promise<void>
+    restorePurchases: () => Promise<void>
 }>({
     status: pending,
     setStatus: () => {},
     signOut: () => Promise.resolve(),
+    restorePurchases: () => Promise.resolve(),
 })
 
 const needsReauth = (
@@ -174,6 +177,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 signOut: async () => {
                     await resetCredentials()
                     setAuthAttempt(createAuthAttempt(unauthed, 'live'))
+                },
+                restorePurchases: async () => {
+                    // await the receipt being added to the system by iOS
+                    // this will prompt a user to login to their iTunes account
+                    const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
+                    if (authStatus && authAttempt.status.type !== 'authed') {
+                        setAuthAttempt(
+                            createAuthAttempt(
+                                { type: 'authed', data: authStatus },
+                                'live',
+                            ),
+                        )
+                    }
                 },
             }}
         >
