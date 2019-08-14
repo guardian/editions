@@ -1,17 +1,11 @@
 import React from 'react'
-import {
-    View,
-    ViewStyle,
-    StyleProp,
-    StyleSheet,
-    TextStyle,
-    Dimensions,
-} from 'react-native'
+import { View, ViewStyle, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { Button, ButtonAppearance } from '../button/button'
+import { minScreenSize } from 'src/helpers/screen'
 
 export enum CardAppearance {
     tomato,
@@ -76,8 +70,7 @@ const OnboardingCard = ({
     appearance: CardAppearance
     size?: 'big' | 'small'
 }) => {
-    const dims = Dimensions.get('window')
-    const max = Math.min(dims.width, dims.height) * 0.8
+    const max = minScreenSize() * 0.8
     return (
         <View
             style={[
