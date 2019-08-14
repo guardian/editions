@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { Text, Dimensions, View, Alert } from 'react-native'
+import React, { useContext, ReactElement } from 'react'
+import { Text, Dimensions, View, Alert, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { List } from 'src/components/lists/list'
@@ -25,9 +25,13 @@ import {
     AuthContext,
     useAuth,
 } from 'src/authentication/auth-context'
+import { RightChevron } from 'src/components/icons/RightChevron'
+import { getFont } from 'src/theme/typography'
+import { color } from 'src/theme/color'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
+    const { status } = useContext(AuthContext)
     const { apiUrl } = settings
     return (
         <>
@@ -117,11 +121,23 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             <Heading>Your settings</Heading>
             <List
                 onPress={() => {}}
-                data={Object.entries(settings).map(([title, explainer]) => ({
-                    key: title,
-                    title,
-                    explainer: explainer + '',
-                }))}
+                data={Object.entries(settings)
+                    .map(([title, explainer]) => ({
+                        key: title,
+                        title,
+                        explainer: explainer + '',
+                    }))
+                    .concat([
+                        {
+                            key: 'Authentication details',
+                            title: 'Authentication details',
+                            explainer: `Signed in status ${status.type} : ${
+                                status.type === 'authed'
+                                    ? status.data.type
+                                    : '_'
+                            }`,
+                        },
+                    ])}
             />
         </>
     )
@@ -132,7 +148,16 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
     const authHandler = useAuth()
-    const { signOut } = useContext(AuthContext)
+    const { signOut, restorePurchases } = useContext(AuthContext)
+
+    const styles = StyleSheet.create({
+        signOut: {
+            color: color.ui.supportBlue,
+            ...getFont('sans', 1),
+        },
+    })
+
+    const rightChevronIcon = <RightChevron />
 
     const signInListItems = [
         ...signInHandler({
@@ -140,12 +165,21 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             signedIn: data => [
                 {
                     key: `Sign out`,
-                    title: `Sign out of ${data.userDetails.publicFields.displayName}`,
+                    title: data.userDetails.publicFields.displayName,
                     data: {
                         onPress: async () => {
                             await signOut()
                         },
                     },
+                    proxy: <Text style={styles.signOut}>Sign Out</Text>,
+                },
+                {
+                    key: `Subscription details`,
+                    title: `Subscription details`,
+                    data: {
+                        onPress: async () => {},
+                    },
+                    proxy: rightChevronIcon,
                 },
             ],
             signedOut: () => [
@@ -157,6 +191,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             navigation.navigate(routeNames.SignIn)
                         },
                     },
+                    proxy: rightChevronIcon,
                 },
             ],
         }),
@@ -180,22 +215,135 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
-                <Heading>Settings</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
                     data={[
                         ...signInListItems,
                         {
-                            key: 'Consent settings',
-                            title: 'Consent settings',
+                            key: 'Restore purchases',
+                            title: 'Restore purchases',
                             data: {
                                 onPress: () => {
-                                    navigation.navigate(routeNames.GdprConsent)
+                                    restorePurchases()
                                 },
                             },
                         },
                     ]}
                 />
+                <Heading>{``}</Heading>
+                <List
+                    onPress={({ onPress }) => onPress()}
+                    data={[
+                        {
+                            key: 'Privacy settings',
+                            title: 'Privacy settings',
+                            data: {
+                                onPress: () => {
+                                    navigation.navigate(routeNames.GdprConsent)
+                                },
+                            },
+                            proxy: rightChevronIcon,
+                        },
+                        {
+                            key: 'Privacy policy',
+                            title: 'Privacy policy',
+                            data: {
+                                onPress: () => {
+                                    navigation.navigate(
+                                        routeNames.PrivacyPolicy,
+                                    )
+                                },
+                            },
+                            proxy: rightChevronIcon,
+                        },
+                        {
+                            key: 'Terms and conditions',
+                            title: 'Terms and conditions',
+                            data: {
+                                onPress: () => {
+                                    navigation.navigate(
+                                        routeNames.TermsAndConditions,
+                                    )
+                                },
+                            },
+                            proxy: rightChevronIcon,
+                        },
+                    ]}
+                />
+                <Heading>{``}</Heading>
+                <List
+                    onPress={({ onPress }) => onPress()}
+                    data={[
+                        {
+                            key: 'Help',
+                            title: 'Help',
+                            data: {
+                                onPress: () => {
+                                    navigation.navigate(routeNames.Help)
+                                },
+                            },
+                            proxy: rightChevronIcon,
+                        },
+                        {
+                            key: 'Clear cache',
+                            title: 'Clear cache',
+                            data: {
+                                onPress: () => {
+                                    Alert.alert(
+                                        'Clear caches',
+                                        'You sure?',
+                                        [
+                                            {
+                                                text: 'Delete fetch cache',
+                                                onPress: () => {
+                                                    clearCache()
+                                                },
+                                            },
+                                            {
+                                                text: 'Delete EVERYTHING',
+                                                onPress: () => {
+                                                    AsyncStorage.clear()
+                                                },
+                                            },
+                                            {
+                                                style: 'cancel',
+                                                text: `No don't do it`,
+                                            },
+                                        ],
+                                        { cancelable: false },
+                                    )
+                                },
+                            },
+                        },
+                        {
+                            key: 'Credits',
+                            title: 'Credits',
+                            data: {
+                                onPress: () => {
+                                    navigation.navigate(routeNames.Credits)
+                                },
+                            },
+                            proxy: rightChevronIcon,
+                        },
+                        {
+                            key: 'Version',
+                            title: 'Version',
+                            data: {
+                                onPress: () => {},
+                            },
+                            proxy: <Text>{getVersionInfo().version}</Text>,
+                        },
+                        {
+                            key: 'Build id',
+                            title: 'Build',
+                            data: {
+                                onPress: () => {},
+                            },
+                            proxy: <Text>{getVersionInfo().commitId}</Text>,
+                        },
+                    ]}
+                />
+
                 <Heading>{`About ${APP_DISPLAY_NAME}`}</Heading>
                 <Footer>
                     <UiBodyCopy>
@@ -208,23 +356,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         {`Send us feedback to ${FEEDBACK_EMAIL}`}
                     </UiBodyCopy>
                 </Footer>
-                <List
-                    onPress={() => {}}
-                    data={[
-                        {
-                            key: '0',
-                            title: 'App version',
-                            explainer: getVersionInfo().version,
-                            data: {},
-                        },
-                        {
-                            key: '1',
-                            title: 'Build id',
-                            explainer: getVersionInfo().commitId,
-                            data: {},
-                        },
-                    ]}
-                />
                 {!isUsingProdDevtools ? (
                     <>
                         <View

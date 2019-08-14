@@ -1,6 +1,5 @@
-import { IContent, TagType } from '@guardian/capi-ts'
-import { ContentType } from '@guardian/capi-ts/dist/com/gu/story/model/v1'
 import { getBylineImages } from '../byline'
+import { TagType, IContent, ContentType } from '@guardian/capi-ts'
 interface TagSpec {
     id: string
     type: TagType
@@ -8,6 +7,7 @@ interface TagSpec {
     bylineImageUrl?: string
     bylineLargeImageUrl?: string
 }
+
 const createTag = ({
     id,
     type,
@@ -59,7 +59,7 @@ describe('byline image extractor', () => {
         ]
         const article = createArticleLike(tagSpecs, 'Name')
         const images = getBylineImages(article)
-        expect(images).toBe({
+        expect(images).toStrictEqual({
             thumbnail: {
                 source: 'test',
                 path: 'image',

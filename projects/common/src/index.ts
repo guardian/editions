@@ -158,16 +158,29 @@ export interface PullquoteElement {
 export interface AtomElement {
     id: '⚛︎'
     atomType: string
+    atomId: string
     html?: string
     css?: string[]
     js?: string[]
 }
+
+export interface MediaAtomElement {
+    id: 'media-atom'
+    atomId: string
+    image?: Image
+    html: string
+    platform?: 'youtube' | 'dailymotion' | 'mainstream' | 'url'
+    assetId?: string
+    title?: string
+}
+
 export type BlockElement =
     | HTMLElement
     | ImageElement
     | UnknownElement
     | TweetElement
     | AtomElement
+    | MediaAtomElement
     | PullquoteElement
 
 export interface CrosswordDimensions {

@@ -1,8 +1,13 @@
 import { Platform } from 'react-native'
-
+import DeviceInfo from 'react-native-device-info'
 import Config from 'react-native-config'
 
-const { ID_API_URL, MEMBERS_DATA_API_URL, ID_ACCESS_TOKEN } = Config
+const {
+    ID_API_URL,
+    MEMBERS_DATA_API_URL,
+    ID_ACCESS_TOKEN,
+    ITUNES_CONNECT_SHARED_SECRET,
+} = Config
 
 const FACEBOOK_CLIENT_ID = '180444840287'
 
@@ -17,6 +22,10 @@ const GOOGLE_CLIENT_ID =
             : '774465807556-cjat38acttpl7md4nfc4pfediouh7v97'
         : '774465807556-kgaj5an4pc4fmr3svp5nfpulekc1rl3n'
 
+const LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY = 'printSubscriberID'
+const LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY = 'printSubscriberPostcode'
+const LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY = `${DeviceInfo.getBundleId()}_expiryDict`
+
 export {
     CAS_ENDPOINT_URL,
     ID_API_URL,
@@ -25,4 +34,8 @@ export {
     FACEBOOK_CLIENT_ID,
     GOOGLE_CLIENT_ID,
     AUTH_TTL,
+    LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
+    LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
+    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
+    ITUNES_CONNECT_SHARED_SECRET,
 }

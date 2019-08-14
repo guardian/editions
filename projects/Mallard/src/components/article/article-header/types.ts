@@ -1,4 +1,4 @@
-import { Image } from '../../../common'
+import { Image, Article } from '../../../common'
 
 export interface ArticleHeaderProps {
     byline: string
@@ -6,4 +6,5 @@ export interface ArticleHeaderProps {
     kicker?: string | null
     image?: Image | null
     standfirst: string
+    starRating?: Article['starRating']
 }

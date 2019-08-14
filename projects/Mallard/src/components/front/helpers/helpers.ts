@@ -1,11 +1,12 @@
 import { FunctionComponent } from 'react'
-import { PropTypes } from './item/item'
+import { PropTypes } from '../items/item'
 import { FlatList } from 'react-native'
-import { Dimensions, Animated } from 'react-native'
+import { Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Front } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useAppAppearance } from 'src/theme/appearance'
+import { Rectangle, Size } from 'src/helpers/sizes'
 
 type Item = FunctionComponent<PropTypes>
 
@@ -13,17 +14,8 @@ export interface AnimatedFlatListRef {
     _component: FlatList<Front['collections'][0]>
 }
 
-interface Size {
-    width: number
-    height: number
-}
-
-export type ItemFit = Size & {
-    top: number
-    left: number
-}
 export interface ItemSizes {
-    story: ItemFit
+    story: Rectangle
     layout: PageLayoutSizes
 }
 
@@ -31,12 +23,14 @@ export enum PageLayoutSizes {
     mobile,
     tablet,
 }
-export interface PageLayout {
-    size: PageLayoutSizes
-    items: {
-        item: Item
-        fits: ItemFit
-    }[]
+export type PageLayout = {
+    [key in PageLayoutSizes]: {
+        size: key
+        items: {
+            item: Item
+            fits: Rectangle
+        }[]
+    }
 }
 
 export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
@@ -51,8 +45,8 @@ This resolves where each article goes
 */
 
 export const getItemPosition = (
-    itemFit: ItemFit,
-    layout: PageLayout['size'],
+    itemFit: Rectangle,
+    layout: PageLayoutSizes,
 ) => {
     const layoutSize = getPageLayoutSizeXY(layout)
     return {
@@ -85,13 +79,14 @@ export const getTranslateForPage = (
     width: number,
     scrollX: Animated.Value,
     page: number,
+    multiplier: number = 1,
 ) => {
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
         outputRange: [
-            metrics.frontsPageSides * -1.75,
+            metrics.frontsPageSides * (-1.75 * multiplier),
             0,
-            metrics.frontsPageSides * 1.75,
+            metrics.frontsPageSides * (1.75 * multiplier),
         ],
     })
 }

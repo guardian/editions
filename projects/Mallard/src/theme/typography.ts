@@ -1,3 +1,8 @@
+import { pickClosestBreakpoint, Breakpoints } from './breakpoints'
+import { Dimensions } from 'react-native'
+import { BreakpointList } from 'src/theme/breakpoints'
+import { FontSizes } from 'src/theme/typography'
+
 export const families = {
     icon: {
         regular: 'GuardianIcons-Regular',
@@ -14,6 +19,7 @@ export const families = {
         regular: 'GTGuardianTitlepiece-Bold',
     },
     headline: {
+        light: 'GHGuardianHeadline-Light',
         regular: 'GHGuardianHeadline-Regular',
         bold: 'GHGuardianHeadline-Bold',
     },
@@ -28,82 +34,163 @@ Think of these as ems
 const scale = {
     icon: {
         [1]: {
-            fontSize: 20,
-            lineHeight: 20,
+            0: {
+                fontSize: 20,
+                lineHeight: 20,
+            },
         },
     },
     sans: {
         [0.5]: {
-            fontSize: 13,
-            lineHeight: 13,
+            0: {
+                fontSize: 13,
+                lineHeight: 13,
+            },
         },
         [0.9]: {
-            fontSize: 15,
-            lineHeight: 18,
+            0: {
+                fontSize: 15,
+                lineHeight: 18,
+            },
         },
         1: {
-            fontSize: 17,
-            lineHeight: 21,
+            0: {
+                fontSize: 17,
+                lineHeight: 21,
+            },
         },
     },
     text: {
         0.9: {
-            fontSize: 14,
-            lineHeight: 18,
+            0: {
+                fontSize: 14,
+                lineHeight: 18,
+            },
         },
         1: {
-            fontSize: 17,
-            lineHeight: 21,
+            0: {
+                fontSize: 16,
+                lineHeight: 20,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 17,
+                lineHeight: 24,
+            },
+        },
+        1.25: {
+            0: {
+                fontSize: 19,
+                lineHeight: 24,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 20,
+                lineHeight: 24,
+            },
         },
     },
     headline: {
         1: {
-            fontSize: 19,
-            lineHeight: 22,
+            0: {
+                fontSize: 19,
+                lineHeight: 22,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 24,
+                lineHeight: 29,
+            },
         },
         1.25: {
-            fontSize: 24,
-            lineHeight: 27,
+            0: {
+                fontSize: 24,
+                lineHeight: 29,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 28,
+                lineHeight: 32,
+            },
         },
         1.5: {
-            fontSize: 28,
-            lineHeight: 32,
+            0: {
+                fontSize: 28,
+                lineHeight: 32,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 34,
+                lineHeight: 38,
+            },
+        },
+        1.75: {
+            0: {
+                fontSize: 34,
+                lineHeight: 38,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 40,
+                lineHeight: 44,
+            },
         },
         2: {
-            fontSize: 40,
-            lineHeight: 40,
+            0: {
+                fontSize: 40,
+                lineHeight: 44,
+            },
         },
     },
     titlepiece: {
         1: {
-            fontSize: 18,
-            lineHeight: 20,
+            0: {
+                fontSize: 16,
+                lineHeight: 18,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 18,
+                lineHeight: 20,
+            },
         },
         1.25: {
-            fontSize: 24,
-            lineHeight: 26,
+            0: {
+                fontSize: 24,
+                lineHeight: 26,
+            },
         },
         1.5: {
-            fontSize: 30,
-            lineHeight: 33,
+            0: {
+                fontSize: 30,
+                lineHeight: 33,
+            },
         },
         2: {
-            fontSize: 45,
-            lineHeight: 50,
+            0: {
+                fontSize: 45,
+                lineHeight: 50,
+            },
         },
         2.5: {
-            fontSize: 60,
-            lineHeight: 66,
+            0: {
+                fontSize: 60,
+                lineHeight: 66,
+            },
         },
     },
 }
 
+export type FontSizes<F extends FontFamily> = keyof typeof scale[F]
+export type FontWeights<F extends FontFamily> = keyof typeof families[F]
+
 export const getFont = <F extends FontFamily>(
     family: F,
-    level: keyof typeof scale[F],
-    weight: keyof typeof families[F] = 'regular',
+    level: FontSizes<F>,
+    weight: FontWeights<F> = 'regular',
 ) => {
-    const scaleForLevel = scale[family][level]
+    const fontAtLevel = (scale[family][level] as unknown) as BreakpointList<{
+        fontSize: number
+        lineHeight: number
+    }>
+
+    const scaleForLevel = pickClosestBreakpoint(
+        fontAtLevel,
+        Dimensions.get('window').width,
+    )
     return {
         fontFamily: families[family][weight],
         ...scaleForLevel,

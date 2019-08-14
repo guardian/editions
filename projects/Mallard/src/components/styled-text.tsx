@@ -15,6 +15,11 @@ const styles = StyleSheet.create({
         ...getFont('headline', 1.5, 'bold'),
         color: color.text,
     },
+    headlineTextLight: {
+        flexShrink: 0,
+        ...getFont('headline', 1.5, 'light'),
+        color: color.text,
+    },
     issueTitleText: {
         flexShrink: 0,
         ...getFont('titlepiece', 1.25),
@@ -78,10 +83,10 @@ export const IssueTitleText = ({
 }
 
 export type HeadlineTextProps = {
-    children: string
-    weight?: 'regular' | 'bold'
+    children: React.ReactNode | React.ReactNode[]
+    weight?: 'regular' | 'bold' | 'light'
     style?: StyleProp<TextStyle>
-} & TextProps
+} & TextProps & { onTextLayout?: any }
 
 export const HeadlineText = ({
     style,
@@ -94,6 +99,8 @@ export const HeadlineText = ({
             style={[
                 weight === 'regular'
                     ? styles.headlineText
+                    : weight === 'light'
+                    ? styles.headlineTextLight
                     : styles.headlineTextBold,
                 style,
             ]}
@@ -126,7 +133,7 @@ export const HeadlineCardText = ({
     style,
     ...props
 }: {
-    children: string
+    children: React.ReactNode | React.ReactNode[]
     style?: StyleProp<TextStyle>
 } & TextProps) => (
     <HeadlineText {...props} style={[styles.headlineCardText, style]}>

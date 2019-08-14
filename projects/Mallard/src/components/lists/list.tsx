@@ -1,6 +1,13 @@
-import React from 'react'
-import { FlatList, ListRenderItem, FlatListProps } from 'react-native'
+import React, { ReactElement } from 'react'
+import {
+    FlatList,
+    ListRenderItem,
+    FlatListProps,
+    Text,
+    StyleSheet,
+} from 'react-native'
 import { Separator, Row } from 'src/components/layout/ui/row'
+import { useAppAppearance } from 'src/theme/appearance'
 /*
 An item is what the list uses to draw its own row –
 See https://facebook.github.io/react-native/docs/using-a-listview
@@ -9,6 +16,7 @@ export interface Item<D> {
     key: string
     title: string
     explainer?: string
+    proxy?: ReactElement
     data?: D
 }
 
@@ -44,6 +52,7 @@ export const List = <D extends {}>({
             data={data}
             renderItem={({ item }) => (
                 <Row
+                    proxy={item.proxy}
                     onPress={() => {
                         if (item.data) onPress(item.data)
                     }}

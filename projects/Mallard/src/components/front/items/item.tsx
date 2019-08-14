@@ -31,7 +31,7 @@ import {
     useCardBackgroundStyle,
     ItemSizes,
     PageLayoutSizes,
-} from '../helpers'
+} from '../helpers/helpers'
 import {
     setScreenPositionOfItem,
     getScreenPositionOfItem,
@@ -223,21 +223,32 @@ Text below image. To use in most heros
 const imageStyles = StyleSheet.create({
     image: {
         width: '100%',
-        height: '50%',
         flex: 0,
-    },
-    heroImage: {
-        height: '75%',
     },
     textBlock: {
         paddingTop: metrics.vertical / 3,
     },
 })
 
-const isHeroImage = ({ story, layout }: ItemSizes) => {
-    return layout === PageLayoutSizes.tablet
-        ? story.height > 2
-        : story.height > 4
+const getImageHeight = ({ story, layout }: ItemSizes) => {
+    if (layout === PageLayoutSizes.tablet) {
+        if (story.height >= 4) {
+            return '50%'
+        }
+        if (story.height >= 3) {
+            return '66.66%'
+        }
+        if (story.height >= 2) {
+            return '50%'
+        }
+        return '75.5%'
+    }
+    if (layout === PageLayoutSizes.mobile) {
+        if (story.height > 4) {
+            return '75.5%'
+        }
+        return '50%'
+    }
 }
 
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
@@ -247,7 +258,7 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 <Image
                     style={[
                         imageStyles.image,
-                        isHeroImage(size) && imageStyles.heroImage,
+                        { height: getImageHeight(size) },
                     ]}
                     source={{
                         uri: `${APIPaths.mediaBackend}${APIPaths.media(
@@ -278,14 +289,17 @@ const splitImageStyles = StyleSheet.create({
     image: {
         width: '50%',
         height: '100%',
-        flex: 0.5,
+        flex: 0,
+    },
+    wideImage: {
+        width: '33.33333%',
     },
     card: {
         flexDirection: 'row',
         height: '100%',
     },
     textBlock: {
-        flex: 0.5,
+        flex: 1,
     },
 })
 
@@ -301,7 +315,12 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 />
                 {'image' in article && article.image ? (
                     <Image
-                        style={[splitImageStyles.image]}
+                        style={[
+                            splitImageStyles.image,
+                            size.layout === PageLayoutSizes.tablet &&
+                                size.story.width === 3 &&
+                                splitImageStyles.wideImage,
+                        ]}
                         source={{
                             uri: `${APIPaths.mediaBackend}${APIPaths.media(
                                 'issue',
@@ -365,7 +384,10 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 {...{ size }}
             />
             {'trail' in article && article.trail ? (
-                <StandfirstText style={[superHeroImageStyles.textStandBlock]}>
+                <StandfirstText
+                    allowFontScaling={false}
+                    style={[superHeroImageStyles.textStandBlock]}
+                >
                     {article.trail}
                 </StandfirstText>
             ) : null}
@@ -423,11 +445,24 @@ const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
     )
 }
 
+const SmallItemLargeText = ({ article, size, ...tappableProps }: PropTypes) => {
+    return (
+        <ItemTappable {...tappableProps} {...{ article }}>
+            <TextBlock
+                kicker={article.kicker}
+                headline={article.headline}
+                fontSize={1.25}
+            />
+        </ItemTappable>
+    )
+}
+
 export {
     SplashImageItem,
     SuperHeroImageItem,
     ImageItem,
     SplitImageItem,
     SmallItem,
+    SmallItemLargeText,
     CoverItem,
 }

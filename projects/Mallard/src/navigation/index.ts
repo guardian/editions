@@ -19,6 +19,11 @@ import {
 } from 'src/screens/onboarding-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
+import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
+import { HelpScreen } from 'src/screens/settings/help-screen'
+import { FAQScreen } from 'src/screens/settings/faq-screen'
+import { CreditsScreen } from 'src/screens/settings/credits-screen'
+import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
@@ -37,6 +42,11 @@ const routeNames = {
     Settings: 'Settings',
     Endpoints: 'Endpoints',
     GdprConsent: 'GdprConsent',
+    PrivacyPolicy: 'PrivacyPolicy',
+    TermsAndConditions: 'TermsAndConditions',
+    Help: 'Help',
+    Credits: 'Credits',
+    FAQ: 'FAQ',
     SignIn: 'SignIn',
     CasSignIn: 'CasSignIn',
     onboarding: {
@@ -118,6 +128,11 @@ const AppStack = createStackNavigator(
                 [routeNames.Downloads]: DownloadScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
+                [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
+                [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
+                [routeNames.Help]: HelpScreen,
+                [routeNames.Credits]: CreditsScreen,
+                [routeNames.FAQ]: FAQScreen,
             },
             {
                 defaultNavigationOptions: {
