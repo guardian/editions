@@ -4,6 +4,8 @@ import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet, View } from 'react-native'
 import { clamp } from 'src/helpers/math'
 
+const fadeLozengeAt = 20
+
 const getStyles = (fill: string, radius: number) =>
     StyleSheet.create({
         root: {
@@ -24,6 +26,7 @@ const getStyles = (fill: string, radius: number) =>
         roundBubble: {
             borderRadius: radius,
             width: radius * 2,
+            zIndex: -2,
             alignItems: 'center',
         },
         leftBubbleCap: {
@@ -32,6 +35,9 @@ const getStyles = (fill: string, radius: number) =>
         rightBubbleCap: {
             left: 'auto',
             right: radius * -1,
+        },
+        centerBubble: {
+            width: '100%',
         },
         text: {
             color: color.textOverDarkBackground,
@@ -48,7 +54,7 @@ const getStyles = (fill: string, radius: number) =>
             ...StyleSheet.absoluteFillObject,
             left: radius,
             right: radius,
-            zIndex: -1,
+            zIndex: -3,
         },
     })
 
@@ -94,7 +100,7 @@ const Lozenge = ({
                             styles.header,
                             width && {
                                 opacity: position.interpolate({
-                                    inputRange: [0, 20],
+                                    inputRange: [0, fadeLozengeAt],
                                     outputRange: [1, 0],
                                     extrapolate: 'clamp',
                                 }),
@@ -116,30 +122,30 @@ const Lozenge = ({
                         onLayout={(ev: any) => {
                             setWidth(ev.nativeEvent.layout.width)
                         }}
-                        style={styles.lozengeContainer}
+                        style={[styles.lozengeContainer]}
                     >
                         <Animated.View
                             accessible={false}
                             style={[
                                 styles.backgroundFill,
-                                {
-                                    width: '100%',
-                                },
+                                styles.centerBubble,
                                 {
                                     transform: [
                                         {
                                             translateX: position.interpolate({
-                                                inputRange: [0, 20],
+                                                inputRange: [0, fadeLozengeAt],
                                                 outputRange: [
                                                     0,
-                                                    -20 - width / 2 + radius,
+                                                    fadeLozengeAt * -1 -
+                                                        width / 2 +
+                                                        radius,
                                                 ],
                                                 extrapolate: 'clamp',
                                             }),
                                         },
                                         {
                                             scaleX: position.interpolate({
-                                                inputRange: [0, 20],
+                                                inputRange: [0, fadeLozengeAt],
                                                 outputRange: [1, 0],
                                                 extrapolate: 'clamp',
                                             }),
@@ -159,22 +165,22 @@ const Lozenge = ({
                                         inputRange: [
                                             0,
                                             clamp(
-                                                width - radius,
-                                                width,
-                                                Infinity,
+                                                width / 2 - radius,
+                                                0,
+                                                width / 2,
                                             ),
-                                            width,
+                                            width / 2,
                                         ],
                                         outputRange: [1, 1, 0],
-                                        extrapolate: 'clamp',
                                     }),
                                     transform: [
                                         {
                                             translateX: position.interpolate({
-                                                inputRange: [0, 20],
+                                                inputRange: [0, fadeLozengeAt],
                                                 outputRange: [
                                                     0,
-                                                    -20 - (width - radius),
+                                                    fadeLozengeAt * -1 -
+                                                        (width - radius),
                                                 ],
                                                 extrapolate: 'clamp',
                                             }),
@@ -190,7 +196,7 @@ const Lozenge = ({
                                 styles.roundBubble,
                                 styles.leftBubbleCap,
                             ]}
-                        ></View>
+                        />
                     </Animated.View>
                 </>
             )}
@@ -201,6 +207,7 @@ const Lozenge = ({
                     styles.roundBubble,
                     {
                         transform: [{ translateX: -1 }],
+                        backgroundColor: 'transparent',
                     },
                     position && {
                         opacity: position.interpolate({
