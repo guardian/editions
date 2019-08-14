@@ -19,11 +19,13 @@ const Wrapper = ({
     scrubber: ReactElement
     children: ReactElement
 }) => {
-    const { card } = useIssueScreenSize()
+    const { card, container } = useIssueScreenSize()
     return (
         <>
             <View style={styles.outer}>{scrubber}</View>
-            <View style={{ height: card.height }}>{children}</View>
+            <View style={{ height: card.height, width: container.width }}>
+                {children}
+            </View>
         </>
     )
 }

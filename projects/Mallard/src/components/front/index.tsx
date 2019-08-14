@@ -1,5 +1,5 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Animated } from 'react-native'
+import { Animated, View } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
@@ -152,6 +152,13 @@ const FrontWithResponse = ({
                 })}
                 keyExtractor={(item: FlatCard, index: number) =>
                     index + item.collection.key
+                }
+                ListFooterComponent={
+                    <View
+                        style={{
+                            width: container.width - card.width,
+                        }}
+                    ></View>
                 }
                 onScroll={Animated.event(
                     [

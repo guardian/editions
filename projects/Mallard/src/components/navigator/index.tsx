@@ -47,7 +47,6 @@ const Navigator = ({
     onReleaseScrub?: (to: number) => void
 }) => {
     let scrubbing = useRef(false).current
-    const [width, setWidth] = useState(0)
     const [panResponder] = useState(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
