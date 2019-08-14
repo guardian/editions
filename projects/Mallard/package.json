@@ -80,6 +80,7 @@
         "fetch-mock": "^7.3.7",
         "jest": "^24.8.0",
         "metro-react-native-babel-preset": "^0.55.0",
+        "mockdate": "^2.0.5",
         "react-test-renderer": "16.8.6",
         "typescript": "^3.5.3"
     },
