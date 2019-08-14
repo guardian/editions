@@ -16,6 +16,9 @@ import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
 import { generateIndex, summary } from './src/indexer/summary'
 import pAll from 'p-all'
+export { handler as issue } from './src/issueTask'
+
+export { handler as invoke } from './src/invoke'
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html

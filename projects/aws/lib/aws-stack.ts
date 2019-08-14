@@ -7,6 +7,8 @@ import iam = require('@aws-cdk/aws-iam')
 import cloudfront = require('@aws-cdk/aws-cloudfront')
 import { CfnOutput, Duration } from '@aws-cdk/core'
 
+import { stateMachineArnEnv } from '../../archiver/src/invoke'
+import { archiverStepFunction } from './step-function'
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props)
@@ -69,7 +71,7 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        const deploy = s3.Bucket.fromBucketName(
+        const deployBucket = s3.Bucket.fromBucketName(
             this,
             'editions-dist',
             'editions-dist',
@@ -94,7 +96,7 @@ export class EditionsStack extends cdk.Stack {
             memorySize: 512,
             timeout: Duration.seconds(60),
             code: Code.bucket(
-                deploy,
+                deployBucket,
                 `${stackParameter.valueAsString}/${stageParameter.valueAsString}/backend/backend.zip`,
             ),
             handler: 'index.handler',
@@ -149,6 +151,8 @@ export class EditionsStack extends cdk.Stack {
         const gatewayId = gateway.restApiId
         const publishedGatewayId = publishedGateway.restApiId
 
+        const backendURL = `${publishedGatewayId}.execute-api.eu-west-1.amazonaws.com/prod/` //Yes, this (the region) really should not be hard coded.
+
         const dist = new cloudfront.CloudFrontWebDistribution(
             this,
             'backend-cloudfront-distribution',
@@ -188,14 +192,14 @@ export class EditionsStack extends cdk.Stack {
             timeout: Duration.minutes(5),
             memorySize: 1500,
             code: Code.bucket(
-                deploy,
+                deployBucket,
                 `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
             ),
             handler: 'index.handler',
             environment: {
                 stage: stageParameter.valueAsString,
                 bucket: archive.bucketName,
-                backend: `${publishedGatewayId}.execute-api.eu-west-1.amazonaws.com/prod/`, //Yes, this (the region) really should not be hard coded.
+                backend: backendURL,
             },
             initialPolicy: [
                 new iam.PolicyStatement({
@@ -227,5 +231,60 @@ export class EditionsStack extends cdk.Stack {
                 sourceArn: publishedBucket.bucketArn,
             },
         )
+
+        //Archiver step function
+
+        const archiverStateMachine = archiverStepFunction(this, {
+            stack: stackParameter.valueAsString,
+            stage: stageParameter.valueAsString,
+            deployBucket,
+            outputBucket: archive,
+            backendURL,
+        })
+
+        new CfnOutput(this, 'archiver-state-machine-arn', {
+            description: 'ARN for archiver state machine',
+            exportName: 'archiver-state-machine-arn',
+            value: archiverStateMachine.stateMachineArn,
+        })
+
+        const archiveS3EventListener = new lambda.Function(
+            this,
+            'EditionsArchiverS3EventListener',
+            {
+                functionName: `editions-archiver-s3-event-listener-${stageParameter.valueAsString}`,
+                runtime: lambda.Runtime.NODEJS_10_X,
+                timeout: Duration.minutes(5),
+                memorySize: 256,
+                code: Code.bucket(
+                    deployBucket,
+                    `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
+                ),
+                handler: 'index.invoke',
+                environment: {
+                    stage: stageParameter.valueAsString,
+                    [stateMachineArnEnv]: archiverStateMachine.stateMachineArn,
+                },
+            },
+        )
+
+        new CfnOutput(this, 'archiver-s3-event-listener-arn', {
+            description: 'ARN for archiver state machine trigger lambda',
+            exportName: 'archiver-s3-event-listener-arn',
+            value: archiveS3EventListener.functionArn,
+        })
+        new lambda.CfnPermission(
+            this,
+            'PublishedEditionsArchiverS3EventListenerInvokePermission',
+            {
+                principal: 's3.amazonaws.com',
+                functionName: archiveS3EventListener.functionName,
+                action: 'lambda:InvokeFunction',
+                sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
+                sourceArn: publishedBucket.bucketArn,
+            },
+        )
+
+        archiverStateMachine.grantStartExecution(archiveS3EventListener)
     }
 }
