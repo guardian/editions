@@ -2,6 +2,19 @@
 
 ## Installing
 
+rn update: run this to clear your cache
+(https://medium.com/@abhisheknalwaya/how-to-clear-react-native-cache-c435c258834e)
+
+```bash
+watchman watch-del-all &&
+rm -rf $TMPDIR/react-native-packager-cache-* &&
+rm -rf $TMPDIR/metro-bundler-cache-* &&
+rm -rf node_modules/ &&
+yarn cache clean &&
+yarn install &&
+yarn start -- --reset-cache
+```
+
 Start by installing our Node.js dependencies:
 
 ```bash

@@ -96,18 +96,18 @@ const TextBlock = ({
     ).fontSize
     return (
         <View style={[rootStyle, style]}>
-            <HeadlineKickerText
+            <HeadlineCardText
                 allowFontScaling={false}
-                style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
+                style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
             >
-                {kicker}
-                <HeadlineCardText
+                <HeadlineKickerText
                     allowFontScaling={false}
-                    style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
+                    style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
                 >
-                    {' ' + headline}
-                </HeadlineCardText>
-            </HeadlineKickerText>
+                    {kicker + ' '}
+                </HeadlineKickerText>
+                {headline}
+            </HeadlineCardText>
         </View>
     )
 }

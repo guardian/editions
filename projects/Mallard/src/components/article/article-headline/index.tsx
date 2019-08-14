@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+
 import { HeadlineText, HeadlineTextProps } from 'src/components/styled-text'
 import {
     StyleSheet,
@@ -9,9 +10,11 @@ import {
     PixelRatio,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
+import { useTextBoxes, TextBoxes } from 'src/components/layout/text-boxes'
 
 export type ArticleHeadlineProps = {
     children: any
+    hasHighlight?: boolean
     textStyle?: StyleProp<TextStyle>
     icon?: { width: number; height: number; element: () => ReactNode }
 } & Pick<HeadlineTextProps, 'weight'>
@@ -20,6 +23,10 @@ const styles = StyleSheet.create({
     headline: {
         marginRight: metrics.horizontal * 2,
         marginTop: metrics.vertical / 2,
+    },
+    highlightBg: {
+        ...StyleSheet.absoluteFillObject,
+        zIndex: -1,
     },
     icon: {
         position: 'absolute',
@@ -59,10 +66,12 @@ const ArticleHeadline = ({
     children,
     textStyle,
     weight,
+    hasHighlight = false,
     icon,
 }: ArticleHeadlineProps) => {
+    const [onTextLayout, boxes] = useTextBoxes()
     return (
-        <>
+        <View>
             {icon && (
                 <View
                     style={[
@@ -76,11 +85,20 @@ const ArticleHeadline = ({
                     {icon.element()}
                 </View>
             )}
-            <HeadlineText {...{ weight }} style={[styles.headline, textStyle]}>
+            <HeadlineText
+                onTextLayout={hasHighlight && onTextLayout}
+                {...{ weight }}
+                style={[styles.headline, textStyle]}
+            >
                 {icon && <IconDashes length={icon.width}></IconDashes>}
                 {children}
             </HeadlineText>
-        </>
+            {hasHighlight && boxes.length > 0 && (
+                <View style={styles.highlightBg}>
+                    <TextBoxes boxes={boxes} />
+                </View>
+            )}
+        </View>
     )
 }
 
