@@ -22,6 +22,7 @@ import { cleanupHtml } from '../utils/html'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
+import { rationaliseAtoms } from './atoms'
 
 type NotInCAPI =
     | 'key'
@@ -69,7 +70,9 @@ const parseArticleResult = async (
         result.fields.standfirst &&
         cleanupHtml(result.fields.standfirst)
 
-    const parser = elementParser(path)
+    const atomData = rationaliseAtoms(result.atoms)
+
+    const parser = elementParser(path, atomData)
     const kicker = kickerPicker(result, title)
 
     const trail = result.fields && result.fields.trailText
@@ -110,8 +113,10 @@ const parseArticleResult = async (
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
     const elements = await attempt(Promise.all(body.map(parser)))
-    if (hasFailed(elements))
+    if (hasFailed(elements)) {
+        console.error(elements)
         throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
+    }
 
     if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
 
