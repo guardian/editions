@@ -66,18 +66,27 @@ export const renderAtomElement = async (
     data: IContentAtomElementFields | undefined,
     atoms: { [key: string]: IAtom[] },
 ): Promise<BlockElement> => {
-    if (data == null) throw new Error('No atom data in element.')
+    if (data == null) {
+        console.error('No atom data found in element.')
+        throw new Error('No atom data in element.')
+    }
 
     const atomType = data.atomType
     const atomId = data.atomId
     const atom = (atoms[atomType] || []).find(atom => atom.id === atomId)
-    if (atom === undefined) throw new Error('Atom not found in CAPI response.')
+    if (atom === undefined) {
+        console.error('Atom not found in CAPI response.')
+        throw new Error('Atom not found in CAPI response.')
+    }
     if (atomType === 'media' && atom !== null) {
         const imageURL = oc(atom).data.media.posterImage.master.file()
         const image = getImageFromURL(imageURL)
-        const activeVersion = oc(atom).data.media.activeVersion.toNumber(
-            () => -1,
-        )()
+        const activeVersion64 = oc(atom).data.media.activeVersion
+        const activeVersion =
+            (activeVersion64 &&
+                activeVersion64.buffer &&
+                activeVersion64.toNumber()) ||
+            -1
         const latestAsset = oc(atom)
             .data.media.assets([])
             .find(_ => _.version.toNumber() === activeVersion)
@@ -87,7 +96,8 @@ export const renderAtomElement = async (
         const title = oc(atom).title('')
 
         return {
-            id: 'media⚛︎',
+            id: 'media-atom',
+            atomId,
             html: atom.defaultHtml,
             image,
             platform,
@@ -103,6 +113,7 @@ export const renderAtomElement = async (
     }
     return {
         id: '⚛︎',
+        atomId,
         atomType: data.atomType,
         ...rendered,
     }

@@ -9,7 +9,7 @@ const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {
         case 'image':
             return element.src
-        case 'media⚛︎':
+        case 'media-atom':
             return element.image
     }
     return undefined

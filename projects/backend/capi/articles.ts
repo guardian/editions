@@ -113,8 +113,10 @@ const parseArticleResult = async (
     if (body == null) throw new Error(`Body was undefined in ${path}!`)
 
     const elements = await attempt(Promise.all(body.map(parser)))
-    if (hasFailed(elements))
+    if (hasFailed(elements)) {
+        console.error(elements)
         throw new Error(`Element parsing failed in ${path}!`) //This should not fire, the parser should log if anything async fails and then return the remainder.
+    }
 
     if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
 
