@@ -44,3 +44,8 @@ export const useIssueDate = (issue?: Issue): IssueDate =>
         () => (issue ? renderIssueDate(issue.date) : { date: '', weekday: '' }),
         [issue && issue.key, issue],
     )
+
+export const todayAsFolder = (): string  => {
+    const today = new Date();
+    return `${today.getUTCFullYear()}-${today.getUTCMonth()+1}-${today.getUTCDate()}`;
+}
