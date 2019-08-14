@@ -83,7 +83,7 @@ export const IssueTitleText = ({
 }
 
 export type HeadlineTextProps = {
-    children: any
+    children: React.ReactNode | React.ReactNode[]
     weight?: 'regular' | 'bold' | 'light'
     style?: StyleProp<TextStyle>
 } & TextProps & { onTextLayout?: any }
@@ -133,7 +133,7 @@ export const HeadlineCardText = ({
     style,
     ...props
 }: {
-    children: string
+    children: React.ReactNode | React.ReactNode[]
     style?: StyleProp<TextStyle>
 } & TextProps) => (
     <HeadlineText {...props} style={[styles.headlineCardText, style]}>
