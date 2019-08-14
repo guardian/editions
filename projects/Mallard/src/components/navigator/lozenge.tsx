@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet, View } from 'react-native'
+import { clamp } from 'src/helpers/math'
 
 const getStyles = (fill: string, radius: number) =>
     StyleSheet.create({
@@ -16,15 +17,21 @@ const getStyles = (fill: string, radius: number) =>
             flex: 0,
             width: 'auto',
         },
-        bubble: {
+        backgroundFill: {
             backgroundColor: fill,
-            zIndex: -1,
             ...StyleSheet.absoluteFillObject,
         },
         roundBubble: {
             borderRadius: radius,
             width: radius * 2,
             alignItems: 'center',
+        },
+        leftBubbleCap: {
+            left: radius * -1,
+        },
+        rightBubbleCap: {
+            left: 'auto',
+            right: radius * -1,
         },
         text: {
             color: color.textOverDarkBackground,
@@ -33,6 +40,15 @@ const getStyles = (fill: string, radius: number) =>
             lineHeight: radius * 1.75,
             alignItems: 'center',
             fontFamily: 'GTGuardianTitlepiece-Bold',
+        },
+        header: {
+            paddingHorizontal: radius * 0.75,
+        },
+        lozengeContainer: {
+            ...StyleSheet.absoluteFillObject,
+            left: radius,
+            right: radius,
+            zIndex: -1,
         },
     })
 
@@ -59,129 +75,140 @@ const Lozenge = ({
                     transform: [
                         {
                             translateX: position.interpolate({
-                                inputRange: [-100, 0, 100],
-                                outputRange: [-20, 0, 100],
+                                inputRange: [0, 100],
+                                outputRange: [0, 100],
+                                extrapolateLeft: 'clamp',
                             }),
                         },
                     ],
                 },
             ]}
         >
-            <Animated.Text
-                accessibilityRole="header"
-                allowFontScaling={false}
-                style={[
-                    styles.text,
-                    {
-                        paddingLeft: radius / 2,
-                    },
-                    position &&
-                        width && {
-                            opacity: position.interpolate({
-                                inputRange: [-100, 0, 10],
-                                outputRange: [0.9, 1, 0],
-                            }),
-                            transform: [
+            {position && (
+                <>
+                    <Animated.Text
+                        accessibilityRole="header"
+                        allowFontScaling={false}
+                        style={[
+                            styles.text,
+                            styles.header,
+                            width && {
+                                opacity: position.interpolate({
+                                    inputRange: [0, 20],
+                                    outputRange: [1, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                                transform: [
+                                    {
+                                        translateX: position.interpolate({
+                                            inputRange: [0, width],
+                                            outputRange: [0, width * -0.5],
+                                            extrapolate: 'clamp',
+                                        }),
+                                    },
+                                ],
+                            },
+                        ]}
+                    >
+                        {children}
+                    </Animated.Text>
+                    <Animated.View
+                        onLayout={(ev: any) => {
+                            setWidth(ev.nativeEvent.layout.width)
+                        }}
+                        style={styles.lozengeContainer}
+                    >
+                        <Animated.View
+                            accessible={false}
+                            style={[
+                                styles.backgroundFill,
                                 {
-                                    translateX: position.interpolate({
-                                        inputRange: [0, width],
-                                        outputRange: [0, width / 2],
-                                        extrapolate: 'clamp',
-                                    }),
+                                    width: '100%',
                                 },
-                            ],
-                        },
-                ]}
-            >
-                {children}
-            </Animated.Text>
-            <Animated.View
-                onLayout={(ev: any) => {
-                    setWidth(ev.nativeEvent.layout.width)
-                }}
-                style={[
-                    StyleSheet.absoluteFillObject,
-                    { zIndex: -1, transform: [{ translateX: radius }] },
-                ]}
-            >
-                <Animated.View
-                    accessible={false}
-                    style={[
-                        styles.bubble,
-                        {
-                            width: '100%',
-                        },
-                        position && {
-                            transform: [
                                 {
-                                    translateX: position.interpolate({
-                                        inputRange: [-100, 0, 20],
-                                        outputRange: [
-                                            100,
+                                    transform: [
+                                        {
+                                            translateX: position.interpolate({
+                                                inputRange: [0, 20],
+                                                outputRange: [
+                                                    0,
+                                                    -20 - width / 2 + radius,
+                                                ],
+                                                extrapolate: 'clamp',
+                                            }),
+                                        },
+                                        {
+                                            scaleX: position.interpolate({
+                                                inputRange: [0, 20],
+                                                outputRange: [1, 0],
+                                                extrapolate: 'clamp',
+                                            }),
+                                        },
+                                    ],
+                                },
+                            ]}
+                        />
+                        <Animated.View
+                            accessible={false}
+                            style={[
+                                styles.backgroundFill,
+                                styles.roundBubble,
+                                styles.rightBubbleCap,
+                                width && {
+                                    opacity: position.interpolate({
+                                        inputRange: [
                                             0,
-                                            -20 - width / 2 + radius,
+                                            clamp(
+                                                width - radius,
+                                                width,
+                                                Infinity,
+                                            ),
+                                            width,
                                         ],
+                                        outputRange: [1, 1, 0],
                                         extrapolate: 'clamp',
                                     }),
+                                    transform: [
+                                        {
+                                            translateX: position.interpolate({
+                                                inputRange: [0, 20],
+                                                outputRange: [
+                                                    0,
+                                                    -20 - (width - radius),
+                                                ],
+                                                extrapolate: 'clamp',
+                                            }),
+                                        },
+                                    ],
                                 },
-                                {
-                                    scaleX: position.interpolate({
-                                        inputRange: [0, 20],
-                                        outputRange: [1, 0],
-                                        extrapolate: 'clamp',
-                                    }),
-                                },
-                            ],
-                        },
-                    ]}
-                ></Animated.View>
-                <Animated.View
-                    accessible={false}
-                    style={[
-                        styles.bubble,
-                        styles.roundBubble,
-                        {
-                            left: 'auto',
-                            right: radius * -1,
-                        },
-
-                        position && {
-                            transform: [
-                                {
-                                    translateX: position.interpolate({
-                                        inputRange: [0, 20],
-                                        outputRange: [
-                                            0,
-                                            -20 - (width - radius),
-                                        ],
-                                        extrapolate: 'clamp',
-                                    }),
-                                },
-                            ],
-                        },
-                    ]}
-                ></Animated.View>
-                <View
-                    accessible={false}
-                    style={[
-                        styles.bubble,
-                        styles.roundBubble,
-                        {
-                            left: radius * -1,
-                        },
-                    ]}
-                ></View>
-            </Animated.View>
+                            ]}
+                        />
+                        <View
+                            accessible={false}
+                            style={[
+                                styles.backgroundFill,
+                                styles.roundBubble,
+                                styles.leftBubbleCap,
+                            ]}
+                        ></View>
+                    </Animated.View>
+                </>
+            )}
             <Animated.View
                 accessible={false}
                 style={[
-                    styles.bubble,
+                    styles.backgroundFill,
                     styles.roundBubble,
-                    position
-                        ? {}
-                        : {
-                              opacity: 0,
-                          },
+                    {
+                        transform: [{ translateX: -1 }],
+                    },
+                    position && {
+                        opacity: position.interpolate({
+                            inputRange: [0, 10],
+                            outputRange: [0, 1],
+                            extrapolate: 'clamp',
+                        }),
+                    },
                 ]}
             >
                 <Text allowFontScaling={false} style={[styles.text]}>
