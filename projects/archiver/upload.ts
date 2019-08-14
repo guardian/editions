@@ -3,6 +3,7 @@ import { s3, bucket } from './s3'
 export const upload = (
     key: string,
     body: {} | Buffer,
+    mime: string,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
         s3.upload(
@@ -11,6 +12,7 @@ export const upload = (
                 Bucket: bucket,
                 Key: `${key}`,
                 ACL: 'public-read',
+                ContentType: mime,
             },
             (err, data) => {
                 if (err) {
@@ -19,6 +21,7 @@ export const upload = (
                     reject()
                     return
                 }
+                console.log(`${data.Key} uploaded to ${data.Bucket}`)
                 resolve({ etag: data.ETag })
             },
         )

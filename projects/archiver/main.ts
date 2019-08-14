@@ -14,7 +14,7 @@ import {
 import { unnest } from 'ramda'
 import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
-import { generateIndex } from './summary'
+import { generateIndex, summary } from './src/indexer/summary'
 import pAll from 'p-all'
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
@@ -104,16 +104,6 @@ const compress = async (id: string) => {
         }),
     )
     console.log('Media zips uploaded.')
-}
-
-const summary = async () => {
-    const index = await attempt(generateIndex())
-    if (hasFailed(index)) {
-        console.error('Could not fetch index')
-        return
-    }
-    await upload('issues', index)
-    return
 }
 
 export const run = async (source: string, id: string): Promise<void> => {
