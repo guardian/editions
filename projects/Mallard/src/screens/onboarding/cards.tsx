@@ -9,21 +9,25 @@ import { metrics } from 'src/theme/spacing'
 import { FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useGdprSwitches } from 'src/hooks/use-settings'
 
+const Aligner = ({ children }: { children: React.ReactNode }) => (
+    <View style={{ flexDirection: 'column', flex: 0, alignItems: 'stretch' }}>
+        {children}
+    </View>
+)
+
 const styles = StyleSheet.create({
     card: {
-        width: '100%',
         marginBottom: metrics.horizontal * 2,
     },
     sbs: {
         flexDirection: 'row',
-        width: '100%',
         justifyContent: 'space-between',
     },
 })
 
 const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
     return (
-        <>
+        <Aligner>
             <OnboardingCard
                 style={styles.card}
                 title="Welcome to the Guardian daily"
@@ -31,10 +35,16 @@ const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
             >
                 {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
             </OnboardingCard>
-            <Button appearance={ButtonAppearance.tomato} onPress={onContinue}>
-                Start
-            </Button>
-        </>
+            <View style={styles.sbs}>
+                <Button
+                    appearance={ButtonAppearance.tomato}
+                    onPress={onContinue}
+                    style={{ marginLeft: 'auto' }} // keep the button to the right
+                >
+                    Start
+                </Button>
+            </View>
+        </Aligner>
     )
 }
 
@@ -47,7 +57,7 @@ const OnboardingConsent = ({
 }) => {
     const { enableNulls } = useGdprSwitches()
     return (
-        <>
+        <Aligner>
             <OnboardingCard
                 style={styles.card}
                 appearance={CardAppearance.apricot}
@@ -73,7 +83,7 @@ const OnboardingConsent = ({
                     Agree
                 </Button>
             </View>
-        </>
+        </Aligner>
     )
 }
 

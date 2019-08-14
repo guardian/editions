@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, ViewStyle, StyleProp, StyleSheet, TextStyle } from 'react-native'
+import {
+    View,
+    ViewStyle,
+    StyleProp,
+    StyleSheet,
+    TextStyle,
+    Dimensions,
+} from 'react-native'
 import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -13,10 +20,10 @@ export enum CardAppearance {
 }
 
 const styles = StyleSheet.create({
-    square: {
-        aspectRatio: 1,
+    top: {
         flexDirection: 'column',
         justifyContent: 'space-around',
+        flexGrow: 1,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
@@ -68,63 +75,84 @@ const OnboardingCard = ({
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
     size?: 'big' | 'small'
-}) => (
-    <View style={style}>
-        <View style={[styles.square, appearances[appearance].background]}>
-            <View style={{ flexGrow: 1 }}>
-                <TitlepieceText
-                    accessibilityRole="header"
-                    style={[
-                        getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
-                        { marginBottom: size === 'big' ? 16 : 8 },
-                        appearances[appearance].text,
-                    ]}
-                >
-                    {title}
-                </TitlepieceText>
-                {subtitle && (
+}) => {
+    const dims = Dimensions.get('window')
+    const max = Math.min(dims.width, dims.height) * 0.8
+    return (
+        <View
+            style={[
+                appearances[appearance].background,
+                {
+                    maxHeight: max,
+                    maxWidth: max,
+                    aspectRatio: 1,
+                    flexDirection: 'column',
+                },
+                style,
+            ]}
+        >
+            <View style={[styles.top, appearances[appearance].background]}>
+                <View style={{ flexGrow: 1 }}>
                     <TitlepieceText
+                        accessibilityRole="header"
                         style={[
-                            getFont('titlepiece', size === 'big' ? 1.5 : 1.25),
+                            getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
+                            { marginBottom: size === 'big' ? 16 : 8 },
                             appearances[appearance].text,
                         ]}
                     >
-                        {subtitle}
+                        {title}
                     </TitlepieceText>
-                )}
+                    {subtitle && (
+                        <TitlepieceText
+                            style={[
+                                getFont(
+                                    'titlepiece',
+                                    size === 'big' ? 1.5 : 1.25,
+                                ),
+                                appearances[appearance].text,
+                            ]}
+                        >
+                            {subtitle}
+                        </TitlepieceText>
+                    )}
+                </View>
+                <View>
+                    {mainActions && (
+                        <View
+                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
+                        >
+                            {mainActions.map(({ label, onPress }) => (
+                                <Button
+                                    style={{
+                                        marginTop: 10,
+                                        marginRight: 10,
+                                    }}
+                                    appearance={ButtonAppearance.light}
+                                    key={label}
+                                    onPress={onPress}
+                                >
+                                    {label}
+                                </Button>
+                            ))}
+                        </View>
+                    )}
+                </View>
             </View>
-            <View>
-                {mainActions && (
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {mainActions.map(({ label, onPress }) => (
-                            <Button
-                                style={{
-                                    marginTop: 10,
-                                    marginRight: 10,
-                                }}
-                                appearance={ButtonAppearance.light}
-                                key={label}
-                                onPress={onPress}
-                            >
-                                {label}
-                            </Button>
-                        ))}
-                    </View>
-                )}
-            </View>
+            {(explainerTitle || children) && (
+                <View style={styles.explainer}>
+                    {explainerTitle && (
+                        <TitlepieceText style={styles.explainerTitle}>
+                            {explainerTitle}
+                        </TitlepieceText>
+                    )}
+                    {children && <UiExplainerCopy>{children}</UiExplainerCopy>}
+                </View>
+            )}
         </View>
-        {(explainerTitle || children) && (
-            <View style={styles.explainer}>
-                {explainerTitle && (
-                    <TitlepieceText style={styles.explainerTitle}>
-                        {explainerTitle}
-                    </TitlepieceText>
-                )}
-                {children && <UiExplainerCopy>{children}</UiExplainerCopy>}
-            </View>
-        )}
-    </View>
-)
+    )
+}
+
 OnboardingCard.defaultProps = {
     appearance: CardAppearance.tomato,
 }

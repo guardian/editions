@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         zIndex: 9999,
     },
     modalWrapper: {
-        alignItems: 'stretch',
+        alignItems: 'center',
         padding: 10,
         position: 'absolute',
         justifyContent: 'center',
