@@ -49,7 +49,9 @@ const fetch = async (source: string, id: string): Promise<void> => {
 
     const frontUploads = await Promise.all(
         fronts.map(async ([frontId, maybeFront]) => {
-            return attempt(upload(frontPath(id, frontId), maybeFront))
+            return attempt(
+                upload(frontPath(id, frontId), maybeFront, 'application/json'),
+            )
         }),
     )
 
@@ -88,7 +90,7 @@ const fetch = async (source: string, id: string): Promise<void> => {
 
     console.log('Uploaded fronts')
 
-    await upload(issuePath(id), issue)
+    await upload(issuePath(id), issue, 'application/json')
     console.log('Uploaded issue.')
 }
 

@@ -3,7 +3,7 @@ import { s3, bucket } from './s3'
 export const upload = (
     key: string,
     body: {} | Buffer,
-    mime: string,
+    mime: 'image/jpeg' | 'application/json' | 'application/zip',
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
         s3.upload(
