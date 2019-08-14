@@ -1,4 +1,4 @@
-import React, { useContext, ReactElement } from 'react'
+import React, { useContext, ReactElement, ReactNode } from 'react'
 import { Text, Dimensions, View, Alert, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -7,6 +7,7 @@ import {
     withNavigation,
     NavigationInjectedProps,
     NavigationScreenProp,
+    createStackNavigator,
 } from 'react-navigation'
 import { useSettings } from 'src/hooks/use-settings'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -17,7 +18,6 @@ import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { routeNames } from 'src/navigation'
 import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
 import {
@@ -28,6 +28,14 @@ import {
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
+import { DownloadScreen } from './settings/download-screen'
+import { ApiScreen } from './settings/api-screen'
+import { GdprConsentScreen } from './settings/gdpr-consent-screen'
+import { PrivacyPolicyScreen } from './settings/privacy-policy-screen'
+import { TermsAndConditionsScreen } from './settings/terms-and-conditions-screen'
+import { HelpScreen } from './settings/help-screen'
+import { CreditsScreen } from './settings/credits-screen'
+import { FAQScreen } from './settings/faq-screen'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -143,7 +151,23 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     )
 })
 
-const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
+const ModalForTablet = ({ children }: { children: ReactNode }) => {
+    return (
+        <View
+            style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <View style={{ width: 400, height: 400, backgroundColor: 'red' }}>
+                {children}
+            </View>
+        </View>
+    )
+}
+
+const SettingsScreenHome = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
@@ -359,7 +383,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 {!isUsingProdDevtools ? (
                     <>
                         <View
-                            style={{ height: Dimensions.get('window').height }}
+                            style={{
+                                height: Dimensions.get('window').height,
+                            }}
                         />
                         <Highlight
                             style={{ alignItems: 'center' }}
@@ -384,6 +410,49 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         </WithAppAppearance>
     )
 }
+
+const routeNames = {
+    Issue: 'Issue',
+    Article: 'Article',
+    IssueList: 'IssueList',
+    Downloads: 'Downloads',
+    Settings: 'Settings',
+    Endpoints: 'Endpoints',
+    GdprConsent: 'GdprConsent',
+    PrivacyPolicy: 'PrivacyPolicy',
+    TermsAndConditions: 'TermsAndConditions',
+    Help: 'Help',
+    Credits: 'Credits',
+    FAQ: 'FAQ',
+    SignIn: 'SignIn',
+    CasSignIn: 'CasSignIn',
+    onboarding: {
+        OnboardingStart: 'OnboardingStart',
+        OnboardingConsent: 'OnboardingConsent',
+        OnboardingConsentInline: 'OnboardingConsentInline',
+    },
+}
+
+const Nav = createStackNavigator({
+    ['Main']: SettingsScreenHome,
+    [routeNames.Downloads]: DownloadScreen,
+    [routeNames.Endpoints]: ApiScreen,
+    [routeNames.GdprConsent]: GdprConsentScreen,
+    [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
+    [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
+    [routeNames.Help]: HelpScreen,
+    [routeNames.Credits]: CreditsScreen,
+    [routeNames.FAQ]: FAQScreen,
+})
+
+const SettingsScreen = withNavigation(({ navigation }) => (
+    <ModalForTablet>
+        <Text>Hi</Text>
+        <Nav navigation={navigation} />
+    </ModalForTablet>
+))
+SettingsScreen.router = Nav.router
+
 SettingsScreen.navigationOptions = ({
     navigation,
 }: {

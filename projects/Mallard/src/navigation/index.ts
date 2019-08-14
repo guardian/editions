@@ -11,7 +11,7 @@ import { SettingsScreen } from '../screens/settings-screen'
 import { DownloadScreen } from '../screens/settings/download-screen'
 import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
-import { Animated, Easing } from 'react-native'
+import { Animated, Easing, View } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import {
     OnboardingIntroScreen,
@@ -122,29 +122,13 @@ const AppStack = createStackNavigator(
                     : {}),
             },
         ),
-        _: createStackNavigator(
-            {
-                [routeNames.Settings]: SettingsScreen,
-                [routeNames.Downloads]: DownloadScreen,
-                [routeNames.Endpoints]: ApiScreen,
-                [routeNames.GdprConsent]: GdprConsentScreen,
-                [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
-                [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
-                [routeNames.Help]: HelpScreen,
-                [routeNames.Credits]: CreditsScreen,
-                [routeNames.FAQ]: FAQScreen,
-            },
-            {
-                defaultNavigationOptions: {
-                    ...navOptionsWithGraunHeader,
-                },
-                initialRouteName: routeNames.Settings,
-            },
-        ),
+        [routeNames.Settings]: SettingsScreen,
     },
     {
         mode: 'modal',
         headerMode: 'none',
+        transparentCard: true,
+        cardOverlayEnabled: true,
         initialRouteName: routeNames.Issue,
         defaultNavigationOptions: {
             gesturesEnabled: false,
