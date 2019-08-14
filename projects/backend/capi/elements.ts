@@ -1,13 +1,14 @@
 import { IBlockElement, ElementType } from '@guardian/capi-ts'
 import { BlockElement } from '../common'
 import { getImage } from './assets'
-import { renderAtom } from './atoms'
-import { attempt, hasFailed } from '../utils/try'
+import { renderAtomElement } from './atoms'
 import { cleanupHtml } from '../utils/html'
+import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 
-export const elementParser = (id: string) => async (
-    element: IBlockElement,
-): Promise<BlockElement> => {
+export const elementParser = (
+    id: string,
+    atoms: { [key: string]: IAtom[] },
+) => async (element: IBlockElement): Promise<BlockElement> => {
     switch (element.type) {
         case ElementType.TEXT:
             if (element.textTypeData && element.textTypeData.html) {
@@ -54,29 +55,7 @@ export const elementParser = (id: string) => async (
                 }
             }
         case ElementType.CONTENTATOM:
-            if (
-                element.contentAtomTypeData &&
-                element.contentAtomTypeData.atomId &&
-                element.contentAtomTypeData.atomType
-            ) {
-                const rendered = await attempt(
-                    renderAtom(
-                        element.contentAtomTypeData.atomType,
-                        element.contentAtomTypeData.atomId,
-                    ),
-                )
-                if (hasFailed(rendered)) {
-                    console.warn(
-                        `${element.contentAtomTypeData.atomType} atom ${element.contentAtomTypeData.atomId} removed in ${id}!`,
-                    )
-                    return { id: 'unknown' }
-                }
-                return {
-                    id: '⚛︎',
-                    atomType: element.contentAtomTypeData.atomType,
-                    ...rendered,
-                }
-            }
+            return renderAtomElement(element.contentAtomTypeData, atoms)
     }
     return { id: 'unknown' }
 }
