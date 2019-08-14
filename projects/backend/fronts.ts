@@ -1,5 +1,5 @@
 import { s3fetch, Path } from './s3'
-import { Front, Collection, CAPIArticle, Appearance } from './common'
+import { Front, Collection, CAPIArticle, PillarAppearance } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -152,7 +152,7 @@ const getDisplayName = (front: string) => {
     return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
-const getFrontColor = (front: string): Appearance => {
+const getFrontColor = (front: string) => {
     //TODO: delete when https://github.com/guardian/facia-tool/pull/918 on all fronts
     switch ((front.split('/').pop() || front).toLowerCase()) {
         case 'special1':
@@ -163,18 +163,18 @@ const getFrontColor = (front: string): Appearance => {
         case 'special 2':
         case 'top stories':
         case 'crosswords':
-            return { type: 'pillar', name: 'neutral' }
+            return 'neutral'
         case 'uknewsguardian':
         case 'uknewsobserver':
         case 'worldnewsguardian':
         case 'worldnewsobserver':
         case 'uk news':
         case 'world news':
-            return { type: 'pillar', name: 'news' }
+            return 'news'
         case 'journal':
         case 'comment':
         case 'opinion':
-            return { type: 'pillar', name: 'opinion' }
+            return 'opinion'
         case 'arts':
         case 'filmandmusic':
         case 'guide':
@@ -182,9 +182,9 @@ const getFrontColor = (front: string): Appearance => {
         case 'books':
         case 'culture':
         case 'books':
-            return { type: 'pillar', name: 'culture' }
+            return 'culture'
         case 'sport':
-            return { type: 'pillar', name: 'sport' }
+            return 'sport'
         case 'features':
         case 'weekend':
         case 'magazine':
@@ -193,9 +193,9 @@ const getFrontColor = (front: string): Appearance => {
         case 'lifestyle':
         case 'food':
         case 'the fashion':
-            return { type: 'pillar', name: 'lifestyle' }
+            return 'lifestyle'
     }
-    return { type: 'pillar', name: 'neutral' }
+    return 'neutral'
 }
 
 export const getFront = async (
@@ -225,7 +225,10 @@ export const getFront = async (
         return failure({ httpStatus: 404, error: new Error('Front not found') })
     }
 
-    const appearance = front.swatch || getFrontColor(id)
+    const appearance: PillarAppearance = {
+        type: 'pillar',
+        name: front.swatch || getFrontColor(id),
+    }
 
     const collections = await Promise.all(
         front.collections

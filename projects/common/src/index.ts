@@ -23,11 +23,11 @@ export const articleTypes = [
 export type PillarFromPalette = typeof articlePillars[number]
 export type ArticleType = typeof articleTypes[number]
 
-interface ColorAppearance {
+export interface ColorAppearance {
     type: 'custom'
     color: string
 }
-interface PillarAppearance {
+export interface PillarAppearance {
     type: 'pillar'
     name: PillarFromPalette
 }
