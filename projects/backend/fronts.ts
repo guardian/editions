@@ -153,6 +153,7 @@ const getDisplayName = (front: string) => {
 }
 
 const getFrontColor = (front: string): Appearance => {
+    //TODO: delete when https://github.com/guardian/facia-tool/pull/918 on all fronts
     switch ((front.split('/').pop() || front).toLowerCase()) {
         case 'special1':
         case 'special2':
@@ -218,12 +219,13 @@ export const getFront = async (
 
     lastModifiedUpdater(resp.lastModified)
 
-    const appearance = getFrontColor(id)
     const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
     const front = issueResponse.fronts.find(_ => _.name === id)
     if (!front) {
         return failure({ httpStatus: 404, error: new Error('Front not found') })
     }
+
+    const appearance = front.swatch || getFrontColor(id)
 
     const collections = await Promise.all(
         front.collections
