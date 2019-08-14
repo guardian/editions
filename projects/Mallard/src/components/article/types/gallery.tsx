@@ -158,7 +158,6 @@ const GalleryCoverItem = ({
 }
 
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
-    console.log(gallery)
     return (
         <>
             <View
