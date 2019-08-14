@@ -75,7 +75,7 @@ const Navigator = ({
     const isScrubbable = onScrub && isScrollable
 
     return (
-        <WithBreakpoints>
+        <WithBreakpoints minHeight={scrubberRadius}>
             {{
                 [0]: ({ width }) => (
                     <View
