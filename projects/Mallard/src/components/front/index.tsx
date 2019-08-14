@@ -126,7 +126,7 @@ const FrontWithResponse = ({
                     position={scrollX.interpolate({
                         inputRange: [
                             0,
-                            container.width * (stops <= 0 ? stops : stops - 1) +
+                            card.width * (stops <= 0 ? stops : stops - 1) +
                                 0.001,
                         ],
                         outputRange: [0, 1],
