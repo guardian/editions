@@ -19,19 +19,31 @@ const overlayStyles = StyleSheet.create({
     },
 })
 
-const useTimeout = (callback: () => void, delay: number) => {
+const useInterval = (
+    callback: () => void,
+    delay: number,
+    shouldFire: boolean,
+) => {
     const cb = useRef<() => void>(() => {})
+    const sf = useRef(shouldFire)
 
     // Remember the latest callback.
     useEffect(() => {
         cb.current = callback
     }, [callback])
 
+    // Remember the latest shouldFire.
     useEffect(() => {
-        const id = setTimeout(() => {
-            cb.current()
+        sf.current = shouldFire
+    }, [shouldFire])
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            if (sf.current) {
+                cb.current()
+            }
         }, delay)
-        return () => clearTimeout(id)
+        return () => clearInterval(id)
     }, [delay])
 }
 
@@ -51,11 +63,18 @@ const ModalOpener = ({
 }) => {
     const { open, close, isOpen } = useModal()
 
-    useTimeout(() => {
-        if (!isOpen) {
-            open(renderModal)
-        }
-    }, 5000)
+    // we use an interval here to make sure that if there's ever a bug
+    // where we don't close this screen after the modal closes, then we
+    // re-check that someone's subscription is valid a bit later
+    useInterval(
+        () => {
+            if (!isOpen) {
+                open(renderModal)
+            }
+        },
+        5000,
+        !isOpen,
+    )
 
     // ensure the modal is closed on unmount
     useEffect(() => () => close(), [close])
