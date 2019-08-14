@@ -1,4 +1,10 @@
-import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
+import React, {
+    useState,
+    useRef,
+    FunctionComponent,
+    useMemo,
+    useEffect,
+} from 'react'
 import { Animated, View } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
@@ -101,6 +107,7 @@ const FrontWithResponse = ({
     )
     const stops = cards.length
     const { card, container } = useIssueScreenSize()
+
     return (
         <Wrapper
             scrubber={
