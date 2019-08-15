@@ -1,7 +1,7 @@
 debug-android:
 	mkdir -p android/app/src/main/assets
-	yarn bundle-android
 	yarn jetify
+	yarn bundle-android
 	cd android && ./gradlew assembleDebug && cd ..
 	cp android/app/build/outputs/apk/debug/app-debug.apk .
 
@@ -16,7 +16,7 @@ beta-ios:
 
 beta-android:
 	mkdir -p android/app/src/main/assets
-	yarn bundle-android
 	yarn jetify
+	yarn bundle-android
 	rm -rf android/app/src/main/res/drawable-*
 	fastlane android beta
