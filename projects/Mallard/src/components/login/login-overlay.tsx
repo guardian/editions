@@ -12,6 +12,12 @@ const overlayStyles = StyleSheet.create({
     },
 })
 
+/**
+ * This turns a prop into a ref, which means closures that run
+ * asynchronously can get a reference to the most recent version
+ * of the prop rather than the value at the time it was closed
+ * over
+ */
 const usePropToRef = <T extends any>(value: T) => {
     const ref = useRef(value)
     useEffect(() => {
