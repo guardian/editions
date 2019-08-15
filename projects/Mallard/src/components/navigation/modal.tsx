@@ -47,7 +47,7 @@ import { routeNames } from 'src/navigation/routes'
 import { SettingsScreenIndex } from './settings'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { NavigationRouteConfigMap } from 'react-navigation';
+import { NavigationRouteConfigMap } from 'react-navigation'
 
 const ModalForTablet = ({ children }: { children: ReactNode }) => {
     return (
@@ -103,30 +103,21 @@ const ModalForTablet = ({ children }: { children: ReactNode }) => {
     )
 }
 
-const SettingsNavigator = createStackNavigator({
-    ['Main']: SettingsScreenIndex,
-    [routeNames.Downloads]: DownloadScreen,
-    [routeNames.Endpoints]: ApiScreen,
-    [routeNames.GdprConsent]: GdprConsentScreen,
-    [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
-    [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
-    [routeNames.Help]: HelpScreen,
-    [routeNames.Credits]: CreditsScreen,
-    [routeNames.FAQ]: FAQScreen,
-})
+const createModalNavigator = (routes: NavigationRouteConfigMap) => {
+    const Navigator = createStackNavigator(routes)
 
-const SettingsScreen = (withNavigation(
-    ({ navigation, ...props }: NavigationInjectedProps) => {
-        console.log(navigation, props)
-        return (
-            <ModalForTablet>
-                <SettingsNavigator navigation={navigation} />
-            </ModalForTablet>
-        )
-    },
-) as unknown) as NavigationContainer
-SettingsScreen.router = SettingsNavigator.router
+    const WithModal = (withNavigation(
+        ({ navigation, ...props }: NavigationInjectedProps) => {
+            console.log(navigation, props)
+            return (
+                <ModalForTablet>
+                    <Navigator navigation={navigation} />
+                </ModalForTablet>
+            )
+        },
+    ) as unknown) as NavigationContainer
+    WithModal.router = Navigator.router
+    return WithModal
+}
 
-export { SettingsScreen }
-
-const createModalNavigator = (routes: NavigationRouteConfigMap)
+export { createModalNavigator }

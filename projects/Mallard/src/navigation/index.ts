@@ -27,6 +27,14 @@ import {
 import { supportsTransparentCards } from 'src/helpers/features'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 import { routeNames } from './routes'
+import { createModalNavigator } from 'src/components/navigation/modal'
+import { DownloadScreen } from 'src/screens/settings/download-screen'
+import { ApiScreen } from 'src/screens/settings/api-screen'
+import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
+import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
+import { HelpScreen } from 'src/screens/settings/help-screen'
+import { CreditsScreen } from 'src/screens/settings/credits-screen'
+import { FAQScreen } from 'src/screens/settings/faq-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -94,7 +102,17 @@ const AppStack = createStackNavigator(
                     : {}),
             },
         ),
-        [routeNames.Settings]: SettingsScreen,
+        [routeNames.Settings]: createModalNavigator({
+            [routeNames.Settings]: SettingsScreen,
+            [routeNames.Downloads]: DownloadScreen,
+            [routeNames.Endpoints]: ApiScreen,
+            [routeNames.GdprConsent]: GdprConsentScreen,
+            [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
+            [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
+            [routeNames.Help]: HelpScreen,
+            [routeNames.Credits]: CreditsScreen,
+            [routeNames.FAQ]: FAQScreen,
+        }),
     },
     {
         mode: 'modal',
