@@ -99,7 +99,7 @@ const AuthSwitcherScreen = ({
                     if (!canViewEdition(data.membershipData)) {
                         open(close => (
                             <SubNotFoundModalCard
-                                onDismiss={() => navigation.goBack()}
+                                onDismiss={() => navigation.popToTop()}
                                 onOpenCASLogin={() =>
                                     navigation.navigate(routeNames.CasSignIn)
                                 }
