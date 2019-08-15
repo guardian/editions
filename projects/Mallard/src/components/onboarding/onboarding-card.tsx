@@ -14,10 +14,14 @@ export enum CardAppearance {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 0,
+        flexDirection: 'column',
+    },
     top: {
         aspectRatio: 1,
         flexDirection: 'column',
-        justifyContent: 'space-around',
+        alignItems: 'flex-start',
         flexGrow: 0,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
@@ -30,6 +34,10 @@ const styles = StyleSheet.create({
     },
     explainerTitle: {
         marginBottom: metrics.vertical * 2,
+    },
+    button: {
+        marginTop: 10,
+        marginRight: 10,
     },
 })
 
@@ -79,61 +87,50 @@ const OnboardingCard = ({
         <View
             style={[
                 appearances[appearance].background,
+                styles.container,
                 {
-                    flex: 0,
-                    flexDirection: 'column',
                     width: max,
                 },
                 style,
             ]}
         >
             <View style={[styles.top, appearances[appearance].background]}>
-                <View style={{ flexGrow: 1 }}>
+                <TitlepieceText
+                    accessibilityRole="header"
+                    style={[
+                        getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
+                        { marginBottom: size === 'big' ? 16 : 8 },
+                        appearances[appearance].text,
+                    ]}
+                >
+                    {title}
+                </TitlepieceText>
+                {subtitle && (
                     <TitlepieceText
-                        accessibilityRole="header"
                         style={[
-                            getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
-                            { marginBottom: size === 'big' ? 16 : 8 },
+                            getFont('titlepiece', size === 'big' ? 1.5 : 1.25),
                             appearances[appearance].text,
                         ]}
                     >
-                        {title}
+                        {subtitle}
                     </TitlepieceText>
-                    {subtitle && (
-                        <TitlepieceText
-                            style={[
-                                getFont(
-                                    'titlepiece',
-                                    size === 'big' ? 1.5 : 1.25,
-                                ),
-                                appearances[appearance].text,
-                            ]}
-                        >
-                            {subtitle}
-                        </TitlepieceText>
-                    )}
-                </View>
-                <View>
-                    {mainActions && (
-                        <View
-                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
-                        >
-                            {mainActions.map(({ label, onPress }) => (
-                                <Button
-                                    style={{
-                                        marginTop: 10,
-                                        marginRight: 10,
-                                    }}
-                                    appearance={ButtonAppearance.light}
-                                    key={label}
-                                    onPress={onPress}
-                                >
-                                    {label}
-                                </Button>
-                            ))}
-                        </View>
-                    )}
-                </View>
+                )}
+            </View>
+            <View>
+                {mainActions && (
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {mainActions.map(({ label, onPress }) => (
+                            <Button
+                                style={styles.button}
+                                appearance={ButtonAppearance.light}
+                                key={label}
+                                onPress={onPress}
+                            >
+                                {label}
+                            </Button>
+                        ))}
+                    </View>
+                )}
             </View>
             {(explainerTitle || children) && (
                 <View style={styles.explainer}>
