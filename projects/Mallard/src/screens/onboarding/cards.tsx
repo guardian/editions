@@ -15,7 +15,7 @@ const Aligner = ({ children }: { children: React.ReactNode }) => (
             flexDirection: 'column',
             flex: 1,
             alignItems: 'stretch',
-            justifyContent: 'space-around',
+            justifyContent: 'center',
         }}
     >
         {children}
@@ -23,12 +23,11 @@ const Aligner = ({ children }: { children: React.ReactNode }) => (
 )
 
 const styles = StyleSheet.create({
-    card: {
-        marginBottom: metrics.horizontal * 2,
-    },
+    card: {},
     sbs: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        marginTop: metrics.horizontal * 2,
     },
 })
 

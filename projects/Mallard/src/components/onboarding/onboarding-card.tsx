@@ -18,9 +18,10 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         flexDirection: 'column',
         justifyContent: 'space-around',
-        flexGrow: 1,
+        flexGrow: 0,
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
+        width: '100%',
     },
     explainer: {
         backgroundColor: color.background,
@@ -61,6 +62,7 @@ const OnboardingCard = ({
     style,
     appearance,
     size = 'big',
+    maxSize = 500,
 }: {
     children?: string
     title: string
@@ -70,16 +72,17 @@ const OnboardingCard = ({
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
     size?: 'big' | 'small'
+    maxSize?: number
 }) => {
-    const max = minScreenSize() * 0.9
+    const max = Math.min(minScreenSize() * 0.9, maxSize)
     return (
         <View
             style={[
                 appearances[appearance].background,
                 {
-                    maxHeight: max,
-                    maxWidth: max,
+                    flex: 0,
                     flexDirection: 'column',
+                    width: max,
                 },
                 style,
             ]}
