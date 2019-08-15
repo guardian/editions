@@ -47,6 +47,7 @@ import { routeNames } from 'src/navigation/routes'
 import { SettingsScreenIndex } from './settings'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { NavigationRouteConfigMap } from 'react-navigation';
 
 const ModalForTablet = ({ children }: { children: ReactNode }) => {
     return (
@@ -127,3 +128,5 @@ const SettingsScreen = (withNavigation(
 SettingsScreen.router = SettingsNavigator.router
 
 export { SettingsScreen }
+
+const createModalNavigator = (routes: NavigationRouteConfigMap)
