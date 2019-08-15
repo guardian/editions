@@ -3,6 +3,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet, View } from 'react-native'
 import { clamp } from 'src/helpers/math'
+import { ariaHidden } from 'src/helpers/a11y'
 
 const fadeLozengeAt = 20
 
@@ -131,13 +132,13 @@ const Lozenge = ({
                         {children}
                     </Animated.Text>
                     <Animated.View
+                        {...ariaHidden}
                         onLayout={(ev: any) => {
                             setWidth(ev.nativeEvent.layout.width)
                         }}
                         style={[styles.lozengeContainer]}
                     >
                         <Animated.View
-                            accessible={false}
                             style={[
                                 styles.square,
                                 {
@@ -166,7 +167,6 @@ const Lozenge = ({
                             ]}
                         />
                         <Animated.View
-                            accessible={false}
                             style={[
                                 styles.rightBubbleCap,
                                 width && {
@@ -198,15 +198,12 @@ const Lozenge = ({
                                 },
                             ]}
                         />
-                        <View
-                            accessible={false}
-                            style={[styles.leftBubbleCap]}
-                        />
+                        <View style={[styles.leftBubbleCap]} />
                     </Animated.View>
                 </>
             )}
             <Animated.View
-                accessible={false}
+                {...ariaHidden}
                 style={[
                     styles.initialBubble,
                     position && {
