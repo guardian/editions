@@ -4,8 +4,9 @@ import { color } from 'src/theme/color'
 import { Animated, View, PanResponder, StyleSheet } from 'react-native'
 import { Lozenge } from './lozenge'
 import { Background } from './background'
-import { WithBreakpoints } from '../layout/ui/with-breakpoints'
+import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
 import { metrics } from 'src/theme/spacing'
+import { WithLayoutRectangle } from '../layout/ui/sizing/with-layout-rectangle'
 
 const stopRadius = 4
 
@@ -78,47 +79,43 @@ const Navigator = ({
     const isScrubbable = onScrub && isScrollable
 
     return (
-        <WithBreakpoints minHeight={metrics.fronts.scrubberRadius}>
-            {{
-                [0]: ({ width }) => (
-                    <View
-                        {...(isScrubbable ? panResponder.panHandlers : {})}
-                        style={styles.root}
+        <WithLayoutRectangle minHeight={metrics.fronts.scrubberRadius}>
+            {({ width }) => (
+                <View
+                    {...(isScrubbable ? panResponder.panHandlers : {})}
+                    style={styles.root}
+                >
+                    {isScrollable ? (
+                        <View style={styles.background}>
+                            <Background
+                                height={metrics.fronts.scrubberRadius}
+                                radius={stopRadius}
+                                {...{ stops, fill }}
+                            />
+                        </View>
+                    ) : null}
+                    <Lozenge
+                        position={
+                            isScrollable
+                                ? position.interpolate({
+                                      inputRange: [0, 1],
+                                      outputRange: [
+                                          0,
+                                          width -
+                                              metrics.fronts.scrubberRadius * 2,
+                                      ],
+                                  })
+                                : undefined
+                        }
+                        scrubbing={scrubbing}
+                        fill={fill}
+                        radius={metrics.fronts.scrubberRadius}
                     >
-                        {isScrollable ? (
-                            <View style={styles.background}>
-                                <Background
-                                    height={metrics.fronts.scrubberRadius}
-                                    radius={stopRadius}
-                                    {...{ stops, fill }}
-                                />
-                            </View>
-                        ) : null}
-                        <Lozenge
-                            position={
-                                isScrollable
-                                    ? position.interpolate({
-                                          inputRange: [0, 1],
-                                          outputRange: [
-                                              0,
-                                              width -
-                                                  metrics.fronts
-                                                      .scrubberRadius *
-                                                      2,
-                                          ],
-                                      })
-                                    : undefined
-                            }
-                            scrubbing={scrubbing}
-                            fill={fill}
-                            radius={metrics.fronts.scrubberRadius}
-                        >
-                            {title}
-                        </Lozenge>
-                    </View>
-                ),
-            }}
-        </WithBreakpoints>
+                        {title}
+                    </Lozenge>
+                </View>
+            )}
+        </WithLayoutRectangle>
     )
 }
 Navigator.defaultProps = {

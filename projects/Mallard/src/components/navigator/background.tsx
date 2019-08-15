@@ -2,7 +2,8 @@ import React, { useMemo } from 'react'
 
 import Svg, { Circle, Line } from 'react-native-svg'
 import { View } from 'react-native'
-import { WithBreakpoints } from '../layout/ui/with-breakpoints'
+import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
+import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 
 const Stop = ({
     fill,
@@ -59,29 +60,27 @@ const Background = ({
         return elements
     }
     return (
-        <WithBreakpoints>
-            {{
-                [0]: ({ width }) => (
-                    <Svg
-                        width={width}
-                        height={height * 2}
-                        style={{
-                            overflow: 'visible',
-                            position: 'absolute',
-                        }}
-                    >
-                        <Line
-                            x1="0"
-                            y1={height}
-                            x2={width}
-                            y2={height}
-                            stroke={fill}
-                        />
-                        {stopElements(width)}
-                    </Svg>
-                ),
-            }}
-        </WithBreakpoints>
+        <WithLayoutRectangle>
+            {({ width }) => (
+                <Svg
+                    width={width}
+                    height={height * 2}
+                    style={{
+                        overflow: 'visible',
+                        position: 'absolute',
+                    }}
+                >
+                    <Line
+                        x1="0"
+                        y1={height}
+                        x2={width}
+                        y2={height}
+                        stroke={fill}
+                    />
+                    {stopElements(width)}
+                </Svg>
+            )}
+        </WithLayoutRectangle>
     )
 }
 

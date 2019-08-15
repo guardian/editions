@@ -17,7 +17,8 @@ import { fetchWeather } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
-import { WithBreakpoints } from './layout/ui/with-breakpoints'
+import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -142,20 +143,6 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
             <WithBreakpoints>
                 {{
                     0: () => (
-                        <View style={styles.weatherContainerNarrow}>
-                            {intervals.map(forecast => {
-                                return (
-                                    <WeatherIconView
-                                        style={styles.forecastItemNarrow}
-                                        key={forecast.EpochDateTime}
-                                        forecast={forecast}
-                                        iconSize={1.5}
-                                    />
-                                )
-                            })}
-                        </View>
-                    ),
-                    110: () => (
                         <View style={styles.weatherContainerLong}>
                             <GridRowSplit
                                 proxy={
@@ -179,6 +166,20 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
                                     )
                                 })}
                             </GridRowSplit>
+                        </View>
+                    ),
+                    [Breakpoints.tabletVertical]: () => (
+                        <View style={styles.weatherContainerNarrow}>
+                            {intervals.map(forecast => {
+                                return (
+                                    <WeatherIconView
+                                        style={styles.forecastItemNarrow}
+                                        key={forecast.EpochDateTime}
+                                        forecast={forecast}
+                                        iconSize={1.5}
+                                    />
+                                )
+                            })}
                         </View>
                     ),
                 }}

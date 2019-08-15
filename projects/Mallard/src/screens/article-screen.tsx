@@ -38,7 +38,8 @@ import { getColor } from 'src/helpers/transform'
 import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { routeNames } from 'src/navigation'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -272,65 +273,63 @@ const ArticleScreenWithProps = ({
                                 position={sliderPos}
                             />
                         </View>
-                        <WithBreakpoints>
-                            {{
-                                0: ({ width }) => (
-                                    <Animated.FlatList
-                                        showsHorizontalScrollIndicator={false}
-                                        showsVerticalScrollIndicator={false}
-                                        scrollEventThrottle={1}
-                                        onScroll={(ev: any) => {
-                                            setCurrent(
-                                                Math.floor(
-                                                    ev.nativeEvent.contentOffset
-                                                        .x / width,
-                                                ),
-                                            )
-                                        }}
-                                        maxToRenderPerBatch={1}
-                                        windowSize={3}
-                                        initialNumToRender={1}
-                                        horizontal={true}
-                                        initialScrollIndex={startingPoint}
-                                        pagingEnabled
-                                        getItemLayout={(
-                                            _: never,
-                                            index: number,
-                                        ) => ({
-                                            length: width,
-                                            offset: width * index,
-                                            index,
-                                        })}
-                                        keyExtractor={(
-                                            item: ArticleNavigator['articles'][0],
-                                        ) => item.article}
-                                        data={
-                                            isInScroller
-                                                ? articleNavigator.articles
-                                                : [
-                                                      path,
-                                                      ...articleNavigator.articles,
-                                                  ]
-                                        }
-                                        renderItem={({
-                                            item,
-                                        }: {
-                                            item: ArticleNavigator['articles'][0]
-                                            index: number
-                                        }) => (
-                                            <ArticleScreenBody
-                                                width={width}
-                                                path={item}
-                                                pillar={pillar}
-                                                onTopPositionChange={isAtTop => {
-                                                    setArticleIsAtTop(isAtTop)
-                                                }}
-                                            />
-                                        )}
-                                    />
-                                ),
-                            }}
-                        </WithBreakpoints>
+                        <WithLayoutRectangle>
+                            {({ width }) => (
+                                <Animated.FlatList
+                                    showsHorizontalScrollIndicator={false}
+                                    showsVerticalScrollIndicator={false}
+                                    scrollEventThrottle={1}
+                                    onScroll={(ev: any) => {
+                                        setCurrent(
+                                            Math.floor(
+                                                ev.nativeEvent.contentOffset.x /
+                                                    width,
+                                            ),
+                                        )
+                                    }}
+                                    maxToRenderPerBatch={1}
+                                    windowSize={3}
+                                    initialNumToRender={1}
+                                    horizontal={true}
+                                    initialScrollIndex={startingPoint}
+                                    pagingEnabled
+                                    getItemLayout={(
+                                        _: never,
+                                        index: number,
+                                    ) => ({
+                                        length: width,
+                                        offset: width * index,
+                                        index,
+                                    })}
+                                    keyExtractor={(
+                                        item: ArticleNavigator['articles'][0],
+                                    ) => item.article}
+                                    data={
+                                        isInScroller
+                                            ? articleNavigator.articles
+                                            : [
+                                                  path,
+                                                  ...articleNavigator.articles,
+                                              ]
+                                    }
+                                    renderItem={({
+                                        item,
+                                    }: {
+                                        item: ArticleNavigator['articles'][0]
+                                        index: number
+                                    }) => (
+                                        <ArticleScreenBody
+                                            width={width}
+                                            path={item}
+                                            pillar={pillar}
+                                            onTopPositionChange={isAtTop => {
+                                                setArticleIsAtTop(isAtTop)
+                                            }}
+                                        />
+                                    )}
+                                />
+                            )}
+                        </WithLayoutRectangle>
                     </LoginOverlay>
                 </SlideCard>
             )}
