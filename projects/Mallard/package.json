@@ -22,7 +22,7 @@
         "bundle-html": "node ./scripts/bundle-html.js",
         "watch-html": "yarn bundle-html && open scripts/watch-html.command",
         "convert-svg": "node ./scripts/svgs.js",
-        "fetch-dev-env": "aws s3 cp s3://editions-config/Mallard/dev/.env ./.env --region=eu-west-1 --profile=frontend",
+        "fetch-dev-env": "node ./scripts/fetch-dev-env.js",
         "write-prod-env": "node .env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
         "write-version-file": "node ./scripts/versioning.js",
