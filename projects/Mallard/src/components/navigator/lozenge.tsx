@@ -6,8 +6,20 @@ import { clamp } from 'src/helpers/math'
 
 const fadeLozengeAt = 20
 
-const getStyles = (fill: string, radius: number) =>
-    StyleSheet.create({
+const getStyles = (fill: string, radius: number) => {
+    const fillStyle = {
+        backgroundColor: fill,
+        ...StyleSheet.absoluteFillObject,
+    }
+
+    const bubbleStyle = {
+        ...fillStyle,
+        borderRadius: radius,
+        width: radius * 2,
+        zIndex: -2,
+    }
+
+    return StyleSheet.create({
         root: {
             height: radius * 2,
             minWidth: radius * 2,
@@ -19,24 +31,23 @@ const getStyles = (fill: string, radius: number) =>
             flex: 0,
             width: 'auto',
         },
-        backgroundFill: {
-            backgroundColor: fill,
-            ...StyleSheet.absoluteFillObject,
-        },
-        roundBubble: {
-            borderRadius: radius,
-            width: radius * 2,
-            zIndex: -2,
+        initialBubble: {
+            ...bubbleStyle,
+            transform: [{ translateX: -1 }],
+            backgroundColor: 'transparent',
             alignItems: 'center',
         },
         leftBubbleCap: {
+            ...bubbleStyle,
             left: radius * -1,
         },
         rightBubbleCap: {
+            ...bubbleStyle,
             left: 'auto',
             right: radius * -1,
         },
-        centerBubble: {
+        square: {
+            ...fillStyle,
             width: '100%',
         },
         text: {
@@ -57,6 +68,7 @@ const getStyles = (fill: string, radius: number) =>
             zIndex: -3,
         },
     })
+}
 
 const Lozenge = ({
     fill,
@@ -127,8 +139,7 @@ const Lozenge = ({
                         <Animated.View
                             accessible={false}
                             style={[
-                                styles.backgroundFill,
-                                styles.centerBubble,
+                                styles.square,
                                 {
                                     transform: [
                                         {
@@ -157,8 +168,6 @@ const Lozenge = ({
                         <Animated.View
                             accessible={false}
                             style={[
-                                styles.backgroundFill,
-                                styles.roundBubble,
                                 styles.rightBubbleCap,
                                 width && {
                                     opacity: position.interpolate({
@@ -191,11 +200,7 @@ const Lozenge = ({
                         />
                         <View
                             accessible={false}
-                            style={[
-                                styles.backgroundFill,
-                                styles.roundBubble,
-                                styles.leftBubbleCap,
-                            ]}
+                            style={[styles.leftBubbleCap]}
                         />
                     </Animated.View>
                 </>
@@ -203,12 +208,7 @@ const Lozenge = ({
             <Animated.View
                 accessible={false}
                 style={[
-                    styles.backgroundFill,
-                    styles.roundBubble,
-                    {
-                        transform: [{ translateX: -1 }],
-                        backgroundColor: 'transparent',
-                    },
+                    styles.initialBubble,
                     position && {
                         opacity: position.interpolate({
                             inputRange: [0, 10],
