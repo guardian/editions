@@ -28,8 +28,8 @@ export const metrics = {
         sides: basicMetrics.horizontal * 1.5,
         cardContainerHeightExtra: scrubberRadius * 2,
         cardSize: XY(540, 600),
-        cardSizeTablet: XY(650, 650),
-        cardSizeTabletShort: XY(650, 650),
+        cardSizeTablet: XY(650, 725),
+        cardSizeTabletShort: XY(650, 660),
         scrubberRadius,
     },
     gridRowSplit: {
