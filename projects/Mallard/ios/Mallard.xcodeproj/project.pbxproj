@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
-		0486168BC45B39E42251CB3F /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA5FE54DF21C63865903DF36 /* libPods-Mallard-tvOS.a */; };
+		0E322313235BC1EB253D9A0B /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7FB5406BC056B239B20F8A7 /* libPods-Mallard-tvOS.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -29,33 +29,32 @@
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
-		6A05327BC97CAE5B518899AE /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F87B34B325E402350D45057F /* libPods-Mallard-tvOSTests.a */; };
-		992DFB5D97629D05ABE4F35B /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C925B47918EC7ADA28BCF61C /* libPods-MallardTests.a */; };
-		A5A1EC2EB85D3B9A0A86D466 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7F0A07C41E9827209E471D0 /* libPods-Mallard.a */; };
+		347ADF0BFDF40FCD0D6E5137 /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F42773E47CBD17E503537C6 /* libPods-Mallard-tvOSTests.a */; };
+		5130C2105EE3FEA790208611 /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D4F08EE20301D01C62B1A3 /* libPods-MallardTests.a */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
-		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378322B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378722B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378822B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378922B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378A22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378B22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378C22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378D22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378E22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378F22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
 		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
 		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
@@ -79,6 +78,7 @@
 		C54937AB22B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */; };
 		C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9D5A81177BD4E53AE3E6D4C /* SpaceMono-Regular copy.ttf */; };
 		C555A75222848D6C002DF16C /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C555A72822848D6C002DF16C /* Icon-1024.png */; };
+		D3508A293C265369B92723C4 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F6EE41D5F5128E121DE28F6 /* libPods-Mallard.a */; };
 		E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
@@ -376,8 +376,6 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MallardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MallardTests.m; sourceTree = "<group>"; };
 		066221D953054F3682287E74 /* GuardianTextEgyptian-RegIt.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-RegIt.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-RegIt.ttf"; sourceTree = "<group>"; };
-		06F7BD0AF7604CC0BD288102 /* Pods-Mallard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.debug.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.debug.xcconfig"; sourceTree = "<group>"; };
-		07C4BB9D8D0BDE387A50F5DF /* Pods-MallardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.release.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.release.xcconfig"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Mallard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mallard.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -392,52 +390,54 @@
 		1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianWeatherIcons-Regular.ttf"; path = "../src/assets/fonts/GuardianWeatherIcons-Regular.ttf"; sourceTree = "<group>"; };
 		1C9724288715471BB3FE3B73 /* GHGuardianHeadline-SemiboldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-SemiboldItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-SemiboldItalic.ttf"; sourceTree = "<group>"; };
 		1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-BlackItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-BlackItalic.ttf"; sourceTree = "<group>"; };
+		1F6EE41D5F5128E121DE28F6 /* libPods-Mallard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20EAB36C2768498C8DA8BFE4 /* GuardianTextEgyptian-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-Bold.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-Bold.ttf"; sourceTree = "<group>"; };
 		274228DDF01142578ACE0F48 /* GHGuardianHeadline-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Medium.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Medium.ttf"; sourceTree = "<group>"; };
 		2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Bold.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Bold.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Mallard-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mallard-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mallard-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F42773E47CBD17E503537C6 /* libPods-Mallard-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B3CC9963BA4216B98F3053 /* GuardianTextSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-BoldItalic.ttf"; path = "../src/assets/fonts/GuardianTextSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		3DA2FD0EC69B436384494394 /* GHGuardianHeadline-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-BoldItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-BoldItalic.ttf"; sourceTree = "<group>"; };
-		4098275394814D8CC43B31DC /* Pods-Mallard-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Black.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Black.ttf"; sourceTree = "<group>"; };
 		5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-RegularItalic.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularItalic.ttf"; sourceTree = "<group>"; };
 		574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
+		5F8F11D5F668031529CBD936 /* Pods-Mallard-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		633BB1AFE255417982D19DF7 /* GHGuardianHeadline-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Regular.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Regular.ttf"; sourceTree = "<group>"; };
 		6AF18C71E29042F4BCB55E18 /* GHGuardianHeadline-RegularItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-RegularItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-RegularItalic.ttf"; sourceTree = "<group>"; };
+		6CC99C917333DBCFE76ACFD0 /* Pods-MallardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.release.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.release.xcconfig"; sourceTree = "<group>"; };
+		7425FBD1E9DBC7BE381B676F /* Pods-MallardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.debug.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianIcons-Regular.otf"; path = "../src/assets/fonts/GuardianIcons-Regular.otf"; sourceTree = "<group>"; };
 		7FE20416D3D243E5A4320927 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		862CD6EDF935165B02EAC04B /* Pods-Mallard-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		90A50D1828ED405BB7AD9145 /* GuardianTextEgyptian-Reg.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-Reg.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-Reg.ttf"; sourceTree = "<group>"; };
 		92C66C5662CA467DB9BDFDCB /* GHGuardianHeadline-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-MediumItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-MediumItalic.ttf"; sourceTree = "<group>"; };
 		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
 		95FC7D9B22EA085300C41645 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
-		A7F0A07C41E9827209E471D0 /* libPods-Mallard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		AF1ED80DA3CF0CDD11840EEC /* Pods-Mallard-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		B3D4F08EE20301D01C62B1A3 /* libPods-MallardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MallardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		C51056C222D60C1700ED3078 /* crosswords.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = crosswords.bundle; path = ../html/crosswords.bundle; sourceTree = "<group>"; };
 		C521D66822CF6FAA00F493D5 /* Mallard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Mallard.entitlements; path = Mallard/Mallard.entitlements; sourceTree = "<group>"; };
 		C521D6EF22CF763C00F493D5 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		C555A72822848D6C002DF16C /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		C73DD286DF1C4408BBB2D277 /* GuardianTextSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Bold.ttf"; path = "../src/assets/fonts/GuardianTextSans-Bold.ttf"; sourceTree = "<group>"; };
-		C7E4ADB9C6C0072D2DE87639 /* Pods-Mallard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.release.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.release.xcconfig"; sourceTree = "<group>"; };
-		C925B47918EC7ADA28BCF61C /* libPods-MallardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MallardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAD3C189F74638E3DC95459C /* Pods-Mallard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.release.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.release.xcconfig"; sourceTree = "<group>"; };
 		CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = guardianIcons_1.12.otf; path = ../src/assets/fonts/guardianIcons_1.12.otf; sourceTree = "<group>"; };
-		D558481789F18FD0B381CAF0 /* Pods-Mallard-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		D91ACCF49F13465D84BB81D7 /* GHGuardianHeadline-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-LightItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-LightItalic.ttf"; sourceTree = "<group>"; };
 		D9D9CF659A9A46959578BE69 /* GHGuardianHeadline-Semibold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Semibold.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Semibold.ttf"; sourceTree = "<group>"; };
+		E10055F583F8989FAD6CBFB8 /* Pods-Mallard-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		E7FB5406BC056B239B20F8A7 /* libPods-Mallard-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9D5A81177BD4E53AE3E6D4C /* SpaceMono-Regular copy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular copy.ttf"; path = "../src/assets/fonts/SpaceMono-Regular copy.ttf"; sourceTree = "<group>"; };
-		EA5FE54DF21C63865903DF36 /* libPods-Mallard-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED175DCD22A3452EA1C9C2E4 /* GHGuardianHeadline-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Light.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Light.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F4CA74186CD02622E3FCE221 /* Pods-Mallard-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		F87B34B325E402350D45057F /* libPods-Mallard-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC37A407506761957A20BC4B /* Pods-MallardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.debug.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F5B993F04EE722067DDE1130 /* Pods-Mallard-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F9B24181A6C11E1F7A13F4E2 /* Pods-Mallard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.debug.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -446,7 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */,
-				992DFB5D97629D05ABE4F35B /* libPods-MallardTests.a in Frameworks */,
+				5130C2105EE3FEA790208611 /* libPods-MallardTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,7 +454,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5A1EC2EB85D3B9A0A86D466 /* libPods-Mallard.a in Frameworks */,
+				D3508A293C265369B92723C4 /* libPods-Mallard.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,7 +471,7 @@
 				2D02E4C61E0B4AEC006451C7 /* libRCTSettings-tvOS.a in Frameworks */,
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
-				0486168BC45B39E42251CB3F /* libPods-Mallard-tvOS.a in Frameworks */,
+				0E322313235BC1EB253D9A0B /* libPods-Mallard-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,7 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */,
-				6A05327BC97CAE5B518899AE /* libPods-Mallard-tvOSTests.a in Frameworks */,
+				347ADF0BFDF40FCD0D6E5137 /* libPods-Mallard-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,10 +639,10 @@
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				7FE20416D3D243E5A4320927 /* libz.tbd */,
-				A7F0A07C41E9827209E471D0 /* libPods-Mallard.a */,
-				EA5FE54DF21C63865903DF36 /* libPods-Mallard-tvOS.a */,
-				F87B34B325E402350D45057F /* libPods-Mallard-tvOSTests.a */,
-				C925B47918EC7ADA28BCF61C /* libPods-MallardTests.a */,
+				1F6EE41D5F5128E121DE28F6 /* libPods-Mallard.a */,
+				E7FB5406BC056B239B20F8A7 /* libPods-Mallard-tvOS.a */,
+				2F42773E47CBD17E503537C6 /* libPods-Mallard-tvOSTests.a */,
+				B3D4F08EE20301D01C62B1A3 /* libPods-MallardTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -659,14 +659,14 @@
 		72371662E5B6D3687E61A459 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				06F7BD0AF7604CC0BD288102 /* Pods-Mallard.debug.xcconfig */,
-				C7E4ADB9C6C0072D2DE87639 /* Pods-Mallard.release.xcconfig */,
-				AF1ED80DA3CF0CDD11840EEC /* Pods-Mallard-tvOS.debug.xcconfig */,
-				F4CA74186CD02622E3FCE221 /* Pods-Mallard-tvOS.release.xcconfig */,
-				4098275394814D8CC43B31DC /* Pods-Mallard-tvOSTests.debug.xcconfig */,
-				D558481789F18FD0B381CAF0 /* Pods-Mallard-tvOSTests.release.xcconfig */,
-				FC37A407506761957A20BC4B /* Pods-MallardTests.debug.xcconfig */,
-				07C4BB9D8D0BDE387A50F5DF /* Pods-MallardTests.release.xcconfig */,
+				F9B24181A6C11E1F7A13F4E2 /* Pods-Mallard.debug.xcconfig */,
+				CAD3C189F74638E3DC95459C /* Pods-Mallard.release.xcconfig */,
+				E10055F583F8989FAD6CBFB8 /* Pods-Mallard-tvOS.debug.xcconfig */,
+				5F8F11D5F668031529CBD936 /* Pods-Mallard-tvOS.release.xcconfig */,
+				F5B993F04EE722067DDE1130 /* Pods-Mallard-tvOSTests.debug.xcconfig */,
+				862CD6EDF935165B02EAC04B /* Pods-Mallard-tvOSTests.release.xcconfig */,
+				7425FBD1E9DBC7BE381B676F /* Pods-MallardTests.debug.xcconfig */,
+				6CC99C917333DBCFE76ACFD0 /* Pods-MallardTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -768,7 +768,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MallardTests" */;
 			buildPhases = (
-				4360149E97B8FE0FC41A90AA /* [CP] Check Pods Manifest.lock */,
+				3D8199C73FDDEA22AE0801AC /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -787,7 +787,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Mallard" */;
 			buildPhases = (
-				A036704103727C473075FCF9 /* [CP] Check Pods Manifest.lock */,
+				CA73B8997BE1CA7A74351F92 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -806,7 +806,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Mallard-tvOS" */;
 			buildPhases = (
-				9B4475FDC8040FCE52A0B537 /* [CP] Check Pods Manifest.lock */,
+				AE0E46154FB3396FDDDE0C70 /* [CP] Check Pods Manifest.lock */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
 				2D02E4791E0B4A5D006451C7 /* Resources */,
@@ -825,7 +825,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Mallard-tvOSTests" */;
 			buildPhases = (
-				70176D2D616C4CBF8280EB2F /* [CP] Check Pods Manifest.lock */,
+				AC15C40CCD9D1C2CF1F52CAF /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -1236,29 +1236,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* (null) in Resources */,
-				C549378122B149BB00B1D9A2 /* (null) in Resources */,
-				C549378222B149BB00B1D9A2 /* (null) in Resources */,
-				C549378322B149BB00B1D9A2 /* (null) in Resources */,
-				C549378422B149BB00B1D9A2 /* (null) in Resources */,
-				C549378522B149BB00B1D9A2 /* (null) in Resources */,
-				C549378622B149BB00B1D9A2 /* (null) in Resources */,
-				C549378722B149BB00B1D9A2 /* (null) in Resources */,
-				C549378822B149BB00B1D9A2 /* (null) in Resources */,
-				C549378922B149BB00B1D9A2 /* (null) in Resources */,
-				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
-				C549379022B149BB00B1D9A2 /* (null) in Resources */,
-				C549379122B149BB00B1D9A2 /* (null) in Resources */,
-				C549379222B149BB00B1D9A2 /* (null) in Resources */,
+				C549378022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378222B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378322B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378622B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378722B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378822B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378922B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378A22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378B22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378C22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378D22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378E22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378F22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379222B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* (null) in Resources */,
-				C549379522B149BB00B1D9A2 /* (null) in Resources */,
-				C549379622B149BB00B1D9A2 /* (null) in Resources */,
+				C549379422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379622B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
@@ -1337,7 +1337,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		4360149E97B8FE0FC41A90AA /* [CP] Check Pods Manifest.lock */ = {
+		3D8199C73FDDEA22AE0801AC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1359,7 +1359,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		70176D2D616C4CBF8280EB2F /* [CP] Check Pods Manifest.lock */ = {
+		AC15C40CCD9D1C2CF1F52CAF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1381,7 +1381,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9B4475FDC8040FCE52A0B537 /* [CP] Check Pods Manifest.lock */ = {
+		AE0E46154FB3396FDDDE0C70 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1403,7 +1403,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A036704103727C473075FCF9 /* [CP] Check Pods Manifest.lock */ = {
+		CA73B8997BE1CA7A74351F92 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1492,7 +1492,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC37A407506761957A20BC4B /* Pods-MallardTests.debug.xcconfig */;
+			baseConfigurationReference = 7425FBD1E9DBC7BE381B676F /* Pods-MallardTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = 998P9U5NGJ;
@@ -1514,7 +1514,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07C4BB9D8D0BDE387A50F5DF /* Pods-MallardTests.release.xcconfig */;
+			baseConfigurationReference = 6CC99C917333DBCFE76ACFD0 /* Pods-MallardTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -1533,7 +1533,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 06F7BD0AF7604CC0BD288102 /* Pods-Mallard.debug.xcconfig */;
+			baseConfigurationReference = F9B24181A6C11E1F7A13F4E2 /* Pods-Mallard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Mallard/Mallard.entitlements;
@@ -1556,7 +1556,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7E4ADB9C6C0072D2DE87639 /* Pods-Mallard.release.xcconfig */;
+			baseConfigurationReference = CAD3C189F74638E3DC95459C /* Pods-Mallard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Mallard/Mallard.entitlements;
@@ -1578,7 +1578,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF1ED80DA3CF0CDD11840EEC /* Pods-Mallard-tvOS.debug.xcconfig */;
+			baseConfigurationReference = E10055F583F8989FAD6CBFB8 /* Pods-Mallard-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1607,7 +1607,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F4CA74186CD02622E3FCE221 /* Pods-Mallard-tvOS.release.xcconfig */;
+			baseConfigurationReference = 5F8F11D5F668031529CBD936 /* Pods-Mallard-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1636,7 +1636,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4098275394814D8CC43B31DC /* Pods-Mallard-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = F5B993F04EE722067DDE1130 /* Pods-Mallard-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1664,7 +1664,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D558481789F18FD0B381CAF0 /* Pods-Mallard-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 862CD6EDF935165B02EAC04B /* Pods-Mallard-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
