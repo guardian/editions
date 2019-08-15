@@ -10,7 +10,14 @@ import { FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useGdprSwitches } from 'src/hooks/use-settings'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
-    <View style={{ flexDirection: 'column', flex: 0, alignItems: 'stretch' }}>
+    <View
+        style={{
+            flexDirection: 'column',
+            flex: 1,
+            alignItems: 'stretch',
+            justifyContent: 'space-around',
+        }}
+    >
         {children}
     </View>
 )

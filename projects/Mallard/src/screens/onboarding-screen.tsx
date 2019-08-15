@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     },
     padding: {
         display: 'flex',
+        flex: 1,
         alignItems: 'center',
         padding: metrics.horizontal * 2,
     },

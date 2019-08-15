@@ -15,6 +15,7 @@ export enum CardAppearance {
 
 const styles = StyleSheet.create({
     top: {
+        aspectRatio: 1,
         flexDirection: 'column',
         justifyContent: 'space-around',
         flexGrow: 1,
@@ -70,7 +71,7 @@ const OnboardingCard = ({
     appearance: CardAppearance
     size?: 'big' | 'small'
 }) => {
-    const max = minScreenSize() * 0.8
+    const max = minScreenSize() * 0.9
     return (
         <View
             style={[
@@ -78,7 +79,6 @@ const OnboardingCard = ({
                 {
                     maxHeight: max,
                     maxWidth: max,
-                    aspectRatio: 1,
                     flexDirection: 'column',
                 },
                 style,
