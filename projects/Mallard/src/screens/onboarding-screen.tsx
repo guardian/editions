@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     },
     padding: {
         display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        flex: 1,
+        alignItems: 'center',
         padding: metrics.horizontal * 2,
     },
 })

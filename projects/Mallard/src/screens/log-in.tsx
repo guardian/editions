@@ -51,7 +51,7 @@ const loginStyles = StyleSheet.create({
     actionsContainer: {
         alignItems: 'flex-start',
         flexDirection: 'column',
-        flex: 1,
+        flex: 0,
     },
     actionRow: {
         alignItems: 'flex-start',
