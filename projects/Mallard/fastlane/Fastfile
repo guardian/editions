@@ -30,7 +30,7 @@ platform :ios do
     )
     build_app(
       scheme: "Mallard",
-      project: "ios/Mallard.xcodeproj",
+      workspace: "ios/Mallard.xcworkspace",
       xcargs: "-allowProvisioningUpdates",
       export_options: {
         exportOptionsPlist: "exports-plists/release.plist"
