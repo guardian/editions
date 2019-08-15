@@ -41,15 +41,18 @@ export const notificationServiceRegister = {
     code: 'https://notifications.code.dev-guardianapis.com/device/register',
 }
 
+const apiUrl = backends[0].value
+
 export const defaultSettings: Settings = {
-    apiUrl: backends[0].value,
+    apiUrl,
     isUsingProdDevtools: false,
     hasOnboarded: false,
     gdprAllowPerformance: null,
     gdprAllowFunctionality: null,
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
-        : notificationServiceRegister.prod,
+        : notificationServiceRegister.code,
+    zipUrl: apiUrl + 'zips/',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

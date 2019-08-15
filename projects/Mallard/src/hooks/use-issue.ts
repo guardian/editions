@@ -17,23 +17,31 @@ export const useIssueWithResponse = <T>(
     deps: any[] = [],
 ) => withResponse<T>(useCachedOrPromise<T>(getter, deps))
 
-export const getIssueResponse = (issue: Issue['key']) =>
-    fetchFromIssue<Issue>(issue, FSPaths.issue(issue), APIPaths.issue(issue), {
+export const getIssueResponse = (issue: Issue['key']) => {
+    console.log("getIssueResponse")
+    console.log("FS PATHS", FSPaths.issue())
+    console.log("API PATH", APIPaths.issue(issue))
+    return fetchFromIssue<Issue>(issue, FSPaths.issue() + "/" + issue, APIPaths.issue(issue), {
         validator: res => {
             return res.fronts != null
         },
     })
+}
 
-export const useIssueResponse = (issue: Issue['key']) =>
-    useIssueWithResponse(getIssueResponse(issue), [issue])
+// export const useIssueResponse = (issue: Issue['key']) =>
+//     useIssueWithResponse(getIssueResponse(issue), [issue])
 
-export const useIssueOrLatestResponse = (issue?: Issue['key']) =>
-    useIssueWithResponse(issue ? getIssueResponse(issue) : getLatestIssue(), [
+export const useIssueOrLatestResponse = (issue?: Issue['key']) => {
+    console.log("USE ISSUE OR LATEST RESPONSE", issue)
+    return useIssueWithResponse(issue ? getIssueResponse(issue) : getLatestIssue(), [
         issue || 'latest',
     ])
+}
+    
 
-export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
-    fetchFromIssue<Front>(
+export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) => {
+    console.log("FSPaths.front", FSPaths.front(issue, front))
+    return fetchFromIssue<Front>(
         issue,
         FSPaths.front(issue, front),
         APIPaths.front(issue, front),
@@ -41,6 +49,7 @@ export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
             validator: res => res.collections != null,
         },
     )
+}
 export const useFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
     useIssueWithResponse(getFrontsResponse(issue, front), [issue, front])
 

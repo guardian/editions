@@ -16,6 +16,7 @@ import {
 } from 'src/helpers/files'
 import { FSPaths } from 'src/paths'
 import { Heading } from 'src/components/layout/ui/row'
+import { downloadAndUnzipIssue } from 'src/helpers/files'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
@@ -102,7 +103,10 @@ export const DownloadScreen = () => {
                     <Button
                         title={'🌈 Download Issue'}
                         onPress={() => {
-                            download('noop' + Math.random())
+                            downloadAndUnzipIssue('2019-07-20')
+                                .then(async () => {
+                                    downloadAndUnzipIssue('2019-07-20-tabletXL')
+                                })
                                 .then(async () => {
                                     refreshIssues()
                                 })

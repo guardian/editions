@@ -78,6 +78,7 @@ const fetchFromApi = <T>(
     } = {},
 ): CachedOrPromise<T> => {
     const { retrieve, store, clear } = withCache<T>('api')
+    console.log("CACHED?: ", cached)
     if (!cached) {
         clear(endpointPath)
         return createCachedOrPromise(
@@ -120,15 +121,21 @@ const fetchFromIssue = <T>(
     TODO: invalidate/background refresh these values
     */
     const { retrieve, store } = withCache<T>('issue')
+    console.log(retrieve(endpointPath))
+    console.log("ENDPOINT PATH", endpointPath);
     return createCachedOrPromise(
         [
             retrieve(endpointPath),
             async () => {
                 const issueOnDevice = await isIssueOnDevice(issueId)
+                console.log(issueOnDevice);
                 if (issueOnDevice) {
-                    return fetchFromFileSystemSlow<T>(fsPath, {
+                    console.log("FFI FSPATH", fsPath)
+                    const james = fetchFromFileSystemSlow<T>(fsPath, {
                         validator,
                     })
+                    console.log(james)
+                    return james
                 } else {
                     return fetchFromApiSlow<T>(endpointPath, {
                         validator,

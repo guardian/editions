@@ -52,15 +52,15 @@ let fileListRawMemo = ''
 let fileListMemo: File[] = []
 
 export const getJson = (path: string) =>
-    RNFetchBlob.fs.readFile(path, 'utf8').then(d => {
-        return JSON.parse(d)
-    })
+    RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
 const pathToFile = (basePath: string = '') => async (
     filePath: string,
 ): Promise<File> => {
     const path = basePath + '/' + filePath
     const { size: fsSize, type: fsType } = await RNFetchBlob.fs.stat(path)
+
+    console.log(fsType)
 
     const type =
         fsType === 'directory'
@@ -71,13 +71,16 @@ const pathToFile = (basePath: string = '') => async (
             ? 'json'
             : 'other'
 
+            console.log(type)
+    
+
     const id = filePath.split('.')[0]
     const size = parseInt(fsSize)
 
     if (type === 'issue') {
         const id = fileName(path)
         try {
-            const issue = await getJson(FSPaths.issue(id))
+            const issue = await getJson(path)
             return {
                 filename: filePath,
                 path,
@@ -130,27 +133,19 @@ export const deleteOtherFiles = async (): Promise<void> => {
     ).then(Promise.resolve)
 }
 
-/*
-TODO: this is not the real issue url
-*/
 export const downloadIssue = (issue: File['id']) => {
+    // TODO: Needs to come from settings
+    const zipUrl = 'https://editions-store.s3-eu-west-1.amazonaws.com/zips/'
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
-    }).fetch(
-        'GET',
-        `https://lauras-funhouse.s3.amazonaws.com/demo-issue.zip?v=1560804690298?issue=${issue}date=${Date.now()}`,
-    )
+        IOSBackgroundTask: true,
+    }).fetch('GET', `${zipUrl}${issue}.zip`)
 
     return {
         promise: returnable.then(async res => {
             await prepFileSystem()
-            await RNFetchBlob.fs.mv(
-                res.path(),
-                FSPaths.issueZip(
-                    `${Date.now()}-${Math.trunc(Math.random() * 100000)}`,
-                ),
-            )
+            await RNFetchBlob.fs.mv(res.path(), FSPaths.issueZip(issue))
             return res
         }),
         cancel: returnable.cancel,
@@ -160,7 +155,7 @@ export const downloadIssue = (issue: File['id']) => {
 
 export const unzipIssue = (issue: File['id']) => {
     const zipFilePath = FSPaths.issueZip(issue)
-    const outputPath = FSPaths.issue(issue)
+    const outputPath = FSPaths.issue()
     return unzip(zipFilePath, outputPath).then(() =>
         RNFetchBlob.fs.unlink(zipFilePath),
     )
@@ -168,7 +163,11 @@ export const unzipIssue = (issue: File['id']) => {
 
 export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
     (await getFileList()).find(
-        file => fileIsIssue(file) && file.issue.key === issue,
+        file => {
+            console.log(file)
+            console.log(fileIsIssue(file))
+            return fileIsIssue(file) && file.issue.key === issue
+        },
     ) !== undefined
 
 /*
@@ -187,4 +186,25 @@ export const displayFileSize = (size: File['size']): string => {
         return (size / 1024).toFixed(2) + ' KB'
     }
     return (size / 1024 / 1024).toFixed(2) + ' MB'
+}
+
+export const downloadAndUnzipIssue = (issueKey: string) => {
+    const dl = downloadIssue(issueKey)
+
+    dl.progress((received, total) => {
+        if (total >= received) {
+            const num = (received / total) * 100
+            console.log(`${parseFloat(String(num)).toFixed(2)}%`)
+        }
+    })
+
+    return dl.promise
+        .then(async () => {
+            return unzipIssue(issueKey).catch(error => {
+                console.log('Unzip error: ', error)
+            })
+        })
+        .catch(errorMessage => {
+            console.log('Download error: ', errorMessage)
+        })
 }
