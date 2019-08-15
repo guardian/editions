@@ -4,7 +4,8 @@ import Vibrant from 'node-vibrant'
 
 const salt = process.env.IMAGE_SALT
 
-export const getImageFromURL = (url: string): Image | undefined => {
+export const getImageFromURL = (url?: string): Image | undefined => {
+    if (url === undefined) return undefined
     try {
         const parsed = new URL(url)
         const path = parsed.pathname.slice(1) //remove leading slash
