@@ -46,6 +46,7 @@ import { FAQScreen } from './settings/faq-screen'
 import { routeNames } from 'src/navigation/routes'
 import { SettingsScreenIndex } from './settings'
 import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const ModalForTablet = ({ children }: { children: ReactNode }) => {
     return (
@@ -76,7 +77,7 @@ const ModalForTablet = ({ children }: { children: ReactNode }) => {
                             {children}
                         </View>
                     ),
-                    [500]: () => (
+                    [Breakpoints.tabletVertical]: () => (
                         <View
                             style={{
                                 flex: 1,
