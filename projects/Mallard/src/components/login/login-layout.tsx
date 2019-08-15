@@ -41,7 +41,12 @@ const LoginHeader = ({
 }) => {
     const insets = useInsets()
     return (
-        <View style={[loginHeaderStyles.wrapper, { paddingTop: insets.top }]}>
+        <View
+            style={[
+                loginHeaderStyles.wrapper,
+                { paddingTop: insets.top + metrics.vertical },
+            ]}
+        >
             <View style={loginHeaderStyles.actionRow}>
                 <Button
                     icon=""
@@ -65,14 +70,19 @@ const loginLayoutStyles = StyleSheet.create({
         flex: 1,
     },
     keyboardAvoider: {
+        flex: 1,
+    },
+    inner: {
         backgroundColor: 'white',
         flex: 1,
         justifyContent: 'center',
+        flexDirection: 'column',
     },
     spinnerContainer: { alignItems: 'center' },
     inputsContainer: {
         flexDirection: 'column',
         flexGrow: 1,
+        flexShrink: 0,
         paddingHorizontal: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
@@ -97,17 +107,19 @@ const LoginLayout = ({
             style={loginLayoutStyles.keyboardAvoider}
             behavior="padding"
         >
-            <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-            <View style={loginLayoutStyles.spinnerContainer}>
-                {isLoading && <Spinner />}
-            </View>
-            <View style={loginLayoutStyles.inputsContainer}>
-                {errorMessage && (
-                    <UiBodyCopy style={loginLayoutStyles.error}>
-                        {errorMessage}
-                    </UiBodyCopy>
-                )}
-                {children}
+            <View style={loginLayoutStyles.inner}>
+                <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
+                <View style={loginLayoutStyles.spinnerContainer}>
+                    {isLoading && <Spinner />}
+                </View>
+                <View style={loginLayoutStyles.inputsContainer}>
+                    {errorMessage && (
+                        <UiBodyCopy style={loginLayoutStyles.error}>
+                            {errorMessage}
+                        </UiBodyCopy>
+                    )}
+                    {children}
+                </View>
             </View>
         </KeyboardAvoidingView>
     </View>
