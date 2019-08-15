@@ -59,6 +59,8 @@ PODS:
   - React-jsinspector (0.60.4)
   - react-native-config (0.11.7):
     - React
+  - react-native-in-app-utils (6.0.1):
+    - React
   - react-native-netinfo (3.2.1):
     - React
   - react-native-safe-area-insets (0.1.0):
@@ -138,6 +140,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - "react-native-safe-area-insets (from `../node_modules/@delightfulstudio/react-native-safe-area-insets`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -196,6 +199,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-in-app-utils:
+    :path: "../node_modules/react-native-in-app-utils"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-insets:
@@ -263,6 +268,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 7549641e48bafae7bfee3f3ea19bf4901639c5de
   React-jsinspector: 73f24a02fa684ed6a2b828ba116874a2191ded88
   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+  react-native-in-app-utils: e87b9a1de664b82176600b5c5d1c9d485c63c801
   react-native-netinfo: 0da34082d2cec3100c9b5073bb217e35f1142bdd
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-webview: 2d8de2be422f0f8b9ba38db3f013f9ebfdb9b78f
