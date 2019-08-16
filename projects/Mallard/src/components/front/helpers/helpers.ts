@@ -44,18 +44,30 @@ export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {
 This resolves where each article goes
 */
 
-export const getItemPosition = (
+export const getItemRectanglePerc = (
     itemFit: Rectangle,
     layout: PageLayoutSizes,
-) => {
+): Rectangle => {
     const layoutSize = getPageLayoutSizeXY(layout)
     return {
-        left: `${(itemFit.left / layoutSize.width) * 100}%`,
-        top: `${(itemFit.top / layoutSize.height) * 100}%`,
-        height: `${(itemFit.height / layoutSize.height) * 100}%`,
-        width: `${(itemFit.width / layoutSize.width) * 100}%`,
+        left: itemFit.left / layoutSize.width,
+        top: itemFit.top / layoutSize.height,
+        height: itemFit.height / layoutSize.height,
+        width: itemFit.width / layoutSize.width,
     }
 }
+
+export const toPercentage = (nm: number): string => `${nm * 100}%`
+
+export const toAbsoluteRectangle = (
+    rectangle: Rectangle,
+    cardSize: Size,
+): Rectangle => ({
+    left: rectangle.left * cardSize.width,
+    width: rectangle.width * cardSize.width,
+    top: rectangle.top * cardSize.height,
+    height: rectangle.height * cardSize.height,
+})
 
 /*
 Map the position of the tap on the screen to
@@ -84,9 +96,9 @@ export const getTranslateForPage = (
     return scrollX.interpolate({
         inputRange: [width * (page - 1), width * page, width * (page + 1)],
         outputRange: [
-            metrics.frontsPageSides * (-1.75 * multiplier),
+            metrics.fronts.sides * (-1.75 * multiplier),
             0,
-            metrics.frontsPageSides * (1.75 * multiplier),
+            metrics.fronts.sides * (1.75 * multiplier),
         ],
     })
 }

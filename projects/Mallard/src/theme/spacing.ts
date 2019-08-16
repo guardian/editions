@@ -1,4 +1,5 @@
 import { Platform, StatusBar } from 'react-native'
+import { Size } from 'src/helpers/sizes'
 
 const spacing = [0, 3, 6, 12, 18, 30]
 
@@ -8,12 +9,12 @@ const basicMetrics = {
     vertical: 10,
 }
 
-const XY = (width: number, height: number) => ({ width, height })
+const XY = (width: number, height: number): Size => ({ width, height })
 
+const scrubberRadius = 18
 export const metrics = {
     ...basicMetrics,
     headerHeight,
-    frontsPageSides: basicMetrics.horizontal * 1.5,
     article: {
         sides: basicMetrics.horizontal / 2,
         sidesTablet: basicMetrics.horizontal * 1.5,
@@ -24,10 +25,12 @@ export const metrics = {
         rightRailLandscape: 260,
     },
     fronts: {
-        cardContainerHeightExtra: 60,
+        sides: basicMetrics.horizontal * 1.5,
+        cardContainerHeightExtra: scrubberRadius * 2,
         cardSize: XY(540, 600),
         cardSizeTablet: XY(650, 725),
         cardSizeTabletShort: XY(650, 660),
+        scrubberRadius,
     },
     gridRowSplit: {
         narrow: (width: number) => width * 0.6,

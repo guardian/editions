@@ -2,10 +2,10 @@ import React, { ReactNode } from 'react'
 import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { Breakpoints, getClosestBreakpoint } from 'src/theme/breakpoints'
 import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
+import { useDimensions } from 'src/hooks/use-screen'
 
 export enum WrapLayout {
     narrow,
@@ -28,16 +28,15 @@ interface ContentWrapperPropTypes extends ChildPropTypes {
     >
 }
 
-interface TabletWrapperPropTypes
+interface ThreeColumnWrapperPropTypes
     extends Exclude<ContentWrapperPropTypes, 'tablet' | 'wide'> {
     backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
     rightRail?: ReactNode
-    landscape?: boolean
 }
 
 interface WrapperPropTypes
-    extends Exclude<TabletWrapperPropTypes, 'landscape'> {
+    extends Exclude<ThreeColumnWrapperPropTypes, 'landscape'> {
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
     >
@@ -60,7 +59,7 @@ const contentWrapStyles = StyleSheet.create({
     },
 })
 
-const BleedyContentWrapper = ({
+const EdgeToEdgeContentWrapper = ({
     header,
     footer,
     children,
@@ -78,7 +77,7 @@ const ContentWrapper = ({
     bleeds,
     ...children
 }: ContentWrapperPropTypes) => {
-    if (bleeds) return <BleedyContentWrapper {...children} />
+    if (bleeds) return <EdgeToEdgeContentWrapper {...children} />
     return (
         <View
             style={[
@@ -128,36 +127,40 @@ const tabletWrapStyles = StyleSheet.create({
         marginTop: metrics.vertical * -0.25,
     },
 })
-const TabletWrapper = ({
+const ThreeColumnWrapper = ({
     borderColor,
-    landscape = false,
     rightRail,
     ...innerProps
-}: TabletWrapperPropTypes) => (
-    <View style={tabletWrapStyles.root}>
-        <View style={tabletWrapStyles.content}>
-            <ContentWrapper tablet {...innerProps} />
+}: ThreeColumnWrapperPropTypes) => {
+    const { width } = useDimensions()
+    const landscape = width >= Breakpoints.tabletLandscape
+
+    return (
+        <View style={tabletWrapStyles.root}>
+            <View style={tabletWrapStyles.content}>
+                <ContentWrapper tablet {...innerProps} />
+            </View>
+            <View
+                style={[
+                    tabletWrapStyles.rightRail,
+                    { borderLeftColor: borderColor },
+                    landscape && tabletWrapStyles.rightRailLandscape,
+                ]}
+            >
+                {rightRail && (
+                    <View
+                        style={[
+                            tabletWrapStyles.rightRailContent,
+                            innerProps.style,
+                        ]}
+                    >
+                        {rightRail}
+                    </View>
+                )}
+            </View>
         </View>
-        <View
-            style={[
-                tabletWrapStyles.rightRail,
-                { borderLeftColor: borderColor },
-                landscape && tabletWrapStyles.rightRailLandscape,
-            ]}
-        >
-            {rightRail && (
-                <View
-                    style={[
-                        tabletWrapStyles.rightRailContent,
-                        innerProps.style,
-                    ]}
-                >
-                    {rightRail}
-                </View>
-            )}
-        </View>
-    </View>
-)
+    )
+}
 
 const TabletWideVerticalWrapper = ({
     children,
@@ -166,11 +169,14 @@ const TabletWideVerticalWrapper = ({
 }: WrapperPropTypes) => (
     <View style={props.style}>
         {props.bleeds ? (
-            <BleedyContentWrapper header={props.header} footer={props.footer}>
+            <EdgeToEdgeContentWrapper
+                header={props.header}
+                footer={props.footer}
+            >
                 {children}
-            </BleedyContentWrapper>
+            </EdgeToEdgeContentWrapper>
         ) : (
-            <TabletWrapper
+            <ThreeColumnWrapper
                 {...{
                     children,
                     backgroundColor,
@@ -180,13 +186,13 @@ const TabletWideVerticalWrapper = ({
             />
         )}
         {props.rightRail && (
-            <TabletWrapper
+            <ThreeColumnWrapper
                 backgroundColor={backgroundColor}
                 borderColor={props.borderColor}
                 rightRail={null}
             >
                 {props.rightRail}
-            </TabletWrapper>
+            </ThreeColumnWrapper>
         )}
     </View>
 )
@@ -196,43 +202,42 @@ const Wrap = ({
     backgroundColor,
     ...props
 }: WrapperPropTypes) => {
+    const { width } = useDimensions()
+    const breakpoint = getClosestBreakpoint(
+        [0, Breakpoints.tabletVertical, Breakpoints.tabletLandscape],
+        width,
+    )
+
+    if (breakpoint < Breakpoints.tabletVertical) {
+        return (
+            <View style={[props.style, { backgroundColor }]}>
+                <ContentWrapper {...props} />
+                {props.rightRail && (
+                    <ContentWrapper>{props.rightRail}</ContentWrapper>
+                )}
+            </View>
+        )
+    }
+
+    if (wide) {
+        return (
+            <View style={{ backgroundColor }}>
+                <TabletWideVerticalWrapper
+                    {...{ backgroundColor, ...props }}
+                    style={[props.style]}
+                />
+            </View>
+        )
+    }
+
     return (
-        <View style={[{ backgroundColor }]}>
-            <WithBreakpoints>
-                {{
-                    0: () => (
-                        <View style={props.style}>
-                            <ContentWrapper {...props} />
-                            {props.rightRail && (
-                                <ContentWrapper>
-                                    {props.rightRail}
-                                </ContentWrapper>
-                            )}
-                        </View>
-                    ),
-
-                    [Breakpoints.tabletVertical]: () =>
-                        wide ? (
-                            <TabletWideVerticalWrapper
-                                {...{ backgroundColor, ...props }}
-                            />
-                        ) : (
-                            <TabletWrapper
-                                {...{
-                                    backgroundColor,
-                                    ...props,
-                                }}
-                            />
-                        ),
-
-                    [Breakpoints.tabletLandscape]: () => (
-                        <TabletWrapper
-                            {...{ backgroundColor, ...props }}
-                            landscape={true}
-                        />
-                    ),
+        <View style={{ backgroundColor }}>
+            <ThreeColumnWrapper
+                {...{
+                    backgroundColor,
+                    ...props,
                 }}
-            </WithBreakpoints>
+            />
         </View>
     )
 }
