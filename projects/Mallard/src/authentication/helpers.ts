@@ -76,13 +76,6 @@ const fetchAndPersistCASExpiry = async (
     return expiry
 }
 
-const fetchAndPersistIAPReceipt = async () => {
-    const receipt = await fetchActiveIOSSubscriptionReceipt()
-    if (!receipt) return null
-    iapReceiptCache.set(receipt)
-    return receipt
-}
-
 export interface UserData {
     userDetails: User
     membershipData: MembersDataAPIResponse
@@ -176,5 +169,4 @@ export {
     fetchCASExpiryForKeychainCredentials,
     canViewEdition,
     fetchAndPersistCASExpiry,
-    fetchAndPersistIAPReceipt,
 }

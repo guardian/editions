@@ -9,10 +9,12 @@ import {
     isAuthed,
     unauthed,
     isPending,
+    AuthType,
 } from './credentials-chain'
 import { UserData, canViewEdition } from './helpers'
 import { AUTH_TTL } from 'src/constants'
 import { tryToRestoreActiveIOSSubscriptionToAuth } from 'src/services/iap'
+import { Alert } from 'react-native'
 
 interface AuthAttempt {
     time: number
@@ -35,11 +37,15 @@ const AuthContext = createContext<{
     setStatus: (status: AuthStatus) => void
     signOut: () => Promise<void>
     restorePurchases: () => Promise<void>
+    isRestoring: boolean
+    isAuthing: boolean
 }>({
     status: pending,
     setStatus: () => {},
     signOut: () => Promise.resolve(),
     restorePurchases: () => Promise.resolve(),
+    isRestoring: false,
+    isAuthing: false,
 })
 
 const needsReauth = (
@@ -69,7 +75,7 @@ const useAuth = () => {
     }: {
         pending: () => T
         unauthed: (signedIn: boolean) => T
-        authed: () => T
+        authed: (type: AuthType) => T
     }) => {
         switch (status.type) {
             case 'pending': {
@@ -82,11 +88,11 @@ const useAuth = () => {
                 switch (status.data.type) {
                     case 'identity': {
                         return canViewEdition(status.data.info.membershipData)
-                            ? authed()
+                            ? authed(status.data)
                             : unauthed(true)
                     }
                     default: {
-                        return authed()
+                        return authed(status.data)
                     }
                 }
             }
@@ -141,7 +147,8 @@ const useIdentity = () => {
 }
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isFetching, setIsFetching] = useState(false)
+    const [isAuthing, setIsAuthing] = useState(false)
+    const [isRestoring, setIsRestoring] = useState(false)
     const [authAttempt, setAuthAttempt] = useState<AuthAttempt>({
         time: 0,
         type: 'cached',
@@ -150,23 +157,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { isConnected } = useNetInfo()
 
     useEffect(() => {
-        if (isFetching || !needsReauth(authAttempt, { isConnected })) return
+        if (isAuthing || !needsReauth(authAttempt, { isConnected })) return
 
-        setIsFetching(true)
+        setIsAuthing(true)
         if (isConnected) {
             liveAuthChain().then(status => {
                 setAuthAttempt(createAuthAttempt(status, 'live'))
-                setIsFetching(false)
+                setIsAuthing(false)
             })
         } else {
             // all cached attempts are retried when we get internet connection
             // back
             cachedAuthChain().then(status => {
                 setAuthAttempt(createAuthAttempt(status, 'cached'))
-                setIsFetching(false)
+                setIsAuthing(false)
             })
         }
-    }, [isConnected, authAttempt, isFetching])
+    }, [isConnected, authAttempt]) // we don't care about isAuthing changing
 
     return (
         <AuthContext.Provider
@@ -178,17 +185,34 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     await resetCredentials()
                     setAuthAttempt(createAuthAttempt(unauthed, 'live'))
                 },
+                isRestoring,
+                isAuthing,
                 restorePurchases: async () => {
                     // await the receipt being added to the system by iOS
                     // this will prompt a user to login to their iTunes account
-                    const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
-                    if (authStatus && authAttempt.status.type !== 'authed') {
-                        setAuthAttempt(
-                            createAuthAttempt(
-                                { type: 'authed', data: authStatus },
-                                'live',
-                            ),
-                        )
+
+                    if (isRestoring) return
+                    setIsRestoring(true)
+
+                    try {
+                        const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
+                        if (
+                            authStatus &&
+                            authAttempt.status.type !== 'authed'
+                        ) {
+                            setAuthAttempt(
+                                createAuthAttempt(
+                                    { type: 'authed', data: authStatus },
+                                    'live',
+                                ),
+                            )
+                        } else {
+                            Alert.alert('Could not find a subscription')
+                        }
+                    } catch (e) {
+                        Alert.alert('Something went wrong, please try again')
+                    } finally {
+                        setIsRestoring(false)
                     }
                 },
             }}
