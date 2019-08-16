@@ -47,9 +47,9 @@ export const render = (article: BlockElement[]) => {
         .map(el => {
             switch (el.id) {
                 case 'html':
-                    return (el as HTMLElement).html
+                    return el.html
                 case 'media-atom':
-                    return renderMediaAtom(el as MediaAtomElement)
+                    return renderMediaAtom(el)
                 default:
                     ''
             }
