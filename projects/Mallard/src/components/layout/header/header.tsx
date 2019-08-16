@@ -12,6 +12,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { useIssueDate } from 'src/helpers/issues'
 import { Issue } from 'src/common'
 import { Highlight } from 'src/components/highlight'
+import { getFont } from 'src/theme/typography'
 
 const styles = StyleSheet.create({
     background: {
@@ -20,6 +21,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         justifyContent: 'flex-end',
         flexDirection: 'row',
+        minHeight: getFont('titlepiece', 1.25).lineHeight * 2,
     },
     flex: {
         flexDirection: 'row',
@@ -33,6 +35,22 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexShrink: 0,
     },
+
+    centerWrapper: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    centerTitle: {
+        ...StyleSheet.absoluteFillObject,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1,
+    },
+    centerAction: {
+        zIndex: 2,
+    },
 })
 
 type TouchableHeaderProps =
@@ -42,33 +60,53 @@ type TouchableHeaderProps =
 type HeaderProps = {
     action?: ReactNode
     leftAction?: ReactNode
+    layout?: 'issue' | 'center'
 } & IssueTitleProps &
     TouchableHeaderProps
 
-const Header = ({ action, leftAction, ...otherProps }: HeaderProps) => {
+const Header = ({
+    action,
+    leftAction,
+    layout = 'issue',
+    ...otherProps
+}: HeaderProps) => {
     const { top: paddingTop } = useInsets()
     return (
         <WithAppAppearance value={'primary'}>
             <View style={[styles.background]}>
-                <GridRowSplit proxy={leftAction} style={{ paddingTop }}>
-                    <View style={styles.headerSplit}>
-                        <View style={styles.headerTitle}>
-                            {'onPress' in otherProps ? (
-                                <Highlight
-                                    onPress={otherProps.onPress}
-                                    accessibilityHint={
-                                        otherProps.accessibilityHint
-                                    }
-                                >
+                {layout === 'issue' ? (
+                    <GridRowSplit proxy={leftAction} style={{ paddingTop }}>
+                        <View style={styles.headerSplit}>
+                            <View style={styles.headerTitle}>
+                                {'onPress' in otherProps ? (
+                                    <Highlight
+                                        onPress={otherProps.onPress}
+                                        accessibilityHint={
+                                            otherProps.accessibilityHint
+                                        }
+                                    >
+                                        <IssueTitle {...otherProps} />
+                                    </Highlight>
+                                ) : (
                                     <IssueTitle {...otherProps} />
-                                </Highlight>
-                            ) : (
-                                <IssueTitle {...otherProps} />
-                            )}
+                                )}
+                            </View>
+                            {action}
                         </View>
-                        {action}
-                    </View>
-                </GridRowSplit>
+                    </GridRowSplit>
+                ) : (
+                    <>
+                        <View style={[styles.centerWrapper, {}]}>
+                            <View style={styles.centerAction}>
+                                {leftAction}
+                            </View>
+                            <View style={styles.centerAction}>{action}</View>
+                            <View style={styles.centerTitle}>
+                                <IssueTitle {...otherProps} />
+                            </View>
+                        </View>
+                    </>
+                )}
             </View>
         </WithAppAppearance>
     )

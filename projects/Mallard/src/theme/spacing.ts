@@ -13,6 +13,7 @@ const scrubberRadius = 18
 export const metrics = {
     ...basicMetrics,
     headerHeight,
+    radius: 10,
     article: {
         sides: basicMetrics.horizontal / 2,
         sidesTablet: basicMetrics.horizontal * 1.5,

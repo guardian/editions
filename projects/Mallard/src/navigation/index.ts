@@ -36,6 +36,7 @@ import { HelpScreen } from 'src/screens/settings/help-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
 import { createModalNavigator } from './navigators/modal'
+import { createHeaderStackNavigator } from './navigators/header'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -105,7 +106,7 @@ const AppStack = createModalNavigator(
         ),
     },
     {
-        [routeNames.Settings]: createStackNavigator(
+        [routeNames.Settings]: createHeaderStackNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
                 [routeNames.Downloads]: DownloadScreen,

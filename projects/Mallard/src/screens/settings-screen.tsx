@@ -157,7 +157,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const signInHandler = useIdentity()
     const authHandler = useAuth()
     const { signOut } = useContext(AuthContext)
-
     const styles = StyleSheet.create({
         signOut: {
             color: color.ui.supportBlue,
