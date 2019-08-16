@@ -90,14 +90,23 @@ const Article = ({
                         useWebKit={false}
                         source={{ html: html }}
                         onShouldStartLoadWithRequest={event => {
-                            if (event.url !== 'about:blank') {
+                            if (
+                                event.url.startsWith(
+                                    'https://embed.theguardian.com',
+                                ) ||
+                                event.url.startsWith('https://www.youtube.com')
+                            ) {
+                                return false
+                            } else if (event.url !== 'about:blank') {
                                 Linking.openURL(event.url)
                                 return false
                             }
                             return true
                         }}
                         onMessage={event => {
-                            setHeight(parseInt(event.nativeEvent.data))
+                            if (parseInt(event.nativeEvent.data) > height) {
+                                setHeight(parseInt(event.nativeEvent.data))
+                            }
                         }}
                         style={{
                             minHeight: height,
