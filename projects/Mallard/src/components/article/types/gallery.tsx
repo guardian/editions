@@ -23,6 +23,7 @@ import { getFont } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
 import { BigArrow, BigArrowDirection } from 'src/components/icons/BigArrow'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { ArticleStandfirst } from '../article-standfirst'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -193,9 +194,10 @@ const GalleryCoverItem = ({
                         {headline}
                     </HeadlineText>
                     {standfirst && (
-                        <StandfirstText style={styles.whiteText}>
-                            {standfirst}
-                        </StandfirstText>
+                        <ArticleStandfirst
+                            standfirst={standfirst}
+                            textStyle={styles.whiteText}
+                        ></ArticleStandfirst>
                     )}
                 </View>
             </MultilineWrap>
