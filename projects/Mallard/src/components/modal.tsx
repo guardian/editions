@@ -34,9 +34,11 @@ const styles = StyleSheet.create({
 const ModalContext = React.createContext<{
     open: (render: ModalRenderer) => void
     close: () => void
+    isOpen: boolean
 }>({
     open: () => {},
     close: () => {},
+    isOpen: false,
 })
 
 const useModal = () => useContext(ModalContext)
@@ -52,6 +54,7 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
                 value={{
                     open: renderModal => setState(() => renderModal),
                     close,
+                    isOpen: !!render,
                 }}
             >
                 {children}

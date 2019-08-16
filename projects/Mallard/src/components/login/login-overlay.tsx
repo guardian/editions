@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react'
-import { View, StyleSheet, PanResponder } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { View, StyleSheet } from 'react-native'
 import { useModal } from '../modal'
 import { useAuth } from 'src/authentication/auth-context'
 import { SignInModalCard } from '../sign-in-modal-card'
@@ -13,50 +13,77 @@ const overlayStyles = StyleSheet.create({
 })
 
 /**
+ * This turns a prop into a ref, which means closures that run
+ * asynchronously can get a reference to the most recent version
+ * of the prop rather than the value at the time it was closed
+ * over
+ */
+const usePropToRef = <T extends any>(value: T) => {
+    const ref = useRef(value)
+    useEffect(() => {
+        ref.current = value
+    })
+    return ref
+}
+
+/**
  * This allows us to open a modal using a component in the view.
  *
  * The primary use case here is for opening with a scrolling interaction.
  */
 
+/**
+ * Because there are various ways to get back to this component without logging in
+ * or it unmounting we need to keep checking whether the user has actually logged in
+ * when they're on this page.
+ *
+ * In order to do this, it sets up an interval which will check whether we need to show
+ * the login modal based on whether the component is focused and whether a modal is
+ * already open.
+ *
+ * It might be slighlty nicer to do this after some user event like a touch. However,
+ * because we're using transparent cards, this component doesn't actually receive
+ * certain gesture events on Android. This could be fixed in future but for the time being
+ * this seems ok for release.
+ */
+
 const ModalOpener = ({
     children,
+    isFocused,
     renderModal,
 }: {
     children: React.ReactNode
-    forceOpen?: boolean
+    isFocused: () => boolean
     renderModal: (close: () => void) => React.ReactNode
 }) => {
-    const { open, close } = useModal()
+    const { open, close, isOpen } = useModal()
+    const isOpenRef = usePropToRef(isOpen)
+    const renderModalRef = usePropToRef(renderModal)
 
-    const swipeUpHandlers = useMemo(
-        () =>
-            PanResponder.create({
-                onStartShouldSetPanResponder: () => true,
-                onMoveShouldSetPanResponder: () => true,
-                onPanResponderMove: (_, gesture) => {
-                    gesture.dy < -10 && open(renderModal)
-                },
-            }),
-        [renderModal, open],
-    )
+    useEffect(() => {
+        const id = setInterval(() => {
+            if (!isOpenRef.current && isFocused()) {
+                open(renderModalRef.current)
+            }
+        }, 7000)
+        return () => clearTimeout(id)
+    }, [])
 
     // ensure the modal is closed on unmount
     useEffect(() => () => close(), [close])
 
-    return (
-        <View style={overlayStyles.wrapper} {...swipeUpHandlers.panHandlers}>
-            {children}
-        </View>
-    )
+    return <View style={overlayStyles.wrapper}>{children}</View>
 }
 
 const LoginOverlay = ({
     children,
+    isFocused,
     onDismiss,
     onOpenCASLogin,
     onLoginPress,
 }: {
     children: React.ReactNode
+    isFocused: () => boolean
     onDismiss: () => void
     onOpenCASLogin: () => void
     onLoginPress: () => void
@@ -69,6 +96,7 @@ const LoginOverlay = ({
         unauthed: signedIn =>
             signedIn ? (
                 <ModalOpener
+                    isFocused={isFocused}
                     renderModal={close => (
                         <SubNotFoundModalCard
                             onDismiss={onDismiss}
@@ -82,6 +110,7 @@ const LoginOverlay = ({
                 </ModalOpener>
             ) : (
                 <ModalOpener
+                    isFocused={isFocused}
                     renderModal={close => (
                         <SignInModalCard
                             onDismiss={onDismiss}
