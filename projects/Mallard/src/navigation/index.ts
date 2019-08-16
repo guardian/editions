@@ -17,6 +17,7 @@ import {
     OnboardingIntroScreen,
     OnboardingConsentScreen,
 } from 'src/screens/onboarding-screen'
+import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
@@ -47,6 +48,7 @@ const routeNames = {
     Help: 'Help',
     Credits: 'Credits',
     FAQ: 'FAQ',
+    AlreadySubscribed: 'AlreadySubscribed',
     SignIn: 'SignIn',
     CasSignIn: 'CasSignIn',
     onboarding: {
@@ -133,6 +135,7 @@ const AppStack = createStackNavigator(
                 [routeNames.Help]: HelpScreen,
                 [routeNames.Credits]: CreditsScreen,
                 [routeNames.FAQ]: FAQScreen,
+                [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
             },
             {
                 defaultNavigationOptions: {
