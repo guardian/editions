@@ -95,8 +95,8 @@ const Header = ({
                         </View>
                     </GridRowSplit>
                 ) : (
-                    <>
-                        <View style={[styles.centerWrapper, {}]}>
+                    <View style={{ paddingTop, width: '100%' }}>
+                        <View style={[styles.centerWrapper]}>
                             <View style={styles.centerAction}>
                                 {leftAction}
                             </View>
@@ -105,7 +105,7 @@ const Header = ({
                                 <IssueTitle {...otherProps} />
                             </View>
                         </View>
-                    </>
+                    </View>
                 )}
             </View>
         </WithAppAppearance>

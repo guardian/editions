@@ -27,17 +27,15 @@ const wrapNavigatorWithModal = (
     return (WithModal as unknown) as NavigationContainer
 }
 
-const createModalNavigator = <T extends string>(
-    topRoute: {
-        [key in T]: NavigationContainer
-    },
+const createModalNavigator = (
+    parent: NavigationContainer,
     modalRoutes: {
         [key: string]: NavigationContainer
     },
 ) => {
     let animatedValue = new Animated.Value(0)
 
-    const navigation: { [key: string]: NavigationContainer } = { ...topRoute }
+    const navigation: { [key: string]: NavigationContainer } = { _: parent }
     for (const [key, value] of Object.entries(modalRoutes)) {
         navigation[key] = wrapNavigatorWithModal(value, () => animatedValue)
     }
@@ -47,7 +45,7 @@ const createModalNavigator = <T extends string>(
         headerMode: 'none',
         transparentCard: true,
         cardOverlayEnabled: true,
-        initialRouteName: Object.keys(topRoute)[0],
+        initialRouteName: '_',
         defaultNavigationOptions: {
             gesturesEnabled: false,
         },

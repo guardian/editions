@@ -64,7 +64,7 @@ const wrapNavigatorWithHeader = (
 
 const createHeaderStackNavigator = (
     routes: Parameters<typeof createStackNavigator>[0],
-    options: Parameters<typeof createStackNavigator>[1],
+    options?: Parameters<typeof createStackNavigator>[1],
 ) =>
     wrapNavigatorWithHeader(
         createStackNavigator(routes, { ...options, headerMode: 'none' }),
