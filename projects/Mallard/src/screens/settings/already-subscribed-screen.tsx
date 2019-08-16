@@ -15,6 +15,10 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
 
     const rightChevronIcon = <RightChevron />
 
+    const restoringLabel = isRestoring
+        ? 'Restore App Store subscription'
+        : 'Restoring ...'
+
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
@@ -48,11 +52,10 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             onPress={({ onPress }) => onPress()}
                             data={[
                                 {
-                                    key: 'Restore App Store subscription',
-                                    title: 'Restore App Store subscription',
+                                    key: restoringLabel,
+                                    title: restoringLabel,
                                     data: {
                                         onPress: () => {
-                                            if (isRestoring) return
                                             restorePurchases()
                                         },
                                     },
