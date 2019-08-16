@@ -39,7 +39,6 @@ import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { routeNames } from 'src/navigation'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
-import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { useDimensions } from 'src/hooks/use-screen'
 
 export interface PathToArticle {
