@@ -2,15 +2,13 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
-import { getNavigationPosition } from 'src/helpers/positions'
 import { ArticleKicker } from '../article-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { ArticleHeaderProps } from './types'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
-import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
-import { Wrap, MultilineWrap } from './wrap'
+import { MultilineWrap } from '../wrap/wrap'
 
 const styles = StyleSheet.create({
     background: {

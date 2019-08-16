@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, ImageBackground, View } from 'react-native'
-import { APIPaths } from 'src/paths'
+import { imagePath } from 'src/paths'
 import { Image as ImageT } from '../../common'
 
 const styles = StyleSheet.create({
@@ -19,17 +19,11 @@ const ArticleImage = ({
     style?: {}
     proxy?: ReactNode
 }) => {
-    const imagePath = `${APIPaths.mediaBackend}${APIPaths.media(
-        'issue',
-        'phone',
-        image.source,
-        image.path,
-    )}`
     return (
         <ImageBackground
             style={[styles.image, style]}
             source={{
-                uri: imagePath,
+                uri: imagePath(image),
             }}
         >
             {proxy && <View style={styles.proxy}>{proxy}</View>}

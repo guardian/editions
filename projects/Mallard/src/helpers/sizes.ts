@@ -15,6 +15,11 @@ export const toPosition = (top: number, left: number): Position => ({
     left,
 })
 
+export const toSize = (width: number, height: number): Size => ({
+    width,
+    height,
+})
+
 export const toRectangle = (
     left: number,
     top: number,
