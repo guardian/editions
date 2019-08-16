@@ -155,7 +155,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
-    const { signOut, restorePurchases } = useContext(AuthContext)
+    const authHandler = useAuth()
+    const { signOut } = useContext(AuthContext)
 
     const styles = StyleSheet.create({
         signOut: {
@@ -200,6 +201,12 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     },
                     proxy: rightChevronIcon,
                 },
+            ],
+        }),
+        ...authHandler({
+            pending: () => [],
+            authed: () => [],
+            unauthed: () => [
                 {
                     key: `I'm already subscribed`,
                     title: `I'm already subscribed`,
@@ -219,7 +226,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             <ScrollContainer>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={[...signInListItems]}
+                    data={signInListItems}
                 />
                 <Heading>{``}</Heading>
                 <List

@@ -11,9 +11,13 @@ import { Platform } from 'react-native'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const authHandler = useAuth()
-    const { restorePurchases } = useContext(AuthContext)
+    const { restorePurchases, isRestoring } = useContext(AuthContext)
 
     const rightChevronIcon = <RightChevron />
+
+    const restoringLabel = isRestoring
+        ? 'Restoring ...'
+        : 'Restore App Store subscription'
 
     return (
         <WithAppAppearance value={'settings'}>
@@ -21,36 +25,24 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                 <Heading>{`Guardian Digital pack/Digital + Print`}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={[
-                        {
-                            key: `Sign in`,
-                            title: `Sign in`,
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(routeNames.SignIn)
-                                },
-                            },
-                            proxy: rightChevronIcon,
-                        },
-                        ...authHandler({
-                            pending: () => [],
-                            authed: () => [],
-                            unauthed: () => [
-                                {
-                                    key: 'Activate with subscriber ID',
-                                    title: 'Activate with subscriber ID',
-                                    data: {
-                                        onPress: () => {
-                                            navigation.navigate(
-                                                routeNames.CasSignIn,
-                                            )
-                                        },
+                    data={authHandler({
+                        pending: () => [],
+                        authed: () => [],
+                        unauthed: () => [
+                            {
+                                key: 'Activate with subscriber ID',
+                                title: 'Activate with subscriber ID',
+                                data: {
+                                    onPress: () => {
+                                        navigation.navigate(
+                                            routeNames.CasSignIn,
+                                        )
                                     },
-                                    proxy: rightChevronIcon,
                                 },
-                            ],
-                        }),
-                    ]}
+                                proxy: rightChevronIcon,
+                            },
+                        ],
+                    })}
                 />
                 {Platform.OS === 'ios' ? (
                     <>
@@ -60,8 +52,8 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             onPress={({ onPress }) => onPress()}
                             data={[
                                 {
-                                    key: 'Restore App Store subscription',
-                                    title: 'Restore App Store subscription',
+                                    key: restoringLabel,
+                                    title: restoringLabel,
                                     data: {
                                         onPress: () => {
                                             restorePurchases()
