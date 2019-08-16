@@ -64,9 +64,14 @@ export const makeHtml = ({
         ${html}
     </div>
     <script>
-        window.requestAnimationFrame(function() {
-            window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
-        })
+        const submitHeight = function() {
+            window.requestAnimationFrame(function() {
+                window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
+            })
+        }
+    
+        window.setInterval(function() { submitHeight() }, 4000)
+        submitHeight()
     </script>
 </body>
 </html>
