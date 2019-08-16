@@ -13,6 +13,7 @@ import {
 import { UserData, canViewEdition } from './helpers'
 import { AUTH_TTL } from 'src/constants'
 import { tryToRestoreActiveIOSSubscriptionToAuth } from 'src/services/iap'
+import { Alert } from 'react-native'
 
 interface AuthAttempt {
     time: number
@@ -188,6 +189,16 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                                 { type: 'authed', data: authStatus },
                                 'live',
                             ),
+                        )
+                    } else {
+                        Alert.alert(
+                            'Could not find previous purchase',
+                            undefined,
+                            [
+                                {
+                                    text: `Ok`,
+                                },
+                            ],
                         )
                     }
                 },
