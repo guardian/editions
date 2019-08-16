@@ -365,6 +365,9 @@ const superHeroImageStyles = StyleSheet.create({
 })
 
 const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+
+    const trailText = article.trail.replace(/<\/?[^>]+>/gi, '')
+
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
@@ -391,7 +394,7 @@ const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     allowFontScaling={false}
                     style={[superHeroImageStyles.textStandBlock]}
                 >
-                    {article.trail}
+                    {trailText}
                 </StandfirstText>
             ) : null}
         </ItemTappable>
