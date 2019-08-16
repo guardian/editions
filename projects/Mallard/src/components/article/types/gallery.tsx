@@ -184,6 +184,7 @@ const GalleryCoverItem = ({
                             {
                                 fontFamily: getFont('titlepiece', 1).fontFamily,
                                 marginTop: metrics.vertical,
+                                marginBottom: metrics.vertical * 2,
                                 marginRight: metrics.horizontal * 4,
                             },
                         ]}
