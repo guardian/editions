@@ -98,6 +98,9 @@ const IssueFronts = ({
             style={style}
             removeClippedSubviews={false}
             ListHeaderComponent={ListHeaderComponent}
+            ListFooterComponent={() => (
+                <View style={{ height: container.height / 2 }} />
+            )}
             keyExtractor={item => `${item.index}::${item.key}`}
             getItemLayout={(_, index) => ({
                 length: container.height,
