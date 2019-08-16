@@ -7,7 +7,7 @@ import {
     IssueTitleProps,
     GridRowSplit,
 } from 'src/components/issue/issue-title'
-import { useInsets } from 'src/hooks/use-insets'
+import { useInsets } from 'src/hooks/use-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { useIssueDate } from 'src/helpers/issues'
 import { Issue } from 'src/common'

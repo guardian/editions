@@ -27,10 +27,11 @@ import {
 import { TextBlock } from './text-block'
 import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
 import {
-    getItemPosition,
+    getItemRectanglePerc,
     useCardBackgroundStyle,
     ItemSizes,
     PageLayoutSizes,
+    toPercentage,
 } from '../helpers/helpers'
 import {
     setScreenPositionOfItem,
@@ -344,10 +345,12 @@ const superHeroImageStyles = StyleSheet.create({
     image: {
         width: '100%',
         flex: 0,
-        height: getItemPosition(
-            { width: 2, height: 4, top: 0, left: 0 },
-            PageLayoutSizes.mobile,
-        ).height,
+        height: toPercentage(
+            getItemRectanglePerc(
+                { width: 2, height: 4, top: 0, left: 0 },
+                PageLayoutSizes.mobile,
+            ).height,
+        ),
     },
     textBlock: {
         ...tappableStyles.padding,
