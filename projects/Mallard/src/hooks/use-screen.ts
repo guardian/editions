@@ -1,7 +1,26 @@
 import { useState, useEffect } from 'react'
 import { currentInsets } from '@delightfulstudio/react-native-safe-area-insets'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
-import { Dimensions } from 'react-native'
+import { Dimensions, ScaledSize } from 'react-native'
+
+const useDimensions = (): ScaledSize => {
+    const [dimensions, setDimensions] = useState(Dimensions.get('window'))
+    useEffect(() => {
+        const listener = (
+            ev: Parameters<
+                Parameters<typeof Dimensions.addEventListener>[1]
+            >[0],
+        ) => {
+            setDimensions(ev.screen)
+        }
+        Dimensions.addEventListener('change', listener)
+        return () => {
+            Dimensions.removeEventListener('change', listener)
+        }
+    }, [])
+
+    return dimensions
+}
 
 const useInsets = () => {
     const [insets, setInsets] = useState({
@@ -29,4 +48,4 @@ const useInsets = () => {
     return insets
 }
 
-export { useInsets }
+export { useInsets, useDimensions }

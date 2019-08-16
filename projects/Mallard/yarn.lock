@@ -4489,6 +4489,11 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+mockdate@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/mockdate/-/mockdate-2.0.5.tgz#70c6abf9ed4b2dae65c81dfc170dd1a5cec53620"
+  integrity sha512-ST0PnThzWKcgSLyc+ugLVql45PvESt3Ul/wrdV/OPc/6Pr8dbLAIJsN1cIp41FLzbN+srVTNIRn+5Cju0nyV6A==
+
 moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
@@ -5407,6 +5412,11 @@ react-native-iap@^3.3.9:
   integrity sha512-td23Dm/irLq5CEXUBuXx5KcmoAkFZM4q3z+gv/eYtMQ3wjBIiZTm3JyS8Df34J2MTKrzg57sGFcwtHVo6v6Vew==
   dependencies:
     dooboolab-welcome "^1.1.0"
+
+react-native-in-app-utils@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-in-app-utils/-/react-native-in-app-utils-6.0.1.tgz#e8469804d7ceb8ad2b368dc2cc9b824c98ca387a"
+  integrity sha512-DHWgQTR+SSmVy+eLEXFJNOfsdvfHmU6y5k91W34x+pt4y/q2wo5++2RQZD/KDpHm89LYKDN1XKCojHFM6//xWQ==
 
 react-native-keychain@^3.1.3:
   version "3.1.3"

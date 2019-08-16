@@ -4,7 +4,7 @@ import { color } from 'src/theme/color'
 import { IssueTitleText } from '../styled-text'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { WithBreakpoints } from '../layout/ui/with-breakpoints'
+import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 
 const splitStyles = StyleSheet.create({

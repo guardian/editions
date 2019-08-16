@@ -3,7 +3,7 @@ import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
 
@@ -112,11 +112,6 @@ const TabletWrapper = ({
     </View>
 )
 
-const wrapStyles = StyleSheet.create({
-    mobileSides: {
-        paddingHorizontal: metrics.article.sides,
-    },
-})
 const Wrap = ({
     children,
     backgroundColor,
