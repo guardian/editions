@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, Animated, Easing } from 'react-native'
+import { View, Animated, StyleSheet } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
 import { color } from 'src/theme/color'
 
-const Ball = ({
-    color,
-    jump,
-    order,
-}: {
-    color: string
-    order: number
-    jump: Animated.Value
-}) => {
+const styles = StyleSheet.create({
+    ball: {
+        width: 22,
+        height: 22,
+        margin: 2,
+        borderRadius: 100,
+    },
+    container: { flexDirection: 'row' },
+})
+
+const pillars = [
+    color.palette.news.main,
+    color.palette.opinion.main,
+    color.palette.sport.main,
+    color.palette.culture.main,
+    color.palette.lifestyle.main,
+]
+
+const Ball = ({ color, jump }: { color: string; jump: Animated.Value }) => {
     return (
         <Animated.View
             style={[
-                { width: 22, height: 22, margin: 2, borderRadius: 100 },
+                styles.ball,
                 { backgroundColor: color },
                 {
                     transform: [
@@ -72,32 +82,10 @@ const Spinner = () => {
     }, [])
     return (
         <View accessibilityLabel={'Loading content'}>
-            <View {...ariaHidden} style={{ flexDirection: 'row' }}>
-                <Ball
-                    order={1}
-                    jump={jumps[0]}
-                    color={color.palette.news.main}
-                ></Ball>
-                <Ball
-                    order={2}
-                    jump={jumps[1]}
-                    color={color.palette.opinion.main}
-                ></Ball>
-                <Ball
-                    order={3}
-                    jump={jumps[2]}
-                    color={color.palette.sport.main}
-                ></Ball>
-                <Ball
-                    order={4}
-                    jump={jumps[3]}
-                    color={color.palette.culture.main}
-                ></Ball>
-                <Ball
-                    order={5}
-                    jump={jumps[4]}
-                    color={color.palette.lifestyle.main}
-                ></Ball>
+            <View {...ariaHidden} style={styles.container}>
+                {pillars.map((color, index) => (
+                    <Ball key={index} jump={jumps[index]} color={color}></Ball>
+                ))}
             </View>
         </View>
     )
