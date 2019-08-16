@@ -43,27 +43,19 @@ const Ball = ({ color, jump }: { color: string; jump: Animated.Value }) => {
 }
 
 const animateJumps = (value: Animated.Value, delay = 0) => {
-    const duration = 400
-    const useNativeDriver = true
+    const makeTimingConfig = (toValue: number) => ({
+        toValue,
+        duration: 400,
+        useNativeDriver: true,
+    })
+
     return Animated.sequence([
         Animated.delay(200 * delay),
         Animated.loop(
             Animated.sequence([
-                Animated.timing(value, {
-                    toValue: 1,
-                    duration,
-                    useNativeDriver,
-                }),
-                Animated.timing(value, {
-                    toValue: 0,
-                    duration,
-                    useNativeDriver,
-                }),
-                Animated.timing(value, {
-                    toValue: 1,
-                    duration,
-                    useNativeDriver,
-                }),
+                Animated.timing(value, makeTimingConfig(1)),
+                Animated.timing(value, makeTimingConfig(0)),
+                Animated.timing(value, makeTimingConfig(0)),
             ]),
         ),
     ])
