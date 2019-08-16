@@ -16,7 +16,7 @@
         "run-ipad": "yarn pre-run && react-native run-ios --simulator=\"iPad Air 2\"",
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard",
-        "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+        "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/generated/res/react/release",
         "bundle-ios": "yarn pre-bundle && yarn install-pods && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
         "rn-link": "react-native link",
         "bundle-html": "node ./scripts/bundle-html.js",
@@ -60,7 +60,7 @@
         "react-native-iap": "^3.3.9",
         "react-native-in-app-utils": "^6.0.1",
         "react-native-keychain": "^3.1.3",
-        "react-native-push-notification": "^3.1.8",
+        "react-native-push-notification": "^3.1.7",
         "react-native-screens": "^1.0.0-alpha.23",
         "react-native-sentry": "^0.43.2",
         "react-native-status-bar-height": "^2.4.0",
@@ -81,7 +81,7 @@
         "@types/jest": "^24.0.17",
         "@types/node": "^12.7.2",
         "@types/react": "^16.9.1",
-        "@types/react-native": "^0.60.4",
+        "@types/react-native": "^0.60.5",
         "@types/react-native-push-notification": "^3.0.6",
         "@types/react-navigation": "^3.0.8",
         "@types/react-test-renderer": "^16.9.0",
@@ -97,7 +97,7 @@
     },
     "resolutions": {
         "@types/react": "16.9.1",
-        "@types/react-native": "0.60.4"
+        "@types/react-native": "0.60.5"
     },
     "jest": {
         "preset": "react-native"
