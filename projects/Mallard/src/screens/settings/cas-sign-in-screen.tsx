@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { fetchAndPersistCASExpiry } from 'src/authentication/helpers'
@@ -7,6 +7,7 @@ import { CASAuthStatus } from 'src/authentication/credentials-chain'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { LoginInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
+import { useFormField } from 'src/hooks/use-form-field'
 
 const styles = StyleSheet.create({
     image: { height: 200, width: undefined },
@@ -18,27 +19,25 @@ const CasSignInScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const { setStatus } = useContext(AuthContext)
-    const [subscriberID, setSubscriberID] = useState('')
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
-    const onSubscriberIdChange = useCallback(value => {
-        setErrorMessage(null)
-        setSubscriberID(value)
-    }, [])
-
-    const [password, setPassword] = useState('')
-    const onPasswordChange = useCallback(value => {
-        setErrorMessage(null)
-        setPassword(value)
-    }, [])
+    const subscriberID = useFormField('', {
+        validator: subId => (subId ? null : 'Please enter a subscriber ID'),
+        onSet: () => setErrorMessage(null),
+    })
+    const password = useFormField('', {
+        validator: password =>
+            password ? null : 'Please enter a postcode or surname',
+        onSet: () => setErrorMessage(null),
+    })
 
     const handleSubmit = async () => {
         try {
             const expiry = await fetchAndPersistCASExpiry(
-                subscriberID,
-                password,
+                subscriberID.value,
+                password.value,
             )
             setStatus(CASAuthStatus(expiry))
         } catch (err) {
@@ -60,19 +59,18 @@ const CasSignInScreen = ({
         >
             <View>
                 <LoginInput
-                    error={null}
-                    onChangeText={onSubscriberIdChange}
-                    keyboardType="number-pad"
+                    error={subscriberID.error}
+                    onChangeText={subscriberID.setValue}
                     label="Subscriber ID (including all zeros)"
                     accessibilityLabel="subscriber id input"
-                    value={subscriberID}
+                    value={subscriberID.value}
                 />
                 <LoginInput
-                    error={null}
-                    onChangeText={onPasswordChange}
+                    error={password.error}
+                    onChangeText={password.setValue}
                     label="Postcode or surname"
                     accessibilityLabel="postcode or surname input"
-                    value={password}
+                    value={password.value}
                 />
                 <LoginButton type="cta" onPress={handleSubmit}>
                     Submit

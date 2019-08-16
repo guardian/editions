@@ -222,6 +222,7 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <LoginOverlay
+                        isFocused={() => navigation.isFocused()}
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
@@ -250,6 +251,7 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <LoginOverlay
+                        isFocused={() => navigation.isFocused()}
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
