@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Text, Dimensions, View, Alert, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -35,7 +35,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const { apiUrl } = settings
     return (
         <>
-            <Heading>💣 DEVELOPER ZONE 💣</Heading>
+            <Heading>🦆 SECRET DUCK MENU 🦆</Heading>
             <Footer>
                 <UiBodyCopy>
                     Only wander here if you know what you are doing!!
@@ -109,7 +109,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Hide this menu',
                         title: 'Hide this menu',
                         explainer:
-                            'Scroll down and tap the duck to bring it back',
+                            'Tap the version 7 times & confirm the fake scary message to bring it back',
                         data: {
                             onPress: () => {
                                 setSetting('isUsingProdDevtools', false)
@@ -156,6 +156,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
     const authHandler = useAuth()
+    const [versionClickedTimes, setVersionClickedTimes] = useState(0)
     const { signOut } = useContext(AuthContext)
     const styles = StyleSheet.create({
         signOut: {
@@ -326,7 +327,41 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             key: 'Version',
                             title: 'Version',
                             data: {
-                                onPress: () => {},
+                                onPress: () => {
+                                    if (!isUsingProdDevtools) {
+                                        setVersionClickedTimes(t => {
+                                            if (t < 7) return t + 1
+                                            Alert.alert(
+                                                'Delete all stored data',
+                                                'Are you sure?',
+                                                [
+                                                    {
+                                                        text: 'Delete data',
+                                                        style: 'destructive',
+                                                        onPress: () => {
+                                                            setSetting(
+                                                                'isUsingProdDevtools',
+                                                                true,
+                                                            )
+                                                            Alert.alert(
+                                                                'You are a developer now!',
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        text: 'Cancel',
+                                                        style: 'cancel',
+                                                        onPress: () => {
+                                                            AsyncStorage.clear()
+                                                        },
+                                                    },
+                                                ],
+                                                { cancelable: false },
+                                            )
+                                            return 0
+                                        })
+                                    }
+                                },
                             },
                             proxy: <Text>{getVersionInfo().version}</Text>,
                         },
@@ -345,50 +380,14 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         {`Send us feedback to ${FEEDBACK_EMAIL}`}
                     </UiBodyCopy>
                 </Footer>
-                {!isUsingProdDevtools ? (
-                    <>
-                        <View
-                            style={{
-                                height: Dimensions.get('window').height,
-                            }}
-                        />
-                        <Highlight
-                            style={{ alignItems: 'center' }}
-                            onPress={() => {
-                                setSetting('isUsingProdDevtools', true)
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    textAlign: 'center',
-                                    padding: 40,
-                                }}
-                            >
-                                🦆
-                            </Text>
-                        </Highlight>
-                    </>
-                ) : (
-                    <DevZone />
-                )}
+                {isUsingProdDevtools && <DevZone />}
             </ScrollContainer>
         </WithAppAppearance>
     )
 }
 
-SettingsScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => ({
+SettingsScreen.navigationOptions = {
     title: 'Settings',
-    headerTitleStyle: {
-        textAlign: 'center',
-        flex: 1,
-    },
-    headerLeft: () => (
-        <Button onPress={() => navigation.goBack(null)}>Back</Button>
-    ),
-})
+}
 
 export { SettingsScreen }
