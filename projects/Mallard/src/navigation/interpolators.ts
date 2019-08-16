@@ -5,7 +5,7 @@ import {
     setNavigationPosition,
 } from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
-import { routeNames } from '.'
+import { routeNames } from 'src/navigation/routes'
 
 export const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width

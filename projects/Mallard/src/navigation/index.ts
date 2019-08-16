@@ -27,7 +27,6 @@ import {
 import { supportsTransparentCards } from 'src/helpers/features'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 import { routeNames } from './routes'
-import { createModalNavigator } from 'src/components/navigation/modal'
 import { DownloadScreen } from 'src/screens/settings/download-screen'
 import { ApiScreen } from 'src/screens/settings/api-screen'
 import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
@@ -35,6 +34,7 @@ import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditi
 import { HelpScreen } from 'src/screens/settings/help-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
+import { createModalNavigator } from './navigators/modal'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -206,4 +206,4 @@ const RootNavigator = createAppContainer(
     ),
 )
 
-export { RootNavigator, routeNames }
+export { RootNavigator }
