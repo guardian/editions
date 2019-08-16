@@ -4,12 +4,7 @@ import {
     fetchCASExpiryForKeychainCredentials,
 } from './helpers'
 import { CasExpiry } from '../services/content-auth-service'
-import {
-    userDataCache,
-    casDataCache,
-    legacyCASExpiryCache,
-    iapReceiptCache,
-} from './storage'
+import { userDataCache, casDataCache, legacyCASExpiryCache } from './storage'
 import {
     ReceiptIOS,
     fetchActiveIOSSubscriptionReceipt,
@@ -165,13 +160,12 @@ const cachedCasAuthProvider = async () => {
     return auth || authTypeFromCAS(legacyCASExpiryCache.get())
 }
 
-const cachedIAPAuthProvider = () => iapReceiptCache.get().then(authTypeFromIAP)
-
 const cachedAuthChain = () =>
     runAuthChain([
         cachedIdentityAuthProvider,
         cachedCasAuthProvider,
-        cachedIAPAuthProvider,
+        // this is already cached as it reads from the file system
+        iapAuthProvider,
     ])
 
 export {

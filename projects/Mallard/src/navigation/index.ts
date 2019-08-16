@@ -15,6 +15,7 @@ import {
     OnboardingIntroScreen,
     OnboardingConsentScreen,
 } from 'src/screens/onboarding-screen'
+import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { NavigationScreenProp } from 'react-navigation'
@@ -115,6 +116,7 @@ const AppStack = createModalNavigator(
                 [routeNames.Help]: HelpScreen,
                 [routeNames.Credits]: CreditsScreen,
                 [routeNames.FAQ]: FAQScreen,
+                [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
             },
             {
                 defaultNavigationOptions: {

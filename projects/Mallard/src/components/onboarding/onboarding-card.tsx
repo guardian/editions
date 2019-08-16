@@ -44,20 +44,24 @@ const styles = StyleSheet.create({
 const appearances: {
     [key in CardAppearance]: {
         background: StyleProp<ViewStyle>
-        text: StyleProp<TextStyle>
+        titleText: StyleProp<TextStyle>
+        subtitleText: StyleProp<TextStyle>
     }
 } = {
     [CardAppearance.tomato]: StyleSheet.create({
         background: { backgroundColor: color.ui.tomato },
-        text: { color: color.palette.neutral[100] },
+        titleText: { color: color.palette.neutral[100] },
+        subtitleText: { color: color.palette.neutral[100] },
     }),
     [CardAppearance.apricot]: StyleSheet.create({
         background: { backgroundColor: color.ui.apricot },
-        text: { color: color.palette.neutral[100] },
+        titleText: { color: color.palette.neutral[100] },
+        subtitleText: { color: color.palette.neutral[100] },
     }),
     [CardAppearance.blue]: StyleSheet.create({
         background: { backgroundColor: color.ui.sea },
-        text: { color: color.primary },
+        titleText: { color: color.palette.neutral[100] },
+        subtitleText: { color: color.primary },
     }),
 }
 
@@ -101,7 +105,7 @@ const OnboardingCard = ({
                         style={[
                             getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
                             { marginBottom: size === 'big' ? 16 : 8 },
-                            appearances[appearance].text,
+                            appearances[appearance].titleText,
                         ]}
                     >
                         {title}
@@ -113,7 +117,7 @@ const OnboardingCard = ({
                                     'titlepiece',
                                     size === 'big' ? 1.5 : 1.25,
                                 ),
-                                appearances[appearance].text,
+                                appearances[appearance].subtitleText,
                             ]}
                         >
                             {subtitle}

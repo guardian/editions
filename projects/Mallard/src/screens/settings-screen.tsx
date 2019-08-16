@@ -116,6 +116,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             },
                         },
                     },
+                    {
+                        key: 'Build id',
+                        title: 'Build',
+                        explainer: getVersionInfo().commitId,
+                        data: {
+                            onPress: () => {},
+                        },
+                    },
                 ]}
             />
             <Heading>Your settings</Heading>
@@ -148,7 +156,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
     const authHandler = useAuth()
-    const { signOut, restorePurchases } = useContext(AuthContext)
+    const { signOut } = useContext(AuthContext)
 
     const styles = StyleSheet.create({
         signOut: {
@@ -200,13 +208,14 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             authed: () => [],
             unauthed: () => [
                 {
-                    key: 'Activate with subscriber ID',
-                    title: 'Activate with subscriber ID',
+                    key: `I'm already subscribed`,
+                    title: `I'm already subscribed`,
                     data: {
                         onPress: () => {
-                            navigation.navigate(routeNames.CasSignIn)
+                            navigation.navigate(routeNames.AlreadySubscribed)
                         },
                     },
+                    proxy: rightChevronIcon,
                 },
             ],
         }),
@@ -217,18 +226,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             <ScrollContainer>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={[
-                        ...signInListItems,
-                        {
-                            key: 'Restore purchases',
-                            title: 'Restore purchases',
-                            data: {
-                                onPress: () => {
-                                    restorePurchases()
-                                },
-                            },
-                        },
-                    ]}
+                    data={signInListItems}
                 />
                 <Heading>{``}</Heading>
                 <List
@@ -332,14 +330,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                                 onPress: () => {},
                             },
                             proxy: <Text>{getVersionInfo().version}</Text>,
-                        },
-                        {
-                            key: 'Build id',
-                            title: 'Build',
-                            data: {
-                                onPress: () => {},
-                            },
-                            proxy: <Text>{getVersionInfo().commitId}</Text>,
                         },
                     ]}
                 />
