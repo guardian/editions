@@ -17,10 +17,10 @@ import {
     StandfirstText,
 } from 'src/components/styled-text'
 import { APIPaths, imagePath } from 'src/paths'
-import { Wrap } from '../wrap/wrap'
-import { palette } from '@guardian/pasteup/palette'
+import { Wrap, MultilineWrap } from '../wrap/wrap'
 import { Multiline } from 'src/components/multiline'
 import { ArticleByline } from '../article-byline'
+import { getFont } from 'src/theme/typography'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -70,6 +70,7 @@ const GalleryImage = ({
 const captionStyles = StyleSheet.create({
     root: {
         color: color.textOverPhotoBackground,
+        ...getFont('sans', 0.9),
     },
 })
 const Caption = ({
@@ -93,13 +94,18 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     spacer: {
-        paddingVertical: metrics.vertical * 0.5,
+        paddingVertical: metrics.vertical * 0.6,
     },
+    whiteText: { color: color.palette.neutral[100] },
 })
 
 const GalleryItem = ({ element }: { element: ImageElement }) => {
     return (
-        <Wrap style={styles.spacer} rightRail={<Caption element={element} />}>
+        <Wrap
+            borderColor={styles.whiteText.color}
+            style={styles.spacer}
+            rightRail={<Caption element={element} />}
+        >
             <GalleryImage
                 accessibilityLabel={element.alt}
                 src={element.src}
@@ -121,30 +127,7 @@ const GalleryCoverItem = ({
     standfirst: GalleryArticle['standfirst']
 }) => {
     return (
-        <Wrap
-            bleeds
-            wide
-            borderColor={color.palette.neutral[60]}
-            rightRail={
-                <View>
-                    <HeadlineText weight="bold">{headline}</HeadlineText>
-                    {standfirst && (
-                        <StandfirstText>{standfirst}</StandfirstText>
-                    )}
-                    {byline && (
-                        <View
-                            style={{
-                                marginTop: metrics.vertical,
-                                marginBottom: metrics.vertical / 2,
-                            }}
-                        >
-                            <Multiline></Multiline>
-                            <ArticleByline>{byline}</ArticleByline>
-                        </View>
-                    )}
-                </View>
-            }
-        >
+        <>
             {element && (
                 <Image
                     style={{ width: '100%', flexGrow: 1, minHeight: 400 }}
@@ -153,19 +136,44 @@ const GalleryCoverItem = ({
                     }}
                 />
             )}
-        </Wrap>
+
+            <MultilineWrap
+                byline={
+                    <ArticleByline style={styles.whiteText}>
+                        {byline || ''}
+                    </ArticleByline>
+                }
+                borderColor={styles.whiteText.color}
+            >
+                <View style={{ paddingBottom: metrics.vertical * 2 }}>
+                    <HeadlineText
+                        style={[
+                            styles.whiteText,
+                            {
+                                fontFamily: getFont('titlepiece', 1).fontFamily,
+                                marginTop: metrics.vertical,
+                                marginRight: metrics.horizontal * 4,
+                            },
+                        ]}
+                        weight="bold"
+                    >
+                        {headline}
+                    </HeadlineText>
+                    {standfirst && (
+                        <StandfirstText style={styles.whiteText}>
+                            {standfirst}
+                        </StandfirstText>
+                    )}
+                </View>
+            </MultilineWrap>
+        </>
     )
 }
 
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
     return (
         <>
-            <View
-                style={[
-                    styles.background,
-                    { backgroundColor: color.palette.neutral[60] },
-                ]}
-            >
+            <View style={[styles.background]}>
                 <GalleryCoverItem
                     element={gallery.image}
                     headline={gallery.headline}
@@ -174,11 +182,14 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
                 ></GalleryCoverItem>
             </View>
             <View
-                style={[
-                    styles.background,
-                    { paddingVertical: metrics.vertical * 0.5 },
-                ]}
-            >
+                style={{
+                    height: 1,
+                    width: '100%',
+                    backgroundColor: styles.whiteText.color,
+                    marginTop: -1,
+                }}
+            ></View>
+            <View style={[styles.background]}>
                 {gallery.elements.map((element, index) => {
                     if (element.id === 'image') {
                         return <GalleryItem element={element} />

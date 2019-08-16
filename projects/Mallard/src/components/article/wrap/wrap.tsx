@@ -22,14 +22,13 @@ interface ChildPropTypes {
 interface ContentWrapperPropTypes extends ChildPropTypes {
     tablet?: boolean
     bleeds?: boolean
-    wide?: boolean
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
     >
 }
 
 interface ThreeColumnWrapperPropTypes
-    extends Exclude<ContentWrapperPropTypes, 'tablet' | 'wide'> {
+    extends Exclude<ContentWrapperPropTypes, 'tablet'> {
     backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
     rightRail?: ReactNode
@@ -162,46 +161,7 @@ const ThreeColumnWrapper = ({
     )
 }
 
-const TabletWideVerticalWrapper = ({
-    children,
-    backgroundColor,
-    ...props
-}: WrapperPropTypes) => (
-    <View style={props.style}>
-        {props.bleeds ? (
-            <EdgeToEdgeContentWrapper
-                header={props.header}
-                footer={props.footer}
-            >
-                {children}
-            </EdgeToEdgeContentWrapper>
-        ) : (
-            <ThreeColumnWrapper
-                {...{
-                    children,
-                    backgroundColor,
-                    ...props,
-                }}
-                rightRail={null}
-            />
-        )}
-        {props.rightRail && (
-            <ThreeColumnWrapper
-                backgroundColor={backgroundColor}
-                borderColor={props.borderColor}
-                rightRail={null}
-            >
-                {props.rightRail}
-            </ThreeColumnWrapper>
-        )}
-    </View>
-)
-
-const Wrap = ({
-    wide = false,
-    backgroundColor,
-    ...props
-}: WrapperPropTypes) => {
+const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
     const { width } = useDimensions()
     const breakpoint = getClosestBreakpoint(
         [0, Breakpoints.tabletVertical, Breakpoints.tabletLandscape],
@@ -215,17 +175,6 @@ const Wrap = ({
                 {props.rightRail && (
                     <ContentWrapper>{props.rightRail}</ContentWrapper>
                 )}
-            </View>
-        )
-    }
-
-    if (wide) {
-        return (
-            <View style={{ backgroundColor }}>
-                <TabletWideVerticalWrapper
-                    {...{ backgroundColor, ...props }}
-                    style={[props.style]}
-                />
             </View>
         )
     }
@@ -245,7 +194,7 @@ const Wrap = ({
 const ArticleFader = getFader('article')
 const multiStyles = StyleSheet.create({
     byline: {
-        paddingBottom: metrics.vertical / 2,
+        paddingBottom: metrics.vertical,
     },
     paddingTop: {
         paddingTop: metrics.vertical,
