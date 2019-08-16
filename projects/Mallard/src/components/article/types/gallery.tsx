@@ -124,7 +124,11 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
                 >
                     <View style={styles.arrow}>
                         <BigArrow
-                            direction={BigArrowDirection.top}
+                            direction={
+                                size < Breakpoints.tabletVertical
+                                    ? BigArrowDirection.top
+                                    : BigArrowDirection.left
+                            }
                             scale={1.2}
                             fill={color.main}
                         ></BigArrow>
