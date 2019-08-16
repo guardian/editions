@@ -138,4 +138,8 @@ const GdprConsentScreen = () => (
     </WithAppAppearance>
 )
 
+GdprConsentScreen.navigationOptions = {
+    title: 'Privacy Settings',
+}
+
 export { GdprConsent, GdprConsentScreen }

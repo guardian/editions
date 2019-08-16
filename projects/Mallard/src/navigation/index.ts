@@ -8,8 +8,6 @@ import { HomeScreen } from '../screens/home-screen'
 import { IssueScreen } from '../screens/issue-screen'
 import { ArticleScreen } from '../screens/article-screen'
 import { SettingsScreen } from '../screens/settings-screen'
-import { DownloadScreen } from '../screens/settings/download-screen'
-import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
@@ -20,11 +18,6 @@ import {
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
-import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
-import { HelpScreen } from 'src/screens/settings/help-screen'
-import { FAQScreen } from 'src/screens/settings/faq-screen'
-import { CreditsScreen } from 'src/screens/settings/credits-screen'
-import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
@@ -34,29 +27,15 @@ import {
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
-
-const routeNames = {
-    Issue: 'Issue',
-    Article: 'Article',
-    IssueList: 'IssueList',
-    Downloads: 'Downloads',
-    Settings: 'Settings',
-    Endpoints: 'Endpoints',
-    GdprConsent: 'GdprConsent',
-    PrivacyPolicy: 'PrivacyPolicy',
-    TermsAndConditions: 'TermsAndConditions',
-    Help: 'Help',
-    Credits: 'Credits',
-    FAQ: 'FAQ',
-    AlreadySubscribed: 'AlreadySubscribed',
-    SignIn: 'SignIn',
-    CasSignIn: 'CasSignIn',
-    onboarding: {
-        OnboardingStart: 'OnboardingStart',
-        OnboardingConsent: 'OnboardingConsent',
-        OnboardingConsentInline: 'OnboardingConsentInline',
-    },
-}
+import { routeNames } from './routes'
+import { DownloadScreen } from 'src/screens/settings/download-screen'
+import { ApiScreen } from 'src/screens/settings/api-screen'
+import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
+import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
+import { HelpScreen } from 'src/screens/settings/help-screen'
+import { CreditsScreen } from 'src/screens/settings/credits-screen'
+import { FAQScreen } from 'src/screens/settings/faq-screen'
+import { createModalNavigator } from './navigators/modal'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -78,7 +57,7 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
     },
 })
 
-const AppStack = createStackNavigator(
+const AppStack = createModalNavigator(
     {
         [routeNames.Issue]: createStackNavigator(
             {
@@ -124,7 +103,9 @@ const AppStack = createStackNavigator(
                     : {}),
             },
         ),
-        _: createStackNavigator(
+    },
+    {
+        [routeNames.Settings]: createStackNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
                 [routeNames.Downloads]: DownloadScreen,
@@ -141,17 +122,8 @@ const AppStack = createStackNavigator(
                 defaultNavigationOptions: {
                     ...navOptionsWithGraunHeader,
                 },
-                initialRouteName: routeNames.Settings,
             },
         ),
-    },
-    {
-        mode: 'modal',
-        headerMode: 'none',
-        initialRouteName: routeNames.Issue,
-        defaultNavigationOptions: {
-            gesturesEnabled: false,
-        },
     },
 )
 
@@ -236,4 +208,4 @@ const RootNavigator = createAppContainer(
     ),
 )
 
-export { RootNavigator, routeNames }
+export { RootNavigator }

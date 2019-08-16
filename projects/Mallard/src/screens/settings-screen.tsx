@@ -1,4 +1,4 @@
-import React, { useContext, ReactElement } from 'react'
+import React, { useContext } from 'react'
 import { Text, Dimensions, View, Alert, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -17,7 +17,6 @@ import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { routeNames } from 'src/navigation'
 import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
 import {
@@ -28,6 +27,7 @@ import {
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
+import { routeNames } from 'src/navigation/routes'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -349,7 +349,9 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 {!isUsingProdDevtools ? (
                     <>
                         <View
-                            style={{ height: Dimensions.get('window').height }}
+                            style={{
+                                height: Dimensions.get('window').height,
+                            }}
                         />
                         <Highlight
                             style={{ alignItems: 'center' }}
@@ -374,6 +376,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         </WithAppAppearance>
     )
 }
+
 SettingsScreen.navigationOptions = ({
     navigation,
 }: {

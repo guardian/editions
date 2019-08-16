@@ -37,7 +37,7 @@ import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getColor } from 'src/helpers/transform'
 import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 import { LoginOverlay } from 'src/components/login/login-overlay'
-import { routeNames } from 'src/navigation'
+import { routeNames } from 'src/navigation/routes'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { useDimensions } from 'src/hooks/use-screen'
 

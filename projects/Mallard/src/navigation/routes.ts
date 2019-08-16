@@ -1,0 +1,22 @@
+export const routeNames = {
+    Issue: 'Issue',
+    Article: 'Article',
+    IssueList: 'IssueList',
+    Downloads: 'Downloads',
+    Settings: 'Settings',
+    Endpoints: 'Endpoints',
+    GdprConsent: 'GdprConsent',
+    PrivacyPolicy: 'PrivacyPolicy',
+    TermsAndConditions: 'TermsAndConditions',
+    Help: 'Help',
+    Credits: 'Credits',
+    FAQ: 'FAQ',
+    AlreadySubscribed: 'AlreadySubscribed',
+    SignIn: 'SignIn',
+    CasSignIn: 'CasSignIn',
+    onboarding: {
+        OnboardingStart: 'OnboardingStart',
+        OnboardingConsent: 'OnboardingConsent',
+        OnboardingConsentInline: 'OnboardingConsentInline',
+    },
+}
