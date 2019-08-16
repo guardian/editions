@@ -56,7 +56,7 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
     },
 })
 
-const AppStack = createStackNavigator(
+const AppStack = createModalNavigator(
     {
         [routeNames.Issue]: createStackNavigator(
             {
@@ -102,7 +102,9 @@ const AppStack = createStackNavigator(
                     : {}),
             },
         ),
-        [routeNames.Settings]: createModalNavigator({
+    },
+    {
+        [routeNames.Settings]: {
             [routeNames.Settings]: SettingsScreen,
             [routeNames.Downloads]: DownloadScreen,
             [routeNames.Endpoints]: ApiScreen,
@@ -112,16 +114,6 @@ const AppStack = createStackNavigator(
             [routeNames.Help]: HelpScreen,
             [routeNames.Credits]: CreditsScreen,
             [routeNames.FAQ]: FAQScreen,
-        }),
-    },
-    {
-        mode: 'modal',
-        headerMode: 'none',
-        transparentCard: true,
-        cardOverlayEnabled: true,
-        initialRouteName: routeNames.Issue,
-        defaultNavigationOptions: {
-            gesturesEnabled: false,
         },
     },
 )
