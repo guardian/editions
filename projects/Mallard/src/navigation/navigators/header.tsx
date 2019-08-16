@@ -5,13 +5,12 @@ import {
     NavigationParams,
 } from 'react-navigation'
 
-import React, { ReactElement } from 'react'
+import React from 'react'
 import { Header } from 'src/components/layout/header/header'
 import { Button } from 'src/components/button/button'
 
 interface NavigationOptions {
     title?: string
-    headerLeft: () => ReactElement
 }
 
 type NavOrFn =

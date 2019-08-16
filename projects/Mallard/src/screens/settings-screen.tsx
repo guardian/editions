@@ -1,23 +1,17 @@
 import React, { useContext, useState } from 'react'
-import { Text, Dimensions, View, Alert, StyleSheet } from 'react-native'
+import { Text, Alert, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { List } from 'src/components/lists/list'
-import {
-    withNavigation,
-    NavigationInjectedProps,
-    NavigationScreenProp,
-} from 'react-navigation'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { useSettings } from 'src/hooks/use-settings'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
 import {
     useIdentity,
