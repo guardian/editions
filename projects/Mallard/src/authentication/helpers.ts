@@ -8,7 +8,6 @@ import {
     getLegacyUserAccessToken,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
-    iapReceiptCache,
 } from './storage'
 import {
     fetchMembershipData,
