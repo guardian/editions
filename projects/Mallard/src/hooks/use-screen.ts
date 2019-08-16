@@ -11,7 +11,7 @@ const useDimensions = (): ScaledSize => {
                 Parameters<typeof Dimensions.addEventListener>[1]
             >[0],
         ) => {
-            setDimensions(ev.screen)
+            setDimensions(ev.window)
         }
         Dimensions.addEventListener('change', listener)
         return () => {
