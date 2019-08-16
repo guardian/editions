@@ -18,9 +18,10 @@ import {
 } from 'src/components/styled-text'
 import { APIPaths, imagePath } from 'src/paths'
 import { Wrap, MultilineWrap } from '../wrap/wrap'
-import { Multiline } from 'src/components/multiline'
 import { ArticleByline } from '../article-byline'
 import { getFont } from 'src/theme/typography'
+import { useArticle } from 'src/hooks/use-article'
+import { BigArrow } from 'src/components/icons/BigArrow'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -97,14 +98,26 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical * 0.6,
     },
     whiteText: { color: color.palette.neutral[100] },
+    arrowContainer: {
+        paddingLeft: 10,
+    },
+    arrow: { position: 'absolute', top: 3, left: -2 },
 })
 
 const GalleryItem = ({ element }: { element: ImageElement }) => {
+    const [color] = useArticle()
     return (
         <Wrap
             borderColor={styles.whiteText.color}
             style={styles.spacer}
-            rightRail={<Caption element={element} />}
+            rightRail={
+                <View style={styles.arrowContainer}>
+                    <View style={styles.arrow}>
+                        <BigArrow scale={1.2} fill={color.main}></BigArrow>
+                    </View>
+                    <Caption element={element} />
+                </View>
+            }
         >
             <GalleryImage
                 accessibilityLabel={element.alt}
@@ -144,6 +157,7 @@ const GalleryCoverItem = ({
                     </ArticleByline>
                 }
                 borderColor={styles.whiteText.color}
+                multilineColor={styles.whiteText.color}
             >
                 <View style={{ paddingBottom: metrics.vertical * 2 }}>
                     <HeadlineText
@@ -185,7 +199,7 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
                 style={{
                     height: 1,
                     width: '100%',
-                    backgroundColor: styles.whiteText.color,
+                    backgroundColor: color.palette.neutral[46],
                     marginTop: -1,
                 }}
             ></View>

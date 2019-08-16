@@ -3,9 +3,10 @@ import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints, getClosestBreakpoint } from 'src/theme/breakpoints'
-import { ArticleMultiline } from '../article-multiline'
 import { getFader } from 'src/components/layout/animators/fader'
 import { useDimensions } from 'src/hooks/use-screen'
+import { getFont } from 'src/theme/typography'
+import { Multiline } from 'src/components/multiline'
 
 export enum WrapLayout {
     narrow,
@@ -195,6 +196,7 @@ const ArticleFader = getFader('article')
 const multiStyles = StyleSheet.create({
     byline: {
         paddingBottom: metrics.vertical,
+        minHeight: getFont('text', 1).lineHeight * 2.75,
     },
     paddingTop: {
         paddingTop: metrics.vertical,
@@ -207,9 +209,11 @@ const multiStyles = StyleSheet.create({
 
 const MultilineWrap = ({
     byline,
+    multilineColor = color.line,
     ...props
 }: Exclude<WrapperPropTypes, 'header' | 'style' | 'footer'> & {
     byline: ReactNode
+    multilineColor?: string
 }) => (
     <>
         <Wrap
@@ -223,7 +227,7 @@ const MultilineWrap = ({
                 style={[multiStyles.byline]}
                 header={
                     <ArticleFader>
-                        <ArticleMultiline />
+                        <Multiline count={4} color={multilineColor} />
                     </ArticleFader>
                 }
                 footer={
