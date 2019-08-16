@@ -21,7 +21,8 @@ import { Wrap, MultilineWrap } from '../wrap/wrap'
 import { ArticleByline } from '../article-byline'
 import { getFont } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
-import { BigArrow } from 'src/components/icons/BigArrow'
+import { BigArrow, BigArrowDirection } from 'src/components/icons/BigArrow'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -101,6 +102,9 @@ const styles = StyleSheet.create({
     arrowContainer: {
         paddingLeft: 10,
     },
+    arrowContainerMobile: {
+        paddingBottom: metrics.vertical,
+    },
     arrow: { position: 'absolute', top: 3, left: -2 },
 })
 
@@ -110,14 +114,24 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
         <Wrap
             borderColor={styles.whiteText.color}
             style={styles.spacer}
-            rightRail={
-                <View style={styles.arrowContainer}>
+            rightRail={size => (
+                <View
+                    style={[
+                        styles.arrowContainer,
+                        size < Breakpoints.tabletVertical &&
+                            styles.arrowContainerMobile,
+                    ]}
+                >
                     <View style={styles.arrow}>
-                        <BigArrow scale={1.2} fill={color.main}></BigArrow>
+                        <BigArrow
+                            direction={BigArrowDirection.top}
+                            scale={1.2}
+                            fill={color.main}
+                        ></BigArrow>
                     </View>
                     <Caption element={element} />
                 </View>
-            }
+            )}
         >
             <GalleryImage
                 accessibilityLabel={element.alt}

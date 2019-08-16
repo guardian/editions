@@ -32,7 +32,9 @@ interface ThreeColumnWrapperPropTypes
     extends Exclude<ContentWrapperPropTypes, 'tablet'> {
     backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
-    rightRail?: ReactNode
+    rightRail?: (
+        position: Breakpoints.zero | Breakpoints.tabletVertical,
+    ) => ReactNode
 }
 
 interface WrapperPropTypes
@@ -154,7 +156,7 @@ const ThreeColumnWrapper = ({
                             innerProps.style,
                         ]}
                     >
-                        {rightRail}
+                        {rightRail(Breakpoints.tabletVertical)}
                     </View>
                 )}
             </View>
@@ -171,11 +173,11 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
 
     if (breakpoint < Breakpoints.tabletVertical) {
         return (
-            <View style={[props.style, { backgroundColor }]}>
-                <ContentWrapper {...props} />
-                {props.rightRail && (
-                    <ContentWrapper>{props.rightRail}</ContentWrapper>
-                )}
+            <View style={[{ backgroundColor }]}>
+                <ContentWrapper {...props}>
+                    {props.children}
+                    {props.rightRail && props.rightRail(Breakpoints.zero)}
+                </ContentWrapper>
             </View>
         )
     }
