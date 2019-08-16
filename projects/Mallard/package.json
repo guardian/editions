@@ -85,6 +85,7 @@
         "@types/react-navigation": "^3.0.8",
         "@types/react-test-renderer": "^16.9.0",
         "@types/validator": "^10.11.2",
+        "aws-sdk": "^2.511.0",
         "babel-jest": "^24.8.0",
         "fetch-mock": "^7.3.7",
         "jest": "^24.8.0",
