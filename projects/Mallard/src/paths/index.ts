@@ -24,7 +24,7 @@ const FSPaths = {
     issuesDir,
     issueRoot,
     issueZip: (issueId: string) => `${issueRoot(issueId)}.zip`,
-    issue: () => issuesDir,
+    issue: (issueId: string) => `${issueRoot(issueId)}/issue`,
     collection: (issueId: string, collectionId: string) =>
         `${issueRoot(issueId)}/collection/${collectionId}`,
     front: (issueId: string, frontId: string) =>

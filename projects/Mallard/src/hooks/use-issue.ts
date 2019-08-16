@@ -18,29 +18,29 @@ export const useIssueWithResponse = <T>(
 ) => withResponse<T>(useCachedOrPromise<T>(getter, deps))
 
 export const getIssueResponse = (issue: Issue['key']) => {
-    console.log("getIssueResponse")
-    console.log("FS PATHS", FSPaths.issue())
-    console.log("API PATH", APIPaths.issue(issue))
-    return fetchFromIssue<Issue>(issue, FSPaths.issue() + "/" + issue, APIPaths.issue(issue), {
-        validator: res => {
-            return res.fronts != null
+    return fetchFromIssue<Issue>(
+        issue,
+        FSPaths.issue(issue),
+        APIPaths.issue(issue),
+        {
+            validator: res => {
+                return res.fronts != null
+            },
         },
-    })
+    )
 }
 
 // export const useIssueResponse = (issue: Issue['key']) =>
 //     useIssueWithResponse(getIssueResponse(issue), [issue])
 
 export const useIssueOrLatestResponse = (issue?: Issue['key']) => {
-    console.log("USE ISSUE OR LATEST RESPONSE", issue)
-    return useIssueWithResponse(issue ? getIssueResponse(issue) : getLatestIssue(), [
-        issue || 'latest',
-    ])
+    return useIssueWithResponse(
+        issue ? getIssueResponse(issue) : getLatestIssue(),
+        [issue || 'latest'],
+    )
 }
-    
 
 export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) => {
-    console.log("FSPaths.front", FSPaths.front(issue, front))
     return fetchFromIssue<Front>(
         issue,
         FSPaths.front(issue, front),

@@ -12,16 +12,14 @@ type CacheType = 'api' | 'issue' | 'weather'
 
 const withCache = <T>(cacheType: CacheType) => ({
     store: (path: string, data: T) => {
-        // console.log("STORING IN CACHE: ", cacheType, path, data)
         cacheStore[cacheType][path] = data
     },
     clear: (path: string) => {
         delete cacheStore[cacheType][path]
     },
     retrieve: (path: string): T | undefined => {
-        // console.log("GETTING FROM CACHE", cacheStore[cacheType][path])
         return cacheStore[cacheType][path]
-    }
+    },
 })
 
 const clearCache = () => {

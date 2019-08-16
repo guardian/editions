@@ -60,8 +60,6 @@ const pathToFile = (basePath: string = '') => async (
     const path = basePath + '/' + filePath
     const { size: fsSize, type: fsType } = await RNFetchBlob.fs.stat(path)
 
-    console.log(fsType)
-
     const type =
         fsType === 'directory'
             ? 'issue'
@@ -71,16 +69,13 @@ const pathToFile = (basePath: string = '') => async (
             ? 'json'
             : 'other'
 
-            console.log(type)
-    
-
     const id = filePath.split('.')[0]
     const size = parseInt(fsSize)
 
     if (type === 'issue') {
         const id = fileName(path)
         try {
-            const issue = await getJson(path)
+            const issue = await getJson(FSPaths.issue(id))
             return {
                 filename: filePath,
                 path,
@@ -89,7 +84,7 @@ const pathToFile = (basePath: string = '') => async (
                 type,
                 issue,
             }
-        } catch {
+        } catch (e) {
             return {
                 filename: filePath,
                 path,
@@ -155,20 +150,16 @@ export const downloadIssue = (issue: File['id']) => {
 
 export const unzipIssue = (issue: File['id']) => {
     const zipFilePath = FSPaths.issueZip(issue)
-    const outputPath = FSPaths.issue()
+    const outputPath = FSPaths.issuesDir
     return unzip(zipFilePath, outputPath).then(() =>
         RNFetchBlob.fs.unlink(zipFilePath),
     )
 }
 
 export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
-    (await getFileList()).find(
-        file => {
-            console.log(file)
-            console.log(fileIsIssue(file))
-            return fileIsIssue(file) && file.issue.key === issue
-        },
-    ) !== undefined
+    (await getFileList()).find(file => {
+        return fileIsIssue(file) && file.issue.key === issue
+    }) !== undefined
 
 /*
 Cheeky size helper
