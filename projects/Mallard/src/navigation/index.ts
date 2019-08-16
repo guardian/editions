@@ -104,17 +104,24 @@ const AppStack = createModalNavigator(
         ),
     },
     {
-        [routeNames.Settings]: {
-            [routeNames.Settings]: SettingsScreen,
-            [routeNames.Downloads]: DownloadScreen,
-            [routeNames.Endpoints]: ApiScreen,
-            [routeNames.GdprConsent]: GdprConsentScreen,
-            [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
-            [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
-            [routeNames.Help]: HelpScreen,
-            [routeNames.Credits]: CreditsScreen,
-            [routeNames.FAQ]: FAQScreen,
-        },
+        [routeNames.Settings]: createStackNavigator(
+            {
+                [routeNames.Settings]: SettingsScreen,
+                [routeNames.Downloads]: DownloadScreen,
+                [routeNames.Endpoints]: ApiScreen,
+                [routeNames.GdprConsent]: GdprConsentScreen,
+                [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
+                [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
+                [routeNames.Help]: HelpScreen,
+                [routeNames.Credits]: CreditsScreen,
+                [routeNames.FAQ]: FAQScreen,
+            },
+            {
+                defaultNavigationOptions: {
+                    ...navOptionsWithGraunHeader,
+                },
+            },
+        ),
     },
 )
 
