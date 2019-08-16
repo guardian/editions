@@ -70,6 +70,7 @@ const Article = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const html = useMemo(() => (article ? render(article) : ''), [article])
     const [, { type }] = useArticle()
+
     return (
         <View style={styles.container}>
             <Fader first position={'article'} />

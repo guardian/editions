@@ -175,7 +175,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsAuthing(false)
             })
         }
-    }, [isConnected, authAttempt]) // we don't care about isAuthing changing
+    }, [isConnected, authAttempt, isAuthing]) // we don't care about isAuthing changing
 
     return (
         <AuthContext.Provider

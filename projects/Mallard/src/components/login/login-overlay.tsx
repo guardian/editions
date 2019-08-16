@@ -67,7 +67,7 @@ const ModalOpener = ({
             }
         }, 7000)
         return () => clearTimeout(id)
-    }, [])
+    }, [isFocused, isOpenRef, open, renderModalRef])
 
     // ensure the modal is closed on unmount
     useEffect(() => () => close(), [close])
