@@ -3,6 +3,7 @@ import { View, StyleSheet, Animated } from 'react-native'
 import { AnimatedValue } from 'react-navigation'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { metrics } from 'src/theme/spacing'
 
 const modalStyles = StyleSheet.create({
     root: {
@@ -19,6 +20,8 @@ const modalStyles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     modal: {
+        borderRadius: metrics.radius,
+        overflow: 'hidden',
         width: 400,
         height: 600,
         backgroundColor: 'red',
