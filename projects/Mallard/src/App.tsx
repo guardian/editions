@@ -74,8 +74,8 @@ export default class App extends React.Component<{}, {}> {
             <ErrorBoundary>
                 <FileSystemProvider>
                     <SettingsProvider>
-                        <AuthProvider>
-                            <Modal>
+                        <Modal>
+                            <AuthProvider>
                                 <StatusBar
                                     animated={true}
                                     barStyle="light-content"
@@ -84,8 +84,8 @@ export default class App extends React.Component<{}, {}> {
                                 <View style={styles.appContainer}>
                                     <RootNavigator {...rootNavigationProps} />
                                 </View>
-                            </Modal>
-                        </AuthProvider>
+                            </AuthProvider>
+                        </Modal>
                     </SettingsProvider>
                 </FileSystemProvider>
             </ErrorBoundary>

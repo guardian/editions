@@ -16,8 +16,8 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const rightChevronIcon = <RightChevron />
 
     const restoringLabel = isRestoring
-        ? 'Restore App Store subscription'
-        : 'Restoring ...'
+        ? 'Restoring ...'
+        : 'Restore App Store subscription'
 
     return (
         <WithAppAppearance value={'settings'}>

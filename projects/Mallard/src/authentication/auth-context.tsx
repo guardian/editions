@@ -14,7 +14,8 @@ import {
 import { UserData, canViewEdition } from './helpers'
 import { AUTH_TTL } from 'src/constants'
 import { tryToRestoreActiveIOSSubscriptionToAuth } from 'src/services/iap'
-import { Alert } from 'react-native'
+import { useModal } from 'src/components/modal'
+import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 
 interface AuthAttempt {
     time: number
@@ -155,6 +156,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         status: pending,
     })
     const { isConnected } = useNetInfo()
+    const { open } = useModal()
 
     useEffect(() => {
         if (isAuthing || !needsReauth(authAttempt, { isConnected })) return
@@ -187,7 +189,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 },
                 isRestoring,
                 isAuthing,
-                restorePurchases: async () => {
+                restorePurchases: async function restorePurchases() {
                     // await the receipt being added to the system by iOS
                     // this will prompt a user to login to their iTunes account
 
@@ -207,10 +209,20 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                                 ),
                             )
                         } else {
-                            Alert.alert('Could not find a subscription')
+                            open(close => (
+                                <MissingIAPModalCard
+                                    close={close}
+                                    onTryAgain={restorePurchases}
+                                />
+                            ))
                         }
                     } catch (e) {
-                        Alert.alert('Something went wrong, please try again')
+                        open(close => (
+                            <MissingIAPModalCard
+                                close={close}
+                                onTryAgain={restorePurchases}
+                            />
+                        ))
                     } finally {
                         setIsRestoring(false)
                     }
