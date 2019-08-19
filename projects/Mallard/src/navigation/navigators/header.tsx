@@ -44,7 +44,7 @@ const wrapNavigatorWithHeader = (
                 <Header
                     leftAction={
                         <Button
-                            icon=""
+                            icon={'\uE00A'}
                             alt="Back"
                             onPress={() => navigation.goBack(null)}
                         ></Button>
