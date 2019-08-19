@@ -17,6 +17,9 @@ export const elementParser = (
                     html: element.textTypeData.html,
                 }
             }
+            console.warn(`Text element missing element data.`)
+            break
+
         case ElementType.IMAGE:
             const image = getImage(element.assets)
             if (element.imageTypeData && image) {
@@ -28,8 +31,11 @@ export const elementParser = (
                         element.imageTypeData.caption &&
                         cleanupHtml(element.imageTypeData.caption),
                     copyright: element.imageTypeData.copyright,
+                    credit: element.imageTypeData.credit,
                 }
             }
+            console.warn(`Image element missing element data.`)
+            break
         case ElementType.TWEET:
             if (
                 element.tweetTypeData &&
@@ -42,20 +48,21 @@ export const elementParser = (
                     url: element.tweetTypeData.url,
                 }
             }
+            console.warn(`Tweet element missing element data.`)
+            break
         case ElementType.PULLQUOTE:
-            if (
-                element.pullquoteTypeData &&
-                element.pullquoteTypeData.attribution &&
-                element.pullquoteTypeData.html
-            ) {
+            if (element.pullquoteTypeData && element.pullquoteTypeData.html) {
                 return {
                     id: 'pullquote',
                     html: element.pullquoteTypeData.html,
                     role: element.pullquoteTypeData.role,
                 }
             }
+            console.warn(`Pullquote element missing element data.`)
+            break
         case ElementType.CONTENTATOM:
             return renderAtomElement(element.contentAtomTypeData, atoms)
     }
+    console.warn(`Failed to render element ${JSON.stringify(element)}`)
     return { id: 'unknown' }
 }

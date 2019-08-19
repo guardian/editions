@@ -5,12 +5,12 @@ import { StyleSheet, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 
-export const getEnumPosition = <T extends string>(
-    value: { [key in T]: string },
+export const getEnumPosition = <T extends {}>(
+    value: T,
     position: number,
-): R => {
+): T[keyof T] => {
     const enumAsArray = Object.values(value)
-    return enumAsArray[position]
+    return enumAsArray[position] as T[keyof T]
 }
 
 const styles = StyleSheet.create({
