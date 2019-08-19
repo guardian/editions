@@ -1,23 +1,17 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { ArticleImage } from '../article-image'
-import { longReadHeaderStyles } from '../styles'
 import { ArticleHeaderProps } from './types'
-import { Multiline } from '../../multiline'
 import { ArticleByline } from '../article-byline'
-import {
-    HeadlineText,
-    HeadlineKickerText,
-    StandfirstText,
-} from 'src/components/styled-text'
+import { HeadlineText } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
 import { MultilineWrap } from '../wrap/wrap'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { ArticleStandfirst } from '../article-standfirst'
-import { useArticle } from 'src/hooks/use-article'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { useMediaQuery } from 'src/hooks/use-screen'
+import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
+import { HangyTagKicker } from '../article-kicker/tag-kicker'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },
@@ -31,9 +25,6 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         flexShrink: 1,
         fontFamily: getFont('headline', 1, 'bold').fontFamily,
-    },
-    kickerMobile: {
-        marginLeft: metrics.article.sides * -1,
     },
     kickerHolder: {
         flexDirection: 'column',
@@ -54,13 +45,13 @@ const LongReadHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const [articleColor] = useArticle()
+    const { height } = useDimensions()
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <>
             {image && (
                 <ArticleImage
-                    style={{ width: '100%', height: 300 }}
+                    style={{ width: '100%', height: height * 0.8 }}
                     image={image}
                 />
             )}
@@ -77,21 +68,7 @@ const LongReadHeader = ({
                 multilineColor={styles.whiteText.color}
             >
                 <View style={{ paddingBottom: metrics.vertical * 2 }}>
-                    {kicker ? (
-                        <View style={styles.kickerHolder}>
-                            <HeadlineKickerText
-                                style={[
-                                    styles.kicker,
-                                    !isTablet && styles.kickerMobile,
-                                    {
-                                        backgroundColor: articleColor.main,
-                                    },
-                                ]}
-                            >
-                                {kicker}
-                            </HeadlineKickerText>
-                        </View>
-                    ) : null}
+                    {kicker ? <HangyTagKicker>{kicker}</HangyTagKicker> : null}
                     <HeadlineText style={[styles.whiteText, styles.headline]}>
                         {headline}
                     </HeadlineText>
