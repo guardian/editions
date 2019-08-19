@@ -8,7 +8,7 @@ import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 export const elementParser = (
     id: string,
     atoms: { [key: string]: IAtom[] },
-) => async (element: IBlockElement): Promise<BlockElement> => {
+) => async (element: IBlockElement): Promise<BlockElement | undefined> => {
     switch (element.type) {
         case ElementType.TEXT:
             if (element.textTypeData && element.textTypeData.html) {
@@ -17,6 +17,9 @@ export const elementParser = (
                     html: element.textTypeData.html,
                 }
             }
+            console.warn(`Text element missing element data.`)
+            break
+        //fix these
         case ElementType.IMAGE:
             const image = getImage(element.assets)
             if (element.imageTypeData && image) {
@@ -30,6 +33,8 @@ export const elementParser = (
                     copyright: element.imageTypeData.copyright,
                 }
             }
+            console.warn(`Image element missing element data.`)
+            break
         case ElementType.TWEET:
             if (
                 element.tweetTypeData &&
@@ -42,20 +47,21 @@ export const elementParser = (
                     url: element.tweetTypeData.url,
                 }
             }
+            console.warn(`Tweet element missing element data.`)
+            break
         case ElementType.PULLQUOTE:
-            if (
-                element.pullquoteTypeData &&
-                element.pullquoteTypeData.attribution &&
-                element.pullquoteTypeData.html
-            ) {
+            if (element.pullquoteTypeData && element.pullquoteTypeData.html) {
                 return {
                     id: 'pullquote',
                     html: element.pullquoteTypeData.html,
                     role: element.pullquoteTypeData.role,
                 }
             }
+            console.warn(`Pullquote element missing element data.`)
+            break
         case ElementType.CONTENTATOM:
             return renderAtomElement(element.contentAtomTypeData, atoms)
     }
+    console.warn(`Failed to render element ${JSON.stringify(element)}`)
     return { id: 'unknown' }
 }
