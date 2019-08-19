@@ -40,9 +40,9 @@ import {
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
-import { navigateToArticle } from 'src/navigation/helpers/base'
-import { APIPaths } from 'src/paths'
+import { navigateToArticle } from 'src/navigation/helpers'
 import { getFont } from 'src/theme/typography'
+import { ImageResource } from '../image-resource'
 
 interface TappablePropTypes {
     style?: StyleProp<ViewStyle>
@@ -53,6 +53,7 @@ interface TappablePropTypes {
 
 export interface PropTypes extends TappablePropTypes {
     size: ItemSizes
+    issueID: string
 }
 
 /*
@@ -188,21 +189,15 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const CoverItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
                 {'image' in article && article.image ? (
-                    <Image
+                    <ImageResource
+                        issueID={issueID}
                         style={coverStyles.cover}
-                        source={{
-                            uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                                'article',
-                                'phone',
-                                article.image.source,
-                                article.image.path,
-                            )}`,
-                        }}
+                        image={article.image}
                     />
                 ) : null}
                 <TextBlock
@@ -252,23 +247,17 @@ const getImageHeight = ({ story, layout }: ItemSizes) => {
     }
 }
 
-const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article && article.image ? (
-                <Image
+                <ImageResource
+                    issueID={issueID}
                     style={[
                         imageStyles.image,
                         { height: getImageHeight(size) },
                     ]}
-                    source={{
-                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                            'issue',
-                            'phone',
-                            article.image.source,
-                            article.image.path,
-                        )}`,
-                    }}
+                    image={article.image}
                 />
             ) : null}
             <TextBlock
@@ -304,7 +293,12 @@ const splitImageStyles = StyleSheet.create({
     },
 })
 
-const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SplitImageItem = ({
+    article,
+    issueID,
+    size,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
@@ -315,21 +309,10 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     {...{ size }}
                 />
                 {'image' in article && article.image ? (
-                    <Image
-                        style={[
-                            splitImageStyles.image,
-                            size.layout === PageLayoutSizes.tablet &&
-                                size.story.width === 3 &&
-                                splitImageStyles.wideImage,
-                        ]}
-                        source={{
-                            uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                                'issue',
-                                'phone',
-                                article.image.source,
-                                article.image.path,
-                            )}`,
-                        }}
+                    <ImageResource
+                        issueID={issueID}
+                        style={[splitImageStyles.image]}
+                        image={article.image}
                     />
                 ) : null}
             </View>
@@ -364,20 +347,19 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+const SuperHeroImageItem = ({
+    article,
+    issueID,
+    size,
+    ...tappableProps
+}: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
-                <Image
+                <ImageResource
+                    issueID={issueID}
                     style={[superHeroImageStyles.image]}
-                    source={{
-                        uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                            'issue',
-                            'phone',
-                            article.image.source,
-                            article.image.path,
-                        )}`,
-                    }}
+                    image={article.image}
                 />
             ) : null}
             <TextBlock
@@ -413,21 +395,17 @@ const splashImageStyles = StyleSheet.create({
     },
 })
 
-const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
+const SplashImageItem = ({ article, issueID, ...tappableProps }: PropTypes) => {
     if (!article.image)
-        return <SuperHeroImageItem {...tappableProps} {...{ article }} />
+        return (
+            <SuperHeroImageItem {...tappableProps} {...{ article, issueID }} />
+        )
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            <Image
+            <ImageResource
+                issueID={issueID}
                 style={[splashImageStyles.image]}
-                source={{
-                    uri: `${APIPaths.mediaBackend}${APIPaths.media(
-                        'issue',
-                        'phone',
-                        article.image.source,
-                        article.image.path,
-                    )}`,
-                }}
+                image={article.image}
             />
             <HeadlineCardText style={[splashImageStyles.hidden]}>
                 {article.kicker}

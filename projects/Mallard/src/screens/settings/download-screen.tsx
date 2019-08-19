@@ -105,7 +105,10 @@ export const DownloadScreen = () => {
                         onPress={() => {
                             downloadAndUnzipIssue('2019-07-20')
                                 .then(async () => {
-                                    downloadAndUnzipIssue('2019-07-20-tabletXL')
+                                    downloadAndUnzipIssue(
+                                        '2019-07-20',
+                                        'tabletXL',
+                                    )
                                 })
                                 .then(async () => {
                                     refreshIssues()

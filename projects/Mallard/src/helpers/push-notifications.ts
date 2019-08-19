@@ -15,7 +15,9 @@ const pushNotifcationRegistration = () =>
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
-                downloadAndUnzipIssue(key)
+                downloadAndUnzipIssue(
+                    key /** , todo, how do we work out image size */,
+                )
             }
 
             // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)

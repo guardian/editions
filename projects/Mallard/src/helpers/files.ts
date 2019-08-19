@@ -2,6 +2,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { unzip } from 'react-native-zip-archive'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
+import { ImageSize } from '../../../common/src'
 
 interface BasicFile {
     filename: string
@@ -148,12 +149,42 @@ export const downloadIssue = (issue: File['id']) => {
     }
 }
 
-export const unzipIssue = (issue: File['id']) => {
-    const zipFilePath = FSPaths.issueZip(issue)
+/**
+ * the api returns zips with folders that are named after the size of the device
+ * we're on such as `/issue/12-12-12/media/tabletXL/media...`
+ *
+ * In future, if we add new breakpoints, this cache will be invisible if we're looking
+ * for images using our new device name such as `tabletM`.
+ *
+ * This will move all images into a folder `/issue/12-12-12/media/cached/media...`
+ */
+const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
+    const [sizedMediaDir] = await RNFetchBlob.fs.ls(FSPaths.mediaRoot(issueId))
+
+    if (!sizedMediaDir) return
+
+    const absSizedMediaDir = `${FSPaths.mediaRoot(issueId)}/${sizedMediaDir}`
+    const genericMediaDir = `${FSPaths.mediaRoot(issueId)}/cached`
+
+    // if the file exists already, delete it and then replace it
+    // unlink doesn't throw if it did not exist so we can call it without a check
+    await RNFetchBlob.fs.unlink(genericMediaDir)
+
+    RNFetchBlob.fs.mv(absSizedMediaDir, genericMediaDir)
+}
+
+const getIssueKey = (issueId: string, imageSize?: ImageSize) =>
+    imageSize ? `${issueId}-${imageSize}` : issueId
+
+export const unzipIssue = (issueId: string, imageSize?: ImageSize) => {
+    const zipFilePath = FSPaths.issueZip(getIssueKey(issueId, imageSize))
     const outputPath = FSPaths.issuesDir
-    return unzip(zipFilePath, outputPath).then(() =>
-        RNFetchBlob.fs.unlink(zipFilePath),
-    )
+    return unzip(zipFilePath, outputPath).then(async () => {
+        if (!!imageSize) {
+            await moveSizedMediaDirToGenericMediaDir(issueId)
+        }
+        RNFetchBlob.fs.unlink(zipFilePath)
+    })
 }
 
 export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
@@ -179,7 +210,11 @@ export const displayFileSize = (size: File['size']): string => {
     return (size / 1024 / 1024).toFixed(2) + ' MB'
 }
 
-export const downloadAndUnzipIssue = (issueKey: string) => {
+export const downloadAndUnzipIssue = (
+    issueId: string,
+    imageSize?: ImageSize,
+) => {
+    const issueKey = getIssueKey(issueId, imageSize)
     const dl = downloadIssue(issueKey)
 
     dl.progress((received, total) => {
@@ -191,7 +226,7 @@ export const downloadAndUnzipIssue = (issueKey: string) => {
 
     return dl.promise
         .then(async () => {
-            return unzipIssue(issueKey).catch(error => {
+            return unzipIssue(issueId, imageSize).catch(error => {
                 console.log('Unzip error: ', error)
             })
         })
