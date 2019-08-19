@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { useArticleResponse } from 'src/hooks/use-issue'
+import { Animated, StyleSheet, View } from 'react-native'
 import { NavigationScreenProp, ScrollView } from 'react-navigation'
-import { ArticleController } from 'src/components/article'
 import {
     Appearance,
     articlePillars,
@@ -9,14 +8,11 @@ import {
     CAPIArticle,
     Collection,
     Front,
-    articlePillars,
-    Appearance,
-    ArticleType,
     Issue,
     PillarFromPalette,
 } from 'src/common'
-import { Animated, View, StyleSheet } from 'react-native'
-import { metrics } from 'src/theme/spacing'
+import { ArticleController } from 'src/components/article'
+import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
@@ -37,10 +33,9 @@ import {
     getArticleNavigationProps,
 } from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
-import { useDimensions } from 'src/hooks/use-screen'
-import { UiBodyCopy } from 'src/components/styled-text'
-import { isPreview } from 'src/helpers/settings/defaults'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { PathToArticle } from './article-screen'
 import { DevTools, getEnumPosition } from './article/dev-tools'
 
 export interface PathToArticle {
