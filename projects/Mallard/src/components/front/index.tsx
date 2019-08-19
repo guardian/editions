@@ -10,7 +10,12 @@ import { CollectionPage, PropTypes } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, PillarFromPalette, Front as FrontType } from 'src/common'
+import {
+    Issue,
+    PillarFromPalette,
+    Front as FrontType,
+    ArticleType,
+} from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import {
     FlatCard,
@@ -62,7 +67,7 @@ const CollectionPageInFront = ({
                 },
             ]}
         >
-            <WithArticle type={'article'} pillar={pillar}>
+            <WithArticle type={ArticleType.Article} pillar={pillar}>
                 <CollectionPage
                     translate={translate}
                     {...collectionPageProps}
