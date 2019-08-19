@@ -16,7 +16,7 @@ import {
     Issue,
     PillarFromPalette,
 } from 'src/common'
-import { Dimensions, Animated, View, StyleSheet } from 'react-native'
+import { Dimensions, Animated, Text, View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
@@ -40,6 +40,8 @@ import { LoginOverlay } from 'src/components/login/login-overlay'
 import { routeNames } from 'src/navigation/routes'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { useDimensions } from 'src/hooks/use-screen'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { isPreview } from 'src/helpers/settings/defaults'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -67,11 +69,13 @@ const ArticleScreenBody = ({
     onTopPositionChange,
     pillar,
     width,
+    previewNotice,
 }: {
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
     pillar: PillarFromPalette
     width: number
+    previewNotice?: string
 }) => {
     const [modifiedPillar, setPillar] = useState(
         articlePillars.indexOf(pillar) || 0,
@@ -104,6 +108,9 @@ const ArticleScreenBody = ({
                 ),
                 success: article => (
                     <>
+                        {previewNotice && (
+                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
+                        )}
                         {isUsingProdDevtools ? (
                             <>
                                 <Button
@@ -212,6 +219,9 @@ const ArticleScreenWithProps = ({
         outputRange: [0, 1],
     })
 
+    const preview = isPreview(useSettings()[0])
+    const previewNotice = preview ? `${path.collection}:${current}` : undefined
+
     return (
         <ClipFromTop
             easing={navigationPosition && navigationPosition.position}
@@ -242,6 +252,7 @@ const ArticleScreenWithProps = ({
                                         width={width}
                                         pillar={pillar}
                                         onTopPositionChange={() => {}}
+                                        previewNotice={previewNotice}
                                     />
                                 ),
                             }}
@@ -320,6 +331,7 @@ const ArticleScreenWithProps = ({
                                     onTopPositionChange={isAtTop => {
                                         setArticleIsAtTop(isAtTop)
                                     }}
+                                    previewNotice={previewNotice}
                                 />
                             )}
                         />

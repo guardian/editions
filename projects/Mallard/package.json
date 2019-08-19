@@ -10,7 +10,7 @@
         "test": "jest --coverage",
         "test:watch": "jest --watch",
         "shake-android": "echo '👋 📱' && adb shell input keyevent 82 && echo '🙌📲🙌'",
-        "wifi-android": "yarn pre-run && ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
+        "wifi-android": "ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
         "run-android": "yarn pre-run && adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android",
         "run-ios": "yarn pre-run && yarn install-pods &&  react-native run-ios",
         "run-ipad": "yarn pre-run && react-native run-ios --simulator=\"iPad Air 2\"",

@@ -20,13 +20,24 @@ import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
-import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
+import {
+    Text,
+    View,
+    ViewStyle,
+    StyleProp,
+    StyleSheet,
+    Alert,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { WithIssueScreenSize, useIssueScreenSize } from './issue/use-size'
 import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
+import { ReloadButton } from 'src/components/reloadButton'
+import { clearCache } from 'src/helpers/fetch/cache'
+import { useSettings } from 'src/hooks/use-settings'
+import { isPreview } from 'src/helpers/settings/defaults'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -118,7 +129,7 @@ const IssueFronts = ({
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
-
+    const preview = isPreview(useSettings()[0])
     return (
         <Container>
             {response({
@@ -140,8 +151,16 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                         </FlexCenter>
                     </>
                 ),
-                success: issue => (
+                success: (issue, { retry }) => (
                     <>
+                        {preview && (
+                            <ReloadButton
+                                onPress={() => {
+                                    clearCache()
+                                    retry()
+                                }}
+                            />
+                        )}
                         <WithBreakpoints>
                             {{
                                 0: () => (
