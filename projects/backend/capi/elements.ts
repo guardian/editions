@@ -19,7 +19,7 @@ export const elementParser = (
             }
             console.warn(`Text element missing element data.`)
             break
-  
+
         case ElementType.IMAGE:
             const image = getImage(element.assets)
             if (element.imageTypeData && image) {
