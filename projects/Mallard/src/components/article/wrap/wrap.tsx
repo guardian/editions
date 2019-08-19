@@ -4,9 +4,14 @@ import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints, getClosestBreakpoint } from 'src/theme/breakpoints'
 import { getFader } from 'src/components/layout/animators/fader'
-import { useDimensions } from 'src/hooks/use-screen'
+import {
+    useDimensions,
+    useBreakpoint,
+    useMediaQuery,
+} from 'src/hooks/use-screen'
 import { getFont } from 'src/theme/typography'
 import { Multiline } from 'src/components/multiline'
+import { ariaHidden } from 'src/helpers/a11y'
 
 export enum WrapLayout {
     narrow,
@@ -23,6 +28,8 @@ interface ChildPropTypes {
 interface ContentWrapperPropTypes extends ChildPropTypes {
     tablet?: boolean
     bleeds?: boolean
+    topOffset?: number
+    backgroundColor?: ViewStyle['backgroundColor']
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
     >
@@ -30,9 +37,7 @@ interface ContentWrapperPropTypes extends ChildPropTypes {
 
 interface ThreeColumnWrapperPropTypes
     extends Exclude<ContentWrapperPropTypes, 'tablet'> {
-    backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
-    topOffset?: number
     rightRail?: (
         position: Breakpoints.zero | Breakpoints.tabletVertical,
     ) => ReactNode
@@ -78,28 +83,51 @@ const ContentWrapper = ({
     tablet,
     style,
     bleeds,
+    topOffset,
+    backgroundColor,
     ...children
 }: ContentWrapperPropTypes) => {
     if (bleeds) return <EdgeToEdgeContentWrapper {...children} />
+    const useMobileTopOffset = !!topOffset && !tablet
     return (
-        <View
-            style={[
-                contentWrapStyles.root,
-                tablet && contentWrapStyles.rootTablet,
-            ]}
-        >
-            {children.header}
+        <>
             <View
                 style={[
-                    style,
-                    contentWrapStyles.inner,
-                    tablet && contentWrapStyles.innerTablet,
+                    contentWrapStyles.root,
+                    { backgroundColor },
+                    tablet && contentWrapStyles.rootTablet,
+                    useMobileTopOffset && {
+                        marginTop: (topOffset || 0) * -1,
+                        width: '95%',
+                    },
                 ]}
             >
-                {children.children}
+                {useMobileTopOffset && (
+                    <View
+                        {...ariaHidden}
+                        style={[
+                            StyleSheet.absoluteFill,
+                            {
+                                backgroundColor,
+                                right: '-10%',
+                                top: topOffset || 0,
+                            },
+                        ]}
+                    ></View>
+                )}
+                {children.header}
+                <View
+                    style={[
+                        style,
+                        contentWrapStyles.inner,
+                        tablet && contentWrapStyles.innerTablet,
+                    ]}
+                >
+                    {children.children}
+                </View>
+                {children.footer}
             </View>
-            {children.footer}
-        </View>
+        </>
     )
 }
 
@@ -137,15 +165,16 @@ const ThreeColumnWrapper = ({
     backgroundColor,
     ...innerProps
 }: ThreeColumnWrapperPropTypes) => {
-    const { width } = useDimensions()
-    const landscape = width >= Breakpoints.tabletLandscape
+    const landscape = useMediaQuery(
+        width => width >= Breakpoints.tabletLandscape,
+    )
 
     return (
         <View style={threeColWrapStyles.root}>
             <View
                 style={[
                     threeColWrapStyles.content,
-                    topOffset && {
+                    !!topOffset && {
                         marginTop: topOffset * -1,
                         backgroundColor,
                     },
@@ -184,12 +213,10 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
 
     if (breakpoint < Breakpoints.tabletVertical) {
         return (
-            <View style={[{ backgroundColor }]}>
-                <ContentWrapper {...props}>
-                    {props.children}
-                    {props.rightRail && props.rightRail(Breakpoints.zero)}
-                </ContentWrapper>
-            </View>
+            <ContentWrapper {...props} backgroundColor={backgroundColor}>
+                {props.children}
+                {props.rightRail && props.rightRail(Breakpoints.zero)}
+            </ContentWrapper>
         )
     }
 
@@ -226,7 +253,7 @@ const MultilineWrap = ({
     multilineColor = color.line,
     ...props
 }: Exclude<WrapperPropTypes, 'header' | 'style' | 'footer'> & {
-    needsTopPadding: boolean
+    needsTopPadding?: boolean
     byline: ReactNode
     multilineColor?: string
 }) => (
