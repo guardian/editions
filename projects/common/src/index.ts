@@ -13,15 +13,15 @@ export const articlePillars = [
     'lifestyle',
     'neutral',
 ] as const
-export const articleTypes = [
-    'article',
-    'review',
-    'opinion',
-    'longread',
-] as const
+
+export enum ArticleType {
+    Article = 'article',
+    Review = 'review',
+    Opinion = 'opinion',
+    Longread = 'longread',
+}
 
 export type PillarFromPalette = typeof articlePillars[number]
-export type ArticleType = typeof articleTypes[number]
 
 interface ColorAppearance {
     type: 'custom'

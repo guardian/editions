@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import {
-    NavigationScreenProp,
-    NavigationEvents,
-    ScrollView,
-} from 'react-navigation'
+import { NavigationScreenProp, ScrollView } from 'react-navigation'
 import { ArticleController } from 'src/components/article'
 import {
     CAPIArticle,
@@ -12,11 +8,11 @@ import {
     Front,
     articlePillars,
     Appearance,
-    articleTypes,
+    ArticleType,
     Issue,
     PillarFromPalette,
 } from 'src/common'
-import { Dimensions, Animated, View, StyleSheet } from 'react-native'
+import { Animated, View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { color } from 'src/theme/color'
@@ -25,7 +21,6 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { useSettings } from 'src/hooks/use-settings'
-import { Button } from 'src/components/button/button'
 import { getNavigationPosition } from 'src/helpers/positions'
 import {
     ArticleNavigationProps,
@@ -37,8 +32,9 @@ import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getColor } from 'src/helpers/transform'
 import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
 import { LoginOverlay } from 'src/components/login/login-overlay'
-import { routeNames } from 'src/navigation'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { routeNames } from 'src/navigation/routes'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import { DevTools, getEnumPosition } from './article/dev-tools'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -104,61 +100,15 @@ const ArticleScreenBody = ({
                 success: article => (
                     <>
                         {isUsingProdDevtools ? (
-                            <>
-                                <Button
-                                    onPress={() => {
-                                        setPillar(app => {
-                                            if (
-                                                app + 1 >=
-                                                articlePillars.length
-                                            ) {
-                                                return 0
-                                            }
-                                            return app + 1
-                                        })
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        zIndex: 9999,
-                                        elevation: 999,
-                                        top:
-                                            Dimensions.get('window').height -
-                                            600,
-                                        right: metrics.horizontal,
-                                        alignSelf: 'flex-end',
-                                    }}
-                                >
-                                    {`${articlePillars[modifiedPillar]} 🌈`}
-                                </Button>
-                                <Button
-                                    onPress={() => {
-                                        setType(app => {
-                                            if (
-                                                app + 1 >=
-                                                articleTypes.length
-                                            ) {
-                                                return 0
-                                            }
-                                            return app + 1
-                                        })
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        zIndex: 9999,
-                                        elevation: 999,
-                                        top:
-                                            Dimensions.get('window').height -
-                                            560,
-                                        right: metrics.horizontal,
-                                        alignSelf: 'flex-end',
-                                    }}
-                                >
-                                    {`${articleTypes[modifiedType]} 🌈`}
-                                </Button>
-                            </>
+                            <DevTools
+                                pillar={modifiedPillar}
+                                setPillar={setPillar}
+                                type={modifiedType}
+                                setType={setType}
+                            />
                         ) : null}
                         <WithArticle
-                            type={articleTypes[modifiedType]}
+                            type={getEnumPosition(ArticleType, modifiedType)}
                             pillar={articlePillars[modifiedPillar]}
                         >
                             <ArticleController article={article.article} />

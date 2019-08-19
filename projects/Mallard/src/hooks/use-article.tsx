@@ -7,7 +7,7 @@ import { PillarColours } from '@guardian/pasteup/palette'
   Exports
  */
 const ArticlePillarContext = createContext<PillarFromPalette>('neutral')
-const ArticleTypeContext = createContext<ArticleType>('article')
+const ArticleTypeContext = createContext<ArticleType>(ArticleType.Article)
 
 export const WithArticlePillar = ArticlePillarContext.Provider
 export const WithArticleType = ArticleTypeContext.Provider

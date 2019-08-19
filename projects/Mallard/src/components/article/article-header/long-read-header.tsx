@@ -11,6 +11,15 @@ import {
     StandfirstText,
 } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
+import { MultilineWrap } from '../wrap/wrap'
+import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
+import { ArticleStandfirst } from '../article-standfirst'
+import { useArticle } from 'src/hooks/use-article'
+
+const styles = StyleSheet.create({
+    whiteText: { color: color.palette.neutral[100] },
+})
 
 const LongReadHeader = ({
     byline,
@@ -19,34 +28,84 @@ const LongReadHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
+    const [articleColor] = useArticle()
     return (
-        <View style={[longReadHeaderStyles.background]}>
-            {image ? (
+        <>
+            {image && (
                 <ArticleImage
-                    style={StyleSheet.absoluteFillObject}
+                    style={{ width: '100%', height: 300 }}
                     image={image}
                 />
-            ) : null}
-            <View style={[longReadHeaderStyles.textBackground]}>
-                {kicker ? (
-                    <HeadlineKickerText
-                        style={{ color: color.palette.neutral[100] }}
+            )}
+
+            <MultilineWrap
+                byline={
+                    <ArticleByline style={styles.whiteText}>
+                        {byline || ''}
+                    </ArticleByline>
+                }
+                topOffset={getFont('titlepiece', 1).lineHeight * 4}
+                borderColor={styles.whiteText.color}
+                backgroundColor={color.palette.neutral[7]}
+                multilineColor={styles.whiteText.color}
+            >
+                <View style={{ paddingBottom: metrics.vertical * 2 }}>
+                    {kicker ? (
+                        <View
+                            style={{
+                                backgroundColor: 'blue',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                            }}
+                        >
+                            <HeadlineKickerText
+                                style={{
+                                    color: color.palette.neutral[100],
+                                    padding: metrics.horizontal / 2,
+                                    paddingVertical: metrics.vertical / 2,
+                                    height: metrics.vertical * 4,
+                                    marginTop: metrics.vertical * -4,
+                                    width: 'auto',
+                                    textAlign: 'left',
+                                    flexShrink: 1,
+                                    backgroundColor: articleColor.main,
+                                    fontFamily: getFont('headline', 1, 'bold')
+                                        .fontFamily,
+                                }}
+                            >
+                                {kicker}
+                            </HeadlineKickerText>
+                        </View>
+                    ) : null}
+                    <HeadlineText
+                        style={[
+                            styles.whiteText,
+                            {
+                                fontFamily: getFont('titlepiece', 1).fontFamily,
+                                marginTop: 0,
+                                marginBottom: metrics.vertical * 2,
+                                marginRight: metrics.horizontal * 4,
+                            },
+                        ]}
+                        weight="bold"
                     >
-                        {kicker}
-                    </HeadlineKickerText>
-                ) : null}
-                <HeadlineText>{headline}</HeadlineText>
-            </View>
-            <View style={[longReadHeaderStyles.textBackground]}>
-                <StandfirstText style={{ color: color.palette.neutral[100] }}>
-                    {standfirst}
-                </StandfirstText>
-                <Multiline count={4} color={color.palette.neutral[100]} />
-                <ArticleByline style={{ color: color.palette.neutral[100] }}>
-                    {byline}
-                </ArticleByline>
-            </View>
-        </View>
+                        {headline}
+                    </HeadlineText>
+                    {standfirst && (
+                        <ArticleStandfirst
+                            standfirst={standfirst}
+                            textStyle={[
+                                styles.whiteText,
+                                {
+                                    fontFamily: getFont('headline', 1, 'bold')
+                                        .fontFamily,
+                                },
+                            ]}
+                        ></ArticleStandfirst>
+                    )}
+                </View>
+            </MultilineWrap>
+        </>
     )
 }
 
