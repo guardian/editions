@@ -9,7 +9,7 @@ import { ArticleHeadline } from '../article-headline'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
 import { ArticleByline } from '../article-byline'
-import { ArticleKicker } from '../article-kicker'
+import { ArticleKicker } from '../article-kicker/normal-kicker'
 import { Wrap, MultilineWrap } from '../wrap/wrap'
 import { Stars } from 'src/components/stars/stars'
 
