@@ -27,7 +27,7 @@ const useDimensions = (): ScaledSize => {
     return dimensions
 }
 
-const useMediaQuery = (condition: (width) => boolean): boolean => {
+const useMediaQuery = (condition: (width: number) => boolean): boolean => {
     const { width } = useDimensions()
     return condition(width)
 }

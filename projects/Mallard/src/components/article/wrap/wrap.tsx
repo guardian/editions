@@ -4,11 +4,7 @@ import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints, getClosestBreakpoint } from 'src/theme/breakpoints'
 import { getFader } from 'src/components/layout/animators/fader'
-import {
-    useDimensions,
-    useBreakpoint,
-    useMediaQuery,
-} from 'src/hooks/use-screen'
+import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { getFont } from 'src/theme/typography'
 import { Multiline } from 'src/components/multiline'
 import { ariaHidden } from 'src/helpers/a11y'

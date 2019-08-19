@@ -24,6 +24,7 @@ import { isPreview } from './preview'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
+    i: number,
     front: PublishedFront,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
@@ -142,7 +143,7 @@ export const parseCollection = async (
         })
 
     return {
-        key: collectionResponse.id,
+        key: `${i}:${collectionResponse.name}`,
         cards: createCardsFromAllArticlesInCollection(articles, front),
     }
 }
@@ -228,7 +229,7 @@ export const getFront = async (
     const collections = await Promise.all(
         front.collections
             .filter(collection => collection.items.length > 0)
-            .map(collection => parseCollection(collection, front)),
+            .map((collection, i) => parseCollection(collection, i, front)),
     )
 
     collections.filter(hasFailed).forEach(failedCollection => {
