@@ -255,7 +255,7 @@ const MultilineWrap = ({
     multilineColor?: string
 }) => (
     <>
-        <Wrap style={[needsTopPadding && multiStyles.paddingTop]} {...props} />
+        <Wrap {...props} style={[needsTopPadding && multiStyles.paddingTop]} />
         {byline && (
             <Wrap
                 backgroundColor={props.backgroundColor}
