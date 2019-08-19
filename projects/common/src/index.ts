@@ -16,9 +16,9 @@ export const articlePillars = [
 
 export enum ArticleType {
     Article = 'article',
-    Longread = 'longread',
     Review = 'review',
     Opinion = 'opinion',
+    Longread = 'longread',
 }
 
 export type PillarFromPalette = typeof articlePillars[number]
