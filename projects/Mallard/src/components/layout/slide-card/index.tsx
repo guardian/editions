@@ -3,6 +3,7 @@ import { Animated, StyleSheet, View, PanResponder } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
 import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
 
 /*
 This is the swipey contraption that contains an article.
@@ -14,8 +15,8 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         height: '100%',
         backgroundColor: color.background,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderTopLeftRadius: metrics.radius,
+        borderTopRightRadius: metrics.radius,
         overflow: 'hidden',
     },
     flexGrow: {

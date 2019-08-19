@@ -13,9 +13,10 @@ import {
 } from 'src/common'
 import {
     useCardBackgroundStyle,
-    getItemPosition,
+    getItemRectanglePerc,
     getPageLayoutSizeXY,
     ItemSizes,
+    toAbsoluteRectangle,
 } from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from './helpers/layouts'
@@ -37,9 +38,9 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 2,
         flex: 1,
-        margin: metrics.frontsPageSides,
-        marginBottom: 32,
-        marginTop: 8,
+        margin: metrics.fronts.sides,
+        marginTop: metrics.fronts.sides / 2,
+        marginBottom: metrics.fronts.sides * 1.5,
     },
     itemHolder: {
         position: 'absolute',
@@ -113,7 +114,7 @@ const CollectionPage = ({
     appearance,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
     const background = useCardBackgroundStyle()
-    const { size } = useIssueScreenSize()
+    const { size, card } = useIssueScreenSize()
     if (!articlesInCard.length) {
         return <FlexErrorMessage />
     }
@@ -135,7 +136,15 @@ const CollectionPage = ({
                         key={index}
                         style={[
                             styles.itemHolder,
-                            getItemPosition(story.fits, layout.size),
+                            toAbsoluteRectangle(
+                                getItemRectanglePerc(story.fits, layout.size),
+                                {
+                                    width:
+                                        card.width - metrics.fronts.sides * 2,
+                                    height:
+                                        card.height - metrics.fronts.sides * 2,
+                                },
+                            ),
                         ]}
                     >
                         <Item
@@ -145,7 +154,6 @@ const CollectionPage = ({
                                 issue,
                                 front,
                             }}
-                            style={styles.item}
                             size={size}
                             articleNavigator={articleNavigator}
                             article={article}

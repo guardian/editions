@@ -8,8 +8,6 @@ import { HomeScreen } from '../screens/home-screen'
 import { IssueScreen } from '../screens/issue-screen'
 import { ArticleScreen } from '../screens/article-screen'
 import { SettingsScreen } from '../screens/settings-screen'
-import { DownloadScreen } from '../screens/settings/download-screen'
-import { ApiScreen } from '../screens/settings/api-screen'
 import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
@@ -17,13 +15,9 @@ import {
     OnboardingIntroScreen,
     OnboardingConsentScreen,
 } from 'src/screens/onboarding-screen'
+import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
-import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
-import { HelpScreen } from 'src/screens/settings/help-screen'
-import { FAQScreen } from 'src/screens/settings/faq-screen'
-import { CreditsScreen } from 'src/screens/settings/credits-screen'
-import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
 import { NavigationScreenProp } from 'react-navigation'
 import { mapNavigationToProps } from './helpers'
 import { shouldShowOnboarding } from 'src/helpers/settings'
@@ -33,28 +27,16 @@ import {
 } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
-
-const routeNames = {
-    Issue: 'Issue',
-    Article: 'Article',
-    IssueList: 'IssueList',
-    Downloads: 'Downloads',
-    Settings: 'Settings',
-    Endpoints: 'Endpoints',
-    GdprConsent: 'GdprConsent',
-    PrivacyPolicy: 'PrivacyPolicy',
-    TermsAndConditions: 'TermsAndConditions',
-    Help: 'Help',
-    Credits: 'Credits',
-    FAQ: 'FAQ',
-    SignIn: 'SignIn',
-    CasSignIn: 'CasSignIn',
-    onboarding: {
-        OnboardingStart: 'OnboardingStart',
-        OnboardingConsent: 'OnboardingConsent',
-        OnboardingConsentInline: 'OnboardingConsentInline',
-    },
-}
+import { routeNames } from './routes'
+import { DownloadScreen } from 'src/screens/settings/download-screen'
+import { ApiScreen } from 'src/screens/settings/api-screen'
+import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
+import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
+import { HelpScreen } from 'src/screens/settings/help-screen'
+import { CreditsScreen } from 'src/screens/settings/credits-screen'
+import { FAQScreen } from 'src/screens/settings/faq-screen'
+import { createModalNavigator } from './navigators/modal'
+import { createHeaderStackNavigator } from './navigators/header'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -76,53 +58,53 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
     },
 })
 
-const AppStack = createStackNavigator(
-    {
-        [routeNames.Issue]: createStackNavigator(
-            {
-                [routeNames.Issue]: createStackNavigator(
-                    {
-                        [routeNames.Issue]: IssueScreen,
-                        [routeNames.Article]: ArticleScreen,
-                    },
-                    {
-                        transparentCard: true,
-                        initialRouteName: routeNames.Issue,
-                        mode: 'modal',
-                        headerMode: 'none',
-                        cardOverlayEnabled: true,
-                        transitionConfig: () => ({
-                            ...transitionOptionsOverArtboard(true),
-                            screenInterpolator: issueToArticleScreenInterpolator,
-                        }),
-                        defaultNavigationOptions: {
-                            gesturesEnabled: false,
-                        },
-                    },
-                ),
-                [routeNames.IssueList]: HomeScreen,
-            },
-            {
-                defaultNavigationOptions: {
-                    header: null,
-                    gesturesEnabled: false,
+const AppStack = createModalNavigator(
+    createStackNavigator(
+        {
+            [routeNames.Issue]: createStackNavigator(
+                {
+                    [routeNames.Issue]: IssueScreen,
+                    [routeNames.Article]: ArticleScreen,
                 },
-                initialRouteName: routeNames.Issue,
-                ...(supportsTransparentCards()
-                    ? {
-                          transparentCard: true,
-                          mode: 'modal',
-                          headerMode: 'none',
-                          cardOverlayEnabled: true,
-                          transitionConfig: () => ({
-                              ...transitionOptionsOverArtboard(false),
-                              screenInterpolator: issueToIssueListInterpolator,
-                          }),
-                      }
-                    : {}),
+                {
+                    transparentCard: true,
+                    initialRouteName: routeNames.Issue,
+                    mode: 'modal',
+                    headerMode: 'none',
+                    cardOverlayEnabled: true,
+                    transitionConfig: () => ({
+                        ...transitionOptionsOverArtboard(true),
+                        screenInterpolator: issueToArticleScreenInterpolator,
+                    }),
+                    defaultNavigationOptions: {
+                        gesturesEnabled: false,
+                    },
+                },
+            ),
+            [routeNames.IssueList]: HomeScreen,
+        },
+        {
+            defaultNavigationOptions: {
+                header: null,
+                gesturesEnabled: false,
             },
-        ),
-        _: createStackNavigator(
+            initialRouteName: routeNames.Issue,
+            ...(supportsTransparentCards()
+                ? {
+                      transparentCard: true,
+                      mode: 'modal',
+                      headerMode: 'none',
+                      cardOverlayEnabled: true,
+                      transitionConfig: () => ({
+                          ...transitionOptionsOverArtboard(false),
+                          screenInterpolator: issueToIssueListInterpolator,
+                      }),
+                  }
+                : {}),
+        },
+    ),
+    {
+        [routeNames.Settings]: createHeaderStackNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
                 [routeNames.Downloads]: DownloadScreen,
@@ -133,68 +115,65 @@ const AppStack = createStackNavigator(
                 [routeNames.Help]: HelpScreen,
                 [routeNames.Credits]: CreditsScreen,
                 [routeNames.FAQ]: FAQScreen,
+                [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
             },
             {
                 defaultNavigationOptions: {
                     ...navOptionsWithGraunHeader,
                 },
-                initialRouteName: routeNames.Settings,
             },
         ),
     },
-    {
-        mode: 'modal',
-        headerMode: 'none',
-        initialRouteName: routeNames.Issue,
-        defaultNavigationOptions: {
-            gesturesEnabled: false,
-        },
-    },
 )
 
-const OnboardingStack = createStackNavigator(
-    {
-        [routeNames.onboarding.OnboardingStart]: mapNavigationToProps(
-            OnboardingIntroScreen,
-            nav => ({
-                onContinue: () =>
-                    nav.navigate(routeNames.onboarding.OnboardingConsent),
-            }),
-        ),
-        [routeNames.onboarding.OnboardingConsent]: createStackNavigator(
-            {
-                Main: {
-                    screen: mapNavigationToProps(
-                        OnboardingConsentScreen,
-                        nav => ({
-                            onContinue: () => nav.navigate('App'),
-                            onOpenGdprConsent: () =>
-                                nav.navigate(
-                                    routeNames.onboarding
-                                        .OnboardingConsentInline,
-                                ),
-                        }),
-                    ),
-                    navigationOptions: {
-                        header: null,
+const OnboardingStack = createModalNavigator(
+    createStackNavigator(
+        {
+            [routeNames.onboarding.OnboardingStart]: mapNavigationToProps(
+                OnboardingIntroScreen,
+                nav => ({
+                    onContinue: () =>
+                        nav.navigate(routeNames.onboarding.OnboardingConsent),
+                }),
+            ),
+            [routeNames.onboarding.OnboardingConsent]: createStackNavigator(
+                {
+                    Main: {
+                        screen: mapNavigationToProps(
+                            OnboardingConsentScreen,
+                            nav => ({
+                                onContinue: () => nav.navigate('App'),
+                                onOpenGdprConsent: () =>
+                                    nav.navigate(
+                                        routeNames.onboarding
+                                            .OnboardingConsentInline,
+                                    ),
+                            }),
+                        ),
+                        navigationOptions: {
+                            header: null,
+                        },
                     },
                 },
-                [routeNames.onboarding
-                    .OnboardingConsentInline]: GdprConsentScreen,
-            },
-            {
-                mode: 'modal',
-                defaultNavigationOptions: {
-                    ...navOptionsWithGraunHeader,
+                {
+                    mode: 'modal',
+                    defaultNavigationOptions: {
+                        ...navOptionsWithGraunHeader,
+                    },
                 },
-            },
-        ),
-    },
+            ),
+        },
+        {
+            headerMode: 'none',
+        },
+    ),
     {
-        headerMode: 'none',
+        [routeNames.onboarding
+            .OnboardingConsentInline]: createHeaderStackNavigator({
+            GdprConsentScreen,
+        }),
     },
 )
-
 const RootNavigator = createAppContainer(
     createStackNavigator(
         {
@@ -233,4 +212,4 @@ const RootNavigator = createAppContainer(
     ),
 )
 
-export { RootNavigator, routeNames }
+export { RootNavigator }

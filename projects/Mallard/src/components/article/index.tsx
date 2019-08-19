@@ -15,7 +15,7 @@ import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
 import { ReviewHeader } from './article-header/review-header'
-import { Wrap } from './article-header/wrap'
+import { Wrap } from './wrap/wrap'
 
 /*
 This is the article view! For all of the articles.
@@ -70,6 +70,7 @@ const Article = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const html = useMemo(() => (article ? render(article) : ''), [article])
     const [, { type }] = useArticle()
+
     return (
         <View style={styles.container}>
             <Fader first position={'article'} />
@@ -90,14 +91,23 @@ const Article = ({
                         useWebKit={false}
                         source={{ html: html }}
                         onShouldStartLoadWithRequest={event => {
-                            if (event.url !== 'about:blank') {
+                            if (
+                                event.url.startsWith(
+                                    'https://embed.theguardian.com',
+                                ) ||
+                                event.url.startsWith('https://www.youtube.com')
+                            ) {
+                                return false
+                            } else if (event.url !== 'about:blank') {
                                 Linking.openURL(event.url)
                                 return false
                             }
                             return true
                         }}
                         onMessage={event => {
-                            setHeight(parseInt(event.nativeEvent.data))
+                            if (parseInt(event.nativeEvent.data) > height) {
+                                setHeight(parseInt(event.nativeEvent.data))
+                            }
                         }}
                         style={{
                             minHeight: height,
