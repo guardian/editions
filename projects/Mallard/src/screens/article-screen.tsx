@@ -35,6 +35,7 @@ import { LoginOverlay } from 'src/components/login/login-overlay'
 import { routeNames } from 'src/navigation/routes'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { DevTools, getEnumPosition } from './article/dev-tools'
+import { useDimensions } from 'src/hooks/use-screen'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -151,6 +152,8 @@ const ArticleScreenWithProps = ({
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
 
+    const { width } = useDimensions()
+
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
         currentValue: current,
@@ -172,6 +175,7 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <LoginOverlay
+                        isFocused={() => navigation.isFocused()}
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
@@ -200,6 +204,7 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <LoginOverlay
+                        isFocused={() => navigation.isFocused()}
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
@@ -222,65 +227,52 @@ const ArticleScreenWithProps = ({
                                 position={sliderPos}
                             />
                         </View>
-                        <WithBreakpoints>
-                            {{
-                                0: ({ width }) => (
-                                    <Animated.FlatList
-                                        showsHorizontalScrollIndicator={false}
-                                        showsVerticalScrollIndicator={false}
-                                        scrollEventThrottle={1}
-                                        onScroll={(ev: any) => {
-                                            setCurrent(
-                                                Math.floor(
-                                                    ev.nativeEvent.contentOffset
-                                                        .x / width,
-                                                ),
-                                            )
-                                        }}
-                                        maxToRenderPerBatch={1}
-                                        windowSize={3}
-                                        initialNumToRender={1}
-                                        horizontal={true}
-                                        initialScrollIndex={startingPoint}
-                                        pagingEnabled
-                                        getItemLayout={(
-                                            _: never,
-                                            index: number,
-                                        ) => ({
-                                            length: width,
-                                            offset: width * index,
-                                            index,
-                                        })}
-                                        keyExtractor={(
-                                            item: ArticleNavigator['articles'][0],
-                                        ) => item.article}
-                                        data={
-                                            isInScroller
-                                                ? articleNavigator.articles
-                                                : [
-                                                      path,
-                                                      ...articleNavigator.articles,
-                                                  ]
-                                        }
-                                        renderItem={({
-                                            item,
-                                        }: {
-                                            item: ArticleNavigator['articles'][0]
-                                            index: number
-                                        }) => (
-                                            <ArticleScreenBody
-                                                width={width}
-                                                path={item}
-                                                pillar={pillar}
-                                                onTopPositionChange={isAtTop => {
-                                                    setArticleIsAtTop(isAtTop)
-                                                }}
-                                            />
-                                        )}
-                                    />
-                                ),
+                        <Animated.FlatList
+                            showsHorizontalScrollIndicator={false}
+                            showsVerticalScrollIndicator={false}
+                            scrollEventThrottle={1}
+                            onScroll={(ev: any) => {
+                                setCurrent(
+                                    Math.floor(
+                                        ev.nativeEvent.contentOffset.x / width,
+                                    ),
+                                )
                             }}
-                        </WithBreakpoints>
+                            maxToRenderPerBatch={1}
+                            windowSize={3}
+                            initialNumToRender={1}
+                            horizontal={true}
+                            initialScrollIndex={startingPoint}
+                            pagingEnabled
+                            getItemLayout={(_: never, index: number) => ({
+                                length: width,
+                                offset: width * index,
+                                index,
+                            })}
+                            keyExtractor={(
+                                item: ArticleNavigator['articles'][0],
+                            ) => item.article}
+                            data={
+                                isInScroller
+                                    ? articleNavigator.articles
+                                    : [path, ...articleNavigator.articles]
+                            }
+                            renderItem={({
+                                item,
+                            }: {
+                                item: ArticleNavigator['articles'][0]
+                                index: number
+                            }) => (
+                                <ArticleScreenBody
+                                    width={width}
+                                    path={item}
+                                    pillar={pillar}
+                                    onTopPositionChange={isAtTop => {
+                                        setArticleIsAtTop(isAtTop)
+                                    }}
+                                />
+                            )}
+                        />
                     </LoginOverlay>
                 </SlideCard>
             )}

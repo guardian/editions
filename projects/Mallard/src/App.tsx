@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-232134'
+const persistenceKey = 'dev-nav-key-231212324'
 const persistNavigationState = async (navState: any) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
@@ -74,8 +74,8 @@ export default class App extends React.Component<{}, {}> {
             <ErrorBoundary>
                 <FileSystemProvider>
                     <SettingsProvider>
-                        <AuthProvider>
-                            <Modal>
+                        <Modal>
+                            <AuthProvider>
                                 <StatusBar
                                     animated={true}
                                     barStyle="light-content"
@@ -84,8 +84,8 @@ export default class App extends React.Component<{}, {}> {
                                 <View style={styles.appContainer}>
                                     <RootNavigator {...rootNavigationProps} />
                                 </View>
-                            </Modal>
-                        </AuthProvider>
+                            </AuthProvider>
+                        </Modal>
                     </SettingsProvider>
                 </FileSystemProvider>
             </ErrorBoundary>

@@ -8,7 +8,6 @@ import {
     getLegacyUserAccessToken,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
-    iapReceiptCache,
 } from './storage'
 import {
     fetchMembershipData,
@@ -74,13 +73,6 @@ const fetchAndPersistCASExpiry = async (
     casCredentialsKeychain.set(subscriberId, password)
     casDataCache.set(expiry)
     return expiry
-}
-
-const fetchAndPersistIAPReceipt = async () => {
-    const receipt = await fetchActiveIOSSubscriptionReceipt()
-    if (!receipt) return null
-    iapReceiptCache.set(receipt)
-    return receipt
 }
 
 export interface UserData {
@@ -176,5 +168,4 @@ export {
     fetchCASExpiryForKeychainCredentials,
     canViewEdition,
     fetchAndPersistCASExpiry,
-    fetchAndPersistIAPReceipt,
 }

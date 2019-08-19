@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { useTextBoxes, TextBoxes } from 'src/components/layout/text-boxes'
+import { ariaHidden } from 'src/helpers/a11y'
 
 export type ArticleHeadlineProps = {
     children: any
@@ -49,12 +50,7 @@ const IconDashes = ({ length = 1 }) => {
     const lines = []
     for (let i = 0; i < Math.floor(length / 4); i++) {
         lines.push(
-            <Text
-                key={i}
-                accessibilityElementsHidden={true}
-                importantForAccessibility="no-hide-descendants"
-                style={[styles.dash]}
-            >
+            <Text key={i} {...ariaHidden} style={[styles.dash]}>
                 {'0'}
             </Text>,
         )

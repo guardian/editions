@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "pre-run": "run-p -ln --aggregate-output install-pods fetch-dev-env watch-html write-version-file",
-        "pre-bundle": "run-p -ln --aggregate-output install-pods  write-prod-env bundle-html",
+        "pre-run": "run-p -ln --aggregate-output fetch-dev-env watch-html write-version-file",
+        "pre-bundle": "run-p -ln --aggregate-output write-prod-env bundle-html",
         "postinstall": "yarn write-version-file",
         "start": "yarn pre-run && react-native start",
         "test": "jest --coverage",
@@ -12,21 +12,21 @@
         "shake-android": "echo '👋 📱' && adb shell input keyevent 82 && echo '🙌📲🙌'",
         "wifi-android": "yarn pre-run && ip=$(adb shell ifconfig wlan0  | awk '/inet addr/{print substr($2,6)}') && adb tcpip 5555 && adb connect $ip:5555",
         "run-android": "yarn pre-run && adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android",
-        "run-ios": "yarn pre-run && react-native run-ios",
+        "run-ios": "yarn pre-run && yarn install-pods &&  react-native run-ios",
         "run-ipad": "yarn pre-run && react-native run-ios --simulator=\"iPad Air 2\"",
         "validate": "cd ../.. && yarn validate-mallard",
         "fix": "cd ../.. && yarn fix-mallard",
-        "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-        "bundle-ios": "yarn pre-bundle && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
+        "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/generated/res/react/release",
+        "bundle-ios": "yarn pre-bundle && yarn install-pods && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
         "rn-link": "react-native link",
         "bundle-html": "node ./scripts/bundle-html.js",
         "watch-html": "yarn bundle-html && open scripts/watch-html.command",
         "convert-svg": "node ./scripts/svgs.js",
-        "fetch-dev-env": "aws s3 cp s3://editions-config/Mallard/dev/.env ./.env --region=eu-west-1 --profile=frontend",
+        "fetch-dev-env": "node ./scripts/fetch-dev-env.js",
         "write-prod-env": "node .env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
-        "write-version-file" :"node ./scripts/versioning.js",
-        "install-pods":"cd ios && pod install"
+        "write-version-file": "node ./scripts/versioning.js",
+        "install-pods": "cd ios && pod install"
     },
     "rnpm": {
         "assets": [
@@ -58,8 +58,9 @@
         "react-native-device-info": "^2.3.2",
         "react-native-gesture-handler": "^1.3.0",
         "react-native-iap": "^3.3.9",
+        "react-native-in-app-utils": "^6.0.1",
         "react-native-keychain": "^3.1.3",
-        "react-native-push-notification": "^3.1.8",
+        "react-native-push-notification": "^3.1.7",
         "react-native-screens": "^1.0.0-alpha.23",
         "react-native-sentry": "^0.43.2",
         "react-native-status-bar-height": "^2.4.0",
@@ -78,22 +79,25 @@
         "@types/fetch-mock": "^7.3.1",
         "@types/invariant": "^2.2.30",
         "@types/jest": "^24.0.17",
+        "@types/node": "^12.7.2",
         "@types/react": "^16.9.1",
-        "@types/react-native": "^0.60.4",
+        "@types/react-native": "^0.60.5",
         "@types/react-native-push-notification": "^3.0.6",
         "@types/react-navigation": "^3.0.8",
         "@types/react-test-renderer": "^16.9.0",
         "@types/validator": "^10.11.2",
+        "aws-sdk": "^2.511.0",
         "babel-jest": "^24.8.0",
         "fetch-mock": "^7.3.7",
         "jest": "^24.8.0",
         "metro-react-native-babel-preset": "^0.55.0",
+        "mockdate": "^2.0.5",
         "react-test-renderer": "16.8.6",
         "typescript": "^3.5.3"
     },
     "resolutions": {
         "@types/react": "16.9.1",
-        "@types/react-native": "0.60.4"
+        "@types/react-native": "0.60.5"
     },
     "jest": {
         "preset": "react-native"

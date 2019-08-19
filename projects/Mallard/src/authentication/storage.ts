@@ -49,8 +49,6 @@ const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
 
 const userDataCache = createAsyncCache<UserData>('user-data-cache')
 
-const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache')
-
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -101,7 +99,6 @@ const resetCredentials = (): Promise<boolean> =>
         casDataCache.reset(),
         _legacyUserAccessTokenKeychain.reset(),
         legacyCASExpiryCache.reset(),
-        iapReceiptCache.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
@@ -115,5 +112,4 @@ export {
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
-    iapReceiptCache,
 }

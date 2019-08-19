@@ -5,7 +5,7 @@ import {
     ArticleTransitionProps,
     PathToArticle,
 } from 'src/screens/article-screen'
-import { routeNames } from '.'
+import { routeNames } from 'src/navigation/routes'
 import { PathToIssue } from 'src/screens/issue-screen'
 
 type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
