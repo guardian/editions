@@ -1,43 +1,43 @@
 import React, { useState } from 'react'
-import { useArticleResponse } from 'src/hooks/use-issue'
+import { Animated, StyleSheet, View } from 'react-native'
 import { NavigationScreenProp, ScrollView } from 'react-navigation'
-import { ArticleController } from 'src/components/article'
 import {
+    Appearance,
+    articlePillars,
+    ArticleType,
     CAPIArticle,
     Collection,
     Front,
-    articlePillars,
-    Appearance,
-    ArticleType,
     Issue,
     PillarFromPalette,
 } from 'src/common'
-import { Dimensions, Animated, Text, View, StyleSheet } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { SlideCard } from 'src/components/layout/slide-card/index'
-import { color } from 'src/theme/color'
-import { PathToArticle } from './article-screen'
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { ArticleController } from 'src/components/article'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import { useSettings } from 'src/hooks/use-settings'
+import { SlideCard } from 'src/components/layout/slide-card/index'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import { LoginOverlay } from 'src/components/login/login-overlay'
+import { Navigator } from 'src/components/navigator'
+import { UiBodyCopy } from 'src/components/styled-text'
 import { getNavigationPosition } from 'src/helpers/positions'
+import { isPreview } from 'src/helpers/settings/defaults'
+import { getColor } from 'src/helpers/transform'
+import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { useAlphaIn } from 'src/hooks/use-alpha-in'
+import { getAppearancePillar, WithArticle } from 'src/hooks/use-article'
+import { useArticleResponse } from 'src/hooks/use-issue'
+import { useDimensions } from 'src/hooks/use-screen'
+import { useSettings } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
-    getArticleNavigationProps,
     ArticleRequiredNavigationProps,
+    getArticleNavigationProps,
 } from 'src/navigation/helpers'
-import { Navigator } from 'src/components/navigator'
-import { useAlphaIn } from 'src/hooks/use-alpha-in'
-import { getColor } from 'src/helpers/transform'
-import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
-import { LoginOverlay } from 'src/components/login/login-overlay'
 import { routeNames } from 'src/navigation/routes'
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { PathToArticle } from './article-screen'
 import { DevTools, getEnumPosition } from './article/dev-tools'
-import { useDimensions } from 'src/hooks/use-screen'
-import { UiBodyCopy } from 'src/components/styled-text'
-import { isPreview } from 'src/helpers/settings/defaults'
 
 export interface PathToArticle {
     collection: Collection['key']
