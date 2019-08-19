@@ -16,7 +16,8 @@ const pushNotifcationRegistration = () =>
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
                 downloadAndUnzipIssue(
-                    key /** , todo, how do we work out image size */,
+                    key,
+                    'tabletXL' /**  todo, how do we work out image size */,
                 )
             }
 

@@ -158,13 +158,20 @@ export const downloadIssue = (issue: File['id']) => {
  *
  * This will move all images into a folder `/issue/12-12-12/media/cached/media...`
  */
+
+const CACHED_FOLDER_NAME = 'cached'
+
 const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
-    const [sizedMediaDir] = await RNFetchBlob.fs.ls(FSPaths.mediaRoot(issueId))
+    const [sizedMediaDir] = (await RNFetchBlob.fs.ls(
+        FSPaths.mediaRoot(issueId),
+    )).filter(folder => folder !== CACHED_FOLDER_NAME) // find the first folder that isn't cached
 
     if (!sizedMediaDir) return
 
     const absSizedMediaDir = `${FSPaths.mediaRoot(issueId)}/${sizedMediaDir}`
-    const genericMediaDir = `${FSPaths.mediaRoot(issueId)}/cached`
+    const genericMediaDir = `${FSPaths.mediaRoot(
+        issueId,
+    )}/${CACHED_FOLDER_NAME}`
 
     // if the file exists already, delete it and then replace it
     // unlink doesn't throw if it did not exist so we can call it without a check
@@ -179,6 +186,7 @@ const getIssueKey = (issueId: string, imageSize?: ImageSize) =>
 export const unzipIssue = (issueId: string, imageSize?: ImageSize) => {
     const zipFilePath = FSPaths.issueZip(getIssueKey(issueId, imageSize))
     const outputPath = FSPaths.issuesDir
+
     return unzip(zipFilePath, outputPath).then(async () => {
         if (!!imageSize) {
             await moveSizedMediaDirToGenericMediaDir(issueId)
@@ -210,27 +218,68 @@ export const displayFileSize = (size: File['size']): string => {
     return (size / 1024 / 1024).toFixed(2) + ' MB'
 }
 
+// TODO: have better types here!
+export type DLStatus =
+    | { type: 'download'; data: number }
+    | { type: 'unzip'; data: 'start' }
+    | { type: 'success' }
+    | { type: 'failure' }
+
 export const downloadAndUnzipIssue = (
     issueId: string,
-    imageSize?: ImageSize,
+    imageSize: ImageSize,
+    onProgress: (status: DLStatus) => void = () => {},
 ) => {
-    const issueKey = getIssueKey(issueId, imageSize)
-    const dl = downloadIssue(issueKey)
+    console.log(issueId)
+    const dl = downloadIssue(issueId) // just the issue json
 
     dl.progress((received, total) => {
+        console.log(received, total)
         if (total >= received) {
-            const num = (received / total) * 100
-            console.log(`${parseFloat(String(num)).toFixed(2)}%`)
+            // the progress of the first 10% is driven by the issue
+            const num = (received / total) * 10
+            onProgress({
+                type: 'download',
+                data: num,
+            })
         }
     })
 
     return dl.promise
         .then(async () => {
-            return unzipIssue(issueId, imageSize).catch(error => {
-                console.log('Unzip error: ', error)
+            // might not need to await this but it's pretty quick
+            await unzipIssue(issueId)
+
+            const imgDL = downloadIssue(`${issueId}-${imageSize}`) // just the images
+
+            imgDL.progress((received, total) => {
+                if (total >= received) {
+                    // the progress of the last 90% is driven by the images
+                    const num = 10 + (received / total) * 90
+                    onProgress({
+                        type: 'download',
+                        data: num,
+                    })
+                }
+            })
+
+            return imgDL.promise.then(() => {
+                onProgress({
+                    type: 'unzip',
+                    data: 'start',
+                })
+                unzipIssue(issueId, imageSize)
+                    .then(() => {
+                        onProgress({ type: 'success' }) // null is unstarted or end
+                    })
+                    .catch(error => {
+                        onProgress({ type: 'failure', data: error })
+                        console.log('Unzip error: ', error)
+                    })
             })
         })
-        .catch(errorMessage => {
-            console.log('Download error: ', errorMessage)
+        .catch(error => {
+            onProgress({ type: 'failure', data: error })
+            console.log('Download error: ', error)
         })
 }

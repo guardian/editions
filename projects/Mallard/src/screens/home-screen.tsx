@@ -1,36 +1,28 @@
-import React from 'react'
-import { Alert, View } from 'react-native'
-import {
-    NavigationEvents,
-    NavigationInjectedProps,
-    NavigationScreenProp,
-    withNavigation,
-} from 'react-navigation'
-import { Issue, IssueSummary } from 'src/common'
-import { Button, ButtonAppearance } from 'src/components/button/button'
-import { IssueRow } from 'src/components/issue/issue-row'
-import { GridRowSplit } from 'src/components/issue/issue-title'
-import { FlexCenter } from 'src/components/layout/flex-center'
-import { IssueHeader } from 'src/components/layout/header/header'
-import { ScrollContainer } from 'src/components/layout/ui/container'
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { Heading } from 'src/components/layout/ui/row'
-import { BaseList, List } from 'src/components/lists/list'
-import { Spinner } from 'src/components/spinner'
-import { unzipIssue } from 'src/helpers/files'
-import { useIssueSummary } from 'src/hooks/use-api'
-import { useFileList } from 'src/hooks/use-fs'
-import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
-import { useMediaQuery } from 'src/hooks/use-screen'
-import { useSettingsValue } from 'src/hooks/use-settings'
-import {
-    navigateToIssue,
-    navigateToSettings,
-} from 'src/navigation/helpers/base'
-import { WithAppAppearance } from 'src/theme/appearance'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { metrics } from 'src/theme/spacing'
-import { ApiState } from './settings/api-screen'
+import React from 'react';
+import { View } from 'react-native';
+import { NavigationEvents, NavigationInjectedProps, NavigationScreenProp, withNavigation } from 'react-navigation';
+import { Issue, IssueSummary } from 'src/common';
+import { Button, ButtonAppearance } from 'src/components/button/button';
+import { IssueRow } from 'src/components/issue/issue-row';
+import { GridRowSplit } from 'src/components/issue/issue-title';
+import { FlexCenter } from 'src/components/layout/flex-center';
+import { IssueHeader } from 'src/components/layout/header/header';
+import { ScrollContainer } from 'src/components/layout/ui/container';
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message';
+import { Heading } from 'src/components/layout/ui/row';
+import { BaseList, List } from 'src/components/lists/list';
+import { Spinner } from 'src/components/spinner';
+import { unzipIssue } from 'src/helpers/files';
+import { useIssueSummary } from 'src/hooks/use-api';
+import { useFileList } from 'src/hooks/use-fs';
+import { useIssueOrLatestResponse } from 'src/hooks/use-issue';
+import { useMediaQuery } from 'src/hooks/use-screen';
+import { useSettingsValue } from 'src/hooks/use-settings';
+import { navigateToIssue, navigateToSettings } from 'src/navigation/helpers/base';
+import { WithAppAppearance } from 'src/theme/appearance';
+import { Breakpoints } from 'src/theme/breakpoints';
+import { metrics } from 'src/theme/spacing';
+import { ApiState } from './settings/api-screen';
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -97,18 +89,6 @@ const IssueList = withNavigation(
                     data={issueList}
                     renderItem={({ item }) => (
                         <IssueRow
-                            proxy={
-                                <Button
-                                    onPress={() => {
-                                        Alert.alert(
-                                            'Sorry, downloading is not supported yet',
-                                        )
-                                    }}
-                                    icon={'\uE077'}
-                                    alt={'Download'}
-                                    appearance={ButtonAppearance.skeleton}
-                                ></Button>
-                            }
                             onPress={() => {
                                 navigateToIssue(navigation, {
                                     path: {
@@ -117,7 +97,7 @@ const IssueList = withNavigation(
                                 })
                             }}
                             issue={item}
-                        ></IssueRow>
+                        />
                     )}
                 />
                 {isUsingProdDevtools ? (
