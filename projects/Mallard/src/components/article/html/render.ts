@@ -52,7 +52,7 @@ const renderImageElement = (imageElement: ImageElement) => {
     return `
         <figure style="overflow: hidden;">
             <img src="${path}" style="display: block; width: 100%; height: auto;" alt="${imageElement.alt}"/> 
-            <figcaption>${imageElement.caption} ${imageElement.credit}</figcaption>
+            <figcaption>${imageElement.caption} ${imageElement.copyright}</figcaption>
         </figure>
     `
 }
