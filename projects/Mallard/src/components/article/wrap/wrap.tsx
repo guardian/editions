@@ -141,6 +141,7 @@ const threeColWrapStyles = StyleSheet.create({
     },
     rightRail: {
         width: metrics.article.rightRail,
+        borderColor: color.line,
         flexShrink: 0,
         borderLeftWidth: 1,
     },
@@ -242,6 +243,7 @@ const multiStyles = StyleSheet.create({
         borderBottomColor: color.dimLine,
         borderBottomWidth: 1,
     },
+    topBorder: { height: 1, width: '100%', backgroundColor: color.line },
 })
 
 const MultilineWrap = ({
@@ -255,6 +257,9 @@ const MultilineWrap = ({
     multilineColor?: string
 }) => (
     <>
+        {needsTopPadding && (
+            <View {...ariaHidden} style={[multiStyles.topBorder]}></View>
+        )}
         <Wrap {...props} style={[needsTopPadding && multiStyles.paddingTop]} />
         {byline && (
             <Wrap
