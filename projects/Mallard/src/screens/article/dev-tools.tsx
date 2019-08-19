@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { articlePillars, ArticleType } from 'src/common'
 import { StyleSheet, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { Button } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 
 export const getEnumPosition = <T extends {}>(value: any, position: number) => {
     return (value[Object.keys(value)[position]] as unknown) as T
@@ -35,6 +35,7 @@ export const DevTools = ({
     return (
         <View style={styles.devTools}>
             <Button
+                appearance={ButtonAppearance.skeletonActive}
                 alt={'open devtools'}
                 onPress={() => {
                     setOpen(current => !current)
