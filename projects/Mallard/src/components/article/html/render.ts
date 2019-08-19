@@ -1,8 +1,14 @@
-import { BlockElement, HTMLElement, MediaAtomElement } from 'src/common'
+import {
+    BlockElement,
+    HTMLElement,
+    MediaAtomElement,
+    ImageElement,
+} from 'src/common'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { generateAssetsFontCss, css, makeHtml } from '../../../helpers/webview'
 import { PixelRatio } from 'react-native'
+import { imagePath } from 'src/paths'
 
 const styles = css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
@@ -41,15 +47,30 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     </figure>`
 }
 
+const renderImageElement = (imageElement: ImageElement) => {
+    const path = imagePath(imageElement.src)
+    return `
+        <figure style="overflow: hidden;">
+            <img src="${path}" style="display: block; width: 100%; height: auto;" alt="${imageElement.alt}"/> 
+            <figcaption>${imageElement.caption} ${imageElement.copyright}</figcaption>
+        </figure>
+    `
+}
+
 export const render = (article: BlockElement[]) => {
     const html = article
-        .filter(el => el.id === 'html' || el.id === 'media-atom')
+        .filter(
+            el =>
+                el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
+        )
         .map(el => {
             switch (el.id) {
                 case 'html':
                     return el.html
                 case 'media-atom':
                     return renderMediaAtom(el)
+                case 'image':
+                    return renderImageElement(el)
                 default:
                     ''
             }
