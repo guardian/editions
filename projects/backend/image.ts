@@ -26,7 +26,7 @@ const getSignature = (path: string) => {
         .digest('hex')
 }
 
-const sizes: { [k in ImageSize]: number } = {
+const sizes: { [k in ImageSize | 'sample']: number } = {
     phone: 375,
     tablet: 740,
     tabletL: 980,
@@ -34,7 +34,7 @@ const sizes: { [k in ImageSize]: number } = {
     sample: 200,
 }
 
-export const getImageURL = (image: Image, size: ImageSize) => {
+export const getImageURL = (image: Image, size: ImageSize | 'sample') => {
     const newPath = `${image.path}?q=85&dpr=2&w=${sizes[size]}`
     return `https://i.guim.co.uk/img/${
         image.source

@@ -97,10 +97,15 @@ export interface GalleryArticle extends Content {
 }
 
 export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
+export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
+export type ImageSize = typeof imageSizes[number]
 
 export interface IssueSummary extends WithKey {
     name: string
     date: string
+    assets?: {
+        [P in ImageSize]?: string[]
+    } & { data: string[] }
 }
 
 export interface Issue extends IssueSummary, WithKey {
@@ -254,7 +259,6 @@ export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
 export const issueSummaryPath = () => 'issues'
-export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export interface Image {
     source: string
     path: string
@@ -268,7 +272,6 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-export type ImageSize = typeof imageSizes[number] | 'sample'
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
