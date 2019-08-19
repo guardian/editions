@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { articlePillars, ArticleType } from 'src/common'
-import { Dimensions } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Button } from 'src/components/button/button'
 
 export const getEnumPosition = <T extends {}>(value: any, position: number) => {
     return (value[Object.keys(value)[position]] as unknown) as T
 }
+
+const styles = StyleSheet.create({
+    devTools: {
+        position: 'absolute',
+        zIndex: 9999,
+        elevation: 999,
+        top: metrics.vertical,
+        right: metrics.horizontal,
+        alignItems: 'flex-end',
+    },
+})
 
 export const DevTools = ({
     pillar,
@@ -20,48 +31,50 @@ export const DevTools = ({
     setPillar: (p: (p: number) => number) => void
     setType: (t: (t: number) => number) => void
 }) => {
+    const [open, setOpen] = useState(false)
     return (
-        <>
+        <View style={styles.devTools}>
             <Button
+                alt={'open devtools'}
                 onPress={() => {
-                    setPillar(app => {
-                        if (app + 1 >= articlePillars.length) {
-                            return 0
-                        }
-                        return app + 1
-                    })
-                }}
-                style={{
-                    position: 'absolute',
-                    zIndex: 9999,
-                    elevation: 999,
-                    top: Dimensions.get('window').height - 600,
-                    right: metrics.horizontal,
-                    alignSelf: 'flex-end',
+                    setOpen(current => !current)
                 }}
             >
-                {`${articlePillars[pillar]} 🌈`}
+                {`🌈`}
             </Button>
-            <Button
-                onPress={() => {
-                    setType(app => {
-                        if (app + 1 >= Object.keys(ArticleType).length) {
-                            return 0
-                        }
-                        return app + 1
-                    })
-                }}
-                style={{
-                    position: 'absolute',
-                    zIndex: 9999,
-                    elevation: 999,
-                    top: Dimensions.get('window').height - 550,
-                    right: metrics.horizontal,
-                    alignSelf: 'flex-end',
-                }}
-            >
-                {`${getEnumPosition(ArticleType, type)} 🌈`}
-            </Button>
-        </>
+            {open && (
+                <>
+                    <Button
+                        style={{ marginTop: metrics.vertical }}
+                        onPress={() => {
+                            setPillar(app => {
+                                if (app + 1 >= articlePillars.length) {
+                                    return 0
+                                }
+                                return app + 1
+                            })
+                        }}
+                    >
+                        {`PILLAR: ${articlePillars[pillar]}`}
+                    </Button>
+                    <Button
+                        style={{ marginTop: metrics.vertical }}
+                        onPress={() => {
+                            setType(app => {
+                                if (
+                                    app + 1 >=
+                                    Object.keys(ArticleType).length
+                                ) {
+                                    return 0
+                                }
+                                return app + 1
+                            })
+                        }}
+                    >
+                        {`TYPE: ${getEnumPosition(ArticleType, type)}`}
+                    </Button>
+                </>
+            )}
+        </View>
     )
 }

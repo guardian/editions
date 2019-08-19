@@ -135,6 +135,7 @@ const Button = ({
     buttonStyles?: StyleProp<ViewStyle>
     textStyles?: StyleProp<TextStyle>
     center?: boolean
+    alt?: string
     iconPosition?: 'left' | 'right'
     appearance: ButtonAppearance
 } & (
