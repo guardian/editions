@@ -57,6 +57,7 @@ const OpinionHeader = ({
 
     return (
         <MultilineWrap
+            needsTopPadding
             style={styles.innerWrap}
             backgroundColor={color.palette.opinion.faded}
             byline={

@@ -15,10 +15,10 @@ export const articlePillars = [
 ] as const
 
 export enum ArticleType {
+    Longread = 'longread',
     Article = 'article',
     Review = 'review',
     Opinion = 'opinion',
-    Longread = 'longread',
 }
 
 export type PillarFromPalette = typeof articlePillars[number]

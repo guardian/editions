@@ -32,6 +32,7 @@ interface ThreeColumnWrapperPropTypes
     extends Exclude<ContentWrapperPropTypes, 'tablet'> {
     backgroundColor?: ViewStyle['backgroundColor']
     borderColor?: ViewStyle['borderColor']
+    topOffset?: number
     rightRail?: (
         position: Breakpoints.zero | Breakpoints.tabletVertical,
     ) => ReactNode
@@ -102,7 +103,7 @@ const ContentWrapper = ({
     )
 }
 
-const tabletWrapStyles = StyleSheet.create({
+const threeColWrapStyles = StyleSheet.create({
     root: {
         flexDirection: 'row',
         width: '100%',
@@ -132,27 +133,37 @@ const tabletWrapStyles = StyleSheet.create({
 const ThreeColumnWrapper = ({
     borderColor,
     rightRail,
+    topOffset,
+    backgroundColor,
     ...innerProps
 }: ThreeColumnWrapperPropTypes) => {
     const { width } = useDimensions()
     const landscape = width >= Breakpoints.tabletLandscape
 
     return (
-        <View style={tabletWrapStyles.root}>
-            <View style={tabletWrapStyles.content}>
+        <View style={threeColWrapStyles.root}>
+            <View
+                style={[
+                    threeColWrapStyles.content,
+                    topOffset && {
+                        marginTop: topOffset * -1,
+                        backgroundColor,
+                    },
+                ]}
+            >
                 <ContentWrapper tablet {...innerProps} />
             </View>
             <View
                 style={[
-                    tabletWrapStyles.rightRail,
+                    threeColWrapStyles.rightRail,
                     { borderLeftColor: borderColor },
-                    landscape && tabletWrapStyles.rightRailLandscape,
+                    landscape && threeColWrapStyles.rightRailLandscape,
                 ]}
             >
                 {rightRail && (
                     <View
                         style={[
-                            tabletWrapStyles.rightRailContent,
+                            threeColWrapStyles.rightRailContent,
                             innerProps.style,
                         ]}
                     >
@@ -211,17 +222,16 @@ const multiStyles = StyleSheet.create({
 
 const MultilineWrap = ({
     byline,
+    needsTopPadding = false,
     multilineColor = color.line,
     ...props
 }: Exclude<WrapperPropTypes, 'header' | 'style' | 'footer'> & {
+    needsTopPadding: boolean
     byline: ReactNode
     multilineColor?: string
 }) => (
     <>
-        <Wrap
-            style={[!!props.backgroundColor && multiStyles.paddingTop]}
-            {...props}
-        />
+        <Wrap style={[needsTopPadding && multiStyles.paddingTop]} {...props} />
         {byline && (
             <Wrap
                 backgroundColor={props.backgroundColor}

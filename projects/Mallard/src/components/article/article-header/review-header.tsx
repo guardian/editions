@@ -34,6 +34,7 @@ const ReviewHeader = ({
     const [color] = useArticle()
     return (
         <MultilineWrap
+            needsTopPadding
             byline={
                 <ArticleFader>
                     <ArticleByline
