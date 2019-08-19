@@ -8,7 +8,7 @@ import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 export const elementParser = (
     id: string,
     atoms: { [key: string]: IAtom[] },
-) => async (element: IBlockElement): Promise<BlockElement | undefined> => {
+) => async (element: IBlockElement): Promise<BlockElement> => {
     switch (element.type) {
         case ElementType.TEXT:
             if (element.textTypeData && element.textTypeData.html) {
