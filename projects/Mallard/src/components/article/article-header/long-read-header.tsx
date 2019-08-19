@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     },
     headline: {
         fontFamily: getFont('titlepiece', 1).fontFamily,
-        marginTop: 0,
-        marginBottom: metrics.vertical * 2,
+        marginTop: metrics.vertical / 2,
+        marginBottom: metrics.vertical * 3.5,
         marginRight: metrics.horizontal * 4,
     },
 })

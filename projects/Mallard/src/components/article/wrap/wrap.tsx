@@ -236,6 +236,7 @@ const ArticleFader = getFader('article')
 const multiStyles = StyleSheet.create({
     byline: {
         paddingBottom: metrics.vertical,
+        paddingTop: metrics.vertical / 6,
         minHeight: getFont('text', 1).lineHeight * 2.75,
     },
     paddingTop: {
