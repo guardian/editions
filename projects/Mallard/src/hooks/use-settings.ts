@@ -1,23 +1,15 @@
-import { useState, useEffect } from 'react'
-
+import { useEffect, useState } from 'react'
 import {
-    storeSetting,
-    Settings,
-    getAllSettings,
-    UnsanitizedSetting,
-    gdprSwitchSettings,
-} from 'src/helpers/settings'
-import {
-    createProviderHook,
-    GetterSetterHook,
-    getterSetterHook,
     createGetterSetterProviderHook,
+    getterSetterHook,
 } from 'src/helpers/provider'
-
-type SettingsFromContext = [
+import {
+    gdprSwitchSettings,
+    getAllSettings,
     Settings,
-    (setting: keyof Settings, value: UnsanitizedSetting) => void,
-]
+    storeSetting,
+    UnsanitizedSetting,
+} from 'src/helpers/settings'
 
 /**
  * Fetch settings stored in AsyncStorage on mount
@@ -46,11 +38,13 @@ const useSettingsInCtx = () => {
 
 const {
     Provider: SettingsProvider,
-    useAsHook: useSettings,
+    useAsSetterHook: useSettings,
+    useAsGetterHook: useSettingsValue,
 } = createGetterSetterProviderHook(useSettingsInCtx)
 
 const useGdprSwitches = () => {
-    const [settings, setSetting] = useSettings()
+    const setSetting = useSettings()
+    const settings = useSettingsValue()
 
     /*
     if a user consents to all via any UI
@@ -80,4 +74,4 @@ const useGdprSwitches = () => {
     return { enableNulls, DEVMODE_resetAll }
 }
 
-export { SettingsProvider, useSettings, useGdprSwitches }
+export { SettingsProvider, useSettings, useSettingsValue, useGdprSwitches }

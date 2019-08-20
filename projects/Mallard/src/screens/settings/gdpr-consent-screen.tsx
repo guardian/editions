@@ -8,7 +8,11 @@ import { Link } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { GdprSwitchSettings } from 'src/helpers/settings'
 import { COOKIE_LINK, PRIVACY_LINK } from 'src/helpers/words'
-import { useGdprSwitches, useSettings } from 'src/hooks/use-settings'
+import {
+    useGdprSwitches,
+    useSettings,
+    useSettingsValue,
+} from 'src/hooks/use-settings'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { useToast } from 'src/hooks/use-toast'
 
@@ -28,7 +32,8 @@ const essentials: EssentialGdprSwitch = {
 }
 
 const GdprConsent = () => {
-    const [{ isUsingProdDevtools, ...settings }, setSetting] = useSettings()
+    const setSetting = useSettings()
+    const { isUsingProdDevtools, ...settings } = useSettingsValue()
     const { DEVMODE_resetAll } = useGdprSwitches()
     const { showToast } = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {

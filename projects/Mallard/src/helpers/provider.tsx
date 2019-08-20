@@ -1,4 +1,5 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
+import { G } from 'react-native-svg'
 
 export type GetterSetterHook<G, S> = null | {
     getter: G
@@ -30,17 +31,28 @@ const createGetterSetterProviderHook = <G, S>(
         createContext<G | null>(null),
         createContext<S | null>(null),
     ]
+
+    const ProviderWithHook = ({
+        getter,
+        setter,
+        children,
+    }: Exclude<GetterSetterHook<G, S>, null> & {
+        children: React.ReactNode
+    }) => {
+        const memoizedSetter = useMemo(() => setter, []) as S
+        return (
+            <SetterCtx.Provider value={memoizedSetter}>
+                <GetterCtx.Provider value={getter}>
+                    {children}
+                </GetterCtx.Provider>
+            </SetterCtx.Provider>
+        )
+    }
+
     const Provider = ({ children }: { children: React.ReactNode }) => {
         const hookVal = hook()
         if (hookVal) {
-            const { getter, setter } = hookVal
-            return (
-                <GetterCtx.Provider value={getter}>
-                    <SetterCtx.Provider value={setter}>
-                        {children}
-                    </SetterCtx.Provider>
-                </GetterCtx.Provider>
-            )
+            return <ProviderWithHook {...hookVal}>{children}</ProviderWithHook>
         }
         return null
     }
@@ -48,9 +60,7 @@ const createGetterSetterProviderHook = <G, S>(
     const useAsSetterHook = (): S => useContextAsHook(SetterCtx)
     const useAsGetterHook = (): G => useContextAsHook(GetterCtx)
 
-    const useAsHook = (): [G, S] => [useAsGetterHook(), useAsSetterHook()]
-
-    return { Provider, useAsHook, useAsGetterHook, useAsSetterHook }
+    return { Provider, useAsGetterHook, useAsSetterHook }
 }
 
 const createProviderHook = <T extends {}>(hook: () => T | null) => {

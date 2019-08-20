@@ -27,7 +27,7 @@ import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar, WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
 import { useDimensions } from 'src/hooks/use-screen'
-import { useSettings } from 'src/hooks/use-settings'
+import { useSettingsValue } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
     ArticleRequiredNavigationProps,
@@ -78,7 +78,7 @@ const ArticleScreenBody = ({
     )
     const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
-    const [{ isUsingProdDevtools }] = useSettings()
+    const { isUsingProdDevtools } = useSettingsValue()
 
     return (
         <ScrollView
@@ -169,7 +169,7 @@ const ArticleScreenWithProps = ({
         outputRange: [0, 1],
     })
 
-    const preview = isPreview(useSettings()[0])
+    const preview = isPreview(useSettingsValue())
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
 
     return (

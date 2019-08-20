@@ -1,28 +1,31 @@
 import React from 'react'
-import { View, Alert } from 'react-native'
-import { List, BaseList } from 'src/components/lists/list'
-import { NavigationScreenProp, NavigationEvents } from 'react-navigation'
-import { ApiState } from './settings/api-screen'
-import { WithAppAppearance } from 'src/theme/appearance'
-import { metrics } from 'src/theme/spacing'
-import { useFileList } from 'src/hooks/use-fs'
-import { unzipIssue } from 'src/helpers/files'
-import { Spinner } from 'src/components/spinner'
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { FlexCenter } from 'src/components/layout/flex-center'
-import { useIssueSummary } from 'src/hooks/use-api'
+import { Alert, View } from 'react-native'
+import {
+    NavigationEvents,
+    NavigationInjectedProps,
+    NavigationScreenProp,
+    withNavigation,
+} from 'react-navigation'
+import { Issue, IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/button/button'
-import { Heading } from 'src/components/layout/ui/row'
 import { IssueRow } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
-import { ScrollContainer } from 'src/components/layout/ui/container'
+import { FlexCenter } from 'src/components/layout/flex-center'
 import { IssueHeader } from 'src/components/layout/header/header'
-import { navigateToIssue } from 'src/navigation/helpers'
+import { ScrollContainer } from 'src/components/layout/ui/container'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { Heading } from 'src/components/layout/ui/row'
+import { BaseList, List } from 'src/components/lists/list'
+import { Spinner } from 'src/components/spinner'
+import { unzipIssue } from 'src/helpers/files'
+import { useIssueSummary } from 'src/hooks/use-api'
+import { useFileList } from 'src/hooks/use-fs'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
-import { Issue, IssueSummary } from 'src/common'
-import { useSettings } from 'src/hooks/use-settings'
-import { navigateToSettings } from 'src/navigation/helpers'
-import { withNavigation, NavigationInjectedProps } from 'react-navigation'
+import { useSettingsValue } from 'src/hooks/use-settings'
+import { navigateToIssue, navigateToSettings } from 'src/navigation/helpers'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { metrics } from 'src/theme/spacing'
+import { ApiState } from './settings/api-screen'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -73,7 +76,7 @@ const IssueList = withNavigation(
     }: {
         issueList: IssueSummary[]
     } & NavigationInjectedProps) => {
-        const [{ isUsingProdDevtools }] = useSettings()
+        const { isUsingProdDevtools } = useSettingsValue()
         return (
             <>
                 <BaseList
@@ -138,7 +141,7 @@ export const HomeScreen = ({
     const [files, { refreshIssues }] = useFileList()
     const { response: issueSummary, retry } = useIssueSummary()
     const from = navigation.getParam('from', undefined)
-    const [{ isUsingProdDevtools }] = useSettings()
+    const { isUsingProdDevtools } = useSettingsValue()
 
     return (
         <WithAppAppearance value={'tertiary'}>

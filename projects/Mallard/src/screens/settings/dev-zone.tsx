@@ -8,7 +8,7 @@ import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { getVersionInfo } from 'src/helpers/settings'
-import { useSettings } from 'src/hooks/use-settings'
+import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -35,7 +35,8 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
 }
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
-    const [settings, setSetting] = useSettings()
+    const setSetting = useSettings()
+    const settings = useSettingsValue()
     const { status } = useContext(AuthContext)
     const { apiUrl } = settings
     const { showToast } = useToast()

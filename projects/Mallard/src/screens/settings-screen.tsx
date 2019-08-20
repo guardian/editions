@@ -15,7 +15,7 @@ import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { getVersionInfo } from 'src/helpers/settings'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
-import { useSettings } from 'src/hooks/use-settings'
+import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
@@ -24,8 +24,8 @@ import { getFont } from 'src/theme/typography'
 import { DevZone } from './settings/dev-zone'
 
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
-    const [settings, setSetting] = useSettings()
-    const { isUsingProdDevtools } = settings
+    const setSetting = useSettings()
+    const { isUsingProdDevtools } = useSettingsValue()
     const signInHandler = useIdentity()
     const authHandler = useAuth()
     const [, setVersionClickedTimes] = useState(0)

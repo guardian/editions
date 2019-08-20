@@ -36,7 +36,7 @@ import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { useSettings } from 'src/hooks/use-settings'
+import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { isPreview } from 'src/helpers/settings/defaults'
 
 export interface PathToIssue {
@@ -129,7 +129,7 @@ const IssueFronts = ({
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
-    const preview = isPreview(useSettings()[0])
+    const preview = isPreview(useSettingsValue())
     return (
         <Container>
             {response({
