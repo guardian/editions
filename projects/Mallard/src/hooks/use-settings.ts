@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-    createGetterSetterProviderHook,
-    getterSetterHook,
-} from 'src/helpers/provider'
+import { createProviderFromHook, providerHook } from 'src/helpers/provider'
 import {
     gdprSwitchSettings,
     getAllSettings,
@@ -31,16 +28,14 @@ const useSettingsInCtx = () => {
     useEffect(() => {
         getAllSettings().then(s => setSettings(s))
     }, [])
-    return (
-        settings && getterSetterHook({ getter: settings, setter: setSetting })
-    )
+    return settings && providerHook({ getter: settings, setter: setSetting })
 }
 
 const {
     Provider: SettingsProvider,
     useAsSetterHook: useSettings,
     useAsGetterHook: useSettingsValue,
-} = createGetterSetterProviderHook(useSettingsInCtx)
+} = createProviderFromHook(useSettingsInCtx)
 
 const useGdprSwitches = () => {
     const setSetting = useSettings()

@@ -4,10 +4,7 @@ import {
     ToastProps,
     ToastRootHolder,
 } from 'src/components/toast/toast'
-import {
-    createGetterSetterProviderHook,
-    getterSetterHook,
-} from 'src/helpers/provider'
+import { createProviderFromHook, providerHook } from 'src/helpers/provider'
 
 /*
   Exports
@@ -30,7 +27,7 @@ const useToastInContext = () => {
         }, 5000)
     }
 
-    return getterSetterHook({
+    return providerHook({
         getter: toast,
         setter: { showToast, removeLastToast },
     })
@@ -40,7 +37,7 @@ const {
     Provider: ToastProviderBase,
     useAsGetterHook: useToastList,
     useAsSetterHook: useToast,
-} = createGetterSetterProviderHook(useToastInContext)
+} = createProviderFromHook(useToastInContext)
 
 const ToastProvider = ({ children }: { children: ReactNode }) => (
     <ToastProviderBase>

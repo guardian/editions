@@ -3,7 +3,6 @@ import { Clipboard, TouchableOpacity } from 'react-native'
 import { Button } from 'src/components/button/button'
 import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text'
 import { GENERIC_ERROR } from 'src/helpers/words'
-import { useSettingsValue } from 'src/hooks/use-settings'
 import { metrics } from 'src/theme/spacing'
 
 export interface PropTypes {

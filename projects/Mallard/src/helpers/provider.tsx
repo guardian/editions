@@ -1,18 +1,14 @@
 import React, { createContext, useContext, useMemo } from 'react'
-import { G } from 'react-native-svg'
 
-export type GetterSetterHook<G, S> = null | {
+export interface ProviderHook<G, S> {
     getter: G
     setter: S
 }
 
-export const getterSetterHook = <G, S>({
+export const providerHook = <G, S>({ getter, setter }: ProviderHook<G, S>) => ({
     getter,
     setter,
-}: {
-    getter: G
-    setter: S
-}) => ({ getter, setter })
+})
 
 const useContextAsHook = <C extends unknown>(
     Context: React.Context<C | null>,
@@ -24,8 +20,16 @@ const useContextAsHook = <C extends unknown>(
     return ctx
 }
 
-const createGetterSetterProviderHook = <G, S>(
-    hook: () => GetterSetterHook<G, S>,
+/*
+By splitting up getters and setters we avoid
+components that only set values rerendering
+when the values are changed
+
+https://kentcdodds.com/blog/how-to-optimize-your-context-value/
+*/
+
+const createProviderFromHook = <G, S>(
+    hook: () => ProviderHook<G, S> | null,
 ) => {
     const [GetterCtx, SetterCtx] = [
         createContext<G | null>(null),
@@ -36,7 +40,7 @@ const createGetterSetterProviderHook = <G, S>(
         getter,
         setter,
         children,
-    }: Exclude<GetterSetterHook<G, S>, null> & {
+    }: ProviderHook<G, S> & {
         children: React.ReactNode
     }) => {
         const memoizedSetter = useMemo(() => setter, []) as S
@@ -63,7 +67,7 @@ const createGetterSetterProviderHook = <G, S>(
     return { Provider, useAsGetterHook, useAsSetterHook }
 }
 
-const createProviderHook = <T extends {}>(hook: () => T | null) => {
+const createMixedProviderHook__SLOW = <T extends {}>(hook: () => T | null) => {
     const Context = createContext<T | null>(null)
     const Provider = ({ children }: { children: React.ReactNode }) => {
         const value = hook()
@@ -80,4 +84,4 @@ const createProviderHook = <T extends {}>(hook: () => T | null) => {
     return { Provider, useAsHook }
 }
 
-export { createProviderHook, createGetterSetterProviderHook }
+export { createProviderFromHook, createMixedProviderHook__SLOW }
