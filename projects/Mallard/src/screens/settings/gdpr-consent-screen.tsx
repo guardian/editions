@@ -1,28 +1,16 @@
 import React from 'react'
-import {
-    View,
-    StyleSheet,
-    ScrollView,
-    FlatList,
-    Linking,
-    Text,
-} from 'react-native'
-import {
-    Row,
-    Separator,
-    Heading,
-    Footer,
-    TallRow,
-} from 'src/components/layout/ui/row'
-import { useSettings, useGdprSwitches } from 'src/hooks/use-settings'
-import { GdprSwitchSettings } from 'src/helpers/settings'
-import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
+import { FlatList, View } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { WithAppAppearance } from 'src/theme/appearance'
-import { UiBodyCopy } from 'src/components/styled-text'
+import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
+import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Link } from 'src/components/link'
-import { PRIVACY_LINK, COOKIE_LINK } from 'src/helpers/words'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { GdprSwitchSettings } from 'src/helpers/settings'
+import { COOKIE_LINK, PRIVACY_LINK } from 'src/helpers/words'
+import { useGdprSwitches, useSettings } from 'src/hooks/use-settings'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { useToast } from 'src/hooks/use-toast'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -42,6 +30,7 @@ const essentials: EssentialGdprSwitch = {
 const GdprConsent = () => {
     const [{ isUsingProdDevtools, ...settings }, setSetting] = useSettings()
     const { DEVMODE_resetAll } = useGdprSwitches()
+    const [, { addToast }] = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
@@ -82,6 +71,7 @@ const GdprConsent = () => {
                             for (const { key } of Object.values(switches)) {
                                 setSetting(key, true)
                             }
+                            addToast('Privacy settings saved')
                         }}
                     >
                         Enable all

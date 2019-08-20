@@ -1,10 +1,5 @@
-import React, { useState, ReactElement } from 'react'
-import {
-    Toast,
-    ToastRootHolder,
-    ToastList,
-    ToastProps,
-} from 'src/components/toast'
+import React, { ReactElement, useState } from 'react'
+import { ToastList, ToastProps, ToastRootHolder } from 'src/components/toast'
 import {
     createGetterSetterProviderHook,
     getterSetterHook,
@@ -27,8 +22,8 @@ const useToastInContext = () => {
     ) => {
         setToast(toasts => [...toasts, { title, ...moreThings }])
         setTimeout(() => {
-            // removeLastToast()
-        }, 2000)
+            removeLastToast()
+        }, 5000)
     }
 
     return getterSetterHook({

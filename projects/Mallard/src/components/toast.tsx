@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
-import { UiBodyCopy } from './styled-text'
-import { View } from 'react-native'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { HeadlineText } from 'src/components/styled-text'
+import { useMediaQuery } from 'src/hooks/use-screen'
 import { useToast } from 'src/hooks/use-toast'
-import { Button } from './button/button'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { HeadlineText } from 'src/components/styled-text'
 import { getFont } from 'src/theme/typography'
-import { useMediaQuery } from 'src/hooks/use-screen'
-import { Breakpoints } from 'src/theme/breakpoints'
+import { UiBodyCopy } from './styled-text'
 
 export interface ToastProps {
     title: string
@@ -16,53 +15,44 @@ export interface ToastProps {
 }
 export type ToastList = ToastProps[]
 
+const styles = StyleSheet.create({
+    toast: {
+        backgroundColor: color.palette.highlight.main,
+        padding: metrics.sides.sides,
+        paddingVertical: metrics.vertical,
+        paddingBottom: metrics.vertical * 2,
+    },
+    title: getFont('headline', 1, 'bold'),
+})
+
 const Toast = ({ title, subtitle }: ToastProps) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <View
-            style={{
-                backgroundColor: color.palette.highlight.main,
-                padding: isTablet
-                    ? metrics.sides.sidesTablet
-                    : metrics.sides.sides,
-                paddingVertical: metrics.vertical,
-                paddingBottom: metrics.vertical * 2,
-            }}
+            style={[
+                styles.toast,
+                isTablet && { paddingHorizontal: metrics.sides.sidesTablet },
+            ]}
         >
-            <View>
-                <HeadlineText style={getFont('headline', 1, 'bold')}>
-                    {title}
-                </HeadlineText>
-                {subtitle && <UiBodyCopy>{subtitle}</UiBodyCopy>}
-            </View>
+            <HeadlineText style={styles.title}>{title}</HeadlineText>
+            {subtitle && <UiBodyCopy>{subtitle}</UiBodyCopy>}
         </View>
     )
 }
 
-const ToastRootHolder = ({}) => {
-    const [toasts, { addToast }] = useToast()
-    useEffect(() => {
-        addToast('hiiii ' + Date.now(), { subtitle: 'asfasdasdsadsad' })
-    }, [])
-    return (
-        <View
-            style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-            }}
-        >
-            <Button
-                onPress={() => {
-                    addToast('hiiii ' + Date.now(), {
-                        subtitle: 'asfasdasdsadsad',
-                    })
-                }}
-            >
-                Add toast
-            </Button>
+const holderStyles = StyleSheet.create({
+    root: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+})
 
+const ToastRootHolder = ({}) => {
+    const [toasts] = useToast()
+    return (
+        <View style={holderStyles.root}>
             {toasts.map((toast, i) => (
                 <Toast {...toast} key={i + toast.title} />
             ))}
