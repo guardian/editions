@@ -17,6 +17,8 @@ import { Login } from './log-in'
 import isEmail from 'validator/lib/isEmail'
 import { useFormField } from 'src/hooks/use-form-field'
 import { IdentityAuthStatus } from 'src/authentication/credentials-chain'
+import { withConsent, GdprSwitch } from 'src/helpers/settings'
+import { Alert } from 'react-native'
 
 const useRandomState = () =>
     useState(
@@ -38,8 +40,8 @@ const tryAuth = async (
     authRunner: () => Promise<unknown> = () => Promise.resolve(null),
 ) => {
     try {
-        await authRunner()
         onStart()
+        await authRunner()
         const membershipData = await fetchUserDataForKeychainUser()
 
         if (!membershipData) {
@@ -81,42 +83,60 @@ const AuthSwitcherScreen = ({
     const { setStatus, signOut } = useContext(AuthContext)
     const { open } = useModal()
 
-    const handleAuthClick = async (authRunner: () => Promise<string>) => {
+    const handleAuthClick = async (
+        authRunner: () => Promise<string>,
+        { consentType }: { consentType: GdprSwitch | false },
+    ) => {
         setError(null)
-        await signOut()
-        tryAuth(
-            {
-                onStart: () => {
-                    setIsLoading(true)
-                },
-                onError: err => {
-                    setIsLoading(false)
-                    setError(err)
-                },
-                onSuccess: data => {
-                    setIsLoading(false)
-                    setStatus(IdentityAuthStatus(data))
-                    if (!canViewEdition(data)) {
-                        open(close => (
-                            <SubNotFoundModalCard
-                                onDismiss={() => navigation.popToTop()}
-                                onOpenCASLogin={() =>
-                                    navigation.navigate(routeNames.CasSignIn)
-                                }
-                                onLoginPress={() =>
-                                    navigation.navigate(routeNames.SignIn)
-                                }
-                                close={close}
-                            />
-                        ))
-                    } else {
-                        open(close => <SubFoundModalCard close={close} />)
-                    }
-                    navigation.goBack()
-                },
+        withConsent(consentType, {
+            allow: async () => {
+                await signOut()
+                tryAuth(
+                    {
+                        onStart: () => {
+                            setIsLoading(true)
+                        },
+                        onError: err => {
+                            setIsLoading(false)
+                            setError(err)
+                        },
+                        onSuccess: data => {
+                            setIsLoading(false)
+                            setStatus(IdentityAuthStatus(data))
+                            if (!canViewEdition(data)) {
+                                open(close => (
+                                    <SubNotFoundModalCard
+                                        onDismiss={() => navigation.popToTop()}
+                                        onOpenCASLogin={() =>
+                                            navigation.navigate(
+                                                routeNames.CasSignIn,
+                                            )
+                                        }
+                                        onLoginPress={() =>
+                                            navigation.navigate(
+                                                routeNames.SignIn,
+                                            )
+                                        }
+                                        close={close}
+                                    />
+                                ))
+                            } else {
+                                open(close => (
+                                    <SubFoundModalCard close={close} />
+                                ))
+                            }
+                            navigation.goBack()
+                        },
+                    },
+                    authRunner,
+                )
             },
-            authRunner,
-        )
+            deny: async () => {
+                Alert.alert(
+                    'You have disabled social sign-in. You can enable it in Settings > Privacy Settings > Functional',
+                )
+            },
+        })
     }
 
     return (
@@ -130,21 +150,25 @@ const AuthSwitcherScreen = ({
             isLoading={isLoading}
             onDismiss={() => navigation.goBack()}
             onFacebookPress={() =>
-                handleAuthClick(() =>
-                    facebookAuthWithDeepRedirect(validatorString),
+                handleAuthClick(
+                    () => facebookAuthWithDeepRedirect(validatorString),
+                    { consentType: 'gdprAllowFunctionality' },
                 )
             }
             onGooglePress={() =>
-                handleAuthClick(() =>
-                    googleAuthWithDeepRedirect(validatorString),
+                handleAuthClick(
+                    () => googleAuthWithDeepRedirect(validatorString),
+                    { consentType: 'gdprAllowFunctionality' },
                 )
             }
             onSubmit={() =>
-                handleAuthClick(() =>
-                    fetchAndPersistUserAccessTokenWithIdentity(
-                        email.value,
-                        password.value,
-                    ),
+                handleAuthClick(
+                    () =>
+                        fetchAndPersistUserAccessTokenWithIdentity(
+                            email.value,
+                            password.value,
+                        ),
+                    { consentType: false },
                 )
             }
             errorMessage={error}
