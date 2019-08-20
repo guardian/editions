@@ -21,6 +21,7 @@ import {
 import { getCrosswordArticleOverrides } from './utils/crossword'
 import { notNull } from '../common/src'
 import { isPreview } from './preview'
+import striptags from 'striptags'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -63,15 +64,16 @@ export const parseCollection = async (
                 (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline =
                 (furniture && furniture.headlineOverride) || article.headline
-            const trail =
+            const trail = striptags(
                 (furniture && furniture.trailTextOverride) ||
-                article.trail ||
-                ''
+                    article.trail ||
+                    '',
+            )
             const byline =
                 (furniture && furniture.bylineOverride) || article.byline
             const showByline = furniture.showByline //TODO
             const showQuotedHeadline = furniture.showQuotedHeadline // TODO
-            const mediaType = furniture.mediaType // TODO// TODO
+            const mediaType = furniture.mediaType // TODO
             const slideshowImages =
                 furniture.slideshowImages &&
                 furniture.slideshowImages
