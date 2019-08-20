@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { HeadlineText } from 'src/components/styled-text'
 import { useMediaQuery } from 'src/hooks/use-screen'
-import { useToast } from 'src/hooks/use-toast'
+import { useToast, useToastList } from 'src/hooks/use-toast'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -66,7 +66,7 @@ const holderStyles = StyleSheet.create({
 })
 
 const ToastRootHolder = ({}) => {
-    const [toasts] = useToast()
+    const toasts = useToastList()
     return (
         <View style={holderStyles.root}>
             {toasts.map((toast, i) => (

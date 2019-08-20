@@ -38,7 +38,8 @@ const useToastInContext = () => {
 
 const {
     Provider: ToastProviderBase,
-    useAsHook: useToast,
+    useAsGetterHook: useToastList,
+    useAsSetterHook: useToast,
 } = createGetterSetterProviderHook(useToastInContext)
 
 const ToastProvider = ({ children }: { children: ReactNode }) => (
@@ -48,4 +49,4 @@ const ToastProvider = ({ children }: { children: ReactNode }) => (
     </ToastProviderBase>
 )
 
-export { ToastProvider, useToast }
+export { ToastProvider, useToast, useToastList }

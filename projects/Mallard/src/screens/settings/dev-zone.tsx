@@ -38,7 +38,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { status } = useContext(AuthContext)
     const { apiUrl } = settings
-    const [, { showToast }] = useToast()
+    const { showToast } = useToast()
     return (
         <>
             <Heading>🦆 SECRET DUCK MENU 🦆</Heading>

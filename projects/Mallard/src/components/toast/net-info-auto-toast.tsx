@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useToast } from 'src/hooks/use-toast'
 
 const NetInfoAutoToast = () => {
-    const [, { showToast }] = useToast()
+    const { showToast } = useToast()
     const { isConnected } = useNetInfo()
     useEffect(() => {
         if (!isConnected) {
