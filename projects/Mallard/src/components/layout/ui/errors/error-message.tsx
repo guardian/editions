@@ -14,7 +14,7 @@ export interface PropTypes {
 }
 
 const ErrorMessage = ({ title, message, debugMessage, action }: PropTypes) => {
-    const { isUsingProdDevtools } = useSettingsValue()
+    const isUsingProdDevtools = __DEV__
 
     return (
         <>
