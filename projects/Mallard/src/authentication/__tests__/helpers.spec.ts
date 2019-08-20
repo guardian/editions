@@ -217,7 +217,7 @@ describe('helpers', () => {
             expect(
                 canViewEdition(
                     withCreds({
-                        email: 'charlotte@elgrauniad.biz',
+                        email: 'charlotte@gu.com',
                         digitalPack: false,
                     }),
                 ),
@@ -248,7 +248,7 @@ describe('helpers', () => {
             expect(
                 canViewEdition(
                     withCreds({
-                        email: 'charlotte@elgrauniad.biz',
+                        email: 'charlotte@gu.com',
                         digitalPack: false,
                         userEmailValidated: false,
                     }),
@@ -278,7 +278,7 @@ describe('helpers', () => {
             expect(
                 canViewEdition(
                     withCreds({
-                        email: 'charlotte@elgrauniad.biz',
+                        email: 'charlotte@gu.com',
                         digitalPack: true,
                     }),
                 ),
