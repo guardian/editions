@@ -88,7 +88,7 @@ const useAuth = () => {
             case 'authed': {
                 switch (status.data.type) {
                     case 'identity': {
-                        return canViewEdition(status.data.info.membershipData)
+                        return canViewEdition(status.data.info)
                             ? authed(status.data)
                             : unauthed(true)
                     }

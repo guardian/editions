@@ -96,7 +96,7 @@ const AuthSwitcherScreen = ({
                 onSuccess: data => {
                     setIsLoading(false)
                     setStatus(IdentityAuthStatus(data))
-                    if (!canViewEdition(data.membershipData)) {
+                    if (!canViewEdition(data)) {
                         open(close => (
                             <SubNotFoundModalCard
                                 onDismiss={() => navigation.popToTop()}

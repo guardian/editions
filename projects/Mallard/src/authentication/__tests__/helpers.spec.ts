@@ -1,5 +1,9 @@
-import { fetchUserDataForKeychainUser } from '../helpers'
-import { membershipResponse, userResponse } from './fixtures'
+import {
+    fetchUserDataForKeychainUser,
+    canViewEdition,
+    UserData,
+} from '../helpers'
+import { membershipResponse, userResponse, userData } from './fixtures'
 
 const getMockStore = (val?: string) => ({
     get: jest.fn(() =>
@@ -13,6 +17,27 @@ const getMockStore = (val?: string) => ({
     ),
     set: jest.fn(() => Promise.resolve(true)),
     reset: jest.fn(() => Promise.resolve(true)),
+})
+
+const withCreds = ({
+    email,
+    digitalPack,
+}: {
+    email: string
+    digitalPack: boolean
+}): UserData => ({
+    ...userData,
+    userDetails: {
+        ...userData.userDetails,
+        primaryEmailAddress: email,
+    },
+    membershipData: {
+        ...userData.membershipData,
+        contentAccess: {
+            ...userData.membershipData.contentAccess,
+            digitalPack,
+        },
+    },
 })
 
 const getMockPromise = <T>(val: T) => jest.fn(() => Promise.resolve(val))
@@ -160,6 +185,66 @@ describe('helpers', () => {
             expect(fetchMembershipData).toBeCalledWith('mtoken')
             expect(fetchMembershipToken).not.toBeCalled()
             expect(membershipStore.set).not.toBeCalled()
+        })
+    })
+
+    describe('canViewEdition', () => {
+        it('allows people in with guardian email addresses', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'alice@guardian.co.uk',
+                        digitalPack: false,
+                    }),
+                ),
+            ).toBe(true)
+
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'bob@theguardian.com',
+                        digitalPack: false,
+                    }),
+                ),
+            ).toBe(true)
+
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'charlotte@elgrauniad.biz',
+                        digitalPack: false,
+                    }),
+                ),
+            ).toBe(false)
+        })
+
+        it('allows anyone to login with a digital pack', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'alice@guardian.co.uk',
+                        digitalPack: true,
+                    }),
+                ),
+            ).toBe(true)
+
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'bob@theguardian.com',
+                        digitalPack: true,
+                    }),
+                ),
+            ).toBe(true)
+
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'charlotte@elgrauniad.biz',
+                        digitalPack: true,
+                    }),
+                ),
+            ).toBe(true)
         })
     })
 })
