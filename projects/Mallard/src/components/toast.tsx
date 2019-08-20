@@ -19,8 +19,10 @@ const styles = StyleSheet.create({
     toast: {
         backgroundColor: color.palette.highlight.main,
         padding: metrics.sides.sides,
-        paddingVertical: metrics.vertical,
+        paddingTop: metrics.vertical / 2,
         paddingBottom: metrics.vertical * 2,
+        borderColor: color.palette.highlight.dark,
+        borderTopWidth: 1,
     },
     title: getFont('headline', 1, 'bold'),
 })
