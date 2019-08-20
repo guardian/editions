@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react'
-import { createProviderFromHook, providerHook } from 'src/helpers/provider'
+import React, { useEffect, useState } from 'react'
+import {
+    createProviderFromHook,
+    providerHook,
+    nestProviders,
+} from 'src/helpers/provider'
 import {
     gdprSwitchSettings,
     getAllSettings,
+    onSettingChanged,
     Settings,
     storeSetting,
     UnsanitizedSetting,
@@ -11,9 +16,18 @@ import {
 /**
  * Fetch settings stored in AsyncStorage on mount
  */
-const useSettingsInCtx = () => {
+
+type SetterFn = (setting: keyof Settings, value: UnsanitizedSetting) => void
+
+const useSettingsFromStore = (): [
+    Settings | null,
+    {
+        setSetting: SetterFn
+        storeSetting: SetterFn
+    },
+] => {
     const [settings, setSettings] = useState(null as Settings | null)
-    const setSetting = (setting: keyof Settings, value: UnsanitizedSetting) => {
+    const setSetting: SetterFn = (setting, value) => {
         setSettings(settings => {
             if (!settings) {
                 console.warn(
@@ -23,20 +37,53 @@ const useSettingsInCtx = () => {
             }
             return { ...settings, [setting]: value }
         })
-        storeSetting(setting, value)
     }
+    useEffect(() => {
+        return onSettingChanged((key, val) => {
+            setSetting(key, val)
+        })
+    }, [])
+
     useEffect(() => {
         getAllSettings().then(s => setSettings(s))
     }, [])
-    return settings && providerHook({ getter: settings, setter: setSetting })
+    return [settings, { setSetting, storeSetting }]
 }
 
+const useSettingsInCtx = () => {
+    const [settings, { storeSetting }] = useSettingsFromStore()
+    return settings && providerHook({ getter: settings, setter: storeSetting })
+}
+
+const createSingleSettingHook = (key: keyof Settings) => () => {
+    const [settings] = useSettingsFromStore()
+    return (
+        settings &&
+        providerHook({
+            getter: settings[key],
+            setter: () => {},
+        })
+    )
+}
+
+/* create settings */
 const {
-    Provider: SettingsProvider,
+    Provider: SettingsProviderBase,
     useAsSetterHook: useSettings,
     useAsGetterHook: useSettingsValue,
 } = createProviderFromHook(useSettingsInCtx)
 
+const {
+    Provider: DevToolSettingsProvider,
+    useAsGetterHook: useSettingIsUsingProdDevtools,
+} = createProviderFromHook(createSingleSettingHook('isUsingProdDevtools'))
+
+const SettingsProvider = nestProviders(
+    SettingsProviderBase,
+    DevToolSettingsProvider,
+)
+
+/* gdpr switchez */
 const useGdprSwitches = () => {
     const setSetting = useSettings()
     const settings = useSettingsValue()
@@ -69,4 +116,10 @@ const useGdprSwitches = () => {
     return { enableNulls, DEVMODE_resetAll }
 }
 
-export { SettingsProvider, useSettings, useSettingsValue, useGdprSwitches }
+export {
+    SettingsProvider,
+    useSettingIsUsingProdDevtools,
+    useSettings,
+    useSettingsValue,
+    useGdprSwitches,
+}

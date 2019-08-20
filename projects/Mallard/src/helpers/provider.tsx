@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { createContext, useContext, useMemo, ReactNode } from 'react'
 
 export interface ProviderHook<G, S> {
     getter: G
@@ -10,12 +10,25 @@ export const providerHook = <G, S>({ getter, setter }: ProviderHook<G, S>) => ({
     setter,
 })
 
+export const nestProviders = (
+    ...providers: ((p: { children: ReactNode }) => JSX.Element | null)[]
+) =>
+    providers.reduce(
+        (Prev, Cur) => ({ children }) => (
+            <Prev>
+                <Cur>{children}</Cur>
+            </Prev>
+        ),
+        ({ children }) => children,
+    )
+
 const useContextAsHook = <C extends unknown>(
     Context: React.Context<C | null>,
 ): C => {
     const ctx = useContext(Context)
-    if (!ctx) {
-        throw 'Missing context provider'
+    if (ctx === null) {
+        console.error(Context)
+        throw 'Missing context provider for ' + Context
     }
     return ctx
 }
@@ -44,6 +57,7 @@ const createProviderFromHook = <G, S>(
         children: React.ReactNode
     }) => {
         const memoizedSetter = useMemo(() => setter, []) as S
+        console.log(GetterCtx.Provider, getter)
         return (
             <SetterCtx.Provider value={memoizedSetter}>
                 <GetterCtx.Provider value={getter}>
@@ -60,7 +74,6 @@ const createProviderFromHook = <G, S>(
         }
         return null
     }
-
     const useAsSetterHook = (): S => useContextAsHook(SetterCtx)
     const useAsGetterHook = (): G => useContextAsHook(GetterCtx)
 

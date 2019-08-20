@@ -14,8 +14,6 @@ const useDimensions = (): ScaledSize => {
         ) => {
             if (!areEqualShallow(ev.window, dimensions)) {
                 setDimensions(ev.window)
-            } else {
-                console.log('skip')
             }
         }
         Dimensions.addEventListener('change', listener)

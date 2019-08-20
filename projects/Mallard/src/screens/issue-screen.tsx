@@ -127,9 +127,13 @@ const IssueFronts = ({
     )
 }
 
+const PreviewReloadButton = ({ onPress }: { onPress: () => {} }) => {
+    const preview = isPreview(useSettingsValue())
+    return preview && <ReloadButton onPress={onPress} />
+}
+
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
-    const preview = isPreview(useSettingsValue())
     return (
         <Container>
             {response({
@@ -153,14 +157,13 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 success: (issue, { retry }) => (
                     <>
-                        {preview && (
-                            <ReloadButton
-                                onPress={() => {
-                                    clearCache()
-                                    retry()
-                                }}
-                            />
-                        )}
+                        <PreviewReloadButton
+                            onPress={() => {
+                                clearCache()
+                                retry()
+                            }}
+                        />
+
                         <WithBreakpoints>
                             {{
                                 0: () => (

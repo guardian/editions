@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { defaultSettings } from './settings/defaults'
 import versionInfo from '../version-info.json'
+
 /*
 Consent switches can be 'unset' or null
 */
@@ -14,7 +15,7 @@ export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
     'gdprAllowFunctionality',
 ]
 
-interface DevSettings {
+export interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
     notificationServiceRegister: string
@@ -55,6 +56,10 @@ export const getVersionInfo = () => {
 /*
 getters & setters
 */
+let callbacks: ((
+    setting: keyof Settings,
+    value: UnsanitizedSetting,
+) => void)[] = []
 export const getSetting = (setting: keyof Settings) =>
     AsyncStorage.getItem('@Setting_' + setting).then(item => {
         if (!item) {
@@ -78,12 +83,24 @@ export const getAllSettings = async (): Promise<Settings> => {
         {} as Settings,
     )
 }
+export const onSettingChanged = (
+    callback: (setting: keyof Settings, value: UnsanitizedSetting) => void,
+) => {
+    callbacks.push(callback)
+    return () => {
+        callbacks = callbacks.filter(item => item !== callback)
+    }
+}
 
 export const storeSetting = (
     setting: keyof Settings,
     value: UnsanitizedSetting,
 ) => {
-    AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
+    AsyncStorage.setItem('@Setting_' + setting, sanitize(value), () => {
+        for (let cb of callbacks) {
+            cb(setting, value)
+        }
+    })
 }
 
 export const shouldShowOnboarding = (settings: Settings) =>

@@ -7,7 +7,10 @@ import { useScreens } from 'react-native-screens'
 import { StatusBar, View } from 'react-native'
 
 import { RootNavigator } from 'src/navigation'
-import { SettingsProvider } from 'src/hooks/use-settings'
+import {
+    SettingsProvider,
+    DevToolSettingsProvider,
+} from 'src/hooks/use-settings'
 import { FileSystemProvider } from 'src/hooks/use-fs'
 import { StyleSheet } from 'react-native'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
