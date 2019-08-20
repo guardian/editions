@@ -1,6 +1,6 @@
 # Archiver
 
-## Status:
+## Status: Accepted
 
 ## Context
 
