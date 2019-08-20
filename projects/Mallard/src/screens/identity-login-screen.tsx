@@ -85,7 +85,7 @@ const AuthSwitcherScreen = ({
 
     const handleAuthClick = async (
         authRunner: () => Promise<string>,
-        { consentType }: { consentType: GdprSwitch | false },
+        { consentType }: { consentType: GdprSwitch | null },
     ) => {
         setError(null)
         withConsent(consentType, {
@@ -168,7 +168,7 @@ const AuthSwitcherScreen = ({
                             email.value,
                             password.value,
                         ),
-                    { consentType: false },
+                    { consentType: null },
                 )
             }
             errorMessage={error}

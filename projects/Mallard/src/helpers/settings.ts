@@ -89,14 +89,10 @@ export const storeSetting = (
 export const shouldShowOnboarding = (settings: Settings) =>
     !settings.hasOnboarded
 
-export const getPerformanceConsent = () => getSetting('gdprAllowPerformance')
-export const getFunctionalityConsent = () =>
-    getSetting('gdprAllowFunctionality')
-
 export type GdprSwitch = keyof GdprSwitchSettings
 
 export const withConsent = async <T>(
-    consentSwitch: GdprSwitch | false, // false allows conditionally ignoring consent
+    consentSwitch: GdprSwitch | null, // false allows conditionally ignoring consent
     {
         allow,
         deny,
@@ -104,8 +100,9 @@ export const withConsent = async <T>(
         allow: () => T
         deny: (wasSet: boolean) => T
     },
+    getSettingImpl = getSetting,
 ) => {
     if (!consentSwitch) return allow()
-    const allowed = await getSetting(consentSwitch)
+    const allowed = await getSettingImpl(consentSwitch)
     return allowed ? allow() : deny(allowed === false)
 }
