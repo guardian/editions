@@ -85,58 +85,68 @@ const AuthSwitcherScreen = ({
 
     const handleAuthClick = async (
         authRunner: () => Promise<string>,
-        { consentType }: { consentType: GdprSwitch | null },
+        {
+            requiresFunctionalConsent,
+            signInName,
+        }: { requiresFunctionalConsent: boolean; signInName?: string },
     ) => {
         setError(null)
-        withConsent(consentType, {
-            allow: async () => {
-                await signOut()
-                tryAuth(
-                    {
-                        onStart: () => {
-                            setIsLoading(true)
+        withConsent(
+            requiresFunctionalConsent ? 'gdprAllowFunctionality' : null,
+            {
+                allow: async () => {
+                    await signOut()
+                    tryAuth(
+                        {
+                            onStart: () => {
+                                setIsLoading(true)
+                            },
+                            onError: err => {
+                                setIsLoading(false)
+                                setError(err)
+                            },
+                            onSuccess: data => {
+                                setIsLoading(false)
+                                setStatus(IdentityAuthStatus(data))
+                                if (!canViewEdition(data)) {
+                                    open(close => (
+                                        <SubNotFoundModalCard
+                                            onDismiss={() =>
+                                                navigation.popToTop()
+                                            }
+                                            onOpenCASLogin={() =>
+                                                navigation.navigate(
+                                                    routeNames.CasSignIn,
+                                                )
+                                            }
+                                            onLoginPress={() =>
+                                                navigation.navigate(
+                                                    routeNames.SignIn,
+                                                )
+                                            }
+                                            close={close}
+                                        />
+                                    ))
+                                } else {
+                                    open(close => (
+                                        <SubFoundModalCard close={close} />
+                                    ))
+                                }
+                                navigation.goBack()
+                            },
                         },
-                        onError: err => {
-                            setIsLoading(false)
-                            setError(err)
-                        },
-                        onSuccess: data => {
-                            setIsLoading(false)
-                            setStatus(IdentityAuthStatus(data))
-                            if (!canViewEdition(data)) {
-                                open(close => (
-                                    <SubNotFoundModalCard
-                                        onDismiss={() => navigation.popToTop()}
-                                        onOpenCASLogin={() =>
-                                            navigation.navigate(
-                                                routeNames.CasSignIn,
-                                            )
-                                        }
-                                        onLoginPress={() =>
-                                            navigation.navigate(
-                                                routeNames.SignIn,
-                                            )
-                                        }
-                                        close={close}
-                                    />
-                                ))
-                            } else {
-                                open(close => (
-                                    <SubFoundModalCard close={close} />
-                                ))
-                            }
-                            navigation.goBack()
-                        },
-                    },
-                    authRunner,
-                )
+                        authRunner,
+                    )
+                },
+                deny: async () => {
+                    Alert.alert(
+                        `${signInName || 'Social'} sign-in disabled`,
+                        `You have disabled ${signInName ||
+                            'social'} sign-in. You can enable it in Settings > Privacy Settings > Functional`,
+                    )
+                },
             },
-            deny: async () => {
-                Alert.alert(
-                    'You have disabled social sign-in. You can enable it in Settings > Privacy Settings > Functional',
-                )
-            },
-        })
+        )
     }
 
     return (
@@ -152,13 +162,13 @@ const AuthSwitcherScreen = ({
             onFacebookPress={() =>
                 handleAuthClick(
                     () => facebookAuthWithDeepRedirect(validatorString),
-                    { consentType: 'gdprAllowFunctionality' },
+                    { requiresFunctionalConsent: true, signInName: 'Facebook' },
                 )
             }
             onGooglePress={() =>
                 handleAuthClick(
                     () => googleAuthWithDeepRedirect(validatorString),
-                    { consentType: 'gdprAllowFunctionality' },
+                    { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
             }
             onSubmit={() =>
@@ -168,7 +178,7 @@ const AuthSwitcherScreen = ({
                             email.value,
                             password.value,
                         ),
-                    { consentType: null },
+                    { requiresFunctionalConsent: false },
                 )
             }
             errorMessage={error}
