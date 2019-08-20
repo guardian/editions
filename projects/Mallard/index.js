@@ -2,11 +2,14 @@
  * @format
  */
 
-import { AppRegistry } from 'react-native'
-import App from './src/App'
-import { name as appName } from './app.json'
-import { Sentry, SentrySeverity } from 'react-native-sentry'
-import Config from 'react-native-config'
+import { AppRegistry, YellowBox } from 'react-native';
+import Config from 'react-native-config';
+import { Sentry } from 'react-native-sentry';
+import { name as appName } from './app.json';
+import App from './src/App';
+
+// Supress Could Not Find Image warnings as a result of our approach to find the image locally
+YellowBox.ignoreWarnings(['Could not find image']);
 
 const { SENTRY_DSN_URL } = Config
 
