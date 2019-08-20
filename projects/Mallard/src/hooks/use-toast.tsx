@@ -13,10 +13,10 @@ const useToastInContext = () => {
     const [toast, setToast] = useState<ToastList>([])
 
     const removeLastToast = () => {
-        setToast(toasts => toasts.slice(1))
+        setToast(toasts => toasts.slice(0, -1))
     }
 
-    const addToast = (
+    const showToast = (
         title: ToastProps['title'],
         moreThings: Omit<ToastProps, 'title'> = {},
     ) => {
@@ -28,7 +28,7 @@ const useToastInContext = () => {
 
     return getterSetterHook({
         getter: toast,
-        setter: { addToast, removeLastToast },
+        setter: { showToast, removeLastToast },
     })
 }
 

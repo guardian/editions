@@ -17,17 +17,19 @@ import { useToast } from 'src/hooks/use-toast'
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
         <Footer>
-            {React.Children.map(children, (button, i) => (
-                <View
-                    key={i}
-                    style={{
-                        marginVertical: metrics.vertical / 2,
-                        marginHorizontal: metrics.horizontal,
-                    }}
-                >
-                    {button}
-                </View>
-            ))}
+            <View style={{ width: '100%' }}>
+                {React.Children.map(children, (button, i) => (
+                    <View
+                        key={i}
+                        style={{
+                            marginVertical: metrics.vertical / 2,
+                            marginHorizontal: metrics.horizontal,
+                        }}
+                    >
+                        {button}
+                    </View>
+                ))}
+            </View>
         </Footer>
     )
 }
@@ -36,7 +38,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
     const { status } = useContext(AuthContext)
     const { apiUrl } = settings
-    const [, { addToast }] = useToast()
+    const [, { showToast }] = useToast()
     return (
         <>
             <Heading>🦆 SECRET DUCK MENU 🦆</Heading>
@@ -57,7 +59,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </Button>
                 <Button
                     onPress={() => {
-                        addToast('Toast title', { subtitle: 'Subtitle' })
+                        showToast('Toast title', { subtitle: 'Subtitle' })
                     }}
                 >
                     Pop a toast

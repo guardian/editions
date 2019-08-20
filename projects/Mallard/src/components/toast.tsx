@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
 import { HeadlineText } from 'src/components/styled-text'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useToast } from 'src/hooks/use-toast'
@@ -29,16 +29,30 @@ const styles = StyleSheet.create({
 
 const Toast = ({ title, subtitle }: ToastProps) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    const [position] = useState(() => new Animated.Value(0))
+    useEffect(() => {
+        Animated.spring(position, { toValue: 1 }).start()
+    }, [])
     return (
-        <View
+        <Animated.View
             style={[
                 styles.toast,
                 isTablet && { paddingHorizontal: metrics.sides.sidesTablet },
+                {
+                    transform: [
+                        {
+                            translateY: position.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [50, 0],
+                            }),
+                        },
+                    ],
+                },
             ]}
         >
             <HeadlineText style={styles.title}>{title}</HeadlineText>
             {subtitle && <UiBodyCopy>{subtitle}</UiBodyCopy>}
-        </View>
+        </Animated.View>
     )
 }
 

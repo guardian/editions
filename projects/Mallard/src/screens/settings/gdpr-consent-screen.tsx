@@ -30,7 +30,7 @@ const essentials: EssentialGdprSwitch = {
 const GdprConsent = () => {
     const [{ isUsingProdDevtools, ...settings }, setSetting] = useSettings()
     const { DEVMODE_resetAll } = useGdprSwitches()
-    const [, { addToast }] = useToast()
+    const [, { showToast }] = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
@@ -71,7 +71,7 @@ const GdprConsent = () => {
                             for (const { key } of Object.values(switches)) {
                                 setSetting(key, true)
                             }
-                            addToast('Privacy settings saved')
+                            showToast('Your preferences are saved.')
                         }}
                     >
                         Enable all
