@@ -7,7 +7,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
-import { UiBodyCopy } from './styled-text'
+import { UiBodyCopy } from '../styled-text'
 
 export interface ToastProps {
     title: string

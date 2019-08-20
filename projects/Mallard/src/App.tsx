@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { AuthProvider } from './authentication/auth-context'
 import { Modal } from './components/modal'
 import { ToastProvider } from './hooks/use-toast'
+import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 
 useScreens()
 prepFileSystem()
@@ -61,6 +62,7 @@ const WithProviders = ({ children }: { children: ReactNode }) => (
             <Modal>
                 <ToastProvider>
                     <AuthProvider>{children}</AuthProvider>
+                    <NetInfoAutoToast />
                 </ToastProvider>
             </Modal>
         </SettingsProvider>

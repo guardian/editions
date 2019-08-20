@@ -1,5 +1,9 @@
-import React, { ReactElement, useState } from 'react'
-import { ToastList, ToastProps, ToastRootHolder } from 'src/components/toast'
+import React, { ReactElement, useState, ReactNode } from 'react'
+import {
+    ToastList,
+    ToastProps,
+    ToastRootHolder,
+} from 'src/components/toast/toast'
 import {
     createGetterSetterProviderHook,
     getterSetterHook,
@@ -37,13 +41,11 @@ const {
     useAsHook: useToast,
 } = createGetterSetterProviderHook(useToastInContext)
 
-const ToastProvider = ({ children }: { children: ReactElement }) => {
-    return (
-        <ToastProviderBase>
-            {children}
-            <ToastRootHolder />
-        </ToastProviderBase>
-    )
-}
+const ToastProvider = ({ children }: { children: ReactNode }) => (
+    <ToastProviderBase>
+        {children}
+        <ToastRootHolder />
+    </ToastProviderBase>
+)
 
 export { ToastProvider, useToast }
