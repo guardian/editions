@@ -1,5 +1,6 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
+import { ModalButton } from './modal-button'
 
 const MissingIAPModalCard = ({
     close,
@@ -13,21 +14,25 @@ const MissingIAPModalCard = ({
         subtitle="There was a problem whilst verifying your subscription"
         appearance={CardAppearance.blue}
         size="small"
-        mainActions={[
-            {
-                label: 'Try again',
-                onPress: () => {
-                    close()
-                    onTryAgain()
-                },
-            },
-            {
-                label: 'Close',
-                onPress: () => {
-                    close()
-                },
-            },
-        ]}
+        bottomContent={
+            <>
+                <ModalButton
+                    onPress={() => {
+                        close()
+                        onTryAgain()
+                    }}
+                >
+                    Try again
+                </ModalButton>
+                <ModalButton
+                    onPress={() => {
+                        close()
+                    }}
+                >
+                    Close
+                </ModalButton>
+            </>
+        }
     />
 )
 
