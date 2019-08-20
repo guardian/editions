@@ -21,14 +21,9 @@ export const withResponse = <T>(response: FetchableResponse<T>) => ({
         callbacks: WithResponseCallbacks<T>,
     ) => ReactElement
 }): ReactElement => {
-    const memoizedResponse = useMemo(
-        () => ('response' in response && response.response) || null,
-        [response.state],
-    )
-
     switch (response.state) {
         case 'success':
-            return success(memoizedResponse as T, { retry: response.retry })
+            return success(response.response as T, { retry: response.retry })
         case 'error':
             return error(response.error, response.staleResponse, {
                 retry: response.retry,
