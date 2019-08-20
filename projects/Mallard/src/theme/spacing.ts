@@ -9,14 +9,19 @@ const basicMetrics = {
     vertical: 10,
 }
 
+const sides = {
+    sides: basicMetrics.horizontal / 2,
+    sidesTablet: basicMetrics.horizontal * 1.5,
+}
+
 const scrubberRadius = 18
 export const metrics = {
     ...basicMetrics,
     headerHeight,
     radius: 10,
+    sides,
     article: {
-        sides: basicMetrics.horizontal / 2,
-        sidesTablet: basicMetrics.horizontal * 1.5,
+        ...sides,
         maxWidth: 540,
         maxWidthLandscape: 620,
         leftRailLandscape: 120,

@@ -1,29 +1,39 @@
-import React, { useState } from 'react'
-import { Toast } from 'src/components/toast'
+import React, { useState, ReactElement } from 'react'
+import {
+    Toast,
+    ToastRootHolder,
+    ToastList,
+    ToastProps,
+} from 'src/components/toast'
 import {
     createGetterSetterProviderHook,
     getterSetterHook,
 } from 'src/helpers/provider'
-import { Button } from 'src/components/button/button'
 
 /*
   Exports
  */
-type Toast = string
-type ToastList = Toast[]
 
 const useToastInContext = () => {
     const [toast, setToast] = useState<ToastList>([])
-    const addToast = (name: Toast) => {
-        setToast(toasts => [...toasts, name])
+
+    const removeLastToast = () => {
+        setToast(toasts => toasts.slice(1))
+    }
+
+    const addToast = (
+        title: ToastProps['title'],
+        moreThings: Omit<ToastProps, 'title'> = {},
+    ) => {
+        setToast(toasts => [...toasts, { title, ...moreThings }])
         setTimeout(() => {
-            setToast(toasts => toasts.slice(1))
+            // removeLastToast()
         }, 2000)
     }
 
     return getterSetterHook({
         getter: toast,
-        setter: { addToast },
+        setter: { addToast, removeLastToast },
     })
 }
 
@@ -32,33 +42,13 @@ const {
     useAsHook: useToast,
 } = createGetterSetterProviderHook(useToastInContext)
 
-const ToastRenderer = () => {
-    const [toasts, { addToast }] = useToast()
-
-    return (
-        <>
-            <Button
-                onPress={() => {
-                    addToast('hiiii ' + Date.now())
-                }}
-            >
-                Add toast
-            </Button>
-
-            {toasts.map((toast, i) => (
-                <Toast key={i + toast}>{toast}</Toast>
-            ))}
-        </>
-    )
-}
-
-const ToastProvider = ({ children }) => {
+const ToastProvider = ({ children }: { children: ReactElement }) => {
     return (
         <ToastProviderBase>
             {children}
-            <ToastRenderer />
+            <ToastRootHolder />
         </ToastProviderBase>
     )
 }
 
-export { ToastProvider }
+export { ToastProvider, useToast }

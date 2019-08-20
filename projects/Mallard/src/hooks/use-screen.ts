@@ -12,7 +12,6 @@ const useDimensions = (): ScaledSize => {
                 Parameters<typeof Dimensions.addEventListener>[1]
             >[0],
         ) => {
-            console.log(ev.window, dimensions)
             if (!areEqualShallow(ev.window, dimensions)) {
                 setDimensions(ev.window)
             } else {
