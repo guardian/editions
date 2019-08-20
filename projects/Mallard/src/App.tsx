@@ -2,25 +2,20 @@
 //
 // In this file, we'll be kicking off our app or storybook.
 
+import AsyncStorage from '@react-native-community/async-storage'
 import React, { ReactNode } from 'react'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
-import { StatusBar, View } from 'react-native'
-
-import { RootNavigator } from 'src/navigation'
-import {
-    SettingsProvider,
-    DevToolSettingsProvider,
-} from 'src/hooks/use-settings'
 import { FileSystemProvider } from 'src/hooks/use-fs'
-import { StyleSheet } from 'react-native'
+import { SettingsProvider } from 'src/hooks/use-settings'
+import { RootNavigator } from 'src/navigation'
+import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
+import { Modal } from './components/modal'
+import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { prepFileSystem } from './helpers/files'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
-import AsyncStorage from '@react-native-community/async-storage'
-import { AuthProvider } from './authentication/auth-context'
-import { Modal } from './components/modal'
 import { ToastProvider } from './hooks/use-toast'
-import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 
 useScreens()
 prepFileSystem()

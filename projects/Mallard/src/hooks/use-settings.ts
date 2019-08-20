@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     createProviderFromHook,
     providerHook,
@@ -43,16 +43,10 @@ const useSettingsFromStore = (): [
             setSetting(key, val)
         })
     }, [])
-
     useEffect(() => {
         getAllSettings().then(s => setSettings(s))
     }, [])
     return [settings, { setSetting, storeSetting }]
-}
-
-const useSettingsInCtx = () => {
-    const [settings, { storeSetting }] = useSettingsFromStore()
-    return settings && providerHook({ getter: settings, setter: storeSetting })
 }
 
 const createSingleSettingHook = (key: keyof Settings) => () => {
@@ -71,7 +65,10 @@ const {
     Provider: SettingsProviderBase,
     useAsSetterHook: useSettings,
     useAsGetterHook: useSettingsValue,
-} = createProviderFromHook(useSettingsInCtx)
+} = createProviderFromHook(() => {
+    const [settings, { storeSetting }] = useSettingsFromStore()
+    return settings && providerHook({ getter: settings, setter: storeSetting })
+})
 
 const {
     Provider: DevToolSettingsProvider,
