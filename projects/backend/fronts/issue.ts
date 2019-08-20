@@ -43,4 +43,5 @@ export interface PublishedFurtniture {
     mediaType: MediaType
     imageSrcOverride?: PublishedImage
     slideshowImages?: PublishedImage[]
+    sportScore?: string
 }

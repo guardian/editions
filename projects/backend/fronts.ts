@@ -71,9 +71,9 @@ export const parseCollection = async (
             )
             const byline =
                 (furniture && furniture.bylineOverride) || article.byline
-            const showByline = furniture.showByline //TODO
-            const showQuotedHeadline = furniture.showQuotedHeadline // TODO
-            const mediaType = furniture.mediaType // TODO
+            const showByline = furniture.showByline
+            const showQuotedHeadline = furniture.showQuotedHeadline
+            const mediaType = furniture.mediaType
             const slideshowImages =
                 furniture.slideshowImages &&
                 furniture.slideshowImages
