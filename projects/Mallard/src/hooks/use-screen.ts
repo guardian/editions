@@ -27,6 +27,11 @@ const useDimensions = (): ScaledSize => {
     return dimensions
 }
 
+const useMediaQuery = (condition: (width: number) => boolean): boolean => {
+    const { width } = useDimensions()
+    return condition(width)
+}
+
 const useInsets = () => {
     const [insets, setInsets] = useState({
         left: 0,
@@ -53,4 +58,4 @@ const useInsets = () => {
     return insets
 }
 
-export { useInsets, useDimensions }
+export { useInsets, useDimensions, useMediaQuery }
