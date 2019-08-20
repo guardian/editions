@@ -22,14 +22,20 @@ const getMockStore = (val?: string) => ({
 const withCreds = ({
     email,
     digitalPack,
+    userEmailValidated = true,
 }: {
     email: string
     digitalPack: boolean
+    userEmailValidated?: boolean
 }): UserData => ({
     ...userData,
     userDetails: {
         ...userData.userDetails,
         primaryEmailAddress: email,
+        statusFields: {
+            ...userData.userDetails.statusFields,
+            userEmailValidated,
+        },
     },
     membershipData: {
         ...userData.membershipData,
@@ -213,6 +219,38 @@ describe('helpers', () => {
                     withCreds({
                         email: 'charlotte@elgrauniad.biz',
                         digitalPack: false,
+                    }),
+                ),
+            ).toBe(false)
+        })
+
+        it('disallows people with unvalidated guardian email addresses', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'alice@guardian.co.uk',
+                        digitalPack: false,
+                        userEmailValidated: false,
+                    }),
+                ),
+            ).toBe(false)
+
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'bob@theguardian.com',
+                        digitalPack: false,
+                        userEmailValidated: false,
+                    }),
+                ),
+            ).toBe(false)
+
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'charlotte@elgrauniad.biz',
+                        digitalPack: false,
+                        userEmailValidated: false,
                     }),
                 ),
             ).toBe(false)

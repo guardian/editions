@@ -161,10 +161,14 @@ const isGuardianEmail = (email: string) =>
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
+ *
+ * If they have a Guardian email we want to check that they've validated their email,
+ * otherwise we don't really mind
  */
 const canViewEdition = (userData: UserData): boolean =>
     userData.membershipData.contentAccess.digitalPack ||
-    isGuardianEmail(userData.userDetails.primaryEmailAddress)
+    (isGuardianEmail(userData.userDetails.primaryEmailAddress) &&
+        userData.userDetails.statusFields.userEmailValidated)
 
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
