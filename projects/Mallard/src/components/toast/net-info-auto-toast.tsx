@@ -6,8 +6,13 @@ const NetInfoAutoToast = () => {
     const { showToast } = useToast()
     const { isConnected } = useNetInfo()
     useEffect(() => {
-        if (!isConnected) {
-            showToast('No internet connection')
+        const time = setTimeout(() => {
+            if (!isConnected) {
+                showToast('No internet connection')
+            }
+        }, 100)
+        return () => {
+            clearTimeout(time)
         }
     }, [isConnected]) // eslint-disable-line react-hooks/exhaustive-deps
     return null
