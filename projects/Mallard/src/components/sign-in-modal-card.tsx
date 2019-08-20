@@ -3,6 +3,7 @@ import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { View } from 'react-native'
 import { ModalButton } from './modal-button'
 import { Link } from './link'
+import { ButtonAppearance } from './button/button'
 
 const SignInModalCard = ({
     close,
@@ -44,10 +45,8 @@ const SignInModalCard = ({
             </>
         }
         explainerTitle="Not subscribed yet?"
-        explainerSubtitle="Check the benefits of the digital pack"
-    >
-        Not subscribed yet? Learn more ...
-    </OnboardingCard>
+        explainerSubtitle="Get a free trial with our Digital Pack, on our website"
+    />
 )
 
 export { SignInModalCard }
