@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, ReactNode, useMemo } from 'react'
+import React, { ReactNode, useState } from 'react'
 import {
     ToastList,
     ToastProps,
