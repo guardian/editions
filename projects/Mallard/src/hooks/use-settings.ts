@@ -7,7 +7,12 @@ import {
     UnsanitizedSetting,
     gdprSwitchSettings,
 } from 'src/helpers/settings'
-import { createProviderHook } from 'src/helpers/provider'
+import {
+    createProviderHook,
+    GetterSetterHook,
+    getterSetterHook,
+    createGetterSetterProviderHook,
+} from 'src/helpers/provider'
 
 type SettingsFromContext = [
     Settings,
@@ -17,7 +22,7 @@ type SettingsFromContext = [
 /**
  * Fetch settings stored in AsyncStorage on mount
  */
-const useSettingsInCtx = (): SettingsFromContext | null => {
+const useSettingsInCtx = () => {
     const [settings, setSettings] = useState(null as Settings | null)
     const setSetting = (setting: keyof Settings, value: UnsanitizedSetting) => {
         setSettings(settings => {
@@ -34,13 +39,15 @@ const useSettingsInCtx = (): SettingsFromContext | null => {
     useEffect(() => {
         getAllSettings().then(s => setSettings(s))
     }, [])
-    return settings && [settings, setSetting]
+    return (
+        settings && getterSetterHook({ getter: settings, setter: setSetting })
+    )
 }
 
 const {
     Provider: SettingsProvider,
     useAsHook: useSettings,
-} = createProviderHook<SettingsFromContext>(useSettingsInCtx)
+} = createGetterSetterProviderHook(useSettingsInCtx)
 
 const useGdprSwitches = () => {
     const [settings, setSetting] = useSettings()

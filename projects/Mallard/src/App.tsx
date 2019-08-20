@@ -2,7 +2,7 @@
 //
 // In this file, we'll be kicking off our app or storybook.
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useScreens } from 'react-native-screens'
 import { StatusBar, View } from 'react-native'
 
@@ -16,6 +16,7 @@ import { pushNotifcationRegistration } from './helpers/push-notifications'
 import AsyncStorage from '@react-native-community/async-storage'
 import { AuthProvider } from './authentication/auth-context'
 import { Modal } from './components/modal'
+import { ToastProvider } from './hooks/use-toast'
 
 useScreens()
 prepFileSystem()
@@ -54,6 +55,18 @@ const rootNavigationProps = __DEV__ && {
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
+const WithProviders = ({ children }: { children: ReactNode }) => (
+    <FileSystemProvider>
+        <SettingsProvider>
+            <Modal>
+                <ToastProvider>
+                    <AuthProvider>{children}</AuthProvider>
+                </ToastProvider>
+            </Modal>
+        </SettingsProvider>
+    </FileSystemProvider>
+)
+
 export default class App extends React.Component<{}, {}> {
     async componentDidCatch(e: Error) {
         /**
@@ -72,22 +85,16 @@ export default class App extends React.Component<{}, {}> {
     render() {
         return (
             <ErrorBoundary>
-                <FileSystemProvider>
-                    <SettingsProvider>
-                        <Modal>
-                            <AuthProvider>
-                                <StatusBar
-                                    animated={true}
-                                    barStyle="light-content"
-                                    backgroundColor="#041f4a"
-                                />
-                                <View style={styles.appContainer}>
-                                    <RootNavigator {...rootNavigationProps} />
-                                </View>
-                            </AuthProvider>
-                        </Modal>
-                    </SettingsProvider>
-                </FileSystemProvider>
+                <WithProviders>
+                    <StatusBar
+                        animated={true}
+                        barStyle="light-content"
+                        backgroundColor="#041f4a"
+                    />
+                    <View style={styles.appContainer}>
+                        <RootNavigator {...rootNavigationProps} />
+                    </View>
+                </WithProviders>
             </ErrorBoundary>
         )
     }
