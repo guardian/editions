@@ -1,17 +1,16 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { ArticleImage } from '../article-image'
-import { ArticleStandfirst } from '../article-standfirst'
-import { ArticleHeaderProps } from './types'
-import { Multiline } from '../../multiline'
-import { ArticleHeadline } from '../article-headline'
-import { useArticle } from 'src/hooks/use-article'
+import { StyleSheet, View } from 'react-native'
 import { getFader } from 'src/components/layout/animators/fader'
-import { ArticleByline } from '../article-byline'
-import { ArticleKicker } from '../article-kicker'
-import { Wrap, MultilineWrap } from '../wrap/wrap'
 import { Stars } from 'src/components/stars/stars'
+import { useArticle } from 'src/hooks/use-article'
+import { metrics } from 'src/theme/spacing'
+import { ArticleByline } from '../article-byline'
+import { ArticleHeadline } from '../article-headline'
+import { ArticleImage } from '../article-image'
+import { ArticleKicker } from '../article-kicker/normal-kicker'
+import { ArticleStandfirst } from '../article-standfirst'
+import { MultilineWrap } from '../wrap/wrap'
+import { ArticleHeaderProps } from './types'
 
 const ArticleFader = getFader('article')
 
@@ -34,6 +33,7 @@ const ReviewHeader = ({
     const [color] = useArticle()
     return (
         <MultilineWrap
+            needsTopPadding
             byline={
                 <ArticleFader>
                     <ArticleByline

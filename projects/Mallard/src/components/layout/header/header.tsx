@@ -1,19 +1,18 @@
 import React, { ReactNode } from 'react'
-import { View, StyleSheet, Alert } from 'react-native'
-import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
-import {
-    IssueTitle,
-    IssueTitleProps,
-    GridRowSplit,
-} from 'src/components/issue/issue-title'
-import { useInsets } from 'src/hooks/use-screen'
-import { WithAppAppearance } from 'src/theme/appearance'
-import { useIssueDate } from 'src/helpers/issues'
+import { StyleSheet, View } from 'react-native'
 import { Issue } from 'src/common'
 import { Highlight } from 'src/components/highlight'
+import {
+    GridRowSplit,
+    IssueTitle,
+    IssueTitleProps,
+} from 'src/components/issue/issue-title'
+import { useIssueDate } from 'src/helpers/issues'
+import { useInsets } from 'src/hooks/use-screen'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
-import { Button, ButtonAppearance } from 'src/components/button/button'
 
 const styles = StyleSheet.create({
     background: {
