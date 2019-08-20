@@ -13,8 +13,6 @@ export interface PropTypes {
 }
 
 const ErrorMessage = ({ title, message, debugMessage, action }: PropTypes) => {
-    const isUsingProdDevtools = __DEV__
-
     return (
         <>
             {!!title && (
@@ -27,7 +25,7 @@ const ErrorMessage = ({ title, message, debugMessage, action }: PropTypes) => {
                     {message}
                 </UiExplainerCopy>
             )}
-            {isUsingProdDevtools && debugMessage ? (
+            {__DEV__ && debugMessage ? (
                 <TouchableOpacity
                     onPress={() => {
                         Clipboard.setString(debugMessage)
