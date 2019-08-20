@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from 'react'
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useEffect,
+    useMemo,
+} from 'react'
 import { resetCredentials } from './storage'
 import { useNetInfo } from '@react-native-community/netinfo'
 import {
@@ -177,61 +183,57 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [isConnected, authAttempt, isAuthing]) // we don't care about isAuthing changing
 
-    return (
-        <AuthContext.Provider
-            value={{
-                status: authAttempt.status,
-                setStatus: (status: AuthStatus) =>
-                    setAuthAttempt(createAuthAttempt(status, 'live')),
-                signOut: async () => {
-                    await resetCredentials()
-                    setAuthAttempt(createAuthAttempt(unauthed, 'live'))
-                },
-                isRestoring,
-                isAuthing,
-                restorePurchases: async function restorePurchases() {
-                    // await the receipt being added to the system by iOS
-                    // this will prompt a user to login to their iTunes account
+    const value = useMemo(
+        () => ({
+            status: authAttempt.status,
+            setStatus: (status: AuthStatus) =>
+                setAuthAttempt(createAuthAttempt(status, 'live')),
+            signOut: async () => {
+                await resetCredentials()
+                setAuthAttempt(createAuthAttempt(unauthed, 'live'))
+            },
+            isRestoring,
+            isAuthing,
+            restorePurchases: async function restorePurchases() {
+                // await the receipt being added to the system by iOS
+                // this will prompt a user to login to their iTunes account
 
-                    if (isRestoring) return
-                    setIsRestoring(true)
+                if (isRestoring) return
+                setIsRestoring(true)
 
-                    try {
-                        const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
-                        if (
-                            authStatus &&
-                            authAttempt.status.type !== 'authed'
-                        ) {
-                            setAuthAttempt(
-                                createAuthAttempt(
-                                    { type: 'authed', data: authStatus },
-                                    'live',
-                                ),
-                            )
-                        } else {
-                            open(close => (
-                                <MissingIAPModalCard
-                                    close={close}
-                                    onTryAgain={restorePurchases}
-                                />
-                            ))
-                        }
-                    } catch (e) {
+                try {
+                    const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
+                    if (authStatus && authAttempt.status.type !== 'authed') {
+                        setAuthAttempt(
+                            createAuthAttempt(
+                                { type: 'authed', data: authStatus },
+                                'live',
+                            ),
+                        )
+                    } else {
                         open(close => (
                             <MissingIAPModalCard
                                 close={close}
                                 onTryAgain={restorePurchases}
                             />
                         ))
-                    } finally {
-                        setIsRestoring(false)
                     }
-                },
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
+                } catch (e) {
+                    open(close => (
+                        <MissingIAPModalCard
+                            close={close}
+                            onTryAgain={restorePurchases}
+                        />
+                    ))
+                } finally {
+                    setIsRestoring(false)
+                }
+            },
+        }),
+        [authAttempt.status, isAuthing, isRestoring, open],
     )
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export {
