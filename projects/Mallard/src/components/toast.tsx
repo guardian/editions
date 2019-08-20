@@ -7,6 +7,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { HeadlineText } from 'src/components/styled-text'
 import { getFont } from 'src/theme/typography'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export interface ToastProps {
     title: string
@@ -15,19 +17,24 @@ export interface ToastProps {
 export type ToastList = ToastProps[]
 
 const Toast = ({ title, subtitle }: ToastProps) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <View
             style={{
                 backgroundColor: color.palette.highlight.main,
-                padding: metrics.sides.sides,
+                padding: isTablet
+                    ? metrics.sides.sidesTablet
+                    : metrics.sides.sides,
                 paddingVertical: metrics.vertical,
                 paddingBottom: metrics.vertical * 2,
             }}
         >
-            <HeadlineText style={getFont('headline', 1, 'bold')}>
-                {title}
-            </HeadlineText>
-            {subtitle && <UiBodyCopy>{subtitle}</UiBodyCopy>}
+            <View>
+                <HeadlineText style={getFont('headline', 1, 'bold')}>
+                    {title}
+                </HeadlineText>
+                {subtitle && <UiBodyCopy>{subtitle}</UiBodyCopy>}
+            </View>
         </View>
     )
 }

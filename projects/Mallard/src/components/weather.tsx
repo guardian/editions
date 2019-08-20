@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
     Text,
     StyleSheet,
@@ -136,58 +136,64 @@ const WeatherIconView = ({
 )
 
 const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
-    if (forecasts && forecasts.length >= 9) {
-        /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
-        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
-        return (
-            <WithBreakpoints>
-                {{
-                    0: () => (
-                        <View style={styles.weatherContainerLong}>
-                            <GridRowSplit
-                                proxy={
-                                    <View style={styles.locationNameContainer}>
-                                        <Text style={styles.locationPinIcon}>
-                                            {'\uE01B'}
-                                        </Text>
-                                        <Text style={styles.locationName}>
-                                            {'London'}
-                                        </Text>
-                                    </View>
-                                }
-                            >
+    return useMemo(() => {
+        if (forecasts && forecasts.length >= 9) {
+            /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
+            const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
+            return (
+                <WithBreakpoints>
+                    {{
+                        0: () => (
+                            <View style={styles.weatherContainerLong}>
+                                <GridRowSplit
+                                    proxy={
+                                        <View
+                                            style={styles.locationNameContainer}
+                                        >
+                                            <Text
+                                                style={styles.locationPinIcon}
+                                            >
+                                                {'\uE01B'}
+                                            </Text>
+                                            <Text style={styles.locationName}>
+                                                {'London'}
+                                            </Text>
+                                        </View>
+                                    }
+                                >
+                                    {intervals.map(forecast => {
+                                        return (
+                                            <WeatherIconView
+                                                style={styles.forecastItemLong}
+                                                key={forecast.EpochDateTime}
+                                                forecast={forecast}
+                                            />
+                                        )
+                                    })}
+                                </GridRowSplit>
+                            </View>
+                        ),
+                        [Breakpoints.tabletVertical]: () => (
+                            <View style={styles.weatherContainerNarrow}>
                                 {intervals.map(forecast => {
                                     return (
                                         <WeatherIconView
-                                            style={styles.forecastItemLong}
+                                            style={styles.forecastItemNarrow}
                                             key={forecast.EpochDateTime}
                                             forecast={forecast}
+                                            iconSize={1.5}
                                         />
                                     )
                                 })}
-                            </GridRowSplit>
-                        </View>
-                    ),
-                    [Breakpoints.tabletVertical]: () => (
-                        <View style={styles.weatherContainerNarrow}>
-                            {intervals.map(forecast => {
-                                return (
-                                    <WeatherIconView
-                                        style={styles.forecastItemNarrow}
-                                        key={forecast.EpochDateTime}
-                                        forecast={forecast}
-                                        iconSize={1.5}
-                                    />
-                                )
-                            })}
-                        </View>
-                    ),
-                }}
-            </WithBreakpoints>
-        )
-    }
+                            </View>
+                        ),
+                    }}
+                </WithBreakpoints>
+            )
+        }
 
-    return <></>
+        return <></>
+    }, [forecasts])
 }
 
 const Weather = () => {
