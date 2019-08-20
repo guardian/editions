@@ -128,24 +128,40 @@ const Button = ({
     textStyles,
     center,
     appearance,
+    iconPosition = 'left',
     ...innards
 }: {
     style?: StyleProp<ViewStyle>
     buttonStyles?: StyleProp<ViewStyle>
     textStyles?: StyleProp<TextStyle>
     center?: boolean
+    alt?: string
+    iconPosition?: 'left' | 'right'
     appearance: ButtonAppearance
-} & ({ children: string } | { icon: string; alt: string }) &
+} & (
+    | { children: string }
+    | { children: string; icon: string | React.ReactNode }
+    | { alt: string; icon: string | React.ReactNode }) &
     TouchableOpacityProps) => {
     const appStyles = useAppAppearance()
     const defaultButtonStyles = useMemo(() => getButtonAppearance(appStyles), [
         appStyles,
     ])[appearance]
 
+    const icon =
+        'icon' in innards &&
+        (typeof innards.icon === 'string' ? (
+            <Icon style={[defaultButtonStyles.text, textStyles]}>
+                {innards.icon}
+            </Icon>
+        ) : (
+            <View style={{ flex: 0 }}>{innards.icon}</View>
+        ))
+
     return (
         <TouchableOpacity
             accessibilityRole="button"
-            accessibilityHint={'icon' in innards ? innards.alt : undefined}
+            accessibilityHint={'alt' in innards ? innards.alt : undefined}
             onPress={onPress}
             style={style}
             {...innards}
@@ -154,11 +170,12 @@ const Button = ({
                 style={[
                     styles.background,
                     defaultButtonStyles.background,
-                    'icon' in innards && styles.withIcon,
+                    !('children' in innards) && styles.withIcon,
                     buttonStyles,
                 ]}
             >
-                {'children' in innards ? (
+                {iconPosition === 'left' && icon}
+                {'children' in innards && (
                     <UiBodyCopy
                         style={[
                             styles.text,
@@ -169,11 +186,8 @@ const Button = ({
                     >
                         {innards.children}
                     </UiBodyCopy>
-                ) : (
-                    <Icon style={[defaultButtonStyles.text, textStyles]}>
-                        {innards.icon}
-                    </Icon>
                 )}
+                {iconPosition === 'right' && icon}
             </View>
         </TouchableOpacity>
     )

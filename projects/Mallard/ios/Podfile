@@ -30,6 +30,8 @@ target 'Mallard' do
 
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 #   https://github.com/luggit/react-native-config/issues/187
+    pod 'react-native-in-app-utils', :path => '../node_modules/react-native-in-app-utils'
+
     post_install do |installer|
     installer.pods_project.targets.each do |target|
       if target.name == 'react-native-config'

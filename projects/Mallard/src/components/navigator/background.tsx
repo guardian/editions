@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react'
 
 import Svg, { Circle, Line } from 'react-native-svg'
+import { View } from 'react-native'
+import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
+import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 
 const Stop = ({
     fill,
@@ -27,7 +30,7 @@ const Background = ({
     height: number
     radius: number
 }) => {
-    const stopElements = useMemo(() => {
+    const stopElements = (width: number) => {
         let elements = [
             <Stop
                 key={-2}
@@ -38,7 +41,7 @@ const Background = ({
             <Stop
                 key={-1}
                 style={{ transform: { translateX: radius * -1 } }}
-                cx={'100%'}
+                cx={width}
                 {...{ fill, height, radius }}
             />,
         ]
@@ -48,26 +51,36 @@ const Background = ({
             elements.push(
                 <Stop
                     key={i}
-                    cx={`${cx * 100}%`}
+                    cx={width * cx}
                     style={{ transform: { translateX } }}
                     {...{ fill, height, radius }}
                 />,
             )
         }
         return elements
-    }, [stops, fill, height, radius])
+    }
     return (
-        <Svg
-            width="100%"
-            height={height * 2}
-            style={{
-                overflow: 'visible',
-                position: 'absolute',
-            }}
-        >
-            <Line x1="0" y1={height} x2="100%" y2={height} stroke={fill} />
-            {stopElements}
-        </Svg>
+        <WithLayoutRectangle>
+            {({ width }) => (
+                <Svg
+                    width={width}
+                    height={height * 2}
+                    style={{
+                        overflow: 'visible',
+                        position: 'absolute',
+                    }}
+                >
+                    <Line
+                        x1="0"
+                        y1={height}
+                        x2={width}
+                        y2={height}
+                        stroke={fill}
+                    />
+                    {stopElements(width)}
+                </Svg>
+            )}
+        </WithLayoutRectangle>
     )
 }
 

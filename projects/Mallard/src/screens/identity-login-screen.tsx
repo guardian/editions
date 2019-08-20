@@ -11,7 +11,7 @@ import { AuthContext } from 'src/authentication/auth-context'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
 import { SubNotFoundModalCard } from 'src/components/sub-not-found-modal-card'
-import { routeNames } from 'src/navigation'
+import { routeNames } from 'src/navigation/routes'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Login } from './log-in'
 import isEmail from 'validator/lib/isEmail'
@@ -99,7 +99,7 @@ const AuthSwitcherScreen = ({
                     if (!canViewEdition(data.membershipData)) {
                         open(close => (
                             <SubNotFoundModalCard
-                                onDismiss={() => navigation.goBack()}
+                                onDismiss={() => navigation.popToTop()}
                                 onOpenCASLogin={() =>
                                     navigation.navigate(routeNames.CasSignIn)
                                 }

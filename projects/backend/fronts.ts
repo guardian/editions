@@ -21,9 +21,11 @@ import {
 import { getCrosswordArticleOverrides } from './utils/crossword'
 import { notNull } from '../common/src'
 import { isPreview } from './preview'
+import striptags from 'striptags'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
+    i: number,
     front: PublishedFront,
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
@@ -62,15 +64,16 @@ export const parseCollection = async (
                 (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline =
                 (furniture && furniture.headlineOverride) || article.headline
-            const trail =
+            const trail = striptags(
                 (furniture && furniture.trailTextOverride) ||
-                article.trail ||
-                ''
+                    article.trail ||
+                    '',
+            )
             const byline =
                 (furniture && furniture.bylineOverride) || article.byline
             const showByline = furniture.showByline //TODO
             const showQuotedHeadline = furniture.showQuotedHeadline // TODO
-            const mediaType = furniture.mediaType // TODO// TODO
+            const mediaType = furniture.mediaType // TODO
             const slideshowImages =
                 furniture.slideshowImages &&
                 furniture.slideshowImages
@@ -142,7 +145,7 @@ export const parseCollection = async (
         })
 
     return {
-        key: collectionResponse.id,
+        key: `${i}:${collectionResponse.name}`,
         cards: createCardsFromAllArticlesInCollection(articles, front),
     }
 }
@@ -233,7 +236,7 @@ export const getFront = async (
     const collections = await Promise.all(
         front.collections
             .filter(collection => collection.items.length > 0)
-            .map(collection => parseCollection(collection, front)),
+            .map((collection, i) => parseCollection(collection, i, front)),
     )
 
     collections.filter(hasFailed).forEach(failedCollection => {

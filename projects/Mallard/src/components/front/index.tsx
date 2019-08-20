@@ -1,10 +1,21 @@
-import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Animated } from 'react-native'
+import React, {
+    useState,
+    useRef,
+    FunctionComponent,
+    useMemo,
+    useEffect,
+} from 'react'
+import { Animated, View } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
-import { Issue, PillarFromPalette, Front as FrontType } from 'src/common'
+import {
+    Issue,
+    PillarFromPalette,
+    Front as FrontType,
+    ArticleType,
+} from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import {
     FlatCard,
@@ -56,7 +67,7 @@ const CollectionPageInFront = ({
                 },
             ]}
         >
-            <WithArticle type={'article'} pillar={pillar}>
+            <WithArticle type={ArticleType.Article} pillar={pillar}>
                 <CollectionPage
                     translate={translate}
                     {...collectionPageProps}
@@ -101,6 +112,7 @@ const FrontWithResponse = ({
     )
     const stops = cards.length
     const { card, container } = useIssueScreenSize()
+
     return (
         <Wrapper
             scrubber={
@@ -126,7 +138,7 @@ const FrontWithResponse = ({
                     position={scrollX.interpolate({
                         inputRange: [
                             0,
-                            container.width * (stops <= 0 ? stops : stops - 1) +
+                            card.width * (stops <= 0 ? stops : stops - 1) +
                                 0.001,
                         ],
                         outputRange: [0, 1],
@@ -152,6 +164,13 @@ const FrontWithResponse = ({
                 })}
                 keyExtractor={(item: FlatCard, index: number) =>
                     index + item.collection.key
+                }
+                ListFooterComponent={
+                    <View
+                        style={{
+                            width: container.width - card.width,
+                        }}
+                    ></View>
                 }
                 onScroll={Animated.event(
                     [

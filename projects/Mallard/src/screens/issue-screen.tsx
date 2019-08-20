@@ -19,13 +19,25 @@ import { Button } from 'src/components/button/button'
 import { navigateToIssueList } from 'src/navigation/helpers'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
-import { Text, View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import {
+    Text,
+    View,
+    ViewStyle,
+    StyleProp,
+    StyleSheet,
+    Alert,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { WithIssueScreenSize, useIssueScreenSize } from './issue/use-size'
 import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
+import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
+import { ReloadButton } from 'src/components/reloadButton'
+import { clearCache } from 'src/helpers/fetch/cache'
+import { useSettings } from 'src/hooks/use-settings'
+import { isPreview } from 'src/helpers/settings/defaults'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -97,6 +109,9 @@ const IssueFronts = ({
             style={style}
             removeClippedSubviews={false}
             ListHeaderComponent={ListHeaderComponent}
+            ListFooterComponent={() => (
+                <View style={{ height: container.height / 2 }} />
+            )}
             keyExtractor={item => `${item.index}::${item.key}`}
             getItemLayout={(_, index) => ({
                 length: container.height,
@@ -114,7 +129,7 @@ const IssueFronts = ({
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
-
+    const preview = isPreview(useSettings()[0])
     return (
         <Container>
             {response({
@@ -136,48 +151,76 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                         </FlexCenter>
                     </>
                 ),
-                success: issue => (
+                success: (issue, { retry }) => (
                     <>
+                        {preview && (
+                            <ReloadButton
+                                onPress={() => {
+                                    clearCache()
+                                    retry()
+                                }}
+                            />
+                        )}
                         <WithBreakpoints>
                             {{
-                                0: metrics => (
-                                    <WithIssueScreenSize
-                                        value={[
-                                            PageLayoutSizes.mobile,
-                                            metrics,
-                                        ]}
-                                    >
-                                        <Header issue={issue} />
-                                        <IssueFronts
-                                            ListHeaderComponent={
-                                                <View
-                                                    style={styles.weatherWide}
-                                                >
-                                                    <Weather />
-                                                </View>
-                                            }
-                                            issue={issue}
-                                        />
-                                    </WithIssueScreenSize>
+                                0: () => (
+                                    <WithLayoutRectangle>
+                                        {metrics => (
+                                            <WithIssueScreenSize
+                                                value={[
+                                                    PageLayoutSizes.mobile,
+                                                    metrics,
+                                                ]}
+                                            >
+                                                <Header issue={issue} />
+                                                <IssueFronts
+                                                    ListHeaderComponent={
+                                                        <View
+                                                            style={
+                                                                styles.weatherWide
+                                                            }
+                                                        >
+                                                            <Weather />
+                                                        </View>
+                                                    }
+                                                    issue={issue}
+                                                />
+                                            </WithIssueScreenSize>
+                                        )}
+                                    </WithLayoutRectangle>
                                 ),
-                                [Breakpoints.tabletVertical]: metrics => (
-                                    <WithIssueScreenSize
-                                        value={[
-                                            PageLayoutSizes.tablet,
-                                            metrics,
-                                        ]}
-                                    >
-                                        <Header issue={issue} />
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <View style={styles.sideWeather}>
-                                                <Weather />
-                                            </View>
-                                            <IssueFronts
-                                                style={styles.sideBySideFeed}
-                                                issue={issue}
-                                            />
-                                        </View>
-                                    </WithIssueScreenSize>
+                                [Breakpoints.tabletVertical]: () => (
+                                    <WithLayoutRectangle>
+                                        {metrics => (
+                                            <WithIssueScreenSize
+                                                value={[
+                                                    PageLayoutSizes.tablet,
+                                                    metrics,
+                                                ]}
+                                            >
+                                                <Header issue={issue} />
+                                                <View
+                                                    style={{
+                                                        flexDirection: 'row',
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={
+                                                            styles.sideWeather
+                                                        }
+                                                    >
+                                                        <Weather />
+                                                    </View>
+                                                    <IssueFronts
+                                                        style={
+                                                            styles.sideBySideFeed
+                                                        }
+                                                        issue={issue}
+                                                    />
+                                                </View>
+                                            </WithIssueScreenSize>
+                                        )}
+                                    </WithLayoutRectangle>
                                 ),
                             }}
                         </WithBreakpoints>

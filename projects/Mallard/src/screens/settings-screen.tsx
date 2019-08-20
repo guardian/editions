@@ -1,24 +1,17 @@
-import React, { useContext, ReactElement } from 'react'
-import { Text, Dimensions, View, Alert, StyleSheet } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { Text, Alert, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { List } from 'src/components/lists/list'
-import {
-    withNavigation,
-    NavigationInjectedProps,
-    NavigationScreenProp,
-} from 'react-navigation'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 import { useSettings } from 'src/hooks/use-settings'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { Highlight } from 'src/components/highlight'
 import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { Heading, Footer } from 'src/components/layout/ui/row'
 import { getVersionInfo } from 'src/helpers/settings'
 import { metrics } from 'src/theme/spacing'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { routeNames } from 'src/navigation'
-import { Button } from 'src/components/button/button'
 import { WithAppAppearance } from 'src/theme/appearance'
 import {
     useIdentity,
@@ -28,6 +21,7 @@ import {
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
+import { routeNames } from 'src/navigation/routes'
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const [settings, setSetting] = useSettings()
@@ -35,7 +29,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const { apiUrl } = settings
     return (
         <>
-            <Heading>💣 DEVELOPER ZONE 💣</Heading>
+            <Heading>🦆 SECRET DUCK MENU 🦆</Heading>
             <Footer>
                 <UiBodyCopy>
                     Only wander here if you know what you are doing!!
@@ -109,11 +103,19 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Hide this menu',
                         title: 'Hide this menu',
                         explainer:
-                            'Scroll down and tap the duck to bring it back',
+                            'Tap the version 7 times & confirm the fake scary message to bring it back',
                         data: {
                             onPress: () => {
                                 setSetting('isUsingProdDevtools', false)
                             },
+                        },
+                    },
+                    {
+                        key: 'Build id',
+                        title: 'Build',
+                        explainer: getVersionInfo().commitId,
+                        data: {
+                            onPress: () => {},
                         },
                     },
                 ]}
@@ -148,8 +150,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const { isUsingProdDevtools } = settings
     const signInHandler = useIdentity()
     const authHandler = useAuth()
-    const { signOut, restorePurchases } = useContext(AuthContext)
-
+    const [versionClickedTimes, setVersionClickedTimes] = useState(0)
+    const { signOut } = useContext(AuthContext)
     const styles = StyleSheet.create({
         signOut: {
             color: color.ui.supportBlue,
@@ -200,13 +202,14 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             authed: () => [],
             unauthed: () => [
                 {
-                    key: 'Activate with subscriber ID',
-                    title: 'Activate with subscriber ID',
+                    key: `I'm already subscribed`,
+                    title: `I'm already subscribed`,
                     data: {
                         onPress: () => {
-                            navigation.navigate(routeNames.CasSignIn)
+                            navigation.navigate(routeNames.AlreadySubscribed)
                         },
                     },
+                    proxy: rightChevronIcon,
                 },
             ],
         }),
@@ -217,18 +220,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             <ScrollContainer>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={[
-                        ...signInListItems,
-                        {
-                            key: 'Restore purchases',
-                            title: 'Restore purchases',
-                            data: {
-                                onPress: () => {
-                                    restorePurchases()
-                                },
-                            },
-                        },
-                    ]}
+                    data={signInListItems}
                 />
                 <Heading>{``}</Heading>
                 <List
@@ -329,17 +321,43 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             key: 'Version',
                             title: 'Version',
                             data: {
-                                onPress: () => {},
+                                onPress: () => {
+                                    if (!isUsingProdDevtools) {
+                                        setVersionClickedTimes(t => {
+                                            if (t < 7) return t + 1
+                                            Alert.alert(
+                                                'Delete all stored data',
+                                                'Are you sure?',
+                                                [
+                                                    {
+                                                        text: 'Delete data',
+                                                        style: 'destructive',
+                                                        onPress: () => {
+                                                            setSetting(
+                                                                'isUsingProdDevtools',
+                                                                true,
+                                                            )
+                                                            Alert.alert(
+                                                                'You are a developer now!',
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        text: 'Cancel',
+                                                        style: 'cancel',
+                                                        onPress: () => {
+                                                            AsyncStorage.clear()
+                                                        },
+                                                    },
+                                                ],
+                                                { cancelable: false },
+                                            )
+                                            return 0
+                                        })
+                                    }
+                                },
                             },
                             proxy: <Text>{getVersionInfo().version}</Text>,
-                        },
-                        {
-                            key: 'Build id',
-                            title: 'Build',
-                            data: {
-                                onPress: () => {},
-                            },
-                            proxy: <Text>{getVersionInfo().commitId}</Text>,
                         },
                     ]}
                 />
@@ -356,47 +374,14 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         {`Send us feedback to ${FEEDBACK_EMAIL}`}
                     </UiBodyCopy>
                 </Footer>
-                {!isUsingProdDevtools ? (
-                    <>
-                        <View
-                            style={{ height: Dimensions.get('window').height }}
-                        />
-                        <Highlight
-                            style={{ alignItems: 'center' }}
-                            onPress={() => {
-                                setSetting('isUsingProdDevtools', true)
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    textAlign: 'center',
-                                    padding: 40,
-                                }}
-                            >
-                                🦆
-                            </Text>
-                        </Highlight>
-                    </>
-                ) : (
-                    <DevZone />
-                )}
+                {isUsingProdDevtools && <DevZone />}
             </ScrollContainer>
         </WithAppAppearance>
     )
 }
-SettingsScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => ({
+
+SettingsScreen.navigationOptions = {
     title: 'Settings',
-    headerTitleStyle: {
-        textAlign: 'center',
-        flex: 1,
-    },
-    headerLeft: () => (
-        <Button onPress={() => navigation.goBack(null)}>Back</Button>
-    ),
-})
+}
 
 export { SettingsScreen }

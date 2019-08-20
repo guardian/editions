@@ -1,44 +1,43 @@
 import React, { useState } from 'react'
-import { useArticleResponse } from 'src/hooks/use-issue'
+import { Animated, StyleSheet, View } from 'react-native'
+import { NavigationScreenProp, ScrollView } from 'react-navigation'
 import {
-    NavigationScreenProp,
-    NavigationEvents,
-    ScrollView,
-} from 'react-navigation'
-import { ArticleController } from 'src/components/article'
-import {
+    Appearance,
+    articlePillars,
+    ArticleType,
     CAPIArticle,
     Collection,
     Front,
-    articlePillars,
-    Appearance,
-    articleTypes,
     Issue,
     PillarFromPalette,
 } from 'src/common'
-import { Dimensions, Animated, View, StyleSheet } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { SlideCard } from 'src/components/layout/slide-card/index'
-import { color } from 'src/theme/color'
-import { PathToArticle } from './article-screen'
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { ArticleController } from 'src/components/article'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import { useSettings } from 'src/hooks/use-settings'
-import { Button } from 'src/components/button/button'
+import { SlideCard } from 'src/components/layout/slide-card/index'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import { LoginOverlay } from 'src/components/login/login-overlay'
+import { Navigator } from 'src/components/navigator'
+import { UiBodyCopy } from 'src/components/styled-text'
 import { getNavigationPosition } from 'src/helpers/positions'
+import { isPreview } from 'src/helpers/settings/defaults'
+import { getColor } from 'src/helpers/transform'
+import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
+import { useAlphaIn } from 'src/hooks/use-alpha-in'
+import { getAppearancePillar, WithArticle } from 'src/hooks/use-article'
+import { useArticleResponse } from 'src/hooks/use-issue'
+import { useDimensions } from 'src/hooks/use-screen'
+import { useSettings } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
-    getArticleNavigationProps,
     ArticleRequiredNavigationProps,
+    getArticleNavigationProps,
 } from 'src/navigation/helpers'
-import { Navigator } from 'src/components/navigator'
-import { useAlphaIn } from 'src/hooks/use-alpha-in'
-import { getColor } from 'src/helpers/transform'
-import { WithArticle, getAppearancePillar } from 'src/hooks/use-article'
-import { LoginOverlay } from 'src/components/login/login-overlay'
-import { routeNames } from 'src/navigation'
-import { WithBreakpoints } from 'src/components/layout/ui/with-breakpoints'
+import { routeNames } from 'src/navigation/routes'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { PathToArticle } from './article-screen'
+import { DevTools, getEnumPosition } from './article/dev-tools'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -66,11 +65,13 @@ const ArticleScreenBody = ({
     onTopPositionChange,
     pillar,
     width,
+    previewNotice,
 }: {
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
     pillar: PillarFromPalette
     width: number
+    previewNotice?: string
 }) => {
     const [modifiedPillar, setPillar] = useState(
         articlePillars.indexOf(pillar) || 0,
@@ -103,62 +104,19 @@ const ArticleScreenBody = ({
                 ),
                 success: article => (
                     <>
+                        {previewNotice && (
+                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
+                        )}
                         {isUsingProdDevtools ? (
-                            <>
-                                <Button
-                                    onPress={() => {
-                                        setPillar(app => {
-                                            if (
-                                                app + 1 >=
-                                                articlePillars.length
-                                            ) {
-                                                return 0
-                                            }
-                                            return app + 1
-                                        })
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        zIndex: 9999,
-                                        elevation: 999,
-                                        top:
-                                            Dimensions.get('window').height -
-                                            600,
-                                        right: metrics.horizontal,
-                                        alignSelf: 'flex-end',
-                                    }}
-                                >
-                                    {`${articlePillars[modifiedPillar]} 🌈`}
-                                </Button>
-                                <Button
-                                    onPress={() => {
-                                        setType(app => {
-                                            if (
-                                                app + 1 >=
-                                                articleTypes.length
-                                            ) {
-                                                return 0
-                                            }
-                                            return app + 1
-                                        })
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        zIndex: 9999,
-                                        elevation: 999,
-                                        top:
-                                            Dimensions.get('window').height -
-                                            560,
-                                        right: metrics.horizontal,
-                                        alignSelf: 'flex-end',
-                                    }}
-                                >
-                                    {`${articleTypes[modifiedType]} 🌈`}
-                                </Button>
-                            </>
+                            <DevTools
+                                pillar={modifiedPillar}
+                                setPillar={setPillar}
+                                type={modifiedType}
+                                setType={setType}
+                            />
                         ) : null}
                         <WithArticle
-                            type={articleTypes[modifiedType]}
+                            type={getEnumPosition(ArticleType, modifiedType)}
                             pillar={articlePillars[modifiedPillar]}
                         >
                             <ArticleController article={article.article} />
@@ -201,6 +159,8 @@ const ArticleScreenWithProps = ({
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
 
+    const { width } = useDimensions()
+
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
         currentValue: current,
@@ -208,6 +168,9 @@ const ArticleScreenWithProps = ({
         inputRange: [0, articleNavigator.articles.length - 1],
         outputRange: [0, 1],
     })
+
+    const preview = isPreview(useSettings()[0])
+    const previewNotice = preview ? `${path.collection}:${current}` : undefined
 
     return (
         <ClipFromTop
@@ -222,6 +185,7 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <LoginOverlay
+                        isFocused={() => navigation.isFocused()}
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
@@ -238,6 +202,7 @@ const ArticleScreenWithProps = ({
                                         width={width}
                                         pillar={pillar}
                                         onTopPositionChange={() => {}}
+                                        previewNotice={previewNotice}
                                     />
                                 ),
                             }}
@@ -250,6 +215,7 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <LoginOverlay
+                        isFocused={() => navigation.isFocused()}
                         onLoginPress={() =>
                             navigation.navigate(routeNames.SignIn)
                         }
@@ -272,65 +238,53 @@ const ArticleScreenWithProps = ({
                                 position={sliderPos}
                             />
                         </View>
-                        <WithBreakpoints>
-                            {{
-                                0: ({ width }) => (
-                                    <Animated.FlatList
-                                        showsHorizontalScrollIndicator={false}
-                                        showsVerticalScrollIndicator={false}
-                                        scrollEventThrottle={1}
-                                        onScroll={(ev: any) => {
-                                            setCurrent(
-                                                Math.floor(
-                                                    ev.nativeEvent.contentOffset
-                                                        .x / width,
-                                                ),
-                                            )
-                                        }}
-                                        maxToRenderPerBatch={1}
-                                        windowSize={3}
-                                        initialNumToRender={1}
-                                        horizontal={true}
-                                        initialScrollIndex={startingPoint}
-                                        pagingEnabled
-                                        getItemLayout={(
-                                            _: never,
-                                            index: number,
-                                        ) => ({
-                                            length: width,
-                                            offset: width * index,
-                                            index,
-                                        })}
-                                        keyExtractor={(
-                                            item: ArticleNavigator['articles'][0],
-                                        ) => item.article}
-                                        data={
-                                            isInScroller
-                                                ? articleNavigator.articles
-                                                : [
-                                                      path,
-                                                      ...articleNavigator.articles,
-                                                  ]
-                                        }
-                                        renderItem={({
-                                            item,
-                                        }: {
-                                            item: ArticleNavigator['articles'][0]
-                                            index: number
-                                        }) => (
-                                            <ArticleScreenBody
-                                                width={width}
-                                                path={item}
-                                                pillar={pillar}
-                                                onTopPositionChange={isAtTop => {
-                                                    setArticleIsAtTop(isAtTop)
-                                                }}
-                                            />
-                                        )}
-                                    />
-                                ),
+                        <Animated.FlatList
+                            showsHorizontalScrollIndicator={false}
+                            showsVerticalScrollIndicator={false}
+                            scrollEventThrottle={1}
+                            onScroll={(ev: any) => {
+                                setCurrent(
+                                    Math.floor(
+                                        ev.nativeEvent.contentOffset.x / width,
+                                    ),
+                                )
                             }}
-                        </WithBreakpoints>
+                            maxToRenderPerBatch={1}
+                            windowSize={3}
+                            initialNumToRender={1}
+                            horizontal={true}
+                            initialScrollIndex={startingPoint}
+                            pagingEnabled
+                            getItemLayout={(_: never, index: number) => ({
+                                length: width,
+                                offset: width * index,
+                                index,
+                            })}
+                            keyExtractor={(
+                                item: ArticleNavigator['articles'][0],
+                            ) => item.article}
+                            data={
+                                isInScroller
+                                    ? articleNavigator.articles
+                                    : [path, ...articleNavigator.articles]
+                            }
+                            renderItem={({
+                                item,
+                            }: {
+                                item: ArticleNavigator['articles'][0]
+                                index: number
+                            }) => (
+                                <ArticleScreenBody
+                                    width={width}
+                                    path={item}
+                                    pillar={pillar}
+                                    onTopPositionChange={isAtTop => {
+                                        setArticleIsAtTop(isAtTop)
+                                    }}
+                                    previewNotice={previewNotice}
+                                />
+                            )}
+                        />
                     </LoginOverlay>
                 </SlideCard>
             )}

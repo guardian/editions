@@ -2,7 +2,7 @@ import React from 'react'
 import { List } from 'src/components/lists/list'
 import { NavigationInjectedProps } from 'react-navigation'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { routeNames } from 'src/navigation'
+import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
 

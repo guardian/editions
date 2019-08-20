@@ -14,8 +14,11 @@ import {
 import { unnest } from 'ramda'
 import { imageSizes, issueDir, ImageSize, Image } from '../common/src/index'
 import { bucket } from './s3'
-import { generateIndex } from './summary'
+import { generateIndex, summary } from './src/indexer/summary'
 import pAll from 'p-all'
+export { handler as issue } from './src/issueTask'
+
+export { handler as invoke } from './src/invoke'
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
@@ -49,7 +52,9 @@ const fetch = async (source: string, id: string): Promise<void> => {
 
     const frontUploads = await Promise.all(
         fronts.map(async ([frontId, maybeFront]) => {
-            return attempt(upload(frontPath(id, frontId), maybeFront))
+            return attempt(
+                upload(frontPath(id, frontId), maybeFront, 'application/json'),
+            )
         }),
     )
 
@@ -88,7 +93,7 @@ const fetch = async (source: string, id: string): Promise<void> => {
 
     console.log('Uploaded fronts')
 
-    await upload(issuePath(id), issue)
+    await upload(issuePath(id), issue, 'application/json')
     console.log('Uploaded issue.')
 }
 
@@ -104,16 +109,6 @@ const compress = async (id: string) => {
         }),
     )
     console.log('Media zips uploaded.')
-}
-
-const summary = async () => {
-    const index = await attempt(generateIndex())
-    if (hasFailed(index)) {
-        console.error('Could not fetch index')
-        return
-    }
-    await upload('issues', index)
-    return
 }
 
 export const run = async (source: string, id: string): Promise<void> => {

@@ -4,6 +4,7 @@ import {
     SaveableNavigationPositions,
 } from 'src/helpers/positions'
 import { Animated, StyleSheet, View, Dimensions } from 'react-native'
+import { clamp } from 'src/helpers/math'
 
 /*
 This is part of the transition from articles to fronts
@@ -21,12 +22,6 @@ export interface PropTypes {
 const faderStyles = StyleSheet.create({
     wrapper: { width: '100%' },
 })
-
-const clamp = (number: number, min: number, max: number) => {
-    if (number > max) return max
-    if (number < min) return min
-    return number
-}
 
 const Fader = ({ children, position }: PropTypes) => {
     const navigationPosition = getNavigationPosition(position)

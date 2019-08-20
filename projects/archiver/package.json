@@ -21,6 +21,7 @@
     "scripts": {
         "build": "ncc build main.ts -o dist -m",
         "start": "AWS_DEFAULT_PROFILE='frontend' ts-node local.ts",
+        "start:index": "AWS_DEFAULT_PROFILE='frontend' ts-node src/indexer/local.ts",
         "validate": "cd ../.. && yarn validate-archiver",
         "fix": "cd ../.. && yarn fix-archiver",
         "test": "jest --coverage",
