@@ -16,7 +16,9 @@ export const upload = (
             },
             (err, data) => {
                 if (err) {
-                    console.error(`S3 upload of ${key} failed with`)
+                    console.error(
+                        `S3 upload of s3://${bucket}/${key} failed with`,
+                    )
                     console.error(err)
                     reject()
                     return

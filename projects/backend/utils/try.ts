@@ -28,7 +28,7 @@ export type Attempt<T extends Exclude<{}, string | Failure>> = Failure | T
  * So Promise<?> would meet this, but then you won't get anything useful out.
  */
 export const hasFailed = <T>(attempt: Attempt<T>): attempt is Failure =>
-    '__failure' in attempt
+    typeof attempt === 'object' && '__failure' in attempt
 
 /**
  *
@@ -36,7 +36,7 @@ export const hasFailed = <T>(attempt: Attempt<T>): attempt is Failure =>
  * So Promise<?> would meet this, but then you won't get anything useful out.
  */
 export const hasSucceeded = <T>(attempt: Attempt<T>): attempt is T =>
-    typeof attempt === 'string' || !('__failure' in attempt)
+    !hasFailed(attempt)
 
 export const attempt = <T>(promise: Promise<T>): Promise<Attempt<T>> =>
     new Promise(resolve => {
