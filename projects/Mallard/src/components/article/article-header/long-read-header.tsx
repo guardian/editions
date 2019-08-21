@@ -9,10 +9,33 @@ import { MultilineWrap } from '../wrap/wrap'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { ArticleStandfirst } from '../article-standfirst'
-import { useArticle } from 'src/hooks/use-article'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
+import { HangyTagKicker } from '../article-kicker/tag-kicker'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },
+    kicker: {
+        color: color.palette.neutral[100],
+        padding: metrics.article.sides,
+        paddingVertical: metrics.vertical / 2,
+        height: metrics.vertical * 4,
+        marginTop: metrics.vertical * -4,
+        width: 'auto',
+        textAlign: 'left',
+        flexShrink: 1,
+        fontFamily: getFont('headline', 1, 'bold').fontFamily,
+    },
+    kickerHolder: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+    },
+    headline: {
+        fontFamily: getFont('titlepiece', 1).fontFamily,
+        marginTop: metrics.vertical / 2,
+        marginBottom: metrics.vertical * 3.5,
+        marginRight: metrics.horizontal * 4,
+    },
 })
 
 const LongReadHeader = ({
@@ -22,12 +45,13 @@ const LongReadHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const [articleColor] = useArticle()
+    const { height } = useDimensions()
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <>
             {image && (
                 <ArticleImage
-                    style={{ width: '100%', height: 300 }}
+                    style={{ width: '100%', height: height * 0.8 }}
                     image={image}
                 />
             )}
@@ -44,59 +68,20 @@ const LongReadHeader = ({
                 multilineColor={styles.whiteText.color}
             >
                 <View style={{ paddingBottom: metrics.vertical * 2 }}>
-                    {kicker ? (
-                        <View
-                            style={{
-                                backgroundColor: 'blue',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                            }}
-                        >
-                            <HeadlineKickerText
-                                style={{
-                                    color: color.palette.neutral[100],
-                                    padding: metrics.horizontal / 2,
-                                    paddingVertical: metrics.vertical / 2,
-                                    height: metrics.vertical * 4,
-                                    marginTop: metrics.vertical * -4,
-                                    width: 'auto',
-                                    textAlign: 'left',
-                                    flexShrink: 1,
-                                    backgroundColor: articleColor.main,
-                                    fontFamily: getFont('headline', 1, 'bold')
-                                        .fontFamily,
-                                }}
-                            >
-                                {kicker}
-                            </HeadlineKickerText>
-                        </View>
-                    ) : null}
-                    <HeadlineText
-                        style={[
-                            styles.whiteText,
-                            {
-                                fontFamily: getFont('titlepiece', 1).fontFamily,
-                                marginTop: 0,
-                                marginBottom: metrics.vertical * 2,
-                                marginRight: metrics.horizontal * 4,
-                            },
-                        ]}
-                        weight="bold"
-                    >
+                    {kicker ? <HangyTagKicker>{kicker}</HangyTagKicker> : null}
+                    <HeadlineText style={[styles.whiteText, styles.headline]}>
                         {headline}
                     </HeadlineText>
-                    {standfirst && (
-                        <ArticleStandfirst
-                            standfirst={standfirst}
-                            textStyle={[
-                                styles.whiteText,
-                                {
-                                    fontFamily: getFont('headline', 1, 'bold')
-                                        .fontFamily,
-                                },
-                            ]}
-                        ></ArticleStandfirst>
-                    )}
+                    <ArticleStandfirst
+                        standfirst={standfirst}
+                        textStyle={[
+                            styles.whiteText,
+                            isTablet && {
+                                fontFamily: getFont('headline', 1, 'bold')
+                                    .fontFamily,
+                            },
+                        ]}
+                    ></ArticleStandfirst>
                 </View>
             </MultilineWrap>
         </>
