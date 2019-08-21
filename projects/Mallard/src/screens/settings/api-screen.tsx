@@ -12,7 +12,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 
 const ApiState = () => {
-    const { apiUrl } = useSettingsValue()
+    const apiUrl = useSettingsValue.apiUrl()
     if (apiUrl === defaultSettings.apiUrl) return null
     return (
         <Footer>
@@ -29,7 +29,8 @@ const ApiScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const setSetting = useSettings()
-    const { apiUrl } = useSettingsValue()
+    const apiUrl = useSettingsValue.apiUrl()
+
     return (
         <ScrollContainer>
             <Heading>Selected backend</Heading>

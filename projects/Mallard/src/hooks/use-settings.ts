@@ -48,22 +48,22 @@ const makeSettingsHooks = <E extends keyof Settings>({
 
 const {
     Provider: SettingsProvider,
-    extractedGetterHooks: useExtractedSettingValue,
+    extractedGetterHooks: useSettingsValue,
     useAsSetterHook: useSettings,
-    useAsGetterHook: useSettingsValue,
+    useAsGetterHook: useOtherSettingsValues,
 } = makeSettingsHooks({
     extractSettings: ['isUsingProdDevtools', 'apiUrl'],
 })
 
 /* extra bespoke getters */
 const useIsPreview = () => {
-    const apiUrl = useExtractedSettingValue.apiUrl()
+    const apiUrl = useSettingsValue.apiUrl()
     return isPreview(apiUrl)
 }
 
 const useGdprSwitches = () => {
     const setSetting = useSettings()
-    const settings = useSettingsValue()
+    const settings = useOtherSettingsValues()
 
     /*
     if a user consents to all via any UI
@@ -95,8 +95,8 @@ const useGdprSwitches = () => {
 
 export {
     SettingsProvider,
-    useExtractedSettingValue,
-    useSettings,
     useSettingsValue,
+    useSettings,
+    useOtherSettingsValues,
 }
 export { useGdprSwitches, useIsPreview }

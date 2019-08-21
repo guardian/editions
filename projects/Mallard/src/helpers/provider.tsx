@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, ReactNode } from 'react'
+import React, { createContext, ReactNode, useContext, useMemo } from 'react'
 
 export interface ProviderHook<G, S> {
     getter: G
@@ -19,7 +19,7 @@ export const nestProviders = (
                 <Cur>{children}</Cur>
             </Prev>
         ),
-        ({ children }) => children,
+        ({ children }) => <>{children}</>,
     )
 
 const useContextAsHook = <C extends unknown>(
@@ -56,8 +56,8 @@ const createProviderFromHook = <G, S>(
     }: ProviderHook<G, S> & {
         children: React.ReactNode
     }) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         const memoizedSetter = useMemo(() => setter, []) as S
-        console.log(GetterCtx.Provider, getter)
         return (
             <SetterCtx.Provider value={memoizedSetter}>
                 <GetterCtx.Provider value={getter}>
@@ -80,6 +80,10 @@ const createProviderFromHook = <G, S>(
     return { Provider, useAsGetterHook, useAsSetterHook }
 }
 
+/*
+Do not use this, filesystem uses it because it's hard to refactor,
+TODO: refactor filesystem into two providers
+*/
 const createMixedProviderHook__SLOW = <T extends {}>(hook: () => T | null) => {
     const Context = createContext<T | null>(null)
     const Provider = ({ children }: { children: React.ReactNode }) => {

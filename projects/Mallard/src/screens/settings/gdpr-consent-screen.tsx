@@ -11,6 +11,7 @@ import { COOKIE_LINK, PRIVACY_LINK } from 'src/helpers/words'
 import {
     useGdprSwitches,
     useSettings,
+    useOtherSettingsValues,
     useSettingsValue,
 } from 'src/hooks/use-settings'
 import { WithAppAppearance } from 'src/theme/appearance'
@@ -33,7 +34,9 @@ const essentials: EssentialGdprSwitch = {
 
 const GdprConsent = () => {
     const setSetting = useSettings()
-    const { isUsingProdDevtools, ...settings } = useSettingsValue()
+    const settings = useOtherSettingsValues()
+    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+
     const { DEVMODE_resetAll } = useGdprSwitches()
     const { showToast } = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
