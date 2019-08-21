@@ -26,6 +26,7 @@ import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { exportAllDeclaration } from '@babel/types'
+import { Fader } from 'src/components/layout/animators/fader'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -150,15 +151,17 @@ const ArticleScreenWithProps = ({
                     onDismiss={() => navigation.goBack()}
                 >
                     <ArticleScreenLoginOverlay navigation={navigation}>
-                        <View style={styles.slider}>
-                            <Slider
-                                small
-                                title={articleNavigator.frontName}
-                                fill={getColor(articleNavigator.appearance)}
-                                stops={2}
-                                position={sliderPos}
-                            />
-                        </View>
+                        <Fader position="article">
+                            <View style={styles.slider}>
+                                <Slider
+                                    small
+                                    title={articleNavigator.frontName}
+                                    fill={getColor(articleNavigator.appearance)}
+                                    stops={2}
+                                    position={sliderPos}
+                                />
+                            </View>
+                        </Fader>
                         <Animated.FlatList
                             ref={(flatList: AnimatedFlatListRef) =>
                                 (flatListRef.current = flatList)
