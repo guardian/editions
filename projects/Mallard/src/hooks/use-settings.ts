@@ -5,12 +5,12 @@ import {
     nestProviders,
 } from 'src/helpers/provider'
 import {
-    gdprSwitchSettings,
-    getAllSettings,
+    UnsanitizedSetting,
     onSettingChanged,
+    getAllSettings,
+    gdprSwitchSettings,
     Settings,
     storeSetting,
-    UnsanitizedSetting,
 } from 'src/helpers/settings'
 
 /**
@@ -60,25 +60,45 @@ const createSingleSettingHook = (key: keyof Settings) => () => {
     )
 }
 
+const extractedSettings = ['isUsingProdDevtools']
+
 /* create settings */
+const makeSettings = () => {
+    const {
+        Provider: BaseProvider,
+        useAsSetterHook,
+        useAsGetterHook,
+    } = createProviderFromHook(() => {
+        const [settings, { storeSetting }] = useSettingsFromStore()
+        return (
+            settings && providerHook({ getter: settings, setter: storeSetting })
+        )
+    })
+
+    let providers = []
+    let extractedGetterHooks: {
+        [key in typeof extractedSettings[number]]: () => Settings[keyof Settings]
+    } = {}
+
+    for (const setting of extractedSettings) {
+        const { Provider, useAsGetterHook } = createProviderFromHook(
+            createSingleSettingHook('isUsingProdDevtools'),
+        )
+        providers.push(Provider)
+        extractedGetterHooks[setting] = useAsGetterHook
+    }
+
+    const Provider = nestProviders(BaseProvider, ...providers)
+
+    return { Provider, extractedGetterHooks, useAsSetterHook, useAsGetterHook }
+}
+
 const {
-    Provider: SettingsProviderBase,
+    Provider: SettingsProvider,
+    extractedGetterHooks: useExtractedSettingValue,
     useAsSetterHook: useSettings,
     useAsGetterHook: useSettingsValue,
-} = createProviderFromHook(() => {
-    const [settings, { storeSetting }] = useSettingsFromStore()
-    return settings && providerHook({ getter: settings, setter: storeSetting })
-})
-
-const {
-    Provider: DevToolSettingsProvider,
-    useAsGetterHook: useSettingIsUsingProdDevtools,
-} = createProviderFromHook(createSingleSettingHook('isUsingProdDevtools'))
-
-const SettingsProvider = nestProviders(
-    SettingsProviderBase,
-    DevToolSettingsProvider,
-)
+} = makeSettings()
 
 /* gdpr switchez */
 const useGdprSwitches = () => {
@@ -115,7 +135,7 @@ const useGdprSwitches = () => {
 
 export {
     SettingsProvider,
-    useSettingIsUsingProdDevtools,
+    useExtractedSettingValue,
     useSettings,
     useSettingsValue,
     useGdprSwitches,

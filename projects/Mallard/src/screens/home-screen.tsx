@@ -21,10 +21,7 @@ import { unzipIssue } from 'src/helpers/files'
 import { useIssueSummary } from 'src/hooks/use-api'
 import { useFileList } from 'src/hooks/use-fs'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
-import {
-    useSettingsValue,
-    useSettingIsUsingProdDevtools,
-} from 'src/hooks/use-settings'
+import { useExtractedSettingValue } from 'src/hooks/use-settings'
 import { navigateToIssue, navigateToSettings } from 'src/navigation/helpers'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { metrics } from 'src/theme/spacing'
@@ -79,7 +76,7 @@ const IssueList = withNavigation(
     }: {
         issueList: IssueSummary[]
     } & NavigationInjectedProps) => {
-        const isUsingProdDevtools = useSettingIsUsingProdDevtools()
+        const isUsingProdDevtools = useExtractedSettingValue.isUsingProdDevtools()
         return (
             <>
                 <BaseList
@@ -144,7 +141,7 @@ export const HomeScreen = ({
     const [files, { refreshIssues }] = useFileList()
     const { response: issueSummary, retry } = useIssueSummary()
     const from = navigation.getParam('from', undefined)
-    const isUsingProdDevtools = useSettingIsUsingProdDevtools()
+    const isUsingProdDevtools = useExtractedSettingValue.isUsingProdDevtools()
 
     return (
         <WithAppAppearance value={'tertiary'}>

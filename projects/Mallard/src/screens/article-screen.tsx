@@ -29,7 +29,7 @@ import { useArticleResponse } from 'src/hooks/use-issue'
 import { useDimensions } from 'src/hooks/use-screen'
 import {
     useSettingsValue,
-    useSettingIsUsingProdDevtools,
+    useExtractedSettingValue,
 } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
@@ -81,7 +81,7 @@ const ArticleScreenBody = ({
     )
     const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
-    const isUsingProdDevtools = useSettingIsUsingProdDevtools()
+    const isUsingProdDevtools = useExtractedSettingValue.isUsingProdDevtools()
 
     return (
         <ScrollView
