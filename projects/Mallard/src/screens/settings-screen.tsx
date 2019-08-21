@@ -29,7 +29,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const signInHandler = useIdentity()
     const authHandler = useAuth()
     const [, setVersionClickedTimes] = useState(0)
-    const { signOut } = useContext(AuthContext)
+    const { signOutIdentity } = useContext(AuthContext)
     const styles = StyleSheet.create({
         signOut: {
             color: color.ui.supportBlue,
@@ -48,7 +48,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     title: data.userDetails.publicFields.displayName,
                     data: {
                         onPress: async () => {
-                            await signOut()
+                            await signOutIdentity()
                         },
                     },
                     proxy: <Text style={styles.signOut}>Sign Out</Text>,

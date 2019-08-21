@@ -1,14 +1,13 @@
-import * as Keychain from 'react-native-keychain'
-import { UserData } from './helpers'
 import AsyncStorage from '@react-native-community/async-storage'
-import { CasExpiry } from 'src/services/content-auth-service'
 import { Settings } from 'react-native'
-import { ReceiptIOS } from '../services/iap'
+import * as Keychain from 'react-native-keychain'
 import {
+    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
-    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
 } from 'src/constants'
+import { CasExpiry } from 'src/services/content-auth-service'
+import { UserData } from './helpers'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -90,22 +89,19 @@ const getLegacyUserAccessToken = async (): ReturnType<
  * Removes all the relevent keychain, storage entries that mark a user as logged in
  * and returns a boolean indicating whether all these operations succeeded
  */
-const resetCredentials = (): Promise<boolean> =>
+const signOutIdentity = (): Promise<boolean> =>
     Promise.all([
         userAccessTokenKeychain.reset(),
         membershipAccessTokenKeychain.reset(),
         userDataCache.reset(),
-        casCredentialsKeychain.reset(),
-        casDataCache.reset(),
         _legacyUserAccessTokenKeychain.reset(),
-        legacyCASExpiryCache.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
     userAccessTokenKeychain,
     membershipAccessTokenKeychain,
     casCredentialsKeychain,
-    resetCredentials,
+    signOutIdentity,
     casDataCache,
     userDataCache,
     getLegacyUserAccessToken,

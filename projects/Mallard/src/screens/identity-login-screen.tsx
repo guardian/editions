@@ -80,7 +80,7 @@ const AuthSwitcherScreen = ({
 
     const validatorString = useRandomState()
 
-    const { setStatus, signOut } = useContext(AuthContext)
+    const { setStatus, signOutIdentity } = useContext(AuthContext)
     const { open } = useModal()
 
     const handleAuthClick = async (
@@ -95,7 +95,7 @@ const AuthSwitcherScreen = ({
             requiresFunctionalConsent ? 'gdprAllowFunctionality' : null,
             {
                 allow: async () => {
-                    await signOut()
+                    await signOutIdentity()
                     tryAuth(
                         {
                             onStart: () => {
