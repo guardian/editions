@@ -34,9 +34,6 @@ const NewsHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const isLandscape = useMediaQuery(
-        width => width >= Breakpoints.tabletLandscape,
-    )
     return (
         <MultilineWrap
             style={[styles.background]}
@@ -48,7 +45,6 @@ const NewsHeader = ({
                 <ArticleFader>
                     <ArticleImage
                         style={{
-                            aspectRatio: isLandscape ? 2 : 1.5,
                             marginBottom: metrics.vertical / 4,
                         }}
                         image={image}

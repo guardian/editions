@@ -1,5 +1,5 @@
 import React, { ReactNode, ReactElement } from 'react'
-import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
+import { View, ViewStyle, StyleProp, StyleSheet, Text } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Breakpoints, getClosestBreakpoint } from 'src/theme/breakpoints'
@@ -48,8 +48,8 @@ interface WrapperPropTypes
 
 const contentWrapStyles = StyleSheet.create({
     root: {
-        width: '100%',
         overflow: 'visible',
+        width: '100%',
     },
 })
 
@@ -68,11 +68,12 @@ const ContentWrapper = ({
                 { backgroundColor },
                 useMobileTopOffset && {
                     marginTop: (topOffset || 0) * -1,
-                    width: '95%',
+                    marginRight: metrics.article.sidesTablet,
+                    width: 'auto',
                 },
             ]}
         >
-            {useMobileTopOffset ? (
+            {useMobileTopOffset && (
                 <View
                     {...ariaHidden}
                     style={[
@@ -84,7 +85,8 @@ const ContentWrapper = ({
                         },
                     ]}
                 ></View>
-            ) : (
+            )}
+            {!!topOffset && (
                 <View
                     {...ariaHidden}
                     style={[
@@ -100,7 +102,15 @@ const ContentWrapper = ({
             {children.header && (
                 <MaxWidthWrap invert>{children.header}</MaxWidthWrap>
             )}
-            <View style={[style]}>{children.children}</View>
+            {!!topOffset ? (
+                <MaxWidthWrap invert>
+                    <View style={[style, { backgroundColor }]}>
+                        {children.children}
+                    </View>
+                </MaxWidthWrap>
+            ) : (
+                <View style={[style]}>{children.children}</View>
+            )}
             {children.footer && (
                 <MaxWidthWrap invert>{children.footer}</MaxWidthWrap>
             )}
@@ -154,6 +164,7 @@ const ThreeColumnWrapper = ({
             >
                 <ContentWrapper
                     backgroundColor={backgroundColor}
+                    topOffset={topOffset}
                     tablet
                     {...innerProps}
                 />
@@ -183,12 +194,17 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     if (!isTablet) {
         return (
-            <MaxWidthWrap>
-                <ContentWrapper {...props} backgroundColor={backgroundColor}>
-                    {props.children}
-                    {props.rightRail && props.rightRail(Breakpoints.zero)}
-                </ContentWrapper>
-            </MaxWidthWrap>
+            <View style={!props.topOffset && { backgroundColor }}>
+                <MaxWidthWrap>
+                    <ContentWrapper
+                        {...props}
+                        backgroundColor={backgroundColor}
+                    >
+                        {props.children}
+                        {props.rightRail && props.rightRail(Breakpoints.zero)}
+                    </ContentWrapper>
+                </MaxWidthWrap>
+            </View>
         )
     }
 
@@ -220,7 +236,11 @@ const multiStyles = StyleSheet.create({
         borderBottomColor: color.dimLine,
         borderBottomWidth: 1,
     },
-    topBorder: { height: 1, width: '100%', backgroundColor: color.line },
+    topBorder: {
+        height: StyleSheet.hairlineWidth,
+        width: '100%',
+        backgroundColor: color.line,
+    },
 })
 
 const MultilineWrap = ({
