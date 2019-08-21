@@ -1,32 +1,20 @@
-import React, { useState, useRef } from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
-import { NavigationScreenProp, ScrollView } from 'react-navigation'
-import {
-    Appearance,
-    articlePillars,
-    ArticleType,
-    CAPIArticle,
-    Collection,
-    Front,
-    Issue,
-    PillarFromPalette,
-} from 'src/common'
-import { ArticleController } from 'src/components/article'
+import React, { useRef, useState, useEffect } from 'react'
+import { Animated, View, StyleSheet } from 'react-native'
+import { NavigationScreenProp } from 'react-navigation'
+import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
+import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { Slider } from 'src/components/slider'
-import { UiBodyCopy } from 'src/components/styled-text'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { getColor } from 'src/helpers/transform'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
-import { getAppearancePillar, WithArticle } from 'src/hooks/use-article'
-import { useArticleResponse } from 'src/hooks/use-issue'
+import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions } from 'src/hooks/use-screen'
-import { useSettingsValue, useIsPreview } from 'src/hooks/use-settings'
+import { useIsPreview } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
     ArticleRequiredNavigationProps,
@@ -36,8 +24,8 @@ import { routeNames } from 'src/navigation/routes'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
-import { DevTools, getEnumPosition } from './article/dev-tools'
-import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
+import { ArticleScreenBody } from './article/body'
+import { exportAllDeclaration } from '@babel/types'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -56,78 +44,6 @@ export interface ArticleNavigator {
     frontName: string
 }
 
-const styles = StyleSheet.create({
-    flex: { flexGrow: 1 },
-})
-
-const ArticleScreenBody = ({
-    path,
-    onTopPositionChange,
-    pillar,
-    width,
-    previewNotice,
-}: {
-    path: PathToArticle
-    onTopPositionChange: (isAtTop: boolean) => void
-    pillar: PillarFromPalette
-    width: number
-    previewNotice?: string
-}) => {
-    const [modifiedPillar, setPillar] = useState(
-        articlePillars.indexOf(pillar) || 0,
-    )
-    const [modifiedType, setType] = useState(0)
-    const articleResponse = useArticleResponse(path)
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-
-    return (
-        <ScrollView
-            scrollEventThrottle={8}
-            onScroll={ev => {
-                onTopPositionChange(ev.nativeEvent.contentOffset.y < 10)
-            }}
-            style={{ width }}
-            contentContainerStyle={styles.flex}
-        >
-            {articleResponse({
-                error: ({ message }) => (
-                    <FlexErrorMessage
-                        title={message}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                pending: () => (
-                    <FlexErrorMessage
-                        title={'loading'}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                success: article => (
-                    <>
-                        {previewNotice && (
-                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
-                        )}
-                        {isUsingProdDevtools ? (
-                            <DevTools
-                                pillar={modifiedPillar}
-                                setPillar={setPillar}
-                                type={modifiedType}
-                                setType={setType}
-                            />
-                        ) : null}
-                        <WithArticle
-                            type={getEnumPosition(ArticleType, modifiedType)}
-                            pillar={articlePillars[modifiedPillar]}
-                        >
-                            <ArticleController article={article.article} />
-                        </WithArticle>
-                    </>
-                ),
-            })}
-        </ScrollView>
-    )
-}
-
 const getData = (
     navigator: ArticleNavigator,
     currentArticle: PathToArticle,
@@ -141,6 +57,14 @@ const getData = (
     if (startingPoint < 0) return { isInScroller: false, startingPoint: 0 }
     return { startingPoint, isInScroller: true }
 }
+
+const styles = StyleSheet.create({
+    slider: {
+        padding: metrics.vertical,
+        justifyContent: 'center',
+        alignItems: 'stretch',
+    },
+})
 
 const ArticleScreenWithProps = ({
     path,
@@ -169,6 +93,14 @@ const ArticleScreenWithProps = ({
         inputRange: [0, articleNavigator.articles.length - 1],
         outputRange: [0, 1],
     })
+
+    useEffect(() => {
+        flatListRef.current &&
+            flatListRef.current._component.scrollToIndex({
+                index: current,
+                animated: false,
+            })
+    }, [width])
 
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
@@ -219,13 +151,7 @@ const ArticleScreenWithProps = ({
                         }
                         onDismiss={() => navigation.goBack()}
                     >
-                        <View
-                            style={{
-                                padding: metrics.vertical,
-                                justifyContent: 'center',
-                                alignItems: 'stretch',
-                            }}
-                        >
+                        <View style={styles.slider}>
                             <Slider
                                 small
                                 title={articleNavigator.frontName}
