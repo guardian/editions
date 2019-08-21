@@ -52,7 +52,7 @@ export const defaultSettings: Settings = {
         : notificationServiceRegister.prod,
 }
 
-export const isPreview = (settings: Settings): boolean => {
-    const backend = backends.find(backend => backend.value === settings.apiUrl)
+export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
+    const backend = backends.find(backend => backend.value === apiUrl)
     return (backend && backend.preview) || false
 }

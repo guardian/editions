@@ -1,10 +1,9 @@
 import React from 'react'
-import { Text, Clipboard, TouchableOpacity } from 'react-native'
-import { UiExplainerCopy, UiBodyCopy } from 'src/components/styled-text'
+import { Clipboard, TouchableOpacity } from 'react-native'
 import { Button } from 'src/components/button/button'
-import { metrics } from 'src/theme/spacing'
+import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text'
 import { GENERIC_ERROR } from 'src/helpers/words'
-import { useSettings } from 'src/hooks/use-settings'
+import { metrics } from 'src/theme/spacing'
 
 export interface PropTypes {
     title?: string
@@ -14,8 +13,6 @@ export interface PropTypes {
 }
 
 const ErrorMessage = ({ title, message, debugMessage, action }: PropTypes) => {
-    const [{ isUsingProdDevtools }] = useSettings()
-
     return (
         <>
             {!!title && (
@@ -28,7 +25,7 @@ const ErrorMessage = ({ title, message, debugMessage, action }: PropTypes) => {
                     {message}
                 </UiExplainerCopy>
             )}
-            {isUsingProdDevtools && debugMessage ? (
+            {__DEV__ && debugMessage ? (
                 <TouchableOpacity
                     onPress={() => {
                         Clipboard.setString(debugMessage)

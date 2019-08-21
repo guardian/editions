@@ -45,7 +45,7 @@ const OnboardingConsentScreen = ({
     onOpenGdprConsent: () => void
     onContinue: () => void
 }) => {
-    const [, setSetting] = useSettings()
+    const setSetting = useSettings()
     return (
         <Frame>
             <OnboardingConsent

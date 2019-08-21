@@ -1,19 +1,18 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-
+import { TextInput } from 'react-native-gesture-handler'
+import { NavigationScreenProp } from 'react-navigation'
+import { ScrollContainer } from 'src/components/layout/ui/container'
+import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { useSettings } from 'src/hooks/use-settings'
-import { NavigationScreenProp } from 'react-navigation'
-import { TextInput } from 'react-native-gesture-handler'
+import { backends, defaultSettings } from 'src/helpers/settings/defaults'
+import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { backends, defaultSettings } from 'src/helpers/settings/defaults'
-import { Heading, Footer } from 'src/components/layout/ui/row'
-import { ScrollContainer } from 'src/components/layout/ui/container'
 
 const ApiState = () => {
-    const [{ apiUrl }] = useSettings()
+    const apiUrl = useSettingsValue.apiUrl()
     if (apiUrl === defaultSettings.apiUrl) return null
     return (
         <Footer>
@@ -29,7 +28,8 @@ const ApiScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const [{ apiUrl }, setSetting] = useSettings()
+    const setSetting = useSettings()
+    const apiUrl = useSettingsValue.apiUrl()
 
     return (
         <ScrollContainer>

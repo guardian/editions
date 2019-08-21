@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     footer: {
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
-        paddingTop: metrics.vertical * 2,
+        paddingBottom: metrics.vertical * 2,
         justifyContent: 'flex-start',
         flexDirection: 'row',
     },
