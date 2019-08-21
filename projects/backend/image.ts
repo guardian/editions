@@ -1,4 +1,5 @@
 import { createHash } from 'crypto'
+import { sizeDescriptions } from '../common/src'
 import { ImageSize, Image } from './common'
 import Vibrant from 'node-vibrant'
 
@@ -27,10 +28,7 @@ const getSignature = (path: string) => {
 }
 
 const sizes: { [k in ImageSize | 'sample']: number } = {
-    phone: 375,
-    tablet: 740,
-    tabletL: 980,
-    tabletXL: 1140,
+    ...sizeDescriptions,
     sample: 200,
 }
 

@@ -1,7 +1,7 @@
 import {
     membershipAccessTokenKeychain,
     userAccessTokenKeychain,
-    resetCredentials,
+    signOutIdentity,
     casCredentialsKeychain,
     casDataCache,
     userDataCache,
@@ -97,7 +97,7 @@ const fetchUserDataForKeychainUser = async (
     fetchUserDetailsImpl = fetchUserDetails,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
     getLegacyUserAccessTokenImpl = getLegacyUserAccessToken,
-    resetCredentialsImpl = resetCredentials,
+    signOutIdentityImpl = signOutIdentity,
 ): Promise<UserData | null> => {
     const [userToken, legacyUserToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
@@ -110,7 +110,7 @@ const fetchUserDataForKeychainUser = async (
     if (!actualUserToken) {
         // no userToken - we need to be logged in again
         // make sure everything is reset before doing that
-        await resetCredentialsImpl()
+        await signOutIdentityImpl()
         return null
     }
 
