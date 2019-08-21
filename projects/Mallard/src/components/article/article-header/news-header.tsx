@@ -9,6 +9,8 @@ import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { getFader } from 'src/components/layout/animators/fader'
 import { MultilineWrap } from '../wrap/wrap'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const styles = StyleSheet.create({
     background: {
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
     standfirst: {
         flex: 0,
         marginTop: metrics.vertical * 4,
-        marginBottom: metrics.vertical / 4,
+        marginBottom: metrics.vertical,
         width: '100%',
     },
 })
@@ -32,6 +34,9 @@ const NewsHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
+    const isLandscape = useMediaQuery(
+        width => width >= Breakpoints.tabletLandscape,
+    )
     return (
         <MultilineWrap
             style={[styles.background]}
@@ -43,7 +48,7 @@ const NewsHeader = ({
                 <ArticleFader>
                     <ArticleImage
                         style={{
-                            aspectRatio: 1.5,
+                            aspectRatio: isLandscape ? 2 : 1.5,
                             marginBottom: metrics.vertical / 4,
                         }}
                         image={image}
