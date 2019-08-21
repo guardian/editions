@@ -13,6 +13,7 @@ const stopRadius = 4
 const styles = StyleSheet.create({
     root: {
         height: metrics.fronts.sliderRadius * 2,
+        width: '100%',
     },
     background: {
         marginHorizontal: metrics.fronts.sliderRadius - stopRadius,

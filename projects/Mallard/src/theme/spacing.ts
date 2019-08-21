@@ -24,6 +24,7 @@ export const metrics = {
         ...sides,
         maxWidth: 790 + sides.sidesTablet * 2,
         rightRail: 150 + sides.sidesTablet,
+        railPaddingLeft: sides.sidesTablet * 1.5,
     },
     fronts: {
         sides: basicMetrics.horizontal * 1.5,

@@ -28,6 +28,7 @@ import { ArticleScreenBody } from './article/body'
 import { exportAllDeclaration } from '@babel/types'
 import { Fader } from 'src/components/layout/animators/fader'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -62,10 +63,9 @@ const getData = (
 
 const styles = StyleSheet.create({
     slider: {
-        padding: metrics.article.sides,
         paddingVertical: metrics.vertical,
         justifyContent: 'center',
-        alignItems: 'stretch',
+        alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: color.background,
     },
@@ -164,20 +164,28 @@ const ArticleScreenWithProps = ({
                             <View
                                 style={[
                                     styles.slider,
-                                    isTablet && {
-                                        paddingHorizontal:
-                                            metrics.article.sidesTablet,
-                                    },
                                     !articleIsAtTop && styles.sliderBorder,
                                 ]}
                             >
-                                <Slider
-                                    small
-                                    title={articleNavigator.frontName}
-                                    fill={getColor(articleNavigator.appearance)}
-                                    stops={2}
-                                    position={sliderPos}
-                                />
+                                <MaxWidthWrap>
+                                    <View
+                                        style={{
+                                            width: '100%',
+                                            flexShrink: 0,
+                                            flexGrow: 1,
+                                        }}
+                                    >
+                                        <Slider
+                                            small
+                                            title={articleNavigator.frontName}
+                                            fill={getColor(
+                                                articleNavigator.appearance,
+                                            )}
+                                            stops={2}
+                                            position={sliderPos}
+                                        />
+                                    </View>
+                                </MaxWidthWrap>
                             </View>
                         </Fader>
                         <Animated.FlatList

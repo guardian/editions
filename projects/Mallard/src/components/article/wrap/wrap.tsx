@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, ReactElement } from 'react'
 import { View, ViewStyle, StyleProp, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
@@ -8,6 +8,7 @@ import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { getFont } from 'src/theme/typography'
 import { Multiline } from 'src/components/multiline'
 import { ariaHidden } from 'src/helpers/a11y'
+import { MaxWidthWrap } from './max-width'
 
 export enum WrapLayout {
     narrow,
@@ -48,16 +49,7 @@ interface WrapperPropTypes
 const contentWrapStyles = StyleSheet.create({
     root: {
         width: '100%',
-        paddingLeft: metrics.article.sides,
-    },
-    rootTablet: {
-        paddingLeft: metrics.article.sidesTablet,
-    },
-    inner: {
-        paddingRight: metrics.article.sides,
-    },
-    innerTablet: {
-        paddingRight: metrics.article.sidesTablet * 1.25,
+        overflow: 'visible',
     },
 })
 
@@ -73,7 +65,6 @@ const ContentWrapper = ({
         <View
             style={[
                 contentWrapStyles.root,
-                tablet && contentWrapStyles.rootTablet,
                 { backgroundColor },
                 useMobileTopOffset && {
                     marginTop: (topOffset || 0) * -1,
@@ -106,17 +97,13 @@ const ContentWrapper = ({
                     ]}
                 ></View>
             )}
-            {children.header}
-            <View
-                style={[
-                    style,
-                    contentWrapStyles.inner,
-                    tablet && contentWrapStyles.innerTablet,
-                ]}
-            >
-                {children.children}
-            </View>
-            {children.footer}
+            {children.header && (
+                <MaxWidthWrap invert>{children.header}</MaxWidthWrap>
+            )}
+            <View style={[style]}>{children.children}</View>
+            {children.footer && (
+                <MaxWidthWrap invert>{children.footer}</MaxWidthWrap>
+            )}
         </View>
     )
 }
@@ -127,13 +114,12 @@ const threeColWrapStyles = StyleSheet.create({
         width: '100%',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
-        maxWidth: metrics.article.maxWidth,
-        overflow: 'visible',
     },
     content: {
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
+        marginRight: metrics.article.railPaddingLeft,
     },
     rightRail: {
         width: metrics.article.rightRail,
@@ -142,7 +128,7 @@ const threeColWrapStyles = StyleSheet.create({
         borderLeftWidth: 1,
     },
     rightRailContent: {
-        maxWidth: metrics.article.rightRail + metrics.article.sidesTablet * 1.5,
+        maxWidth: metrics.article.rightRail + metrics.article.sides,
         paddingRight: metrics.article.sidesTablet * 1.5,
         paddingLeft: metrics.article.sidesTablet / 2,
         marginTop: metrics.vertical * -0.25,
@@ -194,29 +180,28 @@ const ThreeColumnWrapper = ({
 }
 
 const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
-    const { width } = useDimensions()
-    const breakpoint = getClosestBreakpoint(
-        [0, Breakpoints.tabletVertical, Breakpoints.tabletLandscape],
-        width,
-    )
-
-    if (breakpoint < Breakpoints.tabletVertical) {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    if (!isTablet) {
         return (
-            <ContentWrapper {...props} backgroundColor={backgroundColor}>
-                {props.children}
-                {props.rightRail && props.rightRail(Breakpoints.zero)}
-            </ContentWrapper>
+            <MaxWidthWrap>
+                <ContentWrapper {...props} backgroundColor={backgroundColor}>
+                    {props.children}
+                    {props.rightRail && props.rightRail(Breakpoints.zero)}
+                </ContentWrapper>
+            </MaxWidthWrap>
         )
     }
 
     return (
         <View style={{ backgroundColor, alignItems: 'center' }}>
-            <ThreeColumnWrapper
-                {...{
-                    backgroundColor,
-                    ...props,
-                }}
-            />
+            <MaxWidthWrap>
+                <ThreeColumnWrapper
+                    {...{
+                        backgroundColor,
+                        ...props,
+                    }}
+                />
+            </MaxWidthWrap>
         </View>
     )
 }
