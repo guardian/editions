@@ -2,6 +2,7 @@ import PushNotification from 'react-native-push-notification'
 import { PushNotificationIOS, Platform } from 'react-native'
 import { fetchFromNotificationService } from 'src/helpers/fetch'
 import { downloadAndUnzipIssue } from 'src/helpers/files'
+import { imageForScreenSize } from 'src/helpers/screen';
 
 const pushNotifcationRegistration = () =>
     PushNotification.configure({
@@ -15,9 +16,10 @@ const pushNotifcationRegistration = () =>
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
+                const screenSize = imageForScreenSize();
                 downloadAndUnzipIssue(
                     key,
-                    'tabletXL' /**  todo, how do we work out image size */,
+                    screenSize
                 )
             }
 

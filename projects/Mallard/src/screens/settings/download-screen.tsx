@@ -17,6 +17,7 @@ import {
 import { FSPaths } from 'src/paths'
 import { Heading } from 'src/components/layout/ui/row'
 import { downloadAndUnzipIssue } from 'src/helpers/files'
+import { imageForScreenSize } from 'src/helpers/screen'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
@@ -103,7 +104,9 @@ export const DownloadScreen = () => {
                     <Button
                         title={'🌈 Download Issue'}
                         onPress={() => {
-                            downloadAndUnzipIssue('2019-07-20', 'tabletXL')
+                            const screenSize = imageForScreenSize();
+                            Alert.alert(screenSize)
+                            downloadAndUnzipIssue('2019-07-20', screenSize)
                                 .then(async () => {
                                     refreshIssues()
                                 })

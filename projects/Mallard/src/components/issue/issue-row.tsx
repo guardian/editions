@@ -15,6 +15,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { FSPaths } from 'src/paths'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
+import { imageForScreenSize } from "src/helpers/screen"
 
 interface GridRowSplitPropTypes {
     children: ReactNode
@@ -84,7 +85,7 @@ const IssueRow = ({
                                 !dlStatus &&
                                     downloadAndUnzipIssue(
                                         issue.key,
-                                        'phone',
+                                        imageForScreenSize(),
                                         status => {
                                             setDlStatus(status)
                                             if (status.type === 'success') {
