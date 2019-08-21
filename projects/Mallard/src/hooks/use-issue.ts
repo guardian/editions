@@ -30,15 +30,13 @@ export const getIssueResponse = (issue: Issue['key']) => {
     )
 }
 
-export const useIssueOrLatestResponse = (issue?: Issue['key']) => {
-    return useIssueWithResponse(
-        issue ? getIssueResponse(issue) : getLatestIssue(),
-        [issue || 'latest'],
-    )
-}
+export const useIssueOrLatestResponse = (issue?: Issue['key']) =>
+    useIssueWithResponse(issue ? getIssueResponse(issue) : getLatestIssue(), [
+        issue || 'latest',
+    ])
 
-export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) => {
-    return fetchFromIssue<Front>(
+export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
+    fetchFromIssue<Front>(
         issue,
         FSPaths.front(issue, front),
         APIPaths.front(issue, front),
@@ -46,7 +44,7 @@ export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) => {
             validator: res => res.collections != null,
         },
     )
-}
+
 export const useFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
     useIssueWithResponse(getFrontsResponse(issue, front), [issue, front])
 

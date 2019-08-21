@@ -3,7 +3,7 @@ import { unzip } from 'react-native-zip-archive'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { ImageSize } from '../../../common/src'
-import { defaultSettings } from './settings/defaults';
+import { defaultSettings } from './settings/defaults'
 
 interface BasicFile {
     filename: string

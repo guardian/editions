@@ -1,13 +1,22 @@
-import React, { useMemo } from 'react';
-import { Alert, Button, Clipboard, ScrollView, View } from 'react-native';
-import { Heading } from 'src/components/layout/ui/row';
-import { Item, List } from 'src/components/lists/list';
-import { deleteIssueFiles, deleteOtherFiles, displayFileSize, displayPerc, downloadAndUnzipIssue, File, getJson, unzipIssue } from 'src/helpers/files';
-import { imageForScreenSize } from 'src/helpers/screen';
-import { DownloadQueue, useDownloadQueue, useFileList } from 'src/hooks/use-fs';
-import { FSPaths } from 'src/paths';
-import { color } from 'src/theme/color';
-import { metrics } from 'src/theme/spacing';
+import React, { useMemo } from 'react'
+import { Alert, Button, Clipboard, ScrollView, View } from 'react-native'
+import { Heading } from 'src/components/layout/ui/row'
+import { Item, List } from 'src/components/lists/list'
+import {
+    deleteIssueFiles,
+    deleteOtherFiles,
+    displayFileSize,
+    displayPerc,
+    downloadAndUnzipIssue,
+    File,
+    getJson,
+    unzipIssue,
+} from 'src/helpers/files'
+import { imageForScreenSize } from 'src/helpers/screen'
+import { DownloadQueue, useDownloadQueue, useFileList } from 'src/hooks/use-fs'
+import { FSPaths } from 'src/paths'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
 
 const Queue = ({ queue }: { queue: DownloadQueue }) => {
     return (
@@ -94,7 +103,7 @@ export const DownloadScreen = () => {
                     <Button
                         title={'🌈 Download Issue'}
                         onPress={() => {
-                            const screenSize = imageForScreenSize();
+                            const screenSize = imageForScreenSize()
                             downloadAndUnzipIssue('2019-07-20', screenSize)
                                 .then(async () => {
                                     refreshIssues()

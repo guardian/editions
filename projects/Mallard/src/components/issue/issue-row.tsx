@@ -15,7 +15,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { FSPaths } from 'src/paths'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
-import { imageForScreenSize } from "src/helpers/screen"
+import { imageForScreenSize } from 'src/helpers/screen'
 
 interface GridRowSplitPropTypes {
     children: ReactNode
@@ -62,7 +62,7 @@ const IssueRow = ({
         // we probably need a better check for this
         // e.g. do we have issue json and images?
         RNFetchBlob.fs.exists(FSPaths.issue(issue.key)).then(setExists)
-    }, [])
+    }, [issue.key])
 
     return (
         <RowWrapper>

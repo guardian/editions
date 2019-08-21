@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FSPaths, APIPaths } from 'src/paths'
 import { Image as IImage } from '../../../../common/src'
 import { Image, StyleProp, ImageStyle } from 'react-native'
+import { imageForScreenSize } from 'src/helpers/screen'
 
 // get the tail of an array, use in setPath, to move on to the next path after an error
 const tail = <T extends any>([, ...next]: T[]): T[] => next
@@ -28,7 +29,7 @@ const ImageResource = ({
         FSPaths.media(issueID, source, path),
         `${APIPaths.mediaBackend}${APIPaths.media(
             issueID,
-            'phone', // todo, use the proper one!
+            imageForScreenSize(),
             source,
             path,
         )}`,
