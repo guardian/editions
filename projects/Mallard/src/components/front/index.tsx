@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { Animated, View } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
-import { Navigator, NavigatorSkeleton } from '../navigator'
+import { Slider, SliderSkeleton } from '../slider'
 import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import {
@@ -116,7 +116,7 @@ const FrontWithResponse = ({
     return (
         <Wrapper
             scrubber={
-                <Navigator
+                <Slider
                     stops={stops}
                     title={frontData.displayName || 'News'}
                     fill={color}
@@ -225,14 +225,14 @@ export const Front: FunctionComponent<{
 
     return frontsResponse({
         pending: () => (
-            <Wrapper scrubber={<NavigatorSkeleton />}>
+            <Wrapper scrubber={<SliderSkeleton />}>
                 <FlexCenter>
                     <Spinner />
                 </FlexCenter>
             </Wrapper>
         ),
         error: err => (
-            <Wrapper scrubber={<NavigatorSkeleton />}>
+            <Wrapper scrubber={<SliderSkeleton />}>
                 <FlexErrorMessage debugMessage={err.message} />
             </Wrapper>
         ),

@@ -9,7 +9,7 @@ const basicMetrics = {
     vertical: 10,
 }
 
-const scrubberRadius = 18
+const sliderRadius = 18
 export const metrics = {
     ...basicMetrics,
     headerHeight,
@@ -25,11 +25,11 @@ export const metrics = {
     },
     fronts: {
         sides: basicMetrics.horizontal * 1.5,
-        cardContainerHeightExtra: scrubberRadius * 2,
+        cardContainerHeightExtra: sliderRadius * 2,
         cardSize: toSize(540, 600),
         cardSizeTablet: toSize(650, 725),
         cardSizeTabletShort: toSize(650, 660),
-        scrubberRadius,
+        sliderRadius,
     },
     gridRowSplit: {
         narrow: (width: number) => width * 0.6,

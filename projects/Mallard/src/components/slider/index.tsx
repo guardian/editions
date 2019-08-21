@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, View, PanResponder, StyleSheet } from 'react-native'
-import { Lozenge } from './lozenge'
-import { Background } from './background'
+import { Lozenge, MiniLozenge } from './draw/lozenge'
+import { Background } from './draw/background'
 import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { WithLayoutRectangle } from '../layout/ui/sizing/with-layout-rectangle'
@@ -12,18 +12,18 @@ const stopRadius = 4
 
 const styles = StyleSheet.create({
     root: {
-        height: metrics.fronts.scrubberRadius * 2,
+        height: metrics.fronts.sliderRadius * 2,
     },
     background: {
-        marginHorizontal: metrics.fronts.scrubberRadius - stopRadius,
+        marginHorizontal: metrics.fronts.sliderRadius - stopRadius,
     },
 })
 
-export const NavigatorSkeleton = () => {
+export const SliderSkeleton = () => {
     return (
         <View style={[styles.root, styles.background]}>
             <Background
-                height={metrics.fronts.scrubberRadius}
+                height={metrics.fronts.sliderRadius}
                 radius={stopRadius}
                 stops={0}
                 fill={color.skeleton}
@@ -32,14 +32,16 @@ export const NavigatorSkeleton = () => {
     )
 }
 
-const Navigator = ({
+const Slider = ({
+    small = false,
+    fill = color.text,
+    stops = 0,
     title,
-    fill,
-    stops,
     position,
     onScrub,
     onReleaseScrub,
 }: {
+    small: boolean
     title: string
     fill: string
     stops: number
@@ -57,11 +59,11 @@ const Navigator = ({
             onPanResponderGrant: (ev, gestureState) => {
                 scrubbing = true
                 onScrub &&
-                    onScrub(gestureState.x0 - metrics.fronts.scrubberRadius)
+                    onScrub(gestureState.x0 - metrics.fronts.sliderRadius)
             },
             onPanResponderMove: (ev, gestureState) => {
                 onScrub &&
-                    onScrub(gestureState.moveX - metrics.fronts.scrubberRadius)
+                    onScrub(gestureState.moveX - metrics.fronts.sliderRadius)
             },
             onPanResponderEnd: (ev, gestureState) => {
                 scrubbing = false
@@ -69,7 +71,7 @@ const Navigator = ({
                     onReleaseScrub(
                         gestureState.x0 +
                             gestureState.dx -
-                            metrics.fronts.scrubberRadius,
+                            metrics.fronts.sliderRadius,
                     )
             },
         }),
@@ -78,8 +80,16 @@ const Navigator = ({
     const isScrollable = stops > 1
     const isScrubbable = onScrub && isScrollable
 
+    const lozengePosition = (width: number) =>
+        isScrollable
+            ? position.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, width - metrics.fronts.sliderRadius * 2],
+              })
+            : undefined
+
     return (
-        <WithLayoutRectangle minHeight={metrics.fronts.scrubberRadius}>
+        <WithLayoutRectangle minHeight={metrics.fronts.sliderRadius}>
             {({ width }) => (
                 <View
                     {...(isScrubbable ? panResponder.panHandlers : {})}
@@ -88,38 +98,27 @@ const Navigator = ({
                     {isScrollable ? (
                         <View style={styles.background}>
                             <Background
-                                height={metrics.fronts.scrubberRadius}
+                                height={metrics.fronts.sliderRadius}
                                 radius={stopRadius}
                                 {...{ stops, fill }}
                             />
                         </View>
                     ) : null}
-                    <Lozenge
-                        position={
-                            isScrollable
-                                ? position.interpolate({
-                                      inputRange: [0, 1],
-                                      outputRange: [
-                                          0,
-                                          width -
-                                              metrics.fronts.scrubberRadius * 2,
-                                      ],
-                                  })
-                                : undefined
-                        }
-                        scrubbing={scrubbing}
-                        fill={fill}
-                        radius={metrics.fronts.scrubberRadius}
-                    >
-                        {title}
-                    </Lozenge>
+                    {small ? (
+                        <MiniLozenge
+                            position={lozengePosition(width)}
+                            fill={fill}
+                        >
+                            {title}
+                        </MiniLozenge>
+                    ) : (
+                        <Lozenge position={lozengePosition(width)} fill={fill}>
+                            {title}
+                        </Lozenge>
+                    )}
                 </View>
             )}
         </WithLayoutRectangle>
     )
 }
-Navigator.defaultProps = {
-    fill: color.text,
-    stops: 0,
-}
-export { Navigator }
+export { Slider }

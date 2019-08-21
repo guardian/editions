@@ -17,7 +17,7 @@ import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { LoginOverlay } from 'src/components/login/login-overlay'
-import { Navigator } from 'src/components/navigator'
+import { Slider } from 'src/components/slider'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { isPreview } from 'src/helpers/settings/defaults'
@@ -231,8 +231,9 @@ const ArticleScreenWithProps = ({
                                 alignItems: 'stretch',
                             }}
                         >
-                            <Navigator
-                                title={articleNavigator.frontName.slice(0, 1)}
+                            <Slider
+                                small
+                                title={articleNavigator.frontName}
                                 fill={getColor(articleNavigator.appearance)}
                                 stops={2}
                                 position={sliderPos}

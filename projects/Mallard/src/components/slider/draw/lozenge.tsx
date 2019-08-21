@@ -1,85 +1,66 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, ReactNode } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet, View } from 'react-native'
 import { clamp } from 'src/helpers/math'
 import { ariaHidden } from 'src/helpers/a11y'
+import { metrics } from 'src/theme/spacing'
 
 const fadeLozengeAt = 20
 
-const getStyles = (fill: string, radius: number) => {
-    const fillStyle = {
-        backgroundColor: fill,
-        ...StyleSheet.absoluteFillObject,
-    }
-
-    const bubbleStyle = {
-        ...fillStyle,
-        borderRadius: radius,
-        width: radius * 2,
-        zIndex: -2,
-    }
-
-    return StyleSheet.create({
-        root: {
-            height: radius * 2,
-            minWidth: radius * 2,
-            paddingHorizontal: 0,
-            alignItems: 'flex-start',
-            alignSelf: 'flex-start',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            flex: 0,
-            width: 'auto',
-        },
-        initialBubble: {
-            ...bubbleStyle,
-            transform: [{ translateX: -1 }],
-            backgroundColor: 'transparent',
-            alignItems: 'center',
-        },
-        leftBubbleCap: {
-            ...bubbleStyle,
-            left: radius * -1,
-        },
-        rightBubbleCap: {
-            ...bubbleStyle,
-            left: 'auto',
-            right: radius * -1,
-        },
-        square: {
-            ...fillStyle,
-            width: '100%',
-        },
-        text: {
-            color: color.textOverDarkBackground,
-            fontSize: 22,
-            height: radius * 2,
-            lineHeight: radius * 1.75,
-            alignItems: 'center',
-            fontFamily: 'GTGuardianTitlepiece-Bold',
-        },
-        header: {
-            paddingHorizontal: radius * 0.75,
-        },
-        lozengeContainer: {
-            ...StyleSheet.absoluteFillObject,
-            left: radius,
-            right: radius,
-            zIndex: -3,
-        },
-    })
+const bubbleStyle = {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: metrics.fronts.sliderRadius,
+    width: metrics.fronts.sliderRadius * 2,
+    zIndex: -2,
 }
+
+const commonStyles = StyleSheet.create({
+    circle: {
+        ...bubbleStyle,
+        transform: [{ translateX: -1 }],
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+    },
+    leftCap: {
+        ...bubbleStyle,
+        left: metrics.fronts.sliderRadius * -1,
+    },
+    rightCap: {
+        ...bubbleStyle,
+        left: 'auto',
+        right: metrics.fronts.sliderRadius * -1,
+    },
+    square: {
+        ...StyleSheet.absoluteFillObject,
+        width: '100%',
+    },
+    header: {
+        paddingHorizontal: metrics.fronts.sliderRadius * 0.75,
+    },
+    lozengeContainer: {
+        ...StyleSheet.absoluteFillObject,
+        left: metrics.fronts.sliderRadius,
+        right: metrics.fronts.sliderRadius,
+        zIndex: -3,
+    },
+    text: {
+        color: color.textOverDarkBackground,
+        fontSize: 22,
+        height: metrics.fronts.sliderRadius * 2,
+        lineHeight: metrics.fronts.sliderRadius * 1.75,
+        alignItems: 'center',
+        fontFamily: 'GTGuardianTitlepiece-Bold',
+    },
+})
 
 const LozengeBigHeader = ({
     children,
-    radius,
-    styles,
     position,
+    fill,
 }: {
     children: string
-    radius: number
-    styles: ReturnType<typeof getStyles>
+    fill: string
     position?: Animated.AnimatedInterpolation
 }) => {
     const [width, setWidth] = useState(0)
@@ -87,11 +68,10 @@ const LozengeBigHeader = ({
     return (
         <>
             <Animated.Text
-                accessibilityRole="header"
                 allowFontScaling={false}
                 style={[
-                    styles.text,
-                    styles.header,
+                    commonStyles.text,
+                    commonStyles.header,
                     width &&
                         position && {
                             opacity: position.interpolate({
@@ -118,11 +98,12 @@ const LozengeBigHeader = ({
                 onLayout={(ev: any) => {
                     setWidth(ev.nativeEvent.layout.width)
                 }}
-                style={[styles.lozengeContainer]}
+                style={[commonStyles.lozengeContainer]}
             >
                 <Animated.View
                     style={[
-                        styles.square,
+                        commonStyles.square,
+                        { backgroundColor: fill },
                         width &&
                             position && {
                                 transform: [
@@ -133,7 +114,7 @@ const LozengeBigHeader = ({
                                                 0,
                                                 fadeLozengeAt * -1 -
                                                     width / 2 +
-                                                    radius,
+                                                    metrics.fronts.sliderRadius,
                                             ],
                                             extrapolate: 'clamp',
                                         }),
@@ -151,13 +132,19 @@ const LozengeBigHeader = ({
                 />
                 <Animated.View
                     style={[
-                        styles.rightBubbleCap,
+                        commonStyles.rightCap,
+                        { backgroundColor: fill },
                         width &&
                             position && {
                                 opacity: position.interpolate({
                                     inputRange: [
                                         0,
-                                        clamp(width / 2 - radius, 0, width / 2),
+                                        clamp(
+                                            width / 2 -
+                                                metrics.fronts.sliderRadius,
+                                            0,
+                                            width / 2,
+                                        ),
                                         width / 2,
                                     ],
                                     outputRange: [1, 1, 0],
@@ -169,7 +156,9 @@ const LozengeBigHeader = ({
                                             outputRange: [
                                                 0,
                                                 fadeLozengeAt * -1 -
-                                                    (width - radius),
+                                                    (width -
+                                                        metrics.fronts
+                                                            .sliderRadius),
                                             ],
                                             extrapolate: 'clamp',
                                         }),
@@ -178,31 +167,66 @@ const LozengeBigHeader = ({
                             },
                     ]}
                 />
-                <View style={[styles.leftBubbleCap]} />
+                <View
+                    style={[commonStyles.leftCap, { backgroundColor: fill }]}
+                />
             </Animated.View>
         </>
     )
 }
 
-const Lozenge = ({
+const LozengeCircle = ({
     fill,
     children,
-    position,
-    scrubbing,
-    radius,
+    style,
 }: {
     fill: string
     children: string
+    style?: any
     position?: Animated.AnimatedInterpolation
-    scrubbing: boolean
-    radius: number
 }) => {
-    const styles = useMemo(() => getStyles(fill, radius), [fill, radius])
-    const [width, setWidth] = useState(0)
+    return (
+        <Animated.View
+            accessibilityLabel={children}
+            accessibilityRole="header"
+            style={[commonStyles.circle, { backgroundColor: fill }, style]}
+        >
+            <Text
+                {...ariaHidden}
+                allowFontScaling={false}
+                style={[commonStyles.text]}
+            >
+                {children[0]}
+            </Text>
+        </Animated.View>
+    )
+}
+
+const wrapperStyles = StyleSheet.create({
+    root: {
+        height: metrics.fronts.sliderRadius * 2,
+        minWidth: metrics.fronts.sliderRadius * 2,
+        paddingHorizontal: 0,
+        alignItems: 'flex-start',
+        alignSelf: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        flex: 0,
+        width: 'auto',
+    },
+})
+
+const LozengeWrapper = ({
+    children,
+    position,
+}: {
+    position?: Animated.AnimatedInterpolation
+    children: ReactNode
+}) => {
     return (
         <Animated.View
             style={[
-                styles.root,
+                wrapperStyles.root,
                 position && {
                     transform: [
                         {
@@ -216,28 +240,55 @@ const Lozenge = ({
                 },
             ]}
         >
-            <LozengeBigHeader {...{ children, radius, styles, position }} />
-            {position && (
-                <Animated.View
-                    {...ariaHidden}
-                    style={[
-                        styles.initialBubble,
-                        position && {
-                            opacity: position.interpolate({
-                                inputRange: [0, 10],
-                                outputRange: [0, 1],
-                                extrapolate: 'clamp',
-                            }),
-                        },
-                    ]}
-                >
-                    <Text allowFontScaling={false} style={[styles.text]}>
-                        {children[0]}
-                    </Text>
-                </Animated.View>
-            )}
+            {children}
         </Animated.View>
     )
 }
 
-export { Lozenge }
+const Lozenge = ({
+    fill,
+    children,
+    position,
+}: {
+    fill: string
+    children: string
+    position?: Animated.AnimatedInterpolation
+}) => {
+    return (
+        <LozengeWrapper position={position}>
+            <LozengeBigHeader {...{ children, fill, position }} />
+            {position && (
+                <LozengeCircle
+                    fill={fill}
+                    style={{
+                        opacity: position.interpolate({
+                            inputRange: [0, 10],
+                            outputRange: [0, 1],
+                            extrapolate: 'clamp',
+                        }),
+                    }}
+                >
+                    {children}
+                </LozengeCircle>
+            )}
+        </LozengeWrapper>
+    )
+}
+
+const MiniLozenge = ({
+    fill,
+    children,
+    position,
+}: {
+    fill: string
+    children: string
+    position?: Animated.AnimatedInterpolation
+}) => {
+    return (
+        <LozengeWrapper position={position}>
+            <LozengeCircle fill={fill}>{children}</LozengeCircle>
+        </LozengeWrapper>
+    )
+}
+
+export { Lozenge, MiniLozenge }
