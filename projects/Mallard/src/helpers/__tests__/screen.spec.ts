@@ -1,4 +1,10 @@
-import { convertImageSizeToImageDescription, maxScreenSize, minScreenSize, screenSizeToImageSize, imageForScreenSize } from '../screen';
+import {
+    convertImageSizeToImageDescription,
+    maxScreenSize,
+    minScreenSize,
+    screenSizeToImageSize,
+    imageForScreenSize,
+} from '../screen'
 
 const mock = jest.fn()
 
@@ -43,11 +49,11 @@ describe('helpers/screen', () => {
     })
 
     describe('screenSizeToImageSize', () => {
-        it("should provide the minimum value if the screen size is less than that value", () => {
+        it('should provide the minimum value if the screen size is less than that value', () => {
             expect(screenSizeToImageSize(320)).toEqual(375)
         })
 
-        it("should provide the minimum value if the screen size is equal to that value", () => {
+        it('should provide the minimum value if the screen size is equal to that value', () => {
             expect(screenSizeToImageSize(375)).toEqual(375)
         })
 
@@ -66,18 +72,18 @@ describe('helpers/screen', () => {
 
     describe('convertImageSizeToImageDescription', () => {
         it('should return "phone" if no screen size is provided', () => {
-            expect(convertImageSizeToImageDescription(NaN)).toEqual("phone")
+            expect(convertImageSizeToImageDescription(NaN)).toEqual('phone')
         })
         it('should return "phone" if an incorrect screen size is provided', () => {
-            expect(convertImageSizeToImageDescription(-100)).toEqual("phone")
+            expect(convertImageSizeToImageDescription(-100)).toEqual('phone')
         })
 
         it('should return "phone" if a middling value is provided', () => {
-            expect(convertImageSizeToImageDescription(1000)).toEqual("phone")
+            expect(convertImageSizeToImageDescription(1000)).toEqual('phone')
         })
-        
+
         it('should return a correct size based on the value', () => {
-            expect(convertImageSizeToImageDescription(980)).toEqual("tabletL")
+            expect(convertImageSizeToImageDescription(980)).toEqual('tabletL')
         })
     })
 })

@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native'
-import DeviceInfo from "react-native-device-info";
-import { sizes, ImageSize } from "../constants/image-sizes";
+import DeviceInfo from 'react-native-device-info'
+import { sizes, ImageSize } from '../constants/image-sizes'
 
 const maxScreenSize = (): number => {
     const { width, height } = Dimensions.get('window')
@@ -13,33 +13,42 @@ const minScreenSize = (): number => {
 }
 
 const screenSizeToImageSize = (screenSize: number): number => {
-    const allSizes = Object.values(sizes);
-    const minPossibleSize = Math.min(...allSizes);
-    if(screenSize <= minPossibleSize){
+    const allSizes = Object.values(sizes)
+    const minPossibleSize = Math.min(...allSizes)
+    if (screenSize <= minPossibleSize) {
         return minPossibleSize
     }
-    
-    const maxPossibleSize = Math.max(...allSizes);
-    if(screenSize >= maxPossibleSize){
+
+    const maxPossibleSize = Math.max(...allSizes)
+    if (screenSize >= maxPossibleSize) {
         return maxPossibleSize
     }
 
-    const availableSizes: number[] = Object.values(sizes).filter(size => screenSize <= size);
+    const availableSizes: number[] = Object.values(sizes).filter(
+        size => screenSize <= size,
+    )
     return Math.min(...availableSizes)
 }
 
 const convertImageSizeToImageDescription = (screenSize: number): ImageSize => {
-    if(!screenSize){
+    if (!screenSize) {
         return 'phone'
     }
-    const imageSize = Object.keys(sizes).find(size => sizes[size as ImageSize] === screenSize)
-    return imageSize as ImageSize || 'phone'
+    const imageSize = Object.keys(sizes).find(
+        size => sizes[size as ImageSize] === screenSize,
+    )
+    return (imageSize as ImageSize) || 'phone'
 }
 
-const imageForScreenSize = () => {    
+const imageForScreenSize = () => {
     const screenSize = DeviceInfo.isTablet() ? maxScreenSize() : minScreenSize()
     return convertImageSizeToImageDescription(screenSizeToImageSize(screenSize))
-
 }
 
-export { maxScreenSize, minScreenSize, screenSizeToImageSize, convertImageSizeToImageDescription, imageForScreenSize }
+export {
+    maxScreenSize,
+    minScreenSize,
+    screenSizeToImageSize,
+    convertImageSizeToImageDescription,
+    imageForScreenSize,
+}

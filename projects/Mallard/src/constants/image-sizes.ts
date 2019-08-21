@@ -5,7 +5,7 @@ const sizes: { [k in ImageSize]: number } = {
     phone: 375,
     tablet: 740,
     tabletL: 980,
-    tabletXL: 1140
+    tabletXL: 1140,
 }
 
 export { sizes }
