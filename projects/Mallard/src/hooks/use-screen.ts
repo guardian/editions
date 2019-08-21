@@ -2,11 +2,6 @@ import { useState, useEffect } from 'react'
 import { currentInsets } from '@delightfulstudio/react-native-safe-area-insets'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { Dimensions, ScaledSize } from 'react-native'
-import {
-    BreakpointList,
-    getClosestBreakpoint,
-    Breakpoints,
-} from 'src/theme/breakpoints'
 
 const useDimensions = (): ScaledSize => {
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))

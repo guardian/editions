@@ -1,49 +1,69 @@
-import { useState, useEffect } from 'react'
-
+import { gdprSwitchSettings, Settings } from 'src/helpers/settings'
+import { isPreview } from 'src/helpers/settings/defaults'
+import { useSettingsFromStore, applyExtractSettings } from './settings/helpers'
 import {
-    storeSetting,
-    Settings,
-    getAllSettings,
-    UnsanitizedSetting,
-    gdprSwitchSettings,
-} from 'src/helpers/settings'
-import { createProviderHook } from 'src/helpers/provider'
+    createProviderFromHook,
+    providerHook,
+    nestProviders,
+} from 'src/helpers/provider'
 
-type SettingsFromContext = [
-    Settings,
-    (setting: keyof Settings, value: UnsanitizedSetting) => void,
-]
+/*
+build out all the hooks needed for settings
 
-/**
- * Fetch settings stored in AsyncStorage on mount
- */
-const useSettingsInCtx = (): SettingsFromContext | null => {
-    const [settings, setSettings] = useState(null as Settings | null)
-    const setSetting = (setting: keyof Settings, value: UnsanitizedSetting) => {
-        setSettings(settings => {
-            if (!settings) {
-                console.warn(
-                    'Settings had not yet been fetched when trying to set a setting, ignoring setting update.',
-                )
-                return settings
-            }
-            return { ...settings, [setting]: value }
-        })
-        storeSetting(setting, value)
-    }
-    useEffect(() => {
-        getAllSettings().then(s => setSettings(s))
-    }, [])
-    return settings && [settings, setSetting]
+extracting settings is a performance
+optimisation.
+Often read settings should be extracted
+so their consumers don't rerender when any other
+setting changes and only rerender when they
+themselves change
+*/
+const makeSettingsHooks = <E extends keyof Settings>({
+    extractSettings,
+}: {
+    extractSettings: (E)[]
+}) => {
+    const {
+        Provider: BaseProvider,
+        useAsSetterHook,
+        useAsGetterHook,
+    } = createProviderFromHook(() => {
+        const [settings, { storeSetting }] = useSettingsFromStore()
+        return (
+            settings &&
+            providerHook({
+                getter: settings as Omit<Settings, E>,
+                setter: storeSetting,
+            })
+        )
+    })
+
+    const { providers, extractedGetterHooks } = applyExtractSettings(
+        extractSettings,
+    )
+
+    const Provider = nestProviders(BaseProvider, ...providers)
+
+    return { Provider, extractedGetterHooks, useAsSetterHook, useAsGetterHook }
 }
 
 const {
     Provider: SettingsProvider,
-    useAsHook: useSettings,
-} = createProviderHook<SettingsFromContext>(useSettingsInCtx)
+    extractedGetterHooks: useSettingsValue,
+    useAsSetterHook: useSettings,
+    useAsGetterHook: useOtherSettingsValues,
+} = makeSettingsHooks({
+    extractSettings: ['isUsingProdDevtools', 'apiUrl'],
+})
+
+/* extra bespoke getters */
+const useIsPreview = () => {
+    const apiUrl = useSettingsValue.apiUrl()
+    return isPreview(apiUrl)
+}
 
 const useGdprSwitches = () => {
-    const [settings, setSetting] = useSettings()
+    const setSetting = useSettings()
+    const settings = useOtherSettingsValues()
 
     /*
     if a user consents to all via any UI
@@ -73,4 +93,10 @@ const useGdprSwitches = () => {
     return { enableNulls, DEVMODE_resetAll }
 }
 
-export { SettingsProvider, useSettings, useGdprSwitches }
+export {
+    SettingsProvider,
+    useSettingsValue,
+    useSettings,
+    useOtherSettingsValues,
+}
+export { useGdprSwitches, useIsPreview }
