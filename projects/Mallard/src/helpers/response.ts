@@ -1,4 +1,4 @@
-import { ReactElement, useMemo } from 'react'
+import { ReactElement } from 'react'
 import { FetchableResponse, Error } from 'src/hooks/use-response'
 
 interface WithResponseCallbacks<T> {
@@ -23,7 +23,7 @@ export const withResponse = <T>(response: FetchableResponse<T>) => ({
 }): ReactElement => {
     switch (response.state) {
         case 'success':
-            return success(response.response as T, { retry: response.retry })
+            return success(response.response, { retry: response.retry })
         case 'error':
             return error(response.error, response.staleResponse, {
                 retry: response.retry,
