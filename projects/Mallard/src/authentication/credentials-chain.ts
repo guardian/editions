@@ -1,15 +1,17 @@
 import {
     fetchUserDataForKeychainUser,
     UserData,
-    fetchCASExpiryForKeychainCredentials,
+    fetchAndPersistCASExpiryForKeychainCredentials,
+    fetchAndPersistIAPReceiptForCurrentITunesUser,
 } from './helpers'
 import { CasExpiry } from '../services/content-auth-service'
-import { userDataCache, casDataCache, legacyCASExpiryCache } from './storage'
 import {
-    ReceiptIOS,
-    fetchActiveIOSSubscriptionReceipt,
-    isReceiptActive,
-} from '../services/iap'
+    userDataCache,
+    casDataCache,
+    legacyCASExpiryCache,
+    iapReceiptCache,
+} from './storage'
+import { ReceiptIOS, isReceiptActive } from '../services/iap'
 
 interface IdentityAuth {
     type: 'identity'
@@ -132,10 +134,10 @@ const identityAuthProvider = () =>
     fetchUserDataForKeychainUser().then(authTypeFromIdentity)
 
 const casAuthProvider = () =>
-    fetchCASExpiryForKeychainCredentials().then(authTypeFromCAS)
+    fetchAndPersistCASExpiryForKeychainCredentials().then(authTypeFromCAS)
 
 const iapAuthProvider = () =>
-    fetchActiveIOSSubscriptionReceipt().then(authTypeFromIAP)
+    fetchAndPersistIAPReceiptForCurrentITunesUser().then(authTypeFromIAP)
 
 const liveAuthChain = () =>
     runAuthChain([identityAuthProvider, casAuthProvider, iapAuthProvider])
@@ -157,15 +159,16 @@ const cachedIdentityAuthProvider = () =>
 
 const cachedCasAuthProvider = async () => {
     const auth = await casDataCache.get().then(authTypeFromCAS)
-    return auth || authTypeFromCAS(legacyCASExpiryCache.get())
+    return auth || authTypeFromCAS(legacyCASExpiryCache.get() || null)
 }
+
+const cachedIAPAuthProvider = () => iapReceiptCache.get().then(authTypeFromIAP)
 
 const cachedAuthChain = () =>
     runAuthChain([
         cachedIdentityAuthProvider,
         cachedCasAuthProvider,
-        // this is already cached as it reads from the file system
-        iapAuthProvider,
+        cachedIAPAuthProvider,
     ])
 
 export {
