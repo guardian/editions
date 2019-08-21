@@ -5,7 +5,7 @@ import React, {
     useEffect,
     useMemo,
 } from 'react'
-import { resetCredentials } from './storage'
+import { signOutIdentity } from './storage'
 import { useNetInfo } from '@react-native-community/netinfo'
 import {
     liveAuthChain,
@@ -42,14 +42,14 @@ const createAuthAttempt = (
 const AuthContext = createContext<{
     status: AuthStatus
     setStatus: (status: AuthStatus) => void
-    signOut: () => Promise<void>
+    signOutIdentity: () => Promise<void>
     restorePurchases: () => Promise<void>
     isRestoring: boolean
     isAuthing: boolean
 }>({
     status: pending,
     setStatus: () => {},
-    signOut: () => Promise.resolve(),
+    signOutIdentity: () => Promise.resolve(),
     restorePurchases: () => Promise.resolve(),
     isRestoring: false,
     isAuthing: false,
@@ -188,8 +188,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             status: authAttempt.status,
             setStatus: (status: AuthStatus) =>
                 setAuthAttempt(createAuthAttempt(status, 'live')),
-            signOut: async () => {
-                await resetCredentials()
+            signOutIdentity: async () => {
+                await signOutIdentity()
                 setAuthAttempt(createAuthAttempt(unauthed, 'live'))
             },
             isRestoring,
