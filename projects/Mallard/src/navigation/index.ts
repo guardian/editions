@@ -1,40 +1,39 @@
 import { useEffect } from 'react'
-import {
-    createStackNavigator,
-    createAppContainer,
-    createSwitchNavigator,
-} from 'react-navigation'
-import { HomeScreen } from '../screens/home-screen'
-import { IssueScreen } from '../screens/issue-screen'
-import { ArticleScreen } from '../screens/article-screen'
-import { SettingsScreen } from '../screens/settings-screen'
-import { color } from 'src/theme/color'
 import { Animated, Easing } from 'react-native'
-import { useSettings } from 'src/hooks/use-settings'
 import {
-    OnboardingIntroScreen,
+    createAppContainer,
+    createStackNavigator,
+    createSwitchNavigator,
+    NavigationScreenProp,
+} from 'react-navigation'
+import { shouldShowOnboarding } from 'src/helpers/settings'
+import { useOtherSettingsValues } from 'src/hooks/use-settings'
+import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
+import {
     OnboardingConsentScreen,
+    OnboardingIntroScreen,
 } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
-import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
-import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
-import { NavigationScreenProp } from 'react-navigation'
-import { mapNavigationToProps } from './helpers/base'
-import { shouldShowOnboarding } from 'src/helpers/settings'
-import { issueToArticleScreenInterpolator } from './interpolators'
-import { supportsTransparentCards } from 'src/helpers/features'
-import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
-import { routeNames } from './routes'
-import { DownloadScreen } from 'src/screens/settings/download-screen'
 import { ApiScreen } from 'src/screens/settings/api-screen'
+import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
+import { CreditsScreen } from 'src/screens/settings/credits-screen'
+import { DownloadScreen } from 'src/screens/settings/download-screen'
+import { FAQScreen } from 'src/screens/settings/faq-screen'
+import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
+import { HelpScreen } from 'src/screens/settings/help-screen'
 import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
 import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
-import { HelpScreen } from 'src/screens/settings/help-screen'
-import { CreditsScreen } from 'src/screens/settings/credits-screen'
-import { FAQScreen } from 'src/screens/settings/faq-screen'
-import { createModalNavigator } from './navigators/modal'
+import { color } from 'src/theme/color'
+import { ArticleScreen } from '../screens/article-screen'
+import { HomeScreen } from '../screens/home-screen'
+import { IssueScreen } from '../screens/issue-screen'
+import { SettingsScreen } from '../screens/settings-screen'
+import { mapNavigationToProps } from './helpers/base'
+import { issueToArticleScreenInterpolator } from './interpolators'
 import { createHeaderStackNavigator } from './navigators/header'
+import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
+import { routeNames } from './routes'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -163,7 +162,7 @@ const RootNavigator = createAppContainer(
                     }: {
                         navigation: NavigationScreenProp<{}>
                     }) => {
-                        const [settings] = useSettings()
+                        const settings = useOtherSettingsValues()
                         useEffect(() => {
                             if (shouldShowOnboarding(settings)) {
                                 navigation.navigate('Onboarding')

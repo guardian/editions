@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { File, getFileList, downloadIssue } from 'src/helpers/files'
-import { createProviderHook } from 'src/helpers/provider'
+import { createMixedProviderHook__SLOW } from 'src/helpers/provider'
 
 /*
 Downloads
@@ -86,7 +86,10 @@ const useFileListInCtx = (): FileListHook => {
 /*
 Provider
 */
-const { Provider: FileSystemProvider, useAsHook } = createProviderHook<{
+const {
+    Provider: FileSystemProvider,
+    useAsHook,
+} = createMixedProviderHook__SLOW<{
     fileList: FileListHook
     downloads: DownloadQueueHook
 }>(() => {

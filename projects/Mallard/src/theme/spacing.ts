@@ -14,15 +14,20 @@ const buttonHeight =
     getFont('sans', 1).fontSize * PixelRatio.getFontScale() +
     basicMetrics.vertical * 2.5
 
+const sides = {
+    sides: basicMetrics.horizontal / 2,
+    sidesTablet: basicMetrics.horizontal * 1.5,
+}
+
 const scrubberRadius = 18
 export const metrics = {
     ...basicMetrics,
     headerHeight,
     buttonHeight,
     radius: 10,
+    sides,
     article: {
-        sides: basicMetrics.horizontal / 2,
-        sidesTablet: basicMetrics.horizontal * 1.5,
+        ...sides,
         maxWidth: 540,
         maxWidthLandscape: 620,
         leftRailLandscape: 120,

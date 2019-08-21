@@ -20,14 +20,13 @@ import { LoginOverlay } from 'src/components/login/login-overlay'
 import { Navigator } from 'src/components/navigator'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { getNavigationPosition } from 'src/helpers/positions'
-import { isPreview } from 'src/helpers/settings/defaults'
 import { getColor } from 'src/helpers/transform'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar, WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
 import { useDimensions } from 'src/hooks/use-screen'
-import { useSettings } from 'src/hooks/use-settings'
+import { useSettingsValue, useIsPreview } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
     ArticleRequiredNavigationProps,
@@ -78,7 +77,7 @@ const ArticleScreenBody = ({
     )
     const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
-    const [{ isUsingProdDevtools }] = useSettings()
+    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
     return (
         <ScrollView
@@ -169,7 +168,7 @@ const ArticleScreenWithProps = ({
         outputRange: [0, 1],
     })
 
-    const preview = isPreview(useSettings()[0])
+    const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
 
     return (
