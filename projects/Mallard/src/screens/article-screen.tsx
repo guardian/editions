@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { NavigationScreenProp, ScrollView } from 'react-navigation'
 import {
@@ -38,6 +38,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { DevTools, getEnumPosition } from './article/dev-tools'
+import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -160,6 +161,7 @@ const ArticleScreenWithProps = ({
     const [current, setCurrent] = useState(startingPoint)
 
     const { width } = useDimensions()
+    const flatListRef = useRef<AnimatedFlatListRef | undefined>()
 
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
@@ -194,19 +196,13 @@ const ArticleScreenWithProps = ({
                         }
                         onDismiss={() => navigation.goBack()}
                     >
-                        <WithBreakpoints>
-                            {{
-                                0: ({ width }) => (
-                                    <ArticleScreenBody
-                                        path={path}
-                                        width={width}
-                                        pillar={pillar}
-                                        onTopPositionChange={() => {}}
-                                        previewNotice={previewNotice}
-                                    />
-                                ),
-                            }}
-                        </WithBreakpoints>
+                        <ArticleScreenBody
+                            path={path}
+                            width={width}
+                            pillar={pillar}
+                            onTopPositionChange={() => {}}
+                            previewNotice={previewNotice}
+                        />
                     </LoginOverlay>
                 </SlideCard>
             ) : (
@@ -240,6 +236,9 @@ const ArticleScreenWithProps = ({
                             />
                         </View>
                         <Animated.FlatList
+                            ref={(flatList: AnimatedFlatListRef) =>
+                                (flatListRef.current = flatList)
+                            }
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}
                             scrollEventThrottle={1}
