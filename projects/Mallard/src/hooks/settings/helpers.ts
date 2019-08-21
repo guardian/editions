@@ -66,9 +66,9 @@ const applyExtractSettings = <E extends keyof Settings>(
     }
     let providers = []
 
-    for (const setting of extractSettings) {
+    for (let setting of extractSettings) {
         const { Provider, useAsGetterHook } = createProviderFromHook(
-            createSingleSettingHook('isUsingProdDevtools'),
+            createSingleSettingHook(setting),
         )
         providers.push(Provider)
         extractedGetterHooks[

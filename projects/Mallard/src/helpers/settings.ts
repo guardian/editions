@@ -103,5 +103,6 @@ export const storeSetting = (
     })
 }
 
-export const shouldShowOnboarding = (settings: Settings) =>
-    !settings.hasOnboarded
+export const shouldShowOnboarding = (
+    settings: Pick<Settings, 'hasOnboarded'>,
+) => !settings.hasOnboarded
