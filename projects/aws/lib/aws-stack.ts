@@ -270,7 +270,7 @@ export class EditionsStack extends cdk.Stack {
 
         new CfnOutput(this, 'archiver-s3-event-listener-arn', {
             description: 'ARN for archiver state machine trigger lambda',
-            exportName: 'archiver-s3-event-listener-arn',
+            exportName: `archiver-s3-event-listener-arn-${stageParameter.valueAsString}`,
             value: archiveS3EventListener.functionArn,
         })
         new lambda.CfnPermission(
