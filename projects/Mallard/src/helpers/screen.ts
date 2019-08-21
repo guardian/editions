@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { sizes, ImageSize } from '../constants/image-sizes'
+import { sizeDescriptions, ImageSize } from '../../../common/src'
 
 const maxScreenSize = (): number => {
     const { width, height } = Dimensions.get('window')
@@ -13,7 +13,7 @@ const minScreenSize = (): number => {
 }
 
 const screenSizeToImageSize = (screenSize: number): number => {
-    const allSizes = Object.values(sizes)
+    const allSizes = Object.values(sizeDescriptions)
     const minPossibleSize = Math.min(...allSizes)
     if (screenSize <= minPossibleSize) {
         return minPossibleSize
@@ -24,7 +24,7 @@ const screenSizeToImageSize = (screenSize: number): number => {
         return maxPossibleSize
     }
 
-    const availableSizes: number[] = Object.values(sizes).filter(
+    const availableSizes: number[] = Object.values(sizeDescriptions).filter(
         size => screenSize <= size,
     )
     return Math.min(...availableSizes)
@@ -34,8 +34,8 @@ const convertImageSizeToImageDescription = (screenSize: number): ImageSize => {
     if (!screenSize) {
         return 'phone'
     }
-    const imageSize = Object.keys(sizes).find(
-        size => sizes[size as ImageSize] === screenSize,
+    const imageSize = Object.keys(sizeDescriptions).find(
+        size => sizeDescriptions[size as ImageSize] === screenSize,
     )
     return (imageSize as ImageSize) || 'phone'
 }
