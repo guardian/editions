@@ -22,29 +22,29 @@
 		5073D175FC076F04450602A9 /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1718C639A1EF002E7C79BB89 /* libPods-Mallard-tvOS.a */; };
 		C3AFA83DBB499222700C0947 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70480AB7A981F7550F9B8A02 /* libPods-Mallard.a */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
-		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378322B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378722B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378822B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378922B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378A22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378B22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378C22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378D22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378E22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378F22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
 		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
 		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
@@ -117,6 +117,7 @@
 		2D02E47B1E0B4A5D006451C7 /* Mallard-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mallard-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mallard-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F42773E47CBD17E503537C6 /* libPods-Mallard-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B3CC9963BA4216B98F3053 /* GuardianTextSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-BoldItalic.ttf"; path = "../src/assets/fonts/GuardianTextSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		35AAFC7AF833CCE4E9C1931A /* Pods-Mallard-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		3DA2FD0EC69B436384494394 /* GHGuardianHeadline-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-BoldItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -479,29 +480,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* (null) in Resources */,
-				C549378122B149BB00B1D9A2 /* (null) in Resources */,
-				C549378222B149BB00B1D9A2 /* (null) in Resources */,
-				C549378322B149BB00B1D9A2 /* (null) in Resources */,
-				C549378422B149BB00B1D9A2 /* (null) in Resources */,
-				C549378522B149BB00B1D9A2 /* (null) in Resources */,
-				C549378622B149BB00B1D9A2 /* (null) in Resources */,
-				C549378722B149BB00B1D9A2 /* (null) in Resources */,
-				C549378822B149BB00B1D9A2 /* (null) in Resources */,
-				C549378922B149BB00B1D9A2 /* (null) in Resources */,
-				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
-				C549379022B149BB00B1D9A2 /* (null) in Resources */,
-				C549379122B149BB00B1D9A2 /* (null) in Resources */,
-				C549379222B149BB00B1D9A2 /* (null) in Resources */,
+				C549378022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378222B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378322B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378622B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378722B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378822B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378922B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378A22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378B22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378C22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378D22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378E22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378F22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379222B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* (null) in Resources */,
-				C549379522B149BB00B1D9A2 /* (null) in Resources */,
-				C549379622B149BB00B1D9A2 /* (null) in Resources */,
+				C549379422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379622B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
