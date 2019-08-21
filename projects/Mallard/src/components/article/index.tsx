@@ -64,11 +64,12 @@ const Article = ({
     article,
     ...headerProps
 }: {
-    article?: BlockElement[]
+    article: BlockElement[]
 } & ArticleHeaderProps &
     StandfirstPropTypes) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
-    const html = useMemo(() => (article ? render(article) : ''), [article])
+    const [, { pillar }] = useArticle()
+    const html = useMemo(() => render(article, { pillar }), [article, pillar])
     const [, { type }] = useArticle()
 
     return (

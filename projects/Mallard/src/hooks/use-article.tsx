@@ -34,6 +34,9 @@ const neutrals: PillarColours = {
     faded: color.palette.neutral[97],
 }
 
+export const getPillarColors = (pillar: PillarFromPalette) =>
+    pillar === 'neutral' ? neutrals : color.palette[pillar]
+
 export const useArticle = (): [
     PillarColours,
     {
@@ -44,7 +47,7 @@ export const useArticle = (): [
     const pillar = useContext(ArticlePillarContext)
     const type = useContext(ArticleTypeContext)
     return [
-        pillar === 'neutral' ? neutrals : color.palette[pillar],
+        getPillarColors(pillar),
         {
             pillar,
             type,
