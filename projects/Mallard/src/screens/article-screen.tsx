@@ -115,7 +115,12 @@ const ArticleScreenBody = ({
                             />
                         ) : null}
                         <WithArticle
-                            type={getEnumPosition(ArticleType, modifiedType)}
+                            type={
+                                isUsingProdDevtools
+                                    ? getEnumPosition(ArticleType, modifiedType)
+                                    : article.article.articleType ||
+                                      ArticleType.Article
+                            }
                             pillar={articlePillars[modifiedPillar]}
                         >
                             <ArticleController article={article.article} />
