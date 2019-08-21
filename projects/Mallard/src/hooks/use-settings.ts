@@ -1,69 +1,27 @@
-import { useEffect, useState } from 'react'
+import { gdprSwitchSettings, Settings } from 'src/helpers/settings'
+import { isPreview } from 'src/helpers/settings/defaults'
+import { useSettingsFromStore, applyExtractSettings } from './settings/helpers'
 import {
     createProviderFromHook,
     providerHook,
     nestProviders,
 } from 'src/helpers/provider'
-import {
-    UnsanitizedSetting,
-    onSettingChanged,
-    getAllSettings,
-    gdprSwitchSettings,
-    Settings,
-    storeSetting,
-} from 'src/helpers/settings'
 
-/**
- * Fetch settings stored in AsyncStorage on mount
- */
+/*
+build out all the hooks needed for settings
 
-type SetterFn = (setting: keyof Settings, value: UnsanitizedSetting) => void
-
-const useSettingsFromStore = (): [
-    Settings | null,
-    {
-        setSetting: SetterFn
-        storeSetting: SetterFn
-    },
-] => {
-    const [settings, setSettings] = useState(null as Settings | null)
-    const setSetting: SetterFn = (setting, value) => {
-        setSettings(settings => {
-            if (!settings) {
-                console.warn(
-                    'Settings had not yet been fetched when trying to set a setting, ignoring setting update.',
-                )
-                return settings
-            }
-            return { ...settings, [setting]: value }
-        })
-    }
-    useEffect(() => {
-        return onSettingChanged((key, val) => {
-            setSetting(key, val)
-        })
-    }, [])
-    useEffect(() => {
-        getAllSettings().then(s => setSettings(s))
-    }, [])
-    return [settings, { setSetting, storeSetting }]
-}
-
-const createSingleSettingHook = (key: keyof Settings) => () => {
-    const [settings] = useSettingsFromStore()
-    return (
-        settings &&
-        providerHook({
-            getter: settings[key],
-            setter: () => {},
-        })
-    )
-}
-
-const extractedSettings = ['isUsingProdDevtools']
-
-/* create settings */
-const makeSettings = () => {
+extracting settings is a performance
+optimisation.
+Often read settings should be extracted
+so their consumers don't rerender when any other
+setting changes and only rerender when they
+themselves change
+*/
+const makeSettingsHooks = <E extends keyof Settings>({
+    extractSettings,
+}: {
+    extractSettings: (E)[]
+}) => {
     const {
         Provider: BaseProvider,
         useAsSetterHook,
@@ -71,22 +29,17 @@ const makeSettings = () => {
     } = createProviderFromHook(() => {
         const [settings, { storeSetting }] = useSettingsFromStore()
         return (
-            settings && providerHook({ getter: settings, setter: storeSetting })
+            settings &&
+            providerHook({
+                getter: settings as Omit<Settings, E>,
+                setter: storeSetting,
+            })
         )
     })
 
-    let providers = []
-    let extractedGetterHooks: {
-        [key in typeof extractedSettings[number]]: () => Settings[keyof Settings]
-    } = {}
-
-    for (const setting of extractedSettings) {
-        const { Provider, useAsGetterHook } = createProviderFromHook(
-            createSingleSettingHook('isUsingProdDevtools'),
-        )
-        providers.push(Provider)
-        extractedGetterHooks[setting] = useAsGetterHook
-    }
+    const { providers, extractedGetterHooks } = applyExtractSettings(
+        extractSettings,
+    )
 
     const Provider = nestProviders(BaseProvider, ...providers)
 
@@ -98,9 +51,16 @@ const {
     extractedGetterHooks: useExtractedSettingValue,
     useAsSetterHook: useSettings,
     useAsGetterHook: useSettingsValue,
-} = makeSettings()
+} = makeSettingsHooks({
+    extractSettings: ['isUsingProdDevtools', 'apiUrl'],
+})
 
-/* gdpr switchez */
+/* extra bespoke getters */
+const useIsPreview = () => {
+    const apiUrl = useExtractedSettingValue.apiUrl()
+    return isPreview(apiUrl)
+}
+
 const useGdprSwitches = () => {
     const setSetting = useSettings()
     const settings = useSettingsValue()
@@ -138,5 +98,5 @@ export {
     useExtractedSettingValue,
     useSettings,
     useSettingsValue,
-    useGdprSwitches,
 }
+export { useGdprSwitches, useIsPreview }

@@ -1,43 +1,32 @@
 import React, { ReactElement } from 'react'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import {
-    NavigationScreenProp,
     FlatList,
     NavigationInjectedProps,
+    NavigationScreenProp,
+    withNavigation,
 } from 'react-navigation'
-
-import { Front } from 'src/components/front'
 import { Issue } from 'src/common'
-import { IssueHeader } from 'src/components/layout/header/header'
-
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { FlexCenter } from 'src/components/layout/flex-center'
-import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
-import { Spinner } from 'src/components/spinner'
-
-import { withNavigation } from 'react-navigation'
 import { Button } from 'src/components/button/button'
-import { navigateToIssueList } from 'src/navigation/helpers'
-import { Container } from 'src/components/layout/ui/container'
-import { Weather } from 'src/components/weather'
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
-import {
-    Text,
-    View,
-    ViewStyle,
-    StyleProp,
-    StyleSheet,
-    Alert,
-} from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { WithIssueScreenSize, useIssueScreenSize } from './issue/use-size'
+import { Front } from 'src/components/front'
 import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
+import { FlexCenter } from 'src/components/layout/flex-center'
+import { IssueHeader } from 'src/components/layout/header/header'
+import { Container } from 'src/components/layout/ui/container'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
+import { Spinner } from 'src/components/spinner'
+import { Weather } from 'src/components/weather'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
-import { isPreview } from 'src/helpers/settings/defaults'
+import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
+import { useIsPreview } from 'src/hooks/use-settings'
+import { navigateToIssueList } from 'src/navigation/helpers'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -127,9 +116,9 @@ const IssueFronts = ({
     )
 }
 
-const PreviewReloadButton = ({ onPress }: { onPress: () => {} }) => {
-    const preview = isPreview(useSettingsValue())
-    return preview && <ReloadButton onPress={onPress} />
+const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
+    const preview = useIsPreview()
+    return preview ? <ReloadButton onPress={onPress} /> : null
 }
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {

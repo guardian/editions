@@ -16,6 +16,7 @@ import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { prepFileSystem } from './helpers/files'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { ToastProvider } from './hooks/use-toast'
+import { nestProviders } from './helpers/provider'
 
 useScreens()
 prepFileSystem()
@@ -54,17 +55,12 @@ const rootNavigationProps = __DEV__ && {
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const WithProviders = ({ children }: { children: ReactNode }) => (
-    <FileSystemProvider>
-        <SettingsProvider>
-            <Modal>
-                <ToastProvider>
-                    <AuthProvider>{children}</AuthProvider>
-                    <NetInfoAutoToast />
-                </ToastProvider>
-            </Modal>
-        </SettingsProvider>
-    </FileSystemProvider>
+const WithProviders = nestProviders(
+    FileSystemProvider,
+    SettingsProvider,
+    Modal,
+    ToastProvider,
+    AuthProvider,
 )
 
 export default class App extends React.Component<{}, {}> {
@@ -93,6 +89,7 @@ export default class App extends React.Component<{}, {}> {
                     />
                     <View style={styles.appContainer}>
                         <RootNavigator {...rootNavigationProps} />
+                        <NetInfoAutoToast />
                     </View>
                 </WithProviders>
             </ErrorBoundary>
