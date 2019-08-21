@@ -87,7 +87,7 @@ const ContentWrapper = ({
                     ]}
                 ></View>
             )}
-            {useTabletTopOffset && (
+            {(useTabletTopOffset || useMobileTopOffset) && (
                 <View
                     {...ariaHidden}
                     style={[
@@ -95,7 +95,9 @@ const ContentWrapper = ({
                         {
                             backgroundColor,
                             left: '-100%',
-                            right: metrics.article.railPaddingLeft * -1,
+                            right: useTabletTopOffset
+                                ? metrics.article.railPaddingLeft * -1
+                                : 0,
                             top: 0,
                         },
                     ]}
