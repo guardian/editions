@@ -51,7 +51,7 @@ export const defaultSettings: Settings = {
     gdprAllowFunctionality: null,
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
-        : notificationServiceRegister.code,
+        : notificationServiceRegister.prod,
     zipUrl: apiUrl + 'zips/',
 }
 
