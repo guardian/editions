@@ -65,7 +65,7 @@ const ArticleScreenBody = ({
         <ScrollView
             scrollEventThrottle={8}
             onScroll={ev => {
-                onTopPositionChange(ev.nativeEvent.contentOffset.y < 10)
+                onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
             }}
             style={{ width }}
             contentContainerStyle={styles.flex}

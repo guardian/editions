@@ -13,7 +13,7 @@ import { getColor } from 'src/helpers/transform'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
@@ -27,6 +27,7 @@ import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { exportAllDeclaration } from '@babel/types'
 import { Fader } from 'src/components/layout/animators/fader'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -61,9 +62,15 @@ const getData = (
 
 const styles = StyleSheet.create({
     slider: {
-        padding: metrics.vertical,
+        padding: metrics.article.sides,
+        paddingVertical: metrics.vertical,
         justifyContent: 'center',
         alignItems: 'stretch',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: color.background,
+    },
+    sliderBorder: {
+        borderBottomColor: color.line,
     },
 })
 
@@ -123,6 +130,8 @@ const ArticleScreenWithProps = ({
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
 
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+
     return (
         <ClipFromTop
             easing={navigationPosition && navigationPosition.position}
@@ -152,7 +161,16 @@ const ArticleScreenWithProps = ({
                 >
                     <ArticleScreenLoginOverlay navigation={navigation}>
                         <Fader position="article">
-                            <View style={styles.slider}>
+                            <View
+                                style={[
+                                    styles.slider,
+                                    isTablet && {
+                                        paddingHorizontal:
+                                            metrics.article.sidesTablet,
+                                    },
+                                    !articleIsAtTop && styles.sliderBorder,
+                                ]}
+                            >
                                 <Slider
                                     small
                                     title={articleNavigator.frontName}

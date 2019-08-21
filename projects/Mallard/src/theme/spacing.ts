@@ -22,11 +22,8 @@ export const metrics = {
     sides,
     article: {
         ...sides,
-        maxWidth: 540,
-        maxWidthLandscape: 620,
-        leftRailLandscape: 120,
-        rightRail: 200,
-        rightRailLandscape: 260,
+        maxWidth: 790 + sides.sidesTablet * 2,
+        rightRail: 150 + sides.sidesTablet,
     },
     fronts: {
         sides: basicMetrics.horizontal * 1.5,
