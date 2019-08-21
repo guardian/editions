@@ -27,6 +27,7 @@ import {
     StyleProp,
     StyleSheet,
     Alert,
+    Animated,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
@@ -38,6 +39,7 @@ import { ReloadButton } from 'src/components/reloadButton'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useSettings } from 'src/hooks/use-settings'
 import { isPreview } from 'src/helpers/settings/defaults'
+import { useNavigatorPosition } from 'src/navigation/navigators/underlay'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
 
 const Header = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+        const position = useNavigatorPosition()
         return (
             <IssueHeader
                 accessibilityHint="More issues"
@@ -67,13 +70,22 @@ const Header = withNavigation(
                     navigateToIssueList(navigation)
                 }}
                 action={
-                    <Button
-                        icon=""
-                        alt="More issues"
-                        onPress={() => {
-                            navigateToIssueList(navigation)
+                    <Animated.View
+                        style={{
+                            opacity: position.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [1, 0],
+                            }),
                         }}
-                    />
+                    >
+                        <Button
+                            icon=""
+                            alt="More issues"
+                            onPress={() => {
+                                navigateToIssueList(navigation)
+                            }}
+                        />
+                    </Animated.View>
                 }
                 issue={issue}
             />

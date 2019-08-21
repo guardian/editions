@@ -7,6 +7,11 @@ import {
 } from 'src/screens/article-screen'
 import { routeNames } from 'src/navigation/routes'
 import { PathToIssue } from 'src/screens/issue-screen'
+import { Animated } from 'react-native'
+
+export interface PositionInjectedProps {
+    position: Animated.Value
+}
 
 type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
 

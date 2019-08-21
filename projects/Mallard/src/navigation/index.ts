@@ -37,6 +37,7 @@ import { CreditsScreen } from 'src/screens/settings/credits-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
 import { createModalNavigator } from './navigators/modal'
 import { createHeaderStackNavigator } from './navigators/header'
+import { createUnderlayNavigator } from './navigators/underlay'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -59,48 +60,29 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
 })
 
 const AppStack = createModalNavigator(
-    createStackNavigator(
-        {
-            [routeNames.Issue]: createStackNavigator(
-                {
-                    [routeNames.Issue]: IssueScreen,
-                    [routeNames.Article]: ArticleScreen,
-                },
-                {
-                    transparentCard: true,
-                    initialRouteName: routeNames.Issue,
-                    mode: 'modal',
-                    headerMode: 'none',
-                    cardOverlayEnabled: true,
-                    transitionConfig: () => ({
-                        ...transitionOptionsOverArtboard(true),
-                        screenInterpolator: issueToArticleScreenInterpolator,
-                    }),
-                    defaultNavigationOptions: {
-                        gesturesEnabled: false,
-                    },
-                },
-            ),
-            [routeNames.IssueList]: HomeScreen,
-        },
-        {
-            defaultNavigationOptions: {
-                header: null,
-                gesturesEnabled: false,
+    createUnderlayNavigator(
+        createStackNavigator(
+            {
+                [routeNames.Issue]: IssueScreen,
+                [routeNames.Article]: ArticleScreen,
             },
-            initialRouteName: routeNames.Issue,
-            ...(supportsTransparentCards()
-                ? {
-                      transparentCard: true,
-                      mode: 'modal',
-                      headerMode: 'none',
-                      cardOverlayEnabled: true,
-                      transitionConfig: () => ({
-                          ...transitionOptionsOverArtboard(false),
-                          screenInterpolator: issueToIssueListInterpolator,
-                      }),
-                  }
-                : {}),
+            {
+                transparentCard: true,
+                initialRouteName: routeNames.Issue,
+                mode: 'modal',
+                headerMode: 'none',
+                cardOverlayEnabled: true,
+                transitionConfig: () => ({
+                    ...transitionOptionsOverArtboard(true),
+                    screenInterpolator: issueToArticleScreenInterpolator,
+                }),
+                defaultNavigationOptions: {
+                    gesturesEnabled: false,
+                },
+            },
+        ),
+        {
+            [routeNames.IssueList]: HomeScreen,
         },
     ),
     {
