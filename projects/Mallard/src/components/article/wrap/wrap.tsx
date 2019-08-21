@@ -61,6 +61,7 @@ const ContentWrapper = ({
     ...children
 }: ContentWrapperPropTypes) => {
     const useMobileTopOffset = !!topOffset && !tablet
+    const useTabletTopOffset = !!topOffset && tablet
     return (
         <View
             style={[
@@ -86,7 +87,7 @@ const ContentWrapper = ({
                     ]}
                 ></View>
             )}
-            {!!topOffset && (
+            {useTabletTopOffset && (
                 <View
                     {...ariaHidden}
                     style={[
@@ -94,6 +95,7 @@ const ContentWrapper = ({
                         {
                             backgroundColor,
                             left: '-100%',
+                            right: metrics.article.railPaddingLeft * -1,
                             top: 0,
                         },
                     ]}
@@ -102,15 +104,7 @@ const ContentWrapper = ({
             {children.header && (
                 <MaxWidthWrap invert>{children.header}</MaxWidthWrap>
             )}
-            {!!topOffset ? (
-                <MaxWidthWrap invert>
-                    <View style={[style, { backgroundColor }]}>
-                        {children.children}
-                    </View>
-                </MaxWidthWrap>
-            ) : (
-                <View style={[style]}>{children.children}</View>
-            )}
+            <View style={[style]}>{children.children}</View>
             {children.footer && (
                 <MaxWidthWrap invert>{children.footer}</MaxWidthWrap>
             )}
