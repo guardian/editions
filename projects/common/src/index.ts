@@ -23,11 +23,11 @@ export enum ArticleType {
 
 export type PillarFromPalette = typeof articlePillars[number]
 
-interface ColorAppearance {
+export interface ColorAppearance {
     type: 'custom'
     color: string
 }
-interface PillarAppearance {
+export interface PillarAppearance {
     type: 'pillar'
     name: PillarFromPalette
 }

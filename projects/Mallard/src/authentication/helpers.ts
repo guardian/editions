@@ -153,13 +153,22 @@ const fetchCASExpiryForKeychainCredentials = async () => {
     return fetchCasSubscription(creds.username, creds.password)
 }
 
+const GUARDIAN_SUFFIXES = ['guardian.co.uk', 'theguardian.com']
+
+const isGuardianEmail = (email: string) =>
+    GUARDIAN_SUFFIXES.some(suffix => email.endsWith(suffix))
+
 /**
  * This takes the membersDataApiResponse and is responsible for returning a boolean
  * describing whether or not the user has the relevant permissions to use the app
+ *
+ * If they have a Guardian email we want to check that they've validated their email,
+ * otherwise we don't really mind
  */
-const canViewEdition = (
-    membersDataApiResponse: MembersDataAPIResponse,
-): boolean => membersDataApiResponse.contentAccess.digitalPack
+const canViewEdition = (userData: UserData): boolean =>
+    userData.membershipData.contentAccess.digitalPack ||
+    (isGuardianEmail(userData.userDetails.primaryEmailAddress) &&
+        userData.userDetails.statusFields.userEmailValidated)
 
 export {
     fetchAndPersistUserAccessTokenWithIdentity,

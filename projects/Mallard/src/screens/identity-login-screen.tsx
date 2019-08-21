@@ -17,6 +17,8 @@ import { Login } from './log-in'
 import isEmail from 'validator/lib/isEmail'
 import { useFormField } from 'src/hooks/use-form-field'
 import { IdentityAuthStatus } from 'src/authentication/credentials-chain'
+import { withConsent, GdprSwitch } from 'src/helpers/settings'
+import { Alert } from 'react-native'
 
 const useRandomState = () =>
     useState(
@@ -38,8 +40,8 @@ const tryAuth = async (
     authRunner: () => Promise<unknown> = () => Promise.resolve(null),
 ) => {
     try {
-        await authRunner()
         onStart()
+        await authRunner()
         const membershipData = await fetchUserDataForKeychainUser()
 
         if (!membershipData) {
@@ -81,41 +83,69 @@ const AuthSwitcherScreen = ({
     const { setStatus, signOut } = useContext(AuthContext)
     const { open } = useModal()
 
-    const handleAuthClick = async (authRunner: () => Promise<string>) => {
+    const handleAuthClick = async (
+        authRunner: () => Promise<string>,
+        {
+            requiresFunctionalConsent,
+            signInName,
+        }: { requiresFunctionalConsent: boolean; signInName?: string },
+    ) => {
         setError(null)
-        await signOut()
-        tryAuth(
+        withConsent(
+            requiresFunctionalConsent ? 'gdprAllowFunctionality' : null,
             {
-                onStart: () => {
-                    setIsLoading(true)
-                },
-                onError: err => {
-                    setIsLoading(false)
-                    setError(err)
-                },
-                onSuccess: data => {
-                    setIsLoading(false)
-                    setStatus(IdentityAuthStatus(data))
-                    if (!canViewEdition(data.membershipData)) {
-                        open(close => (
-                            <SubNotFoundModalCard
-                                onDismiss={() => navigation.popToTop()}
-                                onOpenCASLogin={() =>
-                                    navigation.navigate(routeNames.CasSignIn)
+                allow: async () => {
+                    await signOut()
+                    tryAuth(
+                        {
+                            onStart: () => {
+                                setIsLoading(true)
+                            },
+                            onError: err => {
+                                setIsLoading(false)
+                                setError(err)
+                            },
+                            onSuccess: data => {
+                                setIsLoading(false)
+                                setStatus(IdentityAuthStatus(data))
+                                if (!canViewEdition(data)) {
+                                    open(close => (
+                                        <SubNotFoundModalCard
+                                            onDismiss={() =>
+                                                navigation.popToTop()
+                                            }
+                                            onOpenCASLogin={() =>
+                                                navigation.navigate(
+                                                    routeNames.CasSignIn,
+                                                )
+                                            }
+                                            onLoginPress={() =>
+                                                navigation.navigate(
+                                                    routeNames.SignIn,
+                                                )
+                                            }
+                                            close={close}
+                                        />
+                                    ))
+                                } else {
+                                    open(close => (
+                                        <SubFoundModalCard close={close} />
+                                    ))
                                 }
-                                onLoginPress={() =>
-                                    navigation.navigate(routeNames.SignIn)
-                                }
-                                close={close}
-                            />
-                        ))
-                    } else {
-                        open(close => <SubFoundModalCard close={close} />)
-                    }
-                    navigation.goBack()
+                                navigation.goBack()
+                            },
+                        },
+                        authRunner,
+                    )
+                },
+                deny: async () => {
+                    Alert.alert(
+                        `${signInName || 'Social'} sign-in disabled`,
+                        `You have disabled ${signInName ||
+                            'social'} sign-in. You can enable it in Settings > Privacy Settings > Functional`,
+                    )
                 },
             },
-            authRunner,
         )
     }
 
@@ -130,21 +160,25 @@ const AuthSwitcherScreen = ({
             isLoading={isLoading}
             onDismiss={() => navigation.goBack()}
             onFacebookPress={() =>
-                handleAuthClick(() =>
-                    facebookAuthWithDeepRedirect(validatorString),
+                handleAuthClick(
+                    () => facebookAuthWithDeepRedirect(validatorString),
+                    { requiresFunctionalConsent: true, signInName: 'Facebook' },
                 )
             }
             onGooglePress={() =>
-                handleAuthClick(() =>
-                    googleAuthWithDeepRedirect(validatorString),
+                handleAuthClick(
+                    () => googleAuthWithDeepRedirect(validatorString),
+                    { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
             }
             onSubmit={() =>
-                handleAuthClick(() =>
-                    fetchAndPersistUserAccessTokenWithIdentity(
-                        email.value,
-                        password.value,
-                    ),
+                handleAuthClick(
+                    () =>
+                        fetchAndPersistUserAccessTokenWithIdentity(
+                            email.value,
+                            password.value,
+                        ),
+                    { requiresFunctionalConsent: false },
                 )
             }
             errorMessage={error}

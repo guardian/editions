@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         margin: 2,
         borderRadius: 100,
     },
-    container: { flexDirection: 'row' },
+    container: { flexDirection: 'row', padding: 5 },
 })
 
 const pillars = [

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from 'react'
+import React, { useState, useMemo, useContext, useCallback } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 
@@ -31,11 +31,13 @@ const styles = StyleSheet.create({
     },
 })
 
-const ModalContext = React.createContext<{
+interface ModalContextValue {
     open: (render: ModalRenderer) => void
     close: () => void
     isOpen: boolean
-}>({
+}
+
+const ModalContext = React.createContext<ModalContextValue>({
     open: () => {},
     close: () => {},
     isOpen: false,
@@ -48,15 +50,20 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
     const val = useAlphaIn(200, { out: true, currentValue: render ? 0.75 : 0 })
     const close = useMemo(() => () => setState(null), [])
 
+    const open = useCallback(renderModal => setState(() => renderModal), [])
+
+    const value = useMemo(
+        (): ModalContextValue => ({
+            open,
+            close,
+            isOpen: !!render,
+        }),
+        [open, close, render],
+    )
+
     return (
         <>
-            <ModalContext.Provider
-                value={{
-                    open: renderModal => setState(() => renderModal),
-                    close,
-                    isOpen: !!render,
-                }}
-            >
+            <ModalContext.Provider value={value}>
                 {children}
             </ModalContext.Provider>
             {render && (
