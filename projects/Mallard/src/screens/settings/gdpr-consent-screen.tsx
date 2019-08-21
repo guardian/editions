@@ -15,7 +15,6 @@ import {
     useSettingsValue,
 } from 'src/hooks/use-settings'
 import { WithAppAppearance } from 'src/theme/appearance'
-import { useToast } from 'src/hooks/use-toast'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -38,7 +37,6 @@ const GdprConsent = () => {
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
     const { DEVMODE_resetAll } = useGdprSwitches()
-    const { showToast } = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
@@ -79,7 +77,6 @@ const GdprConsent = () => {
                             for (const { key } of Object.values(switches)) {
                                 setSetting(key, true)
                             }
-                            showToast('Your preferences are saved.')
                         }}
                     >
                         Enable all

@@ -12,10 +12,8 @@ import { RootNavigator } from 'src/navigation'
 import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal } from './components/modal'
-import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { prepFileSystem } from './helpers/files'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
-import { ToastProvider } from './hooks/use-toast'
 import { nestProviders } from './helpers/provider'
 
 useScreens()
@@ -59,7 +57,6 @@ const WithProviders = nestProviders(
     FileSystemProvider,
     SettingsProvider,
     Modal,
-    ToastProvider,
     AuthProvider,
 )
 
@@ -89,7 +86,6 @@ export default class App extends React.Component<{}, {}> {
                     />
                     <View style={styles.appContainer}>
                         <RootNavigator {...rootNavigationProps} />
-                        <NetInfoAutoToast />
                     </View>
                 </WithProviders>
             </ErrorBoundary>
