@@ -86,7 +86,7 @@ const pathToFile = (basePath: string = '') => async (
                 type,
                 issue,
             }
-        } catch (e) {
+        } catch {
             return {
                 filename: filePath,
                 path,
