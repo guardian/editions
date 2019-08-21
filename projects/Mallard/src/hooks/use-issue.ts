@@ -30,9 +30,6 @@ export const getIssueResponse = (issue: Issue['key']) => {
     )
 }
 
-// export const useIssueResponse = (issue: Issue['key']) =>
-//     useIssueWithResponse(getIssueResponse(issue), [issue])
-
 export const useIssueOrLatestResponse = (issue?: Issue['key']) => {
     return useIssueWithResponse(
         issue ? getIssueResponse(issue) : getLatestIssue(),
