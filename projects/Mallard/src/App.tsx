@@ -3,7 +3,7 @@
 // In this file, we'll be kicking off our app or storybook.
 
 import AsyncStorage from '@react-native-community/async-storage'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
 import { FileSystemProvider } from 'src/hooks/use-fs'
@@ -13,8 +13,8 @@ import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal } from './components/modal'
 import { prepFileSystem } from './helpers/files'
-import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { nestProviders } from './helpers/provider'
+import { pushNotifcationRegistration } from './helpers/push-notifications'
 
 useScreens()
 prepFileSystem()

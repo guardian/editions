@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { currentInsets } from '@delightfulstudio/react-native-safe-area-insets'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { Dimensions, ScaledSize } from 'react-native'
-import { areEqualShallow } from 'src/helpers/features'
 
 const useDimensions = (): ScaledSize => {
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))
@@ -12,9 +11,7 @@ const useDimensions = (): ScaledSize => {
                 Parameters<typeof Dimensions.addEventListener>[1]
             >[0],
         ) => {
-            if (!areEqualShallow(ev.window, dimensions)) {
-                setDimensions(ev.window)
-            }
+            setDimensions(ev.window)
         }
         Dimensions.addEventListener('change', listener)
         return () => {
