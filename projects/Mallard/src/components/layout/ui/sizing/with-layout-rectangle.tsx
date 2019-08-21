@@ -1,11 +1,5 @@
-import React, {
-    useState,
-    ReactNode,
-    FunctionComponent,
-    useRef,
-    useEffect,
-} from 'react'
-import { View, LayoutRectangle } from 'react-native'
+import React, { FunctionComponent, ReactNode, useState } from 'react'
+import { LayoutRectangle, View } from 'react-native'
 
 const WithLayoutRectangle: FunctionComponent<{
     children: (l: LayoutRectangle) => ReactNode
