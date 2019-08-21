@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, ReactNode } from 'react'
 import { Animated, View, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
@@ -66,6 +66,23 @@ const styles = StyleSheet.create({
     },
 })
 
+const ArticleScreenLoginOverlay = ({
+    navigation,
+    children,
+}: {
+    navigation: NavigationScreenProp<{}, ArticleNavigationProps>
+    children: ReactNode
+}) => (
+    <LoginOverlay
+        isFocused={() => navigation.isFocused()}
+        onLoginPress={() => navigation.navigate(routeNames.SignIn)}
+        onOpenCASLogin={() => navigation.navigate(routeNames.CasSignIn)}
+        onDismiss={() => navigation.goBack()}
+    >
+        {children}
+    </LoginOverlay>
+)
+
 const ArticleScreenWithProps = ({
     path,
     articleNavigator,
@@ -117,16 +134,7 @@ const ArticleScreenWithProps = ({
                     enabled={false}
                     onDismiss={() => navigation.goBack()}
                 >
-                    <LoginOverlay
-                        isFocused={() => navigation.isFocused()}
-                        onLoginPress={() =>
-                            navigation.navigate(routeNames.SignIn)
-                        }
-                        onOpenCASLogin={() =>
-                            navigation.navigate(routeNames.CasSignIn)
-                        }
-                        onDismiss={() => navigation.goBack()}
-                    >
+                    <ArticleScreenLoginOverlay navigation={navigation}>
                         <ArticleScreenBody
                             path={path}
                             width={width}
@@ -134,23 +142,14 @@ const ArticleScreenWithProps = ({
                             onTopPositionChange={() => {}}
                             previewNotice={previewNotice}
                         />
-                    </LoginOverlay>
+                    </ArticleScreenLoginOverlay>
                 </SlideCard>
             ) : (
                 <SlideCard
                     enabled={articleIsAtTop}
                     onDismiss={() => navigation.goBack()}
                 >
-                    <LoginOverlay
-                        isFocused={() => navigation.isFocused()}
-                        onLoginPress={() =>
-                            navigation.navigate(routeNames.SignIn)
-                        }
-                        onOpenCASLogin={() =>
-                            navigation.navigate(routeNames.CasSignIn)
-                        }
-                        onDismiss={() => navigation.goBack()}
-                    >
+                    <ArticleScreenLoginOverlay navigation={navigation}>
                         <View style={styles.slider}>
                             <Slider
                                 small
@@ -210,7 +209,7 @@ const ArticleScreenWithProps = ({
                                 />
                             )}
                         />
-                    </LoginOverlay>
+                    </ArticleScreenLoginOverlay>
                 </SlideCard>
             )}
         </ClipFromTop>
