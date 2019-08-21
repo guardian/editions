@@ -3,6 +3,7 @@ import { unzip } from 'react-native-zip-archive'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { ImageSize } from '../../../common/src'
+import { defaultSettings } from './settings/defaults';
 
 interface BasicFile {
     filename: string
@@ -130,8 +131,7 @@ export const deleteOtherFiles = async (): Promise<void> => {
 }
 
 export const downloadIssue = (issue: File['id']) => {
-    // TODO: Needs to come from settings
-    const zipUrl = 'https://editions-store.s3-eu-west-1.amazonaws.com/zips/'
+    const zipUrl = defaultSettings.zipUrl
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
