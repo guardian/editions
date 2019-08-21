@@ -40,6 +40,7 @@ const CasSignInScreen = ({
                 password.value,
             )
             setStatus(CASAuthStatus(expiry))
+            navigation.goBack()
         } catch (err) {
             setErrorMessage(
                 (err instanceof Error ? err.message : err) ||
