@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import { Animated } from 'react-native'
 import { NavigationContainer, NavigationInjectedProps } from 'react-navigation'
+import { addStaticRouter } from './base'
 
 export const minScale = 0.9
 export const minOpacity = 0.9
@@ -18,20 +19,18 @@ export type NavigatorWrapper = (
     getPosition: () => Animated.Value,
 ) => NavigationContainer
 
-export const wrapNavigatorWithPosition: NavigatorWrapper = (
+export const addStaticRouterWithPosition: NavigatorWrapper = (
     Navigator,
     getPosition,
 ) => {
     const WithPosition = ({ navigation }: NavigationInjectedProps) => {
-        const Asd = Navigator as any
         const position = getPosition()
         return (
             <PositionContext.Provider value={position}>
-                <Asd position={position} navigation={navigation} />
+                <Navigator navigation={navigation} />
             </PositionContext.Provider>
         )
     }
-    WithPosition.router = Navigator.router
 
-    return (WithPosition as unknown) as NavigationContainer
+    return addStaticRouter(Navigator, WithPosition)
 }

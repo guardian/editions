@@ -9,6 +9,7 @@ import React from 'react'
 import { Header } from 'src/components/layout/header/header'
 import { Button } from 'src/components/button/button'
 import { IssueTitle } from 'src/components/issue/issue-title'
+import { addStaticRouter } from '../helpers/base'
 
 interface NavigationOptions {
     title?: string
@@ -28,7 +29,7 @@ const getNavigationOptions = (
     }
     return options
 }
-const wrapNavigatorWithHeader = (
+const addStaticRouterWithHeader = (
     Navigator: NavigationContainer,
 ): NavigationContainer => {
     const { router } = Navigator
@@ -60,16 +61,15 @@ const wrapNavigatorWithHeader = (
             </>
         )
     }
-    WithHeader.router = router
 
-    return (WithHeader as unknown) as NavigationContainer
+    return addStaticRouter(Navigator, WithHeader)
 }
 
 const createHeaderStackNavigator = (
     routes: Parameters<typeof createStackNavigator>[0],
     options?: Parameters<typeof createStackNavigator>[1],
 ) =>
-    wrapNavigatorWithHeader(
+    addStaticRouterWithHeader(
         createStackNavigator(routes, { ...options, headerMode: 'none' }),
     )
 

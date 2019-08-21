@@ -12,9 +12,10 @@ import { supportsTransparentCards } from 'src/helpers/features'
 import { color } from 'src/theme/color'
 import {
     NavigatorWrapper,
-    wrapNavigatorWithPosition,
+    addStaticRouterWithPosition,
 } from '../helpers/transition'
 import { screenInterpolator } from './underlay/transition'
+import { addStaticRouter } from '../helpers/base'
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -24,9 +25,12 @@ const overlayStyles = StyleSheet.create({
     },
 })
 
-const wrapNavigatorWithOverlay: NavigatorWrapper = (navigator, getPosition) => {
-    const Navigator = wrapNavigatorWithPosition(navigator, getPosition)
-    const WithModal = ({ navigation }: NavigationInjectedProps) => {
+const addStaticRouterWithOverlay: NavigatorWrapper = (
+    navigator,
+    getPosition,
+) => {
+    const Navigator = addStaticRouterWithPosition(navigator, getPosition)
+    const Wrapper = ({ navigation }: NavigationInjectedProps) => {
         const posi = getPosition()
         return (
             <>
@@ -48,8 +52,7 @@ const wrapNavigatorWithOverlay: NavigatorWrapper = (navigator, getPosition) => {
             </>
         )
     }
-    WithModal.router = Navigator.router
-    return (WithModal as unknown) as NavigationContainer
+    return addStaticRouter(navigator, Wrapper)
 }
 
 const createUnderlayNavigator = (
@@ -61,10 +64,13 @@ const createUnderlayNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: wrapNavigatorWithOverlay(top, () => animatedValue),
+        _: addStaticRouterWithOverlay(top, () => animatedValue),
     }
     for (const [key, value] of Object.entries(bottom)) {
-        navigation[key] = wrapNavigatorWithPosition(value, () => animatedValue)
+        navigation[key] = addStaticRouterWithPosition(
+            value,
+            () => animatedValue,
+        )
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {

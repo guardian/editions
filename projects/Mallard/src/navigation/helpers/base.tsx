@@ -1,5 +1,9 @@
 import React, { ReactElement } from 'react'
-import { NavigationScreenProp } from 'react-navigation'
+import {
+    NavigationScreenProp,
+    NavigationInjectedProps,
+    NavigationContainer,
+} from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import {
     ArticleNavigator,
@@ -7,6 +11,17 @@ import {
     PathToArticle,
 } from 'src/screens/article-screen'
 import { PathToIssue } from 'src/screens/issue-screen'
+
+type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
+export const addStaticRouter = (
+    navigator: NavigationContainer,
+    wrapper: NavigatorWrapper,
+): NavigationContainer => {
+    const wrapperWithRouter = wrapper as NavigatorWrapper & NavigationContainer
+    wrapperWithRouter.router = navigator.router
+
+    return wrapperWithRouter as NavigationContainer
+}
 
 type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
 
