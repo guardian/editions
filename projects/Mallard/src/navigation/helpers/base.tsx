@@ -1,5 +1,9 @@
-import React, { ReactElement } from 'react'
-import { NavigationScreenProp } from 'react-navigation'
+import React, { ReactElement, createContext, useContext } from 'react'
+import {
+    NavigationScreenProp,
+    NavigationContainer,
+    NavigationInjectedProps,
+} from 'react-navigation'
 import {
     ArticleNavigator,
     ArticleTransitionProps,
@@ -8,10 +12,6 @@ import {
 import { routeNames } from 'src/navigation/routes'
 import { PathToIssue } from 'src/screens/issue-screen'
 import { Animated } from 'react-native'
-
-export interface PositionInjectedProps {
-    position: Animated.Value
-}
 
 type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
 

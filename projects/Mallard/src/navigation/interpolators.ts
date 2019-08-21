@@ -6,14 +6,11 @@ import {
 } from 'src/helpers/positions'
 import { metrics } from 'src/theme/spacing'
 import { routeNames } from 'src/navigation/routes'
+import { minScale, radius, minOpacity } from './helpers/transition'
 
 export const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
 }
-
-const minScale = 0.9
-const minOpacity = 0.9
-const radius = 20
 
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps

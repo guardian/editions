@@ -16,7 +16,7 @@ import { Spinner } from 'src/components/spinner'
 
 import { withNavigation } from 'react-navigation'
 import { Button } from 'src/components/button/button'
-import { navigateToIssueList } from 'src/navigation/helpers'
+import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { Container } from 'src/components/layout/ui/container'
 import { Weather } from 'src/components/weather'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
@@ -39,7 +39,7 @@ import { ReloadButton } from 'src/components/reloadButton'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useSettings } from 'src/hooks/use-settings'
 import { isPreview } from 'src/helpers/settings/defaults'
-import { useNavigatorPosition } from 'src/navigation/navigators/underlay'
+import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
 export interface PathToIssue {
     issue: Issue['key']

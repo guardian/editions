@@ -19,12 +19,9 @@ import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed
 import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { NavigationScreenProp } from 'react-navigation'
-import { mapNavigationToProps } from './helpers'
+import { mapNavigationToProps } from './helpers/base'
 import { shouldShowOnboarding } from 'src/helpers/settings'
-import {
-    issueToArticleScreenInterpolator,
-    issueToIssueListInterpolator,
-} from './interpolators'
+import { issueToArticleScreenInterpolator } from './interpolators'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 import { routeNames } from './routes'

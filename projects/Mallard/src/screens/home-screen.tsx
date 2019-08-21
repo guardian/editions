@@ -17,11 +17,11 @@ import { IssueRow } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { IssueHeader } from 'src/components/layout/header/header'
-import { navigateToIssue } from 'src/navigation/helpers'
+import { navigateToIssue } from 'src/navigation/helpers/base'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { Issue, IssueSummary } from 'src/common'
 import { useSettings } from 'src/hooks/use-settings'
-import { navigateToSettings } from 'src/navigation/helpers'
+import { navigateToSettings } from 'src/navigation/helpers/base'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
 
 const HomeScreenHeader = withNavigation(

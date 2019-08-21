@@ -40,7 +40,7 @@ import {
 } from 'src/helpers/positions'
 import { getScaleForArticle } from 'src/navigation/interpolators'
 import { color } from 'src/theme/color'
-import { navigateToArticle } from 'src/navigation/helpers'
+import { navigateToArticle } from 'src/navigation/helpers/base'
 import { APIPaths } from 'src/paths'
 import { getFont } from 'src/theme/typography'
 
