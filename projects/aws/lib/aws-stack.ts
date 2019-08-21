@@ -244,7 +244,7 @@ export class EditionsStack extends cdk.Stack {
 
         new CfnOutput(this, 'archiver-state-machine-arn', {
             description: 'ARN for archiver state machine',
-            exportName: 'archiver-state-machine-arn',
+            exportName: `archiver-state-machine-arn-${stageParameter.valueAsString}`,
             value: archiverStateMachine.stateMachineArn,
         })
 
