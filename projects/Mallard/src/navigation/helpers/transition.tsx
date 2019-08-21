@@ -13,10 +13,15 @@ export interface PositionInjectedProps {
 const PositionContext = createContext(new Animated.Value(0))
 export const useNavigatorPosition = () => useContext(PositionContext)
 
-export const wrapNavigatorWithPosition = (
+export type NavigatorWrapper = (
     Navigator: NavigationContainer,
     getPosition: () => Animated.Value,
-): NavigationContainer => {
+) => NavigationContainer
+
+export const wrapNavigatorWithPosition: NavigatorWrapper = (
+    Navigator,
+    getPosition,
+) => {
     const WithPosition = ({ navigation }: NavigationInjectedProps) => {
         const Asd = Navigator as any
         const position = getPosition()

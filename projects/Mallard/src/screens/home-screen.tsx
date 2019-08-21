@@ -23,6 +23,8 @@ import { Issue, IssueSummary } from 'src/common'
 import { useSettings } from 'src/hooks/use-settings'
 import { navigateToSettings } from 'src/navigation/helpers/base'
 import { withNavigation, NavigationInjectedProps } from 'react-navigation'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -34,8 +36,16 @@ const HomeScreenHeader = withNavigation(
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
+        const isTablet = useMediaQuery(
+            width => width >= Breakpoints.tabletVertical,
+        )
+
         const action = (
-            <Button icon="" alt="Return to issue" onPress={onReturn} />
+            <Button
+                icon={isTablet ? '' : ''}
+                alt="Return to issue"
+                onPress={onReturn}
+            />
         )
         const response = useIssueOrLatestResponse(issue)
         const settings = (

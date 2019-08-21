@@ -22,24 +22,33 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
         inputRange: [sceneIndex, sceneIndex + 1],
         outputRange: [0, -sidebarWidth],
     })
-    const borderRadius = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 1],
-        outputRange: [0, radius],
-    })
 
     const platformStyles = isTablet
         ? {
               transform: [{ translateX }],
+              shadowOffset: {
+                  width: 10,
+                  height: 10,
+              },
+              shadowOpacity: 1,
+              shadowRadius: 3.84,
+              borderRadius: position.interpolate({
+                  inputRange: [sceneIndex, sceneIndex + 1],
+                  outputRange: [0, radius / 4],
+              }),
           }
         : {
               transform: [{ translateY }],
-              borderRadius,
+              borderRadius: position.interpolate({
+                  inputRange: [sceneIndex, sceneIndex + 1],
+                  outputRange: [0, radius],
+              }),
           }
 
     return {
+        overflow: 'hidden',
         zIndex: 9999,
         elevation: 9999,
-        overflow: 'hidden',
         ...StyleSheet.absoluteFillObject,
         ...platformStyles,
     }

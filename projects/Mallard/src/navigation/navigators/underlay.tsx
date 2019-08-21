@@ -1,14 +1,56 @@
-import { Animated } from 'react-native'
+import React from 'react'
+import { Animated, StyleSheet } from 'react-native'
 import {
     createStackNavigator,
     NavigationContainer,
+    NavigationInjectedProps,
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
+import { ariaHidden } from 'src/helpers/a11y'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { color } from 'src/theme/color'
-import { wrapNavigatorWithPosition } from '../helpers/transition'
+import {
+    NavigatorWrapper,
+    wrapNavigatorWithPosition,
+} from '../helpers/transition'
 import { screenInterpolator } from './underlay/transition'
+
+const overlayStyles = StyleSheet.create({
+    root: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: color.artboardBackground,
+        zIndex: 999999,
+    },
+})
+
+const wrapNavigatorWithOverlay: NavigatorWrapper = (navigator, getPosition) => {
+    const Navigator = wrapNavigatorWithPosition(navigator, getPosition)
+    const WithModal = ({ navigation }: NavigationInjectedProps) => {
+        const posi = getPosition()
+        return (
+            <>
+                <Animated.View
+                    {...ariaHidden}
+                    pointerEvents="none"
+                    style={[
+                        overlayStyles.root,
+                        {
+                            opacity: posi.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, 0.33],
+                            }),
+                        },
+                    ]}
+                />
+
+                <Navigator navigation={navigation} />
+            </>
+        )
+    }
+    WithModal.router = Navigator.router
+    return (WithModal as unknown) as NavigationContainer
+}
 
 const createUnderlayNavigator = (
     top: NavigationContainer,
@@ -19,7 +61,7 @@ const createUnderlayNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: wrapNavigatorWithPosition(top, () => animatedValue),
+        _: wrapNavigatorWithOverlay(top, () => animatedValue),
     }
     for (const [key, value] of Object.entries(bottom)) {
         navigation[key] = wrapNavigatorWithPosition(value, () => animatedValue)
@@ -40,6 +82,15 @@ const createUnderlayNavigator = (
         defaultNavigationOptions: {
             gesturesEnabled: false,
         },
+        cardStyle: {
+            shadowOffset: {
+                width: 0,
+                height: 0,
+            },
+            overflow: 'visible',
+            shadowOpacity: 0.2,
+            shadowRadius: 8,
+        },
         ...(supportsTransparentCards()
             ? {
                   mode: 'modal',
@@ -53,27 +104,3 @@ const createUnderlayNavigator = (
 }
 
 export { createUnderlayNavigator }
-
-/**
- *
- *
-        {
-            defaultNavigationOptions: {
-                header: null,
-                gesturesEnabled: false,
-            },
-            initialRouteName: routeNames.Issue,
-            ...(supportsTransparentCards()
-                ? {
-                      transparentCard: true,
-                      mode: 'modal',
-                      headerMode: 'none',
-                      cardOverlayEnabled: true,
-                      transitionConfig: () => ({
-                          ...transitionOptionsOverArtboard(false),
-                          screenInterpolator: issueToIssueListInterpolator,
-                      }),
-                  }
-                : {}),
-        },
- */

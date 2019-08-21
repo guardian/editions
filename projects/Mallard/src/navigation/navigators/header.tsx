@@ -8,6 +8,7 @@ import {
 import React from 'react'
 import { Header } from 'src/components/layout/header/header'
 import { Button } from 'src/components/button/button'
+import { IssueTitle } from 'src/components/issue/issue-title'
 
 interface NavigationOptions {
     title?: string
@@ -50,8 +51,11 @@ const wrapNavigatorWithHeader = (
                         ></Button>
                     }
                     layout={'center'}
-                    title={options.title || navigation.state.routeName}
-                ></Header>
+                >
+                    <IssueTitle
+                        title={options.title || navigation.state.routeName}
+                    />
+                </Header>
                 <Navigator navigation={navigation} />
             </>
         )
