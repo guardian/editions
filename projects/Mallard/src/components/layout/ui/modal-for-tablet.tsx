@@ -24,7 +24,6 @@ const modalStyles = StyleSheet.create({
         overflow: 'hidden',
         width: 400,
         height: 600,
-        backgroundColor: 'red',
         zIndex: 1,
     },
 })

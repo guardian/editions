@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import {
     FlatList,
     NavigationInjectedProps,
@@ -10,8 +10,8 @@ import { Issue } from 'src/common'
 import { Button } from 'src/components/button/button'
 import { Front } from 'src/components/front'
 import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
+import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { IssueHeader } from 'src/components/layout/header/header'
 import { Container } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
@@ -20,13 +20,17 @@ import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
 import { Weather } from 'src/components/weather'
 import { clearCache } from 'src/helpers/fetch/cache'
+import { useIssueDate } from 'src/helpers/issues'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
+import { useMediaQuery } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
-import { navigateToIssueList } from 'src/navigation/helpers'
+import { navigateToIssueList } from 'src/navigation/helpers/base'
+import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
+import { Header } from 'src/components/layout/header/header'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -47,25 +51,49 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = withNavigation(
+const ScreenHeader = withNavigation(
     ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+        const position = useNavigatorPosition()
+        const { date, weekday } = useIssueDate(issue)
+        const isTablet = useMediaQuery(
+            width => width >= Breakpoints.tabletVertical,
+        )
         return (
-            <IssueHeader
+            <Header
                 accessibilityHint="More issues"
                 onPress={() => {
                     navigateToIssueList(navigation)
                 }}
                 action={
-                    <Button
-                        icon=""
-                        alt="More issues"
-                        onPress={() => {
-                            navigateToIssueList(navigation)
+                    <Animated.View
+                        style={{
+                            opacity: position.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [1, 0],
+                            }),
                         }}
-                    />
+                    >
+                        <Button
+                            icon={isTablet ? '' : ''}
+                            alt="More issues"
+                            onPress={() => {
+                                navigateToIssueList(navigation)
+                            }}
+                        />
+                    </Animated.View>
                 }
-                issue={issue}
-            />
+            >
+                <Animated.View
+                    style={{
+                        opacity: position.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [1, 0],
+                        }),
+                    }}
+                >
+                    <IssueTitle title={weekday} subtitle={date} />
+                </Animated.View>
+            </Header>
         )
     },
 )
@@ -128,7 +156,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
             {response({
                 error: ({ message }, _, { retry }) => (
                     <>
-                        <Header />
+                        <ScreenHeader />
 
                         <FlexErrorMessage
                             debugMessage={message}
@@ -138,7 +166,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                 ),
                 pending: () => (
                     <>
-                        <Header />
+                        <ScreenHeader />
                         <FlexCenter>
                             <Spinner />
                         </FlexCenter>
@@ -152,6 +180,7 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                 retry()
                             }}
                         />
+                        <ScreenHeader issue={issue} />
 
                         <WithBreakpoints>
                             {{
@@ -164,7 +193,6 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                                     metrics,
                                                 ]}
                                             >
-                                                <Header issue={issue} />
                                                 <IssueFronts
                                                     ListHeaderComponent={
                                                         <View
@@ -182,37 +210,33 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                     </WithLayoutRectangle>
                                 ),
                                 [Breakpoints.tabletVertical]: () => (
-                                    <WithLayoutRectangle>
-                                        {metrics => (
-                                            <WithIssueScreenSize
-                                                value={[
-                                                    PageLayoutSizes.tablet,
-                                                    metrics,
-                                                ]}
-                                            >
-                                                <Header issue={issue} />
-                                                <View
-                                                    style={{
-                                                        flexDirection: 'row',
-                                                    }}
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                        }}
+                                    >
+                                        <View style={styles.sideWeather}>
+                                            <Weather />
+                                        </View>
+
+                                        <WithLayoutRectangle>
+                                            {metrics => (
+                                                <WithIssueScreenSize
+                                                    value={[
+                                                        PageLayoutSizes.tablet,
+                                                        metrics,
+                                                    ]}
                                                 >
-                                                    <View
-                                                        style={
-                                                            styles.sideWeather
-                                                        }
-                                                    >
-                                                        <Weather />
-                                                    </View>
                                                     <IssueFronts
                                                         style={
                                                             styles.sideBySideFeed
                                                         }
                                                         issue={issue}
                                                     />
-                                                </View>
-                                            </WithIssueScreenSize>
-                                        )}
-                                    </WithLayoutRectangle>
+                                                </WithIssueScreenSize>
+                                            )}
+                                        </WithLayoutRectangle>
+                                    </View>
                                 ),
                             }}
                         </WithBreakpoints>

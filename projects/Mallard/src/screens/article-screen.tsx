@@ -19,7 +19,7 @@ import {
     ArticleNavigationProps,
     ArticleRequiredNavigationProps,
     getArticleNavigationProps,
-} from 'src/navigation/helpers'
+} from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'

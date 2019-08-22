@@ -8,7 +8,7 @@ const WithLayoutRectangle: FunctionComponent<{
     const [metrics, setMetrics] = useState<LayoutRectangle | null>(null)
     return (
         <View
-            style={{ minHeight }}
+            style={{ minHeight, flexGrow: 1 }}
             onLayout={ev => {
                 setMetrics(ev.nativeEvent.layout)
             }}

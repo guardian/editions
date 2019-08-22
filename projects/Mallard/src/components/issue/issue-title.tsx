@@ -53,6 +53,7 @@ const GridRowSplit = ({
 
 const styles = StyleSheet.create({
     text: {
+        marginTop: -2,
         color: color.textOverPrimary,
     },
 })
