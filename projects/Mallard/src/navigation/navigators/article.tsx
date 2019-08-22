@@ -32,8 +32,10 @@ export interface ArticleNavigatorInjectedProps {
 const Dismissable = ({
     navigator,
     navigation,
+    getPosition,
 }: {
     navigator: NavigationContainer
+    getPosition: () => Animated.Value
 } & NavigationInjectedProps) => {
     const Navigator = (navigator as unknown) as FunctionComponent<
         ArticleNavigatorInjectedProps & NavigationInjectedProps
@@ -45,6 +47,7 @@ const Dismissable = ({
             onDismiss={() => {
                 navigation.goBack()
             }}
+            getPosition={getPosition}
         >
             <Navigator
                 onDismissStateChanged={setDismissable}
@@ -151,6 +154,7 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             <Dismissable
                                 navigator={Navigator}
                                 navigation={navigation}
+                                getPosition={getPosition}
                             />
                         </Animated.View>
                     </Animated.View>

@@ -21,7 +21,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         justifyContent: 'flex-end',
         flexDirection: 'row',
-        height: metrics.vertical + getFont('titlepiece', 1.25).lineHeight * 3.1,
+    },
+    height: {
+        height: metrics.vertical + getFont('titlepiece', 1.25).lineHeight * 1.5,
     },
     flex: {
         flexDirection: 'row',
@@ -71,7 +73,7 @@ const Header = ({
     children,
     ...otherProps
 }: HeaderProps) => {
-    const { top: paddingTop } = useInsets()
+    const { top: marginTop } = useInsets()
 
     return (
         <WithAppAppearance value={'primary'}>
@@ -79,11 +81,9 @@ const Header = ({
                 {layout === 'issue' ? (
                     <GridRowSplit
                         proxy={leftAction}
-                        style={{
-                            paddingTop,
-                        }}
+                        style={[{ marginTop }, styles.height]}
                     >
-                        <View style={styles.headerSplit}>
+                        <View style={[styles.headerSplit]}>
                             <View style={styles.headerTitle}>
                                 {'onPress' in otherProps ? (
                                     <Highlight
@@ -102,8 +102,8 @@ const Header = ({
                         </View>
                     </GridRowSplit>
                 ) : (
-                    <View style={{ paddingTop, width: '100%' }}>
-                        <View style={[styles.centerWrapper]}>
+                    <View style={{ marginTop, width: '100%' }}>
+                        <View style={[styles.height, styles.centerWrapper]}>
                             <View style={styles.centerAction}>
                                 {leftAction}
                             </View>

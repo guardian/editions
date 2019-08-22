@@ -2,8 +2,6 @@ import React, { useState, useEffect, ReactNode, useRef } from 'react'
 import { Animated, StyleSheet, View, PanResponder } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
-import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
 
 /*
 This is the swipey contraption that contains an article.
@@ -25,22 +23,31 @@ export const SlideCard = ({
     enabled,
     children,
     onDismiss,
+    getPosition,
 }: {
     enabled: boolean
     children: ReactNode
     onDismiss: () => void
+    getPosition: () => Animated.Value
 }) => {
-    const [scrollY] = useState(() => new Animated.Value(1))
+    const [scrollY] = useState(() => new Animated.Value(0))
     let { current: blocked } = useRef(false)
+
     useEffect(() => {
+        Animated.timing(getPosition(), {
+            toValue: scrollY.interpolate({
+                inputRange: [0, 60],
+                outputRange: [1, 0.8],
+            }),
+            duration: 0,
+            useNativeDriver: true,
+        }).start()
+
         scrollY.addListener(({ value }) => {
-            if (value < dismissAt * -1) {
+            if (value > 300) {
                 blocked = false
-                Animated.timing(scrollY, {
-                    toValue: 0,
-                    duration: 200,
-                }).start()
                 onDismiss()
+                scrollY.stopAnimation()
             }
         })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -54,14 +61,16 @@ export const SlideCard = ({
         },
         onPanResponderTerminationRequest: () => false,
         onShouldBlockNativeResponder: () => false,
-        onPanResponderMove: (ev, gestureState) => {
-            if (blocked) {
-                scrollY.setValue(gestureState.dy * -1.5)
-            }
-        },
+        onPanResponderMove: Animated.event([
+            null,
+            {
+                dy: scrollY,
+            },
+        ]),
         onPanResponderEnd: (ev, gestureState) => {
             blocked = false
             Animated.timing(scrollY, {
+                useNativeDriver: true,
                 toValue: 0,
                 duration: 200,
             }).start()

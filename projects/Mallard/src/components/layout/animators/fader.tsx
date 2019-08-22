@@ -59,10 +59,4 @@ const Fader = ({ children }: PropTypes) => {
     )
 }
 
-const getFader = (position: PropTypes['position']) => (
-    props: Omit<PropTypes, 'position'>,
-) => {
-    return <Fader position={position} {...props}></Fader>
-}
-
-export { Fader, getFader }
+export { Fader }
