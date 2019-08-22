@@ -45,8 +45,17 @@ export const useIssueDate = (issue?: Issue): IssueDate =>
         [issue && issue.key, issue],
     )
 
-export const todayAsFolder = (): string => {
-    const today = new Date()
-    return `${today.getUTCFullYear()}-${today.getUTCMonth() +
-        1}-${today.getUTCDate()}`
+const dateToFolderConvert = (date: Date): string =>
+    `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
+
+export const todayAsFolder = (): string => dateToFolderConvert(new Date())
+
+export const lastSevenDays = (): string[] => {
+    var result = []
+    for (var i = 0; i < 7; i++) {
+        var d = new Date()
+        d.setDate(d.getDate() - i)
+        result.push(dateToFolderConvert(d))
+    }
+    return result
 }
