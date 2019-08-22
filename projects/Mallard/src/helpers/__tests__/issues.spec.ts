@@ -13,13 +13,13 @@ describe('helpers/issues', () => {
         it('should give the last seven days, including today in the correct format', () => {
             MockDate.set('2019-08-21')
             expect(lastSevenDays()).toEqual([
-                '2019-8-21',
-                '2019-8-20',
-                '2019-8-19',
-                '2019-8-18',
-                '2019-8-17',
-                '2019-8-16',
-                '2019-8-15',
+                '2019-08-21',
+                '2019-08-20',
+                '2019-08-19',
+                '2019-08-18',
+                '2019-08-17',
+                '2019-08-16',
+                '2019-08-15',
             ])
         })
     })
