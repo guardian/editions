@@ -9,6 +9,7 @@ import {
     legacyCASUsernameCache,
     legacyCASPasswordCache,
     iapReceiptCache,
+    _legacyUserAccessTokenKeychain,
 } from './storage'
 import {
     fetchMembershipData,
@@ -101,7 +102,8 @@ const fetchUserDataForKeychainUser = async (
     fetchUserDetailsImpl = fetchUserDetails,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
     getLegacyUserAccessTokenImpl = getLegacyUserAccessToken,
-    signOutIdentityImpl = signOutIdentity,
+    userDataCacheImpl = userDataCache,
+    legacyUserAccessTokenKeychainImpl = _legacyUserAccessTokenKeychain,
 ): Promise<UserData | null> => {
     const [userToken, legacyUserToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
@@ -114,7 +116,12 @@ const fetchUserDataForKeychainUser = async (
     if (!actualUserToken) {
         // no userToken - we need to be logged in again
         // make sure everything is reset before doing that
-        await signOutIdentityImpl()
+        await signOutIdentity(
+            userTokenStore,
+            membershipTokenStore,
+            userDataCacheImpl,
+            legacyUserAccessTokenKeychainImpl,
+        )
         return null
     }
 
