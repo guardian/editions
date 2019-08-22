@@ -3,14 +3,17 @@ import {
     HTMLElement,
     MediaAtomElement,
     ImageElement,
+    PillarFromPalette,
 } from 'src/common'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { generateAssetsFontCss, css, makeHtml } from '../../../helpers/webview'
 import { PixelRatio } from 'react-native'
 import { imagePath } from 'src/paths'
+import { PillarColours } from '@guardian/pasteup/palette'
+import { getPillarColors } from 'src/hooks/use-article'
 
-const styles = css`
+const makeCss = (colors: PillarColours) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     * {
         margin: 0;
@@ -28,8 +31,8 @@ const styles = css`
         margin-bottom: ${metrics.vertical * 2}px;
     }
     #app a {
-        color: ${color.primary};
-        text-decoration-color: ${color.line};
+        color: ${colors.main};
+        text-decoration-color: ${colors.pastel};
     }
     figcaption {
         padding-top: 5px;
@@ -51,13 +54,16 @@ const renderImageElement = (imageElement: ImageElement) => {
     const path = imagePath(imageElement.src)
     return `
         <figure style="overflow: hidden;">
-            <img src="${path}" style="display: block; width: 100%; height: auto;" alt="${imageElement.alt}"/> 
+            <img src="${path}" style="display: block; width: 100%; height: auto;" alt="${imageElement.alt}"/>
             <figcaption>${imageElement.caption} ${imageElement.credit}</figcaption>
         </figure>
     `
 }
 
-export const render = (article: BlockElement[]) => {
+export const render = (
+    article: BlockElement[],
+    { pillar }: { pillar: PillarFromPalette },
+) => {
     const html = article
         .filter(
             el =>
@@ -76,6 +82,6 @@ export const render = (article: BlockElement[]) => {
             }
         })
         .join('')
-
+    const styles = makeCss(getPillarColors(pillar))
     return makeHtml({ styles, html })
 }
