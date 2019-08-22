@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         justifyContent: 'flex-end',
         flexDirection: 'row',
-        minHeight: getFont('titlepiece', 1.25).lineHeight * 2,
+        height: metrics.vertical + getFont('titlepiece', 1.25).lineHeight * 3.1,
     },
     flex: {
         flexDirection: 'row',
     },
     headerSplit: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         flexGrow: 1,
     },
     headerTitle: {
@@ -61,21 +61,28 @@ type HeaderProps = {
     action?: ReactNode
     leftAction?: ReactNode
     layout?: 'issue' | 'center'
-} & IssueTitleProps &
-    TouchableHeaderProps
+    children: ReactNode
+} & TouchableHeaderProps
 
 const Header = ({
     action,
     leftAction,
     layout = 'issue',
+    children,
     ...otherProps
 }: HeaderProps) => {
     const { top: paddingTop } = useInsets()
+
     return (
         <WithAppAppearance value={'primary'}>
             <View style={[styles.background]}>
                 {layout === 'issue' ? (
-                    <GridRowSplit proxy={leftAction} style={{ paddingTop }}>
+                    <GridRowSplit
+                        proxy={leftAction}
+                        style={{
+                            paddingTop,
+                        }}
+                    >
                         <View style={styles.headerSplit}>
                             <View style={styles.headerTitle}>
                                 {'onPress' in otherProps ? (
@@ -85,10 +92,10 @@ const Header = ({
                                             otherProps.accessibilityHint
                                         }
                                     >
-                                        <IssueTitle {...otherProps} />
+                                        {children}
                                     </Highlight>
                                 ) : (
-                                    <IssueTitle {...otherProps} />
+                                    children
                                 )}
                             </View>
                             {action}
@@ -101,9 +108,7 @@ const Header = ({
                                 {leftAction}
                             </View>
                             <View style={styles.centerAction}>{action}</View>
-                            <View style={styles.centerTitle}>
-                                <IssueTitle {...otherProps} />
-                            </View>
+                            <View style={styles.centerTitle}>{children}</View>
                         </View>
                     </View>
                 )}
@@ -115,10 +120,14 @@ const Header = ({
 const IssueHeader = ({
     issue,
     ...headerProps
-}: { issue?: Issue } & Omit<HeaderProps, 'title' | 'subtitle'> &
+}: { issue?: Issue } & Omit<HeaderProps, 'children'> &
     TouchableHeaderProps) => {
     const { date, weekday } = useIssueDate(issue)
-    return <Header {...headerProps} title={weekday} subtitle={date} />
+    return (
+        <Header {...headerProps}>
+            <IssueTitle {...headerProps} title={weekday} subtitle={date} />
+        </Header>
+    )
 }
 
 export { Header, IssueHeader }
