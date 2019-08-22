@@ -58,31 +58,7 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
 
 const AppStack = createModalNavigator(
     createUnderlayNavigator(
-        /*
-        createStackNavigator(
-            {
-                [routeNames.Issue]: IssueScreen,
-                [routeNames.Article]: ArticleScreen,
-            },
-            {
-                transparentCard: true,
-                initialRouteName: routeNames.Issue,
-                mode: 'modal',
-                headerMode: 'none',
-                cardOverlayEnabled: true,
-                transitionConfig: () => ({
-                    ...transitionOptionsOverArtboard(true),
-                    screenInterpolator: issueToArticleScreenInterpolator,
-                }),
-                defaultNavigationOptions: {
-                    gesturesEnabled: false,
-                },
-            },
-        ),
-        */
-        createArticleNavigator(IssueScreen, {
-            [routeNames.Article]: ArticleScreen,
-        }),
+        createArticleNavigator(IssueScreen, ArticleScreen),
         {
             [routeNames.IssueList]: HomeScreen,
         },

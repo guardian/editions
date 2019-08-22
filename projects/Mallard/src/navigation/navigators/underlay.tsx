@@ -97,10 +97,10 @@ const createUnderlayNavigator = (
             shadowOpacity: 0.2,
             shadowRadius: 8,
         },
+        headerMode: 'none',
         ...(supportsTransparentCards()
             ? {
                   mode: 'modal',
-                  headerMode: 'none',
                   transparentCard: true,
                   cardOverlayEnabled: true,
                   transitionConfig,

@@ -1,5 +1,5 @@
 import { NavigationTransitionProps } from 'react-navigation'
-import { Dimensions, LayoutRectangle } from 'react-native'
+import { Dimensions, LayoutRectangle, Animated, ScaledSize } from 'react-native'
 import {
     getScreenPositionOfItem,
     setNavigationPosition,
@@ -63,80 +63,78 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     }
 }
 
-const articleScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
-    const { position, scene } = sceneProps
-    const sceneIndex = scene.index
-    const isClosing = sceneProps.position.__getValue() === 1
-
-    setNavigationPosition('article', [position, sceneIndex])
-
+const articleScreenMotion = ({
+    position,
+    originalPosition,
+    window,
+}: {
+    position: Animated.Value
+    originalPosition: LayoutRectangle
+    window: ScaledSize
+}) => {
     /*
     we are assuming our final article
     will cover the entire screen here
     */
-    const { width: windowWidth, height: windowHeight } = Dimensions.get(
-        'window',
-    )
-    const { x, y, width } = getScreenPositionOfItem(
-        scene.route.params &&
-            scene.route.params.path &&
-            scene.route.params.path.article,
-    )
+    const { width: windowWidth, height: windowHeight } = window
+    const { x, y, width } = originalPosition
 
     /*
-    subtly blend the actual article page
-    and its card so it's a bit less jarring
-    */
-    const opacity = isClosing
-        ? position.interpolate({
-              inputRange: [sceneIndex - 1, sceneIndex - 0.75, sceneIndex],
-              outputRange: [0, 1, 1],
-          })
-        : position.interpolate({
-              inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
-              outputRange: [0, 0.95, 1],
-          })
+        subtly blend the actual article page
+        and its card so it's a bit less jarring
+        */
+    const opacity = position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+    })
 
-    /*
-    we need to scale the article's X to
-    whatever its card width is
-    */
-    const scaler = getScaleForArticle(width)
-    const scale = isClosing
-        ? position.interpolate({
-              inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
-              outputRange: [scaler, scaler, 1],
-          })
-        : position.interpolate({
-              inputRange: [sceneIndex - 1, sceneIndex],
-              outputRange: [scaler, 1],
-          })
-
-    /*
-    yScaleDiff calculates how many pixels we need to offset
-    our y translate to account for the scale
-    */
-    const yScaleDiff = (windowHeight - windowHeight * scaler) / 2
-    const translater = y - yScaleDiff
-    const translateY = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.9, sceneIndex],
-        outputRange: [translater, translater, metrics.slideCardSpacing],
+    const opacityOuter = position.interpolate({
+        inputRange: [0, 0.1, 1],
+        outputRange: [0, 1, 1],
     })
 
     /*
-    If the card is half width we
-    need to move it to its side at the start
-    */
+        we need to scale the article's X to
+        whatever its card width is
+        */
+    const scaler = getScaleForArticle(width)
+
+    const scale = position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [scaler, 1],
+    })
+
+    /*
+        yScaleDiff calculates how many pixels we need to offset
+        our y translate to account for the scale
+        */
+    const distanceFromVCenter = y - windowHeight / 2
+    const d = (windowHeight / 2) * scaler + distanceFromVCenter
+    const translateY = position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [d, metrics.slideCardSpacing],
+    })
+
+    /*
+        If the card is half width we
+        need to move it to its side at the start
+        */
     const distanceFromCentre = width / 2 + x - windowWidth / 2
     const translateX = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex],
+        inputRange: [0, 1],
         outputRange: [distanceFromCentre, 0],
     })
 
+    const transform = [{ translateX }, { translateY }, { scale }]
+
     return {
         opacity,
-        marginBottom: metrics.slideCardSpacing,
-        transform: [{ translateX }, { translateY }, { scale }],
+        transform,
+        opacityOuter,
+        translateY,
+        translateX,
+        scale,
+        scaler,
     }
 }
 
@@ -149,4 +147,4 @@ const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
     return {}
 }
 
-export { screenInterpolator }
+export { screenInterpolator, articleScreenMotion }

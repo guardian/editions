@@ -1,10 +1,7 @@
 import React, { useRef } from 'react'
-import {
-    getNavigationPosition,
-    SaveableNavigationPositions,
-} from 'src/helpers/positions'
-import { Animated, StyleSheet, View, Dimensions } from 'react-native'
+import { Animated, Dimensions, StyleSheet, View } from 'react-native'
 import { clamp } from 'src/helpers/math'
+import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
 /*
 This is part of the transition from articles to fronts
@@ -16,15 +13,14 @@ The build order goes up/down according to screen position
 export interface PropTypes {
     first?: boolean
     children?: Element
-    position: SaveableNavigationPositions
 }
 
 const faderStyles = StyleSheet.create({
     wrapper: { width: '100%' },
 })
 
-const Fader = ({ children, position }: PropTypes) => {
-    const navigationPosition = getNavigationPosition(position)
+const Fader = ({ children }: PropTypes) => {
+    const position = useNavigatorPosition()
     const buildOrder = useRef(0)
     const faderRef = useRef<View>()
 
@@ -42,8 +38,8 @@ const Fader = ({ children, position }: PropTypes) => {
                     })
             }}
             style={[
-                navigationPosition && {
-                    opacity: navigationPosition.position.interpolate({
+                {
+                    opacity: position.interpolate({
                         /*
                         we wanna prevent any value except the final
                         one to be 1 because otherwise the animation will throw */
