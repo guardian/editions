@@ -11,6 +11,7 @@ import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
 import { MultilineWrap } from '../wrap/multiline-wrap'
+import { HeadlineTypeWrap } from './shared'
 
 const ArticleFader = getFader('article')
 
@@ -62,9 +63,11 @@ const OpinionHeader = ({
             backgroundColor={color.palette.opinion.faded}
             byline={
                 <ArticleFader>
-                    <View style={[styles.innerWrap]}>
-                        <ArticleStandfirst {...{ standfirst }} />
-                    </View>
+                    <HeadlineTypeWrap>
+                        <View style={[styles.innerWrap]}>
+                            <ArticleStandfirst {...{ standfirst }} />
+                        </View>
+                    </HeadlineTypeWrap>
                 </ArticleFader>
             }
         >
@@ -81,44 +84,45 @@ const OpinionHeader = ({
             ) : null}
             <ArticleFader>
                 <View style={styles.flexRow}>
-                    <View style={styles.headlineContainer}>
-                        <ArticleHeadline
-                            icon={{
-                                width: 80,
-                                height: font.lineHeight,
-                                element: () => (
-                                    <Quote
-                                        scale={1.2}
-                                        fill={articleColor.main}
-                                    />
-                                ),
-                            }}
-                            weight="light"
-                            textStyle={[
-                                { marginBottom: metrics.vertical },
-                                font,
-                            ]}
-                        >
-                            {headline}
-                            <Text
-                                style={[
-                                    { color: articleColor.main },
-                                    styles.byline,
+                    <HeadlineTypeWrap>
+                        <View style={styles.headlineContainer}>
+                            <ArticleHeadline
+                                icon={{
+                                    width: 80,
+                                    height: font.lineHeight,
+                                    element: () => (
+                                        <Quote
+                                            scale={1.2}
+                                            fill={articleColor.main}
+                                        />
+                                    ),
+                                }}
+                                weight="light"
+                                textStyle={[
+                                    { marginBottom: metrics.vertical },
+                                    font,
                                 ]}
                             >
-                                {'\n'}
-                                {byline}
-                            </Text>
-                        </ArticleHeadline>
-                    </View>
+                                {headline}
+                                <Text
+                                    style={[
+                                        { color: articleColor.main },
+                                        styles.byline,
+                                    ]}
+                                >
+                                    {'\n'}
+                                    {byline}
+                                </Text>
+                            </ArticleHeadline>
+                        </View>
+                    </HeadlineTypeWrap>
+
                     {bylineImages && bylineImages.cutout ? (
                         <View style={styles.cutoutContainer}>
-                            <ArticleFader>
-                                <ArticleImage
-                                    style={styles.cutout}
-                                    image={bylineImages.cutout}
-                                />
-                            </ArticleFader>
+                            <ArticleImage
+                                style={styles.cutout}
+                                image={bylineImages.cutout}
+                            />
                         </View>
                     ) : null}
                 </View>

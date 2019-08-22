@@ -13,6 +13,7 @@ import { ArticleStandfirst } from '../article-standfirst'
 import { LeftSideBleed } from '../wrap/left-side-bleed'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
+import { HeadlineTypeWrap } from './shared'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },
@@ -71,7 +72,7 @@ const LongReadHeader = ({
                     backgroundColor={color.palette.neutral[7]}
                     topOffset={getFont('titlepiece', 1).lineHeight * 4}
                 >
-                    <View style={{ paddingBottom: metrics.vertical * 2 }}>
+                    <HeadlineTypeWrap>
                         {kicker ? (
                             <HangyTagKicker>{kicker}</HangyTagKicker>
                         ) : null}
@@ -84,13 +85,14 @@ const LongReadHeader = ({
                             standfirst={standfirst}
                             textStyle={[
                                 styles.whiteText,
+                                { marginBottom: metrics.vertical * 2 },
                                 isTablet && {
                                     fontFamily: getFont('headline', 1, 'bold')
                                         .fontFamily,
                                 },
                             ]}
                         ></ArticleStandfirst>
-                    </View>
+                    </HeadlineTypeWrap>
                 </LeftSideBleed>
             </MultilineWrap>
         </>

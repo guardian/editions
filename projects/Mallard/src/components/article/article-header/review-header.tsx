@@ -11,6 +11,7 @@ import { ArticleKicker } from '../article-kicker/normal-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
+import { HeadlineTypeWrap } from './shared'
 
 const ArticleFader = getFader('article')
 
@@ -46,24 +47,24 @@ const ReviewHeader = ({
             backgroundColor={color.faded}
             borderColor={color.dark}
         >
-            <>
-                {image ? (
-                    <ArticleFader>
-                        <ArticleImage
-                            proxy={starRating && <Stars rating={starRating} />}
-                            style={{
-                                aspectRatio: 1.5,
-                                marginBottom: metrics.vertical / 4,
-                            }}
-                            image={image}
-                        />
-                    </ArticleFader>
-                ) : null}
-                {kicker ? (
-                    <ArticleFader>
-                        <ArticleKicker kicker={kicker} />
-                    </ArticleFader>
-                ) : null}
+            {image ? (
+                <ArticleFader>
+                    <ArticleImage
+                        proxy={starRating && <Stars rating={starRating} />}
+                        style={{
+                            aspectRatio: 1.5,
+                            marginBottom: metrics.vertical / 4,
+                        }}
+                        image={image}
+                    />
+                </ArticleFader>
+            ) : null}
+            {kicker ? (
+                <ArticleFader>
+                    <ArticleKicker kicker={kicker} />
+                </ArticleFader>
+            ) : null}
+            <HeadlineTypeWrap>
                 <ArticleFader>
                     <View>
                         <ArticleHeadline
@@ -81,7 +82,7 @@ const ReviewHeader = ({
                         {...{ standfirst }}
                     />
                 </ArticleFader>
-            </>
+            </HeadlineTypeWrap>
         </MultilineWrap>
     )
 }

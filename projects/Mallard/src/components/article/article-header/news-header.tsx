@@ -1,16 +1,15 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import { getFader } from 'src/components/layout/animators/fader'
 import { metrics } from 'src/theme/spacing'
+import { ArticleByline } from '../article-byline'
+import { ArticleHeadline } from '../article-headline'
 import { ArticleImage } from '../article-image'
 import { ArticleKicker } from '../article-kicker/normal-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
-import { ArticleHeaderProps } from './types'
-import { ArticleByline } from '../article-byline'
-import { ArticleHeadline } from '../article-headline'
-import { getFader } from 'src/components/layout/animators/fader'
 import { MultilineWrap } from '../wrap/multiline-wrap'
-import { useMediaQuery } from 'src/hooks/use-screen'
-import { Breakpoints } from 'src/theme/breakpoints'
+import { HeadlineTypeWrap } from './shared'
+import { ArticleHeaderProps } from './types'
 
 const styles = StyleSheet.create({
     background: {
@@ -57,15 +56,17 @@ const NewsHeader = ({
                     <ArticleKicker kicker={kicker} />
                 </ArticleFader>
             ) : null}
-            <ArticleFader>
-                <ArticleHeadline>{headline}</ArticleHeadline>
-            </ArticleFader>
-            <ArticleFader>
-                <ArticleStandfirst
-                    style={styles.standfirst}
-                    {...{ standfirst }}
-                />
-            </ArticleFader>
+            <HeadlineTypeWrap>
+                <ArticleFader>
+                    <ArticleHeadline>{headline}</ArticleHeadline>
+                </ArticleFader>
+                <ArticleFader>
+                    <ArticleStandfirst
+                        style={styles.standfirst}
+                        {...{ standfirst }}
+                    />
+                </ArticleFader>
+            </HeadlineTypeWrap>
         </MultilineWrap>
     )
 }
