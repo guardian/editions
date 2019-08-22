@@ -198,7 +198,7 @@ const createArticleNavigator = (
     return createStackNavigator(navigation, {
         initialRouteName: routeNames.Issue,
         defaultNavigationOptions: {
-            gesturesEnabled: true,
+            gesturesEnabled: false,
         },
         headerMode: 'none',
         ...(supportsTransparentCards()
