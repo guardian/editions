@@ -4,12 +4,10 @@ import { NavigationScreenProp } from 'react-navigation'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
-import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { Fader } from 'src/components/layout/animators/fader'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { Slider } from 'src/components/slider'
-import { getNavigationPosition } from 'src/helpers/positions'
 import { getColor } from 'src/helpers/transform'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
@@ -18,16 +16,15 @@ import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
-    ArticleRequiredNavigationProps,
     getArticleNavigationProps,
 } from 'src/navigation/helpers/base'
+import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 import { routeNames } from 'src/navigation/routes'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
-import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -101,7 +98,7 @@ const ArticleScreenWithProps = ({
     onDismissStateChanged,
     navigation,
     prefersFullScreen,
-}: ArticleRequiredNavigationProps &
+}: Required<ArticleNavigationProps> &
     ArticleNavigatorInjectedProps & {
         navigation: NavigationScreenProp<{}, ArticleNavigationProps>
     }) => {
@@ -148,7 +145,7 @@ const ArticleScreenWithProps = ({
         </ArticleScreenLoginOverlay>
     ) : (
         <ArticleScreenLoginOverlay navigation={navigation}>
-            <Fader position="article">
+            <Fader>
                 <View
                     style={[
                         styles.slider,
@@ -219,7 +216,8 @@ const ArticleScreenWithProps = ({
                         pillar={pillar}
                         onTopPositionChange={isAtTop => {
                             setArticleIsAtTop(isAtTop)
-                            onDismissStateChanged && onDismissStateChanged(isAtTop)
+                            onDismissStateChanged &&
+                                onDismissStateChanged(isAtTop)
                         }}
                         previewNotice={previewNotice}
                     />

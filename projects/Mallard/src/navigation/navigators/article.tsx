@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import React, { useState, FunctionComponent } from 'react'
+import { Animated, Easing, StyleSheet } from 'react-native'
 import {
     createStackNavigator,
     NavigationContainer,
@@ -11,7 +11,7 @@ import { Button } from 'src/components/button/button'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { Header } from 'src/components/layout/header/header'
 import { supportsTransparentCards } from 'src/helpers/features'
-import { getScreenPositionOfItem } from 'src/helpers/positions'
+import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
 import { useDimensions } from 'src/hooks/use-screen'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -23,7 +23,6 @@ import {
 } from '../helpers/transition'
 import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
-import { toPosition } from 'src/helpers/sizes'
 
 type DismissStateChangedFn = (dismissable: boolean) => void
 export interface ArticleNavigatorInjectedProps {
@@ -36,7 +35,9 @@ const Dismissable = ({
 }: {
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
-    const Navigator = navigator as any & ArticleNavigatorInjectedProps
+    const Navigator = (navigator as unknown) as FunctionComponent<
+        ArticleNavigatorInjectedProps & NavigationInjectedProps
+    >
     const [dismissable, setDismissable] = useState(true)
     return (
         <SlideCard
@@ -185,6 +186,7 @@ const createArticleNavigator = (
             containerStyle: {
                 backgroundColor: color.artboardBackground,
             },
+            easing: Easing.elastic(1),
             screenInterpolator,
         }
     }

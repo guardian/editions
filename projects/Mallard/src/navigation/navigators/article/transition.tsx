@@ -1,14 +1,10 @@
+import { Animated, Dimensions, LayoutRectangle, ScaledSize } from 'react-native'
 import { NavigationTransitionProps } from 'react-navigation'
-import { Dimensions, LayoutRectangle, Animated, ScaledSize } from 'react-native'
-import {
-    getScreenPositionOfItem,
-    setNavigationPosition,
-} from 'src/helpers/positions'
-import { metrics } from 'src/theme/spacing'
+import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { routeNames } from 'src/navigation/routes'
-import { minScale, radius, minOpacity } from 'src/navigation/helpers/transition'
+import { metrics } from 'src/theme/spacing'
 
-export const getScaleForArticle = (width: LayoutRectangle['width']) => {
+const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
 }
 
@@ -142,7 +138,6 @@ const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { scene } = sceneProps
     if (scene.route.routeName === routeNames.Issue) {
         return issueScreenInterpolator(sceneProps)
-    } else {
     }
     return {}
 }

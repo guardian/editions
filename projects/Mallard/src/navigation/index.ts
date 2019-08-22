@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { Animated, Easing } from 'react-native'
 import {
     createAppContainer,
     createStackNavigator,
@@ -29,12 +28,11 @@ import { HomeScreen } from '../screens/home-screen'
 import { IssueScreen } from '../screens/issue-screen'
 import { SettingsScreen } from '../screens/settings-screen'
 import { mapNavigationToProps } from './helpers/base'
-import { issueToArticleScreenInterpolator } from './interpolators'
+import { createArticleNavigator } from './navigators/article'
 import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
-import { createArticleNavigator } from './navigators/article'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -43,18 +41,6 @@ const navOptionsWithGraunHeader = {
     },
     headerTintColor: color.textOverPrimary,
 }
-
-const transitionOptionsOverArtboard = (bounces: boolean) => ({
-    containerStyle: {
-        backgroundColor: color.artboardBackground,
-    },
-    transitionSpec: {
-        duration: bounces ? 600 : 400,
-        easing: Easing.elastic(bounces ? 1 : 0.5),
-        timing: Animated.timing,
-        useNativeDriver: true,
-    },
-})
 
 const AppStack = createModalNavigator(
     createUnderlayNavigator(

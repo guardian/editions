@@ -1,16 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { ScrollView } from 'react-navigation'
-import {
-    Appearance,
-    articlePillars,
-    ArticleType,
-    CAPIArticle,
-    Collection,
-    Front,
-    Issue,
-    PillarFromPalette,
-} from 'src/common'
+import { articlePillars, ArticleType, PillarFromPalette } from 'src/common'
 import { ArticleController } from 'src/components/article'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -18,24 +9,8 @@ import { WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
 import { useSettingsValue } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
+import { PathToArticle } from '../article-screen'
 import { DevTools, getEnumPosition } from './dev-tools'
-
-export interface PathToArticle {
-    collection: Collection['key']
-    front: Front['key']
-    article: CAPIArticle['key']
-    issue: Issue['key']
-}
-
-export interface ArticleTransitionProps {
-    startAtHeightFromFrontsItem: number
-}
-
-export interface ArticleNavigator {
-    articles: PathToArticle[]
-    appearance: Appearance
-    frontName: string
-}
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },

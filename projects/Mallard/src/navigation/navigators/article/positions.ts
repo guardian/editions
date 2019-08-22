@@ -1,7 +1,9 @@
-import { LayoutRectangle, Dimensions, Animated, View } from 'react-native'
+import { LayoutRectangle, Dimensions, View } from 'react-native'
 import { Article } from 'src/common'
 
 /*
+TODO: Pass this via router options
+
 This stores the screen positions of all items so
 that when you try to go and open them the transitioner
 knows where to place the screen.
@@ -51,47 +53,8 @@ const getScreenPositionOfItem = (item: Article['key']): ScreenPosition => {
     }
 }
 
-/*
-This stores the Animated.Value the navigation
-interpolator uses between screens and allow
-the screens involved to retrieve it.
-
-Hacky? yes. Works? yes
-*/
-export interface NavigationPosition {
-    position: Animated.AnimatedInterpolation
-    raw: {
-        position: Animated.Value
-        index: number
-    }
-}
-
-export type SaveableNavigationPositions = 'article'
-
-const interpolators: {
-    [key in SaveableNavigationPositions]?: NavigationPosition
-} = {}
-
-const setNavigationPosition = (
-    key: SaveableNavigationPositions,
-    [position, index]: [Animated.Value, number],
-) => {
-    interpolators[key] = {
-        position: position.interpolate({
-            inputRange: [index - 1, index],
-            outputRange: [0, 1],
-        }),
-        raw: { position, index },
-    }
-}
-const getNavigationPosition = (
-    key: SaveableNavigationPositions,
-): NavigationPosition | undefined => interpolators[key]
-
 export {
     getScreenPositionOfItem,
     setScreenPositionOfItem,
     setScreenPositionFromView,
-    setNavigationPosition,
-    getNavigationPosition,
 }

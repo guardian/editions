@@ -1,48 +1,39 @@
 import React, { ReactNode, useRef, useState } from 'react'
 import {
-    View,
-    StyleSheet,
-    StyleProp,
-    ViewStyle,
-    Image,
     Animated,
     Easing,
+    StyleProp,
+    StyleSheet,
     TouchableWithoutFeedback,
+    View,
+    ViewStyle,
 } from 'react-native'
-import { metrics } from 'src/theme/spacing'
 import {
-    withNavigation,
-    NavigationInjectedProps,
-    NavigationEvents,
     AnimatedValue,
+    NavigationEvents,
+    NavigationInjectedProps,
+    withNavigation,
 } from 'react-navigation'
-
 import { CAPIArticle } from 'src/common'
+import { HeadlineCardText, StandfirstText } from 'src/components/styled-text'
 import {
-    PathToArticle,
-    ArticleTransitionProps,
-    ArticleNavigator,
-} from 'src/screens/article-screen'
-
-import { TextBlock } from './text-block'
-import { StandfirstText, HeadlineCardText } from 'src/components/styled-text'
+    setScreenPositionFromView,
+    setScreenPositionOfItem,
+} from 'src/navigation/navigators/article/positions'
+import { navigateToArticle } from 'src/navigation/helpers/base'
+import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
 import {
     getItemRectanglePerc,
-    useCardBackgroundStyle,
     ItemSizes,
     PageLayoutSizes,
     toPercentage,
+    useCardBackgroundStyle,
 } from '../helpers/helpers'
-import {
-    setScreenPositionOfItem,
-    getScreenPositionOfItem,
-    setScreenPositionFromView,
-} from 'src/helpers/positions'
-import { getScaleForArticle } from 'src/navigation/interpolators'
-import { color } from 'src/theme/color'
-import { navigateToArticle } from 'src/navigation/helpers/base'
-import { getFont } from 'src/theme/typography'
 import { ImageResource } from '../image-resource'
+import { TextBlock } from './text-block'
 
 interface TappablePropTypes {
     style?: StyleProp<ViewStyle>
@@ -138,17 +129,9 @@ const ItemTappable = withNavigation(
 
                 <TouchableWithoutFeedback
                     onPress={() => {
-                        const { width, height } = getScreenPositionOfItem(
-                            article.key,
-                        )
-                        const transitionProps: ArticleTransitionProps = {
-                            startAtHeightFromFrontsItem:
-                                height / getScaleForArticle(width),
-                        }
                         fade(opacity, 'out')
                         navigateToArticle(navigation, {
                             path,
-                            transitionProps,
                             articleNavigator,
                             prefersFullScreen: article.type === 'crossword',
                         })
