@@ -1,14 +1,15 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import { getFader } from 'src/components/layout/animators/fader'
 import { metrics } from 'src/theme/spacing'
+import { ArticleByline } from '../article-byline'
+import { ArticleHeadline } from '../article-headline'
 import { ArticleImage } from '../article-image'
 import { ArticleKicker } from '../article-kicker/normal-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
+import { MultilineWrap } from '../wrap/multiline-wrap'
+import { HeadlineTypeWrap } from './shared'
 import { ArticleHeaderProps } from './types'
-import { ArticleByline } from '../article-byline'
-import { ArticleHeadline } from '../article-headline'
-import { getFader } from 'src/components/layout/animators/fader'
-import { MultilineWrap } from '../wrap/wrap'
 
 const styles = StyleSheet.create({
     background: {
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     standfirst: {
         flex: 0,
         marginTop: metrics.vertical * 4,
-        marginBottom: metrics.vertical / 4,
+        marginBottom: metrics.vertical,
         width: '100%',
     },
 })
@@ -43,7 +44,6 @@ const NewsHeader = ({
                 <ArticleFader>
                     <ArticleImage
                         style={{
-                            aspectRatio: 1.5,
                             marginBottom: metrics.vertical / 4,
                         }}
                         image={image}
@@ -56,15 +56,17 @@ const NewsHeader = ({
                     <ArticleKicker kicker={kicker} />
                 </ArticleFader>
             ) : null}
-            <ArticleFader>
-                <ArticleHeadline>{headline}</ArticleHeadline>
-            </ArticleFader>
-            <ArticleFader>
-                <ArticleStandfirst
-                    style={styles.standfirst}
-                    {...{ standfirst }}
-                />
-            </ArticleFader>
+            <HeadlineTypeWrap>
+                <ArticleFader>
+                    <ArticleHeadline>{headline}</ArticleHeadline>
+                </ArticleFader>
+                <ArticleFader>
+                    <ArticleStandfirst
+                        style={styles.standfirst}
+                        {...{ standfirst }}
+                    />
+                </ArticleFader>
+            </HeadlineTypeWrap>
         </MultilineWrap>
     )
 }
