@@ -42,20 +42,17 @@ export const SlideCard = ({
             duration: 0,
             useNativeDriver: true,
         }).start()
-
-        scrollY.addListener(({ value }) => {
-            if (value > 100) {
-                blocked = false
-                onDismiss()
-                scrollY.stopAnimation()
-            }
-        })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => false,
         onMoveShouldSetPanResponder: (ev, gestureState) => {
             if (gestureState.dy > 10) {
                 blocked = true
+                if (gestureState.vy > 1) {
+                    blocked = false
+                    onDismiss()
+                    scrollY.stopAnimation()
+                }
             }
             return enabled && blocked
         },
@@ -69,6 +66,11 @@ export const SlideCard = ({
         ]),
         onPanResponderEnd: (ev, gestureState) => {
             blocked = false
+            if (gestureState.dy > 400) {
+                onDismiss()
+                scrollY.stopAnimation()
+                return
+            }
             Animated.timing(scrollY, {
                 useNativeDriver: true,
                 toValue: 0,
