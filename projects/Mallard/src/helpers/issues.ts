@@ -5,15 +5,15 @@ const months = [
     'Jan',
     'Feb',
     'March',
-    'Apr',
+    'April',
     'May',
     'June',
     'July',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dev',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
 ]
 
 const days = [
