@@ -1,9 +1,11 @@
-import React, { useRef, useState, useEffect, ReactNode } from 'react'
-import { Animated, View, StyleSheet } from 'react-native'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
+import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
+import { Fader } from 'src/components/layout/animators/fader'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { LoginOverlay } from 'src/components/login/login-overlay'
@@ -21,14 +23,11 @@ import {
     getArticleNavigationProps,
 } from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
-import { exportAllDeclaration } from '@babel/types'
-import { Fader } from 'src/components/layout/animators/fader'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 
 export interface PathToArticle {
     collection: Collection['key']
