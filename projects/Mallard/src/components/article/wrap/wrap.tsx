@@ -51,7 +51,6 @@ const contentWrapStyles = StyleSheet.create({
         maxWidth: metrics.article.maxWidthLandscape,
         width: '100%',
         paddingLeft: metrics.article.sides,
-        overflow: 'visible',
     },
     rootTablet: {
         paddingLeft: metrics.article.sidesTablet,
