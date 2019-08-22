@@ -17,13 +17,14 @@ import {
     StandfirstText,
 } from 'src/components/styled-text'
 import { APIPaths, imagePath } from 'src/paths'
-import { Wrap, MultilineWrap } from '../wrap/wrap'
+import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleByline } from '../article-byline'
 import { getFont } from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
 import { BigArrow, BigArrowDirection } from 'src/components/icons/BigArrow'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { ArticleStandfirst } from '../article-standfirst'
+import { Wrap } from '../wrap/wrap'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },

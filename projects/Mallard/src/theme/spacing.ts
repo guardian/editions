@@ -18,8 +18,8 @@ const sides = {
     sides: basicMetrics.horizontal / 2,
     sidesTablet: basicMetrics.horizontal * 1.5,
 }
+const sliderRadius = 18
 
-const scrubberRadius = 18
 export const metrics = {
     ...basicMetrics,
     headerHeight,
@@ -28,19 +28,17 @@ export const metrics = {
     sides,
     article: {
         ...sides,
-        maxWidth: 540,
-        maxWidthLandscape: 620,
-        leftRailLandscape: 120,
-        rightRail: 200,
-        rightRailLandscape: 260,
+        maxWidth: 800,
+        rightRail: 130 + sides.sidesTablet,
+        railPaddingLeft: sides.sidesTablet * 1.5,
     },
     fronts: {
         sides: basicMetrics.horizontal * 1.5,
-        cardContainerHeightExtra: scrubberRadius * 2,
+        cardContainerHeightExtra: sliderRadius * 2,
         cardSize: toSize(540, 600),
         cardSizeTablet: toSize(650, 725),
         cardSizeTabletShort: toSize(650, 660),
-        scrubberRadius,
+        sliderRadius,
     },
     gridRowSplit: {
         narrow: (width: number) => width * 0.6,

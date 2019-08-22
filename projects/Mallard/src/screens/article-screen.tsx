@@ -1,42 +1,33 @@
-import React, { useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
-import { NavigationScreenProp, ScrollView } from 'react-navigation'
-import {
-    Appearance,
-    articlePillars,
-    ArticleType,
-    CAPIArticle,
-    Collection,
-    Front,
-    Issue,
-    PillarFromPalette,
-} from 'src/common'
-import { ArticleController } from 'src/components/article'
+import { NavigationScreenProp } from 'react-navigation'
+import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
+import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
+import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
+import { Fader } from 'src/components/layout/animators/fader'
 import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { LoginOverlay } from 'src/components/login/login-overlay'
-import { Navigator } from 'src/components/navigator'
-import { UiBodyCopy } from 'src/components/styled-text'
+import { Slider } from 'src/components/slider'
 import { getNavigationPosition } from 'src/helpers/positions'
 import { getColor } from 'src/helpers/transform'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
-import { getAppearancePillar, WithArticle } from 'src/hooks/use-article'
-import { useArticleResponse } from 'src/hooks/use-issue'
-import { useDimensions } from 'src/hooks/use-screen'
-import { useSettingsValue, useIsPreview } from 'src/hooks/use-settings'
+import { getAppearancePillar } from 'src/hooks/use-article'
+import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
+import { useIsPreview } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
     ArticleRequiredNavigationProps,
     getArticleNavigationProps,
 } from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
-import { DevTools, getEnumPosition } from './article/dev-tools'
+import { ArticleScreenBody } from './article/body'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -55,83 +46,6 @@ export interface ArticleNavigator {
     frontName: string
 }
 
-const styles = StyleSheet.create({
-    flex: { flexGrow: 1 },
-})
-
-const ArticleScreenBody = ({
-    path,
-    onTopPositionChange,
-    pillar,
-    width,
-    previewNotice,
-}: {
-    path: PathToArticle
-    onTopPositionChange: (isAtTop: boolean) => void
-    pillar: PillarFromPalette
-    width: number
-    previewNotice?: string
-}) => {
-    const [modifiedPillar, setPillar] = useState(
-        articlePillars.indexOf(pillar) || 0,
-    )
-    const [modifiedType, setType] = useState(0)
-    const articleResponse = useArticleResponse(path)
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-
-    return (
-        <ScrollView
-            scrollEventThrottle={8}
-            onScroll={ev => {
-                onTopPositionChange(ev.nativeEvent.contentOffset.y < 10)
-            }}
-            style={{ width }}
-            contentContainerStyle={styles.flex}
-        >
-            {articleResponse({
-                error: ({ message }) => (
-                    <FlexErrorMessage
-                        title={message}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                pending: () => (
-                    <FlexErrorMessage
-                        title={'loading'}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                success: article => (
-                    <>
-                        {previewNotice && (
-                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
-                        )}
-                        {isUsingProdDevtools ? (
-                            <DevTools
-                                pillar={modifiedPillar}
-                                setPillar={setPillar}
-                                type={modifiedType}
-                                setType={setType}
-                            />
-                        ) : null}
-                        <WithArticle
-                            type={
-                                isUsingProdDevtools
-                                    ? getEnumPosition(ArticleType, modifiedType)
-                                    : article.article.articleType ||
-                                      ArticleType.Article
-                            }
-                            pillar={articlePillars[modifiedPillar]}
-                        >
-                            <ArticleController article={article.article} />
-                        </WithArticle>
-                    </>
-                ),
-            })}
-        </ScrollView>
-    )
-}
-
 const getData = (
     navigator: ArticleNavigator,
     currentArticle: PathToArticle,
@@ -145,6 +59,41 @@ const getData = (
     if (startingPoint < 0) return { isInScroller: false, startingPoint: 0 }
     return { startingPoint, isInScroller: true }
 }
+
+const styles = StyleSheet.create({
+    slider: {
+        paddingVertical: metrics.vertical,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: color.background,
+    },
+    innerSlider: {
+        width: '100%',
+        flexShrink: 0,
+        flexGrow: 1,
+    },
+    sliderBorder: {
+        borderBottomColor: color.line,
+    },
+})
+
+const ArticleScreenLoginOverlay = ({
+    navigation,
+    children,
+}: {
+    navigation: NavigationScreenProp<{}, ArticleNavigationProps>
+    children: ReactNode
+}) => (
+    <LoginOverlay
+        isFocused={() => navigation.isFocused()}
+        onLoginPress={() => navigation.navigate(routeNames.SignIn)}
+        onOpenCASLogin={() => navigation.navigate(routeNames.CasSignIn)}
+        onDismiss={() => navigation.goBack()}
+    >
+        {children}
+    </LoginOverlay>
+)
 
 const ArticleScreenWithProps = ({
     path,
@@ -164,6 +113,7 @@ const ArticleScreenWithProps = ({
     const [current, setCurrent] = useState(startingPoint)
 
     const { width } = useDimensions()
+    const flatListRef = useRef<AnimatedFlatListRef | undefined>()
 
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
@@ -173,8 +123,18 @@ const ArticleScreenWithProps = ({
         outputRange: [0, 1],
     })
 
+    useEffect(() => {
+        flatListRef.current &&
+            flatListRef.current._component.scrollToIndex({
+                index: current,
+                animated: false,
+            })
+    }, [width])
+
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
+
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
     return (
         <ClipFromTop
@@ -188,61 +148,57 @@ const ArticleScreenWithProps = ({
                     enabled={false}
                     onDismiss={() => navigation.goBack()}
                 >
-                    <LoginOverlay
-                        isFocused={() => navigation.isFocused()}
-                        onLoginPress={() =>
-                            navigation.navigate(routeNames.SignIn)
-                        }
-                        onOpenCASLogin={() =>
-                            navigation.navigate(routeNames.CasSignIn)
-                        }
-                        onDismiss={() => navigation.goBack()}
-                    >
-                        <WithBreakpoints>
-                            {{
-                                0: ({ width }) => (
-                                    <ArticleScreenBody
-                                        path={path}
-                                        width={width}
-                                        pillar={pillar}
-                                        onTopPositionChange={() => {}}
-                                        previewNotice={previewNotice}
-                                    />
-                                ),
-                            }}
-                        </WithBreakpoints>
-                    </LoginOverlay>
+                    <ArticleScreenLoginOverlay navigation={navigation}>
+                        <ArticleScreenBody
+                            path={path}
+                            width={width}
+                            pillar={pillar}
+                            onTopPositionChange={() => {}}
+                            previewNotice={previewNotice}
+                        />
+                    </ArticleScreenLoginOverlay>
                 </SlideCard>
             ) : (
                 <SlideCard
                     enabled={articleIsAtTop}
                     onDismiss={() => navigation.goBack()}
                 >
-                    <LoginOverlay
-                        isFocused={() => navigation.isFocused()}
-                        onLoginPress={() =>
-                            navigation.navigate(routeNames.SignIn)
-                        }
-                        onOpenCASLogin={() =>
-                            navigation.navigate(routeNames.CasSignIn)
-                        }
-                        onDismiss={() => navigation.goBack()}
-                    >
-                        <View
-                            style={{
-                                padding: metrics.vertical,
-                                justifyContent: 'center',
-                                alignItems: 'stretch',
-                            }}
-                        >
-                            <Navigator
-                                title={articleNavigator.frontName.slice(0, 1)}
-                                fill={getColor(articleNavigator.appearance)}
-                                stops={2}
-                                position={sliderPos}
-                            />
-                        </View>
+                    <ArticleScreenLoginOverlay navigation={navigation}>
+                        <Fader position="article">
+                            <View
+                                style={[
+                                    styles.slider,
+                                    !articleIsAtTop && styles.sliderBorder,
+                                ]}
+                            >
+                                <MaxWidthWrap>
+                                    <View
+                                        style={[
+                                            styles.innerSlider,
+                                            isTablet && {
+                                                marginHorizontal:
+                                                    metrics.fronts
+                                                        .sliderRadius * -0.8,
+                                            },
+                                        ]}
+                                    >
+                                        <Slider
+                                            small
+                                            title={articleNavigator.frontName}
+                                            fill={getColor(
+                                                articleNavigator.appearance,
+                                            )}
+                                            stops={2}
+                                            position={sliderPos}
+                                        />
+                                    </View>
+                                </MaxWidthWrap>
+                            </View>
+                        </Fader>
                         <Animated.FlatList
+                            ref={(flatList: AnimatedFlatListRef) =>
+                                (flatListRef.current = flatList)
+                            }
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}
                             scrollEventThrottle={1}
@@ -289,7 +245,7 @@ const ArticleScreenWithProps = ({
                                 />
                             )}
                         />
-                    </LoginOverlay>
+                    </ArticleScreenLoginOverlay>
                 </SlideCard>
             )}
         </ClipFromTop>

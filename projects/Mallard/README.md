@@ -30,7 +30,7 @@ The following guides allow you to run the app locally on device emulators, or on
 
 If you're starting from scratch, we recommend starting out with Android Studio because it takes less time to download.
 
-## Using
+## Usage
 
 ### Android
 

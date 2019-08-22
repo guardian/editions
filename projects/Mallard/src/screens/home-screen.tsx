@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, View } from 'react-native'
+import { View } from 'react-native'
 import {
     NavigationEvents,
     NavigationInjectedProps,
@@ -97,18 +97,6 @@ const IssueList = withNavigation(
                     data={issueList}
                     renderItem={({ item }) => (
                         <IssueRow
-                            proxy={
-                                <Button
-                                    onPress={() => {
-                                        Alert.alert(
-                                            'Sorry, downloading is not supported yet',
-                                        )
-                                    }}
-                                    icon={'\uE077'}
-                                    alt={'Download'}
-                                    appearance={ButtonAppearance.skeleton}
-                                ></Button>
-                            }
                             onPress={() => {
                                 navigateToIssue(navigation, {
                                     path: {
@@ -117,7 +105,7 @@ const IssueList = withNavigation(
                                 })
                             }}
                             issue={item}
-                        ></IssueRow>
+                        />
                     )}
                 />
                 {isUsingProdDevtools ? (
