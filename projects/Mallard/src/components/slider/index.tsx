@@ -42,7 +42,7 @@ const Slider = ({
     onScrub,
     onReleaseScrub,
 }: {
-    small: boolean
+    small?: boolean
     title: string
     fill: string
     stops: number
