@@ -12,7 +12,11 @@ import { RootNavigator } from 'src/navigation'
 import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal } from './components/modal'
-import { prepFileSystem, clearOldIssues } from './helpers/files'
+import {
+    prepFileSystem,
+    clearOldIssues,
+    downloadTodaysIssue,
+} from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 
@@ -20,6 +24,7 @@ useScreens()
 prepFileSystem()
 pushNotifcationRegistration()
 clearOldIssues()
+downloadTodaysIssue()
 
 const styles = StyleSheet.create({
     appContainer: {

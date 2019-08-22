@@ -4,7 +4,9 @@ import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { ImageSize } from '../../../common/src'
 import { defaultSettings } from './settings/defaults'
-import { lastSevenDays } from './issues'
+import { lastSevenDays, todayAsFolder } from './issues'
+import { imageForScreenSize } from './screen'
+import { isRemoteZipAvailable } from './fetch'
 
 interface BasicFile {
     filename: string
@@ -293,4 +295,15 @@ export const clearOldIssues = async () => {
         issue => !lastSevenDays().includes(issue),
     )
     issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
+}
+
+export const downloadTodaysIssue = async () => {
+    const todaysKey = todayAsFolder()
+    const isTodaysIssueOnDevice = await isIssueOnDevice(todaysKey)
+    if (!isTodaysIssueOnDevice) {
+        const isValidIssue = await isRemoteZipAvailable(todaysKey)
+        if (isValidIssue) {
+            downloadAndUnzipIssue(todaysKey, imageForScreenSize())
+        }
+    }
 }

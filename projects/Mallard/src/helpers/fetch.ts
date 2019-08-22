@@ -11,6 +11,7 @@ import {
 } from './fetch/cached-or-promise'
 import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
+import { defaultSettings } from './settings/defaults'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -212,9 +213,24 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
         .catch(e => console.log('Error', JSON.stringify(e)))
 }
 
+const isUrlAvailable = async (url: string): Promise<boolean> => {
+    try {
+        const response = await fetch(url, {
+            method: 'HEAD',
+        })
+        return response.status === 200 && true
+    } catch (error) {
+        return false
+    }
+}
+
+const isRemoteZipAvailable = async (issue: string): Promise<boolean> =>
+    await isUrlAvailable(`${defaultSettings.zipUrl}${issue}.zip`)
+
 export {
     fetchFromIssue,
     fetchFromApi,
     fetchWeather,
     fetchFromNotificationService,
+    isRemoteZipAvailable,
 }
