@@ -6,6 +6,7 @@ import { OpinionHeader } from './opinion-header'
 import { ReviewHeader } from './review-header'
 import { ImmersiveHeader } from './immersive-header'
 import { ArticleHeaderProps } from './types'
+import { ObituaryHeader } from './obituary-header'
 
 type HeaderT = (props: ArticleHeaderProps) => JSX.Element
 
@@ -16,6 +17,7 @@ const headers: {
     [ArticleType.Opinion]: OpinionHeader,
     [ArticleType.Review]: ReviewHeader,
     [ArticleType.Longread]: LongReadHeader,
+    [ArticleType.Obituary]: ObituaryHeader,
 }
 
 const ArticleHeader = ({

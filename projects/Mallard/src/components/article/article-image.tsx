@@ -44,12 +44,17 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
     )
 }
 
-const CoverImage = ({ ...props }: Omit<PropTypes, 'style' | 'aspectRatio'>) => {
-    const { height } = useDimensions()
+const CoverImage = ({
+    small,
+    ...props
+}: Omit<PropTypes, 'style' | 'aspectRatio'> & { small: boolean }) => {
     return (
         <ArticleImage
             {...props}
-            style={{ width: '100%', height: height * 0.75 }}
+            aspectRatio={small ? 1.18 : 0.95}
+            style={{
+                width: '100%',
+            }}
         />
     )
 }
