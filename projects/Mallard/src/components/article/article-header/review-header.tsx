@@ -9,7 +9,7 @@ import { ArticleHeadline } from '../article-headline'
 import { ArticleImage } from '../article-image'
 import { ArticleKicker } from '../article-kicker/normal-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
-import { MultilineWrap } from '../wrap/wrap'
+import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
 
 const ArticleFader = getFader('article')

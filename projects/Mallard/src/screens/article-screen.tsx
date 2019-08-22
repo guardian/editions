@@ -69,6 +69,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: color.background,
     },
+    innerSlider: {
+        width: '100%',
+        flexShrink: 0,
+        flexGrow: 1,
+    },
     sliderBorder: {
         borderBottomColor: color.line,
     },
@@ -169,14 +174,14 @@ const ArticleScreenWithProps = ({
                             >
                                 <MaxWidthWrap>
                                     <View
-                                        style={{
-                                            width: '100%',
-                                            marginHorizontal:
-                                                metrics.fronts.sliderRadius *
-                                                -0.8,
-                                            flexShrink: 0,
-                                            flexGrow: 1,
-                                        }}
+                                        style={[
+                                            styles.innerSlider,
+                                            isTablet && {
+                                                marginHorizontal:
+                                                    metrics.fronts
+                                                        .sliderRadius * -0.8,
+                                            },
+                                        ]}
                                     >
                                         <Slider
                                             small

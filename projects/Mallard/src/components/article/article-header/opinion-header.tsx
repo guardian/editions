@@ -10,7 +10,7 @@ import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { getFader } from 'src/components/layout/animators/fader'
-import { MultilineWrap } from '../wrap/wrap'
+import { MultilineWrap } from '../wrap/multiline-wrap'
 
 const ArticleFader = getFader('article')
 

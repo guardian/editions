@@ -8,7 +8,7 @@ import { ArticleHeaderProps } from './types'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { getFader } from 'src/components/layout/animators/fader'
-import { MultilineWrap } from '../wrap/wrap'
+import { MultilineWrap } from '../wrap/multiline-wrap'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
 

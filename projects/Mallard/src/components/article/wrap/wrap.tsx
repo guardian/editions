@@ -1,13 +1,10 @@
-import React, { ReactNode, ReactElement } from 'react'
-import { View, ViewStyle, StyleProp, StyleSheet, Text } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
-import { Breakpoints, getClosestBreakpoint } from 'src/theme/breakpoints'
-import { getFader } from 'src/components/layout/animators/fader'
-import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
-import { getFont } from 'src/theme/typography'
-import { Multiline } from 'src/components/multiline'
+import React, { ReactNode } from 'react'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
 import { MaxWidthWrap } from './max-width'
 
 export enum WrapLayout {
@@ -39,7 +36,7 @@ interface ThreeColumnWrapperPropTypes
     ) => ReactNode
 }
 
-interface WrapperPropTypes
+export interface WrapperPropTypes
     extends Exclude<ThreeColumnWrapperPropTypes, 'landscape'> {
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
@@ -56,53 +53,11 @@ const contentWrapStyles = StyleSheet.create({
 const ContentWrapper = ({
     tablet,
     style,
-    topOffset,
     backgroundColor,
     ...children
 }: ContentWrapperPropTypes) => {
-    const useMobileTopOffset = !!topOffset && !tablet
-    const useTabletTopOffset = !!topOffset && tablet
     return (
-        <View
-            style={[
-                contentWrapStyles.root,
-                { backgroundColor },
-                useMobileTopOffset && {
-                    marginTop: (topOffset || 0) * -1,
-                    marginRight: metrics.article.sidesTablet,
-                    width: 'auto',
-                },
-            ]}
-        >
-            {useMobileTopOffset && (
-                <View
-                    {...ariaHidden}
-                    style={[
-                        StyleSheet.absoluteFill,
-                        {
-                            backgroundColor,
-                            right: '-10%',
-                            top: topOffset || 0,
-                        },
-                    ]}
-                ></View>
-            )}
-            {(useTabletTopOffset || useMobileTopOffset) && (
-                <View
-                    {...ariaHidden}
-                    style={[
-                        StyleSheet.absoluteFill,
-                        {
-                            backgroundColor,
-                            left: '-100%',
-                            right: useTabletTopOffset
-                                ? metrics.article.railPaddingLeft * -1
-                                : 0,
-                            top: 0,
-                        },
-                    ]}
-                ></View>
-            )}
+        <View style={[contentWrapStyles.root, { backgroundColor }]}>
             {children.header && (
                 <MaxWidthWrap invert>{children.header}</MaxWidthWrap>
             )}
@@ -143,24 +98,14 @@ const threeColWrapStyles = StyleSheet.create({
 const ThreeColumnWrapper = ({
     borderColor,
     rightRail,
-    topOffset,
     backgroundColor,
     ...innerProps
 }: ThreeColumnWrapperPropTypes) => {
     return (
         <View style={threeColWrapStyles.root}>
-            <View
-                style={[
-                    threeColWrapStyles.content,
-                    !!topOffset && {
-                        marginTop: topOffset * -1,
-                        backgroundColor,
-                    },
-                ]}
-            >
+            <View style={[threeColWrapStyles.content]}>
                 <ContentWrapper
                     backgroundColor={backgroundColor}
-                    topOffset={topOffset}
                     tablet
                     {...innerProps}
                 />
@@ -190,7 +135,7 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     if (!isTablet) {
         return (
-            <View style={!props.topOffset && { backgroundColor }}>
+            <View style={{ backgroundColor }}>
                 <MaxWidthWrap>
                     <ContentWrapper
                         {...props}
@@ -218,64 +163,4 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
     )
 }
 
-const ArticleFader = getFader('article')
-const multiStyles = StyleSheet.create({
-    byline: {
-        paddingBottom: metrics.vertical,
-        paddingTop: metrics.vertical / 6,
-        minHeight: getFont('text', 1).lineHeight * 2.75,
-    },
-    paddingTop: {
-        paddingTop: metrics.vertical,
-    },
-    bylineBorder: {
-        borderBottomColor: color.dimLine,
-        borderBottomWidth: 1,
-    },
-    topBorder: {
-        height: StyleSheet.hairlineWidth,
-        width: '100%',
-        backgroundColor: color.line,
-    },
-})
-
-const MultilineWrap = ({
-    byline,
-    needsTopPadding = false,
-    multilineColor = color.line,
-    ...props
-}: Exclude<WrapperPropTypes, 'header' | 'style' | 'footer'> & {
-    needsTopPadding?: boolean
-    byline: ReactNode
-    multilineColor?: string
-}) => (
-    <>
-        {needsTopPadding && (
-            <View {...ariaHidden} style={[multiStyles.topBorder]}></View>
-        )}
-        <Wrap {...props} style={[needsTopPadding && multiStyles.paddingTop]} />
-        {byline && (
-            <Wrap
-                backgroundColor={props.backgroundColor}
-                borderColor={props.borderColor}
-                style={[multiStyles.byline]}
-                header={
-                    <ArticleFader>
-                        <Multiline count={4} color={multilineColor} />
-                    </ArticleFader>
-                }
-                footer={
-                    !props.backgroundColor && (
-                        <ArticleFader>
-                            <View style={multiStyles.bylineBorder} />
-                        </ArticleFader>
-                    )
-                }
-            >
-                <ArticleFader>{byline}</ArticleFader>
-            </Wrap>
-        )}
-    </>
-)
-
-export { Wrap, MultilineWrap }
+export { Wrap }
