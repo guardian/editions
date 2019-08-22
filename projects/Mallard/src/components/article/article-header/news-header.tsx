@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
     byline: { marginBottom: metrics.vertical },
     standfirst: {
         flex: 0,
-        marginTop: metrics.vertical * 4,
-        marginBottom: metrics.vertical,
         width: '100%',
     },
 })

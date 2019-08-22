@@ -47,7 +47,7 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
 const CoverImage = ({
     small,
     ...props
-}: Omit<PropTypes, 'style' | 'aspectRatio'> & { small: boolean }) => {
+}: Omit<PropTypes, 'style' | 'aspectRatio'> & { small?: boolean }) => {
     return (
         <ArticleImage
             {...props}

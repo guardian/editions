@@ -13,6 +13,7 @@ import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
 import { ArticleHeaderProps } from './types'
 import { Grayscale, MultiplyBlendColor } from 'react-native-image-filter-kit'
+import { ArticleHeadline } from '../article-headline'
 
 const styles = StyleSheet.create({
     kicker: {
@@ -32,9 +33,6 @@ const styles = StyleSheet.create({
     },
     headline: {
         fontFamily: getFont('titlepiece', 1).fontFamily,
-        marginTop: metrics.vertical / 2,
-        marginBottom: metrics.vertical * 3.5,
-        marginRight: metrics.horizontal * 4,
     },
 })
 
@@ -66,14 +64,20 @@ const ObituaryHeader = ({
                     topOffset={getFont('titlepiece', 1).lineHeight * 4}
                 >
                     <HeadlineTypeWrap>
-                        <HeadlineText
-                            style={[styles.headline, { color: colors.dark }]}
+                        <ArticleHeadline
+                            weight={'titlepiece'}
+                            textStyle={[
+                                styles.headline,
+                                {
+                                    color: colors.dark,
+                                },
+                            ]}
                         >
                             {headline}
-                        </HeadlineText>
+                        </ArticleHeadline>
                         <ArticleStandfirst
                             standfirst={standfirst}
-                            textStyle={[{ marginBottom: metrics.vertical * 2 }]}
+                            bold
                         ></ArticleStandfirst>
                     </HeadlineTypeWrap>
                 </LeftSideBleed>

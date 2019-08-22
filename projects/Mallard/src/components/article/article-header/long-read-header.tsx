@@ -14,6 +14,7 @@ import { LeftSideBleed } from '../wrap/left-side-bleed'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
 import { ArticleHeaderProps } from './types'
+import { ArticleHeadline } from '../article-headline'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },
@@ -31,12 +32,6 @@ const styles = StyleSheet.create({
     kickerHolder: {
         flexDirection: 'column',
         alignItems: 'flex-start',
-    },
-    headline: {
-        fontFamily: getFont('titlepiece', 1).fontFamily,
-        marginTop: metrics.vertical / 2,
-        marginBottom: metrics.vertical * 3.5,
-        marginRight: metrics.horizontal * 4,
     },
 })
 
@@ -70,21 +65,16 @@ const LongReadHeader = ({
                         {kicker ? (
                             <HangyTagKicker>{kicker}</HangyTagKicker>
                         ) : null}
-                        <HeadlineText
-                            style={[styles.whiteText, styles.headline]}
+                        <ArticleHeadline
+                            weight={'titlepiece'}
+                            textStyle={[styles.whiteText]}
                         >
                             {headline}
-                        </HeadlineText>
+                        </ArticleHeadline>
                         <ArticleStandfirst
                             standfirst={standfirst}
-                            textStyle={[
-                                styles.whiteText,
-                                { marginBottom: metrics.vertical * 2 },
-                                isTablet && {
-                                    fontFamily: getFont('headline', 1, 'bold')
-                                        .fontFamily,
-                                },
-                            ]}
+                            bold
+                            textStyle={[styles.whiteText]}
                         ></ArticleStandfirst>
                     </HeadlineTypeWrap>
                 </LeftSideBleed>
