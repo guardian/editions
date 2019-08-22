@@ -171,6 +171,9 @@ const ArticleScreenWithProps = ({
                                     <View
                                         style={{
                                             width: '100%',
+                                            marginHorizontal:
+                                                metrics.fronts.sliderRadius *
+                                                -0.8,
                                             flexShrink: 0,
                                             flexGrow: 1,
                                         }}
