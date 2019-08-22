@@ -19,7 +19,7 @@ import { pushNotifcationRegistration } from './helpers/push-notifications'
 useScreens()
 prepFileSystem()
 pushNotifcationRegistration()
-clearPastSevenDaysIssues();
+clearPastSevenDaysIssues()
 
 const styles = StyleSheet.create({
     appContainer: {

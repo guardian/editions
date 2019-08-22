@@ -4,7 +4,7 @@ import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { ImageSize } from '../../../common/src'
 import { defaultSettings } from './settings/defaults'
-import { lastSevenDays } from './issues';
+import { lastSevenDays } from './issues'
 
 interface BasicFile {
     filename: string
@@ -285,11 +285,12 @@ export const downloadAndUnzipIssue = (
         })
 }
 
-
 export const clearPastSevenDaysIssues = async () => {
-    const files = await getFileList();
-    const availableIssues = files.filter(file => file.type === 'issue');
-    const availableIssuesAsKeys = availableIssues.map(issue => issue.filename);
-    const issuesToDelete = availableIssuesAsKeys.filter(issue => !lastSevenDays().includes(issue))
-    issuesToDelete.map(issue =>  RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
+    const files = await getFileList()
+    const availableIssues = files.filter(file => file.type === 'issue')
+    const availableIssuesAsKeys = availableIssues.map(issue => issue.filename)
+    const issuesToDelete = availableIssuesAsKeys.filter(
+        issue => !lastSevenDays().includes(issue),
+    )
+    issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
 }
