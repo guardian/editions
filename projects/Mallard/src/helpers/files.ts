@@ -285,7 +285,7 @@ export const downloadAndUnzipIssue = (
         })
 }
 
-export const clearPastSevenDaysIssues = async () => {
+export const clearOldIssues = async () => {
     const files = await getFileList()
     const availableIssues = files.filter(file => file.type === 'issue')
     const availableIssuesAsKeys = availableIssues.map(issue => issue.filename)
