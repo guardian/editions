@@ -154,6 +154,7 @@ const CollectionPage = ({
                                 issue,
                                 front,
                             }}
+                            issueID={issue}
                             size={size}
                             articleNavigator={articleNavigator}
                             article={article}

@@ -1,6 +1,8 @@
 import PushNotification from 'react-native-push-notification'
-import { Alert } from 'react-native'
+import { PushNotificationIOS, Platform } from 'react-native'
 import { fetchFromNotificationService } from 'src/helpers/fetch'
+import { downloadAndUnzipIssue } from 'src/helpers/files'
+import { imageForScreenSize } from 'src/helpers/screen'
 
 const pushNotifcationRegistration = () =>
     PushNotification.configure({
@@ -10,11 +12,15 @@ const pushNotifcationRegistration = () =>
             }
         },
         onNotification: (notification: any) => {
-            Alert.alert('NOTIFICATION:', JSON.stringify(notification))
-            // Process the silent notification here
+            const key =
+                Platform.OS === 'ios' ? notification.data.key : notification.key
+            if (key) {
+                const screenSize = imageForScreenSize()
+                downloadAndUnzipIssue(key, screenSize)
+            }
 
             // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-            // notification.finish(PushNotificationIOS.FetchResult.NoData)
+            notification.finish(PushNotificationIOS.FetchResult.NoData)
         },
         senderID: '43377569438',
         permissions: {
