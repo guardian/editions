@@ -65,7 +65,7 @@ const ModalOpener = ({
             if (!isOpenRef.current && isFocused()) {
                 open(renderModalRef.current)
             }
-        }, 7000)
+        }, 3000)
         return () => clearTimeout(id)
     }, [isFocused, isOpenRef, open, renderModalRef])
 

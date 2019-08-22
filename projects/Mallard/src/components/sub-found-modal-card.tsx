@@ -1,5 +1,6 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
+import { ModalButton } from './modal-button'
 
 const SubFoundModalCard = ({ close }: { close: () => void }) => (
     <OnboardingCard
@@ -7,14 +8,15 @@ const SubFoundModalCard = ({ close }: { close: () => void }) => (
         subtitle="Enjoy the Guardian and thank you for your support"
         appearance={CardAppearance.blue}
         size="small"
-        mainActions={[
-            {
-                label: 'Close',
-                onPress: () => {
+        bottomContent={
+            <ModalButton
+                onPress={() => {
                     close()
-                },
-            },
-        ]}
+                }}
+            >
+                Close
+            </ModalButton>
+        }
     />
 )
 
