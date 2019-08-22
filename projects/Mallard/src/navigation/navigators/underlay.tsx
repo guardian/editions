@@ -56,7 +56,7 @@ const addStaticRouterWithOverlay: NavigatorWrapper = (
 }
 
 const createUnderlayNavigator = (
-    top: NavigationContainer,
+    top: NavigationRouteConfig,
     bottom: {
         [name: string]: NavigationRouteConfig
     },

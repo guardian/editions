@@ -34,6 +34,7 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
+import { createArticleNavigator } from './navigators/article'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -57,6 +58,7 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
 
 const AppStack = createModalNavigator(
     createUnderlayNavigator(
+        /*
         createStackNavigator(
             {
                 [routeNames.Issue]: IssueScreen,
@@ -77,6 +79,10 @@ const AppStack = createModalNavigator(
                 },
             },
         ),
+        */
+        createArticleNavigator(IssueScreen, {
+            [routeNames.Article]: ArticleScreen,
+        }),
         {
             [routeNames.IssueList]: HomeScreen,
         },

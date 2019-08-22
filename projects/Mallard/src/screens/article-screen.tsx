@@ -6,7 +6,6 @@ import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { Fader } from 'src/components/layout/animators/fader'
-import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { Slider } from 'src/components/slider'
@@ -95,6 +94,8 @@ const ArticleScreenLoginOverlay = ({
     </LoginOverlay>
 )
 
+const SlideCard = ({ children }) => children
+
 const ArticleScreenWithProps = ({
     path,
     articleNavigator,
@@ -136,119 +137,102 @@ const ArticleScreenWithProps = ({
 
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
-    return (
-        <ClipFromTop
-            easing={navigationPosition && navigationPosition.position}
-            from={
-                transitionProps && transitionProps.startAtHeightFromFrontsItem
-            }
+    return prefersFullScreen ? (
+        <SlideCard enabled={false} onDismiss={() => navigation.goBack()}>
+            <ArticleScreenLoginOverlay navigation={navigation}>
+                <ArticleScreenBody
+                    path={path}
+                    width={width}
+                    pillar={pillar}
+                    onTopPositionChange={() => {}}
+                    previewNotice={previewNotice}
+                />
+            </ArticleScreenLoginOverlay>
+        </SlideCard>
+    ) : (
+        <SlideCard
+            enabled={articleIsAtTop}
+            onDismiss={() => navigation.goBack()}
         >
-            {prefersFullScreen ? (
-                <SlideCard
-                    enabled={false}
-                    onDismiss={() => navigation.goBack()}
-                >
-                    <ArticleScreenLoginOverlay navigation={navigation}>
-                        <ArticleScreenBody
-                            path={path}
-                            width={width}
-                            pillar={pillar}
-                            onTopPositionChange={() => {}}
-                            previewNotice={previewNotice}
-                        />
-                    </ArticleScreenLoginOverlay>
-                </SlideCard>
-            ) : (
-                <SlideCard
-                    enabled={articleIsAtTop}
-                    onDismiss={() => navigation.goBack()}
-                >
-                    <ArticleScreenLoginOverlay navigation={navigation}>
-                        <Fader position="article">
+            <ArticleScreenLoginOverlay navigation={navigation}>
+                <Fader position="article">
+                    <View
+                        style={[
+                            styles.slider,
+                            !articleIsAtTop && styles.sliderBorder,
+                        ]}
+                    >
+                        <MaxWidthWrap>
                             <View
                                 style={[
-                                    styles.slider,
-                                    !articleIsAtTop && styles.sliderBorder,
+                                    styles.innerSlider,
+                                    isTablet && {
+                                        marginHorizontal:
+                                            metrics.fronts.sliderRadius * -0.8,
+                                    },
                                 ]}
                             >
-                                <MaxWidthWrap>
-                                    <View
-                                        style={[
-                                            styles.innerSlider,
-                                            isTablet && {
-                                                marginHorizontal:
-                                                    metrics.fronts
-                                                        .sliderRadius * -0.8,
-                                            },
-                                        ]}
-                                    >
-                                        <Slider
-                                            small
-                                            title={articleNavigator.frontName}
-                                            fill={getColor(
-                                                articleNavigator.appearance,
-                                            )}
-                                            stops={2}
-                                            position={sliderPos}
-                                        />
-                                    </View>
-                                </MaxWidthWrap>
-                            </View>
-                        </Fader>
-                        <Animated.FlatList
-                            ref={(flatList: AnimatedFlatListRef) =>
-                                (flatListRef.current = flatList)
-                            }
-                            showsHorizontalScrollIndicator={false}
-                            showsVerticalScrollIndicator={false}
-                            scrollEventThrottle={1}
-                            onScroll={(ev: any) => {
-                                setCurrent(
-                                    Math.floor(
-                                        ev.nativeEvent.contentOffset.x / width,
-                                    ),
-                                )
-                            }}
-                            maxToRenderPerBatch={1}
-                            windowSize={3}
-                            initialNumToRender={1}
-                            horizontal={true}
-                            initialScrollIndex={startingPoint}
-                            pagingEnabled
-                            getItemLayout={(_: never, index: number) => ({
-                                length: width,
-                                offset: width * index,
-                                index,
-                            })}
-                            keyExtractor={(
-                                item: ArticleNavigator['articles'][0],
-                            ) => item.article}
-                            data={
-                                isInScroller
-                                    ? articleNavigator.articles
-                                    : [path, ...articleNavigator.articles]
-                            }
-                            renderItem={({
-                                item,
-                            }: {
-                                item: ArticleNavigator['articles'][0]
-                                index: number
-                            }) => (
-                                <ArticleScreenBody
-                                    width={width}
-                                    path={item}
-                                    pillar={pillar}
-                                    onTopPositionChange={isAtTop => {
-                                        setArticleIsAtTop(isAtTop)
-                                    }}
-                                    previewNotice={previewNotice}
+                                <Slider
+                                    small
+                                    title={articleNavigator.frontName}
+                                    fill={getColor(articleNavigator.appearance)}
+                                    stops={2}
+                                    position={sliderPos}
                                 />
-                            )}
+                            </View>
+                        </MaxWidthWrap>
+                    </View>
+                </Fader>
+                <Animated.FlatList
+                    ref={(flatList: AnimatedFlatListRef) =>
+                        (flatListRef.current = flatList)
+                    }
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    scrollEventThrottle={1}
+                    onScroll={(ev: any) => {
+                        setCurrent(
+                            Math.floor(ev.nativeEvent.contentOffset.x / width),
+                        )
+                    }}
+                    maxToRenderPerBatch={1}
+                    windowSize={3}
+                    initialNumToRender={1}
+                    horizontal={true}
+                    initialScrollIndex={startingPoint}
+                    pagingEnabled
+                    getItemLayout={(_: never, index: number) => ({
+                        length: width,
+                        offset: width * index,
+                        index,
+                    })}
+                    keyExtractor={(item: ArticleNavigator['articles'][0]) =>
+                        item.article
+                    }
+                    data={
+                        isInScroller
+                            ? articleNavigator.articles
+                            : [path, ...articleNavigator.articles]
+                    }
+                    renderItem={({
+                        item,
+                    }: {
+                        item: ArticleNavigator['articles'][0]
+                        index: number
+                    }) => (
+                        <ArticleScreenBody
+                            width={width}
+                            path={item}
+                            pillar={pillar}
+                            onTopPositionChange={isAtTop => {
+                                setArticleIsAtTop(isAtTop)
+                            }}
+                            previewNotice={previewNotice}
                         />
-                    </ArticleScreenLoginOverlay>
-                </SlideCard>
-            )}
-        </ClipFromTop>
+                    )}
+                />
+            </ArticleScreenLoginOverlay>
+        </SlideCard>
     )
 }
 

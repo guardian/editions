@@ -14,9 +14,6 @@ const styles = StyleSheet.create({
         flex: 0,
         flexShrink: 0,
         height: '100%',
-        backgroundColor: color.background,
-        borderTopLeftRadius: metrics.radius,
-        borderTopRightRadius: metrics.radius,
         overflow: 'hidden',
     },
     flexGrow: {
