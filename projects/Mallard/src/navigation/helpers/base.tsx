@@ -7,6 +7,7 @@ import {
 import { routeNames } from 'src/navigation/routes'
 import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
 import { PathToIssue } from 'src/screens/issue-screen'
+import { Issue } from '../../../../common/src'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
 export const addStaticRouter = (
@@ -84,6 +85,7 @@ const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
 
 export interface IssueNavigationProps {
     path?: PathToIssue
+    issue?: Issue
 }
 const navigateToIssue = (
     navigation: NavigationScreenProp<{}>,

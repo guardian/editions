@@ -1,11 +1,7 @@
-import React, { useState } from 'react'
-import { FSPaths, APIPaths } from 'src/paths'
+import React from 'react'
 import { Image as IImage } from '../../../../common/src'
 import { Image, StyleProp, ImageStyle } from 'react-native'
-import { imageForScreenSize } from 'src/helpers/screen'
-
-// get the tail of an array, use in setPath, to move on to the next path after an error
-const tail = <T extends any>([, ...next]: T[]): T[] => next
+import { useImagePath } from 'src/hooks/use-image-paths'
 
 /**
  * This component abstracts away the endpoint for images
@@ -17,33 +13,15 @@ const tail = <T extends any>([, ...next]: T[]): T[] => next
  * as this implementation for API calls and seems slower for cache hits
  */
 const ImageResource = ({
-    issueID,
-    image: { source, path },
+    image,
     style,
 }: {
-    issueID: string
     image: IImage
     style?: StyleProp<ImageStyle>
 }) => {
-    const [paths, setPaths] = useState([
-        FSPaths.media(issueID, source, path),
-        `${APIPaths.mediaBackend}${APIPaths.media(
-            issueID,
-            imageForScreenSize(),
-            source,
-            path,
-        )}`,
-    ])
+    const path = useImagePath(image)
 
-    const handleError = () => setPaths(tail)
-
-    // this might be undefined if the API errors
-    // this is sort of fine but may want to handle this better
-    const currPath = paths[0]
-
-    return (
-        <Image style={style} source={{ uri: currPath }} onError={handleError} />
-    )
+    return <Image style={style} source={{ uri: path }} />
 }
 
 export { ImageResource }
