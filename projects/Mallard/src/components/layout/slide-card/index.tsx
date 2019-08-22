@@ -48,7 +48,7 @@ export const SlideCard = ({
         onMoveShouldSetPanResponder: (ev, gestureState) => {
             if (gestureState.dy > 10) {
                 blocked = true
-                if (gestureState.vy > 1) {
+                if (enabled && gestureState.vy > 1) {
                     blocked = false
                     onDismiss()
                     scrollY.stopAnimation()
@@ -66,7 +66,7 @@ export const SlideCard = ({
         ]),
         onPanResponderEnd: (ev, gestureState) => {
             blocked = false
-            if (gestureState.dy > 400) {
+            if (gestureState.dy > 50) {
                 onDismiss()
                 scrollY.stopAnimation()
                 return
@@ -96,14 +96,13 @@ export const SlideCard = ({
                 },
             ]}
         >
-            <Header
-                {...{
-                    scrollY,
-                    onDismiss,
-                }}
-            />
-
             <View {...panResponder.panHandlers} style={[{ flex: 1 }]}>
+                <Header
+                    {...{
+                        scrollY,
+                        onDismiss,
+                    }}
+                />
                 {children}
             </View>
         </Animated.View>
