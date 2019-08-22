@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { LongReadHeader, NewsHeader, OpinionHeader } from './article-header'
+import { ArticleHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
 import { PropTypes as StandfirstPropTypes } from './article-standfirst'
 import { BlockElement } from 'src/common'
@@ -14,7 +14,6 @@ import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
-import { ReviewHeader } from './article-header/review-header'
 import { Wrap } from './wrap/wrap'
 
 /*
@@ -74,15 +73,7 @@ const Article = ({
     return (
         <View style={styles.container}>
             <Fader first position={'article'} />
-            {type === 'opinion' ? (
-                <OpinionHeader {...headerProps} />
-            ) : type === 'review' ? (
-                <ReviewHeader {...headerProps} />
-            ) : type === 'longread' ? (
-                <LongReadHeader {...headerProps} />
-            ) : (
-                <NewsHeader {...headerProps} />
-            )}
+            <ArticleHeader {...headerProps} type={type} />
             <Wrap>
                 <Fader position={'article'}>
                     <WebView
