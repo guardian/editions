@@ -21,9 +21,14 @@ import { unzipIssue } from 'src/helpers/files'
 import { useIssueSummary } from 'src/hooks/use-api'
 import { useFileList } from 'src/hooks/use-fs'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
+import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
-import { navigateToIssue, navigateToSettings } from 'src/navigation/helpers'
+import {
+    navigateToIssue,
+    navigateToSettings,
+} from 'src/navigation/helpers/base'
 import { WithAppAppearance } from 'src/theme/appearance'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 
@@ -37,8 +42,16 @@ const HomeScreenHeader = withNavigation(
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
+        const isTablet = useMediaQuery(
+            width => width >= Breakpoints.tabletVertical,
+        )
+
         const action = (
-            <Button icon="" alt="Return to issue" onPress={onReturn} />
+            <Button
+                icon={isTablet ? '' : ''}
+                alt="Return to issue"
+                onPress={onReturn}
+            />
         )
         const response = useIssueOrLatestResponse(issue)
         const settings = (

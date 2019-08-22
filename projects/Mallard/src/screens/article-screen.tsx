@@ -31,7 +31,7 @@ import {
     ArticleNavigationProps,
     ArticleRequiredNavigationProps,
     getArticleNavigationProps,
-} from 'src/navigation/helpers'
+} from 'src/navigation/helpers/base'
 import { routeNames } from 'src/navigation/routes'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -115,7 +115,12 @@ const ArticleScreenBody = ({
                             />
                         ) : null}
                         <WithArticle
-                            type={getEnumPosition(ArticleType, modifiedType)}
+                            type={
+                                isUsingProdDevtools
+                                    ? getEnumPosition(ArticleType, modifiedType)
+                                    : article.article.articleType ||
+                                      ArticleType.Article
+                            }
                             pillar={articlePillars[modifiedPillar]}
                         >
                             <ArticleController article={article.article} />

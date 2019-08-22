@@ -26,9 +26,7 @@ export enum ButtonAppearance {
     light,
 }
 
-const height =
-    getFont('sans', 1).fontSize * PixelRatio.getFontScale() +
-    metrics.vertical * 2.5
+const height = metrics.buttonHeight
 
 const styles = StyleSheet.create({
     background: {

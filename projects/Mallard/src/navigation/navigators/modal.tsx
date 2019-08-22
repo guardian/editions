@@ -10,8 +10,9 @@ import React from 'react'
 
 import { Animated } from 'react-native'
 import { ModalForTablet } from 'src/components/layout/ui/modal-for-tablet'
+import { addStaticRouter } from '../helpers/base'
 
-const wrapNavigatorWithModal = (
+const addStaticRouterWithModal = (
     Navigator: NavigationContainer,
     getPosition: () => AnimatedValue,
 ): NavigationContainer => {
@@ -22,9 +23,7 @@ const wrapNavigatorWithModal = (
             </ModalForTablet>
         )
     }
-    WithModal.router = Navigator.router
-
-    return (WithModal as unknown) as NavigationContainer
+    return addStaticRouter(Navigator, WithModal)
 }
 
 const createModalNavigator = (
@@ -37,7 +36,7 @@ const createModalNavigator = (
 
     const navigation: { [key: string]: NavigationContainer } = { _: parent }
     for (const [key, value] of Object.entries(modalRoutes)) {
-        navigation[key] = wrapNavigatorWithModal(value, () => animatedValue)
+        navigation[key] = addStaticRouterWithModal(value, () => animatedValue)
     }
 
     return createStackNavigator(navigation, {
