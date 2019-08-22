@@ -1,19 +1,19 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { HeadlineText } from 'src/components/styled-text'
-import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
+import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { ArticleByline } from '../article-byline'
-import { ArticleImage } from '../article-image'
+import { CoverImage } from '../article-image'
 import { HangyTagKicker } from '../article-kicker/tag-kicker'
 import { ArticleStandfirst } from '../article-standfirst'
 import { LeftSideBleed } from '../wrap/left-side-bleed'
 import { MultilineWrap } from '../wrap/multiline-wrap'
-import { ArticleHeaderProps } from './types'
 import { HeadlineTypeWrap } from './shared'
+import { ArticleHeaderProps } from './types'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },
@@ -47,16 +47,10 @@ const LongReadHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const { height } = useDimensions()
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <>
-            {image && (
-                <ArticleImage
-                    style={{ width: '100%', height: height * 0.8 }}
-                    image={image}
-                />
-            )}
+            {image && <CoverImage image={image} />}
 
             <MultilineWrap
                 byline={

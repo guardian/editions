@@ -6,7 +6,6 @@ import { OpinionHeader } from './opinion-header'
 import { ReviewHeader } from './review-header'
 import { ImmersiveHeader } from './immersive-header'
 import { ArticleHeaderProps } from './types'
-import { UiBodyCopy } from '../../styled-text'
 
 type HeaderT = (props: ArticleHeaderProps) => JSX.Element
 
@@ -23,10 +22,10 @@ const ArticleHeader = ({
     type,
     ...headerProps
 }: ArticleHeaderProps & { type: ArticleType }) => {
-    if (type in headers && headers[type]) {
+    if (type in headers) {
         const Header = headers[type] as HeaderT
+        return <Header {...headerProps} />
     }
-    return <UiBodyCopy>{type}</UiBodyCopy>
     return <NewsHeader {...headerProps} />
 }
 

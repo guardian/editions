@@ -1,20 +1,19 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { ArticleImage } from '../article-image'
-import { ArticleHeaderProps } from './types'
-import { ArticleByline } from '../article-byline'
+import { StyleSheet } from 'react-native'
 import { HeadlineText } from 'src/components/styled-text'
+import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
-import { MultilineWrap } from '../wrap/wrap'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import { ArticleByline } from '../article-byline'
+import { CoverImage } from '../article-image'
 import { ArticleStandfirst } from '../article-standfirst'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
-import { HangyTagKicker } from '../article-kicker/tag-kicker'
+import { LeftSideBleed } from '../wrap/left-side-bleed'
+import { MultilineWrap } from '../wrap/multiline-wrap'
+import { HeadlineTypeWrap } from './shared'
+import { ArticleHeaderProps } from './types'
 
 const styles = StyleSheet.create({
-    whiteText: { color: color.palette.neutral[100] },
     kicker: {
         color: color.palette.neutral[100],
         padding: metrics.article.sides,
@@ -42,40 +41,30 @@ const ImmersiveHeader = ({
     byline,
     headline,
     image,
-    kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const { height } = useDimensions()
-    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    const [colors] = useArticle()
     return (
         <>
-            <MultilineWrap
-                byline={
-                    <ArticleByline style={styles.whiteText}>
-                        {byline || ''}
-                    </ArticleByline>
-                }
-                topOffset={getFont('titlepiece', 1).lineHeight * 4}
-                borderColor={styles.whiteText.color}
-                backgroundColor={color.palette.neutral[7]}
-                multilineColor={styles.whiteText.color}
-            >
-                <View style={{ paddingBottom: metrics.vertical * 2 }}>
-                    {kicker ? <HangyTagKicker>{kicker}</HangyTagKicker> : null}
-                    <HeadlineText style={[styles.whiteText, styles.headline]}>
-                        {headline}
-                    </HeadlineText>
-                    <ArticleStandfirst
-                        standfirst={standfirst}
-                        textStyle={[
-                            styles.whiteText,
-                            isTablet && {
-                                fontFamily: getFont('headline', 1, 'bold')
-                                    .fontFamily,
-                            },
-                        ]}
-                    ></ArticleStandfirst>
-                </View>
+            {image && <CoverImage image={image} />}
+
+            <MultilineWrap byline={<ArticleByline>{byline}</ArticleByline>}>
+                <LeftSideBleed
+                    backgroundColor={color.palette.neutral[100]}
+                    topOffset={getFont('titlepiece', 1).lineHeight * 4}
+                >
+                    <HeadlineTypeWrap>
+                        <HeadlineText
+                            style={[styles.headline, { color: colors.dark }]}
+                        >
+                            {headline}
+                        </HeadlineText>
+                        <ArticleStandfirst
+                            standfirst={standfirst}
+                            textStyle={[{ marginBottom: metrics.vertical * 2 }]}
+                        ></ArticleStandfirst>
+                    </HeadlineTypeWrap>
+                </LeftSideBleed>
             </MultilineWrap>
         </>
     )
