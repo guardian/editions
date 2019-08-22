@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-23121112324'
+const persistenceKey = 'dev-nav-key-2321asdfa34'
 const persistNavigationState = async (navState: any) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))

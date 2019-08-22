@@ -2,6 +2,8 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { unzip } from 'react-native-zip-archive'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
+import { ImageSize } from '../../../common/src'
+import { defaultSettings } from './settings/defaults'
 
 interface BasicFile {
     filename: string
@@ -52,9 +54,7 @@ let fileListRawMemo = ''
 let fileListMemo: File[] = []
 
 export const getJson = (path: string) =>
-    RNFetchBlob.fs.readFile(path, 'utf8').then(d => {
-        return JSON.parse(d)
-    })
+    RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
 const pathToFile = (basePath: string = '') => async (
     filePath: string,
@@ -130,27 +130,18 @@ export const deleteOtherFiles = async (): Promise<void> => {
     ).then(Promise.resolve)
 }
 
-/*
-TODO: this is not the real issue url
-*/
 export const downloadIssue = (issue: File['id']) => {
+    const zipUrl = defaultSettings.zipUrl
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
-    }).fetch(
-        'GET',
-        `https://lauras-funhouse.s3.amazonaws.com/demo-issue.zip?v=1560804690298?issue=${issue}date=${Date.now()}`,
-    )
+        IOSBackgroundTask: true,
+    }).fetch('GET', `${zipUrl}${issue}.zip`)
 
     return {
         promise: returnable.then(async res => {
             await prepFileSystem()
-            await RNFetchBlob.fs.mv(
-                res.path(),
-                FSPaths.issueZip(
-                    `${Date.now()}-${Math.trunc(Math.random() * 100000)}`,
-                ),
-            )
+            await RNFetchBlob.fs.mv(res.path(), FSPaths.issueZip(issue))
             return res
         }),
         cancel: returnable.cancel,
@@ -158,18 +149,56 @@ export const downloadIssue = (issue: File['id']) => {
     }
 }
 
-export const unzipIssue = (issue: File['id']) => {
-    const zipFilePath = FSPaths.issueZip(issue)
-    const outputPath = FSPaths.issue(issue)
-    return unzip(zipFilePath, outputPath).then(() =>
-        RNFetchBlob.fs.unlink(zipFilePath),
-    )
+/**
+ * the api returns zips with folders that are named after the size of the device
+ * we're on such as `/issue/12-12-12/media/tabletXL/media...`
+ *
+ * In future, if we add new breakpoints, this cache will be invisible if we're looking
+ * for images using our new device name such as `tabletM`.
+ *
+ * This will move all images into a folder `/issue/12-12-12/media/cached/media...`
+ */
+
+const CACHED_FOLDER_NAME = 'cached'
+
+const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
+    const [sizedMediaDir] = (await RNFetchBlob.fs.ls(
+        FSPaths.mediaRoot(issueId),
+    )).filter(folder => folder !== CACHED_FOLDER_NAME) // find the first folder that isn't cached
+
+    if (!sizedMediaDir) return
+
+    const absSizedMediaDir = `${FSPaths.mediaRoot(issueId)}/${sizedMediaDir}`
+    const genericMediaDir = `${FSPaths.mediaRoot(
+        issueId,
+    )}/${CACHED_FOLDER_NAME}`
+
+    // if the file exists already, delete it and then replace it
+    // unlink doesn't throw if it did not exist so we can call it without a check
+    await RNFetchBlob.fs.unlink(genericMediaDir)
+
+    RNFetchBlob.fs.mv(absSizedMediaDir, genericMediaDir)
+}
+
+const getIssueKey = (issueId: string, imageSize?: ImageSize) =>
+    imageSize ? `${issueId}-${imageSize}` : issueId
+
+export const unzipIssue = (issueId: string, imageSize?: ImageSize) => {
+    const zipFilePath = FSPaths.issueZip(getIssueKey(issueId, imageSize))
+    const outputPath = FSPaths.issuesDir
+
+    return unzip(zipFilePath, outputPath).then(async () => {
+        if (!!imageSize) {
+            await moveSizedMediaDirToGenericMediaDir(issueId)
+        }
+        RNFetchBlob.fs.unlink(zipFilePath)
+    })
 }
 
 export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
-    (await getFileList()).find(
-        file => fileIsIssue(file) && file.issue.key === issue,
-    ) !== undefined
+    (await getFileList()).find(file => {
+        return fileIsIssue(file) && file.issue.key === issue
+    }) !== undefined
 
 /*
 Cheeky size helper
@@ -187,4 +216,70 @@ export const displayFileSize = (size: File['size']): string => {
         return (size / 1024).toFixed(2) + ' KB'
     }
     return (size / 1024 / 1024).toFixed(2) + ' MB'
+}
+
+// TODO: have better types here!
+export type DLStatus =
+    | { type: 'download'; data: number }
+    | { type: 'unzip'; data: 'start' }
+    | { type: 'success' }
+    | { type: 'failure' }
+
+export const downloadAndUnzipIssue = (
+    issueId: string,
+    imageSize: ImageSize,
+    onProgress: (status: DLStatus) => void = () => {},
+) => {
+    console.log(issueId)
+    const dl = downloadIssue(issueId) // just the issue json
+
+    dl.progress((received, total) => {
+        console.log(received, total)
+        if (total >= received) {
+            // the progress of the first 10% is driven by the issue
+            const num = (received / total) * 10
+            onProgress({
+                type: 'download',
+                data: num,
+            })
+        }
+    })
+
+    return dl.promise
+        .then(async () => {
+            // might not need to await this but it's pretty quick
+            await unzipIssue(issueId)
+
+            const imgDL = downloadIssue(`${issueId}-${imageSize}`) // just the images
+
+            imgDL.progress((received, total) => {
+                if (total >= received) {
+                    // the progress of the last 90% is driven by the images
+                    const num = 10 + (received / total) * 90
+                    onProgress({
+                        type: 'download',
+                        data: num,
+                    })
+                }
+            })
+
+            return imgDL.promise.then(() => {
+                onProgress({
+                    type: 'unzip',
+                    data: 'start',
+                })
+                unzipIssue(issueId, imageSize)
+                    .then(() => {
+                        onProgress({ type: 'success' }) // null is unstarted or end
+                    })
+                    .catch(error => {
+                        onProgress({ type: 'failure', data: error })
+                        console.log('Unzip error: ', error)
+                    })
+            })
+        })
+        .catch(error => {
+            onProgress({ type: 'failure', data: error })
+            console.log('Download error: ', error)
+        })
 }
