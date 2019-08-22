@@ -23,6 +23,7 @@ import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
+import { articleTypePicker } from './articleTypePicker'
 
 type NotInCAPI =
     | 'key'
@@ -31,7 +32,7 @@ type NotInCAPI =
     | 'mediaType'
     | 'slideshowImages'
 
-type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail'
+type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
 
 interface CAPIExtras {
     path: string
@@ -74,6 +75,8 @@ const parseArticleResult = async (
 
     const parser = elementParser(path, atomData)
     const kicker = kickerPicker(result, title)
+
+    const articleType = articleTypePicker(result)
 
     const trail = result.fields && result.fields.trailText
 
@@ -129,6 +132,7 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     kicker,
+                    articleType,
                     trail,
                     image: maybeImage,
                     byline: byline || '',
@@ -149,6 +153,7 @@ const parseArticleResult = async (
                     headline: title,
                     trail,
                     kicker,
+                    articleType,
                     image: maybeImage,
                     byline: byline || '',
                     standfirst: standfirst || '',
