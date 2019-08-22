@@ -1,5 +1,13 @@
 import React from 'react'
 import { Button, ButtonAppearance } from './button/button'
+import { StyleSheet } from 'react-native'
+
+const styles = StyleSheet.create({
+    button: {
+        marginTop: 10,
+        marginRight: 10,
+    },
+})
 
 const ModalButton = (props: {
     onPress: () => void
@@ -9,10 +17,7 @@ const ModalButton = (props: {
     <Button
         {...props}
         alt={props.alt || props.children}
-        style={{
-            marginTop: 10,
-            marginRight: 10,
-        }}
+        style={styles.button}
         appearance={ButtonAppearance.light}
     />
 )
