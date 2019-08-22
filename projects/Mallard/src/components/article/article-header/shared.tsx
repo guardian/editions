@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         paddingRight: '10%',
     },
 })
-const HeadlineTypeWrap = ({ children }) => {
+const HeadlineTypeWrap = ({ children }: { children: ReactNode }) => {
     return <View style={styles.root}>{children}</View>
 }
 
