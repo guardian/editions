@@ -61,7 +61,10 @@ const hangyKickerStyles = StyleSheet.create({
         marginLeft: metrics.article.sides * -1,
     },
 })
-const HangyTagKicker = (props: PropTypes) => {
+const HangyTagKicker = ({
+    translate,
+    ...props
+}: PropTypes & { translate?: number }) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <TagKicker
@@ -70,6 +73,11 @@ const HangyTagKicker = (props: PropTypes) => {
                 props.style,
                 hangyKickerStyles.normal,
                 !isTablet && hangyKickerStyles.mobile,
+                translate
+                    ? {
+                          transform: [{ translateY: translate }],
+                      }
+                    : null,
             ]}
         />
     )

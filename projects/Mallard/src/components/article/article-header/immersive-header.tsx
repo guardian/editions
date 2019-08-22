@@ -14,27 +14,6 @@ import { HeadlineTypeWrap } from './shared'
 import { ArticleHeaderProps } from './types'
 import { ArticleHeadline } from '../article-headline'
 
-const styles = StyleSheet.create({
-    kicker: {
-        color: color.palette.neutral[100],
-        padding: metrics.article.sides,
-        paddingVertical: metrics.vertical / 2,
-        height: metrics.vertical * 4,
-        marginTop: metrics.vertical * -4,
-        width: 'auto',
-        textAlign: 'left',
-        flexShrink: 1,
-        fontFamily: getFont('headline', 1, 'bold').fontFamily,
-    },
-    kickerHolder: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-    },
-    headline: {
-        fontFamily: getFont('titlepiece', 1).fontFamily,
-    },
-})
-
 const ImmersiveHeader = ({
     byline,
     headline,

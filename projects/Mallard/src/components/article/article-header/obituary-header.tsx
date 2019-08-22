@@ -1,45 +1,29 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { HeadlineText } from 'src/components/styled-text'
+import { StyleSheet, View } from 'react-native'
+import { Grayscale, MultiplyBlendColor } from 'react-native-image-filter-kit'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { ArticleByline } from '../article-byline'
+import { ArticleHeadline } from '../article-headline'
 import { CoverImage } from '../article-image'
 import { ArticleStandfirst } from '../article-standfirst'
 import { LeftSideBleed } from '../wrap/left-side-bleed'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
 import { ArticleHeaderProps } from './types'
-import { Grayscale, MultiplyBlendColor } from 'react-native-image-filter-kit'
-import { ArticleHeadline } from '../article-headline'
+import { HangyTagKicker } from '../article-kicker/tag-kicker'
 
 const styles = StyleSheet.create({
-    kicker: {
-        color: color.palette.neutral[100],
-        padding: metrics.article.sides,
-        paddingVertical: metrics.vertical / 2,
-        height: metrics.vertical * 4,
-        marginTop: metrics.vertical * -4,
-        width: 'auto',
-        textAlign: 'left',
-        flexShrink: 1,
-        fontFamily: getFont('headline', 1, 'bold').fontFamily,
-    },
-    kickerHolder: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-    },
-    headline: {
-        fontFamily: getFont('titlepiece', 1).fontFamily,
-    },
+    whiteText: { color: color.palette.neutral[100] },
 })
 
 const ObituaryHeader = ({
     byline,
     headline,
     image,
+    kicker,
     standfirst,
 }: ArticleHeaderProps) => {
     const [colors, { pillar }] = useArticle()
@@ -58,30 +42,40 @@ const ObituaryHeader = ({
                 ></MultiplyBlendColor>
             )}
 
-            <MultilineWrap byline={<ArticleByline>{byline}</ArticleByline>}>
-                <LeftSideBleed
-                    backgroundColor={color.palette.neutral[100]}
-                    topOffset={getFont('titlepiece', 1).lineHeight * 4}
+            <View
+                style={{
+                    borderTopWidth: 1,
+                    borderColor: color.palette.neutral[100],
+                }}
+            >
+                <MultilineWrap
+                    backgroundColor={colors.main}
+                    multilineColor={color.palette.neutral[100]}
+                    borderColor={color.palette.neutral[100]}
+                    byline={
+                        <ArticleByline style={[styles.whiteText]}>
+                            {byline}
+                        </ArticleByline>
+                    }
                 >
+                    {kicker ? (
+                        <HangyTagKicker translate={-1}>{kicker}</HangyTagKicker>
+                    ) : null}
                     <HeadlineTypeWrap>
                         <ArticleHeadline
                             weight={'titlepiece'}
-                            textStyle={[
-                                styles.headline,
-                                {
-                                    color: colors.dark,
-                                },
-                            ]}
+                            textStyle={[styles.whiteText]}
                         >
                             {headline}
                         </ArticleHeadline>
                         <ArticleStandfirst
+                            textStyle={[styles.whiteText]}
                             standfirst={standfirst}
                             bold
-                        ></ArticleStandfirst>
+                        />
                     </HeadlineTypeWrap>
-                </LeftSideBleed>
-            </MultilineWrap>
+                </MultilineWrap>
+            </View>
         </>
     )
 }
