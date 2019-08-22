@@ -19,6 +19,16 @@ export enum ArticleType {
     Longread = 'longread',
     Review = 'review',
     Opinion = 'opinion',
+    Series = 'series',
+    Interview = 'interview',
+    Analysis = 'analysis',
+    Obituary = 'obituary',
+    MatchResult = 'matchresult',
+    Letter = 'letter',
+    Recipe = 'recipe',
+    Gallery = 'gallery',
+    Feature = 'feature',
+    Immersive = 'immersive',
 }
 
 export type PillarFromPalette = typeof articlePillars[number]
@@ -67,6 +77,7 @@ export interface Content extends WithKey {
     type: string
     headline: string
     kicker: string
+    articleType?: ArticleType
     trail: string
     image?: Image
     standfirst?: string
