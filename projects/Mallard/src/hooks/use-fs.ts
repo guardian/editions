@@ -86,7 +86,10 @@ const useFileListInCtx = (): FileListHook => {
 /*
 Provider
 */
-const { Provider: FileSystemProvider, useAsHook } = createMixedProviderHook__SLOW<{
+const {
+    Provider: FileSystemProvider,
+    useAsHook,
+} = createMixedProviderHook__SLOW<{
     fileList: FileListHook
     downloads: DownloadQueueHook
 }>(() => {

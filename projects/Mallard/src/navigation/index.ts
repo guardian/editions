@@ -6,7 +6,6 @@ import {
     createSwitchNavigator,
     NavigationScreenProp,
 } from 'react-navigation'
-import { supportsTransparentCards } from 'src/helpers/features'
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { useOtherSettingsValues } from 'src/hooks/use-settings'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
@@ -29,13 +28,11 @@ import { ArticleScreen } from '../screens/article-screen'
 import { HomeScreen } from '../screens/home-screen'
 import { IssueScreen } from '../screens/issue-screen'
 import { SettingsScreen } from '../screens/settings-screen'
-import { mapNavigationToProps } from './helpers'
-import {
-    issueToArticleScreenInterpolator,
-    issueToIssueListInterpolator,
-} from './interpolators'
+import { mapNavigationToProps } from './helpers/base'
+import { issueToArticleScreenInterpolator } from './interpolators'
 import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
+import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
 
 const navOptionsWithGraunHeader = {
@@ -59,48 +56,29 @@ const transitionOptionsOverArtboard = (bounces: boolean) => ({
 })
 
 const AppStack = createModalNavigator(
-    createStackNavigator(
-        {
-            [routeNames.Issue]: createStackNavigator(
-                {
-                    [routeNames.Issue]: IssueScreen,
-                    [routeNames.Article]: ArticleScreen,
-                },
-                {
-                    transparentCard: true,
-                    initialRouteName: routeNames.Issue,
-                    mode: 'modal',
-                    headerMode: 'none',
-                    cardOverlayEnabled: true,
-                    transitionConfig: () => ({
-                        ...transitionOptionsOverArtboard(true),
-                        screenInterpolator: issueToArticleScreenInterpolator,
-                    }),
-                    defaultNavigationOptions: {
-                        gesturesEnabled: false,
-                    },
-                },
-            ),
-            [routeNames.IssueList]: HomeScreen,
-        },
-        {
-            defaultNavigationOptions: {
-                header: null,
-                gesturesEnabled: false,
+    createUnderlayNavigator(
+        createStackNavigator(
+            {
+                [routeNames.Issue]: IssueScreen,
+                [routeNames.Article]: ArticleScreen,
             },
-            initialRouteName: routeNames.Issue,
-            ...(supportsTransparentCards()
-                ? {
-                      transparentCard: true,
-                      mode: 'modal',
-                      headerMode: 'none',
-                      cardOverlayEnabled: true,
-                      transitionConfig: () => ({
-                          ...transitionOptionsOverArtboard(false),
-                          screenInterpolator: issueToIssueListInterpolator,
-                      }),
-                  }
-                : {}),
+            {
+                transparentCard: true,
+                initialRouteName: routeNames.Issue,
+                mode: 'modal',
+                headerMode: 'none',
+                cardOverlayEnabled: true,
+                transitionConfig: () => ({
+                    ...transitionOptionsOverArtboard(true),
+                    screenInterpolator: issueToArticleScreenInterpolator,
+                }),
+                defaultNavigationOptions: {
+                    gesturesEnabled: false,
+                },
+            },
+        ),
+        {
+            [routeNames.IssueList]: HomeScreen,
         },
     ),
     {

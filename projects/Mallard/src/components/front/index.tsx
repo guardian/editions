@@ -1,10 +1,4 @@
-import React, {
-    useState,
-    useRef,
-    FunctionComponent,
-    useMemo,
-    useEffect,
-} from 'react'
+import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
 import { Animated, View } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
 import { Navigator, NavigatorSkeleton } from '../navigator'
