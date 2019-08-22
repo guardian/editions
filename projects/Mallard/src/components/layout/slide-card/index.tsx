@@ -44,7 +44,7 @@ export const SlideCard = ({
         }).start()
 
         scrollY.addListener(({ value }) => {
-            if (value > 300) {
+            if (value > 100) {
                 blocked = false
                 onDismiss()
                 scrollY.stopAnimation()
