@@ -8,6 +8,7 @@ import {
 } from 'src/constants'
 import { CasExpiry } from 'src/services/content-auth-service'
 import { UserData } from './helpers'
+import { ReceiptIOS } from 'src/services/iap'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -16,7 +17,7 @@ import { UserData } from './helpers'
  */
 const createSyncCacheIOS = <T = any>(key: string) => ({
     set: (value: T) => Settings.set({ [key]: value }),
-    get: (): T => Settings.get(key),
+    get: (): T | undefined => Settings.get(key),
     reset: (): void => Settings.set({ [key]: void 0 }),
 })
 
@@ -47,6 +48,8 @@ const createAsyncCache = <T extends object>(key: string) => ({
 const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
 
 const userDataCache = createAsyncCache<UserData>('user-data-cache')
+
+const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -108,4 +111,5 @@ export {
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
+    iapReceiptCache,
 }
