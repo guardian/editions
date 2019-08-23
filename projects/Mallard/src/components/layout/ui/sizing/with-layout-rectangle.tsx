@@ -1,6 +1,5 @@
-import React, { useState, ReactNode, FunctionComponent } from 'react'
-import { View, LayoutRectangle } from 'react-native'
-import { areEqualShallow } from 'src/helpers/features'
+import React, { FunctionComponent, ReactNode, useState } from 'react'
+import { LayoutRectangle, View } from 'react-native'
 
 const WithLayoutRectangle: FunctionComponent<{
     children: (l: LayoutRectangle) => ReactNode
@@ -11,16 +10,7 @@ const WithLayoutRectangle: FunctionComponent<{
         <View
             style={{ minHeight, flexGrow: 1 }}
             onLayout={ev => {
-                setMetrics(metrics => {
-                    if (
-                        ev.nativeEvent &&
-                        (!metrics ||
-                            !areEqualShallow(ev.nativeEvent.layout, metrics))
-                    ) {
-                        return ev.nativeEvent.layout
-                    }
-                    return null
-                })
+                setMetrics(ev.nativeEvent.layout)
             }}
         >
             {metrics && children(metrics)}

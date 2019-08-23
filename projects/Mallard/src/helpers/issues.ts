@@ -5,15 +5,15 @@ const months = [
     'Jan',
     'Feb',
     'March',
-    'Apr',
+    'April',
     'May',
     'June',
     'July',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dev',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
 ]
 
 const days = [
@@ -45,8 +45,21 @@ export const useIssueDate = (issue?: Issue): IssueDate =>
         [issue && issue.key, issue],
     )
 
-export const todayAsFolder = (): string => {
-    const today = new Date()
-    return `${today.getUTCFullYear()}-${today.getUTCMonth() +
-        1}-${today.getUTCDate()}`
+const dateToFolderConvert = (date: Date): string => {
+    const pad = (n: number) => (n < 10 ? '0' + n : n)
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(
+        date.getUTCDate(),
+    )}`
+}
+
+export const todayAsFolder = (): string => dateToFolderConvert(new Date())
+
+export const lastSevenDays = (): string[] => {
+    var result = []
+    for (var i = 0; i < 7; i++) {
+        var d = new Date()
+        d.setDate(d.getDate() - i)
+        result.push(dateToFolderConvert(d))
+    }
+    return result
 }

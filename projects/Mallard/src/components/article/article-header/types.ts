@@ -1,4 +1,4 @@
-import { Image, Article } from '../../../common'
+import { Image, Article, ArticleType } from '../../../common'
 
 export interface ArticleHeaderProps {
     byline: string

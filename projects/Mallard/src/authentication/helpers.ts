@@ -8,6 +8,7 @@ import {
     getLegacyUserAccessToken,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
+    iapReceiptCache,
 } from './storage'
 import {
     fetchMembershipData,
@@ -22,7 +23,10 @@ import {
     User,
 } from 'src/services/id-service'
 import { fetchCasSubscription } from '../services/content-auth-service'
-import { fetchActiveIOSSubscriptionReceipt } from '../services/iap'
+import {
+    fetchActiveIOSSubscriptionReceipt,
+    isReceiptActive,
+} from '../services/iap'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -142,15 +146,24 @@ const fetchUserDataForKeychainUser = async (
     return userData
 }
 
-const fetchCASExpiryForKeychainCredentials = async () => {
+const fetchAndPersistCASExpiryForKeychainCredentials = async () => {
     const creds = await casCredentialsKeychain.get()
     if (!creds) {
         const username = legacyCASUsernameCache.get()
         const password = legacyCASPasswordCache.get()
         if (!username || !password) return null
-        return fetchCasSubscription(username, password)
+        return await fetchAndPersistCASExpiry(username, password)
     }
-    return fetchCasSubscription(creds.username, creds.password)
+    return fetchAndPersistCASExpiry(creds.username, creds.password)
+}
+
+const fetchAndPersistIAPReceiptForCurrentITunesUser = async () => {
+    const receipt = await fetchActiveIOSSubscriptionReceipt()
+    if (!receipt) {
+        return null
+    }
+    iapReceiptCache.set(receipt)
+    return receipt
 }
 
 const GUARDIAN_SUFFIXES = ['guardian.co.uk', 'theguardian.com']
@@ -173,8 +186,9 @@ const canViewEdition = (userData: UserData): boolean =>
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
     fetchAndPersistUserAccessTokenWithType,
+    fetchAndPersistIAPReceiptForCurrentITunesUser,
     fetchUserDataForKeychainUser,
-    fetchCASExpiryForKeychainCredentials,
+    fetchAndPersistCASExpiryForKeychainCredentials,
     canViewEdition,
     fetchAndPersistCASExpiry,
 }

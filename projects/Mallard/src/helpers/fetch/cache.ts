@@ -17,7 +17,9 @@ const withCache = <T>(cacheType: CacheType) => ({
     clear: (path: string) => {
         delete cacheStore[cacheType][path]
     },
-    retrieve: (path: string): T | undefined => cacheStore[cacheType][path],
+    retrieve: (path: string): T | undefined => {
+        return cacheStore[cacheType][path]
+    },
 })
 
 const clearCache = () => {

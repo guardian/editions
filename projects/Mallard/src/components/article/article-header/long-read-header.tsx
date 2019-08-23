@@ -1,17 +1,19 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { ArticleImage } from '../article-image'
-import { ArticleHeaderProps } from './types'
-import { ArticleByline } from '../article-byline'
+import { StyleSheet, View } from 'react-native'
 import { HeadlineText } from 'src/components/styled-text'
+import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
-import { MultilineWrap } from '../wrap/wrap'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
-import { ArticleStandfirst } from '../article-standfirst'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
+import { ArticleByline } from '../article-byline'
+import { ArticleImage } from '../article-image'
 import { HangyTagKicker } from '../article-kicker/tag-kicker'
+import { ArticleStandfirst } from '../article-standfirst'
+import { LeftSideBleed } from '../wrap/left-side-bleed'
+import { MultilineWrap } from '../wrap/multiline-wrap'
+import { ArticleHeaderProps } from './types'
+import { HeadlineTypeWrap } from './shared'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },
@@ -62,27 +64,36 @@ const LongReadHeader = ({
                         {byline || ''}
                     </ArticleByline>
                 }
-                topOffset={getFont('titlepiece', 1).lineHeight * 4}
                 borderColor={styles.whiteText.color}
                 backgroundColor={color.palette.neutral[7]}
                 multilineColor={styles.whiteText.color}
             >
-                <View style={{ paddingBottom: metrics.vertical * 2 }}>
-                    {kicker ? <HangyTagKicker>{kicker}</HangyTagKicker> : null}
-                    <HeadlineText style={[styles.whiteText, styles.headline]}>
-                        {headline}
-                    </HeadlineText>
-                    <ArticleStandfirst
-                        standfirst={standfirst}
-                        textStyle={[
-                            styles.whiteText,
-                            isTablet && {
-                                fontFamily: getFont('headline', 1, 'bold')
-                                    .fontFamily,
-                            },
-                        ]}
-                    ></ArticleStandfirst>
-                </View>
+                <LeftSideBleed
+                    backgroundColor={color.palette.neutral[7]}
+                    topOffset={getFont('titlepiece', 1).lineHeight * 4}
+                >
+                    <HeadlineTypeWrap>
+                        {kicker ? (
+                            <HangyTagKicker>{kicker}</HangyTagKicker>
+                        ) : null}
+                        <HeadlineText
+                            style={[styles.whiteText, styles.headline]}
+                        >
+                            {headline}
+                        </HeadlineText>
+                        <ArticleStandfirst
+                            standfirst={standfirst}
+                            textStyle={[
+                                styles.whiteText,
+                                { marginBottom: metrics.vertical * 2 },
+                                isTablet && {
+                                    fontFamily: getFont('headline', 1, 'bold')
+                                        .fontFamily,
+                                },
+                            ]}
+                        ></ArticleStandfirst>
+                    </HeadlineTypeWrap>
+                </LeftSideBleed>
             </MultilineWrap>
         </>
     )

@@ -19,6 +19,7 @@ export interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
     notificationServiceRegister: string
+    zipUrl: string
 }
 
 interface UserSettings {
