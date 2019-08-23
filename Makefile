@@ -26,6 +26,8 @@ validate-Mallard: node_modules projects/Mallard/node_modules
 	cd projects/Mallard && yarn tsc
 validate-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
 	@echo "Skip validation"
+fix-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
+	@echo "Skip fix"
 build-Mallard:
 	@echo "This is not yet handled by make"
 #
