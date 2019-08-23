@@ -11,6 +11,7 @@ import React from 'react'
 import { Animated } from 'react-native'
 import { ModalForTablet } from 'src/components/layout/ui/modal-for-tablet'
 import { addStaticRouter } from '../helpers/base'
+import { supportsTransparentCards } from 'src/helpers/features'
 
 const addStaticRouterWithModal = (
     Navigator: NavigationContainer,
@@ -37,6 +38,13 @@ const createModalNavigator = (
     const navigation: { [key: string]: NavigationContainer } = { _: parent }
     for (const [key, value] of Object.entries(modalRoutes)) {
         navigation[key] = addStaticRouterWithModal(value, () => animatedValue)
+    }
+
+    if (!supportsTransparentCards()) {
+        return createStackNavigator(navigation, {
+            headerMode: 'none',
+            initialRouteName: '_',
+        })
     }
 
     return createStackNavigator(navigation, {
