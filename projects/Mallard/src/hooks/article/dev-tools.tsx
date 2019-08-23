@@ -57,9 +57,6 @@ export const DevTools = ({
                         style={{ marginTop: metrics.vertical }}
                         onPress={() => {
                             setPillar(cur => {
-                                if (cur === firstPillar) {
-                                    return lastPillar
-                                }
                                 if (cur === lastPillar) {
                                     return firstPillar
                                 }
@@ -83,9 +80,6 @@ export const DevTools = ({
                                     if (cur === firstType) {
                                         return lastType
                                     }
-                                    if (cur === lastType) {
-                                        return firstType
-                                    }
                                     return types[types.indexOf(cur) - 1]
                                 })
                             }}
@@ -96,9 +90,6 @@ export const DevTools = ({
                             style={{ marginLeft: metrics.horizontal / 4 }}
                             onPress={() => {
                                 setType(cur => {
-                                    if (cur === firstType) {
-                                        return lastType
-                                    }
                                     if (cur === lastType) {
                                         return firstType
                                     }
