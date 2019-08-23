@@ -5,14 +5,6 @@ import { StyleSheet, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 
-export const getEnumPosition = <T extends {}>(
-    value: T,
-    position: number,
-): T[keyof T] => {
-    const enumAsArray = Object.values(value)
-    return enumAsArray[position] as T[keyof T]
-}
-
 const getFirstLast = <T extends any>(arr: T[]): T[] => [
     arr[0],
     arr.slice(-1)[0],

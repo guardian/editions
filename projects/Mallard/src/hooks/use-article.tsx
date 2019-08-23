@@ -1,14 +1,9 @@
 import React, { createContext, useContext, useState } from 'react'
 import { color } from '../theme/color'
-import {
-    ArticlePillar,
-    ArticleType,
-    Appearance,
-    articlePillars,
-} from '../common'
+import { ArticlePillar, ArticleType, Appearance } from '../common'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { useSettingsValue } from './use-settings'
-import { DevTools } from 'src/screens/article/dev-tools'
+import { DevTools } from 'src/hooks/article/dev-tools'
 
 /*
   Exports
@@ -25,7 +20,18 @@ interface PropTypes {
     children: Element
 }
 
-const WithArticleDevtools = ({ type, pillar, children }: PropTypes) => {
+export const Providers = ({ type, pillar, children }: PropTypes) => {
+    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+    if (isUsingProdDevtools)
+        return <ProvidersAndDevtools {...{ type, pillar, children }} />
+    return (
+        <WithArticleType value={type}>
+            <WithArticlePillar value={pillar}>{children}</WithArticlePillar>
+        </WithArticleType>
+    )
+}
+
+const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
     const [modifiedPillar, setPillar] = useState(pillar)
     const [modifiedType, setType] = useState(type)
 
@@ -37,24 +43,17 @@ const WithArticleDevtools = ({ type, pillar, children }: PropTypes) => {
                 setPillar={setPillar}
                 setType={setType}
             />
-            <WithArticleType value={modifiedType}>
-                <WithArticlePillar value={modifiedPillar}>
-                    {children}
-                </WithArticlePillar>
-            </WithArticleType>
+            <Providers type={modifiedType} pillar={modifiedPillar}>
+                {children}
+            </Providers>
         </>
     )
 }
 
-export const WithArticle = ({ type, pillar, children }: PropTypes) => {
+export const WithArticle = (props: PropTypes) => {
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-    if (isUsingProdDevtools)
-        return <WithArticleDevtools {...{ type, pillar, children }} />
-    return (
-        <WithArticleType value={type}>
-            <WithArticlePillar value={pillar}>{children}</WithArticlePillar>
-        </WithArticleType>
-    )
+    if (isUsingProdDevtools) return <ProvidersAndDevtools {...props} />
+    return <Providers {...props} />
 }
 
 const neutrals: PillarColours = {
