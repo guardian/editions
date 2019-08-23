@@ -8,7 +8,7 @@ import { ArticleHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
 import { PropTypes as StandfirstPropTypes } from './article-standfirst'
 import { BlockElement } from 'src/common'
-import { render } from './html/render'
+import { render, EMBED_DOMAIN } from './html/render'
 import { CAPIArticle } from 'src/common'
 import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
@@ -61,7 +61,7 @@ const ArticleController = ({ article }: { article: CAPIArticle }) => {
 
 const urlIsNotAnEmbed = (url: string) =>
     !(
-        url.startsWith('https://embed.theguardian.com') ||
+        url.startsWith(EMBED_DOMAIN) ||
         url.startsWith('https://www.youtube.com/embed')
     )
 

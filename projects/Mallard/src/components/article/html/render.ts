@@ -13,6 +13,8 @@ import { imagePath } from 'src/paths'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { getPillarColors } from 'src/hooks/use-article'
 
+export const EMBED_DOMAIN = 'https://embed.theguardian.com'
+
 const makeCss = (colors: PillarColours) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     * {
@@ -45,7 +47,7 @@ const makeCss = (colors: PillarColours) => css`
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     return `
     <figure style="overflow: hidden;">
-        <iframe scrolling="no" src="https://embed.theguardian.com/embed/atom/media/${mediaAtomElement.atomId}" style="width: 100%; display: block;" frameborder="0"></iframe>
+        <iframe scrolling="no" src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}" style="width: 100%; display: block;" frameborder="0"></iframe>
         <figcaption>${mediaAtomElement.title}</figcaption>
     </figure>`
 }
