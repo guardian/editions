@@ -19,11 +19,13 @@ import { getFont } from 'src/theme/typography'
 export enum ButtonAppearance {
     default,
     skeleton,
+    skeletonBlue,
     tomato,
     apricot,
     skeletonLight,
     skeletonActive,
     light,
+    dark,
 }
 
 const height = metrics.buttonHeight
@@ -31,7 +33,7 @@ const height = metrics.buttonHeight
 const styles = StyleSheet.create({
     background: {
         borderRadius: 999,
-        paddingHorizontal: metrics.horizontal * 2,
+        paddingHorizontal: metrics.horizontal * 1.5,
         alignItems: 'center',
         justifyContent: 'center',
         height,
@@ -71,6 +73,14 @@ const getButtonAppearance = (
         },
         text: { color: appAppearance.color },
     }),
+    [ButtonAppearance.skeletonBlue]: StyleSheet.create({
+        background: {
+            backgroundColor: undefined,
+            borderWidth: 1,
+            borderColor: color.primary,
+        },
+        text: { color: color.primary },
+    }),
     [ButtonAppearance.skeletonActive]: StyleSheet.create({
         background: {
             backgroundColor: appAppearance.color,
@@ -90,6 +100,10 @@ const getButtonAppearance = (
     [ButtonAppearance.light]: StyleSheet.create({
         background: { backgroundColor: color.palette.neutral[100] },
         text: { color: color.primary },
+    }),
+    [ButtonAppearance.dark]: StyleSheet.create({
+        background: { backgroundColor: color.primary },
+        text: { color: color.palette.neutral[100] },
     }),
     [ButtonAppearance.tomato]: StyleSheet.create({
         background: { backgroundColor: color.ui.tomato },
