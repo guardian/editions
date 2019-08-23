@@ -20,16 +20,11 @@ interface PropTypes {
     children: Element
 }
 
-export const Providers = ({ type, pillar, children }: PropTypes) => {
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-    if (isUsingProdDevtools)
-        return <ProvidersAndDevtools {...{ type, pillar, children }} />
-    return (
-        <WithArticleType value={type}>
-            <WithArticlePillar value={pillar}>{children}</WithArticlePillar>
-        </WithArticleType>
-    )
-}
+export const Providers = ({ type, pillar, children }: PropTypes) => (
+    <WithArticleType value={type}>
+        <WithArticlePillar value={pillar}>{children}</WithArticlePillar>
+    </WithArticleType>
+)
 
 const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
     const [modifiedPillar, setPillar] = useState(pillar)
@@ -52,6 +47,7 @@ const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
 
 export const WithArticle = (props: PropTypes) => {
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+
     if (isUsingProdDevtools) return <ProvidersAndDevtools {...props} />
     return <Providers {...props} />
 }
