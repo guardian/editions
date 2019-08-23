@@ -20,9 +20,13 @@ deployments:
             fileName: archiver.zip
             functionNames:
                 [
-                    editions-archiver-,
                     editions-archiver-s3-event-listener-,
                     editions-archiver-stepmachine-issue-,
+                    editions-archiver-stepmachine-front-,
+                    editions-archiver-stepmachine-image-,
+                    editions-archiver-stepmachine-upload-,
+                    editions-archiver-stepmachine-zip-,
+                    editions-archiver-stepmachine-indexer-,
                 ]
     cloudformation:
         type: cloud-formation

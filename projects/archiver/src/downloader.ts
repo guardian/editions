@@ -7,14 +7,14 @@ import {
     Issue,
     Front,
     Image,
-} from './common'
+} from '../common'
 import {
     attempt,
     Attempt,
     hasFailed,
     withFailureMessage,
-} from '../backend/utils/try'
-import { ImageSize } from '../common/src'
+} from '../../backend/utils/try'
+import { ImageSize } from '../../common/src'
 
 export const URL =
     process.env.backend !== undefined
@@ -34,7 +34,7 @@ export const getIssue = async (id: string) => {
 export const getFront = async (
     issue: string,
     id: string,
-): Promise<Attempt<[string, Front]>> => {
+): Promise<Attempt<Front>> => {
     const path = `${URL}${frontPath(issue, id)}`
     const response = await fetch(path)
     const maybeFront = await attempt(response.json() as Promise<Front>)
@@ -43,7 +43,7 @@ export const getFront = async (
             maybeFront,
             `Failed to download front ${id} from ${issue}`,
         )
-    return [id, maybeFront]
+    return maybeFront
 }
 
 export const getImage = async (

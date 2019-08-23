@@ -7,7 +7,6 @@ import iam = require('@aws-cdk/aws-iam')
 import cloudfront = require('@aws-cdk/aws-cloudfront')
 import { CfnOutput, Duration } from '@aws-cdk/core'
 
-import { stateMachineArnEnv } from '../../archiver/src/invoke'
 import { archiverStepFunction } from './step-function'
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -48,7 +47,6 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Archive Bucket',
-                default: 'editions-store',
                 allowedValues: ['editions-store', 'editions-store-code'],
             },
         )
@@ -186,50 +184,10 @@ export class EditionsStack extends cdk.Stack {
             archiveBucketParameter.valueAsString,
         )
 
-        const archiver = new lambda.Function(this, 'EditionsArchiver', {
-            functionName: `editions-archiver-${stageParameter.valueAsString}`,
-            runtime: lambda.Runtime.NODEJS_10_X,
-            timeout: Duration.minutes(5),
-            memorySize: 1500,
-            code: Code.bucket(
-                deployBucket,
-                `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
-            ),
-            handler: 'index.handler',
-            environment: {
-                stage: stageParameter.valueAsString,
-                bucket: archive.bucketName,
-                backend: backendURL,
-            },
-            initialPolicy: [
-                new iam.PolicyStatement({
-                    actions: ['*'],
-                    resources: [archive.arnForObjects('*'), archive.bucketArn],
-                }),
-            ],
-        })
-
-        new CfnOutput(this, 'archiver-arn', {
-            description: 'ARN for achiver lambda',
-            value: archiver.functionArn,
-        })
-
         const publishedBucket = s3.Bucket.fromBucketName(
             this,
             'published-bucket',
             publishedEditionsBucketnameParameter.valueAsString,
-        )
-
-        new lambda.CfnPermission(
-            this,
-            'PublishedEditionsArchiverInvokePermission',
-            {
-                principal: 's3.amazonaws.com',
-                functionName: archiver.functionName,
-                action: 'lambda:InvokeFunction',
-                sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
-                sourceArn: publishedBucket.bucketArn,
-            },
         )
 
         //Archiver step function
@@ -263,7 +221,7 @@ export class EditionsStack extends cdk.Stack {
                 handler: 'index.invoke',
                 environment: {
                     stage: stageParameter.valueAsString,
-                    [stateMachineArnEnv]: archiverStateMachine.stateMachineArn,
+                    stateMachineARN: archiverStateMachine.stateMachineArn,
                 },
             },
         )

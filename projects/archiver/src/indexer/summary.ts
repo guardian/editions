@@ -1,5 +1,5 @@
-import { s3, bucket } from '../../s3'
-import { upload } from '../../upload'
+import { s3, bucket } from '../s3'
+import { upload } from '../upload'
 import { notNull, IssueSummary } from '../../common'
 import { attempt, hasFailed } from '../../../backend/utils/try'
 import { groupBy } from 'ramda'
@@ -8,7 +8,7 @@ import { imageSizes, ImageSize } from '../../../common/src'
 
 const zips = 'zips/'
 
-export const generateIndex = async (): Promise<IssueSummary[]> => {
+export const indexer = async (): Promise<IssueSummary[]> => {
     const objects = await s3
         .listObjectsV2({
             Bucket: bucket,
@@ -86,7 +86,7 @@ export const generateIndex = async (): Promise<IssueSummary[]> => {
 }
 
 export const summary = async () => {
-    const index = await attempt(generateIndex())
+    const index = await attempt(indexer())
     if (hasFailed(index)) {
         console.error(index)
         console.error('Could not fetch index')
