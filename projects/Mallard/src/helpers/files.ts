@@ -4,6 +4,9 @@ import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { ImageSize } from '../../../common/src'
 import { defaultSettings } from './settings/defaults'
+import { lastSevenDays, todayAsFolder } from './issues'
+import { imageForScreenSize } from './screen'
+import { isRemoteZipAvailable } from './fetch'
 
 interface BasicFile {
     filename: string
@@ -282,4 +285,25 @@ export const downloadAndUnzipIssue = (
             onProgress({ type: 'failure', data: error })
             console.log('Download error: ', error)
         })
+}
+
+export const clearOldIssues = async () => {
+    const files = await getFileList()
+    const availableIssues = files.filter(file => file.type === 'issue')
+    const availableIssuesAsKeys = availableIssues.map(issue => issue.filename)
+    const issuesToDelete = availableIssuesAsKeys.filter(
+        issue => !lastSevenDays().includes(issue),
+    )
+    issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
+}
+
+export const downloadTodaysIssue = async () => {
+    const todaysKey = todayAsFolder()
+    const isTodaysIssueOnDevice = await isIssueOnDevice(todaysKey)
+    if (!isTodaysIssueOnDevice) {
+        const isValidIssue = await isRemoteZipAvailable(todaysKey)
+        if (isValidIssue) {
+            downloadAndUnzipIssue(todaysKey, imageForScreenSize())
+        }
+    }
 }

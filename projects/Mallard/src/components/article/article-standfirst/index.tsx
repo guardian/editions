@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, StyleProp, ViewStyle, TextStyle, StyleSheet } from 'react-native'
 import { StandfirstText } from '../../styled-text'
-import { NavigationPosition } from 'src/helpers/positions'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { useMediaQuery } from 'src/hooks/use-screen'

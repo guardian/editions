@@ -54,9 +54,7 @@ const casExpiry = ({
 })
 
 const receiptIOS = ({
-    expires_date = '',
-    expires_date_ms = `${Date.now()}`,
-    expires_date_pst = '',
+    expires_date = new Date(),
     is_in_intro_offer_period = '',
     is_trial_period = '',
     original_purchase_date = '',
@@ -71,9 +69,9 @@ const receiptIOS = ({
     transaction_id = '',
     web_order_line_item_id = '',
 } = {}): ReceiptIOS => ({
-    expires_date,
-    expires_date_ms,
-    expires_date_pst,
+    expires_date: expires_date.toString(),
+    expires_date_ms: expires_date.getTime().toString(),
+    expires_date_pst: expires_date.toString(),
     is_in_intro_offer_period,
     is_trial_period,
     original_purchase_date,

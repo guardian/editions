@@ -73,10 +73,11 @@ const Article = ({
 
     return (
         <View style={styles.container}>
-            <Fader first position={'article'} />
+            <Fader />
             <ArticleHeader {...headerProps} type={type} />
+
             <Wrap>
-                <Fader position={'article'}>
+                <Fader>
                     <WebView
                         originWhitelist={['*']}
                         scrollEnabled={false}

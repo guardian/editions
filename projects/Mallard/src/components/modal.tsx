@@ -35,68 +35,70 @@ interface ModalContextValue {
     open: (render: ModalRenderer) => void
     close: () => void
     isOpen: boolean
+    render: ModalRenderer | null
 }
 
 const ModalContext = React.createContext<ModalContextValue>({
     open: () => {},
     close: () => {},
     isOpen: false,
+    render: null,
 })
 
 const useModal = () => useContext(ModalContext)
 
 const Modal = ({ children }: { children: React.ReactNode }) => {
     const [render, setState] = useState<ModalRenderer | null>(null)
-    const val = useAlphaIn(200, { out: true, currentValue: render ? 0.75 : 0 })
     const close = useMemo(() => () => setState(null), [])
-
     const open = useCallback(renderModal => setState(() => renderModal), [])
-
     const value = useMemo(
         (): ModalContextValue => ({
             open,
             close,
             isOpen: !!render,
+            render,
         }),
         [open, close, render],
     )
-
     return (
-        <>
-            <ModalContext.Provider value={value}>
-                {children}
-            </ModalContext.Provider>
-            {render && (
-                <>
-                    <Animated.View
-                        style={[
-                            styles.overlay,
-                            {
-                                opacity: val,
-                            },
-                        ]}
-                    />
-                    <Animated.View
-                        style={[
-                            styles.modalWrapper,
-                            {
-                                transform: [
-                                    {
-                                        translateY: val.interpolate({
-                                            inputRange: [0, 1],
-                                            outputRange: [20, 0],
-                                        }),
-                                    },
-                                ],
-                            },
-                        ]}
-                    >
-                        {render(close)}
-                    </Animated.View>
-                </>
-            )}
-        </>
+        <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
     )
 }
 
-export { Modal, useModal }
+const ModalRenderer = () => {
+    const { close, render } = useModal()
+    const val = useAlphaIn(200, { out: true, currentValue: render ? 0.75 : 0 })
+    return (
+        render && (
+            <>
+                <Animated.View
+                    style={[
+                        styles.overlay,
+                        {
+                            opacity: val,
+                        },
+                    ]}
+                />
+                <Animated.View
+                    style={[
+                        styles.modalWrapper,
+                        {
+                            transform: [
+                                {
+                                    translateY: val.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [20, 0],
+                                    }),
+                                },
+                            ],
+                        },
+                    ]}
+                >
+                    {render(close)}
+                </Animated.View>
+            </>
+        )
+    )
+}
+
+export { Modal, ModalRenderer, useModal }

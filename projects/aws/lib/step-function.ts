@@ -7,6 +7,7 @@ import sfn = require('@aws-cdk/aws-stepfunctions')
 import tasks = require('@aws-cdk/aws-stepfunctions-tasks')
 import { toTitleCase } from './tools'
 import { Duration } from '@aws-cdk/core'
+import { Condition } from '@aws-cdk/aws-stepfunctions'
 interface StepFunctionProps {
     stack: string
     stage: string
@@ -66,37 +67,74 @@ export const archiverStepFunction = (
     scope: cdk.Construct,
     { stack, stage, deployBucket, outputBucket, backendURL }: StepFunctionProps,
 ) => {
-    const issue = taskLambda(
-        'issue',
-        {
-            scope,
-            stack,
-            stage,
-            deployBucket,
-            outputBucket,
-        },
-        { backend: backendURL },
-    )
-
+    const lambdaParams = {
+        scope,
+        stack,
+        stage,
+        deployBucket,
+        outputBucket,
+    }
     //Archiver step function
-    const issueTask = new sfn.Task(scope, 'Archive Job', {
+    const issue = taskLambda('issue', lambdaParams, { backend: backendURL })
+
+    const issueTask = new sfn.Task(scope, 'Fetch Issue', {
         task: new tasks.InvokeFunction(issue),
     })
 
-    const hasFinished = new sfn.Choice(scope, 'Has finished', {})
+    const front = taskLambda('front', lambdaParams, { backend: backendURL })
 
-    hasFinished.when(
-        sfn.Condition.booleanEquals('$.finished', false),
-        issueTask,
+    const frontTask = new sfn.Task(scope, 'Fetch and save front', {
+        task: new tasks.InvokeFunction(front),
+    })
+    const image = taskLambda('image', lambdaParams, { backend: backendURL })
+
+    const imageTask = new sfn.Task(scope, 'Fetch Images', {
+        task: new tasks.InvokeFunction(image),
+    })
+
+    const upload = taskLambda('upload', lambdaParams)
+
+    const uploadTask = new sfn.Task(scope, 'Upload issue file', {
+        task: new tasks.InvokeFunction(upload),
+    })
+
+    const zip = taskLambda('zip', lambdaParams)
+
+    const zipTask = new sfn.Task(scope, 'Make issue bundle', {
+        task: new tasks.InvokeFunction(zip),
+    })
+
+    const indexer = taskLambda('indexer', lambdaParams)
+
+    const indexerTask = new sfn.Task(scope, 'Generate Index', {
+        task: new tasks.InvokeFunction(indexer),
+    })
+
+    //Fetch issue metadata
+    issueTask.next(frontTask)
+
+    frontTask.next(imageTask)
+
+    const remainingFronts = new sfn.Choice(scope, 'Check for remaining fronts')
+    remainingFronts.when(
+        Condition.numberGreaterThan('$.remainingFronts', 0),
+        frontTask,
     )
-    hasFinished.otherwise(new sfn.Succeed(scope, 'successfully-archived'))
+    remainingFronts.otherwise(uploadTask)
 
-    issueTask.next(hasFinished)
+    imageTask.next(remainingFronts)
+
+    uploadTask.next(zipTask)
+
+    zipTask.next(indexerTask)
+
+    indexerTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,
         'Archiver State Machine',
         {
+            stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
             definition: issueTask,
             timeout: Duration.minutes(5),
         },

@@ -16,7 +16,7 @@ interface NavigationOptions {
 }
 
 type NavOrFn =
-    | ((navigation: NavigationParams) => NavigationOptions)
+    | (({ navigation }: { navigation: NavigationParams }) => NavigationOptions)
     | NavigationOptions
 
 const getNavigationOptions = (
@@ -25,7 +25,7 @@ const getNavigationOptions = (
 ): NavigationOptions => {
     if (!options) return {}
     if (typeof options === 'function') {
-        return options(navigation)
+        return options({ navigation })
     }
     return options
 }
@@ -73,4 +73,4 @@ const createHeaderStackNavigator = (
         createStackNavigator(routes, { ...options, headerMode: 'none' }),
     )
 
-export { createHeaderStackNavigator }
+export { createHeaderStackNavigator, addStaticRouterWithHeader }

@@ -56,7 +56,7 @@ const addStaticRouterWithOverlay: NavigatorWrapper = (
 }
 
 const createUnderlayNavigator = (
-    top: NavigationContainer,
+    top: NavigationRouteConfig,
     bottom: {
         [name: string]: NavigationRouteConfig
     },
@@ -64,13 +64,14 @@ const createUnderlayNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: addStaticRouterWithOverlay(top, () => animatedValue),
+        _: supportsTransparentCards()
+            ? addStaticRouterWithOverlay(top, () => animatedValue)
+            : top,
     }
     for (const [key, value] of Object.entries(bottom)) {
-        navigation[key] = addStaticRouterWithPosition(
-            value,
-            () => animatedValue,
-        )
+        navigation[key] = supportsTransparentCards()
+            ? addStaticRouterWithPosition(value, () => animatedValue)
+            : value
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
@@ -97,10 +98,10 @@ const createUnderlayNavigator = (
             shadowOpacity: 0.2,
             shadowRadius: 8,
         },
+        headerMode: 'none',
         ...(supportsTransparentCards()
             ? {
                   mode: 'modal',
-                  headerMode: 'none',
                   transparentCard: true,
                   cardOverlayEnabled: true,
                   transitionConfig,

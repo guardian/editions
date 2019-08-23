@@ -2,6 +2,7 @@ import React, { useState, ReactNode } from 'react'
 import { Animated, Dimensions, StyleSheet } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
 import { supportsAnimatedClipView } from 'src/helpers/features'
+import { metrics } from 'src/theme/spacing'
 
 /*
 This is part of the transition from articles to fronts
@@ -10,7 +11,7 @@ as if it's coming out of its card
 */
 
 const clipperStyles = StyleSheet.create({
-    flex: { flex: 0 },
+    flex: { flex: 1 },
     bg: { backgroundColor: 'black' },
 })
 
@@ -25,46 +26,43 @@ interface PropTypes extends MaybePropTypes {
     easing: Animated.AnimatedInterpolation
 }
 
-const topOffset = 100
 const AnimatedMaskedView = Animated.createAnimatedComponent(MaskedView)
 
 const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
-    const [windowHeight] = useState(() => Dimensions.get('window').height)
-    const targetHeightScale = (windowHeight / from) * 2
+    const windowHeight = Dimensions.get('window').height
+    const targetHeightScale = from / windowHeight
     return (
         <AnimatedMaskedView
-            style={[
-                clipperStyles.flex,
-                {
-                    transform: [
-                        {
-                            translateY: easing.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [topOffset * -1, 0],
-                            }),
-                        },
-                    ],
-                },
-            ]}
+            style={[clipperStyles.flex]}
             maskElement={
                 <Animated.View
                     style={[
-                        { height: from },
+                        { height: windowHeight },
+                        {
+                            borderRadius: easing.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, metrics.radius],
+                            }),
+                        },
                         {
                             transform: [
                                 {
                                     translateY: easing.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [topOffset, 0],
+                                        inputRange: [0, 0.5, 1],
+                                        outputRange: [
+                                            (windowHeight - from) / -2,
+                                            (windowHeight - from) / -2,
+                                            0,
+                                        ],
                                     }),
                                 },
                                 {
                                     scaleY: easing.interpolate({
-                                        inputRange: [0, 0.1, 1],
+                                        inputRange: [0, 0.5, 1],
                                         outputRange: [
+                                            targetHeightScale,
+                                            targetHeightScale,
                                             1,
-                                            1,
-                                            targetHeightScale * 1.2,
                                         ],
                                     }),
                                 },

@@ -12,13 +12,21 @@ import { RootNavigator } from 'src/navigation'
 import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal } from './components/modal'
-import { prepFileSystem } from './helpers/files'
+import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
+import { ToastProvider } from './hooks/use-toast'
+import {
+    prepFileSystem,
+    clearOldIssues,
+    downloadTodaysIssue,
+} from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 
 useScreens()
 prepFileSystem()
 pushNotifcationRegistration()
+clearOldIssues()
+downloadTodaysIssue()
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -27,7 +35,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-2321asdfa34'
+const persistenceKey = 'dev-nav-key-2312424'
 const persistNavigationState = async (navState: any) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))
@@ -57,6 +65,7 @@ const WithProviders = nestProviders(
     FileSystemProvider,
     SettingsProvider,
     Modal,
+    ToastProvider,
     AuthProvider,
 )
 
@@ -86,6 +95,7 @@ export default class App extends React.Component<{}, {}> {
                     />
                     <View style={styles.appContainer}>
                         <RootNavigator {...rootNavigationProps} />
+                        <NetInfoAutoToast />
                     </View>
                 </WithProviders>
             </ErrorBoundary>
