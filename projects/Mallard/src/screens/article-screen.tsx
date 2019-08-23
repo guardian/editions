@@ -126,7 +126,7 @@ const ArticleScreenWithProps = ({
                 index: current,
                 animated: false,
             })
-    }, [width])
+    }, [current, width])
 
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
