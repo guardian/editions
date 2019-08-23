@@ -3,7 +3,7 @@ import { StyleSheet, View, KeyboardAvoidingView } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { useInsets } from 'src/hooks/use-screen'
-import { Button } from '../button/button'
+import { CloseModalButton } from '../button/close-modal-button'
 import { TitlepieceText, UiBodyCopy } from '../styled-text'
 import { Spinner } from '../spinner'
 
@@ -17,15 +17,6 @@ const loginHeaderStyles = StyleSheet.create({
     actionRow: {
         alignItems: 'flex-end',
         marginBottom: metrics.vertical / 2,
-    },
-    dismissButton: {
-        paddingHorizontal: 0,
-        backgroundColor: 'transparent',
-        borderColor: color.primary,
-        borderWidth: 1,
-    },
-    dismissText: {
-        color: color.primary,
     },
     title: {
         color: color.primary,
@@ -48,13 +39,7 @@ const LoginHeader = ({
             ]}
         >
             <View style={loginHeaderStyles.actionRow}>
-                <Button
-                    icon=""
-                    alt="Dismiss"
-                    buttonStyles={loginHeaderStyles.dismissButton}
-                    textStyles={loginHeaderStyles.dismissText}
-                    onPress={onDismiss}
-                />
+                <CloseModalButton onPress={onDismiss} />
             </View>
             <View>
                 <TitlepieceText style={loginHeaderStyles.title}>

@@ -13,12 +13,13 @@ const ModalButton = (props: {
     onPress: () => void
     children: string
     alt?: string
+    buttonAppearance?: ButtonAppearance
 }) => (
     <Button
         {...props}
         alt={props.alt || props.children}
         style={styles.button}
-        appearance={ButtonAppearance.light}
+        appearance={props.buttonAppearance || ButtonAppearance.light}
     />
 )
 
