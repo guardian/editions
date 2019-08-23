@@ -38,16 +38,17 @@ export interface TappablePropTypes {
 TAPPABLE
 This just wraps every card to make it tappable
 */
+export const tappablePadding = {
+    padding: metrics.horizontal / 2,
+    paddingVertical: metrics.vertical / 2,
+}
 const tappableStyles = StyleSheet.create({
     root: {
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: '100%',
     },
-    padding: {
-        padding: metrics.horizontal / 2,
-        paddingVertical: metrics.vertical / 2,
-    },
+    padding: tappablePadding,
 })
 
 /*

@@ -12,7 +12,11 @@ import {
     toPercentage,
 } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
-import { ItemTappable, TappablePropTypes } from './item-tappable'
+import {
+    ItemTappable,
+    TappablePropTypes,
+    tappablePadding,
+} from './item-tappable'
 import { TextBlock } from './text-block'
 
 export interface PropTypes extends TappablePropTypes {
@@ -103,6 +107,14 @@ const imageStyles = StyleSheet.create({
     textBlock: {
         paddingTop: metrics.vertical / 3,
     },
+    roundImage: {
+        width: '75%',
+        aspectRatio: 1,
+        borderRadius: 999999,
+        position: 'absolute',
+        right: tappablePadding.padding,
+        bottom: tappablePadding.paddingVertical * 2,
+    },
 })
 
 const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
@@ -150,10 +162,7 @@ const RoundImageItem = ({
             {'image' in article && article.image ? (
                 <ImageResource
                     issueID={issueID}
-                    style={[
-                        imageStyles.image,
-                        { height: getImageHeight(size) },
-                    ]}
+                    style={[imageStyles.roundImage]}
                     image={article.image}
                 />
             ) : null}
@@ -227,10 +236,10 @@ const superHeroImageStyles = StyleSheet.create({
         ),
     },
     textBlock: {
-        ...tappableStyles.padding,
+        ...tappablePadding,
     },
     textStandBlock: {
-        ...tappableStyles.padding,
+        ...tappablePadding,
         ...getFont('text', 0.9),
         color: color.palette.neutral[46],
         position: 'absolute',
