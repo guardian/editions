@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent } from 'react'
+import React, { useState, FunctionComponent, ReactNode } from 'react'
 import { Animated, Easing, StyleSheet } from 'react-native'
 import {
     createStackNavigator,
@@ -7,7 +7,7 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
-import { Button } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { Header } from 'src/components/layout/header/header'
 import { supportsTransparentCards } from 'src/helpers/features'
@@ -71,26 +71,40 @@ const styles = StyleSheet.create({
     },
 })
 
+const BasicCardWrapper = ({
+    navigator,
+    navigation,
+}: {
+    navigator: NavigationContainer
+} & NavigationInjectedProps) => {
+    const Navigator = (navigator as unknown) as FunctionComponent<
+        ArticleNavigatorInjectedProps & NavigationInjectedProps
+    >
+    return (
+        <>
+            <Header
+                white
+                leftAction={
+                    <Button
+                        appearance={ButtonAppearance.skeleton}
+                        icon={'\uE00A'}
+                        alt="Back"
+                        onPress={() => navigation.goBack(null)}
+                    ></Button>
+                }
+                layout={'center'}
+            >
+                {null}
+            </Header>
+            <Navigator navigation={navigation} />
+        </>
+    )
+}
+
 const wrapInBasicCard: NavigatorWrapper = Navigator => {
-    const Wrapper = ({ navigation }: NavigationInjectedProps) => {
-        return (
-            <>
-                <Header
-                    leftAction={
-                        <Button
-                            icon={'\uE00A'}
-                            alt="Back"
-                            onPress={() => navigation.goBack(null)}
-                        ></Button>
-                    }
-                    layout={'center'}
-                >
-                    {null}
-                </Header>
-                <Navigator navigation={navigation} />
-            </>
-        )
-    }
+    const Wrapper = ({ navigation }: NavigationInjectedProps) => (
+        <BasicCardWrapper navigator={Navigator} navigation={navigation} />
+    )
     return addStaticRouterWithPosition(
         addStaticRouter(Navigator, Wrapper),
         () => new Animated.Value(1),
@@ -105,17 +119,52 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
             navigation.getParam('path').article,
         )
         const window = useDimensions()
+
         const { height } = originalPosition
         const {
             opacity,
             opacityOuter,
             scaler,
             transform,
+            borderRadius,
         } = articleScreenMotion({
             position,
             originalPosition,
             window,
         })
+
+        if (navigation.getParam('prefersFullScreen', false)) {
+            return (
+                <Animated.View
+                    style={[
+                        StyleSheet.absoluteFillObject,
+                        {
+                            transform: [
+                                {
+                                    translateY: position.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [200, 0],
+                                    }),
+                                },
+                            ],
+                        },
+                        {
+                            background: color.background,
+                            overflow: 'hidden',
+                            opacity: position.interpolate({
+                                inputRange: [0, 0.5],
+                                outputRange: [0, 1],
+                            }),
+                        },
+                    ]}
+                >
+                    <BasicCardWrapper
+                        navigator={Navigator}
+                        navigation={navigation}
+                    />
+                </Animated.View>
+            )
+        }
 
         return (
             <Animated.View
@@ -132,10 +181,7 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             styles.inner,
                             {
                                 opacity: opacityOuter,
-                                borderRadius: position.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: [0, metrics.radius],
-                                }),
+                                borderRadius,
                                 minHeight: height / scaler,
                             },
                         ]}

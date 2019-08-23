@@ -34,6 +34,7 @@ import {
 } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
 import { TextBlock } from './text-block'
+import { supportsTransparentCards } from 'src/helpers/features'
 
 interface TappablePropTypes {
     style?: StyleProp<ViewStyle>
@@ -129,7 +130,7 @@ const ItemTappable = withNavigation(
 
                 <TouchableWithoutFeedback
                     onPress={() => {
-                        fade(opacity, 'out')
+                        supportsTransparentCards() && fade(opacity, 'out')
                         navigateToArticle(navigation, {
                             path,
                             articleNavigator,

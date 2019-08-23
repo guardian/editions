@@ -123,8 +123,14 @@ const articleScreenMotion = ({
 
     const transform = [{ translateX }, { translateY }, { scale }]
 
+    const borderRadius = position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, metrics.radius],
+    })
+
     return {
         opacity,
+        borderRadius,
         transform,
         opacityOuter,
         translateY,

@@ -64,13 +64,14 @@ const createUnderlayNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: addStaticRouterWithOverlay(top, () => animatedValue),
+        _: supportsTransparentCards()
+            ? addStaticRouterWithOverlay(top, () => animatedValue)
+            : top,
     }
     for (const [key, value] of Object.entries(bottom)) {
-        navigation[key] = addStaticRouterWithPosition(
-            value,
-            () => animatedValue,
-        )
+        navigation[key] = supportsTransparentCards()
+            ? addStaticRouterWithPosition(value, () => animatedValue)
+            : value
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {

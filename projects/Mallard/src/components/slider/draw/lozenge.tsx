@@ -103,31 +103,43 @@ const LozengeBigHeader = ({
                 <Animated.View
                     style={[
                         commonStyles.square,
-                        { backgroundColor: fill },
-                        width &&
-                            position && {
-                                transform: [
-                                    {
-                                        translateX: position.interpolate({
-                                            inputRange: [0, fadeLozengeAt],
-                                            outputRange: [
-                                                0,
-                                                fadeLozengeAt * -1 -
-                                                    width / 2 +
-                                                    metrics.fronts.sliderRadius,
-                                            ],
-                                            extrapolate: 'clamp',
-                                        }),
-                                    },
-                                    {
-                                        scaleX: position.interpolate({
-                                            inputRange: [0, fadeLozengeAt],
-                                            outputRange: [1, 0],
-                                            extrapolate: 'clamp',
-                                        }),
-                                    },
+                        {
+                            backgroundColor: fill,
+                        },
+                        position && {
+                            opacity: position.interpolate({
+                                inputRange: [
+                                    0,
+                                    fadeLozengeAt - 1,
+                                    fadeLozengeAt,
                                 ],
-                            },
+                                outputRange: [1, 1, 0],
+                                extrapolate: 'clamp',
+                            }),
+                        },
+                        position && {
+                            transform: [
+                                {
+                                    translateX: position.interpolate({
+                                        inputRange: [0, fadeLozengeAt],
+                                        outputRange: [
+                                            0,
+                                            fadeLozengeAt * -1 -
+                                                width / 2 +
+                                                metrics.fronts.sliderRadius,
+                                        ],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                                {
+                                    scaleX: position.interpolate({
+                                        inputRange: [0, fadeLozengeAt],
+                                        outputRange: [1, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                            ],
+                        },
                     ]}
                 />
                 <Animated.View

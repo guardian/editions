@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
 import { Issue } from 'src/common'
 import { Highlight } from 'src/components/highlight'
 import {
@@ -17,6 +17,15 @@ import { getFont } from 'src/theme/typography'
 const styles = StyleSheet.create({
     background: {
         backgroundColor: color.primary,
+        padding: metrics.vertical,
+        paddingHorizontal: metrics.horizontal,
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+    },
+    backgroundWhite: {
+        backgroundColor: color.background,
+        borderBottomColor: color.line,
+        borderBottomWidth: StyleSheet.hairlineWidth,
         padding: metrics.vertical,
         paddingHorizontal: metrics.horizontal,
         justifyContent: 'flex-end',
@@ -60,6 +69,7 @@ type TouchableHeaderProps =
     | {}
 
 type HeaderProps = {
+    white?: boolean
     action?: ReactNode
     leftAction?: ReactNode
     layout?: 'issue' | 'center'
@@ -68,16 +78,24 @@ type HeaderProps = {
 
 const Header = ({
     action,
+    white = false,
     leftAction,
     layout = 'issue',
     children,
     ...otherProps
 }: HeaderProps) => {
     const { top: marginTop } = useInsets()
-
+    const bg = white ? styles.backgroundWhite : styles.background
     return (
-        <WithAppAppearance value={'primary'}>
-            <View style={[styles.background]}>
+        <WithAppAppearance value={white ? 'default' : 'primary'}>
+            {white && (
+                <StatusBar
+                    animated={true}
+                    barStyle="dark-content"
+                    backgroundColor="#fff"
+                />
+            )}
+            <View style={[bg]}>
                 {layout === 'issue' ? (
                     <GridRowSplit
                         proxy={leftAction}
