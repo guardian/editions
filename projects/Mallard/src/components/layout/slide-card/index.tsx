@@ -38,7 +38,7 @@ export const SlideCard = ({
             toValue: scrollY.interpolate({
                 inputRange: [0, 60],
                 outputRange: [1, 0.8],
-            }),
+            }) as Animated.Value,
             duration: 0,
             useNativeDriver: true,
         }).start()
