@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, Dimensions, Linking } from 'react-native'
+import { View, StyleSheet, Dimensions, Linking, Platform } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -8,7 +8,7 @@ import { ArticleHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
 import { PropTypes as StandfirstPropTypes } from './article-standfirst'
 import { BlockElement } from 'src/common'
-import { render } from './html/render'
+import { render, EMBED_DOMAIN } from './html/render'
 import { CAPIArticle } from 'src/common'
 import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
@@ -59,6 +59,12 @@ const ArticleController = ({ article }: { article: CAPIArticle }) => {
     }
 }
 
+const urlIsNotAnEmbed = (url: string) =>
+    !(
+        url.startsWith(EMBED_DOMAIN) ||
+        url.startsWith('https://www.youtube.com/embed')
+    )
+
 const Article = ({
     article,
     ...headerProps
@@ -85,13 +91,11 @@ const Article = ({
                         source={{ html: html }}
                         onShouldStartLoadWithRequest={event => {
                             if (
-                                event.url.startsWith(
-                                    'https://embed.theguardian.com',
-                                ) ||
-                                event.url.startsWith('https://www.youtube.com')
+                                Platform.select({
+                                    ios: event.navigationType === 'click',
+                                    android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
+                                })
                             ) {
-                                return false
-                            } else if (event.url !== 'about:blank') {
                                 Linking.openURL(event.url)
                                 return false
                             }
