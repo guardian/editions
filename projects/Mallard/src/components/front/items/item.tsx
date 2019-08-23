@@ -46,7 +46,6 @@ interface TappablePropTypes {
 
 export interface PropTypes extends TappablePropTypes {
     size: ItemSizes
-    issueID: string
 }
 
 /*
@@ -189,13 +188,12 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
+const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
                 {'image' in article && article.image ? (
                     <ImageResource
-                        issueID={issueID}
                         style={coverStyles.cover}
                         image={article.image}
                     />
@@ -247,12 +245,11 @@ const getImageHeight = ({ story, layout }: ItemSizes) => {
     }
 }
 
-const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
+const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article && article.image ? (
                 <ImageResource
-                    issueID={issueID}
                     style={[
                         imageStyles.image,
                         { height: getImageHeight(size) },
@@ -293,12 +290,7 @@ const splitImageStyles = StyleSheet.create({
     },
 })
 
-const SplitImageItem = ({
-    article,
-    issueID,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
@@ -310,7 +302,6 @@ const SplitImageItem = ({
                 />
                 {'image' in article && article.image ? (
                     <ImageResource
-                        issueID={issueID}
                         style={[splitImageStyles.image]}
                         image={article.image}
                     />
@@ -347,17 +338,11 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const SuperHeroImageItem = ({
-    article,
-    issueID,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const SuperHeroImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
                 <ImageResource
-                    issueID={issueID}
                     style={[superHeroImageStyles.image]}
                     image={article.image}
                 />
@@ -395,15 +380,12 @@ const splashImageStyles = StyleSheet.create({
     },
 })
 
-const SplashImageItem = ({ article, issueID, ...tappableProps }: PropTypes) => {
+const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
     if (!article.image)
-        return (
-            <SuperHeroImageItem {...tappableProps} {...{ article, issueID }} />
-        )
+        return <SuperHeroImageItem {...tappableProps} {...{ article }} />
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <ImageResource
-                issueID={issueID}
                 style={[splashImageStyles.image]}
                 image={article.image}
             />

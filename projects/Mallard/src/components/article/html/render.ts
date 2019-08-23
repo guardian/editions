@@ -144,7 +144,7 @@ export const render = (
                 case 'image':
                     return renderImageElement(el)
                 default:
-                    ''
+                    return ''
             }
         })
         .join('')
