@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
-import { ImageBackground, StyleSheet, View } from 'react-native'
-import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
-import { imagePath } from 'src/paths'
-import { Breakpoints } from 'src/theme/breakpoints'
+import { StyleSheet, ImageBackground, View } from 'react-native'
 import { Image as ImageT } from '../../common'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { useImagePath } from 'src/hooks/use-image-paths'
 
 const styles = StyleSheet.create({
     image: {
@@ -26,6 +26,8 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
 
     const defaultAspectRatio = isLandscape ? 2 : 1.5
 
+    const path = useImagePath(image)
+
     return (
         <ImageBackground
             style={[
@@ -36,7 +38,7 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
                 },
             ]}
             source={{
-                uri: imagePath(image),
+                uri: path,
             }}
         >
             {proxy && <View style={styles.proxy}>{proxy}</View>}
