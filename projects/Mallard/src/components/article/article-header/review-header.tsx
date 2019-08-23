@@ -16,10 +16,6 @@ import { HeadlineTypeWrap } from './shared'
 const ArticleFader = Fader
 
 const style = StyleSheet.create({
-    standfirst: {
-        paddingBottom: metrics.vertical * 1,
-        marginTop: metrics.vertical * 4,
-    },
     byline: { marginBottom: metrics.vertical },
 })
 
@@ -37,9 +33,7 @@ const ReviewHeader = ({
             needsTopPadding
             byline={
                 <ArticleFader>
-                    <ArticleByline
-                        style={[style.byline, { color: color.dark }]}
-                    >
+                    <ArticleByline style={[{ color: color.dark }]}>
                         {byline}
                     </ArticleByline>
                 </ArticleFader>
@@ -77,7 +71,6 @@ const ReviewHeader = ({
                 </ArticleFader>
                 <ArticleFader>
                     <ArticleStandfirst
-                        style={[style.standfirst]}
                         textStyle={{ color: color.dark }}
                         {...{ standfirst }}
                     />

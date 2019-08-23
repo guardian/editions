@@ -15,6 +15,12 @@ const styles = StyleSheet.create({
         ...getFont('headline', 1.5, 'bold'),
         color: color.text,
     },
+    headlineTextTitlepiece: {
+        flexShrink: 0,
+        ...getFont('headline', 1.5, 'bold'),
+        fontFamily: getFont('titlepiece', 1).fontFamily,
+        color: color.text,
+    },
     headlineTextLight: {
         flexShrink: 0,
         ...getFont('headline', 1.5, 'light'),
@@ -84,7 +90,7 @@ export const IssueTitleText = ({
 
 export type HeadlineTextProps = {
     children: React.ReactNode | React.ReactNode[]
-    weight?: 'regular' | 'bold' | 'light'
+    weight?: 'regular' | 'bold' | 'light' | 'titlepiece'
     style?: StyleProp<TextStyle>
 } & TextProps & { onTextLayout?: any }
 
@@ -101,7 +107,9 @@ export const HeadlineText = ({
                     ? styles.headlineText
                     : weight === 'light'
                     ? styles.headlineTextLight
-                    : styles.headlineTextBold,
+                    : weight === 'bold'
+                    ? styles.headlineTextBold
+                    : styles.headlineTextTitlepiece,
                 style,
             ]}
         />

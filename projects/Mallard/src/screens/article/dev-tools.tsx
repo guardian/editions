@@ -62,22 +62,43 @@ export const DevTools = ({
                     >
                         {`PILLAR: ${articlePillars[pillar]}`}
                     </Button>
-                    <Button
-                        style={{ marginTop: metrics.vertical }}
-                        onPress={() => {
-                            setType(app => {
-                                if (
-                                    app + 1 >=
-                                    Object.keys(ArticleType).length
-                                ) {
-                                    return 0
-                                }
-                                return app + 1
-                            })
+                    <View
+                        style={{
+                            marginTop: metrics.vertical,
+                            flexDirection: 'row',
                         }}
                     >
-                        {`TYPE: ${getEnumPosition(ArticleType, type)}`}
-                    </Button>
+                        <Button
+                            onPress={() => {
+                                setType(app => {
+                                    if (app - 1 < 0) {
+                                        return (
+                                            Object.keys(ArticleType).length - 1
+                                        )
+                                    }
+                                    return app - 1
+                                })
+                            }}
+                        >
+                            {`👈 ${getEnumPosition(ArticleType, type)}`}
+                        </Button>
+                        <Button
+                            style={{ marginLeft: metrics.horizontal / 4 }}
+                            onPress={() => {
+                                setType(app => {
+                                    if (
+                                        app + 1 >=
+                                        Object.keys(ArticleType).length
+                                    ) {
+                                        return 0
+                                    }
+                                    return app + 1
+                                })
+                            }}
+                        >
+                            {`👉`}
+                        </Button>
+                    </View>
                 </>
             )}
         </View>
