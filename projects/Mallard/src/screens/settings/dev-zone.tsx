@@ -16,6 +16,7 @@ import {
 import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
+import { useToast } from 'src/hooks/use-toast'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -42,6 +43,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const settings = useOtherSettingsValues()
     const { status } = useContext(AuthContext)
     const apiUrl = useSettingsValue.apiUrl()
+    const { showToast } = useToast()
     return (
         <>
             <Heading>🦆 SECRET DUCK MENU 🦆</Heading>
@@ -59,6 +61,13 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     }}
                 >
                     Re-start onboarding
+                </Button>
+                <Button
+                    onPress={() => {
+                        showToast('Toast title', { subtitle: 'Subtitle' })
+                    }}
+                >
+                    Pop a toast
                 </Button>
                 <Button
                     onPress={() => {
