@@ -65,9 +65,13 @@ export const handler: Handler<
                     .startExecution({
                         stateMachineArn,
                         input: JSON.stringify(invoke),
-                        name: `issue-${invoke.issueId.id}-${
+                        name: `issue ${invoke.issueId.id} ${
                             invoke.issueId.source
-                        }-${randomBytes(2).toString('hex')}`,
+                        } ${randomBytes(2).toString('hex')}`.replace(
+                            /\W/g,
+                            '-', // see character restrictions
+                            //https://docs.aws.amazon.com/step-functions/latest/apireference/API_StartExecution.html
+                        ),
                     })
                     .promise(),
             )
