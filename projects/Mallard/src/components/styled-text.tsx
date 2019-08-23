@@ -94,7 +94,9 @@ export type HeadlineTextProps = {
     style?: StyleProp<TextStyle>
 } & TextProps & { onTextLayout?: any }
 
-export const getHeadlineTextStyle = (weight: HeadlineTextProps['weight']) =>
+export const getHeadlineTextStyle = (
+    weight: HeadlineTextProps['weight'] = 'regular',
+) =>
     weight === 'regular'
         ? styles.headlineText
         : weight === 'light'
