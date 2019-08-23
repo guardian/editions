@@ -7,7 +7,7 @@ import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Link } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { GdprSwitchSettings } from 'src/helpers/settings'
-import { COOKIE_LINK, PRIVACY_LINK } from 'src/helpers/words'
+import { COOKIE_LINK, PRIVACY_LINK, PREFS_SAVED_MSG } from 'src/helpers/words'
 import {
     useGdprSwitches,
     useSettings,
@@ -15,6 +15,7 @@ import {
     useSettingsValue,
 } from 'src/hooks/use-settings'
 import { WithAppAppearance } from 'src/theme/appearance'
+import { useToast } from 'src/hooks/use-toast'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -37,6 +38,7 @@ const GdprConsent = () => {
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
     const { DEVMODE_resetAll } = useGdprSwitches()
+    const { showToast } = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
@@ -77,6 +79,7 @@ const GdprConsent = () => {
                             for (const { key } of Object.values(switches)) {
                                 setSetting(key, true)
                             }
+                            showToast(PREFS_SAVED_MSG)
                         }}
                     >
                         Enable all
@@ -101,9 +104,10 @@ const GdprConsent = () => {
                         explainer={item.description}
                         proxy={
                             <ThreeWaySwitch
-                                onValueChange={value =>
+                                onValueChange={value => {
                                     setSetting(item.key, value)
-                                }
+                                    showToast(PREFS_SAVED_MSG)
+                                }}
                                 value={settings[item.key]}
                             />
                         }
