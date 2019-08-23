@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, ImageBackground, View } from 'react-native'
+import { ImageBackground, StyleSheet, View } from 'react-native'
+import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { imagePath } from 'src/paths'
-import { Image as ImageT } from '../../common'
-import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { Image as ImageT } from '../../common'
 
 const styles = StyleSheet.create({
     image: {
@@ -12,17 +12,14 @@ const styles = StyleSheet.create({
     proxy: { position: 'absolute', bottom: 0, left: 0 },
 })
 
-const ArticleImage = ({
-    image,
-    style,
-    proxy,
-    aspectRatio,
-}: {
+interface PropTypes {
     image: ImageT
     style?: {}
     proxy?: ReactNode
     aspectRatio?: number
-}) => {
+}
+
+const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
     const isLandscape = useMediaQuery(
         width => width >= Breakpoints.tabletLandscape,
     )
@@ -47,4 +44,19 @@ const ArticleImage = ({
     )
 }
 
-export { ArticleImage }
+const CoverImage = ({
+    small,
+    ...props
+}: Omit<PropTypes, 'style' | 'aspectRatio'> & { small?: boolean }) => {
+    return (
+        <ArticleImage
+            {...props}
+            aspectRatio={small ? 1.18 : 0.95}
+            style={{
+                width: '100%',
+            }}
+        />
+    )
+}
+
+export { ArticleImage, CoverImage }

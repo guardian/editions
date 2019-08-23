@@ -1,4 +1,10 @@
 PODS:
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - Folly (2018.10.22.00):
@@ -105,6 +111,9 @@ PODS:
     - React
   - RNIap (3.3.9):
     - React
+  - RNImageFilterKit (0.5.18):
+    - Bolts (= 1.9.0)
+    - React
   - RNKeychain (3.1.3):
     - React
   - RNScreens (1.0.0-alpha.23):
@@ -161,6 +170,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNIap (from `../node_modules/react-native-iap`)
+  - RNImageFilterKit (from `../node_modules/react-native-image-filter-kit`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -170,6 +180,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Bolts
     - boost-for-react-native
     - Sentry
     - SSZipArchive
@@ -241,6 +252,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNIap:
     :path: "../node_modules/react-native-iap"
+  RNImageFilterKit:
+    :path: "../node_modules/react-native-image-filter-kit"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
   RNScreens:
@@ -255,6 +268,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
@@ -289,6 +303,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 17e34f6dd902f08d88cbe2c0b7a01be948d43641
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
   RNIap: 89befcc43b4077663968b1e3d0c1e3fbd0a1eaca
+  RNImageFilterKit: 5383a4dcde9177624eb25ce20e12c6cc4805e74c
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
