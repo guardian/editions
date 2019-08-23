@@ -27,7 +27,16 @@ const GridRowSplit = ({
     children: ReactNode
     proxy?: ReactNode
     style?: StyleProp<
-        Pick<ViewStyle, 'paddingTop' | 'paddingVertical' | 'paddingBottom'>
+        Pick<
+            ViewStyle,
+            | 'paddingTop'
+            | 'paddingVertical'
+            | 'paddingBottom'
+            | 'marginTop'
+            | 'marginVertical'
+            | 'marginBottom'
+            | 'height'
+        >
     >
 }) => {
     const Inner = ({ width }: { width: number }) => (

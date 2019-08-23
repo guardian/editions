@@ -4,13 +4,10 @@ import { NavigationScreenProp } from 'react-navigation'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
-import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import { Fader } from 'src/components/layout/animators/fader'
-import { SlideCard } from 'src/components/layout/slide-card/index'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { Slider } from 'src/components/slider'
-import { getNavigationPosition } from 'src/helpers/positions'
 import { getColor } from 'src/helpers/transform'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
@@ -19,9 +16,9 @@ import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import {
     ArticleNavigationProps,
-    ArticleRequiredNavigationProps,
     getArticleNavigationProps,
 } from 'src/navigation/helpers/base'
+import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 import { routeNames } from 'src/navigation/routes'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -98,16 +95,16 @@ const ArticleScreenLoginOverlay = ({
 const ArticleScreenWithProps = ({
     path,
     articleNavigator,
-    transitionProps,
+    onDismissStateChanged,
     navigation,
     prefersFullScreen,
-}: ArticleRequiredNavigationProps & {
-    navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-}) => {
+}: Required<ArticleNavigationProps> &
+    ArticleNavigatorInjectedProps & {
+        navigation: NavigationScreenProp<{}, ArticleNavigationProps>
+    }) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
 
     const [articleIsAtTop, setArticleIsAtTop] = useState(true)
-    const navigationPosition = getNavigationPosition('article')
 
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
@@ -137,138 +134,127 @@ const ArticleScreenWithProps = ({
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
     return (
-        <ClipFromTop
-            easing={navigationPosition && navigationPosition.position}
-            from={
-                transitionProps && transitionProps.startAtHeightFromFrontsItem
-            }
-        >
+        <ArticleScreenLoginOverlay navigation={navigation}>
             {prefersFullScreen ? (
-                <SlideCard
-                    enabled={false}
-                    onDismiss={() => navigation.goBack()}
-                >
-                    <ArticleScreenLoginOverlay navigation={navigation}>
-                        <ArticleScreenBody
-                            path={path}
-                            width={width}
-                            pillar={pillar}
-                            onTopPositionChange={() => {}}
-                            previewNotice={previewNotice}
-                        />
-                    </ArticleScreenLoginOverlay>
-                </SlideCard>
+                <ArticleScreenBody
+                    path={path}
+                    width={width}
+                    pillar={pillar}
+                    onTopPositionChange={() => {}}
+                    previewNotice={previewNotice}
+                />
             ) : (
-                <SlideCard
-                    enabled={articleIsAtTop}
-                    onDismiss={() => navigation.goBack()}
-                >
-                    <ArticleScreenLoginOverlay navigation={navigation}>
-                        <Fader position="article">
-                            <View
-                                style={[
-                                    styles.slider,
-                                    !articleIsAtTop && styles.sliderBorder,
-                                ]}
-                            >
-                                <MaxWidthWrap>
-                                    <View
-                                        style={[
-                                            styles.innerSlider,
-                                            isTablet && {
-                                                marginHorizontal:
-                                                    metrics.fronts
-                                                        .sliderRadius * -0.8,
-                                            },
-                                        ]}
-                                    >
-                                        <Slider
-                                            small
-                                            title={articleNavigator.frontName}
-                                            fill={getColor(
-                                                articleNavigator.appearance,
-                                            )}
-                                            stops={2}
-                                            position={sliderPos}
-                                        />
-                                    </View>
-                                </MaxWidthWrap>
-                            </View>
-                        </Fader>
-                        <Animated.FlatList
-                            ref={(flatList: AnimatedFlatListRef) =>
-                                (flatListRef.current = flatList)
-                            }
-                            showsHorizontalScrollIndicator={false}
-                            showsVerticalScrollIndicator={false}
-                            scrollEventThrottle={1}
-                            onScroll={(ev: any) => {
-                                setCurrent(
-                                    Math.floor(
-                                        ev.nativeEvent.contentOffset.x / width,
-                                    ),
-                                )
-                            }}
-                            maxToRenderPerBatch={1}
-                            windowSize={3}
-                            initialNumToRender={1}
-                            horizontal={true}
-                            initialScrollIndex={startingPoint}
-                            pagingEnabled
-                            getItemLayout={(_: never, index: number) => ({
-                                length: width,
-                                offset: width * index,
-                                index,
-                            })}
-                            keyExtractor={(
-                                item: ArticleNavigator['articles'][0],
-                            ) => item.article}
-                            data={
-                                isInScroller
-                                    ? articleNavigator.articles
-                                    : [path, ...articleNavigator.articles]
-                            }
-                            renderItem={({
-                                item,
-                            }: {
-                                item: ArticleNavigator['articles'][0]
-                                index: number
-                            }) => (
-                                <ArticleScreenBody
-                                    width={width}
-                                    path={item}
-                                    pillar={pillar}
-                                    onTopPositionChange={isAtTop => {
-                                        setArticleIsAtTop(isAtTop)
-                                    }}
-                                    previewNotice={previewNotice}
-                                />
-                            )}
-                        />
-                    </ArticleScreenLoginOverlay>
-                </SlideCard>
+                <>
+                    <Fader>
+                        <View
+                            style={[
+                                styles.slider,
+                                !articleIsAtTop && styles.sliderBorder,
+                            ]}
+                        >
+                            <MaxWidthWrap>
+                                <View
+                                    style={[
+                                        styles.innerSlider,
+                                        isTablet && {
+                                            marginHorizontal:
+                                                metrics.fronts.sliderRadius *
+                                                -0.8,
+                                        },
+                                    ]}
+                                >
+                                    <Slider
+                                        small
+                                        title={articleNavigator.frontName}
+                                        fill={getColor(
+                                            articleNavigator.appearance,
+                                        )}
+                                        stops={2}
+                                        position={sliderPos}
+                                    />
+                                </View>
+                            </MaxWidthWrap>
+                        </View>
+                    </Fader>
+                    <Animated.FlatList
+                        ref={(flatList: AnimatedFlatListRef) =>
+                            (flatListRef.current = flatList)
+                        }
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        scrollEventThrottle={1}
+                        onScroll={(ev: any) => {
+                            setCurrent(
+                                Math.floor(
+                                    ev.nativeEvent.contentOffset.x / width,
+                                ),
+                            )
+                        }}
+                        maxToRenderPerBatch={1}
+                        windowSize={3}
+                        initialNumToRender={1}
+                        horizontal={true}
+                        initialScrollIndex={startingPoint}
+                        pagingEnabled
+                        getItemLayout={(_: never, index: number) => ({
+                            length: width,
+                            offset: width * index,
+                            index,
+                        })}
+                        keyExtractor={(item: ArticleNavigator['articles'][0]) =>
+                            item.article
+                        }
+                        data={
+                            isInScroller
+                                ? articleNavigator.articles
+                                : [path, ...articleNavigator.articles]
+                        }
+                        renderItem={({
+                            item,
+                        }: {
+                            item: ArticleNavigator['articles'][0]
+                            index: number
+                        }) => (
+                            <ArticleScreenBody
+                                width={width}
+                                path={item}
+                                pillar={pillar}
+                                onTopPositionChange={isAtTop => {
+                                    setArticleIsAtTop(isAtTop)
+                                    onDismissStateChanged &&
+                                        onDismissStateChanged(isAtTop)
+                                }}
+                                previewNotice={previewNotice}
+                            />
+                        )}
+                    />
+                </>
             )}
-        </ClipFromTop>
+        </ArticleScreenLoginOverlay>
     )
 }
 
 export const ArticleScreen = ({
     navigation,
+    onDismissStateChanged,
 }: {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-}) =>
+} & ArticleNavigatorInjectedProps) =>
     getArticleNavigationProps(navigation, {
         error: () => (
-            <SlideCard enabled={true} onDismiss={() => navigation.goBack()}>
-                <FlexErrorMessage
-                    title={ERR_404_MISSING_PROPS}
-                    style={{ backgroundColor: color.background }}
+            <FlexErrorMessage
+                title={ERR_404_MISSING_PROPS}
+                style={{ backgroundColor: color.background }}
+            />
+        ),
+        success: props => {
+            return (
+                <ArticleScreenWithProps
+                    {...{ navigation, onDismissStateChanged }}
+                    {...props}
                 />
-            </SlideCard>
-        ),
-        success: props => (
-            <ArticleScreenWithProps {...{ navigation }} {...props} />
-        ),
+            )
+        },
     })
 
 ArticleScreen.navigationOptions = ({

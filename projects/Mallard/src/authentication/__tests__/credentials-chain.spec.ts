@@ -5,8 +5,17 @@ import {
     isAuthed,
     authTypeFromCAS,
     authTypeFromIAP,
+    cachedAuthChain,
+    IAPAuthStatus,
+    unauthed,
 } from '../credentials-chain'
 import { userData, casExpiry, receiptIOS } from './fixtures'
+import {
+    getMockAsyncCache,
+    getMockCache,
+    tomorrow,
+    yesterday,
+} from './test-helpers'
 
 /**
  * This helper ensures an ordering or resolving promises, any promise
@@ -102,7 +111,7 @@ describe('credentials-chain', () => {
             expect(
                 authTypeFromIAP(
                     receiptIOS({
-                        expires_date_ms: `${Date.now() + 1000}`,
+                        expires_date: tomorrow(),
                     }),
                 ),
             ).toMatchObject({
@@ -114,10 +123,105 @@ describe('credentials-chain', () => {
             expect(
                 authTypeFromIAP(
                     receiptIOS({
-                        expires_date_ms: `${Date.now() - 1000}`,
+                        expires_date: yesterday(),
                     }),
                 ),
             ).toBe(false)
+        })
+    })
+
+    describe('cachedAuthChain', () => {
+        const invalidCasExpiry = casExpiry({
+            expiryDate: yesterday().toString(),
+        })
+        const validCasExpiry = casExpiry({
+            expiryDate: tomorrow().toString(),
+        })
+        const invalidIAPReceipt = receiptIOS({
+            expires_date: yesterday(),
+        })
+        const validIAPReceipt = receiptIOS({
+            expires_date: tomorrow(),
+        })
+
+        it('returns an `identity` auth when there is something in the identity cache', async () => {
+            const userDataCache = getMockAsyncCache(userData)
+            const casDataCache = getMockAsyncCache(validCasExpiry)
+            const legacyCasExpiryCache = getMockCache(validCasExpiry)
+            const iapReceiptCache = getMockAsyncCache(validIAPReceipt)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+            )
+
+            expect(result).toEqual(IdentityAuthStatus(userData))
+        })
+
+        it('returns a `cas` auth when there is something valid in the identity cache but nothing in the identity cache', async () => {
+            const userDataCache = getMockAsyncCache(null)
+            const casDataCache = getMockAsyncCache(validCasExpiry)
+            const legacyCasExpiryCache = getMockCache(casExpiry())
+            const iapReceiptCache = getMockAsyncCache(validIAPReceipt)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+            )
+
+            expect(result).toEqual(CASAuthStatus(validCasExpiry))
+        })
+
+        it('returns a `cas` auth from the legacy cache when there is nothing valid in the identity cache or the new cas cache', async () => {
+            const userDataCache = getMockAsyncCache(null)
+            const casDataCache = getMockAsyncCache(invalidCasExpiry)
+            const legacyCasExpiryCache = getMockCache(validCasExpiry)
+            const iapReceiptCache = getMockAsyncCache(validIAPReceipt)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+            )
+
+            expect(result).toEqual(CASAuthStatus(validCasExpiry))
+        })
+
+        it('returns an `iap` auth when all of the previous caches are invalid', async () => {
+            const userDataCache = getMockAsyncCache(null)
+            const casDataCache = getMockAsyncCache(invalidCasExpiry)
+            const legacyCasExpiryCache = getMockCache(invalidCasExpiry)
+            const iapReceiptCache = getMockAsyncCache(validIAPReceipt)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+            )
+
+            expect(result).toEqual(IAPAuthStatus(validIAPReceipt))
+        })
+
+        it('returns `unauthed` when all of the caches are invalid', async () => {
+            const userDataCache = getMockAsyncCache(null)
+            const casDataCache = getMockAsyncCache(invalidCasExpiry)
+            const legacyCasExpiryCache = getMockCache(invalidCasExpiry)
+            const iapReceiptCache = getMockAsyncCache(invalidIAPReceipt)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+            )
+
+            expect(result).toEqual(unauthed)
         })
     })
 })

@@ -11,7 +11,7 @@ export interface PositionInjectedProps {
     position: Animated.Value
 }
 
-const PositionContext = createContext(new Animated.Value(0))
+const PositionContext = createContext(new Animated.Value(1))
 export const useNavigatorPosition = () => useContext(PositionContext)
 
 export type NavigatorWrapper = (
@@ -23,11 +23,14 @@ export const addStaticRouterWithPosition: NavigatorWrapper = (
     Navigator,
     getPosition,
 ) => {
-    const WithPosition = ({ navigation }: NavigationInjectedProps) => {
+    const WithPosition = ({
+        navigation,
+        ...props
+    }: NavigationInjectedProps) => {
         const position = getPosition()
         return (
             <PositionContext.Provider value={position}>
-                <Navigator navigation={navigation} />
+                <Navigator navigation={navigation} {...props} />
             </PositionContext.Provider>
         )
     }

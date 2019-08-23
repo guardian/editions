@@ -45,6 +45,14 @@ const CASAuthStatus = (info: CasExpiry): Authed<CASAuth> => ({
     },
 })
 
+const IAPAuthStatus = (info: ReceiptIOS): Authed<IAPAuth> => ({
+    type: 'authed',
+    data: {
+        type: 'iap',
+        info,
+    },
+})
+
 export type AuthType = IdentityAuth | CASAuth | IAPAuth
 
 interface Pending {
@@ -154,21 +162,32 @@ const liveAuthChain = () =>
  * data and re-open the app to read the new content.
  * */
 
-const cachedIdentityAuthProvider = () =>
-    userDataCache.get().then(authTypeFromIdentity)
+const cachedIdentityAuthProvider = (
+    userDataCacheImpl: typeof userDataCache,
+) => () => userDataCacheImpl.get().then(authTypeFromIdentity)
 
-const cachedCasAuthProvider = async () => {
-    const auth = await casDataCache.get().then(authTypeFromCAS)
-    return auth || authTypeFromCAS(legacyCASExpiryCache.get() || null)
+const cachedCasAuthProvider = (
+    casDataCacheImpl: typeof casDataCache,
+    legacyCASExpiryCacheImpl: typeof legacyCASExpiryCache,
+) => async () => {
+    const auth = await casDataCacheImpl.get().then(authTypeFromCAS)
+    return auth || authTypeFromCAS(legacyCASExpiryCacheImpl.get() || null)
 }
 
-const cachedIAPAuthProvider = () => iapReceiptCache.get().then(authTypeFromIAP)
+const cachedIAPAuthProvider = (
+    iapReceiptCacheImpl: typeof iapReceiptCache,
+) => () => iapReceiptCacheImpl.get().then(authTypeFromIAP)
 
-const cachedAuthChain = () =>
+const cachedAuthChain = (
+    userDataCacheImpl = userDataCache,
+    casDataCacheImpl = casDataCache,
+    legacyCASExpiryCacheImpl = legacyCASExpiryCache,
+    iapReceiptCacheImpl = iapReceiptCache,
+) =>
     runAuthChain([
-        cachedIdentityAuthProvider,
-        cachedCasAuthProvider,
-        cachedIAPAuthProvider,
+        cachedIdentityAuthProvider(userDataCacheImpl),
+        cachedCasAuthProvider(casDataCacheImpl, legacyCASExpiryCacheImpl),
+        cachedIAPAuthProvider(iapReceiptCacheImpl),
     ])
 
 export {
@@ -182,6 +201,7 @@ export {
     getIdentityData,
     IdentityAuthStatus,
     CASAuthStatus,
+    IAPAuthStatus,
     /* exported for testing */
     authTypeFromCAS,
     authTypeFromIAP,
