@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, StyleSheet, Dimensions, Linking } from 'react-native'
+import { View, StyleSheet, Dimensions, Linking, Platform } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -59,6 +59,12 @@ const ArticleController = ({ article }: { article: CAPIArticle }) => {
     }
 }
 
+const urlIsNotAnEmbed = (url: string) =>
+    !(
+        url.startsWith('https://embed.theguardian.com') ||
+        url.startsWith('https://www.youtube.com/embed')
+    )
+
 const Article = ({
     article,
     ...headerProps
@@ -84,7 +90,12 @@ const Article = ({
                         useWebKit={false}
                         source={{ html: html }}
                         onShouldStartLoadWithRequest={event => {
-                            if (event.navigationType === 'click') {
+                            if (
+                                Platform.select({
+                                    ios: event.navigationType === 'click',
+                                    android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
+                                })
+                            ) {
                                 Linking.openURL(event.url)
                                 return false
                             }
