@@ -36,7 +36,6 @@ const addStaticRouterWithOverlay: NavigatorWrapper = (
             <>
                 <Animated.View
                     {...ariaHidden}
-                    pointerEvents="none"
                     style={[
                         overlayStyles.root,
                         {

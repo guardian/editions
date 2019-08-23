@@ -119,6 +119,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             title: 'Privacy policy',
                             data: {
                                 onPress: () => {
+                                    console.log('asdf')
                                     navigation.navigate(
                                         routeNames.PrivacyPolicy,
                                     )
