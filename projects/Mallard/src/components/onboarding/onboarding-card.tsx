@@ -5,6 +5,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { minScreenSize } from 'src/helpers/screen'
+import { Button } from '../button/button'
+import { CloseModalButton } from '../button/close-modal-button'
 
 export enum CardAppearance {
     tomato,
@@ -13,15 +15,15 @@ export enum CardAppearance {
 }
 
 const styles = StyleSheet.create({
+    flexRow: {
+        flexDirection: 'row',
+    },
     container: {
         flex: 0,
         flexDirection: 'column',
     },
     top: {
-        aspectRatio: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        flexGrow: 0,
+        alignContent: 'space-between',
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
         width: '100%',
@@ -36,7 +38,16 @@ const styles = StyleSheet.create({
     },
     explainerSubtitle: {
         ...getFont('titlepiece', 1.25),
-        marginBottom: metrics.vertical * 1.5,
+    },
+    bottomContentContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: metrics.vertical * 3,
+    },
+    dismissIconContainer: {
+        alignItems: 'flex-end',
+        marginBottom: metrics.vertical / 2,
+        marginLeft: '-2%',
     },
 })
 
@@ -71,6 +82,8 @@ const OnboardingCard = ({
     bottomContent,
     explainerTitle,
     explainerSubtitle,
+    bottomExplainerContent,
+    onDismissThisCard,
     style,
     appearance,
     size = 'big',
@@ -82,12 +95,14 @@ const OnboardingCard = ({
     bottomContent?: React.ReactNode
     explainerTitle?: string
     explainerSubtitle?: string
+    bottomExplainerContent?: React.ReactNode
+    onDismissThisCard?: () => void
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
     size?: 'big' | 'small'
     maxSize?: number
 }) => {
-    const max = Math.min(minScreenSize() * 0.9, maxSize)
+    const max = Math.min(minScreenSize() * 0.95, maxSize)
     return (
         <View
             style={[
@@ -100,17 +115,24 @@ const OnboardingCard = ({
             ]}
         >
             <View style={[styles.top, appearances[appearance].background]}>
-                <View style={{ flexGrow: 1 }}>
+                <View style={styles.flexRow}>
                     <TitlepieceText
                         accessibilityRole="header"
                         style={[
-                            getFont('titlepiece', size === 'big' ? 2.5 : 2.0),
+                            getFont('titlepiece', size === 'big' ? 2.5 : 2.25),
                             { marginBottom: size === 'big' ? 16 : 8 },
                             appearances[appearance].titleText,
                         ]}
                     >
                         {title}
                     </TitlepieceText>
+                    {onDismissThisCard && (
+                        <View style={styles.dismissIconContainer}>
+                            <CloseModalButton onPress={onDismissThisCard} />
+                        </View>
+                    )}
+                </View>
+                <View>
                     {subtitle && (
                         <TitlepieceText
                             style={[
@@ -127,9 +149,7 @@ const OnboardingCard = ({
                 </View>
                 <View>
                     {bottomContent && (
-                        <View
-                            style={{ flexDirection: 'row', flexWrap: 'wrap' }}
-                        >
+                        <View style={styles.bottomContentContainer}>
                             {bottomContent}
                         </View>
                     )}
@@ -138,16 +158,31 @@ const OnboardingCard = ({
             {(explainerTitle || explainerSubtitle || children) && (
                 <View style={styles.explainer}>
                     {explainerTitle && (
-                        <TitlepieceText style={styles.explainerTitle}>
+                        <TitlepieceText
+                            style={[
+                                styles.explainerTitle,
+                                appearances[appearance].subtitleText,
+                            ]}
+                        >
                             {explainerTitle}
                         </TitlepieceText>
                     )}
                     {explainerSubtitle && (
-                        <TitlepieceText style={styles.explainerSubtitle}>
+                        <TitlepieceText
+                            style={[
+                                styles.explainerSubtitle,
+                                appearances[appearance].subtitleText,
+                            ]}
+                        >
                             {explainerSubtitle}
                         </TitlepieceText>
                     )}
                     {children && <UiExplainerCopy>{children}</UiExplainerCopy>}
+                    {bottomExplainerContent && (
+                        <View style={styles.bottomContentContainer}>
+                            {bottomExplainerContent}
+                        </View>
+                    )}
                 </View>
             )}
         </View>
