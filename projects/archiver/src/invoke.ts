@@ -10,10 +10,12 @@ import {
     withFailureMessage,
 } from '../../backend/utils/try'
 import { IssueParams } from './issueTask'
+import { randomBytes } from 'crypto'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
+    eventTime: string
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
 interface Issue {
     source: string
@@ -63,6 +65,13 @@ export const handler: Handler<
                     .startExecution({
                         stateMachineArn,
                         input: JSON.stringify(invoke),
+                        name: `issue ${invoke.issueId.id} ${
+                            invoke.issueId.source
+                        } ${randomBytes(2).toString('hex')}`.replace(
+                            /\W/g,
+                            '-', // see character restrictions
+                            //https://docs.aws.amazon.com/step-functions/latest/apireference/API_StartExecution.html
+                        ),
                     })
                     .promise(),
             )
