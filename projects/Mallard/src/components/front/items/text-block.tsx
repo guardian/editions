@@ -31,7 +31,7 @@ const styles = {
 }
 
 const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
-    const [color, {}] = useArticle()
+    const [color, { pillar }] = useArticle()
     const kickerStyle = useKickerColorStyle()
 
     switch (textBlockAppearance) {
@@ -55,7 +55,12 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
             return {
                 rootStyle: styles.root,
                 kickerStyle,
-                headlineStyle: [styles.headline],
+                headlineStyle: [
+                    styles.headline,
+                    pillar === 'opinion' && {
+                        fontFamily: getFont('headline', 1, 'light').fontFamily,
+                    },
+                ],
             }
     }
 }
