@@ -1,27 +1,7 @@
-import React, { ReactNode, useRef, useState } from 'react'
-import {
-    Animated,
-    Easing,
-    StyleProp,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    View,
-    ViewStyle,
-} from 'react-native'
-import {
-    AnimatedValue,
-    NavigationEvents,
-    NavigationInjectedProps,
-    withNavigation,
-} from 'react-navigation'
-import { CAPIArticle } from 'src/common'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { HeadlineCardText, StandfirstText } from 'src/components/styled-text'
-import {
-    setScreenPositionFromView,
-    setScreenPositionOfItem,
-} from 'src/navigation/navigators/article/positions'
-import { navigateToArticle } from 'src/navigation/helpers/base'
-import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
+import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
@@ -30,19 +10,10 @@ import {
     ItemSizes,
     PageLayoutSizes,
     toPercentage,
-    useCardBackgroundStyle,
 } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
+import { ItemTappable, TappablePropTypes } from './item-tappable'
 import { TextBlock } from './text-block'
-import { supportsTransparentCards } from 'src/helpers/features'
-import { ariaHidden } from 'src/helpers/a11y'
-
-interface TappablePropTypes {
-    style?: StyleProp<ViewStyle>
-    article: CAPIArticle
-    path: PathToArticle
-    articleNavigator: ArticleNavigator
-}
 
 export interface PropTypes extends TappablePropTypes {
     size: ItemSizes
@@ -50,124 +21,32 @@ export interface PropTypes extends TappablePropTypes {
 }
 
 /*
-TAPPABLE
-This just wraps every card to make it tappable
+helpers
 */
-const tappableStyles = StyleSheet.create({
-    root: {
-        flexGrow: 1,
-        flexShrink: 0,
-        flexBasis: '100%',
-    },
-    padding: {
-        padding: metrics.horizontal / 2,
-        paddingVertical: metrics.vertical / 2,
-    },
-})
+const getImageHeight = ({ story, layout }: ItemSizes) => {
+    if (layout === PageLayoutSizes.tablet) {
+        if (story.height >= 4) {
+            return '50%'
+        }
+        if (story.height >= 3) {
+            return '66.66%'
+        }
+        if (story.height >= 2) {
+            return '50%'
+        }
+        return '75.5%'
+    }
+    if (layout === PageLayoutSizes.mobile) {
+        if (story.height > 4) {
+            return '75.5%'
+        }
+        return '50%'
+    }
+}
 
-/*
-To help smooth out the transition
-we fade the card contents out on tap
-and then back in when the view regains focus
-*/
-const fade = (opacity: AnimatedValue, direction: 'in' | 'out') =>
-    direction === 'in'
-        ? Animated.timing(opacity, {
-              duration: 250,
-              delay: 250,
-              toValue: 1,
-              easing: Easing.linear,
-              useNativeDriver: true,
-          }).start()
-        : Animated.timing(opacity, {
-              duration: 250,
-              toValue: 0,
-              useNativeDriver: true,
-          }).start()
-
-const ItemTappable = withNavigation(
-    ({
-        children,
-        articleNavigator,
-        style,
-        article,
-        path,
-        navigation,
-        hasPadding = true,
-    }: {
-        children: ReactNode
-        hasPadding?: boolean
-    } & TappablePropTypes &
-        NavigationInjectedProps) => {
-        const tappableRef = useRef<View>()
-        const [opacity] = useState(() => new Animated.Value(1))
-        return (
-            <Animated.View
-                style={[style]}
-                ref={(view: any) => {
-                    if (view) tappableRef.current = view._component as View
-                }}
-                onLayout={(ev: any) => {
-                    setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
-                    tappableRef.current &&
-                        setScreenPositionFromView(
-                            article.key,
-                            tappableRef.current,
-                        )
-                }}
-                onTouchStart={() => {
-                    tappableRef.current &&
-                        setScreenPositionFromView(
-                            article.key,
-                            tappableRef.current,
-                        )
-                }}
-            >
-                <NavigationEvents
-                    onWillFocus={() => {
-                        fade(opacity, 'in')
-                    }}
-                />
-
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        supportsTransparentCards() && fade(opacity, 'out')
-                        navigateToArticle(navigation, {
-                            path,
-                            articleNavigator,
-                            prefersFullScreen: article.type === 'crossword',
-                        })
-                    }}
-                >
-                    <View
-                        style={[
-                            tappableStyles.root,
-                            hasPadding && tappableStyles.padding,
-                            useCardBackgroundStyle(),
-                        ]}
-                    >
-                        {children}
-                    </View>
-                </TouchableWithoutFeedback>
-
-                <Animated.View
-                    {...ariaHidden}
-                    pointerEvents="none"
-                    style={[
-                        StyleSheet.absoluteFill,
-                        {
-                            backgroundColor: color.dimBackground,
-                            opacity: opacity.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [1, 0],
-                            }),
-                        },
-                    ]}
-                ></Animated.View>
-            </Animated.View>
-        )
-    },
-)
+const isSmallItem = (size: ItemSizes) => {
+    return size.story.width <= 1
+}
 
 /*
 COVER ITEM
@@ -226,28 +105,13 @@ const imageStyles = StyleSheet.create({
     },
 })
 
-const getImageHeight = ({ story, layout }: ItemSizes) => {
-    if (layout === PageLayoutSizes.tablet) {
-        if (story.height >= 4) {
-            return '50%'
-        }
-        if (story.height >= 3) {
-            return '66.66%'
-        }
-        if (story.height >= 2) {
-            return '50%'
-        }
-        return '75.5%'
-    }
-    if (layout === PageLayoutSizes.mobile) {
-        if (story.height > 4) {
-            return '75.5%'
-        }
-        return '50%'
-    }
-}
-
 const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
+    const [, { pillar }] = useArticle()
+    if (pillar === 'opinion' && isSmallItem(size)) {
+        return (
+            <RoundImageItem {...{ article, issueID, size, ...tappableProps }} />
+        )
+    }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article && article.image ? (
@@ -266,6 +130,33 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
+        </ItemTappable>
+    )
+}
+const RoundImageItem = ({
+    article,
+    issueID,
+    size,
+    ...tappableProps
+}: PropTypes) => {
+    return (
+        <ItemTappable {...tappableProps} {...{ article }}>
+            <TextBlock
+                style={imageStyles.textBlock}
+                kicker={article.kicker}
+                headline={article.headline}
+                {...{ size }}
+            />
+            {'image' in article && article.image ? (
+                <ImageResource
+                    issueID={issueID}
+                    style={[
+                        imageStyles.image,
+                        { height: getImageHeight(size) },
+                    ]}
+                    image={article.image}
+                />
+            ) : null}
         </ItemTappable>
     )
 }
