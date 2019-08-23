@@ -22,8 +22,8 @@ export type ArticleHeadlineProps = {
 
 const styles = StyleSheet.create({
     headline: {
-        marginRight: metrics.horizontal * 2,
-        marginTop: metrics.vertical / 2,
+        marginTop: metrics.vertical * 0.5,
+        marginBottom: metrics.vertical * 3.5,
     },
     highlightBg: {
         ...StyleSheet.absoluteFillObject,
