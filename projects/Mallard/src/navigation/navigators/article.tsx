@@ -217,7 +217,7 @@ const createArticleNavigator = (
     front: NavigationRouteConfig,
     article: NavigationRouteConfig,
 ) => {
-    let animatedValue = new Animated.Value(1)
+    let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
         [routeNames.Issue]: addStaticRouterWithPosition(
@@ -226,7 +226,7 @@ const createArticleNavigator = (
         ),
         [routeNames.Article]: supportsTransparentCards()
             ? wrapInSlideCard(article, () => animatedValue)
-            : wrapInBasicCard(article, () => animatedValue),
+            : wrapInBasicCard(article, () => new Animated.Value(1)),
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
