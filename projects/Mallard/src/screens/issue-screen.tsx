@@ -121,10 +121,12 @@ const IssueFronts = ({
             // even if it does mean showing the same front twice
             // we could filter out duplicates but in this case it'd probably be more
             // obvious for someone previewing if we did render it twice
-            data={issue.fronts.map((key, index) => ({
-                key,
-                index,
-            }))}
+            data={issue.fronts
+                .filter(front => front === 'Opinion')
+                .map((key, index) => ({
+                    key,
+                    index,
+                }))}
             extraData={{
                 ...container,
             }}

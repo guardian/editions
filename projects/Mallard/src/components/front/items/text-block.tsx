@@ -99,20 +99,51 @@ const TextBlock = ({
         'headline',
         'fontSize' in sizes ? sizes.fontSize : getFontSize(sizes.size),
     ).fontSize
+
+    const [, { pillar }] = useArticle()
     return (
         <View style={[rootStyle, style]}>
-            <HeadlineCardText
-                allowFontScaling={false}
-                style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
-            >
-                <HeadlineKickerText
+            {pillar === 'opinion' ? (
+                <>
+                    <HeadlineCardText
+                        allowFontScaling={false}
+                        style={[
+                            headlineStyle,
+                            { fontSize, lineHeight: fontSize },
+                        ]}
+                    >
+                        {headline}
+                    </HeadlineCardText>
+                    <HeadlineKickerText
+                        allowFontScaling={false}
+                        style={[
+                            kickerStyle,
+                            {
+                                fontSize,
+                                lineHeight: fontSize,
+                            },
+                        ]}
+                    >
+                        {kicker}
+                    </HeadlineKickerText>
+                </>
+            ) : (
+                <HeadlineCardText
                     allowFontScaling={false}
-                    style={[kickerStyle, { fontSize, lineHeight: fontSize }]}
+                    style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
                 >
-                    {kicker + ' '}
-                </HeadlineKickerText>
-                {headline}
-            </HeadlineCardText>
+                    <HeadlineKickerText
+                        allowFontScaling={false}
+                        style={[
+                            kickerStyle,
+                            { fontSize, lineHeight: fontSize },
+                        ]}
+                    >
+                        {kicker + ' '}
+                    </HeadlineKickerText>
+                    {headline}
+                </HeadlineCardText>
+            )}
         </View>
     )
 }
