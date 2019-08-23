@@ -32,7 +32,6 @@ const ArticleScreenBody = ({
 
     return (
         <>
-            <ModalRenderer />
             <ScrollView
                 scrollEventThrottle={8}
                 onScroll={ev => {
@@ -72,6 +71,7 @@ const ArticleScreenBody = ({
                     ),
                 })}
             </ScrollView>
+            <ModalRenderer />
         </>
     )
 }
