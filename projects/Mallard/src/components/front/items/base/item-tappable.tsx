@@ -25,13 +25,18 @@ import {
 import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { ItemSizes, useCardBackgroundStyle } from '../helpers/helpers'
+import { ItemSizes, useCardBackgroundStyle } from '../../helpers/helpers'
 
 export interface TappablePropTypes {
     style?: StyleProp<ViewStyle>
     article: CAPIArticle
     path: PathToArticle
     articleNavigator: ArticleNavigator
+}
+
+export interface PropTypes extends TappablePropTypes {
+    size: ItemSizes
+    issueID: string
 }
 
 /*
@@ -41,6 +46,7 @@ This just wraps every card to make it tappable
 export const tappablePadding = {
     padding: metrics.horizontal / 2,
     paddingVertical: metrics.vertical / 2,
+    paddingRight: metrics.horizontal,
 }
 const tappableStyles = StyleSheet.create({
     root: {

@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text, Image } from 'react-native'
 import { HeadlineCardText, StandfirstText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { getFont } from 'src/theme/typography'
+import { getFont, getUnscaledFont } from 'src/theme/typography'
 import {
     getItemRectanglePerc,
     ItemSizes,
@@ -16,18 +16,19 @@ import {
     ItemTappable,
     TappablePropTypes,
     tappablePadding,
-} from './item-tappable'
-import { TextBlock } from './text-block'
-
-export interface PropTypes extends TappablePropTypes {
-    size: ItemSizes
-    issueID: string
-}
+    PropTypes,
+} from './base/item-tappable'
+import { TextBlock } from './base/text-block'
+import { TextWithIcon } from 'src/components/layout/text-with-icon'
+import Quote from 'src/components/icons/Quote'
+import { imagePath } from 'src/paths'
+import { BylineCutout } from 'src/components/article/article-header/opinion-header'
+import { SuperHeroImageItem } from './super-items'
 
 /*
 helpers
 */
-const getImageHeight = ({ story, layout }: ItemSizes) => {
+export const getImageHeight = ({ story, layout }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
         if (story.height >= 4) {
             return '50%'
@@ -48,7 +49,7 @@ const getImageHeight = ({ story, layout }: ItemSizes) => {
     }
 }
 
-const isSmallItem = (size: ItemSizes) => {
+export const isSmallItem = (size: ItemSizes) => {
     return size.story.width <= 1
 }
 
@@ -84,6 +85,7 @@ const CoverItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                     />
                 ) : null}
                 <TextBlock
+                    byline={article.byline}
                     kicker={article.kicker}
                     headline={article.headline}
                     textBlockAppearance={'pillarColor'}
@@ -137,6 +139,7 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                 />
             ) : null}
             <TextBlock
+                byline={article.byline}
                 style={imageStyles.textBlock}
                 kicker={article.kicker}
                 headline={article.headline}
@@ -154,6 +157,7 @@ const RoundImageItem = ({
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
+                byline={article.byline}
                 kicker={article.kicker}
                 headline={article.headline}
                 {...{ size }}
@@ -202,6 +206,7 @@ const SplitImageItem = ({
         <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
                 <TextBlock
+                    byline={article.byline}
                     style={splitImageStyles.textBlock}
                     kicker={article.kicker}
                     headline={article.headline}
@@ -220,68 +225,8 @@ const SplitImageItem = ({
 }
 
 /*
-SUPERHERO IMAGE ITEM
-Text below image. To use in news & sport supers
-*/
-const superHeroImageStyles = StyleSheet.create({
-    image: {
-        width: '100%',
-        flex: 0,
-        height: toPercentage(
-            getItemRectanglePerc(
-                { width: 2, height: 4, top: 0, left: 0 },
-                PageLayoutSizes.mobile,
-            ).height,
-        ),
-    },
-    textBlock: {
-        ...tappablePadding,
-    },
-    textStandBlock: {
-        ...tappablePadding,
-        ...getFont('text', 0.9),
-        color: color.palette.neutral[46],
-        position: 'absolute',
-        bottom: 0,
-    },
-})
-
-const SuperHeroImageItem = ({
-    article,
-    issueID,
-    size,
-    ...tappableProps
-}: PropTypes) => {
-    return (
-        <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
-                <ImageResource
-                    issueID={issueID}
-                    style={[superHeroImageStyles.image]}
-                    image={article.image}
-                />
-            ) : null}
-            <TextBlock
-                style={[superHeroImageStyles.textBlock]}
-                kicker={article.kicker}
-                headline={article.headline}
-                {...{ size }}
-            />
-            {'trail' in article && article.trail ? (
-                <StandfirstText
-                    allowFontScaling={false}
-                    style={[superHeroImageStyles.textStandBlock]}
-                >
-                    {article.trail}
-                </StandfirstText>
-            ) : null}
-        </ItemTappable>
-    )
-}
-
-/*
-SUPERHERO IMAGE ITEM
-Text below image. To use in news & sport supers
+SPLASH ITEM
+Image only
 */
 const splashImageStyles = StyleSheet.create({
     image: {
@@ -317,6 +262,7 @@ const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
+                byline={article.byline}
                 kicker={article.kicker}
                 headline={article.headline}
                 {...{ size }}
@@ -329,6 +275,7 @@ const SmallItemLargeText = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
+                byline={article.byline}
                 kicker={article.kicker}
                 headline={article.headline}
                 fontSize={1.25}

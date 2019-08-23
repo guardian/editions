@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, ViewStyle, StyleProp } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { HeadlineCardText, HeadlineKickerText } from '../../styled-text'
+import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text'
 
 import { color } from 'src/theme/color'
 import {
     useKickerColorStyle,
     ItemSizes,
     PageLayoutSizes,
-} from '../helpers/helpers'
+} from '../../helpers/helpers'
 import {
     getFont,
     FontSizes,
@@ -92,9 +92,11 @@ const TextBlock = ({
     headline,
     textBlockAppearance,
     style,
+    byline,
     ...sizes
 }: {
     kicker: string
+    byline?: string
     headline: string
     textBlockAppearance: TextBlockAppearance
     style?: StyleProp<ViewStyle>
@@ -145,7 +147,7 @@ const TextBlock = ({
                             },
                         ]}
                     >
-                        {kicker}
+                        {byline}
                     </HeadlineKickerText>
                 </>
             ) : (

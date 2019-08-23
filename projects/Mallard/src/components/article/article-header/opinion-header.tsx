@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    StyleProp,
+    ImageStyle,
+} from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { ArticleImage } from '../article-image'
 import { ArticleStandfirst } from '../article-standfirst'
@@ -12,6 +19,8 @@ import { useArticle } from 'src/hooks/use-article'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
 import { Fader } from 'src/components/layout/animators/fader'
+import { Image as ImageType } from 'src/common'
+import { imagePath } from 'src/paths'
 
 const ArticleFader = Fader
 
@@ -24,27 +33,43 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingRight: 0,
     },
-    cutout: {
-        aspectRatio: 1.5,
-        transform: [{ scaleX: 2.5 }, { scaleY: 2.5 }],
-        marginBottom: metrics.vertical * 2.5,
-        marginLeft: -metrics.vertical * 2.5,
-    },
-    cutoutContainer: {
-        flexDirection: 'column',
-        alignSelf: 'flex-end',
-        flex: 1,
-    },
     headlineContainer: {
         flexDirection: 'column',
-        flex: 4,
-        flexWrap: 'wrap',
+        flex: 1,
     },
     flexRow: {
-        display: 'flex',
         flexDirection: 'row',
+        width: '100%',
+    },
+    cutoutContainer: {
+        flexBasis: '40%',
+        marginLeft: '-30%',
+        marginRight: '-5%',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
     },
 })
+
+const cutoutStyles = {
+    root: {
+        aspectRatio: 1.2,
+        width: '100%',
+    },
+}
+
+export const BylineCutout = ({
+    cutout,
+    style,
+}: {
+    cutout: ImageType
+    style?: StyleProp<ImageStyle>
+}) => (
+    <Image
+        resizeMode={'contain'}
+        source={{ uri: imagePath(cutout) }}
+        style={[cutoutStyles.root, style]}
+    />
+)
 
 const OpinionHeader = ({
     byline,
@@ -84,8 +109,8 @@ const OpinionHeader = ({
             ) : null}
             <ArticleFader>
                 <View style={styles.flexRow}>
-                    <HeadlineTypeWrap>
-                        <View style={styles.headlineContainer}>
+                    <View style={styles.headlineContainer}>
+                        <HeadlineTypeWrap>
                             <ArticleHeadline
                                 icon={{
                                     width: 38,
@@ -113,15 +138,11 @@ const OpinionHeader = ({
                                     {byline}
                                 </Text>
                             </ArticleHeadline>
-                        </View>
-                    </HeadlineTypeWrap>
-
+                        </HeadlineTypeWrap>
+                    </View>
                     {bylineImages && bylineImages.cutout ? (
                         <View style={styles.cutoutContainer}>
-                            <ArticleImage
-                                style={styles.cutout}
-                                image={bylineImages.cutout}
-                            />
+                            <BylineCutout cutout={bylineImages.cutout} />
                         </View>
                     ) : null}
                 </View>
