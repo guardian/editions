@@ -160,7 +160,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 ]}
             >
                 <Text
-                    style={[opinionStyles.bylineText, { color: colors.bright }]}
+                    style={[opinionStyles.bylineText, { color: colors.main }]}
                 >
                     {[
                         article.bylineImages &&
