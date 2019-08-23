@@ -125,7 +125,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                         width: 35,
                         element: scale => (
                             <Quote
-                                scale={1.1 * scale}
+                                scale={0.9 / scale}
                                 fill={opinionStyles.titleText.color}
                             />
                         ),

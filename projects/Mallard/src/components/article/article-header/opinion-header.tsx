@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     cutoutContainer: {
         flexBasis: '40%',
-        marginLeft: '-30%',
+        marginLeft: '-20%',
         marginRight: '-5%',
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
