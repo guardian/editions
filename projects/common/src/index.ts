@@ -87,6 +87,7 @@ export interface Content extends WithKey {
     showQuotedHeadline: boolean
     mediaType: MediaType
     slideshowImages?: Image[]
+    sportScore?: string
 }
 export interface Article extends Content {
     type: 'article'

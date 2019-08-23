@@ -17,7 +17,7 @@ export interface PublishedFront {
     id: string
     name: string
     collections: PublishedCollection[]
-    swatch?: Swatch //TODO: Make non optional on  https://github.com/guardian/facia-tool/pull/918
+    swatch: Swatch
 }
 export interface PublishedCollection {
     id: string
@@ -43,4 +43,5 @@ export interface PublishedFurtniture {
     mediaType: MediaType
     imageSrcOverride?: PublishedImage
     slideshowImages?: PublishedImage[]
+    sportScore?: string
 }
