@@ -31,6 +31,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { Header } from 'src/components/layout/header/header'
+import { supportsTransparentCards } from 'src/helpers/features'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -66,12 +67,14 @@ const ScreenHeader = withNavigation(
                 }}
                 action={
                     <Animated.View
-                        style={{
-                            opacity: position.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [1, 0],
-                            }),
-                        }}
+                        style={
+                            supportsTransparentCards() && {
+                                opacity: position.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [1, 0],
+                                }),
+                            }
+                        }
                     >
                         <Button
                             icon={isTablet ? '' : ''}
@@ -84,12 +87,14 @@ const ScreenHeader = withNavigation(
                 }
             >
                 <Animated.View
-                    style={{
-                        opacity: position.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [1, 0],
-                        }),
-                    }}
+                    style={
+                        supportsTransparentCards() && {
+                            opacity: position.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [1, 0],
+                            }),
+                        }
+                    }
                 >
                     <IssueTitle title={weekday} subtitle={date} />
                 </Animated.View>
@@ -124,7 +129,7 @@ const IssueFronts = ({
                 ...container,
             }}
             style={style}
-            removeClippedSubviews={false}
+            removeClippedSubviews={true}
             ListHeaderComponent={ListHeaderComponent}
             ListFooterComponent={() => (
                 <View style={{ height: container.height / 2 }} />

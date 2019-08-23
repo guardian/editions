@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { getFader } from 'src/components/layout/animators/fader'
+import { Fader } from 'src/components/layout/animators/fader'
 import { metrics } from 'src/theme/spacing'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleFader = getFader('article')
+const ArticleFader = Fader
 
 const NewsHeader = ({
     byline,

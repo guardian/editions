@@ -2,8 +2,6 @@ import React, { useState, useEffect, ReactNode, useRef } from 'react'
 import { Animated, StyleSheet, View, PanResponder } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
-import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
 
 /*
 This is the swipey contraption that contains an article.
@@ -14,9 +12,6 @@ const styles = StyleSheet.create({
         flex: 0,
         flexShrink: 0,
         height: '100%',
-        backgroundColor: color.background,
-        borderTopLeftRadius: metrics.radius,
-        borderTopRightRadius: metrics.radius,
         overflow: 'hidden',
     },
     flexGrow: {
@@ -28,43 +23,57 @@ export const SlideCard = ({
     enabled,
     children,
     onDismiss,
+    getPosition,
 }: {
     enabled: boolean
     children: ReactNode
     onDismiss: () => void
+    getPosition: () => Animated.Value
 }) => {
-    const [scrollY] = useState(() => new Animated.Value(1))
-    let { current: blocked } = useRef(false)
+    const [scrollY] = useState(() => new Animated.Value(0))
+    const blocked = useRef(false)
+
     useEffect(() => {
-        scrollY.addListener(({ value }) => {
-            if (value < dismissAt * -1) {
-                blocked = false
-                Animated.timing(scrollY, {
-                    toValue: 0,
-                    duration: 200,
-                }).start()
-                onDismiss()
-            }
-        })
+        Animated.timing(getPosition(), {
+            toValue: scrollY.interpolate({
+                inputRange: [0, 60],
+                outputRange: [1, 0.8],
+            }) as Animated.Value,
+            duration: 0,
+            useNativeDriver: true,
+        }).start()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => false,
         onMoveShouldSetPanResponder: (ev, gestureState) => {
             if (gestureState.dy > 10) {
-                blocked = true
+                blocked.current = true
+                if (enabled && gestureState.vy > 1) {
+                    blocked.current = false
+                    onDismiss()
+                    scrollY.stopAnimation()
+                }
             }
-            return enabled && blocked
+            return enabled && blocked.current
         },
         onPanResponderTerminationRequest: () => false,
         onShouldBlockNativeResponder: () => false,
-        onPanResponderMove: (ev, gestureState) => {
-            if (blocked) {
-                scrollY.setValue(gestureState.dy * -1.5)
-            }
-        },
+        onPanResponderMove: Animated.event([
+            null,
+            {
+                dy: scrollY,
+            },
+        ]),
         onPanResponderEnd: (ev, gestureState) => {
-            blocked = false
+            blocked.current = false
+            if (gestureState.dy > 50) {
+                onDismiss()
+                scrollY.stopAnimation()
+                return
+            }
             Animated.timing(scrollY, {
+                useNativeDriver: true,
                 toValue: 0,
                 duration: 200,
             }).start()
@@ -88,14 +97,13 @@ export const SlideCard = ({
                 },
             ]}
         >
-            <Header
-                {...{
-                    scrollY,
-                    onDismiss,
-                }}
-            />
-
             <View {...panResponder.panHandlers} style={[{ flex: 1 }]}>
+                <Header
+                    {...{
+                        scrollY,
+                        onDismiss,
+                    }}
+                />
                 {children}
             </View>
         </Animated.View>

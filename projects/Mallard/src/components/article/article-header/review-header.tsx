@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { getFader } from 'src/components/layout/animators/fader'
+import { Fader } from 'src/components/layout/animators/fader'
 import { Stars } from 'src/components/stars/stars'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
@@ -13,7 +13,7 @@ import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
 import { HeadlineTypeWrap } from './shared'
 
-const ArticleFader = getFader('article')
+const ArticleFader = Fader
 
 const style = StyleSheet.create({
     standfirst: {

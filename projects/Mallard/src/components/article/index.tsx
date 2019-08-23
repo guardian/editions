@@ -74,7 +74,7 @@ const Article = ({
 
     return (
         <View style={styles.container}>
-            <Fader first position={'article'} />
+            <Fader />
             {type === 'opinion' ? (
                 <OpinionHeader {...headerProps} />
             ) : type === 'review' ? (
@@ -85,7 +85,7 @@ const Article = ({
                 <NewsHeader {...headerProps} />
             )}
             <Wrap>
-                <Fader position={'article'}>
+                <Fader>
                     <WebView
                         originWhitelist={['*']}
                         scrollEnabled={false}
