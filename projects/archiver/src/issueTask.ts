@@ -1,41 +1,39 @@
 import { Handler } from 'aws-lambda'
-import { head, tail } from 'ramda'
 import { attempt, hasFailed } from '../../backend/utils/try'
-import { run } from '../main'
-export interface Issue {
+import { Issue } from '../common'
+import { getIssue } from './downloader'
+import { bucket } from './s3'
+export interface IssueId {
     source: string
     id: string
 }
 export interface IssueParams {
-    issues: Issue[]
-    parsedIssues?: Issue[]
+    issueId: IssueId
 }
-export const handler: Handler<
-    IssueParams,
-    IssueParams & {
-        parsed?: Issue
-        success: boolean
-        message?: string
-        finished: boolean
+export interface IssueTaskOutput {
+    issueId: IssueId
+    issue: Issue
+    message?: string
+    fronts: string[]
+    remainingFronts: number
+}
+export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
+    issueId,
+}) => {
+    const { source, id } = issueId
+    console.log(`Attempting to upload ${id} to ${bucket}`)
+    const path = `${source}/${id}`
+    const issue = await attempt(getIssue(path))
+    if (hasFailed(issue)) {
+        console.log(JSON.stringify(issue))
+        throw new Error('Failed to download issue.')
     }
-> = async ({ issues, parsedIssues }) => {
-    //Should not be called with empty issues, but short circuit if so.
-    if (issues.length == 0)
-        return { issues, parsedIssues, success: true, finished: true }
-
-    const current = head(issues)
-    const remaining = tail(issues)
-
-    const publish = await attempt(run(current.source, current.id))
-
-    if (hasFailed(publish))
-        throw new Error(`Failed to publish ${current.source}/${current.id}`)
-
+    console.log('Downloaded issue', path)
     return {
-        parsed: current,
-        success: true,
-        issues: remaining,
-        parsedIssues: [...(parsedIssues || []), current],
-        finished: remaining.length === 0,
+        issueId,
+        issue: { ...issue, fronts: [] },
+        fronts: issue.fronts,
+        remainingFronts: issue.fronts.length,
+        message: 'Fetched issue succesfully.',
     }
 }
