@@ -13,3 +13,5 @@ export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at
 
 export const ERR_404_MISSING_PROPS = `Couldn't find a path to this item`
 export const ERR_404_REMOTE = `Couldn't find item`
+
+export const PREFS_SAVED_MSG = 'Your preferences are saved.'

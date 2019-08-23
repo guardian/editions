@@ -7,7 +7,7 @@ import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Link } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { GdprSwitchSettings } from 'src/helpers/settings'
-import { COOKIE_LINK, PRIVACY_LINK } from 'src/helpers/words'
+import { COOKIE_LINK, PRIVACY_LINK, PREFS_SAVED_MSG } from 'src/helpers/words'
 import {
     useGdprSwitches,
     useSettings,
@@ -79,7 +79,7 @@ const GdprConsent = () => {
                             for (const { key } of Object.values(switches)) {
                                 setSetting(key, true)
                             }
-                            showToast('Your preferences are saved.')
+                            showToast(PREFS_SAVED_MSG)
                         }}
                     >
                         Enable all
@@ -104,9 +104,10 @@ const GdprConsent = () => {
                         explainer={item.description}
                         proxy={
                             <ThreeWaySwitch
-                                onValueChange={value =>
+                                onValueChange={value => {
                                     setSetting(item.key, value)
-                                }
+                                    showToast(PREFS_SAVED_MSG)
+                                }}
                                 value={settings[item.key]}
                             />
                         }
