@@ -11,6 +11,7 @@ import { useSettingsValue } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { PathToArticle } from '../article-screen'
 import { DevTools, getEnumPosition } from './dev-tools'
+import { ModalRenderer } from '../../components/modal'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -37,55 +38,61 @@ const ArticleScreenBody = ({
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
     return (
-        <ScrollView
-            scrollEventThrottle={8}
-            onScroll={ev => {
-                onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
-            }}
-            style={{ width }}
-            contentContainerStyle={styles.flex}
-        >
-            {articleResponse({
-                error: ({ message }) => (
-                    <FlexErrorMessage
-                        title={message}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                pending: () => (
-                    <FlexErrorMessage
-                        title={'loading'}
-                        style={{ backgroundColor: color.background }}
-                    />
-                ),
-                success: article => (
-                    <>
-                        {previewNotice && (
-                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
-                        )}
-                        {isUsingProdDevtools ? (
-                            <DevTools
-                                pillar={modifiedPillar}
-                                setPillar={setPillar}
-                                type={modifiedType}
-                                setType={setType}
-                            />
-                        ) : null}
-                        <WithArticle
-                            type={
-                                isUsingProdDevtools
-                                    ? getEnumPosition(ArticleType, modifiedType)
-                                    : article.article.articleType ||
-                                      ArticleType.Article
-                            }
-                            pillar={articlePillars[modifiedPillar]}
-                        >
-                            <ArticleController article={article.article} />
-                        </WithArticle>
-                    </>
-                ),
-            })}
-        </ScrollView>
+        <>
+            <ModalRenderer />
+            <ScrollView
+                scrollEventThrottle={8}
+                onScroll={ev => {
+                    onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
+                }}
+                style={{ width }}
+                contentContainerStyle={styles.flex}
+            >
+                {articleResponse({
+                    error: ({ message }) => (
+                        <FlexErrorMessage
+                            title={message}
+                            style={{ backgroundColor: color.background }}
+                        />
+                    ),
+                    pending: () => (
+                        <FlexErrorMessage
+                            title={'loading'}
+                            style={{ backgroundColor: color.background }}
+                        />
+                    ),
+                    success: article => (
+                        <>
+                            {previewNotice && (
+                                <UiBodyCopy>{previewNotice}</UiBodyCopy>
+                            )}
+                            {isUsingProdDevtools ? (
+                                <DevTools
+                                    pillar={modifiedPillar}
+                                    setPillar={setPillar}
+                                    type={modifiedType}
+                                    setType={setType}
+                                />
+                            ) : null}
+                            <WithArticle
+                                type={
+                                    isUsingProdDevtools
+                                        ? getEnumPosition(
+                                              ArticleType,
+                                              modifiedType,
+                                          )
+                                        : article.article.articleType ||
+                                          ArticleType.Article
+                                }
+                                pillar={articlePillars[modifiedPillar]}
+                            >
+                                <ArticleController article={article.article} />
+                            </WithArticle>
+                        </>
+                    ),
+                })}
+            </ScrollView>
+        </>
     )
 }
 

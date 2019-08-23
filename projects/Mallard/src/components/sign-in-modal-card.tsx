@@ -1,5 +1,9 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
+import { View } from 'react-native'
+import { ModalButton } from './modal-button'
+import { Link } from './link'
+import { ButtonAppearance } from './button/button'
 
 const SignInModalCard = ({
     close,
@@ -11,29 +15,38 @@ const SignInModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
-        title="Already a subscriber?"
+        title="Already subscribed?"
         subtitle="Sign in to continue with the app"
         appearance={CardAppearance.blue}
         size="small"
-        mainActions={[
-            {
-                label: 'Continue',
-                onPress: () => {
-                    close()
-                    onLoginPress()
-                },
-            },
-            {
-                label: 'Close',
-                onPress: () => {
-                    close()
-                    onDismiss()
-                },
-            },
-        ]}
-    >
-        Not subscribed yet? Learn more ...
-    </OnboardingCard>
+        bottomContent={
+            <>
+                <View style={{ width: '100%' }}>
+                    <Link href="https://www.theguardian.com/help/identity-faq">
+                        Need help signing in?
+                    </Link>
+                </View>
+                <ModalButton
+                    onPress={() => {
+                        close()
+                        onLoginPress()
+                    }}
+                >
+                    Continue
+                </ModalButton>
+                <ModalButton
+                    onPress={() => {
+                        close()
+                        onDismiss()
+                    }}
+                >
+                    Close
+                </ModalButton>
+            </>
+        }
+        explainerTitle="Not subscribed yet?"
+        explainerSubtitle="Get a free trial with our Digital Pack, on our website"
+    />
 )
 
 export { SignInModalCard }

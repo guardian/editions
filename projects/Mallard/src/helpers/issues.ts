@@ -5,15 +5,15 @@ const months = [
     'Jan',
     'Feb',
     'March',
-    'Apr',
+    'April',
     'May',
     'June',
     'July',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dev',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
 ]
 
 const days = [
@@ -45,8 +45,12 @@ export const useIssueDate = (issue?: Issue): IssueDate =>
         [issue && issue.key, issue],
     )
 
-const dateToFolderConvert = (date: Date): string =>
-    `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
+const dateToFolderConvert = (date: Date): string => {
+    const pad = (n: number) => (n < 10 ? '0' + n : n)
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(
+        date.getUTCDate(),
+    )}`
+}
 
 export const todayAsFolder = (): string => dateToFolderConvert(new Date())
 

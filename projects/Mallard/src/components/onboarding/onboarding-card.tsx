@@ -4,7 +4,6 @@ import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
-import { Button, ButtonAppearance } from '../button/button'
 import { minScreenSize } from 'src/helpers/screen'
 
 export enum CardAppearance {
@@ -35,9 +34,9 @@ const styles = StyleSheet.create({
     explainerTitle: {
         marginBottom: metrics.vertical * 2,
     },
-    button: {
-        marginTop: 10,
-        marginRight: 10,
+    explainerSubtitle: {
+        ...getFont('titlepiece', 1.25),
+        marginBottom: metrics.vertical * 1.5,
     },
 })
 
@@ -69,8 +68,9 @@ const OnboardingCard = ({
     children,
     title,
     subtitle,
-    mainActions,
+    bottomContent,
     explainerTitle,
+    explainerSubtitle,
     style,
     appearance,
     size = 'big',
@@ -79,8 +79,9 @@ const OnboardingCard = ({
     children?: string
     title: string
     subtitle?: string
-    mainActions?: { label: string; onPress: () => void }[]
+    bottomContent?: React.ReactNode
     explainerTitle?: string
+    explainerSubtitle?: string
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
     size?: 'big' | 'small'
@@ -125,29 +126,25 @@ const OnboardingCard = ({
                     )}
                 </View>
                 <View>
-                    {mainActions && (
+                    {bottomContent && (
                         <View
                             style={{ flexDirection: 'row', flexWrap: 'wrap' }}
                         >
-                            {mainActions.map(({ label, onPress }) => (
-                                <Button
-                                    style={styles.button}
-                                    appearance={ButtonAppearance.light}
-                                    key={label}
-                                    onPress={onPress}
-                                >
-                                    {label}
-                                </Button>
-                            ))}
+                            {bottomContent}
                         </View>
                     )}
                 </View>
             </View>
-            {(explainerTitle || children) && (
+            {(explainerTitle || explainerSubtitle || children) && (
                 <View style={styles.explainer}>
                     {explainerTitle && (
                         <TitlepieceText style={styles.explainerTitle}>
                             {explainerTitle}
+                        </TitlepieceText>
+                    )}
+                    {explainerSubtitle && (
+                        <TitlepieceText style={styles.explainerSubtitle}>
+                            {explainerSubtitle}
                         </TitlepieceText>
                     )}
                     {children && <UiExplainerCopy>{children}</UiExplainerCopy>}
