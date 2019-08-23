@@ -3,7 +3,7 @@ import {
     HTMLElement,
     MediaAtomElement,
     ImageElement,
-    PillarFromPalette,
+    ArticlePillar,
 } from 'src/common'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
@@ -62,7 +62,7 @@ const renderImageElement = (imageElement: ImageElement) => {
 
 export const render = (
     article: BlockElement[],
-    { pillar }: { pillar: PillarFromPalette },
+    { pillar }: { pillar: ArticlePillar },
 ) => {
     const html = article
         .filter(

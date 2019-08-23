@@ -31,7 +31,7 @@ export enum ArticleType {
     Immersive = 'immersive',
 }
 
-export type PillarFromPalette = typeof articlePillars[number]
+export type ArticlePillar = typeof articlePillars[number]
 
 export interface ColorAppearance {
     type: 'custom'
@@ -39,7 +39,7 @@ export interface ColorAppearance {
 }
 export interface PillarAppearance {
     type: 'pillar'
-    name: PillarFromPalette
+    name: ArticlePillar
 }
 
 export type Appearance = PillarAppearance | ColorAppearance

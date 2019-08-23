@@ -6,7 +6,7 @@ import { Spinner } from '../spinner'
 import { FlexCenter } from '../layout/flex-center'
 import {
     Issue,
-    PillarFromPalette,
+    ArticlePillar,
     Front as FrontType,
     ArticleType,
 } from 'src/common'
@@ -36,7 +36,7 @@ const CollectionPageInFront = ({
     ...collectionPageProps
 }: {
     index: number
-    pillar: PillarFromPalette
+    pillar: ArticlePillar
     scrollX: Animated.Value
 } & PropTypes) => {
     const { card, size } = useIssueScreenSize()

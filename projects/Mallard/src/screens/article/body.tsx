@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { ScrollView } from 'react-navigation'
-import { articlePillars, ArticleType, PillarFromPalette } from 'src/common'
+import { articlePillars, ArticleType, ArticlePillar } from 'src/common'
 import { ArticleController } from 'src/components/article'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { UiBodyCopy } from 'src/components/styled-text'
@@ -26,14 +26,10 @@ const ArticleScreenBody = ({
 }: {
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
-    pillar: PillarFromPalette
+    pillar: ArticlePillar
     width: number
     previewNotice?: string
 }) => {
-    const [modifiedPillar, setPillar] = useState(
-        articlePillars.indexOf(pillar) || 0,
-    )
-    const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
@@ -66,25 +62,12 @@ const ArticleScreenBody = ({
                             {previewNotice && (
                                 <UiBodyCopy>{previewNotice}</UiBodyCopy>
                             )}
-                            {isUsingProdDevtools ? (
-                                <DevTools
-                                    pillar={modifiedPillar}
-                                    setPillar={setPillar}
-                                    type={modifiedType}
-                                    setType={setType}
-                                />
-                            ) : null}
                             <WithArticle
                                 type={
-                                    isUsingProdDevtools
-                                        ? getEnumPosition(
-                                              ArticleType,
-                                              modifiedType,
-                                          )
-                                        : article.article.articleType ||
-                                          ArticleType.Article
+                                    article.article.articleType ||
+                                    ArticleType.Article
                                 }
-                                pillar={articlePillars[modifiedPillar]}
+                                pillar={pillar}
                             >
                                 <ArticleController article={article.article} />
                             </WithArticle>
