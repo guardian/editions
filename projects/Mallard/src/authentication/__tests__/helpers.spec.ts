@@ -4,20 +4,7 @@ import {
     UserData,
 } from '../helpers'
 import { membershipResponse, userResponse, userData } from './fixtures'
-
-const getMockStore = (val?: string) => ({
-    get: jest.fn(() =>
-        Promise.resolve(
-            typeof val !== 'undefined' && {
-                service: 's',
-                username: 'u',
-                password: val,
-            },
-        ),
-    ),
-    set: jest.fn(() => Promise.resolve(true)),
-    reset: jest.fn(() => Promise.resolve(true)),
-})
+import { getMockPromise, getMockStore, getMockAsyncCache } from './test-helpers'
 
 const withCreds = ({
     email,
@@ -46,8 +33,6 @@ const withCreds = ({
     },
 })
 
-const getMockPromise = <T>(val: T) => jest.fn(() => Promise.resolve(val))
-
 describe('helpers', () => {
     describe('fetchUserDataForKeychainUser', () => {
         it('will return null if there is no user token, and will reset all credentials', async () => {
@@ -57,7 +42,8 @@ describe('helpers', () => {
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('any')
             const getLegacyUserAccessToken = getMockPromise(false as const)
-            const resetMock = getMockPromise(true)
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
 
             const data = await fetchUserDataForKeychainUser(
                 membershipStore,
@@ -66,12 +52,14 @@ describe('helpers', () => {
                 fetchUserData,
                 fetchMembershipToken,
                 getLegacyUserAccessToken,
-                resetMock,
+                userDataStore,
+                legacyUserDataStore,
             )
 
             expect(data).toEqual(null)
             expect(userStore.get).toBeCalledTimes(1)
-            expect(resetMock).toBeCalledTimes(1)
+            expect(userDataStore.reset).toBeCalledTimes(1)
+            expect(legacyUserDataStore.reset).toBeCalledTimes(1)
             expect(fetchMembershipData).not.toBeCalled()
             expect(fetchMembershipToken).not.toBeCalled()
             expect(fetchUserData).not.toBeCalled()
@@ -84,7 +72,8 @@ describe('helpers', () => {
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
             const getLegacyUserAccessToken = getMockPromise(false as const)
-            const resetMock = getMockPromise(true)
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
 
             const data = await fetchUserDataForKeychainUser(
                 membershipStore,
@@ -93,14 +82,16 @@ describe('helpers', () => {
                 fetchUserData,
                 fetchMembershipToken,
                 getLegacyUserAccessToken,
-                resetMock,
+                userDataStore,
+                legacyUserDataStore,
             )
 
             expect(data).toEqual({
                 userDetails: userResponse,
                 membershipData: membershipResponse,
             })
-            expect(resetMock).not.toHaveBeenCalled()
+            expect(userDataStore.reset).not.toHaveBeenCalled()
+            expect(userDataStore.reset).not.toHaveBeenCalled()
             expect(userStore.get).toBeCalledTimes(1)
             expect(fetchUserData).toBeCalledTimes(1)
             expect(fetchMembershipData).toBeCalledTimes(1)
@@ -113,7 +104,8 @@ describe('helpers', () => {
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
             const getLegacyUserAccessToken = getMockStore('token').get
-            const resetMock = getMockPromise(true)
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
 
             const data = await fetchUserDataForKeychainUser(
                 membershipStore,
@@ -122,14 +114,16 @@ describe('helpers', () => {
                 fetchUserData,
                 fetchMembershipToken,
                 getLegacyUserAccessToken,
-                resetMock,
+                userDataStore,
+                legacyUserDataStore,
             )
 
             expect(data).toEqual({
                 userDetails: userResponse,
                 membershipData: membershipResponse,
             })
-            expect(resetMock).not.toHaveBeenCalled()
+            expect(userDataStore.reset).not.toHaveBeenCalled()
+            expect(legacyUserDataStore.reset).not.toHaveBeenCalled()
             expect(userStore.get).toBeCalledTimes(1)
             expect(fetchUserData).toBeCalledTimes(1)
             expect(fetchMembershipData).toBeCalledTimes(1)
@@ -142,7 +136,8 @@ describe('helpers', () => {
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
             const getLegacyUserAccessToken = getMockPromise(false as const)
-            const resetMock = getMockPromise(true)
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
 
             const data = await fetchUserDataForKeychainUser(
                 membershipStore,
@@ -151,7 +146,8 @@ describe('helpers', () => {
                 fetchUserData,
                 fetchMembershipToken,
                 getLegacyUserAccessToken,
-                resetMock,
+                userDataStore,
+                legacyUserDataStore,
             )
 
             expect(data).toEqual({
@@ -171,7 +167,8 @@ describe('helpers', () => {
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
             const getLegacyUserAccessToken = getMockPromise(false as const)
-            const resetMock = getMockPromise(true)
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
 
             const data = await fetchUserDataForKeychainUser(
                 membershipStore,
@@ -180,7 +177,8 @@ describe('helpers', () => {
                 fetchUserData,
                 fetchMembershipToken,
                 getLegacyUserAccessToken,
-                resetMock,
+                userDataStore,
+                legacyUserDataStore,
             )
 
             expect(data).toEqual({

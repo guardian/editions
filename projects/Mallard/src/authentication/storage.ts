@@ -92,12 +92,17 @@ const getLegacyUserAccessToken = async (): ReturnType<
  * Removes all the relevent keychain, storage entries that mark a user as logged in
  * and returns a boolean indicating whether all these operations succeeded
  */
-const signOutIdentity = (): Promise<boolean> =>
+const signOutIdentity = (
+    userAccessTokenKeychainImpl = userAccessTokenKeychain,
+    membershipAccessTokenKeychainImpl = membershipAccessTokenKeychain,
+    userDataCacheImpl = userDataCache,
+    legacyUserAccessTokenKeychainImpl = _legacyUserAccessTokenKeychain,
+): Promise<boolean> =>
     Promise.all([
-        userAccessTokenKeychain.reset(),
-        membershipAccessTokenKeychain.reset(),
-        userDataCache.reset(),
-        _legacyUserAccessTokenKeychain.reset(),
+        userAccessTokenKeychainImpl.reset(),
+        membershipAccessTokenKeychainImpl.reset(),
+        userDataCacheImpl.reset(),
+        legacyUserAccessTokenKeychainImpl.reset(),
     ]).then(all => all.every(_ => _))
 
 export {
@@ -111,5 +116,6 @@ export {
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
+    _legacyUserAccessTokenKeychain,
     iapReceiptCache,
 }
