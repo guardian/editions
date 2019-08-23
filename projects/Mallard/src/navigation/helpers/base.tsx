@@ -5,11 +5,7 @@ import {
     NavigationContainer,
 } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
-import {
-    ArticleNavigator,
-    ArticleTransitionProps,
-    PathToArticle,
-} from 'src/screens/article-screen'
+import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
 import { PathToIssue } from 'src/screens/issue-screen'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
@@ -22,8 +18,6 @@ export const addStaticRouter = (
 
     return wrapperWithRouter as NavigationContainer
 }
-
-type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
 
 /**
  *
@@ -40,7 +34,6 @@ const mapNavigationToProps = <T extends {}, P extends {}>(
 )
 
 export interface ArticleNavigationProps {
-    transitionProps?: ArticleTransitionProps
     path: PathToArticle
     articleNavigator?: ArticleNavigator
     /*
@@ -49,10 +42,6 @@ export interface ArticleNavigationProps {
     */
     prefersFullScreen?: boolean
 }
-export type ArticleRequiredNavigationProps = RequiredExcept<
-    ArticleNavigationProps,
-    'transitionProps'
->
 
 const navigateToArticle = (
     navigation: NavigationScreenProp<{}>,
@@ -67,12 +56,11 @@ const getArticleNavigationProps = (
         success,
     }: {
         error: () => ReactElement
-        success: (props: ArticleRequiredNavigationProps) => ReactElement
+        success: (props: Required<ArticleNavigationProps>) => ReactElement
     },
 ) => {
     const path = navigation.getParam('path')
     const prefersFullScreen = navigation.getParam('prefersFullScreen', false)
-    const transitionProps = navigation.getParam('transitionProps')
     const articleNavigator = navigation.getParam('articleNavigator', {
         articles: [],
         appearance: { type: 'pillar', name: 'neutral' },
@@ -85,7 +73,6 @@ const getArticleNavigationProps = (
         return success({
             path,
             articleNavigator,
-            transitionProps,
             prefersFullScreen,
         })
     }

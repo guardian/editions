@@ -145,7 +145,7 @@ const FrontWithResponse = ({
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 horizontal={true}
-                removeClippedSubviews={false}
+                removeClippedSubviews={true}
                 decelerationRate="fast"
                 snapToInterval={card.width}
                 ref={(flatList: AnimatedFlatListRef) =>

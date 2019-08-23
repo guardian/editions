@@ -117,7 +117,6 @@
 		2D02E47B1E0B4A5D006451C7 /* Mallard-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mallard-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mallard-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F42773E47CBD17E503537C6 /* libPods-Mallard-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B3CC9963BA4216B98F3053 /* GuardianTextSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-BoldItalic.ttf"; path = "../src/assets/fonts/GuardianTextSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		35AAFC7AF833CCE4E9C1931A /* Pods-Mallard-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOS/Pods-Mallard-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		3DA2FD0EC69B436384494394 /* GHGuardianHeadline-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-BoldItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -355,6 +354,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				6DDC03732BB279EA9CE1AC78 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -623,6 +623,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6DDC03732BB279EA9CE1AC78 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageFilterKit/RNImageFilterKitBundle.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNImageFilterKitBundle.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C99130E1649EBE99DBB1FC9F /* [CP] Check Pods Manifest.lock */ = {

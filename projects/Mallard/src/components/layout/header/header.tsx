@@ -1,12 +1,8 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
 import { Issue } from 'src/common'
 import { Highlight } from 'src/components/highlight'
-import {
-    GridRowSplit,
-    IssueTitle,
-    IssueTitleProps,
-} from 'src/components/issue/issue-title'
+import { GridRowSplit, IssueTitle } from 'src/components/issue/issue-title'
 import { useIssueDate } from 'src/helpers/issues'
 import { useInsets } from 'src/hooks/use-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
@@ -21,7 +17,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: metrics.horizontal,
         justifyContent: 'flex-end',
         flexDirection: 'row',
-        height: metrics.vertical + getFont('titlepiece', 1.25).lineHeight * 3.1,
+    },
+    backgroundWhite: {
+        backgroundColor: color.background,
+        borderBottomColor: color.line,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        padding: metrics.vertical,
+        paddingHorizontal: metrics.horizontal,
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+    },
+    height: {
+        height: metrics.vertical + getFont('titlepiece', 1.25).lineHeight * 1.5,
     },
     flex: {
         flexDirection: 'row',
@@ -58,6 +65,7 @@ type TouchableHeaderProps =
     | {}
 
 type HeaderProps = {
+    white?: boolean
     action?: ReactNode
     leftAction?: ReactNode
     layout?: 'issue' | 'center'
@@ -66,24 +74,30 @@ type HeaderProps = {
 
 const Header = ({
     action,
+    white = false,
     leftAction,
     layout = 'issue',
     children,
     ...otherProps
 }: HeaderProps) => {
-    const { top: paddingTop } = useInsets()
-
+    const { top: marginTop } = useInsets()
+    const bg = white ? styles.backgroundWhite : styles.background
     return (
-        <WithAppAppearance value={'primary'}>
-            <View style={[styles.background]}>
+        <WithAppAppearance value={white ? 'default' : 'primary'}>
+            {white && (
+                <StatusBar
+                    animated={true}
+                    barStyle="dark-content"
+                    backgroundColor="#fff"
+                />
+            )}
+            <View style={[bg]}>
                 {layout === 'issue' ? (
                     <GridRowSplit
                         proxy={leftAction}
-                        style={{
-                            paddingTop,
-                        }}
+                        style={[{ marginTop }, styles.height]}
                     >
-                        <View style={styles.headerSplit}>
+                        <View style={[styles.headerSplit]}>
                             <View style={styles.headerTitle}>
                                 {'onPress' in otherProps ? (
                                     <Highlight
@@ -102,8 +116,8 @@ const Header = ({
                         </View>
                     </GridRowSplit>
                 ) : (
-                    <View style={{ paddingTop, width: '100%' }}>
-                        <View style={[styles.centerWrapper]}>
+                    <View style={{ marginTop, width: '100%' }}>
+                        <View style={[styles.height, styles.centerWrapper]}>
                             <View style={styles.centerAction}>
                                 {leftAction}
                             </View>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { getFader } from 'src/components/layout/animators/fader'
+import { Fader } from 'src/components/layout/animators/fader'
 import { Stars } from 'src/components/stars/stars'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
@@ -13,13 +13,9 @@ import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
 import { HeadlineTypeWrap } from './shared'
 
-const ArticleFader = getFader('article')
+const ArticleFader = Fader
 
 const style = StyleSheet.create({
-    standfirst: {
-        paddingBottom: metrics.vertical * 1,
-        marginTop: metrics.vertical * 4,
-    },
     byline: { marginBottom: metrics.vertical },
 })
 
@@ -37,9 +33,7 @@ const ReviewHeader = ({
             needsTopPadding
             byline={
                 <ArticleFader>
-                    <ArticleByline
-                        style={[style.byline, { color: color.dark }]}
-                    >
+                    <ArticleByline style={[{ color: color.dark }]}>
                         {byline}
                     </ArticleByline>
                 </ArticleFader>
@@ -77,7 +71,6 @@ const ReviewHeader = ({
                 </ArticleFader>
                 <ArticleFader>
                     <ArticleStandfirst
-                        style={[style.standfirst]}
                         textStyle={{ color: color.dark }}
                         {...{ standfirst }}
                     />

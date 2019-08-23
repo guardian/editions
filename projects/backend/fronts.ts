@@ -22,6 +22,7 @@ import { getCrosswordArticleOverrides } from './utils/crossword'
 import { notNull } from '../common/src'
 import { isPreview } from './preview'
 import striptags from 'striptags'
+import { oc } from 'ts-optchain'
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -60,31 +61,27 @@ export const parseCollection = async (
         })
         .map(([key, furniture]): [string, CAPIArticle] => {
             const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const kicker =
-                (furniture && furniture.kicker) || article.kicker || '' // I'm not sure where else we should check for a kicker
+            const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
             const headline =
-                (furniture && furniture.headlineOverride) || article.headline
+                oc(furniture).headlineOverride() || article.headline
             const trail = striptags(
-                (furniture && furniture.trailTextOverride) ||
-                    article.trail ||
-                    '',
+                oc(furniture).trailTextOverride() || article.trail || '',
             )
-            const byline =
-                (furniture && furniture.bylineOverride) || article.byline
-            const showByline = furniture.showByline //TODO
-            const showQuotedHeadline = furniture.showQuotedHeadline // TODO
-            const mediaType = furniture.mediaType // TODO
-            const slideshowImages =
-                furniture.slideshowImages &&
-                furniture.slideshowImages
-                    .map(_ => _.src)
-                    .map(getImageFromURL)
-                    .filter(notNull)
+            const byline = oc(furniture).bylineOverride() || article.byline
+            const showByline = furniture.showByline
+            const showQuotedHeadline = furniture.showQuotedHeadline
+            const mediaType = furniture.mediaType
+            const slideshowImages = oc(furniture)
+                .slideshowImages([])
+                .map(_ => _.src)
+                .map(getImageFromURL)
+                .filter(notNull)
 
-            const imageOverride =
-                furniture &&
-                furniture.imageSrcOverride &&
-                getImageFromURL(furniture.imageSrcOverride.src)
+            const imageOverride = getImageFromURL(
+                oc(furniture).imageSrcOverride.src(),
+            )
+
+            const sportScore = oc(furniture).sportScore()
 
             switch (article.type) {
                 case 'crossword':
@@ -100,6 +97,7 @@ export const parseCollection = async (
                             showQuotedHeadline,
                             mediaType,
                             slideshowImages,
+                            sportScore,
                         },
                     ]
 
@@ -117,6 +115,7 @@ export const parseCollection = async (
                             showQuotedHeadline,
                             mediaType,
                             slideshowImages,
+                            sportScore,
                         },
                     ]
 
@@ -135,6 +134,7 @@ export const parseCollection = async (
                             showQuotedHeadline,
                             mediaType,
                             slideshowImages,
+                            sportScore,
                         },
                     ]
 
@@ -153,52 +153,6 @@ export const parseCollection = async (
 const getDisplayName = (front: string) => {
     const split = front.split('/').pop() || front
     return split.charAt(0).toUpperCase() + split.slice(1)
-}
-
-const getFrontColor = (front: string) => {
-    //TODO: delete when https://github.com/guardian/facia-tool/pull/918 on all fronts
-    switch ((front.split('/').pop() || front).toLowerCase()) {
-        case 'special1':
-        case 'special2':
-        case 'topstories':
-        case 'crossword':
-        case 'special 1':
-        case 'special 2':
-        case 'top stories':
-        case 'crosswords':
-            return 'neutral'
-        case 'uknewsguardian':
-        case 'uknewsobserver':
-        case 'worldnewsguardian':
-        case 'worldnewsobserver':
-        case 'uk news':
-        case 'world news':
-            return 'news'
-        case 'journal':
-        case 'comment':
-        case 'opinion':
-            return 'opinion'
-        case 'arts':
-        case 'filmandmusic':
-        case 'guide':
-        case 'newreview':
-        case 'books':
-        case 'culture':
-        case 'books':
-            return 'culture'
-        case 'sport':
-            return 'sport'
-        case 'features':
-        case 'weekend':
-        case 'magazine':
-        case 'food':
-        case 'observerfood':
-        case 'lifestyle':
-        case 'food':
-        case 'the fashion':
-            return 'lifestyle'
-    }
-    return 'neutral'
 }
 
 export const getFront = async (
@@ -230,7 +184,7 @@ export const getFront = async (
 
     const appearance: PillarAppearance = {
         type: 'pillar',
-        name: front.swatch || getFrontColor(id),
+        name: front.swatch,
     }
 
     const collections = await Promise.all(
