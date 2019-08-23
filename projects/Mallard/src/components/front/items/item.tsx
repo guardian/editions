@@ -35,6 +35,7 @@ import {
 import { ImageResource } from '../image-resource'
 import { TextBlock } from './text-block'
 import { supportsTransparentCards } from 'src/helpers/features'
+import { ariaHidden } from 'src/helpers/a11y'
 
 interface TappablePropTypes {
     style?: StyleProp<ViewStyle>
@@ -102,7 +103,7 @@ const ItemTappable = withNavigation(
         const [opacity] = useState(() => new Animated.Value(1))
         return (
             <Animated.View
-                style={[style, { opacity }]}
+                style={[style]}
                 ref={(view: any) => {
                     if (view) tappableRef.current = view._component as View
                 }}
@@ -148,6 +149,21 @@ const ItemTappable = withNavigation(
                         {children}
                     </View>
                 </TouchableWithoutFeedback>
+
+                <Animated.View
+                    {...ariaHidden}
+                    pointerEvents="none"
+                    style={[
+                        StyleSheet.absoluteFill,
+                        {
+                            backgroundColor: color.dimBackground,
+                            opacity: opacity.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [1, 0],
+                            }),
+                        },
+                    ]}
+                ></Animated.View>
             </Animated.View>
         )
     },

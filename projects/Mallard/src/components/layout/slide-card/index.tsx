@@ -31,7 +31,7 @@ export const SlideCard = ({
     getPosition: () => Animated.Value
 }) => {
     const [scrollY] = useState(() => new Animated.Value(0))
-    let { current: blocked } = useRef(false)
+    const blocked = useRef(false)
 
     useEffect(() => {
         Animated.timing(getPosition(), {
@@ -43,18 +43,19 @@ export const SlideCard = ({
             useNativeDriver: true,
         }).start()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => false,
         onMoveShouldSetPanResponder: (ev, gestureState) => {
             if (gestureState.dy > 10) {
-                blocked = true
+                blocked.current = true
                 if (enabled && gestureState.vy > 1) {
-                    blocked = false
+                    blocked.current = false
                     onDismiss()
                     scrollY.stopAnimation()
                 }
             }
-            return enabled && blocked
+            return enabled && blocked.current
         },
         onPanResponderTerminationRequest: () => false,
         onShouldBlockNativeResponder: () => false,
@@ -65,7 +66,7 @@ export const SlideCard = ({
             },
         ]),
         onPanResponderEnd: (ev, gestureState) => {
-            blocked = false
+            blocked.current = false
             if (gestureState.dy > 50) {
                 onDismiss()
                 scrollY.stopAnimation()
