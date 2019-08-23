@@ -133,96 +133,103 @@ const ArticleScreenWithProps = ({
 
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
-    return prefersFullScreen ? (
+    return (
         <ArticleScreenLoginOverlay navigation={navigation}>
-            <ArticleScreenBody
-                path={path}
-                width={width}
-                pillar={pillar}
-                onTopPositionChange={() => {}}
-                previewNotice={previewNotice}
-            />
-        </ArticleScreenLoginOverlay>
-    ) : (
-        <ArticleScreenLoginOverlay navigation={navigation}>
-            <Fader>
-                <View
-                    style={[
-                        styles.slider,
-                        !articleIsAtTop && styles.sliderBorder,
-                    ]}
-                >
-                    <MaxWidthWrap>
+            {prefersFullScreen ? (
+                <ArticleScreenBody
+                    path={path}
+                    width={width}
+                    pillar={pillar}
+                    onTopPositionChange={() => {}}
+                    previewNotice={previewNotice}
+                />
+            ) : (
+                <>
+                    <Fader>
                         <View
                             style={[
-                                styles.innerSlider,
-                                isTablet && {
-                                    marginHorizontal:
-                                        metrics.fronts.sliderRadius * -0.8,
-                                },
+                                styles.slider,
+                                !articleIsAtTop && styles.sliderBorder,
                             ]}
                         >
-                            <Slider
-                                small
-                                title={articleNavigator.frontName}
-                                fill={getColor(articleNavigator.appearance)}
-                                stops={2}
-                                position={sliderPos}
-                            />
+                            <MaxWidthWrap>
+                                <View
+                                    style={[
+                                        styles.innerSlider,
+                                        isTablet && {
+                                            marginHorizontal:
+                                                metrics.fronts.sliderRadius *
+                                                -0.8,
+                                        },
+                                    ]}
+                                >
+                                    <Slider
+                                        small
+                                        title={articleNavigator.frontName}
+                                        fill={getColor(
+                                            articleNavigator.appearance,
+                                        )}
+                                        stops={2}
+                                        position={sliderPos}
+                                    />
+                                </View>
+                            </MaxWidthWrap>
                         </View>
-                    </MaxWidthWrap>
-                </View>
-            </Fader>
-            <Animated.FlatList
-                ref={(flatList: AnimatedFlatListRef) =>
-                    (flatListRef.current = flatList)
-                }
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={1}
-                onScroll={(ev: any) => {
-                    setCurrent(
-                        Math.floor(ev.nativeEvent.contentOffset.x / width),
-                    )
-                }}
-                maxToRenderPerBatch={1}
-                windowSize={3}
-                initialNumToRender={1}
-                horizontal={true}
-                initialScrollIndex={startingPoint}
-                pagingEnabled
-                getItemLayout={(_: never, index: number) => ({
-                    length: width,
-                    offset: width * index,
-                    index,
-                })}
-                keyExtractor={(item: ArticleNavigator['articles'][0]) =>
-                    item.article
-                }
-                data={
-                    isInScroller
-                        ? articleNavigator.articles
-                        : [path, ...articleNavigator.articles]
-                }
-                renderItem={({
-                    item,
-                }: {
-                    item: ArticleNavigator['articles'][0]
-                    index: number
-                }) => (
-                    <ArticleScreenBody
-                        width={width}
-                        path={item}
-                        pillar={pillar}
-                        onTopPositionChange={isAtTop => {
-                            setArticleIsAtTop(isAtTop)
-                            onDismissStateChanged &&
-                                onDismissStateChanged(isAtTop)
+                    </Fader>
+                    <Animated.FlatList
+                        ref={(flatList: AnimatedFlatListRef) =>
+                            (flatListRef.current = flatList)
+                        }
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        scrollEventThrottle={1}
+                        onScroll={(ev: any) => {
+                            setCurrent(
+                                Math.floor(
+                                    ev.nativeEvent.contentOffset.x / width,
+                                ),
+                            )
                         }}
-                        previewNotice={previewNotice}
+                        maxToRenderPerBatch={1}
+                        windowSize={3}
+                        initialNumToRender={1}
+                        horizontal={true}
+                        initialScrollIndex={startingPoint}
+                        pagingEnabled
+                        getItemLayout={(_: never, index: number) => ({
+                            length: width,
+                            offset: width * index,
+                            index,
+                        })}
+                        keyExtractor={(item: ArticleNavigator['articles'][0]) =>
+                            item.article
+                        }
+                        data={
+                            isInScroller
+                                ? articleNavigator.articles
+                                : [path, ...articleNavigator.articles]
+                        }
+                        renderItem={({
+                            item,
+                        }: {
+                            item: ArticleNavigator['articles'][0]
+                            index: number
+                        }) => (
+                            <ArticleScreenBody
+                                width={width}
+                                path={item}
+                                pillar={pillar}
+                                onTopPositionChange={isAtTop => {
+                                    setArticleIsAtTop(isAtTop)
+                                    onDismissStateChanged &&
+                                        onDismissStateChanged(isAtTop)
+                                }}
+                                previewNotice={previewNotice}
+                            />
+                        )}
                     />
-                )}
-            />
+                </>
+            )}
         </ArticleScreenLoginOverlay>
     )
 }

@@ -57,20 +57,6 @@ const Dismissable = ({
     )
 }
 
-const styles = StyleSheet.create({
-    root: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    inner: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: color.background,
-        height: '100%',
-        flexGrow: 1,
-        overflow: 'hidden',
-        marginBottom: metrics.slideCardSpacing,
-    },
-})
-
 const BasicCardWrapper = ({
     navigator,
     navigation,
@@ -111,6 +97,20 @@ const wrapInBasicCard: NavigatorWrapper = Navigator => {
     )
 }
 
+const styles = StyleSheet.create({
+    root: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    inner: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: color.background,
+        height: '100%',
+        flexGrow: 1,
+        overflow: 'hidden',
+        marginBottom: metrics.slideCardSpacing,
+    },
+    basicCard: { backgroundColor: color.background, overflow: 'hidden' },
+})
 const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
@@ -138,6 +138,7 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                 <Animated.View
                     style={[
                         StyleSheet.absoluteFillObject,
+                        styles.basicCard,
                         {
                             transform: [
                                 {
@@ -149,8 +150,6 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             ],
                         },
                         {
-                            background: color.background,
-                            overflow: 'hidden',
                             opacity: position.interpolate({
                                 inputRange: [0, 0.5],
                                 outputRange: [0, 1],
