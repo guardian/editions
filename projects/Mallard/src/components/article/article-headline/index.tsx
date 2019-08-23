@@ -1,24 +1,35 @@
 import React, { ReactNode } from 'react'
-
-import { HeadlineText, HeadlineTextProps } from 'src/components/styled-text'
+import {
+    HeadlineTextProps,
+    getHeadlineTextStyle,
+} from 'src/components/styled-text'
 import {
     StyleSheet,
     StyleProp,
     TextStyle,
-    Text,
     View,
     PixelRatio,
+    Text,
 } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { useTextBoxes, TextBoxes } from 'src/components/layout/text-boxes'
-import { ariaHidden } from 'src/helpers/a11y'
+import { getFont, getUnscaledFont } from 'src/theme/typography'
+import { TextWithIcon } from 'src/components/layout/text-with-icon'
 
 export type ArticleHeadlineProps = {
     children: any
     hasHighlight?: boolean
     textStyle?: StyleProp<TextStyle>
-    icon?: { width: number; height: number; element: () => ReactNode }
+    icon?: {
+        width: number
+        element: (scale: number) => ReactNode
+    }
 } & Pick<HeadlineTextProps, 'weight'>
+
+const scale =
+    (getUnscaledFont('headline', 1.5)[0].lineHeight /
+        getFont('headline', 1.5).lineHeight) *
+    0.9
 
 const styles = StyleSheet.create({
     headline: {
@@ -36,27 +47,9 @@ const styles = StyleSheet.create({
     },
     dash: {
         opacity: 0,
-        fontSize: PixelRatio.roundToNearestPixel(4),
+        fontSize: PixelRatio.roundToNearestPixel(4) / scale,
     },
 })
-
-/*
-This is super cursed. Basically, in order to add inline icons
-of any arbitrary px width without messing up the line height we add
-invisible 4px em dashes at the start of the text to fill up the space and
-then the icon floats over the whole thing as an absolute box
-*/
-const IconDashes = ({ length = 1 }) => {
-    const lines = []
-    for (let i = 0; i < Math.floor(length / 4); i++) {
-        lines.push(
-            <Text key={i} {...ariaHidden} style={[styles.dash]}>
-                {'0'}
-            </Text>,
-        )
-    }
-    return <>{lines}</>
-}
 
 const ArticleHeadline = ({
     children,
@@ -67,28 +60,25 @@ const ArticleHeadline = ({
 }: ArticleHeadlineProps) => {
     const [onTextLayout, boxes] = useTextBoxes()
     return (
-        <View>
-            {icon && (
-                <View
-                    style={[
-                        styles.icon,
-                        {
-                            width: icon.width,
-                            height: icon.height,
-                        },
-                    ]}
+        <View style={styles.headline}>
+            {icon ? (
+                <TextWithIcon
+                    onTextLayout={hasHighlight && onTextLayout}
+                    unscaledFont={getUnscaledFont('headline', 1.5)}
+                    style={[getHeadlineTextStyle(weight), textStyle]}
+                    icon={icon}
                 >
-                    {icon.element()}
-                </View>
+                    {children}
+                </TextWithIcon>
+            ) : (
+                // @ts-ignore
+                <Text
+                    onTextLayout={hasHighlight && onTextLayout}
+                    style={[getHeadlineTextStyle(weight), textStyle]}
+                >
+                    {children}
+                </Text>
             )}
-            <HeadlineText
-                onTextLayout={hasHighlight && onTextLayout}
-                {...{ weight }}
-                style={[styles.headline, textStyle]}
-            >
-                {icon && <IconDashes length={icon.width}></IconDashes>}
-                {children}
-            </HeadlineText>
             {hasHighlight && boxes.length > 0 && (
                 <View style={styles.highlightBg}>
                     <TextBoxes boxes={boxes} />

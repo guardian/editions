@@ -9,8 +9,15 @@ import {
     ItemSizes,
     PageLayoutSizes,
 } from '../helpers/helpers'
-import { getFont, FontSizes } from 'src/theme/typography'
+import {
+    getFont,
+    FontSizes,
+    getUnscaledFont,
+    applyScale,
+} from 'src/theme/typography'
 import { useArticle } from 'src/hooks/use-article'
+import { TextWithIcon } from 'src/components/layout/text-with-icon'
+import Quote from 'src/components/icons/Quote'
 
 type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
 
@@ -95,30 +102,44 @@ const TextBlock = ({
     const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
         textBlockAppearance,
     )
-    const fontSize = getFont(
+
+    const font = getUnscaledFont(
         'headline',
         'fontSize' in sizes ? sizes.fontSize : getFontSize(sizes.size),
-    ).fontSize
+    )
 
-    const [, { pillar }] = useArticle()
+    const fontSize = applyScale(font).fontSize
+
+    const [color, { pillar }] = useArticle()
     return (
         <View style={[rootStyle, style]}>
             {pillar === 'opinion' ? (
                 <>
-                    <HeadlineCardText
-                        allowFontScaling={false}
-                        style={[
-                            headlineStyle,
-                            { fontSize, lineHeight: fontSize },
-                        ]}
+                    <TextWithIcon
+                        unscaledFont={font}
+                        style={headlineStyle}
+                        icon={{
+                            width: 40,
+                            element: scale => (
+                                <Quote
+                                    scale={
+                                        (0.67 / scale) *
+                                        (fontSize /
+                                            getFont('headline', 1).fontSize)
+                                    }
+                                    fill={color.main}
+                                />
+                            ),
+                        }}
                     >
                         {headline}
-                    </HeadlineCardText>
+                    </TextWithIcon>
                     <HeadlineKickerText
                         allowFontScaling={false}
                         style={[
                             kickerStyle,
                             {
+                                marginTop: 4,
                                 fontSize,
                                 lineHeight: fontSize,
                             },

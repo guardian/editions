@@ -154,7 +154,6 @@ const RoundImageItem = ({
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
-                style={imageStyles.textBlock}
                 kicker={article.kicker}
                 headline={article.headline}
                 {...{ size }}

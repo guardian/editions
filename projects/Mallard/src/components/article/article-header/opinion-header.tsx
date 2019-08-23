@@ -88,11 +88,10 @@ const OpinionHeader = ({
                         <View style={styles.headlineContainer}>
                             <ArticleHeadline
                                 icon={{
-                                    width: 80,
-                                    height: font.lineHeight,
-                                    element: () => (
+                                    width: 38,
+                                    element: scale => (
                                         <Quote
-                                            scale={1.2}
+                                            scale={0.9 / scale}
                                             fill={articleColor.main}
                                         />
                                     ),

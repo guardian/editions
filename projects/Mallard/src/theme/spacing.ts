@@ -15,7 +15,7 @@ const buttonHeight =
     basicMetrics.vertical * 2.5
 
 const sides = {
-    sides: basicMetrics.horizontal / 2,
+    sides: basicMetrics.horizontal / 1.4,
     sidesTablet: basicMetrics.horizontal * 1.5,
 }
 const sliderRadius = 18

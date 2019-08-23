@@ -1,0 +1,89 @@
+import React, { ReactNode } from 'react'
+import {
+    StyleProp,
+    StyleSheet,
+    Text,
+    TextProps,
+    TextStyle,
+    View,
+} from 'react-native'
+import { ariaHidden } from 'src/helpers/a11y'
+import { applyScale, getUnscaledFont } from 'src/theme/typography'
+
+interface Icon {
+    width: number
+    element: (scale: number) => ReactNode
+}
+
+type TextWithIconProps = {
+    children: any
+    unscaledFont: ReturnType<typeof getUnscaledFont>
+    icon: Icon
+    style: StyleProp<TextStyle>
+} & { onTextLayout?: any } & TextProps
+
+const styles = StyleSheet.create({
+    icon: {
+        position: 'absolute',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+    },
+    dash: {
+        opacity: 0,
+    },
+})
+
+/*
+This is super cursed. Basically, in order to add inline icons
+of any arbitrary px width without messing up the line height we add
+invisible 4px em dashes at the start of the text to fill up the space and
+then the icon floats over the whole thing as an absolute box
+*/
+const IconDashes = ({ length = 1 }) => {
+    const lines = []
+    for (let i = 0; i < Math.floor(length / 5); i++) {
+        lines.push(
+            <Text key={i} {...ariaHidden} style={[styles.dash]}>
+                {'.'}
+            </Text>,
+        )
+    }
+    return <>{lines}</>
+}
+
+const TextWithIcon = ({
+    children,
+    style,
+    icon,
+    unscaledFont,
+    ...props
+}: TextWithIconProps) => {
+    const scaledFont = applyScale(unscaledFont)
+    const scale = (unscaledFont[0].lineHeight / scaledFont.lineHeight) * 0.9
+
+    return (
+        <View>
+            <View
+                style={[
+                    styles.icon,
+                    {
+                        width: icon.width / scale,
+                        height: scaledFont.lineHeight * 0.85,
+                    },
+                ]}
+            >
+                {icon.element(scale)}
+            </View>
+            <Text
+                {...props}
+                allowFontScaling={false}
+                style={[style, scaledFont]}
+            >
+                {icon && <IconDashes length={icon.width}></IconDashes>}
+                {children}
+            </Text>
+        </View>
+    )
+}
+
+export { TextWithIcon }

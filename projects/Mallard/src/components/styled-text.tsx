@@ -88,24 +88,18 @@ export type HeadlineTextProps = {
     style?: StyleProp<TextStyle>
 } & TextProps & { onTextLayout?: any }
 
+export const getHeadlineTextStyle = (weight: HeadlineTextProps['weight']) =>
+    weight === 'regular'
+        ? styles.headlineText
+        : weight === 'light'
+        ? styles.headlineTextLight
+        : styles.headlineTextBold
 export const HeadlineText = ({
     style,
     weight = 'regular',
     ...props
 }: HeadlineTextProps) => {
-    return (
-        <Text
-            {...props}
-            style={[
-                weight === 'regular'
-                    ? styles.headlineText
-                    : weight === 'light'
-                    ? styles.headlineTextLight
-                    : styles.headlineTextBold,
-                style,
-            ]}
-        />
-    )
+    return <Text {...props} style={[getHeadlineTextStyle(weight), style]} />
 }
 
 export const HeadlineKickerText = ({
