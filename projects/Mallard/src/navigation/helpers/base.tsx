@@ -19,8 +19,6 @@ export const addStaticRouter = (
     return wrapperWithRouter as NavigationContainer
 }
 
-type RequiredExcept<T, O extends keyof T> = Omit<Required<T>, O> & Pick<T, O>
-
 /**
  *
  * @param Component - component that doesn't want to have navigation as a dependency
