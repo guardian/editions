@@ -37,15 +37,15 @@ const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
 
     return (
         <>
+            <Providers type={modifiedType} pillar={modifiedPillar}>
+                {children}
+            </Providers>
             <DevTools
                 pillar={modifiedPillar}
                 type={modifiedType}
                 setPillar={setPillar}
                 setType={setType}
             />
-            <Providers type={modifiedType} pillar={modifiedPillar}>
-                {children}
-            </Providers>
         </>
     )
 }
