@@ -19,7 +19,7 @@ const loginHeaderStyles = StyleSheet.create({
         marginBottom: metrics.vertical / 2,
     },
     title: {
-        color: color.primary,
+        color: color.textOverPrimary,
     },
 })
 
