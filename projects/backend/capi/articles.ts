@@ -137,7 +137,7 @@ const parseArticleResult = async (
                     image: maybeImage,
                     byline: byline || '',
                     bylineImages,
-                    standfirst: standfirst || '',
+                    standfirst: trail || '',
                     elements,
                     starRating,
                 },
@@ -156,7 +156,7 @@ const parseArticleResult = async (
                     articleType,
                     image: maybeImage,
                     byline: byline || '',
-                    standfirst: standfirst || '',
+                    standfirst: trail || '',
                     elements,
                 },
             ]
@@ -196,7 +196,7 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     byline: byline || '',
-                    standfirst: standfirst || '',
+                    standfirst: trail || '',
                     crossword,
                 },
             ]
@@ -214,7 +214,7 @@ const parseArticleResult = async (
                     kicker,
                     image: maybeImage,
                     byline: byline || '',
-                    standfirst: standfirst || '',
+                    standfirst: trail || '',
                     elements: [
                         {
                             id: 'html',
