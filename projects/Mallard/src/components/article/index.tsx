@@ -84,14 +84,7 @@ const Article = ({
                         useWebKit={false}
                         source={{ html: html }}
                         onShouldStartLoadWithRequest={event => {
-                            if (
-                                event.url.startsWith(
-                                    'https://embed.theguardian.com',
-                                ) ||
-                                event.url.startsWith('https://www.youtube.com')
-                            ) {
-                                return false
-                            } else if (event.url !== 'about:blank') {
+                            if (event.navigationType === 'click') {
                                 Linking.openURL(event.url)
                                 return false
                             }
