@@ -7,7 +7,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { ArticleHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
 import { PropTypes as StandfirstPropTypes } from './article-standfirst'
-import { BlockElement } from 'src/common'
+import { BlockElement, ArticleFeatures } from 'src/common'
 import { render, EMBED_DOMAIN } from './html/render'
 import { CAPIArticle } from 'src/common'
 import { Gallery } from './types/gallery'
@@ -65,6 +65,8 @@ const urlIsNotAnEmbed = (url: string) =>
         url.startsWith('https://www.youtube.com/embed')
     )
 
+const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
+
 const Article = ({
     article,
     ...headerProps
@@ -74,7 +76,11 @@ const Article = ({
     StandfirstPropTypes) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
-    const html = useMemo(() => render(article, { pillar }), [article, pillar])
+    const html = useMemo(() => render(article, { pillar, features }), [
+        article,
+        pillar,
+        ...features,
+    ])
     const [, { type }] = useArticle()
 
     return (

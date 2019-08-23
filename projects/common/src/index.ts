@@ -31,6 +31,11 @@ export enum ArticleType {
     Immersive = 'immersive',
 }
 
+export enum ArticleFeatures {
+    HasDropCap = 'HAS-DROP-CAP',
+    HasFancyDropCap = 'HAS-FANCY-DROP-CAP',
+}
+
 export type ArticlePillar = typeof articlePillars[number]
 
 export interface ColorAppearance {
