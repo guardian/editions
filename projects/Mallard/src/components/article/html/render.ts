@@ -129,7 +129,7 @@ const renderImageElement = (imageElement: ImageElement) => {
                 alt="${imageElement.alt}"
             />
             <figcaption>
-                ${imageElement.caption} ${imageElement.credit}
+                ${imageElement.caption && imageElement.caption} ${imageElement.credit && imageElement.credit}
             </figcaption>
         </figure>
     `
