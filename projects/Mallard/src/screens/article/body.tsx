@@ -10,6 +10,7 @@ import { useArticleResponse } from 'src/hooks/use-issue'
 import { color } from 'src/theme/color'
 import { PathToArticle } from '../article-screen'
 import { ModalRenderer } from '../../components/modal'
+import { useIsPreview } from 'src/hooks/use-settings'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -20,15 +21,17 @@ const ArticleScreenBody = ({
     onTopPositionChange,
     pillar,
     width,
-    previewNotice,
+    position,
 }: {
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
     pillar: ArticlePillar
     width: number
-    previewNotice?: string
+    position?: number
 }) => {
     const articleResponse = useArticleResponse(path)
+    const preview = useIsPreview()
+    const previewNotice = preview ? `${path.collection}:${position}` : undefined
 
     return (
         <>

@@ -59,7 +59,7 @@ const ArticleWebview = ({
 
     const html = useMemo(
         () => render(article, { pillar, features, wrapLayout }),
-        [wrapLayout.width],
+        [wrapLayout.width], // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     return (
