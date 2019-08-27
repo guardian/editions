@@ -7,6 +7,7 @@ const {
     MEMBERS_DATA_API_URL,
     ID_ACCESS_TOKEN,
     ITUNES_CONNECT_SHARED_SECRET,
+    USE_SANDBOX_IAP: ENV_USE_SANDBOX_IAP,
 } = Config
 
 const FACEBOOK_CLIENT_ID = '180444840287'
@@ -26,6 +27,11 @@ const LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY = 'printSubscriberID'
 const LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY = 'printSubscriberPostcode'
 const LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY = `${DeviceInfo.getBundleId()}_expiryDict`
 
+// this allows us to ensure some prod build use the sanboxed IAP endpoints
+// e.g. the beta builds for testflight
+// we should never be using sandbox for __DEV__ builds, hence the `||`
+const USE_SANDBOX_IAP = ENV_USE_SANDBOX_IAP || __DEV__ ? true : false
+
 export {
     CAS_ENDPOINT_URL,
     ID_API_URL,
@@ -38,4 +44,5 @@ export {
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
     LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
     ITUNES_CONNECT_SHARED_SECRET,
+    USE_SANDBOX_IAP,
 }
