@@ -48,7 +48,6 @@ export const SlideCard = ({
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => false,
         onMoveShouldSetPanResponder: (ev, gestureState) => {
-            console.log(gestureState.dy)
             if (gestureState.moveY < 100) {
                 return true
             }
