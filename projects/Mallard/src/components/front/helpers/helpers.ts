@@ -1,5 +1,4 @@
 import { FunctionComponent } from 'react'
-import { PropTypes } from '../items/item'
 import { FlatList } from 'react-native'
 import { Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
@@ -7,6 +6,7 @@ import { Front } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Rectangle, Size } from 'src/helpers/sizes'
+import { PropTypes } from '../items/base/item-tappable'
 import { safeInterpolation } from 'src/helpers/math'
 
 type Item = FunctionComponent<PropTypes>

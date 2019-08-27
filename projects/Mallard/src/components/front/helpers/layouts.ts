@@ -6,7 +6,7 @@ import {
     SplitImageItem,
     SmallItem,
     SmallItemLargeText,
-} from '../items/item'
+} from '../items/items'
 import { FrontCardAppearance } from 'src/common'
 import { toRectangle } from 'src/helpers/sizes'
 

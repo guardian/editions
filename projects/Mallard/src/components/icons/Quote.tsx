@@ -1,12 +1,19 @@
 import React from 'react'
-import Svg, { Path } from 'react-native-svg'
+import Svg, { Path, Rect } from 'react-native-svg'
 import { color } from 'src/theme/color'
 
-const height = 25
-const width = 38
+const width = 32
+const height = 21
+
 const Quote = ({ fill = color.text, scale = 1 }) => (
     <Svg
-        style={{ transform: [{ scale }] }}
+        style={{
+            transform: [
+                { scale },
+                { translateY: (height - height * scale) / 2 },
+                { translateX: (width - width * scale) / -2 },
+            ],
+        }}
         width={width}
         height={height}
         fill="none"
@@ -14,7 +21,7 @@ const Quote = ({ fill = color.text, scale = 1 }) => (
         <Path
             fill-rule="evenodd"
             clip-rule="evenodd"
-            d="M8.864.333h7.74c-.932 6.867-1.756 13.6-2.114 21.134H.3C1.59 14.133 4.277 7.2 8.864.333zm18.024 0h7.633c-.825 6.867-1.756 13.6-2.114 21.134H18.252c1.47-7.334 4.05-14.267 8.636-21.134z"
+            d="M7.96664 0.75H15.1666C14.3 7.18748 13.5333 13.5 13.2 20.5624H0C1.2 13.6875 3.69999 7.18748 7.96664 0.75ZM24.7332 0.75H31.8332C31.0665 7.18748 30.1999 13.5 29.8665 20.5624H16.6999C18.0666 13.6875 20.4666 7.18748 24.7332 0.75Z"
             fill={fill}
         />
     </Svg>
