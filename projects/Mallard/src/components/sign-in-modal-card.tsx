@@ -1,9 +1,19 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
-import { View } from 'react-native'
+import { View, Platform, Linking, StyleSheet } from 'react-native'
 import { ModalButton } from './modal-button'
 import { Link } from './link'
 import { ButtonAppearance } from './button/button'
+import { getFont } from 'src/theme/typography'
+
+const styles = StyleSheet.create({
+    bottomContentContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+})
 
 const SignInModalCard = ({
     close,
@@ -15,37 +25,58 @@ const SignInModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
-        title="Already subscribed?"
+        title="Already a subscriber?"
         subtitle="Sign in to continue with the app"
         appearance={CardAppearance.blue}
         size="small"
         bottomContent={
             <>
-                <View style={{ width: '100%' }}>
-                    <Link href="https://www.theguardian.com/help/identity-faq">
-                        Need help signing in?
-                    </Link>
+                <View style={styles.bottomContentContainer}>
+                    <View>
+                        <ModalButton
+                            onPress={() => {
+                                close()
+                                onLoginPress()
+                            }}
+                        >
+                            Continue
+                        </ModalButton>
+                    </View>
+                    <View>
+                        <Link
+                            style={{ ...getFont('sans', 0.9, 'bold') }}
+                            href="https://www.theguardian.com/help/identity-faq"
+                        >
+                            Need help signing in?
+                        </Link>
+                    </View>
                 </View>
-                <ModalButton
-                    onPress={() => {
-                        close()
-                        onLoginPress()
-                    }}
-                >
-                    Continue
-                </ModalButton>
-                <ModalButton
-                    onPress={() => {
-                        close()
-                        onDismiss()
-                    }}
-                >
-                    Close
-                </ModalButton>
             </>
         }
         explainerTitle="Not subscribed yet?"
-        explainerSubtitle="Get a free trial with our Digital Pack, on our website"
+        explainerSubtitle={
+            Platform.OS === 'ios'
+                ? 'To get a free trial with our Digital Pack, visit our website'
+                : 'Get a free trial with our Digital Pack'
+        }
+        bottomExplainerContent={
+            <>
+                <ModalButton
+                    onPress={() => {
+                        if (Platform.OS === 'android') {
+                            Linking.openURL(
+                                'https://support.theguardian.com/uk/subscribe/digital',
+                            )
+                        }
+                    }}
+                    buttonAppearance={ButtonAppearance.dark}
+                >
+                    {Platform.OS === 'ios'
+                        ? 'Learn more'
+                        : 'Get your free 14 day trial'}
+                </ModalButton>
+            </>
+        }
     />
 )
 

@@ -4,6 +4,7 @@ import { AnimatedValue } from 'react-navigation'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
+import { safeInterpolation } from 'src/helpers/math'
 
 const modalStyles = StyleSheet.create({
     root: {
@@ -47,8 +48,16 @@ const ModalForTablet = ({
                                 modalStyles.bg,
                                 {
                                     opacity: position.interpolate({
-                                        inputRange: [0, 0.9, 1],
-                                        outputRange: [0, 0, 1],
+                                        inputRange: safeInterpolation([
+                                            0,
+                                            0.9,
+                                            1,
+                                        ]),
+                                        outputRange: safeInterpolation([
+                                            0,
+                                            0,
+                                            1,
+                                        ]),
                                     }),
                                 },
                             ]}

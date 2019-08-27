@@ -3,6 +3,7 @@ import { NavigationTransitionProps } from 'react-navigation'
 import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { metrics } from 'src/theme/spacing'
 import { BreakpointList, Breakpoints } from 'src/theme/breakpoints'
+import { safeInterpolation } from 'src/helpers/math'
 
 const sidebarWidth = 360
 
@@ -15,12 +16,12 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
     const finalTranslate = windowHeight - 80
 
     const translateY = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 1],
-        outputRange: [0, finalTranslate],
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+        outputRange: safeInterpolation([0, finalTranslate]),
     })
     const translateX = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 1],
-        outputRange: [0, -sidebarWidth],
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+        outputRange: safeInterpolation([0, -sidebarWidth]),
     })
 
     const platformStyles = isTablet
@@ -33,15 +34,15 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
               shadowOpacity: 1,
               shadowRadius: 3.84,
               borderRadius: position.interpolate({
-                  inputRange: [sceneIndex, sceneIndex + 1],
-                  outputRange: [0, radius / 4],
+                  inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+                  outputRange: safeInterpolation([0, radius / 4]),
               }),
           }
         : {
               transform: [{ translateY }],
               borderRadius: position.interpolate({
-                  inputRange: [sceneIndex, sceneIndex + 1],
-                  outputRange: [0, radius],
+                  inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+                  outputRange: safeInterpolation([0, radius]),
               }),
           }
 
@@ -64,17 +65,21 @@ const IssueListToIssueScreen = (sceneProps: NavigationTransitionProps) => {
     these ones r easy
     */
     const scale = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex - 0.1, sceneIndex],
-        outputRange: [minScale, 1, 1],
+        inputRange: safeInterpolation([
+            sceneIndex - 1,
+            sceneIndex - 0.1,
+            sceneIndex,
+        ]),
+        outputRange: safeInterpolation([minScale, 1, 1]),
     })
     const borderRadius = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex],
+        inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
         extrapolate: 'clamp',
-        outputRange: [radius, 0],
+        outputRange: safeInterpolation([radius, 0]),
     })
     const opacity = position.interpolate({
-        inputRange: [sceneIndex - 1, sceneIndex],
-        outputRange: [minOpacity, 1],
+        inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
+        outputRange: safeInterpolation([minOpacity, 1]),
     })
 
     /*
@@ -88,8 +93,8 @@ const IssueListToIssueScreen = (sceneProps: NavigationTransitionProps) => {
     const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
 
     const translateY = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 1],
-        outputRange: [0, finalTranslate],
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+        outputRange: safeInterpolation([0, finalTranslate]),
     })
 
     const platformStyles = isTablet

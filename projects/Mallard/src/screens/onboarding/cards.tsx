@@ -4,10 +4,10 @@ import {
     OnboardingCard,
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
-import { Button, ButtonAppearance } from 'src/components/button/button'
-import { metrics } from 'src/theme/spacing'
+import { ButtonAppearance } from 'src/components/button/button'
 import { FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useGdprSwitches } from 'src/hooks/use-settings'
+import { ModalButton } from 'src/components/modal-button'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
     <View
@@ -23,11 +23,10 @@ const Aligner = ({ children }: { children: React.ReactNode }) => (
 )
 
 const styles = StyleSheet.create({
-    card: {},
-    sbs: {
+    consentButtonContainer: {
+        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: metrics.horizontal * 2,
+        alignItems: 'center',
     },
 })
 
@@ -35,21 +34,24 @@ const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
     return (
         <Aligner>
             <OnboardingCard
-                style={styles.card}
+                appearance={CardAppearance.blue}
                 title="Welcome to the Guardian daily"
                 explainerTitle="Thank you for being a beta user"
+                bottomExplainerContent={
+                    <>
+                        <ModalButton
+                            onPress={() => {
+                                onContinue()
+                            }}
+                            buttonAppearance={ButtonAppearance.dark}
+                        >
+                            Start
+                        </ModalButton>
+                    </>
+                }
             >
                 {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
             </OnboardingCard>
-            <View style={styles.sbs}>
-                <Button
-                    appearance={ButtonAppearance.tomato}
-                    onPress={onContinue}
-                    style={{ marginLeft: 'auto' }} // keep the button to the right
-                >
-                    Start
-                </Button>
-            </View>
         </Aligner>
     )
 }
@@ -65,30 +67,41 @@ const OnboardingConsent = ({
     return (
         <Aligner>
             <OnboardingCard
-                style={styles.card}
-                appearance={CardAppearance.apricot}
+                appearance={CardAppearance.blue}
                 title="We care about your privacy"
                 explainerTitle="We won’t share your data without asking"
+                bottomExplainerContent={
+                    <>
+                        <View style={styles.consentButtonContainer}>
+                            <View>
+                                <ModalButton
+                                    onPress={() => {
+                                        onOpenGdprConsent()
+                                    }}
+                                    buttonAppearance={
+                                        ButtonAppearance.skeletonBlue
+                                    }
+                                >
+                                    My options
+                                </ModalButton>
+                            </View>
+                            <View>
+                                <ModalButton
+                                    onPress={() => {
+                                        enableNulls()
+                                        onContinue()
+                                    }}
+                                    buttonAppearance={ButtonAppearance.dark}
+                                >
+                                    {`I'm okay with that`}
+                                </ModalButton>
+                            </View>
+                        </View>
+                    </>
+                }
             >
-                {`(temporary copy) By clicking agree you are agreeing to The Guardian’s privacy policy and data usage`}
+                {`We use cookies and similar technology to improve your experience and also to allow us to improve our service. To find out more, read our privacy policy and cookie policy.`}
             </OnboardingCard>
-            <View style={styles.sbs}>
-                <Button
-                    appearance={ButtonAppearance.apricot}
-                    onPress={onOpenGdprConsent}
-                >
-                    Customize
-                </Button>
-                <Button
-                    appearance={ButtonAppearance.apricot}
-                    onPress={() => {
-                        enableNulls()
-                        onContinue()
-                    }}
-                >
-                    Agree
-                </Button>
-            </View>
         </Aligner>
     )
 }

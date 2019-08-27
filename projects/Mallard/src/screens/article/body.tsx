@@ -1,17 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet } from 'react-native'
 import { ScrollView } from 'react-navigation'
-import { articlePillars, ArticleType, PillarFromPalette } from 'src/common'
+import { ArticleType, ArticlePillar } from 'src/common'
 import { ArticleController } from 'src/components/article'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import { useSettingsValue } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { PathToArticle } from '../article-screen'
-import { DevTools, getEnumPosition } from './dev-tools'
 import { ModalRenderer } from '../../components/modal'
+import { useIsPreview } from 'src/hooks/use-settings'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -22,24 +21,20 @@ const ArticleScreenBody = ({
     onTopPositionChange,
     pillar,
     width,
-    previewNotice,
+    position,
 }: {
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
-    pillar: PillarFromPalette
+    pillar: ArticlePillar
     width: number
-    previewNotice?: string
+    position?: number
 }) => {
-    const [modifiedPillar, setPillar] = useState(
-        articlePillars.indexOf(pillar) || 0,
-    )
-    const [modifiedType, setType] = useState(0)
     const articleResponse = useArticleResponse(path)
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+    const preview = useIsPreview()
+    const previewNotice = preview ? `${path.collection}:${position}` : undefined
 
     return (
         <>
-            <ModalRenderer />
             <ScrollView
                 scrollEventThrottle={8}
                 onScroll={ev => {
@@ -66,25 +61,12 @@ const ArticleScreenBody = ({
                             {previewNotice && (
                                 <UiBodyCopy>{previewNotice}</UiBodyCopy>
                             )}
-                            {isUsingProdDevtools ? (
-                                <DevTools
-                                    pillar={modifiedPillar}
-                                    setPillar={setPillar}
-                                    type={modifiedType}
-                                    setType={setType}
-                                />
-                            ) : null}
                             <WithArticle
                                 type={
-                                    isUsingProdDevtools
-                                        ? getEnumPosition(
-                                              ArticleType,
-                                              modifiedType,
-                                          )
-                                        : article.article.articleType ||
-                                          ArticleType.Article
+                                    article.article.articleType ||
+                                    ArticleType.Article
                                 }
-                                pillar={articlePillars[modifiedPillar]}
+                                pillar={pillar}
                             >
                                 <ArticleController article={article.article} />
                             </WithArticle>
@@ -92,6 +74,7 @@ const ArticleScreenBody = ({
                     ),
                 })}
             </ScrollView>
+            <ModalRenderer />
         </>
     )
 }

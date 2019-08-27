@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useContext, useCallback } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
+import { safeInterpolation } from 'src/helpers/math'
 
 type ModalRenderer = (close: () => void) => React.ReactNode
 
@@ -86,8 +87,8 @@ const ModalRenderer = () => {
                             transform: [
                                 {
                                     translateY: val.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [20, 0],
+                                        inputRange: safeInterpolation([0, 1]),
+                                        outputRange: safeInterpolation([20, 0]),
                                     }),
                                 },
                             ],

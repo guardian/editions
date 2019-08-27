@@ -32,6 +32,7 @@ import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { Header } from 'src/components/layout/header/header'
 import { supportsTransparentCards } from 'src/helpers/features'
+import { safeInterpolation } from 'src/helpers/math'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -70,8 +71,8 @@ const ScreenHeader = withNavigation(
                         style={
                             supportsTransparentCards() && {
                                 opacity: position.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: [1, 0],
+                                    inputRange: safeInterpolation([0, 1]),
+                                    outputRange: safeInterpolation([1, 0]),
                                 }),
                             }
                         }
@@ -128,6 +129,7 @@ const IssueFronts = ({
             extraData={{
                 ...container,
             }}
+            windowSize={3}
             style={style}
             removeClippedSubviews={true}
             ListHeaderComponent={ListHeaderComponent}

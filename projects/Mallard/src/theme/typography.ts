@@ -72,6 +72,11 @@ const scale = {
                 fontSize: 16,
                 lineHeight: 20,
             },
+
+            [Breakpoints.tabletVertical]: {
+                fontSize: 18,
+                lineHeight: 22,
+            },
         },
         1.25: {
             0: {
@@ -159,6 +164,12 @@ const scale = {
             0: {
                 fontSize: 45,
                 lineHeight: 50,
+            },
+        },
+        2.25: {
+            0: {
+                fontSize: 55,
+                lineHeight: 55,
             },
         },
         2.5: {

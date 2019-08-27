@@ -1,30 +1,56 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { color } from '../theme/color'
-import { PillarFromPalette, ArticleType, Appearance } from '../common'
+import { ArticlePillar, ArticleType, Appearance } from '../common'
 import { PillarColours } from '@guardian/pasteup/palette'
+import { useSettingsValue } from './use-settings'
+import { DevTools } from 'src/hooks/article/dev-tools'
 
 /*
   Exports
  */
-const ArticlePillarContext = createContext<PillarFromPalette>('neutral')
+const ArticlePillarContext = createContext<ArticlePillar>('neutral')
 const ArticleTypeContext = createContext<ArticleType>(ArticleType.Article)
 
 export const WithArticlePillar = ArticlePillarContext.Provider
 export const WithArticleType = ArticleTypeContext.Provider
 
-export const WithArticle = ({
-    type,
-    pillar,
-    children,
-}: {
+interface PropTypes {
     type: ArticleType
-    pillar: PillarFromPalette
+    pillar: ArticlePillar
     children: Element
-}) => (
+}
+
+export const Providers = ({ type, pillar, children }: PropTypes) => (
     <WithArticleType value={type}>
         <WithArticlePillar value={pillar}>{children}</WithArticlePillar>
     </WithArticleType>
 )
+
+const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
+    const [modifiedPillar, setPillar] = useState(pillar)
+    const [modifiedType, setType] = useState(type)
+
+    return (
+        <>
+            <Providers type={modifiedType} pillar={modifiedPillar}>
+                {children}
+            </Providers>
+            <DevTools
+                pillar={modifiedPillar}
+                type={modifiedType}
+                setPillar={setPillar}
+                setType={setType}
+            />
+        </>
+    )
+}
+
+export const WithArticle = (props: PropTypes) => {
+    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+
+    if (isUsingProdDevtools) return <ProvidersAndDevtools {...props} />
+    return <Providers {...props} />
+}
 
 const neutrals: PillarColours = {
     dark: color.palette.neutral[7],
@@ -34,13 +60,13 @@ const neutrals: PillarColours = {
     faded: color.palette.neutral[97],
 }
 
-export const getPillarColors = (pillar: PillarFromPalette) =>
+export const getPillarColors = (pillar: ArticlePillar) =>
     pillar === 'neutral' ? neutrals : color.palette[pillar]
 
 export const useArticle = (): [
     PillarColours,
     {
-        pillar: PillarFromPalette
+        pillar: ArticlePillar
         type: ArticleType
     },
 ] => {

@@ -8,9 +8,12 @@ import { LoginLayout } from 'src/components/login/login-layout'
 import { LoginInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
 import { useFormField } from 'src/hooks/use-form-field'
+import { getFont } from 'src/theme/typography'
 
 const styles = StyleSheet.create({
     image: { height: 200, width: undefined },
+    casExplainerTitle: { ...getFont('headline', 1, 'bold') },
+    casExplainerBody: { ...getFont('headline', 1, 'regular') },
 })
 
 const CasSignInScreen = ({
@@ -76,8 +79,10 @@ const CasSignInScreen = ({
                 <LoginButton type="cta" onPress={handleSubmit}>
                     Submit
                 </LoginButton>
-                <Text>What&apos;s a subscriber ID?</Text>
-                <Text>
+                <Text style={styles.casExplainerTitle}>
+                    What&apos;s a subscriber ID?
+                </Text>
+                <Text style={styles.casExplainerBody}>
                     You can find your subscriber ID on your subscription
                     confirmation email. If you collect your paper, your
                     subscriber ID is on your voucher.

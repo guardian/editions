@@ -1,28 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
-import { HeadlineCardText, StandfirstText } from 'src/components/styled-text'
+import { StyleSheet, View } from 'react-native'
+import { HeadlineCardText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
-import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { getFont, getUnscaledFont } from 'src/theme/typography'
-import {
-    getItemRectanglePerc,
-    ItemSizes,
-    PageLayoutSizes,
-    toPercentage,
-} from '../helpers/helpers'
+import { ItemSizes, PageLayoutSizes } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
-import {
-    ItemTappable,
-    TappablePropTypes,
-    tappablePadding,
-    PropTypes,
-} from './base/item-tappable'
+import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
 import { TextBlock } from './base/text-block'
-import { TextWithIcon } from 'src/components/layout/text-with-icon'
-import Quote from 'src/components/icons/Quote'
-import { imagePath } from 'src/paths'
-import { BylineCutout } from 'src/components/article/article-header/opinion-header'
 import { SuperHeroImageItem } from './super-items'
 
 /*
@@ -73,13 +57,12 @@ const coverStyles = StyleSheet.create({
     },
 })
 
-const CoverItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
+const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
                 {'image' in article && article.image ? (
                     <ImageResource
-                        issueID={issueID}
                         style={coverStyles.cover}
                         image={article.image}
                     />
@@ -130,7 +113,6 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }}>
             {'image' in article && article.image ? (
                 <ImageResource
-                    issueID={issueID}
                     style={[
                         imageStyles.image,
                         { height: getImageHeight(size) },
@@ -164,7 +146,6 @@ const RoundImageItem = ({
             />
             {'image' in article && article.image ? (
                 <ImageResource
-                    issueID={issueID}
                     style={[imageStyles.roundImage]}
                     image={article.image}
                 />
@@ -196,12 +177,7 @@ const splitImageStyles = StyleSheet.create({
     },
 })
 
-const SplitImageItem = ({
-    article,
-    issueID,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...{ article }} {...tappableProps}>
             <View style={splitImageStyles.card}>
@@ -214,7 +190,6 @@ const SplitImageItem = ({
                 />
                 {'image' in article && article.image ? (
                     <ImageResource
-                        issueID={issueID}
                         style={[splitImageStyles.image]}
                         image={article.image}
                     />
@@ -239,15 +214,12 @@ const splashImageStyles = StyleSheet.create({
     },
 })
 
-const SplashImageItem = ({ article, issueID, ...tappableProps }: PropTypes) => {
+const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
     if (!article.image)
-        return (
-            <SuperHeroImageItem {...tappableProps} {...{ article, issueID }} />
-        )
+        return <SuperHeroImageItem {...tappableProps} {...{ article }} />
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <ImageResource
-                issueID={issueID}
                 style={[splashImageStyles.image]}
                 image={article.image}
             />

@@ -1,6 +1,8 @@
 import React from 'react'
+import { Platform, Linking } from 'react-native'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { ModalButton } from './modal-button'
+import { ButtonAppearance } from './button/button'
 
 const SubNotFoundModalCard = ({
     close,
@@ -14,9 +16,19 @@ const SubNotFoundModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
-        title="Subscription not found"
+        title="Already a subscriber?"
         appearance={CardAppearance.blue}
         size="small"
+        explainerTitle="Not subscribed yet?"
+        onDismissThisCard={() => {
+            close()
+            onDismiss()
+        }}
+        explainerSubtitle={
+            Platform.OS === 'ios'
+                ? 'To get a free trial with our Digital Pack, visit our website'
+                : 'Get a free trial with our Digital Pack'
+        }
         bottomContent={
             <>
                 <ModalButton
@@ -35,18 +47,28 @@ const SubNotFoundModalCard = ({
                 >
                     Activate with subscriber ID
                 </ModalButton>
+            </>
+        }
+        bottomExplainerContent={
+            <>
                 <ModalButton
                     onPress={() => {
-                        close()
-                        onDismiss()
+                        if (Platform.OS === 'android') {
+                            Linking.openURL(
+                                'https://support.theguardian.com/uk/subscribe/digital',
+                            )
+                        }
                     }}
+                    buttonAppearance={ButtonAppearance.dark}
                 >
-                    Close
+                    {Platform.OS === 'ios'
+                        ? 'Learn more'
+                        : 'Get your free 14 day trial'}
                 </ModalButton>
             </>
         }
     >
-        We were unable to find a subscription with that account
+        {}
     </OnboardingCard>
 )
 
