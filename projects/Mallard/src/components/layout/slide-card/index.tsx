@@ -88,25 +88,7 @@ export const SlideCard = ({
     })
 
     return (
-        <Animated.View
-            style={[
-                styles.container,
-                {
-                    transform: [
-                        {
-                            translateY: scrollY.interpolate({
-                                inputRange: safeInterpolation([
-                                    dismissAt * -1,
-                                    0,
-                                ]),
-                                outputRange: safeInterpolation([dismissAt, 0]),
-                                extrapolate: 'clamp',
-                            }),
-                        },
-                    ],
-                },
-            ]}
-        >
+        <Animated.View style={[styles.container]}>
             <View {...panResponder.panHandlers} style={[{ flex: 1 }]}>
                 <Header
                     {...{
