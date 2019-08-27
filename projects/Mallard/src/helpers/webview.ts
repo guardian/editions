@@ -1,8 +1,12 @@
 import { Platform } from 'react-native'
 import { bundles } from 'src/html-bundle-info.json'
 
-/* this tricks vs code into thinking we are using emotion */
-export const css = (
+/*
+this tricks vs code into thinking
+we are using emotion & lit-html
+and gives us syntax colors
+*/
+const passthrough = (
     literals: TemplateStringsArray,
     ...placeholders: any[]
 ): string =>
@@ -12,6 +16,9 @@ export const css = (
         }
         return acc + literal
     }, '')
+
+export const css = passthrough
+export const html = passthrough
 
 export const generateAssetsFontCss = (fontFamily: string) => {
     const fileName = Platform.select({
@@ -69,7 +76,7 @@ export const makeHtml = ({
                 window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
             })
         }
-    
+
         window.setInterval(function() { submitHeight() }, 4000)
         submitHeight()
     </script>
