@@ -2,6 +2,7 @@ import React, { useState, useEffect, ReactNode, useRef } from 'react'
 import { Animated, StyleSheet, View, PanResponder } from 'react-native'
 import { Header } from './header'
 import { dismissAt } from './helpers'
+import { safeInterpolation } from 'src/helpers/math'
 
 /*
 This is the swipey contraption that contains an article.
@@ -36,8 +37,8 @@ export const SlideCard = ({
     useEffect(() => {
         Animated.timing(getPosition(), {
             toValue: scrollY.interpolate({
-                inputRange: [0, 60],
-                outputRange: [1, 0.8],
+                inputRange: safeInterpolation([0, 60]),
+                outputRange: safeInterpolation([1, 0.8]),
             }) as Animated.Value,
             duration: 0,
             useNativeDriver: true,
@@ -88,8 +89,11 @@ export const SlideCard = ({
                     transform: [
                         {
                             translateY: scrollY.interpolate({
-                                inputRange: [dismissAt * -1, 0],
-                                outputRange: [dismissAt, 0],
+                                inputRange: safeInterpolation([
+                                    dismissAt * -1,
+                                    0,
+                                ]),
+                                outputRange: safeInterpolation([dismissAt, 0]),
                                 extrapolate: 'clamp',
                             }),
                         },

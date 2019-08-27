@@ -7,6 +7,7 @@ import { Background } from './draw/background'
 import { WithBreakpoints } from '../layout/ui/sizing/with-breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { WithLayoutRectangle } from '../layout/ui/sizing/with-layout-rectangle'
+import { safeInterpolation } from 'src/helpers/math'
 
 const stopRadius = 4
 
@@ -84,8 +85,11 @@ const Slider = ({
     const lozengePosition = (width: number) =>
         isScrollable
             ? position.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, width - metrics.fronts.sliderRadius * 2],
+                  inputRange: safeInterpolation([0, 1]),
+                  outputRange: safeInterpolation([
+                      0,
+                      width - metrics.fronts.sliderRadius * 2,
+                  ]),
               })
             : undefined
 

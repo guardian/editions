@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
 import { color } from 'src/theme/color'
+import { safeInterpolation } from 'src/helpers/math'
 
 const styles = StyleSheet.create({
     ball: {
@@ -31,8 +32,8 @@ const Ball = ({ color, jump }: { color: string; jump: Animated.Value }) => {
                     transform: [
                         {
                             translateY: jump.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [-5, 5],
+                                inputRange: safeInterpolation([0, 1]),
+                                outputRange: safeInterpolation([-5, 5]),
                             }),
                         },
                     ],

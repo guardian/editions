@@ -3,6 +3,7 @@ import { Animated, Dimensions, StyleSheet } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
 import { supportsAnimatedClipView } from 'src/helpers/features'
 import { metrics } from 'src/theme/spacing'
+import { safeInterpolation } from 'src/helpers/math'
 
 /*
 This is part of the transition from articles to fronts
@@ -41,7 +42,10 @@ const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
                         {
                             borderRadius: easing.interpolate({
                                 inputRange: [0, 1],
-                                outputRange: [0, metrics.radius],
+                                outputRange: safeInterpolation([
+                                    0,
+                                    metrics.radius,
+                                ]),
                             }),
                         },
                         {
@@ -49,21 +53,21 @@ const MaskClipFromTop = ({ children, from, easing }: PropTypes) => {
                                 {
                                     translateY: easing.interpolate({
                                         inputRange: [0, 0.5, 1],
-                                        outputRange: [
+                                        outputRange: safeInterpolation([
                                             (windowHeight - from) / -2,
                                             (windowHeight - from) / -2,
                                             0,
-                                        ],
+                                        ]),
                                     }),
                                 },
                                 {
                                     scaleY: easing.interpolate({
                                         inputRange: [0, 0.5, 1],
-                                        outputRange: [
+                                        outputRange: safeInterpolation([
                                             targetHeightScale,
                                             targetHeightScale,
                                             1,
-                                        ],
+                                        ]),
                                     }),
                                 },
                             ],

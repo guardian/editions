@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Animated, Dimensions, StyleSheet, View } from 'react-native'
-import { clamp } from 'src/helpers/math'
+import { clamp, safeInterpolation } from 'src/helpers/math'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
 /*
@@ -43,12 +43,12 @@ const Fader = ({ children }: PropTypes) => {
                         /*
                         we wanna prevent any value except the final
                         one to be 1 because otherwise the animation will throw */
-                        inputRange: [
+                        inputRange: safeInterpolation([
                             clamp(0.2 + buildOrder.current / 10, 0, 1),
                             clamp(0.4 + buildOrder.current / 10, 0.4, 1),
                             1,
-                        ],
-                        outputRange: [0, 1, 1],
+                        ]),
+                        outputRange: safeInterpolation([0, 1, 1]),
                     }),
                 },
                 faderStyles.wrapper,
