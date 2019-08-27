@@ -24,7 +24,8 @@ const isNonEmpty = s => s
 const getValueFromEnvironment = key => {
     let [writeKey, readKey = writeKey] = key.split('=')
     const value = process.env[readKey]
-    if (!value) throw new Error(`Could not find ${readKey} in environment`)
+    if (typeof value === 'undefined')
+        throw new Error(`Could not find ${readKey} in environment`)
     return `${writeKey}=${value}`
 }
 const writeToFile = (relativePaths, data) =>
