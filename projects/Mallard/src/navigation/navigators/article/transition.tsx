@@ -3,6 +3,7 @@ import { NavigationTransitionProps } from 'react-navigation'
 import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { routeNames } from 'src/navigation/routes'
 import { metrics } from 'src/theme/spacing'
+import { safeInterpolation } from 'src/helpers/math'
 
 const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
@@ -17,18 +18,22 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     these ones r easy
     */
     const scale = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 0.1, sceneIndex + 1],
-        outputRange: [1, 1, minScale],
+        inputRange: safeInterpolation([
+            sceneIndex,
+            sceneIndex + 0.1,
+            sceneIndex + 1,
+        ]),
+        outputRange: safeInterpolation([1, 1, minScale]),
     })
     const borderRadius = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 1],
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
         extrapolate: 'clamp',
-        outputRange: [0, radius],
+        outputRange: safeInterpolation([0, radius]),
     })
     const opacity = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 0.1],
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 0.1]),
         extrapolate: 'clamp',
-        outputRange: [1, minOpacity],
+        outputRange: safeInterpolation([1, minOpacity]),
     })
 
     /*
@@ -42,8 +47,8 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
 
     const translateY = position.interpolate({
-        inputRange: [sceneIndex, sceneIndex + 1],
-        outputRange: [0, finalTranslate],
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+        outputRange: safeInterpolation([0, finalTranslate]),
     })
 
     return {
@@ -80,13 +85,13 @@ const articleScreenMotion = ({
         and its card so it's a bit less jarring
         */
     const opacity = position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 1],
+        inputRange: safeInterpolation([0, 1]),
+        outputRange: safeInterpolation([0, 1]),
     })
 
     const opacityOuter = position.interpolate({
-        inputRange: [0, 0.1, 1],
-        outputRange: [0, 1, 1],
+        inputRange: safeInterpolation([0, 0.1, 1]),
+        outputRange: safeInterpolation([0, 1, 1]),
     })
 
     /*
@@ -96,8 +101,8 @@ const articleScreenMotion = ({
     const scaler = getScaleForArticle(width)
 
     const scale = position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [scaler, 1],
+        inputRange: safeInterpolation([0, 1]),
+        outputRange: safeInterpolation([scaler, 1]),
     })
 
     /*
@@ -107,8 +112,8 @@ const articleScreenMotion = ({
     const distanceFromVCenter = y - windowHeight / 2
     const d = (windowHeight / 2) * scaler + distanceFromVCenter
     const translateY = position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [d, metrics.slideCardSpacing],
+        inputRange: safeInterpolation([0, 1]),
+        outputRange: safeInterpolation([d, metrics.slideCardSpacing]),
     })
 
     /*
@@ -117,15 +122,15 @@ const articleScreenMotion = ({
         */
     const distanceFromCentre = width / 2 + x - windowWidth / 2
     const translateX = position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [distanceFromCentre, 0],
+        inputRange: safeInterpolation([0, 1]),
+        outputRange: safeInterpolation([distanceFromCentre, 0]),
     })
 
     const transform = [{ translateX }, { translateY }, { scale }]
 
     const borderRadius = position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, metrics.radius],
+        inputRange: safeInterpolation([0, 1]),
+        outputRange: safeInterpolation([0, metrics.radius]),
     })
 
     return {

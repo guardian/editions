@@ -2,7 +2,7 @@ import React, { useMemo, useState, ReactNode } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet, View } from 'react-native'
-import { clamp } from 'src/helpers/math'
+import { clamp, safeInterpolation } from 'src/helpers/math'
 import { ariaHidden } from 'src/helpers/a11y'
 import { metrics } from 'src/theme/spacing'
 
@@ -75,15 +75,24 @@ const LozengeBigHeader = ({
                     width &&
                         position && {
                             opacity: position.interpolate({
-                                inputRange: [0, fadeLozengeAt],
-                                outputRange: [1, 0],
+                                inputRange: safeInterpolation([
+                                    0,
+                                    fadeLozengeAt,
+                                ]),
+                                outputRange: safeInterpolation([1, 0]),
                                 extrapolate: 'clamp',
                             }),
                             transform: [
                                 {
                                     translateX: position.interpolate({
-                                        inputRange: [0, width],
-                                        outputRange: [0, width * -0.5],
+                                        inputRange: safeInterpolation([
+                                            0,
+                                            width,
+                                        ]),
+                                        outputRange: safeInterpolation([
+                                            0,
+                                            width * -0.5,
+                                        ]),
                                         extrapolate: 'clamp',
                                     }),
                                 },
@@ -108,12 +117,12 @@ const LozengeBigHeader = ({
                         },
                         position && {
                             opacity: position.interpolate({
-                                inputRange: [
+                                inputRange: safeInterpolation([
                                     0,
                                     fadeLozengeAt - 1,
                                     fadeLozengeAt,
-                                ],
-                                outputRange: [1, 1, 0],
+                                ]),
+                                outputRange: safeInterpolation([1, 1, 0]),
                                 extrapolate: 'clamp',
                             }),
                         },
@@ -121,20 +130,26 @@ const LozengeBigHeader = ({
                             transform: [
                                 {
                                     translateX: position.interpolate({
-                                        inputRange: [0, fadeLozengeAt],
-                                        outputRange: [
+                                        inputRange: safeInterpolation([
+                                            0,
+                                            fadeLozengeAt,
+                                        ]),
+                                        outputRange: safeInterpolation([
                                             0,
                                             fadeLozengeAt * -1 -
                                                 width / 2 +
                                                 metrics.fronts.sliderRadius,
-                                        ],
+                                        ]),
                                         extrapolate: 'clamp',
                                     }),
                                 },
                                 {
                                     scaleX: position.interpolate({
-                                        inputRange: [0, fadeLozengeAt],
-                                        outputRange: [1, 0],
+                                        inputRange: safeInterpolation([
+                                            0,
+                                            fadeLozengeAt,
+                                        ]),
+                                        outputRange: safeInterpolation([1, 0]),
                                         extrapolate: 'clamp',
                                     }),
                                 },
@@ -149,7 +164,7 @@ const LozengeBigHeader = ({
                         width &&
                             position && {
                                 opacity: position.interpolate({
-                                    inputRange: [
+                                    inputRange: safeInterpolation([
                                         0,
                                         clamp(
                                             width / 2 -
@@ -158,20 +173,23 @@ const LozengeBigHeader = ({
                                             width / 2,
                                         ),
                                         width / 2,
-                                    ],
-                                    outputRange: [1, 1, 0],
+                                    ]),
+                                    outputRange: safeInterpolation([1, 1, 0]),
                                 }),
                                 transform: [
                                     {
                                         translateX: position.interpolate({
-                                            inputRange: [0, fadeLozengeAt],
-                                            outputRange: [
+                                            inputRange: safeInterpolation([
+                                                0,
+                                                fadeLozengeAt,
+                                            ]),
+                                            outputRange: safeInterpolation([
                                                 0,
                                                 fadeLozengeAt * -1 -
                                                     (width -
                                                         metrics.fronts
                                                             .sliderRadius),
-                                            ],
+                                            ]),
                                             extrapolate: 'clamp',
                                         }),
                                     },
@@ -243,8 +261,8 @@ const LozengeWrapper = ({
                     transform: [
                         {
                             translateX: position.interpolate({
-                                inputRange: [0, 100],
-                                outputRange: [0, 100],
+                                inputRange: safeInterpolation([0, 100]),
+                                outputRange: safeInterpolation([0, 100]),
                                 extrapolateLeft: 'clamp',
                             }),
                         },
@@ -274,8 +292,8 @@ const Lozenge = ({
                     fill={fill}
                     style={{
                         opacity: position.interpolate({
-                            inputRange: [0, 10],
-                            outputRange: [0, 1],
+                            inputRange: safeInterpolation([0, 10]),
+                            outputRange: safeInterpolation([0, 1]),
                             extrapolate: 'clamp',
                         }),
                     }}

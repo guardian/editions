@@ -8,6 +8,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { UiBodyCopy } from '../styled-text'
+import { safeInterpolation } from 'src/helpers/math'
 
 export interface ToastProps {
     title: string
@@ -42,8 +43,8 @@ const Toast = ({ title, subtitle }: ToastProps) => {
                     transform: [
                         {
                             translateY: position.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [50, 0],
+                                inputRange: safeInterpolation([0, 1]),
+                                outputRange: safeInterpolation([50, 0]),
                             }),
                         },
                     ],

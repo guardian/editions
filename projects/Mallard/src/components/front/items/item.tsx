@@ -36,6 +36,7 @@ import { ImageResource } from '../image-resource'
 import { TextBlock } from './text-block'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { ariaHidden } from 'src/helpers/a11y'
+import { safeInterpolation } from 'src/helpers/math'
 
 interface TappablePropTypes {
     style?: StyleProp<ViewStyle>
@@ -157,8 +158,8 @@ const ItemTappable = withNavigation(
                         {
                             backgroundColor: color.dimBackground,
                             opacity: opacity.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [1, 0],
+                                inputRange: safeInterpolation([0, 1]),
+                                outputRange: safeInterpolation([1, 0]),
                             }),
                         },
                     ]}
