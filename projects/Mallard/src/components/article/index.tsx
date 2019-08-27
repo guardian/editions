@@ -7,7 +7,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { ArticleHeader } from './article-header'
 import { ArticleHeaderProps } from './article-header/types'
 import { PropTypes as StandfirstPropTypes } from './article-standfirst'
-import { BlockElement } from 'src/common'
+import { BlockElement, ArticleFeatures } from 'src/common'
 import { render, EMBED_DOMAIN } from './html/render'
 import { CAPIArticle } from 'src/common'
 import { Gallery } from './types/gallery'
@@ -65,6 +65,8 @@ const urlIsNotAnEmbed = (url: string) =>
         url.startsWith('https://www.youtube.com/embed')
     )
 
+const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
+
 const Article = ({
     article,
     ...headerProps
@@ -73,13 +75,16 @@ const Article = ({
 } & ArticleHeaderProps &
     StandfirstPropTypes) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
-    const [, { pillar }] = useArticle()
-    const [, { type }] = useArticle()
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
+    const [, { pillar, type }] = useArticle()
     const layoutWidth = (wrapLayout && wrapLayout.width) || -1
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const html = wrapLayout ? render(article, { pillar, wrapLayout }) : ''
+    const html = useMemo(
+        () =>
+            wrapLayout ? render(article, { pillar, features, wrapLayout }) : '',
+        [article, pillar, ...features, layoutWidth],
+    )
+
     return (
         <View style={styles.container}>
             <Fader />
