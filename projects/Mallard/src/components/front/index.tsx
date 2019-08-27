@@ -28,6 +28,7 @@ import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
+import { safeInterpolation } from 'src/helpers/math'
 
 const CollectionPageInFront = ({
     index,
@@ -135,7 +136,7 @@ const FrontWithResponse = ({
                             card.width * (stops <= 0 ? stops : stops - 1) +
                                 0.001,
                         ],
-                        outputRange: [0, 1],
+                        outputRange: safeInterpolation([0, 1]),
                     })}
                 />
             }

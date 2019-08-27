@@ -16,6 +16,7 @@ import {
 } from '../helpers/transition'
 import { screenInterpolator } from './underlay/transition'
 import { addStaticRouter } from '../helpers/base'
+import { safeInterpolation } from 'src/helpers/math'
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -41,8 +42,8 @@ const addStaticRouterWithOverlay: NavigatorWrapper = (
                         overlayStyles.root,
                         {
                             opacity: posi.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [0, 0.33],
+                                inputRange: safeInterpolation([0, 1]),
+                                outputRange: safeInterpolation([0, 0.33]),
                             }),
                         },
                     ]}
