@@ -1,24 +1,22 @@
-import {
-    BlockElement,
-    HTMLElement,
-    MediaAtomElement,
-    ImageElement,
-    ArticlePillar,
-    ArticleFeatures,
-} from 'src/common'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
-import {
-    generateAssetsFontCss,
-    css,
-    makeHtml,
-    html,
-} from '../../../helpers/webview'
-import { PixelRatio } from 'react-native'
-import { imagePath } from 'src/paths'
 import { PillarColours } from '@guardian/pasteup/palette'
+import { PixelRatio } from 'react-native'
+import {
+    ArticleFeatures,
+    ArticlePillar,
+    BlockElement,
+    ImageElement,
+    MediaAtomElement,
+} from 'src/common'
 import { getPillarColors } from 'src/hooks/use-article'
+import { imagePath } from 'src/paths'
+import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import {
+    css,
+    generateAssetsFontCss,
+    html,
+    makeHtml,
+} from '../../../helpers/webview'
 import { WrapLayout } from '../wrap/wrap'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
@@ -178,7 +176,8 @@ export const render = (
         })
         .join('')
 
-    const generatedHtml = `<div id="root"><main>${body}</main></root>`
+    const generatedHtml = html`<div id="root"><main>${body}</main></root>`
+
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     return makeHtml({ styles, html: generatedHtml })
 }

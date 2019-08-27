@@ -125,31 +125,33 @@ const ThreeColumnWrapper = ({
     const [wrapperLayout, setWrapperLayout] = useState<LayoutRectangle | null>(
         null,
     )
+    /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
         if (
+            onWrapLayout &&
             railLayout !== null &&
             contentLayout !== null &&
             wrapperLayout !== null
         ) {
-            onWrapLayout &&
-                onWrapLayout({
-                    content: {
-                        width: contentLayout.width,
-                    },
-                    rail: {
-                        width: railLayout.width,
-                        contentWidth:
-                            railLayout.width -
-                            threeColWrapStyles.rightRailContent.marginLeft,
-                    },
-                    width: wrapperLayout.width,
-                })
+            onWrapLayout({
+                content: {
+                    width: contentLayout.width,
+                },
+                rail: {
+                    width: railLayout.width,
+                    contentWidth:
+                        railLayout.width -
+                        threeColWrapStyles.rightRailContent.marginLeft,
+                },
+                width: wrapperLayout.width,
+            })
         }
     }, [
         (wrapperLayout && wrapperLayout.width) || -1,
         (railLayout && railLayout.width) || -1,
         (contentLayout && contentLayout.width) || -1,
     ])
+    /* eslint-enable */
 
     return (
         <View
@@ -206,6 +208,7 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
                                     },
                                     rail: {
                                         width: 0,
+                                        contentWidth: 0,
                                     },
                                     width: ev.nativeEvent.layout.width,
                                 })

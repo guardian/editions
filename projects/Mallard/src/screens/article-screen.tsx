@@ -188,6 +188,7 @@ const ArticleScreenWithProps = ({
                         showsVerticalScrollIndicator={false}
                         scrollEventThrottle={1}
                         onScroll={(ev: any) => {
+                            onDismissStateChanged && onDismissStateChanged(true)
                             setCurrent(
                                 Math.floor(
                                     ev.nativeEvent.contentOffset.x / width,
