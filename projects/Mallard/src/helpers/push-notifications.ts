@@ -3,12 +3,51 @@ import { PushNotificationIOS, Platform } from 'react-native'
 import { fetchFromNotificationService } from 'src/helpers/fetch'
 import { downloadAndUnzipIssue, clearOldIssues } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
+import { pushNotificationRegistrationCache } from '../authentication/storage'
+import Moment from 'moment'
 
-const pushNotifcationRegistration = () =>
+export interface PushNotificationRegistration {
+    registrationDate: string
+}
+
+const DATE_FORMAT = 'YYYY-MM-DD'
+
+const shouldReRegister = (registrationDate: string): boolean => {
+    const regDate = Moment.utc(registrationDate, DATE_FORMAT)
+    const now = Moment().utc()
+    return now.diff(regDate, 'days') > 14
+}
+
+const register = (deviceToken: {token: string }) => {
+    fetchFromNotificationService(deviceToken)
+    pushNotificationRegistrationCache.set({
+        registrationDate: Moment()
+            .utc()
+            .format(DATE_FORMAT)
+            .toString(),
+    })
+}
+
+const pushNotifcationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
             if (token) {
-                fetchFromNotificationService(token)
+                pushNotificationRegistrationCache
+                .get()
+                .then(registrationDateOrNull => {
+                    if (
+                        !registrationDateOrNull ||
+                        shouldReRegister(registrationDateOrNull.registrationDate)
+                    ) {
+                        register(token)
+                    }
+                })
+                .catch(error => {
+                    console.log(
+                        'error retrieving push notification registration date from cache - registering anyway.',
+                    )
+                    register(token)
+                })
             }
         },
         onNotification: (notification: any) => {
@@ -30,5 +69,6 @@ const pushNotifcationRegistration = () =>
             sound: false,
         },
     })
+}
 
 export { pushNotifcationRegistration }
