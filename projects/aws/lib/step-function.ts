@@ -14,6 +14,8 @@ interface StepFunctionProps {
     deployBucket: s3.IBucket
     outputBucket: s3.IBucket
     backendURL: string
+    frontsTopicArn: string
+    frontsTopicRoleArn: string
 }
 
 //Make sure you add the lambda name in riff-raff.yaml
@@ -65,7 +67,15 @@ const taskLambda = (
 
 export const archiverStepFunction = (
     scope: cdk.Construct,
-    { stack, stage, deployBucket, outputBucket, backendURL }: StepFunctionProps,
+    {
+        stack,
+        stage,
+        deployBucket,
+        outputBucket,
+        backendURL,
+        frontsTopicArn,
+        frontsTopicRoleArn,
+    }: StepFunctionProps,
 ) => {
     const lambdaParams = {
         scope,
@@ -109,6 +119,31 @@ export const archiverStepFunction = (
     const indexerTask = new sfn.Task(scope, 'Generate Index', {
         task: new tasks.InvokeFunction(indexer),
     })
+    const frontsTopicRole = iam.Role.fromRoleArn(
+        scope,
+        'fronts-topic-role',
+        frontsTopicRoleArn,
+    )
+    const event = taskLambda(
+        'event',
+        lambdaParams,
+        {
+            topic: frontsTopicArn,
+            role: frontsTopicRoleArn,
+        },
+        {
+            initialPolicy: [
+                new iam.PolicyStatement({
+                    actions: ['sts:AssumeRole'],
+                    resources: [frontsTopicRole.roleArn],
+                }),
+            ],
+        },
+    )
+
+    const eventTask = new sfn.Task(scope, 'Send Event', {
+        task: new tasks.InvokeFunction(event),
+    })
 
     //Fetch issue metadata
     issueTask.next(frontTask)
@@ -126,7 +161,9 @@ export const archiverStepFunction = (
 
     uploadTask.next(zipTask)
 
-    zipTask.next(indexerTask)
+    zipTask.next(eventTask)
+
+    eventTask.next(indexerTask)
 
     indexerTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
