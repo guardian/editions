@@ -1,17 +1,17 @@
-import React, { ReactNode } from 'react'
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
-import { ariaHidden } from 'src/helpers/a11y'
+import React, { ReactNode, useEffect, useState } from 'react'
+import {
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewStyle,
+    ViewProperties,
+    LayoutRectangle,
+} from 'react-native'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { MaxWidthWrap } from './max-width'
-
-export enum WrapLayout {
-    narrow,
-    tablet,
-    tabletLandscape,
-}
 
 interface ChildPropTypes {
     children: ReactNode
@@ -20,17 +20,29 @@ interface ChildPropTypes {
 }
 
 interface ContentWrapperPropTypes extends ChildPropTypes {
-    tablet?: boolean
     topOffset?: number
     backgroundColor?: ViewStyle['backgroundColor']
+    onLayout?: ViewProperties['onLayout']
     style?: StyleProp<
         Pick<ViewStyle, 'paddingVertical' | 'paddingTop' | 'paddingBottom'>
     >
 }
 
+export interface WrapLayout {
+    content: {
+        width: number
+    }
+    rail: {
+        width: number
+        x: number
+    }
+    width: number
+}
+
 interface ThreeColumnWrapperPropTypes
     extends Exclude<ContentWrapperPropTypes, 'tablet'> {
     borderColor?: ViewStyle['borderColor']
+    onWrapLayout?: (wrapLayout: WrapLayout) => void
     rightRail?: (
         position: Breakpoints.zero | Breakpoints.tabletVertical,
     ) => ReactNode
@@ -43,17 +55,25 @@ export interface WrapperPropTypes
     >
 }
 
+const getTotalLayoutWidth = (
+    layout: Omit<WrapLayout, 'width'>,
+): WrapLayout => ({
+    ...layout,
+    width: layout.content.width + layout.rail.width + layout.rail.x,
+})
+
 const contentWrapStyles = StyleSheet.create({
     root: {
         overflow: 'visible',
+        backgroundColor: 'blue',
         width: '100%',
     },
 })
 
 const ContentWrapper = ({
-    tablet,
     style,
     backgroundColor,
+    onLayout,
     ...children
 }: ContentWrapperPropTypes) => {
     return (
@@ -61,7 +81,9 @@ const ContentWrapper = ({
             {children.header && (
                 <MaxWidthWrap invert>{children.header}</MaxWidthWrap>
             )}
-            <View style={[style]}>{children.children}</View>
+            <View {...{ onLayout }} style={[style]}>
+                {children.children}
+            </View>
             {children.footer && (
                 <MaxWidthWrap invert>{children.footer}</MaxWidthWrap>
             )}
@@ -71,15 +93,17 @@ const ContentWrapper = ({
 
 const threeColWrapStyles = StyleSheet.create({
     root: {
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         width: '100%',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
+        overflow: 'visible',
     },
     content: {
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
+        overflow: 'visible',
         marginRight: metrics.article.railPaddingLeft,
     },
     rightRail: {
@@ -90,8 +114,8 @@ const threeColWrapStyles = StyleSheet.create({
     },
     rightRailContent: {
         maxWidth: metrics.article.rightRail + metrics.article.sides,
-        paddingRight: metrics.article.sidesTablet * 1.5,
-        paddingLeft: metrics.article.sidesTablet / 2,
+        marginRight: metrics.article.sidesTablet * 1.5,
+        marginLeft: metrics.article.sidesTablet / 2,
         marginTop: metrics.vertical * -0.25,
     },
 })
@@ -99,33 +123,53 @@ const ThreeColumnWrapper = ({
     borderColor,
     rightRail,
     backgroundColor,
+    onWrapLayout,
     ...innerProps
 }: ThreeColumnWrapperPropTypes) => {
+    const [railLayout, setRailLayout] = useState<LayoutRectangle | null>(null)
+    const [contentLayout, setContentLayout] = useState<LayoutRectangle | null>(
+        null,
+    )
+    useEffect(() => {
+        if (railLayout !== null && contentLayout !== null) {
+            const layout = {
+                content: {
+                    width: contentLayout.width,
+                },
+                rail: railLayout,
+            }
+            onWrapLayout && onWrapLayout(getTotalLayoutWidth(layout))
+        }
+    }, [railLayout !== null && contentLayout !== null])
+
     return (
         <View style={threeColWrapStyles.root}>
-            <View style={[threeColWrapStyles.content]}>
-                <ContentWrapper
-                    backgroundColor={backgroundColor}
-                    tablet
-                    {...innerProps}
-                />
-            </View>
             <View
                 style={[
                     threeColWrapStyles.rightRail,
                     { borderLeftColor: borderColor },
                 ]}
             >
-                {rightRail && (
-                    <View
-                        style={[
-                            threeColWrapStyles.rightRailContent,
-                            innerProps.style,
-                        ]}
-                    >
-                        {rightRail(Breakpoints.tabletVertical)}
-                    </View>
-                )}
+                <View
+                    onLayout={ev => {
+                        setRailLayout(ev.nativeEvent.layout)
+                    }}
+                    style={[
+                        threeColWrapStyles.rightRailContent,
+                        innerProps.style,
+                    ]}
+                >
+                    {rightRail && rightRail(Breakpoints.tabletVertical)}
+                </View>
+            </View>
+            <View style={[threeColWrapStyles.content]}>
+                <ContentWrapper
+                    onLayout={ev => {
+                        setContentLayout(ev.nativeEvent.layout)
+                    }}
+                    backgroundColor={backgroundColor}
+                    {...innerProps}
+                />
             </View>
         </View>
     )
@@ -140,6 +184,20 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
                     <ContentWrapper
                         {...props}
                         backgroundColor={backgroundColor}
+                        onLayout={ev => {
+                            if (props.onWrapLayout) {
+                                props.onWrapLayout({
+                                    content: {
+                                        width: ev.nativeEvent.layout.width,
+                                    },
+                                    rail: {
+                                        width: 0,
+                                        x: -1,
+                                    },
+                                    width: ev.nativeEvent.layout.width,
+                                })
+                            }
+                        }}
                     >
                         {props.children}
                         {props.rightRail && props.rightRail(Breakpoints.zero)}

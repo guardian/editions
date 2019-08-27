@@ -14,7 +14,7 @@ import { Gallery } from './types/gallery'
 import { Crossword } from './types/crossword'
 import { useArticle } from 'src/hooks/use-article'
 import { Fader } from '../layout/animators/fader'
-import { Wrap } from './wrap/wrap'
+import { Wrap, WrapLayout } from './wrap/wrap'
 
 /*
 This is the article view! For all of the articles.
@@ -74,49 +74,66 @@ const Article = ({
     StandfirstPropTypes) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
-    const html = useMemo(() => render(article, { pillar }), [article, pillar])
     const [, { type }] = useArticle()
+    const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
+    const layoutWidth = (wrapLayout && wrapLayout.width) || -1
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const html = wrapLayout ? render(article, { pillar, wrapLayout }) : ''
     return (
         <View style={styles.container}>
             <Fader />
             <ArticleHeader {...headerProps} type={type} />
 
-            <Wrap>
-                <Fader>
-                    <WebView
-                        originWhitelist={['*']}
-                        scrollEnabled={false}
-                        useWebKit={false}
-                        source={{ html: html }}
-                        onShouldStartLoadWithRequest={event => {
-                            if (
-                                Platform.select({
-                                    ios: event.navigationType === 'click',
-                                    android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
-                                })
-                            ) {
-                                Linking.openURL(event.url)
-                                return false
-                            }
-                            return true
-                        }}
-                        onMessage={event => {
-                            if (parseInt(event.nativeEvent.data) > height) {
-                                setHeight(parseInt(event.nativeEvent.data))
-                            }
-                        }}
+            <Wrap onWrapLayout={setWrapLayout}>
+                <View style={{ minHeight: height }}></View>
+                {wrapLayout && (
+                    <View
                         style={{
-                            minHeight: height,
-                            marginHorizontal: metrics.article.sides * -1,
-                            /*
+                            position: 'absolute',
+                            backgroundColor: 'blue',
+                            left: -20,
+                            top: 0,
+                            bottom: 0,
+                            zIndex: 99999999,
+                            width: 900,
+                        }}
+                    >
+                        <WebView
+                            originWhitelist={['*']}
+                            scrollEnabled={false}
+                            useWebKit={false}
+                            source={{ html: html }}
+                            onShouldStartLoadWithRequest={event => {
+                                if (
+                                    Platform.select({
+                                        ios: event.navigationType === 'click',
+                                        android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
+                                    })
+                                ) {
+                                    Linking.openURL(event.url)
+                                    return false
+                                }
+                                return true
+                            }}
+                            onMessage={event => {
+                                if (parseInt(event.nativeEvent.data) > height) {
+                                    setHeight(parseInt(event.nativeEvent.data))
+                                }
+                            }}
+                            style={{
+                                minHeight: height,
+                                width: 999,
+                                marginHorizontal: metrics.article.sides * -1,
+                                /*
                                 The below line fixes crashes on Android
                                 https://github.com/react-native-community/react-native-webview/issues/429
                                 */
-                            opacity: 0.99,
-                        }}
-                    />
-                </Fader>
+                                opacity: 0.99,
+                            }}
+                        />
+                    </View>
+                )}
             </Wrap>
         </View>
     )

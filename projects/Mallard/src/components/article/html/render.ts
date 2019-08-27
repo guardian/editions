@@ -12,11 +12,23 @@ import { PixelRatio } from 'react-native'
 import { imagePath } from 'src/paths'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { getPillarColors } from 'src/hooks/use-article'
+import { WrapLayout } from '../wrap/wrap'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
-const makeCss = (colors: PillarColours) => css`
+const makeCss = ({
+    colors,
+    wrapLayout,
+}: {
+    colors: PillarColours
+    wrapLayout: WrapLayout
+}) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
+    main {
+        float: left;
+        width: ${wrapLayout.content.width}px;
+        background: red;
+    }
     * {
         margin: 0;
         padding: 0;
@@ -42,6 +54,11 @@ const makeCss = (colors: PillarColours) => css`
         color: #767676;
         line-height: 1rem;
     }
+    .fill {
+        background: limegreen;
+        height: 50;
+        width: ${wrapLayout.width}px
+    }
 `
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
@@ -64,9 +81,9 @@ const renderImageElement = (imageElement: ImageElement) => {
 
 export const render = (
     article: BlockElement[],
-    { pillar }: { pillar: ArticlePillar },
+    { pillar, wrapLayout }: { pillar: ArticlePillar; wrapLayout: WrapLayout },
 ) => {
-    const html = article
+    const body = article
         .filter(
             el =>
                 el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
@@ -74,7 +91,10 @@ export const render = (
         .map(el => {
             switch (el.id) {
                 case 'html':
-                    return el.html
+                    return (
+                        el.html +
+                        '<img src="https://cdn.bulbagarden.net/upload/thumb/4/49/Ash_Pikachu.png/1200px-Ash_Pikachu.png" class="fill" />'
+                    )
                 case 'media-atom':
                     return renderMediaAtom(el)
                 case 'image':
@@ -84,6 +104,8 @@ export const render = (
             }
         })
         .join('')
-    const styles = makeCss(getPillarColors(pillar))
+
+    const html = `<main>${body}</main>`
+    const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     return makeHtml({ styles, html })
 }
