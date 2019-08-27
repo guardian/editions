@@ -91,12 +91,11 @@ const Article = ({
                     <View
                         style={{
                             position: 'absolute',
-                            backgroundColor: 'blue',
-                            left: -20,
+                            left: -metrics.article.sides,
+                            width: wrapLayout.width + metrics.article.sides * 2,
                             top: 0,
                             bottom: 0,
                             zIndex: 99999999,
-                            width: 900,
                         }}
                     >
                         <WebView
@@ -123,8 +122,8 @@ const Article = ({
                             }}
                             style={{
                                 minHeight: height,
-                                width: 999,
-                                marginHorizontal: metrics.article.sides * -1,
+                                backgroundColor: 'transparent',
+                                width: '100%',
                                 /*
                                 The below line fixes crashes on Android
                                 https://github.com/react-native-community/react-native-webview/issues/429

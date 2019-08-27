@@ -34,7 +34,7 @@ export interface WrapLayout {
     }
     rail: {
         width: number
-        x: number
+        contentWidth: number
     }
     width: number
 }
@@ -55,17 +55,9 @@ export interface WrapperPropTypes
     >
 }
 
-const getTotalLayoutWidth = (
-    layout: Omit<WrapLayout, 'width'>,
-): WrapLayout => ({
-    ...layout,
-    width: layout.content.width + layout.rail.width + layout.rail.x,
-})
-
 const contentWrapStyles = StyleSheet.create({
     root: {
         overflow: 'visible',
-        backgroundColor: 'blue',
         width: '100%',
     },
 })
@@ -130,30 +122,52 @@ const ThreeColumnWrapper = ({
     const [contentLayout, setContentLayout] = useState<LayoutRectangle | null>(
         null,
     )
+    const [wrapperLayout, setWrapperLayout] = useState<LayoutRectangle | null>(
+        null,
+    )
     useEffect(() => {
-        if (railLayout !== null && contentLayout !== null) {
-            const layout = {
-                content: {
-                    width: contentLayout.width,
-                },
-                rail: railLayout,
-            }
-            onWrapLayout && onWrapLayout(getTotalLayoutWidth(layout))
+        if (
+            railLayout !== null &&
+            contentLayout !== null &&
+            wrapperLayout !== null
+        ) {
+            onWrapLayout &&
+                onWrapLayout({
+                    content: {
+                        width: contentLayout.width,
+                    },
+                    rail: {
+                        width: railLayout.width,
+                        contentWidth:
+                            railLayout.width -
+                            threeColWrapStyles.rightRailContent.marginLeft,
+                    },
+                    width: wrapperLayout.width,
+                })
         }
-    }, [railLayout !== null && contentLayout !== null])
+    }, [
+        (wrapperLayout && wrapperLayout.width) || -1,
+        (railLayout && railLayout.width) || -1,
+        (contentLayout && contentLayout.width) || -1,
+    ])
 
     return (
-        <View style={threeColWrapStyles.root}>
+        <View
+            style={threeColWrapStyles.root}
+            onLayout={ev => {
+                setWrapperLayout(ev.nativeEvent.layout)
+            }}
+        >
             <View
                 style={[
                     threeColWrapStyles.rightRail,
                     { borderLeftColor: borderColor },
                 ]}
+                onLayout={ev => {
+                    setRailLayout(ev.nativeEvent.layout)
+                }}
             >
                 <View
-                    onLayout={ev => {
-                        setRailLayout(ev.nativeEvent.layout)
-                    }}
                     style={[
                         threeColWrapStyles.rightRailContent,
                         innerProps.style,
@@ -192,7 +206,6 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
                                     },
                                     rail: {
                                         width: 0,
-                                        x: -1,
                                     },
                                     width: ev.nativeEvent.layout.width,
                                 })

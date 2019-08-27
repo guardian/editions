@@ -24,15 +24,6 @@ const makeCss = ({
     wrapLayout: WrapLayout
 }) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
-    main {
-        float: left;
-        width: ${wrapLayout.content.width}px;
-        background: red;
-    }
-    * {
-        margin: 0;
-        padding: 0;
-    }
     :root {
         font-size: ${17 * PixelRatio.getFontScale()}px;
         line-height; 1.4;
@@ -48,16 +39,31 @@ const makeCss = ({
         color: ${colors.main};
         text-decoration-color: ${colors.pastel};
     }
+    #root {
+        overflow: hidden;
+    }
+    main {
+        float: left;
+        width: ${wrapLayout.content.width}px;
+        padding: 0 {metrics.article.sides}px
+    }
+    * {
+        margin: 0;
+        padding: 0;
+    }
     figcaption {
         padding-top: 5px;
         font-size: ${12 * PixelRatio.getFontScale()}px;
         color: #767676;
         line-height: 1rem;
     }
-    .fill {
-        background: limegreen;
-        height: 50;
+    .img-fill {
         width: ${wrapLayout.width}px
+    }
+    .img-side {
+        float: right;
+        width: ${wrapLayout.rail.width}px;
+        margin-right: -${wrapLayout.width - wrapLayout.content.width}px
     }
 `
 
@@ -93,7 +99,7 @@ export const render = (
                 case 'html':
                     return (
                         el.html +
-                        '<img src="https://cdn.bulbagarden.net/upload/thumb/4/49/Ash_Pikachu.png/1200px-Ash_Pikachu.png" class="fill" />'
+                        '<img src="https://cdn.bulbagarden.net/upload/thumb/4/49/Ash_Pikachu.png/1200px-Ash_Pikachu.png" class="img-fill" /><img src="https://cdn.bulbagarden.net/upload/thumb/4/49/Ash_Pikachu.png/1200px-Ash_Pikachu.png" class="img-side" />'
                     )
                 case 'media-atom':
                     return renderMediaAtom(el)
@@ -105,7 +111,7 @@ export const render = (
         })
         .join('')
 
-    const html = `<main>${body}</main>`
+    const html = `<div id="root"><main>${body}</main></root>`
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     return makeHtml({ styles, html })
 }
