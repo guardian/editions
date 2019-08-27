@@ -21,10 +21,6 @@ const urlIsNotAnEmbed = (url: string) =>
 const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: color.background,
-    },
     block: {
         alignItems: 'flex-start',
         padding: metrics.horizontal,
@@ -119,7 +115,7 @@ const Article = ({
     const [, { type }] = useArticle()
 
     return (
-        <View style={styles.container}>
+        <>
             <ArticleHeader {...headerProps} type={type} />
             <Fader>
                 <Wrap onWrapLayout={setWrapLayout}>
@@ -131,7 +127,7 @@ const Article = ({
                     )}
                 </Wrap>
             </Fader>
-        </View>
+        </>
     )
 }
 
