@@ -1,24 +1,23 @@
-import {
-    BlockElement,
-    HTMLElement,
-    MediaAtomElement,
-    ImageElement,
-    ArticlePillar,
-    ArticleFeatures,
-} from 'src/common'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
-import {
-    generateAssetsFontCss,
-    css,
-    makeHtml,
-    html,
-} from '../../../helpers/webview'
-import { PixelRatio } from 'react-native'
-import { imagePath } from 'src/paths'
 import { PillarColours } from '@guardian/pasteup/palette'
+import { PixelRatio } from 'react-native'
+import {
+    ArticleFeatures,
+    ArticlePillar,
+    BlockElement,
+    ImageElement,
+    MediaAtomElement,
+} from 'src/common'
 import { getPillarColors } from 'src/hooks/use-article'
+import { imagePath } from 'src/paths'
+import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import {
+    css,
+    generateAssetsFontCss,
+    html,
+    makeHtml,
+} from '../../../helpers/webview'
+import { WrapLayout } from '../wrap/wrap'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -39,7 +38,13 @@ const getScaledFontCss = (...props: Parameters<typeof getFont>) => {
     `
 }
 
-const makeCss = (colors: PillarColours) => css`
+const makeCss = ({
+    colors,
+    wrapLayout,
+}: {
+    colors: PillarColours
+    wrapLayout: WrapLayout
+}) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
     * {
@@ -72,11 +77,31 @@ const makeCss = (colors: PillarColours) => css`
         color: ${colors.main};
         text-decoration-color: ${colors.pastel};
     }
+    #root {
+        overflow: hidden;
+    }
+    main {
+        float: left;
+        width: ${wrapLayout.content.width}px;
+        padding: 0 {metrics.article.sides}px
+    }
+    * {
+        margin: 0;
+        padding: 0;
+    }
     figcaption {
         padding-top: 5px;
         font-size: ${12 * PixelRatio.getFontScale()}px;
         color: #767676;
         line-height: 1rem;
+    }
+    .img-fill {
+        width: ${wrapLayout.width}px
+    }
+    .img-side {
+        float: right;
+        width: ${wrapLayout.rail.width}px;
+        margin-right: -${wrapLayout.width - wrapLayout.content.width}px
     }
 `
 
@@ -115,12 +140,14 @@ export const render = (
     {
         pillar,
         features,
+        wrapLayout,
     }: {
         pillar: ArticlePillar
         features: ArticleFeatures[]
+        wrapLayout: WrapLayout
     },
 ) => {
-    const generatedHtml = article
+    const body = article
         .filter(
             el =>
                 el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
@@ -148,6 +175,9 @@ export const render = (
             }
         })
         .join('')
-    const styles = makeCss(getPillarColors(pillar))
+
+    const generatedHtml = html`<div id="root"><main>${body}</main></root>`
+
+    const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     return makeHtml({ styles, html: generatedHtml })
 }
