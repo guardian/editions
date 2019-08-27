@@ -32,6 +32,14 @@ const ArticleController = ({ article }: { article: CAPIArticle }) => {
         case 'crossword':
             return <Crossword crosswordArticle={article} />
 
+        case 'picture':
+            return (
+                <FlexErrorMessage
+                    title={'Cartoons are not currently supported.'}
+                    style={{ backgroundColor: color.background }}
+                />
+            )
+
         default:
             const message: never = article
             return (
