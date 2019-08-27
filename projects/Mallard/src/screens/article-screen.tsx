@@ -196,7 +196,7 @@ const ArticleScreenWithProps = ({
                             )
                         }}
                         maxToRenderPerBatch={1}
-                        windowSize={3}
+                        windowSize={2}
                         initialNumToRender={1}
                         horizontal={true}
                         initialScrollIndex={startingPoint}
