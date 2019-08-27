@@ -8,6 +8,7 @@ import {
 import { Chevron } from '../../chevron'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
+import { safeInterpolation } from 'src/helpers/math'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -50,11 +51,11 @@ const Header = ({
                             transform: [
                                 {
                                     translateY: scrollY.interpolate({
-                                        inputRange: [0, 100],
-                                        outputRange: [
+                                        inputRange: safeInterpolation([0, 100]),
+                                        outputRange: safeInterpolation([
                                             metrics.headerHeight / -10,
                                             0,
-                                        ],
+                                        ]),
                                         extrapolate: 'clamp',
                                     }),
                                 },

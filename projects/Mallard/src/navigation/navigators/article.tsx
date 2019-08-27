@@ -23,6 +23,7 @@ import {
 } from '../helpers/transition'
 import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
+import { safeInterpolation, safeValue } from 'src/helpers/math'
 
 type DismissStateChangedFn = (dismissable: boolean) => void
 export interface ArticleNavigatorInjectedProps {
@@ -143,16 +144,19 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             transform: [
                                 {
                                     translateY: position.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [200, 0],
+                                        inputRange: safeInterpolation([0, 1]),
+                                        outputRange: safeInterpolation([
+                                            200,
+                                            0,
+                                        ]),
                                     }),
                                 },
                             ],
                         },
                         {
                             opacity: position.interpolate({
-                                inputRange: [0, 0.5],
-                                outputRange: [0, 1],
+                                inputRange: safeInterpolation([0, 0.5]),
+                                outputRange: safeInterpolation([0, 1]),
                             }),
                         },
                     ]}
@@ -164,7 +168,6 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                 </Animated.View>
             )
         }
-
         return (
             <Animated.View
                 style={[
@@ -181,7 +184,7 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             {
                                 opacity: opacityOuter,
                                 borderRadius,
-                                minHeight: height / scaler,
+                                minHeight: safeValue(height / scaler, 1000),
                             },
                         ]}
                     >

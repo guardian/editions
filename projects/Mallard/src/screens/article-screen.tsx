@@ -25,6 +25,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
+import { safeInterpolation } from 'src/helpers/math'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -116,8 +117,11 @@ const ArticleScreenWithProps = ({
         initialValue: 0,
         currentValue: current,
     }).interpolate({
-        inputRange: [0, articleNavigator.articles.length - 1],
-        outputRange: [0, 1],
+        inputRange: safeInterpolation([
+            0,
+            articleNavigator.articles.length - 1,
+        ]),
+        outputRange: safeInterpolation([0, 1]),
     })
 
     useEffect(() => {
@@ -126,7 +130,7 @@ const ArticleScreenWithProps = ({
                 index: current,
                 animated: false,
             })
-    }, [current, width])
+    }, [width])
 
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${current}` : undefined
