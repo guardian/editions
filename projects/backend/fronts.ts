@@ -119,6 +119,24 @@ export const parseCollection = async (
                         },
                     ]
 
+                case 'picture':
+                    return [
+                        article.path,
+                        {
+                            ...article,
+                            key: article.path,
+                            headline,
+                            kicker,
+                            trail,
+                            byline,
+                            showByline,
+                            showQuotedHeadline,
+                            mediaType,
+                            slideshowImages,
+                            sportScore,
+                        },
+                    ]
+
                 case 'article':
                     return [
                         article.path,

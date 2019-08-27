@@ -114,7 +114,12 @@ export interface GalleryArticle extends Content {
     elements: BlockElement[]
 }
 
-export type CAPIArticle = Article | CrosswordArticle | GalleryArticle
+export interface PictureArticle extends Content {
+    type: 'picture'
+    elements: BlockElement[]
+}
+
+export type CAPIArticle = Article | CrosswordArticle | GalleryArticle | PictureArticle
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export type ImageSize = typeof imageSizes[number]
 
