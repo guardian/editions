@@ -15,6 +15,7 @@ export const articlePillars = [
 ] as const
 
 export enum ArticleType {
+    Cartoon = 'cartoon',
     Article = 'article',
     Longread = 'longread',
     Review = 'review',

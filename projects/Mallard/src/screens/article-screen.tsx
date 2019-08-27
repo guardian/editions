@@ -64,7 +64,6 @@ const ArticleScreenWithProps = ({
     }) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
     const { width } = useDimensions()
-
     return (
         <ArticleScreenLoginOverlay navigation={navigation}>
             {prefersFullScreen ? (
