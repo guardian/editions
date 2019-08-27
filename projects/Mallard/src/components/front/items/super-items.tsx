@@ -53,7 +53,6 @@ const NormalSuper = ({
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
                 <ImageResource
-                    issueID={issueID}
                     style={[superHeroImageStyles.image]}
                     image={article.image}
                 />
