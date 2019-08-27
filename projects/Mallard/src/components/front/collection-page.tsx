@@ -148,6 +148,7 @@ const CollectionPage = ({
                         ]}
                     >
                         <Item
+                            issueID={issue}
                             path={{
                                 article: article.key,
                                 collection,

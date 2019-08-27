@@ -72,6 +72,11 @@ const scale = {
                 fontSize: 16,
                 lineHeight: 20,
             },
+
+            [Breakpoints.tabletVertical]: {
+                fontSize: 18,
+                lineHeight: 22,
+            },
         },
         1.25: {
             0: {
@@ -88,17 +93,17 @@ const scale = {
         1: {
             0: {
                 fontSize: 19,
-                lineHeight: 22,
+                lineHeight: 21,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 24,
-                lineHeight: 29,
+                lineHeight: 27,
             },
         },
         1.25: {
             0: {
                 fontSize: 24,
-                lineHeight: 29,
+                lineHeight: 27,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 28,
@@ -179,22 +184,33 @@ const scale = {
 export type FontSizes<F extends FontFamily> = keyof typeof scale[F]
 export type FontWeights<F extends FontFamily> = keyof typeof families[F]
 
+export const getUnscaledFont = <F extends FontFamily>(
+    family: F,
+    level: FontSizes<F>,
+) => {
+    return (scale[family][level] as unknown) as BreakpointList<{
+        fontSize: number
+        lineHeight: number
+    }>
+}
+
+export const applyScale = (
+    unscaledFont: ReturnType<typeof getUnscaledFont>,
+) => {
+    return pickClosestBreakpoint(
+        unscaledFont,
+        Dimensions.get('window').width * 1,
+    )
+}
+
 export const getFont = <F extends FontFamily>(
     family: F,
     level: FontSizes<F>,
     weight: FontWeights<F> = 'regular',
 ) => {
-    const fontAtLevel = (scale[family][level] as unknown) as BreakpointList<{
-        fontSize: number
-        lineHeight: number
-    }>
-
-    const scaleForLevel = pickClosestBreakpoint(
-        fontAtLevel,
-        Dimensions.get('window').width,
-    )
+    const fontAtLevel = getUnscaledFont(family, level)
     return {
         fontFamily: families[family][weight],
-        ...scaleForLevel,
+        ...applyScale(fontAtLevel),
     }
 }

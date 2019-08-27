@@ -1,5 +1,4 @@
 import { FunctionComponent } from 'react'
-import { PropTypes } from '../items/item'
 import { FlatList } from 'react-native'
 import { Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
@@ -7,6 +6,8 @@ import { Front } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Rectangle, Size } from 'src/helpers/sizes'
+import { PropTypes } from '../items/base/item-tappable'
+import { safeInterpolation } from 'src/helpers/math'
 
 type Item = FunctionComponent<PropTypes>
 
@@ -94,12 +95,16 @@ export const getTranslateForPage = (
     multiplier: number = 1,
 ) => {
     return scrollX.interpolate({
-        inputRange: [width * (page - 1), width * page, width * (page + 1)],
-        outputRange: [
+        inputRange: safeInterpolation([
+            width * (page - 1),
+            width * page,
+            width * (page + 1),
+        ]),
+        outputRange: safeInterpolation([
             metrics.fronts.sides * (-1.75 * multiplier),
             0,
             metrics.fronts.sides * (1.75 * multiplier),
-        ],
+        ]),
     })
 }
 

@@ -1,6 +1,6 @@
 import RNIAP, { Purchase } from 'react-native-iap'
 import { Platform } from 'react-native'
-import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants'
+import { ITUNES_CONNECT_SHARED_SECRET, USE_SANDBOX_IAP } from 'src/constants'
 import { ReceiptValidationResponse } from 'react-native-iap/apple'
 import { authTypeFromIAP } from 'src/authentication/credentials-chain'
 import { NativeModules } from 'react-native'
@@ -31,7 +31,7 @@ const fetchDecodeReceipt = (receipt: string) =>
             'receipt-data': receipt,
             password: ITUNES_CONNECT_SHARED_SECRET,
         },
-        __DEV__,
+        USE_SANDBOX_IAP,
     )
 
 const getMostRecentTransactionReceipt = (purchases: Purchase[]) => {

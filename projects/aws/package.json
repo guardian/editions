@@ -10,7 +10,8 @@
         "cdk": "cdk",
         "synth": "cdk synth > cloudformation.yaml",
         "clean": "rm -v bin/*.js bin/*.d.ts lib/*.js lib/*.d.ts",
-        "build": "run-s -ln compile synth clean"
+        "build": "run-s -ln compile synth clean",
+        "test": "echo 'no tests are defined for project aws'"
     },
     "devDependencies": {
         "@types/node": "8.10.45",
