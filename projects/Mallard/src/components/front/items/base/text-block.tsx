@@ -1,25 +1,18 @@
 import React from 'react'
-import { View, ViewStyle, StyleProp } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text'
-
-import { color } from 'src/theme/color'
-import {
-    useKickerColorStyle,
-    ItemSizes,
-    PageLayoutSizes,
-} from '../../helpers/helpers'
-import {
-    getFont,
-    FontSizes,
-    getUnscaledFont,
-    applyScale,
-} from 'src/theme/typography'
-import { useArticle } from 'src/hooks/use-article'
-import { TextWithIcon } from 'src/components/layout/text-with-icon'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import Quote from 'src/components/icons/Quote'
-
-type TextBlockAppearance = 'default' | 'highlight' | 'pillarColor'
+import { TextWithIcon } from 'src/components/layout/text-with-icon'
+import { useArticle } from 'src/hooks/use-article'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import {
+    applyScale,
+    FontSizes,
+    getFont,
+    getUnscaledFont,
+} from 'src/theme/typography'
+import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text'
+import { ItemSizes, PageLayoutSizes } from '../../helpers/helpers'
 
 const styles = {
     root: {
@@ -35,41 +28,10 @@ const styles = {
     headline: {
         color: color.dimText,
     },
-}
-
-const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
-    const [color, { pillar }] = useArticle()
-    const kickerStyle = useKickerColorStyle()
-
-    switch (textBlockAppearance) {
-        case 'highlight':
-            return {
-                rootStyle: [styles.root, styles.rootWithHighlight],
-                kickerStyle: null,
-                headlineStyle: styles.headline,
-            }
-        case 'pillarColor':
-            return {
-                rootStyle: [
-                    styles.root,
-                    styles.rootWithHighlight,
-                    { backgroundColor: color.main },
-                ],
-                kickerStyle: styles.contrastText,
-                headlineStyle: styles.contrastText,
-            }
-        default:
-            return {
-                rootStyle: styles.root,
-                kickerStyle,
-                headlineStyle: [
-                    styles.headline,
-                    pillar === 'opinion' && {
-                        fontFamily: getFont('headline', 1, 'light').fontFamily,
-                    },
-                ],
-            }
-    }
+    opinionHeadline: {
+        color: color.dimText,
+        fontFamily: getFont('headline', 1, 'light').fontFamily,
+    },
 }
 
 const getFontSize = ({ layout, story }: ItemSizes) => {
@@ -90,35 +52,34 @@ const getFontSize = ({ layout, story }: ItemSizes) => {
 const TextBlock = ({
     kicker,
     headline,
-    textBlockAppearance,
     style,
     byline,
+    monotone = false,
     ...sizes
 }: {
     kicker: string
     byline?: string
     headline: string
-    textBlockAppearance: TextBlockAppearance
     style?: StyleProp<ViewStyle>
+    monotone?: boolean
 } & ({ size: ItemSizes } | { fontSize: FontSizes<'headline'> })) => {
-    const { rootStyle, kickerStyle, headlineStyle } = useTextBlockStyles(
-        textBlockAppearance,
-    )
-
     const font = getUnscaledFont(
         'headline',
         'fontSize' in sizes ? sizes.fontSize : getFontSize(sizes.size),
     )
 
     const fontSize = applyScale(font).fontSize
-    const [color, { pillar }] = useArticle()
+    const [colors, { pillar }] = useArticle()
+
+    const kickerColor = colors.main
+
     return (
-        <View style={[rootStyle, style]}>
+        <View style={[styles.root, style]}>
             {pillar === 'opinion' ? (
                 <>
                     <TextWithIcon
                         unscaledFont={font}
-                        style={headlineStyle}
+                        style={styles.opinionHeadline}
                         icon={{
                             width: 40,
                             element: scale => (
@@ -128,7 +89,7 @@ const TextBlock = ({
                                         (fontSize /
                                             getFont('headline', 1).fontSize)
                                     }
-                                    fill={color.main}
+                                    fill={colors.main}
                                 />
                             ),
                         }}
@@ -138,8 +99,8 @@ const TextBlock = ({
                     <HeadlineKickerText
                         allowFontScaling={false}
                         style={[
-                            kickerStyle,
                             {
+                                color: kickerColor,
                                 marginTop: 4,
                                 fontSize,
                                 lineHeight: fontSize,
@@ -152,13 +113,21 @@ const TextBlock = ({
             ) : (
                 <HeadlineCardText
                     allowFontScaling={false}
-                    style={[headlineStyle, { fontSize, lineHeight: fontSize }]}
+                    style={[
+                        styles.headline,
+                        { fontSize, lineHeight: fontSize },
+                    ]}
                 >
                     <HeadlineKickerText
                         allowFontScaling={false}
                         style={[
-                            kickerStyle,
-                            { fontSize, lineHeight: fontSize },
+                            !monotone && {
+                                color: kickerColor,
+                            },
+                            {
+                                fontSize,
+                                lineHeight: fontSize,
+                            },
                         ]}
                     >
                         {kicker + ' '}
