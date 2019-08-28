@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Image as IImage } from '../../../../common/src'
 import { Image, StyleProp, ImageStyle, ImageProps } from 'react-native'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { APIPaths } from 'src/paths'
 
 /**
  * This component abstracts away the endpoint for images
@@ -16,31 +15,29 @@ import { APIPaths } from 'src/paths'
 type ImageResourceProps = {
     image: IImage
     style?: StyleProp<ImageStyle>
+    onGetPath?: (path: string) => void
 } & Omit<ImageProps, 'source'>
 
-const ImageResource = ({ image, style, ...props }: ImageResourceProps) => {
+const ImageResource = ({
+    image,
+    style,
+    onGetPath,
+    ...props
+}: ImageResourceProps) => {
     const path = useImagePath(image)
-
+    useEffect(() => {
+        onGetPath && path && onGetPath(path)
+    }, [path, onGetPath])
     return <Image {...props} style={style} source={{ uri: path }} />
 }
 
-const AutoSizedImageResource = ({ image, ...props }: ImageResourceProps) => {
+const AutoSizedImageResource = ({
+    ...props
+}: Omit<ImageResourceProps, 'onGetPath'>) => {
     const [aspectRatio, setRatio] = useState(1)
-    const path = useImagePath(image)
-
-    useEffect(() => {
-        path &&
-            Image.getSize(
-                path,
-                (width, height) => {
-                    setRatio(width / height)
-                },
-                () => {},
-            )
-    }, [path])
 
     return (
-        <Image
+        <ImageResource
             {...props}
             style={[
                 {
@@ -48,7 +45,15 @@ const AutoSizedImageResource = ({ image, ...props }: ImageResourceProps) => {
                 },
                 props.style,
             ]}
-            source={{ uri: path }}
+            onGetPath={path => {
+                Image.getSize(
+                    path,
+                    (width, height) => {
+                        setRatio(width / height)
+                    },
+                    () => {},
+                )
+            }}
         />
     )
 }
