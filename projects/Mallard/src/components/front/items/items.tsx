@@ -3,11 +3,16 @@ import { StyleSheet, View } from 'react-native'
 import { HeadlineCardText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
-import { ItemSizes, PageLayoutSizes } from '../helpers/helpers'
+import {
+    ItemSizes,
+    PageLayoutSizes,
+    getPageLayoutSizeXY,
+} from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
 import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
 import { TextBlock } from './base/text-block'
 import { SuperHeroImageItem } from './super-items'
+import { Standfirst } from './base/standfirst'
 
 /*
 helpers
@@ -35,6 +40,11 @@ export const getImageHeight = ({ story, layout }: ItemSizes) => {
 
 export const isSmallItem = (size: ItemSizes) => {
     return size.story.width <= 1
+}
+
+export const isFullheightItem = (size: ItemSizes) => {
+    const { height: pageHeight } = getPageLayoutSizeXY(size.layout)
+    return size.story.height >= pageHeight
 }
 
 /*
@@ -100,6 +110,11 @@ const imageStyles = StyleSheet.create({
         right: tappablePadding.padding,
         bottom: tappablePadding.paddingVertical * 2,
     },
+    standfirst: {
+        ...tappablePadding,
+        position: 'absolute',
+        bottom: 0,
+    },
 })
 
 const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
@@ -127,6 +142,11 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
+            {isFullheightItem(size) && (
+                <Standfirst style={imageStyles.standfirst}>
+                    {article.trail}
+                </Standfirst>
+            )}
         </ItemTappable>
     )
 }

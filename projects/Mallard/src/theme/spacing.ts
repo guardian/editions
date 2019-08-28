@@ -36,7 +36,7 @@ export const metrics = {
     fronts: {
         sides: basicMetrics.horizontal * 1.5,
         cardContainerHeightExtra: sliderRadius * 2,
-        cardSize: toSize(540, 600),
+        cardSize: toSize(540, 530),
         cardSizeTablet: toSize(650, 725),
         cardSizeTabletShort: toSize(650, 660),
         sliderRadius,

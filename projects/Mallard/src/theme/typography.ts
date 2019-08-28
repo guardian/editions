@@ -66,6 +66,10 @@ const scale = {
                 fontSize: 14,
                 lineHeight: 18,
             },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 18,
+                lineHeight: 22,
+            },
         },
         1: {
             0: {
@@ -102,8 +106,8 @@ const scale = {
         },
         1: {
             0: {
-                fontSize: 19,
-                lineHeight: 21,
+                fontSize: 18,
+                lineHeight: 20,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 24,
@@ -113,20 +117,20 @@ const scale = {
         1.25: {
             0: {
                 fontSize: 24,
-                lineHeight: 27,
+                lineHeight: 26,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 28,
-                lineHeight: 32,
+                lineHeight: 30,
             },
         },
         1.5: {
             0: {
-                fontSize: 28,
-                lineHeight: 32,
+                fontSize: 26,
+                lineHeight: 27,
             },
             [Breakpoints.tabletVertical]: {
-                fontSize: 34,
+                fontSize: 36,
                 lineHeight: 38,
             },
         },

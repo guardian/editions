@@ -15,6 +15,7 @@ import {
 import { ImageResource } from '../image-resource'
 import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
 import { TextBlock } from './base/text-block'
+import { Standfirst } from './base/standfirst'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -36,8 +37,6 @@ const superHeroImageStyles = StyleSheet.create({
     },
     textStandBlock: {
         ...tappablePadding,
-        ...getFont('text', 0.9),
-        color: color.palette.neutral[46],
         position: 'absolute',
         bottom: 0,
     },
@@ -65,12 +64,16 @@ const NormalSuper = ({
                 {...{ size }}
             />
             {'trail' in article && article.trail ? (
-                <StandfirstText
-                    allowFontScaling={false}
-                    style={[superHeroImageStyles.textStandBlock]}
+                <Standfirst
+                    style={[
+                        superHeroImageStyles.textStandBlock,
+                        size.layout === PageLayoutSizes.tablet && {
+                            width: '80%',
+                        },
+                    ]}
                 >
                     {article.trail}
-                </StandfirstText>
+                </Standfirst>
             ) : null}
         </ItemTappable>
     )
@@ -81,6 +84,7 @@ const opinionStyles = StyleSheet.create({
         height: '33.333333%',
         overflow: 'hidden',
         ...tappablePadding,
+        paddingRight: tappablePadding.padding * 2,
     },
     topBlock: {
         paddingTop: tappablePadding.paddingVertical / 2,
@@ -101,7 +105,7 @@ const opinionStyles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: -20,
-        width: '65%',
+        width: '53%',
     },
 })
 const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
