@@ -90,7 +90,7 @@ const imageStyles = StyleSheet.create({
         flex: 0,
     },
     textBlock: {
-        paddingTop: metrics.vertical / 3,
+        paddingTop: metrics.vertical / 2,
     },
     roundImage: {
         width: '75%',
@@ -164,6 +164,7 @@ const splitImageStyles = StyleSheet.create({
         width: '50%',
         height: '100%',
         flex: 0,
+        marginLeft: metrics.horizontal,
     },
     wideImage: {
         width: '33.33333%',
