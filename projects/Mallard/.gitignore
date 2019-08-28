@@ -73,3 +73,6 @@ coverage
 
 # CocoaPods
 /ios/Pods/
+
+android/app/bin
+android/.project
