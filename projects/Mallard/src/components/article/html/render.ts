@@ -20,16 +20,11 @@ import {
 } from '../../../helpers/webview'
 import { WrapLayout } from '../wrap/wrap'
 import { Image, imageStyles } from './images'
+import { CssProps } from './helpers/props'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
-const makeCss = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
     ${generateAssetsFontCss('GuardianTextSans-Regular')}
@@ -50,10 +45,13 @@ const makeCss = ({
     }
     :root {
         ${getScaledFontCss('text', 1)}
+        font-family: 'GuardianTextEgyptian-Reg';
     }
     #app {
-        font-family: 'GuardianTextEgyptian-Reg';
         padding: ${metrics.vertical}px ${metrics.article.sides}px;
+        float: left;
+        width: ${wrapLayout.content.width}px;
+        padding: 0 {metrics.article.sides}px
     }
     #app p,
     figure {
@@ -62,14 +60,6 @@ const makeCss = ({
     #app a {
         color: ${colors.main};
         text-decoration-color: ${colors.pastel};
-    }
-    #root {
-        overflow: hidden;
-    }
-    main {
-        float: left;
-        width: ${wrapLayout.content.width}px;
-        padding: 0 {metrics.article.sides}px
     }
     * {
         margin: 0;
@@ -83,7 +73,7 @@ const makeCss = ({
         width: ${wrapLayout.rail.width}px;
         margin-right: -${wrapLayout.width - wrapLayout.content.width}px
     }
-    ${imageStyles}
+    ${imageStyles({ colors, wrapLayout })}
 `
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
@@ -141,8 +131,6 @@ export const render = (
         })
         .join('')
 
-    const generatedHtml = html`<div id="root"><main>${body}</main></root>`
-
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
-    return makeHtml({ styles, html: generatedHtml })
+    return makeHtml({ styles, body })
 }

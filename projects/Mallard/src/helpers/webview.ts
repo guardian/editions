@@ -1,6 +1,6 @@
 import { Platform, PixelRatio } from 'react-native'
 import { bundles } from 'src/html-bundle-info.json'
-import { getFont } from 'src/theme/typography'
+import { getFont, FontSizes, FontFamily } from 'src/theme/typography'
 
 /*
 this tricks vs code into thinking
@@ -23,8 +23,11 @@ export const html = passthrough
 
 export const px = (value: string | number) => `${value}px`
 
-export const getScaledFont = (...props: Parameters<typeof getFont>) => {
-    const font = getFont(...props)
+export const getScaledFont = <F extends FontFamily>(
+    family: F,
+    level: FontSizes<F>,
+) => {
+    const font = getFont(family, level)
     return {
         ...font,
         lineHeight: font.lineHeight * PixelRatio.getFontScale(),
@@ -32,8 +35,11 @@ export const getScaledFont = (...props: Parameters<typeof getFont>) => {
     }
 }
 
-export const getScaledFontCss = (...props: Parameters<typeof getFont>) => {
-    const font = getScaledFont(...props)
+export const getScaledFontCss = <F extends FontFamily>(
+    family: F,
+    level: FontSizes<F>,
+) => {
+    const font = getScaledFont(family, level)
     return css`
         font-size: ${px(font.fontSize)};
         line-height; ${px(font.lineHeight)};
@@ -74,32 +80,39 @@ export const getBundleUri = (
 /* makes some HTML and posts the height back */
 export const makeHtml = ({
     styles,
-    html,
+    body,
 }: {
     styles: string
-    html: string
-}) => `
-<html>
-<head>
-    <style>
-      ${styles}
-    </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <div id="app">
-        ${html}
-    </div>
-    <script>
-        const submitHeight = function() {
-            window.requestAnimationFrame(function() {
-                window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)
-            })
-        }
+    body: string
+}) => html`
+    <html>
+        <head>
+            <style>
+                ${styles}
+            </style>
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1"
+            />
+        </head>
+        <body>
+            <div id="app">
+                ${body}
+            </div>
+            <script>
+                const submitHeight = function() {
+                    window.requestAnimationFrame(function() {
+                        window.ReactNativeWebView.postMessage(
+                            document.documentElement.scrollHeight,
+                        )
+                    })
+                }
 
-        window.setInterval(function() { submitHeight() }, 4000)
-        submitHeight()
-    </script>
-</body>
-</html>
+                window.setInterval(function() {
+                    submitHeight()
+                }, 200)
+                submitHeight()
+            </script>
+        </body>
+    </html>
 `
