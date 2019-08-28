@@ -75,14 +75,14 @@ const useTextBlockStyles = (textBlockAppearance: TextBlockAppearance) => {
 const getFontSize = ({ layout, story }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
         if (story.width >= 3) {
-            if (story.height >= 3) return 1.75
-            if (story.height >= 2) return 1.25
+            if (story.height >= 3) return 1.5
+            if (story.height >= 2) return 1
         }
         if (story.width >= 2) {
-            if (story.height >= 3) return 1.5
-            return 1
+            if (story.height >= 3) return 1.25
+            return 0.75
         }
-        return 1
+        return 0.75
     }
     return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
 }
@@ -111,7 +111,6 @@ const TextBlock = ({
     )
 
     const fontSize = applyScale(font).fontSize
-
     const [color, { pillar }] = useArticle()
     return (
         <View style={[rootStyle, style]}>
