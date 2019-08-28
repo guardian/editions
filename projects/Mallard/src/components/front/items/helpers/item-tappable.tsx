@@ -46,7 +46,6 @@ This just wraps every card to make it tappable
 export const tappablePadding = {
     padding: metrics.horizontal / 2,
     paddingVertical: metrics.vertical / 2,
-    paddingRight: metrics.horizontal,
 }
 const tappableStyles = StyleSheet.create({
     root: {

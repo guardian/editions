@@ -20,7 +20,7 @@ module.exports = {
         '@typescript-eslint/explicit-member-accessibility': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         'react/prop-types': 'off',
-        '@typescript-eslint/no-object-literal-type-assertion': 'warn',
+        '@typescript-eslint/consistent-type-assertions': 'warn',
         '@typescript-eslint/camelcase': 'off',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',

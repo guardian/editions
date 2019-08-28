@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { HeadlineCardText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
-import { ItemSizes, PageLayoutSizes } from '../helpers/helpers'
+import {
+    ItemSizes,
+    PageLayoutSizes,
+    getPageLayoutSizeXY,
+} from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
-import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
-import { TextBlock } from './base/text-block'
+import {
+    ItemTappable,
+    PropTypes,
+    tappablePadding,
+} from './helpers/item-tappable'
+import { TextBlock } from './helpers/text-block'
 import { SuperHeroImageItem } from './super-items'
+import { SportItemBackground } from './helpers/sports'
 
 /*
 helpers
@@ -35,6 +44,11 @@ export const getImageHeight = ({ story, layout }: ItemSizes) => {
 
 export const isSmallItem = (size: ItemSizes) => {
     return size.story.width <= 1
+}
+
+export const isFullWidthItem = (size: ItemSizes) => {
+    const { width } = getPageLayoutSizeXY(size.layout)
+    return size.story.width >= width
 }
 
 /*
@@ -71,7 +85,6 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     byline={article.byline}
                     kicker={article.kicker}
                     headline={article.headline}
-                    textBlockAppearance={'pillarColor'}
                     style={coverStyles.text}
                     {...{ size }}
                 />
@@ -90,7 +103,7 @@ const imageStyles = StyleSheet.create({
         flex: 0,
     },
     textBlock: {
-        paddingTop: metrics.vertical / 3,
+        paddingTop: metrics.vertical / 2,
     },
     roundImage: {
         width: '75%',
@@ -120,13 +133,27 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                     image={article.image}
                 />
             ) : null}
-            <TextBlock
-                byline={article.byline}
-                style={imageStyles.textBlock}
-                kicker={article.kicker}
-                headline={article.headline}
-                {...{ size }}
-            />
+            {pillar === 'sport' && isFullWidthItem(size) ? (
+                <SportItemBackground
+                    style={{
+                        paddingHorizontal: tappablePadding.padding,
+                        marginBottom: tappablePadding.paddingVertical,
+                    }}
+                >
+                    <TextBlock
+                        style={imageStyles.textBlock}
+                        size={size}
+                        monotone={true}
+                        {...article}
+                    />
+                </SportItemBackground>
+            ) : (
+                <TextBlock
+                    style={imageStyles.textBlock}
+                    size={size}
+                    {...article}
+                />
+            )}
         </ItemTappable>
     )
 }
@@ -164,6 +191,7 @@ const splitImageStyles = StyleSheet.create({
         width: '50%',
         height: '100%',
         flex: 0,
+        marginLeft: metrics.horizontal,
     },
     wideImage: {
         width: '33.33333%',

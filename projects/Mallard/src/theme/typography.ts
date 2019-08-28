@@ -90,6 +90,16 @@ const scale = {
         },
     },
     headline: {
+        0.75: {
+            0: {
+                fontSize: 19,
+                lineHeight: 21,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 21,
+                lineHeight: 22,
+            },
+        },
         1: {
             0: {
                 fontSize: 19,
