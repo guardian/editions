@@ -15,7 +15,7 @@ import {
     getMockCache,
     tomorrow,
     yesterday,
-} from './test-helpers'
+} from '../../test-helpers/test-helpers'
 
 /**
  * This helper ensures an ordering or resolving promises, any promise
