@@ -6,6 +6,7 @@
 //
 
  #import <Foundation/Foundation.h>
+#import <ophan/ophan.h>
 #import "Ophan.h"
 
  @implementation Ophan
@@ -13,7 +14,7 @@
  RCT_EXPORT_MODULE();
 
  RCT_EXPORT_METHOD(getGreeting: (RCTResponseSenderBlock)callback){
-  callback(@[@"Hello from iOS's Ophan module!"]);
+  callback(@[[OphanOphanKt hello]]);
 }
 
  @end
