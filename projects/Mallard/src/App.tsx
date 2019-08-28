@@ -22,6 +22,8 @@ import {
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 
+// This really needs a comment.
+// eslint-disable-next-line react-hooks/rules-of-hooks
 useScreens()
 prepFileSystem()
 pushNotifcationRegistration()

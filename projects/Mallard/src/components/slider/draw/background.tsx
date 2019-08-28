@@ -31,7 +31,7 @@ const Background = ({
     radius: number
 }) => {
     const stopElements = (width: number) => {
-        let elements = [
+        const elements = [
             <Stop
                 key={-2}
                 style={{ transform: { translateX: radius } }}

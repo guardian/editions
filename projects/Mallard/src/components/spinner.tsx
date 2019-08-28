@@ -72,7 +72,7 @@ const Spinner = () => {
     ])
     useEffect(() => {
         Animated.parallel(jumps.map((j, i) => animateJumps(j, i))).start()
-    }, [])
+    }, [jumps])
     return (
         <View accessibilityLabel={'Loading content'}>
             <View {...ariaHidden} style={styles.container}>

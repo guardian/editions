@@ -59,7 +59,7 @@ let fileListMemo: File[] = []
 export const getJson = (path: string) =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
-const pathToFile = (basePath: string = '') => async (
+const pathToFile = (basePath = '') => async (
     filePath: string,
 ): Promise<File> => {
     const path = basePath + '/' + filePath

@@ -71,6 +71,8 @@ const ArticleHeadline = ({
                     {children}
                 </TextWithIcon>
             ) : (
+                // This really really really needs a comment explaining this.
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 <Text
                     onTextLayout={hasHighlight && onTextLayout}

@@ -98,7 +98,7 @@ export const storeSetting = (
     value: UnsanitizedSetting,
 ) => {
     AsyncStorage.setItem('@Setting_' + setting, sanitize(value), () => {
-        for (let cb of callbacks) {
+        for (const cb of callbacks) {
             cb(setting, value)
         }
     })
