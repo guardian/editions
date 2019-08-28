@@ -3,6 +3,8 @@ plugins {
 }
 repositories {
     mavenCentral()
+    jcenter()
+    maven { url 'https://dl.bintray.com/guardian/kotlin' }
 }
 
 kotlin {
@@ -18,14 +20,21 @@ kotlin {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
+                implementation("io.ktor:ktor-client-core:1.2.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.0-RC")
+                api 'com.gu.kotlin:multiplatform-ophan:0.1.0'
             }
         }
         androidMain {
             dependencies {
                 implementation kotlin('stdlib')
+                implementation("io.ktor:ktor-client-android:1.2.3")
             }
         }
         iosMain {
+            dependencies {
+
+            }
         }
     }
 }
