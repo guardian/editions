@@ -22,7 +22,7 @@ import {
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 
-// This really needs a comment.
+// useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
 useScreens()
 prepFileSystem()

@@ -71,7 +71,7 @@ const ArticleHeadline = ({
                     {children}
                 </TextWithIcon>
             ) : (
-                // This really really really needs a comment explaining this.
+                // onTextLayout is missing from the type definition
                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 <Text
