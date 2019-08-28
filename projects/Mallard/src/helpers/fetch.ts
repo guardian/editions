@@ -208,9 +208,12 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
         headers: {
             'Content-Type': 'application/json',
         },
+    }).then(response => {
+        console.log('Response', JSON.stringify(response))
+        return response.ok
+            ? Promise.resolve(response.json())
+            : Promise.reject(response.status)
     })
-        .then(response => console.log('Response', JSON.stringify(response)))
-        .catch(e => console.log('Error', JSON.stringify(e)))
 }
 
 const isUrlAvailable = async (url: string): Promise<boolean> => {
