@@ -6,7 +6,7 @@ import { Front } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useAppAppearance } from 'src/theme/appearance'
 import { Rectangle, Size } from 'src/helpers/sizes'
-import { PropTypes } from '../items/base/item-tappable'
+import { PropTypes } from '../items/helpers/item-tappable'
 import { safeInterpolation } from 'src/helpers/math'
 
 type Item = FunctionComponent<PropTypes>

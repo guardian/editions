@@ -138,8 +138,5 @@ const TextBlock = ({
         </View>
     )
 }
-TextBlock.defaultProps = {
-    textBlockAppearance: 'default',
-}
 
 export { TextBlock }

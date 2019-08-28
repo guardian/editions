@@ -13,8 +13,12 @@ import {
     toPercentage,
 } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
-import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
-import { TextBlock } from './base/text-block'
+import {
+    ItemTappable,
+    PropTypes,
+    tappablePadding,
+} from './helpers/item-tappable'
+import { TextBlock } from './helpers/text-block'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -68,6 +72,12 @@ const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
         </ItemTappable>
     )
 }
+const sportSuperStyles = StyleSheet.create({
+    card: {
+        backgroundColor: color.palette.highlight.main,
+        flexGrow: 1,
+    },
+})
 const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
@@ -77,12 +87,7 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
                     image={article.image}
                 />
             ) : null}
-            <View
-                style={{
-                    backgroundColor: color.palette.highlight.main,
-                    flexGrow: 1,
-                }}
-            >
+            <View style={sportSuperStyles.card}>
                 <TextBlock
                     byline={article.byline}
                     style={[superHeroImageStyles.textBlock]}
