@@ -119,6 +119,9 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
+export const renderCaption = (imageElement: ImageElement) =>
+    [imageElement.caption, imageElement.credit].filter(s => !!s).join(' ')
+
 const renderImageElement = (imageElement: ImageElement) => {
     const path = imagePath(imageElement.src)
     return html`
@@ -129,7 +132,7 @@ const renderImageElement = (imageElement: ImageElement) => {
                 alt="${imageElement.alt}"
             />
             <figcaption>
-                ${imageElement.caption && imageElement.caption} ${imageElement.credit && imageElement.credit}
+                ${renderCaption(imageElement)}
             </figcaption>
         </figure>
     `
