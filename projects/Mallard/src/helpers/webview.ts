@@ -1,5 +1,6 @@
-import { Platform } from 'react-native'
+import { Platform, PixelRatio } from 'react-native'
 import { bundles } from 'src/html-bundle-info.json'
+import { getFont } from 'src/theme/typography'
 
 /*
 this tricks vs code into thinking
@@ -19,6 +20,25 @@ const passthrough = (
 
 export const css = passthrough
 export const html = passthrough
+
+export const px = (value: string | number) => `${value}px`
+
+export const getScaledFont = (...props: Parameters<typeof getFont>) => {
+    const font = getFont(...props)
+    return {
+        ...font,
+        lineHeight: font.lineHeight * PixelRatio.getFontScale(),
+        fontSize: font.fontSize * PixelRatio.getFontScale(),
+    }
+}
+
+export const getScaledFontCss = (...props: Parameters<typeof getFont>) => {
+    const font = getScaledFont(...props)
+    return css`
+        font-size: ${px(font.fontSize)};
+        line-height; ${px(font.lineHeight)};
+    `
+}
 
 export const generateAssetsFontCss = (fontFamily: string) => {
     const fileName = Platform.select({

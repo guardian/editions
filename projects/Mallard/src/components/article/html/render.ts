@@ -1,5 +1,4 @@
 import { PillarColours } from '@guardian/pasteup/palette'
-import { PixelRatio } from 'react-native'
 import {
     ArticleFeatures,
     ArticlePillar,
@@ -10,33 +9,19 @@ import {
 import { getPillarColors } from 'src/hooks/use-article'
 import { imagePath } from 'src/paths'
 import { metrics } from 'src/theme/spacing'
-import { getFont } from 'src/theme/typography'
 import {
     css,
     generateAssetsFontCss,
+    getScaledFont,
+    getScaledFontCss,
     html,
     makeHtml,
+    px,
 } from '../../../helpers/webview'
 import { WrapLayout } from '../wrap/wrap'
+import { Image, imageStyles } from './images'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
-
-const getScaledFont = (...props: Parameters<typeof getFont>) => {
-    const font = getFont(...props)
-    return {
-        ...font,
-        lineHeight: font.lineHeight * PixelRatio.getFontScale(),
-        fontSize: font.fontSize * PixelRatio.getFontScale(),
-    }
-}
-
-const getScaledFontCss = (...props: Parameters<typeof getFont>) => {
-    const font = getScaledFont(...props)
-    return css`
-        font-size: ${font.fontSize}px;
-        line-height; ${font.lineHeight}px;
-    `
-}
 
 const makeCss = ({
     colors,
@@ -47,6 +32,7 @@ const makeCss = ({
 }) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
+    ${generateAssetsFontCss('GuardianTextSans-Regular')}
     * {
         margin: 0;
         padding: 0;
@@ -55,8 +41,8 @@ const makeCss = ({
         font-family: 'GHGuardianHeadline-Regular';
         color: ${colors.main};
         float: left;
-        font-size: ${getScaledFont('text', 1).lineHeight * 4}px;
-        line-height: ${getScaledFont('text', 1).lineHeight * 4}px;
+        font-size: ${px(getScaledFont('text', 1).lineHeight * 4)};
+        line-height: ${px(getScaledFont('text', 1).lineHeight * 4)};
         display: inline-block;
         transform: scale(1.335) translateY(1px) translateX(-2px);
         transform-origin: left center;
@@ -89,12 +75,6 @@ const makeCss = ({
         margin: 0;
         padding: 0;
     }
-    figcaption {
-        padding-top: 5px;
-        font-size: ${12 * PixelRatio.getFontScale()}px;
-        color: #767676;
-        line-height: 1rem;
-    }
     .img-fill {
         width: ${wrapLayout.width}px
     }
@@ -103,6 +83,7 @@ const makeCss = ({
         width: ${wrapLayout.rail.width}px;
         margin-right: -${wrapLayout.width - wrapLayout.content.width}px
     }
+    ${imageStyles}
 `
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
@@ -115,22 +96,6 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
                 frameborder="0"
             ></iframe>
             <figcaption>${mediaAtomElement.title}</figcaption>
-        </figure>
-    `
-}
-
-const renderImageElement = (imageElement: ImageElement) => {
-    const path = imagePath(imageElement.src)
-    return html`
-        <figure style="overflow: hidden;">
-            <img
-                src="${path}"
-                style="display: block; width: 100%; height: auto;"
-                alt="${imageElement.alt}"
-            />
-            <figcaption>
-                ${imageElement.caption} ${imageElement.credit}
-            </figcaption>
         </figure>
     `
 }
@@ -169,7 +134,7 @@ export const render = (
                 case 'media-atom':
                     return renderMediaAtom(el)
                 case 'image':
-                    return renderImageElement(el)
+                    return Image({ imageElement: el })
                 default:
                     return ''
             }
