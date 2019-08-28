@@ -4,6 +4,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import ophan.OphanKt;
 
 import javax.annotation.Nonnull;
 
@@ -21,6 +22,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getGreeting(Callback callback) {
-        callback.invoke("Hello from Android's Greeting Module!");
+        String kotlinGreeting = OphanKt.hello();
+        callback.invoke(kotlinGreeting);
     }
 }
