@@ -21,7 +21,6 @@ export enum ArticleType {
     Opinion = 'opinion',
     Series = 'series',
     Interview = 'interview',
-    Cartoon = 'cartoon',
     Analysis = 'analysis',
     Obituary = 'obituary',
     MatchResult = 'matchresult',
@@ -119,7 +118,11 @@ export interface PictureArticle extends Content {
     elements: BlockElement[]
 }
 
-export type CAPIArticle = Article | CrosswordArticle | GalleryArticle | PictureArticle
+export type CAPIArticle =
+    | Article
+    | CrosswordArticle
+    | GalleryArticle
+    | PictureArticle
 export const imageSizes = ['phone', 'tablet', 'tabletL', 'tabletXL'] as const
 export type ImageSize = typeof imageSizes[number]
 
