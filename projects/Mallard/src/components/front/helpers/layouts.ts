@@ -146,19 +146,19 @@ const fourStoryPage: PageLayout = {
         items: [
             {
                 item: ImageItem,
-                fits: toRectangle(1, 0, 3, 2),
+                fits: toRectangle(0, 0, 3, 2),
             },
             {
                 item: SplitImageItem,
-                fits: toRectangle(1, 3, 1, 2),
+                fits: toRectangle(0, 3, 1, 2),
             },
             {
                 item: ImageItem,
-                fits: toRectangle(0, 0, 2, 1),
+                fits: toRectangle(2, 0, 2, 1),
             },
             {
                 item: ImageItem,
-                fits: toRectangle(0, 2, 2, 1),
+                fits: toRectangle(2, 2, 2, 1),
             },
         ],
     },

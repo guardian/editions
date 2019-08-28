@@ -46,7 +46,7 @@ const getFontSize = ({ layout, story }: ItemSizes) => {
         }
         return 0.75
     }
-    return story.height >= 6 ? 1.5 : story.height >= 4 ? 1.25 : 1
+    return story.height >= 4 ? 1.5 : 1
 }
 
 const TextBlock = ({
@@ -68,7 +68,7 @@ const TextBlock = ({
         'fontSize' in sizes ? sizes.fontSize : getFontSize(sizes.size),
     )
 
-    const fontSize = applyScale(font).fontSize
+    const { fontSize, lineHeight } = applyScale(font)
     const [colors, { pillar }] = useArticle()
 
     const kickerColor = colors.main
@@ -100,10 +100,10 @@ const TextBlock = ({
                         allowFontScaling={false}
                         style={[
                             {
+                                marginTop: 2,
                                 color: kickerColor,
-                                marginTop: 4,
                                 fontSize,
-                                lineHeight: fontSize,
+                                lineHeight,
                             },
                         ]}
                     >
@@ -113,10 +113,7 @@ const TextBlock = ({
             ) : (
                 <HeadlineCardText
                     allowFontScaling={false}
-                    style={[
-                        styles.headline,
-                        { fontSize, lineHeight: fontSize },
-                    ]}
+                    style={[styles.headline, { fontSize, lineHeight }]}
                 >
                     <HeadlineKickerText
                         allowFontScaling={false}
@@ -126,7 +123,7 @@ const TextBlock = ({
                             },
                             {
                                 fontSize,
-                                lineHeight: fontSize,
+                                lineHeight,
                             },
                         ]}
                     >

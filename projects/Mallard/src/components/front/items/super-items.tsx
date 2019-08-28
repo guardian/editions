@@ -19,6 +19,7 @@ import {
     tappablePadding,
 } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
+import { Standfirst } from './helpers/standfirst'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -40,8 +41,6 @@ const superHeroImageStyles = StyleSheet.create({
     },
     textStandBlock: {
         ...tappablePadding,
-        ...getFont('text', 0.9),
-        color: color.palette.neutral[46],
         position: 'absolute',
         bottom: 0,
     },
@@ -63,15 +62,20 @@ const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
-            <StandfirstText
-                allowFontScaling={false}
-                style={[superHeroImageStyles.textStandBlock]}
+            <Standfirst
+                style={[
+                    superHeroImageStyles.textStandBlock,
+                    size.layout === PageLayoutSizes.tablet && {
+                        width: '80%',
+                    },
+                ]}
             >
                 {article.trail}
-            </StandfirstText>
+            </Standfirst>
         </ItemTappable>
     )
 }
+
 const sportSuperStyles = StyleSheet.create({
     card: {
         backgroundColor: color.palette.highlight.main,
@@ -96,15 +100,16 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
                     monotone
                     {...{ size }}
                 />
-                <StandfirstText
-                    allowFontScaling={false}
+                <Standfirst
                     style={[
                         superHeroImageStyles.textStandBlock,
-                        { color: color.text },
+                        size.layout === PageLayoutSizes.tablet && {
+                            width: '80%',
+                        },
                     ]}
                 >
                     {article.trail}
-                </StandfirstText>
+                </Standfirst>
             </View>
         </ItemTappable>
     )
@@ -115,6 +120,7 @@ const opinionStyles = StyleSheet.create({
         height: '33.333333%',
         overflow: 'hidden',
         ...tappablePadding,
+        paddingRight: tappablePadding.padding * 2,
     },
     topBlock: {
         paddingTop: tappablePadding.paddingVertical / 2,
@@ -135,7 +141,7 @@ const opinionStyles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: -20,
-        width: '65%',
+        width: '53%',
     },
 })
 const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {

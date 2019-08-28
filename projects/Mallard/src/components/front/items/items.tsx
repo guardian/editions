@@ -16,6 +16,7 @@ import {
 } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { SuperHeroImageItem } from './super-items'
+import { Standfirst } from './helpers/standfirst'
 import { SportItemBackground } from './helpers/sports'
 
 /*
@@ -46,6 +47,10 @@ export const isSmallItem = (size: ItemSizes) => {
     return size.story.width <= 1
 }
 
+export const isFullHeightItem = (size: ItemSizes) => {
+    const { height: pageHeight } = getPageLayoutSizeXY(size.layout)
+    return size.story.height >= pageHeight
+}
 export const isFullWidthItem = (size: ItemSizes) => {
     const { width } = getPageLayoutSizeXY(size.layout)
     return size.story.width >= width
@@ -113,6 +118,11 @@ const imageStyles = StyleSheet.create({
         right: tappablePadding.padding,
         bottom: tappablePadding.paddingVertical * 2,
     },
+    standfirst: {
+        ...tappablePadding,
+        position: 'absolute',
+        bottom: 0,
+    },
 })
 
 const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
@@ -153,6 +163,11 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                     size={size}
                     {...article}
                 />
+            )}
+            {isFullHeightItem(size) && (
+                <Standfirst style={imageStyles.standfirst}>
+                    {article.trail}
+                </Standfirst>
             )}
         </ItemTappable>
     )
