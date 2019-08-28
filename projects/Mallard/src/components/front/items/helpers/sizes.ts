@@ -29,6 +29,10 @@ export const isSmallItem = (size: ItemSizes) => {
     return size.story.width <= 1
 }
 
+export const isFullHeightItem = (size: ItemSizes) => {
+    const { height: pageHeight } = getPageLayoutSizeXY(size.layout)
+    return size.story.height >= pageHeight
+}
 export const isFullWidthItem = (size: ItemSizes) => {
     const { width } = getPageLayoutSizeXY(size.layout)
     return size.story.width >= width

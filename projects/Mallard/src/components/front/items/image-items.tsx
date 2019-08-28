@@ -8,10 +8,16 @@ import {
     PropTypes,
     tappablePadding,
 } from './helpers/item-tappable'
-import { getImageHeight, isFullWidthItem, isSmallItem } from './helpers/sizes'
+import {
+    getImageHeight,
+    isFullWidthItem,
+    isSmallItem,
+    isFullHeightItem,
+} from './helpers/sizes'
 import { SportItemBackground } from './helpers/sports'
 import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
+import { Standfirst } from './helpers/standfirst'
 
 /*
 Normal img on top + text
@@ -31,6 +37,11 @@ const imageStyles = StyleSheet.create({
         position: 'absolute',
         right: tappablePadding.padding,
         bottom: tappablePadding.paddingVertical * 2,
+    },
+    standfirst: {
+        ...tappablePadding,
+        position: 'absolute',
+        bottom: 0,
     },
 })
 
@@ -73,10 +84,14 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                     {...article}
                 />
             )}
+            {isFullHeightItem(size) && (
+                <Standfirst style={imageStyles.standfirst}>
+                    {article.trail}
+                </Standfirst>
+            )}
         </ItemTappable>
     )
 }
-
 /*
 The opinion cards with tha circles
 */
@@ -201,5 +216,4 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
         </ItemTappable>
     )
 }
-
 export { ImageItem, SplitImageItem, SmallItem, SidekickImageItem }
