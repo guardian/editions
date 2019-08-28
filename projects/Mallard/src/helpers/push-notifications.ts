@@ -4,49 +4,62 @@ import { fetchFromNotificationService } from 'src/helpers/fetch'
 import { downloadAndUnzipIssue, clearOldIssues } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { pushNotificationRegistrationCache } from '../authentication/storage'
-import Moment from 'moment'
+import moment, { MomentInput } from 'moment'
 
 export interface PushNotificationRegistration {
     registrationDate: string
+    token: string
 }
 
-const DATE_FORMAT = 'YYYY-MM-DD'
+const shouldReRegister = (
+    newToken: string,
+    registration: PushNotificationRegistration,
+    now: MomentInput,
+): boolean =>
+    moment(now).diff(moment(registration.registrationDate), 'days') > 14 ||
+    newToken !== registration.token
 
-const shouldReRegister = (registrationDate: string): boolean => {
-    const regDate = Moment.utc(registrationDate, DATE_FORMAT)
-    const now = Moment().utc()
-    return now.diff(regDate, 'days') > 14
-}
+/**
+ * will register / re-register if it should
+ * will return whether it did register
+ * will throw if anything major went wrong
+ * */
+const maybeRegister = async (
+    token: string,
+    // mocks for testing
+    pushNotificationRegistrationCacheImpl = pushNotificationRegistrationCache,
+    fetchFromNotificationServiceImpl = fetchFromNotificationService,
+    now = moment().toString(),
+) => {
+    let should: boolean
 
-const register = (deviceToken: {token: string }) => {
-    fetchFromNotificationService(deviceToken)
-    pushNotificationRegistrationCache.set({
-        registrationDate: Moment()
-            .utc()
-            .format(DATE_FORMAT)
-            .toString(),
-    })
+    try {
+        const cached = await pushNotificationRegistrationCacheImpl.get()
+        should = !cached || shouldReRegister(token, cached, now)
+    } catch {
+        // in the unlikely event we have an error here, then re-register any way
+        should = true
+    }
+
+    if (should) {
+        // this will throw on non-200 so that we won't add registration info to the cache
+        await fetchFromNotificationServiceImpl({ token })
+        await pushNotificationRegistrationCacheImpl.set({
+            registrationDate: now,
+            token,
+        })
+        return true
+    }
+
+    return false
 }
 
 const pushNotifcationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
             if (token) {
-                pushNotificationRegistrationCache
-                .get()
-                .then(registrationDateOrNull => {
-                    if (
-                        !registrationDateOrNull ||
-                        shouldReRegister(registrationDateOrNull.registrationDate)
-                    ) {
-                        register(token)
-                    }
-                })
-                .catch(error => {
-                    console.log(
-                        'error retrieving push notification registration date from cache - registering anyway.',
-                    )
-                    register(token)
+                maybeRegister(token.token).catch(err => {
+                    console.log(`Error registering for notifications: ${err}`)
                 })
             }
         },
@@ -71,4 +84,8 @@ const pushNotifcationRegistration = () => {
     })
 }
 
-export { pushNotifcationRegistration }
+export {
+    pushNotifcationRegistration,
+    /** exports for testing */
+    maybeRegister,
+}
