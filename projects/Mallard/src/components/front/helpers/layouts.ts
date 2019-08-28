@@ -52,12 +52,12 @@ const superHeroPage: PageLayout = {
     },
 }
 
-const twoStoryPage: PageLayout = {
+const twoStoryPage = (KeyItem = ImageItem): PageLayout => ({
     [PageLayoutSizes.mobile]: {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: ImageItem,
+                item: KeyItem,
                 fits: toRectangle(0, 0, 4, 2),
             },
             {
@@ -70,7 +70,7 @@ const twoStoryPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: ImageItem,
+                item: KeyItem,
                 fits: toRectangle(0, 0, 3, 3),
             },
             {
@@ -79,14 +79,14 @@ const twoStoryPage: PageLayout = {
             },
         ],
     },
-}
+})
 
-const threeStoryPage: PageLayout = {
+const threeStoryPage = (KeyItem = ImageItem): PageLayout => ({
     [PageLayoutSizes.mobile]: {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: ImageItem,
+                item: KeyItem,
                 fits: toRectangle(0, 0, 4, 2),
             },
             {
@@ -104,7 +104,7 @@ const threeStoryPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: ImageItem,
+                item: KeyItem,
                 fits: toRectangle(0, 0, 4, 2),
             },
             {
@@ -117,7 +117,7 @@ const threeStoryPage: PageLayout = {
             },
         ],
     },
-}
+})
 
 const fourStoryPage: PageLayout = {
     [PageLayoutSizes.mobile]: {
@@ -281,8 +281,10 @@ const sixStoryPage: PageLayout = {
 const layouts: { [key in FrontCardAppearance]: PageLayout } = {
     [FrontCardAppearance.splashPage]: splashPage,
     [FrontCardAppearance.superHeroPage]: superHeroPage,
-    [FrontCardAppearance.twoStoryPage]: twoStoryPage,
-    [FrontCardAppearance.threeStoryPage]: threeStoryPage,
+    [FrontCardAppearance.twoStoryPage]: twoStoryPage(),
+    [FrontCardAppearance.visualTwoStoryPage]: twoStoryPage(SmallItem),
+    [FrontCardAppearance.threeStoryPage]: threeStoryPage(),
+    [FrontCardAppearance.visualThreeStoryPage]: threeStoryPage(SmallItem),
     [FrontCardAppearance.fourStoryPage]: fourStoryPage,
     [FrontCardAppearance.fiveStoryPage]: fiveStoryPage,
     [FrontCardAppearance.sixStoryPage]: sixStoryPage,
