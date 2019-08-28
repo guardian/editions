@@ -6,9 +6,9 @@ export enum FrontCardAppearance {
     splashPage = 'splash',
     superHeroPage = 'super',
     twoStoryPage = 'two',
-    visualTwoStoryPage = 'two-visual',
+    twoStoryPageWithSidekick = 'two-plus-sidekick',
     threeStoryPage = 'three',
-    visualThreeStoryPage = 'three-visual',
+    threeStoryPageWithSidekick = 'three-plus-sidekick',
     fourStoryPage = 'four',
     fiveStoryPage = 'five',
     sixStoryPage = 'six',
@@ -31,9 +31,9 @@ const frontCardAppearanceInfo: {
     [FrontCardAppearance.splashPage]: { fits: 1 },
     [FrontCardAppearance.superHeroPage]: { fits: 1 },
     [FrontCardAppearance.twoStoryPage]: { fits: 2 },
-    [FrontCardAppearance.visualTwoStoryPage]: { fits: 2 },
+    [FrontCardAppearance.twoStoryPageWithSidekick]: { fits: 2 },
     [FrontCardAppearance.threeStoryPage]: { fits: 3 },
-    [FrontCardAppearance.visualThreeStoryPage]: { fits: 3 },
+    [FrontCardAppearance.threeStoryPageWithSidekick]: { fits: 3 },
     [FrontCardAppearance.fourStoryPage]: { fits: 4 },
     [FrontCardAppearance.fiveStoryPage]: { fits: 5 },
     [FrontCardAppearance.sixStoryPage]: { fits: 6 },
@@ -79,8 +79,8 @@ const defaultLayout = (
     const [twoStories, threeStories] = visual
         ? [2 as FrontCardAppearanceShort, 3 as FrontCardAppearanceShort]
         : [
-              FrontCardAppearance.visualTwoStoryPage,
-              FrontCardAppearance.visualThreeStoryPage,
+              FrontCardAppearance.twoStoryPageWithSidekick,
+              FrontCardAppearance.threeStoryPageWithSidekick,
           ]
 
     return {
@@ -120,8 +120,8 @@ const thirdPageCoverLayout = (
     const [twoStories, threeStories] = visual
         ? [2 as FrontCardAppearanceShort, 3 as FrontCardAppearanceShort]
         : [
-              FrontCardAppearance.visualTwoStoryPage,
-              FrontCardAppearance.visualThreeStoryPage,
+              FrontCardAppearance.twoStoryPageWithSidekick,
+              FrontCardAppearance.threeStoryPageWithSidekick,
           ]
 
     return {

@@ -14,8 +14,7 @@ import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
 
 /*
-IMAGE ITEM
-Text below image. To use in most heros
+Normal img on top + text
 */
 const imageStyles = StyleSheet.create({
     image: {
@@ -77,6 +76,10 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
         </ItemTappable>
     )
 }
+
+/*
+The opinion cards with tha circles
+*/
 const RoundImageItem = ({
     article,
     issueID,
@@ -116,15 +119,18 @@ const squareStyles = StyleSheet.create({
     },
 })
 
-const SquareOverImageItem = ({
-    article,
-    size,
-    ...tappableProps
-}: PropTypes) => {
-    const [colors] = useArticle()
+/*
+A smaller hero
+*/
+const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+    const [colors, { pillar }] = useArticle()
     if (!article.image) {
         return <SmallItem {...{ article, size, ...tappableProps }} />
     }
+    if (pillar === 'sport') {
+        return <ImageItem {...{ article, size, ...tappableProps }}></ImageItem>
+    }
+
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={squareStyles.cover}>
@@ -152,6 +158,9 @@ const SquareOverImageItem = ({
     )
 }
 
+/*
+50-50 split
+*/
 const splitImageStyles = StyleSheet.create({
     image: {
         width: '50%',
@@ -193,4 +202,4 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     )
 }
 
-export { ImageItem, SplitImageItem, SmallItem, SquareOverImageItem }
+export { ImageItem, SplitImageItem, SmallItem, SidekickImageItem }

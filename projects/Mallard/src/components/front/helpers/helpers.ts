@@ -116,8 +116,3 @@ export const useCardBackgroundStyle = () => {
         ? { backgroundColor: color.faded }
         : { backgroundColor: appColor.cardBackgroundColor }
 }
-
-export const useKickerColorStyle = () => {
-    const [color] = useArticle()
-    return { color: color.main }
-}

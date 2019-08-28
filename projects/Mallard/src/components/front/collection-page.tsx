@@ -83,7 +83,6 @@ const getPageLayout = (
     appearance: FrontCardAppearance | null,
     length: number,
 ): PageLayout => {
-    console.log(appearance)
     if (!appearance) {
         if (
             length === 1 ||

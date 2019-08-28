@@ -5,7 +5,7 @@ import { metrics } from 'src/theme/spacing'
 import { ImageResource } from '../image-resource'
 import { ItemTappable, PropTypes } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
-import { ImageItem, SplitImageItem, SquareOverImageItem } from './image-items'
+import { ImageItem, SplitImageItem, SidekickImageItem } from './image-items'
 import { SmallItem, SmallItemLargeText } from './small-items'
 import { SuperHeroImageItem } from './super-items'
 
@@ -94,5 +94,5 @@ export {
     SmallItem,
     SmallItemLargeText,
     CoverItem,
-    SquareOverImageItem,
+    SidekickImageItem,
 }
