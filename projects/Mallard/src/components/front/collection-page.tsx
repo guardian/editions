@@ -17,6 +17,7 @@ import {
     getPageLayoutSizeXY,
     ItemSizes,
     toAbsoluteRectangle,
+    PageLayout,
 } from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from './helpers/layouts'
@@ -81,7 +82,7 @@ export interface PropTypes {
 const getPageLayout = (
     appearance: FrontCardAppearance | null,
     length: number,
-) => {
+): PageLayout => {
     if (!appearance) {
         if (
             length === 1 ||
@@ -95,7 +96,10 @@ const getPageLayout = (
         }
         return layouts[defaultCardAppearances[6]]
     } else {
-        return layouts[appearance]
+        if (layouts[appearance]) {
+            return layouts[appearance]
+        }
+        return getPageLayout(null, length)
     }
 }
 
