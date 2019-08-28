@@ -297,6 +297,9 @@ export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
 export const issueSummaryPath = () => 'issues'
+
+export const cacheClearPath = () => 'cache-wipe'
+
 export interface Image {
     source: string
     path: string
