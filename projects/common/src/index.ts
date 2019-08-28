@@ -15,13 +15,13 @@ export const articlePillars = [
 ] as const
 
 export enum ArticleType {
-    Cartoon = 'cartoon',
     Article = 'article',
     Longread = 'longread',
     Review = 'review',
     Opinion = 'opinion',
     Series = 'series',
     Interview = 'interview',
+    Cartoon = 'cartoon',
     Analysis = 'analysis',
     Obituary = 'obituary',
     MatchResult = 'matchresult',
