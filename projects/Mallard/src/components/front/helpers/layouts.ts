@@ -6,7 +6,7 @@ import {
     SplitImageItem,
     SmallItem,
     SmallItemLargeText,
-    VisualImageItem,
+    SquareOverImageItem,
 } from '../items/items'
 import { FrontCardAppearance } from 'src/common'
 import { toRectangle } from 'src/helpers/sizes'
@@ -304,7 +304,7 @@ const layouts: { [key in FrontCardAppearance]: PageLayout } = {
     [FrontCardAppearance.splashPage]: splashPage,
     [FrontCardAppearance.superHeroPage]: superHeroPage,
     [FrontCardAppearance.twoStoryPage]: twoStoryPage(),
-    [FrontCardAppearance.visualTwoStoryPage]: twoStoryPage(VisualImageItem),
+    [FrontCardAppearance.visualTwoStoryPage]: twoStoryPage(SquareOverImageItem),
     [FrontCardAppearance.threeStoryPage]: threeStoryPage(),
     [FrontCardAppearance.visualThreeStoryPage]: superHeroPage,
     [FrontCardAppearance.fourStoryPage]: fourStoryPage,
