@@ -31,7 +31,7 @@ export const createCardsFromAllArticlesInCollection = (
     /*
     fill the layout with articles
     */
-    let { cards, itemsSoFar } = layout.reduce<{
+    const { cards, itemsSoFar } = layout.reduce<{
         itemsSoFar: number
         cards: Card[]
     }>(
@@ -62,7 +62,7 @@ export const createCardsFromAllArticlesInCollection = (
     let's just chunk the rest out.
     */
     if (articles.length > itemsSoFar) {
-        cards = [
+        return [
             ...cards,
             ...chunk(articles.slice(itemsSoFar), maxCardSize).map(
                 groupOfArticles => {

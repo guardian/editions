@@ -19,7 +19,7 @@ export const safeValue = (value: unknown, fallback: number): number => {
 }
 
 export const safeInterpolation = (values: unknown[]): number[] => {
-    for (let value of values) {
+    for (const value of values) {
         if (!isSafeValue(value)) {
             return [...new Array(values.length - 1).fill(0), 1]
         }

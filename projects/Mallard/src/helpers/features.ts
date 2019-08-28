@@ -8,7 +8,7 @@ export const areEqualShallow = <A>(
     a: A,
     b: { [key in keyof A]: unknown },
 ): boolean => {
-    for (var key in a) {
+    for (const key in a) {
         if (a[key] !== b[key]) {
             return false
         }
