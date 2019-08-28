@@ -22,15 +22,15 @@ const styles = {
         backgroundColor: color.palette.highlight.main,
         paddingHorizontal: metrics.horizontal / 2,
     },
-    contrastText: {
-        color: color.palette.neutral[100],
-    },
     headline: {
         color: color.dimText,
     },
     opinionHeadline: {
         color: color.dimText,
         fontFamily: getFont('headline', 1, 'light').fontFamily,
+    },
+    invertedText: {
+        color: color.palette.neutral[100],
     },
 }
 
@@ -55,6 +55,7 @@ const TextBlock = ({
     style,
     byline,
     monotone = false,
+    inverted = false,
     ...sizes
 }: {
     kicker: string
@@ -62,6 +63,7 @@ const TextBlock = ({
     headline: string
     style?: StyleProp<ViewStyle>
     monotone?: boolean
+    inverted?: boolean
 } & ({ size: ItemSizes } | { fontSize: FontSizes<'headline'> })) => {
     const font = getUnscaledFont(
         'headline',
@@ -115,6 +117,7 @@ const TextBlock = ({
                     allowFontScaling={false}
                     style={[
                         styles.headline,
+                        inverted && styles.invertedText,
                         { fontSize, lineHeight: fontSize },
                     ]}
                 >

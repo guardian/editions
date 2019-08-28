@@ -207,6 +207,8 @@ const VisualImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                         byline={article.byline}
                         kicker={article.kicker}
                         headline={article.headline}
+                        inverted
+                        monotone
                         {...{ size }}
                     />
                 </View>
