@@ -30,6 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
             List<ReactPackage> packages = new PackageList(this).getPackages();
             packages.add(new RNOphanPackage());
 
+            packages.add(new ReleaseStreamPackage());
+
             // packages.add(new MainReactPackage());
             // packages.add(new RNDeviceInfo());
             // packages.add(new NetInfoPackage());
