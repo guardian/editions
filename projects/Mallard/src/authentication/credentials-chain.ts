@@ -4,6 +4,7 @@ import {
     fetchAndPersistCASExpiryForKeychainCredentials,
     fetchAndPersistIAPReceiptForCurrentITunesUser,
 } from './helpers'
+import { isInTestFlight as getIsInTestFlight } from './release-stream'
 import { CasExpiry } from '../services/content-auth-service'
 import {
     userDataCache,
@@ -124,9 +125,12 @@ const authTypeFromCAS = (info: CasExpiry | null): CASAuth | false =>
         info,
     }
 
-const authTypeFromIAP = (info: ReceiptIOS | null): IAPAuth | false =>
+const authTypeFromIAP = (
+    info: ReceiptIOS | null,
+    { requiresValidReceipt = true } = {},
+): IAPAuth | false =>
     !!info &&
-    isReceiptActive(info) && {
+    (requiresValidReceipt ? isReceiptActive(info) : true) && {
         type: 'iap',
         info,
     }
@@ -147,8 +151,23 @@ const casAuthProvider = () =>
 const iapAuthProvider = () =>
     fetchAndPersistIAPReceiptForCurrentITunesUser().then(authTypeFromIAP)
 
-const liveAuthChain = () =>
-    runAuthChain([identityAuthProvider, casAuthProvider, iapAuthProvider])
+// if we are in testflight and re have an IAP receipt then let them in!
+// because we have changed streams the appBundleReceiptURL will be pointing
+// to a different place, meaning we can't go and fetch the actual receipt
+// and instead have to read from the cache
+const iapBetaFromLiveAuthProvider = (isInTestFlight: boolean) => async () => {
+    if (!isInTestFlight) return false
+    const receipt = await iapReceiptCache.get()
+    return authTypeFromIAP(receipt, { requiresValidReceipt: false })
+}
+
+const liveAuthChain = (isInTestFlight = getIsInTestFlight()) =>
+    runAuthChain([
+        identityAuthProvider,
+        casAuthProvider,
+        iapAuthProvider,
+        iapBetaFromLiveAuthProvider(isInTestFlight),
+    ])
 
 /**
  * Cached
@@ -183,11 +202,13 @@ const cachedAuthChain = (
     casDataCacheImpl = casDataCache,
     legacyCASExpiryCacheImpl = legacyCASExpiryCache,
     iapReceiptCacheImpl = iapReceiptCache,
+    isInTestFlight = getIsInTestFlight(),
 ) =>
     runAuthChain([
         cachedIdentityAuthProvider(userDataCacheImpl),
         cachedCasAuthProvider(casDataCacheImpl, legacyCASExpiryCacheImpl),
         cachedIAPAuthProvider(iapReceiptCacheImpl),
+        iapBetaFromLiveAuthProvider(isInTestFlight),
     ])
 
 export {
