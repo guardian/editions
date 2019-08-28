@@ -11,6 +11,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.guardian.editions.ophan.RNOphanPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             List<ReactPackage> packages = new PackageList(this).getPackages();
+            packages.add(new RNOphanPackage());
 
             // packages.add(new MainReactPackage());
             // packages.add(new RNDeviceInfo());

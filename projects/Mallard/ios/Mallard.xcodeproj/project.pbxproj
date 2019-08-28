@@ -20,31 +20,32 @@
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
 		5073D175FC076F04450602A9 /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1718C639A1EF002E7C79BB89 /* libPods-Mallard-tvOS.a */; };
+		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
 		C3AFA83DBB499222700C0947 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70480AB7A981F7550F9B8A02 /* libPods-Mallard.a */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
-		C549378022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378322B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378722B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378822B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378922B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378A22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378B22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378C22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378D22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378E22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549378F22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549379022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549379122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549379222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549379522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		C549379622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
 		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
 		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
@@ -135,6 +136,8 @@
 		90A50D1828ED405BB7AD9145 /* GuardianTextEgyptian-Reg.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-Reg.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-Reg.ttf"; sourceTree = "<group>"; };
 		92C66C5662CA467DB9BDFDCB /* GHGuardianHeadline-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-MediumItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-MediumItalic.ttf"; sourceTree = "<group>"; };
 		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
+		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
+		95CB9F1A2316B6E900F2F6B0 /* Ophan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ophan.h; sourceTree = "<group>"; };
 		A42333933FB2AE01A0EF24E2 /* libPods-MallardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MallardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		C51056C222D60C1700ED3078 /* crosswords.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = crosswords.bundle; path = ../html/crosswords.bundle; sourceTree = "<group>"; };
@@ -292,6 +295,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				95CB9F182316B6E900F2F6B0 /* Ophan */,
 				13B07FAE1A68108700A75B9A /* Mallard */,
 				00E356EF1AD99517003FC87E /* MallardTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -314,6 +318,16 @@
 				2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		95CB9F182316B6E900F2F6B0 /* Ophan */ = {
+			isa = PBXGroup;
+			children = (
+				95CB9F192316B6E900F2F6B0 /* Ophan.m */,
+				95CB9F1A2316B6E900F2F6B0 /* Ophan.h */,
+			);
+			name = Ophan;
+			path = Mallard/Ophan;
 			sourceTree = "<group>";
 		};
 		ABFED8DA2284261400DA41EA /* Recovered References */ = {
@@ -480,29 +494,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378122B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378222B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378322B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378422B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378522B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378622B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378722B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378822B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378922B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378A22B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378B22B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378C22B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378D22B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378E22B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549378F22B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549379022B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549379122B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549379222B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378022B149BB00B1D9A2 /* (null) in Resources */,
+				C549378122B149BB00B1D9A2 /* (null) in Resources */,
+				C549378222B149BB00B1D9A2 /* (null) in Resources */,
+				C549378322B149BB00B1D9A2 /* (null) in Resources */,
+				C549378422B149BB00B1D9A2 /* (null) in Resources */,
+				C549378522B149BB00B1D9A2 /* (null) in Resources */,
+				C549378622B149BB00B1D9A2 /* (null) in Resources */,
+				C549378722B149BB00B1D9A2 /* (null) in Resources */,
+				C549378822B149BB00B1D9A2 /* (null) in Resources */,
+				C549378922B149BB00B1D9A2 /* (null) in Resources */,
+				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
+				C549379022B149BB00B1D9A2 /* (null) in Resources */,
+				C549379122B149BB00B1D9A2 /* (null) in Resources */,
+				C549379222B149BB00B1D9A2 /* (null) in Resources */,
 				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549379522B149BB00B1D9A2 /* BuildFile in Resources */,
-				C549379622B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379422B149BB00B1D9A2 /* (null) in Resources */,
+				C549379522B149BB00B1D9A2 /* (null) in Resources */,
+				C549379622B149BB00B1D9A2 /* (null) in Resources */,
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
@@ -630,15 +644,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Mallard/Pods-Mallard-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageFilterKit/RNImageFilterKitBundle.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNImageFilterKitBundle.bundle",
 			);
@@ -706,6 +716,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
