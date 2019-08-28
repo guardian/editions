@@ -169,6 +169,8 @@ export const getCardsForFront = (
         case 'Food':
         case 'Review':
             return defaultLayout(FrontCardAppearance.splashPage, true)
+        case 'Sport':
+            return defaultLayout(1, true)
         default:
             return defaultLayout(1)
     }

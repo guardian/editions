@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { HeadlineCardText } from 'src/components/styled-text'
+import { HeadlineCardText, UiBodyCopy } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { ItemSizes, PageLayoutSizes } from '../helpers/helpers'
@@ -153,6 +153,40 @@ const RoundImageItem = ({
         </ItemTappable>
     )
 }
+const VisualImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
+    const [colors] = useArticle()
+    if (!article.image) {
+        return <SmallItem {...{ article, size, ...tappableProps }} />
+    }
+    return (
+        <ItemTappable {...tappableProps} {...{ article }}>
+            <View style={{ flexGrow: 1 }}>
+                <ImageResource
+                    style={[StyleSheet.absoluteFill]}
+                    image={article.image}
+                />
+                <View
+                    style={{
+                        position: 'absolute',
+                        backgroundColor: colors.main,
+                        top: '50%',
+                        right: '50%',
+                        left: 0,
+                        bottom: 0,
+                        ...tappablePadding,
+                    }}
+                >
+                    <TextBlock
+                        byline={article.byline}
+                        kicker={article.kicker}
+                        headline={article.headline}
+                        {...{ size }}
+                    />
+                </View>
+            </View>
+        </ItemTappable>
+    )
+}
 
 /*
 IMAGE SPLIT
@@ -265,4 +299,5 @@ export {
     SmallItem,
     SmallItemLargeText,
     CoverItem,
+    VisualImageItem,
 }

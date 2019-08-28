@@ -6,6 +6,7 @@ import {
     SplitImageItem,
     SmallItem,
     SmallItemLargeText,
+    VisualImageItem,
 } from '../items/items'
 import { FrontCardAppearance } from 'src/common'
 import { toRectangle } from 'src/helpers/sizes'
@@ -114,6 +115,27 @@ const threeStoryPage = (KeyItem = ImageItem): PageLayout => ({
             {
                 item: ImageItem,
                 fits: toRectangle(2, 2, 2, 1),
+            },
+        ],
+    },
+})
+
+const threeStoryPageBigPhoto = (KeyItem = ImageItem): PageLayout => ({
+    ...threeStoryPage(KeyItem),
+    [PageLayoutSizes.tablet]: {
+        size: PageLayoutSizes.tablet,
+        items: [
+            {
+                item: KeyItem,
+                fits: toRectangle(0, 0, 3, 3),
+            },
+            {
+                item: SmallItem,
+                fits: toRectangle(0, 3, 1, 1),
+            },
+            {
+                item: SplitImageItem,
+                fits: toRectangle(1, 3, 1, 3),
             },
         ],
     },
@@ -282,9 +304,9 @@ const layouts: { [key in FrontCardAppearance]: PageLayout } = {
     [FrontCardAppearance.splashPage]: splashPage,
     [FrontCardAppearance.superHeroPage]: superHeroPage,
     [FrontCardAppearance.twoStoryPage]: twoStoryPage(),
-    [FrontCardAppearance.visualTwoStoryPage]: twoStoryPage(SmallItem),
+    [FrontCardAppearance.visualTwoStoryPage]: twoStoryPage(VisualImageItem),
     [FrontCardAppearance.threeStoryPage]: threeStoryPage(),
-    [FrontCardAppearance.visualThreeStoryPage]: threeStoryPage(SmallItem),
+    [FrontCardAppearance.visualThreeStoryPage]: superHeroPage,
     [FrontCardAppearance.fourStoryPage]: fourStoryPage,
     [FrontCardAppearance.fiveStoryPage]: fiveStoryPage,
     [FrontCardAppearance.sixStoryPage]: sixStoryPage,
