@@ -6,10 +6,11 @@ PROJECTS = $(patsubst projects/%, %, $(patsubst %/package.json, %, $(wildcard pr
 #
 # install deps
 install: $(patsubst %, projects/%/node_modules, $(PROJECTS)) node_modules
-projects/%/node_modules: node_modules
-	@echo "\n Installing $@\n"
+projects/%/node_modules: projects/%/yarn.lock
+	@echo "\n👟 Installing $*\n"
 	cd $(dir $@) && ${YARN} ${YARNFLAGS}
-node_modules:
+node_modules: yarn.lock
+	@echo "\n👟 Installing project tools\n"
 	${YARN} ${YARNFLAGS}
 #
 # Build commands
@@ -22,25 +23,32 @@ test: $(patsubst %, test-%, $(PROJECTS))
 # Overrides
 #
 validate-Mallard: node_modules projects/Mallard/node_modules
+	@echo "\n👟 $@ 🦆\n"
 	yarn eslint 'projects/Mallard/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json
 	cd projects/Mallard && yarn tsc
 validate-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
-	@echo "Skip validation"
+	@echo "\n👟 $@ 🦆\n"
+	@echo "\nSkip validation\n"
 fix-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
-	@echo "Skip fix"
+	@echo "\n👟 $@ 🦆\n"
+	@echo "\nSkip fix\n"
 build-Mallard:
-	@echo "This is not yet handled by make"
+	@echo "\n👟 $@ 🦆\n"
+	@echo "\nThis is not yet handled by make\n"
 #
 # Project commands
 #
-validate-%: projects/%/node_modules
+validate-%: projects/%/node_modules node_modules
+	@echo "\n👟 $@ 🦆\n"
 	yarn eslint 'projects/$*/**/*.{ts,tsx}' --parser-options=project:./projects/$*/tsconfig.json
-fix-%: node_modules projects/%/node_modules
+fix-%: node_modules projects/%/node_modules node_modules
+	@echo "\n👟 $@ 🦆\n"
 	yarn eslint 'projects/$*/**/*.{ts,tsx}' --parser-options=project:./projects/$*/tsconfig.json --fix
 test-%: projects/%/node_modules
-	@echo "HELLO $^"
+	@echo "\n👟 $@ 🦆\n"
 	cd projects/$* && yarn test
 build-%: projects/%/node_modules
+	@echo "\n👟 $@ 🦆\n"
 	cd projects/$* && yarn build
 #
 # Misc
@@ -48,5 +56,7 @@ build-%: projects/%/node_modules
 list:
 	@echo  $(PROJECTS)
 clean:
+	@echo "\n🗑 cleaning\n"
 	rm -rf projects/*/node_modules
 	rm -rf node_modules
+	rm projects/aws/bin/*.js projects/aws/bin/*.d.ts projects/aws/lib/*.js projects/aws/lib/*.d.ts
