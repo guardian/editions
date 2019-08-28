@@ -32,6 +32,7 @@ export const elementParser = (
                         cleanupHtml(element.imageTypeData.caption),
                     copyright: element.imageTypeData.copyright,
                     credit: element.imageTypeData.credit,
+                    role: element.imageTypeData.role,
                 }
             }
             console.warn(`Image element missing element data.`)
