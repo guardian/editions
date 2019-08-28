@@ -101,8 +101,8 @@ const articleScreenMotion = ({
     const scaler = getScaleForArticle(width)
 
     const scale = position.interpolate({
-        inputRange: safeInterpolation([0, 1]),
-        outputRange: safeInterpolation([scaler, 1]),
+        inputRange: safeInterpolation([0, 1, 10]),
+        outputRange: safeInterpolation([scaler, 1, 1.25]),
     })
 
     /*
@@ -112,8 +112,12 @@ const articleScreenMotion = ({
     const distanceFromVCenter = y - windowHeight / 2
     const d = (windowHeight / 2) * scaler + distanceFromVCenter
     const translateY = position.interpolate({
-        inputRange: safeInterpolation([0, 1]),
-        outputRange: safeInterpolation([d, metrics.slideCardSpacing]),
+        inputRange: safeInterpolation([0, 1, 10]),
+        outputRange: safeInterpolation([
+            d,
+            metrics.slideCardSpacing,
+            metrics.slideCardSpacing * 1.5,
+        ]),
     })
 
     /*
@@ -122,8 +126,8 @@ const articleScreenMotion = ({
         */
     const distanceFromCentre = width / 2 + x - windowWidth / 2
     const translateX = position.interpolate({
-        inputRange: safeInterpolation([0, 1]),
-        outputRange: safeInterpolation([distanceFromCentre, 0]),
+        inputRange: safeInterpolation([0, 1, 10]),
+        outputRange: safeInterpolation([distanceFromCentre, 0, 0]),
     })
 
     const transform = [{ translateX }, { translateY }, { scale }]
