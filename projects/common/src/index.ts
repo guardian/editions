@@ -21,6 +21,7 @@ export enum ArticleType {
     Opinion = 'opinion',
     Series = 'series',
     Interview = 'interview',
+    Cartoon = 'cartoon',
     Analysis = 'analysis',
     Obituary = 'obituary',
     MatchResult = 'matchresult',

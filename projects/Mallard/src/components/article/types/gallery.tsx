@@ -1,29 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import { GalleryArticle, ImageElement, Image as ImageType } from 'src/common'
+import React, { useEffect, useState } from 'react'
 import {
-    View,
-    Text,
     Image,
+    ImageStyle,
     StyleProp,
     StyleSheet,
-    ImageStyle,
+    Text,
     TextStyle,
+    View,
 } from 'react-native'
+import { GalleryArticle, Image as ImageType, ImageElement } from 'src/common'
+import { BigArrow, BigArrowDirection } from 'src/components/icons/BigArrow'
+import { UiBodyCopy } from 'src/components/styled-text'
+import { useArticle } from 'src/hooks/use-article'
+import { APIPaths, imagePath } from 'src/paths'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import {
-    UiBodyCopy,
-    HeadlineText,
-    StandfirstText,
-} from 'src/components/styled-text'
-import { APIPaths, imagePath } from 'src/paths'
-import { MultilineWrap } from '../wrap/multiline-wrap'
-import { ArticleByline } from '../article-byline'
 import { getFont } from 'src/theme/typography'
-import { useArticle } from 'src/hooks/use-article'
-import { BigArrow, BigArrowDirection } from 'src/components/icons/BigArrow'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { ArticleStandfirst } from '../article-standfirst'
+import {
+    GalleryHeader,
+    GalleryHeaderProps,
+} from '../article-header/gallery-header'
 import { Wrap } from '../wrap/wrap'
 
 const galleryImageStyles = StyleSheet.create({
@@ -150,14 +147,9 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
 
 const GalleryCoverItem = ({
     element,
-    headline,
-    byline,
-    standfirst,
-}: {
+    ...props
+}: GalleryHeaderProps & {
     element?: ImageType
-    headline: GalleryArticle['headline']
-    byline: GalleryArticle['byline']
-    standfirst: GalleryArticle['standfirst']
 }) => {
     return (
         <>
@@ -170,38 +162,7 @@ const GalleryCoverItem = ({
                 />
             )}
 
-            <MultilineWrap
-                byline={
-                    <ArticleByline style={styles.whiteText}>
-                        {byline || ''}
-                    </ArticleByline>
-                }
-                borderColor={styles.whiteText.color}
-                multilineColor={styles.whiteText.color}
-            >
-                <View style={{ paddingBottom: metrics.vertical * 2 }}>
-                    <HeadlineText
-                        style={[
-                            styles.whiteText,
-                            {
-                                fontFamily: getFont('titlepiece', 1).fontFamily,
-                                marginTop: metrics.vertical,
-                                marginBottom: metrics.vertical * 2,
-                                marginRight: metrics.horizontal * 4,
-                            },
-                        ]}
-                        weight="bold"
-                    >
-                        {headline}
-                    </HeadlineText>
-                    {standfirst && (
-                        <ArticleStandfirst
-                            standfirst={standfirst}
-                            textStyle={styles.whiteText}
-                        ></ArticleStandfirst>
-                    )}
-                </View>
-            </MultilineWrap>
+            <GalleryHeader {...props} />
         </>
     )
 }
@@ -237,4 +198,4 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
     )
 }
 
-export { Gallery }
+export { Gallery, GalleryHeader }
