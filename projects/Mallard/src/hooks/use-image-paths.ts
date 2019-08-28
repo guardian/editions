@@ -32,7 +32,7 @@ const useImagePath = (image: Image) => {
 
     useEffect(() => {
         selectImagePath(issueId || 'issue', image).then(setPaths)
-    }, [])
+    }, [image, issueId])
 
     return paths
 }

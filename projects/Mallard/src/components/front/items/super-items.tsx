@@ -13,9 +13,13 @@ import {
     toPercentage,
 } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
-import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
-import { TextBlock } from './base/text-block'
-import { Standfirst } from './base/standfirst'
+import {
+    ItemTappable,
+    PropTypes,
+    tappablePadding,
+} from './helpers/item-tappable'
+import { TextBlock } from './helpers/text-block'
+import { Standfirst } from './helpers/standfirst'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -42,12 +46,7 @@ const superHeroImageStyles = StyleSheet.create({
     },
 })
 
-const NormalSuper = ({
-    article,
-    issueID,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             {'image' in article && article.image ? (
@@ -63,7 +62,44 @@ const NormalSuper = ({
                 headline={article.headline}
                 {...{ size }}
             />
-            {'trail' in article && article.trail ? (
+            <Standfirst
+                style={[
+                    superHeroImageStyles.textStandBlock,
+                    size.layout === PageLayoutSizes.tablet && {
+                        width: '80%',
+                    },
+                ]}
+            >
+                {article.trail}
+            </Standfirst>
+        </ItemTappable>
+    )
+}
+
+const sportSuperStyles = StyleSheet.create({
+    card: {
+        backgroundColor: color.palette.highlight.main,
+        flexGrow: 1,
+    },
+})
+const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
+    return (
+        <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
+            {'image' in article && article.image ? (
+                <ImageResource
+                    style={[superHeroImageStyles.image]}
+                    image={article.image}
+                />
+            ) : null}
+            <View style={sportSuperStyles.card}>
+                <TextBlock
+                    byline={article.byline}
+                    style={[superHeroImageStyles.textBlock]}
+                    kicker={article.kicker}
+                    headline={article.headline}
+                    monotone
+                    {...{ size }}
+                />
                 <Standfirst
                     style={[
                         superHeroImageStyles.textStandBlock,
@@ -74,7 +110,7 @@ const NormalSuper = ({
                 >
                     {article.trail}
                 </Standfirst>
-            ) : null}
+            </View>
         </ItemTappable>
     )
 }
@@ -188,6 +224,9 @@ const SuperHeroImageItem = (props: PropTypes) => {
     const [, { pillar }] = useArticle()
     if (pillar === 'opinion') {
         return <OpinionSuper {...props} />
+    }
+    if (pillar === 'sport') {
+        return <SportSuper {...props} />
     }
     return <NormalSuper {...props} />
 }

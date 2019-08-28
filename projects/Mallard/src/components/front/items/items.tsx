@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { HeadlineCardText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
@@ -9,10 +9,15 @@ import {
     getPageLayoutSizeXY,
 } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
-import { ItemTappable, PropTypes, tappablePadding } from './base/item-tappable'
-import { TextBlock } from './base/text-block'
+import {
+    ItemTappable,
+    PropTypes,
+    tappablePadding,
+} from './helpers/item-tappable'
+import { TextBlock } from './helpers/text-block'
 import { SuperHeroImageItem } from './super-items'
-import { Standfirst } from './base/standfirst'
+import { Standfirst } from './helpers/standfirst'
+import { SportItemBackground } from './helpers/sports'
 
 /*
 helpers
@@ -42,9 +47,13 @@ export const isSmallItem = (size: ItemSizes) => {
     return size.story.width <= 1
 }
 
-export const isFullheightItem = (size: ItemSizes) => {
+export const isFullHeightItem = (size: ItemSizes) => {
     const { height: pageHeight } = getPageLayoutSizeXY(size.layout)
     return size.story.height >= pageHeight
+}
+export const isFullWidthItem = (size: ItemSizes) => {
+    const { width } = getPageLayoutSizeXY(size.layout)
+    return size.story.width >= width
 }
 
 /*
@@ -81,7 +90,6 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     byline={article.byline}
                     kicker={article.kicker}
                     headline={article.headline}
-                    textBlockAppearance={'pillarColor'}
                     style={coverStyles.text}
                     {...{ size }}
                 />
@@ -135,14 +143,28 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
                     image={article.image}
                 />
             ) : null}
-            <TextBlock
-                byline={article.byline}
-                style={imageStyles.textBlock}
-                kicker={article.kicker}
-                headline={article.headline}
-                {...{ size }}
-            />
-            {isFullheightItem(size) && (
+            {pillar === 'sport' && isFullWidthItem(size) ? (
+                <SportItemBackground
+                    style={{
+                        paddingHorizontal: tappablePadding.padding,
+                        marginBottom: tappablePadding.paddingVertical,
+                    }}
+                >
+                    <TextBlock
+                        style={imageStyles.textBlock}
+                        size={size}
+                        monotone={true}
+                        {...article}
+                    />
+                </SportItemBackground>
+            ) : (
+                <TextBlock
+                    style={imageStyles.textBlock}
+                    size={size}
+                    {...article}
+                />
+            )}
+            {isFullHeightItem(size) && (
                 <Standfirst style={imageStyles.standfirst}>
                     {article.trail}
                 </Standfirst>

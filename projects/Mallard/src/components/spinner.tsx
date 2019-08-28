@@ -72,7 +72,8 @@ const Spinner = () => {
     ])
     useEffect(() => {
         Animated.parallel(jumps.map((j, i) => animateJumps(j, i))).start()
-    }, [])
+    }, []) //eslint-ignore-line react-hooks/exhaustive-deps
+    // Ignored linter rule because we don't want to interfere with the animation
     return (
         <View accessibilityLabel={'Loading content'}>
             <View {...ariaHidden} style={styles.container}>

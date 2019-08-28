@@ -173,6 +173,7 @@ export interface ImageElement {
     caption?: string
     copyright?: string
     credit?: string
+    role?: string
 }
 export interface TweetElement {
     id: 'tweet'
