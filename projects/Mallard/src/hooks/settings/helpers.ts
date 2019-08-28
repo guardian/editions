@@ -60,13 +60,12 @@ const createSingleSettingHook = (key: keyof Settings) => () => {
 const applyExtractSettings = <E extends keyof Settings>(
     extractSettings: (E)[],
 ) => {
-    //eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
-    let extractedGetterHooks = {} as {
+    const extractedGetterHooks = {} as {
         [key in typeof extractSettings[number]]: () => Settings[key]
     }
-    let providers = []
+    const providers = []
 
-    for (let setting of extractSettings) {
+    for (const setting of extractSettings) {
         const { Provider, useAsGetterHook } = createProviderFromHook(
             createSingleSettingHook(setting),
         )

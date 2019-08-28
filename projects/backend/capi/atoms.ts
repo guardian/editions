@@ -42,7 +42,7 @@ const renderAtom = async (
     atomType: string,
     atomId: string,
 ): Promise<{ html?: string; css: string[]; js: string[] }> => {
-    let resp = await lambda
+    const resp = await lambda
         .invoke({
             FunctionName: process.env.atomArn || `editions-atom-renderer-CODE`,
             Payload: JSON.stringify({

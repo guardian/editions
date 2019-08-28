@@ -191,7 +191,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
 }
 
 const Weather = () => {
-    let weatherResponse = useWeatherResponse()
+    const weatherResponse = useWeatherResponse()
 
     return weatherResponse({
         error: ({}) => <></>,

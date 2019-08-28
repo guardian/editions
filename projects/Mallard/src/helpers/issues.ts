@@ -55,11 +55,9 @@ const dateToFolderConvert = (date: Date): string => {
 export const todayAsFolder = (): string => dateToFolderConvert(new Date())
 
 export const lastSevenDays = (): string[] => {
-    var result = []
-    for (var i = 0; i < 7; i++) {
-        var d = new Date()
+    return Array.from({ length: 7 }, (_, i) => {
+        const d = new Date()
         d.setDate(d.getDate() - i)
-        result.push(dateToFolderConvert(d))
-    }
-    return result
+        return dateToFolderConvert(d)
+    })
 }

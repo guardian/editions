@@ -92,7 +92,7 @@ export const getTranslateForPage = (
     width: number,
     scrollX: Animated.Value,
     page: number,
-    multiplier: number = 1,
+    multiplier = 1,
 ) => {
     return scrollX.interpolate({
         inputRange: safeInterpolation([
