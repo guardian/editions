@@ -1,27 +1,16 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { currentInsets } from '@delightfulstudio/react-native-safe-area-insets'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { Dimensions, ScaledSize } from 'react-native'
 
-let cbs: DimensionCallback[] = []
-type DimensionCallback = (size: ScaledSize) => void
-
-const useDimensions = (): ScaledSize & {
-    onUpdate: (cb: DimensionCallback) => void
-} => {
+const useDimensions = (): ScaledSize => {
     const [dimensions, setDimensions] = useState(Dimensions.get('window'))
-    const onUpdate = useRef((cb: DimensionCallback) => {
-        cbs.push(cb)
-    })
     useEffect(() => {
         const listener = (
             ev: Parameters<
                 Parameters<typeof Dimensions.addEventListener>[1]
             >[0],
         ) => {
-            for (const cb of cbs) {
-                cb(ev.window)
-            }
             setDimensions(ev.window)
         }
         Dimensions.addEventListener('change', listener)
@@ -30,7 +19,7 @@ const useDimensions = (): ScaledSize & {
         }
     }, [])
 
-    return { ...dimensions, onUpdate: onUpdate.current }
+    return dimensions
 }
 
 const useMediaQuery = (condition: (width: number) => boolean): boolean => {

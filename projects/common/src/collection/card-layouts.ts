@@ -77,11 +77,11 @@ const defaultLayout = (
     visual = false,
 ): FrontCardsForArticleCount => {
     const [twoStories, threeStories] = visual
-        ? [2 as FrontCardAppearanceShort, 3 as FrontCardAppearanceShort]
-        : [
+        ? [
               FrontCardAppearance.twoStoryPageWithSidekick,
               FrontCardAppearance.threeStoryPageWithSidekick,
           ]
+        : [2 as FrontCardAppearanceShort, 3 as FrontCardAppearanceShort]
 
     return {
         0: [],
@@ -118,11 +118,11 @@ const thirdPageCoverLayout = (
     visual = false,
 ): FrontCardsForArticleCount => {
     const [twoStories, threeStories] = visual
-        ? [2 as FrontCardAppearanceShort, 3 as FrontCardAppearanceShort]
-        : [
+        ? [
               FrontCardAppearance.twoStoryPageWithSidekick,
               FrontCardAppearance.threeStoryPageWithSidekick,
           ]
+        : [2 as FrontCardAppearanceShort, 3 as FrontCardAppearanceShort]
 
     return {
         0: [],

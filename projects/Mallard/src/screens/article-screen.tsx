@@ -17,7 +17,7 @@ import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
-import { View, Alert } from 'react-native'
+import { View } from 'react-native'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -68,23 +68,25 @@ const ArticleScreenWithProps = ({
     const viewRef = useRef<View>()
     const { width, onUpdate } = useDimensions()
     useEffect(() => {
-        /* blank out the screen while it relayouts */
-        onUpdate(sz => {
-            if (viewRef.current) {
-                viewRef.current.setNativeProps({ opacity: 0 })
-                setTimeout(() => {
-                    viewRef.current &&
-                        viewRef.current.setNativeProps({ opacity: 1 })
-                }, 1200)
-            }
-        })
-    }, [])
+        if (firstUpdate.current) {
+            firstUpdate.current = false
+            return
+        }
+        if (viewRef.current) {
+            viewRef.current.setNativeProps({ opacity: 0 })
+            setTimeout(() => {
+                viewRef.current &&
+                    viewRef.current.setNativeProps({ opacity: 1 })
+            }, 600)
+        }
+    }, [width])
     return (
         <ArticleScreenLoginOverlay navigation={navigation}>
             <View
                 ref={r => {
                     if (r) viewRef.current = r
                 }}
+                removeClippedSubviews
             >
                 {prefersFullScreen ? (
                     <ArticleScreenBody
