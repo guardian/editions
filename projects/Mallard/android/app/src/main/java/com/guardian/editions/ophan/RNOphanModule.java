@@ -4,7 +4,6 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.gu.ophan.FileRecordStore;
 
 import java.io.File;
 import java.util.UUID;
@@ -28,7 +27,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
                 "testDeviceId",
                 "testUserId",
                 new LogcatLogger(),
-                new FileRecordStore(recordStoreDir.getAbsolutePath())
+                recordStoreDir.getAbsolutePath()
         );
     }
 

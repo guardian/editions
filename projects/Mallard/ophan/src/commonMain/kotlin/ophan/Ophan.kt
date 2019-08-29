@@ -1,8 +1,8 @@
 package ophan
 
+import com.gu.ophan.FileRecordStore
 import com.gu.ophan.Logger
 import com.gu.ophan.OphanDispatcher
-import com.gu.ophan.RecordStore
 import ophan.thrift.componentEvent.Action
 import ophan.thrift.componentEvent.ComponentEvent
 import ophan.thrift.componentEvent.ComponentType
@@ -23,14 +23,14 @@ class OphanApi(
             deviceId: String,
             userId: String,
             logger: Logger,
-            recordStore: RecordStore
+            recordStorePath: String
     ) : this(OphanDispatcher(
             App(appVersion, "TestEditions", appOs, Edition.UK),
             Device(deviceName, deviceManufacturer),
             deviceId,
             userId,
             logger,
-            recordStore
+            FileRecordStore(recordStorePath)
     ))
 
     fun sendTestAppScreenEvent(screenName: String, eventId: String) {
