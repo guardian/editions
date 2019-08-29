@@ -141,7 +141,7 @@ export const archiverStepFunction = (
         },
     )
 
-    const eventTask = new sfn.Task(scope, 'Send Event', {
+    const eventTask = new sfn.Task(scope, 'Send SNS Message to Fronts Tool', {
         task: new tasks.InvokeFunction(event),
     })
     ;[issueTask, frontTask, imageTask, uploadTask, zipTask, indexerTask].map(
