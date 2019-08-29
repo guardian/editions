@@ -298,8 +298,6 @@ export const frontPath = (issueId: string, frontId: string) =>
 
 export const issueSummaryPath = () => 'issues'
 
-export const cacheClearPath = () => 'cache-wipe'
-
 export interface Image {
     source: string
     path: string

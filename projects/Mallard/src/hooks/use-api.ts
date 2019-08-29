@@ -31,11 +31,3 @@ export const getLatestIssue = () => {
 }
 export const useLatestIssue = () =>
     withResponse<Issue>(useCachedOrPromise(getLatestIssue()))
-
-export const getClearCache = () =>
-    fetchFromApi(cacheClearPath(), {
-        cached: false,
-    })
-
-export const useClearCache = () =>
-    withResponse(useCachedOrPromise(getClearCache()))

@@ -21,6 +21,7 @@ import {
 } from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
+import { fetchCacheClear } from './helpers/fetch'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -28,7 +29,11 @@ useScreens()
 prepFileSystem()
 pushNotifcationRegistration()
 clearOldIssues()
-downloadTodaysIssue()
+fetchCacheClear().then(weOk => {
+    if (weOk) {
+        downloadTodaysIssue()
+    }
+})
 
 const styles = StyleSheet.create({
     appContainer: {

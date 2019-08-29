@@ -1,4 +1,5 @@
 import { Platform } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
 import {
@@ -9,7 +10,7 @@ import {
     CachedOrPromise,
     createCachedOrPromise,
 } from './fetch/cached-or-promise'
-import { getJson, isIssueOnDevice } from './files'
+import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
 import { Issue } from 'src/common'
 import { defaultSettings } from './settings/defaults'
 
@@ -187,6 +188,32 @@ const fetchWeather = <T>(
             savePromiseResultToValue: result => store(endpointPath, result),
         },
     )
+}
+
+export const fetchCacheClear = async (): Promise<boolean> => {
+    const asyncItem = '@cacheClear'
+    try {
+        const response = await fetch(defaultSettings.cacheClearUrl)
+        const cacheNumber = await response.json()
+        const cacheNumberStorage = await AsyncStorage.getItem(asyncItem)
+        if (cacheNumberStorage === null) {
+            // No data, so store it
+            await AsyncStorage.setItem(asyncItem, cacheNumber.cacheClear)
+            return true
+        }
+
+        if (cacheNumberStorage !== cacheNumber.cacheClear) {
+            // DELETE EVERYTHING - Currently downloaded issues and stored cace
+            await deleteIssueFiles()
+            await AsyncStorage.clear()
+            return false
+        }
+
+        return true
+    } catch (e) {
+        console.log(e)
+        return false
+    }
 }
 
 const fetchFromNotificationService = async (deviceToken: { token: string }) => {
