@@ -1,25 +1,35 @@
 package com.guardian.editions.ophan;
 
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Promise;
+import com.gu.ophan.FileRecordStore;
 
-import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import ophan.OphanApi;
-import ophan.OphanKt;
-import com.gu.ophan.InMemoryRecordStore;
 
 class RNOphanModule extends ReactContextBaseJavaModule {
 
-    private OphanApi ophanApi = new OphanApi("0.0.1", "Android", "Unknown", "Unknown", "testDeviceId", "testUserId",
-            new LogcatLogger(), new InMemoryRecordStore());
+    private final OphanApi ophanApi;
 
     public RNOphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
+        final File recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
+        ophanApi = new OphanApi(
+                "0.0.1",
+                "Android",
+                "Unknown",
+                "Unknown",
+                "testDeviceId",
+                "testUserId",
+                new LogcatLogger(),
+                new FileRecordStore(recordStoreDir.getAbsolutePath())
+        );
     }
 
     @Nonnull
