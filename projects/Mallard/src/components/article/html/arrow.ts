@@ -8,6 +8,7 @@ const Arrow = ({ fill = color.text, direction = Direction.top } = {}) => html`
         width="11"
         height="9"
         role="img"
+        aria-hidden="true"
         viewBox="0 0 11 9"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
