@@ -10,8 +10,6 @@
 
 @interface RCT_EXTERN_MODULE(Ophan, NSObject)
 
-RCT_EXTERN_METHOD(getGreeting: (RCTResponseSenderBlock)callback)
-
 RCT_EXTERN_METHOD(sendTestAppScreenEvent: (NSString)screenName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject

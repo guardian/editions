@@ -1,5 +1,5 @@
 //
-//  Greeting.swift
+//  Ophan.swift
 //  RnAppWithKotlin
 //
 //  Created by Max Spencer on 26/06/2019.
@@ -30,11 +30,6 @@ class Ophan: NSObject {
   
   deinit {
     print("Deinitialising Ophan instance on thread \(Thread.current)")
-  }
-  
-  @objc(getGreeting:)
-  func getGreeting(_ callback: RCTResponseSenderBlock) -> Void {
-    callback([OphanKt.hello()])
   }
   
   @objc(sendTestAppScreenEvent:resolver:rejecter:)

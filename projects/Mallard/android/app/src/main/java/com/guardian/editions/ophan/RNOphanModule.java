@@ -29,12 +29,6 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getGreeting(Callback callback) {
-        String kotlinGreeting = OphanKt.hello();
-        callback.invoke(kotlinGreeting);
-    }
-
-    @ReactMethod
     public void sendTestAppScreenEvent(String screenName, Promise promise) {
         try {
             ophanApi.sendTestAppScreenEvent(screenName, UUID.randomUUID().toString());

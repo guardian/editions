@@ -4,7 +4,7 @@
 
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
-import { NativeModules, StatusBar, StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
 import { FileSystemProvider } from 'src/hooks/use-fs'
 import { SettingsProvider } from 'src/hooks/use-settings'
@@ -87,9 +87,6 @@ export default class App extends React.Component<{}, {}> {
      * re-renders when we're good to go.
      */
     render() {
-        NativeModules.Ophan.getGreeting((greeting: string) =>
-            console.log(greeting),
-        )
         return (
             <ErrorBoundary>
                 <WithProviders>
