@@ -144,7 +144,9 @@ export const archiverStepFunction = (
     const eventTask = new sfn.Task(scope, 'Send Event', {
         task: new tasks.InvokeFunction(event),
     })
-
+    ;[issueTask, frontTask, imageTask, uploadTask, zipTask, indexerTask].map(
+        (task: sfn.Task) => task.addCatch(eventTask, { resultPath: '$.error' }),
+    )
     //Fetch issue metadata
     issueTask.next(frontTask)
 
