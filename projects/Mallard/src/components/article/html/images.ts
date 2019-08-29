@@ -91,7 +91,8 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
 
         .image[data-role='supporting'] figcaption {
             width: ${px(wrapLayout.rail.contentWidth)};
-            float: right;
+            position: absolute;
+            right: 0;
         }
     }
 
