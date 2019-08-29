@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_FATAL_ERROR } from 'src/helpers/words'
+import {} from 'react-native-sentry'
+import { errorService } from 'src/services/errors'
 
 class ErrorBoundary extends Component<
     {},
@@ -15,8 +17,8 @@ class ErrorBoundary extends Component<
         return { hasError: true, message: JSON.stringify(error) }
     }
 
-    componentDidCatch() {
-        //@TODO: Log this to sentry or w/e
+    componentDidCatch(err: Error) {
+        errorService.captureException(err)
     }
 
     render() {
