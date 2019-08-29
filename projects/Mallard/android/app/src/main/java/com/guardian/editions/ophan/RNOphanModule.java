@@ -7,14 +7,16 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 import ophan.OphanApi;
 import ophan.OphanKt;
+import com.gu.ophan.InMemoryRecordStore;
 
 class RNOphanModule extends ReactContextBaseJavaModule {
 
     private OphanApi ophanApi = new OphanApi("0.0.1", "Android", "Unknown", "Unknown", "testDeviceId", "testUserId",
-            new LogcatLogger(), "ophan");
+            new LogcatLogger(), new InMemoryRecordStore());
 
     public RNOphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
@@ -33,9 +35,9 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendTestAppScreenEvent(String screenName, String eventId, Promise promise) {
+    public void sendTestAppScreenEvent(String screenName, Promise promise) {
         try {
-            ophanApi.sendTestAppScreenEvent(screenName, "JAMES");
+            ophanApi.sendTestAppScreenEvent(screenName, UUID.randomUUID().toString());
             promise.resolve(screenName);
         } catch (Throwable e) {
             promise.reject(e);
