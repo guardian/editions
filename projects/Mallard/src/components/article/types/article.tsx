@@ -27,10 +27,7 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
     webviewWrap: {
-        position: 'absolute',
-        left: -metrics.article.sides,
-        top: 0,
-        bottom: 0,
+        ...StyleSheet.absoluteFillObject,
     },
     webview: {
         backgroundColor: 'transparent',
@@ -53,23 +50,15 @@ const ArticleWebview = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
 
-    const html = useMemo(
-        () => render(article, { pillar, features, wrapLayout }),
-        [wrapLayout.width], // eslint-disable-line react-hooks/exhaustive-deps
-    )
+    const html = render(article, { pillar, features, wrapLayout })
 
     return (
         <>
-            <View style={{ minHeight: height }}></View>
+            <Wrap>
+                <View style={{ minHeight: height }}></View>
+            </Wrap>
 
-            <View
-                style={[
-                    styles.webviewWrap,
-                    {
-                        width: wrapLayout.width + metrics.article.sides * 2,
-                    },
-                ]}
-            >
+            <View style={[styles.webviewWrap]}>
                 <WebView
                     originWhitelist={['*']}
                     scrollEnabled={false}
@@ -118,14 +107,11 @@ const Article = ({
         <>
             <ArticleHeader {...headerProps} type={type} />
             <Fader>
-                <Wrap onWrapLayout={setWrapLayout}>
-                    {wrapLayout && (
-                        <ArticleWebview
-                            article={article}
-                            wrapLayout={wrapLayout}
-                        />
-                    )}
-                </Wrap>
+                {wrapLayout && (
+                    <ArticleWebview article={article} wrapLayout={wrapLayout} />
+                )}
+
+                <Wrap onWrapLayout={setWrapLayout}></Wrap>
             </Fader>
         </>
     )

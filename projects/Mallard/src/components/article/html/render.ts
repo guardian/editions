@@ -1,13 +1,10 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import {
     ArticleFeatures,
     ArticlePillar,
     BlockElement,
-    ImageElement,
     MediaAtomElement,
 } from 'src/common'
 import { getPillarColors } from 'src/hooks/use-article'
-import { imagePath } from 'src/paths'
 import { metrics } from 'src/theme/spacing'
 import {
     css,
@@ -17,10 +14,10 @@ import {
     html,
     makeHtml,
     px,
-} from '../../../helpers/webview'
+} from 'src/helpers/webview'
 import { WrapLayout } from '../wrap/wrap'
-import { Image, imageStyles } from './images'
 import { CssProps } from './helpers/props'
+import { Image, imageStyles } from './images'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -31,6 +28,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
     .drop-cap p:first-child:first-letter {
         font-family: 'GHGuardianHeadline-Regular';
@@ -48,14 +46,17 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         font-family: 'GuardianTextEgyptian-Reg';
     }
     #app {
-        padding: ${metrics.vertical}px ${metrics.article.sides}px;
-        float: left;
-        width: ${wrapLayout.content.width}px;
-        padding: 0 {metrics.article.sides}px
+        padding: ${px(metrics.vertical)} ${px(metrics.article.sides)};
+        width: ${px(wrapLayout.width + metrics.article.sides * 2)};
+        margin: auto;
+        position: relative;
+    }
+    main {
+        width: ${px(wrapLayout.content.width)};
     }
     #app p,
     figure {
-        margin-bottom: ${metrics.vertical * 2}px;
+        margin-bottom: ${px(metrics.vertical * 2)};
     }
     #app a {
         color: ${colors.main};
@@ -64,14 +65,6 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     * {
         margin: 0;
         padding: 0;
-    }
-    .img-fill {
-        width: ${wrapLayout.width}px
-    }
-    .img-side {
-        float: right;
-        width: ${wrapLayout.rail.width}px;
-        margin-right: -${wrapLayout.width - wrapLayout.content.width}px
     }
     ${imageStyles({ colors, wrapLayout })}
 `
@@ -102,7 +95,7 @@ export const render = (
         wrapLayout: WrapLayout
     },
 ) => {
-    const body = article
+    const content = article
         .filter(
             el =>
                 el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
@@ -132,5 +125,8 @@ export const render = (
         .join('')
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
+    const body = html`
+        <main>${content}</main>
+    `
     return makeHtml({ styles, body })
 }

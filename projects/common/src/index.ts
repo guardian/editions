@@ -167,6 +167,9 @@ export interface HTMLElement {
     id: 'html'
     html: string
 }
+
+type ImageRoles = 'supporting' | 'immersive' | 'showcase' | 'thumbnail' | string
+
 export interface ImageElement {
     id: 'image'
     src: Image
@@ -174,7 +177,7 @@ export interface ImageElement {
     caption?: string
     copyright?: string
     credit?: string
-    role?: string
+    role?: ImageRoles
 }
 export interface TweetElement {
     id: 'tweet'

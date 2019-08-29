@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useRef } from 'react'
 import { NavigationScreenProp } from 'react-navigation'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
@@ -17,6 +17,7 @@ import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
+import { View, Alert } from 'react-native'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -63,23 +64,43 @@ const ArticleScreenWithProps = ({
         navigation: NavigationScreenProp<{}, ArticleNavigationProps>
     }) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
-    const { width } = useDimensions()
+    const firstUpdate = useRef(true)
+    const viewRef = useRef<View>()
+    const { width, onUpdate } = useDimensions()
+    useEffect(() => {
+        /* blank out the screen while it relayouts */
+        onUpdate(sz => {
+            if (viewRef.current) {
+                viewRef.current.setNativeProps({ opacity: 0 })
+                setTimeout(() => {
+                    viewRef.current &&
+                        viewRef.current.setNativeProps({ opacity: 1 })
+                }, 1200)
+            }
+        })
+    }, [])
     return (
         <ArticleScreenLoginOverlay navigation={navigation}>
-            {prefersFullScreen ? (
-                <ArticleScreenBody
-                    path={path}
-                    width={width}
-                    pillar={pillar}
-                    onTopPositionChange={() => {}}
-                />
-            ) : (
-                <ArticleSlider
-                    path={path}
-                    articleNavigator={articleNavigator}
-                    onDismissStateChanged={onDismissStateChanged}
-                />
-            )}
+            <View
+                ref={r => {
+                    if (r) viewRef.current = r
+                }}
+            >
+                {prefersFullScreen ? (
+                    <ArticleScreenBody
+                        path={path}
+                        width={width}
+                        pillar={pillar}
+                        onTopPositionChange={() => {}}
+                    />
+                ) : (
+                    <ArticleSlider
+                        path={path}
+                        articleNavigator={articleNavigator}
+                        onDismissStateChanged={onDismissStateChanged}
+                    />
+                )}
+            </View>
         </ArticleScreenLoginOverlay>
     )
 }
