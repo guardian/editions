@@ -158,7 +158,6 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
-
     return (
         <Container>
             {response({
