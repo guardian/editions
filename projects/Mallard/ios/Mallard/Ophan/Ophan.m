@@ -1,20 +1,15 @@
 //
 //  Ophan.m
+//  RnAppWithKotlin
 //
 //  Created by Max Spencer on 25/06/2019.
 //  Copyright © 2019 Facebook. All rights reserved.
 //
 
- #import <Foundation/Foundation.h>
-#import <ophan/ophan.h>
-#import "Ophan.h"
+#import <React/RCTBridgeModule.h>
 
- @implementation Ophan
+@interface RCT_EXTERN_MODULE(Ophan, NSObject)
 
- RCT_EXPORT_MODULE();
+RCT_EXTERN_METHOD(getGreeting: (RCTResponseSenderBlock)callback)
 
- RCT_EXPORT_METHOD(getGreeting: (RCTResponseSenderBlock)callback){
-  callback(@[[OphanOphanKt hello]]);
-}
-
- @end
+@end

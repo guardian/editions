@@ -166,13 +166,13 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
 
-    const james = NativeModules.Ophan.sendTestAppScreenEvent(
-        'issue_front',
-        'JAMES',
-    ) //, track)
-    james
-        .then((result: any) => console.log(result))
-        .catch((e: any) => console.error(e))
+    // const james = NativeModules.Ophan.sendTestAppScreenEvent(
+    //     'issue_front',
+    //     'JAMES',
+    // ) //, track)
+    // james
+    //     .then((result: any) => console.log(result))
+    //     .catch((e: any) => console.error(e))
 
     return (
         <Container>
