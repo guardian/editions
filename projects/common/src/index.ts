@@ -29,6 +29,7 @@ export enum ArticleType {
     Gallery = 'gallery',
     Feature = 'feature',
     Immersive = 'immersive',
+    Cartoon = 'cartoon',
 }
 
 export enum ArticleFeatures {
