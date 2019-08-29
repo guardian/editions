@@ -1,5 +1,12 @@
 import React, { ReactElement } from 'react'
-import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import {
+    Animated,
+    NativeModules,
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewStyle,
+} from 'react-native'
 import {
     FlatList,
     NavigationInjectedProps,
@@ -158,6 +165,15 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
     const response = useIssueOrLatestResponse(path && path.issue)
+
+    const james = NativeModules.Ophan.sendTestAppScreenEvent(
+        'issue_front',
+        'JAMES',
+    ) //, track)
+    james
+        .then((result: any) => console.log(result))
+        .catch((e: any) => console.error(e))
+
     return (
         <Container>
             {response({
