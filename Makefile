@@ -1,6 +1,7 @@
 YARN = yarn
 YARNFLAGS= --frozen-lockfile --mutex network
-PROJECTS = $(patsubst projects/%, %, $(patsubst %/package.json, %, $(wildcard projects/*/package.json)))
+EXCLUDE = ${exclude}
+PROJECTS = $(filter-out $(EXCLUDE),$(patsubst projects/%, %, $(patsubst %/package.json, %, $(wildcard projects/*/package.json))))
 .PHONY: list install clean validate-% fix-% test-% build-% validate fix test
 
 #
