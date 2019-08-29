@@ -18,6 +18,7 @@ import {
 import { WrapLayout } from '../wrap/wrap'
 import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
+import { quoteStyles, Pullquote } from './pull-quote'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -25,6 +26,10 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
     ${generateAssetsFontCss('GuardianTextSans-Regular')}
+    ${quoteStyles({
+        colors,
+        wrapLayout,
+    })}
     * {
         margin: 0;
         padding: 0;
@@ -107,17 +112,51 @@ export const render = (
                         i === 0 &&
                         features.includes(ArticleFeatures.HasDropCap)
                     ) {
-                        return html`
-                            <div class="drop-cap">
-                                ${el.html}
-                            </div>
-                        `
+                        el.html = `<p>What?
+
+                        This is the Reader Revenue demo.  A chance to see Reader Revenue enhancements by the following teams:
+
+                        Acquisition
+                        Simple & Coherent
+                        Fulfilment
+                        Identity
+
+                        A list of what is being shown can be seen here.
+
+                        Where?:
+
+                        17th Jan - Room 3.13
+                        31st Jan - UX lab
+                        14th March -UX lab
+                        28th March - 4.3
+                        All other sessions (until the end of 2019) will be in the MCR.
+
+                        See you there!
+                        </p>`
+                        return (
+                            html`
+                                <div class="drop-cap">
+                                    ${el.html}
+                                </div>
+                            ` +
+                            Pullquote({
+                                cite:
+                                    'This is the Reader This is the Reader This is the Reader',
+                                role: 'default',
+                                attribution: 'laura gz',
+                            })
+                        )
                     }
                     return el.html
                 case 'media-atom':
                     return renderMediaAtom(el)
                 case 'image':
                     return Image({ imageElement: el })
+                case 'pullquote':
+                    return Pullquote({
+                        cite: el.html,
+                        role: el.role || 'default',
+                    })
                 default:
                     return ''
             }
