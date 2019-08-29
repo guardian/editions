@@ -39,7 +39,7 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => (
             <View style={{ flex: 1 }}>
                 <WebView
                     originWhitelist={['*']}
-                    source={{ html: makeHtml({ styles, html }) }}
+                    source={{ html: makeHtml({ styles, body: html }) }}
                     style={webviewStyles.flex}
                 />
             </View>

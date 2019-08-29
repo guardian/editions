@@ -66,7 +66,7 @@ const ArticleScreenWithProps = ({
     const pillar = getAppearancePillar(articleNavigator.appearance)
     const firstUpdate = useRef(true)
     const viewRef = useRef<View>()
-    const { width, onUpdate } = useDimensions()
+    const { width } = useDimensions()
     useEffect(() => {
         if (firstUpdate.current) {
             firstUpdate.current = false

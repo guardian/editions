@@ -14,7 +14,7 @@ import { metrics } from 'src/theme/spacing'
 import { MaxWidthWrap } from './max-width'
 
 interface ChildPropTypes {
-    children: ReactNode
+    children?: ReactNode
     header?: ReactNode
     footer?: ReactNode
 }
