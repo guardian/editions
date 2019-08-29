@@ -2,26 +2,40 @@ import { css, html } from 'src/helpers/webview'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { WrapLayout } from '../wrap/wrap'
 
+const Quotes = () => html`
+    <svg
+        class="quotes"
+        width="22"
+        height="14"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g fill-rule="evenodd">
+            <path
+                d="M5.506 0h4.976c-.6 4.549-1.13 9.01-1.36 14H0C.83 9.142 2.557 4.549 5.506 0zM17.093 0H22c-.53 4.549-1.129 9.01-1.36 14h-9.099c.945-4.858 2.604-9.451 5.552-14z"
+            />
+        </g>
+    </svg>
+`
+
 const BubblePointer = () => html`
     <svg
-        width="22px"
-        height="22px"
-        viewBox="0 0 22 22"
-        version="1.1"
-        role="img"
+        class="bubble"
+        width="22"
+        height="22"
         aria-hidden="true"
+        role="img"
         xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
     >
         <path
-            d="M22.0069452,2.84217094e-14 L21.9741484,0.530833017 C21.7014014,4.94538553 20.0967547,9.87927122 17.2719958,13.749734 C13.5328381,18.873778 7.9707356,21.8649703 0.50877333,21.995923 L0,22.0048517 L0,2.84217094e-14 L22.0069452,2.84217094e-14 Z"
+            d="M22.007 0l-.033.53c-.273 4.415-1.877 9.35-4.702 13.22-3.74 5.124-9.301 8.115-16.763 8.246L0 22.005V0h22.007z"
             class="line"
             fill="#C70000"
-        ></path>
+        />
         <path
-            d="M1,2.84217094e-14 L1,20.9824612 C7.8854742,20.7340818 12.9916017,17.9190296 16.4642228,13.1602405 C19.0568549,9.6078359 20.5839444,5.09622634 20.9367614,1 C20.9695216,0.61965136 20.9741472,0.279980645 21,2.84217094e-14 L1,2.84217094e-14 Z"
-            fill="#FFFFFF"
-        ></path>
+            d="M1 0v20.982c6.885-.248 11.992-3.063 15.464-7.822 2.593-3.552 4.12-8.064 4.473-12.16.033-.38.037-.72.063-1H1z"
+            fill="#FFF"
+        />
     </svg>
 `
 
@@ -41,20 +55,26 @@ const quoteStyles = ({
         margin-bottom: calc(22px + 1rem);
     }
 
-    blockquote svg {
+    blockquote svg.bubble {
         position: absolute;
         height: 22px;
         bottom: -22px;
         left: -1px;
     }
 
-    blockquote svg .line {
+    blockquote svg.quotes {
+        height: 0.77em;
+    }
+
+    blockquote svg.bubble .line,
+    blockquote svg.quotes g {
         fill: ${colors.main};
     }
 
     blockquote cite {
         font-style: normal;
         font-weight: bold;
+        display: block;
     }
 `
 
@@ -67,6 +87,7 @@ const Pullquote = ({
     attribution?: string
 }) => html`
     <blockquote>
+        ${Quotes()}
         ${cite}${attribution &&
             html`
                 <cite>${attribution}</cite>
