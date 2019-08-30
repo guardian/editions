@@ -130,7 +130,7 @@ const authTypeFromIAP = (
     { requiresValidReceipt = true } = {},
 ): IAPAuth | false =>
     !!info &&
-    (requiresValidReceipt ? isReceiptActive(info) : true) && {
+    (!requiresValidReceipt || isReceiptActive(info)) && {
         type: 'iap',
         info,
     }
