@@ -31,6 +31,11 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
+import {
+    CONNECTION_FAILED_ERROR,
+    CONNECTION_FAILED_SUB_ERROR,
+    REFRESH_BUTTON_TEXT,
+} from 'src/helpers/words'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -179,7 +184,9 @@ export const HomeScreen = ({
                             {stale ? <IssueList issueList={stale} /> : null}
                             <FlexErrorMessage
                                 debugMessage={message}
-                                action={['Retry', retry]}
+                                title={CONNECTION_FAILED_ERROR}
+                                message={CONNECTION_FAILED_SUB_ERROR}
+                                action={[REFRESH_BUTTON_TEXT, retry]}
                             />
                         </>
                     ),
