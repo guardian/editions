@@ -68,7 +68,7 @@ task debugFatFramework(type: FatFrameworkTask) {
 task fatFramework(type: FatFrameworkTask) {
     def buildType = project.findProperty('kotlin.build.type') ?: 'DEBUG'
     baseName = "ophan"
-    destinationDir = file("$buildDir/fat-framework/debug")
+    destinationDir = file("$buildDir/fat-framework/${buildType.toLowerCase()}")
     from(
             kotlin.targets.ios.binaries.getFramework(buildType),
             kotlin.targets.ios32.binaries.getFramework(buildType),
