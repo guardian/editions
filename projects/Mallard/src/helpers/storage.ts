@@ -7,7 +7,7 @@ import {
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
 import { CasExpiry } from 'src/services/content-auth-service'
-import { UserData } from './helpers'
+import { UserData } from '../authentication/helpers'
 import { ReceiptIOS } from 'src/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
 

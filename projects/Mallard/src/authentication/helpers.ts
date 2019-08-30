@@ -10,7 +10,7 @@ import {
     legacyCASPasswordCache,
     iapReceiptCache,
     _legacyUserAccessTokenKeychain,
-} from './storage'
+} from '../helpers/storage'
 import {
     fetchMembershipData,
     MembersDataAPIResponse,

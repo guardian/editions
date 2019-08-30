@@ -5,7 +5,7 @@ import React, {
     useEffect,
     useMemo,
 } from 'react'
-import { signOutIdentity } from './storage'
+import { signOutIdentity } from '../helpers/storage'
 import { useNetInfo } from '@react-native-community/netinfo'
 import {
     liveAuthChain,

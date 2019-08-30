@@ -3,7 +3,7 @@ import { PushNotificationIOS, Platform } from 'react-native'
 import { fetchFromNotificationService } from 'src/helpers/fetch'
 import { downloadAndUnzipIssue, clearOldIssues } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
-import { pushNotificationRegistrationCache } from '../authentication/storage'
+import { pushNotificationRegistrationCache } from './storage'
 import moment, { MomentInput } from 'moment'
 
 export interface PushNotificationRegistration {
