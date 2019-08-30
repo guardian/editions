@@ -1,4 +1,4 @@
-package com.guardian.editions;
+package com.guardian.editions.releasestream;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

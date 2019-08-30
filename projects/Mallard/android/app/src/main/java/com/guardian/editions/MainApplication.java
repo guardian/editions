@@ -2,6 +2,8 @@ package com.guardian.editions;
 
 import android.app.Application;
 
+import com.guardian.editions.releasestream.ReleaseStreamPackage
+
 import android.util.Log;
 import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
