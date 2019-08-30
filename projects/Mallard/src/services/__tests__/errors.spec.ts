@@ -31,13 +31,13 @@ describe('errors', () => {
     describe('ErrorService', () => {
         it('should not do anything with calling `init`', async () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -51,13 +51,13 @@ describe('errors', () => {
 
         it('should default to not having consent', () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -71,13 +71,13 @@ describe('errors', () => {
 
         it('should install the if consent is set to true', async () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -90,13 +90,13 @@ describe('errors', () => {
 
         it('should not install without consent', async () => {
             const getSetting = getMockPromise(false)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -109,13 +109,13 @@ describe('errors', () => {
 
         it('should install only after consent is set to true', async () => {
             const getSetting = getMockPromise(false)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -123,20 +123,20 @@ describe('errors', () => {
 
             await Promise.resolve()
 
-            emitter.emit('gdprAllowPerformance', true)
+            settingsUpdateEmitter.emit('gdprAllowPerformance', true)
 
             expect(sentry.config).toHaveBeenCalledTimes(1)
         })
 
         it('should only listen for the relevant key', async () => {
             const getSetting = getMockPromise(false)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -144,7 +144,7 @@ describe('errors', () => {
 
             await Promise.resolve()
 
-            emitter.emit('gdprAllowFunctionality', true)
+            settingsUpdateEmitter.emit('gdprAllowFunctionality', true)
 
             expect(sentry.config).not.toHaveBeenCalled()
 
@@ -155,13 +155,13 @@ describe('errors', () => {
 
         it('should not fire errors without consent', async () => {
             const getSetting = getMockPromise(false)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -176,13 +176,13 @@ describe('errors', () => {
 
         it('should fire errors with consent', async () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -197,13 +197,13 @@ describe('errors', () => {
 
         it('should start firing errors if consent is granted in the app', async () => {
             const getSetting = getMockPromise(false)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -215,7 +215,7 @@ describe('errors', () => {
 
             expect(sentry.captureException).not.toHaveBeenCalled()
 
-            emitter.emit('gdprAllowPerformance', true)
+            settingsUpdateEmitter.emit('gdprAllowPerformance', true)
 
             errorService.captureException(new Error())
 
@@ -224,13 +224,13 @@ describe('errors', () => {
 
         it('should stop firing errors if consent is revoked in the app', async () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -242,7 +242,7 @@ describe('errors', () => {
 
             expect(sentry.captureException).toHaveBeenCalledTimes(1)
 
-            emitter.emit('gdprAllowPerformance', false)
+            settingsUpdateEmitter.emit('gdprAllowPerformance', false)
 
             errorService.captureException(new Error())
 
@@ -251,13 +251,13 @@ describe('errors', () => {
 
         it('should queue errors that happen while waiting to determine whether we have consent and send them if we do', async () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -275,13 +275,13 @@ describe('errors', () => {
 
         it('should stop listening for events after calling destroy', async () => {
             const getSetting = getMockPromise(true)
-            const emitter = createEmitter()
+            const settingsUpdateEmitter = createEmitter()
             const sentry = createSentry()
 
             const errorService = new ErrorService(
                 'gdprAllowPerformance',
                 getSetting,
-                emitter.sub,
+                settingsUpdateEmitter.sub,
                 sentry,
             )
 
@@ -295,7 +295,7 @@ describe('errors', () => {
 
             errorService.destroy()
 
-            emitter.emit('gdprAllowPerformance', false)
+            settingsUpdateEmitter.emit('gdprAllowPerformance', false)
 
             errorService.captureException(new Error())
 

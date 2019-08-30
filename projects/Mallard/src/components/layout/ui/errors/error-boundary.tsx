@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_FATAL_ERROR } from 'src/helpers/words'
-import {} from 'react-native-sentry'
 import { errorService } from 'src/services/errors'
 
 class ErrorBoundary extends Component<
