@@ -67,9 +67,7 @@ const SubNotFoundModalCard = ({
                 </ModalButton>
             </>
         }
-    >
-        {}
-    </OnboardingCard>
+    ></OnboardingCard>
 )
 
 export { SubNotFoundModalCard }

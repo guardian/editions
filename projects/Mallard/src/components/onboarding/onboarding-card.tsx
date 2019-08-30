@@ -89,7 +89,7 @@ const OnboardingCard = ({
     size = 'big',
     maxSize = 500,
 }: {
-    children?: string
+    children?: React.ReactNode
     title: string
     subtitle?: string
     bottomContent?: React.ReactNode
