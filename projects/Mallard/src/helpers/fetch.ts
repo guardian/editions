@@ -1,5 +1,4 @@
 import { Platform } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
 import {
@@ -13,6 +12,7 @@ import {
 import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
 import { Issue } from 'src/common'
 import { defaultSettings } from './settings/defaults'
+import { cacheClearCache } from './storage'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -191,21 +191,20 @@ const fetchWeather = <T>(
 }
 
 export const fetchCacheClear = async (): Promise<boolean> => {
-    const cacheClearItem = '@cacheClear'
     try {
         const response = await fetch(defaultSettings.cacheClearUrl)
         const cacheNumber = await response.json()
-        const cacheNumberStorage = await AsyncStorage.getItem(cacheClearItem)
+        const cacheNumberStorage = await cacheClearCache.get()
         if (cacheNumberStorage === null) {
             // No data, so store it
-            await AsyncStorage.setItem(cacheClearItem, cacheNumber.cacheClear)
+            await cacheClearCache.set(cacheNumber.cacheClear)
             return true
         }
 
         if (cacheNumberStorage !== cacheNumber.cacheClear) {
             // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
             await deleteIssueFiles()
-            await AsyncStorage.removeItem(cacheClearItem)
+            await cacheClearCache.reset()
             return false
         }
 

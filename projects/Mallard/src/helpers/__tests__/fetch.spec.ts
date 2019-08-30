@@ -9,7 +9,7 @@ describe('helpers/fetch', () => {
             fetchMock.getOnce(defaultSettings.cacheClearUrl, {
                 status: 200,
                 body: {
-                    cacheClear: 1,
+                    cacheClear: '1',
                 },
             })
 
