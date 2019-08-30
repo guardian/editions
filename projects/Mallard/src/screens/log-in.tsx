@@ -109,7 +109,7 @@ const Login = ({
 
     const onInputChange = (fn: (value: string) => void) => (value: string) => {
         setShowError(false)
-        fn(value)
+        fn(value.trim())
     }
 
     return (
