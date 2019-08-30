@@ -191,27 +191,26 @@ const fetchWeather = <T>(
 }
 
 export const fetchCacheClear = async (): Promise<boolean> => {
-    const asyncItem = '@cacheClear'
+    const cacheClearItem = '@cacheClear'
     try {
         const response = await fetch(defaultSettings.cacheClearUrl)
         const cacheNumber = await response.json()
-        const cacheNumberStorage = await AsyncStorage.getItem(asyncItem)
+        const cacheNumberStorage = await AsyncStorage.getItem(cacheClearItem)
         if (cacheNumberStorage === null) {
             // No data, so store it
-            await AsyncStorage.setItem(asyncItem, cacheNumber.cacheClear)
+            await AsyncStorage.setItem(cacheClearItem, cacheNumber.cacheClear)
             return true
         }
 
         if (cacheNumberStorage !== cacheNumber.cacheClear) {
-            // DELETE EVERYTHING - Currently downloaded issues and stored cace
+            // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
             await deleteIssueFiles()
-            await AsyncStorage.clear()
+            await AsyncStorage.removeItem(cacheClearItem)
             return false
         }
 
         return true
     } catch (e) {
-        console.log(e)
         return false
     }
 }

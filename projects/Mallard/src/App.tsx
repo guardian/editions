@@ -29,7 +29,7 @@ useScreens()
 prepFileSystem()
 pushNotifcationRegistration()
 clearOldIssues()
-fetchCacheClear().then(weOk => {
+fetchCacheClear().then((weOk: boolean) => {
     if (weOk) {
         downloadTodaysIssue()
     }
