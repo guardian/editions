@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, View, Alert } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
@@ -7,7 +7,12 @@ import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { Link } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { GdprSwitchSettings } from 'src/helpers/settings'
-import { COOKIE_LINK, PRIVACY_LINK, PREFS_SAVED_MSG } from 'src/helpers/words'
+import {
+    COOKIE_LINK,
+    PRIVACY_LINK,
+    PREFS_SAVED_MSG,
+    PRIVACY_SETTINGS_HEADER_TITLE,
+} from 'src/helpers/words'
 import {
     useGdprSwitches,
     useSettings,
@@ -16,6 +21,8 @@ import {
 } from 'src/hooks/use-settings'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { useToast } from 'src/hooks/use-toast'
+import { LoginHeader } from 'src/components/login/login-layout'
+import { NavigationInjectedProps } from 'react-navigation'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -32,7 +39,10 @@ const essentials: EssentialGdprSwitch = {
         'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
 }
 
-const GdprConsent = () => {
+const GdprConsent = ({
+    shouldShowDismissableHeader = false,
+    navigation,
+}: { shouldShowDismissableHeader?: boolean } & NavigationInjectedProps) => {
     const setSetting = useSettings()
     const settings = useOtherSettingsValues()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
@@ -42,22 +52,60 @@ const GdprConsent = () => {
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
-            name: 'Performance (NOT IN USE)',
-            services: 'Google Analytics - Fabric - Nielsen - ComScore - Sentry',
+            name: 'Performance',
+            services: 'Nielsen - ComScore - Sentry',
             description:
                 'Enabling these allows us to measure how you use our services. We use this information to get a better sense of how our users engage with our journalism and to improve our services, so that users have a better experience. For example, we collect information about which of our pages are most frequently visited, and by which types of users. If you disable this, we will not be able to measure your use of our services, and we will have less information about their performance.',
         },
         gdprAllowFunctionality: {
             key: 'gdprAllowFunctionality',
-            name: 'Functionality (NOT IN USE)',
-            services: 'Google - Facebook - Branch',
+            name: 'Functionality',
+            services: 'Google - Facebook',
             description:
                 'Enabling these allow us to provide you with a range of functionality and store related information. For example, you can use social media credentials such as your Google account to log into your Guardian account. If you disable this, some features of our services may not function.',
         },
     }
 
+    const onEnableAllAndContinue = () => {
+        for (const { key } of Object.values(switches)) {
+            setSetting(key, true)
+        }
+        showToast(PREFS_SAVED_MSG)
+        navigation.navigate('App')
+    }
+
+    const onDismiss = () => {
+        if (
+            settings.gdprAllowFunctionality &&
+            settings.gdprAllowFunctionality
+        ) {
+            navigation.goBack(null)
+        } else {
+            Alert.alert(
+                'Before you go',
+                `Please set your preferences for 'Performance' and 'Functionality'.`,
+                [
+                    { text: 'Manage preferences', onPress: () => {} },
+                    {
+                        text: 'Enable all and continue',
+                        onPress: () => onEnableAllAndContinue(),
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false },
+            )
+        }
+    }
+
     return (
         <View>
+            {shouldShowDismissableHeader ? (
+                <LoginHeader onDismiss={() => onDismiss()}>
+                    {PRIVACY_SETTINGS_HEADER_TITLE}
+                </LoginHeader>
+            ) : (
+                <></>
+            )}
             <TallRow
                 title={''}
                 explainer={
@@ -75,20 +123,16 @@ const GdprConsent = () => {
                 proxy={
                     <Button
                         appearance={ButtonAppearance.skeleton}
-                        onPress={() => {
-                            for (const { key } of Object.values(switches)) {
-                                setSetting(key, true)
-                            }
-                            showToast(PREFS_SAVED_MSG)
-                        }}
+                        onPress={() => onEnableAllAndContinue()}
                     >
-                        Enable all
+                        Enable all and continue
                     </Button>
                 }
             ></TallRow>
             <Separator></Separator>
             <TallRow
-                title={essentials.name + '\n' + essentials.services}
+                title={essentials.name}
+                subtitle={essentials.services}
                 explainer={essentials.description}
             ></TallRow>
 
@@ -101,6 +145,7 @@ const GdprConsent = () => {
                 renderItem={({ item }) => (
                     <TallRow
                         title={item.name}
+                        subtitle={item.services}
                         explainer={item.description}
                         proxy={
                             <ThreeWaySwitch
@@ -115,9 +160,9 @@ const GdprConsent = () => {
                 )}
             />
             <Footer>
-                <UiBodyCopy>
+                <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
                     You can change the above setting any time by selecting
-                    privacy settings in the settings menu
+                    privacy settings in the settings menu.
                 </UiBodyCopy>
             </Footer>
             {isUsingProdDevtools ? (
@@ -129,16 +174,29 @@ const GdprConsent = () => {
     )
 }
 
-const GdprConsentScreen = () => (
+const GdprConsentScreen = ({ navigation }: NavigationInjectedProps) => (
     <WithAppAppearance value={'settings'}>
         <ScrollContainer>
-            <GdprConsent></GdprConsent>
+            <GdprConsent navigation={navigation}></GdprConsent>
+        </ScrollContainer>
+    </WithAppAppearance>
+)
+
+const GdprConsentScreenForOnboarding = ({
+    navigation,
+}: NavigationInjectedProps) => (
+    <WithAppAppearance value={'settings'}>
+        <ScrollContainer>
+            <GdprConsent
+                shouldShowDismissableHeader={true}
+                navigation={navigation}
+            ></GdprConsent>
         </ScrollContainer>
     </WithAppAppearance>
 )
 
 GdprConsentScreen.navigationOptions = {
-    title: 'Privacy Settings',
+    title: PRIVACY_SETTINGS_HEADER_TITLE,
 }
 
-export { GdprConsent, GdprConsentScreen }
+export { GdprConsent, GdprConsentScreenForOnboarding, GdprConsentScreen }

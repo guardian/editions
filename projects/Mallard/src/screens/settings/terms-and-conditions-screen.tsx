@@ -8,4 +8,8 @@ const TermsAndConditionsScreen = () => (
     <DefaultInfoTextWebview html={termsAndConditionsHtml} />
 )
 
+TermsAndConditionsScreen.navigationOptions = {
+    title: 'Terms & Conditions',
+}
+
 export { TermsAndConditionsScreen }
