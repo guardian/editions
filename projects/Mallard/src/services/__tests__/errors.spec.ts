@@ -1,5 +1,5 @@
 import { ErrorService } from '../errors'
-import { getMockPromise } from 'src/authentication/__tests__/test-helpers'
+import { getMockPromise } from 'src/test-helpers/test-helpers'
 import { GdprSwitchSettings } from 'src/helpers/settings'
 
 type Sub = (key: keyof GdprSwitchSettings, value: boolean) => void
