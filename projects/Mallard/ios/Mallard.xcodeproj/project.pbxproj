@@ -26,6 +26,8 @@
 		95CB9F222316C60F00F2F6B0 /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95CB9F1D2316C53F00F2F6B0 /* ophan.framework */; };
 		95CB9F232316C60F00F2F6B0 /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95CB9F1D2316C53F00F2F6B0 /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
+		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
+		A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC323167BB400505524 /* ReleaseStream.m */; };
 		BB77E8F846CDE9D32C493592 /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
 		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -156,6 +158,9 @@
 		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
 		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
 		95CB9F1D2316C53F00F2F6B0 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/debugFramework/ophan.framework; sourceTree = "<group>"; };
+		A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mallard-Bridging-Header.h"; sourceTree = "<group>"; };
+		A13D0DC12316783B00505524 /* ReleaseStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseStream.swift; sourceTree = "<group>"; };
+		A13D0DC323167BB400505524 /* ReleaseStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleaseStream.m; sourceTree = "<group>"; };
 		A39C010E18C6F1DE033568D2 /* Pods-MallardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MallardTests.release.xcconfig"; path = "Target Support Files/Pods-MallardTests/Pods-MallardTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
 		B76AB9897804B121CD7C2A6A /* Pods-Mallard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.debug.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.debug.xcconfig"; sourceTree = "<group>"; };
@@ -244,6 +249,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */,
 			);
 			name = Mallard;
 			sourceTree = "<group>";
@@ -316,6 +322,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A10F237623191F62004C70CC /* ReleaseStream */,
 				95CB9F182316B6E900F2F6B0 /* Ophan */,
 				13B07FAE1A68108700A75B9A /* Mallard */,
 				00E356EF1AD99517003FC87E /* MallardTests */,
@@ -350,6 +357,15 @@
 			);
 			name = Ophan;
 			path = Mallard/Ophan;
+			sourceTree = "<group>";
+		};
+		A10F237623191F62004C70CC /* ReleaseStream */ = {
+			isa = PBXGroup;
+			children = (
+				A13D0DC12316783B00505524 /* ReleaseStream.swift */,
+				A13D0DC323167BB400505524 /* ReleaseStream.m */,
+			);
+			name = ReleaseStream;
 			sourceTree = "<group>";
 		};
 		ABFED8DA2284261400DA41EA /* Recovered References */ = {
@@ -762,6 +778,8 @@
 				95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */,
+				A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,7 +891,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = Mallard;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Mallard/Ophan/Mallard-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mallard-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -900,7 +918,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = Mallard;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Mallard/Ophan/Mallard-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mallard-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

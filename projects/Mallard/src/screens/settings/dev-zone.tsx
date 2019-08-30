@@ -17,6 +17,7 @@ import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
+import { isInTestFlight } from 'src/authentication/release-stream'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -136,6 +137,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Build id',
                         title: 'Build',
                         explainer: getVersionInfo().commitId,
+                        data: {
+                            onPress: () => {},
+                        },
+                    },
+                    {
+                        key: 'Reports as in test flight',
+                        title: 'Reports as in test flight',
+                        explainer: isInTestFlight().toString(),
                         data: {
                             onPress: () => {},
                         },

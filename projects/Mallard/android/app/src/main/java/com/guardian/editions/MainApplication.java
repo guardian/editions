@@ -2,6 +2,8 @@ package com.guardian.editions;
 
 import android.app.Application;
 
+import com.guardian.editions.releasestream.ReleaseStreamPackage
+
 import android.util.Log;
 import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
@@ -29,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
             @SuppressWarnings("UnnecessaryLocalVariable")
             List<ReactPackage> packages = new PackageList(this).getPackages();
             packages.add(new RNOphanPackage());
+
+            packages.add(new ReleaseStreamPackage());
 
             // packages.add(new MainReactPackage());
             // packages.add(new RNDeviceInfo());
