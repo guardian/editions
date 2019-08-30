@@ -15,3 +15,5 @@ export const ERR_404_MISSING_PROPS = `Couldn't find a path to this item`
 export const ERR_404_REMOTE = `Couldn't find item`
 
 export const PREFS_SAVED_MSG = 'Your preferences are saved.'
+
+export const PRIVACY_SETTINGS_HEADER_TITLE = 'Privacy Settings'

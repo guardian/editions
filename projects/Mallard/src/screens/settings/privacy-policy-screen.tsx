@@ -8,4 +8,8 @@ const PrivacyPolicyScreen = () => (
     <DefaultInfoTextWebview html={privacyPolicyHtml} />
 )
 
+PrivacyPolicyScreen.navigationOptions = {
+    title: 'Privacy Policy',
+}
+
 export { PrivacyPolicyScreen }

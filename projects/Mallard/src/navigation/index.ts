@@ -18,7 +18,10 @@ import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
 import { DownloadScreen } from 'src/screens/settings/download-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
-import { GdprConsentScreen } from 'src/screens/settings/gdpr-consent-screen'
+import {
+    GdprConsentScreen,
+    GdprConsentScreenForOnboarding,
+} from 'src/screens/settings/gdpr-consent-screen'
 import { HelpScreen } from 'src/screens/settings/help-screen'
 import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
 import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
@@ -114,10 +117,12 @@ const OnboardingStack = createModalNavigator(
         },
     ),
     {
-        [routeNames.onboarding
-            .OnboardingConsentInline]: createHeaderStackNavigator({
-            GdprConsentScreen,
-        }),
+        [routeNames.onboarding.OnboardingConsentInline]: createStackNavigator(
+            {
+                GdprConsentScreenForOnboarding,
+            },
+            { headerMode: 'none' },
+        ),
     },
 )
 const RootNavigator = createAppContainer(

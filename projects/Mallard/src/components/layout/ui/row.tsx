@@ -69,12 +69,18 @@ const Separator = () => {
 
 interface RowContentProps {
     title: string
+    subtitle?: string
     explainer?: Element
 }
 
-const RowContents = ({ title, explainer }: RowContentProps) => (
+const RowContents = ({ title, explainer, subtitle }: RowContentProps) => (
     <>
         <UiBodyCopy weight="bold">{title}</UiBodyCopy>
+        {subtitle && (
+            <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
+                {subtitle}
+            </UiBodyCopy>
+        )}
         {explainer && (
             <UiExplainerCopy style={{ marginTop: metrics.vertical / 8 }}>
                 {explainer}
