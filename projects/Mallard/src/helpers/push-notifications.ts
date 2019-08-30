@@ -3,12 +3,64 @@ import { PushNotificationIOS, Platform } from 'react-native'
 import { fetchFromNotificationService } from 'src/helpers/fetch'
 import { downloadAndUnzipIssue, clearOldIssues } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
+import { pushNotificationRegistrationCache } from './storage'
+import moment, { MomentInput } from 'moment'
 
-const pushNotifcationRegistration = () =>
+export interface PushNotificationRegistration {
+    registrationDate: string
+    token: string
+}
+
+const shouldReRegister = (
+    newToken: string,
+    registration: PushNotificationRegistration,
+    now: MomentInput,
+): boolean =>
+    moment(now).diff(moment(registration.registrationDate), 'days') > 14 ||
+    newToken !== registration.token
+
+/**
+ * will register / re-register if it should
+ * will return whether it did register
+ * will throw if anything major went wrong
+ * */
+const maybeRegister = async (
+    token: string,
+    // mocks for testing
+    pushNotificationRegistrationCacheImpl = pushNotificationRegistrationCache,
+    fetchFromNotificationServiceImpl = fetchFromNotificationService,
+    now = moment().toString(),
+) => {
+    let should: boolean
+
+    try {
+        const cached = await pushNotificationRegistrationCacheImpl.get()
+        should = !cached || shouldReRegister(token, cached, now)
+    } catch {
+        // in the unlikely event we have an error here, then re-register any way
+        should = true
+    }
+
+    if (should) {
+        // this will throw on non-200 so that we won't add registration info to the cache
+        await fetchFromNotificationServiceImpl({ token })
+        await pushNotificationRegistrationCacheImpl.set({
+            registrationDate: now,
+            token,
+        })
+        return true
+    }
+
+    return false
+}
+
+const pushNotifcationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
             if (token) {
-                fetchFromNotificationService(token)
+                maybeRegister(token.token).catch(err => {
+                    console.log(`Error registering for notifications: ${err}`)
+                })
             }
         },
         onNotification: (notification: any) => {
@@ -30,5 +82,10 @@ const pushNotifcationRegistration = () =>
             sound: false,
         },
     })
+}
 
-export { pushNotifcationRegistration }
+export {
+    pushNotifcationRegistration,
+    /** exports for testing */
+    maybeRegister,
+}

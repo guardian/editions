@@ -4,7 +4,11 @@ import {
     UserData,
 } from '../helpers'
 import { membershipResponse, userResponse, userData } from './fixtures'
-import { getMockPromise, getMockStore, getMockAsyncCache } from './test-helpers'
+import {
+    getMockPromise,
+    getMockStore,
+    getMockAsyncCache,
+} from '../../test-helpers/test-helpers'
 
 const withCreds = ({
     email,

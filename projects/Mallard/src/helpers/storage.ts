@@ -7,8 +7,9 @@ import {
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
 import { CasExpiry } from 'src/services/content-auth-service'
-import { UserData } from './helpers'
+import { UserData } from '../authentication/helpers'
 import { ReceiptIOS } from 'src/services/iap'
+import { PushNotificationRegistration } from 'src/helpers/push-notifications'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -50,6 +51,10 @@ const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
 const userDataCache = createAsyncCache<UserData>('user-data-cache')
 
 const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache')
+
+const pushNotificationRegistrationCache = createAsyncCache<
+    PushNotificationRegistration
+>('push-notification-registration-cache')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -112,6 +117,7 @@ export {
     signOutIdentity,
     casDataCache,
     userDataCache,
+    pushNotificationRegistrationCache,
     getLegacyUserAccessToken,
     legacyCASExpiryCache,
     legacyCASUsernameCache,

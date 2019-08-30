@@ -11,7 +11,7 @@ import {
     casDataCache,
     legacyCASExpiryCache,
     iapReceiptCache,
-} from './storage'
+} from '../helpers/storage'
 import { ReceiptIOS, isReceiptActive } from '../services/iap'
 
 interface IdentityAuth {
