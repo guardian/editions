@@ -1,11 +1,6 @@
 import { useCachedOrPromise } from './use-cached-or-promise'
 import { fetchFromApi } from 'src/helpers/fetch'
-import {
-    cacheClearPath,
-    issueSummaryPath,
-    IssueSummary,
-    Issue,
-} from 'src/common'
+import { issueSummaryPath, IssueSummary, Issue } from 'src/common'
 import { withResponse } from 'src/helpers/response'
 import { chain } from 'src/helpers/fetch/cached-or-promise'
 import { getIssueResponse } from './use-issue'

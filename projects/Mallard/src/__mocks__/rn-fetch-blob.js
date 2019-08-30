@@ -19,5 +19,6 @@ export default {
             CacheDir: () => {},
             DocumentDir: () => {},
         },
+        unlink: jest.fn,
     },
 }
