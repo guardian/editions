@@ -1,4 +1,5 @@
 rootProject.name = 'Mallard'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-
+include ':ophan'
+project(':ophan').projectDir = new File(rootProject.projectDir, '../ophan/')
 include ':app'
