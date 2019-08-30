@@ -297,7 +297,6 @@ export const frontPath = (issueId: string, frontId: string) =>
     `${issueDir(issueId)}/front/${frontId}`
 
 export const issueSummaryPath = () => 'issues'
-
 export interface Image {
     source: string
     path: string
