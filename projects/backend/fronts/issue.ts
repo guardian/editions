@@ -13,6 +13,7 @@ export type Swatch =
     | 'culture'
     | 'lifestyle'
     | 'sport'
+    | 'special'
 export interface PublishedFront {
     id: string
     name: string
