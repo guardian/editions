@@ -1,8 +1,11 @@
-import { css, html, px } from 'src/helpers/webview'
+import { css, html, px, getScaledFontCss } from 'src/helpers/webview'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { WrapLayout } from '../wrap/wrap'
 import { families } from 'src/theme/typography'
 import { metrics } from 'src/theme/spacing'
+import { color } from 'src/theme/color'
+import { breakOut } from './helpers/layout'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 const Quotes = () => html`
     <svg
@@ -49,13 +52,16 @@ const quoteStyles = ({
     wrapLayout: WrapLayout
 }) => css`
     blockquote {
+        box-sizing: border-box;
         border: 1px solid ${colors.main};
         color: ${colors.main};
         border-top-width: 12px;
-        padding: 0 ${px(metrics.article.sides / 2)} ${px(metrics.vertical * 2)};
+        padding: 0 1px ${px(metrics.vertical * 2)}
+            ${px(metrics.article.sides / 2)};
         position: relative;
-        margin-bottom: calc(22px);
-        --family: ${families.titlepiece.regular};
+        margin-bottom: calc(22px + 0.25em);
+        margin-top: 0.25em;
+        font-size: 1.1em;
     }
 
     blockquote svg.bubble {
@@ -63,10 +69,6 @@ const quoteStyles = ({
         height: 22px;
         bottom: -22px;
         left: -1px;
-    }
-
-    blockquote svg.quotes {
-        height: 0.77em;
     }
 
     blockquote svg.bubble .line,
@@ -80,14 +82,56 @@ const quoteStyles = ({
         display: block;
     }
 
-    blockquote[data-role='inline'],
-    blockquote[data-role='support'] {
-        width: 50%;
-        float: left;
-        margin-right: ${px(metrics.article.sides)};
+    blockquote[data-role='supporting'] {
+        font-family: ${families.titlepiece.regular};
+    }
+    blockquote[data-role='supporting'] cite {
+        color: ${color.text};
+    }
+
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        blockquote[data-role='inline'],
+        blockquote[data-role='supporting'] {
+            width: 50%;
+            float: left;
+            margin-right: ${px(metrics.article.sides)};
+        }
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        blockquote[data-role='inline'],
+        blockquote[data-role='supporting'] {
+            position: absolute;
+            right: ${px(metrics.article.sides)};
+            display: block;
+            width: ${px(wrapLayout.rail.width)};
+        }
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        blockquote[data-role='showcase'] {
+            width: 50%;
+            float: left;
+            margin-right: ${px(metrics.article.sides)};
+        }
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
+        blockquote[data-role='showcase'] {
+            margin-left: ${px(
+                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2 -
+                    metrics.article.sides) *
+                    -1,
+            )};
+        }
     }
 `
 
+/*
+Some quotes have non breakable spaces
+so we gotta replace them bc our layout
+is hella narrow
+*/
 const Pullquote = ({
     cite,
     attribution,
@@ -98,8 +142,8 @@ const Pullquote = ({
     attribution?: string
 }) => html`
     <blockquote data-role=${role}>
-        ${Quotes()}
-        ${cite}${attribution &&
+        ${Quotes()} ${cite.replace(/\s/g, ' ')}
+        ${attribution &&
             html`
                 <cite>${attribution}</cite>
             `}

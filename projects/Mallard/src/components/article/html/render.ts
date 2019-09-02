@@ -50,7 +50,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     }
     :root {
         ${getScaledFontCss('text', 1)}
-        font-family: 'GuardianTextEgyptian-Reg';
+        font-family: ${families.text.regular};
     }
     #app {
         padding: ${px(metrics.vertical)} ${px(metrics.article.sides)};
@@ -114,40 +114,11 @@ export const render = (
                         i === 0 &&
                         features.includes(ArticleFeatures.HasDropCap)
                     ) {
-                        el.html = `<p>What?
-
-                        This is the Reader Revenue demo.  A chance to see Reader Revenue enhancements by the following teams:
-
-                        Acquisition
-                        Simple & Coherent
-                        Fulfilment
-                        Identity
-
-                        A list of what is being shown can be seen here.
-
-                        Where?:
-
-                        17th Jan - Room 3.13
-                        31st Jan - UX lab
-                        14th March -UX lab
-                        28th March - 4.3
-                        All other sessions (until the end of 2019) will be in the MCR.
-
-                        See you there!
-                        </p>`
-                        return (
-                            html`
-                                <div class="drop-cap">
-                                    ${el.html}
-                                </div>
-                            ` +
-                            Pullquote({
-                                cite:
-                                    'This is the Reader This is the Reader This is the Reader',
-                                role: 'support',
-                                attribution: 'laura gz',
-                            })
-                        )
+                        return html`
+                            <div class="drop-cap">
+                                ${el.html}
+                            </div>
+                        `
                     }
                     return el.html
                 case 'media-atom':
