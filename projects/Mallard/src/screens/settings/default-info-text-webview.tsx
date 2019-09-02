@@ -7,6 +7,7 @@ import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { generateAssetsFontCss, css, makeHtml } from 'src/helpers/webview'
 import { PixelRatio } from 'react-native'
+import { maxScreenSize } from 'src/helpers/screen'
 
 const styles: string = css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
@@ -31,7 +32,9 @@ const styles: string = css`
     }
 `
 
-const webviewStyles = StyleSheet.create({ flex: { flex: 1, minHeight: 600 } })
+const webviewStyles = StyleSheet.create({
+    flex: { flex: 1, minHeight: Dimensions.get('window').height },
+})
 
 const DefaultInfoTextWebview = ({ html }: { html: string }) => (
     <WithAppAppearance value={'settings'}>
