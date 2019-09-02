@@ -1,1 +1,1 @@
-export const isPreview = process.env.publicationStage === 'preview'
+export const isPreview: boolean = process.env.publicationStage === 'preview'
