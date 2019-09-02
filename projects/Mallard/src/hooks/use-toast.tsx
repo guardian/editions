@@ -13,8 +13,8 @@ import { createProviderFromHook, providerHook } from 'src/helpers/provider'
 const useToastInContext = () => {
     const [toast, setToast] = useState<ToastList>([])
 
-    const removeLastToast = () => {
-        setToast(toasts => toasts.slice(0, -1))
+    const removeLastToastWithTitle = (title: string) => {
+        setToast(toasts => toasts.filter(toast => toast.title !== title))
     }
 
     const showToast = (
@@ -23,13 +23,14 @@ const useToastInContext = () => {
     ) => {
         setToast(toasts => [...toasts, { title, ...moreThings }])
         setTimeout(() => {
-            removeLastToast()
+            removeLastToastWithTitle(title)
         }, 5000)
+        removeLastToastWithTitle(title)
     }
 
     return providerHook({
         getter: toast,
-        setter: { showToast, removeLastToast },
+        setter: { showToast },
     })
 }
 
