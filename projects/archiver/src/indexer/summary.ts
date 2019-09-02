@@ -81,6 +81,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
             }
         })
         .filter(notNull)
+        .slice(0, 7)
     if (index === null) throw new Error("Couldn't generate index.")
     return index
 }

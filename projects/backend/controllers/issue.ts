@@ -5,12 +5,15 @@ import { notNull, IssueSummary } from '../common'
 import { lastModified } from '../lastModified'
 import { hasFailed, Attempt } from '../utils/try'
 import { getIssue } from '../issue'
-import { isPreview } from '../preview'
+import { isPreview as isPreviewStage } from '../preview'
+
+export const LIVE_PAGE_SIZE = 7
+export const PREVIEW_PAGE_SIZE = 35
 
 export const issueController = (req: Request, res: Response) => {
     const id: string = req.params.issueId
     const source: string = decodeURIComponent(
-        isPreview ? 'preview' : req.params.source,
+        isPreviewStage ? 'preview' : req.params.source,
     )
     const [date, updater] = lastModified()
     console.log(`${req.url}: request for issue ${id}`)
@@ -27,11 +30,14 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
-export const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
+export const getIssuesSummary = async (
+    isPreview: boolean,
+): Promise<Attempt<IssueSummary[]>> => {
     const issueKeys = await s3List({
         key: 'daily-edition/',
         bucket: isPreview ? 'preview' : 'published',
     })
+
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
         console.error(JSON.stringify(issueKeys))
@@ -54,11 +60,12 @@ export const getIssuesSummary = async (): Promise<Attempt<IssueSummary[]>> => {
             name: 'Daily Edition',
             date: date.toISOString(),
         }))
+        .slice(0, isPreview ? PREVIEW_PAGE_SIZE : LIVE_PAGE_SIZE)
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
     console.log('Issue summary requested.')
-    getIssuesSummary()
+    getIssuesSummary(isPreviewStage)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(JSON.stringify(data))
