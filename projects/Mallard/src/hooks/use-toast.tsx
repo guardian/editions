@@ -21,11 +21,16 @@ const useToastInContext = () => {
         title: ToastProps['title'],
         moreThings: Omit<ToastProps, 'title'> = {},
     ) => {
-        setToast(toasts => [...toasts, { title, ...moreThings }])
-        setTimeout(() => {
-            removeLastToastWithTitle(title)
-        }, 5000)
-        removeLastToastWithTitle(title)
+        setToast(toasts => {
+            if (!toasts.find(toast => toast.title === title)) {
+                setTimeout(() => {
+                    removeLastToastWithTitle(title)
+                }, 5000)
+                return [...toasts, { title, ...moreThings }]
+            }
+
+            return toasts
+        })
     }
 
     return providerHook({
