@@ -1,6 +1,8 @@
-import { css, html } from 'src/helpers/webview'
+import { css, html, px } from 'src/helpers/webview'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { WrapLayout } from '../wrap/wrap'
+import { families } from 'src/theme/typography'
+import { metrics } from 'src/theme/spacing'
 
 const Quotes = () => html`
     <svg
@@ -50,9 +52,10 @@ const quoteStyles = ({
         border: 1px solid ${colors.main};
         color: ${colors.main};
         border-top-width: 12px;
-        padding: 6px;
+        padding: 0 ${px(metrics.article.sides / 2)} ${px(metrics.vertical * 2)};
         position: relative;
-        margin-bottom: calc(22px + 1rem);
+        margin-bottom: calc(22px);
+        --family: ${families.titlepiece.regular};
     }
 
     blockquote svg.bubble {
@@ -76,17 +79,25 @@ const quoteStyles = ({
         font-weight: bold;
         display: block;
     }
+
+    blockquote[data-role='inline'],
+    blockquote[data-role='support'] {
+        width: 50%;
+        float: left;
+        margin-right: ${px(metrics.article.sides)};
+    }
 `
 
 const Pullquote = ({
     cite,
     attribution,
+    role,
 }: {
     cite: string
     role: string
     attribution?: string
 }) => html`
-    <blockquote>
+    <blockquote data-role=${role}>
         ${Quotes()}
         ${cite}${attribution &&
             html`

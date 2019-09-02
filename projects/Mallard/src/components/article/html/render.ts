@@ -19,13 +19,15 @@ import { WrapLayout } from '../wrap/wrap'
 import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
 import { quoteStyles, Pullquote } from './pull-quote'
+import { families } from 'src/theme/typography'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
-    ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
-    ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
-    ${generateAssetsFontCss('GuardianTextSans-Regular')}
+    ${generateAssetsFontCss(families.text.regular)}
+    ${generateAssetsFontCss(families.headline.regular)}
+    ${generateAssetsFontCss(families.sans.regular)}
+    ${generateAssetsFontCss(families.titlepiece.regular)}
     ${quoteStyles({
         colors,
         wrapLayout,
@@ -142,7 +144,7 @@ export const render = (
                             Pullquote({
                                 cite:
                                     'This is the Reader This is the Reader This is the Reader',
-                                role: 'default',
+                                role: 'support',
                                 attribution: 'laura gz',
                             })
                         )
@@ -155,7 +157,7 @@ export const render = (
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,
-                        role: el.role || 'default',
+                        role: el.role || 'inline',
                     })
                 default:
                     return ''
