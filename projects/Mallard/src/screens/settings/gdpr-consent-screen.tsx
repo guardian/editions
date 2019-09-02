@@ -42,7 +42,11 @@ const essentials: EssentialGdprSwitch = {
 const GdprConsent = ({
     shouldShowDismissableHeader = false,
     navigation,
-}: { shouldShowDismissableHeader?: boolean } & NavigationInjectedProps) => {
+    continueText,
+}: {
+    shouldShowDismissableHeader?: boolean
+    continueText: string
+} & NavigationInjectedProps) => {
     const setSetting = useSettings()
     const settings = useOtherSettingsValues()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
@@ -75,11 +79,9 @@ const GdprConsent = ({
     }
 
     const onDismiss = () => {
-        if (
-            settings.gdprAllowFunctionality &&
-            settings.gdprAllowFunctionality
-        ) {
-            navigation.goBack(null)
+        if (settings.gdprAllowFunctionality && settings.gdprAllowPerformance) {
+            showToast(PREFS_SAVED_MSG)
+            navigation.navigate('App')
         } else {
             Alert.alert(
                 'Before you go',
@@ -87,7 +89,7 @@ const GdprConsent = ({
                 [
                     { text: 'Manage preferences', onPress: () => {} },
                     {
-                        text: 'Enable all and continue',
+                        text: continueText,
                         onPress: () => onEnableAllAndContinue(),
                         style: 'cancel',
                     },
@@ -125,7 +127,7 @@ const GdprConsent = ({
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => onEnableAllAndContinue()}
                     >
-                        Enable all and continue
+                        {continueText}
                     </Button>
                 }
             ></TallRow>
@@ -177,7 +179,10 @@ const GdprConsent = ({
 const GdprConsentScreen = ({ navigation }: NavigationInjectedProps) => (
     <WithAppAppearance value={'settings'}>
         <ScrollContainer>
-            <GdprConsent navigation={navigation}></GdprConsent>
+            <GdprConsent
+                navigation={navigation}
+                continueText={'Enable all'}
+            ></GdprConsent>
         </ScrollContainer>
     </WithAppAppearance>
 )
@@ -189,6 +194,7 @@ const GdprConsentScreenForOnboarding = ({
         <ScrollContainer>
             <GdprConsent
                 shouldShowDismissableHeader={true}
+                continueText={'Enable all aand continue'}
                 navigation={navigation}
             ></GdprConsent>
         </ScrollContainer>
