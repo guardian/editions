@@ -52,7 +52,7 @@ describe('helpers/fetch', () => {
             expect(test).toEqual(false)
         })
 
-        it('should return false if an error is thrown', async () => {
+        it('should return true if an error is thrown', async () => {
             fetchMock.getOnce(
                 defaultSettings.cacheClearUrl,
                 {
@@ -62,7 +62,7 @@ describe('helpers/fetch', () => {
             )
 
             const test = await fetchCacheClear()
-            expect(test).toEqual(false)
+            expect(test).toEqual(true)
         })
     })
 })

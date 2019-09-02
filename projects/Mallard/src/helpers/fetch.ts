@@ -190,14 +190,22 @@ const fetchWeather = <T>(
     )
 }
 
+const getCacheNumber = async () => {
+    const response = await fetch(defaultSettings.cacheClearUrl)
+    return await response.json()
+}
+
 export const fetchCacheClear = async (): Promise<boolean> => {
     try {
-        const response = await fetch(defaultSettings.cacheClearUrl)
-        const cacheNumber = await response.json()
-        const cacheNumberStorage = await cacheClearCache.get()
+        const [cacheNumber, cacheNumberStorage] = await Promise.all([
+            getCacheNumber(),
+            cacheClearCache.get(),
+        ])
+
         if (cacheNumberStorage === null) {
             // No data, so store it
             await cacheClearCache.set(cacheNumber.cacheClear)
+            // Suggests that this is a new user, so carry on as normal
             return true
         }
 
@@ -205,12 +213,15 @@ export const fetchCacheClear = async (): Promise<boolean> => {
             // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
             await deleteIssueFiles()
             await cacheClearCache.reset()
+            // Server number doesnt match, which means we are making an attempt to clear the cache.
             return false
         }
 
+        // Cached number matches Remote number, so carry on as normal
         return true
     } catch (e) {
-        return false
+        // Problems? Lets carry on with what we are doing.
+        return true
     }
 }
 
