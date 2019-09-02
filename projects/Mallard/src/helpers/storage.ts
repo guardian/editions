@@ -38,7 +38,7 @@ const legacyCASExpiryCache = createSyncCacheIOS<CasExpiry>(
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
  * between AsyncStorage and the keychain helper below
  */
-const createAsyncCache = <T extends object>(key: string) => ({
+const createAsyncCache = <T extends object | string>(key: string) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
@@ -56,7 +56,7 @@ const pushNotificationRegistrationCache = createAsyncCache<
     PushNotificationRegistration
 >('push-notification-registration-cache')
 
-const cacheClearCache = createAsyncCache('cacheClear')
+const cacheClearCache = createAsyncCache<string>('cacheClear')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.

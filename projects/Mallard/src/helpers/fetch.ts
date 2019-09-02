@@ -202,16 +202,14 @@ export const fetchCacheClear = async (): Promise<boolean> => {
             cacheClearCache.get(),
         ])
 
-        const cacheClearString = JSON.parse(cacheNumber.cacheClear)
-
         if (cacheNumberStorage === null) {
             // No data, so store it
-            await cacheClearCache.set(cacheClearString)
+            await cacheClearCache.set(cacheNumber.cacheClear)
             // Suggests that this is a new user, so carry on as normal
             return true
         }
 
-        if (cacheNumberStorage !== cacheClearString) {
+        if (cacheNumberStorage !== cacheNumber.cacheClear) {
             // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
             await deleteIssueFiles()
             await cacheClearCache.reset()
