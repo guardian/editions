@@ -71,13 +71,19 @@ interface RowContentProps {
     title: string
     subtitle?: string
     explainer?: Element
+    linkWeight?: 'regular' | 'bold'
 }
 
-const RowContents = ({ title, explainer, subtitle }: RowContentProps) => (
+const RowContents = ({
+    title,
+    explainer,
+    subtitle,
+    linkWeight = 'bold',
+}: RowContentProps) => (
     <>
-        <UiBodyCopy weight="bold">{title}</UiBodyCopy>
+        <UiBodyCopy weight={linkWeight}>{title}</UiBodyCopy>
         {subtitle && (
-            <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
+            <UiBodyCopy weight={linkWeight} style={{ fontSize: 14 }}>
                 {subtitle}
             </UiBodyCopy>
         )}
