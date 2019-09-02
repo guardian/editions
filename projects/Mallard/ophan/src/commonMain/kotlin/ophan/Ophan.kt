@@ -42,25 +42,35 @@ class OphanApi(
             FileRecordStore(recordStorePath)
     ))
 
-    fun sendTestAppScreenEvent(screenName: String, eventId: String) {
+    fun componentEventBuilder(component: ComponentType, action: Action, eventId: String, value: String, id: String): Event {
         val event = Event.Builder()
                 .eventId(eventId)
                 .eventType(EventType.COMPONENT_EVENT)
                 .viewId(null) /* TODO */
                 .componentEvent(ComponentEvent.Builder()
                         .component(ComponentV2.Builder()
-                                .componentType(ComponentType.APP_SCREEN)
-                                .id(screenName)
+                                .componentType(component)
+                                .id(id)
                                 .products(emptySet())
                                 .campaignCode(null)
                                 .labels(emptySet())
                                 .build()
                         )
-                        .action(Action.VIEW)
-                        .value("yes")
+                        .action(action)
+                        .value(value)
                         .build()
                 )
                 .build()
+        return event;
+    }
+
+    fun sendAppScreenEvent(screenName: String, value: String, eventId: String) {
+        val event = this.componentEventBuilder(ComponentType.APP_SCREEN, Action.VIEW, eventId, value, screenName)
+        dispatcher.dispatchEvent(event)
+    }
+
+    fun sendAppComponentEvent(component: ComponentType, action: Action, value: String, id: String, eventId: String) {
+        val event = this.componentEventBuilder(component, action, eventId, value, id)
         dispatcher.dispatchEvent(event)
     }
 }

@@ -16,7 +16,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import ophan.OphanApi;
-
 class RNOphanModule extends ReactContextBaseJavaModule {
 
     @Nonnull
@@ -66,11 +65,20 @@ class RNOphanModule extends ReactContextBaseJavaModule {
         }
     }
 
-    @ReactMethod
-    public void sendTestAppScreenEvent(String screenName, Promise promise) {
+    public void sendAppScreenEvent(String screenName, String value, Promise promise) {
         try {
-            ophanApi.sendTestAppScreenEvent(screenName, UUID.randomUUID().toString());
-            promise.resolve(screenName);
+            ophanApi.sendAppScreenEvent(screenName, value, UUID.randomUUID().toString());
+            promise.resolve(true);
+        } catch (Throwable e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void sendAppComponentEvent(String component, String action, String value, String id, Promise promise) {
+        try {
+            ophanApi.sendAppComponentEvent(component, action, value, id, UUID.randomUUID().toString());
+            promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
         }
