@@ -16,18 +16,16 @@ const useFormField = (
         onSet?: (value: string) => void
     },
 ): FormField => {
-    const [hasInput, setHasInput] = useState(false)
     const [value, setValue] = useState(initialValue)
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        hasInput && setError(validator(value))
-    }, [hasInput, validator, value])
+        setError(validator(value))
+    }, [validator, value])
 
     return {
         value,
         setValue: value => {
-            setHasInput(true)
             onSet && onSet(value)
             setValue(value)
         },
