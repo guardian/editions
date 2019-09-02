@@ -18,6 +18,7 @@ export interface Item<D> {
     explainer?: string
     proxy?: ReactElement
     data?: D
+    linkWeight?: 'bold' | 'regular'
 }
 
 /*
