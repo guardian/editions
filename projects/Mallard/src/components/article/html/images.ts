@@ -10,6 +10,12 @@ import { Direction } from 'src/helpers/sizes'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 
+export const renderCaption = ({
+    caption,
+    credit,
+}: Pick<ImageElement, 'caption' | 'credit'>) =>
+    [caption, credit].filter(s => !!s).join(' ')
+
 const breakoutCaption = ({
     role,
     wrapLayout,
@@ -159,14 +165,14 @@ const ImageBase = ({
     credit?: string
     role?: ImageElement['role']
 }) => {
+    const figcaption = renderCaption({ caption, credit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
             <img src="${path}" alt="${alt}" />
-            ${(caption || credit) &&
+            ${figcaption &&
                 html`
                     <figcaption>
-                        ${Arrow({ direction: Direction.top })} Caption – ${role}
-                        – ${caption} ${credit}
+                        ${Arrow({ direction: Direction.top })} ${figcaption}
                     </figcaption>
                 `}
         </figure>

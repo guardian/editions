@@ -1,4 +1,4 @@
-import { renderCaption } from '../render'
+import { renderCaption } from '../images'
 
 describe('html', () => {
     describe('renderCaption', () => {
@@ -6,8 +6,6 @@ describe('html', () => {
             expect(
                 renderCaption({
                     caption: 'caption',
-                    id: 'image',
-                    src: { source: 'source', path: 'path' },
                 }),
             ).toBe('caption')
         })
@@ -16,8 +14,6 @@ describe('html', () => {
             expect(
                 renderCaption({
                     credit: 'credit',
-                    id: 'image',
-                    src: { source: 'source', path: 'path' },
                 }),
             ).toBe('credit')
         })
@@ -27,8 +23,6 @@ describe('html', () => {
                 renderCaption({
                     caption: 'caption',
                     credit: 'credit',
-                    id: 'image',
-                    src: { source: 'source', path: 'path' },
                 }),
             ).toBe('caption credit')
         })
