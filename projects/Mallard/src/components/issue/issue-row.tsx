@@ -16,6 +16,9 @@ import { FSPaths } from 'src/paths'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
 import { imageForScreenSize } from 'src/helpers/screen'
+import { useNetInfo } from '@react-native-community/netinfo'
+import { useToast } from 'src/hooks/use-toast'
+import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 
 interface GridRowSplitPropTypes {
     children: ReactNode
@@ -58,11 +61,28 @@ const IssueRow = ({
 
     const [exists, setExists] = useState<boolean | null>(null)
 
+    const { showToast } = useToast()
+
+    const { isConnected } = useNetInfo()
+
     useEffect(() => {
         // we probably need a better check for this
         // e.g. do we have issue json and images?
         RNFetchBlob.fs.exists(FSPaths.issue(issue.key)).then(setExists)
     }, [issue.key])
+
+    const onDownloadIssue = () => {
+        if (isConnected && !dlStatus) {
+            downloadAndUnzipIssue(issue.key, imageForScreenSize(), status => {
+                setDlStatus(status)
+                if (status.type === 'success') {
+                    setExists(true)
+                }
+            })
+        } else {
+            showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE)
+        }
+    }
 
     return (
         <RowWrapper>
@@ -81,19 +101,7 @@ const IssueRow = ({
                         color={color.primary}
                     >
                         <Button
-                            onPress={() => {
-                                !dlStatus &&
-                                    downloadAndUnzipIssue(
-                                        issue.key,
-                                        imageForScreenSize(),
-                                        status => {
-                                            setDlStatus(status)
-                                            if (status.type === 'success') {
-                                                setExists(true)
-                                            }
-                                        },
-                                    )
-                            }}
+                            onPress={onDownloadIssue}
                             icon={exists === true ? '\uE062' : '\uE077'}
                             alt={'Download'}
                             appearance={ButtonAppearance.skeleton}

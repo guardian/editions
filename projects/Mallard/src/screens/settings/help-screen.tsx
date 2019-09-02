@@ -30,4 +30,8 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
     )
 }
 
+HelpScreen.navigationOptions = {
+    title: 'Help',
+}
+
 export { HelpScreen }

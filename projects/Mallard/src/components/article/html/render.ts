@@ -83,6 +83,25 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
+export const renderCaption = (imageElement: ImageElement) =>
+    [imageElement.caption, imageElement.credit].filter(s => !!s).join(' ')
+
+const renderImageElement = (imageElement: ImageElement) => {
+    const path = imagePath(imageElement.src)
+    return html`
+        <figure style="overflow: hidden;">
+            <img
+                src="${path}"
+                style="display: block; width: 100%; height: auto;"
+                alt="${imageElement.alt}"
+            />
+            <figcaption>
+                ${renderCaption(imageElement)}
+            </figcaption>
+        </figure>
+    `
+}
+
 export const render = (
     article: BlockElement[],
     {

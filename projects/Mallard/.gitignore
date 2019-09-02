@@ -32,6 +32,8 @@ build/
 .gradle
 local.properties
 *.iml
+android/app/bin
+.project
 
 # Visual Studio Code
 #
@@ -73,3 +75,6 @@ coverage
 
 # CocoaPods
 /ios/Pods/
+
+android/app/bin
+android/.project

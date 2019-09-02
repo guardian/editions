@@ -110,4 +110,4 @@ const LoginLayout = ({
     </View>
 )
 
-export { LoginLayout }
+export { LoginLayout, LoginHeader }

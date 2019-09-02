@@ -15,7 +15,7 @@ import {
     getMockCache,
     tomorrow,
     yesterday,
-} from './test-helpers'
+} from '../../test-helpers/test-helpers'
 
 /**
  * This helper ensures an ordering or resolving promises, any promise
@@ -155,6 +155,7 @@ describe('credentials-chain', () => {
                 casDataCache,
                 legacyCasExpiryCache,
                 iapReceiptCache,
+                false,
             )
 
             expect(result).toEqual(IdentityAuthStatus(userData))
@@ -171,6 +172,7 @@ describe('credentials-chain', () => {
                 casDataCache,
                 legacyCasExpiryCache,
                 iapReceiptCache,
+                false,
             )
 
             expect(result).toEqual(CASAuthStatus(validCasExpiry))
@@ -187,6 +189,7 @@ describe('credentials-chain', () => {
                 casDataCache,
                 legacyCasExpiryCache,
                 iapReceiptCache,
+                false,
             )
 
             expect(result).toEqual(CASAuthStatus(validCasExpiry))
@@ -203,6 +206,7 @@ describe('credentials-chain', () => {
                 casDataCache,
                 legacyCasExpiryCache,
                 iapReceiptCache,
+                false,
             )
 
             expect(result).toEqual(IAPAuthStatus(validIAPReceipt))
@@ -219,6 +223,41 @@ describe('credentials-chain', () => {
                 casDataCache,
                 legacyCasExpiryCache,
                 iapReceiptCache,
+                false,
+            )
+
+            expect(result).toEqual(unauthed)
+        })
+
+        it('returns an `iap` when we have only an expired iap receipt and are in testflight', async () => {
+            const userDataCache = getMockAsyncCache(null)
+            const casDataCache = getMockAsyncCache(invalidCasExpiry)
+            const legacyCasExpiryCache = getMockCache(invalidCasExpiry)
+            const iapReceiptCache = getMockAsyncCache(invalidIAPReceipt)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+                true,
+            )
+
+            expect(result).toEqual(unauthed)
+        })
+
+        it('returns `unauthed` when we have only no iap receipt and are in testflight', async () => {
+            const userDataCache = getMockAsyncCache(null)
+            const casDataCache = getMockAsyncCache(invalidCasExpiry)
+            const legacyCasExpiryCache = getMockCache(invalidCasExpiry)
+            const iapReceiptCache = getMockAsyncCache(null)
+
+            const result = await cachedAuthChain(
+                userDataCache,
+                casDataCache,
+                legacyCasExpiryCache,
+                iapReceiptCache,
+                true,
             )
 
             expect(result).toEqual(unauthed)

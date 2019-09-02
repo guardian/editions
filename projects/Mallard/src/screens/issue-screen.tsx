@@ -33,6 +33,11 @@ import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { Header } from 'src/components/layout/header/header'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { safeInterpolation } from 'src/helpers/math'
+import {
+    CONNECTION_FAILED_ERROR,
+    CONNECTION_FAILED_SUB_ERROR,
+    REFRESH_BUTTON_TEXT,
+} from 'src/helpers/words'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -167,7 +172,9 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
 
                         <FlexErrorMessage
                             debugMessage={message}
-                            action={['Retry', retry]}
+                            title={CONNECTION_FAILED_ERROR}
+                            message={CONNECTION_FAILED_SUB_ERROR}
+                            action={[REFRESH_BUTTON_TEXT, retry]}
                         />
                     </>
                 ),
