@@ -9,7 +9,6 @@ import { WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
 import { color } from 'src/theme/color'
 import { PathToArticle } from '../article-screen'
-import { ModalRenderer } from '../../components/modal'
 import { useIsPreview } from 'src/hooks/use-settings'
 
 const styles = StyleSheet.create({
@@ -34,48 +33,45 @@ const ArticleScreenBody = ({
     const previewNotice = preview ? `${path.collection}:${position}` : undefined
 
     return (
-        <>
-            <ScrollView
-                scrollEventThrottle={8}
-                onScroll={ev => {
-                    onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
-                }}
-                style={{ width }}
-                contentContainerStyle={styles.flex}
-            >
-                {articleResponse({
-                    error: ({ message }) => (
-                        <FlexErrorMessage
-                            title={message}
-                            style={{ backgroundColor: color.background }}
-                        />
-                    ),
-                    pending: () => (
-                        <FlexErrorMessage
-                            title={'loading'}
-                            style={{ backgroundColor: color.background }}
-                        />
-                    ),
-                    success: article => (
-                        <>
-                            {previewNotice && (
-                                <UiBodyCopy>{previewNotice}</UiBodyCopy>
-                            )}
-                            <WithArticle
-                                type={
-                                    article.article.articleType ||
-                                    ArticleType.Article
-                                }
-                                pillar={pillar}
-                            >
-                                <ArticleController article={article.article} />
-                            </WithArticle>
-                        </>
-                    ),
-                })}
-            </ScrollView>
-            <ModalRenderer />
-        </>
+        <ScrollView
+            scrollEventThrottle={8}
+            onScroll={ev => {
+                onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
+            }}
+            style={{ width }}
+            contentContainerStyle={styles.flex}
+        >
+            {articleResponse({
+                error: ({ message }) => (
+                    <FlexErrorMessage
+                        title={message}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                pending: () => (
+                    <FlexErrorMessage
+                        title={'loading'}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                success: article => (
+                    <>
+                        {previewNotice && (
+                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
+                        )}
+                        <WithArticle
+                            type={
+                                article.article.articleType ||
+                                ArticleType.Article
+                            }
+                            pillar={pillar}
+                        >
+                            <ArticleController article={article.article} />
+                        </WithArticle>
+                    </>
+                ),
+            })}
+        </ScrollView>
     )
 }
 

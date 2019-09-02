@@ -11,7 +11,7 @@ import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
 import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
-import { Modal } from './components/modal'
+import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { ToastProvider } from './hooks/use-toast'
 import {
@@ -96,6 +96,7 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
+                    <ModalRenderer />
                     <StatusBar
                         animated={true}
                         barStyle="light-content"
