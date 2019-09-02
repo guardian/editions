@@ -1,24 +1,17 @@
 import React from 'react'
 import Svg, { Path } from 'react-native-svg'
-import { toSize } from 'src/helpers/sizes'
+import { toSize, Direction } from 'src/helpers/sizes'
 import { color } from 'src/theme/color'
 import { View } from 'react-native'
-
-export enum BigArrowDirection {
-    'top' = 90,
-    'left' = 0,
-    'bottom' = -90,
-    'right' = 180,
-}
 
 export const BigArrow = ({
     scale = 1,
     fill = color.text,
-    direction = BigArrowDirection.left,
+    direction = Direction.left,
 }: {
     scale: number
     fill: string
-    direction: BigArrowDirection
+    direction: Direction
 }) => {
     const dimensions = toSize(9 * scale, 11 * scale)
     return (
@@ -26,7 +19,7 @@ export const BigArrow = ({
             style={{
                 transform: [
                     {
-                        rotate: direction + 'deg',
+                        rotate: direction - 90 + 'deg',
                     },
                 ],
             }}

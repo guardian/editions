@@ -135,7 +135,7 @@ const threeStoryPageBigPhoto = (KeyItem = ImageItem): PageLayout => ({
             },
             {
                 item: SplitImageItem,
-                fits: toRectangle(1, 3, 1, 3),
+                fits: toRectangle(1, 3, 1, 2),
             },
         ],
     },

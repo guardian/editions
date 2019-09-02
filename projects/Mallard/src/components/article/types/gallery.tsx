@@ -9,7 +9,7 @@ import {
     View,
 } from 'react-native'
 import { GalleryArticle, Image as ImageType, ImageElement } from 'src/common'
-import { BigArrow, BigArrowDirection } from 'src/components/icons/BigArrow'
+import { BigArrow } from 'src/components/icons/BigArrow'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { APIPaths, imagePath } from 'src/paths'
@@ -22,6 +22,7 @@ import {
     GalleryHeaderProps,
 } from '../article-header/gallery-header'
 import { Wrap } from '../wrap/wrap'
+import { Direction } from 'src/helpers/sizes'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -125,8 +126,8 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
                         <BigArrow
                             direction={
                                 size < Breakpoints.tabletVertical
-                                    ? BigArrowDirection.top
-                                    : BigArrowDirection.left
+                                    ? Direction.top
+                                    : Direction.left
                             }
                             scale={1.2}
                             fill={color.main}

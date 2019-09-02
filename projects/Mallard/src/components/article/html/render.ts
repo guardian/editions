@@ -1,62 +1,41 @@
-import { PillarColours } from '@guardian/pasteup/palette'
-import { PixelRatio } from 'react-native'
 import {
     ArticleFeatures,
     ArticlePillar,
     BlockElement,
-    ImageElement,
     MediaAtomElement,
 } from 'src/common'
 import { getPillarColors } from 'src/hooks/use-article'
-import { imagePath } from 'src/paths'
 import { metrics } from 'src/theme/spacing'
-import { getFont } from 'src/theme/typography'
 import {
     css,
     generateAssetsFontCss,
+    getScaledFont,
+    getScaledFontCss,
     html,
     makeHtml,
-} from '../../../helpers/webview'
+    px,
+} from 'src/helpers/webview'
 import { WrapLayout } from '../wrap/wrap'
+import { CssProps } from './helpers/props'
+import { Image, imageStyles } from './images'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
-const getScaledFont = (...props: Parameters<typeof getFont>) => {
-    const font = getFont(...props)
-    return {
-        ...font,
-        lineHeight: font.lineHeight * PixelRatio.getFontScale(),
-        fontSize: font.fontSize * PixelRatio.getFontScale(),
-    }
-}
-
-const getScaledFontCss = (...props: Parameters<typeof getFont>) => {
-    const font = getScaledFont(...props)
-    return css`
-        font-size: ${font.fontSize}px;
-        line-height; ${font.lineHeight}px;
-    `
-}
-
-const makeCss = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
     ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
+    ${generateAssetsFontCss('GuardianTextSans-Regular')}
     * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
     .drop-cap p:first-child:first-letter {
         font-family: 'GHGuardianHeadline-Regular';
         color: ${colors.main};
         float: left;
-        font-size: ${getScaledFont('text', 1).lineHeight * 4}px;
-        line-height: ${getScaledFont('text', 1).lineHeight * 4}px;
+        font-size: ${px(getScaledFont('text', 1).lineHeight * 4)};
+        line-height: ${px(getScaledFont('text', 1).lineHeight * 4)};
         display: inline-block;
         transform: scale(1.335) translateY(1px) translateX(-2px);
         transform-origin: left center;
@@ -64,45 +43,30 @@ const makeCss = ({
     }
     :root {
         ${getScaledFontCss('text', 1)}
+        font-family: 'GuardianTextEgyptian-Reg';
     }
     #app {
-        font-family: 'GuardianTextEgyptian-Reg';
-        padding: ${metrics.vertical}px ${metrics.article.sides}px;
+        padding: ${px(metrics.vertical)} ${px(metrics.article.sides)};
+        width: ${px(wrapLayout.width + metrics.article.sides * 2)};
+        margin: auto;
+        position: relative;
+    }
+    main {
+        width: ${px(wrapLayout.content.width)};
     }
     #app p,
     figure {
-        margin-bottom: ${metrics.vertical * 2}px;
+        margin-bottom: ${px(metrics.vertical * 2)};
     }
     #app a {
         color: ${colors.main};
         text-decoration-color: ${colors.pastel};
     }
-    #root {
-        overflow: hidden;
-    }
-    main {
-        float: left;
-        width: ${wrapLayout.content.width}px;
-        padding: 0 {metrics.article.sides}px
-    }
     * {
         margin: 0;
         padding: 0;
     }
-    figcaption {
-        padding-top: 5px;
-        font-size: ${12 * PixelRatio.getFontScale()}px;
-        color: #767676;
-        line-height: 1rem;
-    }
-    .img-fill {
-        width: ${wrapLayout.width}px
-    }
-    .img-side {
-        float: right;
-        width: ${wrapLayout.rail.width}px;
-        margin-right: -${wrapLayout.width - wrapLayout.content.width}px
-    }
+    ${imageStyles({ colors, wrapLayout })}
 `
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
@@ -119,25 +83,6 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
-export const renderCaption = (imageElement: ImageElement) =>
-    [imageElement.caption, imageElement.credit].filter(s => !!s).join(' ')
-
-const renderImageElement = (imageElement: ImageElement) => {
-    const path = imagePath(imageElement.src)
-    return html`
-        <figure style="overflow: hidden;">
-            <img
-                src="${path}"
-                style="display: block; width: 100%; height: auto;"
-                alt="${imageElement.alt}"
-            />
-            <figcaption>
-                ${renderCaption(imageElement)}
-            </figcaption>
-        </figure>
-    `
-}
-
 export const render = (
     article: BlockElement[],
     {
@@ -150,7 +95,7 @@ export const render = (
         wrapLayout: WrapLayout
     },
 ) => {
-    const body = article
+    const content = article
         .filter(
             el =>
                 el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
@@ -172,15 +117,16 @@ export const render = (
                 case 'media-atom':
                     return renderMediaAtom(el)
                 case 'image':
-                    return renderImageElement(el)
+                    return Image({ imageElement: el })
                 default:
                     return ''
             }
         })
         .join('')
 
-    const generatedHtml = html`<div id="root"><main>${body}</main></root>`
-
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
-    return makeHtml({ styles, html: generatedHtml })
+    const body = html`
+        <main>${content}</main>
+    `
+    return makeHtml({ styles, body })
 }

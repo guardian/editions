@@ -25,7 +25,7 @@ export const families = {
     },
 }
 
-type FontFamily = keyof typeof families
+export type FontFamily = keyof typeof families
 
 /*
 Think of these as ems
