@@ -26,6 +26,8 @@ const CasSignInScreen = ({
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
+    const [shouldShowError, setShouldShowError] = useState(false)
+
     const subscriberID = useFormField('', {
         validator: subId => (subId ? null : 'Please enter a subscriber ID'),
         onSet: () => setErrorMessage(null),
@@ -37,6 +39,10 @@ const CasSignInScreen = ({
     })
 
     const handleSubmit = async () => {
+        if (subscriberID.error || password.error) {
+            setShouldShowError(true)
+            return
+        }
         try {
             const expiry = await fetchAndPersistCASExpiry(
                 subscriberID.value,
@@ -63,14 +69,14 @@ const CasSignInScreen = ({
         >
             <View>
                 <LoginInput
-                    error={subscriberID.error}
+                    error={shouldShowError ? subscriberID.error : null}
                     onChangeText={subscriberID.setValue}
                     label="Subscriber ID (including all zeros)"
                     accessibilityLabel="subscriber id input"
                     value={subscriberID.value}
                 />
                 <LoginInput
-                    error={password.error}
+                    error={shouldShowError ? password.error : null}
                     onChangeText={password.setValue}
                     label="Postcode or surname"
                     accessibilityLabel="postcode or surname input"

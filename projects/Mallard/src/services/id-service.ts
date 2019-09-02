@@ -1,5 +1,6 @@
 import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/constants'
 import qs from 'query-string'
+import { GENERIC_ERROR } from 'src/helpers/words'
 
 interface ErrorReponse {
     errors: { message: string; description: string }[]
@@ -9,7 +10,12 @@ const hasErrorsArray = (json: any): json is ErrorReponse =>
     json && Array.isArray(json.errors)
 
 const maybeThrowErrors = async (res: Response) => {
-    const json = await res.json()
+    let json: any
+    try {
+        json = await res.json()
+    } catch (e) {
+        throw __DEV__ ? e : new Error(GENERIC_ERROR)
+    }
 
     if (res.status !== 200) {
         throw new Error(
