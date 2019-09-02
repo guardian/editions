@@ -190,9 +190,9 @@ const fetchWeather = <T>(
     )
 }
 
-const getCacheNumber = async () => {
+const getCacheNumber = async (): Promise<{ cacheClear: string }> => {
     const response = await fetch(defaultSettings.cacheClearUrl)
-    return await response.json()
+    return response.json()
 }
 
 export const fetchCacheClear = async (): Promise<boolean> => {
@@ -202,14 +202,16 @@ export const fetchCacheClear = async (): Promise<boolean> => {
             cacheClearCache.get(),
         ])
 
+        const cacheClearString = JSON.parse(cacheNumber.cacheClear)
+
         if (cacheNumberStorage === null) {
             // No data, so store it
-            await cacheClearCache.set(cacheNumber.cacheClear)
+            await cacheClearCache.set(cacheClearString)
             // Suggests that this is a new user, so carry on as normal
             return true
         }
 
-        if (cacheNumberStorage !== cacheNumber.cacheClear) {
+        if (cacheNumberStorage !== cacheClearString) {
             // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
             await deleteIssueFiles()
             await cacheClearCache.reset()
