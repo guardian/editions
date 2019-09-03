@@ -14,13 +14,15 @@ const createListener = (): EventEmitter & {
 
 const createInAppBrowser = ({
     available = true,
-    cancel = false,
+    resultType,
 }: {
     available?: boolean
-    cancel?: boolean
+    resultType?: 'cancel' | 'dismiss'
 } = {}) => ({
     open: () =>
-        new Promise<BrowserResult>(res => cancel && res({ type: 'cancel' })),
+        new Promise<BrowserResult>(
+            res => resultType && res({ type: resultType }),
+        ),
     close: jest.fn(() => {}),
     isAvailable: () => Promise.resolve(available),
 })
@@ -239,12 +241,10 @@ describe('deep-link-auth', () => {
                     openURL: () => {},
                 })
                 const appState = createListener()
-                const validator = jest.fn(async () => {
-                    throw 'hi'
-                })
+                const validator = jest.fn(async () => 'token')
                 const browser = createInAppBrowser({
                     available: true,
-                    cancel: true,
+                    resultType: 'cancel',
                 })
 
                 const promise = authWithDeepRedirect(
@@ -268,6 +268,39 @@ describe('deep-link-auth', () => {
 
                 expect(error).toBe('Sign-in cancelled')
                 expect(browser.close).toBeCalled()
+            })
+
+            it('will still auth if the browser is closed before the link handler is called', async () => {
+                const linking = Object.assign(createListener(), {
+                    openURL: () => {},
+                })
+                const appState = createListener()
+                const validator = jest.fn(async () => 'token')
+                const browser = createInAppBrowser({
+                    available: true,
+                    resultType: 'dismiss',
+                })
+
+                const promise = authWithDeepRedirect(
+                    'https://authurl.com/auth',
+                    validator,
+                    linking,
+                    appState,
+                    browser,
+                )
+
+                // wait the in app browser check
+                await Promise.resolve()
+
+                // wait the for the browser to close
+                await Promise.resolve()
+
+                linking.emit('url', { url: 'myurl' })
+
+                const val = await promise
+
+                expect(val).toBe('token')
+                expect(validator).toBeCalledWith('myurl')
             })
         })
     })

@@ -75,7 +75,7 @@ const authWithDeepRedirect = async (
         unlisteners.push(unlistenLink)
 
         if (await inAppBrowserImpl.isAvailable()) {
-            await inAppBrowserImpl.open(authUrl, {
+            const result = await inAppBrowserImpl.open(authUrl, {
                 // iOS Properties
                 dismissButtonStyle: 'cancel',
                 // Android Properties
@@ -83,11 +83,31 @@ const authWithDeepRedirect = async (
                 enableUrlBarHiding: true,
                 enableDefaultShare: true,
             })
-            // The deep link handler is called before the `InAppBrowser.open` promise resolves
-            // so we can tidy up happily here in case there was a cancelled event.
-            // This call may end up rejecting the promise _again_ (after it's already been
-            // resolved / rejected) but this is basically a noop
-            onFinish()
+
+            switch (result.type) {
+                case 'cancel': {
+                    /**
+                     * this was a user cancel so reject the promise
+                     */
+                    onFinish()
+                    break
+                }
+                case 'dismiss': {
+                    /**
+                     * the assumption here is that a dismiss event happens when a deep link
+                     * happens or some other non-user cirucmstance.
+                     *
+                     * On iOS, if this was a deep link then the link handler above should already have fired
+                     * and resolved / rejected this promise (making the rest of thie code a noop).
+                     * However, this isn't the case on Android. Also if it _wan't_ a deep link then
+                     * we should clean up.
+                     *
+                     * Hence a second for other handlers to fire before rejecting the promise
+                     */
+                    setTimeout(() => onFinish(), 1000)
+                    break
+                }
+            }
         } else {
             const unlistenAppState = createAppChangeListener(
                 (currentState: string) => {
