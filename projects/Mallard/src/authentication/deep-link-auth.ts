@@ -59,7 +59,11 @@ const authWithDeepRedirect = async (
             if (!url) {
                 rej('Sign-in cancelled')
             } else {
-                res(await extractTokenAndValidateState(url))
+                try {
+                    res(await extractTokenAndValidateState(url))
+                } catch (e) {
+                    rej(e)
+                }
             }
         }
 
@@ -80,8 +84,8 @@ const authWithDeepRedirect = async (
                 enableDefaultShare: true,
             })
             // The deep link handler is called before the `InAppBrowser.open` promise resolves
-            // so we can tidy up happily here, in case there was a cancelled event
-            // this call may end up rejecting the promise _again_ (after it's already been
+            // so we can tidy up happily here in case there was a cancelled event.
+            // This call may end up rejecting the promise _again_ (after it's already been
             // resolved / rejected) but this is basically a noop
             onFinish()
         } else {
