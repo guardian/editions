@@ -69,15 +69,42 @@ const authWithDeepRedirect = async (
 
         unlisteners.push(unlistenLink)
 
+        const runExternalBrowserDeepLink = () => {
+            const unlistenAppState = addListener(
+                appStateImpl,
+                'change',
+                (currentState: string) => {
+                    if (currentState === 'active') {
+                        // This is being run when
+                        // make sure the link handler is removed whenever we come back to the app
+                        // url is called first in the happy path so the promise will have resolved by then
+                        // otherwise, if they navigate back without authenticating, remove the listener and cancel the login
+
+                        // eslint-disable-next-line
+                        onFinish()
+                    }
+                },
+            )
+            unlisteners.push(unlistenAppState)
+            // open in the browser if in app browsers are not supported
+            linkingImpl.openURL(authUrl)
+        }
+
         if (await inAppBrowserImpl.isAvailable()) {
-            const result = await inAppBrowserImpl.open(authUrl, {
-                // iOS Properties
-                dismissButtonStyle: 'cancel',
-                // Android Properties
-                showTitle: false,
-                enableUrlBarHiding: true,
-                enableDefaultShare: true,
-            })
+            let result
+            try {
+                result = await inAppBrowserImpl.open(authUrl, {
+                    // iOS Properties
+                    dismissButtonStyle: 'cancel',
+                    // Android Properties
+                    showTitle: false,
+                    enableUrlBarHiding: true,
+                    enableDefaultShare: true,
+                })
+            } catch {
+                runExternalBrowserDeepLink()
+                return
+            }
 
             switch (result.type) {
                 case 'cancel': {
@@ -104,24 +131,7 @@ const authWithDeepRedirect = async (
                 }
             }
         } else {
-            const unlistenAppState = addListener(
-                appStateImpl,
-                'change',
-                (currentState: string) => {
-                    if (currentState === 'active') {
-                        // This is being run when
-                        // make sure the link handler is removed whenever we come back to the app
-                        // url is called first in the happy path so the promise will have resolved by then
-                        // otherwise, if they navigate back without authenticating, remove the listener and cancel the login
-
-                        // eslint-disable-next-line
-                        onFinish()
-                    }
-                },
-            )
-            unlisteners.push(unlistenAppState)
-            // open in the browser if in app browsers are not supported
-            linkingImpl.openURL(authUrl)
+            runExternalBrowserDeepLink()
         }
     })
 }
