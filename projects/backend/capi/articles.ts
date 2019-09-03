@@ -40,20 +40,20 @@ interface CAPIExtras {
     path: string
 }
 
-type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
+export type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
     Partial<Pick<Article, OptionalInCAPI>> &
     CAPIExtras
-type CGallery = Omit<GalleryArticle, NotInCAPI | OptionalInCAPI> &
+export type CGallery = Omit<GalleryArticle, NotInCAPI | OptionalInCAPI> &
     Partial<Pick<Article, OptionalInCAPI>> &
     CAPIExtras
-type CPicture = Omit<PictureArticle, NotInCAPI | OptionalInCAPI> &
+export type CPicture = Omit<PictureArticle, NotInCAPI | OptionalInCAPI> &
     Partial<Pick<Article, OptionalInCAPI>> &
     CAPIExtras
 export type CCrossword = Omit<CrosswordArticle, NotInCAPI | OptionalInCAPI> &
     Partial<Pick<Article, OptionalInCAPI>> &
     CAPIExtras
 
-type CAPIContent = CArticle | CGallery | CCrossword | CPicture
+export type CAPIContent = CArticle | CGallery | CCrossword | CPicture
 
 const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
     iso8601: date.iso8601,
