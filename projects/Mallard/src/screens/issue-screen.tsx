@@ -134,7 +134,8 @@ const IssueFronts = ({
             extraData={{
                 ...container,
             }}
-            windowSize={3}
+            windowSize={1}
+            maxToRenderPerBatch={1}
             style={style}
             removeClippedSubviews={true}
             ListHeaderComponent={ListHeaderComponent}
@@ -148,7 +149,7 @@ const IssueFronts = ({
                 index,
             })}
             renderItem={({ item }) => (
-                <View style={{ height: container.height }}>
+                <View style={{ height: container.height, overflow: 'hidden' }}>
                     <Front issue={issue.key} front={item.key} />
                 </View>
             )}

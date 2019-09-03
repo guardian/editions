@@ -30,6 +30,7 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
 
     return (
         <ImageBackground
+            resizeMethod={'resize'}
             style={[
                 styles.image,
                 style,
