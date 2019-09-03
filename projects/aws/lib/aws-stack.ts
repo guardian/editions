@@ -33,8 +33,22 @@ export class EditionsStack extends cdk.Stack {
 
         const frontsRoleARN = new cdk.CfnParameter(this, 'fronts-role-arn', {
             type: 'String',
-            description: 'fronts access',
+            description: 'fronts s3 access',
         })
+
+        const frontsTopicARN = new cdk.CfnParameter(this, 'fronts-topic-arn', {
+            type: 'String',
+            description: 'topic arn for publication messages',
+        })
+
+        const frontsTopicRoleARN = new cdk.CfnParameter(
+            this,
+            'fronts-topic-role-arn',
+            {
+                type: 'String',
+                description: 'topic arn for publication messages',
+            },
+        )
 
         const imageSalt = new cdk.CfnParameter(this, 'image-signing-key', {
             type: 'String',
@@ -198,6 +212,8 @@ export class EditionsStack extends cdk.Stack {
             deployBucket,
             outputBucket: archive,
             backendURL,
+            frontsTopicArn: frontsTopicARN.valueAsString,
+            frontsTopicRoleArn: frontsTopicRoleARN.valueAsString,
         })
 
         new CfnOutput(this, 'archiver-state-machine-arn', {
