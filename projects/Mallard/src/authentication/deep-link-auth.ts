@@ -8,24 +8,17 @@ interface Emitter<T> {
 
 type IAppState = Emitter<string>
 
-const createAppChangeListener = (
-    fn: (state: string) => void,
-    appStateEmitter: IAppState,
+const addListener = <T>(
+    emitter: Emitter<T>,
+    event: string,
+    fn: (e: T) => void,
 ) => {
-    appStateEmitter.addEventListener('change', fn)
-    return () => appStateEmitter.removeEventListener('change', fn)
+    emitter.addEventListener(event, fn)
+    return () => emitter.removeEventListener(event, fn)
 }
 
 type ILinking = Emitter<{ url: string }> & {
     openURL: (url: string) => void
-}
-
-const createLinkListener = (
-    fn: (event: { url: string }) => void,
-    linkingImpl: ILinking,
-) => {
-    linkingImpl.addEventListener('url', fn)
-    return () => linkingImpl.removeEventListener('url', fn)
 }
 
 type IInAppBrowser = Pick<typeof InAppBrowser, 'close' | 'open' | 'isAvailable'>
@@ -67,10 +60,12 @@ const authWithDeepRedirect = async (
             }
         }
 
-        const unlistenLink = createLinkListener((event: { url: string }) => {
+        const unlistenLink = addListener(
+            linkingImpl,
+            'url',
             // eslint-disable-next-line
-            onFinish(event.url)
-        }, linkingImpl)
+            (event: { url: string }) => onFinish(event.url),
+        )
 
         unlisteners.push(unlistenLink)
 
@@ -109,7 +104,9 @@ const authWithDeepRedirect = async (
                 }
             }
         } else {
-            const unlistenAppState = createAppChangeListener(
+            const unlistenAppState = addListener(
+                appStateImpl,
+                'change',
                 (currentState: string) => {
                     if (currentState === 'active') {
                         // This is being run when
@@ -121,7 +118,6 @@ const authWithDeepRedirect = async (
                         onFinish()
                     }
                 },
-                appStateImpl,
             )
             unlisteners.push(unlistenAppState)
             // open in the browser if in app browsers are not supported
