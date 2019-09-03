@@ -1,4 +1,11 @@
-import React, { useState, useMemo, useContext, useCallback } from 'react'
+import React, {
+    useState,
+    useMemo,
+    useContext,
+    useCallback,
+    useEffect,
+    useRef,
+} from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { safeInterpolation } from 'src/helpers/math'
@@ -68,9 +75,24 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
 
 const ModalRenderer = () => {
     const { close, render } = useModal()
+    const [show, setShow] = useState(() => render)
+    const isTransitioning = useRef(false)
     const val = useAlphaIn(200, { out: true, currentValue: render ? 0.75 : 0 })
+
+    useEffect(() => {
+        if (show && !render && !isTransitioning.current) {
+            isTransitioning.current = true
+            setTimeout(() => {
+                isTransitioning.current = false
+                setShow(null)
+            }, 200)
+        } else if (!show && render) {
+            setShow(() => render)
+        }
+    }, [render, show])
+
     return (
-        render && (
+        show && (
             <>
                 <Animated.View
                     style={[
@@ -95,7 +117,7 @@ const ModalRenderer = () => {
                         },
                     ]}
                 >
-                    {render(close)}
+                    {show(close)}
                 </Animated.View>
             </>
         )

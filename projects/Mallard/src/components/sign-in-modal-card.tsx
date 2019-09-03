@@ -25,6 +25,7 @@ const SignInModalCard = ({
     onDismiss: () => void
 }) => (
     <OnboardingCard
+        onDismissThisCard={onDismiss}
         title="Already a subscriber?"
         subtitle="Sign in to continue with the app"
         appearance={CardAppearance.blue}
