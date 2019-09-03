@@ -20,8 +20,8 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
-		4F62AA3223198F8B0052ADBA /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA3123198F8B0052ADBA /* ophan.framework */; };
-		4F62AA3323198F8B0052ADBA /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA3123198F8B0052ADBA /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4F62AA36231E8D660052ADBA /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA35231E8D660052ADBA /* ophan.framework */; };
+		4F62AA37231E8D660052ADBA /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA35231E8D660052ADBA /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7836FF3F0ADEA9274CAD15ED /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */; };
 		950E1C012317E06F00F38B92 /* Ophan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950E1C002317E06F00F38B92 /* Ophan.swift */; };
 		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
@@ -98,13 +98,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4F62AA3423198F8B0052ADBA /* Embed Frameworks */ = {
+		4F62AA38231E8D660052ADBA /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4F62AA3323198F8B0052ADBA /* ophan.framework in Embed Frameworks */,
+				4F62AA37231E8D660052ADBA /* ophan.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,6 +144,7 @@
 		49D58390ADA01A9FBA2F96DD /* Pods-Mallard-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4F62AA2D23198E500052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
 		4F62AA3123198F8B0052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = "../ophan/build/fat-framework/debug/ophan.framework"; sourceTree = "<group>"; };
+		4F62AA35231E8D660052ADBA /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
 		5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-RegularItalic.ttf"; path = "../src/assets/fonts/GuardianTextSans-RegularItalic.ttf"; sourceTree = "<group>"; };
 		574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextSans-Regular.ttf"; path = "../src/assets/fonts/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; };
 		5DA07BFB0DCC824DF7C94988 /* Pods-Mallard-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Mallard-tvOSTests/Pods-Mallard-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -196,7 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */,
-				4F62AA3223198F8B0052ADBA /* ophan.framework in Frameworks */,
+				4F62AA36231E8D660052ADBA /* ophan.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +325,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4F62AA35231E8D660052ADBA /* ophan.framework */,
 				A10F237623191F62004C70CC /* ReleaseStream */,
 				4F62AA2D23198E500052ADBA /* ophan.framework */,
 				4F62AA3123198F8B0052ADBA /* ophan.framework */,
@@ -412,7 +414,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				9A2F30EB4995BA18D2B5CA7D /* [CP] Copy Pods Resources */,
-				4F62AA3423198F8B0052ADBA /* Embed Frameworks */,
+				4F62AA38231E8D660052ADBA /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -699,7 +701,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../ophan/gradlew\" -p \"$SRCROOT/../ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\"                      \\\n-Pkotlin.target=\"$KOTLIN_TARGET\"\n";
+			shellScript = "\"$SRCROOT/../ophan/gradlew\" -p \"$SRCROOT/../ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\"\n";
 		};
 		9A2F30EB4995BA18D2B5CA7D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -887,7 +889,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 998P9U5NGJ;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/fat-framework/debug";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/bin/ios/universalFramework";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
 				KOTLIN_BUILD_TYPE = DEBUG;
@@ -916,7 +918,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 998P9U5NGJ;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/fat-framework/release";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/bin/ios/universalFramework";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
 				KOTLIN_BUILD_TYPE = RELEASE;

@@ -58,7 +58,7 @@ kotlin {
 task fatFramework(type: FatFrameworkTask) {
     def buildType = project.findProperty('kotlin.build.type') ?: 'DEBUG'
     baseName = "ophan"
-    destinationDir = file("$buildDir/fat-framework/${buildType.toLowerCase()}")
+    destinationDir = file("$buildDir/bin/ios/universalFramework")
     from(
             kotlin.targets.ios.binaries.getFramework(buildType),
             kotlin.targets.ios32.binaries.getFramework(buildType),
@@ -94,8 +94,6 @@ task copyFatFramework {
     doLast {
         def srcFile = tasks.fatFramework.outputs.files
         def targetDir = getProperty('configuration.build.dir')
-        println("srcFile=$srcFile")
-        println("targetDir=$targetDir")
         copy {
             from srcFile
             into targetDir
