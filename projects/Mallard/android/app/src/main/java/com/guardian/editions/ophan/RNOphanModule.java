@@ -1,9 +1,12 @@
 package com.guardian.editions.ophan;
 
+import android.os.Build;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.guardian.editions.BuildConfig;
 
 import java.io.File;
 import java.util.UUID;
@@ -20,10 +23,11 @@ class RNOphanModule extends ReactContextBaseJavaModule {
         super(reactContext);
         final File recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
         ophanApi = new OphanApi(
-                "0.0.1",
-                "Android",
-                "Unknown",
-                "Unknown",
+                "Android Editions",
+                BuildConfig.VERSION_NAME,
+                Build.VERSION.RELEASE,
+                Build.MODEL,
+                Build.MANUFACTURER,
                 "testDeviceId",
                 "testUserId",
                 new LogcatLogger(),
