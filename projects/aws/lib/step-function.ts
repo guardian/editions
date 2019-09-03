@@ -141,11 +141,24 @@ export const archiverStepFunction = (
         },
     )
 
-    const eventTask = new sfn.Task(scope, 'Send SNS Message to Fronts Tool', {
-        task: new tasks.InvokeFunction(event),
-    })
+    const publishedTask = new sfn.Task(
+        scope,
+        'Send published message to Fronts Tool',
+        {
+            task: new tasks.InvokeFunction(event),
+        },
+    )
+    const failTask = new sfn.Task(
+        scope,
+        'Send Failure Message to Fronts Tool',
+        {
+            task: new tasks.InvokeFunction(event),
+        },
+    )
+
+    failTask.next(new sfn.Fail(scope, 'publication-failed'))
     ;[issueTask, frontTask, imageTask, uploadTask, zipTask, indexerTask].map(
-        (task: sfn.Task) => task.addCatch(eventTask, { resultPath: '$.error' }),
+        (task: sfn.Task) => task.addCatch(failTask, { resultPath: '$.error' }),
     )
     //Fetch issue metadata
     issueTask.next(frontTask)
@@ -163,9 +176,9 @@ export const archiverStepFunction = (
 
     uploadTask.next(zipTask)
 
-    zipTask.next(eventTask)
+    zipTask.next(publishedTask)
 
-    eventTask.next(indexerTask)
+    publishedTask.next(indexerTask)
 
     indexerTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
