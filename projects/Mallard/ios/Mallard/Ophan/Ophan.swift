@@ -20,11 +20,20 @@ import ophan
 @objc(Ophan)
 class Ophan: NSObject {
   
-  let ophanApi: OphanApi
+  var ophanApi: OphanApi?
 
   override init() {
     print("Initialising new Ophan instance on thread \(Thread.current)")
-    
+    super.init()
+    ophanApi = newOphanApi(userId: nil)
+  }
+
+  deinit {
+    print("Deinitialising Ophan instance on thread \(Thread.current)")
+  }
+  
+  private func newOphanApi(userId: String?) -> OphanApi {
+  
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
     
@@ -36,23 +45,22 @@ class Ophan: NSObject {
     }
     let deviceName = modelCode ?? "Unrecognised model"
     
-    ophanApi = OphanKt_.getThreadSafeOphanApi (
+    return OphanKt_.getThreadSafeOphanApi (
       appFamily: "iOS Editions",
       appVersion: appVersion + " (" + buildNumber + ")",
       appOsVersion: UIDevice.current.systemVersion,
       deviceName: deviceName,
       deviceManufacturer: "Apple",
       deviceId: "testDeviceId",
-      userId: "testUserId",
+      userId: userId,
       logger: SimpleLogger(),
       recordStorePath: "ophan"
     )
-    
-    super.init()
   }
-
-  deinit {
-    print("Deinitialising Ophan instance on thread \(Thread.current)")
+  
+  @objc(setUserId:)
+  func setUserId(_ userId: String) -> Void {
+    ophanApi = newOphanApi(userId: userId)
   }
 
   @objc(sendTestAppScreenEvent:resolver:rejecter:)
@@ -61,7 +69,7 @@ class Ophan: NSObject {
     do {
       DispatchQueue.main.async {
       print("Current thread \(Thread.current)")
-        self.ophanApi.sendTestAppScreenEvent(screenName: screenName, eventId: UUID().uuidString)
+        self.ophanApi?.sendTestAppScreenEvent(screenName: screenName, eventId: UUID().uuidString)
         resolve(screenName)
       }
     } catch let error {

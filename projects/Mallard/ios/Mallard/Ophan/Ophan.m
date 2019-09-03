@@ -14,6 +14,8 @@ RCT_EXTERN_METHOD(sendTestAppScreenEvent: (NSString)screenName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )
+
+RCT_EXTERN_METHOD(setUserId: (NSString)userId)
                   
 
 @end
