@@ -743,6 +743,21 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@guardian/react-crossword@0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-0.1.7.tgz#a45ca420cc79ae5370052ee3f2475ed055d5031c"
+  integrity sha512-cQLRZwQ3sVKNk5SCTK2B9zVHEGjgkhyZnmsZIoiBJnXrk1QmtfF/9OtY998pQ3TQ6gA84mbcCK9Jrdn+ES+5FQ==
+  dependencies:
+    bean "~1.0.14"
+    bonzo "~2.0.0"
+    fastdom "0.8.5"
+    lodash "^4.17.11"
+    qwery "3.4.2"
+    svg-inline-loader "^0.8.0"
+    wolfy87-eventemitter "~5.2.4"
+  optionalDependencies:
+    fsevents "^1.1.2"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"

@@ -22,8 +22,8 @@
         "webpack-cli": "^3.3.2"
     },
     "dependencies": {
+        "@guardian/react-crossword": "^0.1.7",
         "react": "^16.8.6",
-        "react-crossword": "^0.1.7",
         "react-dom": "^16.8.6",
         "webpack-dev-server": "^3.7.2"
     }
