@@ -9,9 +9,10 @@ import {
     CachedOrPromise,
     createCachedOrPromise,
 } from './fetch/cached-or-promise'
-import { getJson, isIssueOnDevice } from './files'
+import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
 import { Issue } from 'src/common'
 import { defaultSettings } from './settings/defaults'
+import { cacheClearCache } from './storage'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -187,6 +188,41 @@ const fetchWeather = <T>(
             savePromiseResultToValue: result => store(endpointPath, result),
         },
     )
+}
+
+const getCacheNumber = async (): Promise<{ cacheClear: string }> => {
+    const response = await fetch(defaultSettings.cacheClearUrl)
+    return response.json()
+}
+
+export const fetchCacheClear = async (): Promise<boolean> => {
+    try {
+        const [cacheNumber, cacheNumberStorage] = await Promise.all([
+            getCacheNumber(),
+            cacheClearCache.get(),
+        ])
+
+        if (cacheNumberStorage === null) {
+            // No data, so store it
+            await cacheClearCache.set(cacheNumber.cacheClear)
+            // Suggests that this is a new user, so carry on as normal
+            return true
+        }
+
+        if (cacheNumberStorage !== cacheNumber.cacheClear) {
+            // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
+            await deleteIssueFiles()
+            await cacheClearCache.reset()
+            // Server number doesnt match, which means we are making an attempt to clear the cache.
+            return false
+        }
+
+        // Cached number matches Remote number, so carry on as normal
+        return true
+    } catch (e) {
+        // Problems? Lets carry on with what we are doing.
+        return true
+    }
 }
 
 const fetchFromNotificationService = async (deviceToken: { token: string }) => {

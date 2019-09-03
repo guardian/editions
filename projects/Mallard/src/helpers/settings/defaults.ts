@@ -53,6 +53,7 @@ export const defaultSettings: Settings = {
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
     zipUrl: apiUrl + 'zips/',
+    cacheClearUrl: apiUrl + 'cache-clear',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
