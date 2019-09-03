@@ -10,14 +10,14 @@ import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
 import { AuthContext } from 'src/authentication/auth-context'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
-import { SubNotFoundModalCard } from 'src/components/sub-not-found-modal-card'
+import { SignInFailedModalCard } from 'src/components/sign-in-failed-modal-card'
 import { routeNames } from 'src/navigation/routes'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 import { Login } from './log-in'
 import isEmail from 'validator/lib/isEmail'
 import { useFormField } from 'src/hooks/use-form-field'
 import { IdentityAuthStatus } from 'src/authentication/credentials-chain'
-import { withConsent, GdprSwitch } from 'src/helpers/settings'
+import { withConsent } from 'src/helpers/settings'
 import { Alert } from 'react-native'
 
 const useRandomState = () =>
@@ -110,7 +110,11 @@ const AuthSwitcherScreen = ({
                                 setStatus(IdentityAuthStatus(data))
                                 if (!canViewEdition(data)) {
                                     open(close => (
-                                        <SubNotFoundModalCard
+                                        <SignInFailedModalCard
+                                            email={
+                                                data.userDetails
+                                                    .primaryEmailAddress
+                                            }
                                             onDismiss={() =>
                                                 navigation.popToTop()
                                             }
