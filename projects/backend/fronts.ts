@@ -9,7 +9,7 @@ import {
     hasSucceeded,
     failure,
 } from './utils/try'
-import { getArticles } from './capi/articles'
+import { getArticles, CAPIContent } from './capi/articles'
 import { createCardsFromAllArticlesInCollection } from './utils/collection'
 import { getImageFromURL } from './image'
 import {
@@ -23,6 +23,97 @@ import { notNull } from '../common/src'
 import { isPreview } from './preview'
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
+
+const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
+    const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
+    const headline = oc(furniture).headlineOverride() || article.headline
+    const trail = striptags(
+        oc(furniture).trailTextOverride() || article.trail || '',
+    )
+    const byline = oc(furniture).bylineOverride() || article.byline
+    const showByline = furniture.showByline
+    const showQuotedHeadline = furniture.showQuotedHeadline
+    const mediaType = furniture.mediaType
+    const slideshowImages = oc(furniture)
+        .slideshowImages([])
+        .map(_ => _.src)
+        .map(getImageFromURL)
+        .filter(notNull)
+
+    return {
+        key: article.path,
+        kicker,
+        headline,
+        trail,
+        standfirst: trail,
+        byline,
+        showByline,
+        showQuotedHeadline,
+        mediaType,
+        slideshowImages,
+    }
+}
+
+export const patchArticle = (
+    article: CAPIContent,
+    furniture: PublishedFurtniture,
+): [string, CAPIArticle] => {
+    const imageOverride = getImageFromURL(oc(furniture).imageSrcOverride.src())
+
+    const sportScore = oc(furniture).sportScore()
+
+    switch (article.type) {
+        case 'crossword':
+            return [
+                article.path,
+                {
+                    ...article,
+                    ...commonFields(article, furniture),
+                    ...getCrosswordArticleOverrides(article),
+                    sportScore,
+                },
+            ]
+
+        case 'gallery':
+            return [
+                article.path,
+                {
+                    ...article,
+                    ...commonFields(article, furniture),
+                    key: article.path,
+                    sportScore,
+                },
+            ]
+
+        case 'picture':
+            return [
+                article.path,
+                {
+                    ...article,
+                    ...commonFields(article, furniture),
+                    key: article.path,
+                    sportScore,
+                },
+            ]
+
+        case 'article':
+            const fields = commonFields(article, furniture)
+            return [
+                article.path,
+                {
+                    ...article,
+                    ...fields,
+                    byline: fields.byline || '',
+                    image: imageOverride || article.image,
+                    sportScore,
+                },
+            ]
+
+        default:
+            const msg: never = article
+            throw new TypeError(`Unknown type: ${msg}`)
+    }
+}
 
 export const parseCollection = async (
     collectionResponse: PublishedCollection,
@@ -59,108 +150,12 @@ export const parseCollection = async (
             }
             return inResponse
         })
-        .map(([key, furniture]): [string, CAPIArticle] => {
-            const article = capiSearchArticles[key] || capiPrintArticles[key]
-            const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
-            const headline =
-                oc(furniture).headlineOverride() || article.headline
-            const trail = striptags(
-                oc(furniture).trailTextOverride() || article.trail || '',
-            )
-            const byline = oc(furniture).bylineOverride() || article.byline
-            const showByline = furniture.showByline
-            const showQuotedHeadline = furniture.showQuotedHeadline
-            const mediaType = furniture.mediaType
-            const slideshowImages = oc(furniture)
-                .slideshowImages([])
-                .map(_ => _.src)
-                .map(getImageFromURL)
-                .filter(notNull)
-
-            const imageOverride = getImageFromURL(
-                oc(furniture).imageSrcOverride.src(),
-            )
-
-            const sportScore = oc(furniture).sportScore()
-
-            switch (article.type) {
-                case 'crossword':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            ...getCrosswordArticleOverrides(article),
-                            key: article.path,
-                            trail,
-                            byline,
-                            showByline,
-                            showQuotedHeadline,
-                            mediaType,
-                            slideshowImages,
-                            sportScore,
-                        },
-                    ]
-
-                case 'gallery':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            key: article.path,
-                            headline,
-                            kicker,
-                            trail,
-                            byline,
-                            showByline,
-                            showQuotedHeadline,
-                            mediaType,
-                            slideshowImages,
-                            sportScore,
-                        },
-                    ]
-
-                case 'picture':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            key: article.path,
-                            headline,
-                            kicker,
-                            trail,
-                            byline,
-                            showByline,
-                            showQuotedHeadline,
-                            mediaType,
-                            slideshowImages,
-                            sportScore,
-                        },
-                    ]
-
-                case 'article':
-                    return [
-                        article.path,
-                        {
-                            ...article,
-                            key: article.path,
-                            headline,
-                            kicker,
-                            trail,
-                            image: imageOverride || article.image,
-                            byline: byline || '',
-                            showByline,
-                            showQuotedHeadline,
-                            mediaType,
-                            slideshowImages,
-                            sportScore,
-                        },
-                    ]
-
-                default:
-                    const msg: never = article
-                    throw new TypeError(`Unknown type: ${msg}`)
-            }
-        })
+        .map(([key, furniture]) =>
+            patchArticle(
+                capiSearchArticles[key] || capiPrintArticles[key],
+                furniture,
+            ),
+        )
 
     return {
         key: `${i}:${collectionResponse.name}`,
