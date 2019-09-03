@@ -134,8 +134,7 @@ const IssueFronts = ({
             extraData={{
                 ...container,
             }}
-            windowSize={1}
-            maxToRenderPerBatch={1}
+            windowSize={3}
             style={style}
             removeClippedSubviews={true}
             ListHeaderComponent={ListHeaderComponent}
