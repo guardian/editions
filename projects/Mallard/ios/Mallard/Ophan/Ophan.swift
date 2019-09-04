@@ -42,7 +42,7 @@ class Ophan: NSObject {
       appOsVersion: UIDevice.current.systemVersion,
       deviceName: deviceName,
       deviceManufacturer: "Apple",
-      deviceId: "testDeviceId",
+      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
       userId: "testUserId",
       logger: SimpleLogger(),
       recordStorePath: "ophan"
