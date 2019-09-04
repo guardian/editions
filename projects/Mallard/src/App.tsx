@@ -96,7 +96,6 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
-                    <ModalRenderer />
                     <StatusBar
                         animated={true}
                         barStyle="light-content"
@@ -106,6 +105,7 @@ export default class App extends React.Component<{}, {}> {
                         <RootNavigator {...rootNavigationProps} />
                         <NetInfoAutoToast />
                     </View>
+                    <ModalRenderer />
                 </WithProviders>
             </ErrorBoundary>
         )
