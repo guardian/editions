@@ -33,11 +33,10 @@ class Ophan: NSObject {
   }
   
   private func newOphanApi(userId: String?) -> OphanApi {
-  
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
     
-    // TODO: Antonio has an objective-C snippet for this but I need his help to turn it into Swiftt
+    // This snippet gets the current device's model name
     var systemInfo = utsname()
     uname(&systemInfo)
     let modelCode = withUnsafePointer(to: &systemInfo.machine) {
