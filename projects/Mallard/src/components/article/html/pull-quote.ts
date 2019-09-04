@@ -62,6 +62,9 @@ const quoteStyles = ({
         margin-bottom: calc(22px + 0.25em);
         margin-top: 0.25em;
         font-size: 1.1em;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
     }
 
     blockquote svg.bubble {
@@ -142,7 +145,7 @@ const Pullquote = ({
     attribution?: string
 }) => html`
     <blockquote data-role=${role}>
-        ${Quotes()} ${cite.replace(/\s/g, ' ')}
+        ${Quotes()} ${cite.replace(/\s/g, ' ')} andhereissomermoretext
         ${attribution &&
             html`
                 <cite>${attribution}</cite>
