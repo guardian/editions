@@ -16,8 +16,9 @@ class OphanApi(
 ) {
 
     constructor(
+            appFamily: String,
             appVersion: String,
-            appOs: String,
+            appOsVersion: String,
             deviceName: String,
             deviceManufacturer: String,
             deviceId: String,
@@ -25,8 +26,16 @@ class OphanApi(
             logger: Logger,
             recordStorePath: String
     ) : this(OphanDispatcher(
-            App(appVersion, "TestEditions", appOs, Edition.UK),
-            Device(deviceName, deviceManufacturer),
+            App(
+                    version = appVersion,
+                    family = appFamily,
+                    os = appOsVersion,
+                    edition = Edition.UK
+            ),
+            Device(
+                    name = deviceName,
+                    manufacturer = deviceManufacturer
+            ),
             deviceId,
             userId,
             logger,
