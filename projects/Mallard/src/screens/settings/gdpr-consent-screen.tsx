@@ -194,7 +194,7 @@ const GdprConsentScreenForOnboarding = ({
         <ScrollContainer>
             <GdprConsent
                 shouldShowDismissableHeader={true}
-                continueText={'Enable all aand continue'}
+                continueText={'Enable all and continue'}
                 navigation={navigation}
             ></GdprConsent>
         </ScrollContainer>
