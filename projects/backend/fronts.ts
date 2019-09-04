@@ -1,5 +1,11 @@
 import { s3fetch, Path } from './s3'
-import { Front, Collection, CAPIArticle, PillarAppearance } from './common'
+import {
+    Front,
+    Image,
+    Collection,
+    CAPIArticle,
+    PillarAppearance,
+} from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
     attempt,
@@ -19,10 +25,31 @@ import {
     PublishedFront,
 } from './fronts/issue'
 import { getCrosswordArticleOverrides } from './utils/crossword'
-import { notNull } from '../common/src'
 import { isPreview } from './preview'
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
+
+const getImages = (
+    article: CAPIContent,
+    furniture: PublishedFurtniture,
+): { image?: Image; cardImage?: Image; cardImageTablet?: Image } => {
+    const {
+        overrideArticleMainMedia,
+        imageSrcOverride,
+        coverCardImages,
+    } = furniture
+
+    const image =
+        overrideArticleMainMedia && imageSrcOverride !== undefined
+            ? getImageFromURL(oc(imageSrcOverride).src())
+            : oc(article).image()
+
+    const cardImage =
+        getImageFromURL(oc(coverCardImages).mobile.src()) ||
+        getImageFromURL(oc(furniture.imageSrcOverride).src())
+    const cardImageTablet = getImageFromURL(oc(coverCardImages).tablet.src())
+    return { image, cardImage, cardImageTablet }
+}
 
 const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
     const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
@@ -34,12 +61,7 @@ const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
     const showByline = furniture.showByline
     const showQuotedHeadline = furniture.showQuotedHeadline
     const mediaType = furniture.mediaType
-    const slideshowImages = oc(furniture)
-        .slideshowImages([])
-        .map(_ => _.src)
-        .map(getImageFromURL)
-        .filter(notNull)
-
+    const images = getImages(article, furniture)
     return {
         key: article.path,
         kicker,
@@ -50,7 +72,7 @@ const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
         showByline,
         showQuotedHeadline,
         mediaType,
-        slideshowImages,
+        ...images,
     }
 }
 
@@ -58,8 +80,6 @@ export const patchArticle = (
     article: CAPIContent,
     furniture: PublishedFurtniture,
 ): [string, CAPIArticle] => {
-    const imageOverride = getImageFromURL(oc(furniture).imageSrcOverride.src())
-
     const sportScore = oc(furniture).sportScore()
 
     switch (article.type) {
@@ -104,7 +124,6 @@ export const patchArticle = (
                     ...article,
                     ...fields,
                     byline: fields.byline || '',
-                    image: imageOverride || article.image,
                     sportScore,
                 },
             ]

@@ -1,7 +1,7 @@
 import { FrontCardAppearance } from './collection/card-layouts'
 export * from './collection/card-layouts'
 
-interface WithKey {
+export interface WithKey {
     key: string
 }
 
@@ -85,18 +85,18 @@ export interface Content extends WithKey {
     articleType?: ArticleType
     trail: string
     image?: Image
+    cardImage?: Image
+    cardImageTablet?: Image
     standfirst?: string
     byline?: string
     bylineImages?: { thumbnail?: Image; cutout?: Image }
     showByline: boolean
     showQuotedHeadline: boolean
     mediaType: MediaType
-    slideshowImages?: Image[]
     sportScore?: string
 }
 export interface Article extends Content {
     type: 'article'
-    image?: Image
     byline: string
     standfirst: string
     elements: BlockElement[]
