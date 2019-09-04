@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "@types/jest": "^24.0.17",
+        "@types/uuid": "^3.4.5",
         "@zeit/ncc": "^0.20.4",
         "archiver": "^3.0.3",
         "aws-sdk": "2.518.0",
@@ -38,6 +39,7 @@
         "p-all": "^2.1.0",
         "ramda": "^0.26.1",
         "ts-jest": "^24.0.2",
-        "ts-optchain": "^0.1.8"
+        "ts-optchain": "^0.1.8",
+        "uuid": "^3.3.3"
     }
 }
