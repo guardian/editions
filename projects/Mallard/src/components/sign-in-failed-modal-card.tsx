@@ -31,7 +31,7 @@ const SignInFailedModalCard = ({
     email: string
 }) => (
     <OnboardingCard
-        title="Already a subscriber?"
+        title="Subscription not found"
         appearance={CardAppearance.blue}
         onDismissThisCard={onDismiss}
         size="small"
