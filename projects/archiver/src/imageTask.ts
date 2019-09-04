@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../backend/utils/try'
 import { Image, ImageSize, imageSizes } from '../common'
-import { getAndUploadColours, getAndUploadImage } from '../media'
+import { getAndUploadColours, getAndUploadImage } from './media'
 import { IssueTaskOutput } from './issueTask'
 import pAll = require('p-all')
 import { FrontTaskOutput } from './frontTask'

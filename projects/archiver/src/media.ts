@@ -5,11 +5,11 @@ import {
     ImageSize,
     notNull,
     BlockElement,
-} from './common'
+} from '../common'
 import { unnest } from 'ramda'
-import { getColours, getImage } from './src/downloader'
-import { hasFailed, attempt } from '../backend/utils/try'
-import { upload } from './src/upload'
+import { getColours, getImage } from './downloader'
+import { hasFailed, attempt } from 'editions-backend/utils/try'
+import { upload } from './upload'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {

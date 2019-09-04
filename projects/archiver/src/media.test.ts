@@ -1,4 +1,4 @@
-import { CAPIArticle } from './common'
+import { CAPIArticle } from '../common'
 import { getImagesFromArticle } from './media'
 
 test('getImage', () => {
