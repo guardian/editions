@@ -155,7 +155,7 @@ const AuthSwitcherScreen = ({
 
     return (
         <Login
-            title="Sign-in to activate your subscription"
+            title="Sign in to activate your subscription"
             resetLink="https://profile.theguardian.com/reset"
             emailProgressText="Next"
             submitText="Sign me in"

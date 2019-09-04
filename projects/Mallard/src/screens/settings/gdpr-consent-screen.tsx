@@ -79,7 +79,10 @@ const GdprConsent = ({
     }
 
     const onDismiss = () => {
-        if (settings.gdprAllowFunctionality && settings.gdprAllowPerformance) {
+        if (
+            settings.gdprAllowFunctionality != null &&
+            settings.gdprAllowPerformance != null
+        ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
         } else {
@@ -91,7 +94,6 @@ const GdprConsent = ({
                     {
                         text: continueText,
                         onPress: () => onEnableAllAndContinue(),
-                        style: 'cancel',
                     },
                 ],
                 { cancelable: false },
