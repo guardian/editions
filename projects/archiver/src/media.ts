@@ -8,8 +8,8 @@ import {
 } from '../common'
 import { unnest } from 'ramda'
 import { getColours, getImage } from './downloader'
-import { hasFailed, attempt } from 'editions-backend/utils/try'
 import { upload } from './upload'
+import { attempt, hasFailed } from '../../backend/utils/try'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {
