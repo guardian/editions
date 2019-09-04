@@ -39,7 +39,7 @@ const authWithDeepRedirect = async (
     inAppBrowserImpl: IInAppBrowser = InAppBrowser,
 ): Promise<string> => {
     return new Promise(async (res, rej) => {
-        let unlisteners: (() => void)[] = []
+        const unlisteners: (() => void)[] = []
 
         const onFinish = async (url?: string) => {
             inAppBrowserImpl.close()
