@@ -11,11 +11,12 @@
 @interface RCT_EXTERN_MODULE(Ophan, NSObject)
 
 RCT_EXTERN_METHOD(sendTestAppScreenEvent: (NSString)screenName
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject
-                  )
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter: (RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(setUserId: (NSString)userId)
+RCT_EXTERN_METHOD(setUserId: (NSString)userId
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter: (RCTPromiseRejectBlock)reject)
                   
 
 @end

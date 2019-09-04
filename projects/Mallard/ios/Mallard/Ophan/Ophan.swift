@@ -58,9 +58,10 @@ class Ophan: NSObject {
     )
   }
   
-  @objc(setUserId:)
-  func setUserId(_ userId: String) -> Void {
+  @objc(setUserId:resolver:rejecter:)
+  func setUserId(_ userId: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
     ophanApi = newOphanApi(userId: userId)
+    resolve(userId)
   }
 
   @objc(sendTestAppScreenEvent:resolver:rejecter:)
