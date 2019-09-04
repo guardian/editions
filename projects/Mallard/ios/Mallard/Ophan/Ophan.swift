@@ -29,7 +29,12 @@ class Ophan: NSObject {
     let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
     
     // TODO: Antonio has an objective-C snippet for this but I need his help to turn it into Swiftt
-    let deviceName = "Unknown"
+    var systemInfo = utsname()
+    uname(&systemInfo)
+    let modelCode = withUnsafePointer(to: &systemInfo.machine) {
+        $0.withMemoryRebound(to: CChar.self, capacity: 1) { String(validatingUTF8: $0) }
+    }
+    let deviceName = modelCode ?? "Unrecognised model"
     
     ophanApi = OphanKt_.getThreadSafeOphanApi (
       appFamily: "iOS Editions",
