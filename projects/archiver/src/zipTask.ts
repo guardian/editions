@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda'
 import { imageSizes, issueDir } from '../common'
-import { zip } from '../zipper'
+import { zip } from './zipper'
 import { IssueId } from './issueTask'
 import { UploadTaskOutput } from './issueUploadTask'
 export interface ZipTaskOutput {
