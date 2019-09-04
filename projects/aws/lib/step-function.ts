@@ -16,6 +16,8 @@ interface StepFunctionProps {
     backendURL: string
     frontsTopicArn: string
     frontsTopicRoleArn: string
+    notifcationEndpoint: string
+    notificationKey: string
 }
 
 //Make sure you add the lambda name in riff-raff.yaml
@@ -75,6 +77,8 @@ export const archiverStepFunction = (
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
+        notifcationEndpoint,
+        notificationKey,
     }: StepFunctionProps,
 ) => {
     const lambdaParams = {
@@ -91,11 +95,17 @@ export const archiverStepFunction = (
         task: new tasks.InvokeFunction(issue),
     })
 
+    const deleteLambda = taskLambda('delete', lambdaParams)
+
+    const deleteTask = new sfn.Task(scope, 'Delete Issue', {
+        task: new tasks.InvokeFunction(deleteLambda),
+    })
     const front = taskLambda('front', lambdaParams, { backend: backendURL })
 
     const frontTask = new sfn.Task(scope, 'Fetch and save front', {
         task: new tasks.InvokeFunction(front),
     })
+
     const image = taskLambda('image', lambdaParams, { backend: backendURL })
 
     const imageTask = new sfn.Task(scope, 'Fetch Images', {
@@ -119,6 +129,16 @@ export const archiverStepFunction = (
     const indexerTask = new sfn.Task(scope, 'Generate Index', {
         task: new tasks.InvokeFunction(indexer),
     })
+
+    const notify = taskLambda('notify', lambdaParams, {
+        endpoint: notifcationEndpoint,
+        key: notificationKey,
+    })
+
+    const notifyTask = new sfn.Task(scope, 'Send notification', {
+        task: new tasks.InvokeFunction(notify),
+    })
+
     const frontsTopicRole = iam.Role.fromRoleArn(
         scope,
         'fronts-topic-role',

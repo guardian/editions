@@ -28,6 +28,8 @@ deployments:
                     editions-archiver-stepmachine-event-,
                     editions-archiver-stepmachine-zip-,
                     editions-archiver-stepmachine-indexer-,
+                    editions-archiver-stepmachine-delete-,
+                    editions-archiver-stepmachine-notify-,
                 ]
     cloudformation:
         type: cloud-formation

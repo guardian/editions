@@ -100,6 +100,24 @@ export class EditionsStack extends cdk.Stack {
             description: 'lambda access',
         })
 
+        const notificationEndpointParam = new cdk.CfnParameter(
+            this,
+            'notification-endpoint',
+            {
+                type: 'String',
+                description: 'notification-endpoint',
+            },
+        )
+
+        const notificationKeyParam = new cdk.CfnParameter(
+            this,
+            'notification-key',
+            {
+                type: 'String',
+                description: 'notification-key',
+            },
+        )
+
         const backendProps = (
             publicationStage: 'preview' | 'published',
         ): FunctionProps => ({
@@ -214,6 +232,8 @@ export class EditionsStack extends cdk.Stack {
             backendURL,
             frontsTopicArn: frontsTopicARN.valueAsString,
             frontsTopicRoleArn: frontsTopicRoleARN.valueAsString,
+            notifcationEndpoint: notificationEndpointParam.valueAsString,
+            notificationKey: notificationKeyParam.valueAsString,
         })
 
         new CfnOutput(this, 'archiver-state-machine-arn', {
