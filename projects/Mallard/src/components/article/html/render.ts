@@ -103,10 +103,6 @@ export const render = (
     },
 ) => {
     const content = article
-        .filter(
-            el =>
-                el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
-        )
         .map((el, i) => {
             switch (el.id) {
                 case 'html':
