@@ -4946,6 +4946,11 @@ open@^6.2.0:
   dependencies:
     is-wsl "^1.1.0"
 
+opencollective-postinstall@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.2.tgz#5657f1bede69b6e33a45939b061eb53d3c6c3a89"
+  integrity sha512-pVOEP16TrAO2/fjej1IdOyupJY8KDUM1CvsaScRbw6oddvpQoOfGk4ywha0HKKVAD6RkW4x6Q+tNBwhf3Bgpuw==
+
 opn@^5.4.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/opn/-/opn-5.5.0.tgz#fc7164fab56d235904c51c3b27da6758ca3b9bfc"
@@ -5500,6 +5505,14 @@ react-native-in-app-utils@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/react-native-in-app-utils/-/react-native-in-app-utils-6.0.1.tgz#e8469804d7ceb8ad2b368dc2cc9b824c98ca387a"
   integrity sha512-DHWgQTR+SSmVy+eLEXFJNOfsdvfHmU6y5k91W34x+pt4y/q2wo5++2RQZD/KDpHm89LYKDN1XKCojHFM6//xWQ==
+
+react-native-inappbrowser-reborn@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-inappbrowser-reborn/-/react-native-inappbrowser-reborn-3.0.1.tgz#85f973fd821b9f67359681147d004ef9cf690b4d"
+  integrity sha512-W1aYWm9/bR6bOWWDJFo6c8w1ivnOC8Z+juUDTAXjH+COaDR5opXHHx8+KL0HZZW6CeyGcnbU/l7l1R2TO7GXBQ==
+  dependencies:
+    invariant "^2.2.4"
+    opencollective-postinstall "^2.0.2"
 
 react-native-keychain@^3.1.3:
   version "3.1.3"
