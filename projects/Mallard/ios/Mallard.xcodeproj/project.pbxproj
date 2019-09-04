@@ -701,7 +701,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../ophan/gradlew\" -p \"$SRCROOT/../ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\"\n";
+			shellScript = "\"$SRCROOT/../ophan/gradlew\" -p \"$SRCROOT/../ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\" \\\n-Pkotlin.valid.archs=\"$VALID_ARCHS\"\n";
 		};
 		9A2F30EB4995BA18D2B5CA7D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
