@@ -7,7 +7,7 @@ import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { AuthContext, useAuth } from 'src/authentication/auth-context'
-import { Platform } from 'react-native'
+import { Platform, Text } from 'react-native'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const authHandler = useAuth()
@@ -74,6 +74,10 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
             </ScrollContainer>
         </WithAppAppearance>
     )
+}
+
+AlreadySubscribedScreen.navigationOptions = {
+    title: <Text style={{ fontSize: 20 }}>Subscription Activation</Text>,
 }
 
 export { AlreadySubscribedScreen }
