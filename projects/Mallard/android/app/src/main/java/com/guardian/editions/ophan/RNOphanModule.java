@@ -75,9 +75,9 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendAppComponentEvent(String component, String action, String value, String id, Promise promise) {
+    public void sendAppComponentEvent(@Nonnull String componentType, @Nonnull String action, @Nullable String value, @Nullable String componentId, @Nonnull Promise promise) {
         try {
-            ophanApi.sendAppComponentEvent(component, action, value, id, UUID.randomUUID().toString());
+            ophanApi.sendAppComponentEvent(componentType, action, UUID.randomUUID().toString(), value, componentId );
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);

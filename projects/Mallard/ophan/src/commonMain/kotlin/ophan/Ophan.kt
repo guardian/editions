@@ -42,21 +42,21 @@ class OphanApi(
             FileRecordStore(recordStorePath)
     ))
 
-    fun componentEventBuilder(component: ComponentType, action: Action, eventId: String, value: String, id: String): Event {
+    fun componentEventBuilder(componentType: String, action: String, eventId: String, value: String?, componentId: String?): Event {
         val event = Event.Builder()
                 .eventId(eventId)
                 .eventType(EventType.COMPONENT_EVENT)
                 .viewId(null) /* TODO */
                 .componentEvent(ComponentEvent.Builder()
                         .component(ComponentV2.Builder()
-                                .componentType(component)
-                                .id(id)
+                                .componentType(ComponentType.valueOf(componentType))
+                                .id(componentId) 
                                 .products(emptySet())
                                 .campaignCode(null)
                                 .labels(emptySet())
                                 .build()
                         )
-                        .action(action)
+                        .action(Action.valueOf(action))
                         .value(value)
                         .build()
                 )
@@ -65,12 +65,12 @@ class OphanApi(
     }
 
     fun sendAppScreenEvent(screenName: String, value: String, eventId: String) {
-        val event = this.componentEventBuilder(ComponentType.APP_SCREEN, Action.VIEW, eventId, value, screenName)
+        val event = this.componentEventBuilder("APP_SCREEN", "VIEW", eventId, value, screenName)
         dispatcher.dispatchEvent(event)
     }
 
-    fun sendAppComponentEvent(component: ComponentType, action: Action, value: String, id: String, eventId: String) {
-        val event = this.componentEventBuilder(component, action, eventId, value, id)
+    fun sendAppComponentEvent(componentType: String, action: String, eventId: String, value: String?, componentId: String?) {
+        val event = this.componentEventBuilder(componentType, action, eventId, value, componentId)
         dispatcher.dispatchEvent(event)
     }
 }
