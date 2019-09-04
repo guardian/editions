@@ -743,10 +743,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@guardian/react-crossword@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-0.1.7.tgz#a45ca420cc79ae5370052ee3f2475ed055d5031c"
-  integrity sha512-cQLRZwQ3sVKNk5SCTK2B9zVHEGjgkhyZnmsZIoiBJnXrk1QmtfF/9OtY998pQ3TQ6gA84mbcCK9Jrdn+ES+5FQ==
+"@guardian/react-crossword@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-0.1.8.tgz#cfdd469b83f9ac868d5d96e001901153ed17244b"
+  integrity sha512-QOsKa+s2shxd/m+U/OcwqfiT/akF9OuIWTo8Y/TYCsKtgEOLbdyxLe5SZ6vQalEiandaukUR25rAJ8/eSZGvGQ==
   dependencies:
     bean "~1.0.14"
     bonzo "~2.0.0"
