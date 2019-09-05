@@ -27,6 +27,15 @@ interface TrackComponentEvent {
 
 type UserId = string | null
 
+const screenTrackingMapping = {
+    Issue: 'issue_front',
+    IssueList: 'issue_list',
+    SignIn: 'sign_in',
+    Settings: 'settings',
+    GDPRConsent: 'consent_management_options',
+    GdprConsentScreenForOnboarding: 'consent_management',
+}
+
 const setUserId = (userId: UserId): Promise<UserId> =>
     NativeModules.Ophan.setUserId(userId)
 
@@ -59,4 +68,5 @@ export {
     sendComponentEvent,
     sendPageViewEvent,
     setUserId,
+    screenTrackingMapping,
 }

@@ -22,7 +22,7 @@ import {
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
-import { sendPageViewEvent } from 'src/services/ophan'
+import { sendAppScreenEvent, screenTrackingMapping } from 'src/services/ophan'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -67,6 +67,27 @@ const rootNavigationProps = __DEV__ && {
     loadNavigationState,
 }
 
+function getActiveRouteName(navigationState: any): any {
+    if (!navigationState) {
+        return null
+    }
+    const route = navigationState.routes[navigationState.index]
+    // dive into nested navigators
+    if (route.routes) {
+        return getActiveRouteName(route)
+    }
+    return route.routeName
+}
+
+const onNavigationStateChange = (_: any, currentState: any) => {
+    const currentScreen = getActiveRouteName(currentState)
+    if (currentScreen && screenTrackingMapping[currentScreen]) {
+        sendAppScreenEvent({
+            screenView: screenTrackingMapping[currentScreen],
+        })
+    }
+}
+
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
@@ -78,12 +99,12 @@ const WithProviders = nestProviders(
     AuthProvider,
 )
 
-sendPageViewEvent({
-    path:
-        'politics/2019/sep/02/boris-johnson-threatens-to-ignore-mps-on-no-deal-brexit',
-})
-    .then(res => console.log(res))
-    .catch(e => console.log(e))
+// sendPageViewEvent({
+//     path:
+//         'politics/2019/sep/02/boris-johnson-threatens-to-ignore-mps-on-no-deal-brexit',
+// })
+//     .then(res => console.log(res))
+//     .catch(e => console.log(e))
 
 export default class App extends React.Component<{}, {}> {
     async componentDidCatch(e: Error) {
@@ -110,7 +131,10 @@ export default class App extends React.Component<{}, {}> {
                         backgroundColor="#041f4a"
                     />
                     <View style={styles.appContainer}>
-                        <RootNavigator {...rootNavigationProps} />
+                        <RootNavigator
+                            {...rootNavigationProps}
+                            onNavigationStateChange={onNavigationStateChange}
+                        />
                         <NetInfoAutoToast />
                     </View>
                     <ModalRenderer />
