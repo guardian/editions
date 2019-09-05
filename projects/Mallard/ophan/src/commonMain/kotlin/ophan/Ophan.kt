@@ -22,7 +22,7 @@ class OphanApi(
             deviceName: String,
             deviceManufacturer: String,
             deviceId: String,
-            userId: String,
+            userId: String?,
             logger: Logger,
             recordStorePath: String
     ) : this(OphanDispatcher(

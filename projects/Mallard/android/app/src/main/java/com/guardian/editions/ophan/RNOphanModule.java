@@ -13,24 +13,33 @@ import java.io.File;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import ophan.OphanApi;
 
 class RNOphanModule extends ReactContextBaseJavaModule {
 
-    private final OphanApi ophanApi;
+    @Nonnull
+    private final File recordStoreDir;
+
+    @Nonnull
+    private OphanApi ophanApi;
 
     public RNOphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
-        final File recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
-        ophanApi = new OphanApi(
+        recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
+        ophanApi = newOphanApi(null);
+    }
+
+    private OphanApi newOphanApi(@Nullable String userId) {
+        return new OphanApi(
                 "Android Editions",
                 BuildConfig.VERSION_NAME,
                 Build.VERSION.RELEASE,
                 Build.MODEL,
                 Build.MANUFACTURER,
                 getDeviceId(),
-                "testUserId",
+                userId,
                 new LogcatLogger(),
                 recordStoreDir.getAbsolutePath()
         );
@@ -45,6 +54,16 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "Ophan";
+    }
+
+    @ReactMethod
+    public void setUserId(@Nullable String userId, Promise promise) {
+        try {
+            ophanApi = newOphanApi(userId);
+            promise.resolve(userId);
+        } catch (Throwable e) {
+            promise.reject(e);
+        }
     }
 
     @ReactMethod

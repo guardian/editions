@@ -20,15 +20,23 @@ import ophan
 @objc(Ophan)
 class Ophan: NSObject {
   
-  let ophanApi: OphanApi
+  var ophanApi: OphanApi?
 
   override init() {
     print("Initialising new Ophan instance on thread \(Thread.current)")
-    
+    super.init()
+    ophanApi = newOphanApi(userId: nil)
+  }
+
+  deinit {
+    print("Deinitialising Ophan instance on thread \(Thread.current)")
+  }
+  
+  private func newOphanApi(userId: String?) -> OphanApi {
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
     
-    // TODO: Antonio has an objective-C snippet for this but I need his help to turn it into Swiftt
+    // This snippet gets the current device's model name
     var systemInfo = utsname()
     uname(&systemInfo)
     let modelCode = withUnsafePointer(to: &systemInfo.machine) {
@@ -36,23 +44,23 @@ class Ophan: NSObject {
     }
     let deviceName = modelCode ?? "Unrecognised model"
     
-    ophanApi = OphanKt_.getThreadSafeOphanApi (
+    return OphanKt_.getThreadSafeOphanApi (
       appFamily: "iOS Editions",
       appVersion: appVersion + " (" + buildNumber + ")",
       appOsVersion: UIDevice.current.systemVersion,
       deviceName: deviceName,
       deviceManufacturer: "Apple",
       deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
-      userId: "testUserId",
+      userId: userId,
       logger: SimpleLogger(),
       recordStorePath: "ophan"
     )
-    
-    super.init()
   }
-
-  deinit {
-    print("Deinitialising Ophan instance on thread \(Thread.current)")
+  
+  @objc(setUserId:resolver:rejecter:)
+  func setUserId(_ userId: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    ophanApi = newOphanApi(userId: userId)
+    resolve(userId)
   }
 
   @objc(sendTestAppScreenEvent:resolver:rejecter:)
@@ -61,7 +69,7 @@ class Ophan: NSObject {
     do {
       DispatchQueue.main.async {
       print("Current thread \(Thread.current)")
-        self.ophanApi.sendTestAppScreenEvent(screenName: screenName, eventId: UUID().uuidString)
+        self.ophanApi?.sendTestAppScreenEvent(screenName: screenName, eventId: UUID().uuidString)
         resolve(screenName)
       }
     } catch let error {

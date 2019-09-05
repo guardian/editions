@@ -79,7 +79,10 @@ const GdprConsent = ({
     }
 
     const onDismiss = () => {
-        if (settings.gdprAllowFunctionality && settings.gdprAllowPerformance) {
+        if (
+            settings.gdprAllowFunctionality != null &&
+            settings.gdprAllowPerformance != null
+        ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
         } else {
@@ -91,7 +94,6 @@ const GdprConsent = ({
                     {
                         text: continueText,
                         onPress: () => onEnableAllAndContinue(),
-                        style: 'cancel',
                     },
                 ],
                 { cancelable: false },
@@ -194,7 +196,7 @@ const GdprConsentScreenForOnboarding = ({
         <ScrollContainer>
             <GdprConsent
                 shouldShowDismissableHeader={true}
-                continueText={'Enable all aand continue'}
+                continueText={'Enable all and continue'}
                 navigation={navigation}
             ></GdprConsent>
         </ScrollContainer>
