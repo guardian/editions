@@ -101,7 +101,7 @@ const OnboardingCard = ({
     onDismissThisCard?: () => void
     style?: StyleProp<ViewStyle>
     appearance: CardAppearance
-    size?: 'big' | 'small'
+    size?: 'big' | 'medium' | 'small'
     maxSize?: number
 }) => {
     const max = Math.min(minScreenSize() * 0.95, maxSize)
@@ -124,7 +124,11 @@ const OnboardingCard = ({
                             style={[
                                 getFont(
                                     'titlepiece',
-                                    size === 'big' ? 2.5 : 2.25,
+                                    size === 'big'
+                                        ? 2.5
+                                        : size === 'medium'
+                                        ? 2.25
+                                        : 2,
                                 ),
                                 { marginBottom: size === 'big' ? 16 : 8 },
                                 appearances[appearance].titleText,

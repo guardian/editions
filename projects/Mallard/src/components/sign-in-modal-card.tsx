@@ -29,7 +29,7 @@ const SignInModalCard = ({
         title="Already a subscriber?"
         subtitle="Sign in to continue with the app"
         appearance={CardAppearance.blue}
-        size="small"
+        size="medium"
         bottomContent={
             <>
                 <View style={styles.bottomContentContainer}>
