@@ -743,6 +743,21 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@guardian/react-crossword@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@guardian/react-crossword/-/react-crossword-0.1.8.tgz#cfdd469b83f9ac868d5d96e001901153ed17244b"
+  integrity sha512-QOsKa+s2shxd/m+U/OcwqfiT/akF9OuIWTo8Y/TYCsKtgEOLbdyxLe5SZ6vQalEiandaukUR25rAJ8/eSZGvGQ==
+  dependencies:
+    bean "~1.0.14"
+    bonzo "~2.0.0"
+    fastdom "0.8.5"
+    lodash "^4.17.11"
+    qwery "3.4.2"
+    svg-inline-loader "^0.8.0"
+    wolfy87-eventemitter "~5.2.4"
+  optionalDependencies:
+    fsevents "^1.1.2"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -4067,21 +4082,6 @@ rc@^1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
-
-react-crossword@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/react-crossword/-/react-crossword-0.1.7.tgz#d3cbcc4c819c4d9f552e72c129bf42a0a0197da7"
-  integrity sha512-GTVTghKuSp03J5NlH5U30CEyxtTtZislcz+7jYyYcjkFWUnZihbOWtwm6yZkjTkNW6Cy0NuynITdkmOkX0hPCw==
-  dependencies:
-    bean "~1.0.14"
-    bonzo "~2.0.0"
-    fastdom "0.8.5"
-    lodash "^4.17.11"
-    qwery "3.4.2"
-    svg-inline-loader "^0.8.0"
-    wolfy87-eventemitter "~5.2.4"
-  optionalDependencies:
-    fsevents "^1.1.2"
 
 react-dom@^16.8.6:
   version "16.8.6"

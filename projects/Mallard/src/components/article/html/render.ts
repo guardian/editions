@@ -18,13 +18,20 @@ import {
 import { WrapLayout } from '../wrap/wrap'
 import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
+import { quoteStyles, Pullquote } from './pull-quote'
+import { families } from 'src/theme/typography'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
-    ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
-    ${generateAssetsFontCss('GHGuardianHeadline-Regular')}
-    ${generateAssetsFontCss('GuardianTextSans-Regular')}
+    ${generateAssetsFontCss(families.text.regular)}
+    ${generateAssetsFontCss(families.headline.regular)}
+    ${generateAssetsFontCss(families.sans.regular)}
+    ${generateAssetsFontCss(families.titlepiece.regular)}
+    ${quoteStyles({
+        colors,
+        wrapLayout,
+    })}
     * {
         margin: 0;
         padding: 0;
@@ -43,7 +50,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     }
     :root {
         ${getScaledFontCss('text', 1)}
-        font-family: 'GuardianTextEgyptian-Reg';
+        font-family: ${families.text.regular};
     }
     #app {
         padding: ${px(metrics.vertical)} ${px(metrics.article.sides)};
@@ -96,10 +103,6 @@ export const render = (
     },
 ) => {
     const content = article
-        .filter(
-            el =>
-                el.id === 'html' || el.id === 'media-atom' || el.id === 'image',
-        )
         .map((el, i) => {
             switch (el.id) {
                 case 'html':
@@ -118,6 +121,11 @@ export const render = (
                     return renderMediaAtom(el)
                 case 'image':
                     return Image({ imageElement: el })
+                case 'pullquote':
+                    return Pullquote({
+                        cite: el.html,
+                        role: el.role || 'inline',
+                    })
                 default:
                     return ''
             }

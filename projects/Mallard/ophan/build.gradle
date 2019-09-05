@@ -57,13 +57,22 @@ kotlin {
 
 task fatFramework(type: FatFrameworkTask) {
     def buildType = project.findProperty('kotlin.build.type') ?: 'DEBUG'
+    def validArchs = project.findProperty('kotlin.valid.archs') ?: 'x86_64'
+    println("validArchs=" + validArchs)
     baseName = "ophan"
     destinationDir = file("$buildDir/bin/ios/universalFramework")
-    from(
-            kotlin.targets.ios.binaries.getFramework(buildType),
-            kotlin.targets.ios32.binaries.getFramework(buildType),
-            kotlin.targets.ios64.binaries.getFramework(buildType)
-    )
+    if (validArchs == 'x86_64') {
+        from(
+                kotlin.targets.ios.binaries.getFramework(buildType),
+                kotlin.targets.ios32.binaries.getFramework(buildType),
+                kotlin.targets.ios64.binaries.getFramework(buildType)
+        )
+    } else {
+        from(
+                kotlin.targets.ios32.binaries.getFramework(buildType),
+                kotlin.targets.ios64.binaries.getFramework(buildType)
+        )
+    }
 }
 
 // This task attaches native framework built from ios module to Xcode project

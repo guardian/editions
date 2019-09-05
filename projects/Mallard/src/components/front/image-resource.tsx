@@ -28,7 +28,14 @@ const ImageResource = ({
     useEffect(() => {
         onGetPath && path && onGetPath(path)
     }, [path, onGetPath])
-    return <Image {...props} style={style} source={{ uri: path }} />
+    return (
+        <Image
+            resizeMethod={'resize'}
+            {...props}
+            style={style}
+            source={{ uri: path }}
+        />
+    )
 }
 
 const AutoSizedImageResource = ({
