@@ -41,15 +41,20 @@ const OnboardingIntroScreen = ({ onContinue }: { onContinue: () => void }) => {
 const OnboardingConsentScreen = ({
     onOpenGdprConsent,
     onContinue,
+    onOpenPrivacyPolicy,
 }: {
     onOpenGdprConsent: () => void
     onContinue: () => void
+    onOpenPrivacyPolicy: () => void
 }) => {
     const setSetting = useSettings()
     return (
         <Frame>
             <OnboardingConsent
-                {...{ onOpenGdprConsent }}
+                {...{
+                    onOpenGdprConsent,
+                    onOpenPrivacyPolicy,
+                }}
                 onContinue={() => {
                     onOpenGdprConsent()
                     setSetting('hasOnboarded', true)

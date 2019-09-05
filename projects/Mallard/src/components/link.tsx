@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     },
 })
 
-export const Link = ({
+const Link = ({
     children,
     style,
     href,
@@ -27,3 +27,19 @@ export const Link = ({
         {children}
     </Text>
 )
+
+const LinkNav = ({
+    children,
+    style,
+    onPress,
+}: {
+    children: string
+    style?: TextProps['style']
+    onPress: () => void
+}) => (
+    <Text style={[styles.link, style]} onPress={onPress}>
+        {children}
+    </Text>
+)
+
+export { Link, LinkNav }
