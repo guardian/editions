@@ -5,6 +5,7 @@ import { ModalButton } from './modal-button'
 import { Link } from './link'
 import { ButtonAppearance } from './button/button'
 import { getFont } from 'src/theme/typography'
+import { sendComponentEvent } from 'src/services/ophan'
 
 const styles = StyleSheet.create({
     bottomContentContainer: {
@@ -38,6 +39,11 @@ const SignInModalCard = ({
                             onPress={() => {
                                 close()
                                 onLoginPress()
+                                sendComponentEvent({
+                                    componentType: 'APP_BUTTON',
+                                    action: 'CLICK',
+                                    value: 'sign_in_continue_clicked',
+                                })
                             }}
                         >
                             Continue
