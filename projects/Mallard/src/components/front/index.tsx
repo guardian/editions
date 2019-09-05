@@ -84,27 +84,25 @@ const FrontWithResponse = ({
 
     const [scrollX] = useState(() => new Animated.Value(0))
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
-    const [cards, articleNavigator]: [FlatCard[], ArticleNavigator] = useMemo(
-        () => {
-            const flatCollections = flattenCollectionsToCards(
-                frontData.collections,
-            )
-            const navigator = {
-                articles: flattenFlatCardsToFront(flatCollections).map(
-                    ({ article, collection }) => ({
-                        collection: collection.key,
-                        front: frontData.key,
-                        article: article.key,
-                        issue,
-                    }),
-                ),
-                appearance: frontData.appearance,
-                frontName: frontData.displayName || '',
-            }
-            return [flatCollections, navigator]
-        },
-        frontData.collections.map(({ key }) => key), // eslint-disable-line react-hooks/exhaustive-deps
-    )
+    const [cards, articleNavigator]: [
+        FlatCard[],
+        ArticleNavigator,
+    ] = useMemo(() => {
+        const flatCollections = flattenCollectionsToCards(frontData.collections)
+        const navigator = {
+            articles: flattenFlatCardsToFront(flatCollections).map(
+                ({ article, collection }) => ({
+                    collection: collection.key,
+                    front: frontData.key,
+                    article: article.key,
+                    issue,
+                }),
+            ),
+            appearance: frontData.appearance,
+            frontName: frontData.displayName || '',
+        }
+        return [flatCollections, navigator]
+    }, [frontData.collections.map(({ key }) => key).join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
     const stops = cards.length
     const { card, container } = useIssueScreenSize()
 
