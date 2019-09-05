@@ -16,7 +16,7 @@ import { FSPaths } from 'src/paths'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
 import { imageForScreenSize } from 'src/helpers/screen'
-import { useNetInfo } from '@react-native-community/netinfo'
+import { fetch } from '@react-native-community/netinfo'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 
@@ -41,11 +41,6 @@ const getStatusPercentage = (status: DLStatus): number | null => {
     return null
 }
 
-const getBGTransparency = (dlStatus: DLStatus | null) =>
-    dlStatus && dlStatus.type === 'download'
-        ? (getStatusPercentage(dlStatus) || 100) / 100
-        : 0
-
 const IssueRow = ({
     issue,
     onPress,
@@ -63,16 +58,14 @@ const IssueRow = ({
 
     const { showToast } = useToast()
 
-    const { isConnected } = useNetInfo()
-
     useEffect(() => {
         // we probably need a better check for this
         // e.g. do we have issue json and images?
         RNFetchBlob.fs.exists(FSPaths.issue(issue.key)).then(setExists)
     }, [issue.key])
 
-    const onDownloadIssue = () => {
-        if (isConnected && !dlStatus) {
+    const onDownloadIssue = async () => {
+        if ((await fetch()).isConnected && !dlStatus) {
             downloadAndUnzipIssue(issue.key, imageForScreenSize(), status => {
                 setDlStatus(status)
                 if (status.type === 'success') {
