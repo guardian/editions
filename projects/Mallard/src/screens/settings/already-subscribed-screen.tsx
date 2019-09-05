@@ -31,8 +31,8 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                         authed: () => [],
                         unauthed: () => [
                             {
-                                key: 'Sign in',
-                                title: 'Sign in',
+                                key: 'Sign in to activate',
+                                title: 'Sign in to activate',
                                 data: {
                                     onPress: () => {
                                         navigation.navigate(routeNames.SignIn)

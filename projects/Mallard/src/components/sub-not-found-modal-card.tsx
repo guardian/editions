@@ -37,7 +37,7 @@ const SubNotFoundModalCard = ({
                         onLoginPress()
                     }}
                 >
-                    Sign-in with different account
+                    Sign in to activate
                 </ModalButton>
                 <ModalButton
                     onPress={() => {
