@@ -182,7 +182,7 @@ const scale = {
         },
         2.25: {
             0: {
-                fontSize: 55,
+                fontSize: 50,
                 lineHeight: 55,
             },
         },
