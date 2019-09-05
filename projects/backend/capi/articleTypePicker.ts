@@ -38,6 +38,8 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isInterview) return ArticleType.Interview
                 else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
+                else if (isLetter) return ArticleType.Letter
+                else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
 
             case 'sport':
@@ -48,6 +50,8 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isMatchResult) return ArticleType.MatchResult
                 else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
+                else if (isLetter) return ArticleType.Letter
+                else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
 
             case 'opinion':
@@ -71,6 +75,8 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isGallery) return ArticleType.Gallery
                 else if (isFeature) return ArticleType.Feature
+                else if (isLetter) return ArticleType.Letter
+                else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
 
             case 'culture':
@@ -88,6 +94,8 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isFeature) return ArticleType.Feature
+                else if (isLetter) return ArticleType.Letter
+                else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
 
             default:
