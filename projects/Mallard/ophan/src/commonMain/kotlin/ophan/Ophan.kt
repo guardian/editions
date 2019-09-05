@@ -64,12 +64,12 @@ class OphanApi(
         return event;
     }
 
-    fun sendAppScreenEvent(screenName: String, value: String, eventId: String) {
+    fun sendAppScreenEvent(screenName: String, value: String?, eventId: String) {
         val event = this.componentEventBuilder("APP_SCREEN", "VIEW", eventId, value, screenName)
         dispatcher.dispatchEvent(event)
     }
 
-    fun sendAppComponentEvent(componentType: String, action: String, eventId: String, value: String?, componentId: String?) {
+    fun sendComponentEvent(componentType: String, action: String, eventId: String, value: String?, componentId: String?) {
         val event = this.componentEventBuilder(componentType, action, eventId, value, componentId)
         dispatcher.dispatchEvent(event)
     }

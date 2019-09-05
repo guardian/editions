@@ -19,8 +19,8 @@ interface TrackScreen {
 }
 
 interface TrackComponentEvent {
-    componentType: ComponentType
-    action: Action
+    componentType: string
+    action: string
     value?: string
     componentId?: string
 }
@@ -30,23 +30,29 @@ type UserId = string | null
 const setUserId = (userId: UserId): Promise<UserId> =>
     NativeModules.Ophan.setUserId(userId)
 
-const trackScreen = async ({
+const sendAppScreenEvent = async ({
     screenName,
     value,
 }: TrackScreen): Promise<boolean> =>
-    NativeModules.Ophan.sendAppScreenEvent(screenName, value || '')
+    NativeModules.Ophan.sendAppScreenEvent(screenName, value)
 
-const trackComponentEvent = ({
+const sendComponentEvent = ({
     componentType,
     action,
     value,
     componentId,
 }: TrackComponentEvent) =>
-    NativeModules.Ophan.sendAppComponentEvent(
+    NativeModules.Ophan.sendComponentEvent(
         componentType,
         action,
-        value || '',
-        componentId || '',
+        value,
+        componentId,
     )
 
-export { trackScreen, trackComponentEvent, setUserId }
+export {
+    Action,
+    ComponentType,
+    sendAppScreenEvent,
+    sendComponentEvent,
+    setUserId,
+}
