@@ -3,14 +3,14 @@
 import { NativeModules } from 'react-native'
 
 enum ComponentType {
-    APP_BUTTON,
-    APP_VIDEO,
-    APP_AUDIO,
+    appButton = 'APP_BUTTON',
+    appVideo = 'APP_VIDEO',
+    appAudio = 'APP_AUDIO',
 }
 
 enum Action {
-    CLICK,
-    VIEW,
+    click = 'CLICK',
+    view = 'VIEW',
 }
 
 interface TrackScreen {
@@ -19,8 +19,8 @@ interface TrackScreen {
 }
 
 interface TrackComponentEvent {
-    componentType: string
-    action: string
+    componentType: ComponentType
+    action: Action
     value?: string
     componentId?: string
 }

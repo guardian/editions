@@ -36,7 +36,7 @@ import {
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
-import { sendComponentEvent } from 'src/services/ophan'
+import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -110,8 +110,8 @@ const IssueList = withNavigation(
                                     },
                                 })
                                 sendComponentEvent({
-                                    componentType: 'APP_BUTTON',
-                                    action: 'CLICK',
+                                    componentType: ComponentType.appButton,
+                                    action: Action.click,
                                     value: 'issues_list_issue_clicked',
                                 })
                             }}
