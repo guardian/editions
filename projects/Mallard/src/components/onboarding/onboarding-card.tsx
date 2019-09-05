@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
-        width: '100%',
     },
     explainer: {
         backgroundColor: color.background,
@@ -47,7 +46,10 @@ const styles = StyleSheet.create({
     dismissIconContainer: {
         alignItems: 'flex-end',
         marginBottom: metrics.vertical / 2,
-        marginLeft: '-2%',
+    },
+    titlePieceContainer: {
+        alignItems: 'flex-start',
+        flex: 1,
     },
 })
 
@@ -116,16 +118,21 @@ const OnboardingCard = ({
         >
             <View style={[styles.top, appearances[appearance].background]}>
                 <View style={styles.flexRow}>
-                    <TitlepieceText
-                        accessibilityRole="header"
-                        style={[
-                            getFont('titlepiece', size === 'big' ? 2.5 : 2.25),
-                            { marginBottom: size === 'big' ? 16 : 8 },
-                            appearances[appearance].titleText,
-                        ]}
-                    >
-                        {title}
-                    </TitlepieceText>
+                    <View style={styles.titlePieceContainer}>
+                        <TitlepieceText
+                            accessibilityRole="header"
+                            style={[
+                                getFont(
+                                    'titlepiece',
+                                    size === 'big' ? 2.5 : 2.25,
+                                ),
+                                { marginBottom: size === 'big' ? 16 : 8 },
+                                appearances[appearance].titleText,
+                            ]}
+                        >
+                            {title}
+                        </TitlepieceText>
+                    </View>
                     {onDismissThisCard && (
                         <View style={styles.dismissIconContainer}>
                             <CloseModalButton onPress={onDismissThisCard} />
