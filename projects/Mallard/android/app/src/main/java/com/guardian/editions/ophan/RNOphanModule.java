@@ -84,4 +84,14 @@ class RNOphanModule extends ReactContextBaseJavaModule {
             promise.reject(e);
         }
     }
+
+    @ReactMethod
+    public void sendPageViewEvent(@Nonnull String path, @Nonnull Promise promise) {
+        try {
+            ophanApi.sendPageViewEvent(path, UUID.randomUUID().toString());
+            promise.resolve(true);
+        } catch (Throwable e) {
+            promise.reject(e);
+        }
+    }
 }

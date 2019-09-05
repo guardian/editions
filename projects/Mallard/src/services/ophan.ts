@@ -49,10 +49,14 @@ const sendComponentEvent = ({
         componentId,
     )
 
+const sendPageViewEvent = ({ path }: { path: string }) =>
+    NativeModules.Ophan.sendPageViewEvent(path)
+
 export {
     Action,
     ComponentType,
     sendAppScreenEvent,
     sendComponentEvent,
+    sendPageViewEvent,
     setUserId,
 }

@@ -22,6 +22,7 @@ import {
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
+import { sendPageViewEvent } from 'src/services/ophan'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -76,6 +77,13 @@ const WithProviders = nestProviders(
     ToastProvider,
     AuthProvider,
 )
+
+sendPageViewEvent({
+    path:
+        'politics/2019/sep/02/boris-johnson-threatens-to-ignore-mps-on-no-deal-brexit',
+})
+    .then(res => console.log(res))
+    .catch(e => console.log(e))
 
 export default class App extends React.Component<{}, {}> {
     async componentDidCatch(e: Error) {

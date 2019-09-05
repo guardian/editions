@@ -90,6 +90,20 @@ class Ophan: NSObject {
       reject("Whoops - ios Ophan is sad", "really sad", nil)
     }
   }
+
+  @objc(sendPageViewEvent:resolver:rejecter:)
+  func sendPageViewEvent(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    print("Current thread \(Thread.current)")
+    do {
+      DispatchQueue.main.async {
+      print("Current thread \(Thread.current)")
+        self.ophanApi?.sendPageViewEvent(path: path, eventId: UUID().uuidString)
+        resolve(path)
+      }
+    } catch let error {
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
+    }
+  }
 }
 
 class SimpleLogger: Multiplatform_ophanLogger {

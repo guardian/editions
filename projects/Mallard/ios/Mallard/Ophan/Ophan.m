@@ -26,5 +26,8 @@ RCT_EXTERN_METHOD(sendComponentEvent: (NSString)componentType
                   resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject)
                   
+RCT_EXTERN_METHOD(sendPageViewEvent: (NSString)path
+                  resolver: (RCTPromiseResolveBlock)resolve
+                  rejecter: (RCTPromiseRejectBlock)reject)
 
 @end

@@ -7,12 +7,14 @@ import ophan.thrift.componentEvent.Action
 import ophan.thrift.componentEvent.ComponentEvent
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.componentEvent.ComponentV2
+import ophan.thrift.event.Url
 import ophan.thrift.nativeapp.*
 
 fun hello(): String = "Hello from MAX AND JAMES!"
 
 class OphanApi(
-        private val dispatcher: OphanDispatcher
+        private val dispatcher: OphanDispatcher,
+        private val logger: Logger
 ) {
 
     constructor(
@@ -40,7 +42,7 @@ class OphanApi(
             userId,
             logger,
             FileRecordStore(recordStorePath)
-    ))
+    ), logger)
 
     fun componentEventBuilder(componentType: String, action: String, eventId: String, value: String?, componentId: String?): Event {
         val event = Event.Builder()
@@ -71,6 +73,30 @@ class OphanApi(
 
     fun sendComponentEvent(componentType: String, action: String, eventId: String, value: String?, componentId: String?) {
         val event = this.componentEventBuilder(componentType, action, eventId, value, componentId)
+        dispatcher.dispatchEvent(event)
+    }
+
+    fun sendPageViewEvent(path: String, eventId: String) {
+        val domain = "theguardian.com"
+        val host = "www." + domain
+        val validPath = "/" + path.removePrefix("/")
+        val raw = "https://" + host + validPath
+
+
+        val event = Event.Builder()
+        .eventId(eventId)
+        .eventType(EventType.VIEW)
+        .viewId(eventId)
+        .path(validPath)
+        .url(Url.Builder()
+                .raw(raw)
+                .host(host)
+                .path(validPath)
+                .domain(domain)
+                .build()
+        )
+        .build()
+        logger.debug("OphanKt", event.toString())
         dispatcher.dispatchEvent(event)
     }
 }
