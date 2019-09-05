@@ -10,7 +10,7 @@ fun getThreadSafeOphanApi(
         deviceName: String,
         deviceManufacturer: String,
         deviceId: String,
-        userId: String,
+        userId: String?,
         logger: Logger,
         recordStorePath: String
 ): OphanApi = OphanApi(appFamily, appVersion, appOsVersion, deviceName, deviceManufacturer, deviceId, userId, logger, recordStorePath).freeze()
