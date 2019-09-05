@@ -17,7 +17,7 @@ import { metrics } from 'src/theme/spacing'
 import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -53,6 +53,10 @@ const ArticleScreenLoginOverlay = ({
     </LoginOverlay>
 )
 
+const styles = StyleSheet.create({
+    refView: { flex: 1 },
+})
+
 const ArticleScreenWithProps = ({
     path,
     articleNavigator,
@@ -83,6 +87,7 @@ const ArticleScreenWithProps = ({
     return (
         <ArticleScreenLoginOverlay navigation={navigation}>
             <View
+                style={styles.refView}
                 ref={r => {
                     if (r) viewRef.current = r
                 }}
