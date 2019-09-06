@@ -5,6 +5,7 @@ import {
     sendPageViewEvent,
     ComponentType,
     Action,
+    ScreenTracking,
 } from '../ophan'
 import { NativeModules } from 'react-native'
 
@@ -30,7 +31,7 @@ describe('services/ophan', () => {
 
     describe('sendAppScreenEvent', () => {
         it('should use the correct native module function at a basic level', () => {
-            sendAppScreenEvent({ screenName: 'issue_front' })
+            sendAppScreenEvent({ screenName: ScreenTracking.Issue })
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalled()
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalledWith(
                 'issue_front',
@@ -40,7 +41,7 @@ describe('services/ophan', () => {
 
         it('should use the correct native module function with optional values', () => {
             sendAppScreenEvent({
-                screenName: 'issue_front',
+                screenName: ScreenTracking.Issue,
                 value: '2019-08-30',
             })
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalled()
@@ -59,8 +60,8 @@ describe('services/ophan', () => {
             })
             expect(NativeModules.Ophan.sendComponentEvent).toHaveBeenCalled()
             expect(NativeModules.Ophan.sendComponentEvent).toHaveBeenCalledWith(
-                ComponentType.appVideo,
-                Action.view,
+                'APP_VIDEO',
+                'VIEW',
                 undefined,
                 undefined,
             )
@@ -75,8 +76,8 @@ describe('services/ophan', () => {
             })
             expect(NativeModules.Ophan.sendComponentEvent).toHaveBeenCalled()
             expect(NativeModules.Ophan.sendComponentEvent).toHaveBeenCalledWith(
-                ComponentType.appVideo,
-                Action.view,
+                'APP_VIDEO',
+                'VIEW',
                 'youtube/politicalvideo',
                 '12345qwerty',
             )
