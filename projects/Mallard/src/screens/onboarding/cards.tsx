@@ -5,10 +5,10 @@ import {
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
 import { ButtonAppearance } from 'src/components/button/button'
-import { FEEDBACK_EMAIL, COOKIE_LINK, PRIVACY_LINK } from 'src/helpers/words'
+import { FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useGdprSwitches } from 'src/hooks/use-settings'
 import { ModalButton } from 'src/components/modal-button'
-import { Link } from 'src/components/link'
+import { LinkNav } from 'src/components/link'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
     <View
@@ -60,9 +60,11 @@ const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
 const OnboardingConsent = ({
     onOpenGdprConsent,
     onContinue,
+    onOpenPrivacyPolicy,
 }: {
     onOpenGdprConsent: () => void
     onContinue: () => void
+    onOpenPrivacyPolicy: () => void
 }) => {
     const { enableNulls } = useGdprSwitches()
     return (
@@ -106,8 +108,10 @@ const OnboardingConsent = ({
                         We use cookies and similar technology to improve your
                         experience and also to allow us to improve our service.
                         To find out more, read our{' '}
-                        <Link href={PRIVACY_LINK}>privacy policy</Link> and{' '}
-                        <Link href={COOKIE_LINK}>cookie policy</Link>.
+                        <LinkNav onPress={onOpenPrivacyPolicy}>
+                            privacy policy
+                        </LinkNav>
+                        .
                     </>
                 }
             </OnboardingCard>

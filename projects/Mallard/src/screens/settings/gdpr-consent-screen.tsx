@@ -1,15 +1,13 @@
 import React from 'react'
-import { FlatList, View, Alert } from 'react-native'
+import { FlatList, View, Alert, Text } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
-import { Link } from 'src/components/link'
+import { LinkNav } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { GdprSwitchSettings } from 'src/helpers/settings'
 import {
-    COOKIE_LINK,
-    PRIVACY_LINK,
     PREFS_SAVED_MSG,
     PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words'
@@ -23,6 +21,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { useToast } from 'src/hooks/use-toast'
 import { LoginHeader } from 'src/components/login/login-layout'
 import { NavigationInjectedProps } from 'react-navigation'
+import { routeNames } from 'src/navigation/routes'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -104,7 +103,7 @@ const GdprConsent = ({
     return (
         <View>
             {shouldShowDismissableHeader ? (
-                <LoginHeader onDismiss={() => onDismiss()}>
+                <LoginHeader onDismiss={onDismiss}>
                     {PRIVACY_SETTINGS_HEADER_TITLE}
                 </LoginHeader>
             ) : (
@@ -118,10 +117,17 @@ const GdprConsent = ({
                         and similar technologies for this service. These
                         technologies are provided by us and by our third-party
                         partners. To find out more, read our{' '}
-                        <Link href={PRIVACY_LINK}>privacy policy</Link> and{' '}
-                        <Link href={COOKIE_LINK}>cookie policy</Link>. If you
-                        disable a category, you may need to restart the app for
-                        your changes to fully take effect.
+                        <LinkNav
+                            onPress={() =>
+                                navigation.navigate(
+                                    routeNames.onboarding.PrivacyPolicyInline,
+                                )
+                            }
+                        >
+                            privacy policy
+                        </LinkNav>
+                        . If you disable a category, you may need to restart the
+                        app for your changes to fully take effect.
                     </>
                 }
                 proxy={
