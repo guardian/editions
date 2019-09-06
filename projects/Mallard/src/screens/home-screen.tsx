@@ -17,9 +17,8 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { Heading } from 'src/components/layout/ui/row'
 import { BaseList, List } from 'src/components/lists/list'
 import { Spinner } from 'src/components/spinner'
-import { unzipIssue } from 'src/helpers/files'
+import { unzipNamedIssueArchive } from 'src/helpers/files'
 import { useIssueSummary } from 'src/hooks/use-api'
-import { useFileList } from 'src/hooks/use-fs'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
@@ -37,6 +36,7 @@ import {
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
+import { PathToIssue } from 'src/paths'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -44,7 +44,10 @@ const HomeScreenHeader = withNavigation(
         navigation,
         onReturn,
     }: {
-        issue?: Issue['key']
+        issue?: {
+            localIssueId: Issue['localId']
+            publishedIssueId: Issue['publishedId']
+        }
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
@@ -103,12 +106,14 @@ const IssueList = withNavigation(
                 <BaseList
                     style={{ paddingTop: 0 }}
                     data={issueList}
-                    renderItem={({ item }) => (
+                    renderItem={({ item: issueSummary }) => (
                         <IssueRow
                             onPress={() => {
                                 navigateToIssue(navigation, {
                                     path: {
-                                        issue: item.key,
+                                        localIssueId: issueSummary.localId,
+                                        publishedIssueId:
+                                            issueSummary.publishedId,
                                     },
                                 })
                                 sendComponentEvent({
@@ -117,7 +122,7 @@ const IssueList = withNavigation(
                                     value: 'issues_list_issue_clicked',
                                 })
                             }}
-                            issue={item}
+                            issue={issueSummary}
                         />
                     )}
                 />
@@ -152,11 +157,11 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const [files, { refreshIssues }] = useFileList()
     const { response: issueSummary, retry } = useIssueSummary()
     const from = navigation.getParam('from', undefined)
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-
+    const issue: PathToIssue =
+        from && from.path && (from.path.issue as PathToIssue)
     return (
         <WithAppAppearance value={'tertiary'}>
             <NavigationEvents
@@ -166,22 +171,13 @@ export const HomeScreen = ({
             />
             <ScrollContainer>
                 <HomeScreenHeader
-                    issue={
-                        from && from.path && from.path.issue
-                            ? from.path.issue
-                            : undefined
-                    }
+                    issue={issue}
                     onSettings={() => {
                         navigation.navigate('Settings')
                     }}
                     onReturn={() => {
                         navigateToIssue(navigation, {
-                            path: {
-                                issue:
-                                    from && from.path && from.path.issue
-                                        ? from.path.issue
-                                        : undefined,
-                            },
+                            path: issue,
                         })
                     }}
                 />
@@ -212,45 +208,7 @@ export const HomeScreen = ({
                             </FlexCenter>
                         ),
                 })}
-                {files.length > 0 && __DEV__ && (
-                    <>
-                        <Heading>Issues on device</Heading>
-                        <List
-                            data={files
-                                .filter(
-                                    ({ type }) =>
-                                        type === 'archive' || type === 'issue',
-                                )
-                                .map(file => ({
-                                    key: file.id,
-                                    title:
-                                        file.type === 'issue'
-                                            ? file.issue.name
-                                            : 'Compressed issue',
-                                    explainer:
-                                        file.type === 'issue'
-                                            ? `From fs/${file.id}`
-                                            : 'Tap to unarchive',
-                                    data: file,
-                                }))}
-                            onPress={file => {
-                                if (file.type === 'archive') {
-                                    unzipIssue(file.id).then(async () => {
-                                        refreshIssues()
-                                        navigation.navigate('Issue', {
-                                            path: file.id,
-                                        })
-                                    })
-                                } else if (file.type === 'issue') {
-                                    navigation.navigate('Issue', {
-                                        path: { issue: file.issue.key },
-                                        issue: file.issue,
-                                    })
-                                }
-                            }}
-                        />
-                    </>
-                )}
+
                 <ApiState />
             </ScrollContainer>
         </WithAppAppearance>

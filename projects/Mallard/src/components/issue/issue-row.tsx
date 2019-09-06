@@ -86,8 +86,7 @@ const IssueRow = ({
                 action: Action.click,
                 value: 'issues_list_issue_clicked',
             })
-
-            downloadAndUnzipIssue(issue.key, imageForScreenSize(), status => {
+            downloadAndUnzipIssue(issue, imageForScreenSize(), status => {
                 setDlStatus(status)
                 if (status.type === 'success') {
                     setExists(ExistsStatus.doesExist)

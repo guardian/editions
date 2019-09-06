@@ -1,7 +1,28 @@
-import { issuePath, mediaPath, frontPath, Image } from 'src/common'
+import {
+    issuePath,
+    mediaPath,
+    frontPath,
+    Issue,
+    Collection,
+    Front,
+    CAPIArticle,
+} from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
 
-const APIPaths = {
+export interface PathToIssue {
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
+}
+
+export interface PathToArticle {
+    collection: Collection['key']
+    front: Front['key']
+    article: CAPIArticle['key']
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
+}
+
+export const APIPaths = {
     issue: issuePath,
     front: frontPath,
     media: mediaPath,
@@ -10,29 +31,22 @@ const APIPaths = {
 
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
-const imagePath = (image: Image) =>
-    `${APIPaths.mediaBackend}${APIPaths.media(
-        'issue',
-        'phone',
-        image.source,
-        image.path,
-    )}`
+const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
+const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
+export const MEDIA_CACHE_DIRECTORY_NAME = 'cached'
 
-const issueRoot = (issueId: string) => `${issuesDir}/${issueId}`
-const mediaRoot = (issueId: string) => `${issueRoot(issueId)}/media`
-
-const FSPaths = {
+export const FSPaths = {
     issuesDir,
     issueRoot,
     mediaRoot,
-    media: (issueId: string, source: string, path: string) =>
-        `${mediaRoot(issueId)}/cached/${source}/${path}`,
-    issueZip: (issueId: string) => `${issueRoot(issueId)}.zip`,
-    issue: (issueId: string) => `${issueRoot(issueId)}/issue`,
-    collection: (issueId: string, collectionId: string) =>
-        `${issueRoot(issueId)}/collection/${collectionId}`,
-    front: (issueId: string, frontId: string) =>
-        `${issueRoot(issueId)}/front/${frontId}`,
+    media: (localIssueId: string, source: string, path: string) =>
+        `${mediaRoot(
+            localIssueId,
+        )}/${MEDIA_CACHE_DIRECTORY_NAME}/${source}/${path}`,
+    zip: (localIssueId: string, filename: string) =>
+        `${issueRoot(localIssueId)}/${filename}.zip`,
+    issueZip: (localIssueId: string) => `${issueRoot(localIssueId)}/data.zip`,
+    issue: (localIssueId: string) => `${issueRoot(localIssueId)}/issue`,
+    front: (localIssueId: string, frontId: string) =>
+        `${issueRoot(localIssueId)}/front/${frontId}`,
 }
-
-export { FSPaths, APIPaths, imagePath }

@@ -61,7 +61,11 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Archive Bucket',
-                allowedValues: ['editions-store', 'editions-store-code'],
+                allowedValues: [
+                    'editions-store',
+                    'editions-store-prod',
+                    'editions-store-code',
+                ], //remove editions-store post merge
             },
         )
 

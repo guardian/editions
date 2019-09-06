@@ -14,7 +14,7 @@ import {
     NavigationInjectedProps,
     withNavigation,
 } from 'react-navigation'
-import { CAPIArticle } from 'src/common'
+import { CAPIArticle, Issue } from 'src/common'
 import { ariaHidden } from 'src/helpers/a11y'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { navigateToArticle } from 'src/navigation/helpers/base'
@@ -22,7 +22,8 @@ import {
     setScreenPositionFromView,
     setScreenPositionOfItem,
 } from 'src/navigation/navigators/article/positions'
-import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
+import { PathToArticle } from 'src/paths'
+import { ArticleNavigator } from 'src/screens/article-screen'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ItemSizes, useCardBackgroundStyle } from '../../helpers/helpers'
@@ -36,7 +37,8 @@ export interface TappablePropTypes {
 
 export interface PropTypes extends TappablePropTypes {
     size: ItemSizes
-    issueID: string
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
 }
 
 /*

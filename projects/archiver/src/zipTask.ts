@@ -1,30 +1,34 @@
 import { Handler } from 'aws-lambda'
+import { mediaDir } from '../../common/src'
 import { imageSizes, issueDir } from '../common'
 import { zip } from '../zipper'
-import { IssueId } from './issueTask'
 import { UploadTaskOutput } from './issueUploadTask'
-export interface ZipTaskOutput {
-    issueId: IssueId
-    message: string
-}
-export const handler: Handler<UploadTaskOutput, ZipTaskOutput> = async ({
-    issueId,
+export const handler: Handler<UploadTaskOutput, UploadTaskOutput> = async ({
+    issuePublication,
+    issue,
 }) => {
-    const { id } = issueId
-
+    const { issueDate, version } = issuePublication
+    const { publishedId } = issue
+    const name = issueDir(publishedId)
     console.log('Compressing')
-    await zip(id, issueDir(id), 'media')
+    await zip(`${name}/data`, issueDir(publishedId), {
+        excludePath: 'media',
+        excludePrefixSegment: version,
+    })
 
     console.log('data zip uploaded')
     await Promise.all(
         imageSizes.map(async size => {
-            await zip(`${id}-${size}`, `${issueDir(id)}/media/${size}/`)
+            await zip(`${name}/${size}`, mediaDir(publishedId, size), {
+                excludePrefixSegment: version,
+            })
             console.log(` ${size} media zip uploaded`)
         }),
     )
     console.log('Media zips uploaded.')
     return {
-        issueId,
-        message: `Issue  ${id} zipped`,
+        issuePublication,
+        issue,
+        message: `Issue ${issueDate} zipped`,
     }
 }

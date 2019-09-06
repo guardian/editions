@@ -1,10 +1,9 @@
-import { s3, bucket } from '../s3'
-import { upload } from '../upload'
-import { notNull, IssueSummary } from '../../common'
+import { fromPairs, groupBy, uniq } from 'ramda'
 import { attempt, hasFailed } from '../../../backend/utils/try'
-import { groupBy } from 'ramda'
-import { fromPairs } from 'ramda'
-import { imageSizes, ImageSize } from '../../../common/src'
+import { ImageSize, imageSizes } from '../../../common/src'
+import { IssueSummary, notNull } from '../../common'
+import { bucket, s3 } from '../s3'
+import { upload } from '../upload'
 
 const zips = 'zips/'
 
@@ -24,28 +23,42 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .map(key => key.substring(zips.length))
     const issues = groupBy<string>(filename => {
-        const issue = filename.match(/\d\d\d\d-\d\d-\d\d/)
-        if (issue == null) return '??'
-        return issue[0]
+        return filename
+            .split('/')
+            .slice(0, 2)
+            .join('/')
     })(filenames)
 
     const index: IssueSummary[] = Object.entries(issues)
         .map(([issue, filenames]) => {
-            const dateFromIssue = new Date(issue)
+            const [edition, id] = issue.split('/')
+
+            const latestVersion = filenames
+                .map(_ => _.split('/')[2])
+                .reduce((a, b) =>
+                    new Date(a).getTime() > new Date(b).getTime() ? a : b,
+                )
+
+            const latestFilenames = filenames.filter(_ =>
+                _.includes(latestVersion),
+            )
+
+            const dateFromIssue = new Date(id)
             if (isNaN(dateFromIssue.getTime())) {
                 console.warn(`Issue with path ${issue} is not a valid date`)
                 return null
             }
 
             const assetFiles = fromPairs(
-                filenames
+                latestFilenames
                     .map((filename): [ImageSize | 'data', string] | null => {
-                        const breakpointString = filename
-                            .replace(issue, '')
+                        const [, , , breakpointString] = filename
                             .replace('.zip', '')
-                            .replace('-', '')
+                            .split('/')
 
-                        if (breakpointString === '') return ['data', filename]
+                        if (breakpointString === 'data') {
+                            return ['data', filename]
+                        }
 
                         const breakpoint = imageSizes.find(
                             size => size === breakpointString,
@@ -72,9 +85,13 @@ export const indexer = async (): Promise<IssueSummary[]> => {
                 return null
             }
             const assets = { data, ...images }
-
+            const key = `${edition}/${id}`
+            const localId = key
+            const publishedId = `${key}/${latestVersion}`
             return {
-                key: issue,
+                key,
+                localId,
+                publishedId,
                 name: 'Daily Edition',
                 date: dateFromIssue,
                 assets,
@@ -83,8 +100,10 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 7)
-        .map(({ key, name, date, assets }) => ({
+        .map(({ name, date, assets, key, localId, publishedId }) => ({
             key,
+            localId,
+            publishedId,
             name,
             date: date.toISOString(),
             assets,

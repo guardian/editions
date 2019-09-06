@@ -42,7 +42,7 @@ export const getScaledFontCss = <F extends FontFamily>(
     const font = getScaledFont(family, level)
     return css`
         font-size: ${px(font.fontSize)};
-        line-height; ${px(font.lineHeight)};
+        line-height: ${px(font.lineHeight)};
     `
 }
 

@@ -2,7 +2,6 @@ export const routeNames = {
     Issue: 'Issue',
     Article: 'Article',
     IssueList: 'IssueList',
-    Downloads: 'Downloads',
     Settings: 'Settings',
     Endpoints: 'Endpoints',
     GdprConsent: 'GdprConsent',

@@ -42,9 +42,7 @@ import { sendPageViewEvent } from 'src/services/ophan'
 import { ScrollView } from 'react-native-gesture-handler'
 import { UiBodyCopy } from 'src/components/styled-text'
 
-export interface PathToIssue {
-    issue: Issue['key']
-}
+import { PathToIssue } from 'src/paths'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -128,7 +126,12 @@ const IssueFronts = ({
         <ScrollView style={style} removeClippedSubviews>
             {ListHeaderComponent}
             {issue.fronts.map((key, index) => (
-                <Front issue={issue.key} front={key} key={key} />
+                <Front
+                    localIssueId={issue.localId}
+                    publishedIssueId={issue.publishedId}
+                    front={key}
+                    key={key}
+                />
             ))}
             <View style={{ height: container.height / 2 }} />
         </ScrollView>
@@ -141,7 +144,7 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 }
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    const response = useIssueOrLatestResponse(path && path.issue)
+    const response = useIssueOrLatestResponse(path)
     return (
         <Container>
             {response({
@@ -251,6 +254,7 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
+    if (!path || !path.localIssueId)
+        return <IssueScreenWithPath path={undefined} />
     return <IssueScreenWithPath path={path} />
 }
