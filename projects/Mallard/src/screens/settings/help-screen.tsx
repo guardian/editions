@@ -8,6 +8,12 @@ import { RightChevron } from 'src/components/icons/RightChevron'
 import { Heading } from 'src/components/layout/ui/row'
 import { AuthContext } from 'src/authentication/auth-context'
 import { createSupportMailTo } from 'src/helpers/diagnostics'
+import {
+    ISSUE_EMAIL,
+    SUBSCRIPTION_EMAIL,
+    READERS_EMAIL,
+    APPS_FEEDBACK_EMAIL,
+} from 'src/helpers/words'
 
 const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
     const { status } = useContext(AuthContext)
@@ -35,22 +41,22 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={[
                         createSupportMailTo(
                             'Report an issue',
-                            'apps.feedback@theguardian.com',
+                            ISSUE_EMAIL,
                             status,
                         ),
                         createSupportMailTo(
                             'Subscription, payment and billing issues',
-                            'subscriptions@theguardian.com',
+                            SUBSCRIPTION_EMAIL,
                             status,
                         ),
                         createSupportMailTo(
                             'Comment or query about an article',
-                            'guardian.readers@theguardian.com',
+                            READERS_EMAIL,
                             status,
                         ),
                         createSupportMailTo(
                             'Send feedback',
-                            'apps.feedback@theguardian.com',
+                            APPS_FEEDBACK_EMAIL,
                             status,
                         ),
                     ]}
