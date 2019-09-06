@@ -287,14 +287,30 @@ export interface Crossword {
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime
 }
+export interface IssueId {
+    source: string
+    id: string
+}
 
-export const issueDir = (issueId: string) => `${issueId}`
+export const issueDir = ({ source, id }: IssueId) => `${id}-${source}`
 
-export const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
+export const issuePath = (issue: IssueId) => `${issueDir(issue)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-export const frontPath = (issueId: string, frontId: string) =>
-    `${issueDir(issueId)}/front/${frontId}`
+export const frontPath = (issue: IssueId, frontId: string) =>
+    `${issueDir(issue)}/front/${frontId}`
+
+// These have issueids in the path, but you'll need to change the archiver if you want to use them.
+
+export const mediaPath = (
+    issue: IssueId,
+    size: ImageSize,
+    source: string,
+    path: string,
+) => `${issueDir(issue)}/media/${size}/${source}/${path}`
+
+export const coloursPath = (issue: IssueId, source: string, path: string) =>
+    `${issueDir(issue)}/colours/${source}/${path}`
 
 export const issueSummaryPath = () => 'issues'
 export interface Image {
@@ -314,18 +330,6 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-
-// These have issueids in the path, but you'll need to change the archiver if you want to use them.
-
-export const mediaPath = (
-    issue: string,
-    size: ImageSize,
-    source: string,
-    path: string,
-) => `${issueDir(issue)}/media/${size}/${source}/${path}`
-
-export const coloursPath = (issue: string, source: string, path: string) =>
-    `${issueDir(issue)}/colours/${source}/${path}`
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
