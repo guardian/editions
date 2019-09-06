@@ -68,7 +68,8 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendAppScreenEvent(@Nonnull String screenName, @Nullable String value, Promise promise) {
         try {
-            ophanApi.sendAppScreenEvent(screenName, value, UUID.randomUUID().toString());
+            String eventId = UUID.randomUUID().toString();
+            ophanApi.sendAppScreenEvent(screenName, value, eventId);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
@@ -78,7 +79,8 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendComponentEvent(@Nonnull String componentType, @Nonnull String action, @Nullable String value, @Nullable String componentId, @Nonnull Promise promise) {
         try {
-            ophanApi.sendComponentEvent(componentType, action, UUID.randomUUID().toString(), value, componentId );
+            String eventId = UUID.randomUUID().toString();
+            ophanApi.sendComponentEvent(componentType, action, eventId, value, componentId );
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
