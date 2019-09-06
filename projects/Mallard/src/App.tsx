@@ -27,6 +27,7 @@ import {
     ScreenTracking,
     ScreenTrackingMapping,
 } from 'src/services/ophan'
+import { NavigationState } from 'react-navigation'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -74,24 +75,30 @@ const rootNavigationProps = __DEV__ && {
     loadNavigationState,
 }
 
-function getActiveRouteName(navigationState: any): any {
+function getActiveRouteName(
+    navigationState: NavigationState,
+): ScreenTrackingMapping | null {
     if (!navigationState) {
         return null
     }
     const route = navigationState.routes[navigationState.index]
     // dive into nested navigators
     if (route.routes) {
-        return getActiveRouteName(route)
+        return getActiveRouteName(route as NavigationState)
     }
-    return route.routeName
+    return route.routeName as ScreenTrackingMapping
 }
 
-const onNavigationStateChange = (prevState: any, currentState: any) => {
-    const prevScreen: ScreenTrackingMapping = getActiveRouteName(prevState)
-    const currentScreen: ScreenTrackingMapping = getActiveRouteName(
+const onNavigationStateChange = (
+    prevState: NavigationState,
+    currentState: NavigationState,
+) => {
+    const prevScreen: ScreenTrackingMapping | null = getActiveRouteName(
+        prevState,
+    )
+    const currentScreen: ScreenTrackingMapping | null = getActiveRouteName(
         currentState,
     )
-    console.log(currentScreen)
     if (
         currentScreen &&
         ScreenTracking[currentScreen] &&
@@ -113,13 +120,6 @@ const WithProviders = nestProviders(
     ToastProvider,
     AuthProvider,
 )
-
-// sendPageViewEvent({
-//     path:
-//         'politics/2019/sep/02/boris-johnson-threatens-to-ignore-mps-on-no-deal-brexit',
-// })
-//     .then(res => console.log(res))
-//     .catch(e => console.log(e))
 
 export default class App extends React.Component<{}, {}> {
     async componentDidCatch(e: Error) {
