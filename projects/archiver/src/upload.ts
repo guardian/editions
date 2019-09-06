@@ -14,7 +14,7 @@ export const upload = (
                 Key: `${key}`,
                 ACL: 'public-read',
                 ContentType: mime,
-                Tagging: `source:${source}`,
+                Tagging: `source=${source}`,
             },
             (err, data) => {
                 if (err) {
