@@ -67,13 +67,12 @@ const IssueRow = ({
 
     const onDownloadIssue = async () => {
         if ((await fetch()).isConnected && !dlStatus) {
-            const onDownloadIssue = () => {
-                sendComponentEvent({
-                    componentType: ComponentType.appButton,
-                    action: Action.click,
-                    value: 'issues_list_issue_clicked',
-                })
-                
+            sendComponentEvent({
+                componentType: ComponentType.appButton,
+                action: Action.click,
+                value: 'issues_list_issue_clicked',
+            })
+
             downloadAndUnzipIssue(issue.key, imageForScreenSize(), status => {
                 setDlStatus(status)
                 if (status.type === 'success') {
