@@ -100,6 +100,6 @@ export const summary = async () => {
         console.error('Could not fetch index')
         return
     }
-    await upload('issues', index, 'application/json', 'index')
+    await upload('issues', index, 'application/json')
     return
 }

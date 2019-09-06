@@ -4,7 +4,6 @@ export const upload = (
     key: string,
     body: {} | Buffer,
     mime: 'image/jpeg' | 'application/json' | 'application/zip',
-    source: string,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
         s3.upload(
@@ -14,7 +13,6 @@ export const upload = (
                 Key: `${key}`,
                 ACL: 'public-read',
                 ContentType: mime,
-                Tagging: `source=${source}`,
             },
             (err, data) => {
                 if (err) {

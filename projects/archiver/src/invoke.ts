@@ -11,18 +11,15 @@ import {
 } from '../../backend/utils/try'
 import { IssueParams } from './issueTask'
 import { randomBytes } from 'crypto'
+import { IssueId } from '../common'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
     eventTime: string
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
-interface Issue {
-    source: string
-    id: string
-}
 
-const parseRecord = (record: Record): Attempt<Issue> => {
+const parseRecord = (record: Record): Attempt<IssueId> => {
     const key = decodeURIComponent(record.s3.object.key)
     const [, id, filename] = key.split('/')
     if (filename === undefined || id === undefined) {
@@ -32,7 +29,7 @@ const parseRecord = (record: Record): Attempt<Issue> => {
         })
     }
     const source = filename.replace('.json', '')
-    return { source, id }
+    return { edition: 'daily-edition' as const, source, id }
 }
 
 export const handler: Handler<

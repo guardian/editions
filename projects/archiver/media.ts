@@ -1,14 +1,15 @@
+import { unnest } from 'ramda'
+import { attempt, hasFailed } from '../backend/utils/try'
 import {
-    Front,
+    BlockElement,
     CAPIArticle,
+    Front,
     Image,
     ImageSize,
     notNull,
-    BlockElement,
+    IssueId,
 } from './common'
-import { unnest } from 'ramda'
 import { getColours, getImage } from './src/downloader'
-import { hasFailed, attempt } from '../backend/utils/try'
 import { upload } from './src/upload'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
@@ -45,27 +46,22 @@ export const getImagesFromFront = (front: Front): Image[] => {
     return images
 }
 
-export const getAndUploadColours = async (
-    source: string,
-    id: string,
-    image: Image,
-) => {
-    const [colourPath, colours] = await getColours(source, id, image)
+export const getAndUploadColours = async (issue: IssueId, image: Image) => {
+    const [colourPath, colours] = await getColours(issue, image)
     if (hasFailed(colours)) {
         console.error(`Could not get colours for ${colourPath}`)
         console.error(JSON.stringify(colours))
         return colours
     }
-    return attempt(upload(colourPath, colours, 'application/json', source))
+    return attempt(upload(colourPath, colours, 'application/json'))
 }
 
 export const getAndUploadImage = async (
-    source: string,
-    issue: string,
+    issue: IssueId,
     image: Image,
     size: ImageSize,
 ) => {
-    const [path, data] = await getImage(source, issue, image, size)
+    const [path, data] = await getImage(issue, image, size)
     if (hasFailed(data)) return data
-    return upload(path, data, 'image/jpeg', source)
+    return upload(path, data, 'image/jpeg')
 }

@@ -21,7 +21,7 @@ export const handler: Handler<IssueTaskOutput, IssueTaskOutput> = async ({
     console.log(`Attempting to upload ${id} to ${bucket}`)
     const [frontId, ...remainingFronts] = fronts
 
-    const maybeFront = await getFront(path, frontId)
+    const maybeFront = await getFront(issueId, frontId)
 
     if (hasFailed(maybeFront)) {
         console.error(JSON.stringify(attempt))
@@ -31,7 +31,7 @@ export const handler: Handler<IssueTaskOutput, IssueTaskOutput> = async ({
     const images = unnest(getImagesFromFront(maybeFront))
 
     const frontUpload = await attempt(
-        upload(frontPath(id, frontId), maybeFront, 'application/json', source),
+        upload(frontPath(issueId, frontId), maybeFront, 'application/json'),
     )
 
     if (hasFailed(frontUpload)) {

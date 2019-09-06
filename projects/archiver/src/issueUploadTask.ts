@@ -10,9 +10,8 @@ export const handler: Handler<MediaTaskOutput, UploadTaskOutput> = async ({
     issueId,
     issue,
 }) => {
-    const { id, source } = issueId
     const issueUpload = await attempt(
-        upload(issuePath(id), issue, 'application/json', source),
+        upload(issuePath(issueId), issue, 'application/json'),
     )
     if (hasFailed(issueUpload)) {
         console.error(JSON.stringify(issueUpload))

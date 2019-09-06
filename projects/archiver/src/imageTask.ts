@@ -25,7 +25,7 @@ export const handler: Handler<FrontTaskOutput, MediaTaskOutput> = async ({
     )
 
     const colourUploads = await Promise.all(
-        images.map(image => getAndUploadColours(source, id, image)),
+        images.map(image => getAndUploadColours(issueId, image)),
     )
 
     const failedColourUploads = colourUploads.filter(hasFailed)
@@ -36,7 +36,7 @@ export const handler: Handler<FrontTaskOutput, MediaTaskOutput> = async ({
 
     const imageUploadActions = imagesWithSizes.map(
         ([image, size]) => async () =>
-            attempt(getAndUploadImage(source, id, image, size)),
+            attempt(getAndUploadImage(issueId, image, size)),
     )
 
     const imageUploads = await pAll(imageUploadActions, { concurrency: 20 })
