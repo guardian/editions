@@ -1,22 +1,21 @@
 import { LastModifiedUpdater } from './lastModified'
-import { Issue } from './common'
+import { Issue, IssueId } from './common'
 import { hasFailed } from './utils/try'
 import { s3fetch, Path } from './s3'
 import { PublishedIssue } from './fronts/issue'
 import { isPreview } from './preview'
 
 export const getIssue = async (
-    issue: string,
-    source: string,
+    issue: IssueId,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Issue | 'notfound'> => {
     console.log('Attempting to get latest issue for', issue)
     const path: Path = {
-        key: `daily-edition/${issue}/${source}.json`,
+        key: `daily-edition/${issue.id}/${issue.source}.json`,
         bucket: isPreview ? 'preview' : 'published',
     }
 
-    console.log(`Fetching ${JSON.stringify(path)} for ${issue}`)
+    console.log(`Fetching ${JSON.stringify(path)} for ${JSON.stringify(issue)}`)
 
     const issueData = await s3fetch(path)
 
@@ -29,8 +28,8 @@ export const getIssue = async (
     const fronts = data.fronts.map(_ => _.name)
     return {
         name: data.name,
-        key: issue,
-        id: data.id,
+        key: issue.id,
+        id: issue,
         date: data.issueDate,
         fronts,
     }

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-
-import { s3List } from '../s3'
-import { notNull, IssueSummary } from '../common'
-import { lastModified } from '../lastModified'
-import { hasFailed, Attempt } from '../utils/try'
+import { groupBy } from 'ramda'
+import { IssueId, IssueSummary, notNull } from '../common'
 import { getIssue } from '../issue'
+import { lastModified } from '../lastModified'
 import { isPreview as isPreviewStage } from '../preview'
+import { s3List } from '../s3'
+import { Attempt, hasFailed } from '../utils/try'
 
 export const LIVE_PAGE_SIZE = 7
 export const PREVIEW_PAGE_SIZE = 35
@@ -15,9 +15,10 @@ export const issueController = (req: Request, res: Response) => {
     const source: string = decodeURIComponent(
         isPreviewStage ? 'preview' : req.params.source,
     )
+    const issueId: IssueId = { id, source, edition: 'daily-edition' }
     const [date, updater] = lastModified()
     console.log(`${req.url}: request for issue ${id}`)
-    getIssue(id, source, updater)
+    getIssue(issueId, updater)
         .then(data => {
             if (data === 'notfound') {
                 res.sendStatus(404)
@@ -28,6 +29,9 @@ export const issueController = (req: Request, res: Response) => {
             res.send(JSON.stringify(data))
         })
         .catch(e => console.error(e))
+}
+interface IssuePublication extends IssueId {
+    publicationDate: Date
 }
 
 export const getIssuesSummary = async (
@@ -43,22 +47,41 @@ export const getIssuesSummary = async (
         console.error(JSON.stringify(issueKeys))
         return issueKeys
     }
-    const issueDates = issueKeys.map(_ => _.split('/')).map(([, date]) => date)
-    return issueDates
-        .map(key => {
-            const date = new Date(key)
+    const issuePublications: IssuePublication[] = issueKeys.map(
+        ({ key, lastModified }) => {
+            const [, id, filename] = key.split('/')
+            const publicationDate = lastModified
+            const source = filename.replace('.json', '')
+            return { edition: 'daily-edition', id, source, publicationDate }
+        },
+    )
+
+    const issues = Object.values(groupBy(_ => _.id, issuePublications)).map(
+        versions =>
+            versions.reduce((a, b) =>
+                a.publicationDate.getTime() > b.publicationDate.getTime()
+                    ? a
+                    : b,
+            ),
+    )
+    return issues
+        .map(id => {
+            const date = new Date(id.id)
             if (isNaN(date.getTime())) {
-                console.warn(`Issue with path ${key} is not a valid date`)
+                console.warn(
+                    `Issue with path ${JSON.stringify(id)} is not a valid date`,
+                )
                 return null
             }
-            return { key, date }
+            return { id, date }
         })
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
-        .map(({ key, date }) => ({
-            key,
+        .map(({ id, date }) => ({
+            key: id.id,
             name: 'Daily Edition',
             date: date.toISOString(),
+            id,
         }))
         .slice(0, isPreview ? PREVIEW_PAGE_SIZE : LIVE_PAGE_SIZE)
 }

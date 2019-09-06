@@ -18,7 +18,9 @@ if (isPreview) {
     console.log('🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞')
 }
 
-const issueId = isPreview ? ':issueId' : ':source/:issueId'
+const issueId = isPreview
+    ? ({ edition: 'daily-edition', source: 'preview', id: ':issueId' } as const)
+    : ({ edition: 'daily-edition', source: ':source', id: ':issueId' } as const)
 
 app.use((req, res, next) => {
     console.log(req.url)

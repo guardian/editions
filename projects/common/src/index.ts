@@ -136,6 +136,7 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
 export interface IssueSummary extends WithKey {
     name: string
     date: string
+    id: IssueId
     assets?: {
         [P in ImageSize]?: string[]
     } & { data: string[] }
@@ -143,7 +144,6 @@ export interface IssueSummary extends WithKey {
 
 export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
-    id: string
 }
 
 export interface Collection extends WithKey {
@@ -288,11 +288,13 @@ export interface Crossword {
     dateSolutionAvailable?: CapiDateTime
 }
 export interface IssueId {
+    edition: 'daily-edition'
     source: string
     id: string
 }
 
-export const issueDir = ({ source, id }: IssueId) => `${id}-${source}`
+export const issueDir = ({ source, id }: IssueId) =>
+    `daily-edition/${id}/${source}`
 
 export const issuePath = (issue: IssueId) => `${issueDir(issue)}/issue`
 
