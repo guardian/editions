@@ -58,7 +58,7 @@ export const getAndUploadColours = async (
         console.error(JSON.stringify(colours))
         return colours
     }
-    return attempt(upload(colourPath, colours, 'application/json'))
+    return attempt(upload(colourPath, colours, 'application/json', source))
 }
 
 export const getAndUploadImage = async (
@@ -69,5 +69,5 @@ export const getAndUploadImage = async (
 ) => {
     const [path, data] = await getImage(source, issue, image, size)
     if (hasFailed(data)) return data
-    return upload(path, data, 'image/jpeg')
+    return upload(path, data, 'image/jpeg', source)
 }
