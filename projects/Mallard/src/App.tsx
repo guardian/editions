@@ -22,7 +22,11 @@ import {
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
-import { sendAppScreenEvent, screenTrackingMapping } from 'src/services/ophan'
+import {
+    sendAppScreenEvent,
+    ScreenTracking,
+    ScreenTrackingMapping,
+} from 'src/services/ophan'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -35,6 +39,9 @@ fetchCacheClear().then((weOk: boolean) => {
         downloadTodaysIssue()
     }
 })
+
+// Capture the first screen event
+sendAppScreenEvent({ screenName: ScreenTracking.Issue })
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -79,11 +86,18 @@ function getActiveRouteName(navigationState: any): any {
     return route.routeName
 }
 
-const onNavigationStateChange = (_: any, currentState: any) => {
-    const currentScreen = getActiveRouteName(currentState)
-    if (currentScreen && screenTrackingMapping[currentScreen]) {
+const onNavigationStateChange = (prevState: any, currentState: any) => {
+    const prevScreen: ScreenTrackingMapping = getActiveRouteName(prevState)
+    const currentScreen: ScreenTrackingMapping = getActiveRouteName(
+        currentState,
+    )
+    if (
+        currentScreen &&
+        ScreenTracking[currentScreen] &&
+        currentScreen !== prevScreen
+    ) {
         sendAppScreenEvent({
-            screenView: screenTrackingMapping[currentScreen],
+            screenName: ScreenTracking[currentScreen],
         })
     }
 }

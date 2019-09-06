@@ -14,7 +14,7 @@ enum Action {
 }
 
 interface TrackScreen {
-    screenName: string
+    screenName: ScreenTracking
     value?: string
 }
 
@@ -27,14 +27,16 @@ interface TrackComponentEvent {
 
 type UserId = string | null
 
-const screenTrackingMapping = {
-    Issue: 'issue_front',
-    IssueList: 'issue_list',
-    SignIn: 'sign_in',
-    Settings: 'settings',
-    GDPRConsent: 'consent_management_options',
-    GdprConsentScreenForOnboarding: 'consent_management',
+enum ScreenTracking {
+    Issue = 'issue_front',
+    IssueList = 'issue_list',
+    SignIn = 'sign_in',
+    Settings = 'settings',
+    GDPRConsent = 'consent_management_options',
+    GdprConsentScreenForOnboarding = 'consent_management',
 }
+
+export type ScreenTrackingMapping = keyof typeof ScreenTracking
 
 const setUserId = (userId: UserId): Promise<UserId> =>
     NativeModules.Ophan.setUserId(userId)
@@ -42,8 +44,10 @@ const setUserId = (userId: UserId): Promise<UserId> =>
 const sendAppScreenEvent = async ({
     screenName,
     value,
-}: TrackScreen): Promise<boolean> =>
-    NativeModules.Ophan.sendAppScreenEvent(screenName, value)
+}: TrackScreen): Promise<boolean> => {
+    console.log(screenName)
+    return NativeModules.Ophan.sendAppScreenEvent(screenName, value)
+}
 
 const sendComponentEvent = ({
     componentType,
@@ -68,5 +72,5 @@ export {
     sendComponentEvent,
     sendPageViewEvent,
     setUserId,
-    screenTrackingMapping,
+    ScreenTracking,
 }
