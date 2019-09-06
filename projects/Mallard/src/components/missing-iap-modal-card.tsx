@@ -13,7 +13,7 @@ const MissingIAPModalCard = ({
         title="Verification error"
         subtitle="There was a problem whilst verifying your subscription"
         appearance={CardAppearance.blue}
-        size="small"
+        size="medium"
         bottomContent={
             <>
                 <ModalButton
