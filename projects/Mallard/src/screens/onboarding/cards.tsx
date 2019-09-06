@@ -72,7 +72,7 @@ const OnboardingConsent = ({
             <OnboardingCard
                 appearance={CardAppearance.blue}
                 title="We care about your privacy"
-                explainerTitle="We won’t share your data without asking"
+                explainerTitle="This app is free of ads"
                 bottomExplainerContent={
                     <>
                         <View style={styles.consentButtonContainer}>
@@ -105,9 +105,10 @@ const OnboardingConsent = ({
             >
                 {
                     <>
-                        We use cookies and similar technology to improve your
-                        experience and also to allow us to improve our service.
-                        To find out more, read our{' '}
+                        The only data that is collected (through tracking
+                        technology) is used by the Guardian to improve your
+                        experience and our level of service to you. To find out
+                        more, read our{' '}
                         <LinkNav onPress={onOpenPrivacyPolicy}>
                             privacy policy
                         </LinkNav>
