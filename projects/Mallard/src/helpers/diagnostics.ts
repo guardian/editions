@@ -15,7 +15,11 @@ import Permissions from 'react-native-permissions'
 import NetInfo from '@react-native-community/netinfo'
 import { isInBeta } from './release-stream'
 import { Platform, ActionSheetIOS, Linking, Alert } from 'react-native'
-import { IOS_BETA_EMAIL, ANDROID_BETA_EMAIL } from './words'
+import {
+    IOS_BETA_EMAIL,
+    ANDROID_BETA_EMAIL,
+    DIAGNOSTICS_REQUEST,
+} from './words'
 
 const getDiagnosticInfo = (authStatus: AuthStatus) =>
     Promise.all([
@@ -63,15 +67,19 @@ Subscriber ID: ${isAuthed(authStatus) &&
 `,
     )
 
-const supportMailto = (text: string, releaseURL: string, body?: string) =>
-    `mailto:${Platform.select({
+const supportMailToURL = (text: string, releaseURL: string, body?: string) => {
+    const email = Platform.select({
         ios: isInBeta() ? releaseURL : IOS_BETA_EMAIL,
         android: isInBeta() ? releaseURL : ANDROID_BETA_EMAIL,
-    })}?subject=${encodeURIComponent(
-        `${text} - ${Platform.OS} Daily App, ${DeviceInfo.getVersion()} / ${
-            getVersionInfo().commitId
-        }`,
-    )}${body && `&body=${encodeURIComponent(body)}`}`
+    })
+
+    const subject = `${text} - ${
+        Platform.OS
+    } Daily App, ${DeviceInfo.getVersion()} / ${getVersionInfo().commitId}`
+
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}${body &&
+        `&body=${encodeURIComponent(body)}`}`
+}
 
 const createSupportMailTo = (
     text: string,
@@ -87,12 +95,11 @@ const createSupportMailTo = (
                     ActionSheetIOS.showActionSheetWithOptions(
                         {
                             options: ['Include', `Don't include`],
-                            message:
-                                'Would you like us to include diagnostic information to help answer your query?',
+                            message: DIAGNOSTICS_REQUEST,
                         },
                         async index => {
                             Linking.openURL(
-                                supportMailto(
+                                supportMailToURL(
                                     text,
                                     release,
                                     index === 0
@@ -103,28 +110,26 @@ const createSupportMailTo = (
                         },
                     ),
                 android: () =>
-                    Alert.alert(
-                        'Would you like us to include diagnostic information to help answer your query?',
-                        undefined,
-                        [
-                            {
-                                text: 'Include',
-                                onPress: async () => {
-                                    supportMailto(
+                    Alert.alert(DIAGNOSTICS_REQUEST, undefined, [
+                        {
+                            text: 'Include',
+                            onPress: async () => {
+                                Linking.openURL(
+                                    supportMailToURL(
                                         text,
                                         release,
                                         await getDiagnosticInfo(authStatus),
-                                    )
-                                },
+                                    ),
+                                )
                             },
-                            {
-                                text: `Don't include`,
-                                onPress: () => {
-                                    supportMailto(text, release)
-                                },
+                        },
+                        {
+                            text: `Don't include`,
+                            onPress: () => {
+                                Linking.openURL(supportMailToURL(text, release))
                             },
-                        ],
-                    ),
+                        },
+                    ]),
             })()
         },
     },

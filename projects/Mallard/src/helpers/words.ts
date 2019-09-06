@@ -15,6 +15,9 @@ export const CONNECTION_FAILED_SUB_ERROR = `Let's try and get your issue`
 export const GENERIC_ERROR = `Sorry! This didn't work`
 export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${FEEDBACK_EMAIL} and tell us what happened?`
 
+export const DIAGNOSTICS_REQUEST =
+    'Would you like us to include diagnostic information to help answer your query?'
+
 export const ERR_404_MISSING_PROPS = `Couldn't find a path to this item`
 export const ERR_404_REMOTE = `Couldn't find item`
 
