@@ -19,6 +19,7 @@ import { imageForScreenSize } from 'src/helpers/screen'
 import { fetch } from '@react-native-community/netinfo'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
+import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 
 interface GridRowSplitPropTypes {
     children: ReactNode
@@ -66,6 +67,12 @@ const IssueRow = ({
 
     const onDownloadIssue = async () => {
         if ((await fetch()).isConnected && !dlStatus) {
+            sendComponentEvent({
+                componentType: ComponentType.appButton,
+                action: Action.click,
+                value: 'issues_list_issue_clicked',
+            })
+
             downloadAndUnzipIssue(issue.key, imageForScreenSize(), status => {
                 setDlStatus(status)
                 if (status.type === 'success') {

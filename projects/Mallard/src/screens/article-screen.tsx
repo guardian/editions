@@ -18,6 +18,7 @@ import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
 import { View, StyleSheet } from 'react-native'
+import { sendPageViewEvent } from 'src/services/ophan'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -126,6 +127,9 @@ export const ArticleScreen = ({
             />
         ),
         success: props => {
+            if (props.path && props.path.article) {
+                sendPageViewEvent({ path: props.path.article })
+            }
             return (
                 <ArticleScreenWithProps
                     {...{ navigation, onDismissStateChanged }}

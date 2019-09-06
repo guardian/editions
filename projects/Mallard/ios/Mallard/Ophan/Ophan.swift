@@ -63,17 +63,45 @@ class Ophan: NSObject {
     resolve(userId)
   }
 
-  @objc(sendTestAppScreenEvent:resolver:rejecter:)
-  func sendTestAppScreenEvent(_ screenName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+  @objc(sendAppScreenEvent:value:resolver:rejecter:)
+  func sendAppScreenEvent(_ screenName: String, value: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
     print("Current thread \(Thread.current)")
     do {
       DispatchQueue.main.async {
       print("Current thread \(Thread.current)")
-        self.ophanApi?.sendTestAppScreenEvent(screenName: screenName, eventId: UUID().uuidString)
+        self.ophanApi?.sendAppScreenEvent(screenName: screenName, value: value, eventId: UUID().uuidString)
         resolve(screenName)
       }
     } catch let error {
-      reject("whoops - ios Ophan is sad", "blah", nil)
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
+    }
+  }
+
+  @objc(sendComponentEvent:action:value:componentId:resolver:rejecter:)
+  func sendComponentEvent(_ componentType: String, action: String, value: String?, componentId: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    print("Current thread \(Thread.current)")
+    do {
+      DispatchQueue.main.async {
+      print("Current thread \(Thread.current)")
+        self.ophanApi?.sendComponentEvent(componentType: componentType, action: action, eventId: UUID().uuidString, value: value, componentId: componentId)
+        resolve(componentType)
+      }
+    } catch let error {
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
+    }
+  }
+
+  @objc(sendPageViewEvent:resolver:rejecter:)
+  func sendPageViewEvent(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    print("Current thread \(Thread.current)")
+    do {
+      DispatchQueue.main.async {
+      print("Current thread \(Thread.current)")
+        self.ophanApi?.sendPageViewEvent(path: path, eventId: UUID().uuidString)
+        resolve(path)
+      }
+    } catch let error {
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
     }
   }
 }
