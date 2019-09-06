@@ -91,6 +91,7 @@ const onNavigationStateChange = (prevState: any, currentState: any) => {
     const currentScreen: ScreenTrackingMapping = getActiveRouteName(
         currentState,
     )
+    console.log(currentScreen)
     if (
         currentScreen &&
         ScreenTracking[currentScreen] &&

@@ -28,12 +28,19 @@ interface TrackComponentEvent {
 type UserId = string | null
 
 enum ScreenTracking {
-    Issue = 'issue_front',
-    IssueList = 'issue_list',
-    SignIn = 'sign_in',
-    Settings = 'settings',
+    AlreadySubscribed = 'im_already_subscribed',
+    CasSignIn = 'activate_with_subscriber_id',
+    Credits = 'credits',
+    Help = 'help',
+    FAQ = 'faqs',
     GDPRConsent = 'consent_management_options',
     GdprConsentScreenForOnboarding = 'consent_management',
+    Issue = 'issue_front',
+    IssueList = 'issue_list',
+    PrivacyPolicy = 'privacy_policy',
+    Settings = 'settings',
+    SignIn = 'sign_in',
+    TermsAndConditions = 'terms_conditions',
 }
 
 export type ScreenTrackingMapping = keyof typeof ScreenTracking
