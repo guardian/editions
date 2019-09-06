@@ -4,7 +4,7 @@ import {
     fetchAndPersistCASExpiryForKeychainCredentials,
     fetchAndPersistIAPReceiptForCurrentITunesUser,
 } from './helpers'
-import { isInTestFlight as getIsInTestFlight } from './release-stream'
+import { isInTestFlight as getIsInTestFlight } from '../helpers/release-stream'
 import { CasExpiry } from '../services/content-auth-service'
 import {
     userDataCache,
@@ -89,6 +89,10 @@ const isPending = (status: AuthStatus): status is Pending =>
 
 const isIdentity = (type: AuthType): type is IdentityAuth =>
     type.type === 'identity'
+
+const isIAP = (type: AuthType): type is IAPAuth => type.type === 'iap'
+
+const isCAS = (type: AuthType): type is CASAuth => type.type === 'cas'
 
 const getIdentityData = (status: AuthStatus): UserData | null =>
     (isAuthed(status) && isIdentity(status.data) && status.data.info) || null
@@ -219,6 +223,9 @@ export {
     unauthed,
     isPending,
     isAuthed,
+    isIdentity,
+    isIAP,
+    isCAS,
     getIdentityData,
     IdentityAuthStatus,
     CASAuthStatus,

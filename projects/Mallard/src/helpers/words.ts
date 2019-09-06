@@ -7,6 +7,8 @@ export const APP_DISPLAY_NAME = 'Daily Edition'
 export const FEEDBACK_EMAIL = 'editions.product@theguardian.com'
 export const COOKIE_LINK = 'https://www.theguardian.com/info/cookies'
 export const PRIVACY_LINK = 'https://www.theguardian.com/info/privacy'
+export const IOS_BETA_EMAIL = 'daily.ios.beta@theguardian.com'
+export const ANDROID_BETA_EMAIL = 'daily.android.beta@theguardian.com'
 
 export const CONNECTION_FAILED_ERROR = `Connection failed`
 export const CONNECTION_FAILED_SUB_ERROR = `Let's try and get your issue`
