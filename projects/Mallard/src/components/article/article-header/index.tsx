@@ -18,6 +18,7 @@ const headers: {
     [ArticleType.Review]: ReviewHeader,
     [ArticleType.Longread]: LongReadHeader,
     [ArticleType.Obituary]: ObituaryHeader,
+    [ArticleType.Series]: LongReadHeader,
 }
 
 const ArticleHeader = ({
