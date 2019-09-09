@@ -51,10 +51,8 @@ const setUserId = (userId: UserId): Promise<UserId> =>
 const sendAppScreenEvent = async ({
     screenName,
     value,
-}: TrackScreen): Promise<boolean> => {
-    console.log(screenName)
-    return NativeModules.Ophan.sendAppScreenEvent(screenName, value)
-}
+}: TrackScreen): Promise<boolean> =>
+    NativeModules.Ophan.sendAppScreenEvent(screenName, value)
 
 const sendComponentEvent = ({
     componentType,
