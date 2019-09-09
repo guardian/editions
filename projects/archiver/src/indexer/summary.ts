@@ -42,7 +42,9 @@ export const indexer = async (): Promise<IssueSummary[]> => {
                     .map((filename): [ImageSize | 'data', string] | null => {
                         const [, breakpointString] = filename.split('.')
 
-                        if (breakpointString === '') return ['data', filename]
+                        if (breakpointString === 'zip') {
+                            return ['data', filename]
+                        }
 
                         const breakpoint = imageSizes.find(
                             size => size === breakpointString,
