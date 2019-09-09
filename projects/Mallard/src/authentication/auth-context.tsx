@@ -201,10 +201,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 // and try to run authentication again
                 // otherwise, their identity sign in didn't affect their auth status
                 // so leave their auth status as is
-                if (
-                    isAuthed(authAttempt.status) &&
-                    isIdentity(authAttempt.status.data)
-                ) {
+                if (isIdentity(authAttempt.status)) {
                     setAuthAttempt(createAuthAttempt(unauthed, 'live'))
                     await runAuth()
                 }
