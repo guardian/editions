@@ -210,7 +210,7 @@ export const HomeScreen = ({
                             </FlexCenter>
                         ),
                 })}
-                {files.length > 0 && (
+                {files.length > 0 && __DEV__ && (
                     <>
                         <Heading>Issues on device</Heading>
                         <List
