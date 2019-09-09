@@ -7,6 +7,7 @@ MEMBERS_DATA_API_URL
 SENTRY_DSN_URL
 ITUNES_CONNECT_SHARED_SECRET
 USE_SANDBOX_IAP
+ANDROID_RELEASE_STREAM
 `
 
 writeEnvVarsToFiles('android/sentry.properties', 'ios/sentry.properties')`
