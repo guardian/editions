@@ -1,11 +1,7 @@
-import { IssueId } from './issueTask'
-
 import { Handler } from 'aws-lambda'
-import {
-    SNS,
-    ChainableTemporaryCredentials,
-    TemporaryCredentials,
-} from 'aws-sdk'
+import { SNS, TemporaryCredentials } from 'aws-sdk'
+import { IssueId } from '../common'
+
 export type Status = 'Processing' | 'Published' | 'Failed'
 
 export interface EventInput {

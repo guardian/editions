@@ -9,21 +9,21 @@ export interface ZipTaskOutput {
 export const handler: Handler<UploadTaskOutput, ZipTaskOutput> = async ({
     issueId,
 }) => {
-    const { id } = issueId
-
+    const { id, source } = issueId
+    const name = `${id}_${source}`
     console.log('Compressing')
-    await zip(id, issueDir(issueId), 'media')
+    await zip(name, issueDir(issueId), 'media')
 
     console.log('data zip uploaded')
     await Promise.all(
         imageSizes.map(async size => {
-            await zip(`${id}-${size}`, `${issueDir(issueId)}/media/${size}/`)
+            await zip(`${name}.${size}`, `${issueDir(issueId)}/media/${size}/`)
             console.log(` ${size} media zip uploaded`)
         }),
     )
     console.log('Media zips uploaded.')
     return {
         issueId,
-        message: `Issue  ${id} zipped`,
+        message: `Issue ${id} zipped`,
     }
 }

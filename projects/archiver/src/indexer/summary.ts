@@ -4,7 +4,7 @@ import { notNull, IssueSummary } from '../../common'
 import { attempt, hasFailed } from '../../../backend/utils/try'
 import { groupBy } from 'ramda'
 import { fromPairs } from 'ramda'
-import { imageSizes, ImageSize } from '../../../common/src'
+import { imageSizes, ImageSize, IssueId } from '../../../common/src'
 
 const zips = 'zips/'
 
@@ -24,14 +24,14 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .map(key => key.substring(zips.length))
     const issues = groupBy<string>(filename => {
-        const issue = filename.match(/\d\d\d\d-\d\d-\d\d/)
-        if (issue == null) return '??'
-        return issue[0]
+        return filename.split('.')[0]
     })(filenames)
 
     const index: IssueSummary[] = Object.entries(issues)
         .map(([issue, filenames]) => {
-            const dateFromIssue = new Date(issue)
+            const [id, source] = issue.split('_')
+            const issueId: IssueId = { id, source, edition: 'daily-edition' }
+            const dateFromIssue = new Date(id)
             if (isNaN(dateFromIssue.getTime())) {
                 console.warn(`Issue with path ${issue} is not a valid date`)
                 return null
@@ -40,10 +40,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
             const assetFiles = fromPairs(
                 filenames
                     .map((filename): [ImageSize | 'data', string] | null => {
-                        const breakpointString = filename
-                            .replace(issue, '')
-                            .replace('.zip', '')
-                            .replace('-', '')
+                        const [, breakpointString] = filename.split('.')
 
                         if (breakpointString === '') return ['data', filename]
 
@@ -75,6 +72,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
 
             return {
                 key: issue,
+                id: issueId,
                 name: 'Daily Edition',
                 date: dateFromIssue,
                 assets,
@@ -83,9 +81,10 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 7)
-        .map(({ key, name, date, assets }) => ({
+        .map(({ key, name, date, assets, id }) => ({
             key,
             name,
+            id,
             date: date.toISOString(),
             assets,
         }))
