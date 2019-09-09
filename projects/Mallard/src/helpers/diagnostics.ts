@@ -36,15 +36,9 @@ const getGDPREntries = () =>
         ),
     )
 
-const getNotificationPermission = () =>
-    Permissions.checkMultiple(
-        Platform.OS === 'ios' ? ['notification'] : [], // can't check notifications on Android
-    )
-
 const getDiagnosticInfo = async (authStatus: AuthStatus) => {
-    const [netInfo, response, gdprEntries, casCode] = await Promise.all([
+    const [netInfo, gdprEntries, casCode] = await Promise.all([
         NetInfo.fetch(),
-        getNotificationPermission(),
         getGDPREntries(),
         getCASCode(),
     ])
@@ -63,7 +57,6 @@ Last updated: ${DeviceInfo.getLastUpdateTime()}
 -Device-
 ${Platform.OS} Version: ${Platform.Version}
 Device Type: ${DeviceInfo.getDeviceId()}
-Notifications Permissions Enabled: ${response.notification || 'unknown'}
 Device Locale: ${DeviceInfo.getDeviceCountry()}
 Timezone: ${DeviceInfo.getTimezone()}
 Network availability: ${netInfo.type}
