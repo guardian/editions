@@ -13,7 +13,7 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
     const { height: windowHeight, width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
-    const finalTranslate = windowHeight - 80
+    const finalTranslate = windowHeight - windowHeight / 4
 
     const translateY = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),

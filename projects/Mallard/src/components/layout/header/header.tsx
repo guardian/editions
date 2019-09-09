@@ -131,17 +131,20 @@ const Header = ({
     )
 }
 
-const IssueHeader = ({
+const IssuePickerHeader = ({
     issue,
     ...headerProps
 }: { issue?: Issue } & Omit<HeaderProps, 'children'> &
     TouchableHeaderProps) => {
-    const { date, weekday } = useIssueDate(issue)
     return (
         <Header {...headerProps}>
-            <IssueTitle {...headerProps} title={weekday} subtitle={date} />
+            <IssueTitle
+                {...headerProps}
+                title={`Recent`}
+                subtitle={`Editions`}
+            />
         </Header>
     )
 }
 
-export { Header, IssueHeader }
+export { Header, IssuePickerHeader }
