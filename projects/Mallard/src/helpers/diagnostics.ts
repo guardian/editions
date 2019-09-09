@@ -26,7 +26,7 @@ const getAsyncDiagnosticDeps = () =>
     Promise.all([
         NetInfo.fetch(),
         Permissions.checkMultiple(
-            Platform.OS === 'ios' ? ['notification'] : [],
+            Platform.OS === 'ios' ? ['notification'] : [], // can't check notifications on Android
         ),
         Promise.all(
             gdprSwitchSettings.map(
@@ -35,9 +35,9 @@ const getAsyncDiagnosticDeps = () =>
         ),
     ])
 
-const getDiagnosticInfo = (authStatus: AuthStatus) =>
-    getAsyncDiagnosticDeps().then(
-        ([netInfo, response, gdprEntries]) => `
+const getDiagnosticInfo = async (authStatus: AuthStatus) => {
+    const [netInfo, response, gdprEntries] = await getAsyncDiagnosticDeps()
+    return `
 
 The information below will help us to better understand your query:
 
@@ -57,23 +57,23 @@ Device Locale: ${DeviceInfo.getDeviceCountry()}
 Timezone: ${DeviceInfo.getTimezone()}
 Network availability: ${netInfo.type}
 Privacy settings: ${gdprEntries
-            .map(([key, value]) => `${key}:${value}`)
-            .join(' ')}
+        .map(([key, value]) => `${key}:${value}`)
+        .join(' ')}
 
 -User / Supporter Info-
 Signed In: ${isAuthed(authStatus)}
 Digital Pack subscription: ${isAuthed(authStatus) &&
-            isIdentity(authStatus.data)}
+        isIdentity(authStatus.data)}
 Apple IAP Transaction Details: ${isAuthed(authStatus) &&
-            isIAP(authStatus.data) &&
-            `\n${JSON.stringify(authStatus.data.info, null, 2)}`}
+        isIAP(authStatus.data) &&
+        `\n${JSON.stringify(authStatus.data.info, null, 2)}`}
 Subscriber ID: ${isAuthed(authStatus) &&
-            isCAS(authStatus.data) &&
-            authStatus.data.info.subscriptionCode}
-`,
-    )
+        isCAS(authStatus.data) &&
+        authStatus.data.info.subscriptionCode}
+`
+}
 
-const supportMailToURL = (text: string, releaseURL: string, body?: string) => {
+const openSupportMailto = (text: string, releaseURL: string, body?: string) => {
     const email = Platform.select({
         ios: isInBeta() ? releaseURL : IOS_BETA_EMAIL,
         android: isInBeta() ? releaseURL : ANDROID_BETA_EMAIL,
@@ -83,12 +83,14 @@ const supportMailToURL = (text: string, releaseURL: string, body?: string) => {
         Platform.OS
     } Daily App, ${DeviceInfo.getVersion()} / ${getVersionInfo().commitId}`
 
-    return `mailto:${email}?subject=${encodeURIComponent(subject)}${
-        body ? `&body=${encodeURIComponent(body)}` : ''
-    }`
+    return Linking.openURL(
+        `mailto:${email}?subject=${encodeURIComponent(subject)}${
+            body ? `&body=${encodeURIComponent(body)}` : ''
+        }`,
+    )
 }
 
-const createSupportMailTo = (
+const createSupportMailto = (
     text: string,
     releaseURL: string,
     authStatus: AuthStatus,
@@ -103,19 +105,15 @@ const createSupportMailTo = (
                     text: 'Include',
                     onPress: async () => {
                         const diagnostics = await getDiagnosticInfo(authStatus)
-                        console.log(diagnostics)
-                        Linking.openURL(
-                            supportMailToURL(text, releaseURL, diagnostics),
-                        )
+                        openSupportMailto(text, releaseURL, diagnostics)
                     },
                 },
                 {
                     text: `Don't include`,
-                    onPress: () =>
-                        Linking.openURL(supportMailToURL(text, releaseURL)),
+                    onPress: () => openSupportMailto(text, releaseURL),
                 },
             ]),
     },
 })
 
-export { createSupportMailTo }
+export { createSupportMailto }

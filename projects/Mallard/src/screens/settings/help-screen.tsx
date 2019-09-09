@@ -7,7 +7,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { Heading } from 'src/components/layout/ui/row'
 import { AuthContext } from 'src/authentication/auth-context'
-import { createSupportMailTo } from 'src/helpers/diagnostics'
+import { createSupportMailto } from 'src/helpers/diagnostics'
 import {
     ISSUE_EMAIL,
     SUBSCRIPTION_EMAIL,
@@ -39,22 +39,22 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                 <List
                     onPress={({ onPress }) => onPress()}
                     data={[
-                        createSupportMailTo(
+                        createSupportMailto(
                             'Report an issue',
                             ISSUE_EMAIL,
                             status,
                         ),
-                        createSupportMailTo(
+                        createSupportMailto(
                             'Subscription, payment and billing issues',
                             SUBSCRIPTION_EMAIL,
                             status,
                         ),
-                        createSupportMailTo(
+                        createSupportMailto(
                             'Comment or query about an article',
                             READERS_EMAIL,
                             status,
                         ),
-                        createSupportMailTo(
+                        createSupportMailto(
                             'Send feedback',
                             APPS_FEEDBACK_EMAIL,
                             status,
