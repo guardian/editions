@@ -24,12 +24,15 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .map(key => key.substring(zips.length))
     const issues = groupBy<string>(filename => {
-        return filename.split('.')[0]
+        return filename
+            .split('/')
+            .slice(0, 2)
+            .join('/')
     })(filenames)
 
     const index: IssueSummary[] = Object.entries(issues)
         .map(([issue, filenames]) => {
-            const [id, source] = issue.split('_')
+            const [, id, source] = issue.split('/')
             const issueId: IssueId = { id, source, edition: 'daily-edition' }
             const dateFromIssue = new Date(id)
             if (isNaN(dateFromIssue.getTime())) {
@@ -40,9 +43,11 @@ export const indexer = async (): Promise<IssueSummary[]> => {
             const assetFiles = fromPairs(
                 filenames
                     .map((filename): [ImageSize | 'data', string] | null => {
-                        const [, breakpointString] = filename.split('.')
+                        const [, , , breakpointString] = filename
+                            .replace('.zip', '')
+                            .split('/')
 
-                        if (breakpointString === 'zip') {
+                        if (breakpointString === 'data') {
                             return ['data', filename]
                         }
 
