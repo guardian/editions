@@ -26,7 +26,7 @@ platform :ios do
   lane :beta do
     increment_build_number(
       xcodeproj: "ios/Mallard.xcodeproj",
-      build_number: latest_testflight_build_number.to_i + 1
+      build_number: latest_testflight_build_number.to_i + 2
     )
     build_app(
       scheme: "Mallard",
