@@ -49,8 +49,7 @@ export const handler: Handler<EventInput, { issueId: IssueId }> = async ({
 
     const payload = {
         event: {
-            issueDate: issueId.id,
-            version: issueId.source,
+            ...issueId,
             status,
             message: parsedErrorOrMessage,
         },

@@ -11,7 +11,7 @@ export const getIssue = async (
 ): Promise<Issue | 'notfound'> => {
     console.log('Attempting to get latest issue for', issue)
     const path: Path = {
-        key: `daily-edition/${issue.id}/${issue.source}.json`,
+        key: `daily-edition/${issue.issueDate}/${issue.version}.json`,
         bucket: isPreview ? 'preview' : 'published',
     }
 
@@ -28,7 +28,7 @@ export const getIssue = async (
     const fronts = data.fronts.map(_ => _.name)
     return {
         name: data.name,
-        key: issue.id,
+        key: issue.issueDate,
         id: issue,
         date: data.issueDate,
         fronts,

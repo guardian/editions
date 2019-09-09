@@ -21,15 +21,15 @@ interface Record {
 
 const parseRecord = (record: Record): Attempt<IssueId> => {
     const key = decodeURIComponent(record.s3.object.key)
-    const [, id, filename] = key.split('/')
-    if (filename === undefined || id === undefined) {
+    const [, issueDate, filename] = key.split('/')
+    if (filename === undefined || issueDate === undefined) {
         return failure({
             error: new Error(),
             messages: [`⚠️ ${key} does not correspond to an issue`],
         })
     }
-    const source = filename.replace('.json', '')
-    return { edition: 'daily-edition' as const, source, id }
+    const version = filename.replace('.json', '')
+    return { edition: 'daily-edition' as const, version, issueDate }
 }
 
 export const handler: Handler<
@@ -62,8 +62,8 @@ export const handler: Handler<
                     .startExecution({
                         stateMachineArn,
                         input: JSON.stringify(invoke),
-                        name: `issue ${invoke.issueId.id} ${
-                            invoke.issueId.source
+                        name: `issue ${invoke.issueId.issueDate} ${
+                            invoke.issueId.version
                         } ${randomBytes(2).toString('hex')}`.replace(
                             /\W/g,
                             '-', // see character restrictions

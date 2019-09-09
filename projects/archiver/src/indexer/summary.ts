@@ -33,7 +33,11 @@ export const indexer = async (): Promise<IssueSummary[]> => {
     const index: IssueSummary[] = Object.entries(issues)
         .map(([issue, filenames]) => {
             const [edition, id, source] = issue.split('/')
-            const issueId: IssueId = { id, source, edition: 'daily-edition' }
+            const issueId: IssueId = {
+                issueDate: id,
+                version: source,
+                edition: 'daily-edition',
+            }
             const dateFromIssue = new Date(id)
             if (isNaN(dateFromIssue.getTime())) {
                 console.warn(`Issue with path ${issue} is not a valid date`)

@@ -16,7 +16,7 @@ export const handler: Handler<FrontTaskOutput, MediaTaskOutput> = async ({
     images,
     ...params
 }) => {
-    const { source, id } = issueId
+    const { version: source, issueDate: id } = issueId
 
     const imagesWithSizes: [Image, ImageSize][] = unnest(
         images.map(image =>

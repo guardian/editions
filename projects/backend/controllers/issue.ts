@@ -11,13 +11,17 @@ export const LIVE_PAGE_SIZE = 7
 export const PREVIEW_PAGE_SIZE = 35
 
 export const issueController = (req: Request, res: Response) => {
-    const id: string = req.params.issueId
-    const source: string = decodeURIComponent(
-        isPreviewStage ? 'preview' : req.params.source,
+    const issueDate: string = req.params.date
+    const version: string = decodeURIComponent(
+        isPreviewStage ? 'preview' : req.params.version,
     )
-    const issueId: IssueId = { id, source, edition: 'daily-edition' }
+    const issueId: IssueId = {
+        issueDate,
+        version,
+        edition: 'daily-edition',
+    }
     const [date, updater] = lastModified()
-    console.log(`${req.url}: request for issue ${id}`)
+    console.log(`${req.url}: request for issue ${issueDate}`)
     getIssue(issueId, updater)
         .then(data => {
             if (data === 'notfound') {
@@ -49,24 +53,28 @@ export const getIssuesSummary = async (
     }
     const issuePublications: IssuePublication[] = issueKeys.map(
         ({ key, lastModified }) => {
-            const [, id, filename] = key.split('/')
+            const [, issueDate, filename] = key.split('/')
             const publicationDate = lastModified
-            const source = filename.replace('.json', '')
-            return { edition: 'daily-edition', id, source, publicationDate }
+            const version = filename.replace('.json', '')
+            return {
+                edition: 'daily-edition',
+                issueDate,
+                version,
+                publicationDate,
+            }
         },
     )
 
-    const issues = Object.values(groupBy(_ => _.id, issuePublications)).map(
-        versions =>
-            versions.reduce((a, b) =>
-                a.publicationDate.getTime() > b.publicationDate.getTime()
-                    ? a
-                    : b,
-            ),
+    const issues = Object.values(
+        groupBy(_ => _.issueDate, issuePublications),
+    ).map(versions =>
+        versions.reduce((a, b) =>
+            a.publicationDate.getTime() > b.publicationDate.getTime() ? a : b,
+        ),
     )
     return issues
         .map(id => {
-            const date = new Date(id.id)
+            const date = new Date(id.issueDate)
             if (isNaN(date.getTime())) {
                 console.warn(
                     `Issue with path ${JSON.stringify(id)} is not a valid date`,
@@ -78,7 +86,7 @@ export const getIssuesSummary = async (
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .map(({ id, date }) => ({
-            key: id.id,
+            key: id.issueDate,
             name: 'Daily Edition',
             date: date.toISOString(),
             id,

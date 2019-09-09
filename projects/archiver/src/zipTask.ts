@@ -2,7 +2,6 @@ import { Handler } from 'aws-lambda'
 import { imageSizes, issueDir, IssueId } from '../common'
 import { zip } from '../zipper'
 import { UploadTaskOutput } from './issueUploadTask'
-import { createHash } from 'crypto'
 export interface ZipTaskOutput {
     issueId: IssueId
     message: string
@@ -10,9 +9,9 @@ export interface ZipTaskOutput {
 export const handler: Handler<UploadTaskOutput, ZipTaskOutput> = async ({
     issueId,
 }) => {
-    const { id, source, edition } = issueId
+    const { issueDate, version, edition } = issueId
 
-    const name = `${edition}/${id}/${source}`
+    const name = `${edition}/${issueDate}/${version}`
     console.log('Compressing')
     await zip(`${name}/data`, issueDir(issueId), 'media')
 
@@ -26,6 +25,6 @@ export const handler: Handler<UploadTaskOutput, ZipTaskOutput> = async ({
     console.log('Media zips uploaded.')
     return {
         issueId,
-        message: `Issue ${id} zipped`,
+        message: `Issue ${issueDate} zipped`,
     }
 }

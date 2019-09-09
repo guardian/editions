@@ -289,12 +289,12 @@ export interface Crossword {
 }
 export interface IssueId {
     edition: 'daily-edition'
-    source: string
-    id: string
+    version: string
+    issueDate: string
 }
 
-export const issueDir = ({ source, id }: IssueId) =>
-    `daily-edition/${id}/${source}`
+export const issueDir = ({ version, issueDate }: IssueId) =>
+    `daily-edition/${issueDate}/${version}`
 
 export const issuePath = (issue: IssueId) => `${issueDir(issue)}/issue`
 

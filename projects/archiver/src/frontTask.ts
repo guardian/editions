@@ -16,7 +16,7 @@ export const handler: Handler<IssueTaskOutput, IssueTaskOutput> = async ({
     issue,
     fronts,
 }) => {
-    const { id } = issueId
+    const { issueDate: id } = issueId
     console.log(`Attempting to upload ${id} to ${bucket}`)
     const [frontId, ...remainingFronts] = fronts
 
