@@ -171,7 +171,7 @@ const GdprConsent = ({
             />
             <Footer>
                 <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
-                    You can change the above setting any time by selecting
+                    You can change the above settings any time by selecting
                     privacy settings in the settings menu.
                 </UiBodyCopy>
             </Footer>
