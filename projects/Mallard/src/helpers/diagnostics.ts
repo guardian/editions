@@ -62,14 +62,10 @@ Privacy settings: ${gdprEntries
 
 -User / Supporter Info-
 Signed In: ${isAuthed(authStatus)}
-Digital Pack subscription: ${isAuthed(authStatus) &&
-        isIdentity(authStatus.data)}
-Apple IAP Transaction Details: ${isAuthed(authStatus) &&
-        isIAP(authStatus.data) &&
+Digital Pack subscription: ${isIdentity(authStatus)}
+Apple IAP Transaction Details: ${isIAP(authStatus) &&
         `\n${JSON.stringify(authStatus.data.info, null, 2)}`}
-Subscriber ID: ${isAuthed(authStatus) &&
-        isCAS(authStatus.data) &&
-        authStatus.data.info.subscriptionCode}
+Subscriber ID: ${isCAS(authStatus) && authStatus.data.info.subscriptionCode}
 `
 }
 

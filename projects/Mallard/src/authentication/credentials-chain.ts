@@ -87,15 +87,17 @@ const isAuthed = (status: AuthStatus): status is AnyAuthed =>
 const isPending = (status: AuthStatus): status is Pending =>
     status.type === 'pending'
 
-const isIdentity = (type: AuthType): type is IdentityAuth =>
-    type.type === 'identity'
+const isIdentity = (status: AuthStatus): status is Authed<IdentityAuth> =>
+    isAuthed(status) && status.data.type === 'identity'
 
-const isIAP = (type: AuthType): type is IAPAuth => type.type === 'iap'
+const isIAP = (status: AuthStatus): status is Authed<IAPAuth> =>
+    isAuthed(status) && status.data.type === 'iap'
 
-const isCAS = (type: AuthType): type is CASAuth => type.type === 'cas'
+const isCAS = (status: AuthStatus): status is Authed<CASAuth> =>
+    isAuthed(status) && status.data.type === 'cas'
 
 const getIdentityData = (status: AuthStatus): UserData | null =>
-    (isAuthed(status) && isIdentity(status.data) && status.data.info) || null
+    (isIdentity(status) && status.data.info) || null
 
 /**
  * This takes an array of providers that are thunks that will return a Promise<AuthType | false>
