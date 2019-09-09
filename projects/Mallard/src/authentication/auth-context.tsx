@@ -4,6 +4,7 @@ import React, {
     useContext,
     useEffect,
     useMemo,
+    useCallback,
 } from 'react'
 import { signOutIdentity } from '../helpers/storage'
 import { useNetInfo } from '@react-native-community/netinfo'
@@ -16,6 +17,7 @@ import {
     unauthed,
     isPending,
     AuthType,
+    isIdentity,
 } from './credentials-chain'
 import { UserData, canViewEdition } from './helpers'
 import { AUTH_TTL } from 'src/constants'
@@ -164,24 +166,29 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { isConnected } = useNetInfo()
     const { open } = useModal()
 
-    useEffect(() => {
-        if (isAuthing || !needsReauth(authAttempt, { isConnected })) return
-
+    const runAuth = useCallback(async () => {
         setIsAuthing(true)
         if (isConnected) {
-            liveAuthChain().then(status => {
-                setAuthAttempt(createAuthAttempt(status, 'live'))
-                setIsAuthing(false)
-            })
+            const status = await liveAuthChain()
+            const attempt = createAuthAttempt(status, 'live')
+            setAuthAttempt(attempt)
+            setIsAuthing(false)
+            return attempt
         } else {
             // all cached attempts are retried when we get internet connection
             // back
-            cachedAuthChain().then(status => {
-                setAuthAttempt(createAuthAttempt(status, 'cached'))
-                setIsAuthing(false)
-            })
+            const status = await cachedAuthChain()
+            const attempt = createAuthAttempt(status, 'cached')
+            setAuthAttempt(attempt)
+            setIsAuthing(false)
+            return attempt
         }
-    }, [isConnected, authAttempt, isAuthing]) // we don't care about isAuthing changing
+    }, [isConnected])
+
+    useEffect(() => {
+        if (isAuthing || !needsReauth(authAttempt, { isConnected })) return
+        runAuth()
+    }, [isConnected, authAttempt, isAuthing, runAuth]) // we don't care about isAuthing changing
 
     const value = useMemo(
         () => ({
@@ -190,7 +197,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setAuthAttempt(createAuthAttempt(status, 'live')),
             signOutIdentity: async () => {
                 await signOutIdentity()
-                setAuthAttempt(createAuthAttempt(unauthed, 'live'))
+                // if a user is authenticated through identity then unauth them
+                // and try to run authentication again
+                // otherwise, their identity sign in didn't affect their auth status
+                // so leave their auth status as is
+                if (
+                    isAuthed(authAttempt.status) &&
+                    isIdentity(authAttempt.status.data)
+                ) {
+                    setAuthAttempt(createAuthAttempt(unauthed, 'live'))
+                    await runAuth()
+                }
             },
             isRestoring,
             isAuthing,
@@ -230,7 +247,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 }
             },
         }),
-        [authAttempt.status, isAuthing, isRestoring, open],
+        [authAttempt.status, isAuthing, isRestoring, open, runAuth],
     )
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
