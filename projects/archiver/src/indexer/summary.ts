@@ -32,7 +32,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
 
     const index: IssueSummary[] = Object.entries(issues)
         .map(([issue, filenames]) => {
-            const [, id, source] = issue.split('/')
+            const [edition, id, source] = issue.split('/')
             const issueId: IssueId = { id, source, edition: 'daily-edition' }
             const dateFromIssue = new Date(id)
             if (isNaN(dateFromIssue.getTime())) {
@@ -78,7 +78,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
             const assets = { data, ...images }
 
             return {
-                key: issue,
+                key: `${edition}/${id}/${source}`,
                 id: issueId,
                 name: 'Daily Edition',
                 date: dateFromIssue,

@@ -14,7 +14,7 @@ export const handler: Handler<UploadTaskOutput, ZipTaskOutput> = async ({
 
     const name = `${edition}/${id}/${source}`
     console.log('Compressing')
-    await zip(`${name}/data.zip`, issueDir(issueId), 'media')
+    await zip(`${name}/data`, issueDir(issueId), 'media')
 
     console.log('data zip uploaded')
     await Promise.all(
