@@ -177,8 +177,10 @@ const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
     )}/${CACHED_FOLDER_NAME}`
 
     // if the file exists already, delete it and then replace it
-    // unlink doesn't throw if it did not exist so we can call it without a check
-    await RNFetchBlob.fs.unlink(genericMediaDir)
+    const fileExists = await RNFetchBlob.fs.exists(genericMediaDir)
+    if (fileExists) {
+        await RNFetchBlob.fs.unlink(genericMediaDir)
+    }
 
     RNFetchBlob.fs.mv(absSizedMediaDir, genericMediaDir)
 }
