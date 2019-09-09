@@ -1,9 +1,17 @@
 import { s3, bucket } from './s3'
 
+function cacheControlHeader(maxAge: number | undefined): string {
+    if (maxAge) {
+        return `max-age=${maxAge}`
+    }
+    return 'private'
+}
+
 export const upload = (
     key: string,
     body: {} | Buffer,
     mime: 'image/jpeg' | 'application/json' | 'application/zip',
+    maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
         s3.upload(
@@ -13,6 +21,7 @@ export const upload = (
                 Key: `${key}`,
                 ACL: 'public-read',
                 ContentType: mime,
+                CacheControl: cacheControlHeader(maxAge),
             },
             (err, data) => {
                 if (err) {

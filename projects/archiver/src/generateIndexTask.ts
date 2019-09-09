@@ -15,7 +15,7 @@ export const handler: Handler<IndexTaskOutput> = async ({ issueId }) => {
         console.error(index)
         throw new Error('Could not generate index.')
     }
-    await upload('issues', index, 'application/json')
+    await upload('issues', index, 'application/json', 60)
     return {
         issueId,
         index,

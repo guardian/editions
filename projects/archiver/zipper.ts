@@ -17,6 +17,8 @@ export const zip = async (
             Key: `zips/${name}.zip`,
             Body: output,
             ACL: 'public-read',
+            ContentType: 'application/zip',
+            CacheControl: 'max-age=604800', // one week
         })
         .promise()
 
