@@ -309,18 +309,21 @@ export const frontPath = (issue: IssueId | string, frontId: string) =>
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
-export const mediaDir = (issue: IssueId, size: ImageSize) =>
+export const mediaDir = (issue: IssueId | string, size: ImageSize) =>
     `${issueDir(issue)}/media/${size}`
 
 export const mediaPath = (
-    issue: IssueId,
+    issue: IssueId | string,
     size: ImageSize,
     source: string,
     path: string,
 ) => `${mediaDir(issue, size)}/${source}/${path}`
 
-export const coloursPath = (issue: IssueId, source: string, path: string) =>
-    `${issueDir(issue)}/colours/${source}/${path}`
+export const coloursPath = (
+    issue: IssueId | string,
+    source: string,
+    path: string,
+) => `${issueDir(issue)}/colours/${source}/${path}`
 
 export const issueSummaryPath = () => 'issues'
 export interface Image {
