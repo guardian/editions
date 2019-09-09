@@ -14,23 +14,29 @@ import {
 import Permissions from 'react-native-permissions'
 import NetInfo from '@react-native-community/netinfo'
 import { isInBeta } from './release-stream'
-import { Platform, ActionSheetIOS, Linking, Alert } from 'react-native'
+import { Platform, Linking } from 'react-native'
 import {
     IOS_BETA_EMAIL,
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
 } from './words'
+import { runActionSheet } from './action-sheet'
 
-const getDiagnosticInfo = (authStatus: AuthStatus) =>
+const getAsyncDiagnosticDeps = () =>
     Promise.all([
         NetInfo.fetch(),
-        Permissions.checkMultiple(['notification']),
+        Permissions.checkMultiple(
+            Platform.OS === 'ios' ? ['notification'] : [],
+        ),
         Promise.all(
             gdprSwitchSettings.map(
                 async setting => [setting, await getSetting(setting)] as const,
             ),
         ),
-    ]).then(
+    ])
+
+const getDiagnosticInfo = (authStatus: AuthStatus) =>
+    getAsyncDiagnosticDeps().then(
         ([netInfo, response, gdprEntries]) => `
 
 The information below will help us to better understand your query:
@@ -46,7 +52,7 @@ Last updated: ${DeviceInfo.getLastUpdateTime()}
 -Device-
 ${Platform.OS} Version: ${Platform.Version}
 Device Type: ${DeviceInfo.getDeviceId()}
-Notifications Permissions Enabled: ${response.notification}
+Notifications Permissions Enabled: ${response.notification || 'unknown'}
 Device Locale: ${DeviceInfo.getDeviceCountry()}
 Timezone: ${DeviceInfo.getTimezone()}
 Network availability: ${netInfo.type}
@@ -77,61 +83,38 @@ const supportMailToURL = (text: string, releaseURL: string, body?: string) => {
         Platform.OS
     } Daily App, ${DeviceInfo.getVersion()} / ${getVersionInfo().commitId}`
 
-    return `mailto:${email}?subject=${encodeURIComponent(subject)}${body &&
-        `&body=${encodeURIComponent(body)}`}`
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}${
+        body ? `&body=${encodeURIComponent(body)}` : ''
+    }`
 }
 
 const createSupportMailTo = (
     text: string,
-    release: string,
+    releaseURL: string,
     authStatus: AuthStatus,
 ) => ({
     key: text,
     title: text,
+    linkWeight: 'regular',
     data: {
-        onPress: async () => {
-            Platform.select({
-                ios: () =>
-                    ActionSheetIOS.showActionSheetWithOptions(
-                        {
-                            options: ['Include', `Don't include`],
-                            message: DIAGNOSTICS_REQUEST,
-                        },
-                        async index => {
-                            Linking.openURL(
-                                supportMailToURL(
-                                    text,
-                                    release,
-                                    index === 0
-                                        ? await getDiagnosticInfo(authStatus)
-                                        : undefined,
-                                ),
-                            )
-                        },
-                    ),
-                android: () =>
-                    Alert.alert(DIAGNOSTICS_REQUEST, undefined, [
-                        {
-                            text: 'Include',
-                            onPress: async () => {
-                                Linking.openURL(
-                                    supportMailToURL(
-                                        text,
-                                        release,
-                                        await getDiagnosticInfo(authStatus),
-                                    ),
-                                )
-                            },
-                        },
-                        {
-                            text: `Don't include`,
-                            onPress: () => {
-                                Linking.openURL(supportMailToURL(text, release))
-                            },
-                        },
-                    ]),
-            })()
-        },
+        onPress: () =>
+            runActionSheet(DIAGNOSTICS_REQUEST, [
+                {
+                    text: 'Include',
+                    onPress: async () => {
+                        const diagnostics = await getDiagnosticInfo(authStatus)
+                        console.log(diagnostics)
+                        Linking.openURL(
+                            supportMailToURL(text, releaseURL, diagnostics),
+                        )
+                    },
+                },
+                {
+                    text: `Don't include`,
+                    onPress: () =>
+                        Linking.openURL(supportMailToURL(text, releaseURL)),
+                },
+            ]),
     },
 })
 
