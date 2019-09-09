@@ -11,7 +11,6 @@ import {
     isIAP,
     isCAS,
 } from 'src/authentication/credentials-chain'
-import Permissions from 'react-native-permissions'
 import NetInfo from '@react-native-community/netinfo'
 import { isInBeta } from './release-stream'
 import { Platform, Linking } from 'react-native'
