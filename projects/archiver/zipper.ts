@@ -8,7 +8,7 @@ const notNull = <T>(value: T | null | undefined): value is T =>
 export const zip = async (
     name: string,
     prefix: string,
-    excludePath?: string,
+    options: { excludePath?: string; excludePrefixSegment?: string },
 ) => {
     const output = new PassThrough()
     const upload = s3
@@ -30,8 +30,10 @@ export const zip = async (
 
     console.log('Got file names')
     const matches =
-        excludePath !== undefined
-            ? files.filter(name => !name.startsWith(`${prefix}/${excludePath}`))
+        options.excludePath !== undefined
+            ? files.filter(
+                  name => !name.startsWith(`${prefix}/${options.excludePath}`),
+              )
             : files
 
     const archive = archiver('zip')
@@ -42,6 +44,9 @@ export const zip = async (
 
     await Promise.all(
         matches.map(async file => {
+            const zipPath = options.excludePrefixSegment
+                ? file.replace(`${options.excludePrefixSegment}/`, '')
+                : file
             console.log(`getting ${file}`)
             const s3response = await s3
                 .getObject({ Bucket: bucket, Key: file })
@@ -50,7 +55,7 @@ export const zip = async (
             console.log(`adding ${file} to zip ${name}`)
 
             archive.append(s3response.Body as Buffer, {
-                name: file,
+                name: zipPath,
             })
         }),
     )
