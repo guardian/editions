@@ -21,22 +21,33 @@ import {
     DIAGNOSTICS_REQUEST,
 } from './words'
 import { runActionSheet } from './action-sheet'
+import { legacyCASUsernameCache, casCredentialsKeychain } from './storage'
 
-const getAsyncDiagnosticDeps = () =>
+const getCASCode = () =>
     Promise.all([
-        NetInfo.fetch(),
-        Permissions.checkMultiple(
-            Platform.OS === 'ios' ? ['notification'] : [], // can't check notifications on Android
+        casCredentialsKeychain.get(),
+        legacyCASUsernameCache.get(),
+    ]).then(([current, legacy]) => (current && current.username) || legacy)
+
+const getGDPREntries = () =>
+    Promise.all(
+        gdprSwitchSettings.map(
+            async setting => [setting, await getSetting(setting)] as const,
         ),
-        Promise.all(
-            gdprSwitchSettings.map(
-                async setting => [setting, await getSetting(setting)] as const,
-            ),
-        ),
-    ])
+    )
+
+const getNotificationPermission = () =>
+    Permissions.checkMultiple(
+        Platform.OS === 'ios' ? ['notification'] : [], // can't check notifications on Android
+    )
 
 const getDiagnosticInfo = async (authStatus: AuthStatus) => {
-    const [netInfo, response, gdprEntries] = await getAsyncDiagnosticDeps()
+    const [netInfo, response, gdprEntries, casCode] = await Promise.all([
+        NetInfo.fetch(),
+        getNotificationPermission(),
+        getGDPREntries(),
+        getCASCode(),
+    ])
     return `
 
 The information below will help us to better understand your query:
@@ -65,7 +76,7 @@ Signed In: ${isAuthed(authStatus)}
 Digital Pack subscription: ${isIdentity(authStatus)}
 Apple IAP Transaction Details: ${isIAP(authStatus) &&
         `\n${JSON.stringify(authStatus.data.info, null, 2)}`}
-Subscriber ID: ${isCAS(authStatus) && authStatus.data.info.subscriptionCode}
+Subscriber ID: ${isCAS(authStatus) && casCode}
 `
 }
 
@@ -101,6 +112,7 @@ const createSupportMailto = (
                     text: 'Include',
                     onPress: async () => {
                         const diagnostics = await getDiagnosticInfo(authStatus)
+                        console.log(diagnostics)
                         openSupportMailto(text, releaseURL, diagnostics)
                     },
                 },
