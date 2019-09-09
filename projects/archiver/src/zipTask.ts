@@ -2,6 +2,7 @@ import { Handler } from 'aws-lambda'
 import { imageSizes, issueDir, IssueId } from '../common'
 import { zip } from '../zipper'
 import { UploadTaskOutput } from './issueUploadTask'
+import { mediaDir } from '../../common/src'
 export interface ZipTaskOutput {
     issueId: IssueId
     message: string
@@ -9,16 +10,16 @@ export interface ZipTaskOutput {
 export const handler: Handler<UploadTaskOutput, ZipTaskOutput> = async ({
     issueId,
 }) => {
-    const { issueDate, version, edition } = issueId
+    const { issueDate } = issueId
 
-    const name = `${edition}/${issueDate}/${version}`
+    const name = issueDir(issueId)
     console.log('Compressing')
     await zip(`${name}/data`, issueDir(issueId), 'media')
 
     console.log('data zip uploaded')
     await Promise.all(
         imageSizes.map(async size => {
-            await zip(`${name}.${size}`, `${issueDir(issueId)}/media/${size}/`)
+            await zip(`${name}/${size}`, mediaDir(issueId, size))
             console.log(` ${size} media zip uploaded`)
         }),
     )

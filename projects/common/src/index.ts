@@ -289,27 +289,35 @@ export interface Crossword {
 }
 export interface IssueId {
     edition: 'daily-edition'
-    version: string
     issueDate: string
+    version: string
 }
 
-export const issueDir = ({ version, issueDate }: IssueId) =>
-    `daily-edition/${issueDate}/${version}`
+export const issueDir = (issueId: IssueId | string) => {
+    if (typeof issueId === 'string') {
+        return issueId
+    }
+    const { edition, version, issueDate } = issueId
+    return `${edition}/${issueDate}/${version}`
+}
 
-export const issuePath = (issue: IssueId) => `${issueDir(issue)}/issue`
+export const issuePath = (issue: IssueId | string) => `${issueDir(issue)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-export const frontPath = (issue: IssueId, frontId: string) =>
+export const frontPath = (issue: IssueId | string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
+
+export const mediaDir = (issue: IssueId, size: ImageSize) =>
+    `${issueDir(issue)}/media/${size}`
 
 export const mediaPath = (
     issue: IssueId,
     size: ImageSize,
     source: string,
     path: string,
-) => `${issueDir(issue)}/media/${size}/${source}/${path}`
+) => `${mediaDir(issue, size)}/${source}/${path}`
 
 export const coloursPath = (issue: IssueId, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
