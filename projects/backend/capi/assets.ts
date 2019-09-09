@@ -1,6 +1,8 @@
-import { IAsset } from '@guardian/capi-ts'
+import { IAsset, IBlockElement } from '@guardian/capi-ts'
 import { Image } from '../common'
 import { getImageFromURL } from '../image'
+import { CreditedImage } from '../../common/src'
+import { oc } from 'ts-optchain'
 
 const extractImage: (
     assetArray: IAsset[],
@@ -35,4 +37,16 @@ export const getImage: (
         return
     }
     return getImageFromURL(asset.file)
+}
+
+export const getCreditedImage: (
+    element: IBlockElement,
+) => CreditedImage | undefined = element => {
+    const asset = extractImage(element.assets)
+    if (!(asset && asset.file)) {
+        console.warn('Image asset potentially invalid.', JSON.stringify(asset))
+        return
+    }
+    const image = getImageFromURL(asset.file)
+    return image && { ...image, credit: oc(element).imageTypeData.credit() }
 }
