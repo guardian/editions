@@ -95,7 +95,7 @@ const createSupportMailTo = (
 ) => ({
     key: text,
     title: text,
-    linkWeight: 'regular',
+    linkWeight: 'regular' as const,
     data: {
         onPress: () =>
             runActionSheet(DIAGNOSTICS_REQUEST, [
