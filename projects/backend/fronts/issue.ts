@@ -42,6 +42,12 @@ export interface PublishedFurtniture {
     showQuotedHeadline: boolean
     mediaType: MediaType
     imageSrcOverride?: PublishedImage
-    slideshowImages?: PublishedImage[]
     sportScore?: string
+    overrideArticleMainMedia: boolean
+    coverCardImages?: PublishedCardImage
+}
+
+export interface PublishedCardImage {
+    mobile: PublishedImage
+    tablet: PublishedImage
 }

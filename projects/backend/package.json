@@ -21,7 +21,7 @@
     "start": "ts-node-dev --ignore-watch node_modules index.ts",
     "preview": "publicationStage=preview yarn start",
     "validate": "cd ../.. && make validate-backend",
-    "fix": "cd ../.. && yarn fix-backend",
+    "fix": "cd ../.. && make fix-backend",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },

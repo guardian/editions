@@ -19,7 +19,6 @@ import {
 import { getImage, getCreditedImage } from './assets'
 import { elementParser } from './elements'
 import fetch from 'node-fetch'
-import { cleanupHtml } from '../utils/html'
 import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
@@ -94,11 +93,6 @@ const parseArticleResult = async (
         throw new Error(`internalid was undefined in ${path}!`)
 
     const title = (result.fields && result.fields.headline) || result.webTitle
-
-    const standfirst =
-        result.fields &&
-        result.fields.standfirst &&
-        cleanupHtml(result.fields.standfirst)
 
     const atomData = rationaliseAtoms(result.atoms)
 
