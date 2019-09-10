@@ -1,10 +1,9 @@
-import { s3, bucket } from '../s3'
-import { upload } from '../upload'
-import { notNull, IssueSummary } from '../../common'
+import { fromPairs, groupBy } from 'ramda'
 import { attempt, hasFailed } from '../../../backend/utils/try'
-import { groupBy } from 'ramda'
-import { fromPairs } from 'ramda'
-import { imageSizes, ImageSize, IssueId } from '../../../common/src'
+import { ImageSize, imageSizes, IssuePublication } from '../../../common/src'
+import { IssueSummary, notNull } from '../../common'
+import { bucket, s3 } from '../s3'
+import { upload } from '../upload'
 
 const zips = 'zips/'
 
@@ -33,11 +32,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
     const index: IssueSummary[] = Object.entries(issues)
         .map(([issue, filenames]) => {
             const [edition, id, source] = issue.split('/')
-            const issueId: IssueId = {
-                issueDate: id,
-                version: source,
-                edition: 'daily-edition',
-            }
+
             const dateFromIssue = new Date(id)
             if (isNaN(dateFromIssue.getTime())) {
                 console.warn(`Issue with path ${issue} is not a valid date`)
@@ -80,10 +75,13 @@ export const indexer = async (): Promise<IssueSummary[]> => {
                 return null
             }
             const assets = { data, ...images }
-
+            const key = `${edition}/${id}`
+            const localId = key
+            const publishedId = `${key}/${source}`
             return {
-                key: `${edition}/${id}/${source}`,
-                id: issueId,
+                key,
+                localId,
+                publishedId,
                 name: 'Daily Edition',
                 date: dateFromIssue,
                 assets,
@@ -92,10 +90,11 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 7)
-        .map(({ key, name, date, assets, id }) => ({
+        .map(({ key, name, date, assets, key, localId, publishedId }) => ({
             key,
+            localId,
+            publishedId,
             name,
-            id,
             date: date.toISOString(),
             assets,
         }))

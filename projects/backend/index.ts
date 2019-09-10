@@ -19,16 +19,8 @@ if (isPreview) {
 }
 
 const issueId = isPreview
-    ? ({
-          edition: 'daily-edition',
-          version: 'preview',
-          issueDate: ':issueId',
-      } as const)
-    : ({
-          edition: 'daily-edition',
-          version: ':version',
-          issueDate: ':date',
-      } as const)
+    ? 'daily-edition/:date/preview'
+    : 'daily-edition/:date/:version'
 
 app.use((req, res, next) => {
     console.log(req.url)
@@ -37,7 +29,6 @@ app.use((req, res, next) => {
 })
 
 app.get('/' + issueSummaryPath(), issuesSummaryController)
-
 app.get('/' + issuePath(issueId), issueController)
 console.log('/' + issuePath(issueId))
 app.get('/' + frontPath(issueId, '*?'), frontController)

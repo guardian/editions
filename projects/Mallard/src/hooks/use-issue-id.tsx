@@ -13,7 +13,7 @@ import {
  * we can't do too much else, without a bigger refactor
  */
 
-const useIssueId = () => {
+const useIssueCompositeKey = () => {
     const nav = useContext(NavigationContext)
     const path: ArticleNavigationProps['path'] | undefined = nav.getParam(
         'path',
@@ -26,4 +26,4 @@ const useIssueId = () => {
     return null
 }
 
-export { useIssueId }
+export { useIssueCompositeKey }

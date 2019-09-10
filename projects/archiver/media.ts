@@ -7,7 +7,7 @@ import {
     Image,
     ImageSize,
     notNull,
-    IssueId,
+    IssueCompositeKey,
 } from './common'
 import { getColours, getImage } from './src/downloader'
 import { upload } from './src/upload'
@@ -46,8 +46,11 @@ export const getImagesFromFront = (front: Front): Image[] => {
     return images
 }
 
-export const getAndUploadColours = async (issue: IssueId, image: Image) => {
-    const [colourPath, colours] = await getColours(issue, image)
+export const getAndUploadColours = async (
+    publishedId: string,
+    image: Image,
+) => {
+    const [colourPath, colours] = await getColours(publishedId, image)
     if (hasFailed(colours)) {
         console.error(`Could not get colours for ${colourPath}`)
         console.error(JSON.stringify(colours))
@@ -57,11 +60,11 @@ export const getAndUploadColours = async (issue: IssueId, image: Image) => {
 }
 
 export const getAndUploadImage = async (
-    issue: IssueId,
+    publishedId: string,
     image: Image,
     size: ImageSize,
 ) => {
-    const [path, data] = await getImage(issue, image, size)
+    const [path, data] = await getImage(publishedId, image, size)
     if (hasFailed(data)) return data
     return upload(path, data, 'image/jpeg')
 }

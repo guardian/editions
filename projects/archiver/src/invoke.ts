@@ -1,5 +1,6 @@
 import { Handler } from 'aws-lambda'
 import { StepFunctions } from 'aws-sdk'
+import { randomBytes } from 'crypto'
 import {
     Attempt,
     attempt,
@@ -9,9 +10,8 @@ import {
     hasSucceeded,
     withFailureMessage,
 } from '../../backend/utils/try'
+import { IssuePublication } from '../../common/src'
 import { IssueParams } from './issueTask'
-import { randomBytes } from 'crypto'
-import { IssueId } from '../common'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
 interface Record {
@@ -19,7 +19,7 @@ interface Record {
     eventTime: string
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
 
-const parseRecord = (record: Record): Attempt<IssueId> => {
+const parseRecord = (record: Record): Attempt<IssuePublication> => {
     const key = decodeURIComponent(record.s3.object.key)
     const [, issueDate, filename] = key.split('/')
     if (filename === undefined || issueDate === undefined) {
@@ -53,17 +53,17 @@ export const handler: Handler<
 
     const issues = maybeIssues.filter(hasSucceeded)
     const runs = await Promise.all(
-        issues.map(async issueId => {
+        issues.map(async issuePublication => {
             const invoke: IssueParams = {
-                issueId,
+                issuePublication,
             }
             const run = await attempt(
                 sf
                     .startExecution({
                         stateMachineArn,
                         input: JSON.stringify(invoke),
-                        name: `issue ${invoke.issueId.issueDate} ${
-                            invoke.issueId.version
+                        name: `issue ${invoke.issuePublication.issueDate} ${
+                            invoke.issuePublication.version
                         } ${randomBytes(2).toString('hex')}`.replace(
                             /\W/g,
                             '-', // see character restrictions
@@ -74,19 +74,23 @@ export const handler: Handler<
             )
             if (hasFailed(run)) {
                 console.error(
-                    `⚠️ Invocation of ${JSON.stringify(issueId)} failed.`,
+                    `⚠️ Invocation of ${JSON.stringify(
+                        issuePublication,
+                    )} failed.`,
                 )
                 return withFailureMessage(
                     run,
-                    `⚠️ Invocation of ${JSON.stringify(issueId)} failed.`,
+                    `⚠️ Invocation of ${JSON.stringify(
+                        issuePublication,
+                    )} failed.`,
                 )
             }
             console.log(
                 `Invoation of step function for ${JSON.stringify(
-                    issueId,
+                    issuePublication,
                 )} succesful`,
             )
-            return issueId
+            return issuePublication
         }),
     )
 

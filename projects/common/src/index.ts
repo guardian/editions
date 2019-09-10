@@ -133,10 +133,14 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export interface IssueSummary extends WithKey {
+export interface IssuePublication {
+    edition: string
+    version: string
+    issueDate: string
+}
+export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
-    id: IssueId
     assets?: {
         [P in ImageSize]?: string[]
     } & { data: string[] }
@@ -287,13 +291,12 @@ export interface Crossword {
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime
 }
-export interface IssueId {
-    edition: 'daily-edition'
-    issueDate: string
-    version: string
+export interface IssueCompositeKey {
+    publishedId: string
+    localId: string
 }
 
-export const issueDir = (issueId: IssueId | string) => {
+export const issueDir = (issueId: string) => {
     if (typeof issueId === 'string') {
         return issueId
     }
@@ -301,29 +304,26 @@ export const issueDir = (issueId: IssueId | string) => {
     return `${edition}/${issueDate}/${version}`
 }
 
-export const issuePath = (issue: IssueId | string) => `${issueDir(issue)}/issue`
+export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-export const frontPath = (issue: IssueId | string, frontId: string) =>
+export const frontPath = (issue: string, frontId: string) =>
     `${issueDir(issue)}/front/${frontId}`
 
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
-export const mediaDir = (issue: IssueId | string, size: ImageSize) =>
+export const mediaDir = (issue: string, size: ImageSize) =>
     `${issueDir(issue)}/media/${size}`
 
 export const mediaPath = (
-    issue: IssueId | string,
+    issue: string,
     size: ImageSize,
     source: string,
     path: string,
 ) => `${mediaDir(issue, size)}/${source}/${path}`
 
-export const coloursPath = (
-    issue: IssueId | string,
-    source: string,
-    path: string,
-) => `${issueDir(issue)}/colours/${source}/${path}`
+export const coloursPath = (issue: string, source: string, path: string) =>
+    `${issueDir(issue)}/colours/${source}/${path}`
 
 export const issueSummaryPath = () => 'issues'
 export interface Image {

@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
 import { groupBy } from 'ramda'
-import { IssueId, IssueSummary, notNull } from '../common'
+import { IssueSummary, notNull, IssuePublication } from '../common'
 import { getIssue } from '../issue'
-import { lastModified } from '../lastModified'
 import { isPreview as isPreviewStage } from '../preview'
 import { s3List } from '../s3'
 import { Attempt, hasFailed } from '../utils/try'
@@ -15,27 +14,23 @@ export const issueController = (req: Request, res: Response) => {
     const version: string = decodeURIComponent(
         isPreviewStage ? 'preview' : req.params.version,
     )
-    const issueId: IssueId = {
+    const issueId: IssuePublication = {
         issueDate,
         version,
         edition: 'daily-edition',
     }
-    const [date, updater] = lastModified()
     console.log(`${req.url}: request for issue ${issueDate}`)
-    getIssue(issueId, updater)
+    getIssue(issueId)
         .then(data => {
             if (data === 'notfound') {
                 res.sendStatus(404)
                 return
             }
-            res.setHeader('Last-Modifed', date())
+            res.setHeader('Last-Modifed', new Date(version).getTime())
             res.setHeader('Content-Type', 'application/json')
             res.send(JSON.stringify(data))
         })
         .catch(e => console.error(e))
-}
-interface IssuePublication extends IssueId {
-    publicationDate: Date
 }
 
 export const getIssuesSummary = async (
@@ -69,27 +64,32 @@ export const getIssuesSummary = async (
         groupBy(_ => _.issueDate, issuePublications),
     ).map(versions =>
         versions.reduce((a, b) =>
-            a.publicationDate.getTime() > b.publicationDate.getTime() ? a : b,
+            new Date(a.version).getTime() > new Date(b.version).getTime() // Version is always a date. This is obscene. This controller should also never be hit. Fix after launch.
+                ? a
+                : b,
         ),
     )
     return issues
-        .map(id => {
-            const date = new Date(id.issueDate)
+        .map(issuePublication => {
+            const date = new Date(issuePublication.issueDate)
             if (isNaN(date.getTime())) {
                 console.warn(
-                    `Issue with path ${JSON.stringify(id)} is not a valid date`,
+                    `Issue with path ${JSON.stringify(
+                        issuePublication,
+                    )} is not a valid date`,
                 )
                 return null
             }
-            return { id, date }
+            return { compositeKey: issuePublication, date }
         })
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
-        .map(({ id, date }) => ({
-            key: id.issueDate,
+        .map(({ compositeKey, date }) => ({
+            key: `${compositeKey.edition}/${compositeKey.issueDate}`,
             name: 'Daily Edition',
             date: date.toISOString(),
-            id,
+            localId: `${compositeKey.edition}/${compositeKey.issueDate}`,
+            publishedId: `${compositeKey.edition}/${compositeKey.issueDate}/${compositeKey.version}`,
         }))
         .slice(0, isPreview ? PREVIEW_PAGE_SIZE : LIVE_PAGE_SIZE)
 }

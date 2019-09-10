@@ -1,31 +1,33 @@
 import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../backend/utils/try'
-import { Issue, IssueId } from '../common'
+import { Issue, IssuePublication } from '../common'
 import { getIssue } from './downloader'
 import { bucket } from './s3'
 
 export interface IssueParams {
-    issueId: IssueId
+    issuePublication: IssuePublication
 }
-export interface IssueTaskOutput {
-    issueId: IssueId
+export interface IssueTaskOutput extends IssueParams {
     issue: Issue
     message?: string
     fronts: string[]
     remainingFronts: number
 }
 export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
-    issueId,
+    issuePublication,
 }) => {
-    console.log(`Attempting to upload ${JSON.stringify(issueId)} to ${bucket}`)
-    const issue = await attempt(getIssue(issueId))
+    console.log(
+        `Attempting to upload ${JSON.stringify(issuePublication)} to ${bucket}`,
+    )
+    const publishedId = `${issuePublication.edition}/${issuePublication.issueDate}/${issuePublication.version}`
+    const issue = await attempt(getIssue(publishedId))
     if (hasFailed(issue)) {
         console.log(JSON.stringify(issue))
         throw new Error('Failed to download issue.')
     }
-    console.log(`Downloaded issue ${JSON.stringify(issueId)}`)
+    console.log(`Downloaded issue ${JSON.stringify(issuePublication)}`)
     return {
-        issueId,
+        issuePublication,
         issue: { ...issue, fronts: [] },
         fronts: issue.fronts,
         remainingFronts: issue.fronts.length,

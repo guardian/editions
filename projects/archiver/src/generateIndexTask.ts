@@ -1,11 +1,11 @@
 import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../backend/utils/try'
-import { IssueId, IssueSummary } from '../common'
+import { IssueCompositeKey, IssueSummary } from '../common'
 import { indexer } from './indexer/summary'
 import { upload } from './upload'
 
 export interface IndexTaskOutput {
-    issueId: IssueId
+    issueId: IssueCompositeKey
     message: string
     index: IssueSummary[]
 }

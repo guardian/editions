@@ -1,13 +1,12 @@
-import { LastModifiedUpdater } from './lastModified'
-import { Issue, IssueId } from './common'
-import { hasFailed } from './utils/try'
-import { s3fetch, Path } from './s3'
+import { Issue } from './common'
+import { IssuePublication } from './controllers/issue'
 import { PublishedIssue } from './fronts/issue'
 import { isPreview } from './preview'
+import { Path, s3fetch } from './s3'
+import { hasFailed } from './utils/try'
 
 export const getIssue = async (
-    issue: IssueId,
-    lastModifiedUpdater: LastModifiedUpdater,
+    issue: IssuePublication,
 ): Promise<Issue | 'notfound'> => {
     console.log('Attempting to get latest issue for', issue)
     const path: Path = {
@@ -23,13 +22,17 @@ export const getIssue = async (
         return 'notfound'
     }
 
-    lastModifiedUpdater(issueData.lastModified)
     const data = (await issueData.json()) as PublishedIssue
     const fronts = data.fronts.map(_ => _.name)
+    const key = `${issue.edition}/${issue.issueDate}`
+    const publishedId = `${key}/${issue.version}`
+    const localId = key
+
     return {
         name: data.name,
-        key: `${issue.edition}/${issue.issueDate}`,
-        id: issue,
+        key,
+        localId,
+        publishedId,
         date: data.issueDate,
         fronts,
     }

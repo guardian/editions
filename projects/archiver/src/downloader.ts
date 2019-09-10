@@ -14,15 +14,15 @@ import {
     hasFailed,
     withFailureMessage,
 } from '../../backend/utils/try'
-import { ImageSize, IssueId } from '../../common/src'
+import { ImageSize, IssueCompositeKey } from '../../common/src'
 
 export const URL =
     process.env.backend !== undefined
         ? `https://${process.env.backend}`
         : 'http://localhost:3131/'
 
-export const getIssue = async (issue: IssueId) => {
-    const path = `${URL}${issuePath(issue)}`
+export const getIssue = async (publishedId: string) => {
+    const path = `${URL}${issuePath(publishedId)}`
     console.log('fetching!', path)
     const response = await fetch(path)
     console.log(response.status)
@@ -32,26 +32,26 @@ export const getIssue = async (issue: IssueId) => {
 }
 
 export const getFront = async (
-    issue: IssueId,
+    publishedId: string,
     front: string,
 ): Promise<Attempt<Front>> => {
-    const path = `${URL}${frontPath(issue, front)}`
+    const path = `${URL}${frontPath(publishedId, front)}`
     const response = await fetch(path)
     const maybeFront = await attempt(response.json() as Promise<Front>)
     if (hasFailed(maybeFront))
         return withFailureMessage(
             maybeFront,
-            `Failed to download front ${front} from ${issue}`,
+            `Failed to download front ${front} from ${publishedId}`,
         )
     return maybeFront
 }
 
 export const getImage = async (
-    issue: IssueId,
+    publishedId: string,
     image: Image,
     size: ImageSize,
 ): Promise<[string, Attempt<Buffer>]> => {
-    const path = mediaPath(issue, size, image.source, image.path)
+    const path = mediaPath(publishedId, size, image.source, image.path)
 
     const url = `${URL}/${path}`
     const resp = attempt(fetch(url))
@@ -64,10 +64,10 @@ export const getImage = async (
 }
 
 export const getColours = async (
-    issue: IssueId,
+    publishedId: string,
     image: Image,
 ): Promise<[string, Attempt<{}>]> => {
-    const path = coloursPath(issue, image.source, image.path)
+    const path = coloursPath(publishedId, image.source, image.path)
     const url = `${URL}/${path}`
     const response = await attempt(fetch(url).then(_ => _.json()))
     return [path, response]

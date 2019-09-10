@@ -3,7 +3,7 @@ import { FSPaths, APIPaths } from 'src/paths'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { Image } from '../../../common/src'
 import RNFetchBlob from 'rn-fetch-blob'
-import { useIssueId } from './use-issue-id'
+import { useIssueCompositeKey } from './use-issue-id'
 
 const selectImagePath = async (issueId: string, { source, path }: Image) => {
     const api = `${APIPaths.mediaBackend}${APIPaths.media(
@@ -26,7 +26,7 @@ const selectImagePath = async (issueId: string, { source, path }: Image) => {
  */
 
 const useImagePath = (image: Image) => {
-    const issueId = useIssueId()
+    const issueId = useIssueCompositeKey()
 
     const [paths, setPaths] = useState<string | undefined>()
 

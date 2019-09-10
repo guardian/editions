@@ -1,5 +1,17 @@
-import { issuePath, mediaPath, frontPath, Image } from 'src/common'
+import {
+    issuePath,
+    mediaPath,
+    frontPath,
+    Image,
+    IssueCompositeKey,
+} from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
+
+interface API {
+    issue: (issueId: IssueCompositeKey) => string
+    front: (issueId: IssueCompositeKey, frontId: string) => string
+    // media:
+}
 
 const APIPaths = {
     issue: issuePath,

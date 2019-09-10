@@ -1,11 +1,11 @@
 import { Handler } from 'aws-lambda'
 import { SNS, TemporaryCredentials } from 'aws-sdk'
-import { IssueId } from '../common'
+import { IssueCompositeKey } from '../common'
 
 export type Status = 'Processing' | 'Published' | 'Failed'
 
 export interface EventInput {
-    issueId: IssueId
+    issueId: IssueCompositeKey
     error?: {
         Error: string
         Cause: string
@@ -25,11 +25,10 @@ export const extractError = (error?: { Cause: string }): string | undefined => {
     }
 }
 
-export const handler: Handler<EventInput, { issueId: IssueId }> = async ({
-    issueId,
-    message,
-    error,
-}) => {
+export const handler: Handler<
+    EventInput,
+    { issueId: IssueCompositeKey }
+> = async ({ issueId, message, error }) => {
     const topic = process.env.topic
     const role = process.env.role
     if (topic === undefined || role === undefined) {
