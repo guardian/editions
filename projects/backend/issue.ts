@@ -1,5 +1,4 @@
-import { Issue } from './common'
-import { IssuePublication } from './controllers/issue'
+import { Issue, IssuePublication } from './common'
 import { PublishedIssue } from './fronts/issue'
 import { isPreview } from './preview'
 import { Path, s3fetch } from './s3'
