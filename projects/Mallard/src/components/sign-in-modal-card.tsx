@@ -36,7 +36,6 @@ const SignInModalCard = ({
         bottomContent={
             <>
                 <View style={styles.bottomContentContainer}>
-                    {/* <View> */}
                     <ModalButton
                         onPress={() => {
                             close()
@@ -50,15 +49,12 @@ const SignInModalCard = ({
                     >
                         Continue
                     </ModalButton>
-                    {/* </View> */}
-                    {/* <View> */}
                     <Link
                         style={{ ...getFont('sans', 0.9, 'bold') }}
                         href="https://www.theguardian.com/help/identity-faq"
                     >
                         Need help signing in?
                     </Link>
-                    {/* </View> */}
                 </View>
             </>
         }
