@@ -120,6 +120,7 @@ const TextBlock = ({
                         inverted && styles.invertedText,
                         { fontSize, lineHeight },
                     ]}
+                    textBreakStrategy="simple"
                 >
                     <HeadlineKickerText
                         allowFontScaling={false}
