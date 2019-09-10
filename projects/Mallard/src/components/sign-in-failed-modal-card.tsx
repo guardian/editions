@@ -33,7 +33,10 @@ const SignInFailedModalCard = ({
     <OnboardingCard
         title="Subscription not found"
         appearance={CardAppearance.blue}
-        onDismissThisCard={onDismiss}
+        onDismissThisCard={() => {
+            close()
+            onDismiss()
+        }}
         size="medium"
         bottomContent={
             <>
