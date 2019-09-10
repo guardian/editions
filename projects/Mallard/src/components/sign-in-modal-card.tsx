@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        flexGrow: 1,
+        marginRight: 15,
     },
 })
 
@@ -34,29 +36,29 @@ const SignInModalCard = ({
         bottomContent={
             <>
                 <View style={styles.bottomContentContainer}>
-                    <View>
-                        <ModalButton
-                            onPress={() => {
-                                close()
-                                onLoginPress()
-                                sendComponentEvent({
-                                    componentType: ComponentType.appButton,
-                                    action: Action.click,
-                                    value: 'sign_in_continue_clicked',
-                                })
-                            }}
-                        >
-                            Continue
-                        </ModalButton>
-                    </View>
-                    <View>
-                        <Link
-                            style={{ ...getFont('sans', 0.9, 'bold') }}
-                            href="https://www.theguardian.com/help/identity-faq"
-                        >
-                            Need help signing in?
-                        </Link>
-                    </View>
+                    {/* <View> */}
+                    <ModalButton
+                        onPress={() => {
+                            close()
+                            onLoginPress()
+                            sendComponentEvent({
+                                componentType: ComponentType.appButton,
+                                action: Action.click,
+                                value: 'sign_in_continue_clicked',
+                            })
+                        }}
+                    >
+                        Continue
+                    </ModalButton>
+                    {/* </View> */}
+                    {/* <View> */}
+                    <Link
+                        style={{ ...getFont('sans', 0.9, 'bold') }}
+                        href="https://www.theguardian.com/help/identity-faq"
+                    >
+                        Need help signing in?
+                    </Link>
+                    {/* </View> */}
                 </View>
             </>
         }
