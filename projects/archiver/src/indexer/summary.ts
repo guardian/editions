@@ -90,7 +90,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
         .filter(notNull)
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 7)
-        .map(({ key, name, date, assets, key, localId, publishedId }) => ({
+        .map(({ name, date, assets, key, localId, publishedId }) => ({
             key,
             localId,
             publishedId,
