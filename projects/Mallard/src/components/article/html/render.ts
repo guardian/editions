@@ -96,10 +96,12 @@ export const render = (
         pillar,
         features,
         wrapLayout,
+        showInlineImages,
     }: {
         pillar: ArticlePillar
         features: ArticleFeatures[]
         wrapLayout: WrapLayout
+        showInlineImages: boolean
     },
 ) => {
     const content = article
@@ -120,7 +122,7 @@ export const render = (
                 case 'media-atom':
                     return renderMediaAtom(el)
                 case 'image':
-                    return Image({ imageElement: el })
+                    return showInlineImages ? Image({ imageElement: el }) : ''
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,

@@ -10,7 +10,7 @@ import { ArticleHeaderProps } from '../article-header/types'
 import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { EMBED_DOMAIN, render } from '../html/render'
 import { Wrap, WrapLayout } from '../wrap/wrap'
-import { color } from 'src/theme/color'
+import { useNetInfo } from '@react-native-community/netinfo'
 
 const urlIsNotAnEmbed = (url: string) =>
     !(
@@ -47,10 +47,16 @@ const ArticleWebview = ({
     article: BlockElement[]
     wrapLayout: WrapLayout
 }) => {
+    const { isConnected } = useNetInfo()
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
 
-    const html = render(article, { pillar, features, wrapLayout })
+    const html = render(article, {
+        pillar,
+        features,
+        wrapLayout,
+        showInlineImages: isConnected,
+    })
 
     return (
         <>
