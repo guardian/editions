@@ -80,7 +80,7 @@ const ArticleWebview = ({
                             Linking.openURL(event.url)
                             return false
                         }
-                        return isConnected // if we're not connected then don't try and load any resources
+                        return true
                     }}
                     onMessage={event => {
                         if (parseInt(event.nativeEvent.data) > height) {
