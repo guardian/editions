@@ -31,10 +31,13 @@ const SignInFailedModalCard = ({
     email: string
 }) => (
     <OnboardingCard
-        title="Already a subscriber?"
+        title="Subscription not found"
         appearance={CardAppearance.blue}
-        onDismissThisCard={onDismiss}
-        size="small"
+        onDismissThisCard={() => {
+            close()
+            onDismiss()
+        }}
+        size="medium"
         bottomContent={
             <>
                 <UiBodyCopy weight="bold">{`We were unable to find a subscription associated with ${email}. Try signing in with a different email or contact us at ${CUSTOMER_HELP_EMAIL}`}</UiBodyCopy>

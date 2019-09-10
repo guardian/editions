@@ -16,7 +16,7 @@ import {
     BufferedTransport,
     CompactProtocol,
 } from '@creditkarma/thrift-server-core'
-import { getImage } from './assets'
+import { getImage, getCreditedImage } from './assets'
 import { elementParser } from './elements'
 import fetch from 'node-fetch'
 import { fromPairs } from 'ramda'
@@ -24,6 +24,8 @@ import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
 import { articleTypePicker } from './articleTypePicker'
+import { CreditedImage } from '../../common/src'
+import { oc } from 'ts-optchain'
 
 type NotInCAPI =
     | 'key'
@@ -59,6 +61,28 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
     dateTime: date.dateTime.toNumber(),
 })
 
+const getMainImage = (result: IContent): CreditedImage | undefined => {
+    const maybeMainImage = oc(result).blocks.main.elements[0]()
+    const maybeThumbnailElement =
+        result.elements &&
+        result.elements.find(element => element.relation === 'thumbnail')
+    const maybeThumbnailImage =
+        maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
+
+    if (!maybeMainImage) {
+        console.warn(
+            `No main image in ${
+                result.id
+            } using thumbnail (${maybeThumbnailImage &&
+                maybeThumbnailImage.path}).`,
+        )
+    }
+
+    return maybeMainImage
+        ? getCreditedImage(maybeMainImage)
+        : maybeThumbnailImage
+}
+
 const parseArticleResult = async (
     result: IContent,
 ): Promise<[number, CAPIContent]> => {
@@ -82,27 +106,7 @@ const parseArticleResult = async (
     const byline = result.fields && result.fields.byline
     const bylineImages = getBylineImages(result)
 
-    const maybeMainImage =
-        result.blocks &&
-        result.blocks.main &&
-        result.blocks.main.elements &&
-        result.blocks.main.elements[0].assets &&
-        getImage(result.blocks.main.elements[0].assets)
-
-    const maybeThumbnailElement =
-        result.elements &&
-        result.elements.find(element => element.relation === 'thumbnail')
-    const maybeThumbnailImage =
-        maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
-    const maybeImage = maybeMainImage || maybeThumbnailImage
-    if (maybeMainImage == null) {
-        console.warn(
-            `No main image in ${
-                result.id
-            } using thumbnail (${maybeThumbnailImage &&
-                maybeThumbnailImage.path}).`,
-        )
-    }
+    const maybeImage = getMainImage(result)
 
     const starRating = result.fields && result.fields.starRating
 

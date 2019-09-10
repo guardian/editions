@@ -48,6 +48,16 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
     },
+    articleImage: {
+        aspectRatio: 1.5,
+        marginBottom: metrics.vertical / 4,
+    },
+    articleHeadline: {
+        marginBottom: metrics.vertical,
+    },
+    underline: {
+        textDecorationLine: 'underline',
+    },
 })
 
 const cutoutStyles = {
@@ -69,6 +79,55 @@ export const BylineCutout = ({
         source={{ uri: imagePath(cutout) }}
         style={[cutoutStyles.root, style]}
     />
+)
+
+const HeaderArticleHeadline = ({
+    shouldShowQuotations,
+    showUnderline,
+    articleColor,
+    headline,
+    byline,
+    font,
+}: {
+    shouldShowQuotations: boolean
+    showUnderline: boolean
+    articleColor: string
+    headline: string
+    byline: string
+    font: {
+        fontSize: number
+        lineHeight: number
+        fontFamily: string
+    }
+}) => (
+    <ArticleHeadline
+        icon={
+            shouldShowQuotations
+                ? {
+                      width: 38,
+                      element: scale => (
+                          <Quote scale={0.9 / scale} fill={articleColor} />
+                      ),
+                  }
+                : undefined
+        }
+        weight="light"
+        textStyle={[styles.articleHeadline, font]}
+    >
+        <Text
+            style={
+                showUnderline
+                    ? [styles.underline, { textDecorationColor: articleColor }]
+                    : null
+            }
+        >
+            {headline}
+        </Text>
+        <Text style={[{ color: articleColor }, styles.byline]}>
+            {'\n'}
+            {byline}
+        </Text>
+    </ArticleHeadline>
 )
 
 const OpinionHeader = ({
@@ -98,46 +157,21 @@ const OpinionHeader = ({
         >
             {image ? (
                 <ArticleFader>
-                    <ArticleImage
-                        style={{
-                            aspectRatio: 1.5,
-                            marginBottom: metrics.vertical / 4,
-                        }}
-                        image={image}
-                    />
+                    <ArticleImage style={styles.articleImage} image={image} />
                 </ArticleFader>
             ) : null}
             <ArticleFader>
                 <View style={styles.flexRow}>
                     <View style={styles.headlineContainer}>
                         <HeadlineTypeWrap>
-                            <ArticleHeadline
-                                icon={{
-                                    width: 38,
-                                    element: scale => (
-                                        <Quote
-                                            scale={0.9 / scale}
-                                            fill={articleColor.main}
-                                        />
-                                    ),
-                                }}
-                                weight="light"
-                                textStyle={[
-                                    { marginBottom: metrics.vertical },
-                                    font,
-                                ]}
-                            >
-                                {headline}
-                                <Text
-                                    style={[
-                                        { color: articleColor.main },
-                                        styles.byline,
-                                    ]}
-                                >
-                                    {'\n'}
-                                    {byline}
-                                </Text>
-                            </ArticleHeadline>
+                            <HeaderArticleHeadline
+                                shouldShowQuotations={true}
+                                showUnderline={false}
+                                articleColor={articleColor.main}
+                                headline={headline}
+                                byline={byline}
+                                font={font}
+                            />
                         </HeadlineTypeWrap>
                     </View>
                     {bylineImages && bylineImages.cutout ? (
@@ -151,4 +185,59 @@ const OpinionHeader = ({
     )
 }
 
-export { OpinionHeader }
+const AnalysisHeader = ({
+    byline,
+    bylineImages,
+    headline,
+    image,
+    standfirst,
+}: ArticleHeaderProps) => {
+    const [articleColor] = useArticle()
+    const font = getFont('headline', 1.5, 'light')
+
+    return (
+        <MultilineWrap
+            needsTopPadding
+            style={styles.innerWrap}
+            backgroundColor={color.palette.neutral[97]}
+            byline={
+                <ArticleFader>
+                    <HeadlineTypeWrap>
+                        <View style={[styles.innerWrap]}>
+                            <ArticleStandfirst {...{ standfirst }} />
+                        </View>
+                    </HeadlineTypeWrap>
+                </ArticleFader>
+            }
+        >
+            {image ? (
+                <ArticleFader>
+                    <ArticleImage style={styles.articleImage} image={image} />
+                </ArticleFader>
+            ) : null}
+            <ArticleFader>
+                <View style={styles.flexRow}>
+                    <View style={styles.headlineContainer}>
+                        <HeadlineTypeWrap>
+                            <HeaderArticleHeadline
+                                shouldShowQuotations={false}
+                                showUnderline={true}
+                                articleColor={articleColor.main}
+                                headline={headline}
+                                byline={byline}
+                                font={font}
+                            />
+                        </HeadlineTypeWrap>
+                    </View>
+                    {bylineImages && bylineImages.cutout ? (
+                        <View style={styles.cutoutContainer}>
+                            <BylineCutout cutout={bylineImages.cutout} />
+                        </View>
+                    ) : null}
+                </View>
+            </ArticleFader>
+        </MultilineWrap>
+    )
+}
+
+export { OpinionHeader, AnalysisHeader }

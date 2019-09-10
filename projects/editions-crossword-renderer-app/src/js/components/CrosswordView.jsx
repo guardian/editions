@@ -1,5 +1,5 @@
 import React from 'react'
-import Crossword from 'react-crossword'
+import Crossword from '@guardian/react-crossword'
 
 const CrosswordView = ({ crosswordData }) => {
     return (

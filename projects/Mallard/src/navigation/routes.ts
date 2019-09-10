@@ -18,5 +18,6 @@ export const routeNames = {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',
         OnboardingConsentInline: 'OnboardingConsentInline',
+        PrivacyPolicyInline: 'PrivacyPolicyInline',
     },
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { ArticleType } from 'src/common'
 import { LongReadHeader } from './long-read-header'
 import { NewsHeader } from './news-header'
-import { OpinionHeader } from './opinion-header'
+import { OpinionHeader, AnalysisHeader } from './opinion-header'
 import { ReviewHeader } from './review-header'
 import { ImmersiveHeader } from './immersive-header'
 import { ArticleHeaderProps } from './types'
@@ -18,6 +18,8 @@ const headers: {
     [ArticleType.Review]: ReviewHeader,
     [ArticleType.Longread]: LongReadHeader,
     [ArticleType.Obituary]: ObituaryHeader,
+    [ArticleType.Series]: LongReadHeader,
+    [ArticleType.Analysis]: AnalysisHeader,
 }
 
 const ArticleHeader = ({

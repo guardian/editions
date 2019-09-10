@@ -96,8 +96,8 @@ const scale = {
     headline: {
         0.75: {
             0: {
-                fontSize: 19,
-                lineHeight: 21,
+                fontSize: 18,
+                lineHeight: 20,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 21,
@@ -182,7 +182,7 @@ const scale = {
         },
         2.25: {
             0: {
-                fontSize: 55,
+                fontSize: 50,
                 lineHeight: 55,
             },
         },

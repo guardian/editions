@@ -17,7 +17,7 @@ import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
-import { isInTestFlight } from 'src/authentication/release-stream'
+import { isInTestFlight } from 'src/helpers/release-stream'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (

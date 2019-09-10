@@ -36,7 +36,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
                 console.warn(`Issue with path ${issue} is not a valid date`)
                 return null
             }
-            const date = dateFromIssue.toISOString()
+
             const assetFiles = fromPairs(
                 filenames
                     .map((filename): [ImageSize | 'data', string] | null => {
@@ -76,12 +76,19 @@ export const indexer = async (): Promise<IssueSummary[]> => {
             return {
                 key: issue,
                 name: 'Daily Edition',
-                date,
+                date: dateFromIssue,
                 assets,
             }
         })
         .filter(notNull)
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 7)
+        .map(({ key, name, date, assets }) => ({
+            key,
+            name,
+            date: date.toISOString(),
+            assets,
+        }))
     if (index === null) throw new Error("Couldn't generate index.")
     return index
 }

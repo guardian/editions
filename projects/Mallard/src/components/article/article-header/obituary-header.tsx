@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Grayscale, MultiplyBlendColor } from 'react-native-image-filter-kit'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -29,18 +28,7 @@ const ObituaryHeader = ({
     const [colors, { pillar }] = useArticle()
     return (
         <>
-            {image && (
-                <MultiplyBlendColor
-                    srcColor={
-                        pillar === 'culture' ? colors.pastel : colors.faded
-                    }
-                    dstImage={
-                        <Grayscale
-                            image={<CoverImage small image={image} />}
-                        ></Grayscale>
-                    }
-                ></MultiplyBlendColor>
-            )}
+            {image && <CoverImage small image={image} />}
 
             <View
                 style={{

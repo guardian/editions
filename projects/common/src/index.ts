@@ -84,7 +84,7 @@ export interface Content extends WithKey {
     kicker: string
     articleType?: ArticleType
     trail: string
-    image?: Image
+    image?: CreditedImage
     cardImage?: Image
     cardImageTablet?: Image
     standfirst?: string
@@ -300,6 +300,10 @@ export const issueSummaryPath = () => 'issues'
 export interface Image {
     source: string
     path: string
+}
+
+export interface CreditedImage extends Image {
+    credit?: string
 }
 export interface Palette {
     //the palette from node-vibrant

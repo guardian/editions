@@ -13,6 +13,7 @@ import { useIsPreview } from 'src/hooks/use-settings'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
+    container: { height: '100%' },
 })
 
 const ArticleScreenBody = ({
@@ -38,7 +39,7 @@ const ArticleScreenBody = ({
             onScroll={ev => {
                 onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
             }}
-            style={{ width }}
+            style={[styles.container, { width }]}
             contentContainerStyle={styles.flex}
         >
             {articleResponse({

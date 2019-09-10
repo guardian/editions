@@ -15,57 +15,103 @@
 */
 
 import Foundation
-// import ophan
+import ophan
 
 @objc(Ophan)
 class Ophan: NSObject {
+  
+  var ophanApi: OphanApi?
 
-//   let ophanApi = OphanKt_.getThreadSafeOphanApi (
-//     appVersion: "0.0.1",
-//     appOs: "iOS",
-//     deviceName: "Unknown",
-//     deviceManufacturer: "Apple",
-//     deviceId: "testDeviceId",
-//     userId: "testUserId",
-//     logger: SimpleLogger(),
-//     recordStorePath: "ophan"
-//   )
+  override init() {
+    print("Initialising new Ophan instance on thread \(Thread.current)")
+    super.init()
+    ophanApi = newOphanApi(userId: nil)
+  }
 
-//   override init() {
-//     super.init()
-//     print("Initialising new Ophan instance on thread \(Thread.current)")
-//   }
+  deinit {
+    print("Deinitialising Ophan instance on thread \(Thread.current)")
+  }
+  
+  private func newOphanApi(userId: String?) -> OphanApi {
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+    
+    // This snippet gets the current device's model name
+    var systemInfo = utsname()
+    uname(&systemInfo)
+    let modelCode = withUnsafePointer(to: &systemInfo.machine) {
+        $0.withMemoryRebound(to: CChar.self, capacity: 1) { String(validatingUTF8: $0) }
+    }
+    let deviceName = modelCode ?? "Unrecognised model"
+    
+    return OphanKt_.getThreadSafeOphanApi (
+      appFamily: "iOS Editions",
+      appVersion: appVersion + " (" + buildNumber + ")",
+      appOsVersion: UIDevice.current.systemVersion,
+      deviceName: deviceName,
+      deviceManufacturer: "Apple",
+      deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
+      userId: userId,
+      logger: SimpleLogger(),
+      recordStorePath: "ophan"
+    )
+  }
+  
+  @objc(setUserId:resolver:rejecter:)
+  func setUserId(_ userId: String, resolver resolve: RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    ophanApi = newOphanApi(userId: userId)
+    resolve(userId)
+  }
 
-//   deinit {
-//     print("Deinitialising Ophan instance on thread \(Thread.current)")
-//   }
+  @objc(sendAppScreenEvent:value:resolver:rejecter:)
+  func sendAppScreenEvent(_ screenName: String, value: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    print("Current thread \(Thread.current)")
+    do {
+      DispatchQueue.main.async {
+      print("Current thread \(Thread.current)")
+        self.ophanApi?.sendAppScreenEvent(screenName: screenName, value: value, eventId: UUID().uuidString)
+        resolve(screenName)
+      }
+    } catch let error {
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
+    }
+  }
 
-//   @objc(sendTestAppScreenEvent:resolver:rejecter:)
+  @objc(sendComponentEvent:action:value:componentId:resolver:rejecter:)
+  func sendComponentEvent(_ componentType: String, action: String, value: String?, componentId: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    print("Current thread \(Thread.current)")
+    do {
+      DispatchQueue.main.async {
+      print("Current thread \(Thread.current)")
+        self.ophanApi?.sendComponentEvent(componentType: componentType, action: action, eventId: UUID().uuidString, value: value, componentId: componentId)
+        resolve(componentType)
+      }
+    } catch let error {
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
+    }
+  }
 
-//   func sendTestAppScreenEvent(_ screenName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-
-//     print("Current thread \(Thread.current)")
-
-//     do {
-//       DispatchQueue.main.async {
-//         print("Current thread \(Thread.current)")
-//         self.ophanApi.sendTestAppScreenEvent(screenName: screenName, eventId: UUID().uuidString)
-//         resolve(screenName)
-//       }
-//     } catch let error {
-//       reject("whoops - ios Ophan is sad", "blah", nil)
-//     }
-
-//   }
+  @objc(sendPageViewEvent:resolver:rejecter:)
+  func sendPageViewEvent(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
+    print("Current thread \(Thread.current)")
+    do {
+      DispatchQueue.main.async {
+      print("Current thread \(Thread.current)")
+        self.ophanApi?.sendPageViewEvent(path: path, eventId: UUID().uuidString)
+        resolve(path)
+      }
+    } catch let error {
+      reject("Whoops - ios Ophan is sad", "really sad", nil)
+    }
+  }
 }
 
-// class SimpleLogger: Multiplatform_ophanLogger {
-//   func debug(tag: String, message: String) {
-//     print("D: " + tag + ": " + message + "\n")
-//   }
-
-//   func warn(tag: String, message: String, error: KotlinThrowable?) {
-//     print("W: " + tag + ": " + message + "\n")
-//   }
-
-// }
+class SimpleLogger: Multiplatform_ophanLogger {
+  func debug(tag: String, message: String) {
+    print("D: " + tag + ": " + message + "\n")
+  }
+  
+  func warn(tag: String, message: String, error: KotlinThrowable?) {
+    print("W: " + tag + ": " + message + "\n")
+  }
+}

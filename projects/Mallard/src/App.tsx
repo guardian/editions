@@ -22,6 +22,12 @@ import {
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
+import {
+    sendAppScreenEvent,
+    ScreenTracking,
+    ScreenTrackingMapping,
+} from 'src/services/ophan'
+import { NavigationState } from 'react-navigation'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -35,6 +41,9 @@ fetchCacheClear().then((weOk: boolean) => {
     }
 })
 
+// Capture the first screen event
+sendAppScreenEvent({ screenName: ScreenTracking.Issue })
+
 const styles = StyleSheet.create({
     appContainer: {
         flex: 1,
@@ -42,7 +51,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-232asdf1asdfa347'
+const persistenceKey = 'dev-nav-key-232asdf1asdfa3410'
 
 const persistNavigationState = async (navState: any) => {
     try {
@@ -64,6 +73,41 @@ const loadNavigationState = async () => {
 const rootNavigationProps = __DEV__ && {
     persistNavigationState,
     loadNavigationState,
+}
+
+function getActiveRouteName(
+    navigationState: NavigationState,
+): ScreenTrackingMapping | null {
+    if (!navigationState) {
+        return null
+    }
+    const route = navigationState.routes[navigationState.index]
+    // dive into nested navigators
+    if (route.routes) {
+        return getActiveRouteName(route as NavigationState)
+    }
+    return route.routeName as ScreenTrackingMapping
+}
+
+const onNavigationStateChange = (
+    prevState: NavigationState,
+    currentState: NavigationState,
+) => {
+    const prevScreen: ScreenTrackingMapping | null = getActiveRouteName(
+        prevState,
+    )
+    const currentScreen: ScreenTrackingMapping | null = getActiveRouteName(
+        currentState,
+    )
+    if (
+        currentScreen &&
+        ScreenTracking[currentScreen] &&
+        currentScreen !== prevScreen
+    ) {
+        sendAppScreenEvent({
+            screenName: ScreenTracking[currentScreen],
+        })
+    }
 }
 
 const isReactNavPersistenceError = (e: Error) =>
@@ -96,16 +140,19 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
-                    <ModalRenderer />
                     <StatusBar
                         animated={true}
                         barStyle="light-content"
                         backgroundColor="#041f4a"
                     />
                     <View style={styles.appContainer}>
-                        <RootNavigator {...rootNavigationProps} />
+                        <RootNavigator
+                            {...rootNavigationProps}
+                            onNavigationStateChange={onNavigationStateChange}
+                        />
                         <NetInfoAutoToast />
                     </View>
+                    <ModalRenderer />
                 </WithProviders>
             </ErrorBoundary>
         )

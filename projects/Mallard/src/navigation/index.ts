@@ -4,6 +4,8 @@ import {
     createStackNavigator,
     createSwitchNavigator,
     NavigationScreenProp,
+    StackViewTransitionConfigs,
+    NavigationTransitionProps,
 } from 'react-navigation'
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { useOtherSettingsValues } from 'src/hooks/use-settings'
@@ -23,7 +25,10 @@ import {
     GdprConsentScreenForOnboarding,
 } from 'src/screens/settings/gdpr-consent-screen'
 import { HelpScreen } from 'src/screens/settings/help-screen'
-import { PrivacyPolicyScreen } from 'src/screens/settings/privacy-policy-screen'
+import {
+    PrivacyPolicyScreen,
+    PrivacyPolicyScreenForOnboarding,
+} from 'src/screens/settings/privacy-policy-screen'
 import { TermsAndConditionsScreen } from 'src/screens/settings/terms-and-conditions-screen'
 import { color } from 'src/theme/color'
 import { ArticleScreen } from '../screens/article-screen'
@@ -43,6 +48,30 @@ const navOptionsWithGraunHeader = {
         borderBottomColor: color.text,
     },
     headerTintColor: color.textOverPrimary,
+}
+
+/* The screens you add to IOS_MODAL_ROUTES will have the modal transition. I.e they will slide up from the bottom. */
+const IOS_MODAL_ROUTES = [
+    routeNames.onboarding.PrivacyPolicyInline,
+    routeNames.onboarding.OnboardingConsentInline,
+]
+
+const dynamicModalTransition = (
+    transitionProps: NavigationTransitionProps,
+    prevTransitionProps: NavigationTransitionProps,
+) => {
+    const isModal = IOS_MODAL_ROUTES.some(
+        screenName =>
+            screenName === transitionProps.scene.route.routeName ||
+            (prevTransitionProps &&
+                screenName === prevTransitionProps.scene.route.routeName),
+    )
+
+    return StackViewTransitionConfigs.defaultTransitionConfig(
+        transitionProps,
+        prevTransitionProps,
+        isModal,
+    )
 }
 
 const AppStack = createModalNavigator(
@@ -97,15 +126,25 @@ const OnboardingStack = createModalNavigator(
                                         routeNames.onboarding
                                             .OnboardingConsentInline,
                                     ),
+                                onOpenPrivacyPolicy: () =>
+                                    nav.navigate(
+                                        routeNames.onboarding
+                                            .PrivacyPolicyInline,
+                                    ),
                             }),
                         ),
                         navigationOptions: {
                             header: null,
                         },
                     },
+                    [routeNames.onboarding
+                        .OnboardingConsentInline]: GdprConsentScreenForOnboarding,
+                    [routeNames.onboarding
+                        .PrivacyPolicyInline]: PrivacyPolicyScreenForOnboarding,
                 },
                 {
-                    mode: 'modal',
+                    headerMode: 'none',
+                    transitionConfig: dynamicModalTransition,
                     defaultNavigationOptions: {
                         ...navOptionsWithGraunHeader,
                     },
@@ -116,14 +155,7 @@ const OnboardingStack = createModalNavigator(
             headerMode: 'none',
         },
     ),
-    {
-        [routeNames.onboarding.OnboardingConsentInline]: createStackNavigator(
-            {
-                GdprConsentScreenForOnboarding,
-            },
-            { headerMode: 'none' },
-        ),
-    },
+    {},
 )
 const RootNavigator = createAppContainer(
     createStackNavigator(
