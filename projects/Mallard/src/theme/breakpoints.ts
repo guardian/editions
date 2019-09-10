@@ -1,16 +1,21 @@
 export enum Breakpoints {
-    zero = 0,
+    smallPhone = 0,
+    phone = 375,
     tabletVertical = 690,
     tabletLandscape = 1000,
 }
 
+/*
+    Minimum breakpoint is currently 375 as this is what we initially started off with.
+*/
+export const MINIMUM_BREAKPOINT: number = Breakpoints.phone
+
 export interface BreakpointList<T> {
-    0: T
     [fromSize: number]: T
 }
 
 export const getClosestBreakpoint = (breakpoints: number[], size: number) => {
-    let max = 0
+    let max = MINIMUM_BREAKPOINT
     for (const key of breakpoints) {
         if (size >= key) {
             max = key

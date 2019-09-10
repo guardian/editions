@@ -8,7 +8,7 @@ import {
     LayoutRectangle,
 } from 'react-native'
 import { useMediaQuery } from 'src/hooks/use-screen'
-import { Breakpoints } from 'src/theme/breakpoints'
+import { Breakpoints, MINIMUM_BREAKPOINT } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { MaxWidthWrap } from './max-width'
@@ -44,7 +44,7 @@ interface ThreeColumnWrapperPropTypes
     borderColor?: ViewStyle['borderColor']
     onWrapLayout?: (wrapLayout: WrapLayout) => void
     rightRail?: (
-        position: Breakpoints.zero | Breakpoints.tabletVertical,
+        position: Breakpoints.phone | Breakpoints.tabletVertical,
     ) => ReactNode
 }
 
@@ -216,7 +216,7 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
                         }}
                     >
                         {props.children}
-                        {props.rightRail && props.rightRail(Breakpoints.zero)}
+                        {props.rightRail && props.rightRail(MINIMUM_BREAKPOINT)}
                     </ContentWrapper>
                 </MaxWidthWrap>
             </View>
