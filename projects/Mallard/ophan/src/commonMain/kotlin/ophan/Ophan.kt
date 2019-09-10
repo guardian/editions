@@ -41,7 +41,8 @@ class OphanApi(
             deviceId,
             userId,
             logger,
-            FileRecordStore(recordStorePath)
+            FileRecordStore(recordStorePath),
+            true
     ), logger)
 
     fun componentEventBuilder(componentType: String, action: String, eventId: String, value: String?, componentId: String?): Event {
