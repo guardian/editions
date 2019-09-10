@@ -97,7 +97,7 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
-def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+// def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -136,7 +136,7 @@ android {
         applicationId "com.guardian.editions"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode vcode
+        versionCode "1"
         versionName "1.0-alpha"
     }
     splits {
