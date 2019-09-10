@@ -14,7 +14,7 @@ import {
 } from '../helpers/storage'
 import { ReceiptIOS, isReceiptActive } from '../services/iap'
 
-interface IdentityAuth {
+export interface IdentityAuth {
     type: 'identity'
     info: UserData
 }
@@ -71,7 +71,7 @@ interface Authed<Type> {
 
 type AnyAuthed = Authed<AuthType>
 
-export type AuthStatus = Pending | Unauthed | Authed<AuthType>
+export type AuthStatus<AT = AuthType> = Pending | Unauthed | Authed<AT>
 
 const unauthed: Unauthed = {
     type: 'unauthed',
@@ -104,9 +104,9 @@ const getIdentityData = (status: AuthStatus): UserData | null =>
  * if one returns false or throws, the next one will be tried until one passes or we exhaust the chain
  * in which case it will return an anauthed status
  */
-const runAuthChain = async (
-    providers: (() => Promise<AuthType | false>)[],
-): Promise<AuthStatus> => {
+const runAuthChain = async <AT = AuthType>(
+    providers: (() => Promise<AT | false>)[],
+): Promise<AuthStatus<AT>> => {
     for (const provider of providers) {
         try {
             const res = await provider()
@@ -151,6 +151,8 @@ const authTypeFromIAP = (
 const identityAuthProvider = () =>
     fetchUserDataForKeychainUser().then(authTypeFromIdentity)
 
+const identityAuthChain = () => runAuthChain([identityAuthProvider])
+
 const casAuthProvider = () =>
     fetchAndPersistCASExpiryForKeychainCredentials().then(authTypeFromCAS)
 
@@ -167,9 +169,8 @@ const iapBetaFromLiveAuthProvider = (isInTestFlight: boolean) => async () => {
     return authTypeFromIAP(receipt, { requiresValidReceipt: false })
 }
 
-const liveAuthChain = (isInTestFlight = getIsInTestFlight()) =>
-    runAuthChain([
-        identityAuthProvider,
+const nonIdentityAuthChain = (isInTestFlight = getIsInTestFlight()) =>
+    runAuthChain<AuthType>([
         casAuthProvider,
         iapAuthProvider,
         iapBetaFromLiveAuthProvider(isInTestFlight),
@@ -187,9 +188,10 @@ const liveAuthChain = (isInTestFlight = getIsInTestFlight()) =>
  * data and re-open the app to read the new content.
  * */
 
-const cachedIdentityAuthProvider = (
-    userDataCacheImpl: typeof userDataCache,
-) => () => userDataCacheImpl.get().then(authTypeFromIdentity)
+const cachedIdentityAuthProvider = () =>
+    userDataCache.get().then(authTypeFromIdentity)
+
+const cachedIdentityAuthChain = () => runAuthChain([cachedIdentityAuthProvider])
 
 const cachedCasAuthProvider = (
     casDataCacheImpl: typeof casDataCache,
@@ -203,15 +205,13 @@ const cachedIAPAuthProvider = (
     iapReceiptCacheImpl: typeof iapReceiptCache,
 ) => () => iapReceiptCacheImpl.get().then(authTypeFromIAP)
 
-const cachedAuthChain = (
-    userDataCacheImpl = userDataCache,
+const cachedNonIdentityAuthChain = (
     casDataCacheImpl = casDataCache,
     legacyCASExpiryCacheImpl = legacyCASExpiryCache,
     iapReceiptCacheImpl = iapReceiptCache,
     isInTestFlight = getIsInTestFlight(),
 ) =>
-    runAuthChain([
-        cachedIdentityAuthProvider(userDataCacheImpl),
+    runAuthChain<AuthType>([
         cachedCasAuthProvider(casDataCacheImpl, legacyCASExpiryCacheImpl),
         cachedIAPAuthProvider(iapReceiptCacheImpl),
         iapBetaFromLiveAuthProvider(isInTestFlight),
@@ -219,8 +219,13 @@ const cachedAuthChain = (
 
 export {
     runAuthChain,
-    liveAuthChain,
-    cachedAuthChain,
+    // live credentials runners
+    identityAuthChain,
+    nonIdentityAuthChain,
+    // cached credentials runners
+    cachedIdentityAuthChain,
+    cachedNonIdentityAuthChain,
+    // helpers
     pending,
     unauthed,
     isPending,
