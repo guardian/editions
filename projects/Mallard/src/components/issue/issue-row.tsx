@@ -42,6 +42,12 @@ const getStatusPercentage = (status: DLStatus): number | null => {
     return null
 }
 
+enum ExistsStatus {
+    pending,
+    doesExist,
+    doesNotExist,
+}
+
 const IssueRow = ({
     issue,
     onPress,
@@ -55,17 +61,25 @@ const IssueRow = ({
 
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
 
-    const [exists, setExists] = useState<boolean | null>(null)
+    const [exists, setExists] = useState<ExistsStatus>(ExistsStatus.pending)
 
     const { showToast } = useToast()
 
     useEffect(() => {
         // we probably need a better check for this
         // e.g. do we have issue json and images?
-        RNFetchBlob.fs.exists(FSPaths.issue(issue.key)).then(setExists)
+        RNFetchBlob.fs
+            .exists(FSPaths.issue(issue.key))
+            .then(exists =>
+                setExists(
+                    exists ? ExistsStatus.doesExist : ExistsStatus.doesNotExist,
+                ),
+            )
     }, [issue.key])
 
     const onDownloadIssue = async () => {
+        if (exists !== ExistsStatus.doesNotExist) return
+        setExists(ExistsStatus.pending)
         if ((await fetch()).isConnected && !dlStatus) {
             sendComponentEvent({
                 componentType: ComponentType.appButton,
@@ -76,7 +90,7 @@ const IssueRow = ({
             downloadAndUnzipIssue(issue.key, imageForScreenSize(), status => {
                 setDlStatus(status)
                 if (status.type === 'success') {
-                    setExists(true)
+                    setExists(ExistsStatus.doesExist)
                 }
             })
         } else {
@@ -95,20 +109,29 @@ const IssueRow = ({
                                 : 100
                         }
                         radius={20}
-                        bgColor={exists ? color.primary : undefined}
+                        bgColor={
+                            exists === ExistsStatus.doesExist
+                                ? color.primary
+                                : undefined
+                        }
                         borderWidth={1}
                         shadowColor="#ccc"
                         color={color.primary}
                     >
                         <Button
                             onPress={onDownloadIssue}
-                            icon={exists === true ? '\uE062' : '\uE077'}
+                            icon={
+                                exists === ExistsStatus.doesExist
+                                    ? '\uE062'
+                                    : '\uE077'
+                            }
                             alt={'Download'}
                             appearance={ButtonAppearance.skeleton}
                             textStyles={{
-                                color: !exists
-                                    ? color.primary
-                                    : color.palette.neutral[100],
+                                color:
+                                    exists !== ExistsStatus.doesExist
+                                        ? color.primary
+                                        : color.palette.neutral[100],
                             }}
                         />
                     </ProgressCircle>
