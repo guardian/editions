@@ -55,7 +55,7 @@ const ArticleWebview = ({
         pillar,
         features,
         wrapLayout,
-        showInlineImages: isConnected,
+        showMedia: isConnected,
     })
 
     return (
