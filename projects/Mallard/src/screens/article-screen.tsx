@@ -24,7 +24,8 @@ export interface PathToArticle {
     collection: Collection['key']
     front: Front['key']
     article: CAPIArticle['key']
-    issue: Issue['key']
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
 }
 
 export interface ArticleTransitionProps {

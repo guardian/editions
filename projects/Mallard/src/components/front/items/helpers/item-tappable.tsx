@@ -14,7 +14,7 @@ import {
     NavigationInjectedProps,
     withNavigation,
 } from 'react-navigation'
-import { CAPIArticle } from 'src/common'
+import { CAPIArticle, Issue } from 'src/common'
 import { ariaHidden } from 'src/helpers/a11y'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { navigateToArticle } from 'src/navigation/helpers/base'
@@ -36,7 +36,8 @@ export interface TappablePropTypes {
 
 export interface PropTypes extends TappablePropTypes {
     size: ItemSizes
-    issueID: string
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
 }
 
 /*

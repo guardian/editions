@@ -14,14 +14,18 @@ import { getLatestIssue } from './use-api'
 
 export const useIssueWithResponse = <T>(
     getter: CachedOrPromise<T>,
-    deps: any[] = [],
+    deps: unknown[] = [],
 ) => withResponse<T>(useCachedOrPromise<T>(getter, deps))
 
-export const getIssueResponse = (issue: Issue['key']) => {
+export const getIssueResponse = (
+    localIssueId: Issue['localId'],
+    publishedIssueId: Issue['publishedId'],
+) => {
+    //TODO: make this work with twin ids
     return fetchFromIssue<Issue>(
-        issue,
-        FSPaths.issue(issue),
-        APIPaths.issue(issue),
+        localIssueId,
+        FSPaths.issue(localIssueId),
+        APIPaths.issue(publishedIssueId),
         {
             validator: res => {
                 return res.fronts != null
@@ -30,26 +34,48 @@ export const getIssueResponse = (issue: Issue['key']) => {
     )
 }
 
-export const useIssueOrLatestResponse = (issue?: Issue['key']) =>
-    useIssueWithResponse(issue ? getIssueResponse(issue) : getLatestIssue(), [
-        issue || 'latest',
-    ])
+export const useIssueOrLatestResponse = (issue?: {
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
+}) =>
+    useIssueWithResponse(
+        issue
+            ? getIssueResponse(issue.localIssueId, issue.publishedIssueId)
+            : getLatestIssue(),
+        [issue || 'latest'],
+    )
 
-export const getFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
+export const getFrontsResponse = (
+    localIssueId: Issue['localId'],
+    publishedIssueId: Issue['publishedId'],
+    front: Front['key'],
+) =>
     fetchFromIssue<Front>(
-        issue,
-        FSPaths.front(issue, front),
-        APIPaths.front(issue, front),
+        localIssueId,
+        FSPaths.front(localIssueId, front),
+        APIPaths.front(publishedIssueId, front),
         {
             validator: res => res.collections != null,
         },
     )
 
-export const useFrontsResponse = (issue: Issue['key'], front: Front['key']) =>
-    useIssueWithResponse(getFrontsResponse(issue, front), [issue, front])
+export const useFrontsResponse = (
+    localIssueId: Issue['localId'],
+    publishedIssueId: Issue['publishedId'],
+    front: Front['key'],
+) =>
+    useIssueWithResponse(
+        getFrontsResponse(localIssueId, publishedIssueId, front),
+        [localIssueId, publishedIssueId, front],
+    )
 
-export const getArticleResponse = ({ article, issue, front }: PathToArticle) =>
-    chain(getFrontsResponse(issue, front), front => {
+export const getArticleResponse = ({
+    article,
+    localIssueId,
+    publishedIssueId,
+    front,
+}: PathToArticle) =>
+    chain(getFrontsResponse(localIssueId, publishedIssueId, front), front => {
         const allArticles = flattenFlatCardsToFront(
             flattenCollectionsToCards(front.collections),
         )
@@ -68,5 +94,6 @@ export const useArticleResponse = (path: PathToArticle) =>
         path.article,
         path.collection,
         path.front,
-        path.issue,
+        path.localIssueId,
+        path.publishedIssueId,
     ])

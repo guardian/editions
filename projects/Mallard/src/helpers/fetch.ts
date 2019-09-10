@@ -69,7 +69,7 @@ api (sign in, issue list. maybe cachable maybe not)
 and the issue files (always cachable, identical
 across zip file & issue API)
 */
-const fetchFromApi = <T>(
+export const fetchFromApi = <T>(
     endpointPath: string,
     {
         validator,
@@ -111,8 +111,8 @@ const fetchFromApi = <T>(
     )
 }
 
-const fetchFromIssue = <T>(
-    issueId: Issue['key'],
+export const fetchFromIssue = <T>(
+    localIssueId: Issue['localId'],
     fsPath: string,
     endpointPath: string,
     { validator }: { validator?: ValidatorFn<T> } = {},
@@ -126,7 +126,7 @@ const fetchFromIssue = <T>(
         [
             retrieve(endpointPath),
             async () => {
-                const issueOnDevice = await isIssueOnDevice(issueId)
+                const issueOnDevice = await isIssueOnDevice(localIssueId)
                 if (issueOnDevice) {
                     return fetchFromFileSystemSlow<T>(fsPath, {
                         validator,
@@ -146,7 +146,7 @@ const fetchFromIssue = <T>(
     )
 }
 
-const fetchFromWeatherApi = async <T>(
+export const fetchFromWeatherApi = async <T>(
     path: string,
     {
         validator = () => true,
@@ -170,7 +170,7 @@ const fetchFromWeatherApi = async <T>(
         })
 }
 
-const fetchWeather = <T>(
+export const fetchWeather = <T>(
     endpointPath: string,
     { validator }: { validator?: ValidatorFn<T> } = {},
 ): CachedOrPromise<T> => {
@@ -225,7 +225,9 @@ export const fetchCacheClear = async (): Promise<boolean> => {
     }
 }
 
-const fetchFromNotificationService = async (deviceToken: { token: string }) => {
+export const fetchFromNotificationService = async (deviceToken: {
+    token: string
+}) => {
     const registerDeviceUrl = await getSetting('notificationServiceRegister')
     const { token } = deviceToken
     const options = {
@@ -262,13 +264,5 @@ const isUrlAvailable = async (url: string): Promise<boolean> => {
     }
 }
 
-const isRemoteZipAvailable = async (issue: string): Promise<boolean> =>
+export const isRemoteZipAvailable = async (issue: string): Promise<boolean> =>
     await isUrlAvailable(`${defaultSettings.zipUrl}${issue}.zip`)
-
-export {
-    fetchFromIssue,
-    fetchFromApi,
-    fetchWeather,
-    fetchFromNotificationService,
-    isRemoteZipAvailable,
-}

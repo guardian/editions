@@ -4,6 +4,7 @@ import {
     ArticleNavigationProps,
     IssueNavigationProps,
 } from 'src/navigation/helpers/base'
+import { PathToIssue } from 'src/paths'
 
 /**
  * This will try and look in the states of any navigator
@@ -13,17 +14,22 @@ import {
  * we can't do too much else, without a bigger refactor
  */
 
-const useIssueCompositeKey = () => {
+export const useIssueCompositeKey = (): PathToIssue | undefined => {
     const nav = useContext(NavigationContext)
     const path: ArticleNavigationProps['path'] | undefined = nav.getParam(
         'path',
     )
-    if (path) return path.issue || null
+    if (path !== undefined) {
+        const { localIssueId, publishedIssueId } = path
+        if (!(localIssueId && publishedIssueId)) return undefined
+        if (path) return { localIssueId, publishedIssueId }
+    }
     const issue: IssueNavigationProps['issue'] | undefined = nav.getParam(
         'issue',
     )
-    if (issue) return issue.key || null
-    return null
+    if (issue) {
+        const { localId, publishedId } = issue
+        return { localIssueId: localId, publishedIssueId: publishedId }
+    }
+    return undefined
 }
-
-export { useIssueCompositeKey }

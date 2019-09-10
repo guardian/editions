@@ -37,6 +37,7 @@ import {
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
+import { PathToIssue } from 'src/paths'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -44,7 +45,10 @@ const HomeScreenHeader = withNavigation(
         navigation,
         onReturn,
     }: {
-        issue?: Issue['key']
+        issue?: {
+            localIssueId: Issue['localId']
+            publishedIssueId: Issue['publishedId']
+        }
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
@@ -103,12 +107,14 @@ const IssueList = withNavigation(
                 <BaseList
                     style={{ paddingTop: 0 }}
                     data={issueList}
-                    renderItem={({ item }) => (
+                    renderItem={({ item: issueSummary }) => (
                         <IssueRow
                             onPress={() => {
                                 navigateToIssue(navigation, {
                                     path: {
-                                        issue: item.key,
+                                        localIssueId: issueSummary.localId,
+                                        publishedIssueId:
+                                            issueSummary.publishedId,
                                     },
                                 })
                                 sendComponentEvent({
@@ -117,7 +123,7 @@ const IssueList = withNavigation(
                                     value: 'issues_list_issue_clicked',
                                 })
                             }}
-                            issue={item}
+                            issue={issueSummary}
                         />
                     )}
                 />
@@ -156,7 +162,8 @@ export const HomeScreen = ({
     const { response: issueSummary, retry } = useIssueSummary()
     const from = navigation.getParam('from', undefined)
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-
+    const issue: PathToIssue =
+        from && from.path && (from.path.issue as PathToIssue)
     return (
         <WithAppAppearance value={'tertiary'}>
             <NavigationEvents
@@ -166,22 +173,13 @@ export const HomeScreen = ({
             />
             <ScrollContainer>
                 <HomeScreenHeader
-                    issue={
-                        from && from.path && from.path.issue
-                            ? from.path.issue
-                            : undefined
-                    }
+                    issue={issue}
                     onSettings={() => {
                         navigation.navigate('Settings')
                     }}
                     onReturn={() => {
                         navigateToIssue(navigation, {
-                            path: {
-                                issue:
-                                    from && from.path && from.path.issue
-                                        ? from.path.issue
-                                        : undefined,
-                            },
+                            path: issue,
                         })
                     }}
                 />

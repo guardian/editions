@@ -38,10 +38,7 @@ import {
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
-
-export interface PathToIssue {
-    issue: Issue['key']
-}
+import { PathToIssue } from 'src/paths'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -162,7 +159,7 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 }
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    const response = useIssueOrLatestResponse(path && path.issue)
+    const response = useIssueOrLatestResponse(path)
     return (
         <Container>
             {response({
@@ -267,6 +264,7 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
+    if (!path || !path.localIssueId)
+        return <IssueScreenWithPath path={undefined} />
     return <IssueScreenWithPath path={path} />
 }
