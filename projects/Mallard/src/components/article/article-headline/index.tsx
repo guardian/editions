@@ -15,6 +15,7 @@ import { metrics } from 'src/theme/spacing'
 import { useTextBoxes, TextBoxes } from 'src/components/layout/text-boxes'
 import { getFont, getUnscaledFont } from 'src/theme/typography'
 import { TextWithIcon } from 'src/components/layout/text-with-icon'
+import { MINIMUM_BREAKPOINT } from 'src/theme/breakpoints'
 
 export type ArticleHeadlineProps = {
     children: any
@@ -27,7 +28,7 @@ export type ArticleHeadlineProps = {
 } & Pick<HeadlineTextProps, 'weight'>
 
 const scale =
-    (getUnscaledFont('headline', 1.5)[0].lineHeight /
+    (getUnscaledFont('headline', 1.5)[MINIMUM_BREAKPOINT].lineHeight /
         getFont('headline', 1.5).lineHeight) *
     0.9
 

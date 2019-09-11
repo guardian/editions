@@ -141,8 +141,8 @@ const FrontWithResponse = ({
         >
             <Animated.FlatList
                 showsHorizontalScrollIndicator={false}
-                windowSize={3}
-                maxToRenderPerBatch={1}
+                windowSize={6}
+                maxToRenderPerBatch={3}
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 horizontal={true}
