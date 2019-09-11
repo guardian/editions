@@ -112,6 +112,16 @@ const signOutIdentity = (
         legacyUserAccessTokenKeychainImpl.reset(),
     ]).then(all => all.every(_ => _))
 
+const DEV_clearCASCaches = () =>
+    Promise.all([
+        signOutIdentity(),
+        legacyCASExpiryCache.reset(),
+        legacyCASPasswordCache.reset(),
+        legacyCASUsernameCache.reset(),
+        casCredentialsKeychain.reset(),
+        casDataCache.reset(),
+    ])
+
 export {
     userAccessTokenKeychain,
     membershipAccessTokenKeychain,
@@ -127,4 +137,5 @@ export {
     _legacyUserAccessTokenKeychain,
     iapReceiptCache,
     cacheClearCache,
+    DEV_clearCASCaches,
 }
