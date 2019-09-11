@@ -12,16 +12,20 @@ import { UiBodyCopy } from '../styled-text'
 const styles = StyleSheet.create({
     wrapper: {
         backgroundColor: 'black',
-        padding: 10,
         width: '100%',
     },
     credit: {
         color: color.palette.neutral[100],
+        zIndex: 1,
+        backgroundColor: 'black',
+        height: '100%',
+        padding: 10,
     },
     button: {
         position: 'absolute',
         bottom: 10,
         right: 10,
+        zIndex: 2,
     },
     buttonText: {
         color: color.palette.neutral[100],
