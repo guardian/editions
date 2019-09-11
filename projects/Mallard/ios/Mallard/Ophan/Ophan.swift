@@ -44,7 +44,7 @@ class Ophan: NSObject {
     }
     let deviceName = modelCode ?? "Unrecognised model"
     
-    return OphanKt_.getThreadSafeOphanApi (
+    return OphanIosKt.getThreadSafeOphanApi (
       appFamily: "iOS Editions",
       appVersion: appVersion + " (" + buildNumber + ")",
       appOsVersion: UIDevice.current.systemVersion,

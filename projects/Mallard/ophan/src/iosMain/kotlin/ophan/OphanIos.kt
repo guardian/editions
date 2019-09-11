@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ophan
 
 import com.gu.ophan.Logger

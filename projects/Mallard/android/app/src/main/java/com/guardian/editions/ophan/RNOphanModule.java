@@ -16,6 +16,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import ophan.OphanApi;
+
+
+@SuppressWarnings("unused")
 class RNOphanModule extends ReactContextBaseJavaModule {
 
     @Nonnull

@@ -10,12 +10,10 @@ import ophan.thrift.componentEvent.ComponentV2
 import ophan.thrift.event.Url
 import ophan.thrift.nativeapp.*
 
-fun hello(): String = "Hello from MAX AND JAMES!"
+private const val GUARDIAN_DOMAIN = "theguardian.com"
 
-class OphanApi(
-        private val dispatcher: OphanDispatcher,
-        private val logger: Logger
-) {
+@Suppress("unused")
+class OphanApi(private val dispatcher: OphanDispatcher) {
 
     constructor(
             appFamily: String,
@@ -43,61 +41,77 @@ class OphanApi(
             logger,
             FileRecordStore(recordStorePath),
             true
-    ), logger)
+    ))
 
-    fun componentEventBuilder(componentType: String, action: String, eventId: String, value: String?, componentId: String?): Event {
+    private fun newComponentEventDetails(
+            componentType: ComponentType,
+            action: Action,
+            componentId: String?,
+            value: String?
+    ) = ComponentEvent.Builder()
+            .component(ComponentV2.Builder()
+                    .componentType(componentType)
+                    .id(componentId)
+                    .products(emptySet())
+                    .campaignCode(null)
+                    .labels(emptySet())
+                    .build()
+            )
+            .action(action)
+            .value(value)
+            .build()
+
+    private fun sendComponentEvent(eventId: String, componentEventDetails: ComponentEvent) {
         val event = Event.Builder()
                 .eventId(eventId)
                 .eventType(EventType.COMPONENT_EVENT)
                 .viewId(null) /* TODO */
-                .componentEvent(ComponentEvent.Builder()
-                        .component(ComponentV2.Builder()
-                                .componentType(ComponentType.valueOf(componentType))
-                                .id(componentId) 
-                                .products(emptySet())
-                                .campaignCode(null)
-                                .labels(emptySet())
-                                .build()
-                        )
-                        .action(Action.valueOf(action))
-                        .value(value)
-                        .build()
-                )
+                .componentEvent(componentEventDetails)
                 .build()
-        return event;
+
+        dispatcher.dispatchEvent(event)
     }
 
     fun sendAppScreenEvent(screenName: String, value: String?, eventId: String) {
-        val event = this.componentEventBuilder("APP_SCREEN", "VIEW", eventId, value, screenName)
-        dispatcher.dispatchEvent(event)
+        val componentEventDetails = newComponentEventDetails(
+                componentType = ComponentType.APP_SCREEN,
+                action = Action.VIEW,
+                componentId = screenName,
+                value = value
+        )
+        sendComponentEvent(eventId, componentEventDetails)
     }
 
     fun sendComponentEvent(componentType: String, action: String, eventId: String, value: String?, componentId: String?) {
-        val event = this.componentEventBuilder(componentType, action, eventId, value, componentId)
-        dispatcher.dispatchEvent(event)
+        val componentEventDetails = newComponentEventDetails(
+                componentType = ComponentType.valueOf(componentType),
+                action = Action.valueOf(action),
+                componentId = componentId,
+                value = value
+        )
+        sendComponentEvent(eventId, componentEventDetails)
     }
 
     fun sendPageViewEvent(path: String, eventId: String) {
-        val domain = "theguardian.com"
-        val host = "www." + domain
+        val host = "www.$GUARDIAN_DOMAIN"
         val validPath = "/" + path.removePrefix("/")
-        val raw = "https://" + host + validPath
+        val raw = "https://$host$validPath"
 
-
-        val event = Event.Builder()
-        .eventId(eventId)
-        .eventType(EventType.VIEW)
-        .viewId(eventId)
-        .path(validPath)
-        .url(Url.Builder()
+        val url = Url.Builder()
                 .raw(raw)
                 .host(host)
                 .path(validPath)
-                .domain(domain)
+                .domain(GUARDIAN_DOMAIN)
                 .build()
-        )
-        .build()
-        logger.debug("OphanKt", event.toString())
+
+        val event = Event.Builder()
+                .eventId(eventId)
+                .eventType(EventType.VIEW)
+                .viewId(eventId)
+                .path(validPath)
+                .url(url)
+                .build()
+
         dispatcher.dispatchEvent(event)
     }
 }
