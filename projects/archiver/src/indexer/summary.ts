@@ -25,7 +25,7 @@ export const indexer = async (): Promise<IssueSummary[]> => {
     const issues = groupBy<string>(filename => {
         return filename
             .split('/')
-            .slice(0, 2)
+            .slice(0, 3)
             .join('/')
     })(filenames)
 
