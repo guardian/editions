@@ -26,8 +26,10 @@ import {
     sendAppScreenEvent,
     ScreenTracking,
     ScreenTrackingMapping,
+    setUserId,
 } from 'src/services/ophan'
 import { NavigationState } from 'react-navigation'
+import { AuthStatus, isIdentity } from './authentication/credentials-chain'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -118,8 +120,15 @@ const WithProviders = nestProviders(
     SettingsProvider,
     Modal,
     ToastProvider,
-    AuthProvider,
 )
+
+const handleLoginStatus = (status: AuthStatus) => {
+    if (isIdentity(status)) {
+        setUserId(status.data.info.userDetails.id)
+    } else {
+        setUserId(null)
+    }
+}
 
 export default class App extends React.Component<{}, {}> {
     async componentDidCatch(e: Error) {
@@ -140,19 +149,23 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
-                    <StatusBar
-                        animated={true}
-                        barStyle="light-content"
-                        backgroundColor="#041f4a"
-                    />
-                    <View style={styles.appContainer}>
-                        <RootNavigator
-                            {...rootNavigationProps}
-                            onNavigationStateChange={onNavigationStateChange}
+                    <AuthProvider onStatusChange={handleLoginStatus}>
+                        <StatusBar
+                            animated={true}
+                            barStyle="light-content"
+                            backgroundColor="#041f4a"
                         />
-                        <NetInfoAutoToast />
-                    </View>
-                    <ModalRenderer />
+                        <View style={styles.appContainer}>
+                            <RootNavigator
+                                {...rootNavigationProps}
+                                onNavigationStateChange={
+                                    onNavigationStateChange
+                                }
+                            />
+                            <NetInfoAutoToast />
+                        </View>
+                        <ModalRenderer />
+                    </AuthProvider>
                 </WithProviders>
             </ErrorBoundary>
         )
