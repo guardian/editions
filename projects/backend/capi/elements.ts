@@ -57,6 +57,7 @@ export const elementParser = (
                     id: 'pullquote',
                     html: element.pullquoteTypeData.html,
                     role: element.pullquoteTypeData.role,
+                    attribution: element.pullquoteTypeData.attribution,
                 }
             }
             console.warn(`Pullquote element missing element data.`)
