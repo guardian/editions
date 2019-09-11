@@ -10,12 +10,14 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.guardian.editions.BuildConfig;
 
 import java.io.File;
-import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import ophan.OphanApi;
+
+
+@SuppressWarnings("unused")
 class RNOphanModule extends ReactContextBaseJavaModule {
 
     @Nonnull
@@ -68,8 +70,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendAppScreenEvent(@Nonnull String screenName, @Nullable String value, Promise promise) {
         try {
-            String eventId = UUID.randomUUID().toString();
-            ophanApi.sendAppScreenEvent(screenName, value, eventId);
+            ophanApi.sendAppScreenEvent(screenName, value);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
@@ -79,8 +80,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendComponentEvent(@Nonnull String componentType, @Nonnull String action, @Nullable String value, @Nullable String componentId, @Nonnull Promise promise) {
         try {
-            String eventId = UUID.randomUUID().toString();
-            ophanApi.sendComponentEvent(componentType, action, eventId, value, componentId );
+            ophanApi.sendComponentEvent(componentType, action, value, componentId);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
@@ -90,8 +90,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendPageViewEvent(@Nonnull String path, @Nonnull Promise promise) {
         try {
-            String eventId = UUID.randomUUID().toString();
-            ophanApi.sendPageViewEvent(path, eventId);
+            ophanApi.sendPageViewEvent(path);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
