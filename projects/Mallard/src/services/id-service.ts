@@ -1,6 +1,8 @@
 import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/constants'
 import qs from 'query-string'
 import { GENERIC_ERROR } from 'src/helpers/words'
+import { userDataCache } from 'src/helpers/storage'
+import { Error5XX } from './Error5XX'
 
 interface ErrorReponse {
     errors: { message: string; description: string }[]
@@ -16,6 +18,8 @@ const maybeThrowErrors = async (res: Response) => {
     } catch (e) {
         throw __DEV__ ? e : new Error(GENERIC_ERROR)
     }
+
+    if (res.status >= 500) throw new Error5XX()
 
     if (res.status !== 200) {
         throw new Error(
@@ -107,6 +111,11 @@ const fetchUserDetails = async (
             Authorization: `Bearer ${userAccessToken}`,
         },
     })
+    if (res.status >= 500) {
+        // if something goes wrong try and read their data from the cache
+        const cached = await userDataCache.get()
+        if (cached) return cached.userDetails
+    }
     return maybeThrowErrors(res).then(json => json.user)
 }
 

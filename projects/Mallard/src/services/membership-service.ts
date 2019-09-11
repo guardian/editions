@@ -1,4 +1,5 @@
 import { MEMBERS_DATA_API_URL } from 'src/constants'
+import { Error5XX } from './Error5XX'
 
 export interface MembersDataAPIResponse {
     userId: string
@@ -22,12 +23,17 @@ export interface MembersDataAPIResponse {
 const fetchMembershipData = async (
     membershipAccessToken: string,
 ): Promise<MembersDataAPIResponse> => {
-    const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
-        headers: {
-            'GU-IdentityToken': membershipAccessToken,
-        },
-    })
-    return res.json()
+    try {
+        const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
+            headers: {
+                'GU-IdentityToken': membershipAccessToken,
+            },
+        })
+        if (res.status >= 500) throw new Error5XX()
+        return res.json()
+    } catch {
+        throw new Error('Something went wrong')
+    }
 }
 
 export { fetchMembershipData }
