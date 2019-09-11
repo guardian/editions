@@ -1,5 +1,5 @@
 import { MEMBERS_DATA_API_URL } from 'src/constants'
-import { Error5XX } from './Error5XX'
+import { Error5XX } from './exceptions'
 
 export interface MembersDataAPIResponse {
     userId: string

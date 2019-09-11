@@ -2,7 +2,7 @@ import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/constants'
 import qs from 'query-string'
 import { GENERIC_ERROR } from 'src/helpers/words'
 import { userDataCache } from 'src/helpers/storage'
-import { Error5XX } from './Error5XX'
+import { Error5XX } from './exceptions'
 
 interface ErrorReponse {
     errors: { message: string; description: string }[]
