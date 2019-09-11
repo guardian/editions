@@ -11,7 +11,7 @@ import { Button, ButtonAppearance } from 'src/components/button/button'
 import { IssueRow } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
-import { IssueHeader } from 'src/components/layout/header/header'
+import { IssuePickerHeader } from 'src/components/layout/header/header'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { Heading } from 'src/components/layout/ui/row'
@@ -71,12 +71,14 @@ const HomeScreenHeader = withNavigation(
             />
         )
         return response({
-            error: () => <IssueHeader leftAction={settings} action={action} />,
+            error: () => (
+                <IssuePickerHeader leftAction={settings} action={action} />
+            ),
             pending: () => (
-                <IssueHeader leftAction={settings} action={action} />
+                <IssuePickerHeader leftAction={settings} action={action} />
             ),
             success: issue => (
-                <IssueHeader
+                <IssuePickerHeader
                     leftAction={settings}
                     issue={issue}
                     accessibilityHint={'Return to issue'}

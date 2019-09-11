@@ -190,14 +190,14 @@ const Login = ({
                         {!hasInputEmail ? emailProgressText : submitText}
                     </LoginButton>
                 </View>
-                <View style={loginStyles.actionRow}>
+                <View style={loginStyles.actionsContainer}>
                     {hasInputEmail && (
-                        <Link style={loginStyles.resetLink} href={resetLink}>
+                        <Link style={[loginStyles.resetLink]} href={resetLink}>
                             Forgot password?
                         </Link>
                     )}
                     <LinkNav
-                        style={loginStyles.resetLink}
+                        style={[loginStyles.resetLink]}
                         onPress={onHelpPress}
                     >
                         Have a subscription but cannot sign in?
