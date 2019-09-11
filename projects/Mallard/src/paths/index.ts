@@ -1,7 +1,24 @@
-import { issuePath, mediaPath, frontPath, Image, Issue } from 'src/common'
+import {
+    issuePath,
+    mediaPath,
+    frontPath,
+    Image,
+    Issue,
+    Collection,
+    Front,
+    CAPIArticle,
+} from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
 
 export interface PathToIssue {
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
+}
+
+export interface PathToArticle {
+    collection: Collection['key']
+    front: Front['key']
+    article: CAPIArticle['key']
     localIssueId: Issue['localId']
     publishedIssueId: Issue['publishedId']
 }

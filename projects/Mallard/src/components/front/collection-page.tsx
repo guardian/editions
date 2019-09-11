@@ -154,7 +154,6 @@ const CollectionPage = ({
                         ]}
                     >
                         <Item
-                            issueID={issue}
                             path={{
                                 article: article.key,
                                 collection,
@@ -162,6 +161,8 @@ const CollectionPage = ({
                                 publishedIssueId,
                                 front,
                             }}
+                            localIssueId={localIssueId}
+                            publishedIssueId={publishedIssueId}
                             size={size}
                             articleNavigator={articleNavigator}
                             article={article}

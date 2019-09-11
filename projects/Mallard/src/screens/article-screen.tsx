@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useRef } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
-import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
+import { Appearance } from 'src/common'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { LoginOverlay } from 'src/components/login/login-overlay'
 import { ERR_404_MISSING_PROPS } from 'src/helpers/words'
@@ -12,21 +13,12 @@ import {
 } from 'src/navigation/helpers/base'
 import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 import { routeNames } from 'src/navigation/routes'
+import { PathToArticle } from 'src/paths'
+import { sendPageViewEvent } from 'src/services/ophan'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { PathToArticle } from './article-screen'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
-import { View, StyleSheet } from 'react-native'
-import { sendPageViewEvent } from 'src/services/ophan'
-
-export interface PathToArticle {
-    collection: Collection['key']
-    front: Front['key']
-    article: CAPIArticle['key']
-    localIssueId: Issue['localId']
-    publishedIssueId: Issue['publishedId']
-}
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number

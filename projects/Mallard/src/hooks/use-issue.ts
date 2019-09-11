@@ -1,16 +1,15 @@
-import { useCachedOrPromise } from './use-cached-or-promise'
+import { Front, Issue } from 'src/common'
 import { fetchFromIssue } from 'src/helpers/fetch'
-import { Issue, Front } from 'src/common'
+import { CachedOrPromise, chain } from 'src/helpers/fetch/cached-or-promise'
 import { withResponse } from 'src/helpers/response'
-import { FSPaths, APIPaths } from 'src/paths'
-import { PathToArticle } from 'src/screens/article-screen'
 import {
     flattenCollectionsToCards,
     flattenFlatCardsToFront,
 } from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
-import { CachedOrPromise, chain } from 'src/helpers/fetch/cached-or-promise'
+import { APIPaths, FSPaths, PathToArticle } from 'src/paths'
 import { getLatestIssue } from './use-api'
+import { useCachedOrPromise } from './use-cached-or-promise'
 
 export const useIssueWithResponse = <T>(
     getter: CachedOrPromise<T>,

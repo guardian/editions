@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
-import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
+import { Appearance } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { Fader } from 'src/components/layout/animators/fader'
@@ -12,18 +12,11 @@ import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
+import { PathToArticle } from 'src/paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
-import { PathToArticle } from './slider'
-
-export interface PathToArticle {
-    collection: Collection['key']
-    front: Front['key']
-    article: CAPIArticle['key']
-    issue: Issue['key']
-}
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number

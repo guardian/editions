@@ -146,7 +146,11 @@ const IssueFronts = ({
             })}
             renderItem={({ item }) => (
                 <View style={{ height: container.height, overflow: 'hidden' }}>
-                    <Front issue={issue.key} front={item.key} />
+                    <Front
+                        localIssueId={issue.localId}
+                        publishedIssueId={issue.publishedId}
+                        front={item.key}
+                    />
                 </View>
             )}
         />

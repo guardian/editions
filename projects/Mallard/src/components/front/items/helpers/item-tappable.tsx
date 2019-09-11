@@ -22,7 +22,8 @@ import {
     setScreenPositionFromView,
     setScreenPositionOfItem,
 } from 'src/navigation/navigators/article/positions'
-import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
+import { PathToArticle } from 'src/paths'
+import { ArticleNavigator } from 'src/screens/article-screen'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ItemSizes, useCardBackgroundStyle } from '../../helpers/helpers'
