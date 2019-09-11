@@ -60,7 +60,7 @@ describe('credentials-chain', () => {
         })
 
         it('ignores errors and tries the next provider', async () => {
-            const res: any = await runAuthChain([
+            const res: any = await runAuthChain<AuthType>([
                 async () => {
                     throw new Error()
                 },
@@ -71,7 +71,7 @@ describe('credentials-chain', () => {
         })
 
         it('tries the next provider if the current one returns false', async () => {
-            const res: any = await runAuthChain([
+            const res: any = await runAuthChain<AuthType>([
                 async () => false,
                 async () => CASAuthStatus(casExpiry()).data,
             ])
@@ -80,7 +80,7 @@ describe('credentials-chain', () => {
         })
 
         it('returns unauthed if no provider returns a truth value', async () => {
-            const res: any = await runAuthChain([
+            const res: any = await runAuthChain<AuthType>([
                 async () => false,
                 async () => {
                     throw new Error()
