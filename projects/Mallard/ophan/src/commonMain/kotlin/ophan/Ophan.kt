@@ -3,6 +3,7 @@ package ophan
 import com.gu.ophan.FileRecordStore
 import com.gu.ophan.Logger
 import com.gu.ophan.OphanDispatcher
+import com.gu.ophan.newUuidV4
 import ophan.thrift.componentEvent.Action
 import ophan.thrift.componentEvent.ComponentEvent
 import ophan.thrift.componentEvent.ComponentType
@@ -61,9 +62,9 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
             .value(value)
             .build()
 
-    private fun sendComponentEvent(eventId: String, componentEventDetails: ComponentEvent) {
+    private fun sendComponentEvent(componentEventDetails: ComponentEvent) {
         val event = Event.Builder()
-                .eventId(eventId)
+                .eventId(newUuidV4())
                 .eventType(EventType.COMPONENT_EVENT)
                 .viewId(null) /* TODO */
                 .componentEvent(componentEventDetails)
@@ -72,27 +73,27 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
         dispatcher.dispatchEvent(event)
     }
 
-    fun sendAppScreenEvent(screenName: String, value: String?, eventId: String) {
+    fun sendAppScreenEvent(screenName: String, value: String?) {
         val componentEventDetails = newComponentEventDetails(
                 componentType = ComponentType.APP_SCREEN,
                 action = Action.VIEW,
                 componentId = screenName,
                 value = value
         )
-        sendComponentEvent(eventId, componentEventDetails)
+        sendComponentEvent(componentEventDetails)
     }
 
-    fun sendComponentEvent(componentType: String, action: String, eventId: String, value: String?, componentId: String?) {
+    fun sendComponentEvent(componentType: String, action: String, value: String?, componentId: String?) {
         val componentEventDetails = newComponentEventDetails(
                 componentType = ComponentType.valueOf(componentType),
                 action = Action.valueOf(action),
                 componentId = componentId,
                 value = value
         )
-        sendComponentEvent(eventId, componentEventDetails)
+        sendComponentEvent(componentEventDetails)
     }
 
-    fun sendPageViewEvent(path: String, eventId: String) {
+    fun sendPageViewEvent(path: String) {
         val host = "www.$GUARDIAN_DOMAIN"
         val validPath = "/" + path.removePrefix("/")
         val raw = "https://$host$validPath"
@@ -105,9 +106,9 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
                 .build()
 
         val event = Event.Builder()
-                .eventId(eventId)
+                .eventId(newUuidV4())
                 .eventType(EventType.VIEW)
-                .viewId(eventId)
+                .viewId(newUuidV4())
                 .path(validPath)
                 .url(url)
                 .build()

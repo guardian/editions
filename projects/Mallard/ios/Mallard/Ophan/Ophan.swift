@@ -65,11 +65,9 @@ class Ophan: NSObject {
 
   @objc(sendAppScreenEvent:value:resolver:rejecter:)
   func sendAppScreenEvent(_ screenName: String, value: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-    print("Current thread \(Thread.current)")
     do {
       DispatchQueue.main.async {
-      print("Current thread \(Thread.current)")
-        self.ophanApi?.sendAppScreenEvent(screenName: screenName, value: value, eventId: UUID().uuidString)
+        self.ophanApi?.sendAppScreenEvent(screenName: screenName, value: value)
         resolve(screenName)
       }
     } catch let error {
@@ -79,11 +77,9 @@ class Ophan: NSObject {
 
   @objc(sendComponentEvent:action:value:componentId:resolver:rejecter:)
   func sendComponentEvent(_ componentType: String, action: String, value: String?, componentId: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-    print("Current thread \(Thread.current)")
     do {
       DispatchQueue.main.async {
-      print("Current thread \(Thread.current)")
-        self.ophanApi?.sendComponentEvent(componentType: componentType, action: action, eventId: UUID().uuidString, value: value, componentId: componentId)
+        self.ophanApi?.sendComponentEvent(componentType: componentType, action: action, value: value, componentId: componentId)
         resolve(componentType)
       }
     } catch let error {
@@ -93,11 +89,9 @@ class Ophan: NSObject {
 
   @objc(sendPageViewEvent:resolver:rejecter:)
   func sendPageViewEvent(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
-    print("Current thread \(Thread.current)")
     do {
       DispatchQueue.main.async {
-      print("Current thread \(Thread.current)")
-        self.ophanApi?.sendPageViewEvent(path: path, eventId: UUID().uuidString)
+        self.ophanApi?.sendPageViewEvent(path: path)
         resolve(path)
       }
     } catch let error {
