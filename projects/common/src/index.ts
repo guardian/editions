@@ -196,6 +196,7 @@ export interface PullquoteElement {
     id: 'pullquote'
     html: string
     role?: string
+    attribution?: string
 }
 
 export interface AtomElement {

@@ -121,10 +121,9 @@ const quoteStyles = ({
 
     @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
         blockquote[data-role='showcase'] {
+            width: 60%;
             margin-left: ${px(
-                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2 -
-                    metrics.article.sides) *
-                    -1,
+                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2) * -1,
             )};
         }
     }
@@ -145,7 +144,7 @@ const Pullquote = ({
     attribution?: string
 }) => html`
     <blockquote data-role=${role}>
-        ${Quotes()} ${cite.replace(/\s/g, ' ')} andhereissomermoretext
+        ${Quotes()} ${cite.replace(/\s/g, ' ')}
         ${attribution &&
             html`
                 <cite>${attribution}</cite>
