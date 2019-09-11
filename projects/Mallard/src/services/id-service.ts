@@ -111,11 +111,6 @@ const fetchUserDetails = async (
             Authorization: `Bearer ${userAccessToken}`,
         },
     })
-    if (res.status >= 500) {
-        // if something goes wrong try and read their data from the cache
-        const cached = await userDataCache.get()
-        if (cached) return cached.userDetails
-    }
     return maybeThrowErrors(res).then(json => json.user)
 }
 
