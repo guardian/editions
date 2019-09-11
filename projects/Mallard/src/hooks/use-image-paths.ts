@@ -6,7 +6,7 @@ import { Image, Issue } from '../../../common/src'
 import { useIssueCompositeKey } from './use-issue-id'
 import { useSettingsValue } from './use-settings'
 
-const selectImagePath = async (
+export const selectImagePath = async (
     apiUrl: string,
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
@@ -31,21 +31,21 @@ const selectImagePath = async (
  * TODO: cache these paths in a context in order not to check every time
  */
 
-const useImagePath = (image?: Image) => {
+export const useImagePath = (image?: Image) => {
     const key = useIssueCompositeKey()
 
-    const [paths, setPaths] = useState<string | undefined>()
+    const [path, setPath] = useState<string | undefined>()
     const apiUrl = useSettingsValue.apiUrl()
     useEffect(() => {
         if (key && image) {
             const { localIssueId, publishedIssueId } = key
             selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
-                setPaths,
+                setPath,
             )
         }
     }, [apiUrl, image, key])
     if (image === undefined) return undefined
-    return paths
+    return path
 }
 
-export { useImagePath, selectImagePath }
+export const useImagesPaths = (images: Image[]) => images.map(useImagePath)

@@ -1080,10 +1080,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.1.tgz#f1a11e7babb0c3cad68100be381d1e064c68f1f6"
   integrity sha512-CFzn9idOEpHrgdw8JsoTkaDDyRWk1jrzIV8djzcgpq0y9tG4B4lFT+Nxh52DVpDXV+n4+NPNv7M1Dj5uMp6XFg==
 
-"@types/react-native-permissions@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@types/react-native-permissions/-/react-native-permissions-1.1.1.tgz#297f39ed19234045e1dc1cd0abd85b86bdf9c606"
-  integrity sha512-+xLVH6kefg9hpJKxQhRcaYHckhbQCxDrU6HEaTzf3gMbn4I4aunjxkqeSMAofrHFNOnOS/phnsTbifoDATjk3w==
+"@types/ramda@0.26.18":
+  version "0.26.18"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.18.tgz#a80f02b046edd5ff777e863732591bd50c53236e"
+  integrity sha512-wK3NLaAkL/ht7Nw4IZsOagJuYqzZgoboFvILolOPtmoKyy25gTdz/uvB/bXsv6vdWENYv+ml5ph873P2d/+9HA==
 
 "@types/react-native-push-notification@^3.0.6":
   version "3.0.6"
@@ -5412,6 +5412,11 @@ ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
   integrity sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
+
+ramda@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
+  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
 
 range-parser@~1.2.1:
   version "1.2.1"

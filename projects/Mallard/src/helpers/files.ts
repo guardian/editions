@@ -235,7 +235,7 @@ export const downloadAndUnzipIssue = (
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
 ) => {
-    console.log(issueId)
+    console.log(issueId, 'fart')
     const dl = downloadIssue(issueId) // just the issue json
 
     dl.progress((received, total) => {

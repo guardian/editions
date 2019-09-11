@@ -78,6 +78,7 @@ const IssueRow = ({
     }, [issue.key])
 
     const onDownloadIssue = async () => {
+        console.log('HGRUGH')
         if (exists !== ExistsStatus.doesNotExist) return
         setExists(ExistsStatus.pending)
         if ((await fetch()).isConnected && !dlStatus) {

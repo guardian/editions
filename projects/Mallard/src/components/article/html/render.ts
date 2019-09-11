@@ -3,6 +3,7 @@ import {
     ArticlePillar,
     BlockElement,
     MediaAtomElement,
+    Image as ImageT,
 } from 'src/common'
 import { getPillarColors } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
@@ -97,11 +98,13 @@ export const render = (
         features,
         wrapLayout,
         showMedia,
+        imagePathLookup,
     }: {
         pillar: ArticlePillar
         features: ArticleFeatures[]
         wrapLayout: WrapLayout
         showMedia: boolean
+        imagePathLookup: [ImageT, string | undefined][]
     },
 ) => {
     const content = article
@@ -122,7 +125,14 @@ export const render = (
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image':
-                    return showMedia ? Image({ imageElement: el }) : ''
+                    const imagePath = imagePathLookup.find(
+                        ([{ source, path }]) =>
+                            path == el.src.path && source == el.src.source,
+                    )
+                    const path = imagePath && imagePath[1]
+                    return showMedia && path !== undefined
+                        ? Image({ imageElement: el, path })
+                        : ''
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,

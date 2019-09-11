@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Dimensions, Linking, Platform, View, StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { ArticleFeatures, BlockElement } from 'src/common'
+import { ArticleFeatures, BlockElement, notNull } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
@@ -11,6 +11,8 @@ import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { EMBED_DOMAIN, render } from '../html/render'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { useNetInfo } from '@react-native-community/netinfo'
+import { useImagesPaths } from 'src/hooks/use-image-paths'
+import { zip } from 'ramda'
 
 const urlIsNotAnEmbed = (url: string) =>
     !(
@@ -50,12 +52,26 @@ const ArticleWebview = ({
     const { isConnected } = useNetInfo()
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
+    const images = article
+        .map(a =>
+            a.id === 'image'
+                ? a.src
+                : a.id === 'media-atom'
+                ? a.image
+                : undefined,
+        )
+        .filter(notNull)
 
+    const imagePaths = useImagesPaths(images)
+    const imagePathLookup = zip(images, imagePaths)
+    console.log('HELO I AM RENDER')
+    console.log(imagePaths)
     const html = render(article, {
         pillar,
         features,
         wrapLayout,
         showMedia: isConnected,
+        imagePathLookup,
     })
 
     return (
