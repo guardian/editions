@@ -18,6 +18,7 @@ import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
 import { isInTestFlight } from 'src/helpers/release-stream'
+import { DEV_clearCASCaches } from 'src/helpers/storage'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -131,6 +132,15 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             onPress: () => {
                                 setSetting('isUsingProdDevtools', false)
                             },
+                        },
+                    },
+                    {
+                        key: 'Clear CAS caches',
+                        title: 'Clear CAS caches',
+                        explainer:
+                            'You will need to reload the app for this to take effect',
+                        data: {
+                            onPress: DEV_clearCASCaches,
                         },
                     },
                     {
