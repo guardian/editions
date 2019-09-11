@@ -297,11 +297,7 @@ export interface IssueCompositeKey {
 }
 
 export const issueDir = (issueId: string) => {
-    if (typeof issueId === 'string') {
-        return issueId
-    }
-    const { edition, version, issueDate } = issueId
-    return `${edition}/${issueDate}/${version}`
+    return issueId
 }
 
 export const issuePath = (issue: string) => `${issueDir(issue)}/issue`

@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react'
-import { FSPaths, APIPaths } from 'src/paths'
-import { imageForScreenSize } from 'src/helpers/screen'
-import { Image, Issue } from '../../../common/src'
+import { useEffect, useState } from 'react'
 import RNFetchBlob from 'rn-fetch-blob'
+import { imageForScreenSize } from 'src/helpers/screen'
+import { APIPaths, FSPaths } from 'src/paths'
+import { Image, Issue } from '../../../common/src'
 import { useIssueCompositeKey } from './use-issue-id'
+import { useSettingsValue } from './use-settings'
 
 const selectImagePath = async (
+    apiUrl: string,
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
     { source, path }: Image,
 ) => {
-    const api = `${APIPaths.mediaBackend}${APIPaths.media(
+    const api = `${apiUrl}${APIPaths.media(
         publishedIssueId,
         imageForScreenSize(),
         source,
@@ -29,20 +31,20 @@ const selectImagePath = async (
  * TODO: cache these paths in a context in order not to check every time
  */
 
-const useImagePath = (image: Image) => {
+const useImagePath = (image?: Image) => {
     const key = useIssueCompositeKey()
 
     const [paths, setPaths] = useState<string | undefined>()
-
+    const apiUrl = useSettingsValue.apiUrl()
     useEffect(() => {
-        if (key) {
+        if (key && image) {
             const { localIssueId, publishedIssueId } = key
-            selectImagePath(localIssueId, publishedIssueId, image).then(
+            selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
                 setPaths,
             )
         }
-    }, [image, key])
-
+    }, [apiUrl, image, key])
+    if (image === undefined) return undefined
     return paths
 }
 

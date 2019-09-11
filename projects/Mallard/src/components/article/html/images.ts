@@ -1,14 +1,13 @@
-import { ImageElement } from 'src/common'
-import { html, css, getScaledFontCss, px } from 'src/helpers/webview'
-import { imagePath } from 'src/paths'
-import { PixelRatio } from 'react-native'
-import { color } from 'src/theme/color'
-import { CssProps } from './helpers/props'
-import { breakOut } from './helpers/layout'
-import { Arrow } from './arrow'
+import { ImageElement, mediaPath } from 'src/common'
+import { backends } from 'src/helpers/settings/defaults'
 import { Direction } from 'src/helpers/sizes'
+import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { Arrow } from './arrow'
+import { breakOut } from './helpers/layout'
+import { CssProps } from './helpers/props'
 
 export const renderCaption = ({
     caption,
@@ -165,6 +164,7 @@ const ImageBase = ({
     credit?: string
     role?: ImageElement['role']
 }) => {
+    console.log(path)
     const figcaption = renderCaption({ caption, credit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
@@ -180,7 +180,15 @@ const ImageBase = ({
 }
 
 const Image = ({ imageElement }: { imageElement: ImageElement }) => {
-    const path = imagePath(imageElement.src)
+    //When you fix this pleas alter image.ts in background to not alert (unless we ship this 😱)
+    const backend = backends[1].value //get PROD preview because we're faking the issue id
+    const path = `${backend}${mediaPath(
+        'fakeIssue/fake',
+        'phone',
+        imageElement.src.source,
+        imageElement.src.path,
+    )}`
+
     return ImageBase({ path, ...imageElement })
 }
 
