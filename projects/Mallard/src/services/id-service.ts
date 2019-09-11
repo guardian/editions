@@ -21,7 +21,7 @@ const maybeThrowErrors = async (res: Response) => {
 
     if (res.status >= 500) throw new Error5XX()
 
-    if (res.status !== 200) {
+    if (!res.ok) {
         throw new Error(
             hasErrorsArray(json)
                 ? json.errors.map(err => err.description).join(', ')

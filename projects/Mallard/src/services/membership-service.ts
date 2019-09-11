@@ -23,17 +23,14 @@ export interface MembersDataAPIResponse {
 const fetchMembershipData = async (
     membershipAccessToken: string,
 ): Promise<MembersDataAPIResponse> => {
-    try {
-        const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
-            headers: {
-                'GU-IdentityToken': membershipAccessToken,
-            },
-        })
-        if (res.status >= 500) throw new Error5XX()
-        return res.json()
-    } catch {
-        throw new Error('Something went wrong')
-    }
+    const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
+        headers: {
+            'GU-IdentityToken': membershipAccessToken,
+        },
+    })
+    if (res.status >= 500) throw new Error5XX()
+    if (!res.ok) throw new Error('Something went wrong')
+    return res.json()
 }
 
 export { fetchMembershipData }
