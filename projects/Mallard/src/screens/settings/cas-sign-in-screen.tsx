@@ -9,6 +9,8 @@ import { LoginInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
 import { useFormField } from 'src/hooks/use-form-field'
 import { getFont } from 'src/theme/typography'
+import { useModal } from 'src/components/modal'
+import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 
 const styles = StyleSheet.create({
     image: { height: 200, width: undefined },
@@ -25,6 +27,7 @@ const CasSignInScreen = ({
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const { open } = useModal()
 
     const [shouldShowError, setShouldShowError] = useState(false)
 
@@ -50,6 +53,7 @@ const CasSignInScreen = ({
             )
             setStatus(CASAuthStatus(expiry))
             navigation.goBack()
+            open(close => <SubFoundModalCard close={close} />)
         } catch (err) {
             setErrorMessage(
                 (err instanceof Error ? err.message : err) ||

@@ -163,6 +163,9 @@ const AuthSwitcherScreen = ({
             password={password}
             isLoading={isLoading}
             onDismiss={() => navigation.goBack()}
+            onHelpPress={() =>
+                navigation.navigate(routeNames.AlreadySubscribed)
+            }
             onFacebookPress={() =>
                 handleAuthClick(
                     () => facebookAuthWithDeepRedirect(validatorString),

@@ -1,33 +1,10 @@
 import {
-    ArticleType,
-    MediaType,
-    Image,
+    Article as IArticle,
     Content as IContent,
-    BlockElement,
+    WithKey,
 } from '../../../common/src'
-import {
-    PublishedImage,
-    PublishedFurtniture as IPublishedFurtniture,
-} from '../../fronts/issue'
 import { CArticle } from '../../capi/articles'
-
-interface ContentFields {
-    key: string
-    type?: string
-    headline?: string
-    kicker?: string
-    articleType?: ArticleType
-    trail?: string
-    image?: Image
-    standfirst?: string
-    byline?: string
-    bylineImages?: { thumbnail?: Image; cutout?: Image }
-    showByline?: boolean
-    showQuotedHeadline?: boolean
-    mediaType?: MediaType
-    slideshowImages?: Image[]
-    sportScore?: string
-}
+import { PublishedFurtniture as IPublishedFurniture } from '../../fronts/issue'
 
 const Content = <T extends string>(
     type: T,
@@ -44,9 +21,8 @@ const Content = <T extends string>(
         showByline = true,
         showQuotedHeadline = false,
         mediaType = 'Image',
-        slideshowImages,
         sportScore,
-    }: ContentFields,
+    }: Partial<IContent> & WithKey,
 ): IContent & { type: T } => ({
     key,
     type,
@@ -61,17 +37,8 @@ const Content = <T extends string>(
     showByline,
     showQuotedHeadline,
     mediaType,
-    slideshowImages,
     sportScore,
 })
-
-type ArticleFields = {
-    image?: Image
-    byline?: string
-    standfirst?: string
-    elements?: BlockElement[]
-    starRating?: number
-} & ContentFields
 
 const Article = ({
     image,
@@ -80,7 +47,7 @@ const Article = ({
     elements = [],
     starRating,
     ...contentFields
-}: ArticleFields): CArticle => ({
+}: Partial<IArticle> & WithKey): CArticle => ({
     ...Content('article', contentFields),
     path: contentFields.key,
     image,
@@ -89,19 +56,6 @@ const Article = ({
     elements,
     starRating,
 })
-
-interface PublishedFurnitureFields {
-    kicker?: string
-    headlineOverride?: string
-    trailTextOverride?: string
-    bylineOverride?: string
-    showByline?: boolean
-    showQuotedHeadline?: boolean
-    mediaType?: MediaType
-    imageSrcOverride?: PublishedImage
-    slideshowImages?: PublishedImage[]
-    sportScore?: string
-}
 
 const PublishedFurniture = ({
     kicker,
@@ -112,9 +66,10 @@ const PublishedFurniture = ({
     showQuotedHeadline = false,
     mediaType = 'Image',
     imageSrcOverride,
-    slideshowImages,
     sportScore,
-}: PublishedFurnitureFields = {}): IPublishedFurtniture => ({
+    overrideArticleMainMedia = false,
+    coverCardImages,
+}: Partial<IPublishedFurniture> = {}): IPublishedFurniture => ({
     kicker,
     headlineOverride,
     trailTextOverride,
@@ -123,8 +78,9 @@ const PublishedFurniture = ({
     showQuotedHeadline,
     mediaType,
     imageSrcOverride,
-    slideshowImages,
     sportScore,
+    overrideArticleMainMedia,
+    coverCardImages,
 })
 
 export { Article, PublishedFurniture }

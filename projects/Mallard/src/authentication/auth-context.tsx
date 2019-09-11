@@ -155,7 +155,13 @@ const useIdentity = () => {
     }
 }
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({
+    children,
+    onStatusChange,
+}: {
+    children: React.ReactNode
+    onStatusChange: (status: AuthStatus) => void
+}) => {
     const [isAuthing, setIsAuthing] = useState(false)
     const [isRestoring, setIsRestoring] = useState(false)
     const [authAttempt, setAuthAttempt] = useState<AuthAttempt>({
@@ -166,12 +172,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { isConnected } = useNetInfo()
     const { open } = useModal()
 
+    const updateAuth = (attempt: AuthAttempt) => {
+        setAuthAttempt(attempt)
+        onStatusChange(attempt.status)
+    }
+
     const runAuth = useCallback(async () => {
         setIsAuthing(true)
         if (isConnected) {
             const status = await liveAuthChain()
             const attempt = createAuthAttempt(status, 'live')
-            setAuthAttempt(attempt)
+            updateAuth(attempt)
             setIsAuthing(false)
             return attempt
         } else {
@@ -179,7 +190,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             // back
             const status = await cachedAuthChain()
             const attempt = createAuthAttempt(status, 'cached')
-            setAuthAttempt(attempt)
+            updateAuth(attempt)
             setIsAuthing(false)
             return attempt
         }
@@ -194,7 +205,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         () => ({
             status: authAttempt.status,
             setStatus: (status: AuthStatus) =>
-                setAuthAttempt(createAuthAttempt(status, 'live')),
+                updateAuth(createAuthAttempt(status, 'live')),
             signOutIdentity: async () => {
                 await signOutIdentity()
                 // if a user is authenticated through identity then unauth them
@@ -202,7 +213,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 // otherwise, their identity sign in didn't affect their auth status
                 // so leave their auth status as is
                 if (isIdentity(authAttempt.status)) {
-                    setAuthAttempt(createAuthAttempt(unauthed, 'live'))
+                    updateAuth(createAuthAttempt(unauthed, 'live'))
                     await runAuth()
                 }
             },
@@ -218,7 +229,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 try {
                     const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
                     if (authStatus && authAttempt.status.type !== 'authed') {
-                        setAuthAttempt(
+                        updateAuth(
                             createAuthAttempt(
                                 { type: 'authed', data: authStatus },
                                 'live',

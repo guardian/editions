@@ -96,10 +96,12 @@ export const render = (
         pillar,
         features,
         wrapLayout,
+        showMedia,
     }: {
         pillar: ArticlePillar
         features: ArticleFeatures[]
         wrapLayout: WrapLayout
+        showMedia: boolean
     },
 ) => {
     const content = article
@@ -118,13 +120,14 @@ export const render = (
                     }
                     return el.html
                 case 'media-atom':
-                    return renderMediaAtom(el)
+                    return showMedia ? renderMediaAtom(el) : ''
                 case 'image':
-                    return Image({ imageElement: el })
+                    return showMedia ? Image({ imageElement: el }) : ''
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,
                         role: el.role || 'inline',
+                        ...el,
                     })
                 default:
                     return ''

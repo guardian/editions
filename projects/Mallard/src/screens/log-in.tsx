@@ -4,7 +4,7 @@ import { TitlepieceText } from 'src/components/styled-text'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
-import { Link } from 'src/components/link'
+import { Link, LinkNav } from 'src/components/link'
 import { getFont } from 'src/theme/typography'
 import { FormField } from 'src/hooks/use-form-field'
 import { LoginLayout } from 'src/components/login/login-layout'
@@ -90,6 +90,7 @@ const Login = ({
     emailProgressText,
     submitText,
     resetLink,
+    onHelpPress,
 }: {
     title: string
     onFacebookPress: () => void
@@ -103,6 +104,7 @@ const Login = ({
     emailProgressText: string
     submitText: string
     resetLink: string
+    onHelpPress: () => void
 }) => {
     const [hasInputEmail, setHasInputEmail] = useState(false)
     const [showError, setShowError] = useState(false)
@@ -188,12 +190,18 @@ const Login = ({
                         {!hasInputEmail ? emailProgressText : submitText}
                     </LoginButton>
                 </View>
-                <View style={loginStyles.actionRow}>
+                <View style={loginStyles.actionsContainer}>
                     {hasInputEmail && (
-                        <Link style={loginStyles.resetLink} href={resetLink}>
+                        <Link style={[loginStyles.resetLink]} href={resetLink}>
                             Forgot password?
                         </Link>
                     )}
+                    <LinkNav
+                        style={[loginStyles.resetLink]}
+                        onPress={onHelpPress}
+                    >
+                        Have a subscription but cannot sign in?
+                    </LinkNav>
                 </View>
             </View>
         </LoginLayout>

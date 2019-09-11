@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
 import { applyScale, getUnscaledFont } from 'src/theme/typography'
+import { MINIMUM_BREAKPOINT } from 'src/theme/breakpoints'
 
 interface Icon {
     width: number
@@ -59,7 +60,9 @@ const TextWithIcon = ({
     ...props
 }: TextWithIconProps) => {
     const scaledFont = applyScale(unscaledFont)
-    const scale = (unscaledFont[0].lineHeight / scaledFont.lineHeight) * 0.9
+    const scale =
+        (unscaledFont[MINIMUM_BREAKPOINT].lineHeight / scaledFont.lineHeight) *
+        0.9
 
     return (
         <View>
