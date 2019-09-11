@@ -8,7 +8,7 @@ export enum Breakpoints {
 /*
     Minimum breakpoint is currently 375 as this is what we initially started off with.
 */
-export const MINIMUM_BREAKPOINT: number = Breakpoints.phone
+export const MINIMUM_BREAKPOINT: number = Breakpoints.smallPhone
 
 export interface BreakpointList<T> {
     [fromSize: number]: T
