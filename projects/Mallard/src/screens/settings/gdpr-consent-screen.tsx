@@ -56,7 +56,7 @@ const GdprConsent = ({
         gdprAllowPerformance: {
             key: 'gdprAllowPerformance',
             name: 'Performance',
-            services: 'Nielsen - ComScore - Sentry',
+            services: 'Sentry',
             description:
                 'Enabling these allows us to measure how you use our services. We use this information to get a better sense of how our users engage with our journalism and to improve our services, so that users have a better experience. For example, we collect information about which of our pages are most frequently visited, and by which types of users. If you disable this, we will not be able to measure your use of our services, and we will have less information about their performance.',
         },
@@ -172,7 +172,7 @@ const GdprConsent = ({
             <Footer>
                 <UiBodyCopy weight="bold" style={{ fontSize: 14 }}>
                     You can change the above settings any time by selecting
-                    privacy settings in the settings menu.
+                    Privacy Settings from the Settings menu.
                 </UiBodyCopy>
             </Footer>
             {isUsingProdDevtools ? (
