@@ -127,6 +127,7 @@ export const render = (
                     return Pullquote({
                         cite: el.html,
                         role: el.role || 'inline',
+                        ...el,
                     })
                 default:
                     return ''

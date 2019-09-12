@@ -124,7 +124,7 @@ const WeatherIconView = ({
         />
         <Text numberOfLines={1} ellipsizeMode="clip" style={styles.temperature}>
             {Math.round(forecast.Temperature.Value) +
-                ' ' +
+                '°' +
                 forecast.Temperature.Unit}
         </Text>
         <Text numberOfLines={1} ellipsizeMode="clip" style={styles.dateTime}>

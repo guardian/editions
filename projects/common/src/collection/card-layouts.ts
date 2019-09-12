@@ -163,6 +163,7 @@ export const getCardsForFront = (
                 0: [],
                 1: [2],
             }
+
         case 'Life':
         case 'Culture':
             return thirdPageCoverLayout(FrontCardAppearance.splashPage, true)
