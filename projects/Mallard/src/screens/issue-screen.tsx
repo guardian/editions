@@ -38,6 +38,7 @@ import {
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
+import { sendPageViewEvent } from 'src/services/ophan';
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -186,17 +187,19 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                         </FlexCenter>
                     </>
                 ),
-                success: (issue, { retry }) => (
-                    <>
-                        <PreviewReloadButton
-                            onPress={() => {
+                success: (issue, { retry }) => {
+                    sendPageViewEvent({ path: issue.id })
+                    return (
+                        <>
+                            <PreviewReloadButton
+                                onPress={() => {
                                 clearCache()
                                 retry()
-                            }}
-                        />
-                        <ScreenHeader issue={issue} />
+                                }}
+                            />
+                            <ScreenHeader issue={issue} />
 
-                        <WithBreakpoints>
+                            <WithBreakpoints>
                             {{
                                 0: () => (
                                     <WithLayoutRectangle>
@@ -254,8 +257,9 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                                 ),
                             }}
                         </WithBreakpoints>
-                    </>
-                ),
+                        </>
+                    )
+                },
             })}
         </Container>
     )
