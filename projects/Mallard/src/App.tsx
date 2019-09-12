@@ -32,6 +32,7 @@ import { IdentityAuth } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
 import { UpdateIpAddress } from './components/update-ip-address'
+import { NetInfoProvider } from './hooks/use-net-info'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -114,10 +115,15 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const WithProviders = nestProviders(SettingsProvider, Modal, ToastProvider)
-
 const handleIdStatus = (data: IdentityAuth | null) =>
     setUserId(data && data.info.userDetails.id)
+
+const WithProviders = nestProviders(
+    SettingsProvider,
+    Modal,
+    ToastProvider,
+    NetInfoProvider,
+)
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
