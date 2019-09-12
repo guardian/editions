@@ -18,7 +18,7 @@ export const getImageHeight = ({ story, layout }: ItemSizes) => {
         return '75.5%'
     }
     if (layout === PageLayoutSizes.mobile) {
-        if (story.height > 4) {
+        if (story.height >= 4) {
             return '75.5%'
         }
         return '50%'
