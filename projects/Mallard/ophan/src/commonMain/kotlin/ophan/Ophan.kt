@@ -62,38 +62,43 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
             .value(value)
             .build()
 
-    private fun sendComponentEvent(componentEventDetails: ComponentEvent) {
+    private fun sendComponentEvent(viewId: String?, componentEventDetails: ComponentEvent) {
         val event = Event.Builder()
                 .eventId(newUuidV4())
                 .eventType(EventType.COMPONENT_EVENT)
-                .viewId(null) /* TODO */
+                .viewId(viewId)
                 .componentEvent(componentEventDetails)
                 .build()
 
         dispatcher.dispatchEvent(event)
     }
 
-    fun sendAppScreenEvent(screenName: String, value: String?) {
+    fun sendAppScreenEvent(viewId: String?, screenName: String, value: String?) {
         val componentEventDetails = newComponentEventDetails(
                 componentType = ComponentType.APP_SCREEN,
                 action = Action.VIEW,
                 componentId = screenName,
                 value = value
         )
-        sendComponentEvent(componentEventDetails)
+        sendComponentEvent(viewId, componentEventDetails)
     }
 
-    fun sendComponentEvent(componentType: String, action: String, value: String?, componentId: String?) {
+    fun sendComponentEvent(viewId: String?, componentType: String, action: String, value: String?, componentId: String?) {
         val componentEventDetails = newComponentEventDetails(
                 componentType = ComponentType.valueOf(componentType),
                 action = Action.valueOf(action),
                 componentId = componentId,
                 value = value
         )
-        sendComponentEvent(componentEventDetails)
+        sendComponentEvent(viewId, componentEventDetails)
     }
 
-    fun sendPageViewEvent(path: String) {
+    /**
+     * Send a page view event to Ophan for the given [path]. Returns the newly generated `viewId`
+     * of the page view for later use.
+     */
+    fun sendPageViewEvent(path: String): String {
+        val viewId = newUuidV4()
         val host = "www.$GUARDIAN_DOMAIN"
         val validPath = "/" + path.removePrefix("/")
         val raw = "https://$host$validPath"
@@ -108,11 +113,12 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
         val event = Event.Builder()
                 .eventId(newUuidV4())
                 .eventType(EventType.VIEW)
-                .viewId(newUuidV4())
+                .viewId(viewId)
                 .path(validPath)
                 .url(url)
                 .build()
 
         dispatcher.dispatchEvent(event)
+        return viewId
     }
 }
