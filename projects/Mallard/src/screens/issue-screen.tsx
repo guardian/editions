@@ -38,7 +38,7 @@ import {
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
-import { sendPageViewEvent } from 'src/services/ophan';
+import { sendPageViewEvent } from 'src/services/ophan'
 
 export interface PathToIssue {
     issue: Issue['key']
@@ -188,75 +188,77 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
                     </>
                 ),
                 success: (issue, { retry }) => {
-                    sendPageViewEvent({ path: issue.id })
+                    sendPageViewEvent({
+                        path: `editions/uk/daily/${issue.key}`,
+                    })
                     return (
                         <>
                             <PreviewReloadButton
                                 onPress={() => {
-                                clearCache()
-                                retry()
+                                    clearCache()
+                                    retry()
                                 }}
                             />
                             <ScreenHeader issue={issue} />
 
                             <WithBreakpoints>
-                            {{
-                                0: () => (
-                                    <WithLayoutRectangle>
-                                        {metrics => (
-                                            <WithIssueScreenSize
-                                                value={[
-                                                    PageLayoutSizes.mobile,
-                                                    metrics,
-                                                ]}
-                                            >
-                                                <IssueFronts
-                                                    ListHeaderComponent={
-                                                        <View
-                                                            style={
-                                                                styles.weatherWide
-                                                            }
-                                                        >
-                                                            <Weather />
-                                                        </View>
-                                                    }
-                                                    issue={issue}
-                                                />
-                                            </WithIssueScreenSize>
-                                        )}
-                                    </WithLayoutRectangle>
-                                ),
-                                [Breakpoints.tabletVertical]: () => (
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                        }}
-                                    >
-                                        <View style={styles.sideWeather}>
-                                            <Weather />
-                                        </View>
-
+                                {{
+                                    0: () => (
                                         <WithLayoutRectangle>
                                             {metrics => (
                                                 <WithIssueScreenSize
                                                     value={[
-                                                        PageLayoutSizes.tablet,
+                                                        PageLayoutSizes.mobile,
                                                         metrics,
                                                     ]}
                                                 >
                                                     <IssueFronts
-                                                        style={
-                                                            styles.sideBySideFeed
+                                                        ListHeaderComponent={
+                                                            <View
+                                                                style={
+                                                                    styles.weatherWide
+                                                                }
+                                                            >
+                                                                <Weather />
+                                                            </View>
                                                         }
                                                         issue={issue}
                                                     />
                                                 </WithIssueScreenSize>
                                             )}
                                         </WithLayoutRectangle>
-                                    </View>
-                                ),
-                            }}
-                        </WithBreakpoints>
+                                    ),
+                                    [Breakpoints.tabletVertical]: () => (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                            }}
+                                        >
+                                            <View style={styles.sideWeather}>
+                                                <Weather />
+                                            </View>
+
+                                            <WithLayoutRectangle>
+                                                {metrics => (
+                                                    <WithIssueScreenSize
+                                                        value={[
+                                                            PageLayoutSizes.tablet,
+                                                            metrics,
+                                                        ]}
+                                                    >
+                                                        <IssueFronts
+                                                            style={
+                                                                styles.sideBySideFeed
+                                                            }
+                                                            issue={issue}
+                                                        />
+                                                    </WithIssueScreenSize>
+                                                )}
+                                            </WithLayoutRectangle>
+                                        </View>
+                                    ),
+                                }}
+                            </WithBreakpoints>
                         </>
                     )
                 },

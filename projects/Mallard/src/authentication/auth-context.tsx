@@ -172,10 +172,10 @@ const AuthProvider = ({
     const { isConnected } = useNetInfo()
     const { open } = useModal()
 
-    const updateAuth = (attempt: AuthAttempt) => {
+    const updateAuth = useCallback((attempt: AuthAttempt) => {
         setAuthAttempt(attempt)
         onStatusChange(attempt.status)
-    }
+    })
 
     const runAuth = useCallback(async () => {
         setIsAuthing(true)
@@ -194,7 +194,7 @@ const AuthProvider = ({
             setIsAuthing(false)
             return attempt
         }
-    }, [isConnected])
+    }, [isConnected, updateAuth])
 
     useEffect(() => {
         if (isAuthing || !needsReauth(authAttempt, { isConnected })) return
@@ -255,7 +255,7 @@ const AuthProvider = ({
                 }
             },
         }),
-        [authAttempt.status, isAuthing, isRestoring, open, runAuth],
+        [authAttempt.status, isAuthing, isRestoring, open, runAuth, updateAuth],
     )
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
