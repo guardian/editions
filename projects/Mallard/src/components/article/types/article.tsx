@@ -51,12 +51,16 @@ const ArticleWebview = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
 
-    const html = render(article, {
-        pillar,
-        features,
-        wrapLayout,
-        showMedia: isConnected,
-    })
+    const html = useMemo(
+        () =>
+            render(article, {
+                pillar,
+                features,
+                wrapLayout,
+                showMedia: isConnected,
+            }),
+        [article, pillar, wrapLayout, isConnected],
+    )
 
     return (
         <>

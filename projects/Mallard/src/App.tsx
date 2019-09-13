@@ -30,6 +30,7 @@ import {
 } from 'src/services/ophan'
 import { NavigationState } from 'react-navigation'
 import { AuthStatus, isIdentity } from './authentication/credentials-chain'
+import { BugButton } from './components/BugButton'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -162,6 +163,7 @@ export default class App extends React.Component<{}, {}> {
                             <NetInfoAutoToast />
                         </View>
                         <ModalRenderer />
+                        <BugButton />
                     </AuthProvider>
                 </WithProviders>
             </ErrorBoundary>
