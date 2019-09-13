@@ -31,32 +31,6 @@ const styles = StyleSheet.create({
     },
 })
 
-const OnboardingIntro = ({ onContinue }: { onContinue: () => void }) => {
-    return (
-        <Aligner>
-            <OnboardingCard
-                appearance={CardAppearance.blue}
-                title="Welcome to the Guardian daily"
-                explainerTitle="Thank you for being a beta user"
-                bottomExplainerContent={
-                    <>
-                        <ModalButton
-                            onPress={() => {
-                                onContinue()
-                            }}
-                            buttonAppearance={ButtonAppearance.dark}
-                        >
-                            Start
-                        </ModalButton>
-                    </>
-                }
-            >
-                {`Send us your thoughts and bugs to ${FEEDBACK_EMAIL}`}
-            </OnboardingCard>
-        </Aligner>
-    )
-}
-
 const OnboardingConsent = ({
     onOpenGdprConsent,
     onContinue,
@@ -120,4 +94,4 @@ const OnboardingConsent = ({
     )
 }
 
-export { OnboardingIntro, OnboardingConsent }
+export { OnboardingConsent }

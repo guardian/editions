@@ -35,7 +35,6 @@ enum ScreenTracking {
     FAQ = 'faqs',
     GDPRConsent = 'consent_management_options',
     GdprConsentScreenForOnboarding = 'consent_management',
-    Issue = 'issue_front',
     IssueList = 'issue_list',
     PrivacyPolicy = 'privacy_policy',
     Settings = 'settings',

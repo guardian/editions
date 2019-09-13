@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import ophan.OphanApi;
 
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 class RNOphanModule extends ReactContextBaseJavaModule {
 
     @Nonnull
@@ -25,6 +25,9 @@ class RNOphanModule extends ReactContextBaseJavaModule {
 
     @Nonnull
     private OphanApi ophanApi;
+
+    @Nullable
+    private String lastViewId = null;
 
     public RNOphanModule(@Nonnull ReactApplicationContext reactContext) {
         super(reactContext);
@@ -70,7 +73,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendAppScreenEvent(@Nonnull String screenName, @Nullable String value, Promise promise) {
         try {
-            ophanApi.sendAppScreenEvent(screenName, value);
+            ophanApi.sendAppScreenEvent(lastViewId, screenName, value);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
@@ -80,7 +83,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendComponentEvent(@Nonnull String componentType, @Nonnull String action, @Nullable String value, @Nullable String componentId, @Nonnull Promise promise) {
         try {
-            ophanApi.sendComponentEvent(componentType, action, value, componentId);
+            ophanApi.sendComponentEvent(lastViewId, componentType, action, value, componentId);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);
@@ -90,7 +93,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sendPageViewEvent(@Nonnull String path, @Nonnull Promise promise) {
         try {
-            ophanApi.sendPageViewEvent(path);
+            lastViewId = ophanApi.sendPageViewEvent(path);
             promise.resolve(true);
         } catch (Throwable e) {
             promise.reject(e);

@@ -44,9 +44,6 @@ fetchCacheClear().then((weOk: boolean) => {
     }
 })
 
-// Capture the first screen event
-sendAppScreenEvent({ screenName: ScreenTracking.Issue })
-
 const styles = StyleSheet.create({
     appContainer: {
         flex: 1,
