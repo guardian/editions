@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
@@ -139,6 +139,14 @@ const ArticleSlider = ({
             })
     }, [width]) // eslint-disable-line react-hooks/exhaustive-deps
 
+    const onTopPositionChange = useCallback(
+        (isAtTop: boolean) => {
+            setArticleIsAtTop(isAtTop)
+            onDismissStateChanged && onDismissStateChanged(isAtTop)
+        },
+        [onDismissStateChanged],
+    )
+
     return (
         <>
             <Fader>
@@ -194,11 +202,7 @@ const ArticleSlider = ({
                         width={width}
                         path={item}
                         pillar={pillar}
-                        onTopPositionChange={isAtTop => {
-                            setArticleIsAtTop(isAtTop)
-                            onDismissStateChanged &&
-                                onDismissStateChanged(isAtTop)
-                        }}
+                        onTopPositionChange={onTopPositionChange}
                         position={index}
                     />
                 )}

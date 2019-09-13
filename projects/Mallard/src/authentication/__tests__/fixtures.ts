@@ -1,4 +1,5 @@
 import { ReceiptIOS } from 'src/services/iap'
+import { UserData } from '../helpers'
 
 const membershipResponse = {
     userId: 'uid',
@@ -87,4 +88,38 @@ const receiptIOS = ({
     web_order_line_item_id,
 })
 
-export { receiptIOS, membershipResponse, userResponse, userData, casExpiry }
+const withCreds = ({
+    email,
+    digitalPack,
+    userEmailValidated = true,
+}: {
+    email: string
+    digitalPack: boolean
+    userEmailValidated?: boolean
+}): UserData => ({
+    ...userData,
+    userDetails: {
+        ...userData.userDetails,
+        primaryEmailAddress: email,
+        statusFields: {
+            ...userData.userDetails.statusFields,
+            userEmailValidated,
+        },
+    },
+    membershipData: {
+        ...userData.membershipData,
+        contentAccess: {
+            ...userData.membershipData.contentAccess,
+            digitalPack,
+        },
+    },
+})
+
+export {
+    receiptIOS,
+    membershipResponse,
+    userResponse,
+    userData,
+    casExpiry,
+    withCreds,
+}
