@@ -47,8 +47,8 @@ const scale = {
     sans: {
         [0.5]: {
             [Breakpoints.smallPhone]: {
-                fontSize: 13,
-                lineHeight: 13,
+                fontSize: 11,
+                lineHeight: 11,
             },
             [Breakpoints.phone]: {
                 fontSize: 13,
@@ -57,8 +57,8 @@ const scale = {
         },
         [0.9]: {
             [Breakpoints.smallPhone]: {
-                fontSize: 15,
-                lineHeight: 18,
+                fontSize: 13,
+                lineHeight: 16,
             },
             [Breakpoints.phone]: {
                 fontSize: 15,
@@ -67,8 +67,8 @@ const scale = {
         },
         1: {
             [Breakpoints.smallPhone]: {
-                fontSize: 17,
-                lineHeight: 21,
+                fontSize: 14,
+                lineHeight: 19,
             },
             [Breakpoints.phone]: {
                 fontSize: 17,
@@ -93,8 +93,8 @@ const scale = {
         },
         1: {
             [Breakpoints.smallPhone]: {
-                fontSize: 16,
-                lineHeight: 20,
+                fontSize: 14,
+                lineHeight: 18,
             },
             [Breakpoints.phone]: {
                 fontSize: 16,
@@ -107,8 +107,8 @@ const scale = {
         },
         1.25: {
             [Breakpoints.smallPhone]: {
-                fontSize: 18,
-                lineHeight: 22,
+                fontSize: 15,
+                lineHeight: 19,
             },
             [Breakpoints.phone]: {
                 fontSize: 18,
@@ -137,8 +137,8 @@ const scale = {
         },
         1: {
             [Breakpoints.smallPhone]: {
-                fontSize: 18,
-                lineHeight: 20,
+                fontSize: 15,
+                lineHeight: 17,
             },
             [Breakpoints.phone]: {
                 fontSize: 18,
@@ -165,8 +165,8 @@ const scale = {
         },
         1.5: {
             [Breakpoints.smallPhone]: {
-                fontSize: 26,
-                lineHeight: 27,
+                fontSize: 21,
+                lineHeight: 22,
             },
             [Breakpoints.phone]: {
                 fontSize: 26,
@@ -219,8 +219,8 @@ const scale = {
         },
         1.25: {
             [Breakpoints.smallPhone]: {
-                fontSize: 24,
-                lineHeight: 26,
+                fontSize: 20,
+                lineHeight: 22,
             },
             [Breakpoints.phone]: {
                 fontSize: 24,
@@ -229,8 +229,8 @@ const scale = {
         },
         1.5: {
             [Breakpoints.smallPhone]: {
-                fontSize: 30,
-                lineHeight: 33,
+                fontSize: 25,
+                lineHeight: 28,
             },
             [Breakpoints.phone]: {
                 fontSize: 30,
@@ -239,8 +239,8 @@ const scale = {
         },
         2: {
             [Breakpoints.smallPhone]: {
-                fontSize: 45,
-                lineHeight: 50,
+                fontSize: 38,
+                lineHeight: 43,
             },
             [Breakpoints.phone]: {
                 fontSize: 45,
@@ -249,8 +249,8 @@ const scale = {
         },
         2.25: {
             [Breakpoints.smallPhone]: {
-                fontSize: 50,
-                lineHeight: 55,
+                fontSize: 38,
+                lineHeight: 42,
             },
             [Breakpoints.phone]: {
                 fontSize: 50,
@@ -259,8 +259,8 @@ const scale = {
         },
         2.5: {
             [Breakpoints.smallPhone]: {
-                fontSize: 60,
-                lineHeight: 66,
+                fontSize: 50,
+                lineHeight: 56,
             },
             [Breakpoints.phone]: {
                 fontSize: 60,
