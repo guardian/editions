@@ -10,6 +10,11 @@
 
 @interface RCT_EXTERN_MODULE(Ophan, NSObject)
 
++ (BOOL)requiresMainQueueSetup
+{
+  return YES;
+}
+
 RCT_EXTERN_METHOD(setUserId: (NSString)userId
                   resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject)
