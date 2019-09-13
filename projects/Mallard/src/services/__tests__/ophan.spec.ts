@@ -31,22 +31,22 @@ describe('services/ophan', () => {
 
     describe('sendAppScreenEvent', () => {
         it('should use the correct native module function at a basic level', () => {
-            sendAppScreenEvent({ screenName: ScreenTracking.Issue })
+            sendAppScreenEvent({ screenName: ScreenTracking.IssueList })
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalled()
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalledWith(
-                'issue_front',
+                'issue_list',
                 undefined,
             )
         })
 
         it('should use the correct native module function with optional values', () => {
             sendAppScreenEvent({
-                screenName: ScreenTracking.Issue,
+                screenName: ScreenTracking.IssueList,
                 value: '2019-08-30',
             })
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalled()
             expect(NativeModules.Ophan.sendAppScreenEvent).toHaveBeenCalledWith(
-                'issue_front',
+                'issue_list',
                 '2019-08-30',
             )
         })
