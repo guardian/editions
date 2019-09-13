@@ -9,8 +9,8 @@ import React, {
 import { signOutIdentity } from '../helpers/storage'
 import { useNetInfo } from '@react-native-community/netinfo'
 import {
-    liveAuthChain,
-    cachedAuthChain,
+    nonIdentityAuthChain,
+    cachedNonIdentityAuthChain,
     AuthStatus,
     pending,
     isAuthed,
@@ -18,6 +18,10 @@ import {
     isPending,
     AuthType,
     isIdentity,
+    identityAuthChain,
+    cachedIdentityAuthChain,
+    IdentityAuth,
+    IdentityAuthStatus,
 } from './credentials-chain'
 import { UserData, canViewEdition } from './helpers'
 import { AUTH_TTL } from 'src/constants'
@@ -48,6 +52,7 @@ const AuthContext = createContext<{
     restorePurchases: () => Promise<void>
     isRestoring: boolean
     isAuthing: boolean
+    identityStatus: AuthStatus<IdentityAuth>
 }>({
     status: pending,
     setStatus: () => {},
@@ -55,6 +60,7 @@ const AuthContext = createContext<{
     restorePurchases: () => Promise.resolve(),
     isRestoring: false,
     isAuthing: false,
+    identityStatus: pending,
 })
 
 const needsReauth = (
@@ -121,7 +127,7 @@ const useAuth = () => {
  * route (CAS, IAP, etc.)
  */
 const useIdentity = () => {
-    const { status } = useContext(AuthContext)
+    const { identityStatus: status } = useContext(AuthContext)
     return <T extends unknown>({
         pending,
         signedIn,
@@ -155,6 +161,39 @@ const useIdentity = () => {
     }
 }
 
+const createRunAuth = (
+    isAuthing: boolean,
+    setIsAuthing: (isRunning: boolean) => void,
+    setIdentityStatus: (status: AuthStatus<IdentityAuth>) => void,
+    updateAuth: (status: AuthStatus, type: 'live' | 'cached') => void,
+) => async (
+    type: 'live' | 'cached',
+    runIdentityChain: () => Promise<AuthStatus<IdentityAuth>>,
+    runNonIdentityChain: () => Promise<AuthStatus>,
+) => {
+    if (isAuthing) return
+    setIsAuthing(true)
+
+    try {
+        const idStatus = await runIdentityChain()
+        if (isAuthed(idStatus)) {
+            setIdentityStatus(IdentityAuthStatus(idStatus.data.info))
+            if (canViewEdition(idStatus.data.info)) {
+                updateAuth(idStatus, type)
+                return
+            }
+        } else {
+            setIdentityStatus(unauthed)
+        }
+        const status = await runNonIdentityChain()
+        updateAuth(status, type)
+    } catch {
+        // TODO: should we do anything special here
+    } finally {
+        setIsAuthing(false)
+    }
+}
+
 const AuthProvider = ({
     children,
     onStatusChange,
@@ -164,6 +203,9 @@ const AuthProvider = ({
 }) => {
     const [isAuthing, setIsAuthing] = useState(false)
     const [isRestoring, setIsRestoring] = useState(false)
+    const [identityStatus, setIdentityStatus] = useState<
+        AuthStatus<IdentityAuth>
+    >(pending)
     const [authAttempt, setAuthAttempt] = useState<AuthAttempt>({
         time: 0,
         type: 'cached',
@@ -172,96 +214,113 @@ const AuthProvider = ({
     const { isConnected } = useNetInfo()
     const { open } = useModal()
 
-    const updateAuth = useCallback((attempt: AuthAttempt) => {
-        setAuthAttempt(attempt)
-        onStatusChange(attempt.status)
-    })
+    const updateAuth = (status: AuthStatus, type: 'live' | 'cached') => {
+        setAuthAttempt(createAuthAttempt(status, type))
+        onStatusChange(status)
+    }
 
     const runAuth = useCallback(async () => {
-        setIsAuthing(true)
+        const runAuth = createRunAuth(
+            isAuthing,
+            setIsAuthing,
+            setIdentityStatus,
+            updateAuth,
+        )
+
         if (isConnected) {
-            const status = await liveAuthChain()
-            const attempt = createAuthAttempt(status, 'live')
-            updateAuth(attempt)
-            setIsAuthing(false)
-            return attempt
+            runAuth('live', identityAuthChain, nonIdentityAuthChain)
         } else {
             // all cached attempts are retried when we get internet connection
             // back
-            const status = await cachedAuthChain()
-            const attempt = createAuthAttempt(status, 'cached')
-            updateAuth(attempt)
-            setIsAuthing(false)
-            return attempt
+            runAuth('cached', cachedIdentityAuthChain, () =>
+                cachedNonIdentityAuthChain(),
+            )
         }
-    }, [isConnected, updateAuth])
+    }, [isConnected, isAuthing, updateAuth])
 
     useEffect(() => {
-        if (isAuthing || !needsReauth(authAttempt, { isConnected })) return
-        runAuth()
-    }, [isConnected, authAttempt, isAuthing, runAuth]) // we don't care about isAuthing changing
+        if (needsReauth(authAttempt, { isConnected })) runAuth()
+    }, [isConnected, authAttempt, runAuth]) // we don't care about isAuthing changing
+
+    const setStatus = (status: AuthStatus) =>
+        setAuthAttempt(createAuthAttempt(status, 'live'))
+
+    const signOutIdentityImpl = useCallback(async () => {
+        await signOutIdentity()
+        // if a user is authenticated through identity then unauth them
+        // and try to run authentication again
+        // otherwise, their identity sign in didn't affect their auth status
+        // so leave their auth status as is
+        if (isIdentity(authAttempt.status)) {
+            setAuthAttempt(createAuthAttempt(unauthed, 'live'))
+            setIdentityStatus(unauthed)
+            runAuth()
+        }
+    }, [authAttempt.status, runAuth])
+
+    const restorePurchases = useCallback(async () => {
+        // await the receipt being added to the system by iOS
+        // this will prompt a user to login to their iTunes account
+
+        if (isRestoring) return
+        setIsRestoring(true)
+
+        try {
+            const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
+
+            // only update the auth type if we're not already authenticated
+            if (authStatus && authAttempt.status.type !== 'authed') {
+                setAuthAttempt(
+                    createAuthAttempt(
+                        { type: 'authed', data: authStatus },
+                        'live',
+                    ),
+                )
+            } else {
+                open(close => (
+                    <MissingIAPModalCard
+                        close={close}
+                        onTryAgain={restorePurchases}
+                    />
+                ))
+            }
+        } catch (e) {
+            open(close => (
+                <MissingIAPModalCard
+                    close={close}
+                    onTryAgain={restorePurchases}
+                />
+            ))
+        } finally {
+            setIsRestoring(false)
+        }
+    }, [authAttempt.status.type, isRestoring, open])
 
     const value = useMemo(
         () => ({
+            identityStatus,
             status: authAttempt.status,
-            setStatus: (status: AuthStatus) =>
-                updateAuth(createAuthAttempt(status, 'live')),
-            signOutIdentity: async () => {
-                await signOutIdentity()
-                // if a user is authenticated through identity then unauth them
-                // and try to run authentication again
-                // otherwise, their identity sign in didn't affect their auth status
-                // so leave their auth status as is
-                if (isIdentity(authAttempt.status)) {
-                    updateAuth(createAuthAttempt(unauthed, 'live'))
-                    await runAuth()
-                }
-            },
+            setStatus,
+            signOutIdentity: signOutIdentityImpl,
             isRestoring,
             isAuthing,
-            restorePurchases: async function restorePurchases() {
-                // await the receipt being added to the system by iOS
-                // this will prompt a user to login to their iTunes account
-
-                if (isRestoring) return
-                setIsRestoring(true)
-
-                try {
-                    const authStatus = await tryToRestoreActiveIOSSubscriptionToAuth()
-                    if (authStatus && authAttempt.status.type !== 'authed') {
-                        updateAuth(
-                            createAuthAttempt(
-                                { type: 'authed', data: authStatus },
-                                'live',
-                            ),
-                        )
-                    } else {
-                        open(close => (
-                            <MissingIAPModalCard
-                                close={close}
-                                onTryAgain={restorePurchases}
-                            />
-                        ))
-                    }
-                } catch (e) {
-                    open(close => (
-                        <MissingIAPModalCard
-                            close={close}
-                            onTryAgain={restorePurchases}
-                        />
-                    ))
-                } finally {
-                    setIsRestoring(false)
-                }
-            },
+            restorePurchases,
         }),
-        [authAttempt.status, isAuthing, isRestoring, open, runAuth, updateAuth],
+        [
+            authAttempt.status,
+            identityStatus,
+            isAuthing,
+            isRestoring,
+            signOutIdentityImpl,
+            restorePurchases,
+        ],
     )
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export {
+    createRunAuth,
     AuthProvider,
     AuthContext,
     useAuth,
