@@ -24,10 +24,8 @@ import {
     User,
 } from 'src/services/id-service'
 import { fetchCasSubscription } from '../services/content-auth-service'
-import {
-    fetchActiveIOSSubscriptionReceipt,
-    isReceiptActive,
-} from '../services/iap'
+import { fetchActiveIOSSubscriptionReceipt } from '../services/iap'
+import { handleFetchError, withTimeout } from 'src/services/exceptions'
 
 /**
  * This helper attempts to get an Identity user access token with an email and password.
@@ -139,8 +137,23 @@ const fetchUserDataForKeychainUser = async (
     }
 
     const [userDetails, membershipData] = await Promise.all([
-        fetchUserDetailsImpl(actualUserToken.password),
-        fetchMembershipDataImpl(newMembershipToken),
+        withTimeout(
+            fetchUserDetailsImpl(actualUserToken.password),
+            10000,
+        ).catch(
+            handleFetchError(async e => {
+                const cached = await userDataCache.get()
+                if (!cached) throw e
+                return cached.userDetails
+            }),
+        ),
+        withTimeout(fetchMembershipDataImpl(newMembershipToken), 10000).catch(
+            handleFetchError(async e => {
+                const cached = await userDataCache.get()
+                if (!cached) throw e
+                return cached.membershipData
+            }),
+        ),
     ])
 
     const userData = {
