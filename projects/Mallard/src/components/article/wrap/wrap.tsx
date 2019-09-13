@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState, useRef } from 'react'
 import {
     StyleProp,
     StyleSheet,
@@ -6,6 +6,7 @@ import {
     ViewStyle,
     ViewProperties,
     LayoutRectangle,
+    LayoutChangeEvent,
 } from 'react-native'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints, MINIMUM_BREAKPOINT } from 'src/theme/breakpoints'
@@ -191,8 +192,26 @@ const ThreeColumnWrapper = ({
     )
 }
 
+const fromEvent = (e: LayoutChangeEvent): WrapLayout => ({
+    content: {
+        width: e.nativeEvent.layout.width,
+    },
+    rail: {
+        width: 0,
+        contentWidth: 0,
+    },
+    width: e.nativeEvent.layout.width,
+})
+
+const eq = (a: WrapLayout, b: WrapLayout) =>
+    a.content.width === b.content.width &&
+    a.rail.width === b.rail.width &&
+    a.rail.contentWidth === b.rail.contentWidth &&
+    a.width === b.width
+
 const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    const wrap = useRef<WrapLayout | null>(null)
     if (!isTablet) {
         return (
             <View style={{ backgroundColor }}>
@@ -200,18 +219,15 @@ const Wrap = ({ backgroundColor, ...props }: WrapperPropTypes) => {
                     <ContentWrapper
                         {...props}
                         backgroundColor={backgroundColor}
-                        onLayout={ev => {
+                        onLayout={e => {
                             if (props.onWrapLayout) {
-                                props.onWrapLayout({
-                                    content: {
-                                        width: ev.nativeEvent.layout.width,
-                                    },
-                                    rail: {
-                                        width: 0,
-                                        contentWidth: 0,
-                                    },
-                                    width: ev.nativeEvent.layout.width,
-                                })
+                                const newWrap = fromEvent(e)
+                                if (
+                                    !(wrap.current && eq(newWrap, wrap.current))
+                                ) {
+                                    props.onWrapLayout(newWrap)
+                                    wrap.current = newWrap
+                                }
                             }
                         }}
                     >
