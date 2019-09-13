@@ -10,10 +10,7 @@ import {
 import { shouldShowOnboarding } from 'src/helpers/settings'
 import { useOtherSettingsValues } from 'src/hooks/use-settings'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
-import {
-    OnboardingConsentScreen,
-    OnboardingIntroScreen,
-} from 'src/screens/onboarding-screen'
+import { OnboardingConsentScreen } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
 import { ApiScreen } from 'src/screens/settings/api-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
@@ -107,13 +104,6 @@ const AppStack = createModalNavigator(
 const OnboardingStack = createModalNavigator(
     createStackNavigator(
         {
-            [routeNames.onboarding.OnboardingStart]: mapNavigationToProps(
-                OnboardingIntroScreen,
-                nav => ({
-                    onContinue: () =>
-                        nav.navigate(routeNames.onboarding.OnboardingConsent),
-                }),
-            ),
             [routeNames.onboarding.OnboardingConsent]: createStackNavigator(
                 {
                     Main: {
