@@ -1,41 +1,10 @@
-import {
-    fetchUserDataForKeychainUser,
-    canViewEdition,
-    UserData,
-} from '../helpers'
-import { membershipResponse, userResponse, userData } from './fixtures'
+import { fetchUserDataForKeychainUser, canViewEdition } from '../helpers'
+import { membershipResponse, userResponse, withCreds } from './fixtures'
 import {
     getMockPromise,
     getMockStore,
     getMockAsyncCache,
 } from '../../test-helpers/test-helpers'
-
-const withCreds = ({
-    email,
-    digitalPack,
-    userEmailValidated = true,
-}: {
-    email: string
-    digitalPack: boolean
-    userEmailValidated?: boolean
-}): UserData => ({
-    ...userData,
-    userDetails: {
-        ...userData.userDetails,
-        primaryEmailAddress: email,
-        statusFields: {
-            ...userData.userDetails.statusFields,
-            userEmailValidated,
-        },
-    },
-    membershipData: {
-        ...userData.membershipData,
-        contentAccess: {
-            ...userData.membershipData.contentAccess,
-            digitalPack,
-        },
-    },
-})
 
 describe('helpers', () => {
     describe('fetchUserDataForKeychainUser', () => {

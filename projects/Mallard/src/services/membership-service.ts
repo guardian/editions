@@ -1,4 +1,5 @@
 import { MEMBERS_DATA_API_URL } from 'src/constants'
+import { Error5XX } from './exceptions'
 
 export interface MembersDataAPIResponse {
     userId: string
@@ -27,6 +28,8 @@ const fetchMembershipData = async (
             'GU-IdentityToken': membershipAccessToken,
         },
     })
+    if (res.status >= 500) throw new Error5XX()
+    if (!res.ok) throw new Error('Something went wrong')
     return res.json()
 }
 

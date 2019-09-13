@@ -89,6 +89,25 @@ const openSupportMailto = (text: string, releaseURL: string, body?: string) => {
     )
 }
 
+const createMailtoHandler = (
+    text: string,
+    releaseURL: string,
+    authStatus: AuthStatus,
+) => () =>
+    runActionSheet(DIAGNOSTICS_REQUEST, [
+        {
+            text: 'Include',
+            onPress: async () => {
+                const diagnostics = await getDiagnosticInfo(authStatus)
+                openSupportMailto(text, releaseURL, diagnostics)
+            },
+        },
+        {
+            text: `Don't include`,
+            onPress: () => openSupportMailto(text, releaseURL),
+        },
+    ])
+
 const createSupportMailto = (
     text: string,
     releaseURL: string,
@@ -98,22 +117,8 @@ const createSupportMailto = (
     title: text,
     linkWeight: 'regular' as const,
     data: {
-        onPress: () =>
-            runActionSheet(DIAGNOSTICS_REQUEST, [
-                {
-                    text: 'Include',
-                    onPress: async () => {
-                        const diagnostics = await getDiagnosticInfo(authStatus)
-                        console.log(diagnostics)
-                        openSupportMailto(text, releaseURL, diagnostics)
-                    },
-                },
-                {
-                    text: `Don't include`,
-                    onPress: () => openSupportMailto(text, releaseURL),
-                },
-            ]),
+        onPress: createMailtoHandler(text, releaseURL, authStatus),
     },
 })
 
-export { createSupportMailto }
+export { createSupportMailto, createMailtoHandler }
