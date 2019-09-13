@@ -90,52 +90,58 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
-export const render = (
-    article: BlockElement[],
+const getElementHTML = (
+    el: BlockElement,
     {
-        pillar,
+        index,
         features,
-        wrapLayout,
         showMedia,
     }: {
+        index: number
+        features: ArticleFeatures[]
+        showMedia: boolean
+    },
+) => {
+    switch (el.id) {
+        case 'html':
+            if (index === 0 && features.includes(ArticleFeatures.HasDropCap)) {
+                return html`
+                    <div class="drop-cap">
+                        ${el.html}
+                    </div>
+                `
+            }
+            return el.html
+        case 'media-atom':
+            return showMedia ? renderMediaAtom(el) : ''
+        case 'image':
+            return showMedia ? Image({ imageElement: el }) : ''
+        case 'pullquote':
+            return Pullquote({
+                cite: el.html,
+                role: el.role || 'inline',
+                ...el,
+            })
+        default:
+            return ''
+    }
+}
+
+export const render = (
+    element: BlockElement,
+    options: {
+        index: number
         pillar: ArticlePillar
         features: ArticleFeatures[]
         wrapLayout: WrapLayout
         showMedia: boolean
     },
 ) => {
-    const content = article
-        .map((el, i) => {
-            switch (el.id) {
-                case 'html':
-                    if (
-                        i === 0 &&
-                        features.includes(ArticleFeatures.HasDropCap)
-                    ) {
-                        return html`
-                            <div class="drop-cap">
-                                ${el.html}
-                            </div>
-                        `
-                    }
-                    return el.html
-                case 'media-atom':
-                    return showMedia ? renderMediaAtom(el) : ''
-                case 'image':
-                    return showMedia ? Image({ imageElement: el }) : ''
-                case 'pullquote':
-                    return Pullquote({
-                        cite: el.html,
-                        role: el.role || 'inline',
-                        ...el,
-                    })
-                default:
-                    return ''
-            }
-        })
-        .join('')
-
-    const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
+    const content = getElementHTML(element, options)
+    const styles = makeCss({
+        colors: getPillarColors(options.pillar),
+        wrapLayout: options.wrapLayout,
+    })
     const body = html`
         <main>${content}</main>
     `
