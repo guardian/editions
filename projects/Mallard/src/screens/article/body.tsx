@@ -16,19 +16,13 @@ const styles = StyleSheet.create({
     container: { height: '100%' },
 })
 
-const ArticleScreenBody = ({
-    path,
-    onTopPositionChange,
-    pillar,
-    width,
-    position,
-}: {
+const ArticleScreenBody = React.memo<{
     path: PathToArticle
     onTopPositionChange: (isAtTop: boolean) => void
     pillar: ArticlePillar
     width: number
     position?: number
-}) => {
+}>(({ path, onTopPositionChange, pillar, width, position }) => {
     const articleResponse = useArticleResponse(path)
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${position}` : undefined
@@ -74,6 +68,6 @@ const ArticleScreenBody = ({
             })}
         </ScrollView>
     )
-}
+})
 
 export { ArticleScreenBody }
