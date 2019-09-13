@@ -9,17 +9,14 @@ import {
 } from 'src/authentication/auth-context'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { Footer, Heading } from 'src/components/layout/ui/row'
+import { Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
-import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { getVersionInfo } from 'src/helpers/settings'
-import { APP_DISPLAY_NAME, FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { DevZone } from './settings/dev-zone'
 
@@ -239,19 +236,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                         },
                     ]}
                 />
-
-                <Heading>{`About ${APP_DISPLAY_NAME}`}</Heading>
-                <Footer>
-                    <UiBodyCopy>
-                        {`Thanks for helping us test the ${APP_DISPLAY_NAME} app!` +
-                            `your feedback will be invaluable to the final product.`}
-                    </UiBodyCopy>
-                </Footer>
-                <Footer style={{ marginBottom: metrics.vertical * 4 }}>
-                    <UiBodyCopy>
-                        {`Send us feedback to ${FEEDBACK_EMAIL}`}
-                    </UiBodyCopy>
-                </Footer>
                 {isUsingProdDevtools && <DevZone />}
             </ScrollContainer>
         </WithAppAppearance>
