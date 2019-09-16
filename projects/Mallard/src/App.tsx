@@ -31,6 +31,7 @@ import {
 import { NavigationState } from 'react-navigation'
 import { AuthStatus, isIdentity } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
+import SplashScreen from 'react-native-splash-screen'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -129,6 +130,10 @@ const handleLoginStatus = (status: AuthStatus) => {
 }
 
 export default class App extends React.Component<{}, {}> {
+    componentDidMount() {
+        SplashScreen.hide()
+    }
+
     async componentDidCatch(e: Error) {
         /**
          * use an heuristic to check whether this is a react-nav error
