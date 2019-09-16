@@ -74,8 +74,8 @@ Subscriber ID: ${isCAS(authStatus) && casCode}
 
 const openSupportMailto = (text: string, releaseURL: string, body?: string) => {
     const email = Platform.select({
-        ios: isInBeta() ? releaseURL : IOS_BETA_EMAIL,
-        android: isInBeta() ? releaseURL : ANDROID_BETA_EMAIL,
+        ios: (isInBeta() && releaseURL) || IOS_BETA_EMAIL,
+        android: (isInBeta() && releaseURL) || ANDROID_BETA_EMAIL,
     })
 
     const subject = `${text} - ${
