@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     forecastItemLong: {
-        height: 60 * PixelRatio.getFontScale(),
+        height: 60,
         borderLeftWidth: 1,
         flex: 2,
         borderLeftColor: color.line,
@@ -122,12 +122,22 @@ const WeatherIconView = ({
             iconNumber={forecast.WeatherIcon}
             fontSize={30 * iconSize}
         />
-        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.temperature}>
+        <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            ellipsizeMode="clip"
+            style={styles.temperature}
+        >
             {Math.round(forecast.Temperature.Value) +
                 '°' +
                 forecast.Temperature.Unit}
         </Text>
-        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.dateTime}>
+        <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            ellipsizeMode="clip"
+            style={styles.dateTime}
+        >
             {Moment(forecast.DateTime).format(
                 `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
             )}
