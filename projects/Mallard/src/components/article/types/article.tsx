@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Linking, Platform, StyleSheet, FlatList } from 'react-native'
+import { Dimensions, Linking, Platform, View, StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { ArticleFeatures, BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
     },
+    webviewWrap: {
+        ...StyleSheet.absoluteFillObject,
+    },
     webview: {
         backgroundColor: 'transparent',
         width: '100%',
@@ -37,42 +40,6 @@ const styles = StyleSheet.create({
     },
 })
 
-const BlockWebview = React.memo(({ blockString }: { blockString: string }) => {
-    const [height, setHeight] = useState(100)
-
-    return (
-        <WebView
-            originWhitelist={['*']}
-            scrollEnabled={false}
-            useWebKit={false}
-            source={{ html: blockString }}
-            onShouldStartLoadWithRequest={event => {
-                if (
-                    Platform.select({
-                        ios: event.navigationType === 'click',
-                        android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
-                    })
-                ) {
-                    Linking.openURL(event.url)
-                    return false
-                }
-                return true
-            }}
-            onMessage={event => {
-                if (parseInt(event.nativeEvent.data) > height) {
-                    setHeight(parseInt(event.nativeEvent.data))
-                }
-            }}
-            style={[
-                styles.webview,
-                {
-                    minHeight: height,
-                },
-            ]}
-        />
-    )
-})
-
 const ArticleWebview = ({
     article,
     wrapLayout,
@@ -81,29 +48,58 @@ const ArticleWebview = ({
     wrapLayout: WrapLayout
 }) => {
     const { isConnected } = useNetInfo()
+    const [height, setHeight] = useState(Dimensions.get('window').height)
     const [, { pillar }] = useArticle()
 
-    const blockStrings = useMemo(
+    const html = useMemo(
         () =>
-            article.map((el, index) => ({
-                string: render(el, {
-                    pillar,
-                    features,
-                    wrapLayout,
-                    showMedia: isConnected,
-                    index,
-                }),
-                key: index.toString(),
-            })),
+            render(article, {
+                pillar,
+                features,
+                wrapLayout,
+                showMedia: isConnected,
+            }),
         [article, pillar, wrapLayout, isConnected],
     )
 
     return (
-        <FlatList
-            data={blockStrings}
-            initialNumToRender={2}
-            renderItem={info => <BlockWebview blockString={info.item.string} />}
-        />
+        <>
+            <Wrap>
+                <View style={{ minHeight: height }}></View>
+            </Wrap>
+
+            <View style={[styles.webviewWrap]}>
+                <WebView
+                    originWhitelist={['*']}
+                    scrollEnabled={false}
+                    useWebKit={false}
+                    source={{ html: html }}
+                    onShouldStartLoadWithRequest={event => {
+                        if (
+                            Platform.select({
+                                ios: event.navigationType === 'click',
+                                android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
+                            })
+                        ) {
+                            Linking.openURL(event.url)
+                            return false
+                        }
+                        return true
+                    }}
+                    onMessage={event => {
+                        if (parseInt(event.nativeEvent.data) > height) {
+                            setHeight(parseInt(event.nativeEvent.data))
+                        }
+                    }}
+                    style={[
+                        styles.webview,
+                        {
+                            minHeight: height,
+                        },
+                    ]}
+                />
+            </View>
+        </>
     )
 }
 
