@@ -4,7 +4,8 @@ import { LayoutRectangle, View } from 'react-native'
 const WithLayoutRectangle: FunctionComponent<{
     children: (l: LayoutRectangle) => ReactNode
     minHeight?: number
-}> = ({ children, minHeight }) => {
+    fallback?: ReactNode
+}> = ({ children, minHeight, fallback }) => {
     const [metrics, setMetrics] = useState<LayoutRectangle | null>(null)
     return (
         <View
@@ -13,6 +14,7 @@ const WithLayoutRectangle: FunctionComponent<{
                 setMetrics(ev.nativeEvent.layout)
             }}
         >
+            {!metrics && fallback}
             {metrics && children(metrics)}
         </View>
     )
