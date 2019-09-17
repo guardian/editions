@@ -24,10 +24,12 @@ export const selectImagePath = async (
 }
 
 /**
- * A simple helper to get image paths in order to try from the cache,
- * then the API if the error handler is called, otherwise returns `undefined`
- * if none are found
+ * A simple helper to get image paths.
+ * This will asynchronously try the cache, otherwise will return the API url
+ * if not available in the cache.
  *
+ * Until the cache lookup has resolved, this will return undefined.
+ * When the lookup resolves, a rerender should be triggered.
  * TODO: cache these paths in a context in order not to check every time
  */
 

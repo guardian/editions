@@ -64,8 +64,6 @@ const ArticleWebview = ({
 
     const imagePaths = useImagesPaths(images)
     const imagePathLookup = zip(images, imagePaths)
-    console.log('HELO I AM RENDER')
-    console.log(imagePaths)
     const html = render(article, {
         pillar,
         features,
