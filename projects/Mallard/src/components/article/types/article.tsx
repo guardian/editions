@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useState, useEffect } from 'react'
 import { Animated, Dimensions, StyleSheet, View, Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { BlockElement } from 'src/common'
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleWebview = ({
+const ArticleWebView = ({
     header,
     onTopPositionChange,
     ...webviewProps
@@ -84,22 +84,30 @@ const androidStyles = StyleSheet.create({
         right: 0,
         width: '100%',
     },
+    wrapper: {
+        height: '100%',
+    },
 })
 const ArticleWebViewAndroid = ({
     header,
+    onTopPositionChange,
     ...webviewProps
 }: {
     header: ReactNode
     article: BlockElement[]
     wrapLayout: WrapLayout
+    onTopPositionChange: OnTopPositionChangeFn
 }) => {
     const [height, setHeight] = useState<number | null>(null)
     const [scrollX] = useState(() => new Animated.Value(0))
+
+    useEffect(() => {
+        onTopPositionChange(false)
+    }, [])
     return (
-        <View>
+        <View style={androidStyles.wrapper}>
             {!!height && (
                 <>
-                    <UiBodyCopy>sdfdsfdsf</UiBodyCopy>
                     <WebviewWithArticle
                         {...webviewProps}
                         onScroll={Animated.event(
@@ -118,9 +126,6 @@ const ArticleWebViewAndroid = ({
                         paddingTop={height}
                         style={{
                             ...StyleSheet.absoluteFillObject,
-                            height: 600,
-                            backgroundColor: 'red',
-                            width: 500,
                         }}
                     />
                 </>
@@ -167,9 +172,7 @@ const Article = ({
     const [, { type }] = useArticle()
 
     const WebView =
-        Platform.OS === 'android'
-            ? ArticleWebViewAndroid
-            : ArticleWebViewAndroid
+        Platform.OS === 'android' ? ArticleWebViewAndroid : ArticleWebView
 
     return (
         <>
