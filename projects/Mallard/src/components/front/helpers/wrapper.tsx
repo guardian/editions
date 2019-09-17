@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
         paddingRight: metrics.horizontal,
         marginBottom: 0,
         marginTop: 0,
+        height: metrics.fronts.sliderRadius * 2,
     },
 })
 

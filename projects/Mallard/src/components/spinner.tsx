@@ -31,9 +31,9 @@ const Ball = ({ color, jump }: { color: string; jump: Animated.Value }) => {
                 {
                     transform: [
                         {
-                            translateY: jump.interpolate({
+                            scale: jump.interpolate({
                                 inputRange: safeInterpolation([0, 1]),
-                                outputRange: safeInterpolation([-5, 5]),
+                                outputRange: safeInterpolation([0.8, 1]),
                             }),
                         },
                     ],
