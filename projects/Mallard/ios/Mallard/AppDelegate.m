@@ -12,6 +12,7 @@
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
 #import <RNCPushNotificationIOS.h>
+#import "RNSplashScreen.h"
 
 @implementation AppDelegate
 
@@ -28,6 +29,7 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [RNSplashScreen show];
   return YES;
 }
 
