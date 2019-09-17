@@ -49,6 +49,7 @@ export interface PathToIssue {
 const styles = StyleSheet.create({
     weatherWide: {
         marginHorizontal: metrics.horizontal,
+        height: 78,
     },
     sideWeather: {
         width: 78,
