@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
 import { StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
-import { FileSystemProvider } from 'src/hooks/use-fs'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
 import { AuthProvider } from './authentication/auth-context'
@@ -14,11 +13,7 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { ToastProvider } from './hooks/use-toast'
-import {
-    prepFileSystem,
-    clearOldIssues,
-    downloadTodaysIssue,
-} from './helpers/files'
+import { prepFileSystem, clearOldIssues } from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
@@ -31,6 +26,7 @@ import {
 import { NavigationState } from 'react-navigation'
 import { AuthStatus, isIdentity } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
+import SplashScreen from 'react-native-splash-screen'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -40,12 +36,11 @@ pushNotifcationRegistration()
 clearOldIssues()
 fetchCacheClear().then((weOk: boolean) => {
     if (weOk) {
-        downloadTodaysIssue()
+        console.log('WE ARE OKAY')
+        //TODO: AW: download todays issue
+        // downloadTodaysIssue()
     }
 })
-
-// Capture the first screen event
-sendAppScreenEvent({ screenName: ScreenTracking.Issue })
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -54,7 +49,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-232asdf1asdfa3410'
+const persistenceKey = 'dev-nav-key-232asdffgdfg1asdffgfdgfdga3410'
 
 const persistNavigationState = async (navState: any) => {
     try {
@@ -116,12 +111,7 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const WithProviders = nestProviders(
-    FileSystemProvider,
-    SettingsProvider,
-    Modal,
-    ToastProvider,
-)
+const WithProviders = nestProviders(SettingsProvider, Modal, ToastProvider)
 
 const handleLoginStatus = (status: AuthStatus) => {
     if (isIdentity(status)) {
@@ -132,6 +122,10 @@ const handleLoginStatus = (status: AuthStatus) => {
 }
 
 export default class App extends React.Component<{}, {}> {
+    componentDidMount() {
+        SplashScreen.hide()
+    }
+
     async componentDidCatch(e: Error) {
         /**
          * use an heuristic to check whether this is a react-nav error

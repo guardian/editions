@@ -21,6 +21,7 @@ import ophan
 class Ophan: NSObject {
   
   var ophanApi: OphanApi?
+  var lastViewId: String? = nil
 
   override init() {
     print("Initialising new Ophan instance on thread \(Thread.current)")
@@ -67,7 +68,7 @@ class Ophan: NSObject {
   func sendAppScreenEvent(_ screenName: String, value: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
     do {
       DispatchQueue.main.async {
-        self.ophanApi?.sendAppScreenEvent(screenName: screenName, value: value)
+        self.ophanApi?.sendAppScreenEvent(viewId: self.lastViewId, screenName: screenName, value: value)
         resolve(screenName)
       }
     } catch let error {
@@ -79,7 +80,7 @@ class Ophan: NSObject {
   func sendComponentEvent(_ componentType: String, action: String, value: String?, componentId: String?, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
     do {
       DispatchQueue.main.async {
-        self.ophanApi?.sendComponentEvent(componentType: componentType, action: action, value: value, componentId: componentId)
+        self.ophanApi?.sendComponentEvent(viewId: self.lastViewId, componentType: componentType, action: action, value: value, componentId: componentId)
         resolve(componentType)
       }
     } catch let error {
@@ -91,7 +92,7 @@ class Ophan: NSObject {
   func sendPageViewEvent(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject:RCTPromiseRejectBlock) -> Void {
     do {
       DispatchQueue.main.async {
-        self.ophanApi?.sendPageViewEvent(path: path)
+        self.lastViewId = self.ophanApi?.sendPageViewEvent(path: path)
         resolve(path)
       }
     } catch let error {

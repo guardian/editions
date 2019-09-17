@@ -1,39 +1,52 @@
-import { useState, useEffect } from 'react'
-import { FSPaths, APIPaths } from 'src/paths'
-import { imageForScreenSize } from 'src/helpers/screen'
-import { Image } from '../../../common/src'
+import { useEffect, useState } from 'react'
 import RNFetchBlob from 'rn-fetch-blob'
-import { useIssueId } from './use-issue-id'
+import { imageForScreenSize } from 'src/helpers/screen'
+import { APIPaths, FSPaths } from 'src/paths'
+import { Image, Issue } from '../../../common/src'
+import { useIssueCompositeKey } from './use-issue-id'
+import { useSettingsValue } from './use-settings'
 
-const selectImagePath = async (issueId: string, { source, path }: Image) => {
-    const api = `${APIPaths.mediaBackend}${APIPaths.media(
-        issueId,
+const selectImagePath = async (
+    apiUrl: string,
+    localIssueId: Issue['localId'],
+    publishedIssueId: Issue['publishedId'],
+    { source, path }: Image,
+) => {
+    const api = `${apiUrl}${APIPaths.media(
+        publishedIssueId,
         imageForScreenSize(),
         source,
         path,
     )}`
-    const fs = FSPaths.media(issueId, source, path)
+    const fs = FSPaths.media(localIssueId, source, path)
     const fsExists = await RNFetchBlob.fs.exists(fs)
     return fsExists ? fs : api
 }
 
 /**
- * A simple helper to get image paths in order to try from the cache,
- * then the API if the error handler is called, otherwise returns `undefined`
- * if none are found
+ * A simple helper to get image paths.
+ * This will asynchronously try the cache, otherwise will return the API url
+ * if not available in the cache.
  *
- * TODO: cache these paths in a context in order not to check every time
- */
+ * Until the cache lookup has resolved, this will return undefined.
+ * When the lookup resolves, a rerender should be triggered.
+ *
+ *  */
 
-const useImagePath = (image: Image) => {
-    const issueId = useIssueId()
+const useImagePath = (image?: Image) => {
+    const key = useIssueCompositeKey()
 
     const [paths, setPaths] = useState<string | undefined>()
-
+    const apiUrl = useSettingsValue.apiUrl()
     useEffect(() => {
-        selectImagePath(issueId || 'issue', image).then(setPaths)
-    }, [image, issueId])
-
+        if (key && image) {
+            const { localIssueId, publishedIssueId } = key
+            selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
+                setPaths,
+            )
+        }
+    }, [apiUrl, image, key])
+    if (image === undefined) return undefined
     return paths
 }
 

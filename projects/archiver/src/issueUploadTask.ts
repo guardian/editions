@@ -5,18 +5,21 @@ import { MediaTaskOutput } from './imageTask'
 import { IssueTaskOutput } from './issueTask'
 import { upload } from './upload'
 
-export type UploadTaskOutput = Pick<IssueTaskOutput, 'issueId' | 'message'>
+export type UploadTaskOutput = Pick<
+    IssueTaskOutput,
+    'issuePublication' | 'message' | 'issue'
+>
 export const handler: Handler<MediaTaskOutput, UploadTaskOutput> = async ({
-    issueId,
+    issuePublication,
     issue,
 }) => {
-    const { id } = issueId
+    const { publishedId } = issue
     const issueUpload = await attempt(
-        upload(issuePath(id), issue, 'application/json'),
+        upload(issuePath(publishedId), issue, 'application/json'),
     )
     if (hasFailed(issueUpload)) {
         console.error(JSON.stringify(issueUpload))
         throw new Error('Failed to upload issue file')
     }
-    return { issueId, message: 'Issue uploaded succesfully' }
+    return { issuePublication, message: 'Issue uploaded succesfully', issue }
 }

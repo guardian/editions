@@ -112,7 +112,7 @@ export const renderAtomElement = async (
         return { id: 'unknown' }
     }
     return {
-        id: '⚛︎',
+        id: 'atom',
         atomId,
         atomType: data.atomType,
         ...rendered,

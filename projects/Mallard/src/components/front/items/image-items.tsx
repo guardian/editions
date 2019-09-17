@@ -45,12 +45,10 @@ const imageStyles = StyleSheet.create({
     },
 })
 
-const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
+const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     const [, { pillar }] = useArticle()
     if (pillar === 'opinion' && isSmallItem(size)) {
-        return (
-            <RoundImageItem {...{ article, issueID, size, ...tappableProps }} />
-        )
+        return <RoundImageItem {...{ article, size, ...tappableProps }} />
     }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
@@ -95,12 +93,7 @@ const ImageItem = ({ article, issueID, size, ...tappableProps }: PropTypes) => {
 /*
 The opinion cards with tha circles
 */
-const RoundImageItem = ({
-    article,
-    issueID,
-    size,
-    ...tappableProps
-}: PropTypes) => {
+const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock

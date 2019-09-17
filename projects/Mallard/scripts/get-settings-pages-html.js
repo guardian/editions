@@ -9,7 +9,7 @@ const capiApiKey = process.env.CAPI_API_KEY
  * Value represents the name of the file the html of the article is written to.
  */
 const settingsPagePathsToFetch = {
-    'mobile/ipad-edition-faqs': 'faq',
+    'help/2019/sep/12/the-guardian-daily-beta-faqs': 'faq',
     'help/privacy-policy': 'privacy-policy',
     'help/terms-of-service': 'terms-of-service',
 }
