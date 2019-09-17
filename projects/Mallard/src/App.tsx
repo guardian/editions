@@ -24,7 +24,7 @@ import {
     setUserId,
 } from 'src/services/ophan'
 import { NavigationState } from 'react-navigation'
-import { AuthStatus, isIdentity } from './authentication/credentials-chain'
+import { IdentityAuth } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
 
@@ -113,13 +113,8 @@ const isReactNavPersistenceError = (e: Error) =>
 
 const WithProviders = nestProviders(SettingsProvider, Modal, ToastProvider)
 
-const handleLoginStatus = (status: AuthStatus) => {
-    if (isIdentity(status)) {
-        setUserId(status.data.info.userDetails.id)
-    } else {
-        setUserId(null)
-    }
-}
+const handleIdStatus = (data: IdentityAuth | null) =>
+    setUserId(data && data.info.userDetails.id)
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
@@ -144,7 +139,7 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
-                    <AuthProvider onStatusChange={handleLoginStatus}>
+                    <AuthProvider onIdentityStatusChange={handleIdStatus}>
                         <StatusBar
                             animated={true}
                             barStyle="light-content"

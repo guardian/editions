@@ -196,10 +196,10 @@ const createRunAuth = (
 
 const AuthProvider = ({
     children,
-    onStatusChange,
+    onIdentityStatusChange,
 }: {
     children: React.ReactNode
-    onStatusChange: (status: AuthStatus) => void
+    onIdentityStatusChange: (status: IdentityAuth | null) => void
 }) => {
     const [isAuthing, setIsAuthing] = useState(false)
     const [isRestoring, setIsRestoring] = useState(false)
@@ -214,10 +214,24 @@ const AuthProvider = ({
     const { isConnected } = useNetInfo()
     const { open } = useModal()
 
-    const updateAuth = (status: AuthStatus, type: 'live' | 'cached') => {
-        setAuthAttempt(createAuthAttempt(status, type))
-        onStatusChange(status)
-    }
+    const updateAuth = useCallback(
+        (status: AuthStatus, type: 'live' | 'cached') => {
+            if (isIdentity(status)) {
+                onIdentityStatusChange(status.data)
+                setIdentityStatus(status)
+                if (canViewEdition(status.data.info)) {
+                    setAuthAttempt(createAuthAttempt(status, type))
+                } else {
+                    setAuthAttempt(createAuthAttempt(unauthed, type))
+                }
+            } else if (isAuthed(authAttempt.status)) {
+                // do nothing
+            } else {
+                setAuthAttempt(createAuthAttempt(status, type))
+            }
+        },
+        [onIdentityStatusChange, authAttempt],
+    )
 
     const runAuth = useCallback(async () => {
         const runAuth = createRunAuth(
@@ -239,11 +253,15 @@ const AuthProvider = ({
     }, [isConnected, isAuthing, updateAuth])
 
     useEffect(() => {
-        if (needsReauth(authAttempt, { isConnected })) runAuth()
-    }, [isConnected, authAttempt, runAuth]) // we don't care about isAuthing changing
+        if (!isAuthing && needsReauth(authAttempt, { isConnected })) runAuth()
+    }, [isAuthing, isConnected, authAttempt, runAuth]) // we don't care about isAuthing changing
 
-    const setStatus = (status: AuthStatus) =>
-        setAuthAttempt(createAuthAttempt(status, 'live'))
+    const setStatus = useCallback(
+        (status: AuthStatus) => {
+            updateAuth(status, 'live')
+        },
+        [updateAuth],
+    )
 
     const signOutIdentityImpl = useCallback(async () => {
         await signOutIdentity()
@@ -251,12 +269,14 @@ const AuthProvider = ({
         // and try to run authentication again
         // otherwise, their identity sign in didn't affect their auth status
         // so leave their auth status as is
+        setIdentityStatus(unauthed)
+        onIdentityStatusChange(null)
+
         if (isIdentity(authAttempt.status)) {
             setAuthAttempt(createAuthAttempt(unauthed, 'live'))
-            setIdentityStatus(unauthed)
             runAuth()
         }
-    }, [authAttempt.status, runAuth])
+    }, [authAttempt.status, runAuth, onIdentityStatusChange])
 
     const restorePurchases = useCallback(async () => {
         // await the receipt being added to the system by iOS
@@ -270,12 +290,7 @@ const AuthProvider = ({
 
             // only update the auth type if we're not already authenticated
             if (authStatus && authAttempt.status.type !== 'authed') {
-                setAuthAttempt(
-                    createAuthAttempt(
-                        { type: 'authed', data: authStatus },
-                        'live',
-                    ),
-                )
+                updateAuth({ type: 'authed', data: authStatus }, 'live')
             } else {
                 open(close => (
                     <MissingIAPModalCard
@@ -294,7 +309,7 @@ const AuthProvider = ({
         } finally {
             setIsRestoring(false)
         }
-    }, [authAttempt.status.type, isRestoring, open])
+    }, [authAttempt.status.type, isRestoring, open, updateAuth])
 
     const value = useMemo(
         () => ({
@@ -313,6 +328,7 @@ const AuthProvider = ({
             isRestoring,
             signOutIdentityImpl,
             restorePurchases,
+            setStatus,
         ],
     )
 
