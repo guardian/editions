@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react'
 import {
-    NavigationScreenProp,
-    NavigationInjectedProps,
     NavigationContainer,
+    NavigationInjectedProps,
+    NavigationScreenProp,
 } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
-import { ArticleNavigator, PathToArticle } from 'src/screens/article-screen'
-import { PathToIssue } from 'src/screens/issue-screen'
+import { PathToArticle, PathToIssue } from 'src/paths'
+import { ArticleNavigator } from 'src/screens/article-screen'
 import { Issue } from '../../../../common/src'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
@@ -68,7 +68,13 @@ const getArticleNavigationProps = (
         frontName: '',
     })
 
-    if (!path || !path.article || !path.collection || !path.issue) {
+    if (
+        !path ||
+        !path.article ||
+        !path.collection ||
+        !path.localIssueId ||
+        !path.publishedIssueId
+    ) {
         return error()
     } else {
         return success({

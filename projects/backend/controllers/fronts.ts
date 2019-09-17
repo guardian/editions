@@ -6,14 +6,14 @@ import { isPreview } from '../preview'
 
 export const frontController = (req: Request, res: Response) => {
     const id: string = req.params[0]
-    const issue: string = req.params.issueId
-    const source: string = decodeURIComponent(
-        isPreview ? 'preview' : req.params.source,
+    const issue: string = req.params.date
+    const version: string = decodeURIComponent(
+        isPreview ? 'preview' : req.params.version,
     )
 
     const [date, updater] = lastModified()
     console.log(`Request for ${req.url} fetching front ${id}`)
-    getFront(issue, id, source, updater)
+    getFront(issue, id, version, updater)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(`${req.url} threw ${JSON.stringify(data)}`)

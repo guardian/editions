@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import {
-    FlatList,
     NavigationInjectedProps,
     NavigationScreenProp,
     withNavigation,
@@ -12,6 +12,7 @@ import { Front } from 'src/components/front'
 import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
+import { Header } from 'src/components/layout/header/header'
 import { Container } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
@@ -19,32 +20,26 @@ import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout
 import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
 import { Weather } from 'src/components/weather'
+import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
-import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
-import { useMediaQuery } from 'src/hooks/use-screen'
-import { useIsPreview } from 'src/hooks/use-settings'
-import { navigateToIssueList } from 'src/navigation/helpers/base'
-import { useNavigatorPosition } from 'src/navigation/helpers/transition'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
-import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { Header } from 'src/components/layout/header/header'
-import { supportsTransparentCards } from 'src/helpers/features'
 import { safeInterpolation } from 'src/helpers/math'
 import {
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
+import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { useIsPreview } from 'src/hooks/use-settings'
+import { navigateToIssueList } from 'src/navigation/helpers/base'
+import { useNavigatorPosition } from 'src/navigation/helpers/transition'
+import { PathToIssue } from 'src/paths'
 import { sendPageViewEvent } from 'src/services/ophan'
-import { ScrollView } from 'react-native-gesture-handler'
-import { UiBodyCopy } from 'src/components/styled-text'
-
-export interface PathToIssue {
-    issue: Issue['key']
-}
+import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -128,7 +123,12 @@ const IssueFronts = ({
         <ScrollView style={style} removeClippedSubviews>
             {ListHeaderComponent}
             {issue.fronts.map((key, index) => (
-                <Front issue={issue.key} front={key} key={key} />
+                <Front
+                    localIssueId={issue.localId}
+                    publishedIssueId={issue.publishedId}
+                    front={key}
+                    key={key}
+                />
             ))}
             <View style={{ height: container.height / 2 }} />
         </ScrollView>
@@ -141,7 +141,7 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
 }
 
 const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    const response = useIssueOrLatestResponse(path && path.issue)
+    const response = useIssueOrLatestResponse(path)
     return (
         <Container>
             {response({
@@ -251,6 +251,7 @@ export const IssueScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.issue) return <IssueScreenWithPath path={undefined} />
+    if (!path || !path.localIssueId)
+        return <IssueScreenWithPath path={undefined} />
     return <IssueScreenWithPath path={path} />
 }

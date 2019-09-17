@@ -1,5 +1,6 @@
 import { Handler } from 'aws-lambda'
 import { StepFunctions } from 'aws-sdk'
+import { randomBytes } from 'crypto'
 import {
     Attempt,
     attempt,
@@ -9,30 +10,26 @@ import {
     hasSucceeded,
     withFailureMessage,
 } from '../../backend/utils/try'
+import { IssuePublication } from '../../common/src'
 import { IssueParams } from './issueTask'
-import { randomBytes } from 'crypto'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
 interface Record {
     s3: { bucket: { name: string }; object: { key: string } }
     eventTime: string
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
-interface Issue {
-    source: string
-    id: string
-}
 
-const parseRecord = (record: Record): Attempt<Issue> => {
+const parseRecord = (record: Record): Attempt<IssuePublication> => {
     const key = decodeURIComponent(record.s3.object.key)
-    const [, id, filename] = key.split('/')
-    if (filename === undefined || id === undefined) {
+    const [, issueDate, filename] = key.split('/')
+    if (filename === undefined || issueDate === undefined) {
         return failure({
             error: new Error(),
             messages: [`⚠️ ${key} does not correspond to an issue`],
         })
     }
-    const source = filename.replace('.json', '')
-    return { source, id }
+    const version = filename.replace('.json', '')
+    return { edition: 'daily-edition' as const, version, issueDate }
 }
 
 export const handler: Handler<
@@ -56,17 +53,17 @@ export const handler: Handler<
 
     const issues = maybeIssues.filter(hasSucceeded)
     const runs = await Promise.all(
-        issues.map(async issueId => {
+        issues.map(async issuePublication => {
             const invoke: IssueParams = {
-                issueId,
+                issuePublication,
             }
             const run = await attempt(
                 sf
                     .startExecution({
                         stateMachineArn,
                         input: JSON.stringify(invoke),
-                        name: `issue ${invoke.issueId.id} ${
-                            invoke.issueId.source
+                        name: `issue ${invoke.issuePublication.issueDate} ${
+                            invoke.issuePublication.version
                         } ${randomBytes(2).toString('hex')}`.replace(
                             /\W/g,
                             '-', // see character restrictions
@@ -77,19 +74,23 @@ export const handler: Handler<
             )
             if (hasFailed(run)) {
                 console.error(
-                    `⚠️ Invocation of ${JSON.stringify(issueId)} failed.`,
+                    `⚠️ Invocation of ${JSON.stringify(
+                        issuePublication,
+                    )} failed.`,
                 )
                 return withFailureMessage(
                     run,
-                    `⚠️ Invocation of ${JSON.stringify(issueId)} failed.`,
+                    `⚠️ Invocation of ${JSON.stringify(
+                        issuePublication,
+                    )} failed.`,
                 )
             }
             console.log(
                 `Invoation of step function for ${JSON.stringify(
-                    issueId,
+                    issuePublication,
                 )} succesful`,
             )
-            return issueId
+            return issuePublication
         }),
     )
 

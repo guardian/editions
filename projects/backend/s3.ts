@@ -42,13 +42,21 @@ interface S3Response {
     etag: string | undefined
 }
 
-export const s3List = async (path: Path): Promise<Attempt<string[]>> => {
+export const s3List = async (
+    path: Path,
+): Promise<
+    Attempt<
+        {
+            key: string
+            lastModified: Date
+        }[]
+    >
+> => {
     const response = await attempt(
         s3
             .listObjectsV2({
                 Bucket: getBucket(path.bucket),
                 Prefix: path.key,
-                Delimiter: '/',
             })
             .promise(),
     )
@@ -68,11 +76,16 @@ export const s3List = async (path: Path): Promise<Attempt<string[]>> => {
             ),
         })
     }
-    const contents = response.CommonPrefixes
+    const contents = response.Contents
 
     if (!contents) throw new Error(`Nothing at ${JSON.stringify(path)}`)
 
-    return contents.map(_ => _.Prefix).filter(notNull)
+    return contents
+        .map(item => {
+            if (item.Key == null || item.LastModified == null) return null
+            return { key: item.Key, lastModified: item.LastModified }
+        })
+        .filter(notNull)
 }
 export const s3fetch = (path: Path): Promise<Attempt<S3Response>> => {
     return new Promise(resolve => {

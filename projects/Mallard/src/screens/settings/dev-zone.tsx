@@ -105,15 +105,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 onPress={({ onPress }) => onPress()}
                 data={[
                     {
-                        key: 'Downloads',
-                        title: 'Manage issues',
-                        data: {
-                            onPress: () => {
-                                navigation.navigate(routeNames.Downloads)
-                            },
-                        },
-                    },
-                    {
                         key: 'Endpoints',
                         title: 'API Endpoint',
                         explainer: apiUrl,

@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
 export interface PropTypes {
     articlesInCard: CAPIArticle[]
     articleNavigator: ArticleNavigator
-    issue: Issue['key']
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
     front: Front['key']
     appearance: FrontCardAppearance | null
     collection: Collection['key']
@@ -113,7 +114,8 @@ const CollectionPage = ({
     articlesInCard,
     articleNavigator,
     collection,
-    issue,
+    localIssueId,
+    publishedIssueId,
     front,
     appearance,
 }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
@@ -152,13 +154,15 @@ const CollectionPage = ({
                         ]}
                     >
                         <Item
-                            issueID={issue}
                             path={{
                                 article: article.key,
                                 collection,
-                                issue,
+                                localIssueId,
+                                publishedIssueId,
                                 front,
                             }}
+                            localIssueId={localIssueId}
+                            publishedIssueId={publishedIssueId}
                             size={size}
                             articleNavigator={articleNavigator}
                             article={article}
