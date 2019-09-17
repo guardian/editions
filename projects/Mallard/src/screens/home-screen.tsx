@@ -14,10 +14,13 @@ import { FlexCenter } from 'src/components/layout/flex-center'
 import { IssuePickerHeader } from 'src/components/layout/header/header'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { Heading } from 'src/components/layout/ui/row'
-import { BaseList, List } from 'src/components/lists/list'
+import { BaseList } from 'src/components/lists/list'
 import { Spinner } from 'src/components/spinner'
-import { unzipNamedIssueArchive } from 'src/helpers/files'
+import {
+    CONNECTION_FAILED_ERROR,
+    CONNECTION_FAILED_SUB_ERROR,
+    REFRESH_BUTTON_TEXT,
+} from 'src/helpers/words'
 import { useIssueSummary } from 'src/hooks/use-api'
 import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { useMediaQuery } from 'src/hooks/use-screen'
@@ -26,17 +29,12 @@ import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
+import { PathToIssue } from 'src/paths'
+import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
-import {
-    CONNECTION_FAILED_ERROR,
-    CONNECTION_FAILED_SUB_ERROR,
-    REFRESH_BUTTON_TEXT,
-} from 'src/helpers/words'
-import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
-import { PathToIssue } from 'src/paths'
 
 const HomeScreenHeader = withNavigation(
     ({
