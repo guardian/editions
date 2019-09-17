@@ -51,7 +51,8 @@ const SubNotFoundModalCard = ({
         }
         bottomExplainerContent={
             <>
-                <ModalButton
+                {/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
+                {/* <ModalButton
                     onPress={() => {
                         if (Platform.OS === 'android') {
                             Linking.openURL(
@@ -64,7 +65,7 @@ const SubNotFoundModalCard = ({
                     {Platform.OS === 'ios'
                         ? 'Learn more'
                         : 'Get your free 14 day trial'}
-                </ModalButton>
+                </ModalButton> */}
             </>
         }
     ></OnboardingCard>
