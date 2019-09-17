@@ -186,9 +186,6 @@ const Image = ({
     imageElement: ImageElement
     path: string
 }) => {
-    //When you fix this pleas alter image.ts in background to not alert (unless we ship this 😱)
-    const backend = backends[1].value //get PROD preview because we're faking the issue id
-
     return ImageBase({ path, ...imageElement })
 }
 
