@@ -164,6 +164,7 @@ const ImageBase = ({
     credit?: string
     role?: ImageElement['role']
 }) => {
+    console.log(path)
     const figcaption = renderCaption({ caption, credit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
@@ -178,15 +179,15 @@ const ImageBase = ({
     `
 }
 
-const Image = ({ imageElement }: { imageElement: ImageElement }) => {
+const Image = ({
+    imageElement,
+    path,
+}: {
+    imageElement: ImageElement
+    path: string
+}) => {
     //When you fix this pleas alter image.ts in background to not alert (unless we ship this 😱)
     const backend = backends[1].value //get PROD preview because we're faking the issue id
-    const path = `${backend}${mediaPath(
-        'fakeIssue/fake',
-        'phone',
-        imageElement.src.source,
-        imageElement.src.path,
-    )}`
 
     return ImageBase({ path, ...imageElement })
 }
