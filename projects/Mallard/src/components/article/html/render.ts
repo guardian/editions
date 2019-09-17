@@ -97,11 +97,13 @@ export const render = (
         features,
         wrapLayout,
         showMedia,
+        height,
     }: {
         pillar: ArticlePillar
         features: ArticleFeatures[]
         wrapLayout: WrapLayout
         showMedia: boolean
+        height: number
     },
 ) => {
     const content = article
@@ -137,7 +139,7 @@ export const render = (
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
-        <main>${content}</main>
+        <main style="padding-top:${px(height)}">${content}</main>
     `
     return makeHtml({ styles, body })
 }

@@ -164,14 +164,10 @@ const ArticleSlider = ({
         return (
             <ViewPagerAndroid
                 style={{ flexGrow: 1, width: '100%' }}
-                initialPage={0}
+                initialPage={startingPoint}
             >
                 {data.map((item, index) => (
-                    <View
-                        style={{
-                            backgroundColor: 'blue',
-                        }}
-                    >
+                    <View>
                         <ArticleScreenBody
                             key={index}
                             width={width}
