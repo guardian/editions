@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -23,6 +22,7 @@
 		4F62AA37231E8D660052ADBA /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA35231E8D660052ADBA /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7836FF3F0ADEA9274CAD15ED /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */; };
 		950E1C012317E06F00F38B92 /* Ophan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950E1C002317E06F00F38B92 /* Ophan.swift */; };
+		95610CA8232BF0FF006B5DF2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */; };
 		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
@@ -156,6 +156,7 @@
 		92C66C5662CA467DB9BDFDCB /* GHGuardianHeadline-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-MediumItalic.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-MediumItalic.ttf"; sourceTree = "<group>"; };
 		950E1BFF2317E06E00F38B92 /* Mallard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mallard-Bridging-Header.h"; sourceTree = "<group>"; };
 		950E1C002317E06F00F38B92 /* Ophan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ophan.swift; sourceTree = "<group>"; };
+		95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Mallard/LaunchScreen.xib; sourceTree = "<group>"; };
 		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
 		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
 		95CB9F1D2316C53F00F2F6B0 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/debugFramework/ophan.framework; sourceTree = "<group>"; };
@@ -250,6 +251,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */,
+				95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */,
 			);
 			name = Mallard;
 			sourceTree = "<group>";
@@ -585,6 +587,7 @@
 				C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C555A75222848D6C002DF16C /* Icon-1024.png in Resources */,
+				95610CA8232BF0FF006B5DF2 /* LaunchScreen.xib in Resources */,
 				E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */,
 				30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */,
 				230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */,
@@ -847,7 +850,6 @@
 			baseConfigurationReference = B76AB9897804B121CD7C2A6A /* Pods-Mallard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Mallard/Mallard.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -858,6 +860,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/bin/ios/universalFramework";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				KOTLIN_BUILD_TYPE = DEBUG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
@@ -878,7 +881,6 @@
 			baseConfigurationReference = 0BAE21BBF3F8EE5432E6C63F /* Pods-Mallard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Mallard/Mallard.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -888,6 +890,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/bin/ios/universalFramework";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				KOTLIN_BUILD_TYPE = RELEASE;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";

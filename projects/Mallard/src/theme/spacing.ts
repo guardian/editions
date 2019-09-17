@@ -10,9 +10,7 @@ const basicMetrics = {
     vertical: 10,
 }
 
-const buttonHeight =
-    getFont('sans', 1).fontSize * PixelRatio.getFontScale() +
-    basicMetrics.vertical * 2.5
+const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
 
 const sides = {
     sides: basicMetrics.horizontal / 1.4,

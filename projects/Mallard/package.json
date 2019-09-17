@@ -65,6 +65,7 @@
         "react-native-push-notification": "^3.1.7",
         "react-native-screens": "^1.0.0-alpha.23",
         "react-native-sentry": "^0.43.2",
+        "react-native-splash-screen": "^3.2.0",
         "react-native-status-bar-height": "^2.4.0",
         "react-native-svg": "^9.6.2",
         "react-native-webview": "^6.9.0",
