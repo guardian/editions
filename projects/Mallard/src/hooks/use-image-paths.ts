@@ -6,7 +6,7 @@ import { Image, Issue } from '../../../common/src'
 import { useIssueCompositeKey } from './use-issue-id'
 import { useSettingsValue } from './use-settings'
 
-const selectImagePath = async (
+export const selectImagePath = async (
     apiUrl: string,
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
@@ -24,30 +24,28 @@ const selectImagePath = async (
 }
 
 /**
- * A simple helper to get image paths.
- * This will asynchronously try the cache, otherwise will return the API url
- * if not available in the cache.
+ * A simple helper to get image paths in order to try from the cache,
+ * then the API if the error handler is called, otherwise returns `undefined`
+ * if none are found
  *
- * Until the cache lookup has resolved, this will return undefined.
- * When the lookup resolves, a rerender should be triggered.
- *
- *  */
+ * TODO: cache these paths in a context in order not to check every time
+ */
 
-const useImagePath = (image?: Image) => {
+export const useImagePath = (image?: Image) => {
     const key = useIssueCompositeKey()
 
-    const [paths, setPaths] = useState<string | undefined>()
+    const [path, setPath] = useState<string | undefined>()
     const apiUrl = useSettingsValue.apiUrl()
     useEffect(() => {
         if (key && image) {
             const { localIssueId, publishedIssueId } = key
             selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
-                setPaths,
+                setPath,
             )
         }
     }, [apiUrl, image, key])
     if (image === undefined) return undefined
-    return paths
+    return path
 }
 
-export { useImagePath, selectImagePath }
+export const useImagesPaths = (images: Image[]) => images.map(useImagePath)
