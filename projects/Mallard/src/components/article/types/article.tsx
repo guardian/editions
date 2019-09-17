@@ -1,5 +1,12 @@
 import React, { useMemo, useState } from 'react'
-import { Dimensions, Linking, Platform, View, StyleSheet } from 'react-native'
+import {
+    Dimensions,
+    Linking,
+    Platform,
+    View,
+    StyleSheet,
+    Animated,
+} from 'react-native'
 import { WebView } from 'react-native-webview'
 import { ArticleFeatures, BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -11,6 +18,7 @@ import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { EMBED_DOMAIN, render } from '../html/render'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { useNetInfo } from '@react-native-community/netinfo'
+import { safeInterpolation } from 'src/helpers/math'
 
 const urlIsNotAnEmbed = (url: string) =>
     !(
@@ -27,11 +35,15 @@ const styles = StyleSheet.create({
         paddingVertical: metrics.vertical,
     },
     webviewWrap: {
-        ...StyleSheet.absoluteFillObject,
+        bottom: 100,
+        backgroundColor: 'yellow',
+        flexGrow: 1,
+        height: 500,
     },
     webview: {
         backgroundColor: 'transparent',
         width: '100%',
+        height: '100%',
         /*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
@@ -39,6 +51,8 @@ const styles = StyleSheet.create({
         opacity: 0.99,
     },
 })
+
+const AniWebview = Animated.createAnimatedComponent(WebView)
 
 const ArticleWebview = ({
     article,
@@ -61,18 +75,43 @@ const ArticleWebview = ({
             }),
         [article, pillar, wrapLayout, isConnected],
     )
-
+    const [scrollX] = useState(() => new Animated.Value(1))
+    console.log(scrollX)
     return (
-        <>
-            <Wrap>
-                <View style={{ minHeight: height }}></View>
-            </Wrap>
-
+        <View style={{ height: 300 }}>
+            <Animated.View
+                style={{
+                    backgroundColor: 'red',
+                    height: 200,
+                    width: '100%',
+                    transform: [
+                        {
+                            translateY: scrollX.interpolate({
+                                inputRange: safeInterpolation([-1, 1]),
+                                outputRange: safeInterpolation([1, -1]),
+                            }),
+                        },
+                    ],
+                }}
+            />
             <View style={[styles.webviewWrap]}>
-                <WebView
+                <AniWebview
                     originWhitelist={['*']}
-                    scrollEnabled={false}
-                    useWebKit={false}
+                    scrollEnabled={true}
+                    scrollEventThrottle={1}
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: {
+                                        y: scrollX,
+                                    },
+                                },
+                            },
+                        ],
+                        /* webview doesnt support the native driver just yet :() */
+                        { useNativeDriver: false },
+                    )}
                     source={{ html: html }}
                     onShouldStartLoadWithRequest={event => {
                         if (
@@ -91,15 +130,10 @@ const ArticleWebview = ({
                             setHeight(parseInt(event.nativeEvent.data))
                         }
                     }}
-                    style={[
-                        styles.webview,
-                        {
-                            minHeight: height,
-                        },
-                    ]}
+                    style={[styles.webview]}
                 />
             </View>
-        </>
+        </View>
     )
 }
 
@@ -115,7 +149,6 @@ const Article = ({
 
     return (
         <>
-            <ArticleHeader {...headerProps} type={type} />
             <Fader>
                 {wrapLayout && (
                     <ArticleWebview article={article} wrapLayout={wrapLayout} />

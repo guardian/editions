@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import {
+    Animated,
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewStyle,
+    Platform,
+    ViewPagerAndroid,
+} from 'react-native'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
@@ -17,6 +25,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
 import { PathToArticle } from './slider'
+import { UiBodyCopy } from 'src/components/styled-text'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -147,6 +156,35 @@ const ArticleSlider = ({
         [onDismissStateChanged],
     )
 
+    const data = isInScroller
+        ? articleNavigator.articles
+        : [path, ...articleNavigator.articles]
+
+    if (Platform.OS === 'android')
+        return (
+            <ViewPagerAndroid
+                style={{ flexGrow: 1, width: '100%' }}
+                initialPage={0}
+            >
+                {data.map((item, index) => (
+                    <View
+                        style={{
+                            backgroundColor: 'blue',
+                        }}
+                    >
+                        <ArticleScreenBody
+                            key={index}
+                            width={width}
+                            path={item}
+                            pillar={pillar}
+                            onTopPositionChange={onTopPositionChange}
+                            position={index}
+                        />
+                    </View>
+                ))}
+            </ViewPagerAndroid>
+        )
+
     return (
         <>
             <Fader>
@@ -186,11 +224,7 @@ const ArticleSlider = ({
                     item.article
                 }
                 removeClippedSubviews={true}
-                data={
-                    isInScroller
-                        ? articleNavigator.articles
-                        : [path, ...articleNavigator.articles]
-                }
+                data={data}
                 renderItem={({
                     item,
                     index,

@@ -63,7 +63,7 @@ const ModalOpener = ({
     useEffect(() => {
         const id = setInterval(() => {
             if (!isOpenRef.current && isFocused()) {
-                open(renderModalRef.current)
+                //open(renderModalRef.current)
             }
         }, 3000)
         return () => clearTimeout(id)

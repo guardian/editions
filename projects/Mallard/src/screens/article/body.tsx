@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-navigation'
 import { ArticleType, ArticlePillar } from 'src/common'
 import { ArticleController } from 'src/components/article'
@@ -28,7 +28,7 @@ const ArticleScreenBody = React.memo<{
     const previewNotice = preview ? `${path.collection}:${position}` : undefined
 
     return (
-        <ScrollView
+        <View
             scrollEventThrottle={8}
             onScroll={ev => {
                 onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
@@ -66,7 +66,7 @@ const ArticleScreenBody = React.memo<{
                     </>
                 ),
             })}
-        </ScrollView>
+        </View>
     )
 })
 
