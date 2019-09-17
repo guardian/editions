@@ -107,19 +107,23 @@ export class EditionsStack extends cdk.Stack {
 
         const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
             type: 'String',
-            description: 'Hostname of the preview endpoint'
+            description: 'Hostname of the preview endpoint',
         })
 
-        const previewCertificateArn = new cdk.CfnParameter(this, 'preview-certificate-arn', {
-            type: 'String',
-            description: 'ARN of ACM certificate for preview endpoint'
-        })
+        const previewCertificateArn = new cdk.CfnParameter(
+            this,
+            'preview-certificate-arn',
+            {
+                type: 'String',
+                description: 'ARN of ACM certificate for preview endpoint',
+            },
+        )
 
         const previewCertificate = acm.Certificate.fromCertificateArn(
             this,
             'preview-certificate',
             previewCertificateArn.valueAsString,
-            )
+        )
 
         const backendProps = (
             publicationStage: 'preview' | 'published',
