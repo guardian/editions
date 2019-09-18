@@ -8,10 +8,9 @@ import { putStatus, getStatuses } from './status'
 import { IndexTaskOutput } from './generateIndexTask'
 import { deletePublication } from './delete'
 
-export interface DeleteTaskOutput extends IndexTaskOutput {
+export type DeleteTaskOutput = Omit<IndexTaskOutput, 'index'> & {
     status: 'cleaned' | 'ceded'
     issueSummary: IssueSummary
-    index: IssueSummary[]
 }
 export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
     issuePublication,
@@ -28,7 +27,13 @@ export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
     if (unfinished.length > 0) {
         console.log('Publications are still in progress, ceding')
         console.log(JSON.stringify(unfinished))
-        return { issue, issuePublication, issueSummary, status: 'ceded' }
+        return {
+            issue,
+            issuePublication,
+            issueSummary,
+            status: 'ceded',
+            message: 'Publications are still in progress, ceding',
+        }
     }
 
     const status = publications.find(
@@ -47,12 +52,24 @@ export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
     if (moreRecent.length > 0) {
         console.log('Another version has published more recently, ceding')
         console.log(JSON.stringify(moreRecent))
-        return { issue, issuePublication, issueSummary, status: 'ceded' }
+        return {
+            issue,
+            issuePublication,
+            issueSummary,
+            status: 'ceded',
+            message: 'Another version has published more recently, ceding',
+        }
     }
 
     const safeToDelete = publications.filter(
         ({ version }) => version !== issuePublication.version,
     )
     await Promise.all(safeToDelete.map(deletePublication))
-    return { issue, issuePublication, issueSummary, status: 'cleaned' }
+    return {
+        issue,
+        issuePublication,
+        issueSummary,
+        status: 'cleaned',
+        message: `Deleted ${JSON.stringify(safeToDelete)}`,
+    }
 }

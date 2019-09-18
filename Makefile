@@ -24,8 +24,9 @@ test: $(patsubst %, test-%, $(PROJECTS))
 # Overrides
 #
 validate-Mallard: node_modules projects/Mallard/node_modules
-	@echo "\n👟 $@ 🦆\n"
+	@echo "\n👟🧶 $@ ESLINT🦆\n"
 	yarn eslint 'projects/Mallard/**/*.{ts,tsx}' --parser-options=project:./projects/Mallard/tsconfig.json
+	@echo "\n👟🚂 $@ TSC 🦆\n"
 	cd projects/Mallard && yarn tsc
 validate-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
 	@echo "\n👟 $@ 🦆\n"
@@ -40,8 +41,10 @@ build-Mallard:
 # Project commands
 #
 validate-%: projects/%/node_modules node_modules
-	@echo "\n👟 $@ 🦆\n"
+	@echo "\n👟🧶 $@ ESLINT 🦆\n"
 	yarn eslint 'projects/$*/**/*.{ts,tsx}' --parser-options=project:./projects/$*/tsconfig.json
+	@echo "\n👟🚂 $@ TSC 🦆\n"
+	cd projects/$* && yarn tsc --noEmit
 fix-%: node_modules projects/%/node_modules node_modules
 	@echo "\n👟 $@ 🦆\n"
 	yarn eslint 'projects/$*/**/*.{ts,tsx}' --parser-options=project:./projects/$*/tsconfig.json --fix
