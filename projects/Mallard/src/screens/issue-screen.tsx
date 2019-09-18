@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import {
@@ -120,9 +120,9 @@ const IssueFronts = ({
     const { container } = useIssueScreenSize()
 
     return (
-        <ScrollView style={style} removeClippedSubviews>
+        <ScrollView style={style}>
             {ListHeaderComponent}
-            {issue.fronts.map((key, index) => (
+            {issue.fronts.map(key => (
                 <Front
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
