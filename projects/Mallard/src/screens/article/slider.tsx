@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
     Animated,
+    Platform,
     StyleProp,
     StyleSheet,
     View,
-    ViewStyle,
-    Platform,
     ViewPagerAndroid,
+    ViewStyle,
 } from 'react-native'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
@@ -20,12 +20,11 @@ import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
+import { PathToArticle } from 'src/paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
-import { PathToArticle } from './slider'
-import { UiBodyCopy } from 'src/components/styled-text'
 
 export interface PathToArticle {
     collection: Collection['key']

@@ -12,7 +12,7 @@ import { GalleryArticle, Image as ImageType, ImageElement } from 'src/common'
 import { BigArrow } from 'src/components/icons/BigArrow'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
-import { APIPaths, imagePath } from 'src/paths'
+import { APIPaths } from 'src/paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -23,6 +23,7 @@ import {
 } from '../article-header/gallery-header'
 import { Wrap } from '../wrap/wrap'
 import { Direction } from 'src/helpers/sizes'
+import { useImagePath } from 'src/hooks/use-image-paths'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -152,13 +153,14 @@ const GalleryCoverItem = ({
 }: GalleryHeaderProps & {
     element?: ImageType
 }) => {
+    const uri = useImagePath(element)
     return (
         <>
             {element && (
                 <Image
                     style={{ width: '100%', flexGrow: 1, minHeight: 400 }}
                     source={{
-                        uri: imagePath(element),
+                        uri,
                     }}
                 />
             )}

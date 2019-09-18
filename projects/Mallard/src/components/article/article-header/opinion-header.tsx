@@ -20,7 +20,7 @@ import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
 import { Fader } from 'src/components/layout/animators/fader'
 import { Image as ImageType } from 'src/common'
-import { imagePath } from 'src/paths'
+import { useImagePath } from 'src/hooks/use-image-paths'
 
 const ArticleFader = Fader
 
@@ -76,7 +76,9 @@ export const BylineCutout = ({
 }) => (
     <Image
         resizeMode={'contain'}
-        source={{ uri: imagePath(cutout) }}
+        source={{
+            uri: useImagePath(cutout),
+        }}
         style={[cutoutStyles.root, style]}
     />
 )

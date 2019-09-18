@@ -7,16 +7,16 @@ import {
     NativeScrollEvent,
 } from 'react-native'
 import { ScrollView } from 'react-navigation'
-import { ArticleType, ArticlePillar } from 'src/common'
+import { ArticlePillar, ArticleType } from 'src/common'
 import { ArticleController } from 'src/components/article'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import { color } from 'src/theme/color'
-import { PathToArticle } from '../article-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { OnTopPositionChangeFn } from './helpers'
+import { PathToArticle } from 'src/paths'
+import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },

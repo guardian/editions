@@ -11,17 +11,16 @@ import { upload } from './upload'
 export interface FrontTaskOutput extends IssueTaskOutput {
     images: Image[]
 }
-export const handler: Handler<IssueTaskOutput, IssueTaskOutput> = async ({
-    issueId,
+export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
+    issuePublication,
     issue,
     fronts,
 }) => {
-    const { source, id } = issueId
-    const path = `${source}/${id}`
-    console.log(`Attempting to upload ${id} to ${bucket}`)
+    const { publishedId } = issue
+    console.log(`Attempting to upload ${publishedId} to ${bucket}`)
     const [frontId, ...remainingFronts] = fronts
 
-    const maybeFront = await getFront(path, frontId)
+    const maybeFront = await getFront(publishedId, frontId)
 
     if (hasFailed(maybeFront)) {
         console.error(JSON.stringify(attempt))
@@ -31,7 +30,7 @@ export const handler: Handler<IssueTaskOutput, IssueTaskOutput> = async ({
     const images = unnest(getImagesFromFront(maybeFront))
 
     const frontUpload = await attempt(
-        upload(frontPath(id, frontId), maybeFront, 'application/json'),
+        upload(frontPath(publishedId, frontId), maybeFront, 'application/json'),
     )
 
     if (hasFailed(frontUpload)) {
@@ -40,7 +39,7 @@ export const handler: Handler<IssueTaskOutput, IssueTaskOutput> = async ({
     }
     const publishedFronts = [...issue.fronts, frontId]
     return {
-        issueId,
+        issuePublication,
         issue: { ...issue, fronts: publishedFronts },
         images,
         fronts: remainingFronts,

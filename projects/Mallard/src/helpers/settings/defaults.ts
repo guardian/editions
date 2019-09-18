@@ -7,7 +7,7 @@ This is a bit of a mess
 export const backends = [
     {
         title: 'PROD published',
-        value: 'https://editions-store.s3-eu-west-1.amazonaws.com/',
+        value: 'https://editions-store-prod.s3-eu-west-1.amazonaws.com/',
         preview: false,
     },
     {
