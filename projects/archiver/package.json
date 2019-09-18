@@ -20,7 +20,7 @@
     },
     "scripts": {
         "build": "ncc build main.ts -o dist -m",
-        "start": "AWS_DEFAULT_PROFILE='frontend' ts-node local.ts",
+        "start": "AWS_PROFILE='frontend' ts-node local.ts",
         "start:index": "AWS_DEFAULT_PROFILE='frontend' ts-node src/indexer/local.ts",
         "validate": "cd ../.. && script/make validate-archiver",
         "fix": "cd ../.. && script/make fix-archiver",

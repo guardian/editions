@@ -18,7 +18,7 @@ const deleteWithPrefix = async (Prefix: string): Promise<void> => {
 }
 
 export const deletePublication = async (issuePublication: IssuePublication) => {
-    console.log(`About to delete ${JSONs.stringify(issuePublication)}`)
+    console.log(`About to delete ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     const zipPath = `zips/${publishedId}`
     await deleteWithPrefix(zipPath)

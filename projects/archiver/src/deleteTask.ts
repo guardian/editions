@@ -6,9 +6,9 @@ import { UploadTaskOutput } from './issueUploadTask'
 import { upload } from './upload'
 import { putStatus, getStatuses } from './status'
 import { IndexTaskOutput } from './generateIndexTask'
+import { deletePublication } from './delete'
 
 export interface DeleteTaskOutput extends IndexTaskOutput {
-    message: string
     status: 'cleaned' | 'ceded'
     issueSummary: IssueSummary
     index: IssueSummary[]
@@ -53,4 +53,6 @@ export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
     const safeToDelete = publications.filter(
         ({ version }) => version !== issuePublication.version,
     )
+    await Promise.all(safeToDelete.map(deletePublication))
+    return { issue, issuePublication, issueSummary, status: 'cleaned' }
 }
