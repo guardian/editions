@@ -2,7 +2,7 @@ import { fromPairs, groupBy, uniq } from 'ramda'
 import { attempt, hasFailed } from '../../../backend/utils/try'
 import { ImageSize, imageSizes } from '../../../common/src'
 import { IssueSummary, notNull } from '../../common'
-import { bucket, s3 } from '../s3'
+import { Bucket, s3 } from '../s3'
 import { upload, FIVE_SECONDS } from '../upload'
 
 const zips = 'zips/'
@@ -10,7 +10,7 @@ const zips = 'zips/'
 export const indexer = async (): Promise<IssueSummary[]> => {
     const objects = await s3
         .listObjectsV2({
-            Bucket: bucket,
+            Bucket,
             Prefix: zips,
         })
         .promise()

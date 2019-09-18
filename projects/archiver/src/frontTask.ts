@@ -5,7 +5,7 @@ import { frontPath, Image } from '../common'
 import { getImagesFromFront } from '../media'
 import { getFront } from './downloader'
 import { IssueTaskOutput } from './issueTask'
-import { bucket } from './s3'
+import { Bucket } from './s3'
 import { upload, ONE_WEEK } from './upload'
 
 export interface FrontTaskOutput extends IssueTaskOutput {
@@ -17,7 +17,7 @@ export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
     fronts,
 }) => {
     const { publishedId } = issue
-    console.log(`Attempting to upload ${publishedId} to ${bucket}`)
+    console.log(`Attempting to upload ${publishedId} to ${Bucket}`)
     const [frontId, ...remainingFronts] = fronts
 
     const maybeFront = await getFront(publishedId, frontId)

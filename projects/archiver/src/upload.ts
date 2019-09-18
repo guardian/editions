@@ -1,4 +1,4 @@
-import { s3, bucket } from './s3'
+import { s3, Bucket } from './s3'
 
 function cacheControlHeader(maxAge: number | undefined): string {
     if (maxAge) {
@@ -21,7 +21,7 @@ export const upload = (
         s3.upload(
             {
                 Body: body instanceof Buffer ? body : JSON.stringify(body),
-                Bucket: bucket,
+                Bucket,
                 Key: `${key}`,
                 ACL: 'public-read',
                 ContentType: mime,
@@ -30,7 +30,7 @@ export const upload = (
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 upload of s3://${bucket}/${key} failed with`,
+                        `S3 upload of s3://${Bucket}/${key} failed with`,
                     )
                     console.error(err)
                     reject()
