@@ -190,7 +190,7 @@ export class EditionsStack extends cdk.Stack {
 
         previewDomainName.addBasePathMapping(previewApi)
 
-        new CfnOutput(this, 'Preview-API-hostname', {
+        new CfnOutput(this, 'Preview-Api-Target-Hostname', {
             description: 'hostname',
             value: `${previewDomainName.domainNameAliasDomainName}`,
         })
