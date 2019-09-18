@@ -5,6 +5,7 @@ import { Animated, Text, StyleSheet, View } from 'react-native'
 import { clamp, safeInterpolation } from 'src/helpers/math'
 import { ariaHidden } from 'src/helpers/a11y'
 import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
 
 const fadeLozengeAt = 20
 
@@ -46,15 +47,15 @@ const commonStyles = StyleSheet.create({
     },
     text: {
         color: color.textOverDarkBackground,
-        fontSize: 24,
+        fontSize: getFont('titlepiece', 1.25).fontSize,
         height: metrics.fronts.sliderRadius * 2,
         lineHeight: metrics.fronts.sliderRadius * 1.75,
         alignItems: 'center',
-        fontFamily: 'GTGuardianTitlepiece-Bold',
+        fontFamily: getFont('titlepiece', 1.25).fontFamily,
     },
     letter: {
-        fontFamily: 'GTGuardianDaily-Regular',
-        fontSize: 20,
+        fontFamily: getFont('daily', 1).fontFamily,
+        fontSize: getFont('daily', 1).fontSize,
         transform: [{ translateY: 2 }],
     },
 })

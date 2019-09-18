@@ -146,6 +146,11 @@ const opinionStyles = StyleSheet.create({
         right: -20,
         width: '53%',
     },
+    borderStyles: {
+        borderTopColor: color.textOverDarkBackground,
+        borderWidth: 0.5,
+        borderColor: '#d6d7da',
+    },
 })
 const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
     const [colors] = useArticle()
@@ -175,7 +180,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 >
                     {article.headline}
                 </TextWithIcon>
-                <View style={[]}>
+                <View>
                     <Text
                         style={[
                             opinionStyles.bylineText,
@@ -203,11 +208,9 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
             <View
                 style={[
                     opinionStyles.block,
+                    opinionStyles.borderStyles,
                     {
                         backgroundColor: colors.main,
-                        borderTopColor: opinionStyles.titleText.color,
-                        borderWidth: 0.5,
-                        borderColor: '#d6d7da',
                     },
                 ]}
             >

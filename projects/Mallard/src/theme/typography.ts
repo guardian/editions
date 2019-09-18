@@ -285,6 +285,14 @@ const scale = {
             },
         },
     },
+    daily: {
+        1: {
+            [Breakpoints.phone]: {
+                fontSize: 20,
+                lineHeight: 25,
+            },
+        },
+    },
 }
 
 export type FontSizes<F extends FontFamily> = keyof typeof scale[F]
