@@ -3,8 +3,10 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
 import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../common/src'
-import { lastSevenDays } from './issues'
+import { lastSevenDays, todayAsFolder } from './issues'
 import { defaultSettings } from './settings/defaults'
+import { imageForScreenSize } from './screen'
+import { getIssueSummary } from 'src/hooks/use-api'
 
 interface BasicFile {
     filename: string
@@ -50,15 +52,16 @@ export const getJson = (path: string) =>
 
 export const downloadNamedIssueArchive = (
     localIssueId: Issue['localId'],
-    publishedIssueId: Issue['publishedId'],
+    assetPath: string,
     filename: string,
 ) => {
     const zipUrl = defaultSettings.zipUrl
+    console.log(`${zipUrl}/${assetPath}`)
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
         IOSBackgroundTask: true,
-    }).fetch('GET', `${zipUrl}${publishedIssueId}/${filename}.zip`)
+    }).fetch('GET', `${zipUrl}/${assetPath}`)
     return {
         promise: returnable.then(async res => {
             await prepFileSystem()
@@ -154,10 +157,14 @@ export const downloadAndUnzipIssue = (
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
 ) => {
-    const { publishedId, localId } = issue
+    const { assets, localId } = issue
+    if (!assets) {
+        return null
+    }
+
     const issueDataDownload = downloadNamedIssueArchive(
         localId,
-        publishedId,
+        assets.data,
         'data',
     ) // just the issue json
 
@@ -179,7 +186,7 @@ export const downloadAndUnzipIssue = (
 
             const imgDL = downloadNamedIssueArchive(
                 localId,
-                publishedId,
+                assets[imageSize] as string,
                 imageSize,
             ) // just the images
 
@@ -223,4 +230,25 @@ export const clearOldIssues = async () => {
         issue => !lastSevenDays().includes(issue),
     )
     issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
+}
+
+export const downloadTodaysIssue = async () => {
+    const todaysKey = todayAsFolder()
+    const issueSummaries = await getIssueSummary().getValue()
+    // Find the todays issue summary from the list of summary
+    const todaysIssueSummary = issueSummaries.find(
+        o => o.localId === `${defaultSettings.appPrefix}/${todaysKey}`,
+    )
+
+    // If there isnt one for today, then fahgettaboudit...
+    if (!todaysIssueSummary) return null
+
+    const isTodaysIssueOnDevice = await isIssueOnDevice(
+        todaysIssueSummary.localId,
+    )
+
+    // Only download it if its not on the device
+    if (!isTodaysIssueOnDevice) {
+        downloadAndUnzipIssue(todaysIssueSummary, imageForScreenSize())
+    }
 }

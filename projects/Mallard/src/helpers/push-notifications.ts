@@ -5,6 +5,8 @@ import { downloadAndUnzipIssue, clearOldIssues } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { pushNotificationRegistrationCache } from './storage'
 import moment, { MomentInput } from 'moment'
+import { getIssueSummary } from 'src/hooks/use-api'
+import { defaultSettings } from './settings/defaults'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -63,12 +65,20 @@ const pushNotifcationRegistration = () => {
                 })
             }
         },
-        onNotification: (notification: any) => {
+        onNotification: async (notification: any) => {
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
                 const screenSize = imageForScreenSize()
-                downloadAndUnzipIssue(key, screenSize)
+                const issueSummaries = await getIssueSummary().getValue()
+                // Check to see if we can find the image summary for the one that is pushed
+                const pushImageSummary = issueSummaries.find(
+                    o => o.localId === `${defaultSettings.appPrefix}/${key}`,
+                )
+                // Not there? Fahgettaboudit
+                if (!pushImageSummary) return null
+
+                downloadAndUnzipIssue(pushImageSummary, screenSize)
                 clearOldIssues()
             }
 
