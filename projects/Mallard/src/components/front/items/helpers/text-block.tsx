@@ -46,7 +46,10 @@ const getFontSize = ({ layout, story }: ItemSizes) => {
         }
         return 0.75
     }
-    return story.height >= 4 ? 1.5 : 1
+    if (story.height > 4) {
+        return 1.5
+    }
+    return 1
 }
 
 const TextBlock = ({
