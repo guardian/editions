@@ -132,7 +132,7 @@ const ArticleWebViewAndroid = ({
             )}
 
             <Animated.View
-                onLayout={ev => {
+                onLayout={(ev: any) => {
                     console.log(ev)
                     setHeight(ev.nativeEvent.layout.height)
                 }}

@@ -1,6 +1,6 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React, { useMemo } from 'react'
-import { Animated, Linking, Platform } from 'react-native'
+import { Animated, Linking, Platform, WebViewProps } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { ArticleFeatures, BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -26,7 +26,7 @@ const WebviewWithArticle = ({
     article: BlockElement[]
     wrapLayout: WrapLayout
     paddingTop?: number
-} & typeof AniWebview) => {
+} & WebViewProps) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
 
