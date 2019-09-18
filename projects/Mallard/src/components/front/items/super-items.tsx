@@ -91,18 +91,21 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
                     image={article.image}
                 />
             ) : null}
-            <View style={sportSuperStyles.card}>
-                <TextBlock
-                    byline={article.byline}
-                    style={[superHeroImageStyles.textBlock]}
-                    kicker={article.kicker}
-                    headline={article.headline}
-                    monotone
-                    {...{ size }}
-                />
+            <TextBlock
+                byline={article.byline}
+                style={[superHeroImageStyles.textBlock]}
+                kicker={article.kicker}
+                headline={article.headline}
+                {...{ size }}
+            />
+            <View
+                style={[
+                    sportSuperStyles.card,
+                    superHeroImageStyles.textStandBlock,
+                ]}
+            >
                 <Standfirst
                     style={[
-                        superHeroImageStyles.textStandBlock,
                         size.layout === PageLayoutSizes.tablet && {
                             width: '80%',
                         },
