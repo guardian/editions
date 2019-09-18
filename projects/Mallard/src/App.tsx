@@ -31,6 +31,7 @@ import { NavigationState } from 'react-navigation'
 import { AuthStatus, isIdentity } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
+import { UpdateIpAddress } from './components/update-ip-address'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -160,6 +161,7 @@ export default class App extends React.Component<{}, {}> {
                                 }
                             />
                             <NetInfoAutoToast />
+                            <UpdateIpAddress />
                         </View>
                         <ModalRenderer />
                         <BugButton />
