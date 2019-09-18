@@ -83,6 +83,7 @@ const androidStyles = StyleSheet.create({
         left: 0,
         right: 0,
         width: '100%',
+        zIndex: 999999,
     },
     wrapper: {
         height: '100%',
@@ -106,34 +107,8 @@ const ArticleWebViewAndroid = ({
     }, [])
     return (
         <View style={androidStyles.wrapper}>
-            {!!height && (
-                <>
-                    <WebviewWithArticle
-                        {...webviewProps}
-                        onScroll={Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: {
-                                            y: scrollX,
-                                        },
-                                    },
-                                },
-                            ],
-                            /* webview doesnt support the native driver just yet :() */
-                            { useNativeDriver: false },
-                        )}
-                        paddingTop={height}
-                        style={{
-                            ...StyleSheet.absoluteFillObject,
-                        }}
-                    />
-                </>
-            )}
-
             <Animated.View
                 onLayout={(ev: any) => {
-                    console.log(ev)
                     setHeight(ev.nativeEvent.layout.height)
                 }}
                 pointerEvents="none"
@@ -153,6 +128,29 @@ const ArticleWebViewAndroid = ({
             >
                 {header}
             </Animated.View>
+
+            {!!height && (
+                <>
+                    <WebviewWithArticle
+                        {...webviewProps}
+                        onScroll={Animated.event(
+                            [
+                                {
+                                    nativeEvent: {
+                                        contentOffset: {
+                                            y: scrollX,
+                                        },
+                                    },
+                                },
+                            ],
+                            /* webview doesnt support the native driver just yet :() */
+                            { useNativeDriver: false },
+                        )}
+                        paddingTop={height}
+                        style={StyleSheet.absoluteFillObject}
+                    />
+                </>
+            )}
         </View>
     )
 }
