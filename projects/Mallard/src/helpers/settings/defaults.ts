@@ -12,7 +12,7 @@ export const backends = [
     },
     {
         title: 'PROD preview',
-        value: 'https://d2cf1ljtg904cv.cloudfront.net/',
+        value: 'https://preview.editions.guardianapis.com/',
         preview: true,
     },
     {
