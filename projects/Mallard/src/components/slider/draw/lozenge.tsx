@@ -46,11 +46,16 @@ const commonStyles = StyleSheet.create({
     },
     text: {
         color: color.textOverDarkBackground,
-        fontSize: 22,
+        fontSize: 24,
         height: metrics.fronts.sliderRadius * 2,
         lineHeight: metrics.fronts.sliderRadius * 1.75,
         alignItems: 'center',
         fontFamily: 'GTGuardianTitlepiece-Bold',
+    },
+    letter: {
+        fontFamily: 'GTGuardianDaily-Regular',
+        fontSize: 20,
+        transform: [{ translateY: 2 }],
     },
 })
 
@@ -219,7 +224,7 @@ const LozengeCircle = ({
             <Text
                 {...ariaHidden}
                 allowFontScaling={false}
-                style={[commonStyles.text]}
+                style={[commonStyles.text, commonStyles.letter]}
             >
                 {children[0]}
             </Text>

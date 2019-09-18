@@ -18,6 +18,9 @@ export const families = {
     titlepiece: {
         regular: 'GTGuardianTitlepiece-Bold',
     },
+    daily: {
+        regular: 'GTGuardianDaily-Regular',
+    },
     headline: {
         light: 'GHGuardianHeadline-Light',
         regular: 'GHGuardianHeadline-Regular',
@@ -83,8 +86,8 @@ const scale = {
                 lineHeight: 18,
             },
             [Breakpoints.phone]: {
-                fontSize: 14,
-                lineHeight: 18,
+                fontSize: 15,
+                lineHeight: 19,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 18,
@@ -97,8 +100,8 @@ const scale = {
                 lineHeight: 18,
             },
             [Breakpoints.phone]: {
-                fontSize: 16,
-                lineHeight: 20,
+                fontSize: 18,
+                lineHeight: 23,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 18,
@@ -141,8 +144,8 @@ const scale = {
                 lineHeight: 17,
             },
             [Breakpoints.phone]: {
-                fontSize: 18,
-                lineHeight: 20,
+                fontSize: 16,
+                lineHeight: 19,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 24,
@@ -170,7 +173,21 @@ const scale = {
             },
             [Breakpoints.phone]: {
                 fontSize: 26,
-                lineHeight: 27,
+                lineHeight: 29,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 36,
+                lineHeight: 38,
+            },
+        },
+        1.6: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 21,
+                lineHeight: 22,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 30,
+                lineHeight: 32,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 36,
