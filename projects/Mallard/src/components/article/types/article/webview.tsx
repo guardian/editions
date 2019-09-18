@@ -26,7 +26,7 @@ const WebviewWithArticle = ({
     article: BlockElement[]
     wrapLayout: WrapLayout
     paddingTop?: number
-} & WebViewProps) => {
+} & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
 
