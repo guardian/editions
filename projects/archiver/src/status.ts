@@ -43,7 +43,7 @@ export const getStatus = async (
     }
     const decodedStatus = JSON.parse(statusResponse)
     const status = statuses.find(_ => _ === decodedStatus.status) || 'unknown'
-    const updated = response.LastModified!
+    const updated = response.LastModified || new Date(0)
     return { ...issuePublication, status, updated }
 }
 
