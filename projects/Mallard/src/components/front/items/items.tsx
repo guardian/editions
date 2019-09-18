@@ -8,6 +8,9 @@ import { TextBlock } from './helpers/text-block'
 import { ImageItem, SplitImageItem, SidekickImageItem } from './image-items'
 import { SmallItem, SmallItemLargeText } from './small-items'
 import { SuperHeroImageItem } from './super-items'
+import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { Image } from '../../../../../common/src'
 
 /*
 helpers
@@ -71,18 +74,55 @@ const splashImageStyles = StyleSheet.create({
 })
 
 const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
-    if (!article.image)
+    if (!article.cardImage || !article.cardImageTablet)
         return <SuperHeroImageItem {...tappableProps} {...{ article }} />
+
+    const cardImage: Image = {
+        source: (article.cardImage && article.cardImage.source) || '',
+        path: (article.cardImage && article.cardImage.path) || '',
+    }
+
+    const cardImageTablet: Image = {
+        source:
+            (article.cardImageTablet && article.cardImageTablet.source) || '',
+        path: (article.cardImageTablet && article.cardImageTablet.path) || '',
+    }
+
     return (
-        <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            <ImageResource
-                style={[splashImageStyles.image]}
-                image={article.image}
-            />
-            <HeadlineCardText style={[splashImageStyles.hidden]}>
-                {article.kicker}
-            </HeadlineCardText>
-        </ItemTappable>
+        <WithBreakpoints>
+            {{
+                0: ({ width }) => (
+                    <ItemTappable
+                        {...tappableProps}
+                        {...{ article }}
+                        hasPadding={false}
+                    >
+                        <ImageResource
+                            style={[splashImageStyles.image]}
+                            image={cardImage}
+                        />
+                        <HeadlineCardText style={[splashImageStyles.hidden]}>
+                            {article.kicker}
+                        </HeadlineCardText>
+                    </ItemTappable>
+                ),
+                [Breakpoints.tabletVertical]: () => (
+                    <ItemTappable
+                        {...tappableProps}
+                        {...{ article }}
+                        hasPadding={false}
+                    >
+                        <ImageResource
+                            style={[splashImageStyles.image]}
+                            image={cardImageTablet}
+                        />
+                        <HeadlineCardText style={[splashImageStyles.hidden]}>
+                            {article.kicker}
+                        </HeadlineCardText>
+                    </ItemTappable>
+                ),
+            }}
+        </WithBreakpoints>
     )
 }
 

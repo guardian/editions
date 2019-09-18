@@ -78,6 +78,8 @@ export type MediaType =
     | 'Cutout'
     | 'Slideshow'
     | 'Image'
+    | 'coverCard'
+
 export interface Content extends WithKey {
     type: string
     headline: string
