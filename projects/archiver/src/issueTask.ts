@@ -4,6 +4,7 @@ import { Issue, IssuePublication } from '../common'
 import { getIssue } from './downloader'
 import { Bucket } from './s3'
 import { getPublishedId } from './publishedId'
+import { putStatus } from './status'
 
 export interface IssueParams {
     issuePublication: IssuePublication
@@ -20,6 +21,7 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
     console.log(
         `Attempting to upload ${JSON.stringify(issuePublication)} to ${Bucket}`,
     )
+    await putStatus(issuePublication, 'started')
     const publishedId = getPublishedId(issuePublication)
     const issue = await attempt(getIssue(publishedId))
     if (hasFailed(issue)) {

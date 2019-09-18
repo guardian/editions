@@ -23,3 +23,18 @@ export const getIssues = async (): Promise<
         issueDate,
     }))
 }
+
+export const issueWindow = (
+    issues: Omit<IssuePublication, 'version'>[],
+    currentlyPublishing?: IssuePublication,
+): Omit<IssuePublication, 'version'>[] =>
+    issues
+        .sort(
+            (a, b) =>
+                new Date(b.issueDate).getTime() -
+                new Date(a.issueDate).getTime(),
+        )
+        .slice(0, 7)
+        .filter(
+            issue => issue.issueDate !== oc(currentlyPublishing).issueDate(''),
+        )

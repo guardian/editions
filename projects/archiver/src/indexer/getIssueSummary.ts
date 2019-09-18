@@ -59,12 +59,12 @@ export const getIssueSummary = async (
             .filter(notNull),
     )
 
-    const images: { [key in ImageSize]?: string[] } = fromPairs(
+    const images: { [key in ImageSize]?: string } = fromPairs(
         imageSizes
-            .map((breakpoint): [ImageSize, string[]] | null => {
+            .map((breakpoint): [ImageSize, string] | null => {
                 const asset = assetFiles[breakpoint]
                 if (asset == null) return null
-                return [breakpoint, [asset]]
+                return [breakpoint, asset]
             })
             .filter(notNull),
     )

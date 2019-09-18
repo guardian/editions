@@ -1,24 +1,32 @@
 import { Handler } from 'aws-lambda'
-import { attempt, hasFailed } from '../../backend/utils/try'
-import { IssueCompositeKey, IssueSummary } from '../common'
+import { IssueSummary } from '../common'
+import { getIssueSummary } from './indexer/getIssueSummary'
 import { indexer } from './indexer/summary'
 import { upload, FIVE_SECONDS } from './upload'
+import { UploadTaskOutput } from './issueUploadTask'
+import { putStatus } from './status'
 
-export interface IndexTaskOutput {
-    issueId: IssueCompositeKey
+export interface IndexTaskOutput extends UploadTaskOutput {
     message: string
+    issueSummary: IssueSummary
     index: IssueSummary[]
 }
-export const handler: Handler<IndexTaskOutput> = async ({ issueId }) => {
-    const index = await attempt(indexer())
-    if (hasFailed(index)) {
-        console.error(index)
-        throw new Error('Could not generate index.')
+export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
+    issuePublication,
+    issue,
+}) => {
+    const index = await indexer(issuePublication)
+    const issueSummary = await getIssueSummary(issuePublication)
+    if (issueSummary == undefined) {
+        throw new Error('No issue summary was generated for the current issue')
     }
-    await upload('issues', index, 'application/json', FIVE_SECONDS)
+    await upload('issues', [issueSummary, ...index], 'application/json', FIVE_SECONDS)
+    await putStatus(issuePublication, 'built')
     return {
-        issueId,
+        issuePublication,
         index,
+        issue,
+        issueSummary,
         message: `Index regenerated`,
     }
 }
