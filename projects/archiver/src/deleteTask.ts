@@ -1,15 +1,14 @@
 import { Handler } from 'aws-lambda'
 import { IssueSummary } from '../common'
-import { getIssueSummary } from './indexer/getIssueSummary'
-import { indexer } from './indexer/summary'
-import { UploadTaskOutput } from './issueUploadTask'
-import { upload } from './upload'
-import { putStatus, getStatuses } from './status'
-import { IndexTaskOutput } from './generateIndexTask'
 import { deletePublication } from './delete'
+import { IndexTaskOutput } from './generateIndexTask'
+import { getStatuses } from './status'
 
+const CLEANED = 'cleaned' as const
+const CEDED = 'ceded' as const
+export type DeletionStatus = typeof CLEANED | typeof CEDED
 export type DeleteTaskOutput = Omit<IndexTaskOutput, 'index'> & {
-    status: 'cleaned' | 'ceded'
+    status: DeletionStatus
     issueSummary: IssueSummary
 }
 export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
@@ -31,7 +30,7 @@ export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
             issue,
             issuePublication,
             issueSummary,
-            status: 'ceded',
+            status: CEDED,
             message: 'Publications are still in progress, ceding',
         }
     }
@@ -56,7 +55,7 @@ export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
             issue,
             issuePublication,
             issueSummary,
-            status: 'ceded',
+            status: CEDED,
             message: 'Another version has published more recently, ceding',
         }
     }
@@ -69,7 +68,7 @@ export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
         issue,
         issuePublication,
         issueSummary,
-        status: 'cleaned',
+        status: CLEANED,
         message: `Deleted ${JSON.stringify(safeToDelete)}`,
     }
 }
