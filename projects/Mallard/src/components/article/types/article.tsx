@@ -136,8 +136,6 @@ const ArticleWebViewAndroid = ({
                     console.log(ev)
                     setHeight(ev.nativeEvent.layout.height)
                 }}
-                renderToHardwareTextureAndroid
-                needsOffscreenAlphaCompositing
                 pointerEvents="none"
                 style={[
                     androidStyles.header,

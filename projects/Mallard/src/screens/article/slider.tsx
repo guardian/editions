@@ -167,9 +167,8 @@ const ArticleSlider = ({
                 initialPage={startingPoint}
             >
                 {data.map((item, index) => (
-                    <View>
+                    <View key={index}>
                         <ArticleScreenBody
-                            key={index}
                             width={width}
                             path={item}
                             pillar={pillar}
