@@ -13,7 +13,7 @@ import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
-import { fetchWeather } from 'src/helpers/fetch'
+import { fetchWeatherForecastForLocation } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
@@ -97,14 +97,14 @@ const styles = StyleSheet.create({
  * to use their location.
  */
 
+export interface WeatherForecast {
+    locationName: string
+    forecasts: Forecast[]
+}
+
 const useWeatherResponse = () => {
-    const londonLocationCode = 328328
-    return withResponse<Forecast[]>(
-        useCachedOrPromise(
-            fetchWeather<Forecast[]>(
-                `forecasts/v1/hourly/12hour/${londonLocationCode}.json?metric=true&language=en-gb`,
-            ),
-        ),
+    return withResponse<WeatherForecast>(
+        useCachedOrPromise(fetchWeatherForecastForLocation()),
     )
 }
 
@@ -145,7 +145,13 @@ const WeatherIconView = ({
     </View>
 )
 
-const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
+const WeatherWithForecast = ({
+    locationName,
+    forecasts,
+}: {
+    locationName: string
+    forecasts: Forecast[]
+}) => {
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
         const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
@@ -161,7 +167,7 @@ const WeatherWithForecast = ({ forecasts }: { forecasts: Forecast[] }) => {
                                             {'\uE01B'}
                                         </Text>
                                         <Text style={styles.locationName}>
-                                            {'London'}
+                                            {locationName}
                                         </Text>
                                     </View>
                                 }
@@ -206,7 +212,12 @@ const Weather = () => {
     return weatherResponse({
         error: ({}) => <></>,
         pending: () => <></>,
-        success: forecasts => <WeatherWithForecast forecasts={forecasts} />,
+        success: weatherForecast => (
+            <WeatherWithForecast
+                locationName={weatherForecast.locationName}
+                forecasts={weatherForecast.forecasts}
+            />
+        ),
     })
 }
 
