@@ -20,6 +20,7 @@ import {
 } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { Standfirst } from './helpers/standfirst'
+import { metrics } from 'src/theme/spacing'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -127,18 +128,24 @@ const opinionStyles = StyleSheet.create({
     },
     topBlock: {
         paddingTop: tappablePadding.paddingVertical / 2,
+        height: '66.66666%',
     },
     titleText: {
         ...getFont('headline', 1.5, 'light'),
-        color: color.textOverDarkBackground,
+        paddingTop: metrics.vertical / 2,
+        color: color.text,
     },
     trailText: {
-        ...getFont('headline', 1, 'light'),
+        ...getFont('headline', 0.75, 'light'),
         color: color.textOverDarkBackground,
+    },
+    trailTextPadding: {
+        paddingRight: '40%',
     },
     bylineText: {
         ...getFont('headline', 1.5),
         fontFamily: getFont('titlepiece', 1.5).fontFamily,
+        color: color.textOverDarkBackground,
     },
     cutout: {
         position: 'absolute',
@@ -161,66 +168,43 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                     opinionStyles.block,
                     opinionStyles.topBlock,
                     {
-                        backgroundColor: colors.main,
+                        backgroundColor: colors.faded,
                     },
                 ]}
             >
-                <TextWithIcon
-                    unscaledFont={getUnscaledFont('headline', 1.5)}
-                    style={opinionStyles.titleText}
-                    icon={{
-                        width: 35,
-                        element: scale => (
-                            <Quote
-                                scale={0.8 / scale}
-                                fill={opinionStyles.titleText.color}
-                            />
-                        ),
-                    }}
+                <Quote scale={2} fill={colors.main} />
+                <Text style={opinionStyles.titleText}>{article.headline}</Text>
+
+                <Text
+                    style={[opinionStyles.bylineText, { color: colors.main }]}
                 >
-                    {article.headline}
-                </TextWithIcon>
-                <View>
-                    <Text
-                        style={[
-                            opinionStyles.bylineText,
-                            { color: opinionStyles.titleText.color },
-                        ]}
-                    >
-                        {[
-                            article.bylineImages &&
-                                article.bylineImages.cutout &&
-                                'by',
-                            article.byline,
-                        ]
-                            .filter(Boolean)
-                            .join(' ')}
-                    </Text>
-                    {article.bylineImages && article.bylineImages.cutout ? (
-                        <View style={opinionStyles.cutout}>
-                            <BylineCutout
-                                cutout={article.bylineImages.cutout}
-                            />
-                        </View>
-                    ) : null}
-                </View>
+                    {article.byline}
+                </Text>
             </View>
             <View
                 style={[
                     opinionStyles.block,
-                    opinionStyles.borderStyles,
                     {
                         backgroundColor: colors.main,
                     },
                 ]}
             >
-                {'trail' in article && article.trail ? (
-                    <Text
-                        style={opinionStyles.trailText}
-                        allowFontScaling={false}
-                    >
-                        {article.trail}
-                    </Text>
+                <Text
+                    style={[
+                        opinionStyles.trailText,
+                        article.bylineImages &&
+                            article.bylineImages.cutout &&
+                            opinionStyles.trailTextPadding,
+                    ]}
+                    allowFontScaling={false}
+                >
+                    {article.trail}
+                </Text>
+
+                {article.bylineImages && article.bylineImages.cutout ? (
+                    <View style={opinionStyles.cutout}>
+                        <BylineCutout cutout={article.bylineImages.cutout} />
+                    </View>
                 ) : null}
             </View>
         </ItemTappable>

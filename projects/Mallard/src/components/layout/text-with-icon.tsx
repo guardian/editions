@@ -42,10 +42,10 @@ then the icon floats over the whole thing as an absolute box
 */
 const IconDashes = ({ length = 1 }) => {
     const lines = []
-    for (let i = 0; i < Math.floor(length / 5); i++) {
+    for (let i = 0; i < Math.floor(length / 3.5); i++) {
         lines.push(
             <Text key={i} {...ariaHidden} style={[styles.dash]}>
-                {'.'}
+                {' '}
             </Text>,
         )
     }

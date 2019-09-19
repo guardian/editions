@@ -10,12 +10,12 @@ const Quote = ({ fill = color.text, scale = 1 }) => (
         style={{
             transform: [
                 { scale },
-                { translateY: (height - height * scale) / 2 },
+                { translateY: (height - height * scale) / -2 },
                 { translateX: (width - width * scale) / -2 },
             ],
         }}
-        width={width}
-        height={height}
+        width={width * scale}
+        height={height * scale}
         fill="none"
     >
         <Path
