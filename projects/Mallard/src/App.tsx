@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
 import { StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
-import { FileSystemProvider } from 'src/hooks/use-fs'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
 import { AuthProvider } from './authentication/auth-context'
@@ -31,6 +30,8 @@ import {
 import { NavigationState } from 'react-navigation'
 import { AuthStatus, isIdentity } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
+import SplashScreen from 'react-native-splash-screen'
+import { UpdateIpAddress } from './components/update-ip-address'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-232asdf1asdfa3410'
+const persistenceKey = 'dev-nav-key-232asdffgdfg1asdffgfdgfdga3410'
 
 const persistNavigationState = async (navState: any) => {
     try {
@@ -113,12 +114,7 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const WithProviders = nestProviders(
-    FileSystemProvider,
-    SettingsProvider,
-    Modal,
-    ToastProvider,
-)
+const WithProviders = nestProviders(SettingsProvider, Modal, ToastProvider)
 
 const handleLoginStatus = (status: AuthStatus) => {
     if (isIdentity(status)) {
@@ -129,6 +125,10 @@ const handleLoginStatus = (status: AuthStatus) => {
 }
 
 export default class App extends React.Component<{}, {}> {
+    componentDidMount() {
+        SplashScreen.hide()
+    }
+
     async componentDidCatch(e: Error) {
         /**
          * use an heuristic to check whether this is a react-nav error
@@ -161,6 +161,7 @@ export default class App extends React.Component<{}, {}> {
                                 }
                             />
                             <NetInfoAutoToast />
+                            <UpdateIpAddress />
                         </View>
                         <ModalRenderer />
                         <BugButton />

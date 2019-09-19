@@ -65,6 +65,8 @@ PODS:
     - React
   - react-native-safe-area-insets (0.1.0):
     - React
+  - react-native-splash-screen (3.2.0):
+    - React
   - react-native-webview (6.9.0):
     - React
   - React-RCTActionSheet (0.60.4):
@@ -145,6 +147,7 @@ DEPENDENCIES:
   - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - "react-native-safe-area-insets (from `../node_modules/@delightfulstudio/react-native-safe-area-insets`)"
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -208,6 +211,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-insets:
     :path: "../node_modules/@delightfulstudio/react-native-safe-area-insets"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -276,6 +281,7 @@ SPEC CHECKSUMS:
   react-native-in-app-utils: e87b9a1de664b82176600b5c5d1c9d485c63c801
   react-native-netinfo: 0da34082d2cec3100c9b5073bb217e35f1142bdd
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
+  react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webview: 2d8de2be422f0f8b9ba38db3f013f9ebfdb9b78f
   React-RCTActionSheet: 9f71d7ae3e8fb10e08d162cbf14c621349dbfab3
   React-RCTAnimation: 981d8c95b0e30918a9832ccac32af83562a27fae
@@ -306,4 +312,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c499c44aed47275a8e1f036511ecda7d7450e47a
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.6.1

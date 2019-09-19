@@ -15,7 +15,6 @@ import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed
 import { ApiScreen } from 'src/screens/settings/api-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
-import { DownloadScreen } from 'src/screens/settings/download-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
 import {
     GdprConsentScreen,
@@ -82,7 +81,6 @@ const AppStack = createModalNavigator(
         [routeNames.Settings]: createHeaderStackNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
-                [routeNames.Downloads]: DownloadScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,

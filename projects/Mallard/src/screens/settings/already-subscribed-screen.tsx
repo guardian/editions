@@ -23,7 +23,6 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
                 <Heading>{`Guardian Digital pack/Digital + Print`}</Heading>
-                <Heading>{``}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
                     data={authHandler({
@@ -61,7 +60,6 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                     <>
                         <Heading>{``}</Heading>
                         <Heading>{`Daily Edition`}</Heading>
-                        <Heading>{``}</Heading>
                         <List
                             onPress={({ onPress }) => onPress()}
                             data={[

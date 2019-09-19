@@ -1,3 +1,5 @@
+export JAVA_OPTS = -Xmx4096m -Dsun.jnu.encoding=UTF-8
+
 debug-android:
 	mkdir -p android/app/src/main/assets
 	yarn jetify
@@ -20,3 +22,5 @@ beta-android:
 	yarn bundle-android
 	cd android && ./gradlew clean && cd ..
 	fastlane android beta
+
+PHONY: beta-android beta-ios debug-android debug-ios

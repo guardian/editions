@@ -72,12 +72,82 @@ export interface Forecast {
     MobileLink: string
     Link: string
 }
+
+interface AccuWeatherRegion {
+    ID: string
+    LocalizedName: string
+    EnglishName: string
+}
+
+type AccuWeatherAdminArea = AccuWeatherRegion & {
+    Level: number
+    LocalizedType: string
+    EnglishType: string
+    CountryID: string
+}
+
+interface AccuweatherSupplementalAdminArea {
+    Level: number
+    LocalizedName: string
+    EnglishName: string
+}
+
+interface AccuWeatherTimezone {
+    Code: string
+    Name: string
+    GmtOffset: number
+    IsDaylightSaving: boolean
+    NextOffsetChange: string
+}
+
+interface AccuWeatherMeasurement {
+    Value: number
+    Unit: string
+    UnitType: number
+}
+
+interface AccuWeatherElevation {
+    Metric: AccuWeatherMeasurement
+    Imperial: AccuWeatherMeasurement
+}
+
+interface AccuWeatherGeoPosition {
+    Latitude: number
+    Longitude: number
+    Elevation: AccuWeatherElevation
+}
+
+export interface AccuWeatherLocation {
+    Version: number
+    Key: string
+    Type: string
+    Rank: number
+    LocalizedName: string
+    EnglishName: string
+    PrimaryPostalCode: string
+    Region: AccuWeatherRegion
+    Country: AccuWeatherRegion
+    AdministrativeArea: AccuWeatherAdminArea
+    TimeZone: AccuWeatherTimezone
+    GeoPosition: AccuWeatherGeoPosition
+    IsAlias: boolean
+    SupplementalAdminAreas: AccuweatherSupplementalAdminArea[]
+    DataSets: string[]
+}
+
+export interface WeatherForecast {
+    locationName: string
+    forecasts: Forecast[]
+}
+
 export type MediaType =
     | 'UseArticleTrail'
     | 'Hide'
     | 'Cutout'
     | 'Slideshow'
     | 'Image'
+    | 'coverCard'
+
 export interface Content extends WithKey {
     type: string
     headline: string
@@ -133,17 +203,21 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export interface IssueSummary extends WithKey {
+export interface IssuePublication {
+    edition: string
+    version: string
+    issueDate: string
+}
+export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
     assets?: {
-        [P in ImageSize]?: string[]
-    } & { data: string[] }
+        [P in ImageSize]?: string
+    } & { data: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
-    id: string
 }
 
 export interface Collection extends WithKey {
@@ -200,7 +274,7 @@ export interface PullquoteElement {
 }
 
 export interface AtomElement {
-    id: '⚛︎'
+    id: 'atom'
     atomType: string
     atomId: string
     html?: string
@@ -288,14 +362,35 @@ export interface Crossword {
     annotatedSolution?: string
     dateSolutionAvailable?: CapiDateTime
 }
+export interface IssueCompositeKey {
+    publishedId: string
+    localId: string
+}
 
-export const issueDir = (issueId: string) => `${issueId}`
+export const issueDir = (issueId: string) => {
+    return issueId
+}
 
-export const issuePath = (issueId: string) => `${issueDir(issueId)}/issue`
+export const issuePath = (issue: string) => `${issueDir(issue)}/issue`
 
 // const issuePath = (issueId: string) => `${issueDir(issueId)}issue`
-export const frontPath = (issueId: string, frontId: string) =>
-    `${issueDir(issueId)}/front/${frontId}`
+export const frontPath = (issue: string, frontId: string) =>
+    `${issueDir(issue)}/front/${frontId}`
+
+// These have issueids in the path, but you'll need to change the archiver if you want to use them.
+
+export const mediaDir = (issue: string, size: ImageSize) =>
+    `${issueDir(issue)}/media/${size}`
+
+export const mediaPath = (
+    issue: string,
+    size: ImageSize,
+    source: string,
+    path: string,
+) => `${mediaDir(issue, size)}/${source}/${path}`
+
+export const coloursPath = (issue: string, source: string, path: string) =>
+    `${issueDir(issue)}/colours/${source}/${path}`
 
 export const issueSummaryPath = () => 'issues'
 export interface Image {
@@ -315,18 +410,6 @@ export interface Palette {
     LightVibrant?: string
     LightMuted?: string
 }
-
-// These have issueids in the path, but you'll need to change the archiver if you want to use them.
-
-export const mediaPath = (
-    issue: string,
-    size: ImageSize,
-    source: string,
-    path: string,
-) => `${issueDir(issue)}/media/${size}/${source}/${path}`
-
-export const coloursPath = (issue: string, source: string, path: string) =>
-    `${issueDir(issue)}/colours/${source}/${path}`
 
 export const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined

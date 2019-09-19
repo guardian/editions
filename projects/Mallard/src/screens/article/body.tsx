@@ -1,15 +1,22 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    ScrollViewProperties,
+    NativeSyntheticEvent,
+    NativeScrollEvent,
+} from 'react-native'
 import { ScrollView } from 'react-navigation'
-import { ArticleType, ArticlePillar } from 'src/common'
+import { ArticlePillar, ArticleType } from 'src/common'
 import { ArticleController } from 'src/components/article'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { WithArticle } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
-import { color } from 'src/theme/color'
-import { PathToArticle } from '../article-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
+import { OnTopPositionChangeFn } from './helpers'
+import { PathToArticle } from 'src/paths'
+import { color } from 'src/theme/color'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
@@ -18,7 +25,7 @@ const styles = StyleSheet.create({
 
 const ArticleScreenBody = React.memo<{
     path: PathToArticle
-    onTopPositionChange: (isAtTop: boolean) => void
+    onTopPositionChange: OnTopPositionChangeFn
     pillar: ArticlePillar
     width: number
     position?: number
@@ -28,14 +35,7 @@ const ArticleScreenBody = React.memo<{
     const previewNotice = preview ? `${path.collection}:${position}` : undefined
 
     return (
-        <ScrollView
-            scrollEventThrottle={8}
-            onScroll={ev => {
-                onTopPositionChange(ev.nativeEvent.contentOffset.y <= 0)
-            }}
-            style={[styles.container, { width }]}
-            contentContainerStyle={styles.flex}
-        >
+        <View style={[styles.container, { width }]}>
             {articleResponse({
                 error: ({ message }) => (
                     <FlexErrorMessage
@@ -61,12 +61,15 @@ const ArticleScreenBody = React.memo<{
                             }
                             pillar={pillar}
                         >
-                            <ArticleController article={article.article} />
+                            <ArticleController
+                                onTopPositionChange={onTopPositionChange}
+                                article={article.article}
+                            />
                         </WithArticle>
                     </>
                 ),
             })}
-        </ScrollView>
+        </View>
     )
 })
 

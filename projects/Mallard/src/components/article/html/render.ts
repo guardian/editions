@@ -20,6 +20,7 @@ import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
 import { quoteStyles, Pullquote } from './pull-quote'
 import { families } from 'src/theme/typography'
+import { Issue } from '../../../common'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -97,11 +98,15 @@ export const render = (
         features,
         wrapLayout,
         showMedia,
+        height,
+        publishedId,
     }: {
         pillar: ArticlePillar
         features: ArticleFeatures[]
         wrapLayout: WrapLayout
         showMedia: boolean
+        height: number
+        publishedId: Issue['publishedId'] | null
     },
 ) => {
     const content = article
@@ -122,7 +127,12 @@ export const render = (
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image':
-                    return showMedia ? Image({ imageElement: el }) : ''
+                    return showMedia && publishedId
+                        ? Image({
+                              imageElement: el,
+                              publishedId,
+                          })
+                        : ''
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,
@@ -137,7 +147,7 @@ export const render = (
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
-        <main>${content}</main>
+        <main style="padding-top:${px(height)}">${content}</main>
     `
     return makeHtml({ styles, body })
 }

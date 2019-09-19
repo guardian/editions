@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import React, { useContext, ReactNode } from 'react'
-import { Alert, View } from 'react-native'
+import { Alert, Clipboard, View } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { AuthContext } from 'src/authentication/auth-context'
 import { Footer, Heading } from 'src/components/layout/ui/row'
@@ -19,6 +19,7 @@ import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
 import { isInTestFlight } from 'src/helpers/release-stream'
 import { DEV_clearCASCaches } from 'src/helpers/storage'
+import { FSPaths } from 'src/paths'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -105,15 +106,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 onPress={({ onPress }) => onPress()}
                 data={[
                     {
-                        key: 'Downloads',
-                        title: 'Manage issues',
-                        data: {
-                            onPress: () => {
-                                navigation.navigate(routeNames.Downloads)
-                            },
-                        },
-                    },
-                    {
                         key: 'Endpoints',
                         title: 'API Endpoint',
                         explainer: apiUrl,
@@ -157,6 +149,17 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         explainer: isInTestFlight().toString(),
                         data: {
                             onPress: () => {},
+                        },
+                    },
+                    {
+                        key: 'Copy local path to clipboard',
+                        title: 'Copy local path to clipboard',
+                        explainer: 'does what it says on the tin',
+                        data: {
+                            onPress: () => {
+                                Clipboard.setString(FSPaths.issuesDir)
+                                Alert.alert(FSPaths.issuesDir)
+                            },
                         },
                     },
                 ]}

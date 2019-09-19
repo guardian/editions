@@ -74,9 +74,11 @@ const CollectionPageInFront = ({
 
 const FrontWithResponse = ({
     frontData,
-    issue,
+    localIssueId,
+    publishedIssueId,
 }: {
-    issue: Issue['key']
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
     frontData: FrontType
 }) => {
     const color = getColor(frontData.appearance)
@@ -95,14 +97,16 @@ const FrontWithResponse = ({
                     collection: collection.key,
                     front: frontData.key,
                     article: article.key,
-                    issue,
+                    localIssueId,
+                    publishedIssueId,
                 }),
             ),
             appearance: frontData.appearance,
             frontName: frontData.displayName || '',
         }
         return [flatCollections, navigator]
-    }, [frontData.collections.map(({ key }) => key).join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [localIssueId, publishedIssueId, frontData])
+
     const stops = cards.length
     const { card, container } = useIssueScreenSize()
 
@@ -146,7 +150,6 @@ const FrontWithResponse = ({
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 horizontal={true}
-                removeClippedSubviews={true}
                 decelerationRate="fast"
                 snapToInterval={card.width}
                 ref={(flatList: AnimatedFlatListRef) =>
@@ -200,7 +203,8 @@ const FrontWithResponse = ({
                         width={card.width}
                         {...{
                             scrollX,
-                            issue,
+                            localIssueId,
+                            publishedIssueId,
                             index,
                             pillar,
                             articleNavigator,
@@ -214,9 +218,14 @@ const FrontWithResponse = ({
 
 export const Front: FunctionComponent<{
     front: string
-    issue: Issue['key']
-}> = ({ front, issue }) => {
-    const frontsResponse = useFrontsResponse(issue, front)
+    localIssueId: Issue['localId']
+    publishedIssueId: Issue['publishedId']
+}> = ({ front, localIssueId, publishedIssueId }) => {
+    const frontsResponse = useFrontsResponse(
+        localIssueId,
+        publishedIssueId,
+        front,
+    )
 
     return frontsResponse({
         pending: () => (
@@ -231,6 +240,10 @@ export const Front: FunctionComponent<{
                 <FlexErrorMessage debugMessage={err.message} />
             </Wrapper>
         ),
-        success: frontData => <FrontWithResponse {...{ frontData, issue }} />,
+        success: frontData => (
+            <FrontWithResponse
+                {...{ frontData, localIssueId, publishedIssueId }}
+            />
+        ),
     })
 }

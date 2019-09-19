@@ -1,10 +1,15 @@
-import PushNotification from 'react-native-push-notification'
-import { PushNotificationIOS, Platform } from 'react-native'
-import { fetchFromNotificationService } from 'src/helpers/fetch'
-import { downloadAndUnzipIssue, clearOldIssues } from 'src/helpers/files'
-import { imageForScreenSize } from 'src/helpers/screen'
-import { pushNotificationRegistrationCache } from './storage'
 import moment, { MomentInput } from 'moment'
+import { Platform, PushNotificationIOS } from 'react-native'
+import PushNotification from 'react-native-push-notification'
+import { fetchFromNotificationService } from 'src/helpers/fetch'
+import {
+    clearOldIssues,
+    downloadAndUnzipIssue,
+    matchSummmaryToKey,
+} from 'src/helpers/files'
+import { imageForScreenSize } from 'src/helpers/screen'
+import { getIssueSummary } from 'src/hooks/use-api'
+import { pushNotificationRegistrationCache } from './storage'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -63,12 +68,19 @@ const pushNotifcationRegistration = () => {
                 })
             }
         },
-        onNotification: (notification: any) => {
+        onNotification: async (notification: any) => {
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
                 const screenSize = imageForScreenSize()
-                downloadAndUnzipIssue(key, screenSize)
+                const issueSummaries = await getIssueSummary().getValue()
+                // Check to see if we can find the image summary for the one that is pushed
+                const pushImageSummary = matchSummmaryToKey(issueSummaries, key)
+
+                // Not there? Fahgettaboudit
+                if (!pushImageSummary) return null
+
+                downloadAndUnzipIssue(pushImageSummary, screenSize)
                 clearOldIssues()
             }
 

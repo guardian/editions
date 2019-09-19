@@ -166,13 +166,8 @@ const LozengeBigHeader = ({
                                 opacity: position.interpolate({
                                     inputRange: safeInterpolation([
                                         0,
-                                        clamp(
-                                            width / 2 -
-                                                metrics.fronts.sliderRadius,
-                                            0,
-                                            width / 2,
-                                        ),
-                                        width / 2,
+                                        fadeLozengeAt,
+                                        fadeLozengeAt * 2,
                                     ]),
                                     outputRange: safeInterpolation([1, 1, 0]),
                                 }),

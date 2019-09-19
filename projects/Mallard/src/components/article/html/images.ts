@@ -1,14 +1,14 @@
-import { ImageElement } from 'src/common'
-import { html, css, getScaledFontCss, px } from 'src/helpers/webview'
-import { imagePath } from 'src/paths'
-import { PixelRatio } from 'react-native'
-import { color } from 'src/theme/color'
-import { CssProps } from './helpers/props'
-import { breakOut } from './helpers/layout'
-import { Arrow } from './arrow'
+import { ImageElement, mediaPath } from 'src/common'
+import { backends, defaultSettings } from 'src/helpers/settings/defaults'
 import { Direction } from 'src/helpers/sizes'
+import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { Arrow } from './arrow'
+import { breakOut } from './helpers/layout'
+import { CssProps } from './helpers/props'
+import { imageForScreenSize } from 'src/helpers/screen'
 
 export const renderCaption = ({
     caption,
@@ -179,8 +179,22 @@ const ImageBase = ({
     `
 }
 
-const Image = ({ imageElement }: { imageElement: ImageElement }) => {
-    const path = imagePath(imageElement.src)
+const Image = ({
+    imageElement,
+    publishedId,
+}: {
+    imageElement: ImageElement
+    publishedId: string
+}) => {
+    // @TODO: This needs refactoring to work with downloaded content
+    const backend = defaultSettings.apiUrl
+    const path = `${backend}${mediaPath(
+        publishedId,
+        imageForScreenSize(),
+        imageElement.src.source,
+        imageElement.src.path,
+    )}`
+
     return ImageBase({ path, ...imageElement })
 }
 

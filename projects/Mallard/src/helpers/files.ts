@@ -1,12 +1,12 @@
-import RNFetchBlob from 'rn-fetch-blob'
 import { unzip } from 'react-native-zip-archive'
+import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { FSPaths } from 'src/paths'
-import { ImageSize } from '../../../common/src'
-import { defaultSettings } from './settings/defaults'
+import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
+import { ImageSize, IssueSummary } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
+import { defaultSettings } from './settings/defaults'
 import { imageForScreenSize } from './screen'
-import { isRemoteZipAvailable } from './fetch'
+import { getIssueSummary } from 'src/hooks/use-api'
 
 interface BasicFile {
     filename: string
@@ -26,16 +26,17 @@ export type File = OtherFile | IssueFile
 export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
 
+export const ensureDirExists = (dir: string): Promise<void> =>
+    RNFetchBlob.fs.mkdir(dir).catch(() => Promise.resolve())
+
 /*
 We always try to prep the file system before accessing issuesDir
 */
 export const prepFileSystem = (): Promise<void> =>
-    RNFetchBlob.fs.mkdir(FSPaths.issuesDir).catch(() => Promise.resolve())
+    ensureDirExists(FSPaths.issuesDir).then(() =>
+        ensureDirExists(`${FSPaths.issuesDir}/daily-edition`),
+    )
 
-export const getIssueFiles = async () => {
-    await prepFileSystem()
-    return RNFetchBlob.fs.ls(FSPaths.issuesDir)
-}
 export const deleteIssueFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
     await prepFileSystem()
@@ -46,105 +47,28 @@ const fileName = (path: string) => {
     return sections[sections.length - 1]
 }
 
-/*
-Very low effort-ly optimise file list rebuilds.
-Only regenerate the file object if we've got new files.
-
-By using this in vanilla JS we don't have to fire up
-react in the background
-*/
-let fileListRawMemo = ''
-let fileListMemo: File[] = []
-
 export const getJson = (path: string) =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
-const pathToFile = (basePath = '') => async (
-    filePath: string,
-): Promise<File> => {
-    const path = basePath + '/' + filePath
-    const { size: fsSize, type: fsType } = await RNFetchBlob.fs.stat(path)
-
-    const type =
-        fsType === 'directory'
-            ? 'issue'
-            : filePath.includes('.zip')
-            ? 'archive'
-            : filePath.includes('.json')
-            ? 'json'
-            : 'other'
-
-    const id = filePath.split('.')[0]
-    const size = parseInt(fsSize)
-
-    if (type === 'issue') {
-        const id = fileName(path)
-        try {
-            const issue = await getJson(FSPaths.issue(id))
-            return {
-                filename: filePath,
-                path,
-                id,
-                size,
-                type,
-                issue,
-            }
-        } catch {
-            return {
-                filename: filePath,
-                path,
-                id,
-                size,
-                type: 'other',
-            }
-        }
-    }
-
-    return {
-        filename: filePath,
-        path,
-        id,
-        size,
-        type,
-    }
-}
-
-export const getFileList = async (): Promise<File[]> => {
-    const fileListRaw = await getIssueFiles()
-    if (fileListRawMemo === fileListRaw.join()) {
-        return fileListMemo
-    } else {
-        const fileList = await getIssueFiles().then(files =>
-            Promise.all(files.map(pathToFile(FSPaths.issuesDir))),
-        )
-        fileListRawMemo = fileListRaw.join()
-        fileListMemo = fileList
-        return fileList
-    }
-}
-
-/*
-This cleans up all files & folders that we can't recognize as valid issues or zip files
-*/
-export const deleteOtherFiles = async (): Promise<void> => {
-    const others = (await getFileList()).filter(({ type }) => type === 'other')
-    return Promise.all(
-        others.map(({ path }) => RNFetchBlob.fs.unlink(path)),
-    ).then(Promise.resolve)
-}
-
-export const downloadIssue = (issue: File['id']) => {
+export const downloadNamedIssueArchive = (
+    localIssueId: Issue['localId'],
+    assetPath: string,
+    filename: string,
+) => {
     const zipUrl = defaultSettings.zipUrl
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
         IOSBackgroundTask: true,
-    }).fetch('GET', `${zipUrl}${issue}.zip`)
-
+    }).fetch('GET', `${zipUrl}/${assetPath}`)
     return {
         promise: returnable.then(async res => {
             await prepFileSystem()
-            await RNFetchBlob.fs.mv(res.path(), FSPaths.issueZip(issue))
+            await ensureDirExists(FSPaths.issueRoot(localIssueId))
+            await RNFetchBlob.fs.mv(
+                res.path(),
+                FSPaths.zip(localIssueId, filename),
+            )
             return res
         }),
         cancel: returnable.cancel,
@@ -162,19 +86,17 @@ export const downloadIssue = (issue: File['id']) => {
  * This will move all images into a folder `/issue/12-12-12/media/cached/media...`
  */
 
-const CACHED_FOLDER_NAME = 'cached'
-
 const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
     const [sizedMediaDir] = (await RNFetchBlob.fs.ls(
         FSPaths.mediaRoot(issueId),
-    )).filter(folder => folder !== CACHED_FOLDER_NAME) // find the first folder that isn't cached
+    )).filter(folder => folder !== MEDIA_CACHE_DIRECTORY_NAME) // find the first folder that isn't cached
 
     if (!sizedMediaDir) return
 
     const absSizedMediaDir = `${FSPaths.mediaRoot(issueId)}/${sizedMediaDir}`
     const genericMediaDir = `${FSPaths.mediaRoot(
         issueId,
-    )}/${CACHED_FOLDER_NAME}`
+    )}/${MEDIA_CACHE_DIRECTORY_NAME}`
 
     // if the file exists already, delete it and then replace it
     const fileExists = await RNFetchBlob.fs.exists(genericMediaDir)
@@ -185,25 +107,24 @@ const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
     RNFetchBlob.fs.mv(absSizedMediaDir, genericMediaDir)
 }
 
-const getIssueKey = (issueId: string, imageSize?: ImageSize) =>
-    imageSize ? `${issueId}-${imageSize}` : issueId
-
-export const unzipIssue = (issueId: string, imageSize?: ImageSize) => {
-    const zipFilePath = FSPaths.issueZip(getIssueKey(issueId, imageSize))
+export const unzipNamedIssueArchive = (
+    localIssueId: Issue['localId'],
+    filename: string,
+) => {
+    const zipFilePath = FSPaths.zip(localIssueId, filename)
     const outputPath = FSPaths.issuesDir
 
     return unzip(zipFilePath, outputPath).then(async () => {
-        if (!!imageSize) {
-            await moveSizedMediaDirToGenericMediaDir(issueId)
+        if (filename !== 'data') {
+            await moveSizedMediaDirToGenericMediaDir(localIssueId)
         }
         RNFetchBlob.fs.unlink(zipFilePath)
     })
 }
 
-export const isIssueOnDevice = async (issue: Issue['key']): Promise<boolean> =>
-    (await getFileList()).find(file => {
-        return fileIsIssue(file) && file.issue.key === issue
-    }) !== undefined
+export const isIssueOnDevice = async (
+    localIssueId: Issue['localId'],
+): Promise<boolean> => RNFetchBlob.fs.exists(FSPaths.issue(localIssueId))
 
 /*
 Cheeky size helper
@@ -231,15 +152,22 @@ export type DLStatus =
     | { type: 'failure' }
 
 export const downloadAndUnzipIssue = (
-    issueId: string,
+    issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
 ) => {
-    console.log(issueId)
-    const dl = downloadIssue(issueId) // just the issue json
+    const { assets, localId } = issue
+    if (!assets) {
+        return null
+    }
 
-    dl.progress((received, total) => {
-        console.log(received, total)
+    const issueDataDownload = downloadNamedIssueArchive(
+        localId,
+        assets.data,
+        'data',
+    ) // just the issue json
+
+    issueDataDownload.progress((received, total) => {
         if (total >= received) {
             // the progress of the first 10% is driven by the issue
             const num = (received / total) * 10
@@ -250,12 +178,16 @@ export const downloadAndUnzipIssue = (
         }
     })
 
-    return dl.promise
+    return issueDataDownload.promise
         .then(async () => {
             // might not need to await this but it's pretty quick
-            await unzipIssue(issueId)
+            await unzipNamedIssueArchive(localId, 'data')
 
-            const imgDL = downloadIssue(`${issueId}-${imageSize}`) // just the images
+            const imgDL = downloadNamedIssueArchive(
+                localId,
+                assets[imageSize] as string,
+                imageSize,
+            ) // just the images
 
             imgDL.progress((received, total) => {
                 if (total >= received) {
@@ -273,7 +205,7 @@ export const downloadAndUnzipIssue = (
                     type: 'unzip',
                     data: 'start',
                 })
-                unzipIssue(issueId, imageSize)
+                unzipNamedIssueArchive(localId, imageSize)
                     .then(() => {
                         onProgress({ type: 'success' }) // null is unstarted or end
                     })
@@ -290,22 +222,41 @@ export const downloadAndUnzipIssue = (
 }
 
 export const clearOldIssues = async () => {
-    const files = await getFileList()
-    const availableIssues = files.filter(file => file.type === 'issue')
-    const availableIssuesAsKeys = availableIssues.map(issue => issue.filename)
-    const issuesToDelete = availableIssuesAsKeys.filter(
+    const edition = 'daily-edition'
+    const files = await RNFetchBlob.fs.ls(`${FSPaths.issuesDir}/${edition}`)
+
+    const issuesToDelete = files.filter(
         issue => !lastSevenDays().includes(issue),
     )
     issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
 }
 
+export const matchSummmaryToKey = (
+    issueSummaries: IssueSummary[],
+    key: string,
+): IssueSummary => {
+    const summaryMatch = issueSummaries.find(
+        issueSummary =>
+            issueSummary.localId === `${defaultSettings.contentPrefix}/${key}`,
+    ) as IssueSummary
+    return summaryMatch || null
+}
+
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
-    const isTodaysIssueOnDevice = await isIssueOnDevice(todaysKey)
+    const issueSummaries = await getIssueSummary().getValue()
+    // Find the todays issue summary from the list of summary
+    const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
+
+    // If there isnt one for today, then fahgettaboudit...
+    if (!todaysIssueSummary) return null
+
+    const isTodaysIssueOnDevice = await isIssueOnDevice(
+        todaysIssueSummary.localId,
+    )
+
+    // Only download it if its not on the device
     if (!isTodaysIssueOnDevice) {
-        const isValidIssue = await isRemoteZipAvailable(todaysKey)
-        if (isValidIssue) {
-            downloadAndUnzipIssue(todaysKey, imageForScreenSize())
-        }
+        downloadAndUnzipIssue(todaysIssueSummary, imageForScreenSize())
     }
 }
