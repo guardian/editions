@@ -52,8 +52,9 @@ export const defaultSettings: Settings = {
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
-    zipUrl: apiUrl + 'zips/',
+    zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
+    appPrefix: 'daily-edition',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
