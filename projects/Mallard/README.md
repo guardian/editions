@@ -51,6 +51,7 @@ You will also need `frontend` credentials form Janus in order to fetch the `.env
 
 ```bash
 $ yarn run-android
+$ yarn start
 ```
 
 ### Android (over wifi)
@@ -58,15 +59,15 @@ $ yarn run-android
 Make sure your phone and computer are on the same WiFi network.
 
 ```bash
-$ yarn start
 $ yarn run wifi-android
+$ yarn start
 ```
 
 ### iOS
 
 ```bash
-$ yarn start
 $ yarn run-ios
+$ yarn start
 ```
 
 ## Tips and tricks
