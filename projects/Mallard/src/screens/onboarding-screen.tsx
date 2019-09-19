@@ -7,7 +7,7 @@ import { OnboardingConsent } from './onboarding/cards'
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: color.palette.brand.main,
+        backgroundColor: color.palette.neutral[86],
         flex: 1,
         display: 'flex',
         justifyContent: 'center',

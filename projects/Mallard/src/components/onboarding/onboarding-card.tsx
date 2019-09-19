@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ViewStyle, StyleProp, StyleSheet, TextStyle } from 'react-native'
+import { View, ViewStyle, StyleProp, StyleSheet, TextStyle, Image, YellowBox } from 'react-native'
 import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -77,6 +77,17 @@ const appearances: {
     }),
 }
 
+const IllustrationStyles = StyleSheet.create({
+    postion: {
+        position: 'absolute',
+        bottom: -30,
+        left: 0,
+        width: '110%',
+        height: 100,
+    },
+})
+
+
 const OnboardingCard = ({
     children,
     title,
@@ -106,7 +117,7 @@ const OnboardingCard = ({
 }) => {
     const max = Math.min(minScreenSize() * 0.95, maxSize)
     return (
-        <View
+        <><View
             style={[
                 appearances[appearance].background,
                 styles.container,
@@ -197,6 +208,24 @@ const OnboardingCard = ({
                 </View>
             )}
         </View>
+        <View 
+        style={[
+        IllustrationStyles.postion
+    ]}>
+
+    <Image
+            style={[
+                {
+                width: "100%",
+                height: 150,
+                }
+            ]}
+            resizeMode={'contain'}
+            source={
+                require('src/assets/images/privacy.png')
+            }
+    />
+    </View></>
     )
 }
 
