@@ -144,8 +144,8 @@ export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
     assets?: {
-        [P in ImageSize]?: string[]
-    } & { data: string[] }
+        [P in ImageSize]?: string
+    } & { data: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {

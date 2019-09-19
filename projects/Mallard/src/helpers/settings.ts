@@ -21,6 +21,7 @@ export interface DevSettings {
     notificationServiceRegister: string
     zipUrl: string
     cacheClearUrl: string
+    appPrefix: string
 }
 
 interface UserSettings {

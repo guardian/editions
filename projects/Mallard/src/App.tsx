@@ -13,7 +13,11 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { ToastProvider } from './hooks/use-toast'
-import { prepFileSystem, clearOldIssues } from './helpers/files'
+import {
+    prepFileSystem,
+    clearOldIssues,
+    downloadTodaysIssue,
+} from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
@@ -36,9 +40,7 @@ pushNotifcationRegistration()
 clearOldIssues()
 fetchCacheClear().then((weOk: boolean) => {
     if (weOk) {
-        console.log('WE ARE OKAY')
-        //TODO: AW: download todays issue
-        // downloadTodaysIssue()
+        downloadTodaysIssue()
     }
 })
 
