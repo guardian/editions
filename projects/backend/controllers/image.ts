@@ -2,11 +2,6 @@ import { Request, Response } from 'express'
 import { getImageURL, getPalette } from '../image'
 import { imageSizes } from '../../common/src/index'
 export const imageController = (req: Request, res: Response) => {
-    //Remove this when images.ts fixes the fake image fetch
-    const date = req.params.date
-    if (date == 'fake-issue') {
-        console.error('Image incorrectly fetched from backend.')
-    }
     const source = req.params.source
     const size = req.params.size
     const path: string = req.params[0]

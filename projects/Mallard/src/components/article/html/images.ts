@@ -186,6 +186,7 @@ const Image = ({
     imageElement: ImageElement
     publishedId: string
 }) => {
+    // @TODO: This needs refactoring to work with downloaded content
     const backend = defaultSettings.apiUrl
     const path = `${backend}${mediaPath(
         publishedId,
