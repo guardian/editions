@@ -12,7 +12,7 @@ export const backends = [
     },
     {
         title: 'PROD preview',
-        value: 'https://d2cf1ljtg904cv.cloudfront.net/',
+        value: 'https://preview.editions.guardianapis.com/',
         preview: true,
     },
     {
@@ -52,8 +52,9 @@ export const defaultSettings: Settings = {
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
-    zipUrl: apiUrl + 'zips/',
+    zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
+    appPrefix: 'daily-edition',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
