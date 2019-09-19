@@ -73,7 +73,9 @@ const pushNotifcationRegistration = () => {
                 const issueSummaries = await getIssueSummary().getValue()
                 // Check to see if we can find the image summary for the one that is pushed
                 const pushImageSummary = issueSummaries.find(
-                    o => o.localId === `${defaultSettings.appPrefix}/${key}`,
+                    issueSummary =>
+                        issueSummary.localId ===
+                        `${defaultSettings.appPrefix}/${key}`,
                 )
                 // Not there? Fahgettaboudit
                 if (!pushImageSummary) return null

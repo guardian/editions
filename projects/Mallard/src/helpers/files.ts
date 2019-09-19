@@ -56,7 +56,6 @@ export const downloadNamedIssueArchive = (
     filename: string,
 ) => {
     const zipUrl = defaultSettings.zipUrl
-    console.log(`${zipUrl}/${assetPath}`)
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
@@ -237,7 +236,9 @@ export const downloadTodaysIssue = async () => {
     const issueSummaries = await getIssueSummary().getValue()
     // Find the todays issue summary from the list of summary
     const todaysIssueSummary = issueSummaries.find(
-        o => o.localId === `${defaultSettings.appPrefix}/${todaysKey}`,
+        issueSummary =>
+            issueSummary.localId ===
+            `${defaultSettings.appPrefix}/${todaysKey}`,
     )
 
     // If there isnt one for today, then fahgettaboudit...
