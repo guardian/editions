@@ -18,7 +18,7 @@ yarn start -- --reset-cache
 The project uses `nvm` so this will need to be installed before if it's not already:
 
 ```bash
-$ brew install nvm
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 ```
 
 Start by installing our Node.js dependencies:
