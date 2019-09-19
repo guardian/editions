@@ -3,48 +3,156 @@ import { IssueSummary } from '../../../common/src'
 import { LIVE_PAGE_SIZE, PREVIEW_PAGE_SIZE } from '../issue'
 
 const issueList = [
-    'daily-edition/2019-03-22/',
-    'daily-edition/2019-03-23/',
-    'daily-edition/2019-03-26/',
-    'daily-edition/2019-03-24/',
-    'daily-edition/2019-03-25/',
-    'daily-edition/2019-03-27/',
-    'daily-edition/2019-03-28/',
-    'daily-edition/2019-03-29/',
-    'daily-edition/2019-03-30/',
-    'daily-edition/2019-03-31/',
-    'daily-edition/2019-04-01/',
-    'daily-edition/2019-04-02/',
-    'daily-edition/2019-04-03/',
-    'daily-edition/2019-04-04/',
-    'daily-edition/2019-04-05/',
-    'daily-edition/2019-04-06/',
-    'daily-edition/2019-04-07/',
-    'daily-edition/2019-04-08/',
-    'daily-edition/2019-04-09/',
-    'daily-edition/2019-04-10/',
-    'daily-edition/2019-04-11/',
-    'daily-edition/2019-04-12/',
-    'daily-edition/2019-04-13/',
-    'daily-edition/2019-04-14/',
-    'daily-edition/2019-04-15/',
-    'daily-edition/2019-04-16/',
-    'daily-edition/2019-04-17/',
-    'daily-edition/2019-04-18/',
-    'daily-edition/2019-04-19/',
-    'daily-edition/2019-04-20/',
-    'daily-edition/2019-04-21/',
-    'daily-edition/2019-04-22/',
-    'daily-edition/2019-04-23/',
-    'daily-edition/2019-04-25/',
-    'daily-edition/2019-04-24/',
+    {
+        key: 'daily-edition/2019-03-22/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-23/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-26/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-24/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-25/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-27/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-28/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-29/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-30/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-03-31/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-01/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-02/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-03/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-04/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-05/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-06/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-07/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-08/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-09/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-10/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-11/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-12/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-13/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-14/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-15/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-16/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-17/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-18/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-19/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-20/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-21/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-22/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-23/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-25/',
+        publicationDate: 'asdf',
+    },
+    {
+        key: 'daily-edition/2019-04-24/',
+        publicationDate: 'asdf',
+    },
 ]
 
 jest.mock('../../s3', () => ({
     s3List: () => Promise.resolve(issueList),
 }))
 
-const getNthKey = (n: number) => issueList[n].split('/')[1]
+const getNthKey = (n: number) => {
+    const [edition, key] = issueList[n].key.split('/')
+    return `${edition}/${key}`
+}
 
 describe('getIssuesSummary', () => {
     it('returns the correct number of issues when on live stage', async () => {
