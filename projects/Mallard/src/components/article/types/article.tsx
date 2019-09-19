@@ -100,7 +100,7 @@ const ArticleWebViewAndroid = ({
     onTopPositionChange: OnTopPositionChangeFn
 }) => {
     const [height, setHeight] = useState<number | null>(null)
-    const [scrollX] = useState(() => new Animated.Value(0))
+    const [scrollY] = useState(() => new Animated.Value(0))
 
     useEffect(() => {
         onTopPositionChange(false)
@@ -117,7 +117,7 @@ const ArticleWebViewAndroid = ({
                     {
                         transform: [
                             {
-                                translateY: scrollX.interpolate({
+                                translateY: scrollY.interpolate({
                                     inputRange: safeInterpolation([-1, 1]),
                                     outputRange: safeInterpolation([1, -1]),
                                 }),
@@ -138,7 +138,7 @@ const ArticleWebViewAndroid = ({
                                 {
                                     nativeEvent: {
                                         contentOffset: {
-                                            y: scrollX,
+                                            y: scrollY,
                                         },
                                     },
                                 },
