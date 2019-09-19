@@ -14,6 +14,9 @@ const MissingIAPModalCard = ({
         subtitle="There was a problem whilst verifying your subscription"
         appearance={CardAppearance.blue}
         size="medium"
+        onDismissThisCard={() => {
+            close()
+        }}
         bottomContent={
             <>
                 <ModalButton
@@ -23,13 +26,6 @@ const MissingIAPModalCard = ({
                     }}
                 >
                     Try again
-                </ModalButton>
-                <ModalButton
-                    onPress={() => {
-                        close()
-                    }}
-                >
-                    Close
                 </ModalButton>
             </>
         }

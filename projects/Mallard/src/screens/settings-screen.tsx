@@ -87,14 +87,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     },
                     proxy: <Text style={styles.signOut}>Sign Out</Text>,
                 },
-                {
-                    key: `Subscription details`,
-                    title: `Subscription details`,
-                    data: {
-                        onPress: async () => {},
-                    },
-                    proxy: rightChevronIcon,
-                },
             ],
             signedOut: () => [
                 {
