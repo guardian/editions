@@ -5,143 +5,143 @@ import { LIVE_PAGE_SIZE, PREVIEW_PAGE_SIZE } from '../issue'
 const issueList = [
     {
         key: 'daily-edition/2019-03-22/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-22',
     },
     {
         key: 'daily-edition/2019-03-23/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-23',
     },
     {
         key: 'daily-edition/2019-03-26/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-26',
     },
     {
         key: 'daily-edition/2019-03-24/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-24',
     },
     {
         key: 'daily-edition/2019-03-25/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-25',
     },
     {
         key: 'daily-edition/2019-03-27/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-27',
     },
     {
         key: 'daily-edition/2019-03-28/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-28',
     },
     {
         key: 'daily-edition/2019-03-29/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-29',
     },
     {
         key: 'daily-edition/2019-03-30/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-30',
     },
     {
         key: 'daily-edition/2019-03-31/',
-        publicationDate: 'asdf',
+        lastModified: '2019-03-31',
     },
     {
         key: 'daily-edition/2019-04-01/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-01',
     },
     {
         key: 'daily-edition/2019-04-02/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-02',
     },
     {
         key: 'daily-edition/2019-04-03/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-03',
     },
     {
         key: 'daily-edition/2019-04-04/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-04',
     },
     {
         key: 'daily-edition/2019-04-05/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-05',
     },
     {
         key: 'daily-edition/2019-04-06/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-06',
     },
     {
         key: 'daily-edition/2019-04-07/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-07',
     },
     {
         key: 'daily-edition/2019-04-08/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-08',
     },
     {
         key: 'daily-edition/2019-04-09/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-09',
     },
     {
         key: 'daily-edition/2019-04-10/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-10',
     },
     {
         key: 'daily-edition/2019-04-11/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-11',
     },
     {
         key: 'daily-edition/2019-04-12/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-12',
     },
     {
         key: 'daily-edition/2019-04-13/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-13',
     },
     {
         key: 'daily-edition/2019-04-14/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-14',
     },
     {
         key: 'daily-edition/2019-04-15/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-15',
     },
     {
         key: 'daily-edition/2019-04-16/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-16',
     },
     {
         key: 'daily-edition/2019-04-17/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-17',
     },
     {
         key: 'daily-edition/2019-04-18/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-18',
     },
     {
         key: 'daily-edition/2019-04-19/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-19',
     },
     {
         key: 'daily-edition/2019-04-20/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-20',
     },
     {
         key: 'daily-edition/2019-04-21/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-21',
     },
     {
         key: 'daily-edition/2019-04-22/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-22',
     },
     {
         key: 'daily-edition/2019-04-23/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-23',
     },
     {
         key: 'daily-edition/2019-04-25/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-25',
     },
     {
         key: 'daily-edition/2019-04-24/',
-        publicationDate: 'asdf',
+        lastModified: '2019-04-24',
     },
 ]
 
