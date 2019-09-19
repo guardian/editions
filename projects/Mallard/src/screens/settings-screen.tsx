@@ -19,6 +19,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { DevZone } from './settings/dev-zone'
+import { isStaffMember } from 'src/authentication/helpers'
 
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const setSetting = useSettings()
@@ -31,6 +32,42 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         signOut: {
             color: color.ui.supportBlue,
             ...getFont('sans', 1),
+        },
+    })
+
+    const handler = useIdentity()
+
+    const versionClickHandler = handler({
+        pending: () => () => {},
+        signedOut: () => () => {},
+        signedIn: user => () => {
+            if (!isUsingProdDevtools && isStaffMember(user))
+                setVersionClickedTimes(t => {
+                    if (t < 7) return t + 1
+                    Alert.alert(
+                        'Delete all stored data',
+                        'Are you sure?',
+                        [
+                            {
+                                text: 'Delete data',
+                                style: 'destructive',
+                                onPress: () => {
+                                    setSetting('isUsingProdDevtools', true)
+                                    Alert.alert('You are a developer now!')
+                                },
+                            },
+                            {
+                                text: 'Cancel',
+                                style: 'cancel',
+                                onPress: () => {
+                                    AsyncStorage.clear()
+                                },
+                            },
+                        ],
+                        { cancelable: false },
+                    )
+                    return 0
+                })
         },
     })
 
@@ -196,41 +233,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             key: 'Version',
                             title: 'Version',
                             data: {
-                                onPress: () => {
-                                    if (!isUsingProdDevtools) {
-                                        setVersionClickedTimes(t => {
-                                            if (t < 7) return t + 1
-                                            Alert.alert(
-                                                'Delete all stored data',
-                                                'Are you sure?',
-                                                [
-                                                    {
-                                                        text: 'Delete data',
-                                                        style: 'destructive',
-                                                        onPress: () => {
-                                                            setSetting(
-                                                                'isUsingProdDevtools',
-                                                                true,
-                                                            )
-                                                            Alert.alert(
-                                                                'You are a developer now!',
-                                                            )
-                                                        },
-                                                    },
-                                                    {
-                                                        text: 'Cancel',
-                                                        style: 'cancel',
-                                                        onPress: () => {
-                                                            AsyncStorage.clear()
-                                                        },
-                                                    },
-                                                ],
-                                                { cancelable: false },
-                                            )
-                                            return 0
-                                        })
-                                    }
-                                },
+                                onPress: versionClickHandler,
                             },
                             proxy: <Text>{getVersionInfo().version}</Text>,
                         },

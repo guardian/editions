@@ -165,6 +165,54 @@ describe('helpers', () => {
         })
     })
 
+    describe('isStaffMember', () => {
+        it('returns true for a validated guardian email', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'alice@guardian.co.uk',
+                        digitalPack: false,
+                    }),
+                ),
+            ).toBe(true)
+        })
+
+        it('returns false for an unvalidated guardian email', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'bob@guardian.co.uk',
+                        digitalPack: false,
+                        userEmailValidated: false,
+                    }),
+                ),
+            ).toBe(false)
+        })
+
+        it('returns false for a validated non-guardian email', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'clarissa@grauniad.co.uk',
+                        digitalPack: false,
+                    }),
+                ),
+            ).toBe(false)
+        })
+
+        it('returns false for an unvalidated non-guardian email', () => {
+            expect(
+                canViewEdition(
+                    withCreds({
+                        email: 'desmond@grauniad.co.uk',
+                        digitalPack: false,
+                        userEmailValidated: false,
+                    }),
+                ),
+            ).toBe(false)
+        })
+    })
+
     describe('canViewEdition', () => {
         it('allows people in with guardian email addresses', () => {
             expect(
