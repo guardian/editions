@@ -4,6 +4,7 @@ import { Animated, Linking, Platform, WebViewProps } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { ArticleFeatures, BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
+import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { EMBED_DOMAIN, render } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 
@@ -29,6 +30,7 @@ const WebviewWithArticle = ({
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
+    const issueCompositeKey = useIssueCompositeKey()
 
     const html = useMemo(
         () =>
@@ -38,6 +40,9 @@ const WebviewWithArticle = ({
                 wrapLayout,
                 showMedia: isConnected,
                 height: paddingTop,
+                publishedId:
+                    (issueCompositeKey && issueCompositeKey.publishedIssueId) ||
+                    null,
             }),
         [article, pillar, wrapLayout, isConnected, paddingTop],
     )

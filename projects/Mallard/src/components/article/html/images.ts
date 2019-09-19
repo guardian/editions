@@ -1,5 +1,5 @@
 import { ImageElement, mediaPath } from 'src/common'
-import { backends } from 'src/helpers/settings/defaults'
+import { backends, defaultSettings } from 'src/helpers/settings/defaults'
 import { Direction } from 'src/helpers/sizes'
 import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
@@ -8,6 +8,7 @@ import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { breakOut } from './helpers/layout'
 import { CssProps } from './helpers/props'
+import { imageForScreenSize } from 'src/helpers/screen'
 
 export const renderCaption = ({
     caption,
@@ -178,15 +179,21 @@ const ImageBase = ({
     `
 }
 
-const Image = ({ imageElement }: { imageElement: ImageElement }) => {
-    //When you fix this pleas alter image.ts in background to not alert (unless we ship this 😱)
-    const backend = backends[1].value //get PROD preview because we're faking the issue id
+const Image = ({
+    imageElement,
+    publishedId,
+}: {
+    imageElement: ImageElement
+    publishedId: string
+}) => {
+    const backend = defaultSettings.apiUrl
     const path = `${backend}${mediaPath(
-        'fakeIssue/fake',
-        'phone',
+        publishedId,
+        imageForScreenSize(),
         imageElement.src.source,
         imageElement.src.path,
     )}`
+    // console.log(path)
 
     return ImageBase({ path, ...imageElement })
 }
