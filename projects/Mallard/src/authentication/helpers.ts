@@ -192,16 +192,19 @@ const isGuardianEmail = (email: string) =>
     GUARDIAN_SUFFIXES.some(suffix => email.endsWith(suffix))
 
 /**
- * This takes the membersDataApiResponse and is responsible for returning a boolean
- * describing whether or not the user has the relevant permissions to use the app
- *
  * If they have a Guardian email we want to check that they've validated their email,
  * otherwise we don't really mind
  */
+const isStaffMember = (userData: UserData) =>
+    isGuardianEmail(userData.userDetails.primaryEmailAddress) &&
+    userData.userDetails.statusFields.userEmailValidated
+
+/**
+ * This takes the membersDataApiResponse and is responsible for returning a boolean
+ * describing whether or not the user has the relevant permissions to use the app
+ */
 const canViewEdition = (userData: UserData): boolean =>
-    userData.membershipData.contentAccess.digitalPack ||
-    (isGuardianEmail(userData.userDetails.primaryEmailAddress) &&
-        userData.userDetails.statusFields.userEmailValidated)
+    userData.membershipData.contentAccess.digitalPack || isStaffMember(userData)
 
 export {
     fetchAndPersistUserAccessTokenWithIdentity,
@@ -211,4 +214,5 @@ export {
     fetchAndPersistCASExpiryForKeychainCredentials,
     canViewEdition,
     fetchAndPersistCASExpiry,
+    isStaffMember,
 }
