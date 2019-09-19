@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { HeadlineCardText } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
-import { ImageResource } from '../image-resource'
+import { ImageResource, AutoSizedImageResource } from '../image-resource'
 import { ItemTappable, PropTypes } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { ImageItem, SplitImageItem, SidekickImageItem } from './image-items'
@@ -11,6 +11,7 @@ import { SuperHeroImageItem } from './super-items'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { Image } from '../../../../../common/src'
+import { PageLayoutSizes } from '../helpers/helpers'
 
 /*
 helpers
@@ -64,65 +65,50 @@ Image only
 */
 const splashImageStyles = StyleSheet.create({
     image: {
-        width: 'auto',
+        width: '100%',
         flex: 0,
-        height: '100%',
     },
     hidden: {
         opacity: 0,
     },
+    overflow: {
+        overflow: 'hidden',
+    },
 })
 
-const SplashImageItem = ({ article, ...tappableProps }: PropTypes) => {
+const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     if (!article.cardImage || !article.cardImageTablet)
-        return <SuperHeroImageItem {...tappableProps} {...{ article }} />
+        return <SuperHeroImageItem {...tappableProps} {...{ article, size }} />
 
-    const cardImage: Image = {
-        source: (article.cardImage && article.cardImage.source) || '',
-        path: (article.cardImage && article.cardImage.path) || '',
-    }
-
-    const cardImageTablet: Image = {
-        source:
-            (article.cardImageTablet && article.cardImageTablet.source) || '',
-        path: (article.cardImageTablet && article.cardImageTablet.path) || '',
-    }
+    const cardImage: Image =
+        size.layout === PageLayoutSizes.mobile
+            ? {
+                  source: (article.cardImage && article.cardImage.source) || '',
+                  path: (article.cardImage && article.cardImage.path) || '',
+              }
+            : {
+                  source:
+                      (article.cardImageTablet &&
+                          article.cardImageTablet.source) ||
+                      '',
+                  path:
+                      (article.cardImageTablet &&
+                          article.cardImageTablet.path) ||
+                      '',
+              }
 
     return (
-        <WithBreakpoints>
-            {{
-                0: ({ width }) => (
-                    <ItemTappable
-                        {...tappableProps}
-                        {...{ article }}
-                        hasPadding={false}
-                    >
-                        <ImageResource
-                            style={[splashImageStyles.image]}
-                            image={cardImage}
-                        />
-                        <HeadlineCardText style={[splashImageStyles.hidden]}>
-                            {article.kicker}
-                        </HeadlineCardText>
-                    </ItemTappable>
-                ),
-                [Breakpoints.tabletVertical]: () => (
-                    <ItemTappable
-                        {...tappableProps}
-                        {...{ article }}
-                        hasPadding={false}
-                    >
-                        <ImageResource
-                            style={[splashImageStyles.image]}
-                            image={cardImageTablet}
-                        />
-                        <HeadlineCardText style={[splashImageStyles.hidden]}>
-                            {article.kicker}
-                        </HeadlineCardText>
-                    </ItemTappable>
-                ),
-            }}
-        </WithBreakpoints>
+        <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
+            <View style={splashImageStyles.overflow}>
+                <AutoSizedImageResource
+                    style={[splashImageStyles.image]}
+                    image={cardImage}
+                />
+            </View>
+            <HeadlineCardText style={[splashImageStyles.hidden]}>
+                {article.kicker}
+            </HeadlineCardText>
+        </ItemTappable>
     )
 }
 
