@@ -231,15 +231,22 @@ export const clearOldIssues = async () => {
     issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
 }
 
+export const matchSummmaryToKey = (
+    issueSummaries: IssueSummary[],
+    key: string,
+): IssueSummary => {
+    const summaryMatch = issueSummaries.find(
+        issueSummary =>
+            issueSummary.localId === `${defaultSettings.contentPrefix}/${key}`,
+    ) as IssueSummary
+    return summaryMatch || null
+}
+
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
     const issueSummaries = await getIssueSummary().getValue()
     // Find the todays issue summary from the list of summary
-    const todaysIssueSummary = issueSummaries.find(
-        issueSummary =>
-            issueSummary.localId ===
-            `${defaultSettings.appPrefix}/${todaysKey}`,
-    )
+    const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
 
     // If there isnt one for today, then fahgettaboudit...
     if (!todaysIssueSummary) return null

@@ -1,14 +1,28 @@
+import { WeatherForecast } from 'src/components/weather'
+
 const cacheStore: {
     api: { [path: string]: any }
     issue: { [path: string]: any }
-    weather: { [path: string]: any }
+    ipAddress: { [path: string]: string }
+    weatherLocation: { [path: string]: any }
+    weatherForecasts: { [path: string]: any }
+    weatherForecastSummary: { [path: string]: any }
 } = {
     api: {},
     issue: {},
-    weather: {},
+    ipAddress: {},
+    weatherLocation: {},
+    weatherForecasts: {},
+    weatherForecastSummary: {},
 }
 
-type CacheType = 'api' | 'issue' | 'weather'
+type CacheType =
+    | 'api'
+    | 'issue'
+    | 'ipAddress'
+    | 'weatherLocation'
+    | 'weatherForecasts'
+    | 'weatherForecastSummary'
 
 const withCache = <T>(cacheType: CacheType) => ({
     store: (path: string, data: T) => {
@@ -32,8 +46,23 @@ const clearCache = () => {
         console.log(`deleted ${url}`)
     }
 
-    for (const url in cacheStore['weather']) {
-        delete cacheStore['weather'][url]
+    for (const url in cacheStore['ipAddress']) {
+        delete cacheStore['ipAddress'][url]
+        console.log(`deleted ${url}`)
+    }
+
+    for (const url in cacheStore['weatherLocation']) {
+        delete cacheStore['weatherLocation'][url]
+        console.log(`deleted ${url}`)
+    }
+
+    for (const url in cacheStore['weatherForecasts']) {
+        delete cacheStore['weatherForecasts'][url]
+        console.log(`deleted ${url}`)
+    }
+
+    for (const url in cacheStore['weatherForecastSummary']) {
+        delete cacheStore['weatherForecastSummary'][url]
         console.log(`deleted ${url}`)
     }
 }
