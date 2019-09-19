@@ -53,8 +53,6 @@ const GalleryImage = ({
         src.path,
     )}`
 
-    console.log(uri)
-
     useEffect(() => {
         Image.getSize(
             uri,
