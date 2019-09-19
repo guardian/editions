@@ -178,7 +178,6 @@ const ArticleSlider = ({
                 keyExtractor={(item: ArticleNavigator['articles'][0]) =>
                     item.article
                 }
-                removeClippedSubviews={true}
                 data={
                     isInScroller
                         ? articleNavigator.articles
