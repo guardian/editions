@@ -74,6 +74,16 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         margin: 0;
         padding: 0;
     }
+    #app p {
+      margin-bottom: 15px;
+    }
+    #app h2 {
+      font-size: ${px(getScaledFont('headline', 1).lineHeight)};
+      line-height: ${px(getScaledFont('headline', 1).lineHeight * 1.1)};
+      margin-bottom: ${px(metrics.vertical)};
+      margin-top: ${px(metrics.vertical * 2.5)};
+    }
+
     ${imageStyles({ colors, wrapLayout })}
 `
 

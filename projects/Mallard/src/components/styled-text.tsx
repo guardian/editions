@@ -7,7 +7,7 @@ import { getFont } from 'src/theme/typography'
 const styles = StyleSheet.create({
     headlineText: {
         flexShrink: 0,
-        ...getFont('headline', 1.5),
+        ...getFont('headline', 1.6),
         color: color.text,
     },
     headlineTextBold: {
