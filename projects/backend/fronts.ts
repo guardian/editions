@@ -2,6 +2,7 @@ import { s3fetch, Path } from './s3'
 import {
     Front,
     Image,
+    CreditedImage,
     Collection,
     CAPIArticle,
     PillarAppearance,
@@ -32,7 +33,7 @@ import { oc } from 'ts-optchain'
 const getImages = (
     article: CAPIContent,
     furniture: PublishedFurtniture,
-): { image?: Image; cardImage?: Image; cardImageTablet?: Image } => {
+): { image?: CreditedImage; cardImage?: Image; cardImageTablet?: Image } => {
     const {
         overrideArticleMainMedia,
         imageSrcOverride,

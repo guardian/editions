@@ -24,7 +24,7 @@ import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
 import { articleTypePicker } from './articleTypePicker'
-import { CreditedImage } from '../../common/src'
+import { Image, CreditedImage } from '../../common/src'
 import { oc } from 'ts-optchain'
 
 type NotInCAPI =
@@ -62,25 +62,25 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
 })
 
 const getMainImage = (result: IContent): CreditedImage | undefined => {
-    const maybeMainImage = oc(result).blocks.main.elements[0]()
+    const maybeMainElement = oc(result).blocks.main.elements[0]()
+    const maybeCreditedMainImage = maybeMainElement && getCreditedImage(maybeMainElement)
+
+    if (!maybeCreditedMainImage) {
+        console.warn(
+            `No main image in ${result.id}`,
+        )
+    }
+
+    return maybeCreditedMainImage
+}
+
+const getTrailImage = (result: IContent): Image | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
     const maybeThumbnailImage =
         maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
-
-    if (!maybeMainImage) {
-        console.warn(
-            `No main image in ${
-                result.id
-            } using thumbnail (${maybeThumbnailImage &&
-                maybeThumbnailImage.path}).`,
-        )
-    }
-
-    return maybeMainImage
-        ? getCreditedImage(maybeMainImage)
-        : maybeThumbnailImage
+    return maybeThumbnailImage
 }
 
 const parseArticleResult = async (
@@ -106,7 +106,8 @@ const parseArticleResult = async (
     const byline = result.fields && result.fields.byline
     const bylineImages = getBylineImages(result)
 
-    const maybeImage = getMainImage(result)
+    const maybeMainImage = getMainImage(result)
+    const maybeTrailImage = getTrailImage(result)
 
     const starRating = result.fields && result.fields.starRating
 
@@ -137,7 +138,8 @@ const parseArticleResult = async (
                     kicker,
                     articleType,
                     trail,
-                    image: maybeImage,
+                    image: maybeMainImage,
+                    trailImage: maybeTrailImage,
                     byline: byline || '',
                     bylineImages,
                     standfirst: trail || '',
@@ -157,7 +159,8 @@ const parseArticleResult = async (
                     trail,
                     kicker,
                     articleType,
-                    image: maybeImage,
+                    image: maybeMainImage,
+                    trailImage: maybeTrailImage,
                     byline: byline || '',
                     standfirst: trail || '',
                     elements,
@@ -176,7 +179,8 @@ const parseArticleResult = async (
                     trail,
                     kicker,
                     articleType,
-                    image: maybeImage,
+                    image: maybeMainImage,
+                    trailImage: maybeTrailImage,
                     byline: byline || '',
                     standfirst: trail || '',
                     elements,
@@ -234,7 +238,8 @@ const parseArticleResult = async (
                     headline: title,
                     trail,
                     kicker,
-                    image: maybeImage,
+                    image: maybeMainImage,
+                    trailImage: maybeTrailImage,
                     byline: byline || '',
                     standfirst: trail || '',
                     elements: [
