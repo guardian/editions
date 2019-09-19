@@ -146,7 +146,7 @@ const issueList = [
 ]
 
 jest.mock('../../s3', () => ({
-    s3List: () => Promise.resolve(issueList),
+    s3List: () => Promise.resolve([]),
 }))
 
 const getNthKey = (n: number) => {
