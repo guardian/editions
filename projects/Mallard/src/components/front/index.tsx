@@ -105,7 +105,8 @@ const FrontWithResponse = ({
             frontName: frontData.displayName || '',
         }
         return [flatCollections, navigator]
-    }, [frontData.collections.map(({ key }) => key).join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [localIssueId, publishedIssueId, frontData])
+
     const stops = cards.length
     const { card, container } = useIssueScreenSize()
 
