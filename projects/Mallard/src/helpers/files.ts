@@ -237,7 +237,7 @@ export const matchSummmaryToKey = (
 ): IssueSummary => {
     const summaryMatch = issueSummaries.find(
         issueSummary =>
-            issueSummary.localId === `${defaultSettings.appPrefix}/${key}`,
+            issueSummary.localId === `${defaultSettings.contentPrefix}/${key}`,
     ) as IssueSummary
     return summaryMatch || null
 }
