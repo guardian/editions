@@ -1,14 +1,14 @@
 {
     "scripts": {
         "upload": "node-riffraff-artifact",
-        "validate": "make validate -j8 -Orecurse",
-        "fix": "make fix -j8 -Orecurse",
-        "build": "make build -j8 -Orecurse",
-        "test": "make test -j8 -Orecurse",
-        "install-mallard": "make install",
-        "validate-mallard": "make validate-Mallard",
+        "validate": "script/make validate -j8 -Orecurse",
+        "fix": "script/make fix -j8 -Orecurse",
+        "build": "script/make build -j8 -Orecurse",
+        "test": "script/make test -j8 -Orecurse",
+        "install-mallard": "script/make install",
+        "validate-mallard": "script/make validate-Mallard",
         "validate-mallard-tsc": "echo 'no longer used'",
-        "test-mallard": "make test-Mallard"
+        "test-mallard": "script/make test-Mallard"
     },
     "devDependencies": {
         "@guardian/node-riffraff-artifact": "0.0.15",
