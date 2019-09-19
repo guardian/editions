@@ -22,7 +22,7 @@ export const backends = [
     },
     {
         title: 'CODE preview',
-        value: 'https://d2mztzjulnpyb8.cloudfront.net/',
+        value: 'https://preview.editions.code.dev-guardianapis.com/',
         preview: true,
     },
     {

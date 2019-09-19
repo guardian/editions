@@ -158,7 +158,14 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                         headline={article.headline}
                         inverted
                         monotone
-                        {...{ size }}
+                        size={{
+                            ...size,
+                            story: {
+                                ...size.story,
+                                width: size.story.width / 2,
+                                height: size.story.width / 2,
+                            },
+                        }}
                     />
                 </View>
             </View>
