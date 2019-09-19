@@ -193,7 +193,6 @@ const Image = ({
         imageElement.src.source,
         imageElement.src.path,
     )}`
-    // console.log(path)
 
     return ImageBase({ path, ...imageElement })
 }
