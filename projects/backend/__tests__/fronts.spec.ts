@@ -58,6 +58,10 @@ describe('fronts', () => {
             source: "test"
         }
 
+        const pubImg: PublishedImage = { height: 1, width: 2, src: "https://test/pub.img" }
+
+        const pubImages: PublishedCardImage = { mobile: pubImg, tablet: pubImg }
+
         it('should extract main image', () => {
             const article: CAPIContent = Article({ key: 'my-article', trail: 'article', image: mainImage, trailImage: trailImg })
             const furniture: PublishedFurtniture = PublishedFurniture({ trailTextOverride: '' })
@@ -65,6 +69,16 @@ describe('fronts', () => {
             const actual = getImages(article, furniture)
 
             const expected = { image: mainImage, cardImage: undefined, cardImageTablet: undefined }
+            expect(actual).toStrictEqual(expected)
+        })
+
+        it('should extract main image and cover card images', () => {
+            const article: CAPIContent = Article({ key: 'my-article', trail: 'article', image: mainImage, trailImage: trailImg })
+            const furniture: PublishedFurtniture = PublishedFurniture({ trailTextOverride: '', coverCardImages: pubImages })
+
+            const actual = getImages(article, furniture)
+
+            const expected = { image: mainImage, cardImage: { path: "pub.img", source: "test" }, cardImageTablet: { path: "pub.img", source: "test" } }
             expect(actual).toStrictEqual(expected)
         })
     })
