@@ -57,7 +57,7 @@ const getCardImageForTablet = (
     return getImageFromURL(oc(maybeCoverCardImages).tablet.src())
 }
 
-const getImages = (
+export const getImages = (
     article: CAPIContent,
     furniture: PublishedFurtniture,
 ): { image?: CreditedImage; cardImage?: Image; cardImageTablet?: Image } => {

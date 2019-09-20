@@ -1,5 +1,8 @@
-import { patchArticle } from '../fronts'
+import { patchArticle, getImages } from '../fronts'
 import { Article, PublishedFurniture } from './helpers/fixtures'
+import { CAPIContent } from '../capi/articles'
+import { PublishedFurtniture, PublishedImage, PublishedCardImage } from '../fronts/issue'
+
 
 describe('fronts', () => {
     describe('patchArticle', () => {
@@ -43,9 +46,15 @@ describe('fronts', () => {
         })
     })
 
-    describe('getImages', () => {
-        it('qwe', () => {
-            expect(1).toBe(1)
+    describe('fronts.getImages', () => {
+        it('should prepeare images', () => {
+            const article: CAPIContent = Article({ key: 'my-article', trail: 'article' })
+            const furniture: PublishedFurtniture = PublishedFurniture({ trailTextOverride: '' })
+
+            const actual = getImages(article, furniture)
+
+            const expected = { image: undefined, cardImage: undefined, cardImageTablet: undefined }
+            expect(actual).toStrictEqual(expected)
         })
     })
 })
