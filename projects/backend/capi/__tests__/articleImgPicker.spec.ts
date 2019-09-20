@@ -15,6 +15,7 @@ const blockImgEleme: IBlockElement = {
     type: ElementType.IMAGE,
     assets: [masterAsset],
 }
+
 const blocks: IBlocks = {
     main: {
         id: "1",
@@ -27,39 +28,49 @@ const blocks: IBlocks = {
     }
 }
 
+const thumbnailElem = {
+    id: "thumbnail",
+    relation: "thumbnail",
+    type: ElementType.IMAGE,
+    assets: [thumbnailAsset]
+}
+
+const sharedGiven = {
+    id: "test",
+    type: 0,
+    webTitle: "title",
+    webUrl: "http://test",
+    apiUrl: "http://api.test",
+    tags: [],
+    references: [],
+    isHosted: false
+}
+
+const mainImgExpected = {
+    credit: undefined,
+    path: "master/asset.com",
+    source: "test"
+}
+
+const thumbnailExpected = {
+    path: "thumbnail/asset.com",
+    source: "test"
+}
+
 describe('articleImgPicker.getImages', () => {
     it('should extracts both images', () => {
 
         const given: IContent = {
-            id: "test",
+            ...sharedGiven,
             blocks: blocks,
-            type: 0,
-            webTitle: "title",
-            webUrl: "http://test",
-            apiUrl: "http://api.test",
-            tags: [],
-            references: [],
-            isHosted: false,
-            elements: [{
-                id: "thumbnail",
-                relation: "thumbnail",
-                type: ElementType.IMAGE,
-                assets: [thumbnailAsset]
-            }]
+            elements: [thumbnailElem]
         }
 
         const actual = getImages(given)
 
         const withBoth: ImageAndTrailImage = {
-            image: {
-                credit: undefined,
-                path: "master/asset.com",
-                source: "test"
-            },
-            trailImage: {
-                path: "thumbnail/asset.com",
-                source: "test"
-            }
+            image: { ...mainImgExpected },
+            trailImage: { ...thumbnailExpected }
         }
 
         expect(actual).toStrictEqual(withBoth)
@@ -68,30 +79,15 @@ describe('articleImgPicker.getImages', () => {
     it('should extract only trail image', () => {
 
         const given: IContent = {
-            id: "test",
-            type: 0,
-            webTitle: "title",
-            webUrl: "http://test",
-            apiUrl: "http://api.test",
-            tags: [],
-            references: [],
-            isHosted: false,
-            elements: [{
-                id: "thumbnail",
-                relation: "thumbnail",
-                type: ElementType.IMAGE,
-                assets: [thumbnailAsset]
-            }]
+            ...sharedGiven,
+            elements: [thumbnailElem]
         }
 
         const actual = getImages(given)
 
         const withTrailOnly: ImageAndTrailImage = {
             image: undefined,
-            trailImage: {
-                path: "thumbnail/asset.com",
-                source: "test"
-            }
+            trailImage: { ...thumbnailExpected }
         }
 
         expect(actual).toStrictEqual(withTrailOnly)
@@ -100,25 +96,14 @@ describe('articleImgPicker.getImages', () => {
     it('should extract only main image', () => {
 
         const given: IContent = {
-            id: "test",
-            blocks: blocks,
-            type: 0,
-            webTitle: "title",
-            webUrl: "http://test",
-            apiUrl: "http://api.test",
-            tags: [],
-            references: [],
-            isHosted: false
+            ...sharedGiven,
+            blocks: blocks
         }
 
         const actual = getImages(given)
 
         const withMainOnly: ImageAndTrailImage = {
-            image: {
-                credit: undefined,
-                path: "master/asset.com",
-                source: "test"
-            },
+            image: { ...mainImgExpected },
             trailImage: undefined
         }
 
@@ -128,14 +113,7 @@ describe('articleImgPicker.getImages', () => {
     it('should extract no images', () => {
 
         const given: IContent = {
-            id: "test",
-            type: 0,
-            webTitle: "title",
-            webUrl: "http://test",
-            apiUrl: "http://api.test",
-            tags: [],
-            references: [],
-            isHosted: false
+            ...sharedGiven
         }
 
         const actual = getImages(given)
