@@ -13,8 +13,8 @@ const basicMetrics = {
 const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
 
 const sides = {
-    sides: basicMetrics.horizontal / 1.4,
-    sidesTablet: basicMetrics.horizontal * 1.5,
+    sides: basicMetrics.horizontal / 1,
+    sidesTablet: basicMetrics.horizontal * 1,
 }
 const sliderRadius = 18
 

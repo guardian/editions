@@ -77,6 +77,7 @@
 		C555A75222848D6C002DF16C /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C555A72822848D6C002DF16C /* Icon-1024.png */; };
 		E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
+		AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +181,7 @@
 		ED175DCD22A3452EA1C9C2E4 /* GHGuardianHeadline-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GHGuardianHeadline-Light.ttf"; path = "../src/assets/fonts/GHGuardianHeadline-Light.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */ = {isa = PBXFileReference; name = "GTGuardianDaily-Regular.otf"; path = "../src/assets/fonts/GTGuardianDaily-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +287,7 @@
 				79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */,
 				1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */,
 				CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */,
+				390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */,
 				30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */,
 				230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */,
+				AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

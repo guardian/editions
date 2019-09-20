@@ -28,8 +28,8 @@ export type ArticleHeadlineProps = {
 } & Pick<HeadlineTextProps, 'weight'>
 
 const scale =
-    (getUnscaledFont('headline', 1.5)[MINIMUM_BREAKPOINT].lineHeight /
-        getFont('headline', 1.5).lineHeight) *
+    (getUnscaledFont('headline', 1.6)[MINIMUM_BREAKPOINT].lineHeight /
+        getFont('headline', 1.6).lineHeight) *
     0.9
 
 const styles = StyleSheet.create({
@@ -65,7 +65,7 @@ const ArticleHeadline = ({
             {icon ? (
                 <TextWithIcon
                     onTextLayout={hasHighlight && onTextLayout}
-                    unscaledFont={getUnscaledFont('headline', 1.5)}
+                    unscaledFont={getUnscaledFont('headline', 1.6)}
                     style={[getHeadlineTextStyle(weight), textStyle]}
                     icon={icon}
                 >
