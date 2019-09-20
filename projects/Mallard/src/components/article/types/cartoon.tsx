@@ -4,7 +4,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { GalleryHeader } from '../article-header/gallery-header'
 import { MaxWidthWrap } from '../wrap/max-width'
-import { AutoSizedImageResource } from 'src/components/front/image-resource'
+import { ImageResource } from 'src/components/front/image-resource'
 import { PictureArticle } from '../../../../../common/src'
 
 const Cartoon = ({ article }: { article: PictureArticle }) => (
@@ -26,9 +26,10 @@ const Cartoon = ({ article }: { article: PictureArticle }) => (
         >
             {article.image && (
                 <MaxWidthWrap>
-                    <AutoSizedImageResource
+                    <ImageResource
                         style={{ width: '100%' }}
                         image={article.image}
+                        setAspectRatio
                     />
                 </MaxWidthWrap>
             )}

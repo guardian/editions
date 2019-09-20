@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Image as IImage } from '../../../../common/src'
-import { Image, StyleProp, ImageStyle, ImageProps } from 'react-native'
+import React from 'react'
+import { Image, ImageProps, ImageStyle, StyleProp } from 'react-native'
+import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath } from 'src/hooks/use-image-paths'
+import { Image as IImage } from '../../../../common/src'
 
 /**
  * This component abstracts away the endpoint for images
@@ -15,54 +16,28 @@ import { useImagePath } from 'src/hooks/use-image-paths'
 type ImageResourceProps = {
     image: IImage
     style?: StyleProp<ImageStyle>
-    onGetPath?: (path: string) => void
+    setAspectRatio?: boolean
 } & Omit<ImageProps, 'source'>
 
 const ImageResource = ({
     image,
     style,
-    onGetPath,
+    setAspectRatio = false,
     ...props
 }: ImageResourceProps) => {
     const path = useImagePath(image)
-    useEffect(() => {
-        onGetPath && path && onGetPath(path)
-    }, [path, onGetPath])
+    const aspectRatio = useAspectRatio(path)
     return (
         <Image
             resizeMethod={'resize'}
             {...props}
-            style={style}
+            style={[
+                style,
+                setAspectRatio && aspectRatio ? { aspectRatio } : {},
+            ]}
             source={{ uri: path }}
         />
     )
 }
 
-const AutoSizedImageResource = ({
-    ...props
-}: Omit<ImageResourceProps, 'onGetPath'>) => {
-    const [aspectRatio, setRatio] = useState(1)
-
-    return (
-        <ImageResource
-            {...props}
-            style={[
-                {
-                    aspectRatio,
-                },
-                props.style,
-            ]}
-            onGetPath={path => {
-                Image.getSize(
-                    path,
-                    (width, height) => {
-                        setRatio(width / height)
-                    },
-                    () => {},
-                )
-            }}
-        />
-    )
-}
-
-export { ImageResource, AutoSizedImageResource }
+export { ImageResource }
