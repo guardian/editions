@@ -5,9 +5,6 @@ export enum Breakpoints {
     tabletLandscape = 1000,
 }
 
-/*
-    Minimum breakpoint is currently 375 as this is what we initially started off with.
-*/
 export const MINIMUM_BREAKPOINT: number = Breakpoints.smallPhone
 
 export interface BreakpointList<T> {

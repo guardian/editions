@@ -13,7 +13,11 @@ import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { ToastProvider } from './hooks/use-toast'
-import { prepFileSystem, clearOldIssues } from './helpers/files'
+import {
+    prepFileSystem,
+    clearOldIssues,
+    downloadTodaysIssue,
+} from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { fetchCacheClear } from './helpers/fetch'
@@ -27,6 +31,7 @@ import { NavigationState } from 'react-navigation'
 import { IdentityAuth } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
+import { UpdateIpAddress } from './components/update-ip-address'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -36,9 +41,7 @@ pushNotifcationRegistration()
 clearOldIssues()
 fetchCacheClear().then((weOk: boolean) => {
     if (weOk) {
-        console.log('WE ARE OKAY')
-        //TODO: AW: download todays issue
-        // downloadTodaysIssue()
+        downloadTodaysIssue()
     }
 })
 
@@ -153,6 +156,7 @@ export default class App extends React.Component<{}, {}> {
                                 }
                             />
                             <NetInfoAutoToast />
+                            <UpdateIpAddress />
                         </View>
                         <ModalRenderer />
                         <BugButton />

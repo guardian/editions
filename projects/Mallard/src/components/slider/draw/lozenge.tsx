@@ -5,6 +5,7 @@ import { Animated, Text, StyleSheet, View } from 'react-native'
 import { clamp, safeInterpolation } from 'src/helpers/math'
 import { ariaHidden } from 'src/helpers/a11y'
 import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
 
 const fadeLozengeAt = 20
 
@@ -46,11 +47,16 @@ const commonStyles = StyleSheet.create({
     },
     text: {
         color: color.textOverDarkBackground,
-        fontSize: 22,
+        fontSize: getFont('titlepiece', 1.25).fontSize,
         height: metrics.fronts.sliderRadius * 2,
         lineHeight: metrics.fronts.sliderRadius * 1.75,
         alignItems: 'center',
-        fontFamily: 'GTGuardianTitlepiece-Bold',
+        fontFamily: getFont('titlepiece', 1.25).fontFamily,
+    },
+    letter: {
+        fontFamily: getFont('daily', 1).fontFamily,
+        fontSize: getFont('daily', 1).fontSize,
+        transform: [{ translateY: 2 }],
     },
 })
 
@@ -166,13 +172,8 @@ const LozengeBigHeader = ({
                                 opacity: position.interpolate({
                                     inputRange: safeInterpolation([
                                         0,
-                                        clamp(
-                                            width / 2 -
-                                                metrics.fronts.sliderRadius,
-                                            0,
-                                            width / 2,
-                                        ),
-                                        width / 2,
+                                        fadeLozengeAt,
+                                        fadeLozengeAt * 2,
                                     ]),
                                     outputRange: safeInterpolation([1, 1, 0]),
                                 }),
@@ -224,7 +225,7 @@ const LozengeCircle = ({
             <Text
                 {...ariaHidden}
                 allowFontScaling={false}
-                style={[commonStyles.text]}
+                style={[commonStyles.text, commonStyles.letter]}
             >
                 {children[0]}
             </Text>

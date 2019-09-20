@@ -91,18 +91,21 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
                     image={article.image}
                 />
             ) : null}
-            <View style={sportSuperStyles.card}>
-                <TextBlock
-                    byline={article.byline}
-                    style={[superHeroImageStyles.textBlock]}
-                    kicker={article.kicker}
-                    headline={article.headline}
-                    monotone
-                    {...{ size }}
-                />
+            <TextBlock
+                byline={article.byline}
+                style={[superHeroImageStyles.textBlock]}
+                kicker={article.kicker}
+                headline={article.headline}
+                {...{ size }}
+            />
+            <View
+                style={[
+                    sportSuperStyles.card,
+                    superHeroImageStyles.textStandBlock,
+                ]}
+            >
                 <Standfirst
                     style={[
-                        superHeroImageStyles.textStandBlock,
                         size.layout === PageLayoutSizes.tablet && {
                             width: '80%',
                         },
@@ -130,7 +133,7 @@ const opinionStyles = StyleSheet.create({
         color: color.textOverDarkBackground,
     },
     trailText: {
-        ...getFont('headline', 1.25, 'light'),
+        ...getFont('headline', 1, 'light'),
         color: color.textOverDarkBackground,
     },
     bylineText: {
@@ -142,6 +145,11 @@ const opinionStyles = StyleSheet.create({
         bottom: 0,
         right: -20,
         width: '53%',
+    },
+    borderStyles: {
+        borderTopColor: color.textOverDarkBackground,
+        borderWidth: 0.5,
+        borderColor: '#d6d7da',
     },
 })
 const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
@@ -164,7 +172,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                         width: 35,
                         element: scale => (
                             <Quote
-                                scale={0.9 / scale}
+                                scale={0.8 / scale}
                                 fill={opinionStyles.titleText.color}
                             />
                         ),
@@ -172,12 +180,37 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 >
                     {article.headline}
                 </TextWithIcon>
+                <View>
+                    <Text
+                        style={[
+                            opinionStyles.bylineText,
+                            { color: opinionStyles.titleText.color },
+                        ]}
+                    >
+                        {[
+                            article.bylineImages &&
+                                article.bylineImages.cutout &&
+                                'by',
+                            article.byline,
+                        ]
+                            .filter(Boolean)
+                            .join(' ')}
+                    </Text>
+                    {article.bylineImages && article.bylineImages.cutout ? (
+                        <View style={opinionStyles.cutout}>
+                            <BylineCutout
+                                cutout={article.bylineImages.cutout}
+                            />
+                        </View>
+                    ) : null}
+                </View>
             </View>
             <View
                 style={[
                     opinionStyles.block,
+                    opinionStyles.borderStyles,
                     {
-                        backgroundColor: colors.bright,
+                        backgroundColor: colors.main,
                     },
                 ]}
             >
@@ -188,32 +221,6 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                     >
                         {article.trail}
                     </Text>
-                ) : null}
-            </View>
-            <View
-                style={[
-                    opinionStyles.block,
-                    {
-                        backgroundColor: colors.faded,
-                    },
-                ]}
-            >
-                <Text
-                    style={[opinionStyles.bylineText, { color: colors.main }]}
-                >
-                    {[
-                        article.bylineImages &&
-                            article.bylineImages.cutout &&
-                            'by',
-                        article.byline,
-                    ]
-                        .filter(Boolean)
-                        .join(' ')}
-                </Text>
-                {article.bylineImages && article.bylineImages.cutout ? (
-                    <View style={opinionStyles.cutout}>
-                        <BylineCutout cutout={article.bylineImages.cutout} />
-                    </View>
                 ) : null}
             </View>
         </ItemTappable>

@@ -7,6 +7,12 @@ import { Crossword } from './types/crossword'
 import { Gallery } from './types/gallery'
 import { Cartoon } from './types/cartoon'
 
+import { ScrollView } from 'react-native'
+import {
+    OnTopPositionChangeFn,
+    wireScrollBarToDismiss,
+} from 'src/screens/article/helpers'
+
 /*
 This is the article view! For all of the articles.
 it gets everything it needs from its route
@@ -16,19 +22,43 @@ export interface ArticleControllerPropTypes {
     article: CAPIArticle
 }
 
-const ArticleController = ({ article }: { article: CAPIArticle }) => {
+const ArticleController = ({
+    article,
+    onTopPositionChange,
+}: {
+    article: CAPIArticle
+    onTopPositionChange: OnTopPositionChangeFn
+}) => {
     switch (article.type) {
         case 'article':
-            return <Article article={article.elements} {...article} />
+            return (
+                <Article
+                    onTopPositionChange={onTopPositionChange}
+                    article={article.elements}
+                    {...article}
+                />
+            )
 
         case 'gallery':
-            return <Gallery gallery={article} />
+            return (
+                <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
+                    <Gallery gallery={article} />
+                </ScrollView>
+            )
 
         case 'picture':
-            return <Cartoon article={article} />
+            return (
+                <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
+                    <Cartoon article={article} />
+                </ScrollView>
+            )
 
         case 'crossword':
-            return <Crossword crosswordArticle={article} />
+            return (
+                <ScrollView>
+                    <Crossword crosswordArticle={article} />
+                </ScrollView>
+            )
 
         default:
             const message: never = article

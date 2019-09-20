@@ -1,6 +1,14 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
-import { Appearance } from 'src/common'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import {
+    Animated,
+    Platform,
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewPagerAndroid,
+    ViewStyle,
+} from 'react-native'
+import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { Fader } from 'src/components/layout/animators/fader'
@@ -17,6 +25,13 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
+
+export interface PathToArticle {
+    collection: Collection['key']
+    front: Front['key']
+    article: CAPIArticle['key']
+    issue: Issue['key']
+}
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
@@ -54,6 +69,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
+        marginLeft: '-4%',
+        marginRight: '-4%',
     },
     sliderBorder: {
         borderBottomColor: color.line,
@@ -140,6 +157,30 @@ const ArticleSlider = ({
         [onDismissStateChanged],
     )
 
+    const data = isInScroller
+        ? articleNavigator.articles
+        : [path, ...articleNavigator.articles]
+
+    if (Platform.OS === 'android')
+        return (
+            <ViewPagerAndroid
+                style={{ flexGrow: 1, width: '100%' }}
+                initialPage={startingPoint}
+            >
+                {data.map((item, index) => (
+                    <View key={index}>
+                        <ArticleScreenBody
+                            width={width}
+                            path={item}
+                            pillar={pillar}
+                            onTopPositionChange={onTopPositionChange}
+                            position={index}
+                        />
+                    </View>
+                ))}
+            </ViewPagerAndroid>
+        )
+
     return (
         <>
             <Fader>
@@ -178,7 +219,6 @@ const ArticleSlider = ({
                 keyExtractor={(item: ArticleNavigator['articles'][0]) =>
                     item.article
                 }
-                removeClippedSubviews={true}
                 data={
                     isInScroller
                         ? articleNavigator.articles

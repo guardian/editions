@@ -105,7 +105,8 @@ const FrontWithResponse = ({
             frontName: frontData.displayName || '',
         }
         return [flatCollections, navigator]
-    }, [frontData.collections.map(({ key }) => key).join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [localIssueId, publishedIssueId, frontData])
+
     const stops = cards.length
     const { card, container } = useIssueScreenSize()
 
@@ -149,7 +150,6 @@ const FrontWithResponse = ({
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 horizontal={true}
-                removeClippedSubviews={true}
                 decelerationRate="fast"
                 snapToInterval={card.width}
                 ref={(flatList: AnimatedFlatListRef) =>

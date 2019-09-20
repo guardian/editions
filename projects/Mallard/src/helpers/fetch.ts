@@ -13,6 +13,7 @@ import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
 import { Issue } from 'src/common'
 import { defaultSettings } from './settings/defaults'
 import { cacheClearCache } from './storage'
+import { Forecast, AccuWeatherLocation, WeatherForecast } from '../common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -69,7 +70,7 @@ api (sign in, issue list. maybe cachable maybe not)
 and the issue files (always cachable, identical
 across zip file & issue API)
 */
-export const fetchFromApi = <T>(
+const fetchFromApi = <T>(
     endpointPath: string,
     {
         validator,
@@ -111,7 +112,7 @@ export const fetchFromApi = <T>(
     )
 }
 
-export const fetchFromIssue = <T>(
+const fetchFromIssue = <T>(
     localIssueId: Issue['localId'],
     fsPath: string,
     endpointPath: string,
@@ -146,7 +147,7 @@ export const fetchFromIssue = <T>(
     )
 }
 
-export const fetchFromWeatherApi = async <T>(
+const fetchFromWeatherApi = async <T>(
     path: string,
     {
         validator = () => true,
@@ -170,22 +171,101 @@ export const fetchFromWeatherApi = async <T>(
         })
 }
 
-export const fetchWeather = <T>(
-    endpointPath: string,
-    { validator }: { validator?: ValidatorFn<T> } = {},
-): CachedOrPromise<T> => {
-    const { retrieve, store } = withCache<T>('weather')
+const fetchAndStoreIpAddress = async (): Promise<string> => {
+    const { store: storeIp } = withCache<string>('ipAddress')
+    const resp = await fetch('https://api.ipify.org')
+    const ipAddress = await resp.text()
+    storeIp('ipAddress', ipAddress)
+    return ipAddress
+}
+
+const fetchIpAddress = (): Promise<string> => {
+    const { retrieve: retrieveIp } = withCache<string>('ipAddress')
+
+    const ipAddressFromCache = retrieveIp('ipAddress')
+
+    if (ipAddressFromCache) {
+        return Promise.resolve(ipAddressFromCache)
+    } else {
+        return fetchAndStoreIpAddress()
+    }
+}
+
+const fetchWeatherForecastForLocation = (): CachedOrPromise<
+    WeatherForecast
+> => {
+    const {
+        retrieve: retrieveWeatherLocation,
+        store: storeWeatherLocation,
+    } = withCache<AccuWeatherLocation>('weatherLocation')
+    const {
+        retrieve: retrieveWeatherForecast,
+        store: storeWeatherForecast,
+    } = withCache<Forecast[]>('weatherForecasts')
+    const {
+        retrieve: retrieveWeatherForecastSummary,
+        store: storeWeatherForecastSummary,
+    } = withCache<WeatherForecast>('weatherForecastSummary')
+
+    const weatherForecast: Promise<WeatherForecast> = fetchIpAddress().then(
+        async ip => {
+            const location = await createCachedOrPromise<AccuWeatherLocation>(
+                [
+                    retrieveWeatherLocation(
+                        `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+                    ),
+                    async () => {
+                        return fetchFromWeatherApi<AccuWeatherLocation>(
+                            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+                        )
+                    },
+                ],
+                {
+                    savePromiseResultToValue: locationResult =>
+                        storeWeatherLocation(
+                            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+                            locationResult,
+                        ),
+                },
+            ).getValue()
+
+            const forecasts = await createCachedOrPromise(
+                [
+                    retrieveWeatherForecast(
+                        `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
+                    ),
+                    async () => {
+                        return fetchFromWeatherApi<Forecast[]>(
+                            `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
+                        )
+                    },
+                ],
+                {
+                    savePromiseResultToValue: forecastsResult =>
+                        storeWeatherForecast(
+                            `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
+                            forecastsResult,
+                        ),
+                },
+            ).getValue()
+
+            const weatherForecast: WeatherForecast = {
+                locationName: location.EnglishName,
+                forecasts,
+            }
+
+            return weatherForecast
+        },
+    )
+
     return createCachedOrPromise(
         [
-            retrieve(endpointPath),
-            async () => {
-                return fetchFromWeatherApi<T>(endpointPath, {
-                    validator,
-                })
-            },
+            retrieveWeatherForecastSummary(`forecasts`),
+            async () => weatherForecast,
         ],
         {
-            savePromiseResultToValue: result => store(endpointPath, result),
+            savePromiseResultToValue: result =>
+                storeWeatherForecastSummary(`forecasts`, result),
         },
     )
 }
@@ -195,7 +275,7 @@ const getCacheNumber = async (): Promise<{ cacheClear: string }> => {
     return response.json()
 }
 
-export const fetchCacheClear = async (): Promise<boolean> => {
+const fetchCacheClear = async (): Promise<boolean> => {
     try {
         const [cacheNumber, cacheNumberStorage] = await Promise.all([
             getCacheNumber(),
@@ -225,9 +305,7 @@ export const fetchCacheClear = async (): Promise<boolean> => {
     }
 }
 
-export const fetchFromNotificationService = async (deviceToken: {
-    token: string
-}) => {
+const fetchFromNotificationService = async (deviceToken: { token: string }) => {
     const registerDeviceUrl = await getSetting('notificationServiceRegister')
     const { token } = deviceToken
     const options = {
@@ -262,4 +340,13 @@ const isUrlAvailable = async (url: string): Promise<boolean> => {
     } catch (error) {
         return false
     }
+}
+
+export {
+    fetchFromIssue,
+    fetchFromApi,
+    fetchWeatherForecastForLocation,
+    fetchFromNotificationService,
+    fetchAndStoreIpAddress,
+    fetchCacheClear,
 }

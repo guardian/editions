@@ -1,24 +1,21 @@
-import React, { useMemo, useState } from 'react'
-import { Dimensions, Linking, Platform, View, StyleSheet } from 'react-native'
-import { WebView } from 'react-native-webview'
-import { ArticleFeatures, BlockElement } from 'src/common'
+import React, { ReactNode, useState, useEffect } from 'react'
+import { Animated, Dimensions, StyleSheet, View, Platform } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+import { BlockElement } from 'src/common'
+import { safeInterpolation } from 'src/helpers/math'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
 import { ArticleHeader } from '../article-header'
 import { ArticleHeaderProps } from '../article-header/types'
 import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
-import { EMBED_DOMAIN, render } from '../html/render'
 import { Wrap, WrapLayout } from '../wrap/wrap'
-import { useNetInfo } from '@react-native-community/netinfo'
-
-const urlIsNotAnEmbed = (url: string) =>
-    !(
-        url.startsWith(EMBED_DOMAIN) ||
-        url.startsWith('https://www.youtube.com/embed')
-    )
-
-const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
+import { WebviewWithArticle } from './article/webview'
+import {
+    wireScrollBarToDismiss,
+    OnTopPositionChangeFn,
+} from 'src/screens/article/helpers'
+import { UiBodyCopy } from 'src/components/styled-text'
 
 const styles = StyleSheet.create({
     block: {
@@ -32,6 +29,7 @@ const styles = StyleSheet.create({
     webview: {
         backgroundColor: 'transparent',
         width: '100%',
+        height: '100%',
         /*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
@@ -40,85 +38,148 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleWebview = ({
-    article,
-    wrapLayout,
+const ArticleWebView = ({
+    header,
+    onTopPositionChange,
+    ...webviewProps
 }: {
+    header: ReactNode
     article: BlockElement[]
+    onTopPositionChange: OnTopPositionChangeFn
     wrapLayout: WrapLayout
 }) => {
-    const { isConnected } = useNetInfo()
     const [height, setHeight] = useState(Dimensions.get('window').height)
-    const [, { pillar }] = useArticle()
-
-    const html = useMemo(
-        () =>
-            render(article, {
-                pillar,
-                features,
-                wrapLayout,
-                showMedia: isConnected,
-            }),
-        [article, pillar, wrapLayout, isConnected],
-    )
 
     return (
-        <>
-            <Wrap>
-                <View style={{ minHeight: height }}></View>
-            </Wrap>
+        <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
+            {header}
+            <View>
+                <Wrap>
+                    <View style={{ minHeight: height }}></View>
+                </Wrap>
 
-            <View style={[styles.webviewWrap]}>
-                <WebView
-                    originWhitelist={['*']}
-                    scrollEnabled={false}
-                    useWebKit={false}
-                    source={{ html: html }}
-                    onShouldStartLoadWithRequest={event => {
-                        if (
-                            Platform.select({
-                                ios: event.navigationType === 'click',
-                                android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
-                            })
-                        ) {
-                            Linking.openURL(event.url)
-                            return false
-                        }
-                        return true
-                    }}
-                    onMessage={event => {
-                        if (parseInt(event.nativeEvent.data) > height) {
-                            setHeight(parseInt(event.nativeEvent.data))
-                        }
-                    }}
-                    style={[
-                        styles.webview,
-                        {
-                            minHeight: height,
-                        },
-                    ]}
-                />
+                <View style={[styles.webviewWrap]}>
+                    <WebviewWithArticle
+                        {...webviewProps}
+                        scrollEnabled={false}
+                        useWebKit={false}
+                        onMessage={event => {
+                            if (parseInt(event.nativeEvent.data) > height) {
+                                setHeight(parseInt(event.nativeEvent.data))
+                            }
+                        }}
+                        style={[styles.webview]}
+                    />
+                </View>
             </View>
-        </>
+        </ScrollView>
+    )
+}
+
+const androidStyles = StyleSheet.create({
+    header: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        zIndex: 999999,
+    },
+    wrapper: {
+        height: '100%',
+    },
+})
+const ArticleWebViewAndroid = ({
+    header,
+    onTopPositionChange,
+    ...webviewProps
+}: {
+    header: ReactNode
+    article: BlockElement[]
+    wrapLayout: WrapLayout
+    onTopPositionChange: OnTopPositionChangeFn
+}) => {
+    const [height, setHeight] = useState<number | null>(null)
+    const [scrollY] = useState(() => new Animated.Value(0))
+
+    useEffect(() => {
+        onTopPositionChange(false)
+    }, [])
+    return (
+        <View style={androidStyles.wrapper}>
+            <Animated.View
+                onLayout={(ev: any) => {
+                    setHeight(ev.nativeEvent.layout.height)
+                }}
+                pointerEvents="none"
+                style={[
+                    androidStyles.header,
+                    {
+                        transform: [
+                            {
+                                translateY: scrollY.interpolate({
+                                    inputRange: safeInterpolation([-1, 1]),
+                                    outputRange: safeInterpolation([1, -1]),
+                                }),
+                            },
+                        ],
+                    },
+                ]}
+            >
+                {header}
+            </Animated.View>
+
+            {!!height && (
+                <>
+                    <WebviewWithArticle
+                        {...webviewProps}
+                        onScroll={Animated.event(
+                            [
+                                {
+                                    nativeEvent: {
+                                        contentOffset: {
+                                            y: scrollY,
+                                        },
+                                    },
+                                },
+                            ],
+                            /* webview doesnt support the native driver just yet :() */
+                            { useNativeDriver: false },
+                        )}
+                        paddingTop={height}
+                        style={StyleSheet.absoluteFillObject}
+                    />
+                </>
+            )}
+        </View>
     )
 }
 
 const Article = ({
     article,
+    onTopPositionChange,
     ...headerProps
 }: {
     article: BlockElement[]
+    onTopPositionChange: OnTopPositionChangeFn
 } & ArticleHeaderProps &
     StandfirstPropTypes) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
 
+    const WebView =
+        Platform.OS === 'android' ? ArticleWebViewAndroid : ArticleWebView
+
     return (
         <>
-            <ArticleHeader {...headerProps} type={type} />
             <Fader>
                 {wrapLayout && (
-                    <ArticleWebview article={article} wrapLayout={wrapLayout} />
+                    <WebView
+                        header={<ArticleHeader {...headerProps} type={type} />}
+                        article={article}
+                        onTopPositionChange={onTopPositionChange}
+                        wrapLayout={wrapLayout}
+                    />
                 )}
 
                 <Wrap onWrapLayout={setWrapLayout}></Wrap>

@@ -8,6 +8,7 @@ import cloudfront = require('@aws-cdk/aws-cloudfront')
 import { CfnOutput, Duration } from '@aws-cdk/core'
 
 import { archiverStepFunction } from './step-function'
+import acm = require('@aws-cdk/aws-certificatemanager')
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props)
@@ -104,6 +105,26 @@ export class EditionsStack extends cdk.Stack {
             description: 'lambda access',
         })
 
+        const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
+            type: 'String',
+            description: 'Hostname of the preview endpoint',
+        })
+
+        const previewCertificateArn = new cdk.CfnParameter(
+            this,
+            'preview-certificate-arn',
+            {
+                type: 'String',
+                description: 'ARN of ACM certificate for preview endpoint',
+            },
+        )
+
+        const previewCertificate = acm.Certificate.fromCertificateArn(
+            this,
+            'preview-certificate',
+            previewCertificateArn.valueAsString,
+        )
+
         const backendProps = (
             publicationStage: 'preview' | 'published',
         ): FunctionProps => ({
@@ -149,14 +170,32 @@ export class EditionsStack extends cdk.Stack {
             backendProps('published'),
         )
 
-        const gateway = new apigateway.LambdaRestApi(
+        const previewApi = new apigateway.LambdaRestApi(
             this,
             'editions-preview-backend-apigateway',
             {
                 handler: previewBackend,
             },
         )
-        const publishedGateway = new apigateway.LambdaRestApi(
+
+        const previewDomainName = new apigateway.DomainName(
+            this,
+            'preview-domain-name',
+            {
+                domainName: previewHostname.valueAsString,
+                certificate: previewCertificate,
+                endpointType: apigateway.EndpointType.REGIONAL,
+            },
+        )
+
+        previewDomainName.addBasePathMapping(previewApi)
+
+        new CfnOutput(this, 'Preview-Api-Target-Hostname', {
+            description: 'hostname',
+            value: `${previewDomainName.domainNameAliasDomainName}`,
+        })
+
+        const publishedApi = new apigateway.LambdaRestApi(
             this,
             'editions-published-backend-apigateway',
             {
@@ -164,12 +203,12 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
-        const gatewayId = gateway.restApiId
-        const publishedGatewayId = publishedGateway.restApiId
+        const previewGatewayId = previewApi.restApiId
+        const publishedGatewayId = publishedApi.restApiId
 
         const backendURL = `${publishedGatewayId}.execute-api.eu-west-1.amazonaws.com/prod/` //Yes, this (the region) really should not be hard coded.
 
-        const dist = new cloudfront.CloudFrontWebDistribution(
+        const previewDist = new cloudfront.CloudFrontWebDistribution(
             this,
             'backend-cloudfront-distribution',
             {
@@ -185,7 +224,7 @@ export class EditionsStack extends cdk.Stack {
                             },
                         ],
                         customOriginSource: {
-                            domainName: `${gatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
+                            domainName: `${previewGatewayId}.execute-api.eu-west-1.amazonaws.com`, //Yes, this (the region) really should not be hard coded.
                         },
                     },
                 ],
@@ -193,7 +232,7 @@ export class EditionsStack extends cdk.Stack {
         )
         new CfnOutput(this, 'Cloudfront-distribution', {
             description: 'URL for distribution',
-            value: `https://${dist.domainName}`,
+            value: `https://${previewDist.domainName}`,
         })
 
         const archive = s3.Bucket.fromBucketName(

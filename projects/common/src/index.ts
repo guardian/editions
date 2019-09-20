@@ -72,12 +72,82 @@ export interface Forecast {
     MobileLink: string
     Link: string
 }
+
+interface AccuWeatherRegion {
+    ID: string
+    LocalizedName: string
+    EnglishName: string
+}
+
+type AccuWeatherAdminArea = AccuWeatherRegion & {
+    Level: number
+    LocalizedType: string
+    EnglishType: string
+    CountryID: string
+}
+
+interface AccuweatherSupplementalAdminArea {
+    Level: number
+    LocalizedName: string
+    EnglishName: string
+}
+
+interface AccuWeatherTimezone {
+    Code: string
+    Name: string
+    GmtOffset: number
+    IsDaylightSaving: boolean
+    NextOffsetChange: string
+}
+
+interface AccuWeatherMeasurement {
+    Value: number
+    Unit: string
+    UnitType: number
+}
+
+interface AccuWeatherElevation {
+    Metric: AccuWeatherMeasurement
+    Imperial: AccuWeatherMeasurement
+}
+
+interface AccuWeatherGeoPosition {
+    Latitude: number
+    Longitude: number
+    Elevation: AccuWeatherElevation
+}
+
+export interface AccuWeatherLocation {
+    Version: number
+    Key: string
+    Type: string
+    Rank: number
+    LocalizedName: string
+    EnglishName: string
+    PrimaryPostalCode: string
+    Region: AccuWeatherRegion
+    Country: AccuWeatherRegion
+    AdministrativeArea: AccuWeatherAdminArea
+    TimeZone: AccuWeatherTimezone
+    GeoPosition: AccuWeatherGeoPosition
+    IsAlias: boolean
+    SupplementalAdminAreas: AccuweatherSupplementalAdminArea[]
+    DataSets: string[]
+}
+
+export interface WeatherForecast {
+    locationName: string
+    forecasts: Forecast[]
+}
+
 export type MediaType =
     | 'UseArticleTrail'
     | 'Hide'
     | 'Cutout'
     | 'Slideshow'
     | 'Image'
+    | 'coverCard'
+
 export interface Content extends WithKey {
     type: string
     headline: string
@@ -142,8 +212,8 @@ export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
     assets?: {
-        [P in ImageSize]?: string[]
-    } & { data: string[] }
+        [P in ImageSize]?: string
+    } & { data: string }
 }
 
 export interface Issue extends IssueSummary, WithKey {

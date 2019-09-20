@@ -12,7 +12,7 @@ export const backends = [
     },
     {
         title: 'PROD preview',
-        value: 'https://d2cf1ljtg904cv.cloudfront.net/',
+        value: 'https://preview.editions.guardianapis.com/',
         preview: true,
     },
     {
@@ -22,7 +22,7 @@ export const backends = [
     },
     {
         title: 'CODE preview',
-        value: 'https://d2mztzjulnpyb8.cloudfront.net/',
+        value: 'https://preview.editions.code.dev-guardianapis.com/',
         preview: true,
     },
     {
@@ -52,8 +52,9 @@ export const defaultSettings: Settings = {
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
-    zipUrl: apiUrl + 'zips/',
+    zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
+    contentPrefix: 'daily-edition',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
