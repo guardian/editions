@@ -44,7 +44,14 @@ const WebviewWithArticle = ({
                     (issueCompositeKey && issueCompositeKey.publishedIssueId) ||
                     null,
             }),
-        [article, pillar, wrapLayout, isConnected, paddingTop],
+        [
+            article,
+            pillar,
+            wrapLayout,
+            isConnected,
+            paddingTop,
+            issueCompositeKey,
+        ],
     )
 
     return (

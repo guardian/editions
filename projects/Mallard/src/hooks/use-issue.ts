@@ -8,7 +8,6 @@ import {
 } from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
 import { APIPaths, FSPaths, PathToArticle } from 'src/paths'
-import { getLatestIssue } from './use-api'
 import { useCachedOrPromise } from './use-cached-or-promise'
 
 export const useIssueWithResponse = <T>(
@@ -33,15 +32,13 @@ export const getIssueResponse = (
     )
 }
 
-export const useIssueOrLatestResponse = (issue?: {
+export const useIssueResponse = (issue: {
     localIssueId: Issue['localId']
     publishedIssueId: Issue['publishedId']
 }) =>
     useIssueWithResponse(
-        issue
-            ? getIssueResponse(issue.localIssueId, issue.publishedIssueId)
-            : getLatestIssue(),
-        [issue || 'latest'],
+        getIssueResponse(issue.localIssueId, issue.publishedIssueId),
+        [issue],
     )
 
 export const getFrontsResponse = (

@@ -1,11 +1,7 @@
 import React, { ReactElement } from 'react'
 import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import {
-    NavigationInjectedProps,
-    NavigationScreenProp,
-    withNavigation,
-} from 'react-navigation'
+import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Issue } from 'src/common'
 import { Button } from 'src/components/button/button'
 import { Front } from 'src/components/front'
@@ -29,7 +25,7 @@ import {
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
-import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
+import { useIssueResponse } from 'src/hooks/use-issue'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
@@ -40,6 +36,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
+import { useIssueCompositeKeyHandler } from 'src/hooks/use-issue-id'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -140,118 +137,125 @@ const PreviewReloadButton = ({ onPress }: { onPress: () => void }) => {
     return preview ? <ReloadButton onPress={onPress} /> : null
 }
 
-const IssueScreenWithPath = ({ path }: { path: PathToIssue | undefined }) => {
-    const response = useIssueOrLatestResponse(path)
+const handleError = (
+    { message }: { message: string },
+    _: unknown,
+    { retry }: { retry: () => void },
+) => (
+    <>
+        <ScreenHeader />
+
+        <FlexErrorMessage
+            debugMessage={message}
+            title={CONNECTION_FAILED_ERROR}
+            message={CONNECTION_FAILED_SUB_ERROR}
+            action={[REFRESH_BUTTON_TEXT, retry]}
+        />
+    </>
+)
+
+const handlePending = () => (
+    <>
+        <ScreenHeader />
+        <FlexCenter>
+            <Spinner />
+        </FlexCenter>
+    </>
+)
+
+const IssueScreenWithPath = ({ path }: { path: PathToIssue }) => {
+    const response = useIssueResponse(path)
+    return response({
+        error: handleError,
+        pending: handlePending,
+        success: (issue, { retry }) => {
+            sendPageViewEvent({
+                path: `editions/uk/daily/${issue.key}`,
+            })
+            return (
+                <>
+                    <PreviewReloadButton
+                        onPress={() => {
+                            clearCache()
+                            retry()
+                        }}
+                    />
+                    <ScreenHeader issue={issue} />
+
+                    <WithBreakpoints>
+                        {{
+                            0: () => (
+                                <WithLayoutRectangle>
+                                    {metrics => (
+                                        <WithIssueScreenSize
+                                            value={[
+                                                PageLayoutSizes.mobile,
+                                                metrics,
+                                            ]}
+                                        >
+                                            <IssueFronts
+                                                ListHeaderComponent={
+                                                    <View
+                                                        style={
+                                                            styles.weatherWide
+                                                        }
+                                                    >
+                                                        <Weather />
+                                                    </View>
+                                                }
+                                                issue={issue}
+                                            />
+                                        </WithIssueScreenSize>
+                                    )}
+                                </WithLayoutRectangle>
+                            ),
+                            [Breakpoints.tabletVertical]: () => (
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                    }}
+                                >
+                                    <View style={styles.sideWeather}>
+                                        <Weather />
+                                    </View>
+
+                                    <WithLayoutRectangle>
+                                        {metrics => (
+                                            <WithIssueScreenSize
+                                                value={[
+                                                    PageLayoutSizes.tablet,
+                                                    metrics,
+                                                ]}
+                                            >
+                                                <IssueFronts
+                                                    style={
+                                                        styles.sideBySideFeed
+                                                    }
+                                                    issue={issue}
+                                                />
+                                            </WithIssueScreenSize>
+                                        )}
+                                    </WithLayoutRectangle>
+                                </View>
+                            ),
+                        }}
+                    </WithBreakpoints>
+                </>
+            )
+        },
+    })
+}
+
+export const IssueScreen = () => {
+    const response = useIssueCompositeKeyHandler()
+
     return (
         <Container>
             {response({
-                error: ({ message }, _, { retry }) => (
-                    <>
-                        <ScreenHeader />
-
-                        <FlexErrorMessage
-                            debugMessage={message}
-                            title={CONNECTION_FAILED_ERROR}
-                            message={CONNECTION_FAILED_SUB_ERROR}
-                            action={[REFRESH_BUTTON_TEXT, retry]}
-                        />
-                    </>
-                ),
-                pending: () => (
-                    <>
-                        <ScreenHeader />
-                        <FlexCenter>
-                            <Spinner />
-                        </FlexCenter>
-                    </>
-                ),
-                success: (issue, { retry }) => {
-                    sendPageViewEvent({
-                        path: `editions/uk/daily/${issue.key}`,
-                    })
-                    return (
-                        <>
-                            <PreviewReloadButton
-                                onPress={() => {
-                                    clearCache()
-                                    retry()
-                                }}
-                            />
-                            <ScreenHeader issue={issue} />
-
-                            <WithBreakpoints>
-                                {{
-                                    0: () => (
-                                        <WithLayoutRectangle>
-                                            {metrics => (
-                                                <WithIssueScreenSize
-                                                    value={[
-                                                        PageLayoutSizes.mobile,
-                                                        metrics,
-                                                    ]}
-                                                >
-                                                    <IssueFronts
-                                                        ListHeaderComponent={
-                                                            <View
-                                                                style={
-                                                                    styles.weatherWide
-                                                                }
-                                                            >
-                                                                <Weather />
-                                                            </View>
-                                                        }
-                                                        issue={issue}
-                                                    />
-                                                </WithIssueScreenSize>
-                                            )}
-                                        </WithLayoutRectangle>
-                                    ),
-                                    [Breakpoints.tabletVertical]: () => (
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                            }}
-                                        >
-                                            <View style={styles.sideWeather}>
-                                                <Weather />
-                                            </View>
-
-                                            <WithLayoutRectangle>
-                                                {metrics => (
-                                                    <WithIssueScreenSize
-                                                        value={[
-                                                            PageLayoutSizes.tablet,
-                                                            metrics,
-                                                        ]}
-                                                    >
-                                                        <IssueFronts
-                                                            style={
-                                                                styles.sideBySideFeed
-                                                            }
-                                                            issue={issue}
-                                                        />
-                                                    </WithIssueScreenSize>
-                                                )}
-                                            </WithLayoutRectangle>
-                                        </View>
-                                    ),
-                                }}
-                            </WithBreakpoints>
-                        </>
-                    )
-                },
+                pending: handlePending,
+                error: handleError,
+                success: path => <IssueScreenWithPath path={path} />,
             })}
         </Container>
     )
-}
-
-export const IssueScreen = ({
-    navigation,
-}: {
-    navigation: NavigationScreenProp<{}>
-}) => {
-    const path = navigation.getParam('path') as PathToIssue | undefined
-    if (!path || !path.localIssueId)
-        return <IssueScreenWithPath path={undefined} />
-    return <IssueScreenWithPath path={path} />
 }
