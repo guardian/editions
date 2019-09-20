@@ -16,7 +16,6 @@ import {
     BufferedTransport,
     CompactProtocol,
 } from '@creditkarma/thrift-server-core'
-import { getImage, getCreditedImage } from './assets'
 import { elementParser } from './elements'
 import fetch from 'node-fetch'
 import { fromPairs } from 'ramda'
@@ -24,8 +23,7 @@ import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
 import { articleTypePicker } from './articleTypePicker'
-import { Image, CreditedImage } from '../../common/src'
-import { oc } from 'ts-optchain'
+import { getImages } from './articleImgPicker'
 
 type NotInCAPI =
     | 'key'
@@ -61,28 +59,6 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
     dateTime: date.dateTime.toNumber(),
 })
 
-const getMainImage = (result: IContent): CreditedImage | undefined => {
-    const maybeMainElement = oc(result).blocks.main.elements[0]()
-    const maybeCreditedMainImage = maybeMainElement && getCreditedImage(maybeMainElement)
-
-    if (!maybeCreditedMainImage) {
-        console.warn(
-            `No main image in ${result.id}`,
-        )
-    }
-
-    return maybeCreditedMainImage
-}
-
-const getTrailImage = (result: IContent): Image | undefined => {
-    const maybeThumbnailElement =
-        result.elements &&
-        result.elements.find(element => element.relation === 'thumbnail')
-    const maybeThumbnailImage =
-        maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
-    return maybeThumbnailImage
-}
-
 const parseArticleResult = async (
     result: IContent,
 ): Promise<[number, CAPIContent]> => {
@@ -106,8 +82,7 @@ const parseArticleResult = async (
     const byline = result.fields && result.fields.byline
     const bylineImages = getBylineImages(result)
 
-    const maybeMainImage = getMainImage(result)
-    const maybeTrailImage = getTrailImage(result)
+    const images = getImages(result)
 
     const starRating = result.fields && result.fields.starRating
 
@@ -138,8 +113,7 @@ const parseArticleResult = async (
                     kicker,
                     articleType,
                     trail,
-                    image: maybeMainImage,
-                    trailImage: maybeTrailImage,
+                    ...images,
                     byline: byline || '',
                     bylineImages,
                     standfirst: trail || '',
@@ -159,8 +133,7 @@ const parseArticleResult = async (
                     trail,
                     kicker,
                     articleType,
-                    image: maybeMainImage,
-                    trailImage: maybeTrailImage,
+                    ...images,
                     byline: byline || '',
                     standfirst: trail || '',
                     elements,
@@ -179,8 +152,7 @@ const parseArticleResult = async (
                     trail,
                     kicker,
                     articleType,
-                    image: maybeMainImage,
-                    trailImage: maybeTrailImage,
+                    ...images,
                     byline: byline || '',
                     standfirst: trail || '',
                     elements,
@@ -238,8 +210,7 @@ const parseArticleResult = async (
                     headline: title,
                     trail,
                     kicker,
-                    image: maybeMainImage,
-                    trailImage: maybeTrailImage,
+                    ...images,
                     byline: byline || '',
                     standfirst: trail || '',
                     elements: [
