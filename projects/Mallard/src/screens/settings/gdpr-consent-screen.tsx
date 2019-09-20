@@ -1,16 +1,12 @@
 import React from 'react'
-import { FlatList, View, Alert, Text } from 'react-native'
+import { FlatList, View, Alert } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { LinkNav } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
-import {
-    GdprSwitchSettings,
-    CURRENT_CONSENT_VERSION,
-    GdprSettings,
-} from 'src/helpers/settings'
+import { GdprSwitchSettings } from 'src/helpers/settings'
 import {
     PREFS_SAVED_MSG,
     PRIVACY_SETTINGS_HEADER_TITLE,
@@ -27,12 +23,8 @@ import { LoginHeader } from 'src/components/login/login-layout'
 import { NavigationInjectedProps } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import {
-    GdprBuckets,
-    Settings,
-    gdprAllowEssentialKey,
     gdprAllowFunctionalityKey,
     gdprAllowPerformanceKey,
-    gdprConsentVersionKey,
 } from 'src/helpers/settings'
 
 interface GdprSwitch {
@@ -58,7 +50,7 @@ const GdprConsent = ({
     shouldShowDismissableHeader?: boolean
     continueText: string
 } & NavigationInjectedProps) => {
-    const setSetting = useSettings()
+    const { setConsent, consentToAll } = useGdprSwitches()
     const settings = useOtherSettingsValues()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
@@ -82,11 +74,7 @@ const GdprConsent = ({
     }
 
     const onEnableAllAndContinue = () => {
-        for (const { key } of Object.values(switches)) {
-            setSetting(key, true)
-        }
-        setSetting(gdprConsentVersionKey, CURRENT_CONSENT_VERSION)
-
+        consentToAll()
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
@@ -174,10 +162,7 @@ const GdprConsent = ({
                         proxy={
                             <ThreeWaySwitch
                                 onValueChange={value => {
-                                    setSetting(item.key, value)
-                                    GdprBuckets[item.key].forEach(key => {
-                                        setSetting(key, value)
-                                    })
+                                    setConsent(item.key, value)
                                     showToast(PREFS_SAVED_MSG)
                                 }}
                                 value={settings[item.key]}

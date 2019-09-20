@@ -3,6 +3,8 @@ import {
     Settings,
     gdprConsentVersionKey,
     GdprBuckets,
+    GdprSwitchSettings,
+    CURRENT_CONSENT_VERSION,
 } from 'src/helpers/settings'
 import { isPreview } from 'src/helpers/settings/defaults'
 import { useSettingsFromStore, applyExtractSettings } from './settings/helpers'
@@ -11,6 +13,7 @@ import {
     providerHook,
     nestProviders,
 } from 'src/helpers/provider'
+import { ThreeWaySwitchValue } from 'src/components/layout/ui/switch'
 
 /*
 build out all the hooks needed for settings
@@ -83,6 +86,28 @@ const useGdprSwitches = () => {
         })
     }
 
+    const setConsentVersion = (version: number | null) => {
+        setSetting(gdprConsentVersionKey, version)
+    }
+
+    const setConsent = (
+        consentBucketKey: keyof GdprSwitchSettings,
+        value: ThreeWaySwitchValue,
+    ) => {
+        setSetting(consentBucketKey, value)
+        GdprBuckets[consentBucketKey].forEach(key => {
+            setSetting(key, value)
+        })
+        setConsentVersion(CURRENT_CONSENT_VERSION)
+    }
+
+    const consentToAll = () => {
+        gdprSwitchSettings.forEach(sw => {
+            setConsent(sw, true)
+        })
+        setConsentVersion(CURRENT_CONSENT_VERSION)
+    }
+
     /*
     for our own convenience let's add
     a quick toggle to set switches back to
@@ -91,20 +116,12 @@ const useGdprSwitches = () => {
     */
     const DEVMODE_resetAll = () => {
         gdprSwitchSettings.forEach(sw => {
-            setSetting(sw, null)
+            setConsent(sw, null)
         })
-
-        Object.entries(GdprBuckets)
-            .map(bucketToKeys =>
-                bucketToKeys.length > 0 ? bucketToKeys[1] : [],
-            )
-            .reduce((prev, curr) => prev.concat(curr))
-            .forEach(key => setSetting(key, null))
-
-        setSetting(gdprConsentVersionKey, null)
+        setConsentVersion(null)
     }
 
-    return { enableNulls, DEVMODE_resetAll }
+    return { enableNulls, DEVMODE_resetAll, setConsent, consentToAll }
 }
 
 export {
