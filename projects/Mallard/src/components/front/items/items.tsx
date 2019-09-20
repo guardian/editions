@@ -2,14 +2,12 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { HeadlineCardText } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
-import { ImageResource, AutoSizedImageResource } from '../image-resource'
+import { ImageResource } from '../image-resource'
 import { ItemTappable, PropTypes } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { ImageItem, SplitImageItem, SidekickImageItem } from './image-items'
 import { SmallItem, SmallItemLargeText } from './small-items'
 import { SuperHeroImageItem } from './super-items'
-import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { Image } from '../../../../../common/src'
 import { PageLayoutSizes } from '../helpers/helpers'
 
@@ -100,9 +98,10 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <View style={splashImageStyles.overflow}>
-                <AutoSizedImageResource
+                <ImageResource
                     style={[splashImageStyles.image]}
                     image={cardImage}
+                    setAspectRatio
                 />
             </View>
             <HeadlineCardText style={[splashImageStyles.hidden]}>

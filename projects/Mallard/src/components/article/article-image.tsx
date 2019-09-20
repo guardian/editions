@@ -1,13 +1,12 @@
 import React, { ReactNode, useState } from 'react'
-import { StyleSheet, ImageBackground, View, Text } from 'react-native'
-import { CreditedImage } from '../../common'
-import { useMediaQuery } from 'src/hooks/use-screen'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { useImagePath } from 'src/hooks/use-image-paths'
-import { Button } from '../button/button'
+import { ImageBackground, StyleSheet, View } from 'react-native'
 import { useArticle } from 'src/hooks/use-article'
+import { useImagePath } from 'src/hooks/use-image-paths'
 import { color } from 'src/theme/color'
+import { CreditedImage } from '../../common'
+import { Button } from '../button/button'
 import { UiBodyCopy } from '../styled-text'
+import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -41,13 +40,8 @@ interface PropTypes {
 }
 
 const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
-    const isLandscape = useMediaQuery(
-        width => width >= Breakpoints.tabletLandscape,
-    )
-
-    const defaultAspectRatio = isLandscape ? 2 : 1.5
-
     const path = useImagePath(image)
+    const defaultAspectRatio = useAspectRatio(path)
 
     const [showCredit, setShowCredit] = useState(false)
     const toggleCredit = () => setShowCredit(curr => !curr)
