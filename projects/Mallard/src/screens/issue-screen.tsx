@@ -1,5 +1,12 @@
 import React, { ReactElement } from 'react'
-import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import {
+    Animated,
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewStyle,
+    Image,
+} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Issue } from 'src/common'
@@ -51,6 +58,16 @@ const styles = StyleSheet.create({
     },
     sideBySideFeed: {
         paddingTop: metrics.vertical,
+    },
+})
+
+const IllustrationStyles = StyleSheet.create({
+    postion: {
+        position: 'relative',
+        bottom: 0,
+        left: 0,
+        height: '15%',
+        right: 0,
     },
 })
 
@@ -137,7 +154,19 @@ const IssueFronts = ({
                     key={key}
                 />
             ))}
-            <View style={{ height: container.height / 2 }} />
+            <View style={[IllustrationStyles.postion]}>
+                <Image
+                    style={[
+                        {
+                            width: '100%',
+                            height: 100,
+                        },
+                    ]}
+                    resizeMode={'contain'}
+                    source={require('src/assets/images/privacy.png')}
+                />
+            </View>
+            <View style={{ height: container.height / 3 }} />
         </ScrollView>
     )
 }
@@ -164,6 +193,7 @@ const handleError = (
     </>
 )
 
+<<<<<<< HEAD
 const handlePending = () => (
     <>
         <ScreenHeader />
@@ -209,6 +239,51 @@ const IssueScreenWithPath = ({ path }: { path: PathToIssue }) => {
                                                         style={
                                                             styles.weatherWide
                                                         }
+=======
+                            <WithBreakpoints>
+                                {{
+                                    0: () => (
+                                        <WithLayoutRectangle>
+                                            {metrics => (
+                                                <WithIssueScreenSize
+                                                    value={[
+                                                        PageLayoutSizes.mobile,
+                                                        metrics,
+                                                    ]}
+                                                >
+                                                    <IssueFronts
+                                                        ListHeaderComponent={
+                                                            <View
+                                                                style={
+                                                                    styles.weatherWide
+                                                                }
+                                                            >
+                                                                <Weather />
+                                                            </View>
+                                                        }
+                                                        issue={issue}
+                                                    />
+                                                </WithIssueScreenSize>
+                                            )}
+                                        </WithLayoutRectangle>
+                                    ),
+                                    [Breakpoints.tabletVertical]: () => (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                            }}
+                                        >
+                                            <View style={styles.sideWeather}>
+                                                <Weather />
+                                            </View>
+                                            <WithLayoutRectangle>
+                                                {metrics => (
+                                                    <WithIssueScreenSize
+                                                        value={[
+                                                            PageLayoutSizes.tablet,
+                                                            metrics,
+                                                        ]}
+>>>>>>> added branding to home screen
                                                     >
                                                         <Weather />
                                                     </View>
