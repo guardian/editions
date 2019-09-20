@@ -24,6 +24,10 @@ import {
 import { Wrap } from '../wrap/wrap'
 import { Direction } from 'src/helpers/sizes'
 import { useImagePath } from 'src/hooks/use-image-paths'
+import { imageForScreenSize } from 'src/helpers/screen'
+import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
+import { Issue } from '../../../common'
+import { defaultSettings } from 'src/helpers/settings/defaults'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -32,15 +36,19 @@ const GalleryImage = ({
     src,
     accessibilityLabel,
     style,
+    publishedId,
 }: {
     src: ImageType
     accessibilityLabel?: string
     style: StyleProp<ImageStyle>
+    publishedId: Issue['publishedId']
 }) => {
     const [aspectRatio, setRatio] = useState(1)
-    const uri = `${APIPaths.mediaBackend}${APIPaths.media(
-        'issue',
-        'phone',
+    const backend = defaultSettings.apiUrl
+    // @TODO: This will need a refactor to work locally
+    const uri = `${backend}${APIPaths.media(
+        publishedId,
+        imageForScreenSize(),
         src.source,
         src.path,
     )}`
@@ -109,7 +117,13 @@ const styles = StyleSheet.create({
     arrow: { position: 'absolute', top: 3, left: -2 },
 })
 
-const GalleryItem = ({ element }: { element: ImageElement }) => {
+const GalleryItem = ({
+    element,
+    publishedId,
+}: {
+    element: ImageElement
+    publishedId: Issue['publishedId']
+}) => {
     const [color] = useArticle()
     return (
         <Wrap
@@ -140,6 +154,7 @@ const GalleryItem = ({ element }: { element: ImageElement }) => {
         >
             <GalleryImage
                 accessibilityLabel={element.alt}
+                publishedId={publishedId}
                 src={element.src}
                 style={styles.image}
             />
@@ -171,6 +186,9 @@ const GalleryCoverItem = ({
 }
 
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
+    const issueCompositeKey = useIssueCompositeKey()
+    const publishedId =
+        (issueCompositeKey && issueCompositeKey.publishedIssueId) || null
     return (
         <>
             <View style={[styles.background]}>
@@ -191,8 +209,13 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
             ></View>
             <View style={[styles.background]}>
                 {gallery.elements.map((element, index) => {
-                    if (element.id === 'image') {
-                        return <GalleryItem element={element} />
+                    if (element.id === 'image' && publishedId) {
+                        return (
+                            <GalleryItem
+                                element={element}
+                                publishedId={publishedId}
+                            />
+                        )
                     }
                     return <Text key={index}>{element.id}</Text>
                 })}
