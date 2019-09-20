@@ -44,6 +44,8 @@ describe('fronts', () => {
     })
 
     describe('getImages', () => {
-        it('')
+        it('qwe', () => {
+            expect(1).toBe(1)
+        })
     })
 })

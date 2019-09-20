@@ -2,7 +2,6 @@ import { s3fetch, Path } from './s3'
 import {
     Front,
     Image,
-    CreditedImage,
     Collection,
     CAPIArticle,
     PillarAppearance,
@@ -33,6 +32,7 @@ import { isPreview } from './preview'
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
 
+// overrideArticleMainMedia may be false in most cases 
 const getImage = (
     overrideArticleMainMedia: boolean,
     maybeImageSrcOverride: PublishedImage | undefined,
