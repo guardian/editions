@@ -47,13 +47,24 @@ describe('fronts', () => {
     })
 
     describe('fronts.getImages', () => {
-        it('should prepeare images', () => {
-            const article: CAPIContent = Article({ key: 'my-article', trail: 'article' })
+        const mainImage = {
+            credit: undefined,
+            path: "master/asset.com",
+            source: "test"
+        }
+
+        const trailImg = {
+            path: "trail/asset.com",
+            source: "test"
+        }
+
+        it('should extract main image', () => {
+            const article: CAPIContent = Article({ key: 'my-article', trail: 'article', image: mainImage, trailImage: trailImg })
             const furniture: PublishedFurtniture = PublishedFurniture({ trailTextOverride: '' })
 
             const actual = getImages(article, furniture)
 
-            const expected = { image: undefined, cardImage: undefined, cardImageTablet: undefined }
+            const expected = { image: mainImage, cardImage: undefined, cardImageTablet: undefined }
             expect(actual).toStrictEqual(expected)
         })
     })
