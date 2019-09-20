@@ -42,4 +42,8 @@ describe('fronts', () => {
             })
         })
     })
+
+    describe('getImages', () => {
+        it('')
+    })
 })
