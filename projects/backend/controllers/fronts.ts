@@ -19,7 +19,9 @@ export const frontController = (req: Request, res: Response) => {
                 console.error(`${req.url} threw ${JSON.stringify(data)}`)
                 if (data.httpStatus) {
                     res.sendStatus(data.httpStatus)
-                } else { res.sendStatus(500) }
+                } else {
+                    res.sendStatus(500)
+                }
                 return
             }
             res.setHeader('Last-Modifed', date())

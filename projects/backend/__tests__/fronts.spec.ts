@@ -1,8 +1,11 @@
 import { patchArticle, getImages } from '../fronts'
 import { Article, PublishedFurniture } from './helpers/fixtures'
 import { CAPIContent } from '../capi/articles'
-import { PublishedFurtniture, PublishedImage, PublishedCardImage } from '../fronts/issue'
-
+import {
+    PublishedFurtniture,
+    PublishedImage,
+    PublishedCardImage,
+} from '../fronts/issue'
 
 describe('fronts', () => {
     describe('patchArticle', () => {
@@ -49,36 +52,63 @@ describe('fronts', () => {
     describe('fronts.getImages', () => {
         const mainImage = {
             credit: undefined,
-            path: "master/asset.com",
-            source: "test"
+            path: 'master/asset.com',
+            source: 'test',
         }
 
         const trailImg = {
-            path: "trail/asset.com",
-            source: "test"
+            path: 'trail/asset.com',
+            source: 'test',
         }
 
-        const pubImg: PublishedImage = { height: 1, width: 2, src: "https://test/pub.img" }
+        const pubImg: PublishedImage = {
+            height: 1,
+            width: 2,
+            src: 'https://test/pub.img',
+        }
 
         const pubImages: PublishedCardImage = { mobile: pubImg, tablet: pubImg }
 
         it('should extract main image', () => {
-            const article: CAPIContent = Article({ key: 'my-article', trail: 'article', image: mainImage, trailImage: trailImg })
-            const furniture: PublishedFurtniture = PublishedFurniture({ trailTextOverride: '' })
+            const article: CAPIContent = Article({
+                key: 'my-article',
+                trail: 'article',
+                image: mainImage,
+                trailImage: trailImg,
+            })
+            const furniture: PublishedFurtniture = PublishedFurniture({
+                trailTextOverride: '',
+            })
 
             const actual = getImages(article, furniture)
 
-            const expected = { image: mainImage, cardImage: undefined, cardImageTablet: undefined }
+            const expected = {
+                image: mainImage,
+                cardImage: undefined,
+                cardImageTablet: undefined,
+            }
             expect(actual).toStrictEqual(expected)
         })
 
         it('should extract main image and cover card images', () => {
-            const article: CAPIContent = Article({ key: 'my-article', trail: 'article', image: mainImage, trailImage: trailImg })
-            const furniture: PublishedFurtniture = PublishedFurniture({ trailTextOverride: '', coverCardImages: pubImages })
+            const article: CAPIContent = Article({
+                key: 'my-article',
+                trail: 'article',
+                image: mainImage,
+                trailImage: trailImg,
+            })
+            const furniture: PublishedFurtniture = PublishedFurniture({
+                trailTextOverride: '',
+                coverCardImages: pubImages,
+            })
 
             const actual = getImages(article, furniture)
 
-            const expected = { image: mainImage, cardImage: { path: "pub.img", source: "test" }, cardImageTablet: { path: "pub.img", source: "test" } }
+            const expected = {
+                image: mainImage,
+                cardImage: { path: 'pub.img', source: 'test' },
+                cardImageTablet: { path: 'pub.img', source: 'test' },
+            }
             expect(actual).toStrictEqual(expected)
         })
     })

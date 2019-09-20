@@ -3,17 +3,14 @@ import { Image, CreditedImage } from '../../common/src'
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
 
-
 const getMainImage = (result: IContent): CreditedImage | undefined => {
     const maybeMainElement = oc(result).blocks.main.elements[0]()
-    const maybeCreditedMainImage = maybeMainElement && getCreditedImage(maybeMainElement)
+    const maybeCreditedMainImage =
+        maybeMainElement && getCreditedImage(maybeMainElement)
 
     if (!maybeCreditedMainImage) {
-        console.warn(
-            `No main image in ${result.id}`,
-        )
+        console.warn(`No main image in ${result.id}`)
     }
-
     return maybeCreditedMainImage
 }
 
@@ -21,21 +18,22 @@ const getTrailImage = (result: IContent): Image | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
-        console.log(maybeThumbnailElement)
+    console.log(maybeThumbnailElement)
+
     const maybeThumbnailImage =
         maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
     return maybeThumbnailImage
 }
 
 interface ImageAndTrailImage {
-    image: CreditedImage | undefined,
+    image: CreditedImage | undefined
     trailImage: Image | undefined
 }
 
 const getImages = (result: IContent): ImageAndTrailImage => {
     return {
-        image: getMainImage(result), 
-        trailImage: getTrailImage(result)
+        image: getMainImage(result),
+        trailImage: getTrailImage(result),
     }
 }
 

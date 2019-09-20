@@ -32,23 +32,26 @@ import { isPreview } from './preview'
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
 
-// overrideArticleMainMedia may be false in most cases 
+// overrideArticleMainMedia may be false in most cases
 const getImage = (
     overrideArticleMainMedia: boolean,
     maybeImageSrcOverride: PublishedImage | undefined,
     maybeArticleImage: CreditedImage | undefined,
 ): Image | undefined => {
     return overrideArticleMainMedia && maybeImageSrcOverride !== undefined
-            ? getImageFromURL(oc(maybeImageSrcOverride).src())
-            : maybeArticleImage
+        ? getImageFromURL(oc(maybeImageSrcOverride).src())
+        : maybeArticleImage
 }
 
 const getCardImage = (
     maybeCoverCardImages: PublishedCardImage | undefined,
     maybeImageSrcOverride: PublishedImage | undefined,
 ): Image | undefined => {
-    return getImageFromURL(oc(maybeCoverCardImages).mobile.src()) ||
-        getImageFromURL(oc(maybeImageSrcOverride).src())
+    const imgFromCardImages = getImageFromURL(
+        oc(maybeCoverCardImages).mobile.src(),
+    )
+    const imgFromOverride = getImageFromURL(oc(maybeImageSrcOverride).src())
+    return imgFromCardImages || imgFromOverride
 }
 
 const getCardImageForTablet = (
@@ -69,7 +72,11 @@ export const getImages = (
 
     const maybeArticleImage = oc(article).image()
 
-    const image = getImage(overrideArticleMainMedia, maybeImageSrcOverride, maybeArticleImage)
+    const image = getImage(
+        overrideArticleMainMedia,
+        maybeImageSrcOverride,
+        maybeArticleImage,
+    )
     const cardImage = getCardImage(maybeCoverCardImages, maybeImageSrcOverride)
     const cardImageTablet = getCardImageForTablet(maybeCoverCardImages)
 
