@@ -6,8 +6,9 @@ if [ -n "$USE_GMAKE" ]; then
     exec gmake "$@"
 else
     if [ "$UNAME" == "Darwin" ]; then
-        echo "ERROR: make on macOS is not sophisticated enough for our needs, please 'brew install make' to get gmake"
-        exit 1
+        echo "ERROR: make on macOS is not sophisticated enough for our needs"
+        echo "       We'll try and use it anyway in case you've replaced the system make"
+        echo "       If it doesn't work please 'brew install make' to get gmake"
     fi
     exec make "$@"
 fi
