@@ -1,9 +1,7 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, View, StatusBar } from 'react-native'
-import { Issue } from 'src/common'
 import { Highlight } from 'src/components/highlight'
 import { GridRowSplit, IssueTitle } from 'src/components/issue/issue-title'
-import { useIssueDate } from 'src/helpers/issues'
 import { useInsets } from 'src/hooks/use-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
@@ -131,12 +129,9 @@ const Header = ({
     )
 }
 
-const IssuePickerHeader = ({
-    issue,
-    ...headerProps
-}: { issue?: Issue } & Omit<HeaderProps, 'children'> &
-    TouchableHeaderProps) => {
-    const { date, weekday } = useIssueDate(issue)
+const IssuePickerHeader = (
+    headerProps: Omit<HeaderProps, 'children'> & TouchableHeaderProps,
+) => {
     return (
         <Header {...headerProps}>
             <IssueTitle

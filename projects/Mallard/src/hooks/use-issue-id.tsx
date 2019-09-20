@@ -5,31 +5,87 @@ import {
     IssueNavigationProps,
 } from 'src/navigation/helpers/base'
 import { PathToIssue } from 'src/paths'
+import { getIssueSummary } from './use-api'
+import { useCachedOrPromise } from './use-cached-or-promise'
 
 /**
  * This will try and look in the states of any navigator
- * and discern an issue id. I've tried to be as defensive
+ * and discern an issue id. Otherwise it will call for the
+ * latest issue. I've tried to be as defensive
  * as possible here given these apis may change but given
  * different screens have their issue ids in different places
  * we can't do too much else, without a bigger refactor
  */
 
-export const useIssueCompositeKey = (): PathToIssue | undefined => {
+export const useIssueCompositeKeyHandler = () => {
     const nav = useContext(NavigationContext)
     const path: ArticleNavigationProps['path'] | undefined = nav.getParam(
         'path',
     )
-    if (path !== undefined) {
-        const { localIssueId, publishedIssueId } = path
-        if (!(localIssueId && publishedIssueId)) return undefined
-        if (path) return { localIssueId, publishedIssueId }
-    }
     const issue: IssueNavigationProps['issue'] | undefined = nav.getParam(
         'issue',
     )
+
+    // this is currently the easiest way to get to a value for the issue summar
+    // could do with a refactor in to a service
+    const response = useCachedOrPromise(getIssueSummary())
+
+    let fromNav: PathToIssue | undefined = undefined
+
+    if (path) {
+        const { localIssueId, publishedIssueId } = path
+        if (localIssueId && publishedIssueId)
+            fromNav = { localIssueId, publishedIssueId }
+    }
+
     if (issue) {
         const { localId, publishedId } = issue
-        return { localIssueId: localId, publishedIssueId: publishedId }
+        fromNav = fromNav || {
+            localIssueId: localId,
+            publishedIssueId: publishedId,
+        }
     }
-    return undefined
+
+    return <R extends any>({
+        error,
+        pending,
+        success,
+    }: {
+        error: (
+            err: {
+                message: string
+                name?: string
+            },
+            stale: R | null,
+            { retry }: { retry: () => void },
+        ) => R
+        pending: () => R
+        success: (path: PathToIssue) => R
+    }): R => {
+        switch (response.state) {
+            case 'pending': {
+                return fromNav ? success(fromNav) : pending()
+            }
+            case 'success': {
+                const summary = response.response
+                return fromNav
+                    ? success(fromNav)
+                    : success({
+                          localIssueId: summary[0].localId,
+                          publishedIssueId: summary[0].publishedId,
+                      })
+            }
+            case 'error': {
+                const { error: err, retry } = response
+                return fromNav ? success(fromNav) : error(err, null, { retry })
+            }
+        }
+    }
 }
+
+export const useIssueCompositeKey = () =>
+    useIssueCompositeKeyHandler()({
+        success: key => key,
+        error: () => undefined,
+        pending: () => undefined,
+    })

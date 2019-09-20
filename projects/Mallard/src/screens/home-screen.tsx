@@ -6,7 +6,7 @@ import {
     NavigationScreenProp,
     withNavigation,
 } from 'react-navigation'
-import { Issue, IssueSummary } from 'src/common'
+import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { IssueRow } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
@@ -22,7 +22,6 @@ import {
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
 import { useIssueSummary } from 'src/hooks/use-api'
-import { useIssueOrLatestResponse } from 'src/hooks/use-issue'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
 import {
@@ -38,14 +37,9 @@ import { ApiState } from './settings/api-screen'
 
 const HomeScreenHeader = withNavigation(
     ({
-        issue,
         navigation,
         onReturn,
     }: {
-        issue?: {
-            localIssueId: Issue['localId']
-            publishedIssueId: Issue['publishedId']
-        }
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
@@ -60,7 +54,6 @@ const HomeScreenHeader = withNavigation(
                 onPress={onReturn}
             />
         )
-        const response = useIssueOrLatestResponse(issue)
         const settings = (
             <Button
                 icon={'\uE040'}
@@ -71,23 +64,14 @@ const HomeScreenHeader = withNavigation(
                 appearance={ButtonAppearance.skeleton}
             />
         )
-        return response({
-            error: () => (
-                <IssuePickerHeader leftAction={settings} action={action} />
-            ),
-            pending: () => (
-                <IssuePickerHeader leftAction={settings} action={action} />
-            ),
-            success: issue => (
-                <IssuePickerHeader
-                    leftAction={settings}
-                    issue={issue}
-                    accessibilityHint={'Return to issue'}
-                    onPress={onReturn}
-                    action={action}
-                />
-            ),
-        })
+        return (
+            <IssuePickerHeader
+                leftAction={settings}
+                accessibilityHint={'Return to issue'}
+                onPress={onReturn}
+                action={action}
+            />
+        )
     },
 )
 
@@ -169,7 +153,6 @@ export const HomeScreen = ({
             />
             <ScrollContainer>
                 <HomeScreenHeader
-                    issue={issue}
                     onSettings={() => {
                         navigation.navigate('Settings')
                     }}
