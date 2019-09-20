@@ -115,15 +115,15 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const handleIdStatus = (data: IdentityAuth | null) =>
-    setUserId(data && data.info.userDetails.id)
-
 const WithProviders = nestProviders(
     SettingsProvider,
     Modal,
     ToastProvider,
     NetInfoProvider,
 )
+
+const handleIdStatus = (data: IdentityAuth | null) =>
+    setUserId(data && data.info.userDetails.id)
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
