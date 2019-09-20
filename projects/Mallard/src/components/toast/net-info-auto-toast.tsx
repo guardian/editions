@@ -1,4 +1,4 @@
-import { useNetInfo } from '@react-native-community/netinfo'
+import { useNetInfo } from 'src/hooks/use-net-info'
 import { useEffect } from 'react'
 import { useToast } from 'src/hooks/use-toast'
 

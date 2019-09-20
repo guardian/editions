@@ -28,10 +28,11 @@ import {
     setUserId,
 } from 'src/services/ophan'
 import { NavigationState } from 'react-navigation'
-import { AuthStatus, isIdentity } from './authentication/credentials-chain'
+import { IdentityAuth } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
 import { UpdateIpAddress } from './components/update-ip-address'
+import { NetInfoProvider } from './hooks/use-net-info'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -114,15 +115,15 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const WithProviders = nestProviders(SettingsProvider, Modal, ToastProvider)
+const WithProviders = nestProviders(
+    SettingsProvider,
+    Modal,
+    ToastProvider,
+    NetInfoProvider,
+)
 
-const handleLoginStatus = (status: AuthStatus) => {
-    if (isIdentity(status)) {
-        setUserId(status.data.info.userDetails.id)
-    } else {
-        setUserId(null)
-    }
-}
+const handleIdStatus = (data: IdentityAuth | null) =>
+    setUserId(data && data.info.userDetails.id)
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
@@ -147,7 +148,7 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
-                    <AuthProvider onStatusChange={handleLoginStatus}>
+                    <AuthProvider onIdentityStatusChange={handleIdStatus}>
                         <StatusBar
                             animated={true}
                             barStyle="light-content"

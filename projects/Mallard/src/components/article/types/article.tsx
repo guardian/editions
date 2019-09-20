@@ -15,7 +15,6 @@ import {
     wireScrollBarToDismiss,
     OnTopPositionChangeFn,
 } from 'src/screens/article/helpers'
-import { UiBodyCopy } from 'src/components/styled-text'
 
 const styles = StyleSheet.create({
     block: {

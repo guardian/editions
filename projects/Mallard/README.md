@@ -15,10 +15,23 @@ yarn install &&
 yarn start -- --reset-cache
 ```
 
+The project uses `nvm` so this will need to be installed before if it's not already:
+
+```bash
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+```
+
 Start by installing our Node.js dependencies:
 
 ```bash
+$ nvm use
 $ yarn
+```
+
+For iOS development you will need to install Xcode from the App Store and then open it once and select "Install" on the pop up asking whether to install other required Xcode dependencies - specifically the simulator. If this doesn't appear go to `Preferences > Components` and download the latest simulator iOS version. Additionally, you need have CocoaPods installed:
+
+```
+$ gem install cocoapods # this may require `sudo` if you're not using rvm or rbenv
 ```
 
 The following guides allow you to run the app locally on device emulators, or on real devices connected to your dev machine via USB.
@@ -30,12 +43,15 @@ The following guides allow you to run the app locally on device emulators, or on
 
 If you're starting from scratch, we recommend starting out with Android Studio because it takes less time to download.
 
+You will also need `frontend` credentials form Janus in order to fetch the `.env` file for local development. This will run as part of either `run-ios` or `run-android` and in order to get the latest environment variables you will need to ensure you have frontend credentials when running at various points in the future.
+
 ## Usage
 
 ### Android
 
 ```bash
 $ yarn run-android
+$ yarn start
 ```
 
 ### Android (over wifi)
@@ -44,12 +60,14 @@ Make sure your phone and computer are on the same WiFi network.
 
 ```bash
 $ yarn run wifi-android
+$ yarn start
 ```
 
 ### iOS
 
 ```bash
 $ yarn run-ios
+$ yarn start
 ```
 
 ## Tips and tricks

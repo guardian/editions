@@ -62,7 +62,7 @@ const TextWithIcon = ({
     const scaledFont = applyScale(unscaledFont)
     const scale =
         (unscaledFont[MINIMUM_BREAKPOINT].lineHeight / scaledFont.lineHeight) *
-        0.9
+        1.1
 
     return (
         <View>
