@@ -27,7 +27,7 @@ const getTrailImage = (result: IContent): Image | undefined => {
 }
 
 interface ImageAndTrailImage {
-    image: Image | undefined,
+    image: CreditedImage | undefined,
     trailImage: Image | undefined
 }
 
