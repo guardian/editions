@@ -7,7 +7,7 @@ import React, {
     useCallback,
 } from 'react'
 import { signOutIdentity } from '../helpers/storage'
-import { useNetInfo } from '@react-native-community/netinfo'
+import { useNetInfo } from 'src/hooks/use-net-info'
 import {
     nonIdentityAuthChain,
     cachedNonIdentityAuthChain,
