@@ -1,4 +1,11 @@
-import { gdprSwitchSettings, Settings } from 'src/helpers/settings'
+import {
+    gdprSwitchSettings,
+    Settings,
+    gdprConsentVersionKey,
+    GdprBuckets,
+    GdprSwitchSettings,
+    CURRENT_CONSENT_VERSION,
+} from 'src/helpers/settings'
 import { isPreview } from 'src/helpers/settings/defaults'
 import { useSettingsFromStore, applyExtractSettings } from './settings/helpers'
 import {
@@ -6,6 +13,7 @@ import {
     providerHook,
     nestProviders,
 } from 'src/helpers/provider'
+import { ThreeWaySwitchValue } from 'src/components/layout/ui/switch'
 
 /*
 build out all the hooks needed for settings
@@ -78,6 +86,28 @@ const useGdprSwitches = () => {
         })
     }
 
+    const setConsentVersion = (version: number | null) => {
+        setSetting(gdprConsentVersionKey, version)
+    }
+
+    const setConsent = (
+        consentBucketKey: keyof GdprSwitchSettings,
+        value: ThreeWaySwitchValue,
+    ) => {
+        setSetting(consentBucketKey, value)
+        GdprBuckets[consentBucketKey].forEach(key => {
+            setSetting(key, value)
+        })
+        setConsentVersion(CURRENT_CONSENT_VERSION)
+    }
+
+    const consentToAll = () => {
+        gdprSwitchSettings.forEach(sw => {
+            setConsent(sw, true)
+        })
+        setConsentVersion(CURRENT_CONSENT_VERSION)
+    }
+
     /*
     for our own convenience let's add
     a quick toggle to set switches back to
@@ -85,12 +115,13 @@ const useGdprSwitches = () => {
     the userland UI by design)
     */
     const DEVMODE_resetAll = () => {
-        gdprSwitchSettings.map(sw => {
-            setSetting(sw, null)
+        gdprSwitchSettings.forEach(sw => {
+            setConsent(sw, null)
         })
+        setConsentVersion(null)
     }
 
-    return { enableNulls, DEVMODE_resetAll }
+    return { enableNulls, DEVMODE_resetAll, setConsent, consentToAll }
 }
 
 export {

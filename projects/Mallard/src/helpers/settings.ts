@@ -2,6 +2,18 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { defaultSettings } from './settings/defaults'
 import versionInfo from '../version-info.json'
 
+/**
+ * History of Consent Management
+ *
+ * v1 - The initial version that CMP was released with
+ * v2 - Move Braze from ESSENTIAL to PERSONALISED_ADS
+ */
+export const CURRENT_CONSENT_VERSION = 2
+
+export interface GdprDefaultSettings {
+    gdprAllowEssential: boolean
+}
+
 /*
 Consent switches can be 'unset' or null
 */
@@ -10,10 +22,40 @@ export interface GdprSwitchSettings {
     gdprAllowPerformance: GdprSwitchSetting
     gdprAllowFunctionality: GdprSwitchSetting
 }
+
+export const gdprAllowEssentialKey = 'gdprAllowEssential'
+export const gdprAllowPerformanceKey = 'gdprAllowPerformance'
+export const gdprAllowFunctionalityKey = 'gdprAllowFunctionality'
+
+export const gdprConsentVersionKey = 'gdprConsentVersion'
+
+type GDPRBucketKeys =
+    | 'gdprAllowEssential'
+    | 'gdprAllowPerformance'
+    | 'gdprAllowFunctionality'
+type GDPRBucket = { [K in GDPRBucketKeys]: (keyof GdprSettings)[] }
+
 export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
-    'gdprAllowPerformance',
-    'gdprAllowFunctionality',
+    gdprAllowPerformanceKey,
+    gdprAllowFunctionalityKey,
 ]
+
+export const GdprBuckets: GDPRBucket = {
+    gdprAllowEssential: ['gdprAllowOphan'],
+    gdprAllowPerformance: ['gdprAllowSentry'],
+    gdprAllowFunctionality: ['gdprAllowGoogleLogin', 'gdprAllowFacebookLogin'],
+}
+
+export interface GdprSettings {
+    gdprConsentVersion: null | number
+    // 'essential' purpose:
+    gdprAllowOphan: GdprSwitchSetting
+    // 'performance' purpose:
+    gdprAllowSentry: GdprSwitchSetting
+    // 'functionality' purpose:
+    gdprAllowGoogleLogin: GdprSwitchSetting
+    gdprAllowFacebookLogin: GdprSwitchSetting
+}
 
 export interface DevSettings {
     apiUrl: string
@@ -30,6 +72,8 @@ interface UserSettings {
 
 export interface Settings
     extends GdprSwitchSettings,
+        GdprDefaultSettings,
+        GdprSettings,
         UserSettings,
         DevSettings {}
 

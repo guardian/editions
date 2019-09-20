@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, View, Alert, Text } from 'react-native'
+import { FlatList, View, Alert } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
@@ -22,6 +22,10 @@ import { useToast } from 'src/hooks/use-toast'
 import { LoginHeader } from 'src/components/login/login-layout'
 import { NavigationInjectedProps } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
+import {
+    gdprAllowFunctionalityKey,
+    gdprAllowPerformanceKey,
+} from 'src/helpers/settings'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -46,7 +50,7 @@ const GdprConsent = ({
     shouldShowDismissableHeader?: boolean
     continueText: string
 } & NavigationInjectedProps) => {
-    const setSetting = useSettings()
+    const { setConsent, consentToAll } = useGdprSwitches()
     const settings = useOtherSettingsValues()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
 
@@ -54,14 +58,14 @@ const GdprConsent = ({
     const { showToast } = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
-            key: 'gdprAllowPerformance',
+            key: gdprAllowPerformanceKey,
             name: 'Performance',
             services: 'Sentry',
             description:
                 'Enabling these allows us to measure how you use our services. We use this information to get a better sense of how our users engage with our journalism and to improve our services, so that users have a better experience. For example, we collect information about which of our pages are most frequently visited, and by which types of users. If you disable this, we will not be able to measure your use of our services, and we will have less information about their performance.',
         },
         gdprAllowFunctionality: {
-            key: 'gdprAllowFunctionality',
+            key: gdprAllowFunctionalityKey,
             name: 'Functionality',
             services: 'Google - Facebook',
             description:
@@ -70,9 +74,7 @@ const GdprConsent = ({
     }
 
     const onEnableAllAndContinue = () => {
-        for (const { key } of Object.values(switches)) {
-            setSetting(key, true)
-        }
+        consentToAll()
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
@@ -160,7 +162,7 @@ const GdprConsent = ({
                         proxy={
                             <ThreeWaySwitch
                                 onValueChange={value => {
-                                    setSetting(item.key, value)
+                                    setConsent(item.key, value)
                                     showToast(PREFS_SAVED_MSG)
                                 }}
                                 value={settings[item.key]}

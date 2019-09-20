@@ -47,8 +47,14 @@ export const defaultSettings: Settings = {
     apiUrl,
     isUsingProdDevtools: false,
     hasOnboarded: false,
+    gdprAllowEssential: true, // essential defaults to true and not switchable
     gdprAllowPerformance: null,
     gdprAllowFunctionality: null,
+    gdprConsentVersion: null,
+    gdprAllowOphan: true, // 'essential' so defaults to true and not switchable
+    gdprAllowSentry: null,
+    gdprAllowFacebookLogin: null,
+    gdprAllowGoogleLogin: null,
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
