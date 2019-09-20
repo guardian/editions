@@ -6,7 +6,11 @@ import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
 import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
 import { LinkNav } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { GdprSwitchSettings } from 'src/helpers/settings'
+import {
+    GdprSwitchSettings,
+    CURRENT_CONSENT_VERSION,
+    GdprSettings,
+} from 'src/helpers/settings'
 import {
     PREFS_SAVED_MSG,
     PRIVACY_SETTINGS_HEADER_TITLE,
@@ -22,6 +26,14 @@ import { useToast } from 'src/hooks/use-toast'
 import { LoginHeader } from 'src/components/login/login-layout'
 import { NavigationInjectedProps } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
+import {
+    GdprBuckets,
+    Settings,
+    gdprAllowEssentialKey,
+    gdprAllowFunctionalityKey,
+    gdprAllowPerformanceKey,
+    gdprConsentVersionKey,
+} from 'src/helpers/settings'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -54,14 +66,14 @@ const GdprConsent = ({
     const { showToast } = useToast()
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
-            key: 'gdprAllowPerformance',
+            key: gdprAllowPerformanceKey,
             name: 'Performance',
             services: 'Sentry',
             description:
                 'Enabling these allows us to measure how you use our services. We use this information to get a better sense of how our users engage with our journalism and to improve our services, so that users have a better experience. For example, we collect information about which of our pages are most frequently visited, and by which types of users. If you disable this, we will not be able to measure your use of our services, and we will have less information about their performance.',
         },
         gdprAllowFunctionality: {
-            key: 'gdprAllowFunctionality',
+            key: gdprAllowFunctionalityKey,
             name: 'Functionality',
             services: 'Google - Facebook',
             description:
@@ -73,6 +85,8 @@ const GdprConsent = ({
         for (const { key } of Object.values(switches)) {
             setSetting(key, true)
         }
+        setSetting(gdprConsentVersionKey, CURRENT_CONSENT_VERSION)
+
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
@@ -161,6 +175,9 @@ const GdprConsent = ({
                             <ThreeWaySwitch
                                 onValueChange={value => {
                                     setSetting(item.key, value)
+                                    GdprBuckets[item.key].forEach(key => {
+                                        setSetting(key, value)
+                                    })
                                     showToast(PREFS_SAVED_MSG)
                                 }}
                                 value={settings[item.key]}

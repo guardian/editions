@@ -1,4 +1,9 @@
-import { gdprSwitchSettings, Settings } from 'src/helpers/settings'
+import {
+    gdprSwitchSettings,
+    Settings,
+    gdprConsentVersionKey,
+    GdprBuckets,
+} from 'src/helpers/settings'
 import { isPreview } from 'src/helpers/settings/defaults'
 import { useSettingsFromStore, applyExtractSettings } from './settings/helpers'
 import {
@@ -85,9 +90,18 @@ const useGdprSwitches = () => {
     the userland UI by design)
     */
     const DEVMODE_resetAll = () => {
-        gdprSwitchSettings.map(sw => {
+        gdprSwitchSettings.forEach(sw => {
             setSetting(sw, null)
         })
+
+        Object.entries(GdprBuckets)
+            .map(bucketToKeys =>
+                bucketToKeys.length > 0 ? bucketToKeys[1] : [],
+            )
+            .reduce((prev, curr) => prev.concat(curr))
+            .forEach(key => setSetting(key, null))
+
+        setSetting(gdprConsentVersionKey, null)
     }
 
     return { enableNulls, DEVMODE_resetAll }
