@@ -1,13 +1,12 @@
-import React from 'react'
-import { StyleSheet, View, Dimensions } from 'react-native'
+import React, { useState } from 'react'
+import { PixelRatio, View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { ScrollContainer } from 'src/components/layout/ui/container'
-import { WithAppAppearance } from 'src/theme/appearance'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
-import { generateAssetsFontCss, css, makeHtml } from 'src/helpers/webview'
-import { PixelRatio } from 'react-native'
 import { maxScreenSize } from 'src/helpers/screen'
+import { css, generateAssetsFontCss, makeHtml } from 'src/helpers/webview'
+import { WithAppAppearance } from 'src/theme/appearance'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
 
 const styles: string = css`
     ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
@@ -32,22 +31,25 @@ const styles: string = css`
     }
 `
 
-const webviewStyles = StyleSheet.create({
-    flex: { flex: 1, minHeight: Dimensions.get('window').height },
-})
+const DefaultInfoTextWebview = ({ html }: { html: string }) => {
+    const [height, setHeight] = useState<number>(maxScreenSize())
 
-const DefaultInfoTextWebview = ({ html }: { html: string }) => (
-    <WithAppAppearance value={'settings'}>
-        <ScrollContainer>
-            <View style={{ flex: 1 }}>
-                <WebView
-                    originWhitelist={['*']}
-                    source={{ html: makeHtml({ styles, body: html }) }}
-                    style={webviewStyles.flex}
-                />
-            </View>
-        </ScrollContainer>
-    </WithAppAppearance>
-)
+    return (
+        <WithAppAppearance value={'settings'}>
+            <ScrollContainer>
+                <View style={{ flex: 1 }}>
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{ html: makeHtml({ styles, body: html }) }}
+                        style={{ flex: 1, height }}
+                        onMessage={event =>
+                            setHeight(parseInt(event.nativeEvent.data))
+                        }
+                    />
+                </View>
+            </ScrollContainer>
+        </WithAppAppearance>
+    )
+}
 
 export { DefaultInfoTextWebview }
