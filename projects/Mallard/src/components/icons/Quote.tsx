@@ -1,8 +1,8 @@
 import React from 'react'
-import Svg, { Path, Rect } from 'react-native-svg'
+import Svg, { Path } from 'react-native-svg'
 import { color } from 'src/theme/color'
 
-const width = 32
+const width = 39
 const height = 21
 
 const Quote = ({ fill = color.text, scale = 1 }) => (
