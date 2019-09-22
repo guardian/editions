@@ -96,8 +96,12 @@ export interface IssueNavigationProps {
 const navigateToIssue = (
     navigation: NavigationScreenProp<{}>,
     navigationProps: IssueNavigationProps,
+    shouldShowMoreIssuesBtn = true,
 ): void => {
-    navigation.navigate(routeNames.Issue, navigationProps)
+    navigation.navigate(routeNames.Issue, {
+        ...navigationProps,
+        shouldShowMoreIssuesBtn,
+    })
 }
 
 const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
