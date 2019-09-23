@@ -1,8 +1,8 @@
 import React from 'react'
-import Svg, { Path, Rect } from 'react-native-svg'
+import Svg, { Path } from 'react-native-svg'
 import { color } from 'src/theme/color'
 
-const width = 32
+const width = 39
 const height = 21
 
 const Quote = ({ fill = color.text, scale = 1 }) => (
@@ -10,12 +10,12 @@ const Quote = ({ fill = color.text, scale = 1 }) => (
         style={{
             transform: [
                 { scale },
-                { translateY: (height - height * scale) / 2 },
+                { translateY: (height - height * scale) / -2 },
                 { translateX: (width - width * scale) / -2 },
             ],
         }}
-        width={width}
-        height={height}
+        width={width * scale}
+        height={height * scale}
         fill="none"
     >
         <Path
