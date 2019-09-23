@@ -35,35 +35,48 @@ import { oc } from 'ts-optchain'
 // overrideArticleMainMedia may be false in most cases
 const getImage = (
     overrideArticleMainMedia: boolean,
-    maybeImageSrcOverride: PublishedImage | undefined,
+    maybeImageOverride: Image | undefined,
     maybeArticleImage: CreditedImage | undefined,
-): Image | undefined => {
-    return overrideArticleMainMedia && maybeImageSrcOverride !== undefined
-        ? getImageFromURL(oc(maybeImageSrcOverride).src())
+): CreditedImage | undefined => {
+    return overrideArticleMainMedia && maybeImageOverride !== undefined
+        ? maybeImageOverride
         : maybeArticleImage
 }
 
-const getCardImage = (
+const getCardImages = (
     maybeCoverCardImages: PublishedCardImage | undefined,
-    maybeImageSrcOverride: PublishedImage | undefined,
-): Image | undefined => {
-    const imgFromCardImages = getImageFromURL(
+): { cardImage: Image; cardImageTablet: Image } | undefined => {
+    const maybeCardImage = getImageFromURL(
         oc(maybeCoverCardImages).mobile.src(),
     )
-    const imgFromOverride = getImageFromURL(oc(maybeImageSrcOverride).src())
-    return imgFromCardImages || imgFromOverride
+    const maybeCardImageTablet = getImageFromURL(
+        oc(maybeCoverCardImages).tablet.src(),
+    )
+    if (maybeCardImage && maybeCardImageTablet) {
+        return {
+            cardImage: maybeCardImage,
+            cardImageTablet: maybeCardImageTablet,
+        }
+    }
 }
 
-const getCardImageForTablet = (
-    maybeCoverCardImages: PublishedCardImage | undefined,
+const getTrailImage = (
+    maybeMainImage: CreditedImage | undefined,
+    maybeCapiTrailImage: Image | undefined,
+    maybeImageOverride: Image | undefined,
 ): Image | undefined => {
-    return getImageFromURL(oc(maybeCoverCardImages).tablet.src())
+    return maybeImageOverride || maybeMainImage || maybeCapiTrailImage
 }
 
 export const getImages = (
     article: CAPIContent,
     furniture: PublishedFurtniture,
-): { image?: CreditedImage; cardImage?: Image; cardImageTablet?: Image } => {
+): {
+    image?: CreditedImage
+    cardImage?: Image
+    cardImageTablet?: Image
+    trailImage?: Image
+} => {
     const {
         overrideArticleMainMedia,
         imageSrcOverride: maybeImageSrcOverride,
@@ -72,15 +85,28 @@ export const getImages = (
 
     const maybeArticleImage = oc(article).image()
 
-    const image = getImage(
+    const maybeCapiTrailImage = oc(article).trailImage()
+
+    const maybeImageOverride = getImageFromURL(oc(maybeImageSrcOverride).src())
+
+    const maybeMainImage = getImage(
         overrideArticleMainMedia,
-        maybeImageSrcOverride,
+        maybeImageOverride,
         maybeArticleImage,
     )
-    const cardImage = getCardImage(maybeCoverCardImages, maybeImageSrcOverride)
-    const cardImageTablet = getCardImageForTablet(maybeCoverCardImages)
 
-    return { image, cardImage, cardImageTablet }
+    const maybeCardImages = getCardImages(maybeCoverCardImages) || {}
+    const maybeTrailImage = getTrailImage(
+        maybeMainImage,
+        maybeCapiTrailImage,
+        maybeImageOverride,
+    )
+
+    return {
+        image: maybeMainImage,
+        trailImage: maybeTrailImage,
+        ...maybeCardImages,
+    }
 }
 
 const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
