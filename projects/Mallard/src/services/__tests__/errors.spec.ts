@@ -25,6 +25,7 @@ const createSentry = () => ({
         install: jest.fn(() => Promise.resolve()),
     })),
     captureException: jest.fn(() => {}),
+    setTagsContext: jest.fn(() => {}),
 })
 
 describe('errors', () => {
