@@ -90,15 +90,6 @@ const createUnderlayNavigator = (
         defaultNavigationOptions: {
             gesturesEnabled: false,
         },
-        cardStyle: {
-            shadowOffset: {
-                width: 0,
-                height: 0,
-            },
-            overflow: 'visible',
-            shadowOpacity: 0.2,
-            shadowRadius: 8,
-        },
         headerMode: 'none',
         ...(supportsTransparentCards()
             ? {
