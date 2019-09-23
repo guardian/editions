@@ -61,11 +61,17 @@ const ScreenHeader = withNavigation(
         const isTablet = useMediaQuery(
             width => width >= Breakpoints.tabletVertical,
         )
+
+        const goToIssueList = () => {
+            navigation.setParams({ shouldShowMoreIssuesBtn: false })
+            navigateToIssueList(navigation)
+        }
+
         return (
             <Header
                 accessibilityHint="More issues"
                 onPress={() => {
-                    navigateToIssueList(navigation)
+                    goToIssueList()
                 }}
                 action={
                     <Animated.View
@@ -78,13 +84,17 @@ const ScreenHeader = withNavigation(
                             }
                         }
                     >
-                        <Button
-                            icon={isTablet ? '' : ''}
-                            alt="More issues"
-                            onPress={() => {
-                                navigateToIssueList(navigation)
-                            }}
-                        />
+                        {navigation.getParam('shouldShowMoreIssuesBtn') ||
+                        navigation.getParam('shouldShowMoreIssuesBtn') ===
+                            undefined ? (
+                            <Button
+                                icon={isTablet ? '' : ''}
+                                alt="More issues"
+                                onPress={() => {
+                                    goToIssueList()
+                                }}
+                            />
+                        ) : null}
                     </Animated.View>
                 }
             >
