@@ -24,6 +24,7 @@ const getImageFromElement = (element: BlockElement): Image | undefined => {
 
 export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const image = article.image
+    const trailImage = article.trailImage
     const elements = article.type !== 'crossword' ? article.elements : []
     const cardImages = [article.cardImage, article.cardImageTablet]
     const bylineImages =
@@ -31,7 +32,13 @@ export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
 
     const images = elements.map(getImageFromElement)
 
-    return [...images, ...cardImages, ...bylineImages, image].filter(notNull)
+    return [
+        ...images,
+        ...cardImages,
+        ...bylineImages,
+        image,
+        trailImage,
+    ].filter(notNull)
 }
 
 export const getImagesFromFront = (front: Front): Image[] => {
