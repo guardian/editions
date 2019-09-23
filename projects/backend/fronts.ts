@@ -5,6 +5,7 @@ import {
     Collection,
     CAPIArticle,
     PillarAppearance,
+    CreditedImage,
 } from './common'
 import { LastModifiedUpdater } from './lastModified'
 import {
@@ -23,31 +24,62 @@ import {
     PublishedCollection,
     PublishedFurtniture,
     PublishedFront,
+    PublishedCardImage,
+    PublishedImage,
 } from './fronts/issue'
 import { getCrosswordArticleOverrides } from './utils/crossword'
 import { isPreview } from './preview'
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
 
-const getImages = (
+// overrideArticleMainMedia may be false in most cases
+const getImage = (
+    overrideArticleMainMedia: boolean,
+    maybeImageSrcOverride: PublishedImage | undefined,
+    maybeArticleImage: CreditedImage | undefined,
+): Image | undefined => {
+    return overrideArticleMainMedia && maybeImageSrcOverride !== undefined
+        ? getImageFromURL(oc(maybeImageSrcOverride).src())
+        : maybeArticleImage
+}
+
+const getCardImage = (
+    maybeCoverCardImages: PublishedCardImage | undefined,
+    maybeImageSrcOverride: PublishedImage | undefined,
+): Image | undefined => {
+    const imgFromCardImages = getImageFromURL(
+        oc(maybeCoverCardImages).mobile.src(),
+    )
+    const imgFromOverride = getImageFromURL(oc(maybeImageSrcOverride).src())
+    return imgFromCardImages || imgFromOverride
+}
+
+const getCardImageForTablet = (
+    maybeCoverCardImages: PublishedCardImage | undefined,
+): Image | undefined => {
+    return getImageFromURL(oc(maybeCoverCardImages).tablet.src())
+}
+
+export const getImages = (
     article: CAPIContent,
     furniture: PublishedFurtniture,
-): { image?: Image; cardImage?: Image; cardImageTablet?: Image } => {
+): { image?: CreditedImage; cardImage?: Image; cardImageTablet?: Image } => {
     const {
         overrideArticleMainMedia,
-        imageSrcOverride,
-        coverCardImages,
+        imageSrcOverride: maybeImageSrcOverride,
+        coverCardImages: maybeCoverCardImages,
     } = furniture
 
-    const image =
-        overrideArticleMainMedia && imageSrcOverride !== undefined
-            ? getImageFromURL(oc(imageSrcOverride).src())
-            : oc(article).image()
+    const maybeArticleImage = oc(article).image()
 
-    const cardImage =
-        getImageFromURL(oc(coverCardImages).mobile.src()) ||
-        getImageFromURL(oc(furniture.imageSrcOverride).src())
-    const cardImageTablet = getImageFromURL(oc(coverCardImages).tablet.src())
+    const image = getImage(
+        overrideArticleMainMedia,
+        maybeImageSrcOverride,
+        maybeArticleImage,
+    )
+    const cardImage = getCardImage(maybeCoverCardImages, maybeImageSrcOverride)
+    const cardImageTablet = getCardImageForTablet(maybeCoverCardImages)
+
     return { image, cardImage, cardImageTablet }
 }
 
