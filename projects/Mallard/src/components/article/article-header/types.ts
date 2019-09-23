@@ -7,5 +7,5 @@ export interface ArticleHeaderProps {
     image?: Image | null
     standfirst: string
     starRating?: Article['starRating']
-    bylineImages?: { thumbnail?: Image; cutout?: Image }
+    bylineImages?: { cutout?: Image }
 }

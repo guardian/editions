@@ -27,11 +27,7 @@ export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const elements = article.type !== 'crossword' ? article.elements : []
     const cardImages = [article.cardImage, article.cardImageTablet]
     const bylineImages =
-        (article.bylineImages && [
-            article.bylineImages.cutout,
-            article.bylineImages.thumbnail,
-        ]) ||
-        []
+        (article.bylineImages && [article.bylineImages.cutout]) || []
 
     const images = elements.map(getImageFromElement)
 
