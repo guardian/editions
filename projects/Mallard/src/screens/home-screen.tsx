@@ -28,12 +28,12 @@ import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
-import { PathToIssue } from 'src/paths'
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
+import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -140,10 +140,8 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const { response: issueSummary, retry } = useIssueSummary()
-    const from = navigation.getParam('from', undefined)
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-    const issue: PathToIssue =
-        from && from.path && (from.path.issue as PathToIssue)
+    const issue = useIssueCompositeKey()
     return (
         <WithAppAppearance value={'tertiary'}>
             <NavigationEvents
