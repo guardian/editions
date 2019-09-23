@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import React, { useContext, useState } from 'react'
-import { Alert, StyleSheet, Text } from 'react-native'
+import { Alert, StyleSheet, Text, Button } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import {
     AuthContext,
@@ -239,6 +239,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
 
 SettingsScreen.navigationOptions = {
     title: 'Settings',
+    showHeaderLeft: false,
+    showHeaderRight: true,
 }
 
 export { SettingsScreen }
