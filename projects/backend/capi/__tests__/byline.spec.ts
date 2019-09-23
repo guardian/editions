@@ -60,10 +60,6 @@ describe('byline image extractor', () => {
         const article = createArticleLike(tagSpecs, 'Name')
         const images = getBylineImages(article)
         expect(images).toStrictEqual({
-            thumbnail: {
-                source: 'test',
-                path: 'image',
-            },
             cutout: {
                 source: 'test',
                 path: 'image2',

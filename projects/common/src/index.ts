@@ -160,7 +160,7 @@ export interface Content extends WithKey {
     cardImageTablet?: Image
     standfirst?: string
     byline?: string
-    bylineImages?: { thumbnail?: Image; cutout?: Image }
+    bylineImages?: { cutout?: Image }
     showByline: boolean
     showQuotedHeadline: boolean
     mediaType: MediaType
