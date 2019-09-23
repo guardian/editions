@@ -3,7 +3,7 @@
 exports[`Quote should display a Quote icon in SVG 1`] = `
 <RNSVGSvgView
   bbHeight={21}
-  bbWidth={32}
+  bbWidth={39}
   fill="none"
   height={21}
   style={
@@ -18,7 +18,7 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
             "scale": 1,
           },
           Object {
-            "translateY": 0,
+            "translateY": -0,
           },
           Object {
             "translateX": -0,
@@ -29,11 +29,11 @@ exports[`Quote should display a Quote icon in SVG 1`] = `
       Object {
         "flex": 0,
         "height": 21,
-        "width": 32,
+        "width": 39,
       },
     ]
   }
-  width={32}
+  width={39}
 >
   <RNSVGGroup
     fill={null}
