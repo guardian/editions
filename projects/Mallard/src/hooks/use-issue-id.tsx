@@ -26,6 +26,12 @@ export const useIssueCompositeKeyHandler = () => {
         'issue',
     )
 
+    // This will mean that any page that has come "from" an issue (that is not
+    // itself an issue), will have this previous issue marked as it's current
+    // issue, in order to facilitate actions to go back to or modals that
+    // require that information
+    const from: { path?: PathToIssue } | undefined = nav.getParam('from')
+
     // this is currently the easiest way to get to a value for the issue summar
     // could do with a refactor in to a service
     const response = useCachedOrPromise(getIssueSummary())
@@ -44,6 +50,15 @@ export const useIssueCompositeKeyHandler = () => {
             localIssueId: localId,
             publishedIssueId: publishedId,
         }
+    }
+
+    if (from && from.path) {
+        const { localIssueId, publishedIssueId } = from.path
+        if (localIssueId && publishedIssueId)
+            fromNav = fromNav || {
+                localIssueId,
+                publishedIssueId,
+            }
     }
 
     return <R extends any>({
