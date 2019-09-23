@@ -13,6 +13,8 @@ import { addStaticRouter } from '../helpers/base'
 
 interface NavigationOptions {
     title?: string
+    showHeaderRight?: boolean
+    showHeaderLeft?: boolean
 }
 
 type NavOrFn =
@@ -41,15 +43,33 @@ const addStaticRouterWithHeader = (
             component.navigationOptions,
         )
 
+        const showHeaderLeft =
+            options.showHeaderLeft !== undefined ? options.showHeaderLeft : true
+        const showHeaderRight =
+            options.showHeaderRight !== undefined
+                ? options.showHeaderRight
+                : false
+
         return (
             <>
                 <Header
                     leftAction={
-                        <Button
-                            icon={'\uE00A'}
-                            alt="Back"
-                            onPress={() => navigation.goBack(null)}
-                        ></Button>
+                        showHeaderLeft ? (
+                            <Button
+                                icon={'\uE00A'}
+                                alt="Back"
+                                onPress={() => navigation.goBack(null)}
+                            ></Button>
+                        ) : null
+                    }
+                    action={
+                        showHeaderRight ? (
+                            <Button
+                                icon={'\uE04F'}
+                                alt="Back"
+                                onPress={() => navigation.goBack(null)}
+                            ></Button>
+                        ) : null
                     }
                     layout={'center'}
                 >
