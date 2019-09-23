@@ -69,8 +69,6 @@ const styles = StyleSheet.create({
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
-        marginLeft: '-4%',
-        marginRight: '-4%',
     },
     sliderBorder: {
         borderBottomColor: color.line,
