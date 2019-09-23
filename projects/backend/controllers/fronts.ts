@@ -17,8 +17,12 @@ export const frontController = (req: Request, res: Response) => {
         .then(data => {
             if (hasFailed(data)) {
                 console.error(`${req.url} threw ${JSON.stringify(data)}`)
-                if (data.httpStatus) res.sendStatus(data.httpStatus)
-                res.sendStatus(500)
+                if (data.httpStatus) {
+                    res.sendStatus(data.httpStatus)
+                } else {
+                    res.sendStatus(500)
+                }
+                return
             }
             res.setHeader('Last-Modifed', date())
             res.setHeader('Content-Type', 'application/json')

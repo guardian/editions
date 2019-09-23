@@ -14,7 +14,7 @@ const extractImage: (
 
     // This returns the master image, or, failing that, the largest.
     // As long as our CAPI key is internal, we should always have a master.
-    const master = assetArray.find(_ => _.file && _.file.includes('/master/'))
+    const master = assetArray.find(_ => _.typeData && _.typeData.isMaster)
     if (master) return master
     console.warn(
         'Failed to find a master image in CAPI response',
