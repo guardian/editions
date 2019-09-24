@@ -3,7 +3,7 @@ import { attempt, hasFailed } from '../../backend/utils/try'
 import { issuePath } from '../common'
 import { MediaTaskOutput } from './imageTask'
 import { IssueTaskOutput } from './issueTask'
-import { upload } from './upload'
+import { upload, ONE_WEEK } from './upload'
 
 export type UploadTaskOutput = Pick<
     IssueTaskOutput,
@@ -15,7 +15,7 @@ export const handler: Handler<MediaTaskOutput, UploadTaskOutput> = async ({
 }) => {
     const { publishedId } = issue
     const issueUpload = await attempt(
-        upload(issuePath(publishedId), issue, 'application/json'),
+        upload(issuePath(publishedId), issue, 'application/json', ONE_WEEK),
     )
     if (hasFailed(issueUpload)) {
         console.error(JSON.stringify(issueUpload))

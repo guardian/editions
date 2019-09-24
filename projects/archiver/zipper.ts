@@ -1,6 +1,7 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
 import { s3, bucket } from './src/s3'
+import { ONE_WEEK } from './src/upload'
 
 const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
@@ -17,6 +18,8 @@ export const zip = async (
             Key: `zips/${name}.zip`,
             Body: output,
             ACL: 'public-read',
+            ContentType: 'application/zip',
+            CacheControl: `max-age=${ONE_WEEK}`,
         })
         .promise()
 
@@ -26,6 +29,12 @@ export const zip = async (
             Prefix: prefix,
         })
         .promise()
+    // TODO: deal with paginating S3 responses
+    if (objects.IsTruncated) {
+        console.error(
+            "Object list from S3 was truncated which we don't currently deal with",
+        )
+    }
     const files = (objects.Contents || []).map(obj => obj.Key).filter(notNull)
 
     console.log('Got file names')
