@@ -1,6 +1,7 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
 import { s3, bucket } from './src/s3'
+import { ONE_WEEK } from './src/upload'
 
 const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
@@ -18,7 +19,7 @@ export const zip = async (
             Body: output,
             ACL: 'public-read',
             ContentType: 'application/zip',
-            CacheControl: 'max-age=604800', // one week
+            CacheControl: `max-age=${ONE_WEEK}`,
         })
         .promise()
 

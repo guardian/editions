@@ -3,7 +3,7 @@ import { attempt, hasFailed } from '../../../backend/utils/try'
 import { ImageSize, imageSizes } from '../../../common/src'
 import { IssueSummary, notNull } from '../../common'
 import { bucket, s3 } from '../s3'
-import { upload } from '../upload'
+import { upload, ONE_MINUTE } from '../upload'
 
 const zips = 'zips/'
 
@@ -119,6 +119,6 @@ export const summary = async () => {
         console.error('Could not fetch index')
         return
     }
-    await upload('issues', index, 'application/json', 60)
+    await upload('issues', index, 'application/json', ONE_MINUTE)
     return
 }
