@@ -42,7 +42,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         display: inline-block;
         transform: scale(1.335) translateY(1px) translateX(-2px);
         transform-origin: left center;
-        margin-bottom: 25px;
+        margin-right: 25px;
     }
     :root {
         ${getScaledFontCss('text', 1)}

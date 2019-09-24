@@ -1,6 +1,6 @@
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
-import { BlockElement } from '../common/src'
+import { BlockElement, ArticleType } from '../common/src'
 import { CAPIContent, CArticle, getArticles } from './capi/articles'
 import {
     CAPIArticle,
@@ -135,7 +135,10 @@ const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
     }
 }
 
-const patchArticleElements = (article: CArticle): BlockElement[] => {
+export const patchArticleElements = (article: {
+    articleType?: ArticleType
+    elements: BlockElement[]
+}): BlockElement[] => {
     const [head, ...tail] = article.elements
     return !articleShouldHaveDropCap(article) || !isHTMLElement(head)
         ? article.elements
