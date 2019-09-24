@@ -52,13 +52,13 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            {'image' in article && article.image ? (
+            {'trailImage' in article && article.trailImage ? (
                 <ImageResource
                     style={[
                         imageStyles.image,
                         { height: getImageHeight(size) },
                     ]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
             ) : null}
             {pillar === 'sport' && isFullWidthItem(size) ? (
@@ -134,7 +134,7 @@ A smaller hero
 */
 const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     const [colors, { pillar }] = useArticle()
-    if (!article.image) {
+    if (!article.trailImage) {
         return <SmallItem {...{ article, size, ...tappableProps }} />
     }
     if (pillar === 'sport') {
@@ -146,7 +146,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
             <View style={squareStyles.cover}>
                 <ImageResource
                     style={[StyleSheet.absoluteFill]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
                 <View
                     style={[
@@ -208,10 +208,10 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                {'image' in article && article.image ? (
+                {'trailImage' in article && article.trailImage ? (
                     <ImageResource
                         style={[splitImageStyles.image]}
-                        image={article.image}
+                        image={article.trailImage}
                     />
                 ) : null}
             </View>

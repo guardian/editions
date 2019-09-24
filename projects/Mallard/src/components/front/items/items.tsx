@@ -39,10 +39,10 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={coverStyles.cover}>
-                {'image' in article && article.image ? (
+                {'trailImage' in article && article.trailImage ? (
                     <ImageResource
                         style={coverStyles.cover}
-                        image={article.image}
+                        image={article.trailImage}
                     />
                 ) : null}
                 <TextBlock
