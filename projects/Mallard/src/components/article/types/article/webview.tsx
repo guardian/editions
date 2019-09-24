@@ -7,6 +7,7 @@ import { useArticle } from 'src/hooks/use-article'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { EMBED_DOMAIN, render } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
+import { ArticleHeaderProps } from '../../article-header/types'
 
 const urlIsNotAnEmbed = (url: string) =>
     !(
@@ -21,11 +22,13 @@ const AniWebview = Animated.createAnimatedComponent(WebView)
 const WebviewWithArticle = ({
     article,
     wrapLayout,
+    headerProps,
     paddingTop = 0,
     ...webViewProps
 }: {
     article: BlockElement[]
     wrapLayout: WrapLayout
+    headerProps: ArticleHeaderProps
     paddingTop?: number
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
@@ -38,6 +41,7 @@ const WebviewWithArticle = ({
                 pillar,
                 features,
                 wrapLayout,
+                headerProps,
                 showMedia: isConnected,
                 height: paddingTop,
                 publishedId:
@@ -59,18 +63,6 @@ const WebviewWithArticle = ({
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{ html }}
-            onShouldStartLoadWithRequest={(event: any) => {
-                if (
-                    Platform.select({
-                        ios: event.navigationType === 'click',
-                        android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
-                    })
-                ) {
-                    Linking.openURL(event.url)
-                    return false
-                }
-                return true
-            }}
             {...webViewProps}
         />
     )

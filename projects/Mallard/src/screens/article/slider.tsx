@@ -181,15 +181,14 @@ const ArticleSlider = ({
 
     return (
         <>
-            <Fader>
-                <SliderBar
-                    total={articleNavigator.articles.length}
-                    position={current}
-                    title={articleNavigator.frontName}
-                    color={getColor(articleNavigator.appearance)}
-                    style={!articleIsAtTop && styles.sliderBorder}
-                />
-            </Fader>
+            <SliderBar
+                total={articleNavigator.articles.length}
+                position={current}
+                title={articleNavigator.frontName}
+                color={getColor(articleNavigator.appearance)}
+                style={!articleIsAtTop && styles.sliderBorder}
+            />
+
             <Animated.FlatList
                 ref={(flatList: AnimatedFlatListRef) =>
                     (flatListRef.current = flatList)

@@ -43,6 +43,7 @@ const ArticleWebView = ({
     ...webviewProps
 }: {
     header: ReactNode
+    headerProps: ArticleHeaderProps
     article: BlockElement[]
     onTopPositionChange: OnTopPositionChangeFn
     wrapLayout: WrapLayout
@@ -51,7 +52,6 @@ const ArticleWebView = ({
 
     return (
         <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-            {header}
             <View>
                 <Wrap>
                     <View style={{ minHeight: height }}></View>
@@ -88,71 +88,6 @@ const androidStyles = StyleSheet.create({
         height: '100%',
     },
 })
-const ArticleWebViewAndroid = ({
-    header,
-    onTopPositionChange,
-    ...webviewProps
-}: {
-    header: ReactNode
-    article: BlockElement[]
-    wrapLayout: WrapLayout
-    onTopPositionChange: OnTopPositionChangeFn
-}) => {
-    const [height, setHeight] = useState<number | null>(null)
-    const [scrollY] = useState(() => new Animated.Value(0))
-
-    useEffect(() => {
-        onTopPositionChange(false)
-    }, [])
-    return (
-        <View style={androidStyles.wrapper}>
-            <Animated.View
-                onLayout={(ev: any) => {
-                    setHeight(ev.nativeEvent.layout.height)
-                }}
-                pointerEvents="none"
-                style={[
-                    androidStyles.header,
-                    {
-                        transform: [
-                            {
-                                translateY: scrollY.interpolate({
-                                    inputRange: safeInterpolation([-1, 1]),
-                                    outputRange: safeInterpolation([1, -1]),
-                                }),
-                            },
-                        ],
-                    },
-                ]}
-            >
-                {header}
-            </Animated.View>
-
-            {!!height && (
-                <>
-                    <WebviewWithArticle
-                        {...webviewProps}
-                        onScroll={Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: {
-                                            y: scrollY,
-                                        },
-                                    },
-                                },
-                            ],
-                            /* webview doesnt support the native driver just yet :() */
-                            { useNativeDriver: false },
-                        )}
-                        paddingTop={height}
-                        style={StyleSheet.absoluteFillObject}
-                    />
-                </>
-            )}
-        </View>
-    )
-}
 
 const Article = ({
     article,
@@ -166,15 +101,13 @@ const Article = ({
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
 
-    const WebView =
-        Platform.OS === 'android' ? ArticleWebViewAndroid : ArticleWebView
-
     return (
         <>
             <Fader>
                 {wrapLayout && (
-                    <WebView
-                        header={<ArticleHeader {...headerProps} type={type} />}
+                    <ArticleWebView
+                        header={<View />}
+                        headerProps={headerProps}
                         article={article}
                         onTopPositionChange={onTopPositionChange}
                         wrapLayout={wrapLayout}

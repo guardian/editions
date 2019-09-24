@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Animated, Dimensions, StyleSheet, View } from 'react-native'
+import { Animated, Dimensions, StyleSheet, View, Image } from 'react-native'
 import { clamp, safeInterpolation } from 'src/helpers/math'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
@@ -23,39 +23,42 @@ const Fader = ({ children }: PropTypes) => {
     const position = useNavigatorPosition()
     const buildOrder = useRef(0)
     const faderRef = useRef<View>()
-
+    const { height } = Dimensions.get('window')
     return (
-        <Animated.View
-            ref={(view: { _component: unknown }) => {
-                if (view && view._component)
-                    faderRef.current = view._component as View
-            }}
-            onLayout={() => {
-                faderRef.current &&
-                    faderRef.current.measureInWindow((x, y) => {
-                        buildOrder.current =
-                            (y / Dimensions.get('window').height) * 6
-                    })
-            }}
-            style={[
-                {
-                    opacity: position.interpolate({
-                        /*
-                        we wanna prevent any value except the final
-                        one to be 1 because otherwise the animation will throw */
-                        inputRange: safeInterpolation([
-                            clamp(0.2 + buildOrder.current / 10, 0, 1),
-                            clamp(0.4 + buildOrder.current / 10, 0.4, 1),
-                            1,
-                        ]),
-                        outputRange: safeInterpolation([0, 1, 1]),
-                    }),
-                },
-                faderStyles.wrapper,
-            ]}
-        >
+        <View style={{ backgroundColor: 'white' }}>
             {children}
-        </Animated.View>
+            <Animated.View
+                style={[
+                    {
+                        ...StyleSheet.absoluteFillObject,
+                        height: height * 2,
+                        top: -height,
+                        transform: [
+                            {
+                                translateY: position.interpolate({
+                                    inputRange: safeInterpolation([0, 0.4, 1]),
+                                    outputRange: safeInterpolation([
+                                        0,
+                                        0,
+                                        height * 2,
+                                    ]),
+                                }),
+                            },
+                        ],
+                    },
+                    faderStyles.wrapper,
+                ]}
+            >
+                <Image
+                    resizeMode="stretch"
+                    style={[
+                        StyleSheet.absoluteFillObject,
+                        { width: '100%', height: '100%' },
+                    ]}
+                    source={require('./fade.png')}
+                ></Image>
+            </Animated.View>
+        </View>
     )
 }
 
