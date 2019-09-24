@@ -1,4 +1,4 @@
-import { upload } from './upload'
+import { upload, ONE_WEEK } from './upload'
 import { s3, Bucket } from './s3'
 import { IssuePublication, notNull } from '../../common/src'
 import { getPublishedId, getLocalId } from './publishedId'
@@ -26,7 +26,7 @@ export const putStatus = (
 ) => {
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status.json`
-    return upload(path, { status }, 'application/json')
+    return upload(path, { status }, 'application/json', ONE_WEEK)
 }
 
 export const getStatus = async (
