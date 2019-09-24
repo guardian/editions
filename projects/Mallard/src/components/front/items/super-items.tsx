@@ -50,10 +50,10 @@ const superHeroImageStyles = StyleSheet.create({
 const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
+            {'trailImage' in article && article.trailImage ? (
                 <ImageResource
                     style={[superHeroImageStyles.image]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
             ) : null}
             <TextBlock
@@ -86,10 +86,10 @@ const sportSuperStyles = StyleSheet.create({
 const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
+            {'trailImage' in article && article.trailImage ? (
                 <ImageResource
                     style={[superHeroImageStyles.image]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
             ) : null}
             <TextBlock
