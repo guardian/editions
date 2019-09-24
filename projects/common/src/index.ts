@@ -31,11 +31,6 @@ export enum ArticleType {
     Immersive = 'immersive',
 }
 
-export enum ArticleFeatures {
-    HasDropCap = 'HAS-DROP-CAP',
-    HasFancyDropCap = 'HAS-FANCY-DROP-CAP',
-}
-
 export type ArticlePillar = typeof articlePillars[number]
 
 export interface ColorAppearance {
@@ -249,6 +244,7 @@ export interface UnknownElement {
 export interface HTMLElement {
     id: 'html'
     html: string
+    hasDropCap?: boolean
 }
 
 type ImageRoles = 'supporting' | 'immersive' | 'showcase' | 'thumbnail' | string

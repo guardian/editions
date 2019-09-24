@@ -1,36 +1,37 @@
-import { s3fetch, Path } from './s3'
-import {
-    Front,
-    Image,
-    Collection,
-    CAPIArticle,
-    PillarAppearance,
-    CreditedImage,
-} from './common'
-import { LastModifiedUpdater } from './lastModified'
-import {
-    attempt,
-    hasFailed,
-    Attempt,
-    withFailureMessage,
-    hasSucceeded,
-    failure,
-} from './utils/try'
-import { getArticles, CAPIContent } from './capi/articles'
-import { createCardsFromAllArticlesInCollection } from './utils/collection'
-import { getImageFromURL } from './image'
-import {
-    PublishedIssue,
-    PublishedCollection,
-    PublishedFurtniture,
-    PublishedFront,
-    PublishedCardImage,
-    PublishedImage,
-} from './fronts/issue'
-import { getCrosswordArticleOverrides } from './utils/crossword'
-import { isPreview } from './preview'
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
+import { BlockElement } from '../common/src'
+import { CAPIContent, CArticle, getArticles } from './capi/articles'
+import {
+    CAPIArticle,
+    Collection,
+    CreditedImage,
+    Front,
+    Image,
+    PillarAppearance,
+} from './common'
+import {
+    PublishedCardImage,
+    PublishedCollection,
+    PublishedFront,
+    PublishedFurtniture,
+    PublishedIssue,
+} from './fronts/issue'
+import { getImageFromURL } from './image'
+import { LastModifiedUpdater } from './lastModified'
+import { isPreview } from './preview'
+import { Path, s3fetch } from './s3'
+import { createCardsFromAllArticlesInCollection } from './utils/collection'
+import { getCrosswordArticleOverrides } from './utils/crossword'
+import {
+    attempt,
+    Attempt,
+    failure,
+    hasFailed,
+    hasSucceeded,
+    withFailureMessage,
+} from './utils/try'
+import { articleShouldHaveDropCap, isHTMLElement } from './utils/article'
 
 // overrideArticleMainMedia may be false in most cases
 const getImage = (
@@ -134,6 +135,13 @@ const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
     }
 }
 
+const patchArticleElements = (article: CArticle): BlockElement[] => {
+    const [head, ...tail] = article.elements
+    return !articleShouldHaveDropCap(article) || !isHTMLElement(head)
+        ? article.elements
+        : [{ ...head, hasDropCap: true }, ...tail]
+}
+
 export const patchArticle = (
     article: CAPIContent,
     furniture: PublishedFurtniture,
@@ -181,6 +189,7 @@ export const patchArticle = (
                 {
                     ...article,
                     ...fields,
+                    elements: patchArticleElements(article),
                     byline: fields.byline || '',
                     sportScore,
                 },
