@@ -21,6 +21,7 @@ import {
 import { TextBlock } from './helpers/text-block'
 import { Standfirst } from './helpers/standfirst'
 import { metrics } from 'src/theme/spacing'
+import { useIsOpinionCard } from './helpers/types'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -213,7 +214,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
 
 const SuperHeroImageItem = (props: PropTypes) => {
     const [, { pillar }] = useArticle()
-    if (pillar === 'opinion') {
+    if (useIsOpinionCard()) {
         return <OpinionSuper {...props} />
     }
     if (pillar === 'sport') {
