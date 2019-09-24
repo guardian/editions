@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical / 1.5,
         marginVertical: StyleSheet.hairlineWidth,
+        paddingBottom: metrics.vertical / 1.5,
     },
     itemFlexer: {
         flexDirection: 'row',
@@ -165,9 +166,6 @@ const RowWrapper = ({
                     {
                         backgroundColor,
                     },
-                    isPhone
-                        ? { paddingBottom: metrics.vertical * 1.5 }
-                        : { paddingBottom: metrics.vertical / 1.5 },
                 ]}
             >
                 {children}
@@ -180,9 +178,6 @@ const RowWrapper = ({
                 {
                     backgroundColor,
                 },
-                isPhone
-                    ? { paddingBottom: metrics.vertical * 1.5 }
-                    : { paddingBottom: metrics.vertical / 1.5 },
             ]}
         >
             {children}
