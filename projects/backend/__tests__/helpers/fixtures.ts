@@ -42,6 +42,7 @@ const Content = <T extends string>(
 
 const Article = ({
     image,
+    trailImage,
     byline = 'Mr CAPI',
     standfirst = 'This story is great',
     elements = [],
@@ -51,6 +52,7 @@ const Article = ({
     ...Content('article', contentFields),
     path: contentFields.key,
     image,
+    trailImage,
     byline,
     standfirst,
     elements,
