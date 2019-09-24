@@ -13,6 +13,7 @@ import {
 } from 'src/theme/typography'
 import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text'
 import { ItemSizes, PageLayoutSizes } from '../../helpers/helpers'
+import { useIsOpinionCard } from './types'
 
 const styles = {
     root: {
@@ -74,13 +75,13 @@ const TextBlock = ({
     )
 
     const { fontSize, lineHeight } = applyScale(font)
-    const [colors, { pillar }] = useArticle()
+    const [colors] = useArticle()
 
     const kickerColor = colors.main
 
     return (
         <View style={[styles.root, style]}>
-            {pillar === 'opinion' ? (
+            {useIsOpinionCard() ? (
                 <>
                     <TextWithIcon
                         unscaledFont={font}

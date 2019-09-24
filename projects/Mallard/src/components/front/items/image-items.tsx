@@ -18,6 +18,7 @@ import { SportItemBackground } from './helpers/sports'
 import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
 import { Standfirst } from './helpers/standfirst'
+import { useIsOpinionCard, useIsSportCard } from './helpers/types'
 
 /*
 Normal img on top + text
@@ -46,8 +47,7 @@ const imageStyles = StyleSheet.create({
 })
 
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
-    const [, { pillar }] = useArticle()
-    if (pillar === 'opinion' && isSmallItem(size)) {
+    if (useIsOpinionCard() && isSmallItem(size)) {
         return <RoundImageItem {...{ article, size, ...tappableProps }} />
     }
     return (
@@ -61,7 +61,7 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     image={article.trailImage}
                 />
             ) : null}
-            {pillar === 'sport' && isFullWidthItem(size) ? (
+            {useIsSportCard() && isFullWidthItem(size) ? (
                 <SportItemBackground
                     style={{
                         paddingHorizontal: tappablePadding.padding,
