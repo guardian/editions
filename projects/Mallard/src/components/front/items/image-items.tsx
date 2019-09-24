@@ -102,10 +102,12 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
-            {'image' in article && article.image ? (
+            {'bylineImages' in article &&
+            article.bylineImages &&
+            article.bylineImages.cutout ? (
                 <ImageResource
                     style={[imageStyles.roundImage]}
-                    image={article.image}
+                    image={article.bylineImages.cutout}
                 />
             ) : null}
         </ItemTappable>
