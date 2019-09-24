@@ -45,12 +45,15 @@ class Ophan: NSObject {
     }
     let deviceName = modelCode ?? "Unrecognised model"
     
+    let deviceClass = UIDevice.current.userInterfaceIdiom == .pad ? "Tablet" : "Phone"
+    
     return OphanIosKt.getThreadSafeOphanApi (
       appFamily: "iOS Editions",
       appVersion: appVersion + " (" + buildNumber + ")",
       appOsVersion: UIDevice.current.systemVersion,
       deviceName: deviceName,
       deviceManufacturer: "Apple",
+      //deviceClass,
       deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
       userId: userId,
       logger: SimpleLogger(),
