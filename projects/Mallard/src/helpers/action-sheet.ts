@@ -12,10 +12,12 @@ const runActionSheet = (
         ios: () =>
             ActionSheetIOS.showActionSheetWithOptions(
                 {
-                    options: options.map(({ text }) => text),
+                    options: [...options.map(({ text }) => text), 'Cancel'],
                     message,
+                    cancelButtonIndex: options.length,
                 },
-                async index => options[index].onPress(),
+                async index =>
+                    index !== options.length && options[index].onPress(),
             ),
         android: () => Alert.alert(message, undefined, options),
     })()
