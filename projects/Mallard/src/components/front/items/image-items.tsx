@@ -47,7 +47,9 @@ const imageStyles = StyleSheet.create({
 })
 
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
-    if (useIsOpinionCard() && isSmallItem(size)) {
+    const [isOpinionCard, isSportCard] = [useIsOpinionCard(), useIsSportCard()]
+
+    if (isOpinionCard && isSmallItem(size)) {
         return <RoundImageItem {...{ article, size, ...tappableProps }} />
     }
     return (
@@ -61,7 +63,7 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     image={article.trailImage}
                 />
             ) : null}
-            {useIsSportCard() && isFullWidthItem(size) ? (
+            {isSportCard && isFullWidthItem(size) ? (
                 <SportItemBackground
                     style={{
                         paddingHorizontal: tappablePadding.padding,

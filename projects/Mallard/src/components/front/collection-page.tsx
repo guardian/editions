@@ -141,10 +141,10 @@ const CollectionPage = ({
                 const article = articlesInCard[index]
                 return (
                     <WithArticleType
+                        key={index}
                         value={article.articleType || ArticleType.Article}
                     >
                         <View
-                            key={index}
                             style={[
                                 styles.itemHolder,
                                 toAbsoluteRectangle(
