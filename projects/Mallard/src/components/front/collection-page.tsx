@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
         marginBottom: metrics.fronts.sides * 1.5,
     },
     itemHolder: {
+        overflow: 'hidden',
         position: 'absolute',
     },
     multiline: {
