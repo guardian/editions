@@ -10,7 +10,7 @@ import {
     IssueCompositeKey,
 } from './common'
 import { getColours, getImage } from './src/downloader'
-import { upload } from './src/upload'
+import { upload, ONE_WEEK } from './src/upload'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {
@@ -59,7 +59,7 @@ export const getAndUploadColours = async (
         console.error(JSON.stringify(colours))
         return colours
     }
-    return attempt(upload(colourPath, colours, 'application/json'))
+    return attempt(upload(colourPath, colours, 'application/json', ONE_WEEK))
 }
 
 export const getAndUploadImage = async (
@@ -69,5 +69,5 @@ export const getAndUploadImage = async (
 ) => {
     const [path, data] = await getImage(publishedId, image, size)
     if (hasFailed(data)) return data
-    return upload(path, data, 'image/jpeg')
+    return upload(path, data, 'image/jpeg', ONE_WEEK)
 }

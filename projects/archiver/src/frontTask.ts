@@ -6,7 +6,7 @@ import { getImagesFromFront } from '../media'
 import { getFront } from './downloader'
 import { IssueTaskOutput } from './issueTask'
 import { bucket } from './s3'
-import { upload } from './upload'
+import { upload, ONE_WEEK } from './upload'
 
 export interface FrontTaskOutput extends IssueTaskOutput {
     images: Image[]
@@ -30,7 +30,12 @@ export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
     const images = unnest(getImagesFromFront(maybeFront))
 
     const frontUpload = await attempt(
-        upload(frontPath(publishedId, frontId), maybeFront, 'application/json'),
+        upload(
+            frontPath(publishedId, frontId),
+            maybeFront,
+            'application/json',
+            ONE_WEEK,
+        ),
     )
 
     if (hasFailed(frontUpload)) {
