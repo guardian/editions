@@ -30,7 +30,12 @@ export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
     const images = unnest(getImagesFromFront(maybeFront))
 
     const frontUpload = await attempt(
-        upload(frontPath(publishedId, frontId), maybeFront, 'application/json', ONE_WEEK),
+        upload(
+            frontPath(publishedId, frontId),
+            maybeFront,
+            'application/json',
+            ONE_WEEK,
+        ),
     )
 
     if (hasFailed(frontUpload)) {

@@ -31,7 +31,9 @@ export const zip = async (
         .promise()
     // TODO: deal with paginating S3 responses
     if (objects.IsTruncated) {
-        console.error("Object list from S3 was truncated which we don't currently deal with")
+        console.error(
+            "Object list from S3 was truncated which we don't currently deal with",
+        )
     }
     const files = (objects.Contents || []).map(obj => obj.Key).filter(notNull)
 
