@@ -11,7 +11,6 @@ import {
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
-import { Fader } from 'src/components/layout/animators/fader'
 import { Slider } from 'src/components/slider'
 import { safeInterpolation } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'

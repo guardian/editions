@@ -49,11 +49,7 @@ const MultilineWrap = ({
                 backgroundColor={props.backgroundColor}
                 borderColor={props.borderColor}
                 style={[multiStyles.byline]}
-                header={
-                    <ArticleFader>
-                        <Multiline count={4} color={multilineColor} />
-                    </ArticleFader>
-                }
+                header={<Multiline count={4} color={multilineColor} />}
                 footer={
                     !props.backgroundColor && (
                         <ArticleFader>
@@ -62,7 +58,7 @@ const MultilineWrap = ({
                     )
                 }
             >
-                <ArticleFader>{byline}</ArticleFader>
+                {byline}
             </Wrap>
         )}
     </>

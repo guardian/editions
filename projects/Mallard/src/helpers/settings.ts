@@ -60,6 +60,7 @@ export interface GdprSettings {
 export interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
+    useNewWebview: boolean
     notificationServiceRegister: string
     zipUrl: string
     cacheClearUrl: string

@@ -171,7 +171,8 @@ export const render = (
         <main style="padding-top:${px(height)}">
             ${showWebHeader &&
                 headerProps &&
-                Header({ ...headerProps, publishedId })}${content}
+                Header({ ...headerProps, publishedId })}
+            ${content}
         </main>
     `
     return makeHtml({ styles, body })

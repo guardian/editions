@@ -61,6 +61,7 @@ export const defaultSettings: Settings = {
     zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
     contentPrefix: 'daily-edition',
+    useNewWebview: false,
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
