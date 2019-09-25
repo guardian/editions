@@ -1,7 +1,7 @@
 import { html, css } from 'src/helpers/webview'
 import { ArticleHeaderProps } from '../article-header/types'
 import { defaultSettings } from 'src/helpers/settings/defaults'
-import { Issue, mediaPath } from 'src/common'
+import { Issue, mediaPath, Image as ImageT } from 'src/common'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { families } from 'src/theme/typography'
 
@@ -37,7 +37,7 @@ const Image = ({
     publishedId,
 }: {
     publishedId: Issue['publishedId']
-    image: any
+    image: ImageT
 }) => {
     const backend = defaultSettings.apiUrl
     const path = `${backend}${mediaPath(
@@ -58,6 +58,7 @@ const Header = ({
     return html`
         <header class="header">
             ${headerProps.image &&
+                publishedId &&
                 Image({ image: headerProps.image, publishedId })}
             <span>${headerProps.kicker}</span>
             <h1>${headerProps.headline}</h1>
