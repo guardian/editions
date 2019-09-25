@@ -2,6 +2,16 @@ import MemWatch from 'node-memwatch'
 import * as main from './main'
 import { Handler, Context } from 'aws-lambda'
 import { IssueParams } from './src/issueTask'
+
+/*
+This file is a shim that allows any of the functions in the step function
+to be run locally.
+Usage:
+    yarn start <function> <inputJson>
+
+Where function is one of those named in main.ts and the inputJson is
+a small JSON document that should be used as input for the function.
+*/
 //When run from terminal
 MemWatch.on('stats', stats => {
     console.log('GC ran', JSON.stringify(stats))

@@ -20,8 +20,13 @@ export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
     if (issueSummary == undefined) {
         throw new Error('No issue summary was generated for the current issue')
     }
-    await upload('issues', [issueSummary, ...index], 'application/json', FIVE_SECONDS)
-    await putStatus(issuePublication, 'built')
+    await upload(
+        'issues',
+        [issueSummary, ...index],
+        'application/json',
+        FIVE_SECONDS,
+    )
+    await putStatus(issuePublication, 'published')
     return {
         issuePublication,
         index,

@@ -1,34 +1,41 @@
-import { upload, ONE_WEEK } from './upload'
+import { upload } from './upload'
 import { s3, Bucket } from './s3'
 import { IssuePublication, notNull } from '../../common/src'
 import { getPublishedId, getLocalId } from './publishedId'
 import { oc } from 'ts-optchain'
-import { zipObj } from 'ramda'
 
 export type IssuePublicationWithStatus = IssuePublication & {
     status: Status
     updated: Date
 }
 
-export const publishedStatuses = ['published', 'notified', 'cleaned'] as const
+export const publishedStatuses = [
+    'published', // index file generated
+    'notified', // notification sent
+    'cleaned',
+] as const
 export const statuses = [
     ...publishedStatuses,
-    'started',
-    'built',
+    'started', // started the process of building
+    'built', // uploaded the zip file
     'unknown',
     'aborted',
 ] as const
 export type Status = typeof statuses[number]
 
+/* Given a published instance ID and status, store the provided status in S3
+ * using a status.json file in S3 */
 export const putStatus = (
     issuePublication: IssuePublication,
     status: Status,
 ) => {
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status.json`
-    return upload(path, { status }, 'application/json', ONE_WEEK)
+    return upload(path, { status }, 'application/json', undefined)
 }
 
+/* Given a published instance ID of an issue, return the instance status
+ * from the status.json file - this contains the status and modified time */
 export const getStatus = async (
     issuePublication: IssuePublication,
 ): Promise<IssuePublicationWithStatus> => {
@@ -47,9 +54,10 @@ export const getStatus = async (
     return { ...issuePublication, status, updated }
 }
 
+/* Given an edition name and date provide a list of versions */
 export const getVersions = async (
     issuePublication: Omit<IssuePublication, 'version'>,
-) => {
+): Promise<string[]> => {
     const root = getLocalId(issuePublication)
     const s3response = await s3
         .listObjectsV2({ Bucket, Delimiter: '/', Prefix: root })
@@ -61,6 +69,8 @@ export const getVersions = async (
     return versions
 }
 
+/* Given an edition name and date provide a list of the status of each version
+ * of that issue */
 export const getStatuses = async (
     issuePublication: Omit<IssuePublication, 'version'>,
 ): Promise<IssuePublicationWithStatus[]> => {
