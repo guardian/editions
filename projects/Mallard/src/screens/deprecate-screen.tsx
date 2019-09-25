@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
-import { Modal, SafeAreaView, View } from 'react-native'
-import { useNetInfo } from '../hooks/use-net-info'
+import React from 'react'
+import { Modal, SafeAreaView } from 'react-native'
 import { TitlepieceText } from '../components/styled-text'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
-import DeviceInfo from 'react-native-device-info'
 import { useDeprecationModal } from 'src/hooks/use-deprecation-screen'
-
-const content = {
-    title: 'This version of the Daily app is no longer supported',
-    subtitle:
-        'Please go to the <INSERT STORE LINK> to update to the latest version',
-}
+import { useNetInfo } from '../hooks/use-net-info'
 
 const DeprecateVersionModal = () => {
+    const { isConnected } = useNetInfo()
+    if (!isConnected) {
+        return null
+    }
+
     const { showModal } = useDeprecationModal()
 
     return (
