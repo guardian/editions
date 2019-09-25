@@ -48,10 +48,11 @@ const DeprecateVersionModal = () => {
             >
                 <View
                     style={{
-                        // backgroundColor: 'green',
                         flexGrow: 1,
                         justifyContent: 'center',
                         padding: 28,
+                        maxWidth: 600,
+                        alignSelf: 'center',
                     }}
                 >
                     <TitlepieceText
@@ -80,11 +81,11 @@ const DeprecateVersionModal = () => {
                 <Image
                     source={require('../assets/images/guardian-observer.png')}
                     style={{
-                        // backgroundColor: 'red',
                         flex: 1,
                         width: '90%',
                         resizeMode: 'contain',
                         alignSelf: 'center',
+                        maxWidth: 600,
                     }}
                 />
             </SafeAreaView>
