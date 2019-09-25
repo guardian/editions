@@ -1,5 +1,6 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React, { useMemo } from 'react'
+import { Animated } from 'react-native'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -7,8 +8,7 @@ import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { ArticleHeaderProps } from '../../article-header/types'
 import { render } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
-import { features, onShouldStartLoadWithRequest } from './helpers'
-import { Animated } from 'react-native'
+import { onShouldStartLoadWithRequest } from './helpers'
 
 const AniWebView = Animated.createAnimatedComponent(WebView)
 

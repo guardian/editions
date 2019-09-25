@@ -1,12 +1,4 @@
-import {
-    ArticleFeatures,
-    ArticlePillar,
-    BlockElement,
-    MediaAtomElement,
-    Article,
-} from 'src/common'
-import { getPillarColors } from 'src/hooks/use-article'
-import { metrics } from 'src/theme/spacing'
+import { ArticlePillar, BlockElement, MediaAtomElement } from 'src/common'
 import {
     css,
     generateAssetsFontCss,
@@ -16,14 +8,16 @@ import {
     makeHtml,
     px,
 } from 'src/helpers/webview'
-import { WrapLayout } from '../wrap/wrap'
-import { CssProps } from './helpers/props'
-import { Image, imageStyles } from './images'
-import { Header, headerStyles } from './header'
-import { quoteStyles, Pullquote } from './pull-quote'
+import { getPillarColors } from 'src/hooks/use-article'
+import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import { Issue } from '../../../common'
 import { ArticleHeaderProps } from '../article-header/types'
+import { WrapLayout } from '../wrap/wrap'
+import { Header, headerStyles } from './header'
+import { CssProps } from './helpers/props'
+import { Image, imageStyles } from './images'
+import { Pullquote, quoteStyles } from './pull-quote'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
