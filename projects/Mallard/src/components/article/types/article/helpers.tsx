@@ -1,5 +1,4 @@
 import { Linking, Platform } from 'react-native'
-import { ArticleFeatures } from 'src/common'
 import { EMBED_DOMAIN } from '../../html/render'
 
 const urlIsNotAnEmbed = (url: string) =>
