@@ -20,6 +20,3 @@ export const onShouldStartLoadWithRequest = (event: any) => {
     }
     return true
 }
-
-//TODO: get this from backend
-export const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
