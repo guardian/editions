@@ -29,27 +29,6 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleWebView = ({
-    header,
-    onTopPositionChange,
-    ...webviewProps
-}: {
-    header: ReactNode
-    headerProps: ArticleHeaderProps
-    article: BlockElement[]
-    onTopPositionChange: OnTopPositionChangeFn
-    wrapLayout: WrapLayout
-}) => {
-    return (
-        <WebviewWithArticle
-            {...webviewProps}
-            scrollEnabled={true}
-            useWebKit={false}
-            style={[styles.webview]}
-        />
-    )
-}
-
 const Article = ({
     onTopPositionChange,
     article,

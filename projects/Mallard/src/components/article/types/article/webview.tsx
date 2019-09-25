@@ -8,14 +8,7 @@ import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { EMBED_DOMAIN, render } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 import { ArticleHeaderProps } from '../../article-header/types'
-
-const urlIsNotAnEmbed = (url: string) =>
-    !(
-        url.startsWith(EMBED_DOMAIN) ||
-        url.startsWith('https://www.youtube.com/embed')
-    )
-
-const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
+import { onShouldStartLoadWithRequest, features } from './helpers'
 
 const WebviewWithArticle = ({
     article,
@@ -40,6 +33,7 @@ const WebviewWithArticle = ({
                 features,
                 wrapLayout,
                 headerProps,
+                showWebHeader: true,
                 showMedia: isConnected,
                 height: paddingTop,
                 publishedId:
@@ -62,6 +56,7 @@ const WebviewWithArticle = ({
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{ html }}
+            onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
         />
     )
 }

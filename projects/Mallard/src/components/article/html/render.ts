@@ -128,6 +128,7 @@ export const render = (
         showMedia,
         height,
         publishedId,
+        showWebHeader,
         headerProps,
     }: {
         pillar: ArticlePillar
@@ -135,6 +136,7 @@ export const render = (
         wrapLayout: WrapLayout
         showMedia: boolean
         height: number
+        showWebHeader: boolean
         publishedId: Issue['publishedId'] | null
         headerProps: ArticleHeaderProps
     },
@@ -178,7 +180,8 @@ export const render = (
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
         <main style="padding-top:${px(height)}">
-            ${Header({ ...headerProps, publishedId })}${content}
+            ${showWebHeader &&
+                Header({ ...headerProps, publishedId })}${content}
         </main>
     `
     return makeHtml({ styles, body })
