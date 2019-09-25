@@ -26,9 +26,10 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     webview: {
-        backgroundColor: 'transparent',
+        backgroundColor: 'yellow',
         width: '100%',
-        height: '100%',
+        height: 100,
+        flex: 1,
         /*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
@@ -51,27 +52,14 @@ const ArticleWebView = ({
     const [height, setHeight] = useState(Dimensions.get('window').height)
 
     return (
-        <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-            <View>
-                <Wrap>
-                    <View style={{ minHeight: height }}></View>
-                </Wrap>
-
-                <View style={[styles.webviewWrap]}>
-                    <WebviewWithArticle
-                        {...webviewProps}
-                        scrollEnabled={false}
-                        useWebKit={false}
-                        onMessage={event => {
-                            if (parseInt(event.nativeEvent.data) > height) {
-                                setHeight(parseInt(event.nativeEvent.data))
-                            }
-                        }}
-                        style={[styles.webview]}
-                    />
-                </View>
-            </View>
-        </ScrollView>
+        <View style={[styles.webview]}>
+            <WebviewWithArticle
+                {...webviewProps}
+                scrollEnabled={true}
+                useWebKit={false}
+                style={[styles.webview]}
+            />
+        </View>
     )
 }
 

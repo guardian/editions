@@ -1,7 +1,7 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React, { useMemo } from 'react'
-import { Animated, Linking, Platform, WebViewProps } from 'react-native'
-import { WebView } from 'react-native-webview'
+import { Animated, Linking, Platform } from 'react-native'
+import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleFeatures, BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
@@ -17,8 +17,6 @@ const urlIsNotAnEmbed = (url: string) =>
 
 const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
 
-const AniWebview = Animated.createAnimatedComponent(WebView)
-
 const WebviewWithArticle = ({
     article,
     wrapLayout,
@@ -30,7 +28,7 @@ const WebviewWithArticle = ({
     wrapLayout: WrapLayout
     headerProps: ArticleHeaderProps
     paddingTop?: number
-} & WebViewProps & { onScroll?: any }) => {
+} & WebViewProps) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
     const issueCompositeKey = useIssueCompositeKey()
@@ -59,11 +57,11 @@ const WebviewWithArticle = ({
     )
 
     return (
-        <AniWebview
+        <WebView
+            {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{ html }}
-            {...webViewProps}
         />
     )
 }

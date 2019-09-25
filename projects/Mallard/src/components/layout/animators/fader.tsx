@@ -25,7 +25,7 @@ const Fader = ({ children }: PropTypes) => {
     const faderRef = useRef<View>()
     const { height } = Dimensions.get('window')
     return (
-        <View style={{ backgroundColor: 'white' }}>
+        <View style={{ backgroundColor: 'red', height: '100%', width: '100%' }}>
             {children}
             <Animated.View
                 style={[
