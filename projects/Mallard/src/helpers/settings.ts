@@ -66,6 +66,10 @@ export interface DevSettings {
     cacheClearUrl: string
     deprecationWarningUrl: string
     contentPrefix: string
+    storeDetails: {
+        ios: string
+        android: string
+    }
 }
 
 interface UserSettings {

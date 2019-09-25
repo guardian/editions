@@ -43,6 +43,11 @@ export const notificationServiceRegister = {
 
 const apiUrl = backends[0].value
 
+const storeDetails = {
+    ios: 'itms-apps://itunes.apple.com/app/id452707806',
+    android: 'market://details?id=com.guardian.editions',
+}
+
 export const defaultSettings: Settings = {
     apiUrl,
     isUsingProdDevtools: false,
@@ -63,6 +68,7 @@ export const defaultSettings: Settings = {
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix: 'daily-edition',
     useNewWebview: false,
+    storeDetails,
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
