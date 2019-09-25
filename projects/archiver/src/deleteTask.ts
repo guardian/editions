@@ -11,6 +11,8 @@ export type DeleteTaskOutput = Omit<IndexTaskOutput, 'index'> & {
     status: DeletionStatus
     issueSummary: IssueSummary
 }
+/* This function deletes old versions - it is currently not used
+ */
 export const handler: Handler<IndexTaskOutput, DeleteTaskOutput> = async ({
     issuePublication,
     issue,

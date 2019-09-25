@@ -128,12 +128,6 @@ export const archiverStepFunction = (
         task: new tasks.InvokeFunction(indexer),
     })
 
-    const deleter = taskLambda('deleter', lambdaParams)
-
-    const deleterTask = new sfn.Task(scope, 'Delete previous publications', {
-        task: new tasks.InvokeFunction(deleter),
-    })
-
     const frontsTopicRole = iam.Role.fromRoleArn(
         scope,
         'fronts-topic-role',
@@ -193,9 +187,7 @@ export const archiverStepFunction = (
 
     zipTask.next(indexerTask)
 
-    indexerTask.next(deleterTask)
-
-    deleterTask.next(publishedTask)
+    indexerTask.next(publishedTask)
 
     publishedTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 

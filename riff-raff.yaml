@@ -25,7 +25,6 @@ deployments:
                     editions-archiver-stepmachine-front-,
                     editions-archiver-stepmachine-image-,
                     editions-archiver-stepmachine-upload-,
-                    editions-archiver-stepmachine-deleter-,
                     editions-archiver-stepmachine-event-,
                     editions-archiver-stepmachine-zip-,
                     editions-archiver-stepmachine-indexer-,
