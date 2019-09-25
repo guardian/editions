@@ -1,16 +1,28 @@
 import { useState } from 'react'
 import DeviceInfo from 'react-native-device-info'
 import { useNetInfo } from './use-net-info'
+import { fetchDeprecationWarning } from 'src/helpers/fetch'
+import { Platform } from 'react-native'
 
-const useDeprecationModal = () => {
+const useDeprecationModal = async (): Promise<{ showModal: boolean }> => {
     const { isConnected } = useNetInfo()
     const [showModal, setShowModal] = useState<boolean>(false)
 
-    // GO AND GET THE NUMBER HERE
+    if (!isConnected) {
+        return {
+            showModal,
+        }
+    }
+
+    const deprecationBuildNumbers = await fetchDeprecationWarning()
+    const platformDeprecationBuildNumber =
+        Platform.OS === 'ios'
+            ? deprecationBuildNumbers.ios
+            : deprecationBuildNumbers.android
 
     if (
         isConnected &&
-        DeviceInfo.getBuildNumber() <= '465' &&
+        DeviceInfo.getBuildNumber() <= platformDeprecationBuildNumber &&
         showModal === false
     ) {
         setShowModal(true)

@@ -60,6 +60,7 @@ export const defaultSettings: Settings = {
         : notificationServiceRegister.prod,
     zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
+    deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix: 'daily-edition',
     useNewWebview: false,
 }
