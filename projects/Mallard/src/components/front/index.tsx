@@ -26,7 +26,11 @@ import {
 } from './helpers/helpers'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'
-import { WithArticle, getAppearancePillar } from '../../hooks/use-article'
+import {
+    WithArticle,
+    getAppearancePillar,
+    getCollectionPillarOverride,
+} from '../../hooks/use-article'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import { safeInterpolation } from 'src/helpers/math'
 
@@ -62,7 +66,13 @@ const CollectionPageInFront = ({
                 },
             ]}
         >
-            <WithArticle type={ArticleType.Article} pillar={pillar}>
+            <WithArticle
+                type={ArticleType.Article}
+                pillar={getCollectionPillarOverride(
+                    pillar,
+                    collectionPageProps.collection,
+                )}
+            >
                 <CollectionPage
                     translate={translate}
                     {...collectionPageProps}
