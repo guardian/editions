@@ -14,9 +14,23 @@ export const getPublishedVersion = async (
     issue: IssueIdentifier,
 ): Promise<IssuePublicationIdentifier | undefined> => {
     const publications = await getStatuses(issue)
+    console.log(
+        `getPublishedVersion: fetch list of publications - ${JSON.stringify(
+            publications,
+        )}`,
+    )
+
     const published = publications.filter(({ status }) =>
         (publishedStatuses as readonly Status[]).includes(status),
     )
+    console.log(
+        `getPublishedVersion: fetch list of published publications - ${JSON.stringify(
+            published,
+        )}`,
+    )
+
+    if (published.length === 0) return undefined
+
     const chosen = published.reduce((a, b) => (a.updated > b.updated ? a : b))
 
     // TODO - deleting these seems potentially racey so probably don't need to warn about this
