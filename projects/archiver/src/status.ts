@@ -1,10 +1,10 @@
 import { upload } from './upload'
 import { s3, Bucket } from './s3'
-import { IssuePublication, notNull } from '../../common/src'
+import { IssuePublicationIdentifier, notNull, IssueIdentifier } from '../../common/src'
 import { getPublishedId, getLocalId } from './publishedId'
 import { oc } from 'ts-optchain'
 
-export type IssuePublicationWithStatus = IssuePublication & {
+export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
     status: Status
     updated: Date
 }
@@ -26,7 +26,7 @@ export type Status = typeof statuses[number]
 /* Given a published instance ID and status, store the provided status in S3
  * using a status.json file in S3 */
 export const putStatus = (
-    issuePublication: IssuePublication,
+    issuePublication: IssuePublicationIdentifier,
     status: Status,
 ) => {
     const publishedId = getPublishedId(issuePublication)
@@ -37,7 +37,7 @@ export const putStatus = (
 /* Given a published instance ID of an issue, return the instance status
  * from the status.json file - this contains the status and modified time */
 export const getStatus = async (
-    issuePublication: IssuePublication,
+    issuePublication: IssuePublicationIdentifier,
 ): Promise<IssuePublicationWithStatus> => {
     const publishedId = getPublishedId(issuePublication)
     //get object
@@ -56,7 +56,7 @@ export const getStatus = async (
 
 /* Given an edition name and date provide a list of versions */
 export const getVersions = async (
-    issuePublication: Omit<IssuePublication, 'version'>,
+    issuePublication: IssueIdentifier,
 ): Promise<string[]> => {
     const root = getLocalId(issuePublication)
     const s3response = await s3
@@ -72,7 +72,7 @@ export const getVersions = async (
 /* Given an edition name and date provide a list of the status of each version
  * of that issue */
 export const getStatuses = async (
-    issuePublication: Omit<IssuePublication, 'version'>,
+    issuePublication: IssueIdentifier,
 ): Promise<IssuePublicationWithStatus[]> => {
     const allVersions = await getVersions(issuePublication)
     const publications = allVersions.map(version => ({

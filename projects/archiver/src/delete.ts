@@ -1,4 +1,4 @@
-import { IssuePublication, notNull } from '../common'
+import { IssuePublicationIdentifier, notNull } from '../common'
 import { s3, Bucket } from './s3'
 import { getPublishedId } from './publishedId'
 const deleteWithPrefix = async (Prefix: string): Promise<void> => {
@@ -17,7 +17,7 @@ const deleteWithPrefix = async (Prefix: string): Promise<void> => {
     return deleteWithPrefix(Prefix)
 }
 
-export const deletePublication = async (issuePublication: IssuePublication) => {
+export const deletePublication = async (issuePublication: IssuePublicationIdentifier) => {
     console.log(`About to delete ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     const zipPath = `zips/${publishedId}`

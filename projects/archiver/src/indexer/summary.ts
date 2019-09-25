@@ -1,4 +1,4 @@
-import { IssuePublication } from '../../../common/src'
+import { IssuePublicationIdentifier } from '../../../common/src'
 import { IssueSummary, notNull } from '../../common'
 import { upload, FIVE_SECONDS } from '../upload'
 import { getIssues, issueWindow } from './getIssues'
@@ -7,7 +7,7 @@ import { getPublishedVersion } from './getPublishedVersion'
 
 //currently publishing will remove this issue from the index, it should be generated in the indextask
 export const indexer = async (
-    currentlyPublishing?: IssuePublication,
+    currentlyPublishing?: IssuePublicationIdentifier,
 ): Promise<IssueSummary[]> => {
     const issues = await getIssues()
     const issuesToIndex = issueWindow(issues, currentlyPublishing)

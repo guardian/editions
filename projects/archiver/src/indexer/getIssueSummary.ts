@@ -1,7 +1,7 @@
 import { fromPairs } from 'ramda'
 import { oc } from 'ts-optchain'
 import {
-    IssuePublication,
+    IssuePublicationIdentifier,
     IssueSummary,
     ImageSize,
     imageSizes,
@@ -12,7 +12,7 @@ import { Bucket, s3 } from '../s3'
 import { issue } from '../../main'
 
 export const getIssueSummary = async (
-    issuePublication: IssuePublication,
+    issuePublication: IssuePublicationIdentifier,
 ): Promise<IssueSummary | undefined> => {
     const { edition, issueDate } = issuePublication
 

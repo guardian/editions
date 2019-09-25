@@ -1,13 +1,13 @@
 import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../backend/utils/try'
-import { Issue, IssuePublication } from '../common'
+import { Issue, IssuePublicationIdentifier } from '../common'
 import { getIssue } from './downloader'
 import { Bucket } from './s3'
 import { getPublishedId } from './publishedId'
 import { putStatus } from './status'
 
 export interface IssueParams {
-    issuePublication: IssuePublication
+    issuePublication: IssuePublicationIdentifier
 }
 export interface IssueTaskOutput extends IssueParams {
     issue: Issue

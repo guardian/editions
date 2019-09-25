@@ -1,4 +1,4 @@
-import { IssuePublication } from '../../../common/src'
+import { IssuePublicationIdentifier, IssueIdentifier } from '../../../common/src'
 import { getStatuses, publishedStatuses, Status } from '../status'
 
 /* Given an edition name and date this will return the current publication instance ID
@@ -8,8 +8,8 @@ import { getStatuses, publishedStatuses, Status } from '../status'
  * This also logs if there are more than one
  */
 export const getPublishedVersion = async (
-    issue: Omit<IssuePublication, 'version'>,
-): Promise<IssuePublication | undefined> => {
+    issue: IssueIdentifier,
+): Promise<IssuePublicationIdentifier | undefined> => {
     const publications = await getStatuses(issue)
     const published = publications.filter(({ status }) =>
         (publishedStatuses as readonly Status[]).includes(status),

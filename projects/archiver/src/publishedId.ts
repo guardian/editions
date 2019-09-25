@@ -1,8 +1,8 @@
-import { IssuePublication } from '../common'
+import { IssuePublicationIdentifier, IssueIdentifier } from '../common'
 
-export const getPublishedId = (issuePublication: IssuePublication) =>
+export const getPublishedId = (issuePublication: IssuePublicationIdentifier) =>
     `${issuePublication.edition}/${issuePublication.issueDate}/${issuePublication.version}`
 
 export const getLocalId = (
-    issuePublication: Omit<IssuePublication, 'version'>,
+    issuePublication: IssueIdentifier,
 ) => `${issuePublication.edition}/${issuePublication.issueDate}`
