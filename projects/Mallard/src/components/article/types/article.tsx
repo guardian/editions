@@ -50,7 +50,9 @@ const ArticleWebView = ({
     wrapLayout: WrapLayout
 }) => {
     const [height, setHeight] = useState(Dimensions.get('window').height)
-
+    useEffect(() => {
+        onTopPositionChange(false)
+    }, [])
     return (
         <View style={[styles.webview]}>
             <WebviewWithArticle
