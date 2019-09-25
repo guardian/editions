@@ -54,11 +54,7 @@ const ArticleController = ({
             )
 
         case 'crossword':
-            return (
-                <ScrollView>
-                    <Crossword crosswordArticle={article} />
-                </ScrollView>
-            )
+            return <Crossword crosswordArticle={article} />
 
         default:
             const message: never = article

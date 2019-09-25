@@ -9,6 +9,7 @@ function cacheControlHeader(maxAge: number | undefined): string {
 
 export const ONE_WEEK = 3600 * 24 * 7
 export const ONE_MINUTE = 60
+export const FIVE_SECONDS = 5
 
 export const upload = (
     key: string,
