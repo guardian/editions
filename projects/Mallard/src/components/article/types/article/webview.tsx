@@ -8,6 +8,9 @@ import { ArticleHeaderProps } from '../../article-header/types'
 import { render } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 import { features, onShouldStartLoadWithRequest } from './helpers'
+import { Animated } from 'react-native'
+
+const AniWebView = Animated.createAnimatedComponent(WebView)
 
 const WebviewWithArticle = ({
     article,
@@ -18,9 +21,9 @@ const WebviewWithArticle = ({
 }: {
     article: BlockElement[]
     wrapLayout: WrapLayout
-    headerProps: ArticleHeaderProps
+    headerProps?: ArticleHeaderProps
     paddingTop?: number
-} & WebViewProps) => {
+} & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
     const issueCompositeKey = useIssueCompositeKey()
@@ -29,7 +32,6 @@ const WebviewWithArticle = ({
         () =>
             render(article, {
                 pillar,
-                features,
                 wrapLayout,
                 headerProps,
                 showWebHeader: true,
@@ -50,7 +52,7 @@ const WebviewWithArticle = ({
     )
 
     return (
-        <WebView
+        <AniWebView
             {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}

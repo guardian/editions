@@ -123,7 +123,6 @@ export const render = (
     article: BlockElement[],
     {
         pillar,
-        features,
         wrapLayout,
         showMedia,
         height,
@@ -132,23 +131,19 @@ export const render = (
         headerProps,
     }: {
         pillar: ArticlePillar
-        features: ArticleFeatures[]
         wrapLayout: WrapLayout
         showMedia: boolean
         height: number
-        showWebHeader: boolean
         publishedId: Issue['publishedId'] | null
-        headerProps: ArticleHeaderProps
+        showWebHeader: boolean
+        headerProps?: ArticleHeaderProps
     },
 ) => {
     const content = article
         .map((el, i) => {
             switch (el.id) {
                 case 'html':
-                    if (
-                        i === 0 &&
-                        features.includes(ArticleFeatures.HasDropCap)
-                    ) {
+                    if (el.hasDropCap) {
                         return html`
                             <div class="drop-cap">
                                 ${el.html}
@@ -181,6 +176,7 @@ export const render = (
     const body = html`
         <main style="padding-top:${px(height)}">
             ${showWebHeader &&
+                headerProps &&
                 Header({ ...headerProps, publishedId })}${content}
         </main>
     `
