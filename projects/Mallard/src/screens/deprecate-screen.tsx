@@ -51,7 +51,7 @@ const DeprecateVersionModal = () => {
                         flexGrow: 1,
                         justifyContent: 'center',
                         padding: 28,
-                        maxWidth: 600,
+                        maxWidth: 500,
                         alignSelf: 'center',
                     }}
                 >
@@ -85,7 +85,7 @@ const DeprecateVersionModal = () => {
                         width: '90%',
                         resizeMode: 'contain',
                         alignSelf: 'center',
-                        maxWidth: 600,
+                        maxWidth: 460,
                     }}
                 />
             </SafeAreaView>
