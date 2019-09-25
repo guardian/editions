@@ -1,9 +1,4 @@
-import {
-    ArticleFeatures,
-    ArticlePillar,
-    BlockElement,
-    MediaAtomElement,
-} from 'src/common'
+import { ArticlePillar, BlockElement, MediaAtomElement } from 'src/common'
 import { getPillarColors } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import {
@@ -105,14 +100,12 @@ export const render = (
     article: BlockElement[],
     {
         pillar,
-        features,
         wrapLayout,
         showMedia,
         height,
         publishedId,
     }: {
         pillar: ArticlePillar
-        features: ArticleFeatures[]
         wrapLayout: WrapLayout
         showMedia: boolean
         height: number
@@ -123,10 +116,7 @@ export const render = (
         .map((el, i) => {
             switch (el.id) {
                 case 'html':
-                    if (
-                        i === 0 &&
-                        features.includes(ArticleFeatures.HasDropCap)
-                    ) {
+                    if (el.hasDropCap) {
                         return html`
                             <div class="drop-cap">
                                 ${el.html}

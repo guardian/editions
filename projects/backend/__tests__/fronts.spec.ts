@@ -1,4 +1,4 @@
-import { patchArticle, getImages } from '../fronts'
+import { patchArticle, getImages, patchArticleElements } from '../fronts'
 import { Article, PublishedFurniture } from './helpers/fixtures'
 import { CAPIContent } from '../capi/articles'
 import {
@@ -6,7 +6,7 @@ import {
     PublishedImage,
     PublishedCardImage,
 } from '../fronts/issue'
-import { CreditedImage, Image } from '../../common/src'
+import { CreditedImage, Image, ArticleType } from '../../common/src'
 
 describe('fronts', () => {
     describe('patchArticle', () => {
@@ -46,6 +46,40 @@ describe('fronts', () => {
                 )[1]
                 expect(patched.trail).toBe('here is something important')
                 expect(patched.trail).toBe(patched.standfirst)
+            })
+        })
+    })
+
+    describe('patchArticleElements', () => {
+        it('should add drop caps for the first html element only in certain `articleType`s', () => {
+            const els = patchArticleElements({
+                articleType: ArticleType.Feature,
+                elements: [
+                    { id: 'html', html: '<p>hi</p>' },
+                    { id: 'html', html: '<p>hi</p>' },
+                ],
+            })
+
+            expect(els[0]).toMatchObject({
+                hasDropCap: true,
+            })
+        })
+
+        it('should ignore non-html elements in first position', () => {
+            const els = patchArticleElements({
+                articleType: ArticleType.Feature,
+                elements: [
+                    { id: 'unknown' },
+                    { id: 'html', html: '<p>hi</p>' },
+                ],
+            })
+
+            expect(els[0]).not.toMatchObject({
+                hasDropCap: true,
+            })
+
+            expect(els[1]).not.toMatchObject({
+                hasDropCap: true,
             })
         })
     })
