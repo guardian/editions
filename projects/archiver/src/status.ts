@@ -29,26 +29,28 @@ export const statuses = [
 export type Status = typeof statuses[number]
 
 /* Given a published instance ID and status, store the provided status in S3
- * using a status.json file in S3 */
+ * using a status file in S3 */
 export const putStatus = (
     issuePublication: IssuePublicationIdentifier,
     status: Status,
 ) => {
-    console.log(`Changing state of ${issuePublication} to ${status}`)
+    console.log(
+        `Changing state of ${JSON.stringify(issuePublication)} to ${status}`,
+    )
     const publishedId = getPublishedId(issuePublication)
-    const path = `${publishedId}/status.json`
+    const path = `${publishedId}/status`
     return upload(path, { status }, 'application/json', undefined)
 }
 
 /* Given a published instance ID of an issue, return the instance status
- * from the status.json file - this contains the status and modified time */
+ * from the status file - this contains the status and modified time */
 export const getStatus = async (
     issuePublication: IssuePublicationIdentifier,
 ): Promise<IssuePublicationWithStatus> => {
     const publishedId = getPublishedId(issuePublication)
     //get object
     const response = await s3
-        .getObject({ Bucket, Key: `${publishedId}/status.json` })
+        .getObject({ Bucket, Key: `${publishedId}/status` })
         .promise()
     const statusResponse = response.Body
     if (typeof statusResponse !== 'string') {
@@ -64,6 +66,7 @@ export const getStatus = async (
 export const getVersions = async (
     issuePublication: IssueIdentifier,
 ): Promise<string[]> => {
+    console.log(`getVersions for ${JSON.stringify(issuePublication)}`)
     const root = getLocalId(issuePublication)
     const s3response = await s3
         .listObjectsV2({ Bucket, Delimiter: '/', Prefix: root })

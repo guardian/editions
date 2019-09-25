@@ -15,18 +15,18 @@ export const getPublishedVersion = async (
 ): Promise<IssuePublicationIdentifier | undefined> => {
     const publications = await getStatuses(issue)
     console.log(
-        `getPublishedVersion: fetch list of publications - ${JSON.stringify(
-            publications,
+        `getPublishedVersion: fetched list of publications for ${JSON.stringify(
+            issue,
         )}`,
+        JSON.stringify(publications),
     )
 
     const published = publications.filter(({ status }) =>
         (publishedStatuses as readonly Status[]).includes(status),
     )
     console.log(
-        `getPublishedVersion: fetch list of published publications - ${JSON.stringify(
-            published,
-        )}`,
+        `getPublishedVersion: filtered list of published publications`,
+        JSON.stringify(published),
     )
 
     if (published.length === 0) return undefined
