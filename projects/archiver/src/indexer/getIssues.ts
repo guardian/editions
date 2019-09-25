@@ -1,12 +1,10 @@
 import { oc } from 'ts-optchain'
-import { IssuePublicationIdentifier, IssueIdentifier } from '../../../common/src'
+import { IssueIdentifier } from '../../../common/src'
 import { notNull } from '../../common'
 import { Bucket, s3 } from '../s3'
 
 /* Crawl S3 for a list of all of the issues that are available */
-export const getIssues = async (): Promise<
-    IssueIdentifier[]
-> => {
+export const getIssues = async (): Promise<IssueIdentifier[]> => {
     const resp = await s3
         .listObjectsV2({
             Bucket,
@@ -25,11 +23,11 @@ export const getIssues = async (): Promise<
     }))
 }
 
-/* Given a list of issues return the set of issues that fall into the 
- * publication window */
+/* Given a list of issues return the set of issues that fall into the
+ * publication window (excluding the issue currentlyPublishing) */
 export const issueWindow = (
     issues: IssueIdentifier[],
-    currentlyPublishing?: IssuePublicationIdentifier,
+    windowSize: number,
 ): IssueIdentifier[] =>
     issues
         .sort(
@@ -37,7 +35,4 @@ export const issueWindow = (
                 new Date(b.issueDate).getTime() -
                 new Date(a.issueDate).getTime(),
         )
-        .slice(0, 7)
-        .filter(
-            issue => issue.issueDate !== oc(currentlyPublishing).issueDate(''),
-        )
+        .slice(0, windowSize)

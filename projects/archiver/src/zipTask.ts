@@ -27,7 +27,7 @@ export const handler: Handler<UploadTaskOutput, UploadTaskOutput> = async ({
         }),
     )
     console.log('Media zips uploaded.')
-    await putStatus(issuePublication, 'built')
+    await putStatus(issuePublication, 'published')
     return {
         issuePublication,
         issue,

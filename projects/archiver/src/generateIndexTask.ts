@@ -15,23 +15,43 @@ export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
     issuePublication,
     issue,
 }) => {
-    const index = await indexer(issuePublication)
-    const issueSummary = await getIssueSummary(issuePublication)
-    if (issueSummary == undefined) {
+    console.log(
+        'generateIndexTask handler',
+        JSON.stringify(issuePublication),
+        JSON.stringify(issue),
+    )
+
+    // at the moment we create and recreate these issue summaries every time
+    // an optimisation would be to move the issue summary creation to the previous task
+    // so it would only have to be done once and can easily be read in and stiched together
+    const thisIssueSummary = await getIssueSummary(issuePublication)
+
+    if (thisIssueSummary == undefined) {
         throw new Error('No issue summary was generated for the current issue')
     }
+
+    const otherIssueSummaries = await indexer(issuePublication)
+
+    console.log(
+        `Creating index using the new and ${otherIssueSummaries.length} existing issue summaries`,
+    )
+
     await upload(
         'issues',
-        [issueSummary, ...index],
+        [thisIssueSummary, ...otherIssueSummaries],
         'application/json',
         FIVE_SECONDS,
     )
-    await putStatus(issuePublication, 'published')
+
+    console.log('Uploaded new issues file')
+
+    await putStatus(issuePublication, 'indexed')
+
     return {
         issuePublication,
-        index,
+        index: otherIssueSummaries,
         issue,
-        issueSummary,
+        issueSummary: thisIssueSummary,
         message: `Index regenerated`,
     }
 }

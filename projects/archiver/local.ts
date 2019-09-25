@@ -36,12 +36,13 @@ const handlers = (main as unknown) as {
 }
 const handler = handlers[task]
 
-const run = handler(JSON.parse(json), {} as Context, () => {}) as Promise<any>
+const run = handler(JSON.parse(json), {} as Context, () => {}) as Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
 
 run.then(x => {
     console.log(x)
     console.log('Finished.')
     process.exit(0)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }).catch((error: any) => {
     console.error(error)
     process.exit(1)

@@ -1,6 +1,10 @@
 import { upload } from './upload'
 import { s3, Bucket } from './s3'
-import { IssuePublicationIdentifier, notNull, IssueIdentifier } from '../../common/src'
+import {
+    IssuePublicationIdentifier,
+    notNull,
+    IssueIdentifier,
+} from '../../common/src'
 import { getPublishedId, getLocalId } from './publishedId'
 import { oc } from 'ts-optchain'
 
@@ -10,14 +14,15 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
 }
 
 export const publishedStatuses = [
-    'published', // index file generated
+    'published', // zip file built and uploaded
+    'indexed', // index file generated
     'notified', // notification sent
     'cleaned',
 ] as const
 export const statuses = [
     ...publishedStatuses,
     'started', // started the process of building
-    'built', // uploaded the zip file
+    'assembled', // assembled assets into S3
     'unknown',
     'aborted',
 ] as const
@@ -29,6 +34,7 @@ export const putStatus = (
     issuePublication: IssuePublicationIdentifier,
     status: Status,
 ) => {
+    console.log(`Changing state of ${issuePublication} to ${status}`)
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status.json`
     return upload(path, { status }, 'application/json', undefined)

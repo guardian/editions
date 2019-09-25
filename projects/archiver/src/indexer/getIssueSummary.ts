@@ -11,6 +11,9 @@ import { getPublishedId } from '../publishedId'
 import { Bucket, s3 } from '../s3'
 import { issue } from '../../main'
 
+/* Given an instance of an issue this returns a summary of the instance that
+ * includes simple metadata (key, localId, etc) and the list of zip assets
+ */
 export const getIssueSummary = async (
     issuePublication: IssuePublicationIdentifier,
 ): Promise<IssueSummary | undefined> => {
