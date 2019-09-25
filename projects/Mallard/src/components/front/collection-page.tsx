@@ -10,6 +10,7 @@ import {
     Front,
     defaultCardAppearances,
     FrontCardAppearance,
+    ArticleType,
 } from 'src/common'
 import {
     useCardBackgroundStyle,
@@ -24,6 +25,7 @@ import { layouts } from './helpers/layouts'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
+import { WithArticleType } from 'src/hooks/use-article'
 
 const styles = StyleSheet.create({
     root: {
@@ -138,52 +140,61 @@ const CollectionPage = ({
                 const Item = story.item
                 const article = articlesInCard[index]
                 return (
-                    <View
+                    <WithArticleType
                         key={index}
-                        style={[
-                            styles.itemHolder,
-                            toAbsoluteRectangle(
-                                getItemRectanglePerc(story.fits, layout.size),
-                                {
-                                    width:
-                                        card.width - metrics.fronts.sides * 2,
-                                    height:
-                                        card.height - metrics.fronts.sides * 2,
-                                },
-                            ),
-                        ]}
+                        value={article.articleType || ArticleType.Article}
                     >
-                        <Item
-                            path={{
-                                article: article.key,
-                                collection,
-                                localIssueId,
-                                publishedIssueId,
-                                front,
-                            }}
-                            localIssueId={localIssueId}
-                            publishedIssueId={publishedIssueId}
-                            size={size}
-                            articleNavigator={articleNavigator}
-                            article={article}
-                        />
-                        {isNotRightMostStory(size) ? (
-                            <View
-                                style={[
-                                    styles.sideBorder,
-                                    !isNotBottomMostStory(size) &&
-                                        styles.endCapSideBorder,
-                                ]}
+                        <View
+                            style={[
+                                styles.itemHolder,
+                                toAbsoluteRectangle(
+                                    getItemRectanglePerc(
+                                        story.fits,
+                                        layout.size,
+                                    ),
+                                    {
+                                        width:
+                                            card.width -
+                                            metrics.fronts.sides * 2,
+                                        height:
+                                            card.height -
+                                            metrics.fronts.sides * 2,
+                                    },
+                                ),
+                            ]}
+                        >
+                            <Item
+                                path={{
+                                    article: article.key,
+                                    collection,
+                                    localIssueId,
+                                    publishedIssueId,
+                                    front,
+                                }}
+                                localIssueId={localIssueId}
+                                publishedIssueId={publishedIssueId}
+                                size={size}
+                                articleNavigator={articleNavigator}
+                                article={article}
                             />
-                        ) : null}
-                        {isNotBottomMostStory(size) ? (
-                            <Multiline
-                                style={styles.multiline}
-                                color={color.dimLine}
-                                count={2}
-                            />
-                        ) : null}
-                    </View>
+                            {isNotRightMostStory(size) ? (
+                                <View
+                                    style={[
+                                        styles.sideBorder,
+                                        !isNotBottomMostStory(size) &&
+                                            styles.endCapSideBorder,
+                                    ]}
+                                />
+                            ) : null}
+                            {isNotBottomMostStory(size) ? (
+                                <Multiline
+                                    style={styles.multiline}
+                                    color={color.dimLine}
+                                    count={2}
+                                />
+                            ) : null}
+                        </View>
+                    </WithArticleType>
                 )
             })}
         </View>
