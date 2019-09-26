@@ -14,7 +14,7 @@ import {
     hasFailed,
     withFailureMessage,
 } from '../../backend/utils/try'
-import { ImageSize, IssueCompositeKey } from '../../common/src'
+import { ImageSize } from '../../common/src'
 
 export const URL =
     process.env.backend !== undefined

@@ -199,11 +199,15 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export interface IssuePublication {
+export interface IssueIdentifier {
     edition: string
-    version: string
     issueDate: string
 }
+
+export interface IssuePublicationIdentifier extends IssueIdentifier {
+    version: string
+}
+
 export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
