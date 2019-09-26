@@ -7,6 +7,7 @@ import { lastSevenDays, todayAsFolder } from './issues'
 import { defaultSettings } from './settings/defaults'
 import { imageForScreenSize } from './screen'
 import { getIssueSummary } from 'src/hooks/use-api'
+import { getSetting } from './settings'
 
 interface BasicFile {
     filename: string
@@ -50,17 +51,18 @@ const fileName = (path: string) => {
 export const getJson = (path: string) =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
-export const downloadNamedIssueArchive = (
+export const downloadNamedIssueArchive = async (
     localIssueId: Issue['localId'],
     assetPath: string,
     filename: string,
 ) => {
-    const zipUrl = defaultSettings.zipUrl
+    const apiUrl = await getSetting('apiUrl')
+    const zipUrl = `${apiUrl}${assetPath}`
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
         IOSBackgroundTask: true,
-    }).fetch('GET', `${zipUrl}/${assetPath}`)
+    }).fetch('GET', zipUrl)
     return {
         promise: returnable.then(async res => {
             await prepFileSystem()
@@ -151,7 +153,7 @@ export type DLStatus =
     | { type: 'success' }
     | { type: 'failure' }
 
-export const downloadAndUnzipIssue = (
+export const downloadAndUnzipIssue = async (
     issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
@@ -161,7 +163,7 @@ export const downloadAndUnzipIssue = (
         return null
     }
 
-    const issueDataDownload = downloadNamedIssueArchive(
+    const issueDataDownload = await downloadNamedIssueArchive(
         localId,
         assets.data,
         'data',
@@ -183,7 +185,7 @@ export const downloadAndUnzipIssue = (
             // might not need to await this but it's pretty quick
             await unzipNamedIssueArchive(localId, 'data')
 
-            const imgDL = downloadNamedIssueArchive(
+            const imgDL = await downloadNamedIssueArchive(
                 localId,
                 assets[imageSize] as string,
                 imageSize,
