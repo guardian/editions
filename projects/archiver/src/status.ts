@@ -42,30 +42,33 @@ export const putStatus = (
 export const getStatus = async (
     issuePublication: IssuePublicationIdentifier,
 ): Promise<IssuePublicationWithStatus> => {
+    console.log(`getStatus for ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     //get object
     const response = await s3
         .getObject({ Bucket, Key: `${publishedId}/status` })
         .promise()
     const statusResponse = response.Body
+    console.log(`Raw response is ${statusResponse}`)
     if (typeof statusResponse !== 'string') {
         throw new Error('Could not get status')
     }
     const decodedStatus = JSON.parse(statusResponse)
     const status = statuses.find(_ => _ === decodedStatus.status) || 'unknown'
     const updated = response.LastModified || new Date(0)
+    console.log(`Status was ${status} at ${updated}`)
     return { ...issuePublication, status, updated }
 }
 
 /* Given an edition name and date provide a list of versions */
 export const getVersions = async (
-    issuePublication: IssueIdentifier,
+    issue: IssueIdentifier,
 ): Promise<IssuePublicationIdentifier[]> => {
-    console.log(`getVersions for ${JSON.stringify(issuePublication)}`)
-    const root = getLocalId(issuePublication)
+    console.log(`getVersions for ${JSON.stringify(issue)}`)
+    const root = getLocalId(issue)
     const versions = await listNestedPrefixes(Bucket, root)
     return versions.map(version => ({
-        ...issuePublication,
+        ...issue,
         version,
     }))
 }
