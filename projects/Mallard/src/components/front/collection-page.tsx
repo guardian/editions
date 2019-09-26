@@ -19,6 +19,8 @@ import {
     ItemSizes,
     toAbsoluteRectangle,
     PageLayout,
+    Item as TItem,
+    PageLayoutSizes,
 } from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { layouts } from './helpers/layouts'
@@ -26,6 +28,7 @@ import { ArticleNavigator } from '../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import { WithArticleType } from 'src/hooks/use-article'
+import { Rectangle, Size } from 'src/helpers/sizes'
 
 const styles = StyleSheet.create({
     root: {
@@ -112,93 +115,126 @@ const isNotRightMostStory = ({ story, layout }: ItemSizes) =>
 const isNotBottomMostStory = ({ story, layout }: ItemSizes) =>
     story.top + story.height < getPageLayoutSizeXY(layout).height
 
-const CollectionPage = ({
-    articlesInCard,
-    articleNavigator,
-    collection,
-    localIssueId,
-    publishedIssueId,
-    front,
-    appearance,
-}: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
-    const background = useCardBackgroundStyle()
-    const { size, card } = useIssueScreenSize()
-    if (!articlesInCard.length) {
-        return <FlexErrorMessage />
-    }
-
-    const layout = getPageLayout(appearance, articlesInCard.length)[size]
-
-    return (
-        <View style={[styles.root, background]}>
-            {layout.items.map((story, index) => {
-                if (!articlesInCard[index]) return null
-                const size = {
-                    story: story.fits,
-                    layout: layout.size,
-                }
-                const Item = story.item
-                const article = articlesInCard[index]
-                return (
-                    <WithArticleType
-                        key={index}
-                        value={article.articleType || ArticleType.Article}
-                    >
+const Item = React.memo(
+    ({
+        card,
+        collection,
+        localIssueId,
+        publishedIssueId,
+        front,
+        article,
+        Renderer,
+        story,
+        layout,
+        articleNavigator,
+    }: {
+        card: Size
+        collection: string
+        localIssueId: string
+        publishedIssueId: string
+        front: string
+        article: CAPIArticle
+        Renderer: TItem
+        story: Rectangle
+        layout: PageLayoutSizes
+        articleNavigator: ArticleNavigator
+    }) => {
+        const size = {
+            story,
+            layout,
+        }
+        return (
+            <WithArticleType value={article.articleType || ArticleType.Article}>
+                <View
+                    style={[
+                        styles.itemHolder,
+                        toAbsoluteRectangle(
+                            getItemRectanglePerc(story, layout),
+                            {
+                                width: card.width - metrics.fronts.sides * 2,
+                                height: card.height - metrics.fronts.sides * 2,
+                            },
+                        ),
+                    ]}
+                >
+                    <Renderer
+                        path={{
+                            article: article.key,
+                            collection,
+                            localIssueId,
+                            publishedIssueId,
+                            front,
+                        }}
+                        localIssueId={localIssueId}
+                        publishedIssueId={publishedIssueId}
+                        size={size}
+                        articleNavigator={articleNavigator}
+                        article={article}
+                    />
+                    {isNotRightMostStory(size) ? (
                         <View
                             style={[
-                                styles.itemHolder,
-                                toAbsoluteRectangle(
-                                    getItemRectanglePerc(
-                                        story.fits,
-                                        layout.size,
-                                    ),
-                                    {
-                                        width:
-                                            card.width -
-                                            metrics.fronts.sides * 2,
-                                        height:
-                                            card.height -
-                                            metrics.fronts.sides * 2,
-                                    },
-                                ),
+                                styles.sideBorder,
+                                !isNotBottomMostStory(size) &&
+                                    styles.endCapSideBorder,
                             ]}
-                        >
-                            <Item
-                                path={{
-                                    article: article.key,
-                                    collection,
-                                    localIssueId,
-                                    publishedIssueId,
-                                    front,
-                                }}
-                                localIssueId={localIssueId}
-                                publishedIssueId={publishedIssueId}
-                                size={size}
-                                articleNavigator={articleNavigator}
-                                article={article}
-                            />
-                            {isNotRightMostStory(size) ? (
-                                <View
-                                    style={[
-                                        styles.sideBorder,
-                                        !isNotBottomMostStory(size) &&
-                                            styles.endCapSideBorder,
-                                    ]}
-                                />
-                            ) : null}
-                            {isNotBottomMostStory(size) ? (
-                                <Multiline
-                                    style={styles.multiline}
-                                    color={color.dimLine}
-                                    count={2}
-                                />
-                            ) : null}
-                        </View>
-                    </WithArticleType>
-                )
-            })}
-        </View>
-    )
-}
+                        />
+                    ) : null}
+                    {isNotBottomMostStory(size) ? (
+                        <Multiline
+                            style={styles.multiline}
+                            color={color.dimLine}
+                            count={2}
+                        />
+                    ) : null}
+                </View>
+            </WithArticleType>
+        )
+    },
+)
+
+const CollectionPage = React.memo(
+    ({
+        articlesInCard,
+        articleNavigator,
+        collection,
+        localIssueId,
+        publishedIssueId,
+        front,
+        appearance,
+    }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
+        const background = useCardBackgroundStyle()
+        const { size, card } = useIssueScreenSize()
+        if (!articlesInCard.length) {
+            return <FlexErrorMessage />
+        }
+
+        const layout = getPageLayout(appearance, articlesInCard.length)[size]
+
+        return (
+            <View style={[styles.root, background]}>
+                {layout.items.map((story, index) => {
+                    if (!articlesInCard[index]) return null
+                    const article = articlesInCard[index]
+                    return (
+                        <Item
+                            card={card}
+                            articleNavigator={articleNavigator}
+                            story={story.fits}
+                            layout={layout.size}
+                            collection={collection}
+                            localIssueId={localIssueId}
+                            publishedIssueId={publishedIssueId}
+                            front={front}
+                            key={index}
+                            Renderer={story.item}
+                            article={article}
+                        />
+                    )
+                })}
+            </View>
+        )
+    },
+)
 
 export { CollectionPage }

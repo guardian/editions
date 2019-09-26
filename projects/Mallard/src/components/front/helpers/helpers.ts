@@ -9,7 +9,7 @@ import { Rectangle, Size } from 'src/helpers/sizes'
 import { PropTypes } from '../items/helpers/item-tappable'
 import { safeInterpolation } from 'src/helpers/math'
 
-type Item = FunctionComponent<PropTypes>
+export type Item = FunctionComponent<PropTypes>
 
 export interface AnimatedFlatListRef {
     _component: FlatList<Front['collections'][0]>
