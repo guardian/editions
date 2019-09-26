@@ -7,6 +7,7 @@ import {
     Text,
     Linking,
     Platform,
+    StyleSheet,
 } from 'react-native'
 import { useDeprecationModal } from 'src/hooks/use-deprecation-screen'
 import { color } from 'src/theme/color'
@@ -33,45 +34,51 @@ const StoreLink = () => {
     )
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: color.ui.sea,
+        justifyContent: 'flex-end',
+    },
+    textContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        padding: 28,
+        maxWidth: 500,
+        alignSelf: 'center',
+    },
+    title: {
+        color: color.palette.neutral[100],
+        marginBottom: 30,
+    },
+    subTitle: {
+        color: color.primary,
+    },
+    logo: {
+        flex: 1,
+        width: '90%',
+        resizeMode: 'contain',
+        alignSelf: 'center',
+        maxWidth: 460,
+    },
+})
+
 const DeprecateVersionModal = () => {
     const { isConnected } = useNetInfo()
     const { showModal } = useDeprecationModal()
 
     return (
         <Modal visible={isConnected && showModal}>
-            <SafeAreaView
-                style={{
-                    flex: 1,
-                    backgroundColor: color.ui.sea,
-                    justifyContent: 'flex-end',
-                }}
-            >
-                <View
-                    style={{
-                        flexGrow: 1,
-                        justifyContent: 'center',
-                        padding: 28,
-                        maxWidth: 500,
-                        alignSelf: 'center',
-                    }}
-                >
+            <SafeAreaView style={styles.container}>
+                <View style={styles.textContainer}>
                     <TitlepieceText
                         accessibilityRole="header"
-                        style={[
-                            getFont('titlepiece', 2),
-                            {
-                                color: color.palette.neutral[100],
-                                marginBottom: 30,
-                            },
-                        ]}
+                        style={[getFont('titlepiece', 2), styles.title]}
                     >
                         This version of the Daily app is no longer supported
                     </TitlepieceText>
                     <TitlepieceText
-                        style={[
-                            getFont('titlepiece', 1.5),
-                            { color: color.primary },
-                        ]}
+                        style={[getFont('titlepiece', 1.5), styles.subTitle]}
                     >
                         Please go to the {StoreLink()} to update to the latest
                         version
@@ -80,13 +87,7 @@ const DeprecateVersionModal = () => {
 
                 <Image
                     source={require('../assets/images/guardian-observer.png')}
-                    style={{
-                        flex: 1,
-                        width: '90%',
-                        resizeMode: 'contain',
-                        alignSelf: 'center',
-                        maxWidth: 460,
-                    }}
+                    style={styles.logo}
                 />
             </SafeAreaView>
         </Modal>
