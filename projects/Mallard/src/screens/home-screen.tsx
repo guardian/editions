@@ -145,17 +145,17 @@ export const HomeScreen = ({
     const issue = useIssueCompositeKey()
     return (
         <WithAppAppearance value={'tertiary'}>
+            <HomeScreenHeader
+                onSettings={() => {
+                    navigation.navigate('Settings')
+                }}
+                onReturn={() => {
+                    navigateToIssue(navigation, {
+                        path: issue,
+                    })
+                }}
+            />
             <ScrollContainer>
-                <HomeScreenHeader
-                    onSettings={() => {
-                        navigation.navigate('Settings')
-                    }}
-                    onReturn={() => {
-                        navigateToIssue(navigation, {
-                            path: issue,
-                        })
-                    }}
-                />
                 {issueSummary({
                     success: issueList => <IssueList issueList={issueList} />,
                     error: ({ message }, stale, { retry }) => (
