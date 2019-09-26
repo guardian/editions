@@ -77,17 +77,6 @@ const appearances: {
     }),
 }
 
-const IllustrationStyles = StyleSheet.create({
-    postion: {
-        position: 'absolute',
-        bottom: -30,
-        left: 0,
-        width: '110%',
-        height: 100,
-    },
-})
-
-
 const OnboardingCard = ({
     children,
     title,

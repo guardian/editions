@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const IllustrationStyles = StyleSheet.create({
+const illustrationStyles = StyleSheet.create({
     postion: {
         position: 'absolute',
         bottom: 0,
@@ -28,6 +28,10 @@ const IllustrationStyles = StyleSheet.create({
         height: '15%',
         right: 0,
     },
+    image: {
+      width: '100%',
+      height: '100%',
+    }
 })
 
 const Frame = ({ children }: { children: ReactNode }) => (
@@ -59,14 +63,9 @@ const OnboardingConsentScreen = ({
                     onContinue()
                 }}
             />
-            <View style={[IllustrationStyles.postion]}>
+            <View style={[illustrationStyles.postion]}>
                 <Image
-                    style={[
-                        {
-                            width: '100%',
-                            height: '100%',
-                        },
-                    ]}
+                    style={[illustrationStyles.image]}
                     resizeMode={'contain'}
                     source={require('src/assets/images/privacy.png')}
                 />
