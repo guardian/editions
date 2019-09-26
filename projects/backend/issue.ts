@@ -1,11 +1,11 @@
-import { Issue, IssuePublication } from './common'
+import { Issue, IssuePublicationIdentifier } from './common'
 import { PublishedIssue } from './fronts/issue'
 import { isPreview } from './preview'
 import { Path, s3fetch } from './s3'
 import { hasFailed } from './utils/try'
 
 export const getIssue = async (
-    issue: IssuePublication,
+    issue: IssuePublicationIdentifier,
 ): Promise<Issue | 'notfound'> => {
     console.log('Attempting to get latest issue for', issue)
     const path: Path = {
