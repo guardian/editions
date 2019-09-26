@@ -173,6 +173,11 @@ const handlePending = () => (
     </>
 )
 
+/** used to memoize the IssueScreenWithPath */
+const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
+    a.localIssueId === b.localIssueId &&
+    a.publishedIssueId === b.publishedIssueId
+
 const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
@@ -256,9 +261,7 @@ const IssueScreenWithPath = React.memo(
             },
         })
     },
-    (prev, next) =>
-        prev.path.localIssueId === next.path.localIssueId &&
-        prev.path.publishedIssueId === next.path.publishedIssueId,
+    (prev, next) => pathsAreEqual(prev.path, next.path),
 )
 
 export const IssueScreen = () => {
