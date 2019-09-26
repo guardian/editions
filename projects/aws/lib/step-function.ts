@@ -6,7 +6,7 @@ import iam = require('@aws-cdk/aws-iam')
 import sfn = require('@aws-cdk/aws-stepfunctions')
 import tasks = require('@aws-cdk/aws-stepfunctions-tasks')
 import { toTitleCase } from './tools'
-import { Duration } from '@aws-cdk/core'
+import { Duration, Tag } from '@aws-cdk/core'
 import { Condition } from '@aws-cdk/aws-stepfunctions'
 interface StepFunctionProps {
     stack: string
@@ -37,32 +37,40 @@ const taskLambda = (
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
-    return new lambda.Function(scope, `EditionsArchiver${toTitleCase(name)}`, {
-        functionName: `editions-archiver-stepmachine-${name}-${stage}`,
-        runtime: lambda.Runtime.NODEJS_10_X,
-        timeout: Duration.minutes(5),
-        memorySize: 1500,
-        code: Code.bucket(
-            deployBucket,
-            `${stack}/${stage}/archiver/archiver.zip`,
-        ),
-        handler: `index.${name}`,
-        environment: {
-            ...environment,
-            stage: stage,
-            bucket: outputBucket.bucketName,
+    const fn = new lambda.Function(
+        scope,
+        `EditionsArchiver${toTitleCase(name)}`,
+        {
+            functionName: `editions-archiver-stepmachine-${name}-${stage}`,
+            runtime: lambda.Runtime.NODEJS_10_X,
+            timeout: Duration.minutes(5),
+            memorySize: 1500,
+            code: Code.bucket(
+                deployBucket,
+                `${stack}/${stage}/archiver/archiver.zip`,
+            ),
+            handler: `index.${name}`,
+            environment: {
+                ...environment,
+                stage: stage,
+                bucket: outputBucket.bucketName,
+            },
+            initialPolicy: [
+                new iam.PolicyStatement({
+                    actions: ['*'],
+                    resources: [
+                        outputBucket.arnForObjects('*'),
+                        outputBucket.bucketArn,
+                    ],
+                }),
+            ],
+            ...overrides,
         },
-        initialPolicy: [
-            new iam.PolicyStatement({
-                actions: ['*'],
-                resources: [
-                    outputBucket.arnForObjects('*'),
-                    outputBucket.bucketArn,
-                ],
-            }),
-        ],
-        ...overrides,
-    })
+    )
+    Tag.add(fn, 'App', `archiver-${name}`)
+    Tag.add(fn, 'Stage', stage)
+    Tag.add(fn, 'Stack', stack)
+    return fn
 }
 
 export const archiverStepFunction = (
