@@ -2,6 +2,7 @@ import { useState, Dispatch, SetStateAction, useEffect } from 'react'
 import DeviceInfo from 'react-native-device-info'
 import { fetchDeprecationWarning } from 'src/helpers/fetch'
 import { Platform } from 'react-native'
+import { sendAppScreenEvent, ScreenTracking } from 'src/services/ophan'
 
 const useDeprecationModal = (): {
     showModal: boolean
@@ -22,6 +23,9 @@ const useDeprecationModal = (): {
                         platformDeprecationBuildNumber
                 ) {
                     setShowModal(true)
+                    sendAppScreenEvent({
+                        screenName: ScreenTracking.Deprecation,
+                    })
                 }
             },
         )
