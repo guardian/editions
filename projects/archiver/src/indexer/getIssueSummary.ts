@@ -86,8 +86,10 @@ export const getIssueSummary = async (
     }
 
     const assetFiles = identifyAssetFiles(assetKeys)
+    console.log('assetFiles extracted', JSON.stringify(assetFiles))
 
     const images = makeImageAssetObject(assetFiles)
+    console.log('ImageAssetObjects extracted', JSON.stringify(images))
 
     const data = assetFiles.data
     if (data == null) {
