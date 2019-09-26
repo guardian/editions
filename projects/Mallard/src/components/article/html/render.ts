@@ -24,7 +24,7 @@ export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss(families.text.regular)}
     ${generateAssetsFontCss(families.headline.regular)}
-    ${generateAssetsFontCss(families.headline.bold)}
+    ${generateAssetsFontCss(families.headline.bold, 600)}
     ${generateAssetsFontCss(families.sans.regular)}
     ${generateAssetsFontCss(families.titlepiece.regular)}
     ${quoteStyles({
@@ -95,7 +95,10 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
       margin-bottom: ${px(metrics.vertical)};
       margin-top: ${px(metrics.vertical * 2.5)};
     }
-    ${headerStyles}
+    ${headerStyles({
+        colors,
+        wrapLayout,
+    })}
     ${imageStyles({ colors, wrapLayout })}
 `
 

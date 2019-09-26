@@ -46,7 +46,7 @@ export const getScaledFontCss = <F extends FontFamily>(
     `
 }
 
-export const generateAssetsFontCss = (fontFamily: string) => {
+export const generateAssetsFontCss = (fontFamily: string, fontWeight = 400) => {
     const fileName = Platform.select({
         ios: `file:///assets/fonts/${fontFamily}.ttf`,
         android: `file:///android_asset/fonts/${fontFamily}.ttf`,
@@ -55,6 +55,7 @@ export const generateAssetsFontCss = (fontFamily: string) => {
     return css`
         @font-face {
             font-family: '${fontFamily}';
+            font-weight: ${fontWeight};
             src: url("${fileName}")
         }
     `
