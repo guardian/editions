@@ -34,7 +34,6 @@ const ArticleController = ({
     const { useNewWebview } = useOtherSettingsValues()
     switch (article.type) {
         case 'article':
-            console.log(article)
             return useNewWebview ? (
                 <Article
                     onTopPositionChange={onTopPositionChange}
