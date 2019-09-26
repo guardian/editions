@@ -2,6 +2,7 @@ import { upload } from './upload'
 import { s3, Bucket, listNestedPrefixes } from './s3'
 import { IssuePublicationIdentifier, IssueIdentifier } from '../../common/src'
 import { getPublishedId, getLocalId } from './publishedId'
+import { oc } from 'ts-optchain'
 
 export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
     status: Status
@@ -48,15 +49,32 @@ export const getStatus = async (
     const response = await s3
         .getObject({ Bucket, Key: `${publishedId}/status` })
         .promise()
-    const statusResponse = response.Body
-    console.log(`Raw response is ${statusResponse}`)
+        .catch(() => {
+            return undefined
+        })
+    const statusResponse =
+        response && response.Body && response.Body.toString('utf-8')
+    console.log(
+        `Raw response for ${JSON.stringify(
+            issuePublication,
+        )} is ${statusResponse}`,
+    )
     if (typeof statusResponse !== 'string') {
-        throw new Error('Could not get status')
+        console.log(
+            `Raw response for ${JSON.stringify(
+                issuePublication,
+            )} was not a string :( but was actually a ${typeof statusResponse}`,
+        )
+        return { ...issuePublication, status: 'unknown', updated: new Date(0) }
     }
     const decodedStatus = JSON.parse(statusResponse)
     const status = statuses.find(_ => _ === decodedStatus.status) || 'unknown'
-    const updated = response.LastModified || new Date(0)
-    console.log(`Status was ${status} at ${updated}`)
+    const updated = oc(response).LastModified() || new Date(0)
+    console.log(
+        `Status for ${JSON.stringify(
+            issuePublication,
+        )} was ${status} at ${updated}`,
+    )
     return { ...issuePublication, status, updated }
 }
 
