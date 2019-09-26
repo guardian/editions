@@ -38,6 +38,9 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         colors,
         wrapLayout,
     })}
+    html, body {
+        overflow: hidden;
+    }
     * {
         margin: 0;
         padding: 0;
