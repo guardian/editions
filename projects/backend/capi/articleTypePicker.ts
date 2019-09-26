@@ -5,16 +5,23 @@ const doesTagExist = (article: IContent, tagId: string): boolean => {
     return article.tags.find(tag => tag.id === tagId) != undefined
 }
 
+const doesTypeExist = (article: IContent, tagType: string): boolean => {
+    return article.tags.find(tag => tag.type === tagType) != undefined
+}
+
 const articleTypePicker = (article: IContent): ArticleType => {
     const isTagPresent = (tagId: string): boolean =>
         doesTagExist(article, tagId)
+    
+    const isTypePresent = (tagType: string): boolean =>
+        doesTypeExist(article, tagType)
 
     const isImmersive: boolean =
         (article.fields && article.fields.displayHint === 'immersive') || false
     const isLongRead: boolean = isTagPresent(
         'theguardian/journal/the-long-read',
     )
-    const isSeries: boolean = isTagPresent('tone/special-report') && isImmersive
+    const isSeries: boolean = isTypePresent('series') 
     const isInterview: boolean = isTagPresent('tone/interview')
     const isObituary: boolean = isTagPresent('tone/obituaries')
     const isAnalysis: boolean = isTagPresent('tone/analysis')
