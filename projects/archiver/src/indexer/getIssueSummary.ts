@@ -13,6 +13,7 @@ import { issue } from '../../main'
 
 // from a list of S3 keys, create an object of the basename to filename
 const identifyAssetFiles = (assetKeys: string[]) => {
+    console.log('identifyAssetFiles', JSON.stringify(assetKeys))
     return fromPairs(
         assetKeys
             .map((key): [ImageSize | 'data', string] | null => {
@@ -60,6 +61,7 @@ const makeImageAssetObject = (assetFiles: {
 export const getIssueSummary = async (
     issuePublication: IssuePublicationIdentifier,
 ): Promise<IssueSummary | undefined> => {
+    console.log('generating issue summary')
     const { edition, issueDate } = issuePublication
 
     const publishedId = getPublishedId(issuePublication)
