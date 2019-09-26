@@ -11,11 +11,11 @@ const useDeprecationModal = (): {
 
     useEffect(() => {
         fetchDeprecationWarning().then(
-            (result: { ios: string; android: string }) => {
+            (buildNumbers: { ios: string; android: string }) => {
                 const platformDeprecationBuildNumber =
-                    Platform.OS === 'ios' && result
-                        ? result.ios
-                        : result.android
+                    Platform.OS === 'ios' && buildNumbers
+                        ? buildNumbers.ios
+                        : buildNumbers.android
                 if (
                     DeviceInfo.getBuildNumber() &&
                     DeviceInfo.getBuildNumber() <=

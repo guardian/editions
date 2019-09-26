@@ -16,24 +16,6 @@ import { TitlepieceText } from '../components/styled-text'
 import { useNetInfo } from '../hooks/use-net-info'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 
-const StoreLink = () => {
-    const name = Platform.OS === 'ios' ? 'App Store' : 'Google Play Store'
-    const link =
-        Platform.OS === 'ios'
-            ? defaultSettings.storeDetails.ios
-            : defaultSettings.storeDetails.android
-    return (
-        <Text
-            style={{
-                textDecorationLine: 'underline',
-            }}
-            onPress={() => Linking.openURL(link)}
-        >
-            {name}
-        </Text>
-    )
-}
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -61,7 +43,23 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         maxWidth: 460,
     },
+    link: {
+        textDecorationLine: 'underline',
+    },
 })
+
+const StoreLink = () => {
+    const name = Platform.OS === 'ios' ? 'App Store' : 'Google Play Store'
+    const link =
+        Platform.OS === 'ios'
+            ? defaultSettings.storeDetails.ios
+            : defaultSettings.storeDetails.android
+    return (
+        <Text style={styles.link} onPress={() => Linking.openURL(link)}>
+            {name}
+        </Text>
+    )
+}
 
 const DeprecateVersionModal = () => {
     const { isConnected } = useNetInfo()
