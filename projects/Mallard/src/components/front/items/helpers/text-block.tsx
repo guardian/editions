@@ -87,14 +87,10 @@ const TextBlock = ({
                         unscaledFont={font}
                         style={styles.opinionHeadline}
                         icon={{
-                            width: 40,
+                            width: 36,
                             element: scale => (
                                 <Quote
-                                    scale={
-                                        (0.67 / scale) *
-                                        (fontSize /
-                                            getFont('headline', 1).fontSize)
-                                    }
+                                    scale={fontSize / 26}
                                     fill={colors.main}
                                 />
                             ),
