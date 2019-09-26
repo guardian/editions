@@ -5,6 +5,7 @@ import { ActionSheetIOS, Platform, Alert } from 'react-native'
  * an Alert
  */
 const runActionSheet = (
+    title: string,
     message: string,
     options: { text: string; onPress: () => void }[],
 ) =>
@@ -13,13 +14,14 @@ const runActionSheet = (
             ActionSheetIOS.showActionSheetWithOptions(
                 {
                     options: [...options.map(({ text }) => text), 'Cancel'],
+                    title,
                     message,
                     cancelButtonIndex: options.length,
                 },
                 async index =>
                     index !== options.length && options[index].onPress(),
             ),
-        android: () => Alert.alert(message, undefined, options),
+        android: () => Alert.alert(title, message, options),
     })()
 
 export { runActionSheet }

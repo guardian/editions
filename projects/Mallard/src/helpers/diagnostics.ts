@@ -18,6 +18,7 @@ import {
     IOS_BETA_EMAIL,
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
+    DIAGNOSTICS_TITLE,
 } from './words'
 import { runActionSheet } from './action-sheet'
 import { legacyCASUsernameCache, casCredentialsKeychain } from './storage'
@@ -107,7 +108,7 @@ const createMailtoHandler = (
     releaseURL: string,
     authStatus: AuthStatus,
 ) => () =>
-    runActionSheet(DIAGNOSTICS_REQUEST, [
+    runActionSheet(DIAGNOSTICS_TITLE, DIAGNOSTICS_REQUEST, [
         {
             text: 'Include',
             onPress: async () => {
