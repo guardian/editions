@@ -61,10 +61,11 @@ const makeImageAssetObject = (assetFiles: {
 export const getIssueSummary = async (
     issuePublication: IssuePublicationIdentifier,
 ): Promise<IssueSummary | undefined> => {
-    console.log('generating issue summary')
     const { edition, issueDate } = issuePublication
-
     const publishedId = getPublishedId(issuePublication)
+    console.log(
+        `generating issue summary for issue publishedId: ${publishedId}`,
+    )
 
     const assetKeyList = await s3
         .listObjectsV2({
