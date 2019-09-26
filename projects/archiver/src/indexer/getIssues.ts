@@ -1,21 +1,9 @@
-import { oc } from 'ts-optchain'
 import { IssueIdentifier } from '../../../common/src'
-import { notNull } from '../../common'
-import { Bucket, s3 } from '../s3'
+import { Bucket, listNestedPrefixes } from '../s3'
 
 /* Crawl S3 for a list of all of the issues that are available */
 export const getIssues = async (): Promise<IssueIdentifier[]> => {
-    const resp = await s3
-        .listObjectsV2({
-            Bucket,
-            Prefix: 'daily-edition/',
-            Delimiter: '/',
-        })
-        .promise()
-    const prefixes = oc(resp)
-        .CommonPrefixes([])
-        .map(_ => _.Prefix)
-        .filter(notNull)
+    const prefixes = await listNestedPrefixes(Bucket, 'daily-edition')
 
     return prefixes.map(issueDate => ({
         edition: 'daily-edition',

@@ -1,12 +1,7 @@
 import { upload } from './upload'
-import { s3, Bucket } from './s3'
-import {
-    IssuePublicationIdentifier,
-    notNull,
-    IssueIdentifier,
-} from '../../common/src'
+import { s3, Bucket, listNestedPrefixes } from './s3'
+import { IssuePublicationIdentifier, IssueIdentifier } from '../../common/src'
 import { getPublishedId, getLocalId } from './publishedId'
-import { oc } from 'ts-optchain'
 
 export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
     status: Status
@@ -68,14 +63,7 @@ export const getVersions = async (
 ): Promise<string[]> => {
     console.log(`getVersions for ${JSON.stringify(issuePublication)}`)
     const root = getLocalId(issuePublication)
-    const s3response = await s3
-        .listObjectsV2({ Bucket, Delimiter: '/', Prefix: `${root}/` })
-        .promise()
-    const versions = oc(s3response)
-        .CommonPrefixes([])
-        .map(_ => _.Prefix)
-        .filter(notNull)
-    return versions
+    return listNestedPrefixes(Bucket, root)
 }
 
 /* Given an edition name and date provide a list of the status of each version
