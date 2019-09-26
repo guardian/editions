@@ -69,7 +69,7 @@ export const getVersions = async (
     console.log(`getVersions for ${JSON.stringify(issuePublication)}`)
     const root = getLocalId(issuePublication)
     const s3response = await s3
-        .listObjectsV2({ Bucket, Delimiter: '/', Prefix: root })
+        .listObjectsV2({ Bucket, Delimiter: '/', Prefix: `${root}/` })
         .promise()
     const versions = oc(s3response)
         .CommonPrefixes([])

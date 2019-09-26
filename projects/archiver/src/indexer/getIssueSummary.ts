@@ -24,7 +24,7 @@ export const getIssueSummary = async (
     const assetKeyList = await s3
         .listObjectsV2({
             Bucket,
-            Prefix: `zips/${publishedId}`,
+            Prefix: `zips/${publishedId}/`,
         })
         .promise()
 

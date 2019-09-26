@@ -8,7 +8,7 @@ export const getIssues = async (): Promise<IssueIdentifier[]> => {
     const resp = await s3
         .listObjectsV2({
             Bucket,
-            Prefix: 'daily-edition',
+            Prefix: 'daily-edition/',
             Delimiter: '/',
         })
         .promise()
