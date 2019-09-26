@@ -18,7 +18,8 @@ const useDeprecationModal = (): {
                         : result.android
                 if (
                     DeviceInfo.getBuildNumber() &&
-                    DeviceInfo.getBuildNumber() > platformDeprecationBuildNumber
+                    DeviceInfo.getBuildNumber() <=
+                        platformDeprecationBuildNumber
                 ) {
                     setShowModal(true)
                 }
