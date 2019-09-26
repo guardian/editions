@@ -5,6 +5,7 @@ import { getIssue } from './downloader'
 import { Bucket } from './s3'
 import { getPublishedId } from './publishedId'
 import { putStatus } from './status'
+import { logInput, logOutput } from './log-utils'
 
 export interface IssueParams {
     issuePublication: IssuePublicationIdentifier
@@ -18,6 +19,7 @@ export interface IssueTaskOutput extends IssueParams {
 export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
     issuePublication,
 }) => {
+    logInput({ issuePublication })
     console.log(
         `Attempting to upload ${JSON.stringify(issuePublication)} to ${Bucket}`,
     )
@@ -29,11 +31,13 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
         throw new Error('Failed to download issue.')
     }
     console.log(`Downloaded issue ${JSON.stringify(issuePublication)}`)
-    return {
+    const out: IssueTaskOutput = {
         issuePublication,
         issue: { ...issue, fronts: [] },
         fronts: issue.fronts,
         remainingFronts: issue.fronts.length,
         message: 'Fetched issue succesfully.',
     }
+    logOutput(out)
+    return out
 }
