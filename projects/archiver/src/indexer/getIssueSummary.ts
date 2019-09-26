@@ -67,10 +67,12 @@ export const getIssueSummary = async (
         `generating issue summary for issue publishedId: ${publishedId}`,
     )
 
+    const zipsPrefix = 'zips/'
+
     const assetKeyList = await s3
         .listObjectsV2({
             Bucket,
-            Prefix: `zips/${publishedId}/`,
+            Prefix: `${zipsPrefix}${publishedId}/`,
         })
         .promise()
 
@@ -78,7 +80,7 @@ export const getIssueSummary = async (
         .Contents([])
         .map(_ => _.Key)
         .filter(notNull)
-        .map(key => key.substring('zips/'.length))
+        .map(key => key.substring(zipsPrefix.length))
 
     const dateFromIssue = new Date(issueDate)
 
