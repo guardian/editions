@@ -24,6 +24,10 @@ export const statuses = [
 ] as const
 export type Status = typeof statuses[number]
 
+export const isPublished = (status: Status): boolean => {
+    return (publishedStatuses as readonly Status[]).includes(status)
+}
+
 /* Given a published instance ID and status, store the provided status in S3
  * using a status file in S3 */
 export const putStatus = (

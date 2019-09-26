@@ -2,7 +2,7 @@ import {
     IssuePublicationIdentifier,
     IssueIdentifier,
 } from '../../../common/src'
-import { getStatuses, publishedStatuses, Status } from '../status'
+import { getStatuses, isPublished } from '../status'
 
 /* Given an edition name and date this will return the current publication instance ID
  * or undefined is there is no valid published instance. This is based on the status
@@ -13,16 +13,16 @@ import { getStatuses, publishedStatuses, Status } from '../status'
 export const getPublishedVersion = async (
     issue: IssueIdentifier,
 ): Promise<IssuePublicationIdentifier | undefined> => {
-    const publications = await getStatuses(issue)
+    const publicationStatuses = await getStatuses(issue)
     console.log(
         `getPublishedVersion: fetched list of publications for ${JSON.stringify(
             issue,
         )}`,
-        JSON.stringify(publications),
+        JSON.stringify(publicationStatuses),
     )
 
-    const published = publications.filter(({ status }) =>
-        (publishedStatuses as readonly Status[]).includes(status),
+    const published = publicationStatuses.filter(({ status }) =>
+        isPublished(status),
     )
     console.log(
         `getPublishedVersion: filtered list of published publications`,
@@ -38,7 +38,7 @@ export const getPublishedVersion = async (
         console.log(
             `For issue date ${issue.issueDate} of ${issue.edition} we were expecting a single published issue, but received ${published.length}`,
         )
-        console.log(JSON.stringify(publications))
+        console.log(JSON.stringify(publicationStatuses))
         console.log(
             `We have chosen to select ${JSON.stringify(
                 chosen,
