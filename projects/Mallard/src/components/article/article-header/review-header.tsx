@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Fader } from 'src/components/layout/animators/fader'
 import { Stars } from 'src/components/stars/stars'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
@@ -12,8 +11,6 @@ import { ArticleStandfirst } from '../article-standfirst'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
 import { HeadlineTypeWrap } from './shared'
-
-const ArticleFader = Fader
 
 const style = StyleSheet.create({
     byline: { marginBottom: metrics.vertical },
@@ -32,49 +29,38 @@ const ReviewHeader = ({
         <MultilineWrap
             needsTopPadding
             byline={
-                <ArticleFader>
-                    <ArticleByline style={[{ color: color.dark }]}>
-                        {byline}
-                    </ArticleByline>
-                </ArticleFader>
+                <ArticleByline style={[{ color: color.dark }]}>
+                    {byline}
+                </ArticleByline>
             }
             backgroundColor={color.faded}
             borderColor={color.dark}
         >
             {image ? (
-                <ArticleFader>
-                    <ArticleImage
-                        proxy={starRating && <Stars rating={starRating} />}
-                        style={{
-                            aspectRatio: 1.5,
-                            marginBottom: metrics.vertical / 4,
-                        }}
-                        image={image}
-                    />
-                </ArticleFader>
+                <ArticleImage
+                    proxy={starRating && <Stars rating={starRating} />}
+                    style={{
+                        aspectRatio: 1.5,
+                        marginBottom: metrics.vertical / 4,
+                    }}
+                    image={image}
+                />
             ) : null}
-            {kicker ? (
-                <ArticleFader>
-                    <ArticleKicker kicker={kicker} />
-                </ArticleFader>
-            ) : null}
+            {kicker ? <ArticleKicker kicker={kicker} /> : null}
             <HeadlineTypeWrap>
-                <ArticleFader>
-                    <View>
-                        <ArticleHeadline
-                            weight={'bold'}
-                            textStyle={{ color: color.dark }}
-                        >
-                            {headline}
-                        </ArticleHeadline>
-                    </View>
-                </ArticleFader>
-                <ArticleFader>
-                    <ArticleStandfirst
+                <View>
+                    <ArticleHeadline
+                        weight={'bold'}
                         textStyle={{ color: color.dark }}
-                        {...{ standfirst }}
-                    />
-                </ArticleFader>
+                    >
+                        {headline}
+                    </ArticleHeadline>
+                </View>
+
+                <ArticleStandfirst
+                    textStyle={{ color: color.dark }}
+                    {...{ standfirst }}
+                />
             </HeadlineTypeWrap>
         </MultilineWrap>
     )

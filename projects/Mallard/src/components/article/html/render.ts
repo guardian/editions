@@ -1,6 +1,4 @@
 import { ArticlePillar, BlockElement, MediaAtomElement } from 'src/common'
-import { getPillarColors } from 'src/hooks/use-article'
-import { metrics } from 'src/theme/spacing'
 import {
     css,
     generateAssetsFontCss,
@@ -10,18 +8,23 @@ import {
     makeHtml,
     px,
 } from 'src/helpers/webview'
-import { WrapLayout } from '../wrap/wrap'
-import { CssProps } from './helpers/props'
-import { Image, imageStyles } from './images'
-import { quoteStyles, Pullquote } from './pull-quote'
+import { getPillarColors } from 'src/hooks/use-article'
+import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import { Issue } from '../../../common'
+import { ArticleHeaderProps } from '../article-header/types'
+import { WrapLayout } from '../wrap/wrap'
+import { Header, headerStyles } from './header'
+import { CssProps } from './helpers/props'
+import { Image, imageStyles } from './images'
+import { Pullquote, quoteStyles } from './pull-quote'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss(families.text.regular)}
     ${generateAssetsFontCss(families.headline.regular)}
+    ${generateAssetsFontCss(families.headline.bold)}
     ${generateAssetsFontCss(families.sans.regular)}
     ${generateAssetsFontCss(families.titlepiece.regular)}
     ${quoteStyles({
@@ -48,11 +51,25 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         ${getScaledFontCss('text', 1)}
         font-family: ${families.text.regular};
     }
+
+    @keyframes fade {
+        from {
+            opacity: 0
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
     #app {
         padding: ${px(metrics.vertical)} ${px(metrics.article.sides)};
         width: ${px(wrapLayout.width + metrics.article.sides * 2)};
         margin: auto;
         position: relative;
+        animation-duration: .5s;
+        animation-name: fade;
+        animation-fill-mode: both;
     }
     main {
         width: ${px(wrapLayout.content.width)};
@@ -78,7 +95,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
       margin-bottom: ${px(metrics.vertical)};
       margin-top: ${px(metrics.vertical * 2.5)};
     }
-
+    ${headerStyles}
     ${imageStyles({ colors, wrapLayout })}
 `
 
@@ -104,12 +121,16 @@ export const render = (
         showMedia,
         height,
         publishedId,
+        showWebHeader,
+        headerProps,
     }: {
         pillar: ArticlePillar
         wrapLayout: WrapLayout
         showMedia: boolean
         height: number
         publishedId: Issue['publishedId'] | null
+        showWebHeader: boolean
+        headerProps?: ArticleHeaderProps
     },
 ) => {
     const content = article
@@ -147,7 +168,12 @@ export const render = (
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
-        <main style="padding-top:${px(height)}">${content}</main>
+        <main style="padding-top:${px(height)}">
+            ${showWebHeader &&
+                headerProps &&
+                Header({ ...headerProps, publishedId })}
+            ${content}
+        </main>
     `
     return makeHtml({ styles, body })
 }

@@ -1,29 +1,27 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React, { useMemo } from 'react'
-import { Animated, Linking, Platform, WebViewProps } from 'react-native'
-import { WebView } from 'react-native-webview'
+import { Animated } from 'react-native'
+import { WebView, WebViewProps } from 'react-native-webview'
 import { BlockElement } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
-import { EMBED_DOMAIN, render } from '../../html/render'
+import { ArticleHeaderProps } from '../../article-header/types'
+import { render } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
+import { onShouldStartLoadWithRequest } from './helpers'
 
-const urlIsNotAnEmbed = (url: string) =>
-    !(
-        url.startsWith(EMBED_DOMAIN) ||
-        url.startsWith('https://www.youtube.com/embed')
-    )
-
-const AniWebview = Animated.createAnimatedComponent(WebView)
+const AniWebView = Animated.createAnimatedComponent(WebView)
 
 const WebviewWithArticle = ({
     article,
     wrapLayout,
+    headerProps,
     paddingTop = 0,
     ...webViewProps
 }: {
     article: BlockElement[]
     wrapLayout: WrapLayout
+    headerProps?: ArticleHeaderProps
     paddingTop?: number
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
@@ -35,6 +33,8 @@ const WebviewWithArticle = ({
             render(article, {
                 pillar,
                 wrapLayout,
+                headerProps,
+                showWebHeader: true,
                 showMedia: isConnected,
                 height: paddingTop,
                 publishedId:
@@ -52,23 +52,12 @@ const WebviewWithArticle = ({
     )
 
     return (
-        <AniWebview
+        <AniWebView
+            {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{ html }}
-            onShouldStartLoadWithRequest={(event: any) => {
-                if (
-                    Platform.select({
-                        ios: event.navigationType === 'click',
-                        android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
-                    })
-                ) {
-                    Linking.openURL(event.url)
-                    return false
-                }
-                return true
-            }}
-            {...webViewProps}
+            onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
         />
     )
 }

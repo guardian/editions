@@ -18,11 +18,8 @@ import { color } from 'src/theme/color'
 import { useArticle } from 'src/hooks/use-article'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
-import { Fader } from 'src/components/layout/animators/fader'
 import { Image as ImageType } from 'src/common'
 import { useImagePath } from 'src/hooks/use-image-paths'
-
-const ArticleFader = Fader
 
 const styles = StyleSheet.create({
     innerWrap: {
@@ -148,41 +145,36 @@ const OpinionHeader = ({
             style={styles.innerWrap}
             backgroundColor={color.palette.opinion.faded}
             byline={
-                <ArticleFader>
-                    <HeadlineTypeWrap>
-                        <View style={[styles.innerWrap]}>
-                            <ArticleStandfirst {...{ standfirst }} />
-                        </View>
-                    </HeadlineTypeWrap>
-                </ArticleFader>
+                <HeadlineTypeWrap>
+                    <View style={[styles.innerWrap]}>
+                        <ArticleStandfirst {...{ standfirst }} />
+                    </View>
+                </HeadlineTypeWrap>
             }
         >
             {image ? (
-                <ArticleFader>
-                    <ArticleImage style={styles.articleImage} image={image} />
-                </ArticleFader>
+                <ArticleImage style={styles.articleImage} image={image} />
             ) : null}
-            <ArticleFader>
-                <View style={styles.flexRow}>
-                    <View style={styles.headlineContainer}>
-                        <HeadlineTypeWrap>
-                            <HeaderArticleHeadline
-                                shouldShowQuotations={true}
-                                showUnderline={false}
-                                articleColor={articleColor.main}
-                                headline={headline}
-                                byline={byline}
-                                font={font}
-                            />
-                        </HeadlineTypeWrap>
-                    </View>
-                    {bylineImages && bylineImages.cutout ? (
-                        <View style={styles.cutoutContainer}>
-                            <BylineCutout cutout={bylineImages.cutout} />
-                        </View>
-                    ) : null}
+
+            <View style={styles.flexRow}>
+                <View style={styles.headlineContainer}>
+                    <HeadlineTypeWrap>
+                        <HeaderArticleHeadline
+                            shouldShowQuotations={true}
+                            showUnderline={false}
+                            articleColor={articleColor.main}
+                            headline={headline}
+                            byline={byline}
+                            font={font}
+                        />
+                    </HeadlineTypeWrap>
                 </View>
-            </ArticleFader>
+                {bylineImages && bylineImages.cutout ? (
+                    <View style={styles.cutoutContainer}>
+                        <BylineCutout cutout={bylineImages.cutout} />
+                    </View>
+                ) : null}
+            </View>
         </MultilineWrap>
     )
 }
@@ -203,41 +195,36 @@ const AnalysisHeader = ({
             style={styles.innerWrap}
             backgroundColor={color.palette.neutral[97]}
             byline={
-                <ArticleFader>
-                    <HeadlineTypeWrap>
-                        <View style={[styles.innerWrap]}>
-                            <ArticleStandfirst {...{ standfirst }} />
-                        </View>
-                    </HeadlineTypeWrap>
-                </ArticleFader>
+                <HeadlineTypeWrap>
+                    <View style={[styles.innerWrap]}>
+                        <ArticleStandfirst {...{ standfirst }} />
+                    </View>
+                </HeadlineTypeWrap>
             }
         >
             {image ? (
-                <ArticleFader>
-                    <ArticleImage style={styles.articleImage} image={image} />
-                </ArticleFader>
+                <ArticleImage style={styles.articleImage} image={image} />
             ) : null}
-            <ArticleFader>
-                <View style={styles.flexRow}>
-                    <View style={styles.headlineContainer}>
-                        <HeadlineTypeWrap>
-                            <HeaderArticleHeadline
-                                shouldShowQuotations={false}
-                                showUnderline={true}
-                                articleColor={articleColor.main}
-                                headline={headline}
-                                byline={byline}
-                                font={font}
-                            />
-                        </HeadlineTypeWrap>
-                    </View>
-                    {bylineImages && bylineImages.cutout ? (
-                        <View style={styles.cutoutContainer}>
-                            <BylineCutout cutout={bylineImages.cutout} />
-                        </View>
-                    ) : null}
+
+            <View style={styles.flexRow}>
+                <View style={styles.headlineContainer}>
+                    <HeadlineTypeWrap>
+                        <HeaderArticleHeadline
+                            shouldShowQuotations={false}
+                            showUnderline={true}
+                            articleColor={articleColor.main}
+                            headline={headline}
+                            byline={byline}
+                            font={font}
+                        />
+                    </HeadlineTypeWrap>
                 </View>
-            </ArticleFader>
+                {bylineImages && bylineImages.cutout ? (
+                    <View style={styles.cutoutContainer}>
+                        <BylineCutout cutout={bylineImages.cutout} />
+                    </View>
+                ) : null}
+            </View>
         </MultilineWrap>
     )
 }

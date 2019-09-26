@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { Fader } from 'src/components/layout/animators/fader'
 import { metrics } from 'src/theme/spacing'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
@@ -22,8 +21,6 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleFader = Fader
-
 const NewsHeader = ({
     byline,
     headline,
@@ -39,31 +36,21 @@ const NewsHeader = ({
             }
         >
             {image ? (
-                <ArticleFader>
-                    <ArticleImage
-                        style={{
-                            marginBottom: metrics.vertical / 4,
-                        }}
-                        image={image}
-                    />
-                </ArticleFader>
+                <ArticleImage
+                    style={{
+                        marginBottom: metrics.vertical / 4,
+                    }}
+                    image={image}
+                />
             ) : null}
 
-            {kicker ? (
-                <ArticleFader>
-                    <ArticleKicker kicker={kicker} />
-                </ArticleFader>
-            ) : null}
+            {kicker ? <ArticleKicker kicker={kicker} /> : null}
             <HeadlineTypeWrap>
-                <ArticleFader>
-                    <ArticleHeadline>{headline}</ArticleHeadline>
-                </ArticleFader>
-                <ArticleFader>
-                    <ArticleStandfirst
-                        style={styles.standfirst}
-                        {...{ standfirst }}
-                    />
-                </ArticleFader>
+                <ArticleHeadline>{headline}</ArticleHeadline>
+                <ArticleStandfirst
+                    style={styles.standfirst}
+                    {...{ standfirst }}
+                />
             </HeadlineTypeWrap>
         </MultilineWrap>
     )

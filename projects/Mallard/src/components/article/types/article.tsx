@@ -171,18 +171,16 @@ const Article = ({
 
     return (
         <>
-            <Fader>
-                {wrapLayout && (
-                    <WebView
-                        header={<ArticleHeader {...headerProps} type={type} />}
-                        article={article}
-                        onTopPositionChange={onTopPositionChange}
-                        wrapLayout={wrapLayout}
-                    />
-                )}
+            {wrapLayout && (
+                <WebView
+                    header={<ArticleHeader {...headerProps} type={type} />}
+                    article={article}
+                    onTopPositionChange={onTopPositionChange}
+                    wrapLayout={wrapLayout}
+                />
+            )}
 
-                <Wrap onWrapLayout={setWrapLayout}></Wrap>
-            </Fader>
+            <Wrap onWrapLayout={setWrapLayout}></Wrap>
         </>
     )
 }
