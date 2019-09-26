@@ -78,6 +78,7 @@ export const getIssueSummary = async (
         .Contents([])
         .map(_ => _.Key)
         .filter(notNull)
+        .map(key => key.substring('zips/'.length))
 
     const dateFromIssue = new Date(issueDate)
 
