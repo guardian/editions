@@ -85,6 +85,8 @@ export const getIssueSummary = async (
         return undefined
     }
 
+    console.log('assetKeys', JSON.stringify(assetKeys))
+
     const assetFiles = identifyAssetFiles(assetKeys)
     console.log('assetFiles extracted', JSON.stringify(assetFiles))
 
