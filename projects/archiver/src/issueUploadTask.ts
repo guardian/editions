@@ -4,6 +4,7 @@ import { issuePath } from '../common'
 import { MediaTaskOutput } from './imageTask'
 import { IssueTaskOutput } from './issueTask'
 import { upload, ONE_WEEK } from './upload'
+import { putStatus } from './status'
 
 export type UploadTaskOutput = Pick<
     IssueTaskOutput,
@@ -21,5 +22,6 @@ export const handler: Handler<MediaTaskOutput, UploadTaskOutput> = async ({
         console.error(JSON.stringify(issueUpload))
         throw new Error('Failed to upload issue file')
     }
+    await putStatus(issuePublication, 'assembled')
     return { issuePublication, message: 'Issue uploaded succesfully', issue }
 }

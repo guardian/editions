@@ -7,7 +7,6 @@ import {
     Image,
     ImageSize,
     notNull,
-    IssueCompositeKey,
 } from './common'
 import { getColours, getImage } from './src/downloader'
 import { upload, ONE_WEEK } from './src/upload'

@@ -3,6 +3,7 @@ import { mediaDir } from '../../common/src'
 import { imageSizes, issueDir } from '../common'
 import { zip } from '../zipper'
 import { UploadTaskOutput } from './issueUploadTask'
+import { putStatus } from './status'
 export const handler: Handler<UploadTaskOutput, UploadTaskOutput> = async ({
     issuePublication,
     issue,
@@ -26,6 +27,7 @@ export const handler: Handler<UploadTaskOutput, UploadTaskOutput> = async ({
         }),
     )
     console.log('Media zips uploaded.')
+    await putStatus(issuePublication, 'published')
     return {
         issuePublication,
         issue,
