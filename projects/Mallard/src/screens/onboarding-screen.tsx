@@ -63,9 +63,9 @@ const OnboardingConsentScreen = ({
                     onContinue()
                 }}
             />
-            <View style={[illustrationStyles.postion]}>
+            <View style={illustrationStyles.postion}>
                 <Image
-                    style={[illustrationStyles.image]}
+                    style={illustrationStyles.image}
                     resizeMode={'contain'}
                     source={require('src/assets/images/privacy.png')}
                 />
