@@ -33,7 +33,7 @@ const getCrosswordImage = (type: CrosswordType) => {
 
 type CrosswordArticleOverrides = Pick<
     CAPIArticle,
-    'headline' | 'kicker' | 'image'
+    'headline' | 'kicker' | 'trailImage'
 > &
     Pick<CrosswordArticle, 'crossword'>
 
@@ -44,7 +44,7 @@ export const getCrosswordArticleOverrides = (
     return {
         headline: getCrosswordName(type),
         kicker: getCrosswordKicker(article.crossword),
-        image: getCrosswordImage(type),
+        trailImage: getCrosswordImage(type),
         crossword: article.crossword,
     }
 }
