@@ -76,7 +76,7 @@ $ yarn run wifi-android
 $ yarn start
 ```
 
-in sepearte terminal
+in separate terminal
 ```bash
 $ yarn run-ios
 ```
