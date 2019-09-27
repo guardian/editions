@@ -9,6 +9,7 @@ import { CfnOutput, Duration } from '@aws-cdk/core'
 
 import { archiverStepFunction } from './step-function'
 import acm = require('@aws-cdk/aws-certificatemanager')
+import { Effect } from '@aws-cdk/aws-iam'
 export class EditionsStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props)
@@ -69,6 +70,13 @@ export class EditionsStack extends cdk.Stack {
                 ], //remove editions-store post merge
             },
         )
+
+        const previewIpAcl = new cdk.CfnParameter(this, 'preview-ip-acl', {
+            type: 'List<String>',
+            description:
+                'List of IP addresses and CIDR blocks from which preview can be accessed',
+            default: '77.91.248.0/21',
+        })
 
         const cmsFrontsAccountIdParameter = new cdk.CfnParameter(
             this,
@@ -170,11 +178,27 @@ export class EditionsStack extends cdk.Stack {
             backendProps('published'),
         )
 
+        const previewApiPolicyStatement = new iam.PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ['execute-api:Invoke'],
+            resources: ['*'],
+            conditions: {
+                IpAddress: {
+                    'aws:SourceIp': previewIpAcl.valueAsList,
+                },
+            },
+        })
+        previewApiPolicyStatement.addAnyPrincipal()
+
         const previewApi = new apigateway.LambdaRestApi(
             this,
             'editions-preview-backend-apigateway',
             {
                 handler: previewBackend,
+                // a policy that only allows users access from certain IPs
+                policy: new iam.PolicyDocument({
+                    statements: [previewApiPolicyStatement],
+                }),
             },
         )
 
