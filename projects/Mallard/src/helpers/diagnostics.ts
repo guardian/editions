@@ -57,6 +57,7 @@ The information below will help us to better understand your query:
 -App-
 Product: Daily App
 App Version: ${DeviceInfo.getVersion()} ${DeviceInfo.getBuildNumber()}
+Commit id: ${getVersionInfo().commitId}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
 App Edition: UK
 First app start: ${DeviceInfo.getFirstInstallTime()}
@@ -92,7 +93,7 @@ const openSupportMailto = (text: string, releaseURL: string, body?: string) => {
 
     const subject = `${text} - ${
         Platform.OS
-    } Daily App, ${DeviceInfo.getVersion()} / ${getVersionInfo().commitId}`
+    } Daily App, ${DeviceInfo.getVersion()} ${DeviceInfo.getBuildNumber()}`
 
     return Linking.openURL(
         `mailto:${email}?subject=${encodeURIComponent(subject)}${

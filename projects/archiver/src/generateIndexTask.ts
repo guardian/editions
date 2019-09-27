@@ -6,6 +6,7 @@ import { upload, FIVE_SECONDS } from './upload'
 import { UploadTaskOutput } from './issueUploadTask'
 import { putStatus } from './status'
 import { logInput, logOutput } from './log-utils'
+import { issueSummarySort } from '../common'
 
 export interface IndexTaskOutput extends UploadTaskOutput {
     message: string
@@ -35,12 +36,12 @@ export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
         `Creating index using the new and ${otherIssueSummaries.length} existing issue summaries`,
     )
 
-    await upload(
-        'issues',
-        [thisIssueSummary, ...otherIssueSummaries],
-        'application/json',
-        FIVE_SECONDS,
-    )
+    const allIssues = issueSummarySort([
+        thisIssueSummary,
+        ...otherIssueSummaries,
+    ])
+
+    await upload('issues', allIssues, 'application/json', FIVE_SECONDS)
 
     console.log('Uploaded new issues file')
 
