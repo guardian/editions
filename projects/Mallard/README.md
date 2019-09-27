@@ -52,7 +52,7 @@ You will also need `frontend` credentials form Janus in order to fetch the `.env
 ```bash
 $ yarn start
 ```
-in sepearte terminal
+in separate terminal
 ```bash
 $ yarn run-android
 ```
