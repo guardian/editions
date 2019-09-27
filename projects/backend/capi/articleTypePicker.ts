@@ -25,6 +25,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
     const isInterview: boolean = isTagPresent('tone/interview')
     const isObituary: boolean = isTagPresent('tone/obituaries')
     const isAnalysis: boolean = isTagPresent('tone/analysis')
+    const isEditorial: boolean = isTagPresent('tone/editorials')
     const isComment: boolean = isTagPresent('tone/comment')
     const isLetter: boolean = isTagPresent('tone/letters')
     const isFeature: boolean = isTagPresent('tone/features')
@@ -70,6 +71,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
+                else if (isEditorial) return ArticleType.Article
                 else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article
 
