@@ -3,6 +3,9 @@ import { ActionSheetIOS, Platform, Alert } from 'react-native'
 /**
  * iOS action sheets have not parallel on Android so just replace them with
  * an Alert
+ *
+ * For android we `reverse` the options so that the cancel option is on the left
+ * and the "top" action is on the right.
  */
 const runActionSheet = (
     title: string,
