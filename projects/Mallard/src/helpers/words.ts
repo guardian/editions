@@ -1,4 +1,5 @@
 import { isInBeta } from './release-stream'
+import { Platform } from 'react-native'
 
 export const REQUEST_INVALID_RESPONSE_STATE = 'Request failed'
 export const REQUEST_INVALID_RESPONSE_VALIDATION = 'Failed to parse data'
@@ -26,8 +27,12 @@ export const DIAGNOSTICS_REQUEST = `Would you like us to include diagnostic info
     isInBeta()
         ? `
 
-Additionally, if you would like to switch back from this beta build to the release build you can delete this app and reinstall it from the app store.
-`
+${Platform.select({
+    ios:
+        'Additionally, if you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
+    android:
+        'Additionally, if you would like to switch back from this beta back to the general app you can find this app on the Play Store, leave the beta from the Play Store page, uninstall the app and then reinstall the app.',
+})}`
         : ``
 }`
 

@@ -8,12 +8,16 @@ const runActionSheet = (
     title: string,
     message: string,
     options: { text: string; onPress: () => void }[],
-) =>
-    Platform.select({
+) => {
+    const optionsWithCancel = options.concat({
+        text: 'Cancel',
+        onPress: () => {},
+    })
+    return Platform.select({
         ios: () =>
             ActionSheetIOS.showActionSheetWithOptions(
                 {
-                    options: [...options.map(({ text }) => text), 'Cancel'],
+                    options: optionsWithCancel.map(({ text }) => text),
                     title,
                     message,
                     cancelButtonIndex: options.length,
@@ -21,7 +25,9 @@ const runActionSheet = (
                 async index =>
                     index !== options.length && options[index].onPress(),
             ),
-        android: () => Alert.alert(title, message, options),
+        android: () =>
+            Alert.alert(title, message, optionsWithCancel.slice().reverse()),
     })()
+}
 
 export { runActionSheet }
