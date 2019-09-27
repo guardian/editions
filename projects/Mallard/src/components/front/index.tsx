@@ -45,11 +45,15 @@ const CollectionPageInFront = ({
     scrollX: Animated.Value
 } & PropTypes) => {
     const { card, size } = useIssueScreenSize()
-    const translate = getTranslateForPage(
-        card.width,
-        scrollX,
-        index,
-        size === PageLayoutSizes.mobile ? 1 : 0.5,
+    const translate = useMemo(
+        () =>
+            getTranslateForPage(
+                card.width,
+                scrollX,
+                index,
+                size === PageLayoutSizes.mobile ? 1 : 0.5,
+            ),
+        [card.width, scrollX, index, size],
     )
     return (
         <Animated.View
@@ -82,149 +86,152 @@ const CollectionPageInFront = ({
     )
 }
 
-const FrontWithResponse = ({
-    frontData,
-    localIssueId,
-    publishedIssueId,
-}: {
-    localIssueId: Issue['localId']
-    publishedIssueId: Issue['publishedId']
-    frontData: FrontType
-}) => {
-    const color = getColor(frontData.appearance)
-    const pillar = getAppearancePillar(frontData.appearance)
+const FrontWithResponse = React.memo(
+    ({
+        frontData,
+        localIssueId,
+        publishedIssueId,
+    }: {
+        localIssueId: Issue['localId']
+        publishedIssueId: Issue['publishedId']
+        frontData: FrontType
+    }) => {
+        const color = getColor(frontData.appearance)
+        const pillar = getAppearancePillar(frontData.appearance)
 
-    const [scrollX] = useState(() => new Animated.Value(0))
-    const flatListRef = useRef<AnimatedFlatListRef | undefined>()
-    const [cards, articleNavigator]: [
-        FlatCard[],
-        ArticleNavigator,
-    ] = useMemo(() => {
-        const flatCollections = flattenCollectionsToCards(frontData.collections)
-        const navigator = {
-            articles: flattenFlatCardsToFront(flatCollections).map(
-                ({ article, collection }) => ({
-                    collection: collection.key,
-                    front: frontData.key,
-                    article: article.key,
-                    localIssueId,
-                    publishedIssueId,
-                }),
-            ),
-            appearance: frontData.appearance,
-            frontName: frontData.displayName || '',
-        }
-        return [flatCollections, navigator]
-    }, [localIssueId, publishedIssueId, frontData])
-
-    const stops = cards.length
-    const { card, container } = useIssueScreenSize()
-
-    return (
-        <Wrapper
-            scrubber={
-                <Slider
-                    stops={stops}
-                    title={frontData.displayName || 'News'}
-                    fill={color}
-                    onReleaseScrub={screenX => {
-                        if (
-                            flatListRef.current &&
-                            flatListRef.current._component
-                        ) {
-                            flatListRef.current._component.scrollToOffset({
-                                offset:
-                                    getNearestPage(
-                                        container.width,
-                                        screenX,
-                                        stops,
-                                    ) * container.width,
-                            })
-                        }
-                    }}
-                    position={scrollX.interpolate({
-                        inputRange: [
-                            0,
-                            card.width * (stops <= 0 ? stops : stops - 1) +
-                                0.001,
-                        ],
-                        outputRange: safeInterpolation([0, 1]),
-                    })}
-                />
+        const [scrollX] = useState(() => new Animated.Value(0))
+        const flatListRef = useRef<AnimatedFlatListRef | undefined>()
+        const [cards, articleNavigator]: [
+            FlatCard[],
+            ArticleNavigator,
+        ] = useMemo(() => {
+            const flatCollections = flattenCollectionsToCards(
+                frontData.collections,
+            )
+            const navigator = {
+                articles: flattenFlatCardsToFront(flatCollections).map(
+                    ({ article, collection }) => ({
+                        collection: collection.key,
+                        front: frontData.key,
+                        article: article.key,
+                        localIssueId,
+                        publishedIssueId,
+                    }),
+                ),
+                appearance: frontData.appearance,
+                frontName: frontData.displayName || '',
             }
-        >
-            <Animated.FlatList
-                showsHorizontalScrollIndicator={false}
-                windowSize={6}
-                maxToRenderPerBatch={3}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={1}
-                horizontal={true}
-                decelerationRate="fast"
-                snapToInterval={card.width}
-                ref={(flatList: AnimatedFlatListRef) =>
-                    (flatListRef.current = flatList)
-                }
-                getItemLayout={(_: never, index: number) => ({
-                    length: card.width,
-                    offset: card.width * index,
-                    index,
-                })}
-                keyExtractor={(item: FlatCard, index: number) =>
-                    index + item.collection.key
-                }
-                ListFooterComponent={
-                    <View
-                        style={{
-                            width: container.width - card.width,
+            return [flatCollections, navigator]
+        }, [localIssueId, publishedIssueId, frontData])
+
+        const stops = cards.length
+        const { card, container } = useIssueScreenSize()
+
+        return (
+            <Wrapper
+                scrubber={
+                    <Slider
+                        stops={stops}
+                        title={frontData.displayName || 'News'}
+                        fill={color}
+                        onReleaseScrub={screenX => {
+                            if (
+                                flatListRef.current &&
+                                flatListRef.current._component
+                            ) {
+                                flatListRef.current._component.scrollToOffset({
+                                    offset:
+                                        getNearestPage(
+                                            container.width,
+                                            screenX,
+                                            stops,
+                                        ) * container.width,
+                                })
+                            }
                         }}
-                    ></View>
+                        position={scrollX.interpolate({
+                            inputRange: [
+                                0,
+                                card.width * (stops <= 0 ? stops : stops - 1) +
+                                    0.001,
+                            ],
+                            outputRange: safeInterpolation([0, 1]),
+                        })}
+                    />
                 }
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    x: scrollX,
+            >
+                <Animated.FlatList
+                    showsHorizontalScrollIndicator={false}
+                    // These three props are responsible for the majority of
+                    // performance improvements
+                    initialNumToRender={2}
+                    windowSize={5}
+                    maxToRenderPerBatch={2}
+                    showsVerticalScrollIndicator={false}
+                    scrollEventThrottle={1}
+                    horizontal={true}
+                    decelerationRate="fast"
+                    snapToInterval={card.width}
+                    ref={flatListRef}
+                    getItemLayout={(_: never, index: number) => ({
+                        length: card.width,
+                        offset: card.width * index,
+                        index,
+                    })}
+                    keyExtractor={(item: FlatCard, index: number) =>
+                        index + item.collection.key
+                    }
+                    ListFooterComponent={
+                        <View
+                            style={{
+                                width: container.width - card.width,
+                            }}
+                        ></View>
+                    }
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: {
+                                        x: scrollX,
+                                    },
                                 },
                             },
-                        },
-                    ],
-                    { useNativeDriver: true },
-                )}
-                extraData={{
-                    ...card,
-                    cw: container.width,
-                    ch: container.height,
-                }}
-                data={cards}
-                renderItem={({
-                    item,
-                    index,
-                }: {
-                    item: FlatCard
-                    index: number
-                }) => (
-                    <CollectionPageInFront
-                        articlesInCard={item.articles || []}
-                        appearance={item.appearance}
-                        collection={item.collection.key}
-                        front={frontData.key}
-                        width={card.width}
-                        {...{
-                            scrollX,
-                            localIssueId,
-                            publishedIssueId,
-                            index,
-                            pillar,
-                            articleNavigator,
-                        }}
-                    />
-                )}
-            />
-        </Wrapper>
-    )
-}
+                        ],
+                        { useNativeDriver: true },
+                    )}
+                    // this needs to be referential equal or will trigger
+                    // a re-render
+                    extraData={`${container.width}:${container.height}`}
+                    data={cards}
+                    renderItem={({
+                        item,
+                        index,
+                    }: {
+                        item: FlatCard
+                        index: number
+                    }) => (
+                        <CollectionPageInFront
+                            articlesInCard={item.articles || []}
+                            appearance={item.appearance}
+                            collection={item.collection.key}
+                            front={frontData.key}
+                            width={card.width}
+                            {...{
+                                scrollX,
+                                localIssueId,
+                                publishedIssueId,
+                                index,
+                                pillar,
+                                articleNavigator,
+                            }}
+                        />
+                    )}
+                />
+            </Wrapper>
+        )
+    },
+)
 
 export const Front: FunctionComponent<{
     front: string

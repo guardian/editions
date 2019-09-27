@@ -21,6 +21,8 @@ import {
 } from './words'
 import { runActionSheet } from './action-sheet'
 import { legacyCASUsernameCache, casCredentialsKeychain } from './storage'
+import RNFetchBlob from 'rn-fetch-blob'
+import { FSPaths } from 'src/paths'
 
 const getCASCode = () =>
     Promise.all([
@@ -41,6 +43,13 @@ const getDiagnosticInfo = async (authStatus: AuthStatus) => {
         getGDPREntries(),
         getCASCode(),
     ])
+    const folderStat = await RNFetchBlob.fs.stat(FSPaths.issuesDir)
+    const size = parseInt(folderStat.size)
+    const bytes = size
+    const kilobytes = bytes / 1000
+    const megabytes = kilobytes / 1000
+    const gigabytes = megabytes / 1000
+
     return `
 
 The information below will help us to better understand your query:
@@ -48,6 +57,7 @@ The information below will help us to better understand your query:
 -App-
 Product: Daily App
 App Version: ${DeviceInfo.getVersion()} ${DeviceInfo.getBuildNumber()}
+Commit id: ${getVersionInfo().commitId}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
 App Edition: UK
 First app start: ${DeviceInfo.getFirstInstallTime()}
@@ -62,6 +72,9 @@ Network availability: ${netInfo.type}
 Privacy settings: ${gdprEntries
         .map(([key, value]) => `${key}:${value}`)
         .join(' ')}
+Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
+Total Disk Space: ${DeviceInfo.getTotalDiskCapacity()}
+Available Disk Spce: ${DeviceInfo.getFreeDiskStorage()}
 
 -User / Supporter Info-
 Signed In: ${isAuthed(authStatus)}
@@ -80,7 +93,7 @@ const openSupportMailto = (text: string, releaseURL: string, body?: string) => {
 
     const subject = `${text} - ${
         Platform.OS
-    } Daily App, ${DeviceInfo.getVersion()} / ${getVersionInfo().commitId}`
+    } Daily App, ${DeviceInfo.getVersion()} ${DeviceInfo.getBuildNumber()}`
 
     return Linking.openURL(
         `mailto:${email}?subject=${encodeURIComponent(subject)}${
