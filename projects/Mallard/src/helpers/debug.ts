@@ -9,13 +9,14 @@ type DiffEntry<Props, K extends keyof Props> = {
 type Diff<Props extends object> = DiffEntry<Props, keyof Props>[]
 
 /**
- * This will help to log the difference between props on subsequen renders.
+ * This will help to log the difference between props on subsequent renders.
  *
- * You use it just as you would use React.memo, except the second argument
- * will pass you the prev / next props _and_ the array of diffs to log.
+ * It (ab)uses, React.memo to get access to the prev / next props and you
+ * use it just as you would use React.memo, except the second argument
+ * passes through those prev / next props _and_ an array of diffs to log.
  *
- * If you only want to log the diffs of one specific component you can
- * use the props to and log conditionally e.g. and article id
+ * If you only want to log the diffs of one specific component instance you can
+ * use the props to log conditionally e.g. comparing against a specific article id
  */
 const logPropDiff = <T extends object>(
     component: SFC<T>,
