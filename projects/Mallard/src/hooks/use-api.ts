@@ -7,7 +7,7 @@ import { getIssueResponse } from './use-issue'
 
 export const getIssueSummary = () =>
     fetchFromApi<IssueSummary[]>(issueSummaryPath(), {
-        cached: true,
+        cached: false,
         validator: res => res.length > 0,
     })
 
