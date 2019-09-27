@@ -5,6 +5,7 @@ import { indexer } from './indexer/summary'
 import { upload, FIVE_SECONDS } from './upload'
 import { UploadTaskOutput } from './issueUploadTask'
 import { putStatus } from './status'
+import { logInput, logOutput } from './log-utils'
 
 export interface IndexTaskOutput extends UploadTaskOutput {
     message: string
@@ -15,12 +16,10 @@ export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
     issuePublication,
     issue,
 }) => {
-    console.log(
-        'generateIndexTask handler',
-        JSON.stringify(issuePublication),
-        JSON.stringify(issue),
-    )
-
+    logInput({
+        issuePublication,
+        issue,
+    })
     // at the moment we create and recreate these issue summaries every time
     // an optimisation would be to move the issue summary creation to the previous task
     // so it would only have to be done once and can easily be read in and stiched together
@@ -47,11 +46,13 @@ export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
 
     await putStatus(issuePublication, 'indexed')
 
-    return {
+    const out: IndexTaskOutput = {
         issuePublication,
         index: otherIssueSummaries,
         issue,
         issueSummary: thisIssueSummary,
         message: `Index regenerated`,
     }
+    logOutput(out)
+    return out
 }

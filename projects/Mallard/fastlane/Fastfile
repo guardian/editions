@@ -56,7 +56,7 @@ platform :android do
            }
     )
     supply(
-      track: 'beta',
+      track: 'internal',
       package_name: 'com.guardian.editions'
     )
   end

@@ -63,7 +63,6 @@ export const defaultSettings: Settings = {
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
-    zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix: 'daily-edition',

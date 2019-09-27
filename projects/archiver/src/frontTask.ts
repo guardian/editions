@@ -7,6 +7,7 @@ import { getFront } from './downloader'
 import { IssueTaskOutput } from './issueTask'
 import { Bucket } from './s3'
 import { upload, ONE_WEEK } from './upload'
+import { logInput, logOutput } from './log-utils'
 
 export interface FrontTaskOutput extends IssueTaskOutput {
     images: Image[]
@@ -16,6 +17,11 @@ export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
     issue,
     fronts,
 }) => {
+    logInput({
+        issuePublication,
+        issue,
+        fronts,
+    })
     const { publishedId } = issue
     console.log(`Attempting to upload ${publishedId} to ${Bucket}`)
     const [frontId, ...remainingFronts] = fronts
@@ -43,7 +49,7 @@ export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
         throw new Error('Could not upload front')
     }
     const publishedFronts = [...issue.fronts, frontId]
-    return {
+    const out: FrontTaskOutput = {
         issuePublication,
         issue: { ...issue, fronts: publishedFronts },
         images,
@@ -51,4 +57,6 @@ export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
         remainingFronts: remainingFronts.length,
         message: `Succesfully published ${frontId}`,
     }
+    logOutput(out)
+    return out
 }
