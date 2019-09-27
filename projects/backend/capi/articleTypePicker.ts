@@ -84,7 +84,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isGallery) return ArticleType.Gallery
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
-                else if (isSeries) retrun ArticleType.Article
+                else if (isSeries) return ArticleType.Article
                 else if (isFeature) return ArticleType.Feature
                 else return ArticleType.Article
 
