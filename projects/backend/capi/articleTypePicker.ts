@@ -66,6 +66,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'journal':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
+                else if (isSeries) retrun ArticleType.Article
                 else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
