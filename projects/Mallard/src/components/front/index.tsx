@@ -159,16 +159,17 @@ const FrontWithResponse = ({
         >
             <Animated.FlatList
                 showsHorizontalScrollIndicator={false}
-                windowSize={6}
-                maxToRenderPerBatch={3}
+                // These three props are responsible for the majority of
+                // performance improvements
+                initialNumToRender={2}
+                windowSize={5}
+                maxToRenderPerBatch={2}
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 horizontal={true}
                 decelerationRate="fast"
                 snapToInterval={card.width}
-                ref={(flatList: AnimatedFlatListRef) =>
-                    (flatListRef.current = flatList)
-                }
+                ref={flatListRef}
                 getItemLayout={(_: never, index: number) => ({
                     length: card.width,
                     offset: card.width * index,
@@ -196,11 +197,9 @@ const FrontWithResponse = ({
                     ],
                     { useNativeDriver: true },
                 )}
-                extraData={{
-                    ...card,
-                    cw: container.width,
-                    ch: container.height,
-                }}
+                // this needs to be referential equal or will trigger
+                // a re-render
+                extraData={`${container.width}:${container.height}`}
                 data={cards}
                 renderItem={({
                     item,
