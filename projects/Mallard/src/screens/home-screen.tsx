@@ -1,7 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
 import {
-    NavigationEvents,
     NavigationInjectedProps,
     NavigationScreenProp,
     withNavigation,
@@ -76,62 +75,64 @@ const HomeScreenHeader = withNavigation(
 )
 
 const IssueList = withNavigation(
-    ({
-        issueList,
-        navigation,
-    }: {
-        issueList: IssueSummary[]
-    } & NavigationInjectedProps) => {
-        const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-        return (
-            <>
-                <BaseList
-                    style={{ paddingTop: 0 }}
-                    data={issueList}
-                    renderItem={({ item: issueSummary }) => (
-                        <IssueRow
-                            onPress={() => {
-                                navigateToIssue(navigation, {
-                                    path: {
-                                        localIssueId: issueSummary.localId,
-                                        publishedIssueId:
-                                            issueSummary.publishedId,
-                                    },
-                                })
-                                sendComponentEvent({
-                                    componentType: ComponentType.appButton,
-                                    action: Action.click,
-                                    value: 'issues_list_issue_clicked',
-                                })
-                            }}
-                            issue={issueSummary}
-                        />
-                    )}
-                />
-                {isUsingProdDevtools ? (
-                    <View
-                        style={{
-                            padding: metrics.horizontal,
-                            paddingVertical: metrics.vertical * 4,
-                        }}
-                    >
-                        <GridRowSplit>
-                            <Button
-                                appearance={ButtonAppearance.skeleton}
+    React.memo(
+        ({
+            issueList,
+            navigation,
+        }: {
+            issueList: IssueSummary[]
+        } & NavigationInjectedProps) => {
+            const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+            return (
+                <>
+                    <BaseList
+                        style={{ paddingTop: 0 }}
+                        data={issueList}
+                        renderItem={({ item: issueSummary }) => (
+                            <IssueRow
                                 onPress={() => {
                                     navigateToIssue(navigation, {
-                                        path: undefined,
+                                        path: {
+                                            localIssueId: issueSummary.localId,
+                                            publishedIssueId:
+                                                issueSummary.publishedId,
+                                        },
+                                    })
+                                    sendComponentEvent({
+                                        componentType: ComponentType.appButton,
+                                        action: Action.click,
+                                        value: 'issues_list_issue_clicked',
                                     })
                                 }}
-                            >
-                                Go to latest
-                            </Button>
-                        </GridRowSplit>
-                    </View>
-                ) : null}
-            </>
-        )
-    },
+                                issue={issueSummary}
+                            />
+                        )}
+                    />
+                    {isUsingProdDevtools ? (
+                        <View
+                            style={{
+                                padding: metrics.horizontal,
+                                paddingVertical: metrics.vertical * 4,
+                            }}
+                        >
+                            <GridRowSplit>
+                                <Button
+                                    appearance={ButtonAppearance.skeleton}
+                                    onPress={() => {
+                                        navigateToIssue(navigation, {
+                                            path: undefined,
+                                        })
+                                    }}
+                                >
+                                    Go to latest
+                                </Button>
+                            </GridRowSplit>
+                        </View>
+                    ) : null}
+                </>
+            )
+        },
+    ),
 )
 
 export const HomeScreen = ({
@@ -139,16 +140,11 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { response: issueSummary, retry } = useIssueSummary()
+    const { response: issueSummary } = useIssueSummary()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     const issue = useIssueCompositeKey()
     return (
         <WithAppAppearance value={'tertiary'}>
-            <NavigationEvents
-                onDidFocus={() => {
-                    retry()
-                }}
-            />
             <ScrollContainer>
                 <HomeScreenHeader
                     onSettings={() => {
