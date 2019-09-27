@@ -29,9 +29,9 @@ export const DIAGNOSTICS_REQUEST = `Would you like us to include diagnostic info
 
 ${Platform.select({
     ios:
-        'Additionally, if you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
+        'If you would like to switch back from this beta back to the general app you can delete this app and reinstall it from the app store.',
     android:
-        'Additionally, if you would like to switch back from this beta back to the general app you can find this app on the Play Store, leave the beta from the Play Store page, uninstall the app and then reinstall the app.',
+        'If you would like to switch back from this beta back to the general app you can find this app on the Play Store, leave the beta from the Play Store page, uninstall the app and then reinstall the app.',
 })}`
         : ``
 }`
