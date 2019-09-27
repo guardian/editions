@@ -8,6 +8,7 @@ import { ArticleHeaderProps } from '../article-header/types'
 import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
+import { useArticle } from 'src/hooks/use-article'
 
 const styles = StyleSheet.create({
     block: {
@@ -41,12 +42,13 @@ const Article = ({
     useEffect(() => {
         onTopPositionChange(false)
     }, [])
+    const [, { type }] = useArticle()
 
     return (
         <Fader>
             {wrapLayout && (
                 <WebviewWithArticle
-                    headerProps={headerProps}
+                    headerProps={{ ...headerProps, type: type }}
                     article={article}
                     scrollEnabled={true}
                     useWebKit={false}
