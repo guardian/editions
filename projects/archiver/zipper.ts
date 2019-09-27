@@ -1,6 +1,6 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
-import { s3, bucket } from './src/s3'
+import { s3, Bucket } from './src/s3'
 import { ONE_WEEK } from './src/upload'
 
 const notNull = <T>(value: T | null | undefined): value is T =>
@@ -14,7 +14,7 @@ export const zip = async (
     const output = new PassThrough()
     const upload = s3
         .upload({
-            Bucket: bucket,
+            Bucket,
             Key: `zips/${name}.zip`,
             Body: output,
             ACL: 'public-read',
@@ -25,7 +25,7 @@ export const zip = async (
 
     const objects = await s3
         .listObjectsV2({
-            Bucket: bucket,
+            Bucket,
             Prefix: prefix,
         })
         .promise()
@@ -58,7 +58,7 @@ export const zip = async (
                 : file
             console.log(`getting ${file}`)
             const s3response = await s3
-                .getObject({ Bucket: bucket, Key: file })
+                .getObject({ Bucket, Key: file })
                 .promise()
             if (s3response.Body == null) return false
             console.log(`adding ${file} to zip ${name}`)

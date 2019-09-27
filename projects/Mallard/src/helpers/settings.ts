@@ -62,9 +62,13 @@ export interface DevSettings {
     isUsingProdDevtools: boolean
     useNewWebview: boolean
     notificationServiceRegister: string
-    zipUrl: string
     cacheClearUrl: string
+    deprecationWarningUrl: string
     contentPrefix: string
+    storeDetails: {
+        ios: string
+        android: string
+    }
 }
 
 interface UserSettings {

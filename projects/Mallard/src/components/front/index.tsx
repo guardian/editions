@@ -45,11 +45,15 @@ const CollectionPageInFront = ({
     scrollX: Animated.Value
 } & PropTypes) => {
     const { card, size } = useIssueScreenSize()
-    const translate = getTranslateForPage(
-        card.width,
-        scrollX,
-        index,
-        size === PageLayoutSizes.mobile ? 1 : 0.5,
+    const translate = useMemo(
+        () =>
+            getTranslateForPage(
+                card.width,
+                scrollX,
+                index,
+                size === PageLayoutSizes.mobile ? 1 : 0.5,
+            ),
+        [card.width, scrollX, index, size],
     )
     return (
         <Animated.View

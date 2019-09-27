@@ -1,20 +1,14 @@
 import { Handler } from 'aws-lambda'
-import { SNS, TemporaryCredentials } from 'aws-sdk'
-import { IssueCompositeKey } from '../common'
-import { attempt } from '../../backend/utils/try'
+import { IssueCompositeKey, IssuePublicationIdentifier, Issue } from '../common'
+import { logInput, logOutput } from './log-utils'
+import {
+    PublishEvent,
+    Status,
+    notifyAboutPublishStatus,
+} from './notifications/pub-status-notifyer'
+import { scheduleAppStoreNotification } from './notifications/device-notifications'
 
-export type Status = 'Processing' | 'Published' | 'Failed'
-
-export interface EventInput {
-    issueId: IssueCompositeKey
-    error?: {
-        Error: string
-        Cause: string
-    }
-    message?: string
-}
-
-export const extractError = (error?: { Cause: string }): string | undefined => {
+const extractError = (error?: { Cause: string }): string | undefined => {
     if (error === undefined) {
         return
     }
@@ -26,40 +20,54 @@ export const extractError = (error?: { Cause: string }): string | undefined => {
     }
 }
 
-export const handler: Handler<
-    EventInput,
-    { issueId: IssueCompositeKey }
-> = async ({ issueId, message, error }) => {
-    const topic = process.env.topic
-    const role = process.env.role
-    if (topic === undefined || role === undefined) {
-        throw new Error('No topic or role.')
+export interface EventTaskInput {
+    issuePublication: IssuePublicationIdentifier
+    issue: Issue
+    message?: string
+    error?: {
+        Error: string
+        Cause: string
     }
-    const sns = new SNS({
-        region: 'eu-west-1',
-        credentials: new TemporaryCredentials({
-            RoleArn: role,
-            RoleSessionName: 'front-assume-role-access-for-sns',
-        }),
-    })
+}
+
+export interface EventTaskOutput {
+    issueId: IssueCompositeKey
+}
+
+export const handler: Handler<EventTaskInput, EventTaskOutput> = async ({
+    issuePublication,
+    issue,
+    message,
+    error,
+}) => {
+    const eventTaskInput = {
+        issuePublication,
+        issue,
+        message,
+    }
+
+    logInput(eventTaskInput)
 
     const status: Status = error === undefined ? 'Published' : 'Failed'
-
-    const parsedErrorOrMessage = extractError(error) || message
-
-    const payload = {
-        event: {
-            ...issueId,
-            status,
-            message: parsedErrorOrMessage,
-        },
+    const messageOrError = extractError(error) || message
+    const { version } = issuePublication
+    const publishEvent: PublishEvent = {
+        version,
+        status,
+        message: messageOrError,
     }
-    const send = await attempt(
-        sns
-            .publish({ TopicArn: topic, Message: JSON.stringify(payload) })
-            .promise(),
-    )
 
-    console.log(send)
-    return { issueId }
+    const sendSNSRes = await notifyAboutPublishStatus(publishEvent)
+    console.log('send sns message:', sendSNSRes)
+    scheduleAppStoreNotification(issue, issuePublication)
+
+    const { publishedId, localId } = issue
+
+    const issueId: IssueCompositeKey = {
+        publishedId,
+        localId,
+    }
+    const out: EventTaskOutput = { issueId }
+    logOutput(out)
+    return out
 }

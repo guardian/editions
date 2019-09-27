@@ -6,6 +6,9 @@
         "@types/ramda": "^0.26.18",
         "ramda": "^0.26.1"
     },
+     "devDependencies": {
+      "typescript": "^3.5.3"
+  },
     "scripts": {
         "build": "echo 'Common does not need building.'",
         "test": "echo 'Common has no tests.'"
