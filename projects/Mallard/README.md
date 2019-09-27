@@ -65,7 +65,7 @@ Make sure your phone and computer are on the same WiFi network.
 $ yarn start
 ```
 
-in sepearte terminal
+in separate terminal
 ```bash
 $ yarn run wifi-android
 ```
