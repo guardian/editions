@@ -112,6 +112,9 @@ export const headerStyles = ({
             margin-right: 2em;
             margin-top: -4em;
         }
+        .header-container[data-type='immersive'] .header:after {
+            margin-right: -4em;
+        }
     }
 
     .header-container[data-type='immersive'] {
@@ -180,9 +183,7 @@ const Header = ({
                     headerProps.image &&
                     publishedId &&
                     Image({ image: headerProps.image, publishedId })}
-                <span class="header-kicker"
-                    >${type} – ${headerProps.kicker}</span
-                >
+                <span class="header-kicker">${headerProps.kicker}</span>
                 <section class="header-top">
                     <h1>${headerProps.headline}</h1>
                     <p>${headerProps.standfirst}</p>
