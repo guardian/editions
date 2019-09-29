@@ -8,6 +8,7 @@ import { color } from 'src/theme/color'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { WrapLayout } from '../wrap/wrap'
 import { metrics } from 'src/theme/spacing'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export const headerStyles = ({
     colors,
@@ -52,6 +53,7 @@ export const headerStyles = ({
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
+        height: 100vw;
     }
     .header-kicker {
         font-family: ${families.titlepiece.regular};
@@ -105,6 +107,13 @@ export const headerStyles = ({
         margin: -2em ${px(metrics.article.sidesTablet * -1)} 0;
         padding: 0 ${px(metrics.article.sidesTablet)};
     }
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container[data-type='immersive'] .header {
+            margin-right: 2em;
+            margin-top: -4em;
+        }
+    }
+
     .header-container[data-type='immersive'] {
         color: ${color.textOverDarkBackground};
     }
