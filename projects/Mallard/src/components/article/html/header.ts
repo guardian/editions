@@ -100,6 +100,11 @@ export const headerStyles = ({
     .header-container[data-type='immersive'] .header-bg {
         background-color: ${color.palette.neutral[7]};
     }
+    .header-container[data-type='immersive'] .header {
+        background-color: ${color.palette.neutral[7]};
+        margin: -2em ${px(metrics.article.sidesTablet * -1)} 0;
+        padding: 0 ${px(metrics.article.sidesTablet)};
+    }
     .header-container[data-type='immersive'] {
         color: ${color.textOverDarkBackground};
     }
@@ -112,6 +117,10 @@ export const headerStyles = ({
         padding-right: ${metrics.article.sidesTablet};
         margin-left: -10em;
         padding-left: 10em;
+        border: none;
+    }
+    .header-container[data-type='immersive'] .header-byline {
+        color: ${color.textOverDarkBackground};
     }
 `
 
