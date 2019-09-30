@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
     Image,
     ImageStyle,
@@ -12,7 +12,6 @@ import { GalleryArticle, Image as ImageType, ImageElement } from 'src/common'
 import { BigArrow } from 'src/components/icons/BigArrow'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
-import { APIPaths } from 'src/paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -24,10 +23,9 @@ import {
 import { Wrap } from '../wrap/wrap'
 import { Direction } from 'src/helpers/sizes'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { imageForScreenSize } from 'src/helpers/screen'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { Issue } from '../../../common'
-import { defaultSettings } from 'src/helpers/settings/defaults'
+import { ImageResource } from 'src/components/front/image-resource'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -36,44 +34,17 @@ const GalleryImage = ({
     src,
     accessibilityLabel,
     style,
-    publishedId,
 }: {
     src: ImageType
     accessibilityLabel?: string
     style: StyleProp<ImageStyle>
-    publishedId: Issue['publishedId']
 }) => {
-    const [aspectRatio, setRatio] = useState(1)
-    const backend = defaultSettings.apiUrl
-    // @TODO: This will need a refactor to work locally
-    const uri = `${backend}${APIPaths.media(
-        publishedId,
-        imageForScreenSize(),
-        src.source,
-        src.path,
-    )}`
-
-    useEffect(() => {
-        Image.getSize(
-            uri,
-            (width, height) => {
-                setRatio(width / height)
-            },
-            () => {},
-        )
-    }, [uri])
-
     return (
-        <Image
+        <ImageResource
+            image={src}
+            style={[style, galleryImageStyles.root]}
+            setAspectRatio={true}
             accessibilityLabel={accessibilityLabel}
-            source={{ uri }}
-            style={[
-                style,
-                galleryImageStyles.root,
-                {
-                    aspectRatio,
-                },
-            ]}
         />
     )
 }
@@ -117,13 +88,7 @@ const styles = StyleSheet.create({
     arrow: { position: 'absolute', top: 3, left: -2 },
 })
 
-const GalleryItem = ({
-    element,
-    publishedId,
-}: {
-    element: ImageElement
-    publishedId: Issue['publishedId']
-}) => {
+const GalleryItem = ({ element }: { element: ImageElement }) => {
     const [color] = useArticle()
     return (
         <Wrap
@@ -154,7 +119,6 @@ const GalleryItem = ({
         >
             <GalleryImage
                 accessibilityLabel={element.alt}
-                publishedId={publishedId}
                 src={element.src}
                 style={styles.image}
             />
@@ -210,12 +174,7 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
             <View style={[styles.background]}>
                 {gallery.elements.map((element, index) => {
                     if (element.id === 'image' && publishedId) {
-                        return (
-                            <GalleryItem
-                                element={element}
-                                publishedId={publishedId}
-                            />
-                        )
+                        return <GalleryItem element={element} />
                     }
                     return <Text key={index}>{element.id}</Text>
                 })}
