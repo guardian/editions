@@ -115,10 +115,12 @@ export const headerStyles = ({
         display: block;
         height: 0;
         margin: 0 -50em;
-        border-bottom: 1px solid ${color.dimLine};
     }
 
     /*review*/
+    .header-container[data-type='review']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
     .header-container[data-type='review'] .header-bg {
         background-color: ${colors.faded};
     }
