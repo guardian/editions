@@ -16,6 +16,7 @@ interface StepFunctionProps {
     backendURL: string
     frontsTopicArn: string
     frontsTopicRoleArn: string
+    guNotifyServiceApiKey: string
 }
 
 //Make sure you add the lambda name in riff-raff.yaml
@@ -83,6 +84,7 @@ export const archiverStepFunction = (
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
+        guNotifyServiceApiKey,
     }: StepFunctionProps,
 ) => {
     const lambdaParams = {
@@ -139,6 +141,7 @@ export const archiverStepFunction = (
         {
             topic: frontsTopicArn,
             role: frontsTopicRoleArn,
+            gu_notify_service_api_key: guNotifyServiceApiKey,
         },
         {
             initialPolicy: [
@@ -150,25 +153,9 @@ export const archiverStepFunction = (
         },
     )
 
-    const publishedTask = new sfn.Task(
-        scope,
-        'Send published message to Fronts Tool',
-        {
-            task: new tasks.InvokeFunction(event),
-        },
-    )
-    const failTask = new sfn.Task(
-        scope,
-        'Send Failure Message to Fronts Tool',
-        {
-            task: new tasks.InvokeFunction(event),
-        },
-    )
-
-    failTask.next(new sfn.Fail(scope, 'publication-failed'))
-    ;[issueTask, frontTask, imageTask, uploadTask, zipTask, indexerTask].map(
-        (task: sfn.Task) => task.addCatch(failTask, { resultPath: '$.error' }),
-    )
+    const publishedTask = new sfn.Task(scope, 'Schedule device notification', {
+        task: new tasks.InvokeFunction(event),
+    })
     //Fetch issue metadata
     issueTask.next(frontTask)
 

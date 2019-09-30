@@ -1,40 +1,70 @@
-import { IssuePublicationIdentifier, Issue } from '../../common'
+import { attempt } from '../../../backend/utils/try'
+import fetch from 'node-fetch'
+import {
+    prepareScheduleDeviceNotificationRequest,
+    createScheduleTime,
+    shouldSchedule,
+} from './device-notifications-helpers'
 
-interface Topic {
-    type: string
-    name: string
-}
+/**
+ * TODO
+ * it will work now noly for Daily Editions in UK
+ * In the future we will need to make it more generic (for US and Australia)
+ **/
 
-interface ScheduleAppStoreNotificationPayload {
-    id: string
-    type: string
-    topic: Topic[]
+export interface IssueNotificationData {
     key: string
     name: string
-    date: string
-    sender: string
+    issueDate: string
 }
 
-export const scheduleAppStoreNotification = (
-    issue: Issue,
-    issuePublication: IssuePublicationIdentifier,
-): any => {
-    console.log('scheduling App Store Notification')
-    const { issueDate } = issuePublication
-    const { key, name } = issue
-
-    const issueAppStoreNotification: ScheduleAppStoreNotificationPayload = {
-        id: '123',
-        type: 'editions',
-        topic: [{ type: 'editions', name: 'uk' }],
-        key,
-        name,
-        date: issueDate,
-        sender: 'editions-backend',
-    }
-
-    console.log(
-        'issue app store notification payload',
-        issueAppStoreNotification,
+const scheduleDeviceNotification = async (
+    issueData: IssueNotificationData,
+    cfg: { domain: string; apiKey: string },
+    scheduleTime: string,
+) => {
+    const { reqEndpoint, reqBody } = prepareScheduleDeviceNotificationRequest(
+        issueData,
+        cfg,
+        scheduleTime,
     )
+    const rawResponse = await fetch(reqEndpoint, reqBody)
+    const { status, statusText } = rawResponse
+
+    if (status < 200 || status > 299) {
+        const resText = await attempt(rawResponse.text())
+        const errLog = `Could not Schedule Device Notification, status: ${status}, statusText: ${statusText}, error message: ${resText}`
+        console.error(errLog)
+        throw new Error(errLog)
+    }
+    return { statusCode: status, statusText }
+}
+
+export const scheduleDeviceNotificationIfInFuture = async (
+    issueData: IssueNotificationData,
+    cfg: { domain: string; apiKey: string },
+) => {
+    const scheduleTime = createScheduleTime(issueData.issueDate)
+
+    const now = new Date()
+
+    if (shouldSchedule(scheduleTime, now)) {
+        const { statusCode, statusText } = await scheduleDeviceNotification(
+            issueData,
+            cfg,
+            scheduleTime,
+        )
+
+        console.log(
+            'schedule Device Notification Response',
+            JSON.stringify({
+                statusCode: statusCode,
+                statusText: statusText,
+            }),
+        )
+    } else {
+        console.log(
+            `skipping schedule Device Notification because the (scheduleTime: ${scheduleTime}) is in the past`,
+        )
+    }
 }

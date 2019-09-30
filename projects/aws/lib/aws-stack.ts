@@ -28,6 +28,15 @@ export class EditionsStack extends cdk.Stack {
             description: 'Capi key',
         })
 
+        const guNotifyServiceApiKeyParameter = new cdk.CfnParameter(
+            this,
+            'gu_notify_service_api_key',
+            {
+                type: 'String',
+                description: 'guardian device notifications service api key',
+            },
+        )
+
         const printSentURLParameter = new cdk.CfnParameter(this, 'psurl', {
             type: 'String',
             description: 'print sent url parameter',
@@ -281,6 +290,7 @@ export class EditionsStack extends cdk.Stack {
             backendURL,
             frontsTopicArn: frontsTopicARN.valueAsString,
             frontsTopicRoleArn: frontsTopicRoleARN.valueAsString,
+            guNotifyServiceApiKey: guNotifyServiceApiKeyParameter.valueAsString,
         })
 
         new CfnOutput(this, 'archiver-state-machine-arn', {
