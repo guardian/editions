@@ -116,6 +116,21 @@ export const headerStyles = ({
         height: 0;
         margin: 0 -50em;
     }
+    .header-opinion-flex {
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+    .header-opinion-flex > :last-child {
+        width: 30%;
+    }
+
+    .header-opinion-flex > :last-child img {
+        width: 250%;
+        display: block;
+        float: right;
+    }
 
     /*review*/
     .header-container[data-type='review']:after {
@@ -127,13 +142,58 @@ export const headerStyles = ({
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
         ${getScaledFontCss('headline', 1.5)}
-        font-weight: 600;
+        font-family: ${families.headline.bold};
     }
     .header-container[data-type='review'] .header-byline {
         color: ${colors.dark};
     }
     .header-container[data-type='review'] p {
         color: ${colors.main};
+    }
+
+    /*opinion*/
+    .header-container[data-type='opinion']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
+    .header-container[data-type='opinion'] .header-bg {
+        background-color: ${color.palette.opinion.faded};
+    }
+    .header-container[data-type='opinion'] .header-kicker {
+        display: none;
+    }
+    .header-container[data-type='opinion'] .header-byline {
+        color: ${color.text};
+    }
+    .header-container[data-type='opinion'] h1 {
+        font-family: ${families.headline.light};
+    }
+    .header-container[data-type='opinion'] h1 span {
+        color: ${colors.main};
+        display: block;
+        font-family: ${families.titlepiece.regular};
+    }
+
+
+    /*opinion*/
+    .header-container[data-type='analysis']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
+    .header-container[data-type='analysis'] .header-bg {
+        background-color: ${color.palette.neutral[93]};
+    }
+    .header-container[data-type='analysis'] .header-kicker {
+        display: none;
+    }
+    .header-container[data-type='analysis'] .header-byline {
+        color: ${color.text};
+    }
+    .header-container[data-type='analysis'] h1 {
+        font-family: ${families.headline.light};
+    }
+    .header-container[data-type='analysis'] h1 span {
+        color: ${colors.main};
+        display: block;
+        font-family: ${families.titlepiece.regular};
     }
 
     /*immersive*/
@@ -193,12 +253,15 @@ const Image = ({
         image.path,
     )}`
     return html`
-        <img class="header-image ${className}" src="${path}" />
+        <img class="${className}" src="${path}" />
     `
 }
 
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive || type === ArticleType.Longread
+
+const hasLargeByline = (type: ArticleType) =>
+    type === ArticleType.Opinion || type === ArticleType.Analysis
 
 const Header = ({
     publishedId,
@@ -209,6 +272,11 @@ const Header = ({
     type: ArticleType
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const largeByline = hasLargeByline(type)
+    const cutout =
+        type === ArticleType.Opinion &&
+        headerProps.bylineImages &&
+        headerProps.bylineImages.cutout
     return html`
         ${immersive &&
             headerProps.image &&
@@ -216,7 +284,7 @@ const Header = ({
             Image({
                 image: headerProps.image,
                 publishedId,
-                className: 'header-image--immersive',
+                className: 'header-image header-image--immersive',
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -225,16 +293,51 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        Image({ image: headerProps.image, publishedId })}
+                        Image({
+                            className: 'header-image',
+                            image: headerProps.image,
+                            publishedId,
+                        })}
                     <span class="header-kicker">${headerProps.kicker}</span>
-                    <section class="header-top">
-                        <h1>${headerProps.headline}</h1>
-                        <p>${headerProps.standfirst}</p>
-                    </section>
+                    ${largeByline
+                        ? html`
+                              <section class="header-top">
+                                  <div
+                                      class="${cutout && `header-opinion-flex`}"
+                                  >
+                                      <h1>
+                                          ${headerProps.headline}
+                                          <span>${headerProps.byline}</span>
+                                      </h1>
+                                      ${publishedId &&
+                                          cutout &&
+                                          html`
+                                              <div>
+                                                  ${Image({
+                                                      image: cutout,
+                                                      publishedId,
+                                                  })}
+                                              </div>
+                                          `}
+                                  </div>
+                              </section>
+                          `
+                        : html`
+                              <section class="header-top">
+                                  <h1>
+                                      ${headerProps.headline}
+                                  </h1>
+                                  <p>${headerProps.standfirst}</p>
+                              </section>
+                          `}
                 </header>
 
                 <aside class="header-byline">
-                    <span>${headerProps.byline}</span>
+                    <span
+                        >${largeByline
+                            ? headerProps.standfirst
+                            : headerProps.byline}</span
+                    >
                 </aside>
                 <div class="header-bg"></div>
             </div>
