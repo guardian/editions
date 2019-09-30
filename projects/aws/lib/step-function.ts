@@ -127,6 +127,7 @@ export const archiverStepFunction = (
     const indexerTask = new sfn.Task(scope, 'Generate Index', {
         task: new tasks.InvokeFunction(indexer),
     })
+
     const frontsTopicRole = iam.Role.fromRoleArn(
         scope,
         'fronts-topic-role',
@@ -184,11 +185,11 @@ export const archiverStepFunction = (
 
     uploadTask.next(zipTask)
 
-    zipTask.next(publishedTask)
+    zipTask.next(indexerTask)
 
-    publishedTask.next(indexerTask)
+    indexerTask.next(publishedTask)
 
-    indexerTask.next(new sfn.Succeed(scope, 'successfully-archived'))
+    publishedTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,

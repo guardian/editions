@@ -10,7 +10,7 @@ import {
     hasSucceeded,
     withFailureMessage,
 } from '../../backend/utils/try'
-import { IssuePublication } from '../../common/src'
+import { IssuePublicationIdentifier } from '../../common/src'
 import { IssueParams } from './issueTask'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
@@ -19,7 +19,7 @@ interface Record {
     eventTime: string
 } //partial of https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
 
-const parseRecord = (record: Record): Attempt<IssuePublication> => {
+const parseRecord = (record: Record): Attempt<IssuePublicationIdentifier> => {
     const key = decodeURIComponent(record.s3.object.key)
     const [, issueDate, filename] = key.split('/')
     if (filename === undefined || issueDate === undefined) {

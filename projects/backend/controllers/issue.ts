@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { groupBy } from 'ramda'
-import { IssueSummary, notNull, IssuePublication } from '../common'
+import { IssueSummary, notNull, IssuePublicationIdentifier } from '../common'
 import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
 import { s3List } from '../s3'
@@ -14,7 +14,7 @@ export const issueController = (req: Request, res: Response) => {
     const version: string = decodeURIComponent(
         isPreviewStage ? 'preview' : req.params.version,
     )
-    const issueId: IssuePublication = {
+    const issueId: IssuePublicationIdentifier = {
         issueDate,
         version,
         edition: 'daily-edition',
@@ -46,7 +46,7 @@ export const getIssuesSummary = async (
         console.error(JSON.stringify(issueKeys))
         return issueKeys
     }
-    const issuePublications: IssuePublication[] = issueKeys.map(
+    const issuePublications: IssuePublicationIdentifier[] = issueKeys.map(
         ({ key, lastModified }) => {
             const [, issueDate, filename] = key.split('/')
             const publicationDate = lastModified

@@ -270,6 +270,14 @@ const fetchWeatherForecastForLocation = (): CachedOrPromise<
     )
 }
 
+const fetchDeprecationWarning = async (): Promise<{
+    android: string
+    ios: string
+}> => {
+    const response = await fetch(defaultSettings.deprecationWarningUrl)
+    return response.json()
+}
+
 const getCacheNumber = async (): Promise<{ cacheClear: string }> => {
     const response = await fetch(defaultSettings.cacheClearUrl)
     return response.json()
@@ -349,4 +357,5 @@ export {
     fetchFromNotificationService,
     fetchAndStoreIpAddress,
     fetchCacheClear,
+    fetchDeprecationWarning,
 }

@@ -72,7 +72,7 @@ export const TitlepieceText = ({
     style,
     ...props
 }: {
-    children: string
+    children: string[] | string | Element
     style?: StyleProp<TextStyle>
 } & TextProps) => {
     return <Text {...props} style={[styles.titlepieceText, style]} />

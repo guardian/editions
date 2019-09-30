@@ -11,7 +11,7 @@ const {
     ANDROID_RELEASE_STREAM,
 } = Config
 
-const FACEBOOK_CLIENT_ID = '180444840287'
+const FACEBOOK_CLIENT_ID = '528503751025697'
 
 const AUTH_TTL = 86400000 // ms in a day
 
