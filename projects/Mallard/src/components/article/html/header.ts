@@ -258,8 +258,9 @@ const Image = ({
 }
 
 const isImmersive = (type: ArticleType) => type === ArticleType.Immersive
+
 const hasLargeByline = (type: ArticleType) =>
-    type === ArticleType.Opinion || ArticleType.Analysis
+    type === ArticleType.Opinion || type === ArticleType.Analysis
 
 const Header = ({
     publishedId,
@@ -297,16 +298,8 @@ const Header = ({
                             publishedId,
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
-                    ${!largeByline
+                    ${largeByline
                         ? html`
-                              <section class="header-top">
-                                  <h1>
-                                      ${headerProps.headline}
-                                  </h1>
-                                  <p>${headerProps.standfirst}</p>
-                              </section>
-                          `
-                        : html`
                               <section class="header-top">
                                   <div
                                       class="${cutout && `header-opinion-flex`}"
@@ -326,6 +319,14 @@ const Header = ({
                                               </div>
                                           `}
                                   </div>
+                              </section>
+                          `
+                        : html`
+                              <section class="header-top">
+                                  <h1>
+                                      ${headerProps.headline}
+                                  </h1>
+                                  <p>${headerProps.standfirst}</p>
                               </section>
                           `}
                 </header>
