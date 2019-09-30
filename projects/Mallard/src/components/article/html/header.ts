@@ -116,6 +116,21 @@ export const headerStyles = ({
         height: 0;
         margin: 0 -50em;
     }
+    .header-opinion-flex {
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+    .header-opinion-flex > :last-child {
+        width: 30%;
+    }
+
+    .header-opinion-flex > :last-child img {
+        width: 250%;
+        display: block;
+        float: right;
+    }
 
     /*review*/
     .header-container[data-type='review']:after {
@@ -215,7 +230,7 @@ const Image = ({
         image.path,
     )}`
     return html`
-        <img class="header-image ${className}" src="${path}" />
+        <img class="${className}" src="${path}" />
     `
 }
 
@@ -239,7 +254,7 @@ const Header = ({
             Image({
                 image: headerProps.image,
                 publishedId,
-                className: 'header-image--immersive',
+                className: 'header-image header-image--immersive',
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -248,7 +263,11 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        Image({ image: headerProps.image, publishedId })}
+                        Image({
+                            className: 'header-image',
+                            image: headerProps.image,
+                            publishedId,
+                        })}
                     <span class="header-kicker">${headerProps.kicker}</span>
                     ${!opinion
                         ? html`
@@ -261,10 +280,26 @@ const Header = ({
                           `
                         : html`
                               <section class="header-top">
-                                  <h1>
-                                      ${headerProps.headline}
-                                      <span>${headerProps.byline}</span>
-                                  </h1>
+                                  <div class="header-opinion-flex">
+                                      <h1>
+                                          ${headerProps.headline}
+                                          <span>${headerProps.byline}</span>
+                                      </h1>
+                                      ${publishedId &&
+                                          headerProps.bylineImages &&
+                                          headerProps.bylineImages.cutout &&
+                                          html`
+                                              <div>
+                                                  ${Image({
+                                                      image:
+                                                          headerProps
+                                                              .bylineImages
+                                                              .cutout,
+                                                      publishedId,
+                                                  })}
+                                              </div>
+                                          `}
+                                  </div>
                               </section>
                           `}
                 </header>
