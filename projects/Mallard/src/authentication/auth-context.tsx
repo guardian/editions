@@ -187,8 +187,10 @@ const createRunAuth = (
         }
         const status = await runNonIdentityChain()
         updateAuth(status, type)
-    } catch {
-        // TODO: should we do anything special here
+    } catch (e) {
+        // updateAuth will not unauth unless we're currently pending or already unauthed
+        // so we can call this with impunity
+        updateAuth(unauthed, type)
     } finally {
         setIsAuthing(false)
     }
@@ -234,7 +236,7 @@ const AuthProvider = ({
     )
 
     const runAuth = useCallback(async () => {
-        const runAuth = createRunAuth(
+        const innerRunAuth = createRunAuth(
             isAuthing,
             setIsAuthing,
             setIdentityStatus,
@@ -242,11 +244,11 @@ const AuthProvider = ({
         )
 
         if (isConnected) {
-            runAuth('live', identityAuthChain, nonIdentityAuthChain)
+            innerRunAuth('live', identityAuthChain, nonIdentityAuthChain)
         } else {
             // all cached attempts are retried when we get internet connection
             // back
-            runAuth('cached', cachedIdentityAuthChain, () =>
+            innerRunAuth('cached', cachedIdentityAuthChain, () =>
                 cachedNonIdentityAuthChain(),
             )
         }
