@@ -198,7 +198,7 @@ const Image = ({
 }
 
 const isImmersive = (type: ArticleType) =>
-    type === ArticleType.Immersive || ArticleType.Longread
+    type === ArticleType.Immersive || type === ArticleType.Longread
 
 const Header = ({
     publishedId,
