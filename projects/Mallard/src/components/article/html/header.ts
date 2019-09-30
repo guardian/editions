@@ -12,6 +12,33 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { Line } from './line'
 import { breakSides } from './helpers/layout'
 
+const outieHeader = (type: ArticleType) => css`
+    .header-container[data-type='${type}'] .header {
+        ${breakSides}
+        margin-top: -4em;
+    }
+    .header-container[data-type='${type}'] {
+        padding-top: 1px;
+    }
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container[data-type='${type}'] .header {
+            margin-right: 2em;
+        }
+        .header-container[data-type='${type}'] .header:after {
+            margin-right: -4em;
+        }
+    }
+    .header-container[data-type='${type}'] .header-kicker {
+        display: inline-block;
+        height: 3em;
+        margin-top: -3em;
+        padding-right: ${metrics.article.sidesTablet};
+        margin-left: -10em;
+        padding-left: 10em;
+        border: none;
+    }
+`
+
 export const headerStyles = ({
     colors,
     wrapLayout,
@@ -88,17 +115,34 @@ export const headerStyles = ({
         display: block;
         height: 0;
         margin: 0 -50em;
-        border-bottom: 1px solid ${color.dimLine};
+    }
+    .header-opinion-flex {
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+    .header-opinion-flex > :last-child {
+        width: 30%;
+    }
+
+    .header-opinion-flex > :last-child img {
+        width: 250%;
+        display: block;
+        float: right;
     }
 
     /*review*/
+    .header-container[data-type='review']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
     .header-container[data-type='review'] .header-bg {
         background-color: ${colors.faded};
     }
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
         ${getScaledFontCss('headline', 1.5)}
-        font-weight: 600;
+        font-family: ${families.headline.bold};
     }
     .header-container[data-type='review'] .header-byline {
         color: ${colors.dark};
@@ -107,46 +151,87 @@ export const headerStyles = ({
         color: ${colors.main};
     }
 
-    /*immersive*/
-    .header-container[data-type='immersive'] .header-bg {
-        background-color: ${color.palette.neutral[7]};
+    /*opinion*/
+    .header-container[data-type='opinion']:after {
+        border-bottom: 1px solid ${color.dimLine};
     }
-    .header-container[data-type='immersive'] .header {
-        background-color: ${color.palette.neutral[7]};
-        margin: -2em ${px(metrics.article.sidesTablet * -1)} 0;
-        padding: 0 ${px(metrics.article.sidesTablet)};
+    .header-container[data-type='opinion'] .header-bg {
+        background-color: ${color.palette.opinion.faded};
     }
-    .header-container[data-type='immersive'] {
-        padding-top: 1px;
+    .header-container[data-type='opinion'] .header-kicker {
+        display: none;
     }
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-container[data-type='immersive'] .header {
-            margin-right: 2em;
-        }
-        .header-container[data-type='immersive'] .header:after {
-            margin-right: -4em;
-        }
+    .header-container[data-type='opinion'] .header-byline {
+        color: ${color.text};
     }
-
-    .header-container[data-type='immersive'] {
-        color: ${color.textOverDarkBackground};
+    .header-container[data-type='opinion'] h1 {
+        font-family: ${families.headline.light};
     }
-    .header-container[data-type='immersive'] .header-kicker {
-        display: inline-block;
-        background-color: ${colors.main};
-        color: ${color.textOverDarkBackground};
-        height: 3em;
-        margin-top: -3em;
-        padding-right: ${metrics.article.sidesTablet};
-        margin-left: -10em;
-        padding-left: 10em;
-        border: none;
-        font-family: ${families.headline.bold};
-    }
-    .header-container[data-type='immersive'] .header-top {
+    .header-container[data-type='opinion'] h1 span {
+        color: ${colors.main};
+        display: block;
         font-family: ${families.titlepiece.regular};
     }
-    .header-container[data-type='immersive'] .header-byline {
+
+
+    /*opinion*/
+    .header-container[data-type='analysis']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
+    .header-container[data-type='analysis'] .header-bg {
+        background-color: ${color.palette.neutral[93]};
+    }
+    .header-container[data-type='analysis'] .header-kicker {
+        display: none;
+    }
+    .header-container[data-type='analysis'] .header-byline {
+        color: ${color.text};
+    }
+    .header-container[data-type='analysis'] h1 {
+        font-family: ${families.headline.light};
+    }
+    .header-container[data-type='analysis'] h1 span {
+        color: ${colors.main};
+        display: block;
+        font-family: ${families.titlepiece.regular};
+    }
+
+    /*immersive*/
+    ${outieHeader(ArticleType.Immersive)}
+    .header-container[data-type='immersive'] .header-bg {
+        background-color: ${color.palette.neutral[100]};
+    }
+    .header-container[data-type='immersive'] .header {
+        background-color: ${color.palette.neutral[100]};
+    }
+    .header-container[data-type='immersive'] .header-kicker {
+        display: none;
+    }
+    .header-container[data-type='immersive'] .header-top h1 {
+        font-family: ${families.titlepiece.regular};
+        color: ${colors.main};
+    }
+
+    /*longread*/
+    ${outieHeader(ArticleType.Longread)}
+    .header-container[data-type='longread'] {
+        color: ${color.textOverDarkBackground};
+    }
+    .header-container[data-type='longread'] .header-bg {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-container[data-type='longread'] .header {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-container[data-type='longread'] .header-kicker {
+        background-color: ${colors.main};
+        color: ${color.textOverDarkBackground};
+        font-family: ${families.headline.bold};
+    }
+    .header-container[data-type='longread'] .header-top {
+        font-family: ${families.titlepiece.regular};
+    }
+    .header-container[data-type='longread'] .header-byline {
         color: ${color.textOverDarkBackground};
     }
 `
@@ -168,11 +253,14 @@ const Image = ({
         image.path,
     )}`
     return html`
-        <img class="header-image ${className}" src="${path}" />
+        <img class="${className}" src="${path}" />
     `
 }
 
 const isImmersive = (type: ArticleType) => type === ArticleType.Immersive
+
+const hasLargeByline = (type: ArticleType) =>
+    type === ArticleType.Opinion || type === ArticleType.Analysis
 
 const Header = ({
     publishedId,
@@ -183,6 +271,11 @@ const Header = ({
     type: ArticleType
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const largeByline = hasLargeByline(type)
+    const cutout =
+        type === ArticleType.Opinion &&
+        headerProps.bylineImages &&
+        headerProps.bylineImages.cutout
     return html`
         ${immersive &&
             headerProps.image &&
@@ -190,7 +283,7 @@ const Header = ({
             Image({
                 image: headerProps.image,
                 publishedId,
-                className: 'header-image--immersive',
+                className: 'header-image header-image--immersive',
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -199,16 +292,51 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        Image({ image: headerProps.image, publishedId })}
+                        Image({
+                            className: 'header-image',
+                            image: headerProps.image,
+                            publishedId,
+                        })}
                     <span class="header-kicker">${headerProps.kicker}</span>
-                    <section class="header-top">
-                        <h1>${headerProps.headline}</h1>
-                        <p>${headerProps.standfirst}</p>
-                    </section>
+                    ${largeByline
+                        ? html`
+                              <section class="header-top">
+                                  <div
+                                      class="${cutout && `header-opinion-flex`}"
+                                  >
+                                      <h1>
+                                          ${headerProps.headline}
+                                          <span>${headerProps.byline}</span>
+                                      </h1>
+                                      ${publishedId &&
+                                          cutout &&
+                                          html`
+                                              <div>
+                                                  ${Image({
+                                                      image: cutout,
+                                                      publishedId,
+                                                  })}
+                                              </div>
+                                          `}
+                                  </div>
+                              </section>
+                          `
+                        : html`
+                              <section class="header-top">
+                                  <h1>
+                                      ${headerProps.headline}
+                                  </h1>
+                                  <p>${headerProps.standfirst}</p>
+                              </section>
+                          `}
                 </header>
 
                 <aside class="header-byline">
-                    <span>${headerProps.byline}</span>
+                    <span
+                        >${largeByline
+                            ? headerProps.standfirst
+                            : headerProps.byline}</span
+                    >
                 </aside>
                 <div class="header-bg"></div>
             </div>
