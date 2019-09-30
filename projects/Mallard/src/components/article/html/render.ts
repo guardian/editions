@@ -39,7 +39,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         wrapLayout,
     })}
     html, body {
-        overflow: hidden;
+        overflow-x: hidden;
     }
     * {
         margin: 0;
