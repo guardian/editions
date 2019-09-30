@@ -9,6 +9,8 @@ import { PillarColours } from '@guardian/pasteup/palette'
 import { WrapLayout } from '../wrap/wrap'
 import { metrics } from 'src/theme/spacing'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { Line } from './line'
+import { breakSides } from './helpers/layout'
 
 export const headerStyles = ({
     colors,
@@ -33,8 +35,13 @@ export const headerStyles = ({
         height: 0.8125rem;
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
     }
+    .header-container-line-wrap,
     .header-container {
         position: relative;
+    }
+    .header-container-line-wrap {
+        z-index: 100;
+        ${breakSides}
     }
     .header-bg {
         left: -50em;
@@ -49,6 +56,8 @@ export const headerStyles = ({
         width: 100%;
         object-fit: cover;
         display: block;
+        z-index: 99;
+        position: relative;
     }
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
@@ -107,10 +116,12 @@ export const headerStyles = ({
         margin: -2em ${px(metrics.article.sidesTablet * -1)} 0;
         padding: 0 ${px(metrics.article.sidesTablet)};
     }
+    .header-container[data-type='immersive'] {
+        padding-top: 1px;
+    }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
         .header-container[data-type='immersive'] .header {
             margin-right: 2em;
-            margin-top: -4em;
         }
         .header-container[data-type='immersive'] .header:after {
             margin-right: -4em;
@@ -130,6 +141,10 @@ export const headerStyles = ({
         margin-left: -10em;
         padding-left: 10em;
         border: none;
+        font-family: ${families.headline.bold};
+    }
+    .header-container[data-type='immersive'] .header-top {
+        font-family: ${families.titlepiece.regular};
     }
     .header-container[data-type='immersive'] .header-byline {
         color: ${color.textOverDarkBackground};
@@ -177,23 +192,26 @@ const Header = ({
                 publishedId,
                 className: 'header-image--immersive',
             })}
-        <div class="header-container" data-type="${type}">
-            <header class="header">
-                ${!immersive &&
-                    headerProps.image &&
-                    publishedId &&
-                    Image({ image: headerProps.image, publishedId })}
-                <span class="header-kicker">${headerProps.kicker}</span>
-                <section class="header-top">
-                    <h1>${headerProps.headline}</h1>
-                    <p>${headerProps.standfirst}</p>
-                </section>
-            </header>
+        <div class="header-container-line-wrap">
+            ${Line({ zIndex: 10 })}
+            <div class="header-container wrapper" data-type="${type}">
+                <header class="header">
+                    ${!immersive &&
+                        headerProps.image &&
+                        publishedId &&
+                        Image({ image: headerProps.image, publishedId })}
+                    <span class="header-kicker">${headerProps.kicker}</span>
+                    <section class="header-top">
+                        <h1>${headerProps.headline}</h1>
+                        <p>${headerProps.standfirst}</p>
+                    </section>
+                </header>
 
-            <aside class="header-byline">
-                <span>${headerProps.byline}</span>
-            </aside>
-            <div class="header-bg"></div>
+                <aside class="header-byline">
+                    <span>${headerProps.byline}</span>
+                </aside>
+                <div class="header-bg"></div>
+            </div>
         </div>
     `
 }
