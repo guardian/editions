@@ -1,5 +1,12 @@
 import React, { useRef } from 'react'
-import { Animated, Dimensions, StyleSheet, View, Image } from 'react-native'
+import {
+    Animated,
+    Dimensions,
+    StyleSheet,
+    View,
+    Image,
+    Platform,
+} from 'react-native'
 import { clamp, safeInterpolation } from 'src/helpers/math'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
@@ -21,9 +28,10 @@ const faderStyles = StyleSheet.create({
 
 const Fader = ({ children }: PropTypes) => {
     const position = useNavigatorPosition()
-    const buildOrder = useRef(0)
-    const faderRef = useRef<View>()
     const { height } = Dimensions.get('window')
+
+    if (Platform.OS === 'android') return children
+
     return (
         <View
             style={{ backgroundColor: 'white', height: '100%', width: '100%' }}
