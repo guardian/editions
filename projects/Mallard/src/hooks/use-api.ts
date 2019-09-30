@@ -1,9 +1,7 @@
-import { useCachedOrPromise } from './use-cached-or-promise'
+import { IssueSummary, issueSummaryPath } from 'src/common'
 import { fetchFromApi } from 'src/helpers/fetch'
-import { issueSummaryPath, IssueSummary, Issue } from 'src/common'
 import { withResponse } from 'src/helpers/response'
-import { chain } from 'src/helpers/fetch/cached-or-promise'
-import { getIssueResponse } from './use-issue'
+import { useCachedOrPromise } from './use-cached-or-promise'
 
 export const getIssueSummary = () =>
     fetchFromApi<IssueSummary[]>(issueSummaryPath(), {
@@ -18,11 +16,3 @@ export const useIssueSummary = () => {
         retry: response.retry,
     }
 }
-
-export const getLatestIssue = () => {
-    return chain<IssueSummary[], Issue>(getIssueSummary(), summary =>
-        getIssueResponse(summary[0].localId, summary[0].publishedId),
-    )
-}
-export const useLatestIssue = () =>
-    withResponse<Issue>(useCachedOrPromise(getLatestIssue()))
