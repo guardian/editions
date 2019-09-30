@@ -271,6 +271,10 @@ const Header = ({
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
     const largeByline = hasLargeByline(type)
+    const cutout =
+        type === ArticleType.Opinion &&
+        headerProps.bylineImages &&
+        headerProps.bylineImages.cutout
     return html`
         ${immersive &&
             headerProps.image &&
@@ -304,21 +308,19 @@ const Header = ({
                           `
                         : html`
                               <section class="header-top">
-                                  <div class="header-opinion-flex">
+                                  <div
+                                      class="${cutout && `header-opinion-flex`}"
+                                  >
                                       <h1>
                                           ${headerProps.headline}
                                           <span>${headerProps.byline}</span>
                                       </h1>
                                       ${publishedId &&
-                                          headerProps.bylineImages &&
-                                          headerProps.bylineImages.cutout &&
+                                          cutout &&
                                           html`
                                               <div>
                                                   ${Image({
-                                                      image:
-                                                          headerProps
-                                                              .bylineImages
-                                                              .cutout,
+                                                      image: cutout,
                                                       publishedId,
                                                   })}
                                               </div>
