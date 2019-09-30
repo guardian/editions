@@ -16,6 +16,7 @@ interface StepFunctionProps {
     backendURL: string
     frontsTopicArn: string
     frontsTopicRoleArn: string
+    guNotifyServiceApiKey: string
 }
 
 //Make sure you add the lambda name in riff-raff.yaml
@@ -83,6 +84,7 @@ export const archiverStepFunction = (
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
+        guNotifyServiceApiKey,
     }: StepFunctionProps,
 ) => {
     const lambdaParams = {
@@ -139,6 +141,7 @@ export const archiverStepFunction = (
         {
             topic: frontsTopicArn,
             role: frontsTopicRoleArn,
+            gu_notify_service_api_key: guNotifyServiceApiKey,
         },
         {
             initialPolicy: [
