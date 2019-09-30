@@ -173,6 +173,29 @@ export const headerStyles = ({
         font-family: ${families.titlepiece.regular};
     }
 
+
+    /*opinion*/
+    .header-container[data-type='analysis']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
+    .header-container[data-type='analysis'] .header-bg {
+        background-color: ${color.palette.neutral[93]};
+    }
+    .header-container[data-type='analysis'] .header-kicker {
+        display: none;
+    }
+    .header-container[data-type='analysis'] .header-byline {
+        color: ${color.text};
+    }
+    .header-container[data-type='analysis'] h1 {
+        font-family: ${families.headline.light};
+    }
+    .header-container[data-type='analysis'] h1 span {
+        color: ${colors.main};
+        display: block;
+        font-family: ${families.titlepiece.regular};
+    }
+
     /*immersive*/
     ${outieHeader(ArticleType.Immersive)}
     .header-container[data-type='immersive'] .header-bg {
@@ -235,7 +258,8 @@ const Image = ({
 }
 
 const isImmersive = (type: ArticleType) => type === ArticleType.Immersive
-const isOpinion = (type: ArticleType) => type === ArticleType.Opinion
+const hasLargeByline = (type: ArticleType) =>
+    type === ArticleType.Opinion || ArticleType.Analysis
 
 const Header = ({
     publishedId,
@@ -246,7 +270,7 @@ const Header = ({
     type: ArticleType
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
-    const opinion = isOpinion(type)
+    const largeByline = hasLargeByline(type)
     return html`
         ${immersive &&
             headerProps.image &&
@@ -269,7 +293,7 @@ const Header = ({
                             publishedId,
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
-                    ${!opinion
+                    ${!largeByline
                         ? html`
                               <section class="header-top">
                                   <h1>
@@ -306,7 +330,7 @@ const Header = ({
 
                 <aside class="header-byline">
                     <span
-                        >${opinion
+                        >${largeByline
                             ? headerProps.standfirst
                             : headerProps.byline}</span
                     >
