@@ -173,7 +173,17 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                     },
                 ]}
             >
-                <Quote scale={2} fill={colors.main} />
+                <View
+                    style={{
+                        height: 60,
+                        marginLeft: -18,
+                        marginBottom: -8,
+                        alignItems: 'flex-start',
+                        justifyContent: 'flex-end',
+                    }}
+                >
+                    <Quote scale={2} fill={colors.main} />
+                </View>
                 <Text style={opinionStyles.titleText}>{article.headline}</Text>
 
                 <Text

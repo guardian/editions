@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'flex-start',
         justifyContent: 'flex-end',
+        top: 1,
+        left: -1,
     },
     dash: {
         opacity: 0,
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
 /*
 This is super cursed. Basically, in order to add inline icons
 of any arbitrary px width without messing up the line height we add
-invisible 4px em dashes at the start of the text to fill up the space and
+invisible spaces at the start of the text to fill up the space and
 then the icon floats over the whole thing as an absolute box
 */
 const IconDashes = ({ length = 1 }) => {
@@ -70,7 +72,7 @@ const TextWithIcon = ({
                 style={[
                     styles.icon,
                     {
-                        width: icon.width / scale,
+                        width: icon.width * scale,
                         height: scaledFont.lineHeight * 0.85,
                     },
                 ]}

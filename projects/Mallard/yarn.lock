@@ -5477,10 +5477,10 @@ react-native-iap@^3.3.9:
   dependencies:
     dooboolab-welcome "^1.1.0"
 
-react-native-in-app-utils@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-in-app-utils/-/react-native-in-app-utils-6.0.1.tgz#e8469804d7ceb8ad2b368dc2cc9b824c98ca387a"
-  integrity sha512-DHWgQTR+SSmVy+eLEXFJNOfsdvfHmU6y5k91W34x+pt4y/q2wo5++2RQZD/KDpHm89LYKDN1XKCojHFM6//xWQ==
+react-native-in-app-utils@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-in-app-utils/-/react-native-in-app-utils-6.0.2.tgz#b44498c7cce772fe1cebb00af082ff7bf4000a55"
+  integrity sha512-hAQFhzl/qN1PwZJVAcE1+LR0baQrcDGzjGRIIgkSJuytjYo3iO9L4qxKqewsLlMwKRfxr2BfORWlPTp6djmJJA==
 
 react-native-inappbrowser-reborn@^3.0.1:
   version "3.0.1"

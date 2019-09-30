@@ -33,6 +33,7 @@ import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
 import { UpdateIpAddress } from './components/update-ip-address'
 import { NetInfoProvider } from './hooks/use-net-info'
+import { DeprecateVersionModal } from './screens/deprecate-screen'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -157,6 +158,7 @@ export default class App extends React.Component<{}, {}> {
                         <View style={styles.appContainer}>
                             <RootNavigator
                                 {...rootNavigationProps}
+                                enableURLHandling={false}
                                 onNavigationStateChange={
                                     onNavigationStateChange
                                 }
@@ -166,6 +168,7 @@ export default class App extends React.Component<{}, {}> {
                         </View>
                         <ModalRenderer />
                         <BugButton />
+                        <DeprecateVersionModal />
                     </AuthProvider>
                 </WithProviders>
             </ErrorBoundary>
