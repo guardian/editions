@@ -127,7 +127,7 @@ export const headerStyles = ({
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
         ${getScaledFontCss('headline', 1.5)}
-        font-weight: 600;
+        font-family: ${families.headline.bold};
     }
     .header-container[data-type='review'] .header-byline {
         color: ${colors.dark};
@@ -144,15 +144,12 @@ export const headerStyles = ({
         background-color: ${color.palette.opinion.faded};
     }
     .header-container[data-type='opinion'] h1 {
-        color: ${colors.dark};
-        ${getScaledFontCss('headline', 1.5)}
-        font-weight: 600;
+        font-family: ${families.headline.light};
     }
-    .header-container[data-type='opinion'] .header-byline {
-        color: ${colors.dark};
-    }
-    .header-container[data-type='opinion'] p {
+    .header-container[data-type='opinion'] h1 span {
         color: ${colors.main};
+        display: block;
+        font-family: ${families.titlepiece.regular};
     }
 
     /*immersive*/
@@ -247,14 +244,31 @@ const Header = ({
                         publishedId &&
                         Image({ image: headerProps.image, publishedId })}
                     <span class="header-kicker">${headerProps.kicker}</span>
-                    <section class="header-top">
-                        <h1>${headerProps.headline}</h1>
-                        <p>${headerProps.standfirst}</p>
-                    </section>
+                    ${!opinion
+                        ? html`
+                              <section class="header-top">
+                                  <h1>
+                                      ${headerProps.headline}
+                                  </h1>
+                                  <p>${headerProps.standfirst}</p>
+                              </section>
+                          `
+                        : html`
+                              <section class="header-top">
+                                  <h1>
+                                      ${headerProps.headline}
+                                      <span>${headerProps.byline}</span>
+                                  </h1>
+                              </section>
+                          `}
                 </header>
 
                 <aside class="header-byline">
-                    <span>${headerProps.byline}</span>
+                    <span
+                        >${opinion
+                            ? headerProps.standfirst
+                            : headerProps.byline}</span
+                    >
                 </aside>
                 <div class="header-bg"></div>
             </div>
