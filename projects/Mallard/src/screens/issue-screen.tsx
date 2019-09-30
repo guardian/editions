@@ -129,16 +129,14 @@ const IssueFronts = ({
     return (
         <ScrollView style={style}>
             {ListHeaderComponent}
-            {issue.fronts
-                .filter(f => f === 'Journal')
-                .map(key => (
-                    <Front
-                        localIssueId={issue.localId}
-                        publishedIssueId={issue.publishedId}
-                        front={key}
-                        key={key}
-                    />
-                ))}
+            {issue.fronts.map(key => (
+                <Front
+                    localIssueId={issue.localId}
+                    publishedIssueId={issue.publishedId}
+                    front={key}
+                    key={key}
+                />
+            ))}
             <View style={{ height: container.height / 2 }} />
         </ScrollView>
     )
