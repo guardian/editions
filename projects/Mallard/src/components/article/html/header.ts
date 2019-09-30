@@ -12,6 +12,33 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { Line } from './line'
 import { breakSides } from './helpers/layout'
 
+const outieHeader = (type: ArticleType) => css`
+    .header-container[data-type='${type}'] .header {
+        ${breakSides}
+        margin-top: -4em;
+    }
+    .header-container[data-type='${type}'] {
+        padding-top: 1px;
+    }
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-container[data-type='${type}'] .header {
+            margin-right: 2em;
+        }
+        .header-container[data-type='${type}'] .header:after {
+            margin-right: -4em;
+        }
+    }
+    .header-container[data-type='${type}'] .header-kicker {
+        display: inline-block;
+        height: 3em;
+        margin-top: -3em;
+        padding-right: ${metrics.article.sidesTablet};
+        margin-left: -10em;
+        padding-left: 10em;
+        border: none;
+    }
+`
+
 export const headerStyles = ({
     colors,
     wrapLayout,
@@ -108,45 +135,41 @@ export const headerStyles = ({
     }
 
     /*immersive*/
+    ${outieHeader(ArticleType.Immersive)}
     .header-container[data-type='immersive'] .header-bg {
-        background-color: ${color.palette.neutral[7]};
+        background-color: ${color.palette.neutral[100]};
     }
     .header-container[data-type='immersive'] .header {
-        background-color: ${color.palette.neutral[7]};
-        margin: -2em ${px(metrics.article.sidesTablet * -1)} 0;
-        padding: 0 ${px(metrics.article.sidesTablet)};
-    }
-    .header-container[data-type='immersive'] {
-        padding-top: 1px;
-    }
-    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-container[data-type='immersive'] .header {
-            margin-right: 2em;
-        }
-        .header-container[data-type='immersive'] .header:after {
-            margin-right: -4em;
-        }
-    }
-
-    .header-container[data-type='immersive'] {
-        color: ${color.textOverDarkBackground};
+        background-color: ${color.palette.neutral[100]};
     }
     .header-container[data-type='immersive'] .header-kicker {
-        display: inline-block;
+        display: none;
+    }
+    .header-container[data-type='immersive'] .header-top h1 {
+        font-family: ${families.titlepiece.regular};
+        color: ${colors.main};
+    }
+
+    /*longread*/
+    ${outieHeader(ArticleType.Longread)}
+    .header-container[data-type='longread'] {
+        color: ${color.textOverDarkBackground};
+    }
+    .header-container[data-type='longread'] .header-bg {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-container[data-type='longread'] .header {
+        background-color: ${color.palette.neutral[7]};
+    }
+    .header-container[data-type='longread'] .header-kicker {
         background-color: ${colors.main};
         color: ${color.textOverDarkBackground};
-        height: 3em;
-        margin-top: -3em;
-        padding-right: ${metrics.article.sidesTablet};
-        margin-left: -10em;
-        padding-left: 10em;
-        border: none;
         font-family: ${families.headline.bold};
     }
-    .header-container[data-type='immersive'] .header-top {
+    .header-container[data-type='longread'] .header-top {
         font-family: ${families.titlepiece.regular};
     }
-    .header-container[data-type='immersive'] .header-byline {
+    .header-container[data-type='longread'] .header-byline {
         color: ${color.textOverDarkBackground};
     }
 `
