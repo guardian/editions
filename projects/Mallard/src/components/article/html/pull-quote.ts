@@ -4,7 +4,6 @@ import { WrapLayout } from '../wrap/wrap'
 import { families } from 'src/theme/typography'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
-import { breakOut } from './helpers/layout'
 import { Breakpoints } from 'src/theme/breakpoints'
 
 const Quotes = () => html`
@@ -65,6 +64,7 @@ const quoteStyles = ({
         -webkit-hyphens: auto;
         -moz-hyphens: auto;
         hyphens: auto;
+        z-index: 10000;
     }
 
     blockquote svg.bubble {
@@ -107,7 +107,7 @@ const quoteStyles = ({
             position: absolute;
             right: ${px(metrics.article.sides)};
             display: block;
-            width: ${px(wrapLayout.rail.width)};
+            width: ${px(wrapLayout.rail.width - metrics.sides.sides + 1)};
         }
     }
 
