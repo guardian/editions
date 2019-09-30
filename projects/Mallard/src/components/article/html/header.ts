@@ -143,6 +143,9 @@ export const headerStyles = ({
     .header-container[data-type='opinion'] .header-bg {
         background-color: ${color.palette.opinion.faded};
     }
+    .header-container[data-type='opinion'] .header-kicker {
+        display: none;
+    }
     .header-container[data-type='opinion'] h1 {
         font-family: ${families.headline.light};
     }
