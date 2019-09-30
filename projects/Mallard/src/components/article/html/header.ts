@@ -257,7 +257,8 @@ const Image = ({
     `
 }
 
-const isImmersive = (type: ArticleType) => type === ArticleType.Immersive
+const isImmersive = (type: ArticleType) =>
+    type === ArticleType.Immersive || type === ArticleType.Longread
 
 const hasLargeByline = (type: ArticleType) =>
     type === ArticleType.Opinion || type === ArticleType.Analysis
