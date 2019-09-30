@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { ReactNode } from 'react'
 import {
     Animated,
     Dimensions,
@@ -18,8 +18,7 @@ The build order goes up/down according to screen position
 */
 
 export interface PropTypes {
-    first?: boolean
-    children?: Element
+    children: ReactNode
 }
 
 const faderStyles = StyleSheet.create({
@@ -30,7 +29,7 @@ const Fader = ({ children }: PropTypes) => {
     const position = useNavigatorPosition()
     const { height } = Dimensions.get('window')
 
-    if (Platform.OS === 'android') return children
+    if (Platform.OS === 'android' && children) return children
 
     return (
         <View
