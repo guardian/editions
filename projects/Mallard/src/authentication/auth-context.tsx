@@ -66,11 +66,7 @@ const AuthContext = createContext<{
 const needsReauth = (
     prevAttempt: AuthAttempt,
     { isConnected }: { isConnected: boolean | null },
-) =>
-    (prevAttempt.type === 'cached' && isConnected) ||
-    (isPending(prevAttempt.status) ||
-        (isAuthed(prevAttempt.status) &&
-            prevAttempt.time < Date.now() - AUTH_TTL))
+) => prevAttempt.type === 'cached' && isConnected
 
 const assertUnreachable = (x: never): never => {
     throw new Error('This should be unreachable')
