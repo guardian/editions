@@ -18,7 +18,7 @@ The build order goes up/down according to screen position
 */
 
 export interface PropTypes {
-    children: ReactNode
+    children: any
 }
 
 const faderStyles = StyleSheet.create({
@@ -29,7 +29,7 @@ const Fader = ({ children }: PropTypes) => {
     const position = useNavigatorPosition()
     const { height } = Dimensions.get('window')
 
-    if (Platform.OS === 'android' && children) return children
+    if (Platform.OS === 'android') return children
 
     return (
         <View
