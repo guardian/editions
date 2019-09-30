@@ -136,6 +136,25 @@ export const headerStyles = ({
         color: ${colors.main};
     }
 
+    /*opinion*/
+    .header-container[data-type='opinion']:after {
+        border-bottom: 1px solid ${color.dimLine};
+    }
+    .header-container[data-type='opinion'] .header-bg {
+        background-color: ${color.palette.opinion.faded};
+    }
+    .header-container[data-type='opinion'] h1 {
+        color: ${colors.dark};
+        ${getScaledFontCss('headline', 1.5)}
+        font-weight: 600;
+    }
+    .header-container[data-type='opinion'] .header-byline {
+        color: ${colors.dark};
+    }
+    .header-container[data-type='opinion'] p {
+        color: ${colors.main};
+    }
+
     /*immersive*/
     ${outieHeader(ArticleType.Immersive)}
     .header-container[data-type='immersive'] .header-bg {
@@ -198,6 +217,7 @@ const Image = ({
 }
 
 const isImmersive = (type: ArticleType) => type === ArticleType.Immersive
+const isOpinion = (type: ArticleType) => type === ArticleType.Opinion
 
 const Header = ({
     publishedId,
@@ -208,6 +228,7 @@ const Header = ({
     type: ArticleType
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const opinion = isOpinion(type)
     return html`
         ${immersive &&
             headerProps.image &&
