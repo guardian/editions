@@ -2,7 +2,7 @@ import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
 import { IssuePublicationIdentifier } from '../../common'
 import { Status } from '../services/status'
-import moment, { Moment } from 'moment'
+import { Moment } from 'moment'
 
 export type ToolStatus = 'Processing' | 'Published' | 'Failed'
 
@@ -15,7 +15,7 @@ export interface PublishEvent {
     timestamp: string
 }
 
-const sendPublishStatusToTopic = async (pubEvent: PublishEvent) => {
+export const sendPublishStatusToTopic = async (pubEvent: PublishEvent) => {
     console.log('attempt to send publish status update', pubEvent)
     const payload = { event: pubEvent }
     const topic = process.env.topic
@@ -44,7 +44,7 @@ function throwBadStatus(s: never): never {
     throw new Error('Unknown status type')
 }
 
-const createPublishEvent = (
+export const createPublishEvent = (
     identifier: IssuePublicationIdentifier,
     status: Status,
     eventTime: Moment,
@@ -73,53 +73,4 @@ const createPublishEvent = (
         default:
             return throwBadStatus(status)
     }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const errorToString = (err: any): string => {
-    if (err instanceof Error) {
-        return err.toString()
-    }
-    return `Error: ${JSON.stringify(err)}`
-}
-
-async function handleAndNotifyInternal<T>(
-    identifier: IssuePublicationIdentifier,
-    statusOnSuccess: Status | undefined,
-    handler: () => Promise<T>,
-): Promise<T> {
-    try {
-        const result = await handler()
-        if (statusOnSuccess) {
-            const now = moment()
-            const event = createPublishEvent(identifier, statusOnSuccess, now)
-            await sendPublishStatusToTopic(event)
-        }
-        return result
-    } catch (err) {
-        // send failure notification
-        await sendPublishStatusToTopic({
-            ...identifier,
-            status: 'Failed',
-            message: errorToString(err),
-            timestamp: moment().format(),
-        })
-        // now escalate error
-        throw err
-    }
-}
-
-export async function handleAndNotify<T>(
-    identifier: IssuePublicationIdentifier,
-    statusOnSuccess: Status,
-    handler: () => Promise<T>,
-): Promise<T> {
-    return await handleAndNotifyInternal(identifier, statusOnSuccess, handler)
-}
-
-export async function handleAndNotifyOnError<T>(
-    identifier: IssuePublicationIdentifier,
-    handler: () => Promise<T>,
-): Promise<T> {
-    return await handleAndNotifyInternal(identifier, undefined, handler)
 }

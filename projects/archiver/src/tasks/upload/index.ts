@@ -6,7 +6,7 @@ import { IssueTaskOutput } from '../issue'
 import { upload, ONE_WEEK } from '../../utils/s3'
 import { putStatus } from '../../services/status'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotify } from '../../services/pub-status-notifier'
+import { handleAndNotify } from '../../services/task-handler'
 
 type UploadTaskInput = ImageTaskOutput
 export type UploadTaskOutput = Pick<

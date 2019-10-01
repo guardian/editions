@@ -4,7 +4,7 @@ import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { putStatus } from '../../services/status'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotify } from '../../services/pub-status-notifier'
+import { handleAndNotify } from '../../services/task-handler'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
