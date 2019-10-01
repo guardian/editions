@@ -2,9 +2,9 @@ import { Handler } from 'aws-lambda'
 import { imageSizes, issueDir, mediaDir } from '../../../common'
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
-import { putStatus } from '../../status-store/status'
+import { putStatus } from '../../services/status'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotify } from '../../services/pub-status-notifier'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput

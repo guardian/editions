@@ -4,9 +4,9 @@ import { issuePath } from '../../../common'
 import { ImageTaskOutput } from '../image'
 import { IssueTaskOutput } from '../issue'
 import { upload, ONE_WEEK } from '../../utils/s3'
-import { putStatus } from '../../status-store/status'
+import { putStatus } from '../../services/status'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotify } from '../../services/pub-status-notifier'
 
 type UploadTaskInput = ImageTaskOutput
 export type UploadTaskOutput = Pick<

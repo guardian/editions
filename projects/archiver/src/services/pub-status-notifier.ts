@@ -1,7 +1,7 @@
-import { attempt } from '../../../../../backend/utils/try'
+import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
-import { IssuePublicationIdentifier } from '../../../../common'
-import { Status } from '../../../status-store/status'
+import { IssuePublicationIdentifier } from '../../common'
+import { Status } from '../services/status'
 import moment, { Moment } from 'moment'
 
 export type ToolStatus = 'Processing' | 'Published' | 'Failed'

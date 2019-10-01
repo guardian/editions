@@ -4,9 +4,9 @@ import { getIssueSummary } from './helpers/get-issue-summary'
 import { indexer } from './helpers/summary'
 import { upload, FIVE_SECONDS } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
-import { putStatus } from '../../status-store/status'
+import { putStatus } from '../../services/status'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotify } from '../../services/pub-status-notifier'
 
 type IndexTaskInput = UploadTaskOutput
 export interface IndexTaskOutput extends UploadTaskOutput {

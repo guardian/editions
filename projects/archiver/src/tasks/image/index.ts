@@ -6,7 +6,7 @@ import { getAndUploadColours, getAndUploadImage } from './helpers/media'
 import pAll = require('p-all')
 import { FrontTaskOutput } from '../front'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotifyOnError } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotifyOnError } from '../../services/pub-status-notifier'
 
 type ImageTaskInput = FrontTaskOutput
 export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {

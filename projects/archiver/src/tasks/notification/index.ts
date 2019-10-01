@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotify } from './helpers/pub-status-notifier'
+import { handleAndNotify } from '../../services/pub-status-notifier'
 import { scheduleDeviceNotificationIfInFuture } from './helpers/device-notifications'
 import { IndexTaskOutput } from '../indexer'
 import { IssuePublicationIdentifier } from '../../../common'

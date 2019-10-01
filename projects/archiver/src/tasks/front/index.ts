@@ -7,7 +7,7 @@ import { getFront } from '../../utils/backend-client'
 import { IssueTaskOutput } from '../issue'
 import { Bucket, upload, ONE_WEEK } from '../../utils/s3'
 import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotifyOnError } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotifyOnError } from '../../services/pub-status-notifier'
 
 type FrontTaskInput = IssueTaskOutput
 export interface FrontTaskOutput extends IssueTaskOutput {
