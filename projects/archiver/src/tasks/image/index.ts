@@ -5,7 +5,6 @@ import { Image, ImageSize, imageSizes } from '../../../common'
 import { getAndUploadColours, getAndUploadImage } from './helpers/media'
 import pAll = require('p-all')
 import { FrontTaskOutput } from '../front'
-import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotifyOnError } from '../../services/task-handler'
 
 type ImageTaskInput = FrontTaskOutput

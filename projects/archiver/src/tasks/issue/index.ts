@@ -5,7 +5,6 @@ import { getIssue } from '../../utils/backend-client'
 import { Bucket } from '../../utils/s3'
 import { getPublishedId } from '../../utils/path-builder'
 import { putStatus } from '../../services/status'
-import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotify } from '../../services/task-handler'
 
 export interface IssueParams {

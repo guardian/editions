@@ -3,7 +3,6 @@ import { imageSizes, issueDir, mediaDir } from '../../../common'
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { putStatus } from '../../services/status'
-import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotify } from '../../services/task-handler'
 
 type ZipTaskInput = UploadTaskOutput

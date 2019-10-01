@@ -1,5 +1,4 @@
 import { Handler } from 'aws-lambda'
-import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotify } from '../../services/task-handler'
 import { scheduleDeviceNotificationIfInFuture } from './helpers/device-notifications'
 import { IndexTaskOutput } from '../indexer'

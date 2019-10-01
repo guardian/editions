@@ -5,7 +5,6 @@ import { indexer } from './helpers/summary'
 import { upload, FIVE_SECONDS } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { putStatus } from '../../services/status'
-import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotify } from '../../services/task-handler'
 
 type IndexTaskInput = UploadTaskOutput

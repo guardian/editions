@@ -5,7 +5,6 @@ import { ImageTaskOutput } from '../image'
 import { IssueTaskOutput } from '../issue'
 import { upload, ONE_WEEK } from '../../utils/s3'
 import { putStatus } from '../../services/status'
-import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotify } from '../../services/task-handler'
 
 type UploadTaskInput = ImageTaskOutput

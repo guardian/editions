@@ -6,6 +6,7 @@ import {
     createPublishEvent,
 } from './pub-status-notifier'
 import { Handler } from 'aws-lambda'
+import { logInput, logOutput } from '../utils/log'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const errorToString = (err: any): string => {
@@ -23,7 +24,9 @@ function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
 ): Handler<I, O> {
     return async (input: I) => {
         try {
+            logInput(input)
             const result = await handler(input)
+            logOutput(result)
             if (statusOnSuccess) {
                 const now = moment()
                 const event = createPublishEvent(
