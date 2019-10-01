@@ -198,7 +198,9 @@ const cachedCasAuthProvider = (
     legacyCASExpiryCacheImpl: typeof legacyCASExpiryCache,
 ) => async () => {
     const auth = await casDataCacheImpl.get().then(authTypeFromCAS)
-    return auth || authTypeFromCAS(legacyCASExpiryCacheImpl.get() || null)
+    return (
+        auth || authTypeFromCAS(legacyCASExpiryCacheImpl('1234').get() || null)
+    )
 }
 
 const cachedIAPAuthProvider = (

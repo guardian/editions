@@ -1,6 +1,6 @@
 const getMockPromise = <T>(val: T) => jest.fn(() => Promise.resolve(val))
 
-const getMockCache = <T>(val: T) => ({
+const getMockCache = <T>(val: T) => (buildNumber: string) => ({
     get: () => val,
     set: () => void 0,
     reset: () => true,
