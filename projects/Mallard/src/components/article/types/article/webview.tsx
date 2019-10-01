@@ -17,12 +17,14 @@ const WebviewWithArticle = ({
     wrapLayout,
     headerProps,
     paddingTop = 0,
+    _ref,
     ...webViewProps
 }: {
     article: BlockElement[]
     wrapLayout: WrapLayout
     headerProps?: ArticleHeaderProps & { type: ArticleType }
     paddingTop?: number
+    _ref?: (ref: { _component: WebView }) => void
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
@@ -57,6 +59,7 @@ const WebviewWithArticle = ({
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{ html }}
+            ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
         />
     )
