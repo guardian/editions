@@ -1,7 +1,7 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
-import { s3, Bucket } from './src/s3'
-import { ONE_WEEK } from './src/upload'
+import { s3, Bucket } from '../../utils/s3'
+import { ONE_WEEK } from '../../utils/s3'
 
 const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined

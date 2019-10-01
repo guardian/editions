@@ -7,14 +7,14 @@ import {
     Issue,
     Front,
     Image,
-} from '../common'
+} from '../../common'
 import {
     attempt,
     Attempt,
     hasFailed,
     withFailureMessage,
-} from '../../backend/utils/try'
-import { ImageSize } from '../../common/src'
+} from '../../../backend/utils/try'
+import { ImageSize } from '../../../common/src'
 
 export const URL =
     process.env.backend !== undefined

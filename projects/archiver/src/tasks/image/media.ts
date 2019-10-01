@@ -1,5 +1,5 @@
 import { unnest } from 'ramda'
-import { attempt, hasFailed } from '../backend/utils/try'
+import { attempt, hasFailed } from '../../../../backend/utils/try'
 import {
     BlockElement,
     CAPIArticle,
@@ -7,9 +7,9 @@ import {
     Image,
     ImageSize,
     notNull,
-} from './common'
-import { getColours, getImage } from './src/downloader'
-import { upload, ONE_WEEK } from './src/upload'
+} from '../../../common'
+import { getColours, getImage } from '../../utils/backend-client'
+import { upload, ONE_WEEK } from '../../utils/s3'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {

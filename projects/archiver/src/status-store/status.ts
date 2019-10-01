@@ -1,7 +1,10 @@
-import { upload } from './upload'
-import { s3, Bucket, listNestedPrefixes } from './s3'
-import { IssuePublicationIdentifier, IssueIdentifier } from '../../common/src'
-import { getPublishedId, getLocalId } from './publishedId'
+import { upload } from '../utils/s3'
+import { s3, Bucket, listNestedPrefixes } from '../utils/s3'
+import {
+    IssuePublicationIdentifier,
+    IssueIdentifier,
+} from '../../../common/src'
+import { getPublishedId, getLocalId } from '../utils/path-builder'
 import { oc } from 'ts-optchain'
 
 export type IssuePublicationWithStatus = IssuePublicationIdentifier & {

@@ -1,6 +1,6 @@
 import { indexer } from './summary'
-import { attempt, hasFailed } from '../../../backend/utils/try'
-import { upload, ONE_MINUTE } from '../upload'
+import { attempt, hasFailed } from '../../../../backend/utils/try'
+import { upload, ONE_MINUTE } from '../../utils/s3'
 
 /* This file is for testing the indexer locally */
 

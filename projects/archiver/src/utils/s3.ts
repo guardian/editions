@@ -1,5 +1,5 @@
 import { S3 } from 'aws-sdk'
-import { notNull } from '../common'
+import { notNull } from '../../common'
 import { oc } from 'ts-optchain'
 
 export const s3 = new S3({
@@ -49,5 +49,48 @@ export const listNestedPrefixes = async (
         .filter(notNull)
     return prefixList.map(newPrefix => {
         return stripPrefix(stripSuffix(newPrefix, '/'), prefixWithDelimiter)
+    })
+}
+
+function cacheControlHeader(maxAge: number | undefined): string {
+    if (maxAge) {
+        return `max-age=${maxAge}`
+    }
+    return 'private'
+}
+
+export const ONE_WEEK = 3600 * 24 * 7
+export const ONE_MINUTE = 60
+export const FIVE_SECONDS = 5
+
+export const upload = (
+    key: string,
+    body: {} | Buffer,
+    mime: 'image/jpeg' | 'application/json' | 'application/zip',
+    maxAge: number | undefined,
+): Promise<{ etag: string }> => {
+    return new Promise((resolve, reject) => {
+        s3.upload(
+            {
+                Body: body instanceof Buffer ? body : JSON.stringify(body),
+                Bucket,
+                Key: `${key}`,
+                ACL: 'public-read',
+                ContentType: mime,
+                CacheControl: cacheControlHeader(maxAge),
+            },
+            (err, data) => {
+                if (err) {
+                    console.error(
+                        `S3 upload of s3://${Bucket}/${key} failed with`,
+                        err,
+                    )
+                    reject()
+                    return
+                }
+                console.log(`${data.Key} uploaded to ${data.Bucket}`)
+                resolve({ etag: data.ETag })
+            },
+        )
     })
 }

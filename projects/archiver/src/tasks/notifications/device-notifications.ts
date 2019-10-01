@@ -1,4 +1,4 @@
-import { attempt } from '../../../backend/utils/try'
+import { attempt } from '../../../../backend/utils/try'
 import fetch from 'node-fetch'
 import {
     prepareScheduleDeviceNotificationRequest,

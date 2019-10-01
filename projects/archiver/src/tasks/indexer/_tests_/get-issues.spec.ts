@@ -1,4 +1,4 @@
-import { issueWindow } from '../getIssues'
+import { issueWindow } from '../get-issues'
 
 describe('issueWindow', () => {
     it('should sort issues', () => {

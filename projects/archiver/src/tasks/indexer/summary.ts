@@ -1,8 +1,8 @@
-import { IssuePublicationIdentifier } from '../../../common/src'
-import { IssueSummary, notNull } from '../../common'
-import { getIssues, issueWindow } from './getIssues'
-import { getIssueSummary } from './getIssueSummary'
-import { getPublishedVersion } from './getPublishedVersion'
+import { IssuePublicationIdentifier } from '../../../../common/src'
+import { IssueSummary, notNull } from '../../../common'
+import { getIssues, issueWindow } from './get-issues'
+import { getIssueSummary } from './get-issue-summary'
+import { getPublishedVersion } from './get-published-version'
 import { oc } from 'ts-optchain'
 
 // currently publishing will remove this issue from the index, it should be generated in the indextask

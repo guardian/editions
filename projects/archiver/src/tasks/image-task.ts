@@ -2,11 +2,11 @@ import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../backend/utils/try'
 import { Image, ImageSize, imageSizes } from '../../common'
-import { getAndUploadColours, getAndUploadImage } from '../../media'
+import { getAndUploadColours, getAndUploadImage } from './image/media'
 import pAll = require('p-all')
-import { FrontTaskOutput } from './frontTask'
-import { logInput, logOutput } from '../log-utils'
-import { handleAndNotifyOnError } from '../notifications/pub-status-notifier'
+import { FrontTaskOutput } from './front-task'
+import { logInput, logOutput } from '../utils/log'
+import { handleAndNotifyOnError } from './notifications/pub-status-notifier'
 
 type ImageTaskInput = FrontTaskOutput
 export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {
