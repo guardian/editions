@@ -9,9 +9,9 @@ import {
     hasFailed,
     hasSucceeded,
     withFailureMessage,
-} from '../../backend/utils/try'
-import { IssuePublicationIdentifier } from '../../common/src'
-import { IssueParams } from './tasks/issue'
+} from '../../../backend/utils/try'
+import { IssuePublicationIdentifier } from '../../../common/src'
+import { IssueParams } from '../tasks/issue'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
 interface Record {
