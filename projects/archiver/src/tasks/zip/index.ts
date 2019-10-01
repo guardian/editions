@@ -1,6 +1,5 @@
 import { Handler } from 'aws-lambda'
-import { mediaDir } from '../../../../common/src'
-import { imageSizes, issueDir } from '../../../common'
+import { imageSizes, issueDir, mediaDir } from '../../../common'
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { putStatus } from '../../status-store/status'

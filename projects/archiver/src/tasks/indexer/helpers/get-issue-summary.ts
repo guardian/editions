@@ -6,7 +6,7 @@ import {
     ImageSize,
     imageSizes,
     notNull,
-} from '../../../../../common/src'
+} from '../../../../common'
 import { getPublishedId } from '../../../utils/path-builder'
 import { Bucket, s3 } from '../../../utils/s3'
 import { issue } from '../../../../main'

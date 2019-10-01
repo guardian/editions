@@ -1,4 +1,4 @@
-import { IssueIdentifier } from '../../../../../common/src'
+import { IssueIdentifier } from '../../../../common'
 import { Bucket, listNestedPrefixes } from '../../../utils/s3'
 
 /* Crawl S3 for a list of all of the issues that are available */

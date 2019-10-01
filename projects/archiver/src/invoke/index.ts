@@ -10,7 +10,7 @@ import {
     hasSucceeded,
     withFailureMessage,
 } from '../../../backend/utils/try'
-import { IssuePublicationIdentifier } from '../../../common/src'
+import { IssuePublicationIdentifier } from '../../common'
 import { IssueParams } from '../tasks/issue'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]

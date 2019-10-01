@@ -1,12 +1,11 @@
 import { Handler } from 'aws-lambda'
-import { IssueSummary } from '../../../common'
+import { IssueSummary, issueSummarySort } from '../../../common'
 import { getIssueSummary } from './helpers/get-issue-summary'
 import { indexer } from './helpers/summary'
 import { upload, FIVE_SECONDS } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { putStatus } from '../../status-store/status'
 import { logInput, logOutput } from '../../utils/log'
-import { issueSummarySort } from '../../../common'
 import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
 
 type IndexTaskInput = UploadTaskOutput

@@ -3,7 +3,7 @@ import { logInput, logOutput } from '../../utils/log'
 import { handleAndNotify } from './helpers/pub-status-notifier'
 import { scheduleDeviceNotificationIfInFuture } from './helpers/device-notifications'
 import { IndexTaskOutput } from '../indexer'
-import { IssuePublicationIdentifier } from '../../../../common/src'
+import { IssuePublicationIdentifier } from '../../../common'
 
 export type NotificationTaskInput = IndexTaskOutput
 export interface NotificationTaskOutput {

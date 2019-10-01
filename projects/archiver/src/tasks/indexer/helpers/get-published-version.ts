@@ -1,7 +1,4 @@
-import {
-    IssuePublicationIdentifier,
-    IssueIdentifier,
-} from '../../../../../common/src'
+import { IssuePublicationIdentifier, IssueIdentifier } from '../../../../common'
 import { getStatuses, isPublished } from '../../../status-store/status'
 
 /* Given an edition name and date this will return the current publication instance ID
