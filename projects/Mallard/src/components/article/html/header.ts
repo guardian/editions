@@ -10,7 +10,7 @@ import { metrics } from 'src/theme/spacing'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { Line } from './line'
 import { breakSides } from './helpers/layout'
-import { useImageSize } from 'src/hooks/use-image-size'
+import { useImagePath } from 'src/hooks/use-image-paths'
 
 const outieHeader = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header {
@@ -236,23 +236,8 @@ export const headerStyles = ({
     }
 `
 
-const Image = ({
-    image,
-    publishedId,
-    className,
-}: {
-    publishedId: Issue['publishedId']
-    image: ImageT
-    className?: string
-}) => {
-    const backend = defaultSettings.apiUrl
-    const { imageSize } = useImageSize()
-    const path = `${backend}${mediaPath(
-        publishedId,
-        imageSize,
-        image.source,
-        image.path,
-    )}`
+const Image = ({ image, className }: { image: ImageT; className?: string }) => {
+    const path = useImagePath(image)
     return html`
         <img class="${className}" src="${path}" />
     `
@@ -284,7 +269,6 @@ const Header = ({
             publishedId &&
             Image({
                 image: headerProps.image,
-                publishedId,
                 className: 'header-image header-image--immersive',
             })}
         <div class="header-container-line-wrap">
@@ -297,7 +281,6 @@ const Header = ({
                         Image({
                             className: 'header-image',
                             image: headerProps.image,
-                            publishedId,
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
                     ${largeByline
@@ -316,7 +299,6 @@ const Header = ({
                                               <div>
                                                   ${Image({
                                                       image: cutout,
-                                                      publishedId,
                                                   })}
                                               </div>
                                           `}

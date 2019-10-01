@@ -23,8 +23,6 @@ import { Header, headerStyles } from './header'
 import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
 import { Pullquote, quoteStyles } from './pull-quote'
-import { color } from 'src/theme/color'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { lineStyles, Line } from './line'
 import { useImageSize } from 'src/hooks/use-image-size'
 

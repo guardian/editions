@@ -51,13 +51,23 @@ const getDiagnosticInfo = async (authStatus: AuthStatus) => {
     const megabytes = kilobytes / 1000
     const gigabytes = megabytes / 1000
 
-    const version = await DeviceInfo.getVersion()
-    const buildNumber = await DeviceInfo.getBuildNumber()
-    const firstInstallTime = await DeviceInfo.getFirstInstallTime()
-    const lastUpdateTime = await DeviceInfo.getLastUpdateTime()
-    const deviceId = await DeviceInfo.getDeviceId()
-    const totalDiskCapacity = await DeviceInfo.getTotalDiskCapacity()
-    const freeDiskStorage = await DeviceInfo.getFreeDiskStorage()
+    const [
+        version,
+        buildNumber,
+        firstInstallTime,
+        lastUpdateTime,
+        deviceId,
+        totalDiskCapacity,
+        freeDiskStorage,
+    ] = await Promise.all([
+        DeviceInfo.getVersion(),
+        DeviceInfo.getBuildNumber(),
+        DeviceInfo.getFirstInstallTime(),
+        DeviceInfo.getLastUpdateTime(),
+        DeviceInfo.getDeviceId(),
+        DeviceInfo.getTotalDiskCapacity(),
+        DeviceInfo.getFreeDiskStorage(),
+    ])
 
     return `
 
