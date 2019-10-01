@@ -17,10 +17,9 @@ export interface IssueTaskOutput extends IssueParams {
     fronts: string[]
     remainingFronts: number
 }
-export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
-    issuePublication,
-}) => {
-    return await handleAndNotify(issuePublication, 'started', async () => {
+export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
+    'started',
+    async ({ issuePublication }) => {
         logInput({ issuePublication })
         console.log(
             `Attempting to upload ${JSON.stringify(
@@ -44,5 +43,5 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = async ({
         }
         logOutput(out)
         return out
-    })
-}
+    },
+)

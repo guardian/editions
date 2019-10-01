@@ -13,13 +13,11 @@ export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {
     failedImages: number
     failedColours: number
 }
-export const handler: Handler<ImageTaskInput, ImageTaskOutput> = async ({
-    issuePublication,
-    issue,
-    images,
-    ...params
-}) => {
-    return await handleAndNotifyOnError(issuePublication, async () => {
+export const handler: Handler<
+    ImageTaskInput,
+    ImageTaskOutput
+> = handleAndNotifyOnError(
+    async ({ issuePublication, issue, images, ...params }) => {
         logInput({
             issuePublication,
             issue,
@@ -74,5 +72,5 @@ export const handler: Handler<ImageTaskInput, ImageTaskOutput> = async ({
         }
         logOutput(out)
         return out
-    })
-}
+    },
+)

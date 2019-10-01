@@ -8,11 +8,9 @@ import { handleAndNotify } from '../../services/task-handler'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
-export const handler: Handler<ZipTaskInput, ZipTaskOutput> = async ({
-    issuePublication,
-    issue,
-}) => {
-    return await handleAndNotify(issuePublication, 'bundled', async () => {
+export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
+    'bundled',
+    async ({ issuePublication, issue }) => {
         logInput({
             issuePublication,
             issue,
@@ -44,5 +42,5 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = async ({
         }
         logOutput(out)
         return out
-    })
-}
+    },
+)

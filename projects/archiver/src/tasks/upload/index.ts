@@ -13,30 +13,28 @@ export type UploadTaskOutput = Pick<
     IssueTaskOutput,
     'issuePublication' | 'message' | 'issue'
 >
-export const handler: Handler<UploadTaskInput, UploadTaskOutput> = async ({
-    issuePublication,
-    issue,
-}) => {
-    return await handleAndNotify(issuePublication, 'assembled', async () => {
-        logInput({
-            issuePublication,
-            issue,
-        })
-        const { publishedId } = issue
-        const issueUpload = await attempt(
-            upload(issuePath(publishedId), issue, 'application/json', ONE_WEEK),
-        )
-        if (hasFailed(issueUpload)) {
-            console.error(JSON.stringify(issueUpload))
-            throw new Error('Failed to upload issue file')
-        }
-        await putStatus(issuePublication, 'assembled')
-        const out: UploadTaskOutput = {
-            issuePublication,
-            message: 'Issue uploaded succesfully',
-            issue,
-        }
-        logOutput(out)
-        return out
+export const handler: Handler<
+    UploadTaskInput,
+    UploadTaskOutput
+> = handleAndNotify('assembled', async ({ issuePublication, issue }) => {
+    logInput({
+        issuePublication,
+        issue,
     })
-}
+    const { publishedId } = issue
+    const issueUpload = await attempt(
+        upload(issuePath(publishedId), issue, 'application/json', ONE_WEEK),
+    )
+    if (hasFailed(issueUpload)) {
+        console.error(JSON.stringify(issueUpload))
+        throw new Error('Failed to upload issue file')
+    }
+    await putStatus(issuePublication, 'assembled')
+    const out: UploadTaskOutput = {
+        issuePublication,
+        message: 'Issue uploaded succesfully',
+        issue,
+    }
+    logOutput(out)
+    return out
+})
