@@ -9,6 +9,7 @@ import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
 import { useArticle } from 'src/hooks/use-article'
+import { parsePing } from 'src/helpers/webview'
 
 const styles = StyleSheet.create({
     block: {
@@ -39,11 +40,8 @@ const Article = ({
 } & ArticleHeaderProps &
     StandfirstPropTypes) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
-    useEffect(() => {
-        onTopPositionChange(false)
-    }, [])
     const [, { type }] = useArticle()
-
+    console.log('webview rerender ' + wrapLayout)
     return (
         <Fader>
             {wrapLayout && (
@@ -54,6 +52,10 @@ const Article = ({
                     useWebKit={false}
                     style={[styles.webview]}
                     wrapLayout={wrapLayout}
+                    onMessage={event => {
+                        const { isAtTop } = parsePing(event.nativeEvent.data)
+                        console.log(isAtTop)
+                    }}
                 />
             )}
             <Wrap onWrapLayout={setWrapLayout}></Wrap>
