@@ -26,9 +26,9 @@ const GOOGLE_CLIENT_ID =
 
 const LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY = 'printSubscriberID'
 const LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY = 'printSubscriberPostcode'
-// const LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY = () =>
-//     `${DeviceInfo.getBundleId().then(bundleId => bundleId)}_expiryDict`
-const LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY = 'NEED_TO_G)_BACK_expiryDict'
+const LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY = `${DeviceInfo.getBundleId().then(
+    bundleId => bundleId,
+)}_expiryDict`
 
 // this allows us to ensure some prod build use the sanboxed IAP endpoints
 // e.g. the beta builds for testflight

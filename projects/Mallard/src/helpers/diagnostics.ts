@@ -124,8 +124,7 @@ const createMailtoHandler = (
             text: 'Include',
             onPress: async () => {
                 const diagnostics = await getDiagnosticInfo(authStatus)
-                console.log(diagnostics)
-                // openSupportMailto(text, releaseURL, diagnostics)
+                openSupportMailto(text, releaseURL, diagnostics)
             },
         },
         {
