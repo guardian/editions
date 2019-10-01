@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet } from 'react-native'
+import WebView from 'react-native-webview'
 import { BlockElement } from 'src/common'
+import { parsePing } from 'src/helpers/webview'
+import { useArticle } from 'src/hooks/use-article'
 import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
@@ -8,8 +11,6 @@ import { ArticleHeaderProps } from '../article-header/types'
 import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
-import { useArticle } from 'src/hooks/use-article'
-import { parsePing } from 'src/helpers/webview'
 
 const styles = StyleSheet.create({
     block: {
@@ -41,7 +42,7 @@ const Article = ({
     StandfirstPropTypes) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
-    console.log('webview rerender ' + wrapLayout)
+    const ref = useRef<{ _component: WebView } | null>(null)
     return (
         <Fader>
             {wrapLayout && (
@@ -52,9 +53,29 @@ const Article = ({
                     useWebKit={false}
                     style={[styles.webview]}
                     wrapLayout={wrapLayout}
+                    _ref={r => {
+                        ref.current = r
+                    }}
                     onMessage={event => {
                         const { isAtTop } = parsePing(event.nativeEvent.data)
-                        console.log(isAtTop)
+                        if (ref.current) {
+                            // webViewRef is missing from the type definition
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                            // @ts-ignore
+                            ref.current._component.webViewRef.current.measure(
+                                (
+                                    fx: number,
+                                    fy: number,
+                                    width: number,
+                                    height: number,
+                                    px: number,
+                                ) => {
+                                    if (px === 0) {
+                                        onTopPositionChange(isAtTop)
+                                    }
+                                },
+                            )
+                        }
                     }}
                 />
             )}

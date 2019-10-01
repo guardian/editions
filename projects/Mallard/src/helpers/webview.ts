@@ -112,7 +112,7 @@ export const makeHtml = ({
                     window.ReactNativeWebView.postMessage(
                         JSON.stringify({
                             scrollHeight: document.documentElement.scrollHeight,
-                            isAtTop: document.hasFocus(),
+                            isAtTop: window.scrollY < 10,
                         }),
                     )
                 }
