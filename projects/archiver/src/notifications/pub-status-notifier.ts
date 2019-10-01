@@ -58,14 +58,14 @@ const createPublishEvent = (
             return {
                 ...identifier,
                 status: 'Processing',
-                message: `Issue is now ${status}`,
+                message: `Publication stage: ${status}`,
                 timestamp,
             }
         case 'notified':
             return {
                 ...identifier,
                 status: 'Published',
-                message: 'Device notification scheduled',
+                message: 'Publication processing complete',
                 timestamp,
             }
         case 'unknown':
