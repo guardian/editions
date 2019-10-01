@@ -11,7 +11,7 @@ import {
     withFailureMessage,
 } from '../../backend/utils/try'
 import { IssuePublicationIdentifier } from '../../common/src'
-import { IssueParams } from './issueTask'
+import { IssueParams } from './tasks/issueTask'
 const stateMachineArnEnv = 'stateMachineARN'
 const stateMachineArn = process.env[stateMachineArnEnv]
 interface Record {

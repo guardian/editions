@@ -1,18 +1,19 @@
 import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
-import { attempt, hasFailed } from '../../backend/utils/try'
-import { Image, ImageSize, imageSizes } from '../common'
-import { getAndUploadColours, getAndUploadImage } from '../media'
+import { attempt, hasFailed } from '../../../backend/utils/try'
+import { Image, ImageSize, imageSizes } from '../../common'
+import { getAndUploadColours, getAndUploadImage } from '../../media'
 import pAll = require('p-all')
 import { FrontTaskOutput } from './frontTask'
-import { logInput, logOutput } from './log-utils'
-import { handleAndNotifyOnError } from './notifications/pub-status-notifier'
+import { logInput, logOutput } from '../log-utils'
+import { handleAndNotifyOnError } from '../notifications/pub-status-notifier'
 
-export interface MediaTaskOutput extends Omit<FrontTaskOutput, 'images'> {
+type ImageTaskInput = FrontTaskOutput
+export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {
     failedImages: number
     failedColours: number
 }
-export const handler: Handler<FrontTaskOutput, MediaTaskOutput> = async ({
+export const handler: Handler<ImageTaskInput, ImageTaskOutput> = async ({
     issuePublication,
     issue,
     images,
@@ -61,7 +62,7 @@ export const handler: Handler<FrontTaskOutput, MediaTaskOutput> = async ({
         const failedColours = failedColourUploads.length
         const success = failedImages + failedColours === 0
 
-        const out: MediaTaskOutput = {
+        const out: ImageTaskOutput = {
             issuePublication,
             issue,
             ...params,

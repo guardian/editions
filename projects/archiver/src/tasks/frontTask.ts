@@ -1,19 +1,20 @@
 import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
-import { attempt, hasFailed } from '../../backend/utils/try'
-import { frontPath, Image } from '../common'
-import { getImagesFromFront } from '../media'
-import { getFront } from './downloader'
+import { attempt, hasFailed } from '../../../backend/utils/try'
+import { frontPath, Image } from '../../common'
+import { getImagesFromFront } from '../../media'
+import { getFront } from '../downloader'
 import { IssueTaskOutput } from './issueTask'
-import { Bucket } from './s3'
-import { upload, ONE_WEEK } from './upload'
-import { logInput, logOutput } from './log-utils'
-import { handleAndNotifyOnError } from './notifications/pub-status-notifier'
+import { Bucket } from '../s3'
+import { upload, ONE_WEEK } from '../upload'
+import { logInput, logOutput } from '../log-utils'
+import { handleAndNotifyOnError } from '../notifications/pub-status-notifier'
 
+type FrontTaskInput = IssueTaskOutput
 export interface FrontTaskOutput extends IssueTaskOutput {
     images: Image[]
 }
-export const handler: Handler<IssueTaskOutput, FrontTaskOutput> = async ({
+export const handler: Handler<FrontTaskInput, FrontTaskOutput> = async ({
     issuePublication,
     issue,
     fronts,

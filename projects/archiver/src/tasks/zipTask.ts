@@ -1,13 +1,15 @@
 import { Handler } from 'aws-lambda'
-import { mediaDir } from '../../common/src'
-import { imageSizes, issueDir } from '../common'
-import { zip } from '../zipper'
+import { mediaDir } from '../../../common/src'
+import { imageSizes, issueDir } from '../../common'
+import { zip } from '../../zipper'
 import { UploadTaskOutput } from './issueUploadTask'
-import { putStatus } from './status'
-import { logInput, logOutput } from './log-utils'
-import { handleAndNotify } from './notifications/pub-status-notifier'
+import { putStatus } from '../status'
+import { logInput, logOutput } from '../log-utils'
+import { handleAndNotify } from '../notifications/pub-status-notifier'
 
-export const handler: Handler<UploadTaskOutput, UploadTaskOutput> = async ({
+type ZipTaskInput = UploadTaskOutput
+type ZipTaskOutput = UploadTaskOutput
+export const handler: Handler<ZipTaskInput, ZipTaskOutput> = async ({
     issuePublication,
     issue,
 }) => {

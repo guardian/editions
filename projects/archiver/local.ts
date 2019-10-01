@@ -1,7 +1,7 @@
 import MemWatch from 'node-memwatch'
 import * as main from './main'
 import { Handler, Context } from 'aws-lambda'
-import { IssueParams } from './src/issueTask'
+import { IssueParams } from './src/tasks/issueTask'
 
 /*
 This file is a shim that allows any of the functions in the step function

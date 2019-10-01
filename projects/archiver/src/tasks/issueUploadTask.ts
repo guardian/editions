@@ -1,18 +1,19 @@
 import { Handler } from 'aws-lambda'
-import { attempt, hasFailed } from '../../backend/utils/try'
-import { issuePath } from '../common'
-import { MediaTaskOutput } from './imageTask'
+import { attempt, hasFailed } from '../../../backend/utils/try'
+import { issuePath } from '../../common'
+import { ImageTaskOutput } from './imageTask'
 import { IssueTaskOutput } from './issueTask'
-import { upload, ONE_WEEK } from './upload'
-import { putStatus } from './status'
-import { logInput, logOutput } from './log-utils'
-import { handleAndNotify } from './notifications/pub-status-notifier'
+import { upload, ONE_WEEK } from '../upload'
+import { putStatus } from '../status'
+import { logInput, logOutput } from '../log-utils'
+import { handleAndNotify } from '../notifications/pub-status-notifier'
 
+type UploadTaskInput = ImageTaskOutput
 export type UploadTaskOutput = Pick<
     IssueTaskOutput,
     'issuePublication' | 'message' | 'issue'
 >
-export const handler: Handler<MediaTaskOutput, UploadTaskOutput> = async ({
+export const handler: Handler<UploadTaskInput, UploadTaskOutput> = async ({
     issuePublication,
     issue,
 }) => {

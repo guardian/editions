@@ -1,23 +1,20 @@
 import { Handler } from 'aws-lambda'
-import { IssueCompositeKey, IssuePublicationIdentifier, Issue } from '../common'
-import { logInput, logOutput } from './log-utils'
-import { handleAndNotify } from './notifications/pub-status-notifier'
-import { scheduleDeviceNotificationIfInFuture } from './notifications/device-notifications'
+import { logInput, logOutput } from '../log-utils'
+import { handleAndNotify } from '../notifications/pub-status-notifier'
+import { scheduleDeviceNotificationIfInFuture } from '../notifications/device-notifications'
+import { IndexTaskOutput } from './generateIndexTask'
+import { IssuePublicationIdentifier } from '../../../common/src'
 
-export interface EventTaskInput {
+export type NotificationTaskInput = IndexTaskOutput
+export interface NotificationTaskOutput {
     issuePublication: IssuePublicationIdentifier
-    issue: Issue
 }
 
-export interface EventTaskOutput {
-    issueId: IssueCompositeKey
-}
-
-export const handler: Handler<EventTaskInput, EventTaskOutput> = async ({
-    issuePublication,
-    issue,
-}) => {
-    return handleAndNotify<EventTaskOutput>(
+export const handler: Handler<
+    NotificationTaskInput,
+    NotificationTaskOutput
+> = async ({ issuePublication, issue }) => {
+    return handleAndNotify<NotificationTaskOutput>(
         issuePublication,
         'notified',
         async () => {
@@ -49,13 +46,7 @@ export const handler: Handler<EventTaskInput, EventTaskOutput> = async ({
                 },
             )
 
-            const { publishedId, localId } = issue
-
-            const issueId: IssueCompositeKey = {
-                publishedId,
-                localId,
-            }
-            const out: EventTaskOutput = { issueId }
+            const out: NotificationTaskOutput = { issuePublication }
             logOutput(out)
             return out
         },

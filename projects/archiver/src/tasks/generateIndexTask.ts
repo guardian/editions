@@ -1,19 +1,20 @@
 import { Handler } from 'aws-lambda'
-import { IssueSummary } from '../common'
-import { getIssueSummary } from './indexer/getIssueSummary'
-import { indexer } from './indexer/summary'
-import { upload, FIVE_SECONDS } from './upload'
+import { IssueSummary } from '../../common'
+import { getIssueSummary } from '../indexer/getIssueSummary'
+import { indexer } from '../indexer/summary'
+import { upload, FIVE_SECONDS } from '../upload'
 import { UploadTaskOutput } from './issueUploadTask'
-import { putStatus } from './status'
-import { logInput, logOutput } from './log-utils'
-import { issueSummarySort } from '../common'
-import { handleAndNotify } from './notifications/pub-status-notifier'
+import { putStatus } from '../status'
+import { logInput, logOutput } from '../log-utils'
+import { issueSummarySort } from '../../common'
+import { handleAndNotify } from '../notifications/pub-status-notifier'
 
+type IndexTaskInput = UploadTaskOutput
 export interface IndexTaskOutput extends UploadTaskOutput {
     issueSummary: IssueSummary
     index: IssueSummary[]
 }
-export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
+export const handler: Handler<IndexTaskInput, IndexTaskOutput> = async ({
     issuePublication,
     issue,
 }) => {
