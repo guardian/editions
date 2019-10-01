@@ -10,17 +10,15 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
 }
 
 export const publishedStatuses = [
-    'published', // zip file built and uploaded
+    'bundled', // zip files built and uploaded
     'indexed', // index file generated
     'notified', // notification sent
-    'cleaned',
 ] as const
 export const statuses = [
     ...publishedStatuses,
     'started', // started the process of building
     'assembled', // assembled assets into S3
     'unknown',
-    'aborted',
 ] as const
 export type Status = typeof statuses[number]
 

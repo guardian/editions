@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const logInput = (inpt: any) => {
     console.log('input:', JSON.stringify(inpt))
 }
