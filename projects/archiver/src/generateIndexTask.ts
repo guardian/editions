@@ -10,7 +10,6 @@ import { issueSummarySort } from '../common'
 import { handleAndNotify } from './notifications/pub-status-notifier'
 
 export interface IndexTaskOutput extends UploadTaskOutput {
-    message: string
     issueSummary: IssueSummary
     index: IssueSummary[]
 }
@@ -56,7 +55,6 @@ export const handler: Handler<UploadTaskOutput, IndexTaskOutput> = async ({
             index: otherIssueSummaries,
             issue,
             issueSummary: thisIssueSummary,
-            message: `Index regenerated`,
         }
         logOutput(out)
         return out

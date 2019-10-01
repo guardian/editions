@@ -7,7 +7,6 @@ import { scheduleDeviceNotificationIfInFuture } from './notifications/device-not
 export interface EventTaskInput {
     issuePublication: IssuePublicationIdentifier
     issue: Issue
-    message?: string
 }
 
 export interface EventTaskOutput {
@@ -17,7 +16,6 @@ export interface EventTaskOutput {
 export const handler: Handler<EventTaskInput, EventTaskOutput> = async ({
     issuePublication,
     issue,
-    message,
 }) => {
     return handleAndNotify<EventTaskOutput>(
         issuePublication,
@@ -26,7 +24,6 @@ export const handler: Handler<EventTaskInput, EventTaskOutput> = async ({
             const eventTaskInput = {
                 issuePublication,
                 issue,
-                message,
             }
 
             logInput(eventTaskInput)
