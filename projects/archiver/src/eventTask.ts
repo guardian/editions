@@ -5,7 +5,7 @@ import {
     PublishEvent,
     Status,
     notifyAboutPublishStatus,
-} from './notifications/pub-status-notifyer'
+} from './notifications/pub-status-notifier'
 import { scheduleDeviceNotificationIfInFuture } from './notifications/device-notifications'
 
 const extractError = (error?: { Cause: string }): string | undefined => {
