@@ -75,6 +75,14 @@ const createPublishEvent = (
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const errorToString = (err: any): string => {
+    if (err instanceof Error) {
+        return err.toString()
+    }
+    return `Error: ${JSON.stringify(err)}`
+}
+
 async function handleAndNotifyInternal<T>(
     identifier: IssuePublicationIdentifier,
     statusOnSuccess: Status | undefined,
@@ -93,7 +101,7 @@ async function handleAndNotifyInternal<T>(
         await sendPublishStatusToTopic({
             ...identifier,
             status: 'Failed',
-            message: err,
+            message: errorToString(err),
             timestamp: moment().format(),
         })
         // now escalate error
