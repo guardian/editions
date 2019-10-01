@@ -25,13 +25,15 @@ import { Image, imageStyles } from './images'
 import { Pullquote, quoteStyles } from './pull-quote'
 import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { lineStyles, Line } from './line'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss(families.text.regular)}
+    ${generateAssetsFontCss(families.headline.light)}
     ${generateAssetsFontCss(families.headline.regular)}
-    ${generateAssetsFontCss(families.headline.bold, 600)}
+    ${generateAssetsFontCss(families.headline.bold)}
     ${generateAssetsFontCss(families.sans.regular)}
     ${generateAssetsFontCss(families.titlepiece.regular)}
     ${quoteStyles({
@@ -39,7 +41,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         wrapLayout,
     })}
     html, body {
-        overflow: hidden;
+        overflow-x: hidden;
     }
     * {
         margin: 0;
@@ -81,8 +83,8 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         animation-name: fade;
         animation-fill-mode: both;
     }
-    main {
-        width: ${px(wrapLayout.content.width)};
+    main, .wrapper {
+        width: ${px(wrapLayout.content.width + metrics.sides.sides / 2)};
     }
     #app p,
     figure {
@@ -105,24 +107,18 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
       margin-bottom: ${px(metrics.vertical)};
       margin-top: ${px(metrics.vertical * 2.5)};
     }
-    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .line {
-            position: absolute;
-            width: 1px;
-            height: '100%';
-            background: ${color.line};
-            top: 0;
-            right: ${wrapLayout.width - wrapLayout.content.width};
-            bottom: 0;
-            display: block
-            z-index: 99999;
-        }
+    .content-wrap {
+        position: relative;
+    }
+    .content-wrap .line {
+        margin-right: ${px(metrics.article.sidesTablet * -1)};
     }
     ${headerStyles({
         colors,
         wrapLayout,
     })}
     ${imageStyles({ colors, wrapLayout })}
+    ${lineStyles({ colors, wrapLayout })}
 `
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
@@ -194,16 +190,15 @@ export const render = (
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
-        <main style="padding-top:${px(height)}">
-            ${showWebHeader &&
-                html`
-                    <div class="line"></div>
-                `}
-            ${showWebHeader &&
-                headerProps &&
-                Header({ ...headerProps, publishedId })}
-            ${content}
-        </main>
+        ${showWebHeader &&
+            headerProps &&
+            Header({ ...headerProps, publishedId })}
+        <div class="content-wrap">
+            ${showWebHeader && Line({ zIndex: 999 })}
+            <main style="padding-top:${px(height)}">
+                ${content}
+            </main>
+        </div>
     `
     return makeHtml({ styles, body })
 }

@@ -40,6 +40,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
     .image {
         position: relative;
         clear: right;
+        z-index: 10000;
     }
     .image img {
         display: block;
