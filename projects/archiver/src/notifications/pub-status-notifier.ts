@@ -2,6 +2,7 @@ import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
 import { IssuePublicationIdentifier } from '../../common'
 import { Status } from '../status'
+import moment, { Moment } from 'moment'
 
 export type ToolStatus = 'Processing' | 'Published' | 'Failed'
 
@@ -11,6 +12,7 @@ export interface PublishEvent {
     version: string
     status: ToolStatus
     message: string
+    timestamp: string
 }
 
 const sendPublishStatusToTopic = async (pubEvent: PublishEvent) => {
@@ -44,7 +46,9 @@ function throwBadStatus(s: never): never {
 const createPublishEvent = (
     identifier: IssuePublicationIdentifier,
     status: Status,
+    eventTime: Moment,
 ): PublishEvent => {
+    const timestamp = eventTime.format()
     switch (status) {
         case 'started':
         case 'assembled':
@@ -54,12 +58,14 @@ const createPublishEvent = (
                 ...identifier,
                 status: 'Processing',
                 message: `Issue is now ${status}`,
+                timestamp,
             }
         case 'notified':
             return {
                 ...identifier,
                 status: 'Published',
                 message: 'Device notification scheduled',
+                timestamp,
             }
         case 'unknown':
             throw new Error('Can\'t make publish event with status "unknown"')
@@ -76,7 +82,8 @@ async function handleAndNotifyInternal<T>(
     try {
         const result = await handler()
         if (statusOnSuccess) {
-            const event = createPublishEvent(identifier, statusOnSuccess)
+            const now = moment()
+            const event = createPublishEvent(identifier, statusOnSuccess, now)
             await sendPublishStatusToTopic(event)
         }
         return result
@@ -86,6 +93,7 @@ async function handleAndNotifyInternal<T>(
             ...identifier,
             status: 'Failed',
             message: err,
+            timestamp: moment().format(),
         })
         // now escalate error
         throw err
