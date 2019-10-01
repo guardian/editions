@@ -13,7 +13,7 @@ export interface PublishEvent {
     message: string
 }
 
-export const notifyAboutPublishStatus = async (pubEvent: PublishEvent) => {
+const sendPublishStatusToTopic = async (pubEvent: PublishEvent) => {
     console.log('attempt to send publish status update', pubEvent)
     const payload = { event: pubEvent }
     const topic = process.env.topic
@@ -36,6 +36,38 @@ export const notifyAboutPublishStatus = async (pubEvent: PublishEvent) => {
     return sendStatus
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function throwBadStatus(s: never): never {
+    throw new Error('Unknown status type')
+}
+
+const createPublishEvent = (
+    identifier: IssuePublicationIdentifier,
+    status: Status,
+): PublishEvent => {
+    switch (status) {
+        case 'started':
+        case 'assembled':
+        case 'bundled':
+        case 'indexed':
+            return {
+                ...identifier,
+                status: 'Processing',
+                message: `Issue is now ${status}`,
+            }
+        case 'notified':
+            return {
+                ...identifier,
+                status: 'Published',
+                message: 'Device notification scheduled',
+            }
+        case 'unknown':
+            throw new Error('Can\'t make publish event with status "unknown"')
+        default:
+            return throwBadStatus(status)
+    }
+}
+
 async function handleAndNotifyInternal<T>(
     identifier: IssuePublicationIdentifier,
     statusOnSuccess: Status | undefined,
@@ -44,17 +76,15 @@ async function handleAndNotifyInternal<T>(
     try {
         const result = await handler()
         if (statusOnSuccess) {
-            await notifyAboutPublishStatus({
-                ...identifier,
-                status: statusOnSuccess,
-            })
+            const event = createPublishEvent(identifier, statusOnSuccess)
+            await sendPublishStatusToTopic(event)
         }
         return result
     } catch (err) {
         // send failure notification
-        await notifyAboutPublishStatus({
+        await sendPublishStatusToTopic({
             ...identifier,
-            status: 'aborted',
+            status: 'Failed',
             message: err,
         })
         // now escalate error
