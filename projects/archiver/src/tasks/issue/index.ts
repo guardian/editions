@@ -4,7 +4,6 @@ import { Issue, IssuePublicationIdentifier } from '../../../common'
 import { getIssue } from '../../utils/backend-client'
 import { Bucket } from '../../utils/s3'
 import { getPublishedId } from '../../utils/path-builder'
-import { putStatus } from '../../services/status'
 import { handleAndNotify } from '../../services/task-handler'
 
 export interface IssueParams {
@@ -24,7 +23,6 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
                 issuePublication,
             )} to ${Bucket}`,
         )
-        await putStatus(issuePublication, 'started')
         const publishedId = getPublishedId(issuePublication)
         const issue = await attempt(getIssue(publishedId))
         if (hasFailed(issue)) {

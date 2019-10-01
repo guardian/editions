@@ -1,5 +1,5 @@
 import { IssuePublicationIdentifier } from '../../common'
-import { Status } from '../services/status'
+import { Status, putStatus } from '../services/status'
 import moment from 'moment'
 import {
     sendPublishStatusToTopic,
@@ -28,6 +28,7 @@ function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
             const result = await handler(input)
             logOutput(result)
             if (statusOnSuccess) {
+                await putStatus(input.issuePublication, statusOnSuccess)
                 const now = moment()
                 const event = createPublishEvent(
                     input.issuePublication,
@@ -51,6 +52,9 @@ function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
     }
 }
 
+/* This is a general handler that handles logging of input and output objects
+ * and also notifications to the tooling topic on both success and failure
+ */
 export function handleAndNotify<I extends InputWithIdentifier, O>(
     statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
@@ -58,6 +62,9 @@ export function handleAndNotify<I extends InputWithIdentifier, O>(
     return handleAndNotifyInternal(statusOnSuccess, handler)
 }
 
+/* This is a general handler that handles logging of input and output objects
+ * and also notifications to the tooling topic on failures
+ */
 export function handleAndNotifyOnError<I extends InputWithIdentifier, O>(
     handler: (input: I) => Promise<O>,
 ): Handler<I, O> {

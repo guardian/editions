@@ -4,7 +4,6 @@ import { issuePath } from '../../../common'
 import { ImageTaskOutput } from '../image'
 import { IssueTaskOutput } from '../issue'
 import { upload, ONE_WEEK } from '../../utils/s3'
-import { putStatus } from '../../services/status'
 import { handleAndNotify } from '../../services/task-handler'
 
 type UploadTaskInput = ImageTaskOutput
@@ -24,7 +23,6 @@ export const handler: Handler<
         console.error(JSON.stringify(issueUpload))
         throw new Error('Failed to upload issue file')
     }
-    await putStatus(issuePublication, 'assembled')
     return {
         issuePublication,
         message: 'Issue uploaded succesfully',

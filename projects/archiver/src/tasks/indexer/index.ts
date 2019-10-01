@@ -4,7 +4,6 @@ import { getIssueSummary } from './helpers/get-issue-summary'
 import { indexer } from './helpers/summary'
 import { upload, FIVE_SECONDS } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
-import { putStatus } from '../../services/status'
 import { handleAndNotify } from '../../services/task-handler'
 
 type IndexTaskInput = UploadTaskOutput
@@ -39,8 +38,6 @@ export const handler: Handler<
     await upload('issues', allIssues, 'application/json', FIVE_SECONDS)
 
     console.log('Uploaded new issues file')
-
-    await putStatus(issuePublication, 'indexed')
 
     return {
         issuePublication,

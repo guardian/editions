@@ -2,7 +2,6 @@ import { Handler } from 'aws-lambda'
 import { imageSizes, issueDir, mediaDir } from '../../../common'
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
-import { putStatus } from '../../services/status'
 import { handleAndNotify } from '../../services/task-handler'
 
 type ZipTaskInput = UploadTaskOutput
@@ -29,7 +28,6 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             }),
         )
         console.log('Media zips uploaded.')
-        await putStatus(issuePublication, 'bundled')
         return {
             issuePublication,
             issue,
