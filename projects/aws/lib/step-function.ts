@@ -148,13 +148,17 @@ export const archiverStepFunction = (
         task: new tasks.InvokeFunction(indexer),
     })
 
-    const event = taskLambda('event', lambdaParams, {
+    const notification = taskLambda('notification', lambdaParams, {
         gu_notify_service_api_key: guNotifyServiceApiKey,
     })
 
-    const publishedTask = new sfn.Task(scope, 'Schedule device notification', {
-        task: new tasks.InvokeFunction(event),
-    })
+    const notificationTask = new sfn.Task(
+        scope,
+        'Schedule device notification',
+        {
+            task: new tasks.InvokeFunction(notification),
+        },
+    )
     //Fetch issue metadata
     issueTask.next(frontTask)
 
@@ -173,9 +177,9 @@ export const archiverStepFunction = (
 
     zipTask.next(indexerTask)
 
-    indexerTask.next(publishedTask)
+    indexerTask.next(notificationTask)
 
-    publishedTask.next(new sfn.Succeed(scope, 'successfully-archived'))
+    notificationTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,
