@@ -3,8 +3,8 @@ import { IssueCompositeKey, IssuePublicationIdentifier, Issue } from '../common'
 import { logInput, logOutput } from './log-utils'
 import {
     PublishEvent,
-    Status,
     notifyAboutPublishStatus,
+    handleAndNotify,
 } from './notifications/pub-status-notifier'
 import { scheduleDeviceNotificationIfInFuture } from './notifications/device-notifications'
 
@@ -38,56 +38,49 @@ export const handler: Handler<EventTaskInput, EventTaskOutput> = async ({
     issuePublication,
     issue,
     message,
-    error,
 }) => {
-    const eventTaskInput = {
+    return handleAndNotify<EventTaskOutput>(
         issuePublication,
-        issue,
-        message,
-    }
+        'notified',
+        async () => {
+            const eventTaskInput = {
+                issuePublication,
+                issue,
+                message,
+            }
 
-    logInput(eventTaskInput)
+            logInput(eventTaskInput)
 
-    const stage: string = process.env.stage || 'code'
+            const stage: string = process.env.stage || 'code'
 
-    const status: Status = error === undefined ? 'Published' : 'Failed'
-    const messageOrError = extractError(error) || message
-    const { version } = issuePublication
-    const publishEvent: PublishEvent = {
-        version,
-        status,
-        message: messageOrError,
-    }
+            const { issueDate } = issuePublication
+            const { key, name } = issue
 
-    const sendSNSRes = await notifyAboutPublishStatus(publishEvent)
-    console.log('send sns message:', sendSNSRes)
+            const guNotificationServiceDomain =
+                stage.toLowerCase() == 'prod'
+                    ? 'https://notification.notifications.guardianapis.com'
+                    : 'https://notification.notifications.code.dev-guardianapis.com'
 
-    const { issueDate } = issuePublication
-    const { key, name } = issue
+            const guNotificationServiceAPIKey =
+                process.env.gu_notify_service_api_key || ''
 
-    const guNotificationServiceDomain =
-        stage.toLowerCase() == 'prod'
-            ? 'https://notification.notifications.guardianapis.com'
-            : 'https://notification.notifications.code.dev-guardianapis.com'
+            await scheduleDeviceNotificationIfInFuture(
+                { key, name, issueDate },
+                {
+                    domain: guNotificationServiceDomain,
+                    apiKey: guNotificationServiceAPIKey,
+                },
+            )
 
-    const guNotificationServiceAPIKey =
-        process.env.gu_notify_service_api_key || ''
+            const { publishedId, localId } = issue
 
-    await scheduleDeviceNotificationIfInFuture(
-        { key, name, issueDate },
-        {
-            domain: guNotificationServiceDomain,
-            apiKey: guNotificationServiceAPIKey,
+            const issueId: IssueCompositeKey = {
+                publishedId,
+                localId,
+            }
+            const out: EventTaskOutput = { issueId }
+            logOutput(out)
+            return out
         },
     )
-
-    const { publishedId, localId } = issue
-
-    const issueId: IssueCompositeKey = {
-        publishedId,
-        localId,
-    }
-    const out: EventTaskOutput = { issueId }
-    logOutput(out)
-    return out
 }

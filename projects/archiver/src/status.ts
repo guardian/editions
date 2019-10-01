@@ -10,7 +10,7 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
 }
 
 export const publishedStatuses = [
-    'published', // zip file built and uploaded
+    'bundled', // zip files built and uploaded
     'indexed', // index file generated
     'notified', // notification sent
     'cleaned',

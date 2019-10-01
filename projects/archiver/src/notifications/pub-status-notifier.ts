@@ -1,12 +1,16 @@
 import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
+import { IssuePublicationIdentifier } from '../../common'
+import { Status } from '../status'
 
-export type Status = 'Processing' | 'Published' | 'Failed'
+export type ToolStatus = 'Processing' | 'Published' | 'Failed'
 
 export interface PublishEvent {
+    edition: string
+    issueDate: string
     version: string
-    status: Status
-    message?: string
+    status: ToolStatus
+    message: string
 }
 
 export const notifyAboutPublishStatus = async (pubEvent: PublishEvent) => {
@@ -30,4 +34,45 @@ export const notifyAboutPublishStatus = async (pubEvent: PublishEvent) => {
             .promise(),
     )
     return sendStatus
+}
+
+async function handleAndNotifyInternal<T>(
+    identifier: IssuePublicationIdentifier,
+    statusOnSuccess: Status | undefined,
+    handler: () => Promise<T>,
+): Promise<T> {
+    try {
+        const result = await handler()
+        if (statusOnSuccess) {
+            await notifyAboutPublishStatus({
+                ...identifier,
+                status: statusOnSuccess,
+            })
+        }
+        return result
+    } catch (err) {
+        // send failure notification
+        await notifyAboutPublishStatus({
+            ...identifier,
+            status: 'aborted',
+            message: err,
+        })
+        // now escalate error
+        throw err
+    }
+}
+
+export async function handleAndNotify<T>(
+    identifier: IssuePublicationIdentifier,
+    statusOnSuccess: Status,
+    handler: () => Promise<T>,
+): Promise<T> {
+    return await handleAndNotifyInternal(identifier, statusOnSuccess, handler)
+}
+
+export async function handleAndNotifyOnError<T>(
+    identifier: IssuePublicationIdentifier,
+    handler: () => Promise<T>,
+): Promise<T> {
+    return await handleAndNotifyInternal(identifier, undefined, handler)
 }
