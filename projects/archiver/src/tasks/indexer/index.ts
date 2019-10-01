@@ -17,10 +17,6 @@ export const handler: Handler<
     IndexTaskInput,
     IndexTaskOutput
 > = handleAndNotify('indexed', async ({ issuePublication, issue }) => {
-    logInput({
-        issuePublication,
-        issue,
-    })
     // at the moment we create and recreate these issue summaries every time
     // an optimisation would be to move the issue summary creation to the previous task
     // so it would only have to be done once and can easily be read in and stiched together
@@ -47,12 +43,10 @@ export const handler: Handler<
 
     await putStatus(issuePublication, 'indexed')
 
-    const out: IndexTaskOutput = {
+    return {
         issuePublication,
         index: otherIssueSummaries,
         issue,
         issueSummary: thisIssueSummary,
     }
-    logOutput(out)
-    return out
 })

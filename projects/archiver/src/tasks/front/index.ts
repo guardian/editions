@@ -17,11 +17,6 @@ export const handler: Handler<
     FrontTaskInput,
     FrontTaskOutput
 > = handleAndNotifyOnError(async ({ issuePublication, issue, fronts }) => {
-    logInput({
-        issuePublication,
-        issue,
-        fronts,
-    })
     const { publishedId } = issue
     console.log(`Attempting to upload ${publishedId} to ${Bucket}`)
     const [frontId, ...remainingFronts] = fronts
@@ -49,7 +44,7 @@ export const handler: Handler<
         throw new Error('Could not upload front')
     }
     const publishedFronts = [...issue.fronts, frontId]
-    const out: FrontTaskOutput = {
+    return {
         issuePublication,
         issue: { ...issue, fronts: publishedFronts },
         images,
@@ -57,6 +52,4 @@ export const handler: Handler<
         remainingFronts: remainingFronts.length,
         message: `Succesfully published ${frontId}`,
     }
-    logOutput(out)
-    return out
 })

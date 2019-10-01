@@ -14,13 +14,6 @@ export const handler: Handler<
     NotificationTaskInput,
     NotificationTaskOutput
 > = handleAndNotify('notified', async ({ issuePublication, issue }) => {
-    const eventTaskInput = {
-        issuePublication,
-        issue,
-    }
-
-    logInput(eventTaskInput)
-
     const stage: string = process.env.stage || 'code'
 
     const { issueDate } = issuePublication
@@ -42,7 +35,5 @@ export const handler: Handler<
         },
     )
 
-    const out: NotificationTaskOutput = { issuePublication }
-    logOutput(out)
-    return out
+    return { issuePublication }
 })

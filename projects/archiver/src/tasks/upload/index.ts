@@ -17,10 +17,6 @@ export const handler: Handler<
     UploadTaskInput,
     UploadTaskOutput
 > = handleAndNotify('assembled', async ({ issuePublication, issue }) => {
-    logInput({
-        issuePublication,
-        issue,
-    })
     const { publishedId } = issue
     const issueUpload = await attempt(
         upload(issuePath(publishedId), issue, 'application/json', ONE_WEEK),
@@ -30,11 +26,9 @@ export const handler: Handler<
         throw new Error('Failed to upload issue file')
     }
     await putStatus(issuePublication, 'assembled')
-    const out: UploadTaskOutput = {
+    return {
         issuePublication,
         message: 'Issue uploaded succesfully',
         issue,
     }
-    logOutput(out)
-    return out
 })

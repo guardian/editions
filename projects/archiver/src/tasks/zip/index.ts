@@ -11,10 +11,6 @@ type ZipTaskOutput = UploadTaskOutput
 export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
     'bundled',
     async ({ issuePublication, issue }) => {
-        logInput({
-            issuePublication,
-            issue,
-        })
         const { issueDate, version } = issuePublication
         const { publishedId } = issue
         const name = issueDir(publishedId)
@@ -35,12 +31,10 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
         )
         console.log('Media zips uploaded.')
         await putStatus(issuePublication, 'bundled')
-        const out: UploadTaskOutput = {
+        return {
             issuePublication,
             issue,
             message: `Issue ${issueDate} zipped`,
         }
-        logOutput(out)
-        return out
     },
 )

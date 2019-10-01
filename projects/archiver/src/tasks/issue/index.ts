@@ -20,7 +20,6 @@ export interface IssueTaskOutput extends IssueParams {
 export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
     'started',
     async ({ issuePublication }) => {
-        logInput({ issuePublication })
         console.log(
             `Attempting to upload ${JSON.stringify(
                 issuePublication,
@@ -34,14 +33,12 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
             throw new Error('Failed to download issue.')
         }
         console.log(`Downloaded issue ${JSON.stringify(issuePublication)}`)
-        const out: IssueTaskOutput = {
+        return {
             issuePublication,
             issue: { ...issue, fronts: [] },
             fronts: issue.fronts,
             remainingFronts: issue.fronts.length,
             message: 'Fetched issue succesfully.',
         }
-        logOutput(out)
-        return out
     },
 )

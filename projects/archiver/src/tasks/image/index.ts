@@ -18,12 +18,6 @@ export const handler: Handler<
     ImageTaskOutput
 > = handleAndNotifyOnError(
     async ({ issuePublication, issue, images, ...params }) => {
-        logInput({
-            issuePublication,
-            issue,
-            images,
-            ...params,
-        })
         const { publishedId } = issue
 
         const imagesWithSizes: [Image, ImageSize][] = unnest(
@@ -60,7 +54,7 @@ export const handler: Handler<
         const failedColours = failedColourUploads.length
         const success = failedImages + failedColours === 0
 
-        const out: ImageTaskOutput = {
+        return {
             issuePublication,
             issue,
             ...params,
@@ -70,7 +64,5 @@ export const handler: Handler<
                 success ? 'succesfully' : 'with some errors'
             }.`,
         }
-        logOutput(out)
-        return out
     },
 )
