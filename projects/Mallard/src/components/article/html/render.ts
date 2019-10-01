@@ -75,7 +75,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     }
 
     #app {
-        padding: ${px(metrics.vertical)} ${px(metrics.article.sides)};
+        padding: 0 ${px(metrics.article.sides)} ${px(metrics.vertical)};
         width: ${px(wrapLayout.width + metrics.article.sides * 2)};
         margin: auto;
         position: relative;
@@ -109,6 +109,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     }
     .content-wrap {
         position: relative;
+        padding-top: ${px(metrics.vertical)};
     }
     .content-wrap .line {
         margin-right: ${px(metrics.article.sidesTablet * -1)};
