@@ -11,7 +11,7 @@ public class MainActivity extends ReactFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, true);  // here
+        SplashScreen.show(this);
         super.onCreate(null);
     }
     /**

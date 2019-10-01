@@ -10,7 +10,6 @@ buildscript {
         androidXVersion = '1.0.2' // This is for react-native-inappbrowser-reborn
         mediaCompatVersion = '1.0.1' // Do not specify if using old libraries, specify '1.0.1' or similar for androidx.media:media dependency
         supportV4Version = '1.0.0' // Do not specify if using old libraries, specify '1.0.0' or similar for androidx.legacy:legacy-support-v4 dependency
-        googlePlayServicesVersion = "17.1.0"
         firebaseVersion = "19.0.1"
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
@@ -30,8 +29,9 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         google()
+        maven { url "https://maven.google.com" }
+        mavenLocal()
         jcenter()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
