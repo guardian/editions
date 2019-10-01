@@ -59,6 +59,9 @@ const styles = StyleSheet.create({
     sideBySideFeed: {
         paddingTop: metrics.vertical,
     },
+    overflow: {
+        overflow: 'hidden',
+    },
     illustrationImage: {
         width: '100%',
         height: 100,
