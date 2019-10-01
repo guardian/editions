@@ -33,6 +33,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
+import { fetchIssueSummary } from 'src/helpers/fetch'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -141,6 +142,8 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const { response: issueSummary } = useIssueSummary()
+    const james = fetchIssueSummary().then()
+    console.log(james)
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     const issue = useIssueCompositeKey()
     return (

@@ -339,6 +339,20 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
     )
 }
 
+const fetchIssueSummary = async () => {
+    const apiUrl = await getSetting('apiUrl')
+    return fetch(`${apiUrl}/issues`, {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(response =>
+        response.ok
+            ? Promise.resolve(response.json())
+            : Promise.reject(response.status),
+    )
+}
+
 export {
     fetchFromIssue,
     fetchFromApi,
@@ -347,4 +361,5 @@ export {
     fetchAndStoreIpAddress,
     fetchCacheClear,
     fetchDeprecationWarning,
+    fetchIssueSummary,
 }

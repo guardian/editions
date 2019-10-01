@@ -2,7 +2,6 @@ import { html, css, getScaledFontCss, px } from 'src/helpers/webview'
 import { ArticleHeaderProps } from '../article-header/types'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { Issue, mediaPath, Image as ImageT, ArticleType } from 'src/common'
-import { imageForScreenSize } from 'src/helpers/screen'
 import { families } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { PillarColours } from '@guardian/pasteup/palette'
@@ -11,6 +10,7 @@ import { metrics } from 'src/theme/spacing'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { Line } from './line'
 import { breakSides } from './helpers/layout'
+import { useImageSize } from 'src/hooks/use-image-size'
 
 const outieHeader = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header {
@@ -246,9 +246,10 @@ const Image = ({
     className?: string
 }) => {
     const backend = defaultSettings.apiUrl
+    const { imageSize } = useImageSize()
     const path = `${backend}${mediaPath(
         publishedId,
-        imageForScreenSize(),
+        imageSize,
         image.source,
         image.path,
     )}`
