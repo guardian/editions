@@ -1,5 +1,5 @@
-import { IssuePublicationIdentifier } from '../../../../common/src'
-import { IssueSummary, notNull } from '../../../common'
+import { IssuePublicationIdentifier } from '../../../../../common/src'
+import { IssueSummary, notNull } from '../../../../common'
 import { getIssues, issueWindow } from './get-issues'
 import { getIssueSummary } from './get-issue-summary'
 import { getPublishedVersion } from './get-published-version'

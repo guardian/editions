@@ -1,12 +1,12 @@
 import { Handler } from 'aws-lambda'
-import { attempt, hasFailed } from '../../../backend/utils/try'
-import { issuePath } from '../../common'
-import { ImageTaskOutput } from './image-task'
-import { IssueTaskOutput } from './issue-task'
-import { upload, ONE_WEEK } from '../utils/s3'
-import { putStatus } from '../status-store/status'
-import { logInput, logOutput } from '../utils/log'
-import { handleAndNotify } from './notifications/pub-status-notifier'
+import { attempt, hasFailed } from '../../../../backend/utils/try'
+import { issuePath } from '../../../common'
+import { ImageTaskOutput } from '../image'
+import { IssueTaskOutput } from '../issue'
+import { upload, ONE_WEEK } from '../../utils/s3'
+import { putStatus } from '../../status-store/status'
+import { logInput, logOutput } from '../../utils/log'
+import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
 
 type UploadTaskInput = ImageTaskOutput
 export type UploadTaskOutput = Pick<

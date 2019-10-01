@@ -1,14 +1,14 @@
 import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
-import { attempt, hasFailed } from '../../../backend/utils/try'
-import { frontPath, Image } from '../../common'
-import { getImagesFromFront } from './image/media'
-import { getFront } from '../utils/backend-client'
-import { IssueTaskOutput } from './issue-task'
-import { Bucket } from '../utils/s3'
-import { upload, ONE_WEEK } from '../utils/s3'
-import { logInput, logOutput } from '../utils/log'
-import { handleAndNotifyOnError } from './notifications/pub-status-notifier'
+import { attempt, hasFailed } from '../../../../backend/utils/try'
+import { frontPath, Image } from '../../../common'
+import { getImagesFromFront } from '../image/helpers/media'
+import { getFront } from '../../utils/backend-client'
+import { IssueTaskOutput } from '../issue'
+import { Bucket } from '../../utils/s3'
+import { upload, ONE_WEEK } from '../../utils/s3'
+import { logInput, logOutput } from '../../utils/log'
+import { handleAndNotifyOnError } from '../notification/helpers/pub-status-notifier'
 
 type FrontTaskInput = IssueTaskOutput
 export interface FrontTaskOutput extends IssueTaskOutput {

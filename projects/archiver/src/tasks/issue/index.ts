@@ -1,12 +1,12 @@
 import { Handler } from 'aws-lambda'
-import { attempt, hasFailed } from '../../../backend/utils/try'
-import { Issue, IssuePublicationIdentifier } from '../../common'
-import { getIssue } from '../utils/backend-client'
-import { Bucket } from '../utils/s3'
-import { getPublishedId } from '../utils/path-builder'
-import { putStatus } from '../status-store/status'
-import { logInput, logOutput } from '../utils/log'
-import { handleAndNotify } from './notifications/pub-status-notifier'
+import { attempt, hasFailed } from '../../../../backend/utils/try'
+import { Issue, IssuePublicationIdentifier } from '../../../common'
+import { getIssue } from '../../utils/backend-client'
+import { Bucket } from '../../utils/s3'
+import { getPublishedId } from '../../utils/path-builder'
+import { putStatus } from '../../status-store/status'
+import { logInput, logOutput } from '../../utils/log'
+import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
 
 export interface IssueParams {
     issuePublication: IssuePublicationIdentifier

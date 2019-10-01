@@ -6,10 +6,10 @@ import {
     ImageSize,
     imageSizes,
     notNull,
-} from '../../../../common/src'
-import { getPublishedId } from '../../utils/path-builder'
-import { Bucket, s3 } from '../../utils/s3'
-import { issue } from '../../../main'
+} from '../../../../../common/src'
+import { getPublishedId } from '../../../utils/path-builder'
+import { Bucket, s3 } from '../../../utils/s3'
+import { issue } from '../../../../main'
 
 // from a list of S3 keys, create an object of the basename to filename
 const identifyAssetFiles = (assetKeys: string[]) => {

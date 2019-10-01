@@ -1,13 +1,13 @@
 import { Handler } from 'aws-lambda'
-import { IssueSummary } from '../../common'
-import { getIssueSummary } from './indexer/get-issue-summary'
-import { indexer } from './indexer/summary'
-import { upload, FIVE_SECONDS } from '../utils/s3'
-import { UploadTaskOutput } from './issue-upload-task'
-import { putStatus } from '../status-store/status'
-import { logInput, logOutput } from '../utils/log'
-import { issueSummarySort } from '../../common'
-import { handleAndNotify } from './notifications/pub-status-notifier'
+import { IssueSummary } from '../../../common'
+import { getIssueSummary } from './helpers/get-issue-summary'
+import { indexer } from './helpers/summary'
+import { upload, FIVE_SECONDS } from '../../utils/s3'
+import { UploadTaskOutput } from '../upload'
+import { putStatus } from '../../status-store/status'
+import { logInput, logOutput } from '../../utils/log'
+import { issueSummarySort } from '../../../common'
+import { handleAndNotify } from '../notification/helpers/pub-status-notifier'
 
 type IndexTaskInput = UploadTaskOutput
 export interface IndexTaskOutput extends UploadTaskOutput {

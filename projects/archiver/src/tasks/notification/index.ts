@@ -1,9 +1,9 @@
 import { Handler } from 'aws-lambda'
-import { logInput, logOutput } from '../utils/log'
-import { handleAndNotify } from './notifications/pub-status-notifier'
-import { scheduleDeviceNotificationIfInFuture } from './notifications/device-notifications'
-import { IndexTaskOutput } from './generate-index-task'
-import { IssuePublicationIdentifier } from '../../../common/src'
+import { logInput, logOutput } from '../../utils/log'
+import { handleAndNotify } from './helpers/pub-status-notifier'
+import { scheduleDeviceNotificationIfInFuture } from './helpers/device-notifications'
+import { IndexTaskOutput } from '../indexer'
+import { IssuePublicationIdentifier } from '../../../../common/src'
 
 export type NotificationTaskInput = IndexTaskOutput
 export interface NotificationTaskOutput {

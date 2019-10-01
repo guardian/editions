@@ -1,5 +1,5 @@
 import { CAPIArticle } from '../../../../common'
-import { getImagesFromArticle } from '../media'
+import { getImagesFromArticle } from './media'
 
 test('getImage', () => {
     const image = {
