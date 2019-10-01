@@ -80,8 +80,8 @@ const OnboardingConsent = ({
                 {
                     <>
                         As the Guardian daily is ad free, we only collect data
-                        to improve your experience and our service to you. To 
-                        find out more read our {' '}
+                        to improve your experience and our service to you. To
+                        find out more read our{' '}
                         <LinkNav onPress={onOpenPrivacyPolicy}>
                             privacy policy
                         </LinkNav>

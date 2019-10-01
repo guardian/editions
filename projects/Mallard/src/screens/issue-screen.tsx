@@ -1,12 +1,5 @@
 import React, { ReactElement } from 'react'
-import {
-    Animated,
-    StyleProp,
-    StyleSheet,
-    View,
-    ViewStyle,
-    Image,
-} from 'react-native'
+import { Animated, StyleProp, StyleSheet, View, ViewStyle, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Issue } from 'src/common'
@@ -59,10 +52,11 @@ const styles = StyleSheet.create({
     sideBySideFeed: {
         paddingTop: metrics.vertical,
     },
-})
-
-const IllustrationStyles = StyleSheet.create({
-    postion: {
+    illustrationImage: {
+        width: '100%',
+        height: 100,
+    },
+    illustrationPosition: {
         position: 'relative',
         bottom: 0,
         left: 0,
@@ -154,14 +148,9 @@ const IssueFronts = ({
                     key={key}
                 />
             ))}
-            <View style={[IllustrationStyles.postion]}>
+            <View style={[styles.illustrationPosition]}>
                 <Image
-                    style={[
-                        {
-                            width: '100%',
-                            height: 100,
-                        },
-                    ]}
+                    style={styles.illustrationImage}
                     resizeMode={'contain'}
                     source={require('src/assets/images/privacy.png')}
                 />
@@ -193,7 +182,6 @@ const handleError = (
     </>
 )
 
-<<<<<<< HEAD
 const handlePending = () => (
     <>
         <ScreenHeader />
@@ -203,133 +191,96 @@ const handlePending = () => (
     </>
 )
 
-const IssueScreenWithPath = ({ path }: { path: PathToIssue }) => {
-    const response = useIssueResponse(path)
-    return response({
-        error: handleError,
-        pending: handlePending,
-        success: (issue, { retry }) => {
-            sendPageViewEvent({
-                path: `editions/uk/daily/${issue.key}`,
-            })
-            return (
-                <>
-                    <PreviewReloadButton
-                        onPress={() => {
-                            clearCache()
-                            retry()
-                        }}
-                    />
-                    <ScreenHeader issue={issue} />
+/** used to memoize the IssueScreenWithPath */
+const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
+    a.localIssueId === b.localIssueId &&
+    a.publishedIssueId === b.publishedIssueId
 
-                    <WithBreakpoints>
-                        {{
-                            0: () => (
-                                <WithLayoutRectangle>
-                                    {metrics => (
-                                        <WithIssueScreenSize
-                                            value={[
-                                                PageLayoutSizes.mobile,
-                                                metrics,
-                                            ]}
-                                        >
-                                            <IssueFronts
-                                                ListHeaderComponent={
-                                                    <View
-                                                        style={
-                                                            styles.weatherWide
-                                                        }
-=======
-                            <WithBreakpoints>
-                                {{
-                                    0: () => (
-                                        <WithLayoutRectangle>
-                                            {metrics => (
-                                                <WithIssueScreenSize
-                                                    value={[
-                                                        PageLayoutSizes.mobile,
-                                                        metrics,
-                                                    ]}
-                                                >
-                                                    <IssueFronts
-                                                        ListHeaderComponent={
-                                                            <View
-                                                                style={
-                                                                    styles.weatherWide
-                                                                }
-                                                            >
-                                                                <Weather />
-                                                            </View>
-                                                        }
-                                                        issue={issue}
-                                                    />
-                                                </WithIssueScreenSize>
-                                            )}
-                                        </WithLayoutRectangle>
-                                    ),
-                                    [Breakpoints.tabletVertical]: () => (
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                            }}
-                                        >
-                                            <View style={styles.sideWeather}>
-                                                <Weather />
-                                            </View>
-                                            <WithLayoutRectangle>
-                                                {metrics => (
-                                                    <WithIssueScreenSize
-                                                        value={[
-                                                            PageLayoutSizes.tablet,
-                                                            metrics,
-                                                        ]}
->>>>>>> added branding to home screen
-                                                    >
-                                                        <Weather />
-                                                    </View>
-                                                }
-                                                issue={issue}
-                                            />
-                                        </WithIssueScreenSize>
-                                    )}
-                                </WithLayoutRectangle>
-                            ),
-                            [Breakpoints.tabletVertical]: () => (
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                    }}
-                                >
-                                    <View style={styles.sideWeather}>
-                                        <Weather />
-                                    </View>
+const IssueScreenWithPath = React.memo(
+    ({ path }: { path: PathToIssue }) => {
+        const response = useIssueResponse(path)
+        return response({
+            error: handleError,
+            pending: handlePending,
+            success: (issue, { retry }) => {
+                sendPageViewEvent({
+                    path: `editions/uk/daily/${issue.key}`,
+                })
+                return (
+                    <>
+                        <PreviewReloadButton
+                            onPress={() => {
+                                clearCache()
+                                retry()
+                            }}
+                        />
+                        <ScreenHeader issue={issue} />
 
+                        <WithBreakpoints>
+                            {{
+                                0: () => (
                                     <WithLayoutRectangle>
                                         {metrics => (
                                             <WithIssueScreenSize
                                                 value={[
-                                                    PageLayoutSizes.tablet,
+                                                    PageLayoutSizes.mobile,
                                                     metrics,
                                                 ]}
                                             >
                                                 <IssueFronts
-                                                    style={
-                                                        styles.sideBySideFeed
+                                                    ListHeaderComponent={
+                                                        <View
+                                                            style={
+                                                                styles.weatherWide
+                                                            }
+                                                        >
+                                                            <Weather />
+                                                        </View>
                                                     }
                                                     issue={issue}
                                                 />
                                             </WithIssueScreenSize>
                                         )}
                                     </WithLayoutRectangle>
-                                </View>
-                            ),
-                        }}
-                    </WithBreakpoints>
-                </>
-            )
-        },
-    })
-}
+                                ),
+                                [Breakpoints.tabletVertical]: () => (
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                        }}
+                                    >
+                                        <View style={styles.sideWeather}>
+                                            <Weather />
+                                        </View>
+
+                                        <WithLayoutRectangle>
+                                            {metrics => (
+                                                <WithIssueScreenSize
+                                                    value={[
+                                                        PageLayoutSizes.tablet,
+                                                        metrics,
+                                                    ]}
+                                                >
+                                                    <IssueFronts
+                                                        style={
+                                                            styles.sideBySideFeed
+                                                        }
+                                                        issue={issue}
+                                                    />
+                                                </WithIssueScreenSize>
+                                            )}
+                                        </WithLayoutRectangle>
+                                    </View>
+                                ),
+                            }}
+                        </WithBreakpoints>
+                    </>
+                )
+            },
+        })
+    },
+    (prev, next) => pathsAreEqual(prev.path, next.path),
+)
 
 export const IssueScreen = () => {
     const response = useIssueCompositeKeyHandler()

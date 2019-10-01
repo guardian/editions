@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ViewStyle, StyleProp, StyleSheet, TextStyle, Image, YellowBox } from 'react-native'
+import { View, ViewStyle, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { TitlepieceText, UiExplainerCopy } from '../styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
