@@ -135,7 +135,7 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
-export const renderHTML = (
+export const useRenderedHTML = (
     article: BlockElement[],
     {
         pillar,
@@ -155,6 +155,7 @@ export const renderHTML = (
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     },
 ) => {
+    const { imageSize } = useImageSize()
     const content = article
         .map((el, i) => {
             switch (el.id) {
@@ -174,6 +175,7 @@ export const renderHTML = (
                         ? Image({
                               imageElement: el,
                               publishedId,
+                              imageSize,
                           })
                         : ''
                 case 'pullquote':

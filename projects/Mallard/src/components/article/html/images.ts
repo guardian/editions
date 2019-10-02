@@ -184,12 +184,13 @@ const ImageBase = ({
 const Image = ({
     imageElement,
     publishedId,
+    imageSize,
 }: {
     imageElement: ImageElement
     publishedId: string
+    imageSize: ImageSize
 }) => {
     // @TODO: This needs refactoring to work with downloaded content
-    const { imageSize } = useImageSize()
     const backend = defaultSettings.apiUrl
     const path = `${backend}${mediaPath(
         publishedId,
