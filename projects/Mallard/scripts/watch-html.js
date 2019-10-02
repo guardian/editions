@@ -16,10 +16,16 @@ const startWatchers = async () => {
                 [`cd ../../projects/${project}`, watchScript].join(' && '),
                 (err, stdout, stderr) => {
                     if (err || stderr) {
+                        if (stderr.includes('SIGKILL')) {
+                            console.log('Process replaced.')
+                            process.exit(0)
+                        }
                         console.error(
                             chalk.red('Failed watching bundle ' + key),
                         )
                         console.error(stderr)
+
+                        fs.readFileSync(0) //Don't immediately exit, allow the user to read the message.
                         process.exit(1)
                         return
                     }
