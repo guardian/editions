@@ -66,7 +66,7 @@ export const defaultSettings: Settings = {
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix: 'daily-edition',
-    useNewWebview: false,
+    useNonWobblyWebview: true,
     storeDetails,
 }
 

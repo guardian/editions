@@ -6,60 +6,49 @@ import { getImagesFromFront } from '../image/helpers/media'
 import { getFront } from '../../utils/backend-client'
 import { IssueTaskOutput } from '../issue'
 import { Bucket, upload, ONE_WEEK } from '../../utils/s3'
-import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotifyOnError } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotifyOnError } from '../../services/task-handler'
 
 type FrontTaskInput = IssueTaskOutput
 export interface FrontTaskOutput extends IssueTaskOutput {
     images: Image[]
 }
-export const handler: Handler<FrontTaskInput, FrontTaskOutput> = async ({
-    issuePublication,
-    issue,
-    fronts,
-}) => {
-    return await handleAndNotifyOnError(issuePublication, async () => {
-        logInput({
-            issuePublication,
-            issue,
-            fronts,
-        })
-        const { publishedId } = issue
-        console.log(`Attempting to upload ${publishedId} to ${Bucket}`)
-        const [frontId, ...remainingFronts] = fronts
+export const handler: Handler<
+    FrontTaskInput,
+    FrontTaskOutput
+> = handleAndNotifyOnError(async ({ issuePublication, issue, fronts }) => {
+    const { publishedId } = issue
+    console.log(`Attempting to upload ${publishedId} to ${Bucket}`)
+    const [frontId, ...remainingFronts] = fronts
 
-        const maybeFront = await getFront(publishedId, frontId)
+    const maybeFront = await getFront(publishedId, frontId)
 
-        if (hasFailed(maybeFront)) {
-            console.error(JSON.stringify(attempt))
-            throw new Error(`Could not download front ${frontId}`)
-        }
+    if (hasFailed(maybeFront)) {
+        console.error(JSON.stringify(attempt))
+        throw new Error(`Could not download front ${frontId}`)
+    }
 
-        const images = unnest(getImagesFromFront(maybeFront))
+    const images = unnest(getImagesFromFront(maybeFront))
 
-        const frontUpload = await attempt(
-            upload(
-                frontPath(publishedId, frontId),
-                maybeFront,
-                'application/json',
-                ONE_WEEK,
-            ),
-        )
+    const frontUpload = await attempt(
+        upload(
+            frontPath(publishedId, frontId),
+            maybeFront,
+            'application/json',
+            ONE_WEEK,
+        ),
+    )
 
-        if (hasFailed(frontUpload)) {
-            console.error(JSON.stringify(frontUpload))
-            throw new Error('Could not upload front')
-        }
-        const publishedFronts = [...issue.fronts, frontId]
-        const out: FrontTaskOutput = {
-            issuePublication,
-            issue: { ...issue, fronts: publishedFronts },
-            images,
-            fronts: remainingFronts,
-            remainingFronts: remainingFronts.length,
-            message: `Succesfully published ${frontId}`,
-        }
-        logOutput(out)
-        return out
-    })
-}
+    if (hasFailed(frontUpload)) {
+        console.error(JSON.stringify(frontUpload))
+        throw new Error('Could not upload front')
+    }
+    const publishedFronts = [...issue.fronts, frontId]
+    return {
+        issuePublication,
+        issue: { ...issue, fronts: publishedFronts },
+        images,
+        fronts: remainingFronts,
+        remainingFronts: remainingFronts.length,
+        message: `Succesfully published ${frontId}`,
+    }
+})
