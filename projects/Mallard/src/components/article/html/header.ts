@@ -96,7 +96,7 @@ export const headerStyles = ({
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
-        height: 100vw;
+        height: 80vw;
     }
     .header-kicker {
         font-family: ${families.titlepiece.regular};
