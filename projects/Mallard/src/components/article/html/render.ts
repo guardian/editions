@@ -23,9 +23,8 @@ import { Header, headerStyles } from './header'
 import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
 import { Pullquote, quoteStyles } from './pull-quote'
-import { color } from 'src/theme/color'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { lineStyles, Line } from './line'
+import { useImageSize } from 'src/hooks/use-image-size'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -136,7 +135,7 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
-export const render = (
+export const useRenderedHTML = (
     article: BlockElement[],
     {
         pillar,
@@ -156,6 +155,7 @@ export const render = (
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     },
 ) => {
+    const { imageSize } = useImageSize()
     const content = article
         .map((el, i) => {
             switch (el.id) {
@@ -175,6 +175,7 @@ export const render = (
                         ? Image({
                               imageElement: el,
                               publishedId,
+                              imageSize,
                           })
                         : ''
                 case 'pullquote':

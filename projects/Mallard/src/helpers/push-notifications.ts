@@ -72,7 +72,7 @@ const pushNotifcationRegistration = () => {
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
-                const screenSize = imageForScreenSize()
+                const screenSize = await imageForScreenSize()
                 const issueSummaries = await getIssueSummary().getValue()
                 // Check to see if we can find the image summary for the one that is pushed
                 const pushImageSummary = matchSummmaryToKey(issueSummaries, key)

@@ -74,7 +74,8 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
                 action: Action.click,
                 value: 'issues_list_issue_clicked',
             })
-            downloadAndUnzipIssue(issue, imageForScreenSize(), status => {
+            const imageSize = await imageForScreenSize()
+            downloadAndUnzipIssue(issue, imageSize, status => {
                 setDlStatus(status)
                 if (status.type === 'success') {
                     setExists(ExistsStatus.doesExist)
