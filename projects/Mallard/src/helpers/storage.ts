@@ -10,6 +10,7 @@ import { CasExpiry } from 'src/services/content-auth-service'
 import { UserData } from '../authentication/helpers'
 import { ReceiptIOS } from 'src/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
+import DeviceInfo from 'react-native-device-info'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -30,9 +31,8 @@ const legacyCASPasswordCache = createSyncCacheIOS<string>(
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 )
 
-const legacyCASExpiryCache = createSyncCacheIOS<CasExpiry>(
-    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
-)
+const legacyCASExpiryCache = (bundleId: string) =>
+    createSyncCacheIOS<CasExpiry>(LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY(bundleId))
 
 /**
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
@@ -115,7 +115,9 @@ const signOutIdentity = (
 const DEV_clearCASCaches = () =>
     Promise.all([
         signOutIdentity(),
-        legacyCASExpiryCache.reset(),
+        DeviceInfo.getBundleId().then(buildId =>
+            legacyCASExpiryCache(buildId).reset(),
+        ),
         legacyCASPasswordCache.reset(),
         legacyCASUsernameCache.reset(),
         casCredentialsKeychain.reset(),

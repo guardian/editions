@@ -202,8 +202,6 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     // These should be auto linked. TODO: TEST THIS
-    implementation "com.google.android.gms:play-services-base:17.1.0"
-    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation "com.google.firebase:firebase-core:17.0.1"
     implementation "com.google.firebase:firebase-messaging:19.0.1"
     implementation project(":ophan")

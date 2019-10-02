@@ -259,6 +259,7 @@ export const downloadTodaysIssue = async () => {
 
     // Only download it if its not on the device
     if (!isTodaysIssueOnDevice) {
-        downloadAndUnzipIssue(todaysIssueSummary, imageForScreenSize())
+        const imageSize = await imageForScreenSize()
+        downloadAndUnzipIssue(todaysIssueSummary, imageSize)
     }
 }

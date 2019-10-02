@@ -51,31 +51,47 @@ const getDiagnosticInfo = async (authStatus: AuthStatus) => {
     const megabytes = kilobytes / 1000
     const gigabytes = megabytes / 1000
 
+    const [
+        version,
+        buildNumber,
+        firstInstallTime,
+        lastUpdateTime,
+        deviceId,
+        totalDiskCapacity,
+        freeDiskStorage,
+    ] = await Promise.all([
+        DeviceInfo.getVersion(),
+        DeviceInfo.getBuildNumber(),
+        DeviceInfo.getFirstInstallTime(),
+        DeviceInfo.getLastUpdateTime(),
+        DeviceInfo.getDeviceId(),
+        DeviceInfo.getTotalDiskCapacity(),
+        DeviceInfo.getFreeDiskStorage(),
+    ])
+
     return `
 
 The information below will help us to better understand your query:
 
 -App-
 Product: Daily App
-App Version: ${DeviceInfo.getVersion()} ${DeviceInfo.getBuildNumber()}
+App Version: ${version} ${buildNumber}
 Commit id: ${getVersionInfo().commitId}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
 App Edition: UK
-First app start: ${DeviceInfo.getFirstInstallTime()}
-Last updated: ${DeviceInfo.getLastUpdateTime()}
+First app start: ${firstInstallTime}
+Last updated: ${lastUpdateTime}
 
 -Device-
 ${Platform.OS} Version: ${Platform.Version}
-Device Type: ${DeviceInfo.getDeviceId()}
-Device Locale: ${DeviceInfo.getDeviceCountry()}
-Timezone: ${DeviceInfo.getTimezone()}
+Device Type: ${deviceId}
 Network availability: ${netInfo.type}
 Privacy settings: ${gdprEntries
         .map(([key, value]) => `${key}:${value}`)
         .join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
-Total Disk Space: ${DeviceInfo.getTotalDiskCapacity()}
-Available Disk Spce: ${DeviceInfo.getFreeDiskStorage()}
+Total Disk Space: ${totalDiskCapacity}
+Available Disk Spce: ${freeDiskStorage}
 
 -User / Supporter Info-
 Signed In: ${isAuthed(authStatus)}
@@ -86,15 +102,20 @@ Subscriber ID: ${isCAS(authStatus) && casCode}
 `
 }
 
-const openSupportMailto = (text: string, releaseURL: string, body?: string) => {
+const openSupportMailto = async (
+    text: string,
+    releaseURL: string,
+    body?: string,
+) => {
     const email = Platform.select({
         ios: isInBeta() ? IOS_BETA_EMAIL : releaseURL,
         android: isInBeta() ? ANDROID_BETA_EMAIL : releaseURL,
     })
 
-    const subject = `${text} - ${
-        Platform.OS
-    } Daily App, ${DeviceInfo.getVersion()} ${DeviceInfo.getBuildNumber()}`
+    const version = await DeviceInfo.getVersion()
+    const buildNumber = await DeviceInfo.getBuildNumber()
+
+    const subject = `${text} - ${Platform.OS} Daily App, ${version} ${buildNumber}`
 
     return Linking.openURL(
         `mailto:${email}?subject=${encodeURIComponent(subject)}${

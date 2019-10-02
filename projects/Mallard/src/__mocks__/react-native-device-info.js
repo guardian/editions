@@ -1,4 +1,4 @@
 export default {
     getBundleId: jest.fn(),
-    getUniqueID: jest.fn(),
+    getUniqueId: jest.fn(),
 }

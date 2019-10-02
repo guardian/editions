@@ -12,9 +12,10 @@ const selectImagePath = async (
     publishedIssueId: Issue['publishedId'],
     { source, path }: Image,
 ) => {
+    const imageSize = await imageForScreenSize()
     const api = `${apiUrl}${APIPaths.media(
         publishedIssueId,
-        imageForScreenSize(),
+        imageSize,
         source,
         path,
     )}`
