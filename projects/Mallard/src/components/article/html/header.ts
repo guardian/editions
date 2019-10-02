@@ -62,6 +62,9 @@ export const headerStyles = ({
         height: 0.8125rem;
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
     }
+    .header {
+        padding-top: ${px(metrics.vertical)};
+    }
     .header-container-line-wrap,
     .header-container {
         position: relative;

@@ -15,6 +15,7 @@ import {
     wireScrollBarToDismiss,
     OnTopPositionChangeFn,
 } from 'src/screens/article/helpers'
+import { parsePing } from 'src/helpers/webview'
 
 const styles = StyleSheet.create({
     block: {
@@ -63,8 +64,11 @@ const ArticleWebView = ({
                         scrollEnabled={false}
                         useWebKit={false}
                         onMessage={event => {
-                            if (parseInt(event.nativeEvent.data) > height) {
-                                setHeight(parseInt(event.nativeEvent.data))
+                            const { scrollHeight } = parsePing(
+                                event.nativeEvent.data,
+                            )
+                            if (scrollHeight > height) {
+                                setHeight(scrollHeight)
                             }
                         }}
                         style={[styles.webview]}

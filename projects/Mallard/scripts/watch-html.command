@@ -4,4 +4,3 @@
 cd `dirname $0`
 cd ..
 node ./scripts/watch-html.js
-read
