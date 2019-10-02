@@ -115,7 +115,7 @@ const signOutIdentity = (
 const DEV_clearCASCaches = () =>
     Promise.all([
         signOutIdentity(),
-        DeviceInfo.getBuildId().then(buildId =>
+        DeviceInfo.getBundleId().then(buildId =>
             legacyCASExpiryCache(buildId).reset(),
         ),
         legacyCASPasswordCache.reset(),

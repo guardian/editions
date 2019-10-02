@@ -13,6 +13,7 @@ import {
     iapReceiptCache,
 } from '../helpers/storage'
 import { ReceiptIOS, isReceiptActive } from '../services/iap'
+import DeviceInfo from 'react-native-device-info'
 
 export interface IdentityAuth {
     type: 'identity'
@@ -198,8 +199,10 @@ const cachedCasAuthProvider = (
     legacyCASExpiryCacheImpl: typeof legacyCASExpiryCache,
 ) => async () => {
     const auth = await casDataCacheImpl.get().then(authTypeFromCAS)
+    const bundleId = await DeviceInfo.getBundleId()
     return (
-        auth || authTypeFromCAS(legacyCASExpiryCacheImpl('1234').get() || null)
+        auth ||
+        authTypeFromCAS(legacyCASExpiryCacheImpl(bundleId).get() || null)
     )
 }
 
