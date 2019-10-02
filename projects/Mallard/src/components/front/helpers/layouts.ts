@@ -224,16 +224,16 @@ const fiveStoryPage: PageLayout = {
                 fits: toRectangle(2, 0, 2, 1),
             },
             {
-                item: ImageItem,
-                fits: toRectangle(2, 2, 2, 1),
-            },
-            {
                 item: SmallItem,
                 fits: toRectangle(0, 3, 1, 1),
             },
             {
                 item: SmallItem,
                 fits: toRectangle(1, 3, 1, 1),
+            },
+            {
+                item: ImageItem,
+                fits: toRectangle(2, 2, 2, 1),
             },
         ],
     },
