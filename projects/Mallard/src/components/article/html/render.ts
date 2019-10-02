@@ -135,7 +135,7 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
-export const render = (
+export const renderHTML = (
     article: BlockElement[],
     {
         pillar,
@@ -155,7 +155,6 @@ export const render = (
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     },
 ) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { imageSize } = useImageSize()
     const content = article
         .map((el, i) => {

@@ -6,7 +6,7 @@ import { BlockElement, ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { ArticleHeaderProps } from '../../article-header/types'
-import { render } from '../../html/render'
+import { renderHTML } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 import { onShouldStartLoadWithRequest } from './helpers'
 
@@ -32,7 +32,7 @@ const WebviewWithArticle = ({
 
     const html = useMemo(
         () =>
-            render(article, {
+            renderHTML(article, {
                 pillar,
                 wrapLayout,
                 headerProps,
