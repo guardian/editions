@@ -12,6 +12,18 @@ import { Line } from './line'
 import { breakSides } from './helpers/layout'
 import { useImagePath } from 'src/hooks/use-image-paths'
 
+const outieKicker = (type: ArticleType) => css`
+    .header-container[data-type='${type}'] .header-kicker {
+        display: inline-block;
+        height: 3em;
+        margin-top: -3em;
+        padding-right: ${metrics.article.sidesTablet};
+        margin-left: -10em;
+        padding-left: 10em;
+        border: none;
+    }
+`
+
 const outieHeader = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header {
         ${breakSides}
@@ -28,15 +40,7 @@ const outieHeader = (type: ArticleType) => css`
             margin-right: -4em;
         }
     }
-    .header-container[data-type='${type}'] .header-kicker {
-        display: inline-block;
-        height: 3em;
-        margin-top: -3em;
-        padding-right: ${metrics.article.sidesTablet};
-        margin-left: -10em;
-        padding-left: 10em;
-        border: none;
-    }
+    ${outieKicker(type)}
 `
 
 export const headerStyles = ({
@@ -92,7 +96,7 @@ export const headerStyles = ({
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
-        height: 100vw;
+        height: 80vw;
     }
     .header-kicker {
         font-family: ${families.titlepiece.regular};
@@ -237,6 +241,30 @@ export const headerStyles = ({
     .header-container[data-type='longread'] .header-byline {
         color: ${color.textOverDarkBackground};
     }
+
+
+    /*obit*/
+    ${outieKicker(ArticleType.Obituary)}
+    .header-container[data-type='${ArticleType.Obituary}'] {
+        color: ${color.textOverDarkBackground};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-bg {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-kicker {
+        background-color: ${color.palette.neutral[20]};
+        color: ${color.textOverDarkBackground};
+        font-family: ${families.headline.bold};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-top h1 {
+        font-family: ${families.titlepiece.regular};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-byline {
+        color: ${color.textOverDarkBackground};
+    }
 `
 
 const Image = ({ image, className }: { image: ImageT; className?: string }) => {
@@ -247,7 +275,9 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
 }
 
 const isImmersive = (type: ArticleType) =>
-    type === ArticleType.Immersive || type === ArticleType.Longread
+    type === ArticleType.Immersive ||
+    type === ArticleType.Longread ||
+    type === ArticleType.Obituary
 
 const hasLargeByline = (type: ArticleType) =>
     type === ArticleType.Opinion || type === ArticleType.Analysis

@@ -1,8 +1,7 @@
 import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/constants'
 import qs from 'query-string'
 import { GENERIC_ERROR } from 'src/helpers/words'
-import { userDataCache } from 'src/helpers/storage'
-import { Error5XX } from './exceptions'
+import { Error5XX, Error401 } from './exceptions'
 
 interface ErrorReponse {
     errors: { message: string; description: string }[]
@@ -20,7 +19,7 @@ const maybeThrowErrors = async (res: Response) => {
     }
 
     if (res.status >= 500) throw new Error5XX()
-
+    if (res.status === 401) throw new Error401()
     if (!res.ok) {
         throw new Error(
             hasErrorsArray(json)

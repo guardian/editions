@@ -5,11 +5,10 @@ import {
     casCredentialsKeychain,
     casDataCache,
     userDataCache,
-    getLegacyUserAccessToken,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
     iapReceiptCache,
-    _legacyUserAccessTokenKeychain,
+    legacyUserAccessTokenKeychain,
 } from '../helpers/storage'
 import {
     fetchMembershipData,
@@ -99,13 +98,12 @@ const fetchUserDataForKeychainUser = async (
     fetchMembershipDataImpl = fetchMembershipData,
     fetchUserDetailsImpl = fetchUserDetails,
     fetchMembershipAccessTokenImpl = fetchMembershipAccessToken,
-    getLegacyUserAccessTokenImpl = getLegacyUserAccessToken,
     userDataCacheImpl = userDataCache,
-    legacyUserAccessTokenKeychainImpl = _legacyUserAccessTokenKeychain,
+    legacyUserAccessTokenKeychainImpl = legacyUserAccessTokenKeychain,
 ): Promise<UserData | null> => {
     const [userToken, legacyUserToken, membershipToken] = await Promise.all([
         userTokenStore.get(),
-        getLegacyUserAccessTokenImpl(),
+        legacyUserAccessTokenKeychainImpl.get(),
         membershipTokenStore.get(),
     ])
 
@@ -140,18 +138,31 @@ const fetchUserDataForKeychainUser = async (
         withTimeout(
             fetchUserDetailsImpl(actualUserToken.password),
             10000,
-        ).catch(
-            handleFetchError(async e => {
-                const cached = await userDataCache.get()
-                if (!cached) throw e
-                return cached.userDetails
-            }),
+        ).catch(e =>
+            handleFetchError({
+                unauthorized: e => {
+                    legacyUserAccessTokenKeychainImpl.reset()
+                    userTokenStore.reset()
+                    throw e
+                },
+                error: async e => {
+                    const cached = await userDataCache.get()
+                    if (!cached) throw e
+                    return cached.userDetails
+                },
+            })(e),
         ),
         withTimeout(fetchMembershipDataImpl(newMembershipToken), 10000).catch(
-            handleFetchError(async e => {
-                const cached = await userDataCache.get()
-                if (!cached) throw e
-                return cached.membershipData
+            handleFetchError({
+                unauthorized: e => {
+                    membershipTokenStore.reset()
+                    throw e
+                },
+                error: async e => {
+                    const cached = await userDataCache.get()
+                    if (!cached) throw e
+                    return cached.membershipData
+                },
             }),
         ),
     ])
