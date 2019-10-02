@@ -29,7 +29,6 @@ const WebviewWithArticle = ({
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
     const issueCompositeKey = useIssueCompositeKey()
-    if (headerProps) headerProps.type = ArticleType.Obituary
 
     const html = useRenderedHTML(article, {
         pillar,
