@@ -129,12 +129,12 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     {
                         key: 'Use non-wobbly webviews',
                         title: 'Use non-wobbly webviews',
-                        explainer: settings.useNewWebview ? 'yes' : 'no',
+                        explainer: settings.useNonWobblyWebview ? 'yes' : 'no',
                         data: {
                             onPress: () => {
                                 setSetting(
-                                    'useNewWebview',
-                                    !settings.useNewWebview,
+                                    'useNonWobblyWebview',
+                                    !settings.useNonWobblyWebview,
                                 )
                             },
                         },

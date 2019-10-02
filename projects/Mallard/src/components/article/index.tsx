@@ -31,10 +31,10 @@ const ArticleController = ({
     article: CAPIArticle
     onTopPositionChange: OnTopPositionChangeFn
 }) => {
-    const { useNewWebview } = useOtherSettingsValues()
+    const { useNonWobblyWebview } = useOtherSettingsValues()
     switch (article.type) {
         case 'article':
-            return useNewWebview ? (
+            return useNonWobblyWebview ? (
                 <Article
                     onTopPositionChange={onTopPositionChange}
                     article={article.elements}
