@@ -83,16 +83,20 @@ const casCredentialsKeychain = createServiceTokenStore('CASCredentials')
  */
 const _legacyUserAccessTokenKeychain = createServiceTokenStore('AccessToken')
 
-const getLegacyUserAccessToken = async (): ReturnType<
-    typeof _legacyUserAccessTokenKeychain.get
-> => {
-    const token = await _legacyUserAccessTokenKeychain.get()
-    if (!token) return token
+const legacyUserAccessTokenKeychain = {
+    get: async (): ReturnType<typeof _legacyUserAccessTokenKeychain.get> => {
+        const token = await _legacyUserAccessTokenKeychain.get()
+        if (!token) return token
 
-    return {
-        ...token,
-        password: JSON.parse(token.password).accessToken,
-    }
+        return {
+            ...token,
+            password: JSON.parse(token.password).accessToken,
+        }
+    },
+    set: () => {
+        /** noop, use the non-legacy cache */
+    },
+    reset: () => _legacyUserAccessTokenKeychain.reset(),
 }
 
 /**
@@ -103,7 +107,7 @@ const signOutIdentity = (
     userAccessTokenKeychainImpl = userAccessTokenKeychain,
     membershipAccessTokenKeychainImpl = membershipAccessTokenKeychain,
     userDataCacheImpl = userDataCache,
-    legacyUserAccessTokenKeychainImpl = _legacyUserAccessTokenKeychain,
+    legacyUserAccessTokenKeychainImpl = legacyUserAccessTokenKeychain,
 ): Promise<boolean> =>
     Promise.all([
         userAccessTokenKeychainImpl.reset(),
@@ -132,11 +136,10 @@ export {
     casDataCache,
     userDataCache,
     pushNotificationRegistrationCache,
-    getLegacyUserAccessToken,
+    legacyUserAccessTokenKeychain,
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
-    _legacyUserAccessTokenKeychain,
     iapReceiptCache,
     cacheClearCache,
     DEV_clearCASCaches,
