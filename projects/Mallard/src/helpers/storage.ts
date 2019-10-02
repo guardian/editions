@@ -93,6 +93,9 @@ const legacyUserAccessTokenKeychain = {
             password: JSON.parse(token.password).accessToken,
         }
     },
+    set: () => {
+        /** noop, use the non-legacy cache */
+    },
     reset: () => _legacyUserAccessTokenKeychain.reset(),
 }
 
@@ -104,7 +107,7 @@ const signOutIdentity = (
     userAccessTokenKeychainImpl = userAccessTokenKeychain,
     membershipAccessTokenKeychainImpl = membershipAccessTokenKeychain,
     userDataCacheImpl = userDataCache,
-    legacyUserAccessTokenKeychainImpl = _legacyUserAccessTokenKeychain,
+    legacyUserAccessTokenKeychainImpl = legacyUserAccessTokenKeychain,
 ): Promise<boolean> =>
     Promise.all([
         userAccessTokenKeychainImpl.reset(),
