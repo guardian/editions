@@ -1,23 +1,14 @@
 import { IssuePublicationIdentifier, IssueIdentifier } from '../../../../common'
-import { getStatuses, isPublished } from '../../../services/status'
+import {
+    getStatuses,
+    isPublished,
+    IssuePublicationWithStatus,
+} from '../../../services/status'
 
-/* Given an edition name and date this will return the current publication instance ID
- * or undefined is there is no valid published instance. This is based on the status
- * of each instance, we are only interested in instances that are 'published'. Of the
- * instances that are valid we want the most recent one.
- * This also logs if there are more than one
- */
-export const getPublishedVersion = async (
+export const getPublishedVersionInternal = (
+    publicationStatuses: IssuePublicationWithStatus[],
     issue: IssueIdentifier,
-): Promise<IssuePublicationIdentifier | undefined> => {
-    const publicationStatuses = await getStatuses(issue)
-    console.log(
-        `getPublishedVersion: fetched list of publications for ${JSON.stringify(
-            issue,
-        )}`,
-        JSON.stringify(publicationStatuses),
-    )
-
+): IssuePublicationIdentifier | undefined => {
     const published = publicationStatuses.filter(({ status }) =>
         isPublished(status),
     )
@@ -44,4 +35,26 @@ export const getPublishedVersion = async (
     }
 
     return chosen
+}
+
+/* Given an edition name and date this will return the current publication instance ID
+ * or undefined is there is no valid published instance. This is based on the status
+ * of each instance, we are only interested in instances that are 'published'. Of the
+ * instances that are valid we want the most recent one.
+ * This also logs if there are more than one
+ */
+export const getPublishedVersion = async (
+    issue: IssueIdentifier,
+): Promise<IssuePublicationIdentifier | undefined> => {
+    const publicationStatuses: IssuePublicationWithStatus[] = await getStatuses(
+        issue,
+    )
+    console.log(
+        `getPublishedVersion: fetched list of publications for ${JSON.stringify(
+            issue,
+        )}`,
+        JSON.stringify(publicationStatuses),
+    )
+
+    return getPublishedVersionInternal(publicationStatuses, issue)
 }

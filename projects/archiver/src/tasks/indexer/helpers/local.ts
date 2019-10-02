@@ -1,11 +1,11 @@
-import { indexer } from './summary'
+import { getIssueSummaries } from './summary'
 import { attempt, hasFailed } from '../../../../../backend/utils/try'
 import { upload, ONE_MINUTE } from '../../../utils/s3'
 
 /* This file is for testing the indexer locally */
 
 export const summary = async () => {
-    const index = await attempt(indexer())
+    const index = await attempt(getIssueSummaries())
     if (hasFailed(index)) {
         console.error(index)
         console.error('Could not fetch index')
