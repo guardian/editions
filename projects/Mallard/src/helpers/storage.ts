@@ -83,16 +83,17 @@ const casCredentialsKeychain = createServiceTokenStore('CASCredentials')
  */
 const _legacyUserAccessTokenKeychain = createServiceTokenStore('AccessToken')
 
-const getLegacyUserAccessToken = async (): ReturnType<
-    typeof _legacyUserAccessTokenKeychain.get
-> => {
-    const token = await _legacyUserAccessTokenKeychain.get()
-    if (!token) return token
+const legacyUserAccessTokenKeychain = {
+    get: async (): ReturnType<typeof _legacyUserAccessTokenKeychain.get> => {
+        const token = await _legacyUserAccessTokenKeychain.get()
+        if (!token) return token
 
-    return {
-        ...token,
-        password: JSON.parse(token.password).accessToken,
-    }
+        return {
+            ...token,
+            password: JSON.parse(token.password).accessToken,
+        }
+    },
+    reset: () => _legacyUserAccessTokenKeychain.reset(),
 }
 
 /**
@@ -132,11 +133,10 @@ export {
     casDataCache,
     userDataCache,
     pushNotificationRegistrationCache,
-    getLegacyUserAccessToken,
+    legacyUserAccessTokenKeychain,
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
-    _legacyUserAccessTokenKeychain,
     iapReceiptCache,
     cacheClearCache,
     DEV_clearCASCaches,
