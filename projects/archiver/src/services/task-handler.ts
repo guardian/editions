@@ -7,7 +7,6 @@ import {
     PublishEvent,
 } from './pub-status-notifier'
 import { Handler } from 'aws-lambda'
-import { logInput, logOutput } from '../utils/log'
 import { Attempt } from '../../../backend/utils/try'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import SNS from 'aws-sdk/clients/sns'
@@ -23,7 +22,7 @@ const errorToString = (err: any): string => {
 
 type InputWithIdentifier = { issuePublication: IssuePublicationIdentifier }
 
-type HandlerDependencies = {
+export type HandlerDependencies = {
     putStatus: (
         issuePublication: IssuePublicationIdentifier,
         status: Status,
@@ -33,38 +32,36 @@ type HandlerDependencies = {
     ) => Promise<Attempt<PromiseResult<SNS.PublishResponse, AWSError>>>
 }
 
-function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
+export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
     statusOnSuccess: Status | undefined,
     handler: (input: I) => Promise<O>,
     dependencies: HandlerDependencies,
 ): Handler<I, O> {
     return async (input: I) => {
+        const { issuePublication } = input
         try {
-            logInput(input)
+            console.log('input:', JSON.stringify(input))
             const result = await handler(input)
-            logOutput(result)
+            console.log('output:', JSON.stringify(result))
             if (statusOnSuccess) {
-                await dependencies.putStatus(
-                    input.issuePublication,
-                    statusOnSuccess,
-                )
-                const now = moment()
+                await dependencies.putStatus(issuePublication, statusOnSuccess)
                 const event = createPublishEvent(
-                    input.issuePublication,
+                    issuePublication,
                     statusOnSuccess,
-                    now,
+                    moment(),
                 )
                 await dependencies.sendPublishStatusToTopic(event)
             }
             return result
         } catch (err) {
             // send failure notification
-            await dependencies.sendPublishStatusToTopic({
-                ...input.issuePublication,
+            const event: PublishEvent = {
+                ...issuePublication,
                 status: 'Failed',
                 message: errorToString(err),
                 timestamp: moment().format(),
-            })
+            }
+            await dependencies.sendPublishStatusToTopic(event)
             // now escalate error
             throw err
         }
