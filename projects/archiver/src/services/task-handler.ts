@@ -1,6 +1,6 @@
 import { IssuePublicationIdentifier } from '../../common'
 import { Status, putStatus } from '../services/status'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import {
     sendPublishStatusToTopic,
     createPublishEvent,
@@ -30,6 +30,7 @@ export type HandlerDependencies = {
     sendPublishStatusToTopic: (
         event: PublishEvent,
     ) => Promise<Attempt<PromiseResult<SNS.PublishResponse, AWSError>>>
+    getMoment: () => Moment
 }
 
 export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
@@ -48,7 +49,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
                 const event = createPublishEvent(
                     issuePublication,
                     statusOnSuccess,
-                    moment(),
+                    dependencies.getMoment(),
                 )
                 await dependencies.sendPublishStatusToTopic(event)
             }
@@ -59,7 +60,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
                 ...issuePublication,
                 status: 'Failed',
                 message: errorToString(err),
-                timestamp: moment().format(),
+                timestamp: dependencies.getMoment().format(),
             }
             await dependencies.sendPublishStatusToTopic(event)
             // now escalate error
@@ -68,7 +69,11 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
     }
 }
 
-const runtimeHandlerDependencies = { putStatus, sendPublishStatusToTopic }
+const runtimeHandlerDependencies = {
+    putStatus,
+    sendPublishStatusToTopic,
+    getMoment: () => moment(),
+}
 
 /* This is a general handler that handles logging of input and output objects
  * and also notifications to the tooling topic on both success and failure
