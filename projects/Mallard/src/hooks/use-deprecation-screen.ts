@@ -17,16 +17,17 @@ const useDeprecationModal = (): {
                     Platform.OS === 'ios' && buildNumbers
                         ? buildNumbers.ios
                         : buildNumbers.android
-                if (
-                    DeviceInfo.getBuildNumber() &&
-                    DeviceInfo.getBuildNumber() <=
-                        platformDeprecationBuildNumber
-                ) {
-                    setShowModal(true)
-                    sendAppScreenEvent({
-                        screenName: ScreenTracking.Deprecation,
-                    })
-                }
+                DeviceInfo.getBuildNumber().then(buildNumber => {
+                    if (
+                        buildNumber &&
+                        buildNumber <= platformDeprecationBuildNumber
+                    ) {
+                        setShowModal(true)
+                        sendAppScreenEvent({
+                            screenName: ScreenTracking.Deprecation,
+                        })
+                    }
+                })
             },
         )
     }, [])

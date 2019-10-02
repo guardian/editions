@@ -9,6 +9,12 @@ export class Error5XX extends Error {
     }
 }
 
+export class Error401 extends Error {
+    constructor() {
+        super(__DEV__ ? 'Unauthorized' : 'Something went wrong')
+    }
+}
+
 export class Timeout extends Error {
     constructor() {
         super(__DEV__ ? 'Timeout' : 'Something went wrong')
@@ -25,9 +31,18 @@ export const withTimeout = <T>(promise: Promise<T>, timeout: number) =>
         ),
     ]) as Promise<T>
 
-export const handleFetchError = <T>(cont: (e: Error5XX) => T) => (e: any) => {
-    if (e instanceof Error5XX || e instanceof Timeout) {
-        return cont(e)
+export const handleFetchError = <T>({
+    error,
+    unauthorized,
+}: {
+    error?: (e: Error5XX) => T
+    unauthorized?: (e: Error5XX) => T
+}) => (e: any) => {
+    if (error && (e instanceof Error5XX || e instanceof Timeout)) {
+        return error(e)
+    }
+    if (unauthorized && e instanceof Error401) {
+        return unauthorized(e)
     }
     throw e
 }

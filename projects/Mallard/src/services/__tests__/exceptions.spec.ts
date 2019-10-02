@@ -19,7 +19,7 @@ describe('exceptions', () => {
         it('when an error is a Timeout it resolves with the value of the called continuation', () => {
             expect(
                 withTimeout(new Promise(() => {}), 1).catch(
-                    handleFetchError(() => 3),
+                    handleFetchError({ error: () => 3 }),
                 ),
             ).resolves.toBe(3)
         })
@@ -31,7 +31,7 @@ describe('exceptions', () => {
                         throw new Error5XX()
                     }),
                     1,
-                ).catch(handleFetchError(() => 4)),
+                ).catch(handleFetchError({ error: () => 4 })),
             ).resolves.toBe(4)
         })
 
@@ -42,7 +42,7 @@ describe('exceptions', () => {
                         throw new Error5XX()
                     }),
                     1,
-                ).catch(handleFetchError(async () => 4)),
+                ).catch(handleFetchError({ error: async () => 4 })),
             ).resolves.toBe(4)
         })
 
@@ -54,7 +54,7 @@ describe('exceptions', () => {
                         throw new MyError()
                     }),
                     1,
-                ).catch(handleFetchError(() => 4)),
+                ).catch(handleFetchError({ error: () => 4 })),
             ).rejects.toThrow(MyError)
         })
     })

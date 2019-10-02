@@ -2,7 +2,6 @@ import { html, css, getScaledFontCss, px } from 'src/helpers/webview'
 import { ArticleHeaderProps } from '../article-header/types'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { Issue, mediaPath, Image as ImageT, ArticleType } from 'src/common'
-import { imageForScreenSize } from 'src/helpers/screen'
 import { families } from 'src/theme/typography'
 import { color } from 'src/theme/color'
 import { PillarColours } from '@guardian/pasteup/palette'
@@ -11,6 +10,19 @@ import { metrics } from 'src/theme/spacing'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { Line } from './line'
 import { breakSides } from './helpers/layout'
+import { useImagePath } from 'src/hooks/use-image-paths'
+
+const outieKicker = (type: ArticleType) => css`
+    .header-container[data-type='${type}'] .header-kicker {
+        display: inline-block;
+        height: 3em;
+        margin-top: -3em;
+        padding-right: ${metrics.article.sidesTablet};
+        margin-left: -10em;
+        padding-left: 10em;
+        border: none;
+    }
+`
 
 const outieHeader = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header {
@@ -28,15 +40,7 @@ const outieHeader = (type: ArticleType) => css`
             margin-right: -4em;
         }
     }
-    .header-container[data-type='${type}'] .header-kicker {
-        display: inline-block;
-        height: 3em;
-        margin-top: -3em;
-        padding-right: ${metrics.article.sidesTablet};
-        margin-left: -10em;
-        padding-left: 10em;
-        border: none;
-    }
+    ${outieKicker(type)}
 `
 
 export const headerStyles = ({
@@ -61,6 +65,9 @@ export const headerStyles = ({
         display: block;
         height: 0.8125rem;
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
+    }
+    .header {
+        padding-top: ${px(metrics.vertical)};
     }
     .header-container-line-wrap,
     .header-container {
@@ -89,7 +96,7 @@ export const headerStyles = ({
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
-        height: 100vw;
+        height: 80vw;
     }
     .header-kicker {
         font-family: ${families.titlepiece.regular};
@@ -234,31 +241,43 @@ export const headerStyles = ({
     .header-container[data-type='longread'] .header-byline {
         color: ${color.textOverDarkBackground};
     }
+
+
+    /*obit*/
+    ${outieKicker(ArticleType.Obituary)}
+    .header-container[data-type='${ArticleType.Obituary}'] {
+        color: ${color.textOverDarkBackground};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-bg {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header {
+        background-color: ${color.palette.neutral[20]};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-kicker {
+        background-color: ${color.palette.neutral[20]};
+        color: ${color.textOverDarkBackground};
+        font-family: ${families.headline.bold};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-top h1 {
+        font-family: ${families.titlepiece.regular};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .header-byline {
+        color: ${color.textOverDarkBackground};
+    }
 `
 
-const Image = ({
-    image,
-    publishedId,
-    className,
-}: {
-    publishedId: Issue['publishedId']
-    image: ImageT
-    className?: string
-}) => {
-    const backend = defaultSettings.apiUrl
-    const path = `${backend}${mediaPath(
-        publishedId,
-        imageForScreenSize(),
-        image.source,
-        image.path,
-    )}`
+const Image = ({ image, className }: { image: ImageT; className?: string }) => {
+    const path = useImagePath(image)
     return html`
         <img class="${className}" src="${path}" />
     `
 }
 
 const isImmersive = (type: ArticleType) =>
-    type === ArticleType.Immersive || type === ArticleType.Longread
+    type === ArticleType.Immersive ||
+    type === ArticleType.Longread ||
+    type === ArticleType.Obituary
 
 const hasLargeByline = (type: ArticleType) =>
     type === ArticleType.Opinion || type === ArticleType.Analysis
@@ -283,7 +302,6 @@ const Header = ({
             publishedId &&
             Image({
                 image: headerProps.image,
-                publishedId,
                 className: 'header-image header-image--immersive',
             })}
         <div class="header-container-line-wrap">
@@ -296,7 +314,6 @@ const Header = ({
                         Image({
                             className: 'header-image',
                             image: headerProps.image,
-                            publishedId,
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
                     ${largeByline
@@ -315,7 +332,6 @@ const Header = ({
                                               <div>
                                                   ${Image({
                                                       image: cutout,
-                                                      publishedId,
                                                   })}
                                               </div>
                                           `}

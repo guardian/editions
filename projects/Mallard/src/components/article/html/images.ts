@@ -8,7 +8,8 @@ import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { breakOut } from './helpers/layout'
 import { CssProps } from './helpers/props'
-import { imageForScreenSize } from 'src/helpers/screen'
+import { useImageSize } from 'src/hooks/use-image-size'
+import { ImageSize } from '../../../../../common/src'
 
 export const renderCaption = ({
     caption,
@@ -83,7 +84,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
         .image[data-role='thumbnail'] {
             width: ${px(wrapLayout.rail.contentWidth)};
             position: absolute;
-            right: ${px(metrics.article.sides)};
+            right: 0;
         }
     }
 
@@ -183,15 +184,17 @@ const ImageBase = ({
 const Image = ({
     imageElement,
     publishedId,
+    imageSize,
 }: {
     imageElement: ImageElement
     publishedId: string
+    imageSize: ImageSize
 }) => {
     // @TODO: This needs refactoring to work with downloaded content
     const backend = defaultSettings.apiUrl
     const path = `${backend}${mediaPath(
         publishedId,
-        imageForScreenSize(),
+        imageSize,
         imageElement.src.source,
         imageElement.src.path,
     )}`

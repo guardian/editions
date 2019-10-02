@@ -28,12 +28,16 @@ const taskLambda = (
         stage,
         deployBucket,
         outputBucket,
+        frontsTopicArn,
+        frontsTopicRole,
     }: {
         scope: cdk.Construct
         stack: string
         stage: string
         deployBucket: s3.IBucket
         outputBucket: s3.IBucket
+        frontsTopicArn: string
+        frontsTopicRole: iam.IRole
     },
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
@@ -55,6 +59,8 @@ const taskLambda = (
                 ...environment,
                 stage: stage,
                 bucket: outputBucket.bucketName,
+                topic: frontsTopicArn,
+                role: frontsTopicRole.roleArn,
             },
             initialPolicy: [
                 new iam.PolicyStatement({
@@ -63,6 +69,10 @@ const taskLambda = (
                         outputBucket.arnForObjects('*'),
                         outputBucket.bucketArn,
                     ],
+                }),
+                new iam.PolicyStatement({
+                    actions: ['sts:AssumeRole'],
+                    resources: [frontsTopicRole.roleArn],
                 }),
             ],
             ...overrides,
@@ -87,12 +97,20 @@ export const archiverStepFunction = (
         guNotifyServiceApiKey,
     }: StepFunctionProps,
 ) => {
+    const frontsTopicRole = iam.Role.fromRoleArn(
+        scope,
+        'fronts-topic-role',
+        frontsTopicRoleArn,
+    )
+
     const lambdaParams = {
         scope,
         stack,
         stage,
         deployBucket,
         outputBucket,
+        frontsTopicArn,
+        frontsTopicRole,
     }
     //Archiver step function
     const issue = taskLambda('issue', lambdaParams, { backend: backendURL })
@@ -130,32 +148,17 @@ export const archiverStepFunction = (
         task: new tasks.InvokeFunction(indexer),
     })
 
-    const frontsTopicRole = iam.Role.fromRoleArn(
-        scope,
-        'fronts-topic-role',
-        frontsTopicRoleArn,
-    )
-    const event = taskLambda(
-        'event',
-        lambdaParams,
-        {
-            topic: frontsTopicArn,
-            role: frontsTopicRoleArn,
-            gu_notify_service_api_key: guNotifyServiceApiKey,
-        },
-        {
-            initialPolicy: [
-                new iam.PolicyStatement({
-                    actions: ['sts:AssumeRole'],
-                    resources: [frontsTopicRole.roleArn],
-                }),
-            ],
-        },
-    )
-
-    const publishedTask = new sfn.Task(scope, 'Schedule device notification', {
-        task: new tasks.InvokeFunction(event),
+    const notification = taskLambda('notification', lambdaParams, {
+        gu_notify_service_api_key: guNotifyServiceApiKey,
     })
+
+    const notificationTask = new sfn.Task(
+        scope,
+        'Schedule device notification',
+        {
+            task: new tasks.InvokeFunction(notification),
+        },
+    )
     //Fetch issue metadata
     issueTask.next(frontTask)
 
@@ -174,9 +177,9 @@ export const archiverStepFunction = (
 
     zipTask.next(indexerTask)
 
-    indexerTask.next(publishedTask)
+    indexerTask.next(notificationTask)
 
-    publishedTask.next(new sfn.Succeed(scope, 'successfully-archived'))
+    notificationTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,

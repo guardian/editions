@@ -10,6 +10,7 @@ import { CasExpiry } from 'src/services/content-auth-service'
 import { UserData } from '../authentication/helpers'
 import { ReceiptIOS } from 'src/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
+import DeviceInfo from 'react-native-device-info'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -30,9 +31,8 @@ const legacyCASPasswordCache = createSyncCacheIOS<string>(
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 )
 
-const legacyCASExpiryCache = createSyncCacheIOS<CasExpiry>(
-    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
-)
+const legacyCASExpiryCache = (bundleId: string) =>
+    createSyncCacheIOS<CasExpiry>(LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY(bundleId))
 
 /**
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
@@ -83,16 +83,20 @@ const casCredentialsKeychain = createServiceTokenStore('CASCredentials')
  */
 const _legacyUserAccessTokenKeychain = createServiceTokenStore('AccessToken')
 
-const getLegacyUserAccessToken = async (): ReturnType<
-    typeof _legacyUserAccessTokenKeychain.get
-> => {
-    const token = await _legacyUserAccessTokenKeychain.get()
-    if (!token) return token
+const legacyUserAccessTokenKeychain = {
+    get: async (): ReturnType<typeof _legacyUserAccessTokenKeychain.get> => {
+        const token = await _legacyUserAccessTokenKeychain.get()
+        if (!token) return token
 
-    return {
-        ...token,
-        password: JSON.parse(token.password).accessToken,
-    }
+        return {
+            ...token,
+            password: JSON.parse(token.password).accessToken,
+        }
+    },
+    set: () => {
+        /** noop, use the non-legacy cache */
+    },
+    reset: () => _legacyUserAccessTokenKeychain.reset(),
 }
 
 /**
@@ -103,7 +107,7 @@ const signOutIdentity = (
     userAccessTokenKeychainImpl = userAccessTokenKeychain,
     membershipAccessTokenKeychainImpl = membershipAccessTokenKeychain,
     userDataCacheImpl = userDataCache,
-    legacyUserAccessTokenKeychainImpl = _legacyUserAccessTokenKeychain,
+    legacyUserAccessTokenKeychainImpl = legacyUserAccessTokenKeychain,
 ): Promise<boolean> =>
     Promise.all([
         userAccessTokenKeychainImpl.reset(),
@@ -115,7 +119,9 @@ const signOutIdentity = (
 const DEV_clearCASCaches = () =>
     Promise.all([
         signOutIdentity(),
-        legacyCASExpiryCache.reset(),
+        DeviceInfo.getBundleId().then(buildId =>
+            legacyCASExpiryCache(buildId).reset(),
+        ),
         legacyCASPasswordCache.reset(),
         legacyCASUsernameCache.reset(),
         casCredentialsKeychain.reset(),
@@ -130,11 +136,10 @@ export {
     casDataCache,
     userDataCache,
     pushNotificationRegistrationCache,
-    getLegacyUserAccessToken,
+    legacyUserAccessTokenKeychain,
     legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
-    _legacyUserAccessTokenKeychain,
     iapReceiptCache,
     cacheClearCache,
     DEV_clearCASCaches,

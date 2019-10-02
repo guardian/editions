@@ -26,14 +26,17 @@ const fetchCasSubscription = async (
     subscriberID: string,
     password: string,
 ): Promise<CasExpiry> => {
+    const appId = await DeviceInfo.getBundleId()
+    const deviceId = await DeviceInfo.getUniqueId()
+
     const res = await fetch(CAS_ENDPOINT_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            appId: DeviceInfo.getBundleId(),
-            deviceId: DeviceInfo.getUniqueID(),
+            appId,
+            deviceId,
             subscriberId: subscriberID,
             password: password,
         }),

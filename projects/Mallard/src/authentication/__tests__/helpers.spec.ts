@@ -5,6 +5,7 @@ import {
     getMockStore,
     getMockAsyncCache,
 } from '../../test-helpers/test-helpers'
+import { Error401 } from 'src/services/exceptions'
 
 describe('helpers', () => {
     describe('fetchUserDataForKeychainUser', () => {
@@ -14,7 +15,6 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('any')
-            const getLegacyUserAccessToken = getMockPromise(false as const)
             const userDataStore = getMockAsyncCache(null)
             const legacyUserDataStore = getMockStore()
 
@@ -24,7 +24,6 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
-                getLegacyUserAccessToken,
                 userDataStore,
                 legacyUserDataStore,
             )
@@ -44,7 +43,6 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
-            const getLegacyUserAccessToken = getMockPromise(false as const)
             const userDataStore = getMockAsyncCache(null)
             const legacyUserDataStore = getMockStore()
 
@@ -54,7 +52,6 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
-                getLegacyUserAccessToken,
                 userDataStore,
                 legacyUserDataStore,
             )
@@ -76,9 +73,8 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
-            const getLegacyUserAccessToken = getMockStore('token').get
             const userDataStore = getMockAsyncCache(null)
-            const legacyUserDataStore = getMockStore()
+            const legacyUserDataStore = getMockStore('token')
 
             const data = await fetchUserDataForKeychainUser(
                 membershipStore,
@@ -86,7 +82,6 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
-                getLegacyUserAccessToken,
                 userDataStore,
                 legacyUserDataStore,
             )
@@ -108,7 +103,6 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
-            const getLegacyUserAccessToken = getMockPromise(false as const)
             const userDataStore = getMockAsyncCache(null)
             const legacyUserDataStore = getMockStore()
 
@@ -118,7 +112,6 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
-                getLegacyUserAccessToken,
                 userDataStore,
                 legacyUserDataStore,
             )
@@ -139,7 +132,6 @@ describe('helpers', () => {
             const fetchMembershipData = getMockPromise(membershipResponse)
             const fetchUserData = getMockPromise(userResponse)
             const fetchMembershipToken = getMockPromise('mtoken')
-            const getLegacyUserAccessToken = getMockPromise(false as const)
             const userDataStore = getMockAsyncCache(null)
             const legacyUserDataStore = getMockStore()
 
@@ -149,7 +141,6 @@ describe('helpers', () => {
                 fetchMembershipData,
                 fetchUserData,
                 fetchMembershipToken,
-                getLegacyUserAccessToken,
                 userDataStore,
                 legacyUserDataStore,
             )
@@ -162,6 +153,61 @@ describe('helpers', () => {
             expect(fetchMembershipData).toBeCalledWith('mtoken')
             expect(fetchMembershipToken).not.toBeCalled()
             expect(membershipStore.set).not.toBeCalled()
+        })
+
+        it('clears the caches after a membership fetch error', async () => {
+            const membershipStore = getMockStore('mtoken')
+            const userStore = getMockStore('utoken')
+            const fetchMembershipData = jest.fn(async () => {
+                await Promise.resolve()
+                throw new Error401()
+            })
+            const fetchUserData = getMockPromise(userResponse)
+            const fetchMembershipToken = getMockPromise('mtoken')
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
+
+            const data = fetchUserDataForKeychainUser(
+                membershipStore,
+                userStore,
+                fetchMembershipData,
+                fetchUserData,
+                fetchMembershipToken,
+                userDataStore,
+                legacyUserDataStore,
+            )
+
+            await expect(data).rejects.toThrow(Error401)
+            expect(membershipStore.reset).toHaveBeenCalled()
+            expect(fetchMembershipData).toBeCalledTimes(1)
+        })
+
+        it('clears the caches after an identity fetch error', async () => {
+            const membershipStore = getMockStore('mtoken')
+            const userStore = getMockStore('utoken')
+            const fetchMembershipData = getMockPromise(membershipResponse)
+            const fetchUserData = jest.fn(async () => {
+                await Promise.resolve()
+                throw new Error401()
+            })
+            const fetchMembershipToken = getMockPromise('mtoken')
+            const userDataStore = getMockAsyncCache(null)
+            const legacyUserDataStore = getMockStore()
+
+            const data = fetchUserDataForKeychainUser(
+                membershipStore,
+                userStore,
+                fetchMembershipData,
+                fetchUserData,
+                fetchMembershipToken,
+                userDataStore,
+                legacyUserDataStore,
+            )
+
+            await expect(data).rejects.toThrow(Error401)
+            expect(userStore.reset).toHaveBeenCalled()
+            expect(legacyUserDataStore.reset).toHaveBeenCalled()
+            expect(fetchUserData).toBeCalledTimes(1)
         })
     })
 

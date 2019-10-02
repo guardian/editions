@@ -40,8 +40,9 @@ const convertImageSizeToImageDescription = (screenSize: number): ImageSize => {
     return (imageSize as ImageSize) || 'phone'
 }
 
-const imageForScreenSize = () => {
-    const screenSize = DeviceInfo.isTablet() ? maxScreenSize() : minScreenSize()
+const imageForScreenSize = async () => {
+    const isTablet = await DeviceInfo.isTablet()
+    const screenSize = isTablet ? maxScreenSize() : minScreenSize()
     return convertImageSizeToImageDescription(screenSizeToImageSize(screenSize))
 }
 
