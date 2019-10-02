@@ -1,6 +1,8 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
 import { s3, Bucket, ONE_WEEK } from '../../../utils/s3'
+import Jimp from 'jimp'
+import { jimpEvMethod } from '@jimp/core'
 
 const notNull = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined
@@ -61,8 +63,13 @@ export const zip = async (
                 .promise()
             if (s3response.Body == null) return false
             console.log(`adding ${file} to zip ${name}`)
-
-            archive.append(s3response.Body as Buffer, {
+            let imageBuf: Buffer | undefined
+            if (s3response.ContentType === 'image/jpeg') {
+                const image = await Jimp.read(s3response.Body as Buffer)
+                image.invert()
+                imageBuf = await image.getBufferAsync(Jimp.MIME_JPEG)
+            }
+            archive.append(imageBuf || (s3response.Body as Buffer), {
                 name: zipPath,
             })
         }),
