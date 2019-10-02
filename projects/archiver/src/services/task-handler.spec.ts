@@ -1,7 +1,8 @@
-import { handleAndNotifyInternal, HandlerDependencies } from './task-handler'
+import { handleAndNotifyInternal } from './task-handler'
 import moment = require('moment')
 import { createPublishEvent, PublishEvent } from './pub-status-notifier'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dontCare = {} as any
 
 const input = {
