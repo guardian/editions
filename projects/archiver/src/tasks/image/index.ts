@@ -5,27 +5,18 @@ import { Image, ImageSize, imageSizes } from '../../../common'
 import { getAndUploadColours, getAndUploadImage } from './helpers/media'
 import pAll = require('p-all')
 import { FrontTaskOutput } from '../front'
-import { logInput, logOutput } from '../../utils/log'
-import { handleAndNotifyOnError } from '../notification/helpers/pub-status-notifier'
+import { handleAndNotifyOnError } from '../../services/task-handler'
 
 type ImageTaskInput = FrontTaskOutput
 export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {
     failedImages: number
     failedColours: number
 }
-export const handler: Handler<ImageTaskInput, ImageTaskOutput> = async ({
-    issuePublication,
-    issue,
-    images,
-    ...params
-}) => {
-    return await handleAndNotifyOnError(issuePublication, async () => {
-        logInput({
-            issuePublication,
-            issue,
-            images,
-            ...params,
-        })
+export const handler: Handler<
+    ImageTaskInput,
+    ImageTaskOutput
+> = handleAndNotifyOnError(
+    async ({ issuePublication, issue, images, ...params }) => {
         const { publishedId } = issue
 
         const imagesWithSizes: [Image, ImageSize][] = unnest(
@@ -62,7 +53,7 @@ export const handler: Handler<ImageTaskInput, ImageTaskOutput> = async ({
         const failedColours = failedColourUploads.length
         const success = failedImages + failedColours === 0
 
-        const out: ImageTaskOutput = {
+        return {
             issuePublication,
             issue,
             ...params,
@@ -72,7 +63,5 @@ export const handler: Handler<ImageTaskInput, ImageTaskOutput> = async ({
                 success ? 'succesfully' : 'with some errors'
             }.`,
         }
-        logOutput(out)
-        return out
-    })
-}
+    },
+)

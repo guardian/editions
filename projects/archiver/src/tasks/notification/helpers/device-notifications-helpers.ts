@@ -74,8 +74,6 @@ export const prepareScheduleDeviceNotificationRequest = (
         sender: 'editions-backend',
     }
 
-    console.log('issue Device Notification payload', payload)
-
     const reqBody: RequestInit = {
         method: 'POST',
         headers: {
@@ -87,6 +85,9 @@ export const prepareScheduleDeviceNotificationRequest = (
     }
 
     const reqEndpoint = createScheduleNotificationEndpoint(domain, scheduleTime)
+
+    console.log('Device notification endpoint:', reqEndpoint)
+    console.log('Issue device notification payload', JSON.stringify(payload))
 
     return {
         reqEndpoint,
