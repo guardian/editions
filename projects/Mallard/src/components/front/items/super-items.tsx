@@ -211,13 +211,12 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 >
                     {article.trail}
                 </Text>
-
-                {article.bylineImages && article.bylineImages.cutout ? (
-                    <View style={opinionStyles.cutout}>
-                        <BylineCutout cutout={article.bylineImages.cutout} />
-                    </View>
-                ) : null}
             </View>
+            {article.bylineImages && article.bylineImages.cutout ? (
+                <View style={opinionStyles.cutout}>
+                    <BylineCutout cutout={article.bylineImages.cutout} />
+                </View>
+            ) : null}
         </ItemTappable>
     )
 }
