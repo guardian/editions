@@ -165,11 +165,13 @@ const FrontWithResponse = React.memo(
                     // These three props are responsible for the majority of
                     // performance improvements
                     initialNumToRender={2}
-                    windowSize={5}
+                    windowSize={3}
                     maxToRenderPerBatch={2}
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}
                     horizontal={true}
+                    removeClippedSubviews={true}
+                    style={{ overflow: 'hidden' }}
                     decelerationRate="fast"
                     snapToInterval={card.width}
                     ref={flatListRef}
