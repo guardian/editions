@@ -26,7 +26,7 @@ import {
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
 import { useIssueResponse } from 'src/hooks/use-issue'
-import { useMediaQuery } from 'src/hooks/use-screen'
+import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
@@ -125,9 +125,10 @@ const IssueFronts = ({
     style?: StyleProp<ViewStyle>
 }) => {
     const { container } = useIssueScreenSize()
-
+    const { width } = useDimensions()
+    /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
-        <ScrollView style={style}>
+        <ScrollView style={style} key={width}>
             {ListHeaderComponent}
             {issue.fronts.map(key => (
                 <Front
