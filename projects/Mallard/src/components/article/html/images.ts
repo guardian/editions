@@ -83,7 +83,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
         .image[data-role='thumbnail'] {
             width: ${px(wrapLayout.rail.contentWidth)};
             position: absolute;
-            right: ${px(metrics.article.sides * 0.5)};
+            right: 0;
         }
     }
 
