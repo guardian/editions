@@ -332,14 +332,14 @@ export interface CrosswordEntry {
 }
 
 export enum CrosswordType {
-    QUICK = 0,
-    CRYPTIC = 1,
-    QUIPTIC = 2,
-    SPEEDY = 3,
-    PRIZE = 4,
-    EVERYMAN = 5,
-    DIAN_QUIPTIC_CROSSWORD = 6,
-    WEEKEND = 7,
+    QUICK = 'quick',
+    CRYPTIC = 'cryptic',
+    QUIPTIC = 'quiptic',
+    SPEEDY = 'speedy',
+    PRIZE = 'prize',
+    EVERYMAN = 'everyman',
+    DIAN_QUIPTIC_CROSSWORD = 'quiptic-dian',
+    WEEKEND = 'weekend',
 }
 
 export interface CapiDateTime {
