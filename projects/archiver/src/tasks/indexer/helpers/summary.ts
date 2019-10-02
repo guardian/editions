@@ -9,7 +9,7 @@ import { getPublishedVersion } from './get-published-version'
 import { oc } from 'ts-optchain'
 
 // currently publishing will remove this issue from the index, it should be generated in the indextask
-export const indexer = async (
+export const getIssueSummaries = async (
     currentlyPublishing?: IssuePublicationIdentifier,
 ): Promise<IssueSummary[]> => {
     const allIssues = await getIssues()

@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda'
 import { IssueSummary, issueSummarySort } from '../../../common'
 import { getIssueSummary } from './helpers/get-issue-summary'
-import { indexer } from './helpers/summary'
+import { getIssueSummaries } from './helpers/summary'
 import { upload, FIVE_SECONDS } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
@@ -24,7 +24,7 @@ export const handler: Handler<
         throw new Error('No issue summary was generated for the current issue')
     }
 
-    const otherIssueSummaries = await indexer(issuePublication)
+    const otherIssueSummaries = await getIssueSummaries(issuePublication)
 
     console.log(
         `Creating index using the new and ${otherIssueSummaries.length} existing issue summaries`,

@@ -41,7 +41,7 @@ export const putStatus = (
 
 /* Given a published instance ID of an issue, return the instance status
  * from the status file - this contains the status and modified time */
-export const getStatus = async (
+const getStatus = async (
     issuePublication: IssuePublicationIdentifier,
 ): Promise<IssuePublicationWithStatus> => {
     console.log(`getStatus for ${JSON.stringify(issuePublication)}`)
@@ -80,7 +80,7 @@ export const getStatus = async (
 }
 
 /* Given an edition name and date provide a list of versions */
-export const getVersions = async (
+const getVersions = async (
     issue: IssueIdentifier,
 ): Promise<IssuePublicationIdentifier[]> => {
     console.log(`getVersions for ${JSON.stringify(issue)}`)
@@ -97,6 +97,8 @@ export const getVersions = async (
 export const getStatuses = async (
     issuePublication: IssueIdentifier,
 ): Promise<IssuePublicationWithStatus[]> => {
-    const allVersions = await getVersions(issuePublication)
+    const allVersions: IssuePublicationIdentifier[] = await getVersions(
+        issuePublication,
+    )
     return Promise.all(allVersions.map(getStatus))
 }
