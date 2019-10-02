@@ -155,7 +155,6 @@ export const renderHTML = (
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     },
 ) => {
-    const { imageSize } = useImageSize()
     const content = article
         .map((el, i) => {
             switch (el.id) {
@@ -175,7 +174,6 @@ export const renderHTML = (
                         ? Image({
                               imageElement: el,
                               publishedId,
-                              imageSize,
                           })
                         : ''
                 case 'pullquote':
