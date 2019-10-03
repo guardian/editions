@@ -47,23 +47,16 @@ const compressImagePath = async (path: string, width: number) => {
  *
  *  */
 
-const useImagePath = (image?: Image, width?: number) => {
+const useImagePath = (image?: Image) => {
     const key = useIssueCompositeKey()
 
     const [paths, setPaths] = useState<string | undefined>()
     const apiUrl = useSettingsValue.apiUrl()
     useEffect(() => {
         if (key && image) {
-            console.log([apiUrl, image, key])
             const { localIssueId, publishedIssueId } = key
             selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
-                path => {
-                    if (width) {
-                        compressImagePath(path, width).then(setPaths)
-                    } else {
-                        setPaths(path)
-                    }
-                },
+                setPaths,
             )
         }
     }, [
@@ -71,7 +64,6 @@ const useImagePath = (image?: Image, width?: number) => {
         image,
         key ? key.publishedIssueId : undefined,
         key ? key.localIssueId : undefined,
-        width,
     ])
     if (image === undefined) return undefined
     return paths
