@@ -28,7 +28,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get('/' + issueSummaryPath(), issuesSummaryController)
+app.get('/' + issueSummaryPath('daily-edition'), issuesSummaryController)
 app.get('/' + issuePath(issueId), issueController)
 console.log('/' + issuePath(issueId))
 app.get('/' + frontPath(issueId, '*?'), frontController)
