@@ -12,6 +12,7 @@ const Crossword = ({
     crosswordArticle: CrosswordArticle
 }) => (
     <WebView
+        key={crosswordArticle.key}
         originWhitelist={['*']}
         source={{ uri: getBundleUri('crosswords') }}
         injectedJavaScript={`

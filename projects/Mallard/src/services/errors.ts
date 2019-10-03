@@ -70,7 +70,7 @@ class ErrorService {
         if (this.hasConsent && !this.hasConfigured) {
             this.sentryImpl.config(SENTRY_DSN_URL).install()
             this.sentryImpl.setTagsContext({
-                environment: isInBeta() ? 'BETA' : 'RELEASE',
+                environment: __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
                 react: true,
             })
             this.hasConfigured = true

@@ -5477,6 +5477,11 @@ react-native-iap@^3.3.9:
   dependencies:
     dooboolab-welcome "^1.1.0"
 
+react-native-image-resizer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-resizer/-/react-native-image-resizer-1.0.1.tgz#e9eeb7f81596ffc490f822897952b046c07ee95c"
+  integrity sha512-upBF/9TIs4twg19dSkSaDW/MzMpNbysEXtPuapu3GqvOuGIYHKQ30v6httDn7rIb6uCcNIWL1BwZJM2cDt/C9Q==
+
 react-native-in-app-utils@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-native-in-app-utils/-/react-native-in-app-utils-6.0.2.tgz#b44498c7cce772fe1cebb00af082ff7bf4000a55"

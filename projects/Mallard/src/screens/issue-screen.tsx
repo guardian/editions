@@ -1,5 +1,12 @@
 import React, { ReactElement } from 'react'
-import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import {
+    Animated,
+    StyleProp,
+    StyleSheet,
+    View,
+    ViewStyle,
+    Image,
+} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Issue } from 'src/common'
@@ -51,6 +58,17 @@ const styles = StyleSheet.create({
     },
     sideBySideFeed: {
         paddingTop: metrics.vertical,
+    },
+    illustrationImage: {
+        width: '100%',
+        height: 100,
+    },
+    illustrationPosition: {
+        position: 'relative',
+        bottom: 0,
+        left: 0,
+        height: '15%',
+        right: 0,
     },
 })
 
@@ -138,7 +156,14 @@ const IssueFronts = ({
                     key={key}
                 />
             ))}
-            <View style={{ height: container.height / 2 }} />
+            <View style={[styles.illustrationPosition]}>
+                <Image
+                    style={styles.illustrationImage}
+                    resizeMode={'contain'}
+                    source={require('src/assets/images/privacy.png')}
+                />
+            </View>
+            <View style={{ height: container.height / 3 }} />
         </ScrollView>
     )
 }

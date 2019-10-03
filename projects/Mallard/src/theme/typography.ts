@@ -281,7 +281,7 @@ const scale = {
             },
             [Breakpoints.phone]: {
                 fontSize: 60,
-                lineHeight: 66,
+                lineHeight: 58,
             },
         },
     },
