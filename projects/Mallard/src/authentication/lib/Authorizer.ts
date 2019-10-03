@@ -48,16 +48,19 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
         private checkUserHasAccess: (data: T) => boolean,
     ) {}
 
-    private async runAuthRunner(runner: () => Promise<AuthResult<T>>) {
+    private async handleAuthPromise(
+        promise: Promise<AuthResult<T>>,
+        connectivity: Connectivity,
+    ) {
         let attempt: ResolvedAttempt<T>
         try {
-            const result = await runner()
+            const result = await promise
 
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
-                valid: data => ValidAttempt(data, 'online'),
+                valid: data => ValidAttempt(data, connectivity),
                 invalid: reason => {
                     this.clearCaches()
-                    return InvalidAttempt('online', reason)
+                    return InvalidAttempt(connectivity, reason)
                 },
             })
         } catch (e) {
@@ -72,7 +75,10 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
     }
 
     public async runAuth(...args: A) {
-        return this.runAuthRunner(() => this.auth(args, this.authCaches))
+        return this.handleAuthPromise(
+            this.auth(args, this.authCaches),
+            'online',
+        )
     }
 
     private async getLastKnownAuthStatus(): Promise<AuthResult<T>> {
@@ -85,12 +91,18 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
     }
 
     public async runAuthWithCachedCredentials(connectivity: Connectivity) {
-        return this.runAuthRunner(() =>
-            withConnectivity(connectivity, {
-                offline: () => this.getLastKnownAuthStatus(),
-                online: () => this.authWithCachedCredentials(this.authCaches),
-            }),
-        )
+        return withConnectivity(connectivity, {
+            offline: () =>
+                this.handleAuthPromise(
+                    this.getLastKnownAuthStatus(),
+                    'offline',
+                ),
+            online: () =>
+                this.handleAuthPromise(
+                    this.authWithCachedCredentials(this.authCaches),
+                    'online',
+                ),
+        })
     }
 
     private clearCaches() {
@@ -148,12 +160,6 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
      * authentication status, it returns an unsubscribe function
      */
     public subscribe(fn: UpdateHandler<T>): () => void {
-        /**
-         * send initial message to subscriber if we already have info
-         */
-        if (hasRun(this.attempt)) {
-            fn(this.attempt)
-        }
         this.subscribers.push(fn)
         return () => {
             this.subscribers = this.subscribers.filter(sub => sub !== fn)

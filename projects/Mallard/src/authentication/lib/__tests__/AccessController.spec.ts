@@ -60,6 +60,8 @@ const createSimpleAccessController = ({
 
     controller.subscribe(handler)
 
+    attempt = controller.getAttempt()
+
     return {
         cache,
         controller,
