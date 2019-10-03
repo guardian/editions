@@ -1,4 +1,3 @@
-import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { FACEBOOK_CLIENT_ID } from '../../constants'
 import qs from 'query-string'
@@ -44,8 +43,6 @@ const facebookAuthWithDeepRedirect = (
         invariant(params.access_token, 'Something went wrong')
 
         return params.access_token as string
-    }).then(fbToken =>
-        fetchAndPersistUserAccessTokenWithType('facebook', fbToken),
-    )
+    })
 
 export { facebookAuthWithDeepRedirect }

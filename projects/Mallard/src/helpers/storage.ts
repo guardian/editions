@@ -7,10 +7,10 @@ import {
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
 import { CasExpiry } from 'src/services/content-auth-service'
-import { UserData } from '../authentication/helpers'
-import { ReceiptIOS } from 'src/services/iap'
+import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
 import DeviceInfo from 'react-native-device-info'
+import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
@@ -42,13 +42,12 @@ const createAsyncCache = <T extends object | string>(key: string) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
-    reset: (): Promise<boolean> =>
-        AsyncStorage.removeItem(key).then(() => true),
+    reset: (): Promise<void> => AsyncStorage.removeItem(key),
 })
 
 const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
 
-const userDataCache = createAsyncCache<UserData>('user-data-cache')
+const userDataCache = createAsyncCache<IdentityAuthData>('user-data-cache')
 
 const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache')
 
@@ -64,10 +63,16 @@ const cacheClearCache = createAsyncCache<string>('cacheClear')
  * This is keyed off the given service.
  */
 const createServiceTokenStore = (service: string) => ({
-    get: () => Keychain.getGenericPassword({ service }),
-    set: (username: string, token: string) =>
-        Keychain.setGenericPassword(username, token, { service }),
-    reset: () => Keychain.resetGenericPassword({ service }),
+    get: () =>
+        Keychain.getGenericPassword({ service }).then(val =>
+            val ? val : null,
+        ),
+    set: async ({ username, token }: { username: string; token: string }) => {
+        await Keychain.setGenericPassword(username, token, { service })
+    },
+    reset: async (): Promise<void> => {
+        await Keychain.resetGenericPassword({ service })
+    },
 })
 
 const userAccessTokenKeychain = createServiceTokenStore('UserAccessToken')
@@ -93,7 +98,7 @@ const legacyUserAccessTokenKeychain = {
             password: JSON.parse(token.password).accessToken,
         }
     },
-    set: () => {
+    set: async () => {
         /** noop, use the non-legacy cache */
     },
     reset: () => _legacyUserAccessTokenKeychain.reset(),

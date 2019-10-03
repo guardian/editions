@@ -6,18 +6,19 @@ import { ScrollContainer } from 'src/components/layout/ui/container'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
-import { AuthContext, useAuth } from 'src/authentication/auth-context'
 import { Platform, Text } from 'react-native'
+import { AccessContext, useAccess } from 'src/authentication/AccessContext'
+import { useModal } from 'src/components/modal'
+import { isValid } from 'src/authentication/lib/Attempt'
+import { isReceiptActive } from 'src/authentication/services/iap'
+import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
-    const authHandler = useAuth()
-    const { restorePurchases, isRestoring } = useContext(AuthContext)
+    const canAccess = useAccess()
+    const { authIAP } = useContext(AccessContext)
+    const { open } = useModal()
 
     const rightChevronIcon = <RightChevron />
-
-    const restoringLabel = isRestoring
-        ? 'Restoring ...'
-        : 'Restore App Store subscription'
 
     return (
         <WithAppAppearance value={'settings'}>
@@ -25,36 +26,38 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                 <Heading>{`Guardian Digital pack/Digital + Print`}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={authHandler({
-                        pending: () => [],
-                        authed: () => [],
-                        unauthed: () => [
-                            {
-                                key: 'Sign in to activate',
-                                title: 'Sign in to activate',
-                                data: {
-                                    onPress: () => {
-                                        navigation.navigate(routeNames.SignIn)
-                                    },
-                                },
-                                proxy: rightChevronIcon,
-                                linkWeight: 'regular',
-                            },
-                            {
-                                key: 'Activate with subscriber ID',
-                                title: 'Activate with subscriber ID',
-                                data: {
-                                    onPress: () => {
-                                        navigation.navigate(
-                                            routeNames.CasSignIn,
-                                        )
-                                    },
-                                },
-                                proxy: rightChevronIcon,
-                                linkWeight: 'regular',
-                            },
-                        ],
-                    })}
+                    data={
+                        canAccess
+                            ? [
+                                  {
+                                      key: 'Sign in to activate',
+                                      title: 'Sign in to activate',
+                                      data: {
+                                          onPress: () => {
+                                              navigation.navigate(
+                                                  routeNames.SignIn,
+                                              )
+                                          },
+                                      },
+                                      proxy: rightChevronIcon,
+                                      linkWeight: 'regular',
+                                  },
+                                  {
+                                      key: 'Activate with subscriber ID',
+                                      title: 'Activate with subscriber ID',
+                                      data: {
+                                          onPress: () => {
+                                              navigation.navigate(
+                                                  routeNames.CasSignIn,
+                                              )
+                                          },
+                                      },
+                                      proxy: rightChevronIcon,
+                                      linkWeight: 'regular',
+                                  },
+                              ]
+                            : []
+                    }
                 />
                 {Platform.OS === 'ios' ? (
                     <>
@@ -64,11 +67,24 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                             onPress={({ onPress }) => onPress()}
                             data={[
                                 {
-                                    key: restoringLabel,
-                                    title: restoringLabel,
+                                    key: 'Restore App Store subscription',
+                                    title: 'Restore App Store subscription',
                                     data: {
-                                        onPress: () => {
-                                            restorePurchases()
+                                        onPress: async () => {
+                                            const attempt = await authIAP()
+                                            if (
+                                                isValid(attempt) &&
+                                                isReceiptActive(attempt.data)
+                                            ) {
+                                                return
+                                            } else {
+                                                open(close => (
+                                                    <MissingIAPModalCard
+                                                        close={close}
+                                                        onTryAgain={authIAP}
+                                                    />
+                                                ))
+                                            }
                                         },
                                     },
                                     proxy: rightChevronIcon,
