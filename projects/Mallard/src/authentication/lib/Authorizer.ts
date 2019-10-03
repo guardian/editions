@@ -55,9 +55,9 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
 
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
                 valid: data => ValidAttempt(data, 'online'),
-                invalid: () => {
+                invalid: reason => {
                     this.clearCaches()
-                    return InvalidAttempt('online')
+                    return InvalidAttempt('online', reason)
                 },
             })
         } catch (e) {

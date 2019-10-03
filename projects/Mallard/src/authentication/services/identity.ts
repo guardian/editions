@@ -26,7 +26,7 @@ const fetchAuth = async <T>(
     const data = await res.json()
     if (res.ok) return ValidResult(data.accessToken.accessToken)
     if (hasErrorsArray(data)) {
-        return InvalidResult(data.errors.join('.\n'))
+        return InvalidResult(data.errors.map(err => err.description).join(', '))
     }
     return InvalidResult('Something went wrong')
 }
@@ -84,7 +84,7 @@ const fetchUserDetails = async (
     const data = await res.json()
     if (res.ok) return ValidResult(data.user)
     if (hasErrorsArray(data)) {
-        return InvalidResult(data.errors.join('.\n'))
+        return InvalidResult(data.errors.map(err => err.description).join(', '))
     }
     return InvalidResult('Something went wrong')
 }
