@@ -1,5 +1,5 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Animated, View } from 'react-native'
+import { Animated, View, StyleSheet } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
 import { Slider, SliderSkeleton } from '../slider'
 import { Spinner } from '../spinner'
@@ -86,6 +86,8 @@ const CollectionPageInFront = ({
     )
 }
 
+const styles = StyleSheet.create({ overflow: { overflow: 'hidden' } })
+
 const FrontWithResponse = React.memo(
     ({
         frontData,
@@ -171,7 +173,7 @@ const FrontWithResponse = React.memo(
                     scrollEventThrottle={1}
                     horizontal={true}
                     removeClippedSubviews={true}
-                    style={{ overflow: 'hidden' }}
+                    style={styles.overflow}
                     decelerationRate="fast"
                     snapToInterval={card.width}
                     ref={flatListRef}
