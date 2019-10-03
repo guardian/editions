@@ -1,5 +1,5 @@
 import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Animated, View } from 'react-native'
+import { Animated, View, StyleSheet } from 'react-native'
 import { CollectionPage, PropTypes } from './collection-page'
 import { Slider, SliderSkeleton } from '../slider'
 import { Spinner } from '../spinner'
@@ -86,6 +86,8 @@ const CollectionPageInFront = ({
     )
 }
 
+const styles = StyleSheet.create({ overflow: { overflow: 'hidden' } })
+
 const FrontWithResponse = React.memo(
     ({
         frontData,
@@ -165,11 +167,13 @@ const FrontWithResponse = React.memo(
                     // These three props are responsible for the majority of
                     // performance improvements
                     initialNumToRender={2}
-                    windowSize={5}
+                    windowSize={3}
                     maxToRenderPerBatch={2}
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}
                     horizontal={true}
+                    removeClippedSubviews={true}
+                    style={styles.overflow}
                     decelerationRate="fast"
                     snapToInterval={card.width}
                     ref={flatListRef}
