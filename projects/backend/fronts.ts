@@ -258,13 +258,14 @@ const getDisplayName = (front: string) => {
 }
 
 export const getFront = async (
-    issue: string,
+    edition: string,
+    issueDate: string,
     id: string,
     source: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<Front>> => {
     const path: Path = {
-        key: `daily-edition/${issue}/${source}.json`,
+        key: `${edition}/${issueDate}/${source}.json`,
         bucket: isPreview ? 'preview' : 'published',
     }
     const resp = await s3fetch(path)
@@ -272,7 +273,7 @@ export const getFront = async (
     if (hasFailed(resp)) {
         return withFailureMessage(
             resp,
-            `Attempt to fetch ${issue} and ${id} failed.`,
+            `Attempt to fetch ${issueDate} and ${id} failed.`,
         )
     }
 
@@ -297,7 +298,7 @@ export const getFront = async (
 
     collections.filter(hasFailed).forEach(failedCollection => {
         console.error(
-            `silently removing collection from ${issue}/${id} ${JSON.stringify(
+            `silently removing collection from ${issueDate}/${id} ${JSON.stringify(
                 failedCollection,
             )}`,
         )
