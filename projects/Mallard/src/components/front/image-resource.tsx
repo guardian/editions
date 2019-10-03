@@ -1,5 +1,12 @@
-import React from 'react'
-import { Image, ImageProps, ImageStyle, StyleProp } from 'react-native'
+import React, { useState } from 'react'
+import {
+    Image,
+    ImageProps,
+    ImageStyle,
+    StyleProp,
+    View,
+    PixelRatio,
+} from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Image as IImage } from '../../../../common/src'
@@ -19,13 +26,14 @@ type ImageResourceProps = {
     setAspectRatio?: boolean
 } & Omit<ImageProps, 'source'>
 
-const ImageResource = ({
+const ImageResourceWithWidth = ({
     image,
     style,
     setAspectRatio = false,
+    width,
     ...props
-}: ImageResourceProps) => {
-    const path = useImagePath(image)
+}: ImageResourceProps & { width: number }) => {
+    const path = useImagePath(image, width)
     const aspectRatio = useAspectRatio(path)
     return (
         <Image
@@ -37,6 +45,26 @@ const ImageResource = ({
             ]}
             source={{ uri: path }}
         />
+    )
+}
+
+const ImageResource = (props: ImageResourceProps) => {
+    const [width, setWidth] = useState<number | null>(null)
+    return width ? (
+        <ImageResourceWithWidth
+            width={width}
+            {...props}
+        ></ImageResourceWithWidth>
+    ) : (
+        <View
+            onLayout={ev => {
+                setWidth(
+                    PixelRatio.getPixelSizeForLayoutSize(
+                        ev.nativeEvent.layout.width,
+                    ),
+                )
+            }}
+        ></View>
     )
 }
 
