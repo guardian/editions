@@ -142,8 +142,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     {
                         key: 'Clear CAS caches',
                         title: 'Clear CAS caches',
-                        explainer:
-                            'You will need to reload the app for this to take effect',
                         data: {
                             onPress: signOutCAS,
                         },
