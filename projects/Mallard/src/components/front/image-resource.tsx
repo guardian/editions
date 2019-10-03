@@ -57,6 +57,7 @@ const ImageResource = (props: ImageResourceProps) => {
         ></ImageResourceWithWidth>
     ) : (
         <View
+            style={[props.style]}
             onLayout={ev => {
                 setWidth(
                     PixelRatio.getPixelSizeForLayoutSize(

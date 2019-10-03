@@ -71,6 +71,7 @@ const useImagePath = (image?: Image, width?: number) => {
         image,
         key ? key.publishedIssueId : undefined,
         key ? key.localIssueId : undefined,
+        width,
     ])
     if (image === undefined) return undefined
     return paths
