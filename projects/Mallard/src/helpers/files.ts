@@ -2,8 +2,8 @@ import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-api'
-import { FSPaths } from 'src/paths'
-import { ImageSize, IssueSummary } from '../../../common/src'
+import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
+import { ImageSize, IssueSummary, issueSummaryPath } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
@@ -228,4 +228,39 @@ export const downloadTodaysIssue = async () => {
         const imageSize = await imageForScreenSize()
         downloadAndUnzipIssue(todaysIssueSummary, imageSize)
     }
+}
+
+export const readIssueSummary = async () =>
+    RNFetchBlob.fs
+        .readFile(FSPaths.issuesDir + '/daily-edition/issues.json', 'utf8')
+        .then(data => JSON.parse(data))
+        .catch(e => console.log(e))
+
+export const storeIssueSummary = async () => {
+    const apiUrl = await getSetting('apiUrl')
+    return RNFetchBlob.config({
+        fileCache: true,
+        overwrite: true,
+    })
+        .fetch('GET', apiUrl + issueSummaryPath(), {
+            'Content-Type': 'application/json',
+        })
+        .then(async res => {
+            // console.log(FSPaths.issuesDir + '/daily-edition')
+            // await prepFileSystem()
+            // await RNFetchBlob.fs.unlink(
+            //     FSPaths.issuesDir + '/daily-edition/issues.json',
+            // )
+            // const fileExists = await RNFetchBlob.fs.exists(FSPaths.issuesDir + '/daily-edition/issues.json')
+
+            // Need to solve this being called multiple times
+            RNFetchBlob.fs
+                .mv(
+                    res.path(),
+                    FSPaths.issuesDir + '/daily-edition/issues.json',
+                )
+                .catch(e => console.log('supressing: ', e))
+            return res.json()
+        })
+    // .catch(e => console.log(e))
 }

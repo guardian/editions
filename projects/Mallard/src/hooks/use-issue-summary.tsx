@@ -6,7 +6,7 @@ import { CachedOrPromise } from 'src/helpers/fetch/cached-or-promise'
 import { useCachedOrPromise } from './use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 
-const IssueSummaryContext = createContext<CachedOrPromise<IssueSummary[]>>()
+const IssueSummaryContext = createContext<CachedOrPromise<IssueSummary[]>>([])
 
 const modifyIssueSummary = () => {
     const response = useCachedOrPromise(getIssueSummary())
