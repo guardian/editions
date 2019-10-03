@@ -7,7 +7,7 @@ import {
 } from '../services/iap'
 
 export default new Authorizer(
-    'identity',
+    'iap',
     iapReceiptCache,
     [],
     tryRestoreActiveIOSSubscriptionReceipt,

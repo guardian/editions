@@ -4,7 +4,7 @@ import { flat, InvalidResult, ValidResult } from '../lib/Result'
 import { fetchCASSubscription } from '../services/cas'
 
 export default new Authorizer(
-    'identity',
+    'cas',
     casDataCache,
     [casCredentialsKeychain] as const,
     async ([subscriberId, password]: [string, string], [creds]) => {
