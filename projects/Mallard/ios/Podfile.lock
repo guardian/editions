@@ -59,6 +59,8 @@ PODS:
   - React-jsinspector (0.60.4)
   - react-native-config (0.11.7):
     - React
+  - react-native-image-resizer (1.0.1):
+    - React
   - react-native-in-app-utils (6.0.2):
     - React
   - react-native-netinfo (3.2.1):
@@ -144,6 +146,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - "react-native-safe-area-insets (from `../node_modules/@delightfulstudio/react-native-safe-area-insets`)"
@@ -205,6 +208,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
   react-native-in-app-utils:
     :path: "../node_modules/react-native-in-app-utils"
   react-native-netinfo:
@@ -278,6 +283,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 7549641e48bafae7bfee3f3ea19bf4901639c5de
   React-jsinspector: 73f24a02fa684ed6a2b828ba116874a2191ded88
   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+  react-native-image-resizer: 48eb06a18a6d0a632ffa162a51ca61a68fb5322f
   react-native-in-app-utils: 07ea1df4bb6e8cbb27337d42a65ffe4cf7a35e97
   react-native-netinfo: 0da34082d2cec3100c9b5073bb217e35f1142bdd
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
@@ -312,4 +318,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c499c44aed47275a8e1f036511ecda7d7450e47a
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.6.1

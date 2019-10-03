@@ -5,6 +5,7 @@ import { APIPaths, FSPaths } from 'src/paths'
 import { Image, Issue } from '../../../common/src'
 import { useIssueCompositeKey } from './use-issue-id'
 import { useSettingsValue } from './use-settings'
+import ImageResizer from 'react-native-image-resizer'
 
 const selectImagePath = async (
     apiUrl: string,
@@ -22,6 +23,18 @@ const selectImagePath = async (
     const fs = FSPaths.media(localIssueId, source, path)
     const fsExists = await RNFetchBlob.fs.exists(fs)
     return fsExists ? fs : api
+}
+
+const compressImagePath = async (path: string, width: number) => {
+    const resized = await ImageResizer.createResizedImage(
+        path,
+        width,
+        99999,
+        'JPEG',
+        100,
+        0,
+    )
+    return resized.path
 }
 
 /**
@@ -46,9 +59,22 @@ const useImagePath = (image?: Image) => {
                 setPaths,
             )
         }
-    }, [apiUrl, image, key])
+    }, [
+        apiUrl,
+        image,
+        key ? key.publishedIssueId : undefined,
+        key ? key.localIssueId : undefined,
+    ])
     if (image === undefined) return undefined
     return paths
 }
 
-export { useImagePath, selectImagePath }
+const useScaledImage = (largePath: string, width: number) => {
+    const [path, setPath] = useState<string | undefined>()
+    useEffect(() => {
+        compressImagePath(largePath, width).then(setPath)
+    }, [largePath, width])
+    return path
+}
+
+export { useImagePath, useScaledImage, selectImagePath }
