@@ -44,7 +44,9 @@ export const handler: Handler<
 
     // Also upload the index into the root for older clients
     // TODO: this can be removed once we are happy that the clients are consuming the namespaced index
-    await upload('issues', allIssues, 'application/json', FIVE_SECONDS)
+    if (issuePublication.edition === 'daily-edition') {
+        await upload('issues', allIssues, 'application/json', FIVE_SECONDS)
+    }
 
     console.log('Uploaded new issues file')
 
