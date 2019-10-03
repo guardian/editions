@@ -21,6 +21,11 @@ const outieKicker = (type: ArticleType) => css`
         margin-left: -10em;
         padding-left: 10em;
         border: none;
+        z-index: 9;
+    }
+    .header-container[data-type='${type}'] .header {
+        position: relative;
+        z-index: 9;
     }
 `
 
@@ -28,6 +33,9 @@ const outieHeader = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header {
         ${breakSides}
         margin-top: -4em;
+        padding-top: 0;
+        margin-left: -50em;
+        padding-left: 50em;
     }
     .header-container[data-type='${type}'] {
         padding-top: 1px;
@@ -66,6 +74,11 @@ export const headerStyles = ({
         height: 0.8125rem;
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header:after {
+            margin-left: 0;
+        }
+    }
     .header {
         padding-top: ${px(metrics.vertical)};
     }
@@ -86,7 +99,7 @@ export const headerStyles = ({
         z-index: -1;
     }
     .header-image {
-        height: 56vw;
+        height: 10%;
         width: 100%;
         object-fit: cover;
         display: block;
@@ -96,7 +109,7 @@ export const headerStyles = ({
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
-        height: 80vw;
+        padding-top: 100%;
     }
     .header-kicker {
         font-family: ${families.titlepiece.regular};
@@ -108,9 +121,10 @@ export const headerStyles = ({
     }
     .header h1 {
         ${getScaledFontCss('headline', 1.6)}
+        font-family: ${families.headline.regular};
         font-weight: 400;
-        letter-spacing: -0.5;
         margin: 0.1em 1em 0.75em 0;
+        word-wrap: none;
     }
     .header-byline {
         font-weight: 600;
@@ -139,12 +153,18 @@ export const headerStyles = ({
         float: right;
     }
 
+    .image-as-bg {
+        display: block;
+        padding-top: 60%;
+        background-size: cover;
+    }
+
     /*review*/
     .header-container[data-type='review']:after {
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='review'] .header-bg {
-        background-color: ${colors.faded};
+        background-color: ${colors.dark};
     }
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
@@ -155,7 +175,7 @@ export const headerStyles = ({
         color: ${colors.dark};
     }
     .header-container[data-type='review'] p {
-        color: ${colors.main};
+        color: ${colors.dark};
     }
 
     /*opinion*/
@@ -169,7 +189,7 @@ export const headerStyles = ({
         display: none;
     }
     .header-container[data-type='opinion'] .header-byline {
-        color: ${color.text};
+        color: ${color.palette.neutral[46]};
     }
     .header-container[data-type='opinion'] h1 {
         font-family: ${families.headline.light};
@@ -235,7 +255,7 @@ export const headerStyles = ({
         color: ${color.textOverDarkBackground};
         font-family: ${families.headline.bold};
     }
-    .header-container[data-type='longread'] .header-top {
+    .header-container[data-type='longread'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
     }
     .header-container[data-type='longread'] .header-byline {
@@ -274,6 +294,22 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
     `
 }
 
+const ImageRatio = ({
+    image,
+    className,
+}: {
+    image: ImageT
+    className?: string
+}) => {
+    const path = useImagePath(image)
+    return html`
+        <div
+            class="image-as-bg ${className}"
+            style="background-image: url(${path}); "
+        ></div>
+    `
+}
+
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
@@ -300,7 +336,7 @@ const Header = ({
         ${immersive &&
             headerProps.image &&
             publishedId &&
-            Image({
+            ImageRatio({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
             })}
@@ -311,7 +347,7 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        Image({
+                        ImageRatio({
                             className: 'header-image',
                             image: headerProps.image,
                         })}
