@@ -28,6 +28,10 @@ const createSentry = () => ({
     setTagsContext: jest.fn(() => {}),
 })
 
+jest.mock('src/helpers/release-stream', () => ({
+    isInBeta: () => false,
+}))
+
 describe('errors', () => {
     describe('ErrorService', () => {
         it('should not do anything with calling `init`', async () => {
