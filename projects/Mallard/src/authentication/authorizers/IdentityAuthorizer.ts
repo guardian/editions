@@ -1,4 +1,3 @@
-import { AsyncStorage } from '../AsyncStorage'
 import { Authorizer } from '../lib/Authorizer'
 import { AuthResult, flat, InvalidResult, ValidResult } from '../lib/Result'
 import {

@@ -86,19 +86,6 @@ const isDowngrading = <T>(
     return !isOnline(curr) && isValid(prev) && !isValid(curr)
 }
 
-const logFunc = <F extends (...args: any[]) => any>(fn: F) => (
-    ...args: Parameters<F>
-): ReturnType<F> => {
-    console.log('input: ', ...args)
-    const out = fn(...args)
-    if (out instanceof Promise) {
-        out.then(res => console.log('output: ', res))
-    } else {
-        console.log('output: ', out)
-    }
-    return out
-}
-
 const patchAttempt = <T, P extends AnyAttempt<T>, C extends AnyAttempt<T>>(
     prev: P,
     curr: C,
