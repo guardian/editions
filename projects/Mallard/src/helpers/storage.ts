@@ -2,14 +2,12 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { Settings } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 import {
-    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
 import { CasExpiry } from 'src/services/content-auth-service'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
-import DeviceInfo from 'react-native-device-info'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
 
 /**
@@ -17,22 +15,23 @@ import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthori
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
  * and not Android.
  */
-const createSyncCacheIOS = <T = any>(key: string) => ({
-    set: (value: T) => Settings.set({ [key]: value }),
-    get: (): T | undefined => Settings.get(key),
-    reset: (): void => Settings.set({ [key]: void 0 }),
+const createSettingsCacheIOS = <T = any>(key: string) => ({
+    set: async (value: T) => {
+        Settings.set({ [key]: value })
+    },
+    get: async (): Promise<T | null> => Settings.get(key) || null,
+    reset: async (): Promise<void> => {
+        Settings.set({ [key]: void 0 })
+    },
 })
 
-const legacyCASUsernameCache = createSyncCacheIOS<string>(
+const legacyCASUsernameCache = createSettingsCacheIOS<string>(
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
 )
 
-const legacyCASPasswordCache = createSyncCacheIOS<string>(
+const legacyCASPasswordCache = createSettingsCacheIOS<string>(
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 )
-
-const legacyCASExpiryCache = (bundleId: string) =>
-    createSyncCacheIOS<CasExpiry>(LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY(bundleId))
 
 /**
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
@@ -104,48 +103,16 @@ const legacyUserAccessTokenKeychain = {
     reset: () => _legacyUserAccessTokenKeychain.reset(),
 }
 
-/**
- * Removes all the relevent keychain, storage entries that mark a user as logged in
- * and returns a boolean indicating whether all these operations succeeded
- */
-const signOutIdentity = (
-    userAccessTokenKeychainImpl = userAccessTokenKeychain,
-    membershipAccessTokenKeychainImpl = membershipAccessTokenKeychain,
-    userDataCacheImpl = userDataCache,
-    legacyUserAccessTokenKeychainImpl = legacyUserAccessTokenKeychain,
-): Promise<boolean> =>
-    Promise.all([
-        userAccessTokenKeychainImpl.reset(),
-        membershipAccessTokenKeychainImpl.reset(),
-        userDataCacheImpl.reset(),
-        legacyUserAccessTokenKeychainImpl.reset(),
-    ]).then(all => all.every(_ => _))
-
-const DEV_clearCASCaches = () =>
-    Promise.all([
-        signOutIdentity(),
-        DeviceInfo.getBundleId().then(buildId =>
-            legacyCASExpiryCache(buildId).reset(),
-        ),
-        legacyCASPasswordCache.reset(),
-        legacyCASUsernameCache.reset(),
-        casCredentialsKeychain.reset(),
-        casDataCache.reset(),
-    ])
-
 export {
     userAccessTokenKeychain,
     membershipAccessTokenKeychain,
     casCredentialsKeychain,
-    signOutIdentity,
     casDataCache,
     userDataCache,
     pushNotificationRegistrationCache,
     legacyUserAccessTokenKeychain,
-    legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
     iapReceiptCache,
     cacheClearCache,
-    DEV_clearCASCaches,
 }

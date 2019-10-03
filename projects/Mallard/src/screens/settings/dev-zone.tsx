@@ -17,7 +17,6 @@ import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
 import { isInTestFlight } from 'src/helpers/release-stream'
-import { DEV_clearCASCaches } from 'src/helpers/storage'
 import { FSPaths } from 'src/paths'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
@@ -45,7 +44,7 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const setSetting = useSettings()
     const settings = useOtherSettingsValues()
-    const { attempt } = useContext(AccessContext)
+    const { attempt, signOutCAS } = useContext(AccessContext)
     const apiUrl = useSettingsValue.apiUrl()
     const { showToast } = useToast()
     return (
@@ -146,7 +145,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         explainer:
                             'You will need to reload the app for this to take effect',
                         data: {
-                            onPress: DEV_clearCASCaches,
+                            onPress: signOutCAS,
                         },
                     },
                     {
