@@ -28,6 +28,10 @@ app.use((req, res, next) => {
     next()
 })
 
+// this next line supports legacy clients and can be removed after beta
+// it should return the issues list for the daily-edition
+app.get('/issues', issuesSummaryController)
+
 app.get('/' + issueSummaryPath('daily-edition'), issuesSummaryController)
 app.get('/' + issuePath(issueId), issueController)
 console.log('/' + issuePath(issueId))
