@@ -34,7 +34,10 @@ export const createApp = (
         next()
     })
 
+    // this next line supports legacy clients and can be removed after beta
+    // it should return the issues list for the daily-edition
     app.get('/issues', controllers.issuesSummaryController)
+
     app.get(
         '/' + issueSummaryPath(':edition'),
         controllers.issuesSummaryController,
