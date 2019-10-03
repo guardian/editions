@@ -27,7 +27,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                 <List
                     onPress={({ onPress }) => onPress()}
                     data={
-                        canAccess
+                        !canAccess
                             ? [
                                   {
                                       key: 'Sign in to activate',
