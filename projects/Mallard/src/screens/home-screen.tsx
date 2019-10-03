@@ -33,6 +33,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
+import { useIssueSummaryJames } from 'src/hooks/use-issue-summary'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -140,9 +141,10 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { response: issueSummary } = useIssueSummary()
+    const { response: issueSummary } = useIssueSummaryJames()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     const issue = useIssueCompositeKey()
+    console.log('count')
     return (
         <WithAppAppearance value={'tertiary'}>
             <HomeScreenHeader
