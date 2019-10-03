@@ -154,25 +154,27 @@ const getNthKey = (n: number) => {
     return `${edition}/${key}`
 }
 
+const dailyEdition = 'daily-edition'
+
 describe('getIssuesSummary', () => {
     it('returns the correct number of issues when on live stage', async () => {
         const isPreview = false
-        const issues = await getIssuesSummary(isPreview)
+        const issues = await getIssuesSummary(dailyEdition, isPreview)
         expect(issues).toHaveLength(7)
 
-        const issues2 = await getIssuesSummary(isPreview)
+        const issues2 = await getIssuesSummary(dailyEdition, isPreview)
         expect(issues2).toHaveLength(LIVE_PAGE_SIZE)
     })
 
     it('returns the correct numer of issues when in preview stage', async () => {
         const isPreview = true
-        const issues = await getIssuesSummary(isPreview)
+        const issues = await getIssuesSummary(dailyEdition, isPreview)
         expect(issues).toHaveLength(PREVIEW_PAGE_SIZE)
     })
 
     it('returns the most recent issues', async () => {
         const isPreview = false
-        const issues = await getIssuesSummary(isPreview)
+        const issues = await getIssuesSummary(dailyEdition, isPreview)
         expect(issues).not.toHaveFailed(issues)
         expect((issues as IssueSummary[]).map(i => i.key)).toEqual([
             getNthKey(33),

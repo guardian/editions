@@ -14,10 +14,11 @@ export const issueController = (req: Request, res: Response) => {
     const version: string = decodeURIComponent(
         isPreviewStage ? 'preview' : req.params.version,
     )
+    const issueEdition = req.params.edition
     const issueId: IssuePublicationIdentifier = {
         issueDate,
         version,
-        edition: 'daily-edition',
+        edition: issueEdition,
     }
     console.log(`${req.url}: request for issue ${issueDate}`)
     getIssue(issueId)
@@ -34,10 +35,11 @@ export const issueController = (req: Request, res: Response) => {
 }
 
 export const getIssuesSummary = async (
+    editionType: string,
     isPreview: boolean,
 ): Promise<Attempt<IssueSummary[]>> => {
     const issueKeys = await s3List({
-        key: 'daily-edition/',
+        key: `${editionType}/`,
         bucket: isPreview ? 'preview' : 'published',
     })
 
@@ -52,7 +54,7 @@ export const getIssuesSummary = async (
             const publicationDate = lastModified
             const version = filename.replace('.json', '')
             return {
-                edition: 'daily-edition',
+                edition: editionType,
                 issueDate,
                 version,
                 publicationDate,
@@ -96,7 +98,8 @@ export const getIssuesSummary = async (
 
 export const issuesSummaryController = (req: Request, res: Response) => {
     console.log('Issue summary requested.')
-    getIssuesSummary(isPreviewStage)
+    const issueEdition = req.params.edition
+    getIssuesSummary(issueEdition, isPreviewStage)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(JSON.stringify(data))
