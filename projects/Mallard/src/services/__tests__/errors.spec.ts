@@ -25,7 +25,12 @@ const createSentry = () => ({
         install: jest.fn(() => Promise.resolve()),
     })),
     captureException: jest.fn(() => {}),
+    setTagsContext: jest.fn(() => {}),
 })
+
+jest.mock('src/helpers/release-stream', () => ({
+    isInBeta: () => false,
+}))
 
 describe('errors', () => {
     describe('ErrorService', () => {

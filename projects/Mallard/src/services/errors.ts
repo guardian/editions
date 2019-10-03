@@ -5,6 +5,7 @@ import {
 } from 'src/helpers/settings'
 import Sentry from 'react-native-sentry'
 import Config from 'react-native-config'
+import { isInBeta } from 'src/helpers/release-stream'
 
 const { SENTRY_DSN_URL } = Config
 
@@ -18,6 +19,7 @@ interface SentryImpl {
         install: () => Promise<void>
     }
     captureException: (err: Error) => void
+    setTagsContext: (tags: object) => void
 }
 
 enum InitState {
@@ -67,6 +69,10 @@ class ErrorService {
         this.hasConsent = hasConsent
         if (this.hasConsent && !this.hasConfigured) {
             this.sentryImpl.config(SENTRY_DSN_URL).install()
+            this.sentryImpl.setTagsContext({
+                environment: isInBeta() ? 'BETA' : 'RELEASE',
+                react: true,
+            })
             this.hasConfigured = true
         }
     }
