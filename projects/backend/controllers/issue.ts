@@ -34,12 +34,21 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
+const getEditionOrFallback = (editionType: string) =>
+    editionType ? editionType : 'daily-edition'
+
 export const getIssuesSummary = async (
     editionType: string,
     isPreview: boolean,
 ): Promise<Attempt<IssueSummary[]>> => {
+    /**
+     * fallbacks to 'daily-edition'
+     * to support /issues path
+     * TODO to delete in the future
+     */
+    const edition = getEditionOrFallback(editionType)
     const issueKeys = await s3List({
-        key: `${editionType}/`,
+        key: `${edition}/`,
         bucket: isPreview ? 'preview' : 'published',
     })
 
