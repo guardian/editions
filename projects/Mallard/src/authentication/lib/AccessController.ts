@@ -17,6 +17,7 @@ type AuthMap<I extends {}> = {
 
 class AccessController<I extends {}> {
     private attempt: AnyAttempt<string> = NotRun
+    private fetchingConnectivities: Set<Connectivity> = new Set()
     private subscribers: UpdateHandler[] = []
 
     constructor(readonly authorizerMap: AuthMap<I>) {
@@ -27,7 +28,6 @@ class AccessController<I extends {}> {
 
     public subscribe(fn: UpdateHandler) {
         this.subscribers.push(fn)
-        fn(this.attempt)
         return () => {
             this.subscribers = this.subscribers.filter(sub => sub !== fn)
         }
@@ -41,19 +41,14 @@ class AccessController<I extends {}> {
         return Object.values(this.authorizerMap)
     }
 
-    public get hasAuthRun() {
+    private get hasAuthRun() {
         return hasRun(this.attempt)
     }
 
-    public get isAuthOnline() {
+    private get isAuthOnline() {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
-    public get isAuthValid() {
-        return isValid(this.attempt)
-    }
-
-    // TODO: put this logic elsewhere
     public handleConnectionStatusChanged(isConnected: boolean) {
         if (!this.hasAuthRun) {
             if (isConnected) {
@@ -78,10 +73,16 @@ class AccessController<I extends {}> {
      * It will only call them for authorizers that haven't run
      */
     private async runCachedAuth(connectivity: Connectivity) {
-        for (const authorizer of this.authorizers) {
-            if (authorizer.isAuth(connectivity)) continue
-            await authorizer.runAuthWithCachedCredentials(connectivity)
-            if (isValid(this.attempt)) return
+        if (this.fetchingConnectivities.has(connectivity)) return
+        try {
+            this.fetchingConnectivities.add(connectivity)
+            for (const authorizer of this.authorizers) {
+                if (authorizer.isAuth(connectivity)) continue
+                await authorizer.runAuthWithCachedCredentials(connectivity)
+                if (isValid(this.attempt)) return
+            }
+        } finally {
+            this.fetchingConnectivities.delete(connectivity)
         }
     }
 

@@ -15,6 +15,7 @@ import cas from './authorizers/CASAuthorizer'
 import iap from './authorizers/IAPAuthorizer'
 import { CASExpiry } from './services/cas'
 import { ReceiptIOS } from './services/iap'
+import * as NetInfo from '@react-native-community/netinfo'
 
 const AccessContext = createContext({
     attempt: NotRun as AnyAttempt<string>,
@@ -55,6 +56,7 @@ const AccessProvider = ({
 
     useEffect(() => {
         const unsubController = controller.subscribe(setAttempt)
+        controller.subscribe(console.log)
         const unsubIdentity = controller.authorizerMap.identity.subscribe(
             attempt => {
                 setIdAuth(attempt)
@@ -62,7 +64,9 @@ const AccessProvider = ({
             },
         )
         const unsubCAS = controller.authorizerMap.cas.subscribe(setCASAuth)
-        controller.handleConnectionStatusChanged(true)
+        NetInfo.addEventListener(info =>
+            controller.handleConnectionStatusChanged(info.isConnected),
+        )
         return () => {
             unsubController()
             unsubIdentity()
