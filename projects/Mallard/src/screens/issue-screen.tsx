@@ -52,9 +52,6 @@ const styles = StyleSheet.create({
     sideBySideFeed: {
         paddingTop: metrics.vertical,
     },
-    overflow: {
-        overflow: 'hidden',
-    },
 })
 
 const ScreenHeader = withNavigation(
@@ -131,11 +128,7 @@ const IssueFronts = ({
     const { width } = useDimensions()
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
-        <ScrollView
-            style={[style, styles.overflow]}
-            key={width}
-            removeClippedSubviews={true}
-        >
+        <ScrollView style={style} key={width} removeClippedSubviews={true}>
             {ListHeaderComponent}
             {issue.fronts.map(key => (
                 <Front
