@@ -393,7 +393,7 @@ export const mediaPath = (
 export const coloursPath = (issue: string, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
 
-export const issueSummaryPath = () => 'issues'
+export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
     source: string
     path: string
