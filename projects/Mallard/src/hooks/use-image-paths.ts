@@ -77,4 +77,12 @@ const useImagePath = (image?: Image, width?: number) => {
     return paths
 }
 
-export { useImagePath, selectImagePath }
+const useScaledImage = (largePath: string, width: number) => {
+    const [path, setPath] = useState<string | undefined>()
+    useEffect(() => {
+        compressImagePath(largePath, width).then(setPath)
+    }, [largePath, width])
+    return path
+}
+
+export { useImagePath, useScaledImage, selectImagePath }

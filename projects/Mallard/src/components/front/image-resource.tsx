@@ -8,7 +8,7 @@ import {
     PixelRatio,
 } from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
 import { Image as IImage } from '../../../../common/src'
 
 /**
@@ -26,38 +26,47 @@ type ImageResourceProps = {
     setAspectRatio?: boolean
 } & Omit<ImageProps, 'source'>
 
-const ImageResourceWithWidth = ({
-    image,
+const ScaledImageResource = ({
+    imagePath,
     style,
-    setAspectRatio = false,
     width,
     ...props
-}: ImageResourceProps & { width: number }) => {
-    const path = useImagePath(image, width)
-    const aspectRatio = useAspectRatio(path)
+}: {
+    width: number
+    imagePath: string
+    style?: StyleProp<ImageStyle>
+}) => {
+    const uri = useScaledImage(imagePath, width)
     return (
         <Image
             resizeMethod={'resize'}
             {...props}
-            style={[
-                style,
-                setAspectRatio && aspectRatio ? { aspectRatio } : {},
-            ]}
-            source={{ uri: path }}
+            style={style}
+            source={{ uri }}
         />
     )
 }
 
-const ImageResource = (props: ImageResourceProps) => {
+const ImageResource = ({
+    image,
+    style,
+    setAspectRatio = false,
+    ...props
+}: ImageResourceProps) => {
     const [width, setWidth] = useState<number | null>(null)
-    return width ? (
-        <ImageResourceWithWidth
+    const imagePath = useImagePath(image)
+    const aspectRatio = useAspectRatio(imagePath)
+    const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
+    return width && imagePath ? (
+        <ScaledImageResource
             width={width}
+            imagePath={imagePath}
+            style={styles}
             {...props}
-        ></ImageResourceWithWidth>
+        ></ScaledImageResource>
     ) : (
         <View
-            style={[props.style]}
+            style={styles}
             onLayout={ev => {
                 setWidth(
                     PixelRatio.getPixelSizeForLayoutSize(
