@@ -9,6 +9,7 @@ import { imageController, imageColourController } from './controllers/image'
 import { ImageSize, coloursPath } from '../common/src/index'
 import { issuePath, mediaPath, frontPath, issueSummaryPath } from './common'
 import { isPreview } from './preview'
+import listEndpoints from 'express-list-endpoints'
 
 const app = express()
 
@@ -44,9 +45,13 @@ app.get(
 
 app.get('/' + coloursPath(issueId, ':source', '*?'), imageColourController)
 
-app.get('/', (req, res) => {
+const endpoints = listEndpoints(app)
+
+const rootPath = '/'
+
+app.get(rootPath, (req, res) => {
     res.setHeader('Content-Type', 'application/json')
-    res.send(JSON.stringify({ client: '🦆' }))
+    res.send(endpoints)
 })
 
 export const handler: Handler = (event, context) => {
@@ -60,7 +65,8 @@ export const handler: Handler = (event, context) => {
 if (require.main === module) {
     const port = 3131
 
-    app.listen(port, () =>
-        console.log(`Editions backend listening on port ${port}!`),
-    )
+    app.listen(port, () => {
+        console.log(`Editions backend listening on port ${port}!`)
+        console.log('Editions backend endpoints list available at root path')
+    })
 }

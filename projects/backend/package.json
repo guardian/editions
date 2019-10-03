@@ -37,6 +37,7 @@
     "aws-serverless-express": "^3.3.6",
     "encoding": "^0.1.12",
     "express": "^4.17.1",
+    "express-list-endpoints": "^4.0.1",
     "jest": "^24.8.0",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
