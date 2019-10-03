@@ -15,6 +15,7 @@ interface BasicFile {
     size: number
     id: string
 }
+
 interface OtherFile extends BasicFile {
     type: 'other' | 'archive' | 'json'
 }
