@@ -257,13 +257,13 @@ const getDisplayName = (front: string) => {
     return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
-export const getFront = async (
+const fetchPublishedIssue = async (
     edition: string,
     issueDate: string,
-    id: string,
+    frontId: string,
     source: string,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<Attempt<Front>> => {
+): Promise<Attempt<PublishedIssue>> => {
     const path: Path = {
         key: `${edition}/${issueDate}/${source}.json`,
         bucket: isPreview ? 'preview' : 'published',
@@ -273,14 +273,22 @@ export const getFront = async (
     if (hasFailed(resp)) {
         return withFailureMessage(
             resp,
-            `Attempt to fetch ${issueDate} and ${id} failed.`,
+            `Attempt to fetch ${issueDate} and ${frontId} failed.`,
         )
     }
 
     lastModifiedUpdater(resp.lastModified)
 
     const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
-    const front = issueResponse.fronts.find(_ => _.name === id)
+    return issueResponse
+}
+
+export const transformToFront = async (
+    frontId: string,
+    publishedIssue: PublishedIssue,
+): Promise<Attempt<Front>> => {
+    const { issueDate } = publishedIssue
+    const front = publishedIssue.fronts.find(_ => _.name === frontId)
     if (!front) {
         return failure({ httpStatus: 404, error: new Error('Front not found') })
     }
@@ -298,7 +306,7 @@ export const getFront = async (
 
     collections.filter(hasFailed).forEach(failedCollection => {
         console.error(
-            `silently removing collection from ${issueDate}/${id} ${JSON.stringify(
+            `silently removing collection from ${issueDate}/${frontId} ${JSON.stringify(
                 failedCollection,
             )}`,
         )
@@ -307,8 +315,30 @@ export const getFront = async (
     return {
         ...front,
         appearance,
-        displayName: getDisplayName(id),
+        displayName: getDisplayName(frontId),
         collections: collections.filter(hasSucceeded),
-        key: id,
+        key: frontId,
     }
+}
+
+export const getFront = async (
+    edition: string,
+    issueDate: string,
+    frontId: string,
+    source: string,
+    lastModifiedUpdater: LastModifiedUpdater,
+): Promise<Attempt<Front>> => {
+    const publishedIssue = await fetchPublishedIssue(
+        edition,
+        issueDate,
+        frontId,
+        source,
+        lastModifiedUpdater,
+    )
+
+    if (hasFailed(publishedIssue)) {
+        return publishedIssue
+    }
+
+    return transformToFront(frontId, publishedIssue)
 }
