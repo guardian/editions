@@ -1,8 +1,23 @@
-import { AsyncStorage } from '../../AsyncStorage'
 import { Authorizer, AsyncCache } from '../Authorizer'
 import { AccessController } from '../AccessController'
 import { AnyAttempt } from '../Attempt'
 import { AuthResult, ValidResult, InvalidResult } from '../Result'
+
+class AsyncStorage<T> {
+    constructor(private data: T | null = null) {}
+    async get() {
+        return this.data
+    }
+    async set(data: T) {
+        this.data = data
+    }
+
+    async reset() {
+        this.data = null
+    }
+}
+
+export { AsyncStorage }
 
 type UserData = { id: string }
 
