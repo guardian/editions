@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     },
     webview: {
         flex: 1,
+        overflow: 'hidden',
         /*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
