@@ -21,7 +21,7 @@ const createSettingsCacheIOS = <T = any>(key: string) => ({
     },
     get: async (): Promise<T | null> => Settings.get(key) || null,
     reset: async (): Promise<void> => {
-        Settings.set({ [key]: void 0 })
+        Settings.set({ [key]: null })
     },
 })
 
