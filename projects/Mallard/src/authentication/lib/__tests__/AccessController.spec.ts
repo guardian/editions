@@ -275,7 +275,7 @@ describe('AccessController', () => {
     })
 
     describe('asyncCaches', () => {
-        it('is purged after erroring auth requests', async () => {
+        it('is not purged after erroring auth requests', async () => {
             const cache = new AsyncStorage<UserData>()
             const cacheA = new AsyncStorage('a')
             const cacheB = new AsyncStorage(1)
@@ -287,6 +287,30 @@ describe('AccessController', () => {
                     async () => {
                         throw new Error()
                     },
+                    getValidUserData,
+                    () => false,
+                ),
+            } as const)
+
+            await expect(cacheA.get()).resolves.toEqual('a')
+            await expect(cacheB.get()).resolves.toEqual(1)
+
+            await controller.authorizerMap.a.runAuth()
+
+            await expect(cacheA.get()).resolves.toBe('a')
+            await expect(cacheB.get()).resolves.toBe(1)
+        })
+
+        it('is not purged after Invalid auth requests', async () => {
+            const cache = new AsyncStorage<UserData>()
+            const cacheA = new AsyncStorage('a')
+            const cacheB = new AsyncStorage(1)
+            const controller = new AccessController({
+                a: new Authorizer(
+                    'a',
+                    cache,
+                    [cacheA, cacheB] as const,
+                    getInvalidUserData,
                     getValidUserData,
                     () => false,
                 ),
