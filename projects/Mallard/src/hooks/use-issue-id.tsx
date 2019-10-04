@@ -26,8 +26,8 @@ export const useIssueCompositeKeyHandler = () => {
         'issue',
     )
 
-    console.log('path', path)
-    console.log('issue', issue)
+    // console.log('path', path)
+    // console.log('issue', issue)
 
     // This will mean that any page that has come "from" an issue (that is not
     // itself an issue), will have this previous issue marked as it's current

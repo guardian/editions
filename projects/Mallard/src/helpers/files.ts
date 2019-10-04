@@ -239,29 +239,25 @@ export const readIssueSummary = async () =>
 
 export const storeIssueSummary = async () => {
     const apiUrl = await getSetting('apiUrl')
-    return RNFetchBlob.config({
-        fileCache: true,
-        overwrite: true,
-    })
-        .fetch('GET', apiUrl + issueSummaryPath(), {
-            'Content-Type': 'application/json',
+    return (
+        RNFetchBlob.config({
+            fileCache: true,
+            overwrite: true,
         })
-        .then(async res => {
-            // console.log(FSPaths.issuesDir + '/daily-edition')
-            // await prepFileSystem()
-            // await RNFetchBlob.fs.unlink(
-            //     FSPaths.issuesDir + '/daily-edition/issues.json',
-            // )
-            // const fileExists = await RNFetchBlob.fs.exists(FSPaths.issuesDir + '/daily-edition/issues.json')
-
-            // Need to solve this being called multiple times
-            RNFetchBlob.fs
-                .mv(
-                    res.path(),
-                    FSPaths.issuesDir + '/daily-edition/issues.json',
-                )
-                .catch(e => console.log('supressing: ', e))
-            return res.json()
-        })
+            // @TODO: Refactor the URL here.
+            .fetch('GET', apiUrl + 'issues', {
+                'Content-Type': 'application/json',
+            })
+            .then(async res => {
+                await RNFetchBlob.fs
+                    .mv(
+                        res.path(),
+                        FSPaths.issuesDir + '/daily-edition/issues.json',
+                    )
+                    .catch(e => console.log('supressing: ', e))
+                return res.json()
+            })
+    )
+    // @TODO: Need to handle these errors nicely?
     // .catch(e => console.log(e))
 }
