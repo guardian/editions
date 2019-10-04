@@ -241,22 +241,17 @@ export const storeIssueSummary = async () => {
     const apiUrl = await getSetting('apiUrl')
     return (
         RNFetchBlob.config({
-            fileCache: true,
             overwrite: true,
+            path: FSPaths.issuesDir + '/daily-edition/issues.json',
         })
             // @TODO: Refactor the URL here.
             .fetch('GET', apiUrl + 'issues', {
                 'Content-Type': 'application/json',
             })
             .then(async res => {
-                await RNFetchBlob.fs
-                    .mv(
-                        res.path(),
-                        FSPaths.issuesDir + '/daily-edition/issues.json',
-                    )
-                    .catch(e => console.log('supressing: ', e))
                 return res.json()
             })
+            .catch(e => console.log('supressing: ', e))
     )
     // @TODO: Need to handle these errors nicely?
     // .catch(e => console.log(e))
