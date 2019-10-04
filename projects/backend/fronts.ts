@@ -1,6 +1,10 @@
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
-import { BlockElement, ArticleType } from '../common/src'
+import {
+    BlockElement,
+    ArticleType,
+    IssuePublicationIdentifier,
+} from '../common/src'
 import { CAPIContent, CArticle, getArticles } from './capi/articles'
 import {
     CAPIArticle,
@@ -32,6 +36,7 @@ import {
     withFailureMessage,
 } from './utils/try'
 import { articleShouldHaveDropCap, isHTMLElement } from './utils/article'
+import { issueObjectPathBuilder } from './utils/issue'
 
 // overrideArticleMainMedia may be false in most cases
 const getImage = (
@@ -261,25 +266,29 @@ const fetchPublishedIssue = async (
     edition: string,
     issueDate: string,
     frontId: string,
-    source: string,
+    version: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<PublishedIssue>> => {
-    const path: Path = {
-        key: `${edition}/${issueDate}/${source}.json`,
-        bucket: isPreview ? 'preview' : 'published',
+    const issue: IssuePublicationIdentifier = {
+        issueDate,
+        version,
+        edition,
     }
-    const resp = await s3fetch(path)
 
-    if (hasFailed(resp)) {
+    const path: Path = issueObjectPathBuilder(issue, isPreview)
+
+    const issueData = await s3fetch(path)
+
+    if (hasFailed(issueData)) {
         return withFailureMessage(
-            resp,
+            issueData,
             `Attempt to fetch ${issueDate} and ${frontId} failed.`,
         )
     }
 
-    lastModifiedUpdater(resp.lastModified)
+    lastModifiedUpdater(issueData.lastModified)
 
-    const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
+    const issueResponse: PublishedIssue = (await issueData.json()) as PublishedIssue
     return issueResponse
 }
 

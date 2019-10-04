@@ -5,6 +5,7 @@ import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
 import { s3List } from '../s3'
 import { Attempt, hasFailed } from '../utils/try'
+import { getEditionOrFallback } from '../utils/issue'
 
 export const LIVE_PAGE_SIZE = 7
 export const PREVIEW_PAGE_SIZE = 35
@@ -15,13 +16,13 @@ export const issueController = (req: Request, res: Response) => {
         isPreviewStage ? 'preview' : req.params.version,
     )
     const issueEdition = req.params.edition
-    const issueId: IssuePublicationIdentifier = {
+    const issue: IssuePublicationIdentifier = {
         issueDate,
         version,
         edition: issueEdition,
     }
     console.log(`${req.url}: request for issue ${issueDate}`)
-    getIssue(issueId)
+    getIssue(issue)
         .then(data => {
             if (data === 'notfound') {
                 res.sendStatus(404)
@@ -34,11 +35,8 @@ export const issueController = (req: Request, res: Response) => {
         .catch(e => console.error(e))
 }
 
-const getEditionOrFallback = (editionType: string) =>
-    editionType ? editionType : 'daily-edition'
-
 export const getIssuesSummary = async (
-    editionType: string,
+    maybeEdition: string,
     isPreview: boolean,
 ): Promise<Attempt<IssueSummary[]>> => {
     /**
@@ -46,7 +44,7 @@ export const getIssuesSummary = async (
      * to support /issues path
      * TODO to delete in the future
      */
-    const edition = getEditionOrFallback(editionType)
+    const edition = getEditionOrFallback(maybeEdition)
     const issueKeys = await s3List({
         key: `${edition}/`,
         bucket: isPreview ? 'preview' : 'published',
@@ -63,7 +61,7 @@ export const getIssuesSummary = async (
             const publicationDate = lastModified
             const version = filename.replace('.json', '')
             return {
-                edition: editionType,
+                edition,
                 issueDate,
                 version,
                 publicationDate,

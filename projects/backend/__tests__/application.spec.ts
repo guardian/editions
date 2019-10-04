@@ -2,9 +2,7 @@ import { Request, Response } from 'express'
 import { EditionsBackendControllers, createApp } from '../application'
 import chai from 'chai'
 import chaiHttp from 'chai-http'
-import * as http from 'http'
 
-// Configure chai
 chai.use(chaiHttp)
 chai.should()
 
@@ -21,10 +19,8 @@ const testStubControllers: EditionsBackendControllers = {
     imageColourController: stub,
 }
 
-const previewApp = createApp(testStubControllers, true)
-const versionedApp = createApp(testStubControllers, false)
-
 describe('Endpoints contract test for Preview Editions Backend application', () => {
+    const previewApp = createApp(testStubControllers, true)
     it('should return 404 for non registered endpoints', done => {
         chai.request(previewApp)
             .get('/non-exisitent')
@@ -56,6 +52,7 @@ describe('Endpoints contract test for Preview Editions Backend application', () 
 })
 
 describe('Endpoints contract test for Versioned Editions Backend application', () => {
+    const versionedApp = createApp(testStubControllers, false)
     const version = '2019-10-02T16:50:56.015Z'
     it('should return 404 for non registered endpoints', done => {
         chai.request(versionedApp)
