@@ -12,6 +12,7 @@ import { Line } from './line'
 import { breakSides } from './helpers/layout'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Quotes } from './icon/quotes'
+import { Rating } from './rating'
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -107,6 +108,11 @@ export const headerStyles = ({
         z-index: 99;
         position: relative;
     }
+    .header-image > * {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
@@ -151,11 +157,12 @@ export const headerStyles = ({
     }
 
     .header-opinion-flex > :last-child {
-        width: 30%;
+        width: 15%;
+        flex: 0 0 auto;
     }
 
     .header-opinion-flex > :last-child img {
-        width: 250%;
+        width: 240%;
         display: block;
         float: right;
     }
@@ -309,16 +316,20 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
 const ImageRatio = ({
     image,
     className,
+    children,
 }: {
     image: ImageT
     className?: string
+    children?: string
 }) => {
     const path = useImagePath(image)
     return html`
         <div
             class="image-as-bg ${className}"
             style="background-image: url(${path}); "
-        ></div>
+        >
+            ${children}
+        </div>
     `
 }
 
@@ -362,6 +373,9 @@ const Header = ({
                         ImageRatio({
                             className: 'header-image',
                             image: headerProps.image,
+                            children: headerProps.starRating
+                                ? Rating(headerProps)
+                                : Rating(headerProps),
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
                     ${largeByline
