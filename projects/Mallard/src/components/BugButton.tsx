@@ -1,10 +1,10 @@
 import React from 'react'
 import { useContext } from 'react'
-import { AuthContext } from 'src/authentication/auth-context'
 import { createMailtoHandler } from 'src/helpers/diagnostics'
 import { Button } from './button/button'
 import { isInBeta } from 'src/helpers/release-stream'
 import { StyleSheet } from 'react-native'
+import { AccessContext } from 'src/authentication/AccessContext'
 
 const styles = StyleSheet.create({
     button: {
@@ -16,11 +16,11 @@ const styles = StyleSheet.create({
 })
 
 const BugButton = () => {
-    const { status } = useContext(AuthContext)
+    const { attempt } = useContext(AccessContext)
     return isInBeta() ? (
         <Button
             style={styles.button}
-            onPress={createMailtoHandler('Report a bug', '', status)}
+            onPress={createMailtoHandler('Report a bug', '', attempt)}
             alt="Report a bug"
             icon=""
         />
