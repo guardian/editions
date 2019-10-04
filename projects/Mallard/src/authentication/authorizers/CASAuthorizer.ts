@@ -8,15 +8,15 @@ import { Authorizer } from '../lib/Authorizer'
 import { flat, ValidResult, ErrorResult } from '../lib/Result'
 import { fetchCASSubscription } from '../services/cas'
 
-export default new Authorizer(
-    'cas',
-    casDataCache,
-    [
+export default new Authorizer({
+    name: 'cas',
+    userDataCache: casDataCache,
+    authCaches: [
         casCredentialsKeychain,
         legacyCASUsernameCache,
         legacyCASPasswordCache,
     ] as const,
-    async ([subscriberId, password]: [string, string], [creds]) => {
+    auth: async ([subscriberId, password]: [string, string], [creds]) => {
         const casResult = await fetchCASSubscription(subscriberId, password)
         return flat(casResult, async expiry => {
             creds.set({
@@ -26,19 +26,24 @@ export default new Authorizer(
             return ValidResult(expiry)
         })
     },
-    async ([credsCache, luser, lpass]) => {
+    authWithCachedCredentials: async ([
+        credsCache,
+        lsubscriberIdCache,
+        lpasswordCache,
+    ]) => {
         const creds = await credsCache.get()
 
         if (creds) return fetchCASSubscription(creds.username, creds.password)
 
         const [username, password] = await Promise.all([
-            luser.get(),
-            lpass.get(),
+            lsubscriberIdCache.get(),
+            lpasswordCache.get(),
         ])
         if (username && password) {
             return fetchCASSubscription(username, password)
         }
         return ErrorResult()
     },
-    expiry => new Date(expiry.expiryDate).getTime() > Date.now(),
-)
+    checkUserHasAccess: expiry =>
+        new Date(expiry.expiryDate).getTime() > Date.now(),
+})

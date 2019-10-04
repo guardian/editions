@@ -6,11 +6,11 @@ import {
     tryRestoreActiveIOSSubscriptionReceipt,
 } from '../services/iap'
 
-export default new Authorizer(
-    'iap',
-    iapReceiptCache,
-    [],
-    tryRestoreActiveIOSSubscriptionReceipt,
-    fetchActiveIOSSubscriptionReceipt,
-    isReceiptActive,
-)
+export default new Authorizer({
+    name: 'iap',
+    userDataCache: iapReceiptCache,
+    authCaches: [],
+    auth: tryRestoreActiveIOSSubscriptionReceipt,
+    authWithCachedCredentials: fetchActiveIOSSubscriptionReceipt,
+    checkUserHasAccess: isReceiptActive,
+})

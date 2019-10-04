@@ -46,16 +46,18 @@ const createSimpleAccessController = ({
     )
 
     const controller = new AccessController({
-        a: new Authorizer(
-            'a',
-            cache,
-            [] as AsyncCache<any>[],
-            invalidFromLiveCredentials ? getInvalidUserData : getValidUserData,
-            invalidFromCachedCredentials
+        a: new Authorizer({
+            name: 'a',
+            userDataCache: cache,
+            authCaches: [] as AsyncCache<any>[],
+            auth: invalidFromLiveCredentials
                 ? getInvalidUserData
                 : getValidUserData,
-            () => grantAccessFromUserData,
-        ),
+            authWithCachedCredentials: invalidFromCachedCredentials
+                ? getInvalidUserData
+                : getValidUserData,
+            checkUserHasAccess: () => grantAccessFromUserData,
+        }),
     })
 
     controller.subscribe(handler)
@@ -85,16 +87,16 @@ describe('AccessController', () => {
         const cache = new AsyncStorage<UserData>({ id: '123' })
 
         const controller = new AccessController({
-            a: new Authorizer(
-                'a',
-                cache,
-                [] as AsyncCache<any>[],
-                async () => {
+            a: new Authorizer({
+                name: 'a',
+                userDataCache: cache,
+                authCaches: [] as AsyncCache<any>[],
+                auth: async () => {
                     throw new Error()
                 },
-                getValidUserData,
-                () => true,
-            ),
+                authWithCachedCredentials: getValidUserData,
+                checkUserHasAccess: () => true,
+            }),
         })
 
         controller.subscribe(handler)
@@ -206,19 +208,19 @@ describe('AccessController', () => {
             let arg: string | null = null
             const cache = new AsyncStorage<UserData>({ id: '123' })
             const controller = new AccessController({
-                a: new Authorizer(
-                    'a',
-                    cache,
-                    [] as AsyncCache<any>[],
-                    async ([a]: [string]) => {
+                a: new Authorizer({
+                    name: 'a',
+                    userDataCache: cache,
+                    authCaches: [] as AsyncCache<any>[],
+                    auth: async ([a]: [string]) => {
                         arg = a
                         return ValidResult({
                             id: '123',
                         })
                     },
-                    getValidUserData,
-                    () => true,
-                ),
+                    authWithCachedCredentials: getValidUserData,
+                    checkUserHasAccess: () => true,
+                }),
             })
 
             await controller.authorizerMap.a.runAuth('sstring')
@@ -280,17 +282,17 @@ describe('AccessController', () => {
             const cacheA = new AsyncStorage('a')
             const cacheB = new AsyncStorage(1)
             const controller = new AccessController({
-                a: new Authorizer(
-                    'a',
-                    cache,
-                    [cacheA, cacheB] as const,
-                    async () => {
+                a: new Authorizer({
+                    name: 'a',
+                    userDataCache: cache,
+                    authCaches: [cacheA, cacheB] as const,
+                    auth: async (): Promise<AuthResult<UserData>> => {
                         throw new Error()
                     },
-                    getValidUserData,
-                    () => false,
-                ),
-            } as const)
+                    authWithCachedCredentials: getValidUserData,
+                    checkUserHasAccess: () => false,
+                }),
+            })
 
             await expect(cacheA.get()).resolves.toEqual('a')
             await expect(cacheB.get()).resolves.toEqual(1)
@@ -306,15 +308,15 @@ describe('AccessController', () => {
             const cacheA = new AsyncStorage('a')
             const cacheB = new AsyncStorage(1)
             const controller = new AccessController({
-                a: new Authorizer(
-                    'a',
-                    cache,
-                    [cacheA, cacheB] as const,
-                    getInvalidUserData,
-                    getValidUserData,
-                    () => false,
-                ),
-            } as const)
+                a: new Authorizer({
+                    name: 'a',
+                    userDataCache: cache,
+                    authCaches: [cacheA, cacheB] as const,
+                    auth: getInvalidUserData,
+                    authWithCachedCredentials: getValidUserData,
+                    checkUserHasAccess: () => false,
+                }),
+            })
 
             await expect(cacheA.get()).resolves.toEqual('a')
             await expect(cacheB.get()).resolves.toEqual(1)

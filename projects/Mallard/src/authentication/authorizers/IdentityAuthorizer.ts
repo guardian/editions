@@ -64,15 +64,15 @@ const getUserNameFromParams = (params: AuthParams) => {
     return x
 }
 
-export default new Authorizer(
-    'identity',
+export default new Authorizer({
+    name: 'identity',
     userDataCache,
-    [
+    authCaches: [
         userAccessTokenKeychain,
         membershipAccessTokenKeychain,
         legacyUserAccessTokenKeychain,
     ] as const,
-    async ([params]: [AuthParams], [utc, mtc]) => {
+    auth: async ([params]: [AuthParams], [utc, mtc]) => {
         const username = getUserNameFromParams(params)
         const utokenResult = await fetchAuth<string>(params)
         return flat(utokenResult, async utoken => {
@@ -84,7 +84,7 @@ export default new Authorizer(
             })
         })
     },
-    async ([utc, mtc, lutc]) => {
+    authWithCachedCredentials: async ([utc, mtc, lutc]) => {
         const [nutoken, lutoken, mtoken] = await Promise.all([
             utc.get(),
             lutc.get(),
@@ -94,5 +94,5 @@ export default new Authorizer(
         if (!utoken || !mtoken) return InvalidResult()
         return authWithTokens(utoken.password, mtoken.password)
     },
-    canViewEdition,
-)
+    checkUserHasAccess: canViewEdition,
+})

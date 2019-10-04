@@ -25,28 +25,46 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
     private subscribers: UpdateHandler<T>[] = []
     private attempt: AnyAttempt<T> = NotRun
     private accessAttempt: AnyAttempt<string> = NotRun
+    readonly name: string
+    private userDataCache: AsyncCache<T>
+    private authCaches: C
+    /**
+     * the main method for authing against a backend, takes the raw credentials
+     * that would be input by the user and returns either an object representing
+     * the valid data representing a known user, or null when they failed to
+     * authenticate. All errors thrown will be caught and will set create an InvalidAttempt.
+     */
+    private auth: (args: A, caches: C) => Promise<AuthResult<T>>
+    /**
+     * This should hit live endpoints with credentials stored on the
+     * device (probably the keychain), in order to re-validate a user
+     * e.g. at app open. This basically for silently logging in a user.
+     */
+    private authWithCachedCredentials: (authCaches: C) => Promise<AuthResult<T>>
+    private checkUserHasAccess: (data: T) => boolean
 
-    constructor(
-        readonly name: string,
-        private userDataCache: AsyncCache<T>,
-        private authCaches: C,
-        /**
-         * the main method for authing against a backend, takes the raw credentials
-         * that would be input by the user and returns either an object representing
-         * the valid data representing a known user, or null when they failed to
-         * authenticate. All errors thrown will be caught and will set create an InvalidAttempt.
-         */
-        private auth: (args: A, caches: C) => Promise<AuthResult<T>>,
-        /**
-         * This should hit live endpoints with credentials stored on the
-         * device (probably the keychain), in order to re-validate a user
-         * e.g. at app open. This basically for silently logging in a user.
-         */
-        private authWithCachedCredentials: (
-            authCaches: C,
-        ) => Promise<AuthResult<T>>,
-        private checkUserHasAccess: (data: T) => boolean,
-    ) {}
+    constructor({
+        name,
+        userDataCache,
+        authCaches,
+        auth,
+        authWithCachedCredentials,
+        checkUserHasAccess,
+    }: {
+        name: string
+        userDataCache: AsyncCache<T>
+        authCaches: C
+        auth: (args: A, caches: C) => Promise<AuthResult<T>>
+        authWithCachedCredentials: (authCaches: C) => Promise<AuthResult<T>>
+        checkUserHasAccess: (data: T) => boolean
+    }) {
+        this.name = name
+        this.userDataCache = userDataCache
+        this.authCaches = authCaches
+        this.auth = auth
+        this.authWithCachedCredentials = authWithCachedCredentials
+        this.checkUserHasAccess = checkUserHasAccess
+    }
 
     private async handleAuthPromise(
         promise: Promise<AuthResult<T>>,
