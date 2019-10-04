@@ -30,6 +30,7 @@ export const selectImagePath = async (
     const fs = getFsPath(localIssueId, { source, path }, imageSize)
     const fsExists = await RNFetchBlob.fs.exists(fs)
     return fsExists ? fs : api
+    //should this be a file url
 }
 
 const compressImagePath = async (path: string, width: number) => {
