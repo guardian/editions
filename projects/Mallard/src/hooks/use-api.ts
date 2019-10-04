@@ -8,10 +8,12 @@ import { storeIssueSummary, readIssueSummary } from '../helpers/files'
 
 export const getIssueSummaryNew = () => {
     const { isConnected } = useNetInfo()
+    console.log(isConnected)
 
     return {
         type: 'promise',
-        getValue: isConnected ? storeIssueSummary : readIssueSummary,
+        // getValue: isConnected ? storeIssueSummary : readIssueSummary,
+        getValue: storeIssueSummary,
     }
 }
 

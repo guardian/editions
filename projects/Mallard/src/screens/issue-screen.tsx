@@ -323,7 +323,10 @@ export const IssueScreen = () => {
             {response({
                 pending: handlePending,
                 error: handleError,
-                success: path => <IssueScreenWithPath path={path} />,
+                success: path => {
+                    console.log(path)
+                    return <IssueScreenWithPath path={path} />
+                },
             })}
         </Container>
     )

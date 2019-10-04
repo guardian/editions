@@ -5,7 +5,7 @@ import {
     IssueNavigationProps,
 } from 'src/navigation/helpers/base'
 import { PathToIssue } from 'src/paths'
-import { getIssueSummary } from './use-api'
+import { getIssueSummary, getIssueSummaryNew } from './use-api'
 import { useCachedOrPromise } from './use-cached-or-promise'
 
 /**
@@ -25,6 +25,9 @@ export const useIssueCompositeKeyHandler = () => {
     const issue: IssueNavigationProps['issue'] | undefined = nav.getParam(
         'issue',
     )
+
+    console.log('path', path)
+    console.log('issue', issue)
 
     // This will mean that any page that has come "from" an issue (that is not
     // itself an issue), will have this previous issue marked as it's current
@@ -79,6 +82,7 @@ export const useIssueCompositeKeyHandler = () => {
     }): R => {
         switch (response.state) {
             case 'pending': {
+                console.log('pend')
                 return fromNav ? success(fromNav) : pending()
             }
             case 'success': {
