@@ -1,6 +1,12 @@
 import { GENERIC_AUTH_ERROR } from 'src/helpers/words'
 
 type ValidResult<T> = { type: 'valid-result'; data: T }
+/**
+ * the difference between these two is a signal to the Authorizer
+ * that we should clear our authCaches if we receive and InvalidResult
+ * whereas an ErrorResult is exceptional, does not mean we have
+ * invalid credentials so we should keep the caches
+ **/
 type InvalidResult = { type: 'invalid-result'; reason?: string }
 type ErrorResult = { type: 'error-result'; reason?: string }
 
