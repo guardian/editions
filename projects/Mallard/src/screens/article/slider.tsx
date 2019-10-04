@@ -72,6 +72,10 @@ const styles = StyleSheet.create({
     sliderBorder: {
         borderBottomColor: color.line,
     },
+    androidPager: {
+        flexGrow: 1,
+        width: '100%',
+    },
 })
 
 const SliderBar = ({
@@ -169,7 +173,7 @@ const ArticleSlider = ({
                     style={!articleIsAtTop && styles.sliderBorder}
                 />
                 <ViewPagerAndroid
-                    style={{ flexGrow: 1, width: '100%' }}
+                    style={styles.androidPager}
                     initialPage={startingPoint}
                     onPageSelected={(ev: any) => {
                         setCurrent(ev.nativeEvent.position)
