@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react'
+import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
-import { Image, Issue } from '../../../common/src'
+import { Image, ImageSize, Issue } from '../../../common/src'
 import { useIssueCompositeKey } from './use-issue-id'
 import { useSettingsValue } from './use-settings'
-import ImageResizer from 'react-native-image-resizer'
+
+const getFsPath = (
+    localIssueId: Issue['localId'],
+    { source, path }: Image,
+    size: ImageSize,
+) => FSPaths.media(localIssueId, source, path, size)
 
 const selectImagePath = async (
     apiUrl: string,
@@ -20,9 +26,12 @@ const selectImagePath = async (
         source,
         path,
     )}`
-    const fs = FSPaths.media(localIssueId, source, path)
+
+    const fs = getFsPath(localIssueId, { source, path }, imageSize)
+    console.log(fs)
     const fsExists = await RNFetchBlob.fs.exists(fs)
     return fsExists ? fs : api
+    //should this be a file url
 }
 
 const compressImagePath = async (path: string, width: number) => {
@@ -34,7 +43,7 @@ const compressImagePath = async (path: string, width: number) => {
         100,
         0,
     )
-    return resized.path
+    return resized.uri
 }
 
 /**
@@ -62,7 +71,7 @@ const useImagePath = (image?: Image) => {
     }, [
         apiUrl,
         image,
-        key ? key.publishedIssueId : undefined,
+        key ? key.publishedIssueId : undefined, // Why isn't this just key?
         key ? key.localIssueId : undefined,
     ])
     if (image === undefined) return undefined
