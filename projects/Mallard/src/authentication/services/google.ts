@@ -1,4 +1,3 @@
-import { fetchAndPersistUserAccessTokenWithType } from '../helpers'
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { GOOGLE_CLIENT_ID } from '../../constants'
 import qs from 'query-string'
@@ -73,9 +72,7 @@ const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
             invariant(params.code, 'Something went wrong')
 
             return getGoogleTokenFromCode(params.code as string)
-        }).then(fbToken =>
-            fetchAndPersistUserAccessTokenWithType('google', fbToken),
-        ),
+        }),
     )
 
 export { googleAuthWithDeepRedirect }

@@ -2,8 +2,8 @@ import RNIAP, { Purchase } from 'react-native-iap'
 import { Platform } from 'react-native'
 import { ITUNES_CONNECT_SHARED_SECRET, USE_SANDBOX_IAP } from 'src/constants'
 import { ReceiptValidationResponse } from 'react-native-iap/apple'
-import { authTypeFromIAP } from 'src/authentication/credentials-chain'
 import { NativeModules } from 'react-native'
+import { InvalidResult, AuthResult, ValidResult } from '../lib/Result'
 const { InAppUtils } = NativeModules
 
 export interface ReceiptIOS {
@@ -52,20 +52,22 @@ const findValidReceipt = (receipt: ReceiptValidationResponse) =>
 /**
  * This will attempt to restore existing purchases
  */
-const restoreActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> => {
-    if (Platform.OS !== 'ios') return null
-    const purchases = await RNIAP.getAvailablePurchases()
-    const mostRecentReceipt = getMostRecentTransactionReceipt(purchases)
-    if (!mostRecentReceipt) return null
-    const decodedReceipt = await fetchDecodeReceipt(mostRecentReceipt)
-    if (!decodedReceipt) return null
-    return findValidReceipt(decodedReceipt)
+const tryRestoreActiveIOSSubscriptionReceipt = async (): Promise<
+    AuthResult<ReceiptIOS>
+> => {
+    try {
+        if (Platform.OS !== 'ios') return InvalidResult()
+        const purchases = await RNIAP.getAvailablePurchases()
+        const mostRecentReceipt = getMostRecentTransactionReceipt(purchases)
+        if (!mostRecentReceipt) return InvalidResult()
+        const decodedReceipt = await fetchDecodeReceipt(mostRecentReceipt)
+        if (!decodedReceipt) return InvalidResult()
+        const validReceipt = findValidReceipt(decodedReceipt)
+        return validReceipt ? ValidResult(validReceipt) : InvalidResult()
+    } catch {
+        return InvalidResult()
+    }
 }
-
-const tryToRestoreActiveIOSSubscriptionToAuth = () =>
-    restoreActiveIOSSubscriptionReceipt()
-        .then(authTypeFromIAP)
-        .catch(() => false as const)
 
 const getReceiptData = (): Promise<string> =>
     new Promise((res, rej) =>
@@ -79,21 +81,24 @@ const getReceiptData = (): Promise<string> =>
     )
 
 // This will attempt to look for the existing receipt without trying to restore those purchases
-const fetchActiveIOSSubscriptionReceipt = async (): Promise<ReceiptIOS | null> => {
-    if (Platform.OS !== 'ios') return null
+const fetchActiveIOSSubscriptionReceipt = async (): Promise<
+    AuthResult<ReceiptIOS>
+> => {
+    if (Platform.OS !== 'ios') return InvalidResult()
     let receipt: string | undefined
     try {
         receipt = await getReceiptData()
     } catch (e) {
-        return null
+        return InvalidResult()
     }
     const decodedReceipt = await fetchDecodeReceipt(receipt)
-    if (!decodedReceipt) return null
-    return findValidReceipt(decodedReceipt)
+    if (!decodedReceipt) return InvalidResult()
+    const validReceipt = findValidReceipt(decodedReceipt)
+    return validReceipt ? ValidResult(validReceipt) : InvalidResult()
 }
 
 export {
     fetchActiveIOSSubscriptionReceipt,
-    tryToRestoreActiveIOSSubscriptionToAuth,
+    tryRestoreActiveIOSSubscriptionReceipt,
     isReceiptActive,
 }
