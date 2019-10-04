@@ -1,16 +1,18 @@
-import { html, css, getScaledFontCss, px } from 'src/helpers/webview'
-import { ArticleHeaderProps } from '../article-header/types'
-import { defaultSettings } from 'src/helpers/settings/defaults'
-import { Issue, mediaPath, Image as ImageT, ArticleType } from 'src/common'
-import { families } from 'src/theme/typography'
-import { color } from 'src/theme/color'
 import { PillarColours } from '@guardian/pasteup/palette'
-import { WrapLayout } from '../wrap/wrap'
-import { metrics } from 'src/theme/spacing'
-import { Breakpoints } from 'src/theme/breakpoints'
-import { Line } from './line'
-import { breakSides } from './helpers/layout'
+import { ArticleType, Image as ImageT, Issue } from 'src/common'
+import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { useImagePath } from 'src/hooks/use-image-paths'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
+import { ArticleHeaderProps } from '../article-header/types'
+import { WrapLayout } from '../wrap/wrap'
+import { breakSides } from './helpers/layout'
+import { Quotes } from './icon/quotes'
+import { Line } from './line'
+import { Rating } from './rating'
+import { CreditedImage } from '../../../../../common/src'
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -85,6 +87,8 @@ export const headerStyles = ({
     .header-container-line-wrap,
     .header-container {
         position: relative;
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
     }
     .header-container-line-wrap {
         z-index: 100;
@@ -106,6 +110,11 @@ export const headerStyles = ({
         z-index: 99;
         position: relative;
     }
+    .header-image > .review {
+        position: absolute;
+        bottom:0;
+        left:0;
+    }
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
@@ -126,11 +135,34 @@ export const headerStyles = ({
         margin: 0.1em 1em 0.75em 0;
         word-wrap: none;
     }
-    .header-byline {
+    .header h1 svg {
+        height: .7em;
+        transform: scale(1.1);
+        width: auto;
+        fill: ${colors.main};
+    }
+    .header-byline:not(:empty) {
         font-weight: 600;
         padding: 0.25rem 0 2rem;
         color: ${colors.main};
+        position: relative;
     }
+    .header-byline:not(:empty):after {
+        content: '';
+        display: block;
+        height: 1px;
+        background-color: ${color.dimLine};
+        position: absolute;
+        bottom: -1px;
+        left: ${px(metrics.article.sidesTablet * -1)};
+        right: ${px(metrics.article.sidesTablet * -1)};
+    }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-byline:not(:empty):after {
+            left: 0;
+        }
+    }
+
     .header-container:after {
         content: '';
         display: block;
@@ -140,15 +172,20 @@ export const headerStyles = ({
     .header-opinion-flex {
         display: flex;
         align-items: flex-end;
-        overflow: hidden;
+    }
+
+    .header-opinion-flex > :first-child {
+        flex: 1 1 0;
     }
 
     .header-opinion-flex > :last-child {
-        width: 30%;
+        width: 15%;
+        overflow: visible;
+        flex: 0 0 auto;
     }
 
     .header-opinion-flex > :last-child img {
-        width: 250%;
+        width: 240%;
         display: block;
         float: right;
     }
@@ -157,6 +194,44 @@ export const headerStyles = ({
         display: block;
         padding-top: 60%;
         background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .image-as-bg-info {
+        position: absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+        padding: ${px(metrics.vertical)} ${px(metrics.horizontal)};
+        color: ${color.palette.neutral[100]};
+        background: rgba(20,20,20,.8);
+        font-family: ${families.sans.regular};
+        z-index: 1;
+        display:none;
+    }
+
+    .image-as-bg[data-open=true] .image-as-bg-info {
+        display:block;
+    }
+
+    .image-as-bg > button {
+        position: absolute;
+        bottom: ${px(metrics.vertical)};
+        right: ${px(metrics.horizontal)};
+        z-index: 2;
+        font-family: ${families.icon.regular};
+        background-color: ${colors.main};
+        color: ${color.textOverDarkBackground};
+        border:none;
+        width: 2em;
+        height: 2em;
+        display: block;
+        line-height: .9;
+        text-align: center;
+        font-size: 1.2em;
+        border-radius: 100%;
     }
 
     /*review*/
@@ -164,7 +239,7 @@ export const headerStyles = ({
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='review'] .header-bg {
-        background-color: ${colors.dark};
+        background-color: ${colors.faded};
     }
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
@@ -194,7 +269,7 @@ export const headerStyles = ({
     .header-container[data-type='opinion'] h1 {
         font-family: ${families.headline.light};
     }
-    .header-container[data-type='opinion'] h1 span {
+    .header-container[data-type='opinion'] h1 .header-top-byline {
         color: ${colors.main};
         display: block;
         font-family: ${families.titlepiece.regular};
@@ -212,12 +287,17 @@ export const headerStyles = ({
         display: none;
     }
     .header-container[data-type='analysis'] .header-byline {
-        color: ${color.text};
+        color: ${color.palette.neutral[46]};
     }
     .header-container[data-type='analysis'] h1 {
         font-family: ${families.headline.light};
     }
-    .header-container[data-type='analysis'] h1 span {
+    .header-container[data-type='analysis'] h1 .header-top-headline {
+        text-decoration: underline;
+        text-decoration-color: ${colors.main};
+        text-decoration-thickness: 1px;
+    }
+    .header-container[data-type='analysis'] h1 .header-top-byline {
         color: ${colors.main};
         display: block;
         font-family: ${families.titlepiece.regular};
@@ -294,19 +374,31 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
     `
 }
 
-const ImageRatio = ({
+const ImageAsBg = ({
     image,
     className,
+    children,
 }: {
-    image: ImageT
+    image: CreditedImage
     className?: string
+    children?: string
 }) => {
     const path = useImagePath(image)
     return html`
         <div
             class="image-as-bg ${className}"
             style="background-image: url(${path}); "
-        ></div>
+            data-open="false"
+        >
+            <button
+                aria-hidden
+                onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+            >
+                
+            </button>
+            <div class="image-as-bg-info">${image.credit}</div>
+            ${children}
+        </div>
     `
 }
 
@@ -336,7 +428,7 @@ const Header = ({
         ${immersive &&
             headerProps.image &&
             publishedId &&
-            ImageRatio({
+            ImageAsBg({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
             })}
@@ -347,9 +439,12 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        ImageRatio({
+                        ImageAsBg({
                             className: 'header-image',
                             image: headerProps.image,
+                            children: headerProps.starRating
+                                ? Rating(headerProps)
+                                : undefined,
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
                     ${largeByline
@@ -359,8 +454,14 @@ const Header = ({
                                       class="${cutout && `header-opinion-flex`}"
                                   >
                                       <h1>
-                                          ${headerProps.headline}
-                                          <span>${headerProps.byline}</span>
+                                          ${type === ArticleType.Opinion &&
+                                              Quotes()}
+                                          <span class="header-top-headline"
+                                              >${headerProps.headline}</span
+                                          >
+                                          <span class="header-top-byline"
+                                              >${headerProps.byline}</span
+                                          >
                                       </h1>
                                       ${publishedId &&
                                           cutout &&

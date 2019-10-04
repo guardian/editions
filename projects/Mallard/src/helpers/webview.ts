@@ -120,6 +120,9 @@ export const makeHtml = ({
                 window.setInterval(function() {
                     submitHeight()
                 }, 500)
+                window.addEventListener('scroll', function() {
+                    submitHeight()
+                })
                 submitHeight()
             </script>
         </body>

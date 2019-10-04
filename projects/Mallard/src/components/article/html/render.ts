@@ -25,20 +25,18 @@ import { Image, imageStyles } from './images'
 import { Pullquote, quoteStyles } from './pull-quote'
 import { lineStyles, Line } from './line'
 import { useImageSize } from 'src/hooks/use-image-size'
+import { ratingStyles } from './rating'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss(families.text.regular)}
+    ${generateAssetsFontCss(families.icon.regular)}
     ${generateAssetsFontCss(families.headline.light)}
     ${generateAssetsFontCss(families.headline.regular)}
     ${generateAssetsFontCss(families.headline.bold)}
     ${generateAssetsFontCss(families.sans.regular)}
     ${generateAssetsFontCss(families.titlepiece.regular)}
-    ${quoteStyles({
-        colors,
-        wrapLayout,
-    })}
     html, body {
         overflow-x: hidden;
     }
@@ -113,12 +111,17 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     .content-wrap .line {
         margin-right: ${px(metrics.article.sidesTablet * -1)};
     }
+    ${quoteStyles({
+        colors,
+        wrapLayout,
+    })}
     ${headerStyles({
         colors,
         wrapLayout,
     })}
     ${imageStyles({ colors, wrapLayout })}
     ${lineStyles({ colors, wrapLayout })}
+    ${ratingStyles({ colors, wrapLayout })}
 `
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
