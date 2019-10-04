@@ -83,7 +83,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         animation-fill-mode: both;
     }
     main, .wrapper {
-        width: ${px(wrapLayout.content.width + metrics.sides.sides / 2)};
+        max-width: ${px(wrapLayout.content.width + metrics.sides.sides / 2)};
     }
     #app p,
     figure {
