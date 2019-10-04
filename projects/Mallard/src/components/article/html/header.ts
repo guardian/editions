@@ -12,6 +12,7 @@ import { breakSides } from './helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
+import { CreditedImage } from '../../../../../common/src'
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -109,7 +110,7 @@ export const headerStyles = ({
         z-index: 99;
         position: relative;
     }
-    .header-image > * {
+    .header-image > .review {
         position: absolute;
         bottom:0;
         left:0;
@@ -194,6 +195,43 @@ export const headerStyles = ({
         padding-top: 60%;
         background-size: cover;
         background-position: center;
+        position: relative;
+    }
+
+    .image-as-bg-info {
+        position: absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+        padding: ${px(metrics.vertical)} ${px(metrics.horizontal)};
+        color: ${color.palette.neutral[100]};
+        background: rgba(20,20,20,.8);
+        font-family: ${families.sans.regular};
+        z-index: 1;
+        display:none;
+    }
+
+    .image-as-bg[data-open=true] .image-as-bg-info {
+        display:block;
+    }
+
+    .image-as-bg > button {
+        position: absolute;
+        bottom: ${px(metrics.vertical)};
+        right: ${px(metrics.horizontal)};
+        z-index: 2;
+        font-family: ${families.icon.regular};
+        background-color: ${colors.main};
+        color: ${color.textOverDarkBackground};
+        border:none;
+        width: 2em;
+        height: 2em;
+        display: block;
+        line-height: .9;
+        text-align: center;
+        font-size: 1.2em;
+        border-radius: 100%;
     }
 
     /*review*/
@@ -336,12 +374,12 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
     `
 }
 
-const ImageRatio = ({
+const ImageAsBg = ({
     image,
     className,
     children,
 }: {
-    image: ImageT
+    image: CreditedImage
     className?: string
     children?: string
 }) => {
@@ -350,7 +388,15 @@ const ImageRatio = ({
         <div
             class="image-as-bg ${className}"
             style="background-image: url(${path}); "
+            data-open="false"
         >
+            <button
+                aria-hidden
+                onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+            >
+                
+            </button>
+            <div class="image-as-bg-info">${image.credit}</div>
             ${children}
         </div>
     `
@@ -382,7 +428,7 @@ const Header = ({
         ${immersive &&
             headerProps.image &&
             publishedId &&
-            ImageRatio({
+            ImageAsBg({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
             })}
@@ -393,7 +439,7 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        ImageRatio({
+                        ImageAsBg({
                             className: 'header-image',
                             image: headerProps.image,
                             children: headerProps.starRating
