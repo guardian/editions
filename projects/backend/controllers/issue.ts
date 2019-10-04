@@ -5,7 +5,10 @@ import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
 import { s3List } from '../s3'
 import { Attempt, hasFailed } from '../utils/try'
-import { getEditionOrFallback } from '../utils/issue'
+import {
+    buildEditionRootPath as buildEditionPath,
+    getEditionOrFallback,
+} from '../utils/issue'
 
 export const LIVE_PAGE_SIZE = 7
 export const PREVIEW_PAGE_SIZE = 35
@@ -45,10 +48,9 @@ export const getIssuesSummary = async (
      * TODO to delete in the future
      */
     const edition = getEditionOrFallback(maybeEdition)
-    const issueKeys = await s3List({
-        key: `${edition}/`,
-        bucket: isPreview ? 'preview' : 'published',
-    })
+    const editionPath = buildEditionPath(maybeEdition, isPreview)
+    console.log('listing objects at path:', editionPath)
+    const issueKeys = await s3List(editionPath)
 
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
