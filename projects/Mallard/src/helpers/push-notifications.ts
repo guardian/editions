@@ -8,7 +8,7 @@ import {
     matchSummmaryToKey,
 } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
-import { getIssueSummary, getIssueSummaryNew } from 'src/hooks/use-api'
+import { getIssueSummaryNew } from 'src/hooks/use-api'
 import { pushNotificationRegistrationCache } from './storage'
 
 export interface PushNotificationRegistration {
