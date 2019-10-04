@@ -131,6 +131,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
      */
     public toAccessAttempt(attempt: AnyAttempt<T>): AnyAttempt<string> {
         if (isNotRun(attempt)) return attempt
+        try {
         return isValid(attempt) && this.checkUserHasAccess(attempt.data)
             ? ValidAttempt(this.name, attempt.connectivity, attempt.time)
             : InvalidAttempt(
@@ -138,6 +139,13 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
                   'Insufficient privileges',
                   attempt.time,
               )
+        } catch {
+            return InvalidAttempt(
+                attempt.connectivity,
+                'Something went wrong',
+                attempt.time,
+            )
+        }
     }
 
     public getAttempt() {
