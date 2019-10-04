@@ -13,7 +13,7 @@ const getFsPath = (
     size: ImageSize,
 ) => FSPaths.media(localIssueId, source, path, size)
 
-const selectImagePath = async (
+export const selectImagePath = async (
     apiUrl: string,
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
@@ -56,7 +56,7 @@ const compressImagePath = async (path: string, width: number) => {
  *
  *  */
 
-const useImagePath = (image?: Image) => {
+export const useImagePath = (image?: Image) => {
     const key = useIssueCompositeKey()
 
     const [paths, setPaths] = useState<string | undefined>()
@@ -78,12 +78,10 @@ const useImagePath = (image?: Image) => {
     return paths
 }
 
-const useScaledImage = (largePath: string, width: number) => {
-    const [path, setPath] = useState<string | undefined>()
+export const useScaledImage = (largePath: string, width: number) => {
+    const [uri, setUri] = useState<string | undefined>()
     useEffect(() => {
-        compressImagePath(largePath, width).then(setPath)
+        compressImagePath(largePath, width).then(setUri)
     }, [largePath, width])
-    return path
+    return uri
 }
-
-export { useImagePath, useScaledImage, selectImagePath }
