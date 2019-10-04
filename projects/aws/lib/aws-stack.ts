@@ -1,11 +1,11 @@
 import cdk = require('@aws-cdk/core')
 import apigateway = require('@aws-cdk/aws-apigateway')
 import lambda = require('@aws-cdk/aws-lambda')
-import { Code, FunctionProps } from '@aws-cdk/aws-lambda'
+import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
 import cloudfront = require('@aws-cdk/aws-cloudfront')
-import { CfnOutput, Duration } from '@aws-cdk/core'
+import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
 
 import { archiverStepFunction } from './step-function'
 import acm = require('@aws-cdk/aws-certificatemanager')
@@ -142,50 +142,53 @@ export class EditionsStack extends cdk.Stack {
             previewCertificateArn.valueAsString,
         )
 
-        const backendProps = (
-            publicationStage: 'preview' | 'published',
-        ): FunctionProps => ({
-            functionName: `editions-${publicationStage}-backend-${stageParameter.valueAsString}`,
-            runtime: lambda.Runtime.NODEJS_10_X,
-            memorySize: 512,
-            timeout: Duration.seconds(60),
-            code: Code.bucket(
-                deployBucket,
-                `${stackParameter.valueAsString}/${stageParameter.valueAsString}/backend/backend.zip`,
-            ),
-            handler: 'index.handler',
-            environment: {
-                CAPI_KEY: capiKeyParameter.valueAsString,
-                arn: frontsRoleARN.valueAsString,
-                stage: stageParameter.valueAsString,
-                atomArn: atomLambdaParam.valueAsString,
-                psurl: printSentURLParameter.valueAsString,
-                IMAGE_SALT: imageSalt.valueAsString,
-                publicationStage,
-            },
-            initialPolicy: [
-                new iam.PolicyStatement({
-                    actions: ['sts:AssumeRole'],
-                    resources: [frontsAccess.roleArn],
-                }),
-                new iam.PolicyStatement({
-                    resources: [atomLambdaParam.valueAsString],
-                    actions: ['lambda:InvokeFunction'],
-                }),
-            ],
-        })
+        const backendFunction = (publicationStage: 'preview' | 'published') => {
+            const titleCasePublicationStage =
+                publicationStage.charAt(0).toUpperCase() +
+                publicationStage.slice(1)
+            const fn = new lambda.Function(
+                this,
+                `Editions${titleCasePublicationStage}Backend`,
+                {
+                    functionName: `editions-${publicationStage}-backend-${stageParameter.valueAsString}`,
+                    runtime: lambda.Runtime.NODEJS_10_X,
+                    memorySize: 512,
+                    timeout: Duration.seconds(60),
+                    code: Code.bucket(
+                        deployBucket,
+                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/backend/backend.zip`,
+                    ),
+                    handler: 'index.handler',
+                    environment: {
+                        CAPI_KEY: capiKeyParameter.valueAsString,
+                        arn: frontsRoleARN.valueAsString,
+                        stage: stageParameter.valueAsString,
+                        atomArn: atomLambdaParam.valueAsString,
+                        psurl: printSentURLParameter.valueAsString,
+                        IMAGE_SALT: imageSalt.valueAsString,
+                        publicationStage,
+                    },
+                    initialPolicy: [
+                        new iam.PolicyStatement({
+                            actions: ['sts:AssumeRole'],
+                            resources: [frontsAccess.roleArn],
+                        }),
+                        new iam.PolicyStatement({
+                            resources: [atomLambdaParam.valueAsString],
+                            actions: ['lambda:InvokeFunction'],
+                        }),
+                    ],
+                },
+            )
+            Tag.add(fn, 'App', `editions-backend-${publicationStage}`)
+            Tag.add(fn, 'Stage', stageParameter.valueAsString)
+            Tag.add(fn, 'Stack', stackParameter.valueAsString)
+            return fn
+        }
 
-        const previewBackend = new lambda.Function(
-            this,
-            'EditionsPreviewBackend',
-            backendProps('preview'),
-        )
+        const previewBackend = backendFunction('preview')
 
-        const publishedBackend = new lambda.Function(
-            this,
-            'EditionsPublishedBackend',
-            backendProps('published'),
-        )
+        const publishedBackend = backendFunction('published')
 
         const previewApiPolicyStatement = new iam.PolicyStatement({
             effect: Effect.ALLOW,
