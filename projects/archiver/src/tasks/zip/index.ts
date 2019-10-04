@@ -21,7 +21,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
         console.log('data zip uploaded')
         await Promise.all(
             imageSizes.map(async size => {
-                await zip(`${name}/${size}`, mediaDir(publishedId, size), {
+                await zip(`${name}/${size}/`, mediaDir(publishedId, size), {
                     excludePrefixSegment: version,
                 })
                 console.log(` ${size} media zip uploaded`)
