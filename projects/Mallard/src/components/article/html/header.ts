@@ -120,6 +120,12 @@ export const headerStyles = ({
         width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
         padding-top: 100%;
     }
+    @media (max-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-image.header-image--immersive {
+            padding-top: 140%;
+        }
+    }
+
     .header-kicker {
         font-family: ${families.titlepiece.regular};
         font-size: 0.9em;
