@@ -26,6 +26,8 @@ import { Pullquote, quoteStyles } from './pull-quote'
 import { lineStyles, Line } from './line'
 import { useImageSize } from 'src/hooks/use-image-size'
 import { ratingStyles } from './rating'
+import { Arrow } from './arrow'
+import { Direction } from 'src/helpers/sizes'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -126,14 +128,16 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
 
 const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     return html`
-        <figure style="overflow: hidden;">
+        <figure class="image" style="overflow: hidden;">
             <iframe
                 scrolling="no"
                 src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}"
                 style="width: 100%; display: block;"
                 frameborder="0"
             ></iframe>
-            <figcaption>${mediaAtomElement.title}</figcaption>
+            <figcaption>
+                ${Arrow({ direction: Direction.top })} ${mediaAtomElement.title}
+            </figcaption>
         </figure>
     `
 }
