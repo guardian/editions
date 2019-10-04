@@ -74,7 +74,6 @@ const AccessProvider = ({
 
     useEffect(() => {
         const unsubController = controller.subscribe(setAttempt)
-        controller.subscribe(console.log)
         const unsubIdentity = controller.authorizerMap.identity.subscribe(
             attempt => {
                 setIdAuth(attempt)
