@@ -164,7 +164,7 @@ export const headerStyles = ({
         border-bottom: 1px solid ${color.dimLine};
     }
     .header-container[data-type='review'] .header-bg {
-        background-color: ${colors.dark};
+        background-color: ${colors.faded};
     }
     .header-container[data-type='review'] h1 {
         color: ${colors.dark};
@@ -194,7 +194,7 @@ export const headerStyles = ({
     .header-container[data-type='opinion'] h1 {
         font-family: ${families.headline.light};
     }
-    .header-container[data-type='opinion'] h1 span {
+    .header-container[data-type='opinion'] h1 .header-top-byline {
         color: ${colors.main};
         display: block;
         font-family: ${families.titlepiece.regular};
@@ -212,12 +212,17 @@ export const headerStyles = ({
         display: none;
     }
     .header-container[data-type='analysis'] .header-byline {
-        color: ${color.text};
+        color: ${color.palette.neutral[46]};
     }
     .header-container[data-type='analysis'] h1 {
         font-family: ${families.headline.light};
     }
-    .header-container[data-type='analysis'] h1 span {
+    .header-container[data-type='analysis'] h1 .header-top-headline {
+        text-decoration: underline;
+        text-decoration-color: ${colors.main};
+        text-decoration-thickness: 1px;
+    }
+    .header-container[data-type='analysis'] h1 .header-top-byline {
         color: ${colors.main};
         display: block;
         font-family: ${families.titlepiece.regular};
@@ -359,8 +364,12 @@ const Header = ({
                                       class="${cutout && `header-opinion-flex`}"
                                   >
                                       <h1>
-                                          ${headerProps.headline}
-                                          <span>${headerProps.byline}</span>
+                                          <span class="header-top-headline"
+                                              >${headerProps.headline}</span
+                                          >
+                                          <span class="header-top-byline"
+                                              >${headerProps.byline}</span
+                                          >
                                       </h1>
                                       ${publishedId &&
                                           cutout &&
