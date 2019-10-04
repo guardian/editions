@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
+import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
-import { Image, Issue } from '../../../common/src'
+import { Image, ImageSize, Issue } from '../../../common/src'
 import { useIssueCompositeKey } from './use-issue-id'
 import { useSettingsValue } from './use-settings'
-import ImageResizer from 'react-native-image-resizer'
 
-const selectImagePath = async (
+const getFsPath = (
+    localIssueId: Issue['localId'],
+    { source, path }: Image,
+    size: ImageSize,
+) => FSPaths.media(localIssueId, source, path, size)
+
+export const selectImagePath = async (
     apiUrl: string,
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
@@ -20,7 +26,8 @@ const selectImagePath = async (
         source,
         path,
     )}`
-    const fs = FSPaths.media(localIssueId, source, path)
+
+    const fs = getFsPath(localIssueId, { source, path }, imageSize)
     const fsExists = await RNFetchBlob.fs.exists(fs)
     return fsExists ? fs : api
 }
@@ -34,7 +41,7 @@ const compressImagePath = async (path: string, width: number) => {
         100,
         0,
     )
-    return resized.path
+    return resized.uri
 }
 
 /**
@@ -47,7 +54,7 @@ const compressImagePath = async (path: string, width: number) => {
  *
  *  */
 
-const useImagePath = (image?: Image) => {
+export const useImagePath = (image?: Image) => {
     const key = useIssueCompositeKey()
 
     const [paths, setPaths] = useState<string | undefined>()
@@ -62,19 +69,17 @@ const useImagePath = (image?: Image) => {
     }, [
         apiUrl,
         image,
-        key ? key.publishedIssueId : undefined,
+        key ? key.publishedIssueId : undefined, // Why isn't this just key?
         key ? key.localIssueId : undefined,
     ])
     if (image === undefined) return undefined
     return paths
 }
 
-const useScaledImage = (largePath: string, width: number) => {
-    const [path, setPath] = useState<string | undefined>()
+export const useScaledImage = (largePath: string, width: number) => {
+    const [uri, setUri] = useState<string | undefined>()
     useEffect(() => {
-        compressImagePath(largePath, width).then(setPath)
+        compressImagePath(largePath, width).then(setUri)
     }, [largePath, width])
-    return path
+    return uri
 }
-
-export { useImagePath, useScaledImage, selectImagePath }

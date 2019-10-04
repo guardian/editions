@@ -6,6 +6,7 @@ import {
     Collection,
     Front,
     CAPIArticle,
+    ImageSize,
 } from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
 
@@ -38,10 +39,12 @@ export const FSPaths = {
     issuesDir,
     issueRoot,
     mediaRoot,
-    media: (localIssueId: string, source: string, path: string) =>
-        `${mediaRoot(
-            localIssueId,
-        )}/${MEDIA_CACHE_DIRECTORY_NAME}/${source}/${path}`,
+    media: (
+        localIssueId: string,
+        source: string,
+        path: string,
+        size: ImageSize,
+    ) => `${mediaRoot(localIssueId)}/${size}/${source}/${path}`,
     zip: (localIssueId: string, filename: string) =>
         `${issueRoot(localIssueId)}/${filename}.zip`,
     issueZip: (localIssueId: string) => `${issueRoot(localIssueId)}/data.zip`,
