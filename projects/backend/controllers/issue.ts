@@ -8,6 +8,7 @@ import { Attempt, hasFailed } from '../utils/try'
 import {
     buildEditionRootPath as buildEditionPath,
     getEditionOrFallback,
+    decodeVersionOrPreview,
 } from '../utils/issue'
 
 export const LIVE_PAGE_SIZE = 7
@@ -15,8 +16,9 @@ export const PREVIEW_PAGE_SIZE = 35
 
 export const issueController = (req: Request, res: Response) => {
     const issueDate: string = req.params.date
-    const version: string = decodeURIComponent(
-        isPreviewStage ? 'preview' : req.params.version,
+    const version: string = decodeVersionOrPreview(
+        req.params.version,
+        isPreviewStage,
     )
     const edition = req.params.edition
     const issue: IssuePublicationIdentifier = {

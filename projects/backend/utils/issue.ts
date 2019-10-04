@@ -27,3 +27,10 @@ export const buildEditionRootPath = (
         bucket: pickBucket(asPreview),
     }
 }
+
+export const decodeVersionOrPreview = (
+    version: string,
+    isPreviewStage: boolean,
+): string => {
+    return decodeURIComponent(isPreviewStage ? 'preview' : version)
+}

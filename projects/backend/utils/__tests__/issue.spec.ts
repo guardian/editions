@@ -1,4 +1,8 @@
-import { buildIssueObjectPath, buildEditionRootPath } from '../issue'
+import {
+    buildIssueObjectPath,
+    buildEditionRootPath,
+    decodeVersionOrPreview,
+} from '../issue'
 import { IssuePublicationIdentifier } from '../../common'
 import { Path } from '../../s3'
 
@@ -69,5 +73,20 @@ describe('buildEditionRootPath', () => {
             bucket: 'published',
         }
         expect(actual).toStrictEqual(expected)
+    })
+})
+
+describe('decodeVersionOrPreview', () => {
+    it('should fallback to preview', () => {
+        const isPreviewStage = true
+        expect(
+            decodeVersionOrPreview('some%20version', isPreviewStage),
+        ).toStrictEqual('preview')
+    })
+    it('should decode version', () => {
+        const isPreviewStage = false
+        expect(
+            decodeVersionOrPreview('some%20version', isPreviewStage),
+        ).toStrictEqual('some version')
     })
 })

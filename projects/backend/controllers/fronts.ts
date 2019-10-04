@@ -4,14 +4,15 @@ import { getFront } from '../fronts'
 import { hasFailed } from '../utils/try'
 import { isPreview } from '../preview'
 import { IssuePublicationIdentifier } from '../common'
+import { decodeVersionOrPreview } from '../utils/issue'
 
 export const frontController = (req: Request, res: Response) => {
     const frontId: string = req.params[0]
     const issueDate: string = req.params.date
-    const version: string = decodeURIComponent(
-        isPreview ? 'preview' : req.params.version,
+    const version: string = decodeVersionOrPreview(
+        req.params.version,
+        isPreview,
     )
-
     const edition = req.params.edition
     const [date, updater] = lastModified()
     console.log(`Request for ${req.url} fetching front ${frontId}`)
