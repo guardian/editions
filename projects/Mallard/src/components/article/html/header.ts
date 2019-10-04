@@ -140,11 +140,28 @@ export const headerStyles = ({
         width: auto;
         fill: ${colors.main};
     }
-    .header-byline {
+    .header-byline:not(:empty) {
         font-weight: 600;
         padding: 0.25rem 0 2rem;
         color: ${colors.main};
+        position: relative;
     }
+    .header-byline:not(:empty):after {
+        content: '';
+        display: block;
+        height: 1px;
+        background-color: ${color.dimLine};
+        position: absolute;
+        bottom: -1px;
+        left: ${px(metrics.article.sidesTablet * -1)};
+        right: ${px(metrics.article.sidesTablet * -1)};
+    }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-byline:not(:empty):after {
+            left: 0;
+        }
+    }
+
     .header-container:after {
         content: '';
         display: block;
