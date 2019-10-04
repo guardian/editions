@@ -15,11 +15,11 @@ export const issueController = (req: Request, res: Response) => {
     const version: string = decodeURIComponent(
         isPreviewStage ? 'preview' : req.params.version,
     )
-    const issueEdition = req.params.edition
+    const edition = req.params.edition
     const issue: IssuePublicationIdentifier = {
         issueDate,
         version,
-        edition: issueEdition,
+        edition,
     }
     console.log(`${req.url}: request for issue ${issueDate}`)
     getIssue(issue)

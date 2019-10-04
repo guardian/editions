@@ -263,18 +263,10 @@ const getDisplayName = (front: string) => {
 }
 
 const fetchPublishedIssue = async (
-    edition: string,
-    issueDate: string,
+    issue: IssuePublicationIdentifier,
     frontId: string,
-    version: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<PublishedIssue>> => {
-    const issue: IssuePublicationIdentifier = {
-        issueDate,
-        version,
-        edition,
-    }
-
     const path: Path = issueObjectPathBuilder(issue, isPreview)
 
     const issueData = await s3fetch(path)
@@ -282,7 +274,7 @@ const fetchPublishedIssue = async (
     if (hasFailed(issueData)) {
         return withFailureMessage(
             issueData,
-            `Attempt to fetch ${issueDate} and ${frontId} failed.`,
+            `Attempt to fetch ${issue.issueDate} and ${frontId} failed.`,
         )
     }
 
@@ -331,17 +323,13 @@ export const transformToFront = async (
 }
 
 export const getFront = async (
-    edition: string,
-    issueDate: string,
+    issue: IssuePublicationIdentifier,
     frontId: string,
-    source: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<Front>> => {
     const publishedIssue = await fetchPublishedIssue(
-        edition,
-        issueDate,
+        issue,
         frontId,
-        source,
         lastModifiedUpdater,
     )
 

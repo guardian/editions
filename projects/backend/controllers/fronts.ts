@@ -3,6 +3,7 @@ import { lastModified } from '../lastModified'
 import { getFront } from '../fronts'
 import { hasFailed } from '../utils/try'
 import { isPreview } from '../preview'
+import { IssuePublicationIdentifier } from '../common'
 
 export const frontController = (req: Request, res: Response) => {
     const frontId: string = req.params[0]
@@ -14,7 +15,12 @@ export const frontController = (req: Request, res: Response) => {
     const edition = req.params.edition
     const [date, updater] = lastModified()
     console.log(`Request for ${req.url} fetching front ${frontId}`)
-    getFront(edition, issueDate, frontId, version, updater)
+    const issue: IssuePublicationIdentifier = {
+        issueDate,
+        version,
+        edition,
+    }
+    getFront(issue, frontId, updater)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(`${req.url} threw ${JSON.stringify(data)}`)
