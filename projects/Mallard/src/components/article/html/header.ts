@@ -153,11 +153,15 @@ export const headerStyles = ({
     .header-opinion-flex {
         display: flex;
         align-items: flex-end;
-        overflow: hidden;
+    }
+
+    .header-opinion-flex > :first-child {
+        flex: 1 1 0;
     }
 
     .header-opinion-flex > :last-child {
         width: 15%;
+        overflow: visible;
         flex: 0 0 auto;
     }
 
@@ -375,7 +379,7 @@ const Header = ({
                             image: headerProps.image,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
-                                : Rating(headerProps),
+                                : undefined,
                         })}
                     <span class="header-kicker">${headerProps.kicker}</span>
                     ${largeByline
