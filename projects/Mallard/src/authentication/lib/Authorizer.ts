@@ -140,6 +140,10 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
               )
     }
 
+    public getAttempt() {
+        return this.attempt
+    }
+
     public getAccessAttempt() {
         return this.accessAttempt
     }

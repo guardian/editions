@@ -50,9 +50,15 @@ const AccessProvider = ({
     children: React.ReactNode
     onIdentityStatusChange?: (idAttempt: AnyAttempt<IdentityAuthData>) => void
 }) => {
-    const [attempt, setAttempt] = useState<AnyAttempt<string>>(NotRun)
-    const [idAuth, setIdAuth] = useState<AnyAttempt<IdentityAuthData>>(NotRun)
-    const [casAuth, setCASAuth] = useState<AnyAttempt<CASExpiry>>(NotRun)
+    const [attempt, setAttempt] = useState<AnyAttempt<string>>(
+        controller.getAttempt(),
+    )
+    const [idAuth, setIdAuth] = useState<AnyAttempt<IdentityAuthData>>(
+        controller.authorizerMap.identity.getAttempt(),
+    )
+    const [casAuth, setCASAuth] = useState<AnyAttempt<CASExpiry>>(
+        controller.authorizerMap.cas.getAttempt(),
+    )
 
     useEffect(() => {
         const unsubController = controller.subscribe(setAttempt)
