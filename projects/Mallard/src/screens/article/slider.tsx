@@ -160,22 +160,34 @@ const ArticleSlider = ({
 
     if (Platform.OS === 'android')
         return (
-            <ViewPagerAndroid
-                style={{ flexGrow: 1, width: '100%' }}
-                initialPage={startingPoint}
-            >
-                {data.map((item, index) => (
-                    <View key={index}>
-                        <ArticleScreenBody
-                            width={width}
-                            path={item}
-                            pillar={pillar}
-                            onTopPositionChange={onTopPositionChange}
-                            position={index}
-                        />
-                    </View>
-                ))}
-            </ViewPagerAndroid>
+            <>
+                <SliderBar
+                    total={articleNavigator.articles.length}
+                    position={current}
+                    title={articleNavigator.frontName}
+                    color={getColor(articleNavigator.appearance)}
+                    style={!articleIsAtTop && styles.sliderBorder}
+                />
+                <ViewPagerAndroid
+                    style={{ flexGrow: 1, width: '100%' }}
+                    initialPage={startingPoint}
+                    onPageSelected={(ev: any) => {
+                        setCurrent(ev.nativeEvent.position)
+                    }}
+                >
+                    {data.map((item, index) => (
+                        <View key={index}>
+                            <ArticleScreenBody
+                                width={width}
+                                path={item}
+                                pillar={pillar}
+                                onTopPositionChange={onTopPositionChange}
+                                position={index}
+                            />
+                        </View>
+                    ))}
+                </ViewPagerAndroid>
+            </>
         )
 
     return (
