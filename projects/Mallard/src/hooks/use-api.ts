@@ -7,8 +7,8 @@ import { useNetInfo } from 'src/hooks/use-net-info'
 import { storeIssueSummary, readIssueSummary } from '../helpers/files'
 
 export const getIssueSummaryNew = () => {
-    const { isConnected } = useNetInfo()
-    console.log(isConnected)
+    // const { isConnected } = useNetInfo()
+    // console.log(isConnected)
 
     return {
         type: 'promise',
