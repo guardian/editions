@@ -176,6 +176,7 @@ export const headerStyles = ({
         display: block;
         padding-top: 60%;
         background-size: cover;
+        background-position: center;
     }
 
     /*review*/
