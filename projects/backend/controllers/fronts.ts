@@ -3,17 +3,25 @@ import { lastModified } from '../lastModified'
 import { getFront } from '../fronts'
 import { hasFailed } from '../utils/try'
 import { isPreview } from '../preview'
+import { IssuePublicationIdentifier } from '../common'
+import { decodeVersionOrPreview } from '../utils/issue'
 
 export const frontController = (req: Request, res: Response) => {
-    const id: string = req.params[0]
-    const issue: string = req.params.date
-    const version: string = decodeURIComponent(
-        isPreview ? 'preview' : req.params.version,
+    const frontId: string = req.params[0]
+    const issueDate: string = req.params.date
+    const version: string = decodeVersionOrPreview(
+        req.params.version,
+        isPreview,
     )
-
+    const edition = req.params.edition
     const [date, updater] = lastModified()
-    console.log(`Request for ${req.url} fetching front ${id}`)
-    getFront(issue, id, version, updater)
+    console.log(`Request for ${req.url} fetching front ${frontId}`)
+    const issue: IssuePublicationIdentifier = {
+        issueDate,
+        version,
+        edition,
+    }
+    getFront(issue, frontId, updater)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(`${req.url} threw ${JSON.stringify(data)}`)

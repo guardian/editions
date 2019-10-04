@@ -1,6 +1,10 @@
 import striptags from 'striptags'
 import { oc } from 'ts-optchain'
-import { BlockElement, ArticleType } from '../common/src'
+import {
+    BlockElement,
+    ArticleType,
+    IssuePublicationIdentifier,
+} from '../common/src'
 import { CAPIContent, CArticle, getArticles } from './capi/articles'
 import {
     CAPIArticle,
@@ -32,6 +36,7 @@ import {
     withFailureMessage,
 } from './utils/try'
 import { articleShouldHaveDropCap, isHTMLElement } from './utils/article'
+import { buildIssueObjectPath } from './utils/issue'
 
 // overrideArticleMainMedia may be false in most cases
 const getImage = (
@@ -257,29 +262,34 @@ const getDisplayName = (front: string) => {
     return split.charAt(0).toUpperCase() + split.slice(1)
 }
 
-export const getFront = async (
-    issue: string,
-    id: string,
-    source: string,
+const fetchPublishedIssue = async (
+    issue: IssuePublicationIdentifier,
+    frontId: string,
     lastModifiedUpdater: LastModifiedUpdater,
-): Promise<Attempt<Front>> => {
-    const path: Path = {
-        key: `daily-edition/${issue}/${source}.json`,
-        bucket: isPreview ? 'preview' : 'published',
-    }
-    const resp = await s3fetch(path)
+): Promise<Attempt<PublishedIssue>> => {
+    const path: Path = buildIssueObjectPath(issue, isPreview)
 
-    if (hasFailed(resp)) {
+    const issueData = await s3fetch(path)
+
+    if (hasFailed(issueData)) {
         return withFailureMessage(
-            resp,
-            `Attempt to fetch ${issue} and ${id} failed.`,
+            issueData,
+            `Attempt to fetch ${issue.issueDate} and ${frontId} failed.`,
         )
     }
 
-    lastModifiedUpdater(resp.lastModified)
+    lastModifiedUpdater(issueData.lastModified)
 
-    const issueResponse: PublishedIssue = (await resp.json()) as PublishedIssue
-    const front = issueResponse.fronts.find(_ => _.name === id)
+    const issueResponse: PublishedIssue = (await issueData.json()) as PublishedIssue
+    return issueResponse
+}
+
+export const transformToFront = async (
+    frontId: string,
+    publishedIssue: PublishedIssue,
+): Promise<Attempt<Front>> => {
+    const { issueDate } = publishedIssue
+    const front = publishedIssue.fronts.find(_ => _.name === frontId)
     if (!front) {
         return failure({ httpStatus: 404, error: new Error('Front not found') })
     }
@@ -297,7 +307,7 @@ export const getFront = async (
 
     collections.filter(hasFailed).forEach(failedCollection => {
         console.error(
-            `silently removing collection from ${issue}/${id} ${JSON.stringify(
+            `silently removing collection from ${issueDate}/${frontId} ${JSON.stringify(
                 failedCollection,
             )}`,
         )
@@ -306,8 +316,26 @@ export const getFront = async (
     return {
         ...front,
         appearance,
-        displayName: getDisplayName(id),
+        displayName: getDisplayName(frontId),
         collections: collections.filter(hasSucceeded),
-        key: id,
+        key: frontId,
     }
+}
+
+export const getFront = async (
+    issue: IssuePublicationIdentifier,
+    frontId: string,
+    lastModifiedUpdater: LastModifiedUpdater,
+): Promise<Attempt<Front>> => {
+    const publishedIssue = await fetchPublishedIssue(
+        issue,
+        frontId,
+        lastModifiedUpdater,
+    )
+
+    if (hasFailed(publishedIssue)) {
+        return publishedIssue
+    }
+
+    return transformToFront(frontId, publishedIssue)
 }
