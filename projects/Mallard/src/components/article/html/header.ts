@@ -11,6 +11,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { Line } from './line'
 import { breakSides } from './helpers/layout'
 import { useImagePath } from 'src/hooks/use-image-paths'
+import { Quotes } from './icon/quotes'
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -125,6 +126,12 @@ export const headerStyles = ({
         font-weight: 400;
         margin: 0.1em 1em 0.75em 0;
         word-wrap: none;
+    }
+    .header h1 svg {
+        height: .7em;
+        transform: scale(1.1);
+        width: auto;
+        fill: ${colors.main};
     }
     .header-byline {
         font-weight: 600;
@@ -364,6 +371,8 @@ const Header = ({
                                       class="${cutout && `header-opinion-flex`}"
                                   >
                                       <h1>
+                                          ${type === ArticleType.Opinion &&
+                                              Quotes()}
                                           <span class="header-top-headline"
                                               >${headerProps.headline}</span
                                           >
