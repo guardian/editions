@@ -1,13 +1,13 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
+import { getIssueSummary } from 'src/hooks/use-api'
+import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
-import { defaultSettings } from './settings/defaults'
 import { imageForScreenSize } from './screen'
-import { getIssueSummary } from 'src/hooks/use-api'
 import { getSetting } from './settings'
+import { defaultSettings } from './settings/defaults'
 
 interface BasicFile {
     filename: string
@@ -78,37 +78,6 @@ export const downloadNamedIssueArchive = async (
     }
 }
 
-/**
- * the api returns zips with folders that are named after the size of the device
- * we're on such as `/issue/12-12-12/media/tabletXL/media...`
- *
- * In future, if we add new breakpoints, this cache will be invisible if we're looking
- * for images using our new device name such as `tabletM`.
- *
- * This will move all images into a folder `/issue/12-12-12/media/cached/media...`
- */
-
-const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
-    const [sizedMediaDir] = (await RNFetchBlob.fs.ls(
-        FSPaths.mediaRoot(issueId),
-    )).filter(folder => folder !== MEDIA_CACHE_DIRECTORY_NAME) // find the first folder that isn't cached
-
-    if (!sizedMediaDir) return
-
-    const absSizedMediaDir = `${FSPaths.mediaRoot(issueId)}/${sizedMediaDir}`
-    const genericMediaDir = `${FSPaths.mediaRoot(
-        issueId,
-    )}/${MEDIA_CACHE_DIRECTORY_NAME}`
-
-    // if the file exists already, delete it and then replace it
-    const fileExists = await RNFetchBlob.fs.exists(genericMediaDir)
-    if (fileExists) {
-        await RNFetchBlob.fs.unlink(genericMediaDir)
-    }
-
-    RNFetchBlob.fs.mv(absSizedMediaDir, genericMediaDir)
-}
-
 export const unzipNamedIssueArchive = (
     localIssueId: Issue['localId'],
     filename: string,
@@ -116,11 +85,8 @@ export const unzipNamedIssueArchive = (
     const zipFilePath = FSPaths.zip(localIssueId, filename)
     const outputPath = FSPaths.issuesDir
 
-    return unzip(zipFilePath, outputPath).then(async () => {
-        if (filename !== 'data') {
-            await moveSizedMediaDirToGenericMediaDir(localIssueId)
-        }
-        RNFetchBlob.fs.unlink(zipFilePath)
+    return unzip(zipFilePath, outputPath).then(() => {
+        return RNFetchBlob.fs.unlink(zipFilePath)
     })
 }
 

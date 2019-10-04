@@ -3,15 +3,14 @@ import { PublishedIssue } from './fronts/issue'
 import { isPreview } from './preview'
 import { Path, s3fetch } from './s3'
 import { hasFailed } from './utils/try'
+import { buildIssueObjectPath } from './utils/issue'
 
 export const getIssue = async (
     issue: IssuePublicationIdentifier,
 ): Promise<Issue | 'notfound'> => {
     console.log('Attempting to get latest issue for', issue)
-    const path: Path = {
-        key: `${issue.edition}/${issue.issueDate}/${issue.version}.json`,
-        bucket: isPreview ? 'preview' : 'published',
-    }
+
+    const path: Path = buildIssueObjectPath(issue, isPreview)
 
     console.log(`Fetching ${JSON.stringify(path)} for ${JSON.stringify(issue)}`)
 
