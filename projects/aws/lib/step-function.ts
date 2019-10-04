@@ -78,7 +78,7 @@ const taskLambda = (
             ...overrides,
         },
     )
-    Tag.add(fn, 'App', `archiver-${name}`)
+    Tag.add(fn, 'App', `editions-archiver-${name}`)
     Tag.add(fn, 'Stage', stage)
     Tag.add(fn, 'Stack', stack)
     return fn
