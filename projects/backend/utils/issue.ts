@@ -1,7 +1,7 @@
 import { IssuePublicationIdentifier } from '../common'
 import { Path } from '../s3'
 
-export const issueObjectPathBuilder = (
+export const buildIssueObjectPath = (
     issue: IssuePublicationIdentifier,
     asPreview: boolean,
 ): Path => {
@@ -12,5 +12,5 @@ export const issueObjectPathBuilder = (
     }
 }
 
-export const getEditionOrFallback = (editionType: string) =>
-    editionType ? editionType : 'daily-edition'
+export const getEditionOrFallback = (maybeEdition: string) =>
+    maybeEdition ? maybeEdition : 'daily-edition'

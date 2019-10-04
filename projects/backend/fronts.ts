@@ -36,7 +36,7 @@ import {
     withFailureMessage,
 } from './utils/try'
 import { articleShouldHaveDropCap, isHTMLElement } from './utils/article'
-import { issueObjectPathBuilder } from './utils/issue'
+import { buildIssueObjectPath } from './utils/issue'
 
 // overrideArticleMainMedia may be false in most cases
 const getImage = (
@@ -267,7 +267,7 @@ const fetchPublishedIssue = async (
     frontId: string,
     lastModifiedUpdater: LastModifiedUpdater,
 ): Promise<Attempt<PublishedIssue>> => {
-    const path: Path = issueObjectPathBuilder(issue, isPreview)
+    const path: Path = buildIssueObjectPath(issue, isPreview)
 
     const issueData = await s3fetch(path)
 
