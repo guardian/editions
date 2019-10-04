@@ -25,7 +25,7 @@ export const zip = async (
     const objects = await s3
         .listObjectsV2({
             Bucket,
-            Prefix: prefix,
+            Prefix: `${prefix}/`,
         })
         .promise()
     // TODO: deal with paginating S3 responses
