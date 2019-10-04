@@ -4,7 +4,7 @@ import { Path } from '../s3'
 const pickBucket = (asPreview: boolean) => (asPreview ? 'preview' : 'published')
 
 export const getEditionOrFallback = (maybeEdition: string) =>
-    maybeEdition ? maybeEdition : 'daily-edition'
+    maybeEdition || 'daily-edition'
 
 export const buildIssueObjectPath = (
     issue: IssuePublicationIdentifier,

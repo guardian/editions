@@ -49,7 +49,6 @@ export const getIssuesSummary = async (
      */
     const edition = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
-    console.log('listing objects at path:', editionPath)
     const issueKeys = await s3List(editionPath)
 
     if (hasFailed(issueKeys)) {
