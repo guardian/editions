@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { ImageSize, coloursPath } from '../common/src/index'
 import { issuePath, mediaPath, frontPath, issueSummaryPath } from './common'
 import listEndpoints from 'express-list-endpoints'
+import { pickIssuePathSegments } from './utils/issue'
 
 export interface EditionsBackendControllers {
     issuesSummaryController: (req: Request, res: Response) => void
@@ -24,9 +25,7 @@ export const createApp = (
         console.log('🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞🗞')
     }
 
-    const issueId = asPreview
-        ? ':edition/:date/preview'
-        : ':edition/:date/:version'
+    const issuePathSegments = pickIssuePathSegments(asPreview)
 
     app.use((req, res, next) => {
         console.log(req.url)
@@ -42,16 +41,20 @@ export const createApp = (
         '/' + issueSummaryPath(':edition'),
         controllers.issuesSummaryController,
     )
-    app.get('/' + issuePath(issueId), controllers.issueController)
-    app.get('/' + frontPath(issueId, '*?'), controllers.frontController)
+    app.get('/' + issuePath(issuePathSegments), controllers.issueController)
+    app.get(
+        '/' + frontPath(issuePathSegments, '*?'),
+        controllers.frontController,
+    )
 
     app.get(
-        '/' + mediaPath(issueId, ':size' as ImageSize, ':source', '*?'),
+        '/' +
+            mediaPath(issuePathSegments, ':size' as ImageSize, ':source', '*?'),
         controllers.imageController,
     )
 
     app.get(
-        '/' + coloursPath(issueId, ':source', '*?'),
+        '/' + coloursPath(issuePathSegments, ':source', '*?'),
         controllers.imageColourController,
     )
 

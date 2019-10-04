@@ -34,3 +34,7 @@ export const decodeVersionOrPreview = (
 ): string => {
     return decodeURIComponent(isPreviewStage ? 'preview' : version)
 }
+
+export const pickIssuePathSegments = (asPreview: boolean) => {
+    return asPreview ? ':edition/:date/preview' : ':edition/:date/:version'
+}

@@ -2,6 +2,7 @@ import {
     buildIssueObjectPath,
     buildEditionRootPath,
     decodeVersionOrPreview,
+    pickIssuePathSegments,
 } from '../issue'
 import { IssuePublicationIdentifier } from '../../common'
 import { Path } from '../../s3'
@@ -88,5 +89,20 @@ describe('decodeVersionOrPreview', () => {
         expect(
             decodeVersionOrPreview('some%20version', isPreviewStage),
         ).toStrictEqual('some version')
+    })
+})
+
+describe('pickIssuePathSegments', () => {
+    it('should fallback to preview', () => {
+        const isPreview = true
+        expect(pickIssuePathSegments(isPreview)).toStrictEqual(
+            ':edition/:date/preview',
+        )
+    })
+    it('should pick versioned path segments', () => {
+        const isPreview = false
+        expect(pickIssuePathSegments(isPreview)).toStrictEqual(
+            ':edition/:date/:version',
+        )
     })
 })
