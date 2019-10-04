@@ -21,24 +21,6 @@ export type AsyncCache<T> = {
     reset: () => Promise<void>
 }
 
-/**
- * This class is responsible for primarily piecing together a means of:
- *  - authorizing with user input credentials
- *  - authorizing with cached credentials that should have been cached
- *    while running aforementioned user input authorizer.
- *
- * It also takes the caches as its dependencies in order that it can clear them
- * when required.
- *
- * The `userDataCache` is used to cache the results of running either of the
- * authorizers in order to use this data when a user is offline. It shouldn't
- * be set manually and as such isn't passed to the auth functions.
- *
- * Finally, even if a user is authenticated against some service, they may
- * not have access to a resource (e.g. Editions) hence `checkUserHasAccess`, which
- * is used to generate an `accessAttempt` which is at least as restrictive as the
- * original `attempt` for the initial auth service.
- */
 class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
     private subscribers: UpdateHandler<T>[] = []
     private attempt: AnyAttempt<T> = NotRun

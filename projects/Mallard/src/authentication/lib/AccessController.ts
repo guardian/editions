@@ -14,27 +14,6 @@ type UpdateHandler = (attempt: AnyAttempt<string>) => void
 type AuthMap<I extends {}> = {
     [K in keyof I]: I[K] extends Authorizer<any, any, any> ? I[K] : never
 }
-
-/**
- * An Access controller is responsible for listening to its Authorizers
- * each time a sign in happens it will try to upgrade the current access level.
- * If it can't "upgrade" the access level it will keep it as it was.
- *
- * An Access controller only requires one authorizer to have a valid `accessAttempt`
- * in order to report as being valid itself.
- *
- * An upgrade is defined as either moving from offline to online (online attempts
- * are more important than offline) or moving from invalid to valid. Currently
- * the model doesn't support unauthenticated a user with a second attempt at authentication.
- *
- * This also handle sign outs too by simply reconciling all of the authorizer attempts
- * into this "most online" and then "most valid" after an authorizer has signed out.
- *
- * This will also run the "silent" authorizer methods from caches when some form of
- * connectivity is passed to `handleConnectionStatusChanged`. Although this will only
- * ever cause at most two "silent" auths. An online one and, if it comes before the online one,
- * an offline one.
- */
 class AccessController<I extends {}> {
     private attempt: AnyAttempt<string> = NotRun
     private fetchingConnectivities: Set<Connectivity> = new Set()
