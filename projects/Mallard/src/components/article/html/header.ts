@@ -44,7 +44,7 @@ const outieHeader = (type: ArticleType) => css`
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
         .header-container[data-type='${type}'] .header {
-            margin-right: 2em;
+            margin-right: 4em;
         }
         .header-container[data-type='${type}'] .header:after {
             margin-right: -4em;
@@ -74,11 +74,11 @@ export const headerStyles = ({
         content: '';
         display: block;
         height: 0.8125rem;
-        margin: 0 ${px(metrics.article.sidesTablet * -1)};
+        margin: 0;
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header:after {
-            margin-left: 0;
+            margin-right: ${px(metrics.article.sidesTablet * -1)};
         }
     }
     .header {
@@ -161,6 +161,10 @@ export const headerStyles = ({
         .header-byline:not(:empty):after {
             left: 0;
         }
+    }
+
+    .header-top p {
+        font-size: 1.05em;
     }
 
     .header-container:after {
@@ -276,7 +280,7 @@ export const headerStyles = ({
     }
 
 
-    /*opinion*/
+    /*analysis*/
     .header-container[data-type='analysis']:after {
         border-bottom: 1px solid ${color.dimLine};
     }
@@ -316,7 +320,10 @@ export const headerStyles = ({
     }
     .header-container[data-type='immersive'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
-        color: ${colors.main};
+        color: ${colors.dark};
+    }
+    .header-container[data-type='immersive'] .header-byline {
+        color: ${colors.dark};
     }
 
     /*longread*/
