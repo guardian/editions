@@ -1,5 +1,5 @@
 import DeviceInfo from 'react-native-device-info'
-import { AuthResult, InvalidResult, ValidResult } from '../lib/Result'
+import { AuthResult, fromResponse } from '../lib/Result'
 import { CAS_ENDPOINT_URL } from 'src/constants'
 
 export interface CASExpiry {
@@ -30,12 +30,9 @@ const fetchCASSubscription = async (
         }),
     })
 
-    if (res.status >= 500) return InvalidResult('Something went wrong')
-    const json = await res.json()
-    if (res.ok) return ValidResult(json.expiry)
-    return InvalidResult(
-        json.error ? json.error.message : 'Something went wrong',
-    )
+    return fromResponse(res, {
+        valid: data => data.expiry,
+    })
 }
 
 export { fetchCASSubscription }

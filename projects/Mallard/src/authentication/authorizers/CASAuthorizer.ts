@@ -5,7 +5,7 @@ import {
     legacyCASPasswordCache,
 } from 'src/helpers/storage'
 import { Authorizer } from '../lib/Authorizer'
-import { flat, InvalidResult, ValidResult } from '../lib/Result'
+import { flat, ValidResult, ErrorResult } from '../lib/Result'
 import { fetchCASSubscription } from '../services/cas'
 
 export default new Authorizer(
@@ -38,7 +38,7 @@ export default new Authorizer(
         if (username && password) {
             return fetchCASSubscription(username, password)
         }
-        return InvalidResult()
+        return ErrorResult()
     },
     expiry => new Date(expiry.expiryDate).getTime() > Date.now(),
 )

@@ -1,4 +1,4 @@
-import { AuthResult, InvalidResult, ValidResult } from '../lib/Result'
+import { AuthResult, fromResponse } from '../lib/Result'
 import { MEMBERS_DATA_API_URL } from 'src/constants'
 
 export interface MembersDataAPIResponse {
@@ -22,9 +22,7 @@ const fetchMembershipData = async (
             'GU-IdentityToken': membershipAccessToken,
         },
     })
-    if (!res.ok) return InvalidResult('Something went wrong')
-    const data = await res.json()
-    return ValidResult(data)
+    return fromResponse(res)
 }
 
 export { fetchMembershipData }

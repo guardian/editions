@@ -62,10 +62,9 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
                     this.clearCaches()
                     return InvalidAttempt(connectivity, reason)
                 },
+                error: reason => InvalidAttempt(connectivity, reason),
             })
         } catch (e) {
-            // if we don't know what the error was, be safe and clear the caches
-            this.clearCaches()
             attempt = InvalidAttempt('online', 'Something went wrong')
         }
         this.upgradeAttempt(attempt)

@@ -20,6 +20,7 @@ export const APPS_FEEDBACK_EMAIL = 'daily.feedback@theguardian.com'
 export const CONNECTION_FAILED_ERROR = `Connection failed`
 export const CONNECTION_FAILED_SUB_ERROR = `Let's try and get your issue`
 export const GENERIC_ERROR = `Sorry! This didn't work`
+export const GENERIC_AUTH_ERROR = `Something went wrong`
 export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${FEEDBACK_EMAIL} and tell us what happened?`
 
 export const DIAGNOSTICS_TITLE = 'Found a bug?'

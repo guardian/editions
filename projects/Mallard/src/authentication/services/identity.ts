@@ -1,6 +1,7 @@
 import qs from 'query-string'
-import { AuthResult, InvalidResult, ValidResult } from '../lib/Result'
+import { AuthResult, fromResponse } from '../lib/Result'
 import { ID_API_URL, ID_ACCESS_TOKEN } from 'src/constants'
+import { GENERIC_AUTH_ERROR } from 'src/helpers/words'
 
 interface ErrorReponse {
     errors: { message: string; description: string }[]
@@ -8,6 +9,11 @@ interface ErrorReponse {
 
 const hasErrorsArray = (json: any): json is ErrorReponse =>
     json && Array.isArray(json.errors)
+
+const getErrorString = (data: any) =>
+    hasErrorsArray(data)
+        ? data.errors.map(err => err.description).join(', ')
+        : GENERIC_AUTH_ERROR
 
 const fetchAuth = async <T>(
     params: { [key: string]: string },
@@ -22,13 +28,10 @@ const fetchAuth = async <T>(
         },
         body: qs.stringify(params),
     })
-    if (res.status >= 500) return InvalidResult('Something went wrong')
-    const data = await res.json()
-    if (res.ok) return ValidResult(data.accessToken.accessToken)
-    if (hasErrorsArray(data)) {
-        return InvalidResult(data.errors.map(err => err.description).join(', '))
-    }
-    return InvalidResult('Something went wrong')
+    return fromResponse(res, {
+        valid: data => data.accessToken.accessToken,
+        invalid: getErrorString,
+    })
 }
 
 const fetchMembershipToken = (userToken: string) =>
@@ -80,13 +83,11 @@ const fetchUserDetails = async (
             Authorization: `Bearer ${userAccessToken}`,
         },
     })
-    if (res.status >= 500) return InvalidResult('Something went wrong')
-    const data = await res.json()
-    if (res.ok) return ValidResult(data.user)
-    if (hasErrorsArray(data)) {
-        return InvalidResult(data.errors.map(err => err.description).join(', '))
-    }
-    return InvalidResult('Something went wrong')
+
+    return fromResponse(res, {
+        valid: data => data.user,
+        invalid: getErrorString,
+    })
 }
 
 export { fetchUserDetails, fetchAuth, fetchMembershipToken }
