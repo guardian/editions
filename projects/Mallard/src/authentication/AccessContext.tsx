@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from 'react'
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useEffect,
+    useMemo,
+} from 'react'
 import { AccessController } from './lib/AccessController'
 import {
     AnyAttempt,
@@ -43,6 +49,12 @@ const controller = new AccessController({
     iap,
 })
 
+const authCAS = cas.runAuth.bind(cas)
+const authIAP = iap.runAuth.bind(iap)
+const signOutCAS = cas.signOut.bind(cas)
+const authIdentity = identity.runAuth.bind(identity)
+const signOutIdentity = identity.signOut.bind(identity)
+
 const AccessProvider = ({
     children,
     onIdentityStatusChange = () => {},
@@ -80,22 +92,23 @@ const AccessProvider = ({
         }
     }, [])
 
-    const { cas, identity } = controller.authorizerMap
+    const value = useMemo(
+        () => ({
+            attempt,
+            canAccess: !!attempt && isValid(attempt),
+            idenityData: isValid(idAuth) ? idAuth.data : null,
+            casData: isValid(casAuth) ? casAuth.data : null,
+            authCAS,
+            authIAP,
+            signOutCAS,
+            authIdentity,
+            signOutIdentity,
+        }),
+        [attempt, casAuth, idAuth],
+    )
 
     return (
-        <AccessContext.Provider
-            value={{
-                attempt,
-                canAccess: !!attempt && isValid(attempt),
-                idenityData: isValid(idAuth) ? idAuth.data : null,
-                casData: isValid(casAuth) ? casAuth.data : null,
-                authCAS: cas.runAuth.bind(cas),
-                authIAP: iap.runAuth.bind(iap), // TODO: change this
-                signOutCAS: cas.signOut.bind(cas),
-                authIdentity: identity.runAuth.bind(identity),
-                signOutIdentity: identity.signOut.bind(identity),
-            }}
-        >
+        <AccessContext.Provider value={value}>
             {children}
         </AccessContext.Provider>
     )
