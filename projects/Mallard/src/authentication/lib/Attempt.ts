@@ -76,6 +76,11 @@ const isValid = <T>(attempt: AnyAttempt<T>): attempt is ValidAttempt<T> =>
 const isOnline = <T>(attempt: ResolvedAttempt<T>) =>
     attempt.connectivity === 'online'
 
+/**
+ * As mentioned in the comments for the AccessController
+ * this checks to see whether an attempt is less important than the previous attempt
+ * (the access controller talks of "upgrading", this is the opposite)
+ */
 const isDowngrading = <T>(
     prev: ResolvedAttempt<T>,
     curr: ResolvedAttempt<T>,

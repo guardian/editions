@@ -70,6 +70,11 @@ const fromResponse = async <T>(
     return ErrorResultCons(error)
 }
 
+/**
+ * This is a helper for taking an auth result and chaining it
+ * with another one. A little bit like a cheap and cheerful asynchronous
+ * Either
+ */
 const flat = async <T, U>(
     init: AuthResult<T>,
     mapper: (data: T) => Promise<AuthResult<U>>,
