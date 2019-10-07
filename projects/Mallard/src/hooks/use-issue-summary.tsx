@@ -1,14 +1,29 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useState,
+    SetStateAction,
+    Dispatch,
+} from 'react'
 import { IssueSummary } from '../common'
 import { CachedOrPromise } from 'src/helpers/fetch/cached-or-promise'
 import { useCachedOrPromise } from './use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { useNetInfo } from './use-net-info'
 import { storeIssueSummary, readIssueSummary } from '../helpers/files'
+import { PathToIssue } from 'src/paths'
 
-const IssueSummaryContext = createContext<CachedOrPromise<IssueSummary[]>>([])
+interface IssueSummaryState {
+    issueSummary: any
+    issueId: PathToIssue
+    setIssueId: Dispatch<SetStateAction<PathToIssue>>
+}
 
-const getIssueSummary = (isConnected: boolean) => {
+const IssueSummaryContext = createContext<IssueSummaryState | null>(null)
+
+const getIssueSummary = (
+    isConnected: boolean = true,
+): CachedOrPromise<IssueSummary[]> => {
     return {
         type: 'promise',
         getValue: isConnected ? storeIssueSummary : readIssueSummary,
@@ -23,7 +38,9 @@ const fetchIssueSummary = (isConnected: boolean) => {
     }
 }
 
-const issueSummaryToLatestPath = (issueSummary: IssueSummary[]) => ({
+const issueSummaryToLatestPath = (
+    issueSummary: IssueSummary[],
+): PathToIssue => ({
     localIssueId: issueSummary[0].localId,
     publishedIssueId: issueSummary[0].publishedId,
 })
@@ -36,10 +53,10 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (issueId === null && issueSummary.response) {
         issueSummary.response({
-            success: issueSummary =>
+            success: (issueSummary: IssueSummary[]) =>
                 setIssueId(issueSummaryToLatestPath(issueSummary)),
-            pending: () => null,
-            error: () => null,
+            pending: () => <></>,
+            error: () => <></>,
         })
     }
 
@@ -52,7 +69,8 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-const useIssueSummaryJames = () => useContext(IssueSummaryContext)
+const useIssueSummaryJames = () =>
+    useContext<IssueSummaryState>(IssueSummaryContext)
 
 export {
     IssueSummaryProvider,

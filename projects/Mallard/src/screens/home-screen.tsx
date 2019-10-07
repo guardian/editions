@@ -165,8 +165,14 @@ export const HomeScreen = ({
             />
             <ScrollContainer>
                 {response({
-                    success: issueList => <IssueList issueList={issueList} />,
-                    error: ({ message }, stale, { retry }) => (
+                    success: (issueList: IssueSummary[]) => (
+                        <IssueList issueList={issueList} />
+                    ),
+                    error: (
+                        { message }: { message: string },
+                        stale: IssueSummary[],
+                        { retry }: { retry: () => void },
+                    ) => (
                         <>
                             {stale ? <IssueList issueList={stale} /> : null}
                             <FlexErrorMessage
@@ -177,7 +183,7 @@ export const HomeScreen = ({
                             />
                         </>
                     ),
-                    pending: stale =>
+                    pending: (stale: IssueSummary[]) =>
                         stale ? (
                             <>
                                 <IssueList issueList={stale} />

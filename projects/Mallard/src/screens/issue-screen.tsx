@@ -47,6 +47,7 @@ import {
     useIssueSummaryJames,
     issueSummaryToLatestPath,
 } from 'src/hooks/use-issue-summary'
+import { IssueSummary } from '../../../common/src'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -331,7 +332,7 @@ export const IssueScreen = () => {
                 response({
                     pending: handlePending,
                     error: handleError,
-                    success: issueSummary => {
+                    success: (issueSummary: IssueSummary[]) => {
                         const path = issueSummaryToLatestPath(issueSummary)
                         return <IssueScreenWithPath path={path} />
                     },
