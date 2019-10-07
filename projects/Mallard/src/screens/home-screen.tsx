@@ -20,7 +20,6 @@ import {
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
-import { useIssueSummary } from 'src/hooks/use-api'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
 import {
@@ -32,7 +31,6 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
-import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { useIssueSummaryJames } from 'src/hooks/use-issue-summary'
 
 const HomeScreenHeader = withNavigation(
@@ -149,9 +147,9 @@ export const HomeScreen = ({
 }) => {
     const {
         issueSummary: { response },
+        issueId,
     } = useIssueSummaryJames()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-    const issue = useIssueCompositeKey()
     return (
         <WithAppAppearance value={'tertiary'}>
             <HomeScreenHeader
@@ -159,6 +157,7 @@ export const HomeScreen = ({
                     navigation.navigate('Settings')
                 }}
                 onReturn={() => {
+                    const issue = issueId || '/'
                     navigateToIssue(navigation, {
                         path: issue,
                     })

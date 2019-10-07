@@ -1,7 +1,7 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { getIssueSummary, getIssueSummaryNew } from 'src/hooks/use-api'
+import { getIssueSummaryNew } from 'src/hooks/use-api'
 import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
 import { ImageSize, IssueSummary, issueSummaryPath } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
