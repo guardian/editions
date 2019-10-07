@@ -144,7 +144,6 @@ const IssueFronts = ({
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
-    console.log(issue)
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
