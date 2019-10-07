@@ -1,10 +1,10 @@
 import React from 'react'
 import Crossword from '@guardian/react-crossword'
 
-const CrosswordView = ({ crosswordData }) => {
+const CrosswordView = ({ id, crosswordData }) => {
     return (
         <div id="crossword-view">
-            <Crossword data={crosswordData} />
+            <Crossword id={id} data={crosswordData} />
         </div>
     )
 }
