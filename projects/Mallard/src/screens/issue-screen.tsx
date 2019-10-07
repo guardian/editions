@@ -44,7 +44,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import {
-    useIssueSummaryJames,
+    useIssueSummary,
     issueSummaryToLatestPath,
 } from 'src/hooks/use-issue-summary'
 import { IssueSummary } from '../../../common/src'
@@ -323,7 +323,7 @@ export const IssueScreen = () => {
     const {
         issueSummary: { response },
         issueId,
-    } = useIssueSummaryJames()
+    } = useIssueSummary()
     return (
         <Container>
             {issueId ? (

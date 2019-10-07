@@ -24,7 +24,7 @@ import { Wrap } from '../wrap/wrap'
 import { Direction } from 'src/helpers/sizes'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { ImageResource } from 'src/components/front/image-resource'
-import { useIssueSummaryJames } from 'src/hooks/use-issue-summary'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -149,7 +149,7 @@ const GalleryCoverItem = ({
 }
 
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
-    const { issueId } = useIssueSummaryJames()
+    const { issueId } = useIssueSummary()
     const publishedId = (issueId && issueId.publishedIssueId) || null
     return (
         <>

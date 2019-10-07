@@ -5,7 +5,7 @@ import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue } from '../../../common/src'
 import { useSettingsValue } from './use-settings'
-import { useIssueSummaryJames } from './use-issue-summary'
+import { useIssueSummary } from './use-issue-summary'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
@@ -56,7 +56,7 @@ const compressImagePath = async (path: string, width: number) => {
  *  */
 
 export const useImagePath = (image?: Image) => {
-    const { issueId } = useIssueSummaryJames()
+    const { issueId } = useIssueSummary()
 
     const [paths, setPaths] = useState<string | undefined>()
     const apiUrl = useSettingsValue.apiUrl()

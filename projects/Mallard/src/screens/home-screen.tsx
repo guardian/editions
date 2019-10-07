@@ -31,7 +31,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
-import { useIssueSummaryJames } from 'src/hooks/use-issue-summary'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -82,7 +82,7 @@ const IssueList = withNavigation(
             issueList: IssueSummary[]
         } & NavigationInjectedProps) => {
             const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-            const { setIssueId } = useIssueSummaryJames()
+            const { setIssueId } = useIssueSummary()
             return (
                 <>
                     <BaseList
@@ -148,7 +148,7 @@ export const HomeScreen = ({
     const {
         issueSummary: { response },
         issueId,
-    } = useIssueSummaryJames()
+    } = useIssueSummary()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     return (
         <WithAppAppearance value={'tertiary'}>

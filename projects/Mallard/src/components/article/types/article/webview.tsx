@@ -8,7 +8,7 @@ import { ArticleHeaderProps } from '../../article-header/types'
 import { useRenderedHTML } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 import { onShouldStartLoadWithRequest } from './helpers'
-import { useIssueSummaryJames } from 'src/hooks/use-issue-summary'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const AniWebView = Animated.createAnimatedComponent(WebView)
 
@@ -28,7 +28,7 @@ const WebviewWithArticle = ({
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
-    const { issueId } = useIssueSummaryJames()
+    const { issueId } = useIssueSummary()
 
     const html = useRenderedHTML(article, {
         pillar,

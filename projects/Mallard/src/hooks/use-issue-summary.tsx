@@ -69,12 +69,11 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-const useIssueSummaryJames = () =>
-    useContext<IssueSummaryState>(IssueSummaryContext)
+const useIssueSummary = () => useContext<IssueSummaryState>(IssueSummaryContext)
 
 export {
     IssueSummaryProvider,
-    useIssueSummaryJames,
+    useIssueSummary,
     issueSummaryToLatestPath,
     getIssueSummary,
 }
