@@ -16,9 +16,9 @@ const Crossword = ({
         originWhitelist={['*']}
         source={{ uri: getBundleUri('crosswords') }}
         injectedJavaScript={`
-                window.loadCrosswordData(${JSON.stringify(
-                    crosswordArticle.crossword,
-                )}); true;
+                window.loadCrosswordData("${
+                    crosswordArticle.key
+                }", ${JSON.stringify(crosswordArticle.crossword)}); true;
             `}
         allowFileAccess={true}
         javaScriptEnabled={true}

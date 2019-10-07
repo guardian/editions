@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom'
 
 const wrapper = document.getElementById('crossword-container')
 
-window.loadCrosswordData = crosswordData => {
+window.loadCrosswordData = (id, crosswordData) => {
     wrapper
         ? ReactDOM.render(
-              <CrosswordView crosswordData={crosswordData} />,
+              <CrosswordView id={id} crosswordData={crosswordData} />,
               wrapper,
           )
         : false
