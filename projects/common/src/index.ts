@@ -1,5 +1,8 @@
 import { FrontCardAppearance } from './collection/card-layouts'
 export * from './collection/card-layouts'
+export * from './collection/layout-model'
+export * from './collection/layouts'
+export * from './helpers/sizes'
 
 export interface WithKey {
     key: string

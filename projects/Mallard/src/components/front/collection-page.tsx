@@ -11,24 +11,26 @@ import {
     defaultCardAppearances,
     FrontCardAppearance,
     ArticleType,
+    PageLayout,
+    layouts,
+    Rectangle,
+    Size,
+    ItemSizes,
+    PageLayoutSizes,
 } from 'src/common'
 import {
     useCardBackgroundStyle,
     getItemRectanglePerc,
     getPageLayoutSizeXY,
-    ItemSizes,
     toAbsoluteRectangle,
-    PageLayout,
     Item as TItem,
-    PageLayoutSizes,
 } from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { layouts } from './helpers/layouts'
+import { itemTypeLookup } from './helpers/item-type-lookup'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import { WithArticleType } from 'src/hooks/use-article'
-import { Rectangle, Size } from 'src/helpers/sizes'
 
 const styles = StyleSheet.create({
     root: {
@@ -217,6 +219,7 @@ const CollectionPage = React.memo(
                 {layout.items.map((story, index) => {
                     if (!articlesInCard[index]) return null
                     const article = articlesInCard[index]
+                    const itemRenderer = itemTypeLookup[story.item]
                     return (
                         <Item
                             card={card}
@@ -228,7 +231,7 @@ const CollectionPage = React.memo(
                             publishedIssueId={publishedIssueId}
                             front={front}
                             key={index}
-                            Renderer={story.item}
+                            Renderer={itemRenderer}
                             article={article}
                         />
                     )

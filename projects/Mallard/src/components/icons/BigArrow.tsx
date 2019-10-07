@@ -1,6 +1,6 @@
 import React from 'react'
 import Svg, { Path } from 'react-native-svg'
-import { toSize, Direction } from 'src/helpers/sizes'
+import { toSize, Direction } from 'src/common'
 import { color } from 'src/theme/color'
 import { View } from 'react-native'
 
