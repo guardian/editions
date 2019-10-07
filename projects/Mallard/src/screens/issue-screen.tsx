@@ -7,7 +7,7 @@ import {
     ViewStyle,
     Image,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Issue } from 'src/common'
 import { Button } from 'src/components/button/button'
@@ -142,29 +142,53 @@ const IssueFronts = ({
     ListHeaderComponent?: ReactElement
     style?: StyleProp<ViewStyle>
 }) => {
-    const { container } = useIssueScreenSize()
+    const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
+    console.log(issue)
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
-        <ScrollView style={style} key={width} removeClippedSubviews={true}>
-            {ListHeaderComponent}
-            {issue.fronts.map(key => (
+        <FlatList
+            showsHorizontalScrollIndicator={false}
+            ListHeaderComponent={ListHeaderComponent}
+            // These three props are responsible for the majority of
+            // performance improvements
+            initialNumToRender={2}
+            windowSize={2}
+            debug
+            maxToRenderPerBatch={2}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={1}
+            decelerationRate="fast"
+            ListFooterComponent={() => (
+                <>
+                    <View style={[styles.illustrationPosition]}>
+                        <Image
+                            style={styles.illustrationImage}
+                            resizeMode={'contain'}
+                            source={require('src/assets/images/privacy.png')}
+                        />
+                    </View>
+                    <View style={{ height: container.height / 3 }} />
+                </>
+            )}
+            getItemLayout={(_: any, index: number) => ({
+                length: card.height,
+                offset: card.height * index,
+                index,
+            })}
+            keyExtractor={item => item}
+            data={issue.fronts}
+            style={style}
+            key={width}
+            renderItem={({ item: key }) => (
                 <Front
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
                     front={key}
                     key={key}
                 />
-            ))}
-            <View style={[styles.illustrationPosition]}>
-                <Image
-                    style={styles.illustrationImage}
-                    resizeMode={'contain'}
-                    source={require('src/assets/images/privacy.png')}
-                />
-            </View>
-            <View style={{ height: container.height / 3 }} />
-        </ScrollView>
+            )}
+        />
     )
 }
 
