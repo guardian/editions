@@ -52,7 +52,7 @@ const AuthSwitcherScreen = ({
     const { open } = useModal()
 
     const handleAuthClick = async (
-        params: Promise<AuthParams>,
+        paramsPromise: Promise<AuthParams>,
         {
             requiresFunctionalConsent,
             signInName,
@@ -64,35 +64,46 @@ const AuthSwitcherScreen = ({
             {
                 allow: async () => {
                     setIsLoading(true)
-                    const attempt = await authIdentity(await params)
-                    if (isValid(attempt)) {
-                        setIsLoading(false)
-                        if (!canViewEdition(attempt.data)) {
-                            open(close => (
-                                <SignInFailedModalCard
-                                    email={
-                                        attempt.data.userDetails
-                                            .primaryEmailAddress
-                                    }
-                                    onDismiss={() => navigation.popToTop()}
-                                    onOpenCASLogin={() =>
-                                        navigation.navigate(
-                                            routeNames.CasSignIn,
-                                        )
-                                    }
-                                    onLoginPress={() =>
-                                        navigation.navigate(routeNames.SignIn)
-                                    }
-                                    close={close}
-                                />
-                            ))
+                    try {
+                        const attempt = await authIdentity(await paramsPromise)
+                        if (isValid(attempt)) {
+                            setIsLoading(false)
+                            if (!canViewEdition(attempt.data)) {
+                                open(close => (
+                                    <SignInFailedModalCard
+                                        email={
+                                            attempt.data.userDetails
+                                                .primaryEmailAddress
+                                        }
+                                        onDismiss={() => navigation.popToTop()}
+                                        onOpenCASLogin={() =>
+                                            navigation.navigate(
+                                                routeNames.CasSignIn,
+                                            )
+                                        }
+                                        onLoginPress={() =>
+                                            navigation.navigate(
+                                                routeNames.SignIn,
+                                            )
+                                        }
+                                        close={close}
+                                    />
+                                ))
+                            } else {
+                                open(close => (
+                                    <SubFoundModalCard close={close} />
+                                ))
+                            }
+                            navigation.goBack()
                         } else {
-                            open(close => <SubFoundModalCard close={close} />)
+                            // push this into the catch logic below
+                            throw attempt.reason
                         }
-                        navigation.goBack()
-                    } else {
+                    } catch (e) {
                         setIsLoading(false)
-                        setError(attempt.reason || 'Something went wrong')
+                        setError(
+                            typeof e === 'string' ? e : 'Something went wrong',
+                        )
                     }
                 },
                 deny: async () => {
