@@ -110,7 +110,7 @@ export const headerStyles = ({
         z-index: 99;
         position: relative;
     }
-    .header-image > .review {
+    .header-image > .rating {
         position: absolute;
         bottom:0;
         left:0;
