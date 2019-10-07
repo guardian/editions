@@ -2,6 +2,7 @@ import { FrontCardAppearance } from './collection/card-layouts'
 export * from './collection/card-layouts'
 export * from './collection/layout-model'
 export * from './collection/layouts'
+export * from './collection/thumbnails'
 export * from './helpers/sizes'
 
 export interface WithKey {
@@ -411,6 +412,13 @@ export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
     source: string
     path: string
+}
+
+export type ImageUse = 'full-size' | 'thumb' | 'thumb-large' | 'not-used'
+
+export interface TrailImage extends Image {
+    mobileImageUse: ImageUse
+    tabletImageUse: ImageUse
 }
 
 export interface CreditedImage extends Image {

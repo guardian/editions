@@ -4,8 +4,10 @@ import {
     BlockElement,
     ArticleType,
     IssuePublicationIdentifier,
+    ImageUse,
+    TrailImage,
 } from '../common/src'
-import { CAPIContent, CArticle, getArticles } from './capi/articles'
+import { CAPIContent, getArticles } from './capi/articles'
 import {
     CAPIArticle,
     Collection,
@@ -18,14 +20,14 @@ import {
     PublishedCardImage,
     PublishedCollection,
     PublishedFront,
-    PublishedFurtniture,
     PublishedIssue,
+    PublishedFurniture,
 } from './fronts/issue'
 import { getImageFromURL } from './image'
 import { LastModifiedUpdater } from './lastModified'
 import { isPreview } from './preview'
 import { Path, s3fetch } from './s3'
-import { createCardsFromAllArticlesInCollection } from './utils/collection'
+import { createCards } from './utils/collection'
 import { getCrosswordArticleOverrides } from './utils/crossword'
 import {
     attempt,
@@ -70,13 +72,25 @@ const getTrailImage = (
     maybeMainImage: CreditedImage | undefined,
     maybeCapiTrailImage: Image | undefined,
     maybeImageOverride: Image | undefined,
-): Image | undefined => {
-    return maybeImageOverride || maybeMainImage || maybeCapiTrailImage
+    mobileImageUse: ImageUse,
+    tabletImageUse: ImageUse,
+): TrailImage | undefined => {
+    const chosenTrailImage =
+        maybeImageOverride || maybeMainImage || maybeCapiTrailImage
+    return (
+        chosenTrailImage && {
+            ...chosenTrailImage,
+            mobileImageUse,
+            tabletImageUse,
+        }
+    )
 }
 
 export const getImages = (
     article: CAPIContent,
-    furniture: PublishedFurtniture,
+    furniture: PublishedFurniture,
+    mobileImageUse: ImageUse,
+    tabletImageUse: ImageUse,
 ): {
     image?: CreditedImage
     cardImage?: Image
@@ -106,6 +120,8 @@ export const getImages = (
         maybeMainImage,
         maybeCapiTrailImage,
         maybeImageOverride,
+        mobileImageUse,
+        tabletImageUse,
     )
 
     return {
@@ -115,7 +131,12 @@ export const getImages = (
     }
 }
 
-const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
+const commonFields = (
+    article: CAPIContent,
+    furniture: PublishedFurniture,
+    mobileImageUse: ImageUse,
+    tabletImageUse: ImageUse,
+) => {
     const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
     const headline = oc(furniture).headlineOverride() || article.headline
     const trail = striptags(
@@ -125,7 +146,7 @@ const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
     const showByline = furniture.showByline
     const showQuotedHeadline = furniture.showQuotedHeadline
     const mediaType = furniture.mediaType
-    const images = getImages(article, furniture)
+    const images = getImages(article, furniture, mobileImageUse, tabletImageUse)
     return {
         key: article.path,
         kicker,
@@ -152,7 +173,9 @@ export const patchArticleElements = (article: {
 
 export const patchArticle = (
     article: CAPIContent,
-    furniture: PublishedFurtniture,
+    furniture: PublishedFurniture,
+    mobileImageUse: ImageUse,
+    tabletImageUse: ImageUse,
 ): [string, CAPIArticle] => {
     const sportScore = oc(furniture).sportScore()
 
@@ -162,7 +185,12 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(article, furniture),
+                    ...commonFields(
+                        article,
+                        furniture,
+                        mobileImageUse,
+                        tabletImageUse,
+                    ),
                     ...getCrosswordArticleOverrides(article),
                     sportScore,
                 },
@@ -173,7 +201,12 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(article, furniture),
+                    ...commonFields(
+                        article,
+                        furniture,
+                        mobileImageUse,
+                        tabletImageUse,
+                    ),
                     key: article.path,
                     sportScore,
                 },
@@ -184,14 +217,24 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(article, furniture),
+                    ...commonFields(
+                        article,
+                        furniture,
+                        mobileImageUse,
+                        tabletImageUse,
+                    ),
                     key: article.path,
                     sportScore,
                 },
             ]
 
         case 'article':
-            const fields = commonFields(article, furniture)
+            const fields = commonFields(
+                article,
+                furniture,
+                mobileImageUse,
+                tabletImageUse,
+            )
             return [
                 article.path,
                 {
@@ -216,7 +259,7 @@ export const parseCollection = async (
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
-        PublishedFurtniture,
+        PublishedFurniture,
     ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
@@ -235,7 +278,7 @@ export const parseCollection = async (
             'Could not connect to CAPI',
         )
 
-    const articles: [string, CAPIArticle][] = articleFragmentList
+    const articles: [CAPIContent, PublishedFurniture][] = articleFragmentList
         .filter(([key]) => {
             const inResponse =
                 key in capiPrintArticles || key in capiSearchArticles
@@ -244,16 +287,14 @@ export const parseCollection = async (
             }
             return inResponse
         })
-        .map(([key, furniture]) =>
-            patchArticle(
-                capiSearchArticles[key] || capiPrintArticles[key],
-                furniture,
-            ),
-        )
+        .map(([key, furniture]) => [
+            capiSearchArticles[key] || capiPrintArticles[key],
+            furniture,
+        ])
 
     return {
         key: `${i}:${collectionResponse.name}`,
-        cards: createCardsFromAllArticlesInCollection(articles, front),
+        cards: createCards(articles, front),
     }
 }
 
@@ -322,6 +363,11 @@ export const transformToFront = async (
     }
 }
 
+// Run through each card and reduce or remove trailImage as appropriate
+const optimisedFrontImages = (front: Front): Front => {
+    return front
+}
+
 export const getFront = async (
     issue: IssuePublicationIdentifier,
     frontId: string,
@@ -337,5 +383,11 @@ export const getFront = async (
         return publishedIssue
     }
 
-    return transformToFront(frontId, publishedIssue)
+    const front = await transformToFront(frontId, publishedIssue)
+
+    const optimisedFront = hasSucceeded(front)
+        ? optimisedFrontImages(front)
+        : front
+
+    return optimisedFront
 }

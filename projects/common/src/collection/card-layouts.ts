@@ -1,5 +1,3 @@
-import { CAPIArticle } from '../index'
-
 type PossibleCardlengths = 1 | 2 | 3 | 4 | 5 | 6
 
 export enum FrontCardAppearance {
@@ -52,18 +50,11 @@ export const defaultCardAppearances: {
 
 export const getCardAppearanceInfoAndOverrides = (
     card: FrontCardAppearanceShort,
-    articles: CAPIArticle[],
 ): FrontCardAppearanceInfo & { appearance: FrontCardAppearance } => {
     if (typeof card === 'number') {
         return {
             appearance: defaultCardAppearances[card],
             ...frontCardAppearanceInfo[defaultCardAppearances[card]],
-        }
-    }
-    if (card === FrontCardAppearance.splashPage) {
-        //TODO: implement correct logic using data from fronts
-        if (articles[0].byline === 'Ben Longden') {
-            card = FrontCardAppearance.superHeroPage
         }
     }
     return {

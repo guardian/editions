@@ -4,7 +4,7 @@ import {
     WithKey,
 } from '../../../common/src'
 import { CArticle } from '../../capi/articles'
-import { PublishedFurtniture as IPublishedFurniture } from '../../fronts/issue'
+import { PublishedFurniture as IPublishedFurniture } from '../../fronts/issue'
 
 const Content = <T extends string>(
     type: T,
