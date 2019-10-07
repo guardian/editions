@@ -1,7 +1,7 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { getIssueSummaryNew } from 'src/hooks/use-api'
+import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
 import { ImageSize, IssueSummary, issueSummaryPath } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
@@ -213,7 +213,7 @@ export const matchSummmaryToKey = (
 
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
-    const issueSummaries = await getIssueSummaryNew().getValue()
+    const issueSummaries = await getIssueSummary().getValue()
     // Find the todays issue summary from the list of summary
     const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
 

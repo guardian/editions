@@ -8,7 +8,7 @@ import {
     matchSummmaryToKey,
 } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
-import { getIssueSummaryNew } from 'src/hooks/use-api'
+import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushNotificationRegistrationCache } from './storage'
 
 export interface PushNotificationRegistration {
@@ -73,7 +73,7 @@ const pushNotifcationRegistration = () => {
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
                 const screenSize = await imageForScreenSize()
-                const issueSummaries = await getIssueSummaryNew().getValue()
+                const issueSummaries = await getIssueSummary().getValue()
                 console.log(issueSummaries)
                 // Check to see if we can find the image summary for the one that is pushed
                 const pushImageSummary = matchSummmaryToKey(issueSummaries, key)
