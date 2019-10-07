@@ -44,6 +44,8 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { useIssueCompositeKeyHandler } from 'src/hooks/use-issue-id'
+import { useIssueIdJames } from 'src/hooks/use-issue-id-new'
+import { useIssueSummaryJames } from 'src/hooks/use-issue-summary'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -316,18 +318,27 @@ const IssueScreenWithPath = React.memo(
 )
 
 export const IssueScreen = () => {
-    const response = useIssueCompositeKeyHandler()
-
+    const {
+        issueSummary: { response },
+        issueId,
+    } = useIssueSummaryJames()
     return (
         <Container>
-            {response({
-                pending: handlePending,
-                error: handleError,
-                success: path => {
-                    console.log(path)
-                    return <IssueScreenWithPath path={path} />
-                },
-            })}
+            {issueId ? (
+                <IssueScreenWithPath path={issueId} />
+            ) : (
+                response({
+                    pending: handlePending,
+                    error: handleError,
+                    success: issueSummary => {
+                        const path = {
+                            localIssueId: issueSummary[0].localId,
+                            publishedIssueId: issueSummary[0].publishedId,
+                        }
+                        return <IssueScreenWithPath path={path} />
+                    },
+                })
+            )}
         </Container>
     )
 }

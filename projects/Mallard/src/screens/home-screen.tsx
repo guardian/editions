@@ -84,6 +84,7 @@ const IssueList = withNavigation(
             issueList: IssueSummary[]
         } & NavigationInjectedProps) => {
             const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+            const { setIssueId } = useIssueSummaryJames()
             return (
                 <>
                     <BaseList
@@ -98,6 +99,11 @@ const IssueList = withNavigation(
                                             publishedIssueId:
                                                 issueSummary.publishedId,
                                         },
+                                    })
+                                    setIssueId({
+                                        localIssueId: issueSummary.localId,
+                                        publishedIssueId:
+                                            issueSummary.publishedId,
                                     })
                                     sendComponentEvent({
                                         componentType: ComponentType.appButton,
@@ -141,10 +147,11 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { response: issueSummary } = useIssueSummaryJames()
+    const {
+        issueSummary: { response },
+    } = useIssueSummaryJames()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     const issue = useIssueCompositeKey()
-    console.log('count')
     return (
         <WithAppAppearance value={'tertiary'}>
             <HomeScreenHeader
@@ -158,7 +165,7 @@ export const HomeScreen = ({
                 }}
             />
             <ScrollContainer>
-                {issueSummary({
+                {response({
                     success: issueList => <IssueList issueList={issueList} />,
                     error: ({ message }, stale, { retry }) => (
                         <>

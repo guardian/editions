@@ -82,7 +82,6 @@ export const useIssueCompositeKeyHandler = () => {
     }): R => {
         switch (response.state) {
             case 'pending': {
-                console.log('pend')
                 return fromNav ? success(fromNav) : pending()
             }
             case 'success': {

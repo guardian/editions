@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { useNetInfo } from './use-net-info'
 import { IssueSummary } from '../common'
 import { getIssueSummary, getIssueSummaryNew } from './use-api'
@@ -16,11 +16,16 @@ const fetchIssueSummary = () => {
     }
 }
 
-const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => (
-    <IssueSummaryContext.Provider value={fetchIssueSummary()}>
-        {children}
-    </IssueSummaryContext.Provider>
-)
+const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
+    const [issueId, setIssueId] = useState(null)
+    return (
+        <IssueSummaryContext.Provider
+            value={{ issueSummary: fetchIssueSummary(), issueId, setIssueId }}
+        >
+            {children}
+        </IssueSummaryContext.Provider>
+    )
+}
 
 const useIssueSummaryJames = () => useContext(IssueSummaryContext)
 
