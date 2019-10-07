@@ -77,9 +77,15 @@ export const useImagePath = (image?: Image) => {
 }
 
 export const useScaledImage = (largePath: string, width: number) => {
-    const [uri, setUri] = useState<string | undefined>()
+    const isRemote = largePath.slice(0, 4) === 'http'
+
+    const [uri, setUri] = useState<string | undefined>(
+        isRemote ? largePath : undefined,
+    )
     useEffect(() => {
-        compressImagePath(largePath, width).then(setUri)
+        if (!isRemote) {
+            compressImagePath(largePath, width).then(setUri)
+        }
     }, [largePath, width])
     return uri
 }
