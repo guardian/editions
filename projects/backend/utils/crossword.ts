@@ -1,17 +1,20 @@
 import { capitalizeFirstLetter, addCommas } from './format'
 import { CCrossword } from '../capi/articles'
-import { CAPIArticle, Crossword, CrosswordArticle } from '../common'
+import {
+    CAPIArticle,
+    Crossword,
+    CrosswordArticle,
+    CrosswordType,
+} from '../common'
 import { getImageFromURL } from '../image'
 
-const crosswordTypes = ['quick', 'cryptic', 'speedy', 'everyman'] as const
-
-export type CrosswordType = typeof crosswordTypes[number] | null
+const enumKeyToKebabCase = (key: string) => key.toLowerCase().replace(/_/g, '-')
 
 const getCrosswordType = (path: string): CrosswordType => {
-    for (const key of crosswordTypes) {
-        if (path.includes(key)) return key
+    for (const [key, type] of Object.entries(CrosswordType)) {
+        if (path.includes(enumKeyToKebabCase(key))) return type
     }
-    return null
+    return CrosswordType.QUICK // default to something sensible as this is largely used for rendering
 }
 
 const getCrosswordName = (type: CrosswordType): string =>
@@ -45,6 +48,9 @@ export const getCrosswordArticleOverrides = (
         headline: getCrosswordName(type),
         kicker: getCrosswordKicker(article.crossword),
         trailImage: getCrosswordImage(type),
-        crossword: article.crossword,
+        crossword: {
+            ...article.crossword,
+            type,
+        },
     }
 }
