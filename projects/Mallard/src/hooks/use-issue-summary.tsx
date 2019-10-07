@@ -22,9 +22,23 @@ const issueSummaryToLatestPath = (issueSummary: IssueSummary[]) => ({
 
 const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     const [issueId, setIssueId] = useState(null)
+
+    const issueSummary = fetchIssueSummary()
+
+    if (issueId === null && issueSummary.response) {
+        console.log(
+            issueSummary.response({
+                success: issueSummary =>
+                    setIssueId(issueSummaryToLatestPath(issueSummary)),
+                pending: () => null,
+                error: () => null,
+            }),
+        )
+    }
+
     return (
         <IssueSummaryContext.Provider
-            value={{ issueSummary: fetchIssueSummary(), issueId, setIssueId }}
+            value={{ issueSummary, issueId, setIssueId }}
         >
             {children}
         </IssueSummaryContext.Provider>
