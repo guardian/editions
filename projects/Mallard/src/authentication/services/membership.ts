@@ -1,5 +1,5 @@
+import { AuthResult, fromResponse } from '../lib/Result'
 import { MEMBERS_DATA_API_URL } from 'src/constants'
-import { Error5XX } from './exceptions'
 
 export interface MembersDataAPIResponse {
     userId: string
@@ -14,23 +14,15 @@ export interface MembersDataAPIResponse {
     }
 }
 
-/**
- * DO NOT USE THIS DIRECTLY
- *
- * In most cases you will want to use the method that caches the result of this request
- * in order that re-authentication can use the cached credentials
- */
 const fetchMembershipData = async (
     membershipAccessToken: string,
-): Promise<MembersDataAPIResponse> => {
+): Promise<AuthResult<MembersDataAPIResponse>> => {
     const res = await fetch(`${MEMBERS_DATA_API_URL}/user-attributes/me`, {
         headers: {
             'GU-IdentityToken': membershipAccessToken,
         },
     })
-    if (res.status >= 500) throw new Error5XX()
-    if (!res.ok) throw new Error('Something went wrong')
-    return res.json()
+    return fromResponse(res)
 }
 
 export { fetchMembershipData }

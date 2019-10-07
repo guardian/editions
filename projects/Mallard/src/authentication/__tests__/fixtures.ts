@@ -1,5 +1,5 @@
-import { ReceiptIOS } from 'src/services/iap'
-import { UserData } from '../helpers'
+import { ReceiptIOS } from 'src/authentication/services/iap'
+import { IdentityAuthData } from '../authorizers/IdentityAuthorizer'
 
 const membershipResponse = {
     userId: 'uid',
@@ -96,7 +96,7 @@ const withCreds = ({
     email: string
     digitalPack: boolean
     userEmailValidated?: boolean
-}): UserData => ({
+}): IdentityAuthData => ({
     ...userData,
     userDetails: {
         ...userData.userDetails,

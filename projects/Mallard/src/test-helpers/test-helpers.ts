@@ -9,7 +9,7 @@ const getMockCache = <T>(val: T) => (buildNumber: string) => ({
 const getMockAsyncCache = <T>(val: T) => ({
     get: getMockPromise(val),
     set: getMockPromise(void 0),
-    reset: getMockPromise(true),
+    reset: getMockPromise(void 0),
 })
 
 const getMockStore = (val?: string) => ({

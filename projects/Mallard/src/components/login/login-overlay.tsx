@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useModal } from '../modal'
-import { useAuth } from 'src/authentication/auth-context'
 import { SignInModalCard } from '../sign-in-modal-card'
 import { SubNotFoundModalCard } from '../sub-not-found-modal-card'
+import { useAccess, useIdentity } from 'src/authentication/AccessContext'
 
 const overlayStyles = StyleSheet.create({
     wrapper: {
@@ -88,40 +88,38 @@ const LoginOverlay = ({
     onOpenCASLogin: () => void
     onLoginPress: () => void
 }) => {
-    const handler = useAuth()
-    return handler({
-        pending: () => <>{children}</>,
-        authed: () => <>{children}</>,
-        unauthed: signedIn =>
-            signedIn ? (
-                <ModalOpener
-                    isFocused={isFocused}
-                    renderModal={close => (
-                        <SubNotFoundModalCard
-                            onDismiss={onDismiss}
-                            onOpenCASLogin={onOpenCASLogin}
-                            onLoginPress={onLoginPress}
-                            close={close}
-                        />
-                    )}
-                >
-                    {children}
-                </ModalOpener>
-            ) : (
-                <ModalOpener
-                    isFocused={isFocused}
-                    renderModal={close => (
-                        <SignInModalCard
-                            onDismiss={onDismiss}
-                            onLoginPress={onLoginPress}
-                            close={close}
-                        />
-                    )}
-                >
-                    {children}
-                </ModalOpener>
-            ),
-    })
+    const canAccess = useAccess()
+    const idData = useIdentity()
+    return canAccess ? (
+        <>{children}</>
+    ) : idData ? (
+        <ModalOpener
+            isFocused={isFocused}
+            renderModal={close => (
+                <SubNotFoundModalCard
+                    onDismiss={onDismiss}
+                    onOpenCASLogin={onOpenCASLogin}
+                    onLoginPress={onLoginPress}
+                    close={close}
+                />
+            )}
+        >
+            {children}
+        </ModalOpener>
+    ) : (
+        <ModalOpener
+            isFocused={isFocused}
+            renderModal={close => (
+                <SignInModalCard
+                    onDismiss={onDismiss}
+                    onLoginPress={onLoginPress}
+                    close={close}
+                />
+            )}
+        >
+            {children}
+        </ModalOpener>
+    )
 }
 
 export { LoginOverlay }

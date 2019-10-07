@@ -2,37 +2,36 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { Settings } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 import {
-    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 } from 'src/constants'
 import { CasExpiry } from 'src/services/content-auth-service'
-import { UserData } from '../authentication/helpers'
-import { ReceiptIOS } from 'src/services/iap'
+import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
-import DeviceInfo from 'react-native-device-info'
+import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
 
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
  * and not Android.
  */
-const createSyncCacheIOS = <T = any>(key: string) => ({
-    set: (value: T) => Settings.set({ [key]: value }),
-    get: (): T | undefined => Settings.get(key),
-    reset: (): void => Settings.set({ [key]: void 0 }),
+const createSettingsCacheIOS = <T = any>(key: string) => ({
+    set: async (value: T) => {
+        Settings.set({ [key]: value })
+    },
+    get: async (): Promise<T | null> => Settings.get(key) || null,
+    reset: async (): Promise<void> => {
+        Settings.set({ [key]: null })
+    },
 })
 
-const legacyCASUsernameCache = createSyncCacheIOS<string>(
+const legacyCASUsernameCache = createSettingsCacheIOS<string>(
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
 )
 
-const legacyCASPasswordCache = createSyncCacheIOS<string>(
+const legacyCASPasswordCache = createSettingsCacheIOS<string>(
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
 )
-
-const legacyCASExpiryCache = (bundleId: string) =>
-    createSyncCacheIOS<CasExpiry>(LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY(bundleId))
 
 /**
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
@@ -42,13 +41,12 @@ const createAsyncCache = <T extends object | string>(key: string) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
-    reset: (): Promise<boolean> =>
-        AsyncStorage.removeItem(key).then(() => true),
+    reset: (): Promise<void> => AsyncStorage.removeItem(key),
 })
 
 const casDataCache = createAsyncCache<CasExpiry>('cas-data-cache')
 
-const userDataCache = createAsyncCache<UserData>('user-data-cache')
+const userDataCache = createAsyncCache<IdentityAuthData>('user-data-cache')
 
 const iapReceiptCache = createAsyncCache<ReceiptIOS>('iap-receipt-cache')
 
@@ -64,10 +62,16 @@ const cacheClearCache = createAsyncCache<string>('cacheClear')
  * This is keyed off the given service.
  */
 const createServiceTokenStore = (service: string) => ({
-    get: () => Keychain.getGenericPassword({ service }),
-    set: (username: string, token: string) =>
-        Keychain.setGenericPassword(username, token, { service }),
-    reset: () => Keychain.resetGenericPassword({ service }),
+    get: () =>
+        Keychain.getGenericPassword({ service }).then(val =>
+            val ? val : null,
+        ),
+    set: async ({ username, token }: { username: string; token: string }) => {
+        await Keychain.setGenericPassword(username, token, { service })
+    },
+    reset: async (): Promise<void> => {
+        await Keychain.resetGenericPassword({ service })
+    },
 })
 
 const userAccessTokenKeychain = createServiceTokenStore('UserAccessToken')
@@ -93,54 +97,22 @@ const legacyUserAccessTokenKeychain = {
             password: JSON.parse(token.password).accessToken,
         }
     },
-    set: () => {
+    set: async () => {
         /** noop, use the non-legacy cache */
     },
     reset: () => _legacyUserAccessTokenKeychain.reset(),
 }
 
-/**
- * Removes all the relevent keychain, storage entries that mark a user as logged in
- * and returns a boolean indicating whether all these operations succeeded
- */
-const signOutIdentity = (
-    userAccessTokenKeychainImpl = userAccessTokenKeychain,
-    membershipAccessTokenKeychainImpl = membershipAccessTokenKeychain,
-    userDataCacheImpl = userDataCache,
-    legacyUserAccessTokenKeychainImpl = legacyUserAccessTokenKeychain,
-): Promise<boolean> =>
-    Promise.all([
-        userAccessTokenKeychainImpl.reset(),
-        membershipAccessTokenKeychainImpl.reset(),
-        userDataCacheImpl.reset(),
-        legacyUserAccessTokenKeychainImpl.reset(),
-    ]).then(all => all.every(_ => _))
-
-const DEV_clearCASCaches = () =>
-    Promise.all([
-        signOutIdentity(),
-        DeviceInfo.getBundleId().then(buildId =>
-            legacyCASExpiryCache(buildId).reset(),
-        ),
-        legacyCASPasswordCache.reset(),
-        legacyCASUsernameCache.reset(),
-        casCredentialsKeychain.reset(),
-        casDataCache.reset(),
-    ])
-
 export {
     userAccessTokenKeychain,
     membershipAccessTokenKeychain,
     casCredentialsKeychain,
-    signOutIdentity,
     casDataCache,
     userDataCache,
     pushNotificationRegistrationCache,
     legacyUserAccessTokenKeychain,
-    legacyCASExpiryCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
     iapReceiptCache,
     cacheClearCache,
-    DEV_clearCASCaches,
 }
