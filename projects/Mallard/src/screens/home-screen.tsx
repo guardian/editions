@@ -16,21 +16,20 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { BaseList } from 'src/components/lists/list'
 import { Spinner } from 'src/components/spinner'
 import {
-    CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_AUTO_RETRY,
+    CONNECTION_FAILED_ERROR,
 } from 'src/helpers/words'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
 import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
-import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -90,22 +89,17 @@ const IssueList = withNavigation(
                         renderItem={({ item: issueSummary }) => (
                             <IssueRow
                                 onPress={() => {
-                                    navigateToIssue(navigation, {
-                                        path: {
-                                            localIssueId: issueSummary.localId,
-                                            publishedIssueId:
-                                                issueSummary.publishedId,
+                                    navigateToIssue({
+                                        navigation,
+                                        navigationProps: {
+                                            path: {
+                                                localIssueId:
+                                                    issueSummary.localId,
+                                                publishedIssueId:
+                                                    issueSummary.publishedId,
+                                            },
                                         },
-                                    })
-                                    setIssueId({
-                                        localIssueId: issueSummary.localId,
-                                        publishedIssueId:
-                                            issueSummary.publishedId,
-                                    })
-                                    sendComponentEvent({
-                                        componentType: ComponentType.appButton,
-                                        action: Action.click,
-                                        value: 'issues_list_issue_clicked',
+                                        setIssueId,
                                     })
                                 }}
                                 issue={issueSummary}
@@ -123,8 +117,12 @@ const IssueList = withNavigation(
                                 <Button
                                     appearance={ButtonAppearance.skeleton}
                                     onPress={() => {
-                                        navigateToIssue(navigation, {
-                                            path: undefined,
+                                        navigateToIssue({
+                                            navigation,
+                                            navigationProps: {
+                                                path: undefined,
+                                            },
+                                            setIssueId,
                                         })
                                     }}
                                 >
@@ -144,7 +142,7 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { issueSummary, error } = useIssueSummary()
+    const { issueSummary, error, setIssueId } = useIssueSummary()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     return (
         <WithAppAppearance value={'tertiary'}>
@@ -153,7 +151,11 @@ export const HomeScreen = ({
                     navigation.navigate('Settings')
                 }}
                 onReturn={() => {
-                    navigateToIssue(navigation, {})
+                    navigateToIssue({
+                        navigation,
+                        navigationProps: {},
+                        setIssueId,
+                    })
                 }}
             />
             <ScrollContainer>
