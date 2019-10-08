@@ -2,8 +2,8 @@ import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
-import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
-import { ImageSize, IssueSummary, issueSummaryPath } from '../../../common/src'
+import { FSPaths } from 'src/paths'
+import { ImageSize, IssueSummary } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
@@ -15,7 +15,6 @@ interface BasicFile {
     size: number
     id: string
 }
-
 interface OtherFile extends BasicFile {
     type: 'other' | 'archive' | 'json'
 }
