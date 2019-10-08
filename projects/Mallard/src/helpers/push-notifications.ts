@@ -72,15 +72,24 @@ const pushNotifcationRegistration = () => {
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             if (key) {
-                const screenSize = await imageForScreenSize()
-                const issueSummaries = await getIssueSummary().getValue()
-                // Check to see if we can find the image summary for the one that is pushed
-                const pushImageSummary = matchSummmaryToKey(issueSummaries, key)
+                try {
+                    const screenSize = await imageForScreenSize()
+                    const issueSummaries = await getIssueSummary().getValue()
+                    // Check to see if we can find the image summary for the one that is pushed
+                    const pushImageSummary = matchSummmaryToKey(
+                        issueSummaries,
+                        key,
+                    )
 
-                // Not there? Fahgettaboudit
-                if (!pushImageSummary) return null
+                    // Not there? Fahgettaboudit
+                    if (!pushImageSummary) return null
 
-                downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    downloadAndUnzipIssue(pushImageSummary, screenSize)
+                } catch (e) {
+                    console.log('Push notification unable to download')
+                }
+
+                // No matter what happens, always clear up old issues
                 clearOldIssues()
             }
 

@@ -64,7 +64,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
                 }
             })
             .catch(e => {
-                setError(e)
+                setError(e.message)
             })
     }, [])
 
@@ -80,7 +80,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
                         setError('')
                     })
                     .catch(e => {
-                        setError(e)
+                        setError(e.message)
                     })
             }
         })

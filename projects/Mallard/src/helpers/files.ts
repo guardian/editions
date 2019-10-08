@@ -213,46 +213,50 @@ export const matchSummmaryToKey = (
 
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
-    const issueSummaries = await getIssueSummary().getValue()
-    // Find the todays issue summary from the list of summary
-    const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
+    try {
+        const issueSummaries = await getIssueSummary().getValue()
 
-    // If there isnt one for today, then fahgettaboudit...
-    if (!todaysIssueSummary) return null
+        // Find the todays issue summary from the list of summary
+        const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
 
-    const isTodaysIssueOnDevice = await isIssueOnDevice(
-        todaysIssueSummary.localId,
-    )
+        // If there isnt one for today, then fahgettaboudit...
+        if (!todaysIssueSummary) return null
 
-    // Only download it if its not on the device
-    if (!isTodaysIssueOnDevice) {
-        const imageSize = await imageForScreenSize()
-        downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+        const isTodaysIssueOnDevice = await isIssueOnDevice(
+            todaysIssueSummary.localId,
+        )
+
+        // Only download it if its not on the device
+        if (!isTodaysIssueOnDevice) {
+            const imageSize = await imageForScreenSize()
+            downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+        }
+    } catch (e) {
+        console.log('Unable to get the issue summary')
     }
 }
 
 export const readIssueSummary = async () =>
     RNFetchBlob.fs
-        .readFile(FSPaths.issuesDir + '/daily-edition/issues.json', 'utf8')
+        .readFile(FSPaths.issuesDir + defaultSettings.issuesPath, 'utf8')
         .then(data => JSON.parse(data))
-        .catch(e => console.log(e))
+        .catch(e => {
+            throw e
+        })
 
 export const fetchAndStoreIssueSummary = async () => {
     const apiUrl = await getSetting('apiUrl')
-    return (
-        RNFetchBlob.config({
-            overwrite: true,
-            path: FSPaths.issuesDir + '/daily-edition/issues.json',
+    return RNFetchBlob.config({
+        overwrite: true,
+        path: FSPaths.issuesDir + defaultSettings.issuesPath,
+    })
+        .fetch('GET', apiUrl + 'issues', {
+            'Content-Type': 'application/json',
         })
-            // @TODO: Refactor the URL here.
-            .fetch('GET', apiUrl + 'issues', {
-                'Content-Type': 'application/json',
-            })
-            .then(async res => {
-                return res.json()
-            })
-            .catch(e => console.log('supressing: ', e))
-    )
-    // @TODO: Need to handle these errors nicely?
-    // .catch(e => console.log(e))
+        .then(async res => {
+            return res.json()
+        })
+        .catch(e => {
+            throw e
+        })
 }
