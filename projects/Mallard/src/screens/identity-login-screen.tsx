@@ -52,7 +52,7 @@ const AuthSwitcherScreen = ({
     const { open } = useModal()
 
     const handleAuthClick = async (
-        runParamsPromise: () => Promise<AuthParams>,
+        runGetIdentityAuthParams: () => Promise<AuthParams>,
         {
             requiresFunctionalConsent,
             signInName,
@@ -66,7 +66,7 @@ const AuthSwitcherScreen = ({
                     setIsLoading(true)
                     try {
                         const attempt = await authIdentity(
-                            await runParamsPromise(),
+                            await runGetIdentityAuthParams(),
                         )
                         if (isValid(attempt)) {
                             setIsLoading(false)
