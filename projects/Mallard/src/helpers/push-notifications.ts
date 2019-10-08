@@ -86,7 +86,9 @@ const pushNotifcationRegistration = () => {
 
                     downloadAndUnzipIssue(pushImageSummary, screenSize)
                 } catch (e) {
-                    console.log('Push notification unable to download')
+                    console.log(
+                        `Push notification unable to download: ${e.message}`,
+                    )
                 }
 
                 // No matter what happens, always clear up old issues

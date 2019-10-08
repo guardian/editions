@@ -231,7 +231,7 @@ export const downloadTodaysIssue = async () => {
             downloadAndUnzipIssue(todaysIssueSummary, imageSize)
         }
     } catch (e) {
-        console.log('Unable to get the issue summary')
+        console.log(`Unable to download todays issue: ${e.message}`)
     }
 }
 
