@@ -1,4 +1,5 @@
 import { FrontCardAppearance } from './collection/card-layouts'
+import { getImageUse } from './collection/thumbnails'
 export * from './collection/card-layouts'
 export * from './collection/layout-model'
 export * from './collection/layouts'
@@ -154,7 +155,7 @@ export interface Content extends WithKey {
     articleType?: ArticleType
     trail: string
     image?: CreditedImage
-    trailImage?: Image
+    trailImage?: TrailImage
     cardImage?: Image
     cardImageTablet?: Image
     standfirst?: string
@@ -416,9 +417,13 @@ export interface Image {
 
 export type ImageUse = 'full-size' | 'thumb' | 'thumb-large' | 'not-used'
 
+export interface ImageDeviceUses {
+    mobile: ImageUse
+    tablet: ImageUse
+}
+
 export interface TrailImage extends Image {
-    mobileImageUse: ImageUse
-    tabletImageUse: ImageUse
+    use: ImageDeviceUses
 }
 
 export interface CreditedImage extends Image {

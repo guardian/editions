@@ -9,11 +9,13 @@ import {
     PublishedImage,
     PublishedCardImage,
 } from '../fronts/issue'
-import { CreditedImage, Image, ArticleType } from '../../common/src'
+import { CreditedImage, ArticleType, Image } from '../../common/src'
 
 const notUsed = {
-    mobileImageUse: 'not-used',
-    tabletImageUse: 'not-used',
+    use: {
+        mobile: 'not-used',
+        tablet: 'not-used',
+    },
 }
 
 describe('fronts', () => {
@@ -25,8 +27,10 @@ describe('fronts', () => {
                     PublishedFurnitureFixture({
                         trailTextOverride: 'furniture',
                     }),
-                    'not-used',
-                    'not-used',
+                    {
+                        mobile: 'not-used',
+                        tablet: 'not-used',
+                    },
                 )[1]
                 expect(patched.trail).toBe('furniture')
                 expect(patched.trail).toBe(patched.standfirst)
@@ -36,8 +40,10 @@ describe('fronts', () => {
                 const p1 = patchArticle(
                     Article({ key: 'my-article', trail: 'article' }),
                     PublishedFurnitureFixture({ trailTextOverride: '' }),
-                    'not-used',
-                    'not-used',
+                    {
+                        mobile: 'not-used',
+                        tablet: 'not-used',
+                    },
                 )[1]
                 expect(p1.trail).toBe('article')
                 expect(p1.trail).toBe(p1.standfirst)
@@ -45,8 +51,10 @@ describe('fronts', () => {
                 const p2 = patchArticle(
                     Article({ key: 'my-article', trail: 'article' }),
                     PublishedFurnitureFixture(),
-                    'not-used',
-                    'not-used',
+                    {
+                        mobile: 'not-used',
+                        tablet: 'not-used',
+                    },
                 )[1]
                 expect(p2.trail).toBe(p2.standfirst)
             })
@@ -59,8 +67,10 @@ describe('fronts', () => {
                             '<strong>here is <em>something</em> important</strong>',
                     }),
                     PublishedFurnitureFixture({ trailTextOverride: '' }),
-                    'not-used',
-                    'not-used',
+                    {
+                        mobile: 'not-used',
+                        tablet: 'not-used',
+                    },
                 )[1]
                 expect(patched.trail).toBe('here is something important')
                 expect(patched.trail).toBe(patched.standfirst)
@@ -136,12 +146,10 @@ describe('fronts', () => {
                     },
                 )
 
-                const { image: actual } = getImages(
-                    article,
-                    furniture,
-                    'not-used',
-                    'not-used',
-                )
+                const { image: actual } = getImages(article, furniture, {
+                    mobile: 'not-used',
+                    tablet: 'not-used',
+                })
 
                 const expected = mainImage
                 expect(actual).toStrictEqual(expected)
@@ -162,12 +170,10 @@ describe('fronts', () => {
                     },
                 )
 
-                const { image: actual } = getImages(
-                    article,
-                    furniture,
-                    'not-used',
-                    'not-used',
-                )
+                const { image: actual } = getImages(article, furniture, {
+                    mobile: 'not-used',
+                    tablet: 'not-used',
+                })
 
                 const expected = { path: 'pub.img', source: 'test' }
                 expect(actual).toStrictEqual(expected)
@@ -188,12 +194,10 @@ describe('fronts', () => {
                     },
                 )
 
-                const { trailImage: actual } = getImages(
-                    article,
-                    furniture,
-                    'not-used',
-                    'not-used',
-                )
+                const { trailImage: actual } = getImages(article, furniture, {
+                    mobile: 'not-used',
+                    tablet: 'not-used',
+                })
 
                 const expected = {
                     ...mainImage,
@@ -216,12 +220,10 @@ describe('fronts', () => {
                     },
                 )
 
-                const { trailImage: actual } = getImages(
-                    article,
-                    furniture,
-                    'not-used',
-                    'not-used',
-                )
+                const { trailImage: actual } = getImages(article, furniture, {
+                    mobile: 'not-used',
+                    tablet: 'not-used',
+                })
 
                 const expected = { path: 'pub.img', source: 'test', ...notUsed }
                 expect(actual).toStrictEqual(expected)
@@ -240,12 +242,10 @@ describe('fronts', () => {
                     },
                 )
 
-                const { trailImage: actual } = getImages(
-                    article,
-                    furniture,
-                    'not-used',
-                    'not-used',
-                )
+                const { trailImage: actual } = getImages(article, furniture, {
+                    mobile: 'not-used',
+                    tablet: 'not-used',
+                })
 
                 const expected = {
                     ...trailImg,
@@ -275,7 +275,10 @@ describe('fronts', () => {
                     image, // eslint-disable-line @typescript-eslint/no-unused-vars
                     trailImage, // eslint-disable-line @typescript-eslint/no-unused-vars
                     ...actualCoverCardImages
-                } = getImages(article, furniture, 'not-used', 'not-used')
+                } = getImages(article, furniture, {
+                    mobile: 'not-used',
+                    tablet: 'not-used',
+                })
 
                 const expected = {
                     cardImage: { path: 'pub.img', source: 'test' },

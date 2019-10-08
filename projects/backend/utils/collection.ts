@@ -12,6 +12,7 @@ import { fromPairs, zip } from 'ramda'
 import { PublishedFront, PublishedFurniture } from '../fronts/issue'
 import { CAPIContent } from '../capi/articles'
 import { patchArticle } from '../fronts'
+import { ImageDeviceUses } from '../../common/src'
 
 const chunk = <T>(arr: T[], size: number) =>
     Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -68,22 +69,19 @@ export const createCards = (
 
             const patchedArticles = articleItemTypes.map(
                 ([[content, furniture], [mobileItemType, tabletItemType]]) => {
-                    const mobileImageUse = getImageUse(
-                        mobileItemType.item,
-                        mobileItemType.fits,
-                        PageLayoutSizes.mobile,
-                    )
-                    const tabletImageUse = getImageUse(
-                        tabletItemType.item,
-                        tabletItemType.fits,
-                        PageLayoutSizes.tablet,
-                    )
-                    return patchArticle(
-                        content,
-                        furniture,
-                        mobileImageUse,
-                        tabletImageUse,
-                    )
+                    const imageUse: ImageDeviceUses = {
+                        mobile: getImageUse(
+                            mobileItemType.item,
+                            mobileItemType.fits,
+                            PageLayoutSizes.mobile,
+                        ),
+                        tablet: getImageUse(
+                            tabletItemType.item,
+                            tabletItemType.fits,
+                            PageLayoutSizes.tablet,
+                        ),
+                    }
+                    return patchArticle(content, furniture, imageUse)
                 },
             )
 
@@ -112,12 +110,10 @@ export const createCards = (
                 groupOfArticles => {
                     const patchedArticles = groupOfArticles.map(
                         ([content, furniture]) => {
-                            return patchArticle(
-                                content,
-                                furniture,
-                                'not-used',
-                                'not-used',
-                            )
+                            return patchArticle(content, furniture, {
+                                mobile: 'not-used',
+                                tablet: 'not-used',
+                            })
                         },
                     )
                     return {

@@ -4,8 +4,8 @@ import {
     BlockElement,
     ArticleType,
     IssuePublicationIdentifier,
-    ImageUse,
     TrailImage,
+    ImageDeviceUses,
 } from '../common/src'
 import { CAPIContent, getArticles } from './capi/articles'
 import {
@@ -72,16 +72,14 @@ const getTrailImage = (
     maybeMainImage: CreditedImage | undefined,
     maybeCapiTrailImage: Image | undefined,
     maybeImageOverride: Image | undefined,
-    mobileImageUse: ImageUse,
-    tabletImageUse: ImageUse,
+    imageUse: ImageDeviceUses,
 ): TrailImage | undefined => {
     const chosenTrailImage =
         maybeImageOverride || maybeMainImage || maybeCapiTrailImage
     return (
         chosenTrailImage && {
             ...chosenTrailImage,
-            mobileImageUse,
-            tabletImageUse,
+            use: imageUse,
         }
     )
 }
@@ -89,13 +87,12 @@ const getTrailImage = (
 export const getImages = (
     article: CAPIContent,
     furniture: PublishedFurniture,
-    mobileImageUse: ImageUse,
-    tabletImageUse: ImageUse,
+    imageUse: ImageDeviceUses,
 ): {
     image?: CreditedImage
     cardImage?: Image
     cardImageTablet?: Image
-    trailImage?: Image
+    trailImage?: TrailImage
 } => {
     const {
         overrideArticleMainMedia,
@@ -120,8 +117,7 @@ export const getImages = (
         maybeMainImage,
         maybeCapiTrailImage,
         maybeImageOverride,
-        mobileImageUse,
-        tabletImageUse,
+        imageUse,
     )
 
     return {
@@ -134,8 +130,7 @@ export const getImages = (
 const commonFields = (
     article: CAPIContent,
     furniture: PublishedFurniture,
-    mobileImageUse: ImageUse,
-    tabletImageUse: ImageUse,
+    imageUse: ImageDeviceUses,
 ) => {
     const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
     const headline = oc(furniture).headlineOverride() || article.headline
@@ -146,7 +141,7 @@ const commonFields = (
     const showByline = furniture.showByline
     const showQuotedHeadline = furniture.showQuotedHeadline
     const mediaType = furniture.mediaType
-    const images = getImages(article, furniture, mobileImageUse, tabletImageUse)
+    const images = getImages(article, furniture, imageUse)
     return {
         key: article.path,
         kicker,
@@ -172,12 +167,15 @@ export const patchArticleElements = (article: {
 }
 
 export const patchArticle = (
-    article: CAPIContent,
+    capiArticle: CAPIContent,
     furniture: PublishedFurniture,
-    mobileImageUse: ImageUse,
-    tabletImageUse: ImageUse,
+    imageUse: ImageDeviceUses,
 ): [string, CAPIArticle] => {
     const sportScore = oc(furniture).sportScore()
+
+    // get article object without the oldTrailImage which is a different type
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { trailImage: oldTrailImage, ...article } = capiArticle
 
     switch (article.type) {
         case 'crossword':
@@ -185,12 +183,7 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(
-                        article,
-                        furniture,
-                        mobileImageUse,
-                        tabletImageUse,
-                    ),
+                    ...commonFields(article, furniture, imageUse),
                     ...getCrosswordArticleOverrides(article),
                     sportScore,
                 },
@@ -201,12 +194,7 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(
-                        article,
-                        furniture,
-                        mobileImageUse,
-                        tabletImageUse,
-                    ),
+                    ...commonFields(article, furniture, imageUse),
                     key: article.path,
                     sportScore,
                 },
@@ -217,24 +205,14 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(
-                        article,
-                        furniture,
-                        mobileImageUse,
-                        tabletImageUse,
-                    ),
+                    ...commonFields(article, furniture, imageUse),
                     key: article.path,
                     sportScore,
                 },
             ]
 
         case 'article':
-            const fields = commonFields(
-                article,
-                furniture,
-                mobileImageUse,
-                tabletImageUse,
-            )
+            const fields = commonFields(article, furniture, imageUse)
             return [
                 article.path,
                 {
