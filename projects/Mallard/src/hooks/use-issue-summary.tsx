@@ -29,14 +29,8 @@ const IssueSummaryContext = createContext<IssueSummaryState>({
     error: '',
 })
 
-const getIssueSummary = (
-    isConnected = true,
-): CachedOrPromise<IssueSummary[]> => {
-    return {
-        type: 'promise',
-        getValue: isConnected ? fetchAndStoreIssueSummary : readIssueSummary,
-    }
-}
+const getIssueSummary = (isConnected = true): Promise<IssueSummary[]> =>
+    isConnected ? fetchAndStoreIssueSummary() : readIssueSummary()
 
 const issueSummaryToLatestPath = (
     issueSummary: IssueSummary[],
@@ -58,8 +52,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         setIsConnectedInitial(isConnected)
         getIssueSummary(isConnected)
-            .getValue()
-            .then(issueSummary => {
+            .then((issueSummary: IssueSummary[]) => {
                 if (issueSummary) {
                     setIssueSummary(issueSummary)
                     setIssueId(issueSummaryToLatestPath(issueSummary))
@@ -78,8 +71,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             // intially offline, but then online
             if (isConnectedInitial === false && info.isConnected === true) {
                 getIssueSummary(info.isConnected)
-                    .getValue()
-                    .then(issueSummary => {
+                    .then((issueSummary: IssueSummary[]) => {
                         setIssueSummary(issueSummary)
                         setIssueId(issueSummaryToLatestPath(issueSummary))
                         setError('')

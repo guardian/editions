@@ -213,7 +213,7 @@ export const matchSummmaryToKey = (
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
     try {
-        const issueSummaries = await getIssueSummary().getValue()
+        const issueSummaries = await getIssueSummary()
 
         // Find the todays issue summary from the list of summary
         const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
