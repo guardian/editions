@@ -341,11 +341,6 @@ export const transformToFront = async (
     }
 }
 
-// Run through each card and reduce or remove trailImage as appropriate
-const optimisedFrontImages = (front: Front): Front => {
-    return front
-}
-
 export const getFront = async (
     issue: IssuePublicationIdentifier,
     frontId: string,
@@ -361,11 +356,5 @@ export const getFront = async (
         return publishedIssue
     }
 
-    const front = await transformToFront(frontId, publishedIssue)
-
-    const optimisedFront = hasSucceeded(front)
-        ? optimisedFrontImages(front)
-        : front
-
-    return optimisedFront
+    return transformToFront(frontId, publishedIssue)
 }
