@@ -4,19 +4,22 @@ import React, {
     useState,
     SetStateAction,
     Dispatch,
+    useEffect,
 } from 'react'
 import { IssueSummary } from '../common'
 import { CachedOrPromise } from 'src/helpers/fetch/cached-or-promise'
 import { useCachedOrPromise } from './use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { useNetInfo } from './use-net-info'
-import { storeIssueSummary, readIssueSummary } from '../helpers/files'
+import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
 import { PathToIssue } from 'src/paths'
+import NetInfo from '@react-native-community/netinfo'
 
 interface IssueSummaryState {
-    issueSummary: any
-    issueId: PathToIssue
+    issueSummary: IssueSummary[] | null
+    issueId: PathToIssue | null
     setIssueId: Dispatch<SetStateAction<PathToIssue>>
+    error: string
 }
 
 const IssueSummaryContext = createContext<IssueSummaryState | null>(null)
@@ -26,15 +29,7 @@ const getIssueSummary = (
 ): CachedOrPromise<IssueSummary[]> => {
     return {
         type: 'promise',
-        getValue: isConnected ? storeIssueSummary : readIssueSummary,
-    }
-}
-
-const fetchIssueSummary = (isConnected: boolean) => {
-    const response = useCachedOrPromise(getIssueSummary(isConnected))
-    return {
-        response: withResponse<IssueSummary[]>(response),
-        retry: response.retry,
+        getValue: isConnected ? fetchAndStoreIssueSummary : readIssueSummary,
     }
 }
 
@@ -46,23 +41,54 @@ const issueSummaryToLatestPath = (
 })
 
 const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
-    const [issueId, setIssueId] = useState(null)
+    const [issueId, setIssueId] = useState<PathToIssue | null>(null)
+    const [issueSummary, setIssueSummary] = useState<IssueSummary[] | null>(
+        null,
+    )
+    const [error, setError] = useState<string>('')
+    const [isConnectedInitial, setIsConnectedInitial] = useState(false)
     const { isConnected } = useNetInfo()
 
-    const issueSummary = fetchIssueSummary(isConnected)
+    // Run the first time, either offline or online
+    useEffect(() => {
+        setIsConnectedInitial(isConnected)
+        getIssueSummary(isConnected)
+            .getValue()
+            .then(issueSummary => {
+                if (issueSummary) {
+                    setIssueSummary(issueSummary)
+                    setIssueId(issueSummaryToLatestPath(issueSummary))
+                    setError('')
+                } else {
+                    setError('initial offline')
+                }
+            })
+            .catch(e => {
+                setError(e)
+            })
+    }, [])
 
-    if (issueId === null && issueSummary.response) {
-        issueSummary.response({
-            success: (issueSummary: IssueSummary[]) =>
-                setIssueId(issueSummaryToLatestPath(issueSummary)),
-            pending: () => <></>,
-            error: () => <></>,
+    useEffect(() => {
+        NetInfo.addEventListener(info => {
+            // intially offline, but then online
+            if (isConnectedInitial === false && info.isConnected === true) {
+                getIssueSummary(info.isConnected)
+                    .getValue()
+                    .then(issueSummary => {
+                        setIssueSummary(issueSummary)
+                        setIssueId(issueSummaryToLatestPath(issueSummary))
+                        setError('')
+                    })
+                    .catch(e => {
+                        setError(e)
+                    })
+            }
         })
-    }
+    }, [])
 
     return (
         <IssueSummaryContext.Provider
-            value={{ issueSummary, issueId, setIssueId }}
+            value={{ issueSummary, issueId, setIssueId, error }}
         >
             {children}
         </IssueSummaryContext.Provider>

@@ -31,6 +31,7 @@ import {
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
+    CONNECTION_FAILED_AUTO_RETRY,
 } from 'src/helpers/words'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
@@ -228,6 +229,17 @@ const handlePending = () => (
     </>
 )
 
+const handleIssueScreenError = (error: string) => (
+    <>
+        <ScreenHeader />
+        <FlexErrorMessage
+            debugMessage={error}
+            title={CONNECTION_FAILED_ERROR}
+            message={CONNECTION_FAILED_AUTO_RETRY}
+        />
+    </>
+)
+
 /** used to memoize the IssueScreenWithPath */
 const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.localIssueId === b.localIssueId &&
@@ -320,23 +332,19 @@ const IssueScreenWithPath = React.memo(
 )
 
 export const IssueScreen = () => {
-    const {
-        issueSummary: { response },
-        issueId,
-    } = useIssueSummary()
+    const { issueSummary, issueId, error } = useIssueSummary()
     return (
         <Container>
             {issueId ? (
                 <IssueScreenWithPath path={issueId} />
+            ) : issueSummary ? (
+                <IssueScreenWithPath
+                    path={issueSummaryToLatestPath(issueSummary)}
+                />
+            ) : error ? (
+                error && handleIssueScreenError(error)
             ) : (
-                response({
-                    pending: handlePending,
-                    error: handleError,
-                    success: (issueSummary: IssueSummary[]) => {
-                        const path = issueSummaryToLatestPath(issueSummary)
-                        return <IssueScreenWithPath path={path} />
-                    },
-                })
+                handlePending()
             )}
         </Container>
     )

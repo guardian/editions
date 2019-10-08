@@ -17,8 +17,7 @@ import { BaseList } from 'src/components/lists/list'
 import { Spinner } from 'src/components/spinner'
 import {
     CONNECTION_FAILED_ERROR,
-    CONNECTION_FAILED_SUB_ERROR,
-    REFRESH_BUTTON_TEXT,
+    CONNECTION_FAILED_AUTO_RETRY,
 } from 'src/helpers/words'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
@@ -145,10 +144,7 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const {
-        issueSummary: { response },
-        issueId,
-    } = useIssueSummary()
+    const { issueSummary, issueId, error } = useIssueSummary()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     return (
         <WithAppAppearance value={'tertiary'}>
@@ -164,40 +160,21 @@ export const HomeScreen = ({
                 }}
             />
             <ScrollContainer>
-                {response({
-                    success: (issueList: IssueSummary[]) => (
-                        <IssueList issueList={issueList} />
-                    ),
-                    error: (
-                        { message }: { message: string },
-                        stale: IssueSummary[],
-                        { retry }: { retry: () => void },
-                    ) => (
-                        <>
-                            {stale ? <IssueList issueList={stale} /> : null}
-                            <FlexErrorMessage
-                                debugMessage={message}
-                                title={CONNECTION_FAILED_ERROR}
-                                message={CONNECTION_FAILED_SUB_ERROR}
-                                action={[REFRESH_BUTTON_TEXT, retry]}
-                            />
-                        </>
-                    ),
-                    pending: (stale: IssueSummary[]) =>
-                        stale ? (
-                            <>
-                                <IssueList issueList={stale} />
-                                {isUsingProdDevtools ? (
-                                    <Spinner></Spinner>
-                                ) : null}
-                            </>
-                        ) : (
-                            <FlexCenter>
-                                <Spinner></Spinner>
-                            </FlexCenter>
-                        ),
-                })}
-
+                {issueSummary ? (
+                    <IssueList issueList={issueSummary} />
+                ) : error ? (
+                    <>
+                        <FlexErrorMessage
+                            debugMessage={error}
+                            title={CONNECTION_FAILED_ERROR}
+                            message={CONNECTION_FAILED_AUTO_RETRY}
+                        />
+                    </>
+                ) : (
+                    <FlexCenter>
+                        <Spinner></Spinner>
+                    </FlexCenter>
+                )}
                 <ApiState />
             </ScrollContainer>
         </WithAppAppearance>

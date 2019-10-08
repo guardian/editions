@@ -237,7 +237,7 @@ export const readIssueSummary = async () =>
         .then(data => JSON.parse(data))
         .catch(e => console.log(e))
 
-export const storeIssueSummary = async () => {
+export const fetchAndStoreIssueSummary = async () => {
     const apiUrl = await getSetting('apiUrl')
     return (
         RNFetchBlob.config({
