@@ -153,7 +153,6 @@ const IssueFronts = ({
             // performance improvements
             initialNumToRender={2}
             windowSize={2}
-            debug
             maxToRenderPerBatch={2}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
