@@ -46,7 +46,7 @@ const WebviewWithArticle = ({
             {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
-            source={{ html }}
+            source={{ html, baseUrl: '' }}
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
         />
