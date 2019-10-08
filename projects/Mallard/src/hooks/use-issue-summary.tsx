@@ -1,19 +1,16 @@
+import NetInfo from '@react-native-community/netinfo'
 import React, {
     createContext,
-    useContext,
-    useState,
-    SetStateAction,
     Dispatch,
+    SetStateAction,
+    useContext,
     useEffect,
+    useRef,
+    useState,
 } from 'react'
-import { IssueSummary } from '../common'
-import { CachedOrPromise } from 'src/helpers/fetch/cached-or-promise'
-import { useCachedOrPromise } from './use-cached-or-promise'
-import { withResponse } from 'src/helpers/response'
-import { useNetInfo } from './use-net-info'
-import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
 import { PathToIssue } from 'src/paths'
-import NetInfo from '@react-native-community/netinfo'
+import { IssueSummary } from '../common'
+import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
 
 interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
@@ -45,32 +42,14 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         null,
     )
     const [error, setError] = useState<string>('')
-    const [isConnectedInitial, setIsConnectedInitial] = useState(false)
-    const { isConnected } = useNetInfo()
-
-    // Run the first time, either offline or online
-    useEffect(() => {
-        setIsConnectedInitial(isConnected)
-        getIssueSummary(isConnected)
-            .then((issueSummary: IssueSummary[]) => {
-                if (issueSummary) {
-                    setIssueSummary(issueSummary)
-                    setIssueId(issueSummaryToLatestPath(issueSummary))
-                    setError('')
-                } else {
-                    setError('initial offline')
-                }
-            })
-            .catch(e => {
-                setError(e.message)
-            })
-    }, [])
+    const hasConnected = useRef(false)
 
     useEffect(() => {
-        NetInfo.addEventListener(info => {
-            // intially offline, but then online
-            if (isConnectedInitial === false && info.isConnected === true) {
-                getIssueSummary(info.isConnected)
+        NetInfo.addEventListener(({ isConnected }) => {
+            if (!hasConnected.current) {
+                hasConnected.current = isConnected
+
+                getIssueSummary(isConnected)
                     .then((issueSummary: IssueSummary[]) => {
                         setIssueSummary(issueSummary)
                         setIssueId(issueSummaryToLatestPath(issueSummary))
