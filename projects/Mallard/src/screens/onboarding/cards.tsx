@@ -81,8 +81,8 @@ const OnboardingConsent = ({
                     <>
                         The only data that is collected (through tracking
                         technology) is used by the Guardian to improve your
-                        experience and our level of service to you. To find out
-                        more, read our{' '}
+                        experience and our level of service to you. By continuing,
+                        you agree with the Guardian's{' '}
                         <LinkNav onPress={onOpenPrivacyPolicy}>
                             privacy policy
                         </LinkNav>
