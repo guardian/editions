@@ -18,14 +18,19 @@ import NetInfo from '@react-native-community/netinfo'
 interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
     issueId: PathToIssue | null
-    setIssueId: Dispatch<SetStateAction<PathToIssue>>
+    setIssueId: Dispatch<SetStateAction<PathToIssue | null>>
     error: string
 }
 
-const IssueSummaryContext = createContext<IssueSummaryState | null>(null)
+const IssueSummaryContext = createContext<IssueSummaryState>({
+    issueSummary: null,
+    issueId: null,
+    setIssueId: () => {},
+    error: '',
+})
 
 const getIssueSummary = (
-    isConnected: boolean = true,
+    isConnected = true,
 ): CachedOrPromise<IssueSummary[]> => {
     return {
         type: 'promise',

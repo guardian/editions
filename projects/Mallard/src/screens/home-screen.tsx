@@ -144,7 +144,7 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { issueSummary, issueId, error } = useIssueSummary()
+    const { issueSummary, error } = useIssueSummary()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     return (
         <WithAppAppearance value={'tertiary'}>
@@ -153,10 +153,7 @@ export const HomeScreen = ({
                     navigation.navigate('Settings')
                 }}
                 onReturn={() => {
-                    const issue = issueId || '/'
-                    navigateToIssue(navigation, {
-                        path: issue,
-                    })
+                    navigateToIssue(navigation, {})
                 }}
             />
             <ScrollContainer>
