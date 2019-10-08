@@ -5,9 +5,20 @@ import invariant from 'invariant'
 
 const googleRedirectURI = `com.googleusercontent.apps.${GOOGLE_CLIENT_ID}:authorize`
 
+const DEFAULT_AUTHORIZATION_ENDPOINT =
+    'https://accounts.google.com/o/oauth2/v2/auth'
+
 const getGoogleOAuthURL = (validatorString: string) =>
     fetch('https://accounts.google.com/.well-known/openid-configuration')
-        .then(res => res.json())
+        .then(res => {
+            if (res.ok) return res.json()
+            throw new Error() // knock us into the `catch` below
+        })
+        /**
+         * The above is the right way to find the auth endpoint but, in case of an error,
+         * return auth endpoint for google OAuth that is correct at time of writing
+         */
+        .catch(() => DEFAULT_AUTHORIZATION_ENDPOINT)
         .then(
             json =>
                 `${json.authorization_endpoint}?${qs.stringify({
