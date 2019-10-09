@@ -22,6 +22,7 @@ const Content = <T extends string>(
         showQuotedHeadline = false,
         mediaType = 'Image',
         sportScore,
+        bylineHtml,
     }: Partial<IContent> & WithKey,
 ): IContent & { type: T } => ({
     key,
@@ -34,6 +35,7 @@ const Content = <T extends string>(
     standfirst,
     byline,
     bylineImages,
+    bylineHtml,
     showByline,
     showQuotedHeadline,
     mediaType,
@@ -44,9 +46,11 @@ const Article = ({
     image,
     trailImage,
     byline = 'Mr CAPI',
+    bylineHtml = '<a>Mr CAPI</> Senior Correspondent',
     standfirst = 'This story is great',
     elements = [],
     starRating,
+
     ...contentFields
 }: Partial<IArticle> & WithKey): CArticle => ({
     ...Content('article', contentFields),
@@ -54,6 +58,7 @@ const Article = ({
     image,
     trailImage,
     byline,
+    bylineHtml,
     standfirst,
     elements,
     starRating,

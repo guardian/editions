@@ -9,4 +9,5 @@ export interface ArticleHeaderProps {
     standfirst: string
     starRating?: Article['starRating']
     bylineImages?: { cutout?: Image }
+    bylineHtml: string
 }

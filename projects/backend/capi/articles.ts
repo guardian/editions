@@ -80,6 +80,7 @@ const parseArticleResult = async (
     const trail = result.fields && result.fields.trailText
 
     const byline = result.fields && result.fields.byline
+    const bylineHtml = result.fields && result.fields.bylineHtml
     const bylineImages = getBylineImages(result)
 
     const images = getImages(result)
@@ -115,6 +116,7 @@ const parseArticleResult = async (
                     trail,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     bylineImages,
                     standfirst: trail || '',
                     elements,
@@ -135,6 +137,7 @@ const parseArticleResult = async (
                     articleType,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
                 },
@@ -154,6 +157,7 @@ const parseArticleResult = async (
                     articleType,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
                 },
@@ -194,6 +198,7 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     crossword,
                 },
@@ -212,6 +217,7 @@ const parseArticleResult = async (
                     kicker,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements: [
                         {

@@ -148,11 +148,23 @@ export const headerStyles = ({
         fill: ${colors.main};
     }
     .header-byline:not(:empty) {
-        font-weight: 600;
+        font-style: italic;
         padding: 0.25rem 0 2rem;
-        color: ${colors.main};
         position: relative;
     }
+
+    .header-byline > span > a {
+        font-style: normal !important;
+        text-decoration: none;
+        font-weight: 600;
+        color: ${colors.main};
+    }
+
+    .header-top-byline > a {
+        font-style: normal !important;
+        text-decoration: none;
+    }
+
     .header-byline:not(:empty):after {
         content: '';
         display: block;
@@ -473,7 +485,7 @@ const Header = ({
                                               >${headerProps.headline}</span
                                           >
                                           <span class="header-top-byline"
-                                              >${headerProps.byline}</span
+                                              >${headerProps.bylineHtml}</span
                                           >
                                       </h1>
                                       ${publishedId &&
@@ -502,7 +514,7 @@ const Header = ({
                     <span
                         >${largeByline
                             ? headerProps.standfirst
-                            : headerProps.byline}</span
+                            : headerProps.bylineHtml}</span
                     >
                 </aside>
                 <div class="header-bg"></div>
