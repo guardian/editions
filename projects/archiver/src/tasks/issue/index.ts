@@ -30,11 +30,18 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
             throw new Error('Failed to download issue.')
         }
         console.log(`Downloaded issue ${JSON.stringify(issuePublication)}`)
+
+        const { fronts } = issue
+
+        if (fronts.length == 0) {
+            throw new Error(`No fronts found on '${publishedId}' issue`)
+        }
+
         return {
             issuePublication,
             issue: { ...issue, fronts: [] },
-            fronts: issue.fronts,
-            remainingFronts: issue.fronts.length,
+            fronts,
+            remainingFronts: fronts.length,
             message: 'Fetched issue succesfully.',
         }
     },
