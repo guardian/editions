@@ -44,44 +44,6 @@ describe('prepareScheduleDeviceNotificationRequest', () => {
 
         expect(actual).toStrictEqual(expected)
     })
-
-    it('should prepare request Body and request endpoint correctly for [American Edition]', () => {
-        const issueData: IssueNotificationData = {
-            key: 'american-edition/2019-10-09',
-            name: 'American Edition',
-            edition: 'american-edition',
-            issueDate: '2019-10-09',
-        }
-
-        const apiCfg = {
-            domain: 'http://example.com',
-            apiKey: 'some.key',
-        }
-        const scheduleTime = '2019-09-18T03:00:00Z'
-
-        const actual = prepareScheduleDeviceNotificationRequest(
-            issueData,
-            apiCfg,
-            scheduleTime,
-        )
-
-        const expected: { reqEndpoint: RequestInfo; reqBody: RequestInit } = {
-            reqEndpoint:
-                'http://example.com/push/schedule/2019-09-18T03:00:00Z',
-            reqBody: {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer some.key',
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body:
-                    '{"id":"ba3baf47-0336-57a3-83bd-5b26aacb5404","type":"editions","topic":[{"type":"editions","name":"usa"}],"key":"american-edition/2019-10-09","name":"American Edition","date":"2019-10-09","sender":"editions-backend"}',
-            },
-        }
-
-        expect(actual).toStrictEqual(expected)
-    })
 })
 describe('createScheduleTime', () => {
     it('should create schedule tiem from issue at 3 am', () => {
