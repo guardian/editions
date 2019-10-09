@@ -35,6 +35,7 @@ import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { AccessProvider } from './authentication/AccessContext'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
+import { IssueSummaryProvider } from './hooks/use-issue-summary'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -122,6 +123,7 @@ const WithProviders = nestProviders(
     Modal,
     ToastProvider,
     NetInfoProvider,
+    IssueSummaryProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>

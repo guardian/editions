@@ -31,6 +31,7 @@ import {
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
+    CONNECTION_FAILED_AUTO_RETRY,
 } from 'src/helpers/words'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
@@ -43,7 +44,11 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useIssueCompositeKeyHandler } from 'src/hooks/use-issue-id'
+import {
+    useIssueSummary,
+    issueSummaryToLatestPath,
+} from 'src/hooks/use-issue-summary'
+import { IssueSummary } from '../../../common/src'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -221,6 +226,17 @@ const handlePending = () => (
     </>
 )
 
+const handleIssueScreenError = (error: string) => (
+    <>
+        <ScreenHeader />
+        <FlexErrorMessage
+            debugMessage={error}
+            title={CONNECTION_FAILED_ERROR}
+            message={CONNECTION_FAILED_AUTO_RETRY}
+        />
+    </>
+)
+
 /** used to memoize the IssueScreenWithPath */
 const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.localIssueId === b.localIssueId &&
@@ -313,15 +329,20 @@ const IssueScreenWithPath = React.memo(
 )
 
 export const IssueScreen = () => {
-    const response = useIssueCompositeKeyHandler()
-
+    const { issueSummary, issueId, error } = useIssueSummary()
     return (
         <Container>
-            {response({
-                pending: handlePending,
-                error: handleError,
-                success: path => <IssueScreenWithPath path={path} />,
-            })}
+            {issueId ? (
+                <IssueScreenWithPath path={issueId} />
+            ) : issueSummary ? (
+                <IssueScreenWithPath
+                    path={issueSummaryToLatestPath(issueSummary)}
+                />
+            ) : error ? (
+                error && handleIssueScreenError(error)
+            ) : (
+                handlePending()
+            )}
         </Container>
     )
 }

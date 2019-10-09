@@ -4,8 +4,8 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue } from '../../../common/src'
-import { useIssueCompositeKey } from './use-issue-id'
 import { useSettingsValue } from './use-settings'
+import { useIssueSummary } from './use-issue-summary'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
@@ -55,13 +55,13 @@ const compressImagePath = async (path: string, width: number) => {
  *  */
 
 export const useImagePath = (image?: Image) => {
-    const key = useIssueCompositeKey()
+    const { issueId } = useIssueSummary()
 
     const [paths, setPaths] = useState<string | undefined>()
     const apiUrl = useSettingsValue.apiUrl()
     useEffect(() => {
-        if (key && image) {
-            const { localIssueId, publishedIssueId } = key
+        if (issueId && image) {
+            const { localIssueId, publishedIssueId } = issueId
             selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
                 setPaths,
             )
@@ -69,8 +69,8 @@ export const useImagePath = (image?: Image) => {
     }, [
         apiUrl,
         image,
-        key ? key.publishedIssueId : undefined, // Why isn't this just key?
-        key ? key.localIssueId : undefined,
+        issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
+        issueId ? issueId.localIssueId : undefined,
     ])
     if (image === undefined) return undefined
     return paths

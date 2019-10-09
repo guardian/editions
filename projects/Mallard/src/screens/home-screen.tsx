@@ -16,23 +16,20 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { BaseList } from 'src/components/lists/list'
 import { Spinner } from 'src/components/spinner'
 import {
+    CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,
-    CONNECTION_FAILED_SUB_ERROR,
-    REFRESH_BUTTON_TEXT,
 } from 'src/helpers/words'
-import { useIssueSummary } from 'src/hooks/use-api'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
 import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
-import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
-import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -83,6 +80,7 @@ const IssueList = withNavigation(
             issueList: IssueSummary[]
         } & NavigationInjectedProps) => {
             const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+            const { setIssueId } = useIssueSummary()
             return (
                 <>
                     <BaseList
@@ -91,17 +89,17 @@ const IssueList = withNavigation(
                         renderItem={({ item: issueSummary }) => (
                             <IssueRow
                                 onPress={() => {
-                                    navigateToIssue(navigation, {
-                                        path: {
-                                            localIssueId: issueSummary.localId,
-                                            publishedIssueId:
-                                                issueSummary.publishedId,
+                                    navigateToIssue({
+                                        navigation,
+                                        navigationProps: {
+                                            path: {
+                                                localIssueId:
+                                                    issueSummary.localId,
+                                                publishedIssueId:
+                                                    issueSummary.publishedId,
+                                            },
                                         },
-                                    })
-                                    sendComponentEvent({
-                                        componentType: ComponentType.appButton,
-                                        action: Action.click,
-                                        value: 'issues_list_issue_clicked',
+                                        setIssueId,
                                     })
                                 }}
                                 issue={issueSummary}
@@ -119,8 +117,12 @@ const IssueList = withNavigation(
                                 <Button
                                     appearance={ButtonAppearance.skeleton}
                                     onPress={() => {
-                                        navigateToIssue(navigation, {
-                                            path: undefined,
+                                        navigateToIssue({
+                                            navigation,
+                                            navigationProps: {
+                                                path: undefined,
+                                            },
+                                            setIssueId,
                                         })
                                     }}
                                 >
@@ -140,9 +142,8 @@ export const HomeScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { response: issueSummary } = useIssueSummary()
+    const { issueSummary, error, setIssueId } = useIssueSummary()
     const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-    const issue = useIssueCompositeKey()
     return (
         <WithAppAppearance value={'tertiary'}>
             <HomeScreenHeader
@@ -150,40 +151,29 @@ export const HomeScreen = ({
                     navigation.navigate('Settings')
                 }}
                 onReturn={() => {
-                    navigateToIssue(navigation, {
-                        path: issue,
+                    navigateToIssue({
+                        navigation,
+                        navigationProps: {},
+                        setIssueId,
                     })
                 }}
             />
             <ScrollContainer>
-                {issueSummary({
-                    success: issueList => <IssueList issueList={issueList} />,
-                    error: ({ message }, stale, { retry }) => (
-                        <>
-                            {stale ? <IssueList issueList={stale} /> : null}
-                            <FlexErrorMessage
-                                debugMessage={message}
-                                title={CONNECTION_FAILED_ERROR}
-                                message={CONNECTION_FAILED_SUB_ERROR}
-                                action={[REFRESH_BUTTON_TEXT, retry]}
-                            />
-                        </>
-                    ),
-                    pending: stale =>
-                        stale ? (
-                            <>
-                                <IssueList issueList={stale} />
-                                {isUsingProdDevtools ? (
-                                    <Spinner></Spinner>
-                                ) : null}
-                            </>
-                        ) : (
-                            <FlexCenter>
-                                <Spinner></Spinner>
-                            </FlexCenter>
-                        ),
-                })}
-
+                {issueSummary ? (
+                    <IssueList issueList={issueSummary} />
+                ) : error ? (
+                    <>
+                        <FlexErrorMessage
+                            debugMessage={error}
+                            title={CONNECTION_FAILED_ERROR}
+                            message={CONNECTION_FAILED_AUTO_RETRY}
+                        />
+                    </>
+                ) : (
+                    <FlexCenter>
+                        <Spinner></Spinner>
+                    </FlexCenter>
+                )}
                 <ApiState />
             </ScrollContainer>
         </WithAppAppearance>

@@ -1,6 +1,30 @@
-import { S3 } from 'aws-sdk'
+import {
+    S3,
+    ChainableTemporaryCredentials,
+    SharedIniFileCredentials,
+} from 'aws-sdk'
 import { notNull } from '../../common'
 import { oc } from 'ts-optchain'
+
+const createCMSFrontsS3Client = () => {
+    console.log(`Creating S3 client with role arn: ${process.env.arn}`)
+    const options: ChainableTemporaryCredentials.ChainableTemporaryCredentialsOptions = {
+        params: {
+            RoleArn: process.env.arn as string,
+            RoleSessionName: 'front-assume-role-access',
+        },
+        stsConfig: {},
+    }
+
+    const cmsFrontsTmpCreds = new ChainableTemporaryCredentials(options)
+
+    const iniFileCreds = new SharedIniFileCredentials({ profile: 'cmsFronts' })
+
+    return new S3({
+        region: 'eu-west-1',
+        credentials: process.env.arn ? cmsFrontsTmpCreds : iniFileCreds,
+    })
+}
 
 export const s3 = new S3({
     region: 'eu-west-1',
@@ -93,4 +117,34 @@ export const upload = (
             },
         )
     })
+}
+
+export interface GetS3ObjParams {
+    Bucket: string
+    Key: string
+}
+
+const cmsFrontsS3 = createCMSFrontsS3Client()
+
+export const fetchfromCMSFrontsS3 = async (
+    params: GetS3ObjParams,
+): Promise<string> => {
+    return cmsFrontsS3
+        .getObject(params)
+        .promise()
+        .then(data => {
+            if (data.Body == null) {
+                throw new Error('S3 Object Response body was empty or null')
+            }
+            return data.Body.toString('utf-8')
+        })
+        .catch(e => {
+            console.error(
+                'Could not get content of S3 object for params:',
+                params,
+                'error: ',
+                e,
+            )
+            throw e
+        })
 }

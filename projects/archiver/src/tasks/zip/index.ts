@@ -3,6 +3,7 @@ import { imageSizes, issueDir, mediaDir } from '../../../common'
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
+import { Bucket } from '../../utils/s3'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
@@ -11,19 +12,22 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
     async ({ issuePublication, issue }) => {
         const { issueDate, version } = issuePublication
         const { publishedId } = issue
-        const name = issueDir(publishedId)
         console.log('Compressing')
-        await zip(`${name}/data`, issueDir(publishedId), {
+        await zip(`${publishedId}/data`, publishedId, {
             excludePath: 'media',
             excludePrefixSegment: version,
         })
 
-        console.log('data zip uploaded')
+        console.log(`data zip uploaded to: s3://${Bucket}/${publishedId}`)
         await Promise.all(
             imageSizes.map(async size => {
-                await zip(`${name}/${size}`, mediaDir(publishedId, size), {
-                    excludePrefixSegment: version,
-                })
+                await zip(
+                    `${publishedId}/${size}`,
+                    mediaDir(publishedId, size),
+                    {
+                        excludePrefixSegment: version,
+                    },
+                )
                 console.log(` ${size} media zip uploaded`)
             }),
         )

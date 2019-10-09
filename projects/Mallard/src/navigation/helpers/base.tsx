@@ -8,6 +8,7 @@ import { routeNames } from 'src/navigation/routes'
 import { PathToArticle, PathToIssue } from 'src/paths'
 import { ArticleNavigator } from 'src/screens/article-screen'
 import { Issue } from '../../../../common/src'
+import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
 export const addStaticRouter = (
@@ -93,14 +94,31 @@ export interface IssueNavigationProps {
     path?: PathToIssue
     issue?: Issue
 }
-const navigateToIssue = (
-    navigation: NavigationScreenProp<{}>,
-    navigationProps: IssueNavigationProps,
+
+interface NavigateToIssueProps {
+    navigation: NavigationScreenProp<{}>
+    navigationProps: IssueNavigationProps
+    shouldShowMoreIssuesBtn?: boolean
+    setIssueId: (path: PathToIssue) => void
+}
+
+const navigateToIssue = ({
+    navigation,
+    navigationProps,
     shouldShowMoreIssuesBtn = true,
-): void => {
+    setIssueId,
+}: NavigateToIssueProps) => {
     navigation.navigate(routeNames.Issue, {
         ...navigationProps,
         shouldShowMoreIssuesBtn,
+    })
+    if (navigationProps.path) {
+        setIssueId(navigationProps.path)
+    }
+    sendComponentEvent({
+        componentType: ComponentType.appButton,
+        action: Action.click,
+        value: 'issues_list_issue_clicked',
     })
 }
 

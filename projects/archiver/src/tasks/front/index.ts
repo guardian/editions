@@ -27,7 +27,9 @@ export const handler: Handler<
         throw new Error(`Could not download front ${frontId}`)
     }
 
-    const images = unnest(getImagesFromFront(maybeFront))
+    console.log(`succesfully download front ${frontId}`, maybeFront)
+
+    const images: Image[] = unnest(getImagesFromFront(maybeFront))
 
     const frontUpload = await attempt(
         upload(
@@ -43,6 +45,9 @@ export const handler: Handler<
         throw new Error('Could not upload front')
     }
     const publishedFronts = [...issue.fronts, frontId]
+
+    console.log(`front uploaded`, publishedFronts)
+
     return {
         issuePublication,
         issue: { ...issue, fronts: publishedFronts },
