@@ -155,6 +155,7 @@ export interface Content extends WithKey {
     cardImageTablet?: Image
     standfirst?: string
     byline?: string
+    bylineHtml?: string
     bylineImages?: { cutout?: Image }
     showByline: boolean
     showQuotedHeadline: boolean
@@ -164,6 +165,7 @@ export interface Content extends WithKey {
 export interface Article extends Content {
     type: 'article'
     byline: string
+    bylineHtml: string
     standfirst: string
     elements: BlockElement[]
     starRating?: number

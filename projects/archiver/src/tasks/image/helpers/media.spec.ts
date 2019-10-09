@@ -12,6 +12,7 @@ test('getImage', () => {
         headline: '🗣',
         showByline: false,
         byline: '🧬',
+        bylineHtml: '<a>🧬</<a> Senior person',
         standfirst: '🥇',
         kicker: '🥾',
         trail: '🛣',
