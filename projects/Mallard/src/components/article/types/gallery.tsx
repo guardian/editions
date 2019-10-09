@@ -172,7 +172,7 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
             <View style={[styles.background]}>
                 {gallery.elements.map((element, index) => {
                     if (element.id === 'image' && publishedId) {
-                        return <GalleryItem element={element} />
+                        return <GalleryItem key={index} element={element} />
                     }
                     return <Text key={index}>{element.id}</Text>
                 })}
