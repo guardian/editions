@@ -1,4 +1,4 @@
-const createEditionToNameMap = () => {
+const createEditionToDisplayNameMap = () => {
     const map = new Map<string, string>()
     map.set('daily-edition', 'Daily Edition')
     map.set('american-edition', 'American Edition')
@@ -7,9 +7,9 @@ const createEditionToNameMap = () => {
     return map
 }
 
-const editionToName = createEditionToNameMap()
+const editionToName = createEditionToDisplayNameMap()
 
-export const getEditionNameBy = (edition: string): string => {
+export const getEditionDisplayName = (edition: string): string => {
     if (!editionToName.has(edition)) {
         throw new Error(`${edition} missing in editionToName mapping`)
     }

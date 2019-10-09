@@ -10,7 +10,7 @@ import {
 import { getPublishedId } from '../../../utils/path-builder'
 import { Bucket, s3 } from '../../../utils/s3'
 import { issue } from '../../../../main'
-import { getEditionNameBy } from '../../../services/editions-mappings'
+import { getEditionDisplayName } from '../../../services/editions-mappings'
 
 // from a list of S3 keys, create an object of the basename to filename
 const identifyAssetFiles = (assetKeys: string[]) => {
@@ -85,7 +85,7 @@ export const getIssueSummaryInternal = (
     const assets = { data, ...images }
     const localId = `${edition}/${issueDate}`
     const key = localId
-    const name = getEditionNameBy(edition)
+    const name = getEditionDisplayName(edition)
 
     return {
         key,

@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda'
 import { handleAndNotify } from '../../services/task-handler'
 import {
     scheduleDeviceNotificationIfEligible,
-    DeviceNotificationStatus,
+    NotificationStatus,
 } from './helpers/device-notifications'
 import { IndexTaskOutput } from '../indexer'
 import { IssuePublicationIdentifier } from '../../../common'
@@ -10,7 +10,7 @@ import { IssuePublicationIdentifier } from '../../../common'
 export type NotificationTaskInput = IndexTaskOutput
 export interface NotificationTaskOutput {
     issuePublication: IssuePublicationIdentifier
-    notificationScheduledOrSkipped: DeviceNotificationStatus
+    notificationStatus: NotificationStatus
 }
 
 export const handler: Handler<
@@ -30,7 +30,7 @@ export const handler: Handler<
     const guNotificationServiceAPIKey =
         process.env.gu_notify_service_api_key || ''
 
-    const notificationScheduledOrSkipped = await scheduleDeviceNotificationIfEligible(
+    const notificationStatus = await scheduleDeviceNotificationIfEligible(
         { key, name, issueDate, edition },
         {
             domain: guNotificationServiceDomain,
@@ -38,5 +38,5 @@ export const handler: Handler<
         },
     )
 
-    return { issuePublication, notificationScheduledOrSkipped }
+    return { issuePublication, notificationStatus }
 })

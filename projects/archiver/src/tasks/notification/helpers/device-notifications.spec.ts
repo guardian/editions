@@ -36,7 +36,7 @@ describe('scheduleDeviceNotificationIfEligibleInternal', () => {
             dayBeforeIssue,
             testDependencies,
         )
-        expect(actual).toBe('send')
+        expect(actual).toBe('scheduled')
     })
 
     it('skip request if edition was not daily-edition', async () => {
