@@ -1,7 +1,7 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { getIssueSummary } from 'src/hooks/use-api'
+import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
@@ -212,20 +212,50 @@ export const matchSummmaryToKey = (
 
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
-    const issueSummaries = await getIssueSummary().getValue()
-    // Find the todays issue summary from the list of summary
-    const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
+    try {
+        const issueSummaries = await getIssueSummary()
 
-    // If there isnt one for today, then fahgettaboudit...
-    if (!todaysIssueSummary) return null
+        // Find the todays issue summary from the list of summary
+        const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
 
-    const isTodaysIssueOnDevice = await isIssueOnDevice(
-        todaysIssueSummary.localId,
-    )
+        // If there isnt one for today, then fahgettaboudit...
+        if (!todaysIssueSummary) return null
 
-    // Only download it if its not on the device
-    if (!isTodaysIssueOnDevice) {
-        const imageSize = await imageForScreenSize()
-        downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+        const isTodaysIssueOnDevice = await isIssueOnDevice(
+            todaysIssueSummary.localId,
+        )
+
+        // Only download it if its not on the device
+        if (!isTodaysIssueOnDevice) {
+            const imageSize = await imageForScreenSize()
+            downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+        }
+    } catch (e) {
+        console.log(`Unable to download todays issue: ${e.message}`)
     }
+}
+
+export const readIssueSummary = async () =>
+    RNFetchBlob.fs
+        .readFile(FSPaths.issuesDir + defaultSettings.issuesPath, 'utf8')
+        .then(data => JSON.parse(data))
+        .catch(e => {
+            throw e
+        })
+
+export const fetchAndStoreIssueSummary = async () => {
+    const apiUrl = await getSetting('apiUrl')
+    return RNFetchBlob.config({
+        overwrite: true,
+        path: FSPaths.issuesDir + defaultSettings.issuesPath,
+    })
+        .fetch('GET', apiUrl + 'issues', {
+            'Content-Type': 'application/json',
+        })
+        .then(async res => {
+            return res.json()
+        })
+        .catch(e => {
+            throw e
+        })
 }
