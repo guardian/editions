@@ -16,6 +16,7 @@ export interface IssueNotificationData {
     key: string
     name: string
     issueDate: string
+    edition: string
 }
 
 const scheduleDeviceNotification = async (

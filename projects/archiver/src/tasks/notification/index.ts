@@ -15,7 +15,7 @@ export const handler: Handler<
 > = handleAndNotify('notified', async ({ issuePublication, issue }) => {
     const stage: string = process.env.stage || 'code'
 
-    const { issueDate } = issuePublication
+    const { issueDate, edition } = issuePublication
     const { key, name } = issue
 
     const guNotificationServiceDomain =
@@ -27,7 +27,7 @@ export const handler: Handler<
         process.env.gu_notify_service_api_key || ''
 
     await scheduleDeviceNotificationIfInFuture(
-        { key, name, issueDate },
+        { key, name, issueDate, edition },
         {
             domain: guNotificationServiceDomain,
             apiKey: guNotificationServiceAPIKey,

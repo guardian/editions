@@ -36,6 +36,7 @@ export const getFront = async (
     front: string,
 ): Promise<Attempt<Front>> => {
     const path = `${URL}${frontPath(publishedId, front)}`
+    console.log(`attempt to getFront from path: ${path}`)
     const response = await fetch(path)
     const maybeFront = await attempt(response.json() as Promise<Front>)
     if (hasFailed(maybeFront))

@@ -7,10 +7,11 @@ import { IssueNotificationData } from '../device-notifications'
 import { RequestInit, RequestInfo } from 'node-fetch'
 
 describe('prepareScheduleDeviceNotificationRequest', () => {
-    it('should prepare request Body and request endpoint correctly', () => {
+    it('should prepare request Body and request endpoint correctly for [Daily Edition]', () => {
         const issueData: IssueNotificationData = {
             key: 'daily-edition/2019-09-18',
-            name: 'daily-edition',
+            name: 'Daily Edition',
+            edition: 'daily-edition',
             issueDate: '2019-09-18',
         }
 
@@ -37,7 +38,45 @@ describe('prepareScheduleDeviceNotificationRequest', () => {
                     'Content-Type': 'application/json',
                 },
                 body:
-                    '{"id":"a8b07133-19c1-5a00-a42b-f55bee6508c7","type":"editions","topic":[{"type":"editions","name":"uk"}],"key":"daily-edition/2019-09-18","name":"daily-edition","date":"2019-09-18","sender":"editions-backend"}',
+                    '{"id":"a8b07133-19c1-5a00-a42b-f55bee6508c7","type":"editions","topic":[{"type":"editions","name":"uk"}],"key":"daily-edition/2019-09-18","name":"Daily Edition","date":"2019-09-18","sender":"editions-backend"}',
+            },
+        }
+
+        expect(actual).toStrictEqual(expected)
+    })
+
+    it('should prepare request Body and request endpoint correctly for [American Edition]', () => {
+        const issueData: IssueNotificationData = {
+            key: 'american-edition/2019-10-09',
+            name: 'American Edition',
+            edition: 'american-edition',
+            issueDate: '2019-10-09',
+        }
+
+        const apiCfg = {
+            domain: 'http://example.com',
+            apiKey: 'some.key',
+        }
+        const scheduleTime = '2019-09-18T03:00:00Z'
+
+        const actual = prepareScheduleDeviceNotificationRequest(
+            issueData,
+            apiCfg,
+            scheduleTime,
+        )
+
+        const expected: { reqEndpoint: RequestInfo; reqBody: RequestInit } = {
+            reqEndpoint:
+                'http://example.com/push/schedule/2019-09-18T03:00:00Z',
+            reqBody: {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer some.key',
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body:
+                    '{"id":"ba3baf47-0336-57a3-83bd-5b26aacb5404","type":"editions","topic":[{"type":"editions","name":"usa"}],"key":"american-edition/2019-10-09","name":"American Edition","date":"2019-10-09","sender":"editions-backend"}',
             },
         }
 
