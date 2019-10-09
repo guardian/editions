@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda'
 import { IssueSummary, issueSummarySort } from '../../../common'
 import { getIssueSummary } from './helpers/get-issue-summary'
-import { getIssueSummaries } from './helpers/summary'
+import { getOtherIssuesSummariesForEdition } from './helpers/summary'
 import { upload, FIVE_SECONDS } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
@@ -24,20 +24,30 @@ export const handler: Handler<
         throw new Error('No issue summary was generated for the current issue')
     }
 
-    const otherIssueSummaries = await getIssueSummaries(issuePublication)
+    console.log('thisIssueSummary:', JSON.stringify(thisIssueSummary))
 
-    console.log(
-        `Creating index using the new and ${otherIssueSummaries.length} existing issue summaries`,
+    const { edition } = issuePublication
+
+    const otherIssuesSummariesForEdition = await getOtherIssuesSummariesForEdition(
+        issuePublication,
+        edition,
     )
 
-    const allIssues = issueSummarySort([
-        thisIssueSummary,
-        ...otherIssueSummaries,
-    ])
+    console.log(
+        'otherIssuesSummariesForEdition:',
+        JSON.stringify(otherIssuesSummariesForEdition),
+    )
+
+    console.log(
+        `Creating index using the new and ${otherIssuesSummariesForEdition.length} existing issue summaries`,
+    )
+
+    const all = [thisIssueSummary, ...otherIssuesSummariesForEdition]
+    const allSortedEditionsIssues = issueSummarySort(all)
 
     await upload(
         `${issuePublication.edition}/issues`,
-        allIssues,
+        allSortedEditionsIssues,
         'application/json',
         FIVE_SECONDS,
     )
@@ -45,14 +55,19 @@ export const handler: Handler<
     // Also upload the index into the root for older clients
     // TODO: this can be removed once we are happy that the clients are consuming the namespaced index
     if (issuePublication.edition === 'daily-edition') {
-        await upload('issues', allIssues, 'application/json', FIVE_SECONDS)
+        await upload(
+            'issues',
+            allSortedEditionsIssues,
+            'application/json',
+            FIVE_SECONDS,
+        )
     }
 
     console.log('Uploaded new issues file')
 
     return {
         issuePublication,
-        index: otherIssueSummaries,
+        index: otherIssuesSummariesForEdition,
         issue,
         issueSummary: thisIssueSummary,
     }

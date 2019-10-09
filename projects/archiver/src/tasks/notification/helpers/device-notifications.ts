@@ -6,23 +6,33 @@ import {
     shouldSchedule,
 } from './device-notifications-helpers'
 
-/**
- * TODO
- * it will work now noly for Daily Editions in UK
- * In the future we will need to make it more generic (for US and Australia)
- **/
-
 export interface IssueNotificationData {
     key: string
     name: string
     issueDate: string
+    edition: string
+}
+
+export interface ScheduleDeviceNotificationAPIResponse {
+    statusCode: number
+    statusText: string
+}
+
+export interface ApiConfig {
+    domain: string
+    apiKey: string
+}
+
+export interface ScheduleDeviceNotificationInput {
+    issueData: IssueNotificationData
+    cfg: ApiConfig
+    scheduleTime: string
 }
 
 const scheduleDeviceNotification = async (
-    issueData: IssueNotificationData,
-    cfg: { domain: string; apiKey: string },
-    scheduleTime: string,
-) => {
+    input: ScheduleDeviceNotificationInput,
+): Promise<ScheduleDeviceNotificationAPIResponse> => {
+    const { issueData, cfg, scheduleTime } = input
     const { reqEndpoint, reqBody } = prepareScheduleDeviceNotificationRequest(
         issueData,
         cfg,
@@ -40,31 +50,73 @@ const scheduleDeviceNotification = async (
     return { statusCode: status, statusText }
 }
 
-export const scheduleDeviceNotificationIfInFuture = async (
+export type DeviceNotificationReqStatus = 'skipped' | 'send'
+
+export interface ScheduleDeviceNotificationDependencies {
+    scheduleNotificationFunction: (
+        input: ScheduleDeviceNotificationInput,
+    ) => Promise<ScheduleDeviceNotificationAPIResponse>
+}
+
+export const scheduleDeviceNotificationIfEligibleInternal = async (
     issueData: IssueNotificationData,
-    cfg: { domain: string; apiKey: string },
-) => {
+    cfg: ApiConfig,
+    now: Date,
+    deps: ScheduleDeviceNotificationDependencies,
+): Promise<DeviceNotificationReqStatus> => {
+    const { edition } = issueData
+
+    if (edition != 'daily-edition') {
+        console.log(
+            `skipping schedule Device Notification because the ${edition} edition is not eligible for Device Notification`,
+        )
+        return 'skipped'
+    }
+
     const scheduleTime = createScheduleTime(issueData.issueDate)
 
-    const now = new Date()
-
-    if (shouldSchedule(scheduleTime, now)) {
-        const { statusCode, statusText } = await scheduleDeviceNotification(
-            issueData,
-            cfg,
-            scheduleTime,
-        )
-
-        console.log(
-            'schedule Device Notification Response',
-            JSON.stringify({
-                statusCode: statusCode,
-                statusText: statusText,
-            }),
-        )
-    } else {
+    if (!shouldSchedule(scheduleTime, now)) {
         console.log(
             `skipping schedule Device Notification because the (scheduleTime: ${scheduleTime}) is in the past`,
         )
+        return 'skipped'
     }
+
+    const scheduleNotificationInput = {
+        issueData,
+        cfg,
+        scheduleTime,
+    }
+
+    const { statusCode, statusText } = await deps.scheduleNotificationFunction(
+        scheduleNotificationInput,
+    )
+
+    console.log(
+        'schedule Device Notification Response',
+        JSON.stringify({
+            statusCode: statusCode,
+            statusText: statusText,
+        }),
+    )
+
+    return 'send'
+}
+
+export const scheduleDeviceNotificationIfEligible = async (
+    issueData: IssueNotificationData,
+    cfg: ApiConfig,
+) => {
+    const runtimeDependencies = {
+        scheduleNotificationFunction: scheduleDeviceNotification,
+    }
+
+    const now = new Date()
+
+    scheduleDeviceNotificationIfEligibleInternal(
+        issueData,
+        cfg,
+        now,
+        runtimeDependencies,
+    )
 }

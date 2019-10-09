@@ -2,6 +2,7 @@ import moment from 'moment'
 import uuid from 'uuidv4'
 import { IssueNotificationData } from './device-notifications'
 import { RequestInit, RequestInfo } from 'node-fetch'
+import { getEditionCountryBy } from '../../../services/editions-mappings'
 
 type EditionNotificationTypes = 'editions'
 
@@ -57,17 +58,13 @@ export const prepareScheduleDeviceNotificationRequest = (
 ): { reqEndpoint: RequestInfo; reqBody: RequestInit } => {
     const { domain, apiKey } = cfg
 
-    const { key, name, issueDate } = issueData
+    const { key, name, issueDate, edition } = issueData
+    const topicName = getEditionCountryBy(edition)
 
-    /**
-     * TODO
-     * Payload is hardcoded now for UK
-     * In the future we will need to make it more generic (for US and Australia)
-     */
     const payload: ScheduleDeviceNotificationPayload = {
         id: uuid.fromString(key),
         type: 'editions',
-        topic: [{ type: 'editions', name: 'uk' }],
+        topic: [{ type: 'editions', name: topicName }],
         key,
         name,
         date: issueDate,
