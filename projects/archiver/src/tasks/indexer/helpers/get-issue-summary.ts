@@ -64,10 +64,14 @@ export const getIssueSummary = async (
 
     const publishedId = getPublishedId(issuePublication)
 
+    const Prefix = `zips/${publishedId}/`
+
+    console.log(`getIssueSummary from location: s3://${Bucket}/${Prefix}`)
+
     const assetKeyList = await s3
         .listObjectsV2({
             Bucket,
-            Prefix: `zips/${publishedId}/`,
+            Prefix,
         })
         .promise()
 
