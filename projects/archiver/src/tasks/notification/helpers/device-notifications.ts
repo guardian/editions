@@ -50,7 +50,7 @@ const scheduleDeviceNotification = async (
     return { statusCode: status, statusText }
 }
 
-export type DeviceNotificationReqStatus = 'skipped' | 'send'
+export type DeviceNotificationStatus = 'skipped' | 'send'
 
 export interface ScheduleDeviceNotificationDependencies {
     scheduleNotificationFunction: (
@@ -63,7 +63,7 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
     cfg: ApiConfig,
     now: Date,
     deps: ScheduleDeviceNotificationDependencies,
-): Promise<DeviceNotificationReqStatus> => {
+): Promise<DeviceNotificationStatus> => {
     const { edition } = issueData
 
     if (edition != 'daily-edition') {
@@ -106,14 +106,14 @@ export const scheduleDeviceNotificationIfEligibleInternal = async (
 export const scheduleDeviceNotificationIfEligible = async (
     issueData: IssueNotificationData,
     cfg: ApiConfig,
-) => {
+): Promise<DeviceNotificationStatus> => {
     const runtimeDependencies = {
         scheduleNotificationFunction: scheduleDeviceNotification,
     }
 
     const now = new Date()
 
-    scheduleDeviceNotificationIfEligibleInternal(
+    return scheduleDeviceNotificationIfEligibleInternal(
         issueData,
         cfg,
         now,
