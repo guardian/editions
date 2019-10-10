@@ -175,6 +175,8 @@ export const getCardsForFront = (
             return thirdPageCoverLayout(FrontCardAppearance.splashPage, true)
         case 'Food':
         case 'Review':
+        case 'Travel':
+        case 'Books':
             return defaultLayout(FrontCardAppearance.splashPage, true)
         case 'Sport':
             return defaultLayout(1, true)
