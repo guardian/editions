@@ -101,6 +101,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         padding: 0;
     }
     #app p {
+      line-height: 1.4;
       margin-bottom: 15px;
     }
     #app h2 {
