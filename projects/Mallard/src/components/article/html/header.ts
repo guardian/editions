@@ -147,12 +147,33 @@ export const headerStyles = ({
         width: auto;
         fill: ${colors.main};
     }
-    .header-byline:not(:empty) {
+
+    .header-standfirst {
         font-weight: 600;
-        padding: 0.25rem 0 2rem;
         color: ${colors.main};
+    }
+
+    .header-byline-italic {
+        font-style: italic;
+    }
+
+    .header-byline:not(:empty) {
+        padding: 0.25rem 0 2rem;
         position: relative;
     }
+
+    .header-byline > span > a {
+        font-style: normal !important;
+        text-decoration: none;
+        font-weight: 600;
+        color: ${colors.main};
+    }
+
+    .header-top-byline > a {
+        font-style: normal !important;
+        text-decoration: none;
+    }
+
     .header-byline:not(:empty):after {
         content: '';
         display: block;
@@ -473,7 +494,7 @@ const Header = ({
                                               >${headerProps.headline}</span
                                           >
                                           <span class="header-top-byline"
-                                              >${headerProps.byline}</span
+                                              >${headerProps.bylineHtml}</span
                                           >
                                       </h1>
                                       ${publishedId &&
@@ -498,13 +519,17 @@ const Header = ({
                           `}
                 </header>
 
-                <aside class="header-byline">
-                    <span
-                        >${largeByline
-                            ? headerProps.standfirst
-                            : headerProps.byline}</span
-                    >
-                </aside>
+                ${largeByline
+                    ? html`
+                          <aside class="header-byline header-standfirst">
+                              <span>${headerProps.standfirst}</span>
+                          </aside>
+                      `
+                    : html`
+                          <aside class="header-byline header-byline-italic">
+                              <span>${headerProps.bylineHtml}</span>
+                          </aside>
+                      `}
                 <div class="header-bg"></div>
             </div>
         </div>

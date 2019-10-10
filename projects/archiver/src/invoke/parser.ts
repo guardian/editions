@@ -22,7 +22,9 @@ export const parseRecordInternal = (
         })
     }
 
-    const { edition, version, issueDate } = JSON.parse(objContent)
+    const { edition, version, issueDate } = JSON.parse(
+        objContent,
+    ) as IssuePublicationIdentifier
 
     if (
         edition === undefined ||
