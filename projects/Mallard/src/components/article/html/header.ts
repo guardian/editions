@@ -256,8 +256,8 @@ export const headerStyles = ({
         background-color: ${colors.main};
         color: ${color.textOverDarkBackground};
         border:none;
-        width: 2em;
-        height: 2em;
+        width: ${metrics.fronts.sliderRadius * 2}px;
+        height: ${metrics.fronts.sliderRadius * 2}px;
         display: block;
         line-height: .9;
         text-align: center;
