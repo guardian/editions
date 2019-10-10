@@ -2,16 +2,10 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { BylineCutout } from 'src/components/article/article-header/opinion-header'
 import Quote from 'src/components/icons/Quote'
-import { TextWithIcon } from 'src/components/layout/text-with-icon'
-import { StandfirstText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
-import { getFont, getUnscaledFont } from 'src/theme/typography'
-import {
-    getItemRectanglePerc,
-    PageLayoutSizes,
-    toPercentage,
-} from '../helpers/helpers'
+import { getFont } from 'src/theme/typography'
+import { getItemRectanglePerc, toPercentage } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
 import {
     ItemTappable,
@@ -22,6 +16,7 @@ import { TextBlock } from './helpers/text-block'
 import { Standfirst } from './helpers/standfirst'
 import { metrics } from 'src/theme/spacing'
 import { useIsOpinionCard } from './helpers/types'
+import { PageLayoutSizes } from '../../../common'
 
 /*
 SUPERHERO IMAGE ITEM

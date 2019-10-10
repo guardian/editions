@@ -1,8 +1,5 @@
-import {
-    ItemSizes,
-    PageLayoutSizes,
-    getPageLayoutSizeXY,
-} from '../../helpers/helpers'
+import { getPageLayoutSizeXY } from '../../helpers/helpers'
+import { PageLayoutSizes, ItemSizes } from '../../../../common'
 
 export const getImageHeight = ({ story, layout }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {

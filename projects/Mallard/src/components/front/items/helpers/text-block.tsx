@@ -12,8 +12,8 @@ import {
     getUnscaledFont,
 } from 'src/theme/typography'
 import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text'
-import { ItemSizes, PageLayoutSizes } from '../../helpers/helpers'
 import { useIsOpinionCard } from './types'
+import { ItemSizes, PageLayoutSizes } from 'src/common'
 
 const styles = {
     root: {
