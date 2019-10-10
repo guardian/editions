@@ -128,9 +128,9 @@ export const headerStyles = ({
 
     .header-kicker {
         font-family: ${families.titlepiece.regular};
-        font-size: 0.9em;
+        font-size: 1em;
         color: ${colors.main};
-        padding: 0.25rem 0 1rem;
+        padding: 0.25rem 0 0.8rem;
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
