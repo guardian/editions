@@ -1,3 +1,4 @@
+export DEVELOPER_DIR=/Applications/Xcode_10.3.app/Contents/Developer/
 export JAVA_OPTS = -Xmx4096m -Dsun.jnu.encoding=UTF-8
 
 debug-android:

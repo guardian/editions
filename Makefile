@@ -1,4 +1,3 @@
-export DEVELOPER_DIR=/Applications/Xcode_10.3.app/Contents/Developer/
 YARN = yarn
 YARNFLAGS= --frozen-lockfile --mutex network
 EXCLUDE = ${exclude}
