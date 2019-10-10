@@ -135,7 +135,7 @@ export const headerStyles = ({
         display: block;
     }
     .header h1 {
-        ${getScaledFontCss('headline', 1.6)}
+        ${getScaledFontCss('headline', 1.75)}
         font-family: ${families.headline.regular};
         font-weight: 400;
         margin: 0.1em 1em 0.75em 0;
