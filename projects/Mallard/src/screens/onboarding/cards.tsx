@@ -46,7 +46,7 @@ const OnboardingConsent = ({
             <OnboardingCard
                 appearance={CardAppearance.blue}
                 title="We care about your privacy"
-                explainerTitle="We won't share your data without asking"
+                explainerTitle="This app is free of ads"
                 bottomExplainerContent={
                     <>
                         <View style={styles.consentButtonContainer}>
@@ -79,10 +79,10 @@ const OnboardingConsent = ({
             >
                 {
                     <>
-                        As the Guardian daily is ad free, we only collect data
-                        to improve your experience and our service to you. To
-                        experience and our level of service to you. To find out
-                        more, read our{' '}
+                        The only data that is collected (through tracking
+                        technology) is used by the Guardian to improve your
+                        experience and our level of service to you. By
+                        continuing, you agree with the Guardian&apos;s{' '}
                         <LinkNav onPress={onOpenPrivacyPolicy}>
                             privacy policy
                         </LinkNav>

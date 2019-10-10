@@ -48,6 +48,8 @@ const storeDetails = {
     android: 'market://details?id=com.guardian.editions',
 }
 
+const contentPrefix = 'daily-edition'
+
 export const defaultSettings: Settings = {
     apiUrl,
     isUsingProdDevtools: false,
@@ -65,8 +67,9 @@ export const defaultSettings: Settings = {
         : notificationServiceRegister.prod,
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
-    contentPrefix: 'daily-edition',
-    useNonWobblyWebview: false,
+    contentPrefix,
+    issuesPath: `/${contentPrefix}/issues`,
+    useNonWobblyWebview: true,
     storeDetails,
 }
 

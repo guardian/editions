@@ -23,9 +23,8 @@ import {
 import { Wrap } from '../wrap/wrap'
 import { Direction } from 'src/helpers/sizes'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
-import { Issue } from '../../../common'
 import { ImageResource } from 'src/components/front/image-resource'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
@@ -150,9 +149,8 @@ const GalleryCoverItem = ({
 }
 
 const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
-    const issueCompositeKey = useIssueCompositeKey()
-    const publishedId =
-        (issueCompositeKey && issueCompositeKey.publishedIssueId) || null
+    const { issueId } = useIssueSummary()
+    const publishedId = (issueId && issueId.publishedIssueId) || null
     return (
         <>
             <View style={[styles.background]}>
@@ -174,7 +172,7 @@ const Gallery = ({ gallery }: { gallery: GalleryArticle }) => {
             <View style={[styles.background]}>
                 {gallery.elements.map((element, index) => {
                     if (element.id === 'image' && publishedId) {
-                        return <GalleryItem element={element} />
+                        return <GalleryItem key={index} element={element} />
                     }
                     return <Text key={index}>{element.id}</Text>
                 })}

@@ -302,25 +302,38 @@ export class EditionsStack extends cdk.Stack {
             value: archiverStateMachine.stateMachineArn,
         })
 
-        const archiveS3EventListener = new lambda.Function(
-            this,
-            'EditionsArchiverS3EventListener',
-            {
-                functionName: `editions-archiver-s3-event-listener-${stageParameter.valueAsString}`,
-                runtime: lambda.Runtime.NODEJS_10_X,
-                timeout: Duration.minutes(5),
-                memorySize: 256,
-                code: Code.bucket(
-                    deployBucket,
-                    `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
-                ),
-                handler: 'index.invoke',
-                environment: {
-                    stage: stageParameter.valueAsString,
-                    stateMachineARN: archiverStateMachine.stateMachineArn,
+        const archiveS3EventListenerFunction = () => {
+            const fn = new lambda.Function(
+                this,
+                'EditionsArchiverS3EventListener',
+                {
+                    functionName: `editions-archiver-s3-event-listener-${stageParameter.valueAsString}`,
+                    runtime: lambda.Runtime.NODEJS_10_X,
+                    timeout: Duration.minutes(5),
+                    memorySize: 256,
+                    code: Code.bucket(
+                        deployBucket,
+                        `${stackParameter.valueAsString}/${stageParameter.valueAsString}/archiver/archiver.zip`,
+                    ),
+                    handler: 'index.invoke',
+                    environment: {
+                        stage: stageParameter.valueAsString,
+                        stateMachineARN: archiverStateMachine.stateMachineArn,
+                        arn: frontsRoleARN.valueAsString,
+                    },
                 },
-            },
-        )
+            )
+            Tag.add(
+                fn,
+                'App',
+                `editions-archiver-s3-event-listener-${stageParameter.valueAsString}`,
+            )
+            Tag.add(fn, 'Stage', stageParameter.valueAsString)
+            Tag.add(fn, 'Stack', stackParameter.valueAsString)
+            return fn
+        }
+
+        const archiveS3EventListener = archiveS3EventListenerFunction()
 
         new CfnOutput(this, 'archiver-s3-event-listener-arn', {
             description: 'ARN for archiver state machine trigger lambda',
@@ -339,6 +352,12 @@ export class EditionsStack extends cdk.Stack {
             },
         )
 
+        archiveS3EventListener.addToRolePolicy(
+            new iam.PolicyStatement({
+                actions: ['sts:AssumeRole'],
+                resources: [frontsAccess.roleArn],
+            }),
+        )
         archiverStateMachine.grantStartExecution(archiveS3EventListener)
     }
 }

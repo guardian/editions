@@ -59,6 +59,7 @@ const ImageResource = ({
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
     return width && imagePath ? (
         <ScaledImageResource
+            key={imagePath} // an attempt to fix https://github.com/facebook/react-native/issues/9195
             width={width}
             imagePath={imagePath}
             style={styles}

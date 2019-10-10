@@ -7,7 +7,7 @@ import {
     ViewStyle,
     Image,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Issue } from 'src/common'
 import { Button } from 'src/components/button/button'
@@ -31,6 +31,7 @@ import {
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
+    CONNECTION_FAILED_AUTO_RETRY,
 } from 'src/helpers/words'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
@@ -43,7 +44,11 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useIssueCompositeKeyHandler } from 'src/hooks/use-issue-id'
+import {
+    useIssueSummary,
+    issueSummaryToLatestPath,
+} from 'src/hooks/use-issue-summary'
+import { IssueSummary } from '../../../common/src'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -142,29 +147,51 @@ const IssueFronts = ({
     ListHeaderComponent?: ReactElement
     style?: StyleProp<ViewStyle>
 }) => {
-    const { container } = useIssueScreenSize()
+    const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
-        <ScrollView style={style} key={width} removeClippedSubviews={true}>
-            {ListHeaderComponent}
-            {issue.fronts.map(key => (
+        <FlatList
+            showsHorizontalScrollIndicator={false}
+            ListHeaderComponent={ListHeaderComponent}
+            // These three props are responsible for the majority of
+            // performance improvements
+            initialNumToRender={2}
+            windowSize={2}
+            maxToRenderPerBatch={2}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={1}
+            decelerationRate="fast"
+            ListFooterComponent={() => (
+                <>
+                    <View style={[styles.illustrationPosition]}>
+                        <Image
+                            style={styles.illustrationImage}
+                            resizeMode={'contain'}
+                            source={require('src/assets/images/privacy.png')}
+                        />
+                    </View>
+                    <View style={{ height: container.height / 3 }} />
+                </>
+            )}
+            getItemLayout={(_: any, index: number) => ({
+                length: card.height,
+                offset: card.height * index,
+                index,
+            })}
+            keyExtractor={item => item}
+            data={issue.fronts}
+            style={style}
+            key={width}
+            renderItem={({ item: key }) => (
                 <Front
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
                     front={key}
                     key={key}
                 />
-            ))}
-            <View style={[styles.illustrationPosition]}>
-                <Image
-                    style={styles.illustrationImage}
-                    resizeMode={'contain'}
-                    source={require('src/assets/images/privacy.png')}
-                />
-            </View>
-            <View style={{ height: container.height / 3 }} />
-        </ScrollView>
+            )}
+        />
     )
 }
 
@@ -196,6 +223,17 @@ const handlePending = () => (
         <FlexCenter>
             <Spinner />
         </FlexCenter>
+    </>
+)
+
+const handleIssueScreenError = (error: string) => (
+    <>
+        <ScreenHeader />
+        <FlexErrorMessage
+            debugMessage={error}
+            title={CONNECTION_FAILED_ERROR}
+            message={CONNECTION_FAILED_AUTO_RETRY}
+        />
     </>
 )
 
@@ -291,15 +329,20 @@ const IssueScreenWithPath = React.memo(
 )
 
 export const IssueScreen = () => {
-    const response = useIssueCompositeKeyHandler()
-
+    const { issueSummary, issueId, error } = useIssueSummary()
     return (
         <Container>
-            {response({
-                pending: handlePending,
-                error: handleError,
-                success: path => <IssueScreenWithPath path={path} />,
-            })}
+            {issueId ? (
+                <IssueScreenWithPath path={issueId} />
+            ) : issueSummary ? (
+                <IssueScreenWithPath
+                    path={issueSummaryToLatestPath(issueSummary)}
+                />
+            ) : error ? (
+                error && handleIssueScreenError(error)
+            ) : (
+                handlePending()
+            )}
         </Container>
     )
 }

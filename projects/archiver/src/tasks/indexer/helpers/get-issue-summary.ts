@@ -10,6 +10,7 @@ import {
 import { getPublishedId } from '../../../utils/path-builder'
 import { Bucket, s3 } from '../../../utils/s3'
 import { issue } from '../../../../main'
+import { getEditionDisplayName } from '../../../services/editions-mappings'
 
 // from a list of S3 keys, create an object of the basename to filename
 const identifyAssetFiles = (assetKeys: string[]) => {
@@ -57,24 +58,13 @@ const makeImageAssetObject = (assetFiles: {
  * includes simple metadata (key, localId, etc) and the list of zip assets.
  * If the issue isn't valid this will return undefined.
  */
-export const getIssueSummary = async (
+export const getIssueSummaryInternal = (
     issuePublication: IssuePublicationIdentifier,
-): Promise<IssueSummary | undefined> => {
+    assetKeys: string[],
+): IssueSummary | undefined => {
     const { edition, issueDate } = issuePublication
 
-    const publishedId = getPublishedId(issuePublication)
-
-    const assetKeyList = await s3
-        .listObjectsV2({
-            Bucket,
-            Prefix: `zips/${publishedId}/`,
-        })
-        .promise()
-
-    const assetKeys = oc(assetKeyList)
-        .Contents([])
-        .map(_ => _.Key)
-        .filter(notNull)
+    const publishedIssuePrefix = getPublishedId(issuePublication)
 
     const dateFromIssue = new Date(issueDate)
 
@@ -95,12 +85,39 @@ export const getIssueSummary = async (
     const assets = { data, ...images }
     const localId = `${edition}/${issueDate}`
     const key = localId
+    const name = getEditionDisplayName(edition)
+
     return {
         key,
         localId,
-        publishedId,
-        name: 'Daily Edition',
+        publishedId: publishedIssuePrefix,
+        name,
         date: issueDate,
         assets,
     }
+}
+
+export const getIssueSummary = async (
+    issuePublication: IssuePublicationIdentifier,
+): Promise<IssueSummary | undefined> => {
+    const publishedIssuePrefix = getPublishedId(issuePublication)
+    const Prefix = `zips/${publishedIssuePrefix}/`
+    const assetKeyList = await s3
+        .listObjectsV2({
+            Bucket,
+            Prefix,
+        })
+        .promise()
+
+    const assetKeys = oc(assetKeyList)
+        .Contents([])
+        .map(_ => _.Key)
+        .filter(notNull)
+
+    console.log(
+        `getIssueSummary, get assetKeyList from s3://${Bucket}/${Prefix}`,
+        JSON.stringify(assetKeyList),
+    )
+
+    return getIssueSummaryInternal(issuePublication, assetKeys)
 }

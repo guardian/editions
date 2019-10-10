@@ -69,6 +69,7 @@ export interface DevSettings {
         ios: string
         android: string
     }
+    issuesPath: string
 }
 
 interface UserSettings {

@@ -57,7 +57,7 @@ export const prepareScheduleDeviceNotificationRequest = (
 ): { reqEndpoint: RequestInfo; reqBody: RequestInit } => {
     const { domain, apiKey } = cfg
 
-    const { key, name, issueDate } = issueData
+    const { key, name, issueDate, edition } = issueData
 
     /**
      * TODO

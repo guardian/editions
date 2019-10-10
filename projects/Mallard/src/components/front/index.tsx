@@ -172,7 +172,6 @@ const FrontWithResponse = React.memo(
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}
                     horizontal={true}
-                    removeClippedSubviews={true}
                     style={styles.overflow}
                     decelerationRate="fast"
                     snapToInterval={card.width}

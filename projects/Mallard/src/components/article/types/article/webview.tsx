@@ -4,11 +4,11 @@ import { Animated } from 'react-native'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { BlockElement, ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
-import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
 import { ArticleHeaderProps } from '../../article-header/types'
 import { useRenderedHTML } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 import { onShouldStartLoadWithRequest } from './helpers'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const AniWebView = Animated.createAnimatedComponent(WebView)
 
@@ -28,7 +28,7 @@ const WebviewWithArticle = ({
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
-    const issueCompositeKey = useIssueCompositeKey()
+    const { issueId } = useIssueSummary()
 
     const html = useRenderedHTML(article, {
         pillar,
@@ -37,8 +37,7 @@ const WebviewWithArticle = ({
         showWebHeader: true,
         showMedia: isConnected,
         height: paddingTop,
-        publishedId:
-            (issueCompositeKey && issueCompositeKey.publishedIssueId) || null,
+        publishedId: (issueId && issueId.publishedIssueId) || null,
     })
 
     return (
@@ -46,7 +45,11 @@ const WebviewWithArticle = ({
             {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
-            source={{ html }}
+            source={{
+                html,
+                baseUrl:
+                    '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
+            }}
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
         />

@@ -1,6 +1,7 @@
 import { handleAndNotifyInternal } from './task-handler'
 import moment = require('moment')
 import { createPublishEvent, PublishEvent } from './pub-status-notifier'
+import { IssuePublicationIdentifier } from '../../common'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dontCare = {} as any
@@ -10,7 +11,7 @@ const input = {
         edition: 'daily-edition',
         version: '2019-10-02T11:31:58.974+01:00',
         issueDate: '2019-09-11',
-    },
+    } as IssuePublicationIdentifier,
 }
 
 const successHandler = async () => 'banana'
