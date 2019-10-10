@@ -14,7 +14,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 
 const styles: string = css`
-    ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
+    ${generateAssetsFontCss({ fontFamily: 'GuardianTextEgyptian-Reg' })}
     * {
         margin: 0;
         padding: 0;

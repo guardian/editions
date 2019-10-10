@@ -32,13 +32,16 @@ import { Arrow } from './arrow'
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
-    ${generateAssetsFontCss(families.text.regular)}
-    ${generateAssetsFontCss(families.icon.regular)}
-    ${generateAssetsFontCss(families.headline.light)}
-    ${generateAssetsFontCss(families.headline.regular)}
-    ${generateAssetsFontCss(families.headline.bold)}
-    ${generateAssetsFontCss(families.sans.regular)}
-    ${generateAssetsFontCss(families.titlepiece.regular)}
+    ${generateAssetsFontCss({ fontFamily: families.text.regular })}
+    ${generateAssetsFontCss({
+        fontFamily: families.icon.regular,
+        extension: 'otf',
+    })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.light })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.bold })}
+    ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
+    ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
     html, body {
         overflow-x: hidden;
     }
