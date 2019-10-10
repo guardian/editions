@@ -3,13 +3,14 @@ import {
     notNull,
     IssuePublicationIdentifier,
     IssueIdentifier,
+    Edition,
 } from '../../../../common'
 import { getIssuesBy as getIssuesByEdition, issueWindow } from './get-issues'
 import { getIssueSummary } from './get-issue-summary'
 import { getPublishedVersion } from './get-published-version'
 import { oc } from 'ts-optchain'
 
-const validate = (allEditionIssues: IssueIdentifier[], edition: string) => {
+const validate = (allEditionIssues: IssueIdentifier[], edition: Edition) => {
     const otherEditions = allEditionIssues.filter(
         issue => issue.edition != edition,
     )
@@ -39,7 +40,7 @@ export const getOtherRecentIssues = (
 // currently publishing will remove this issue from the index, it should be generated in the indextask
 export const getOtherIssuesSummariesForEdition = async (
     currentlyPublishing: IssuePublicationIdentifier,
-    edition: string,
+    edition: Edition,
 ): Promise<IssueSummary[]> => {
     const allEditionIssues = await getIssuesByEdition(edition)
 

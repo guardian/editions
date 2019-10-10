@@ -69,7 +69,8 @@ const getStatus = async (
         return { ...issuePublication, status: 'unknown', updated: new Date(0) }
     }
     const decodedStatus = JSON.parse(statusResponse)
-    const status = statuses.find(_ => _ === decodedStatus.status) || 'unknown'
+    const status: Status =
+        statuses.find(_ => _ === decodedStatus.status) || 'unknown'
     const updated = oc(response).LastModified() || new Date(0)
     console.log(
         `Status for ${JSON.stringify(
