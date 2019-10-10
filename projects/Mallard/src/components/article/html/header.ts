@@ -277,7 +277,10 @@ export const headerStyles = ({
         ${getScaledFontCss('headline', 1.5)}
         font-family: ${families.headline.bold};
     }
-    .header-container[data-type='review'] .header-byline {
+    .header-container[data-type='review'] .header-kicker {
+        color: ${colors.dark};
+    }
+    .header-container[data-type='review'] .header-byline a {
         color: ${colors.dark};
     }
     .header-container[data-type='review'] p {
@@ -349,7 +352,7 @@ export const headerStyles = ({
         font-family: ${families.titlepiece.regular};
         color: ${colors.dark};
     }
-    .header-container[data-type='immersive'] .header-byline {
+    .header-container[data-type='immersive'] .header-byline a {
         color: ${colors.dark};
     }
 
