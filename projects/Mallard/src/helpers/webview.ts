@@ -112,7 +112,7 @@ export const makeHtml = ({
             />
         </head>
         <body>
-            <div id="app">
+            <div id="app" class="app">
                 ${body}
             </div>
             <script>

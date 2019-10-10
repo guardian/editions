@@ -396,7 +396,9 @@ export const headerStyles = ({
     .header-container[data-type='${ArticleType.Obituary}'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
     }
-    .header-container[data-type='${ArticleType.Obituary}'] .header-byline {
+    .header-container[data-type='${ArticleType.Obituary}'] .header-byline,
+    ${'' /* this is needed to be more specific than an above style */}
+    .header-container[data-type='${ArticleType.Obituary}'] .header-byline a {
         color: ${color.textOverDarkBackground};
     }
 `

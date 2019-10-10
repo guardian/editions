@@ -161,7 +161,7 @@ export default class App extends React.Component<{}, {}> {
                         <View style={styles.appContainer}>
                             <RootNavigator
                                 {...rootNavigationProps}
-                                enableURLHandling={false}
+                                enableURLHandling={__DEV__}
                                 onNavigationStateChange={
                                     onNavigationStateChange
                                 }

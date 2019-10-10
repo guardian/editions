@@ -23,14 +23,14 @@ const styles: string = css`
         font-size: ${17 * PixelRatio.getFontScale()}px;
         line-height; 1.4;
     }
-    #app {
+    .app {
         font-family: 'GuardianTextEgyptian-Reg';
         padding: ${metrics.vertical}px ${metrics.horizontal}px;
     }
-    #app p {
+    .app p {
         margin-bottom: ${metrics.vertical * 2}px;
     }
-    #app a {
+    .app a {
         color: ${color.primary};
         text-decoration-color: ${color.line};
     }
