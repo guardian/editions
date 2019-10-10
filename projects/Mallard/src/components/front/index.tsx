@@ -9,6 +9,7 @@ import {
     ArticlePillar,
     Front as FrontType,
     ArticleType,
+    PageLayoutSizes,
 } from 'src/common'
 import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
 import {
@@ -22,7 +23,6 @@ import {
     getTranslateForPage,
     AnimatedFlatListRef,
     getNearestPage,
-    PageLayoutSizes,
 } from './helpers/helpers'
 import { useFrontsResponse } from 'src/hooks/use-issue'
 import { ArticleNavigator } from '../../screens/article-screen'

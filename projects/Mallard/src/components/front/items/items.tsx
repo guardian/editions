@@ -8,8 +8,7 @@ import { TextBlock } from './helpers/text-block'
 import { ImageItem, SplitImageItem, SidekickImageItem } from './image-items'
 import { SmallItem, SmallItemLargeText } from './small-items'
 import { SuperHeroImageItem } from './super-items'
-import { Image } from '../../../../../common/src'
-import { PageLayoutSizes } from '../helpers/helpers'
+import { Image, PageLayoutSizes } from 'src/common'
 
 /*
 helpers

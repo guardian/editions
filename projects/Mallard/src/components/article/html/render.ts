@@ -3,7 +3,8 @@ import {
     BlockElement,
     MediaAtomElement,
     ArticleType,
-} from 'src/common'
+    Direction,
+} from '../../../common'
 import {
     css,
     generateAssetsFontCss,
@@ -27,7 +28,6 @@ import { lineStyles, Line } from './line'
 import { useImageSize } from 'src/hooks/use-image-size'
 import { ratingStyles } from './rating'
 import { Arrow } from './arrow'
-import { Direction } from 'src/helpers/sizes'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 

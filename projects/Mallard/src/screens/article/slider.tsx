@@ -5,9 +5,9 @@ import {
     StyleProp,
     StyleSheet,
     View,
-    ViewPagerAndroid,
     ViewStyle,
 } from 'react-native'
+import ViewPagerAndroid from '@react-native-community/viewpager'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
