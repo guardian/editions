@@ -1,6 +1,11 @@
 import { Request, Response } from 'express'
 import { groupBy } from 'ramda'
-import { IssueSummary, notNull, IssuePublicationIdentifier } from '../common'
+import {
+    IssueSummary,
+    notNull,
+    IssuePublicationIdentifier,
+    Edition,
+} from '../common'
 import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
 import { s3List } from '../s3'
@@ -49,7 +54,7 @@ export const getIssuesSummary = async (
      * to support /issues path
      * TODO to delete in the future
      */
-    const edition = getEditionOrFallback(maybeEdition)
+    const edition: Edition = getEditionOrFallback(maybeEdition)
     const editionPath = buildEditionPath(maybeEdition, isPreview)
     const issueKeys = await s3List(editionPath)
 

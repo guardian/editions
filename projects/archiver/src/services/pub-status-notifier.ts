@@ -1,13 +1,13 @@
 import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
-import { IssuePublicationIdentifier } from '../../common'
+import { IssuePublicationIdentifier, Edition } from '../../common'
 import { Status } from '../services/status'
 import { Moment } from 'moment'
 
 export type ToolStatus = 'Processing' | 'Published' | 'Failed'
 
 export interface PublishEvent {
-    edition: string
+    edition: Edition
     issueDate: string
     version: string
     status: ToolStatus

@@ -1,5 +1,7 @@
+import { Edition } from '../../common'
+
 const createEditionToDisplayNameMap = () => {
-    const map = new Map<string, string>()
+    const map = new Map<Edition, string>()
     map.set('daily-edition', 'Daily Edition')
     map.set('american-edition', 'American Edition')
     map.set('australian-edition', 'Australian Edition')
@@ -9,7 +11,7 @@ const createEditionToDisplayNameMap = () => {
 
 const editionToName = createEditionToDisplayNameMap()
 
-export const getEditionDisplayName = (edition: string): string => {
+export const getEditionDisplayName = (edition: Edition): string => {
     if (!editionToName.has(edition)) {
         throw new Error(`${edition} missing in editionToName mapping`)
     }

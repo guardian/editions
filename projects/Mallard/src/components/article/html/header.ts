@@ -147,8 +147,17 @@ export const headerStyles = ({
         width: auto;
         fill: ${colors.main};
     }
-    .header-byline:not(:empty) {
+
+    .header-standfirst {
+        font-weight: 600;
+        color: ${colors.main};
+    }
+
+    .header-byline-italic {
         font-style: italic;
+    }
+
+    .header-byline:not(:empty) {
         padding: 0.25rem 0 2rem;
         position: relative;
     }
@@ -510,13 +519,17 @@ const Header = ({
                           `}
                 </header>
 
-                <aside class="header-byline">
-                    <span
-                        >${largeByline
-                            ? headerProps.standfirst
-                            : headerProps.bylineHtml}</span
-                    >
-                </aside>
+                ${largeByline
+                    ? html`
+                          <aside class="header-byline header-standfirst">
+                              <span>${headerProps.standfirst}</span>
+                          </aside>
+                      `
+                    : html`
+                          <aside class="header-byline header-byline-italic">
+                              <span>${headerProps.bylineHtml}</span>
+                          </aside>
+                      `}
                 <div class="header-bg"></div>
             </div>
         </div>
