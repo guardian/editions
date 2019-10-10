@@ -1,5 +1,10 @@
 import { FrontCardAppearance } from './collection/card-layouts'
+import { getImageUse } from './collection/thumbnails'
 export * from './collection/card-layouts'
+export * from './collection/layout-model'
+export * from './collection/layouts'
+export * from './collection/thumbnails'
+export * from './helpers/sizes'
 
 export interface WithKey {
     key: string
@@ -150,7 +155,7 @@ export interface Content extends WithKey {
     articleType?: ArticleType
     trail: string
     image?: CreditedImage
-    trailImage?: Image
+    trailImage?: TrailImage
     cardImage?: Image
     cardImageTablet?: Image
     standfirst?: string
@@ -408,6 +413,17 @@ export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
     source: string
     path: string
+}
+
+export type ImageUse = 'full-size' | 'thumb' | 'thumb-large' | 'not-used'
+
+export interface ImageDeviceUses {
+    mobile: ImageUse
+    tablet: ImageUse
+}
+
+export interface TrailImage extends Image {
+    use: ImageDeviceUses
 }
 
 export interface CreditedImage extends Image {

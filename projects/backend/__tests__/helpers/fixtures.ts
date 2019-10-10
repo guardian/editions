@@ -1,10 +1,6 @@
-import {
-    Article as IArticle,
-    Content as IContent,
-    WithKey,
-} from '../../../common/src'
+import { Content as IContent, WithKey } from '../../../common/src'
 import { CArticle } from '../../capi/articles'
-import { PublishedFurtniture as IPublishedFurniture } from '../../fronts/issue'
+import { PublishedFurniture as IPublishedFurniture } from '../../fronts/issue'
 
 const Content = <T extends string>(
     type: T,
@@ -52,7 +48,7 @@ const Article = ({
     starRating,
 
     ...contentFields
-}: Partial<IArticle> & WithKey): CArticle => ({
+}: Partial<CArticle> & WithKey): CArticle => ({
     ...Content('article', contentFields),
     path: contentFields.key,
     image,

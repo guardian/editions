@@ -1,6 +1,6 @@
 import { ImageElement, mediaPath } from 'src/common'
-import { backends, defaultSettings } from 'src/helpers/settings/defaults'
-import { Direction } from 'src/helpers/sizes'
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import { Direction, ImageSize } from 'src/common'
 import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -8,8 +8,6 @@ import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { breakOut } from './helpers/layout'
 import { CssProps } from './helpers/props'
-import { useImageSize } from 'src/hooks/use-image-size'
-import { ImageSize } from '../../../../../common/src'
 
 export const renderCaption = ({
     caption,
