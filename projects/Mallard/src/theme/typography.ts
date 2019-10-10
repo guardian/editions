@@ -1,7 +1,6 @@
 import { pickClosestBreakpoint, Breakpoints } from './breakpoints'
 import { Dimensions } from 'react-native'
 import { BreakpointList } from 'src/theme/breakpoints'
-import { FontSizes } from 'src/theme/typography'
 
 export const families = {
     icon: {
