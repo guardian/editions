@@ -191,6 +191,7 @@ export const headerStyles = ({
     }
 
     .header-top p {
+        font-family: ${families.headline.regular};
         font-size: 1.05em;
     }
 
