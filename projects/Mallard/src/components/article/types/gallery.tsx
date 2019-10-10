@@ -9,23 +9,22 @@ import {
     View,
 } from 'react-native'
 import { GalleryArticle, Image as ImageType, ImageElement } from 'src/common'
+import { ImageResource } from 'src/components/front/image-resource'
 import { BigArrow } from 'src/components/icons/BigArrow'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
+import { useImagePath } from 'src/hooks/use-image-paths'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import { Direction } from '../../../common'
 import {
     GalleryHeader,
     GalleryHeaderProps,
 } from '../article-header/gallery-header'
 import { Wrap } from '../wrap/wrap'
-import { Direction } from '../../../common'
-import { useImagePath } from 'src/hooks/use-image-paths'
-import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
-import { ImageResource } from 'src/components/front/image-resource'
-import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
 const galleryImageStyles = StyleSheet.create({
     root: { backgroundColor: color.skeleton },
