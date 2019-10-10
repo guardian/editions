@@ -32,7 +32,6 @@ export const SlideCard = ({
     getPosition: () => Animated.Value
 }) => {
     const [scrollY] = useState(() => new Animated.Value(0))
-    const blocked = useRef(false)
 
     useEffect(() => {
         Animated.timing(getPosition(), {
@@ -45,51 +44,9 @@ export const SlideCard = ({
         }).start()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const panResponder = PanResponder.create({
-        onStartShouldSetPanResponder: () => false,
-        onMoveShouldSetPanResponder: (ev, gestureState) => {
-            if (gestureState.moveY < 100) {
-                return true
-            }
-            if (gestureState.dy < 0) {
-                return false
-            }
-            if (gestureState.dy > 10) {
-                blocked.current = true
-                if (enabled && gestureState.vy > 1) {
-                    blocked.current = false
-                    onDismiss()
-                    scrollY.stopAnimation()
-                }
-            }
-            return enabled && blocked.current
-        },
-        onPanResponderTerminationRequest: () => false,
-        onShouldBlockNativeResponder: () => false,
-        onPanResponderMove: Animated.event([
-            null,
-            {
-                dy: scrollY,
-            },
-        ]),
-        onPanResponderEnd: (ev, gestureState) => {
-            blocked.current = false
-            if (gestureState.dy > 50) {
-                onDismiss()
-                scrollY.stopAnimation()
-                return
-            }
-            Animated.timing(scrollY, {
-                useNativeDriver: true,
-                toValue: 0,
-                duration: 200,
-            }).start()
-        },
-    })
-
     return (
         <Animated.View style={[styles.container]}>
-            <View {...panResponder.panHandlers} style={[{ flex: 1 }]}>
+            <View style={[{ flex: 1 }]}>
                 <Header
                     {...{
                         scrollY,

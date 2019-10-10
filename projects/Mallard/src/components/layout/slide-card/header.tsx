@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
     Animated,
     StyleSheet,
     View,
     TouchableWithoutFeedback,
+    PanResponder,
 } from 'react-native'
 import { Chevron } from '../../chevron'
 import { metrics } from 'src/theme/spacing'
@@ -38,8 +39,37 @@ const Header = ({
     scrollY: Animated.Value
     onDismiss: () => void
 }) => {
+    const panResponder = useMemo(
+        () =>
+            PanResponder.create({
+                onMoveShouldSetPanResponder: () => true,
+                onStartShouldSetPanResponder: () => true,
+                onPanResponderMove: Animated.event([
+                    null,
+                    {
+                        dy: scrollY,
+                    },
+                ]),
+                onPanResponderEnd: (ev, gestureState) => {
+                    if (gestureState.dy > 50) {
+                        onDismiss()
+                        scrollY.stopAnimation()
+                        return
+                    }
+                    Animated.timing(scrollY, {
+                        useNativeDriver: true,
+                        toValue: 0,
+                        duration: 200,
+                    }).start()
+                },
+            }),
+        [onDismiss, scrollY],
+    )
     return (
-        <View style={[styles.headerContainer]}>
+        <Animated.View
+            {...panResponder.panHandlers}
+            style={[styles.headerContainer]}
+        >
             <TouchableWithoutFeedback
                 onPress={onDismiss}
                 accessibilityHint="Go back"
@@ -66,7 +96,7 @@ const Header = ({
                     <Chevron color={color.text} />
                 </Animated.View>
             </TouchableWithoutFeedback>
-        </View>
+        </Animated.View>
     )
 }
 
