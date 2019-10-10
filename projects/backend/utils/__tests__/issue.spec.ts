@@ -3,19 +3,32 @@ import {
     buildEditionRootPath,
     decodeVersionOrPreview,
     pickIssuePathSegments,
+    getEditionOrFallback,
 } from '../issue'
-import { IssuePublicationIdentifier } from '../../common'
+import { IssuePublicationIdentifier, Edition } from '../../common'
 import { Path } from '../../s3'
 
 const issueDate = '2019-09-11'
 const version = '2019-10-04T11:28:04.07Z'
-const edition = 'daily-edition'
+const dailyEdition: Edition = 'daily-edition'
+const usEdition: Edition = 'american-edition'
 
 const issue: IssuePublicationIdentifier = {
     issueDate,
     version,
-    edition,
+    edition: dailyEdition,
 }
+
+describe('getEditionOrFallback', () => {
+    it('should get edition provided', () => {
+        expect(getEditionOrFallback(usEdition)).toStrictEqual(usEdition)
+    })
+    it('should fallback to daily-edition', () => {
+        expect(getEditionOrFallback('banana')).toStrictEqual(dailyEdition)
+        expect(getEditionOrFallback('')).toStrictEqual(dailyEdition)
+        expect(getEditionOrFallback(undefined)).toStrictEqual(dailyEdition)
+    })
+})
 
 describe('buildIssueObjectPath', () => {
     it('should build preview path', () => {
@@ -41,39 +54,43 @@ describe('buildIssueObjectPath', () => {
 describe('buildEditionRootPath', () => {
     it('should get preview edition path for edition provided', () => {
         const isPreview = true
-        const actual = buildEditionRootPath('other-edition', isPreview)
+        const actual = buildEditionRootPath(usEdition, isPreview)
         const expected: Path = {
-            key: 'other-edition/',
+            key: `${usEdition}/`,
             bucket: 'preview',
         }
         expect(actual).toStrictEqual(expected)
     })
     it('should get published edition path for edition provided', () => {
         const isPreview = false
-        const actual = buildEditionRootPath('other-edition', isPreview)
+        const actual = buildEditionRootPath(usEdition, isPreview)
         const expected: Path = {
-            key: 'other-edition/',
+            key: `${usEdition}/`,
             bucket: 'published',
         }
         expect(actual).toStrictEqual(expected)
     })
     it('should get preview edition path with fallback to daily-edition', () => {
         const isPreview = true
-        const actual = buildEditionRootPath('', isPreview)
         const expected: Path = {
             key: 'daily-edition/',
             bucket: 'preview',
         }
-        expect(actual).toStrictEqual(expected)
+        expect(buildEditionRootPath('', isPreview)).toStrictEqual(expected)
+        expect(buildEditionRootPath(undefined, isPreview)).toStrictEqual(
+            expected,
+        )
     })
     it('should get published edition path with fallback to daily-edition', () => {
         const isPreview = false
-        const actual = buildEditionRootPath('', isPreview)
         const expected: Path = {
             key: 'daily-edition/',
             bucket: 'published',
         }
-        expect(actual).toStrictEqual(expected)
+        expect(buildEditionRootPath('', isPreview)).toStrictEqual(expected)
+        expect(buildEditionRootPath(undefined, isPreview)).toStrictEqual(
+            expected,
+        )
     })
 })
 
