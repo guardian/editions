@@ -3,13 +3,18 @@ import { PixelRatio, View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { maxScreenSize } from 'src/helpers/screen'
-import { css, generateAssetsFontCss, makeHtml } from 'src/helpers/webview'
+import {
+    css,
+    generateAssetsFontCss,
+    makeHtml,
+    parsePing,
+} from 'src/helpers/webview'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 
 const styles: string = css`
-    ${generateAssetsFontCss('GuardianTextEgyptian-Reg')}
+    ${generateAssetsFontCss({ fontFamily: 'GuardianTextEgyptian-Reg' })}
     * {
         margin: 0;
         padding: 0;
@@ -42,9 +47,12 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
                         originWhitelist={['*']}
                         source={{ html: makeHtml({ styles, body: html }) }}
                         style={{ flex: 1, height }}
-                        onMessage={event =>
-                            setHeight(parseInt(event.nativeEvent.data))
-                        }
+                        onMessage={event => {
+                            const { scrollHeight } = parsePing(
+                                event.nativeEvent.data,
+                            )
+                            setHeight(scrollHeight)
+                        }}
                     />
                 </View>
             </ScrollContainer>

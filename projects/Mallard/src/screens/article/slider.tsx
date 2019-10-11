@@ -5,13 +5,12 @@ import {
     StyleProp,
     StyleSheet,
     View,
-    ViewPagerAndroid,
     ViewStyle,
 } from 'react-native'
+import ViewPagerAndroid from '@react-native-community/viewpager'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
-import { Fader } from 'src/components/layout/animators/fader'
 import { Slider } from 'src/components/slider'
 import { safeInterpolation } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
@@ -72,6 +71,10 @@ const styles = StyleSheet.create({
     },
     sliderBorder: {
         borderBottomColor: color.line,
+    },
+    androidPager: {
+        flexGrow: 1,
+        width: '100%',
     },
 })
 
@@ -161,27 +164,7 @@ const ArticleSlider = ({
 
     if (Platform.OS === 'android')
         return (
-            <ViewPagerAndroid
-                style={{ flexGrow: 1, width: '100%' }}
-                initialPage={startingPoint}
-            >
-                {data.map((item, index) => (
-                    <View key={index}>
-                        <ArticleScreenBody
-                            width={width}
-                            path={item}
-                            pillar={pillar}
-                            onTopPositionChange={onTopPositionChange}
-                            position={index}
-                        />
-                    </View>
-                ))}
-            </ViewPagerAndroid>
-        )
-
-    return (
-        <>
-            <Fader>
+            <>
                 <SliderBar
                     total={articleNavigator.articles.length}
                     position={current}
@@ -189,7 +172,38 @@ const ArticleSlider = ({
                     color={getColor(articleNavigator.appearance)}
                     style={!articleIsAtTop && styles.sliderBorder}
                 />
-            </Fader>
+                <ViewPagerAndroid
+                    style={styles.androidPager}
+                    initialPage={startingPoint}
+                    onPageSelected={(ev: any) => {
+                        setCurrent(ev.nativeEvent.position)
+                    }}
+                >
+                    {data.map((item, index) => (
+                        <View key={index}>
+                            <ArticleScreenBody
+                                width={width}
+                                path={item}
+                                pillar={pillar}
+                                onTopPositionChange={onTopPositionChange}
+                                position={index}
+                            />
+                        </View>
+                    ))}
+                </ViewPagerAndroid>
+            </>
+        )
+
+    return (
+        <>
+            <SliderBar
+                total={articleNavigator.articles.length}
+                position={current}
+                title={articleNavigator.frontName}
+                color={getColor(articleNavigator.appearance)}
+                style={!articleIsAtTop && styles.sliderBorder}
+            />
+
             <Animated.FlatList
                 ref={(flatList: AnimatedFlatListRef) =>
                     (flatListRef.current = flatList)

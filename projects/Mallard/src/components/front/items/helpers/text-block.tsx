@@ -12,7 +12,8 @@ import {
     getUnscaledFont,
 } from 'src/theme/typography'
 import { HeadlineCardText, HeadlineKickerText } from '../../../styled-text'
-import { ItemSizes, PageLayoutSizes } from '../../helpers/helpers'
+import { useIsOpinionCard } from './types'
+import { ItemSizes, PageLayoutSizes } from 'src/common'
 
 const styles = {
     root: {
@@ -74,26 +75,22 @@ const TextBlock = ({
     )
 
     const { fontSize, lineHeight } = applyScale(font)
-    const [colors, { pillar }] = useArticle()
+    const [colors] = useArticle()
 
     const kickerColor = colors.main
 
     return (
         <View style={[styles.root, style]}>
-            {pillar === 'opinion' ? (
+            {useIsOpinionCard() ? (
                 <>
                     <TextWithIcon
                         unscaledFont={font}
                         style={styles.opinionHeadline}
                         icon={{
-                            width: 40,
+                            width: 36,
                             element: scale => (
                                 <Quote
-                                    scale={
-                                        (0.67 / scale) *
-                                        (fontSize /
-                                            getFont('headline', 1).fontSize)
-                                    }
+                                    scale={fontSize / 26}
                                     fill={colors.main}
                                 />
                             ),

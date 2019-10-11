@@ -1,5 +1,10 @@
 import { FrontCardAppearance } from './collection/card-layouts'
+import { getImageUse } from './collection/thumbnails'
 export * from './collection/card-layouts'
+export * from './collection/layout-model'
+export * from './collection/layouts'
+export * from './collection/thumbnails'
+export * from './helpers/sizes'
 
 export interface WithKey {
     key: string
@@ -29,11 +34,6 @@ export enum ArticleType {
     Gallery = 'gallery',
     Feature = 'feature',
     Immersive = 'immersive',
-}
-
-export enum ArticleFeatures {
-    HasDropCap = 'HAS-DROP-CAP',
-    HasFancyDropCap = 'HAS-FANCY-DROP-CAP',
 }
 
 export type ArticlePillar = typeof articlePillars[number]
@@ -155,11 +155,12 @@ export interface Content extends WithKey {
     articleType?: ArticleType
     trail: string
     image?: CreditedImage
-    trailImage?: Image
+    trailImage?: TrailImage
     cardImage?: Image
     cardImageTablet?: Image
     standfirst?: string
     byline?: string
+    bylineHtml?: string
     bylineImages?: { cutout?: Image }
     showByline: boolean
     showQuotedHeadline: boolean
@@ -169,6 +170,7 @@ export interface Content extends WithKey {
 export interface Article extends Content {
     type: 'article'
     byline: string
+    bylineHtml: string
     standfirst: string
     elements: BlockElement[]
     starRating?: number
@@ -204,11 +206,24 @@ export const sizeDescriptions: { [k in ImageSize]: number } = {
     tabletXL: 1140,
 }
 
-export interface IssuePublication {
-    edition: string
-    version: string
+export const Editions = [
+    'daily-edition',
+    'american-edition',
+    'australian-edition',
+    'training-edition',
+] as const
+
+export type Edition = typeof Editions[number]
+
+export interface IssueIdentifier {
+    edition: Edition
     issueDate: string
 }
+
+export interface IssuePublicationIdentifier extends IssueIdentifier {
+    version: string
+}
+
 export interface IssueSummary extends WithKey, IssueCompositeKey {
     name: string
     date: string
@@ -249,6 +264,7 @@ export interface UnknownElement {
 export interface HTMLElement {
     id: 'html'
     html: string
+    hasDropCap?: boolean
 }
 
 type ImageRoles = 'supporting' | 'immersive' | 'showcase' | 'thumbnail' | string
@@ -332,14 +348,14 @@ export interface CrosswordEntry {
 }
 
 export enum CrosswordType {
-    QUICK = 0,
-    CRYPTIC = 1,
-    QUIPTIC = 2,
-    SPEEDY = 3,
-    PRIZE = 4,
-    EVERYMAN = 5,
-    DIAN_QUIPTIC_CROSSWORD = 6,
-    WEEKEND = 7,
+    QUICK = 'quick',
+    CRYPTIC = 'cryptic',
+    QUIPTIC = 'quiptic',
+    SPEEDY = 'speedy',
+    PRIZE = 'prize',
+    EVERYMAN = 'everyman',
+    DIAN_QUIPTIC_CROSSWORD = 'quiptic-dian',
+    WEEKEND = 'weekend',
 }
 
 export interface CapiDateTime {
@@ -393,10 +409,21 @@ export const mediaPath = (
 export const coloursPath = (issue: string, source: string, path: string) =>
     `${issueDir(issue)}/colours/${source}/${path}`
 
-export const issueSummaryPath = () => 'issues'
+export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
     source: string
     path: string
+}
+
+export type ImageUse = 'full-size' | 'thumb' | 'thumb-large' | 'not-used'
+
+export interface ImageDeviceUses {
+    mobile: ImageUse
+    tablet: ImageUse
+}
+
+export interface TrailImage extends Image {
+    use: ImageDeviceUses
 }
 
 export interface CreditedImage extends Image {

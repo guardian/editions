@@ -60,10 +60,16 @@ export interface GdprSettings {
 export interface DevSettings {
     apiUrl: string
     isUsingProdDevtools: boolean
+    useNonWobblyWebview: boolean
     notificationServiceRegister: string
-    zipUrl: string
     cacheClearUrl: string
+    deprecationWarningUrl: string
     contentPrefix: string
+    storeDetails: {
+        ios: string
+        android: string
+    }
+    issuesPath: string
 }
 
 interface UserSettings {

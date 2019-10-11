@@ -1,26 +1,38 @@
 import { Request, Response } from 'express'
 import { groupBy } from 'ramda'
-import { IssueSummary, notNull, IssuePublication } from '../common'
+import {
+    IssueSummary,
+    notNull,
+    IssuePublicationIdentifier,
+    Edition,
+} from '../common'
 import { getIssue } from '../issue'
 import { isPreview as isPreviewStage } from '../preview'
 import { s3List } from '../s3'
 import { Attempt, hasFailed } from '../utils/try'
+import {
+    buildEditionRootPath as buildEditionPath,
+    getEditionOrFallback,
+    decodeVersionOrPreview,
+} from '../utils/issue'
 
 export const LIVE_PAGE_SIZE = 7
 export const PREVIEW_PAGE_SIZE = 35
 
 export const issueController = (req: Request, res: Response) => {
     const issueDate: string = req.params.date
-    const version: string = decodeURIComponent(
-        isPreviewStage ? 'preview' : req.params.version,
+    const version: string = decodeVersionOrPreview(
+        req.params.version,
+        isPreviewStage,
     )
-    const issueId: IssuePublication = {
+    const edition = req.params.edition
+    const issue: IssuePublicationIdentifier = {
         issueDate,
         version,
-        edition: 'daily-edition',
+        edition,
     }
     console.log(`${req.url}: request for issue ${issueDate}`)
-    getIssue(issueId)
+    getIssue(issue)
         .then(data => {
             if (data === 'notfound') {
                 res.sendStatus(404)
@@ -34,25 +46,30 @@ export const issueController = (req: Request, res: Response) => {
 }
 
 export const getIssuesSummary = async (
+    maybeEdition: string,
     isPreview: boolean,
 ): Promise<Attempt<IssueSummary[]>> => {
-    const issueKeys = await s3List({
-        key: 'daily-edition/',
-        bucket: isPreview ? 'preview' : 'published',
-    })
+    /**
+     * fallbacks to 'daily-edition'
+     * to support /issues path
+     * TODO to delete in the future
+     */
+    const edition: Edition = getEditionOrFallback(maybeEdition)
+    const editionPath = buildEditionPath(maybeEdition, isPreview)
+    const issueKeys = await s3List(editionPath)
 
     if (hasFailed(issueKeys)) {
         console.error('Error in issue index controller')
         console.error(JSON.stringify(issueKeys))
         return issueKeys
     }
-    const issuePublications: IssuePublication[] = issueKeys.map(
+    const issuePublications: IssuePublicationIdentifier[] = issueKeys.map(
         ({ key, lastModified }) => {
             const [, issueDate, filename] = key.split('/')
             const publicationDate = lastModified
             const version = filename.replace('.json', '')
             return {
-                edition: 'daily-edition',
+                edition,
                 issueDate,
                 version,
                 publicationDate,
@@ -96,7 +113,8 @@ export const getIssuesSummary = async (
 
 export const issuesSummaryController = (req: Request, res: Response) => {
     console.log('Issue summary requested.')
-    getIssuesSummary(isPreviewStage)
+    const issueEdition = req.params.edition
+    getIssuesSummary(issueEdition, isPreviewStage)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(JSON.stringify(data))

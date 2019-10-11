@@ -20,7 +20,7 @@
     },
     "scripts": {
         "build": "ncc build main.ts -o dist -m",
-        "start": "AWS_DEFAULT_PROFILE='frontend' ts-node local.ts",
+        "start": "AWS_PROFILE='frontend' ts-node local.ts",
         "start:index": "AWS_DEFAULT_PROFILE='frontend' ts-node src/indexer/local.ts",
         "validate": "cd ../.. && script/make validate-archiver",
         "fix": "cd ../.. && script/make fix-archiver",
@@ -37,6 +37,9 @@
         "node-fetch": "^2.6.0",
         "p-all": "^2.1.0",
         "ramda": "^0.26.1",
-        "ts-jest": "^24.0.2"
+        "ts-jest": "^24.0.2",
+        "ts-optchain": "^0.1.8",
+        "uuidv4": "5.0.1",
+        "moment": "^2.24.0"
     }
 }

@@ -66,6 +66,19 @@ const SignInModalCard = ({
         }
         bottomExplainerContent={
             <>
+                {/* Added only for Android - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
+                {Platform.OS === 'android' ? (
+                    <ModalButton
+                        onPress={() => {
+                            Linking.openURL(
+                                'https://support.theguardian.com/uk/subscribe/digital',
+                            )
+                        }}
+                        buttonAppearance={ButtonAppearance.dark}
+                    >
+                        {'Get your free 14 day trial'}
+                    </ModalButton>
+                ) : null}
                 {/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}
                 {/* <ModalButton
                     onPress={() => {

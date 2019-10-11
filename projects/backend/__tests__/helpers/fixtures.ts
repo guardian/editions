@@ -1,10 +1,6 @@
-import {
-    Article as IArticle,
-    Content as IContent,
-    WithKey,
-} from '../../../common/src'
+import { Content as IContent, WithKey } from '../../../common/src'
 import { CArticle } from '../../capi/articles'
-import { PublishedFurtniture as IPublishedFurniture } from '../../fronts/issue'
+import { PublishedFurniture as IPublishedFurniture } from '../../fronts/issue'
 
 const Content = <T extends string>(
     type: T,
@@ -22,6 +18,7 @@ const Content = <T extends string>(
         showQuotedHeadline = false,
         mediaType = 'Image',
         sportScore,
+        bylineHtml,
     }: Partial<IContent> & WithKey,
 ): IContent & { type: T } => ({
     key,
@@ -34,6 +31,7 @@ const Content = <T extends string>(
     standfirst,
     byline,
     bylineImages,
+    bylineHtml,
     showByline,
     showQuotedHeadline,
     mediaType,
@@ -42,16 +40,21 @@ const Content = <T extends string>(
 
 const Article = ({
     image,
+    trailImage,
     byline = 'Mr CAPI',
+    bylineHtml = '<a>Mr CAPI</> Senior Correspondent',
     standfirst = 'This story is great',
     elements = [],
     starRating,
+
     ...contentFields
-}: Partial<IArticle> & WithKey): CArticle => ({
+}: Partial<CArticle> & WithKey): CArticle => ({
     ...Content('article', contentFields),
     path: contentFields.key,
     image,
+    trailImage,
     byline,
+    bylineHtml,
     standfirst,
     elements,
     starRating,

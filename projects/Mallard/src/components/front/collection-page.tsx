@@ -10,20 +10,27 @@ import {
     Front,
     defaultCardAppearances,
     FrontCardAppearance,
+    ArticleType,
+    PageLayout,
+    layouts,
+    Rectangle,
+    Size,
+    ItemSizes,
+    PageLayoutSizes,
 } from 'src/common'
 import {
     useCardBackgroundStyle,
     getItemRectanglePerc,
     getPageLayoutSizeXY,
-    ItemSizes,
     toAbsoluteRectangle,
-    PageLayout,
+    Item as TItem,
 } from './helpers/helpers'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { layouts } from './helpers/layouts'
+import { itemTypeLookup } from './helpers/item-type-lookup'
 import { ArticleNavigator } from '../../screens/article-screen'
 import { Multiline } from 'src/components/multiline'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
+import { WithArticleType } from 'src/hooks/use-article'
 
 const styles = StyleSheet.create({
     root: {
@@ -44,6 +51,7 @@ const styles = StyleSheet.create({
         marginBottom: metrics.fronts.sides * 1.5,
     },
     itemHolder: {
+        overflow: 'hidden',
         position: 'absolute',
     },
     multiline: {
@@ -110,84 +118,127 @@ const isNotRightMostStory = ({ story, layout }: ItemSizes) =>
 const isNotBottomMostStory = ({ story, layout }: ItemSizes) =>
     story.top + story.height < getPageLayoutSizeXY(layout).height
 
-const CollectionPage = ({
-    articlesInCard,
-    articleNavigator,
-    collection,
-    localIssueId,
-    publishedIssueId,
-    front,
-    appearance,
-}: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
-    const background = useCardBackgroundStyle()
-    const { size, card } = useIssueScreenSize()
-    if (!articlesInCard.length) {
-        return <FlexErrorMessage />
-    }
+const Item = React.memo(
+    ({
+        card,
+        collection,
+        localIssueId,
+        publishedIssueId,
+        front,
+        article,
+        Renderer,
+        story,
+        layout,
+        articleNavigator,
+    }: {
+        card: Size
+        collection: string
+        localIssueId: string
+        publishedIssueId: string
+        front: string
+        article: CAPIArticle
+        Renderer: TItem
+        story: Rectangle
+        layout: PageLayoutSizes
+        articleNavigator: ArticleNavigator
+    }) => {
+        const size = {
+            story,
+            layout,
+        }
+        return (
+            <WithArticleType value={article.articleType || ArticleType.Article}>
+                <View
+                    style={[
+                        styles.itemHolder,
+                        toAbsoluteRectangle(
+                            getItemRectanglePerc(story, layout),
+                            {
+                                width: card.width - metrics.fronts.sides * 2,
+                                height: card.height - metrics.fronts.sides * 2,
+                            },
+                        ),
+                    ]}
+                >
+                    <Renderer
+                        path={{
+                            article: article.key,
+                            collection,
+                            localIssueId,
+                            publishedIssueId,
+                            front,
+                        }}
+                        localIssueId={localIssueId}
+                        publishedIssueId={publishedIssueId}
+                        size={size}
+                        articleNavigator={articleNavigator}
+                        article={article}
+                    />
+                    {isNotRightMostStory(size) ? (
+                        <View
+                            style={[
+                                styles.sideBorder,
+                                !isNotBottomMostStory(size) &&
+                                    styles.endCapSideBorder,
+                            ]}
+                        />
+                    ) : null}
+                    {isNotBottomMostStory(size) ? (
+                        <Multiline
+                            style={styles.multiline}
+                            color={color.dimLine}
+                            count={2}
+                        />
+                    ) : null}
+                </View>
+            </WithArticleType>
+        )
+    },
+)
 
-    const layout = getPageLayout(appearance, articlesInCard.length)[size]
+const CollectionPage = React.memo(
+    ({
+        articlesInCard,
+        articleNavigator,
+        collection,
+        localIssueId,
+        publishedIssueId,
+        front,
+        appearance,
+    }: { translate: Animated.AnimatedInterpolation } & PropTypes) => {
+        const background = useCardBackgroundStyle()
+        const { size, card } = useIssueScreenSize()
+        if (!articlesInCard.length) {
+            return <FlexErrorMessage />
+        }
 
-    return (
-        <View style={[styles.root, background]}>
-            {layout.items.map((story, index) => {
-                if (!articlesInCard[index]) return null
-                const size = {
-                    story: story.fits,
-                    layout: layout.size,
-                }
-                const Item = story.item
-                const article = articlesInCard[index]
-                return (
-                    <View
-                        key={index}
-                        style={[
-                            styles.itemHolder,
-                            toAbsoluteRectangle(
-                                getItemRectanglePerc(story.fits, layout.size),
-                                {
-                                    width:
-                                        card.width - metrics.fronts.sides * 2,
-                                    height:
-                                        card.height - metrics.fronts.sides * 2,
-                                },
-                            ),
-                        ]}
-                    >
+        const layout = getPageLayout(appearance, articlesInCard.length)[size]
+
+        return (
+            <View style={[styles.root, background]}>
+                {layout.items.map((story, index) => {
+                    if (!articlesInCard[index]) return null
+                    const article = articlesInCard[index]
+                    const itemRenderer = itemTypeLookup[story.item]
+                    return (
                         <Item
-                            path={{
-                                article: article.key,
-                                collection,
-                                localIssueId,
-                                publishedIssueId,
-                                front,
-                            }}
+                            card={card}
+                            articleNavigator={articleNavigator}
+                            story={story.fits}
+                            layout={layout.size}
+                            collection={collection}
                             localIssueId={localIssueId}
                             publishedIssueId={publishedIssueId}
-                            size={size}
-                            articleNavigator={articleNavigator}
+                            front={front}
+                            key={index}
+                            Renderer={itemRenderer}
                             article={article}
                         />
-                        {isNotRightMostStory(size) ? (
-                            <View
-                                style={[
-                                    styles.sideBorder,
-                                    !isNotBottomMostStory(size) &&
-                                        styles.endCapSideBorder,
-                                ]}
-                            />
-                        ) : null}
-                        {isNotBottomMostStory(size) ? (
-                            <Multiline
-                                style={styles.multiline}
-                                color={color.dimLine}
-                                count={2}
-                            />
-                        ) : null}
-                    </View>
-                )
-            })}
-        </View>
-    )
-}
+                    )
+                })}
+            </View>
+        )
+    },
+)
 
 export { CollectionPage }

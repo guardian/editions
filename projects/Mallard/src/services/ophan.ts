@@ -31,6 +31,7 @@ enum ScreenTracking {
     AlreadySubscribed = 'im_already_subscribed',
     CasSignIn = 'activate_with_subscriber_id',
     Credits = 'credits',
+    Deprecation = 'deprecatted_app_screen',
     Help = 'help',
     FAQ = 'faqs',
     GDPRConsent = 'consent_management_options',

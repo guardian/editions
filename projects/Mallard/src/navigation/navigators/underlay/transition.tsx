@@ -15,7 +15,7 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
     const isPhone = width >= Breakpoints.phone
 
     const finalTranslate = isPhone
-        ? windowHeight - windowHeight / 4
+        ? windowHeight - windowHeight / 5
         : windowHeight - windowHeight / 5.6
 
     const translateY = position.interpolate({

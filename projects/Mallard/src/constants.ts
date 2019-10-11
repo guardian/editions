@@ -11,7 +11,7 @@ const {
     ANDROID_RELEASE_STREAM,
 } = Config
 
-const FACEBOOK_CLIENT_ID = '180444840287'
+const FACEBOOK_CLIENT_ID = '528503751025697'
 
 const AUTH_TTL = 86400000 // ms in a day
 
@@ -26,7 +26,6 @@ const GOOGLE_CLIENT_ID =
 
 const LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY = 'printSubscriberID'
 const LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY = 'printSubscriberPostcode'
-const LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY = `${DeviceInfo.getBundleId()}_expiryDict`
 
 // this allows us to ensure some prod build use the sanboxed IAP endpoints
 // e.g. the beta builds for testflight
@@ -43,7 +42,6 @@ export {
     AUTH_TTL,
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
     LEGACY_SUBSCRIBER_POSTCODE_USER_DEFAULT_KEY,
-    LEGACY_CAS_EXPIRY_USER_DEFAULTS_KEY,
     ITUNES_CONNECT_SHARED_SECRET,
     USE_SANDBOX_IAP,
     ANDROID_RELEASE_STREAM,

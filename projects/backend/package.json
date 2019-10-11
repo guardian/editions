@@ -14,7 +14,9 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0"
   },
   "scripts": {
     "build": "ncc build index.ts -o dist -m",
@@ -37,6 +39,7 @@
     "aws-serverless-express": "^3.3.6",
     "encoding": "^0.1.12",
     "express": "^4.17.1",
+    "express-list-endpoints": "^4.0.1",
     "jest": "^24.8.0",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",

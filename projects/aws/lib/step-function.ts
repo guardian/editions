@@ -6,7 +6,7 @@ import iam = require('@aws-cdk/aws-iam')
 import sfn = require('@aws-cdk/aws-stepfunctions')
 import tasks = require('@aws-cdk/aws-stepfunctions-tasks')
 import { toTitleCase } from './tools'
-import { Duration } from '@aws-cdk/core'
+import { Duration, Tag } from '@aws-cdk/core'
 import { Condition } from '@aws-cdk/aws-stepfunctions'
 interface StepFunctionProps {
     stack: string
@@ -16,6 +16,7 @@ interface StepFunctionProps {
     backendURL: string
     frontsTopicArn: string
     frontsTopicRoleArn: string
+    guNotifyServiceApiKey: string
 }
 
 //Make sure you add the lambda name in riff-raff.yaml
@@ -27,42 +28,60 @@ const taskLambda = (
         stage,
         deployBucket,
         outputBucket,
+        frontsTopicArn,
+        frontsTopicRole,
     }: {
         scope: cdk.Construct
         stack: string
         stage: string
         deployBucket: s3.IBucket
         outputBucket: s3.IBucket
+        frontsTopicArn: string
+        frontsTopicRole: iam.IRole
     },
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
-    return new lambda.Function(scope, `EditionsArchiver${toTitleCase(name)}`, {
-        functionName: `editions-archiver-stepmachine-${name}-${stage}`,
-        runtime: lambda.Runtime.NODEJS_10_X,
-        timeout: Duration.minutes(5),
-        memorySize: 1500,
-        code: Code.bucket(
-            deployBucket,
-            `${stack}/${stage}/archiver/archiver.zip`,
-        ),
-        handler: `index.${name}`,
-        environment: {
-            ...environment,
-            stage: stage,
-            bucket: outputBucket.bucketName,
+    const fn = new lambda.Function(
+        scope,
+        `EditionsArchiver${toTitleCase(name)}`,
+        {
+            functionName: `editions-archiver-stepmachine-${name}-${stage}`,
+            runtime: lambda.Runtime.NODEJS_10_X,
+            timeout: Duration.minutes(5),
+            memorySize: 1500,
+            code: Code.bucket(
+                deployBucket,
+                `${stack}/${stage}/archiver/archiver.zip`,
+            ),
+            handler: `index.${name}`,
+            environment: {
+                ...environment,
+                stage: stage,
+                bucket: outputBucket.bucketName,
+                topic: frontsTopicArn,
+                role: frontsTopicRole.roleArn,
+            },
+            initialPolicy: [
+                new iam.PolicyStatement({
+                    actions: ['*'],
+                    resources: [
+                        outputBucket.arnForObjects('*'),
+                        outputBucket.bucketArn,
+                    ],
+                }),
+                new iam.PolicyStatement({
+                    actions: ['sts:AssumeRole'],
+                    resources: [frontsTopicRole.roleArn],
+                }),
+            ],
+            ...overrides,
         },
-        initialPolicy: [
-            new iam.PolicyStatement({
-                actions: ['*'],
-                resources: [
-                    outputBucket.arnForObjects('*'),
-                    outputBucket.bucketArn,
-                ],
-            }),
-        ],
-        ...overrides,
-    })
+    )
+    Tag.add(fn, 'App', `editions-archiver-${name}`)
+    Tag.add(fn, 'Stage', stage)
+    Tag.add(fn, 'Stack', stack)
+    return fn
 }
 
 export const archiverStepFunction = (
@@ -75,14 +94,23 @@ export const archiverStepFunction = (
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
+        guNotifyServiceApiKey,
     }: StepFunctionProps,
 ) => {
+    const frontsTopicRole = iam.Role.fromRoleArn(
+        scope,
+        'fronts-topic-role',
+        frontsTopicRoleArn,
+    )
+
     const lambdaParams = {
         scope,
         stack,
         stage,
         deployBucket,
         outputBucket,
+        frontsTopicArn,
+        frontsTopicRole,
     }
     //Archiver step function
     const issue = taskLambda('issue', lambdaParams, { backend: backendURL })
@@ -119,46 +147,17 @@ export const archiverStepFunction = (
     const indexerTask = new sfn.Task(scope, 'Generate Index', {
         task: new tasks.InvokeFunction(indexer),
     })
-    const frontsTopicRole = iam.Role.fromRoleArn(
-        scope,
-        'fronts-topic-role',
-        frontsTopicRoleArn,
-    )
-    const event = taskLambda(
-        'event',
-        lambdaParams,
-        {
-            topic: frontsTopicArn,
-            role: frontsTopicRoleArn,
-        },
-        {
-            initialPolicy: [
-                new iam.PolicyStatement({
-                    actions: ['sts:AssumeRole'],
-                    resources: [frontsTopicRole.roleArn],
-                }),
-            ],
-        },
-    )
 
-    const publishedTask = new sfn.Task(
-        scope,
-        'Send published message to Fronts Tool',
-        {
-            task: new tasks.InvokeFunction(event),
-        },
-    )
-    const failTask = new sfn.Task(
-        scope,
-        'Send Failure Message to Fronts Tool',
-        {
-            task: new tasks.InvokeFunction(event),
-        },
-    )
+    const notification = taskLambda('notification', lambdaParams, {
+        gu_notify_service_api_key: guNotifyServiceApiKey,
+    })
 
-    failTask.next(new sfn.Fail(scope, 'publication-failed'))
-    ;[issueTask, frontTask, imageTask, uploadTask, zipTask, indexerTask].map(
-        (task: sfn.Task) => task.addCatch(failTask, { resultPath: '$.error' }),
+    const notificationTask = new sfn.Task(
+        scope,
+        'Schedule device notification',
+        {
+            task: new tasks.InvokeFunction(notification),
+        },
     )
     //Fetch issue metadata
     issueTask.next(frontTask)
@@ -176,11 +175,11 @@ export const archiverStepFunction = (
 
     uploadTask.next(zipTask)
 
-    zipTask.next(publishedTask)
+    zipTask.next(indexerTask)
 
-    publishedTask.next(indexerTask)
+    indexerTask.next(notificationTask)
 
-    indexerTask.next(new sfn.Succeed(scope, 'successfully-archived'))
+    notificationTask.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,

@@ -1,12 +1,13 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { FSPaths, MEDIA_CACHE_DIRECTORY_NAME } from 'src/paths'
+import { getIssueSummary } from 'src/hooks/use-issue-summary'
+import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../common/src'
 import { lastSevenDays, todayAsFolder } from './issues'
-import { defaultSettings } from './settings/defaults'
 import { imageForScreenSize } from './screen'
-import { getIssueSummary } from 'src/hooks/use-api'
+import { getSetting } from './settings'
+import { defaultSettings } from './settings/defaults'
 
 interface BasicFile {
     filename: string
@@ -50,17 +51,18 @@ const fileName = (path: string) => {
 export const getJson = (path: string) =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
-export const downloadNamedIssueArchive = (
+export const downloadNamedIssueArchive = async (
     localIssueId: Issue['localId'],
     assetPath: string,
     filename: string,
 ) => {
-    const zipUrl = defaultSettings.zipUrl
+    const apiUrl = await getSetting('apiUrl')
+    const zipUrl = `${apiUrl}${assetPath}`
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
         IOSBackgroundTask: true,
-    }).fetch('GET', `${zipUrl}/${assetPath}`)
+    }).fetch('GET', zipUrl)
     return {
         promise: returnable.then(async res => {
             await prepFileSystem()
@@ -76,37 +78,6 @@ export const downloadNamedIssueArchive = (
     }
 }
 
-/**
- * the api returns zips with folders that are named after the size of the device
- * we're on such as `/issue/12-12-12/media/tabletXL/media...`
- *
- * In future, if we add new breakpoints, this cache will be invisible if we're looking
- * for images using our new device name such as `tabletM`.
- *
- * This will move all images into a folder `/issue/12-12-12/media/cached/media...`
- */
-
-const moveSizedMediaDirToGenericMediaDir = async (issueId: string) => {
-    const [sizedMediaDir] = (await RNFetchBlob.fs.ls(
-        FSPaths.mediaRoot(issueId),
-    )).filter(folder => folder !== MEDIA_CACHE_DIRECTORY_NAME) // find the first folder that isn't cached
-
-    if (!sizedMediaDir) return
-
-    const absSizedMediaDir = `${FSPaths.mediaRoot(issueId)}/${sizedMediaDir}`
-    const genericMediaDir = `${FSPaths.mediaRoot(
-        issueId,
-    )}/${MEDIA_CACHE_DIRECTORY_NAME}`
-
-    // if the file exists already, delete it and then replace it
-    const fileExists = await RNFetchBlob.fs.exists(genericMediaDir)
-    if (fileExists) {
-        await RNFetchBlob.fs.unlink(genericMediaDir)
-    }
-
-    RNFetchBlob.fs.mv(absSizedMediaDir, genericMediaDir)
-}
-
 export const unzipNamedIssueArchive = (
     localIssueId: Issue['localId'],
     filename: string,
@@ -114,11 +85,8 @@ export const unzipNamedIssueArchive = (
     const zipFilePath = FSPaths.zip(localIssueId, filename)
     const outputPath = FSPaths.issuesDir
 
-    return unzip(zipFilePath, outputPath).then(async () => {
-        if (filename !== 'data') {
-            await moveSizedMediaDirToGenericMediaDir(localIssueId)
-        }
-        RNFetchBlob.fs.unlink(zipFilePath)
+    return unzip(zipFilePath, outputPath).then(() => {
+        return RNFetchBlob.fs.unlink(zipFilePath)
     })
 }
 
@@ -151,7 +119,7 @@ export type DLStatus =
     | { type: 'success' }
     | { type: 'failure' }
 
-export const downloadAndUnzipIssue = (
+export const downloadAndUnzipIssue = async (
     issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
@@ -161,7 +129,7 @@ export const downloadAndUnzipIssue = (
         return null
     }
 
-    const issueDataDownload = downloadNamedIssueArchive(
+    const issueDataDownload = await downloadNamedIssueArchive(
         localId,
         assets.data,
         'data',
@@ -183,7 +151,7 @@ export const downloadAndUnzipIssue = (
             // might not need to await this but it's pretty quick
             await unzipNamedIssueArchive(localId, 'data')
 
-            const imgDL = downloadNamedIssueArchive(
+            const imgDL = await downloadNamedIssueArchive(
                 localId,
                 assets[imageSize] as string,
                 imageSize,
@@ -244,19 +212,50 @@ export const matchSummmaryToKey = (
 
 export const downloadTodaysIssue = async () => {
     const todaysKey = todayAsFolder()
-    const issueSummaries = await getIssueSummary().getValue()
-    // Find the todays issue summary from the list of summary
-    const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
+    try {
+        const issueSummaries = await getIssueSummary()
 
-    // If there isnt one for today, then fahgettaboudit...
-    if (!todaysIssueSummary) return null
+        // Find the todays issue summary from the list of summary
+        const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
 
-    const isTodaysIssueOnDevice = await isIssueOnDevice(
-        todaysIssueSummary.localId,
-    )
+        // If there isnt one for today, then fahgettaboudit...
+        if (!todaysIssueSummary) return null
 
-    // Only download it if its not on the device
-    if (!isTodaysIssueOnDevice) {
-        downloadAndUnzipIssue(todaysIssueSummary, imageForScreenSize())
+        const isTodaysIssueOnDevice = await isIssueOnDevice(
+            todaysIssueSummary.localId,
+        )
+
+        // Only download it if its not on the device
+        if (!isTodaysIssueOnDevice) {
+            const imageSize = await imageForScreenSize()
+            downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+        }
+    } catch (e) {
+        console.log(`Unable to download todays issue: ${e.message}`)
     }
+}
+
+export const readIssueSummary = async () =>
+    RNFetchBlob.fs
+        .readFile(FSPaths.issuesDir + defaultSettings.issuesPath, 'utf8')
+        .then(data => JSON.parse(data))
+        .catch(e => {
+            throw e
+        })
+
+export const fetchAndStoreIssueSummary = async () => {
+    const apiUrl = await getSetting('apiUrl')
+    return RNFetchBlob.config({
+        overwrite: true,
+        path: FSPaths.issuesDir + defaultSettings.issuesPath,
+    })
+        .fetch('GET', apiUrl + 'issues', {
+            'Content-Type': 'application/json',
+        })
+        .then(async res => {
+            return res.json()
+        })
+        .catch(e => {
+            throw e
+        })
 }

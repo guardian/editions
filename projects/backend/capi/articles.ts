@@ -11,6 +11,7 @@ import {
     CrosswordArticle,
     PictureArticle,
     CapiDateTime as CapiDateTime32,
+    Image,
 } from '../common'
 import {
     BufferedTransport,
@@ -32,11 +33,13 @@ type NotInCAPI =
     | 'mediaType'
     | 'slideshowImages'
     | 'sportScore'
+    | 'trailImage'
 
 type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
 
 interface CAPIExtras {
     path: string
+    trailImage?: Image
 }
 
 export type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
@@ -80,6 +83,7 @@ const parseArticleResult = async (
     const trail = result.fields && result.fields.trailText
 
     const byline = result.fields && result.fields.byline
+    const bylineHtml = result.fields && result.fields.bylineHtml
     const bylineImages = getBylineImages(result)
 
     const images = getImages(result)
@@ -115,6 +119,7 @@ const parseArticleResult = async (
                     trail,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     bylineImages,
                     standfirst: trail || '',
                     elements,
@@ -135,6 +140,7 @@ const parseArticleResult = async (
                     articleType,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
                 },
@@ -154,6 +160,7 @@ const parseArticleResult = async (
                     articleType,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
                 },
@@ -194,6 +201,7 @@ const parseArticleResult = async (
                     path: path,
                     headline: title,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     crossword,
                 },
@@ -212,6 +220,7 @@ const parseArticleResult = async (
                     kicker,
                     ...images,
                     byline: byline || '',
+                    bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements: [
                         {
@@ -271,7 +280,7 @@ export const getArticles = async (
         return fromPairs(firstArray.concat(lastArray))
     }
     console.log('Making CAPI query', endpoint)
-    console.log('Debug link:', endpoint.replace('thrift', 'json'))
+    console.log('Debug link:', endpoint.replace(/thrift/g, 'json'))
     const resp = await attempt(fetch(endpoint))
     if (hasFailed(resp)) throw new Error('Could not connect to CAPI.')
     const buffer = await resp.arrayBuffer()

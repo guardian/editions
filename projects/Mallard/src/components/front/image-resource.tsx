@@ -1,7 +1,14 @@
-import React from 'react'
-import { Image, ImageProps, ImageStyle, StyleProp } from 'react-native'
+import React, { useState } from 'react'
+import {
+    Image,
+    ImageProps,
+    ImageStyle,
+    StyleProp,
+    View,
+    PixelRatio,
+} from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
 import { Image as IImage } from '../../../../common/src'
 
 /**
@@ -19,24 +26,56 @@ type ImageResourceProps = {
     setAspectRatio?: boolean
 } & Omit<ImageProps, 'source'>
 
+const ScaledImageResource = ({
+    imagePath,
+    style,
+    width,
+    ...props
+}: {
+    width: number
+    imagePath: string
+    style?: StyleProp<ImageStyle>
+}) => {
+    const uri = useScaledImage(imagePath, width)
+    return (
+        <Image
+            resizeMethod={'resize'}
+            {...props}
+            style={style}
+            source={{ uri }}
+        />
+    )
+}
+
 const ImageResource = ({
     image,
     style,
     setAspectRatio = false,
     ...props
 }: ImageResourceProps) => {
-    const path = useImagePath(image)
-    const aspectRatio = useAspectRatio(path)
-    return (
-        <Image
-            resizeMethod={'resize'}
+    const [width, setWidth] = useState<number | null>(null)
+    const imagePath = useImagePath(image)
+    const aspectRatio = useAspectRatio(imagePath)
+    const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
+    return width && imagePath ? (
+        <ScaledImageResource
+            key={imagePath} // an attempt to fix https://github.com/facebook/react-native/issues/9195
+            width={width}
+            imagePath={imagePath}
+            style={styles}
             {...props}
-            style={[
-                style,
-                setAspectRatio && aspectRatio ? { aspectRatio } : {},
-            ]}
-            source={{ uri: path }}
-        />
+        ></ScaledImageResource>
+    ) : (
+        <View
+            style={styles}
+            onLayout={ev => {
+                setWidth(
+                    PixelRatio.getPixelSizeForLayoutSize(
+                        ev.nativeEvent.layout.width,
+                    ),
+                )
+            }}
+        ></View>
     )
 }
 

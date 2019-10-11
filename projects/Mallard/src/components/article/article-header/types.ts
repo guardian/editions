@@ -1,11 +1,13 @@
 import { Image, Article, ArticleType } from '../../../common'
+import { CreditedImage } from '../../../../../common/src'
 
 export interface ArticleHeaderProps {
     byline: string
     headline: string
     kicker?: string | null
-    image?: Image | null
+    image?: CreditedImage | null
     standfirst: string
     starRating?: Article['starRating']
     bylineImages?: { cutout?: Image }
+    bylineHtml: string
 }

@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Fader } from 'src/components/layout/animators/fader'
 import { Multiline } from 'src/components/multiline'
 import { ariaHidden } from 'src/helpers/a11y'
 import { color } from 'src/theme/color'
@@ -8,7 +7,6 @@ import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { Wrap, WrapperPropTypes } from './wrap'
 
-const ArticleFader = Fader
 const multiStyles = StyleSheet.create({
     byline: {
         paddingBottom: metrics.vertical,
@@ -49,20 +47,14 @@ const MultilineWrap = ({
                 backgroundColor={props.backgroundColor}
                 borderColor={props.borderColor}
                 style={[multiStyles.byline]}
-                header={
-                    <ArticleFader>
-                        <Multiline count={4} color={multilineColor} />
-                    </ArticleFader>
-                }
+                header={<Multiline count={4} color={multilineColor} />}
                 footer={
                     !props.backgroundColor && (
-                        <ArticleFader>
-                            <View style={multiStyles.bylineBorder} />
-                        </ArticleFader>
+                        <View style={multiStyles.bylineBorder} />
                     )
                 }
             >
-                <ArticleFader>{byline}</ArticleFader>
+                {byline}
             </Wrap>
         )}
     </>

@@ -2,6 +2,11 @@ import { Platform, PixelRatio } from 'react-native'
 import { bundles } from 'src/html-bundle-info.json'
 import { getFont, FontSizes, FontFamily } from 'src/theme/typography'
 
+export interface WebViewPing {
+    scrollHeight: number
+    isAtTop: boolean
+}
+
 /*
 this tricks vs code into thinking
 we are using emotion & lit-html
@@ -46,15 +51,24 @@ export const getScaledFontCss = <F extends FontFamily>(
     `
 }
 
-export const generateAssetsFontCss = (fontFamily: string) => {
+export const generateAssetsFontCss = ({
+    fontFamily,
+    fontWeight = 400,
+    extension = 'ttf',
+}: {
+    fontFamily: string
+    fontWeight?: number
+    extension?: string
+}) => {
     const fileName = Platform.select({
-        ios: `file:///assets/fonts/${fontFamily}.ttf`,
-        android: `file:///android_asset/fonts/${fontFamily}.ttf`,
+        ios: `file:///assets/fonts/${fontFamily}.${extension}`,
+        android: `file:///android_asset/fonts/${fontFamily}.${extension}`,
     })
 
     return css`
         @font-face {
             font-family: '${fontFamily}';
+            font-weight: ${fontWeight};
             src: url("${fileName}")
         }
     `
@@ -76,6 +90,8 @@ export const getBundleUri = (
     }
     return uris[use]
 }
+
+export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
 
 /* makes some HTML and posts the height back */
 export const makeHtml = ({
@@ -101,16 +117,20 @@ export const makeHtml = ({
             </div>
             <script>
                 const submitHeight = function() {
-                    window.requestAnimationFrame(function() {
-                        window.ReactNativeWebView.postMessage(
-                            document.documentElement.scrollHeight,
-                        )
-                    })
+                    window.ReactNativeWebView.postMessage(
+                        JSON.stringify({
+                            scrollHeight: document.documentElement.scrollHeight,
+                            isAtTop: window.scrollY < 10,
+                        }),
+                    )
                 }
 
                 window.setInterval(function() {
                     submitHeight()
-                }, 200)
+                }, 500)
+                window.addEventListener('scroll', function() {
+                    submitHeight()
+                })
                 submitHeight()
             </script>
         </body>

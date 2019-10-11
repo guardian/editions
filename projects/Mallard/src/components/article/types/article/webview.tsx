@@ -1,77 +1,58 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React, { useMemo } from 'react'
-import { Animated, Linking, Platform, WebViewProps } from 'react-native'
-import { WebView } from 'react-native-webview'
-import { ArticleFeatures, BlockElement } from 'src/common'
+import { Animated } from 'react-native'
+import { WebView, WebViewProps } from 'react-native-webview'
+import { BlockElement, ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
-import { useIssueCompositeKey } from 'src/hooks/use-issue-id'
-import { EMBED_DOMAIN, render } from '../../html/render'
+import { ArticleHeaderProps } from '../../article-header/types'
+import { useRenderedHTML } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
+import { onShouldStartLoadWithRequest } from './helpers'
+import { useIssueSummary } from 'src/hooks/use-issue-summary'
 
-const urlIsNotAnEmbed = (url: string) =>
-    !(
-        url.startsWith(EMBED_DOMAIN) ||
-        url.startsWith('https://www.youtube.com/embed')
-    )
-
-const features: ArticleFeatures[] = [ArticleFeatures.HasDropCap]
-
-const AniWebview = Animated.createAnimatedComponent(WebView)
+const AniWebView = Animated.createAnimatedComponent(WebView)
 
 const WebviewWithArticle = ({
     article,
     wrapLayout,
+    headerProps,
     paddingTop = 0,
+    _ref,
     ...webViewProps
 }: {
     article: BlockElement[]
     wrapLayout: WrapLayout
+    headerProps?: ArticleHeaderProps & { type: ArticleType }
     paddingTop?: number
+    _ref?: (ref: { _component: WebView }) => void
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
-    const issueCompositeKey = useIssueCompositeKey()
+    const { issueId } = useIssueSummary()
 
-    const html = useMemo(
-        () =>
-            render(article, {
-                pillar,
-                features,
-                wrapLayout,
-                showMedia: isConnected,
-                height: paddingTop,
-                publishedId:
-                    (issueCompositeKey && issueCompositeKey.publishedIssueId) ||
-                    null,
-            }),
-        [
-            article,
-            pillar,
-            wrapLayout,
-            isConnected,
-            paddingTop,
-            issueCompositeKey,
-        ],
-    )
+    const html = useRenderedHTML(article, {
+        pillar,
+        wrapLayout,
+        headerProps,
+        showWebHeader: true,
+        showMedia: isConnected,
+        height: paddingTop,
+        publishedId: (issueId && issueId.publishedIssueId) || null,
+    })
 
     return (
-        <AniWebview
+        <AniWebView
+            {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
-            source={{ html }}
-            onShouldStartLoadWithRequest={(event: any) => {
-                if (
-                    Platform.select({
-                        ios: event.navigationType === 'click',
-                        android: urlIsNotAnEmbed(event.url), // android doesn't have 'click' types so check for our embed types
-                    })
-                ) {
-                    Linking.openURL(event.url)
-                    return false
-                }
-                return true
+            source={{
+                html,
+                baseUrl:
+                    '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
             }}
-            {...webViewProps}
+            ref={_ref}
+            onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+            allowFileAccess={true}
         />
     )
 }

@@ -59,13 +59,17 @@ PODS:
   - React-jsinspector (0.60.4)
   - react-native-config (0.11.7):
     - React
-  - react-native-in-app-utils (6.0.1):
+  - react-native-image-resizer (1.0.1):
+    - React
+  - react-native-in-app-utils (6.0.2):
     - React
   - react-native-netinfo (3.2.1):
     - React
   - react-native-safe-area-insets (0.1.0):
     - React
   - react-native-splash-screen (3.2.0):
+    - React
+  - react-native-viewpager (2.0.1):
     - React
   - react-native-webview (6.9.0):
     - React
@@ -101,7 +105,7 @@ PODS:
     - React
   - RNCPushNotificationIOS (1.0.2):
     - React
-  - RNDeviceInfo (2.3.2):
+  - RNDeviceInfo (3.1.4):
     - React
   - RNGestureHandler (1.3.0):
     - React
@@ -115,11 +119,11 @@ PODS:
     - React
   - RNSVG (9.6.2):
     - React
-  - RNZipArchive (4.1.3):
+  - RNZipArchive (4.1.2):
     - React
-    - RNZipArchive/Core (= 4.1.3)
+    - RNZipArchive/Core (= 4.1.2)
     - SSZipArchive (= 2.2.2)
-  - RNZipArchive/Core (4.1.3):
+  - RNZipArchive/Core (4.1.2):
     - React
     - SSZipArchive (= 2.2.2)
   - Sentry (4.1.3):
@@ -144,10 +148,12 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - "react-native-safe-area-insets (from `../node_modules/@delightfulstudio/react-native-safe-area-insets`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -205,6 +211,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
   react-native-in-app-utils:
     :path: "../node_modules/react-native-in-app-utils"
   react-native-netinfo:
@@ -213,6 +221,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@delightfulstudio/react-native-safe-area-insets"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-viewpager:
+    :path: "../node_modules/@react-native-community/viewpager"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -278,10 +288,12 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 7549641e48bafae7bfee3f3ea19bf4901639c5de
   React-jsinspector: 73f24a02fa684ed6a2b828ba116874a2191ded88
   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
-  react-native-in-app-utils: e87b9a1de664b82176600b5c5d1c9d485c63c801
+  react-native-image-resizer: 48eb06a18a6d0a632ffa162a51ca61a68fb5322f
+  react-native-in-app-utils: 07ea1df4bb6e8cbb27337d42a65ffe4cf7a35e97
   react-native-netinfo: 0da34082d2cec3100c9b5073bb217e35f1142bdd
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+  react-native-viewpager: f41b42bba71407e916654d64e87ff2680edecc92
   react-native-webview: 2d8de2be422f0f8b9ba38db3f013f9ebfdb9b78f
   React-RCTActionSheet: 9f71d7ae3e8fb10e08d162cbf14c621349dbfab3
   React-RCTAnimation: 981d8c95b0e30918a9832ccac32af83562a27fae
@@ -297,19 +309,19 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
   RNCMaskedView: b79e193409a90bf6b5170d421684f437ff4e2278
   RNCPushNotificationIOS: 0b8d06ff190d84627dd17501bfb96652375970e4
-  RNDeviceInfo: 17e34f6dd902f08d88cbe2c0b7a01be948d43641
+  RNDeviceInfo: 88099e84466f053bae3f34c307b506738b2b6946
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
   RNIap: 89befcc43b4077663968b1e3d0c1e3fbd0a1eaca
   RNInAppBrowser: 24abaaff1fe1d8bea2492537ca32e455b14ef030
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
-  RNZipArchive: 655499eab4610068319ff118ee9317496c6f019e
+  RNZipArchive: 2179f7a0755905d68a3b0f2d9332796cca1e7aa4
   Sentry: 4e8a17b61ddd116f89536cc81d567fdee1ebca96
   SentryReactNative: 07237139c00366ea2e75ae3e5c566e7a71c27a90
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   yoga: c2c050f6ae6e222534760cc82f559b89214b67e2
 
-PODFILE CHECKSUM: c499c44aed47275a8e1f036511ecda7d7450e47a
+PODFILE CHECKSUM: 788719fce78dff3b2ae21dad8bb5cde3c56a97bb
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.5

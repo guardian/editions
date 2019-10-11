@@ -48,21 +48,9 @@ enum ExistsStatus {
     doesNotExist,
 }
 
-const IssueRow = ({
-    issue,
-    onPress,
-}: {
-    issue: IssueSummary
-    onPress: () => void
-}) => {
-    const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
-        issue.date,
-    ])
-
-    const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
-
+const IssueButton = ({ issue }: { issue: IssueSummary }) => {
     const [exists, setExists] = useState<ExistsStatus>(ExistsStatus.pending)
-
+    const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
 
     useEffect(() => {
@@ -86,7 +74,8 @@ const IssueRow = ({
                 action: Action.click,
                 value: 'issues_list_issue_clicked',
             })
-            downloadAndUnzipIssue(issue, imageForScreenSize(), status => {
+            const imageSize = await imageForScreenSize()
+            downloadAndUnzipIssue(issue, imageSize, status => {
                 setDlStatus(status)
                 if (status.type === 'success') {
                     setExists(ExistsStatus.doesExist)
@@ -98,44 +87,46 @@ const IssueRow = ({
     }
 
     return (
+        <ProgressCircle
+            percent={dlStatus ? getStatusPercentage(dlStatus) || 100 : 100}
+            radius={20}
+            bgColor={
+                exists === ExistsStatus.doesExist ? color.primary : undefined
+            }
+            borderWidth={1}
+            shadowColor="#ccc"
+            color={color.primary}
+        >
+            <Button
+                onPress={onDownloadIssue}
+                icon={exists === ExistsStatus.doesExist ? '\uE062' : '\uE077'}
+                alt={'Download'}
+                appearance={ButtonAppearance.skeleton}
+                textStyles={{
+                    color:
+                        exists !== ExistsStatus.doesExist
+                            ? color.primary
+                            : color.palette.neutral[100],
+                }}
+            />
+        </ProgressCircle>
+    )
+}
+
+const IssueRow = ({
+    issue,
+    onPress,
+}: {
+    issue: IssueSummary
+    onPress: () => void
+}) => {
+    const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
+        issue.date,
+    ])
+
+    return (
         <RowWrapper>
-            <GridRowSplit
-                proxy={
-                    <ProgressCircle
-                        percent={
-                            dlStatus
-                                ? getStatusPercentage(dlStatus) || 100
-                                : 100
-                        }
-                        radius={20}
-                        bgColor={
-                            exists === ExistsStatus.doesExist
-                                ? color.primary
-                                : undefined
-                        }
-                        borderWidth={1}
-                        shadowColor="#ccc"
-                        color={color.primary}
-                    >
-                        <Button
-                            onPress={onDownloadIssue}
-                            icon={
-                                exists === ExistsStatus.doesExist
-                                    ? '\uE062'
-                                    : '\uE077'
-                            }
-                            alt={'Download'}
-                            appearance={ButtonAppearance.skeleton}
-                            textStyles={{
-                                color:
-                                    exists !== ExistsStatus.doesExist
-                                        ? color.primary
-                                        : color.palette.neutral[100],
-                            }}
-                        />
-                    </ProgressCircle>
-                }
-            >
+            <GridRowSplit proxy={<IssueButton issue={issue} />}>
                 <View style={rowStyles.issueRow}>
                     <Highlight onPress={onPress}>
                         <IssueTitle

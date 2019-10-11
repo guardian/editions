@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { color } from '../theme/color'
-import { ArticlePillar, ArticleType, Appearance } from '../common'
+import { ArticlePillar, ArticleType, Appearance, Collection } from '../common'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { useSettingsValue } from './use-settings'
 import { DevTools } from 'src/hooks/article/dev-tools'
@@ -83,3 +83,11 @@ export const useArticle = (): [
 
 export const getAppearancePillar = (app: Appearance) =>
     app.type === 'custom' ? 'neutral' : app.name
+
+export const getCollectionPillarOverride = (
+    pillar: ArticlePillar,
+    collection: Collection['key'],
+) => {
+    const col = collection.split(':').pop()
+    return col === 'Obituaries' ? 'neutral' : pillar
+}

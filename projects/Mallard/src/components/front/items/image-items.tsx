@@ -18,6 +18,7 @@ import { SportItemBackground } from './helpers/sports'
 import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
 import { Standfirst } from './helpers/standfirst'
+import { useIsOpinionCard, useIsSportCard } from './helpers/types'
 
 /*
 Normal img on top + text
@@ -46,22 +47,23 @@ const imageStyles = StyleSheet.create({
 })
 
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
-    const [, { pillar }] = useArticle()
-    if (pillar === 'opinion' && isSmallItem(size)) {
+    const [isOpinionCard, isSportCard] = [useIsOpinionCard(), useIsSportCard()]
+
+    if (isOpinionCard && isSmallItem(size)) {
         return <RoundImageItem {...{ article, size, ...tappableProps }} />
     }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            {'image' in article && article.image ? (
+            {'trailImage' in article && article.trailImage ? (
                 <ImageResource
                     style={[
                         imageStyles.image,
                         { height: getImageHeight(size) },
                     ]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
             ) : null}
-            {pillar === 'sport' && isFullWidthItem(size) ? (
+            {isSportCard && isFullWidthItem(size) ? (
                 <SportItemBackground
                     style={{
                         paddingHorizontal: tappablePadding.padding,
@@ -102,10 +104,12 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 headline={article.headline}
                 {...{ size }}
             />
-            {'image' in article && article.image ? (
+            {'bylineImages' in article &&
+            article.bylineImages &&
+            article.bylineImages.cutout ? (
                 <ImageResource
                     style={[imageStyles.roundImage]}
-                    image={article.image}
+                    image={article.bylineImages.cutout}
                 />
             ) : null}
         </ItemTappable>
@@ -132,7 +136,7 @@ A smaller hero
 */
 const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     const [colors, { pillar }] = useArticle()
-    if (!article.image) {
+    if (!article.trailImage) {
         return <SmallItem {...{ article, size, ...tappableProps }} />
     }
     if (pillar === 'sport') {
@@ -144,7 +148,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
             <View style={squareStyles.cover}>
                 <ImageResource
                     style={[StyleSheet.absoluteFill]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
                 <View
                     style={[
@@ -206,10 +210,10 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                {'image' in article && article.image ? (
+                {'trailImage' in article && article.trailImage ? (
                     <ImageResource
                         style={[splitImageStyles.image]}
-                        image={article.image}
+                        image={article.trailImage}
                     />
                 ) : null}
             </View>

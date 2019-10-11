@@ -1,17 +1,21 @@
 import { capitalizeFirstLetter, addCommas } from './format'
 import { CCrossword } from '../capi/articles'
-import { CAPIArticle, Crossword, CrosswordArticle } from '../common'
+import {
+    CAPIArticle,
+    Crossword,
+    CrosswordArticle,
+    CrosswordType,
+    TrailImage,
+} from '../common'
 import { getImageFromURL } from '../image'
 
-const crosswordTypes = ['quick', 'cryptic', 'speedy', 'everyman'] as const
-
-export type CrosswordType = typeof crosswordTypes[number] | null
+const enumKeyToKebabCase = (key: string) => key.toLowerCase().replace(/_/g, '-')
 
 const getCrosswordType = (path: string): CrosswordType => {
-    for (const key of crosswordTypes) {
-        if (path.includes(key)) return key
+    for (const [key, type] of Object.entries(CrosswordType)) {
+        if (path.includes(enumKeyToKebabCase(key))) return type
     }
-    return null
+    return CrosswordType.QUICK // default to something sensible as this is largely used for rendering
 }
 
 const getCrosswordName = (type: CrosswordType): string =>
@@ -20,20 +24,34 @@ const getCrosswordName = (type: CrosswordType): string =>
 const getCrosswordKicker = (crossword: Crossword) => addCommas(crossword.number)
 
 //TODO: get images according to type
-const getCrosswordImage = (type: CrosswordType) => {
+
+const getCrosswordImageFromURL = (url: string): TrailImage | undefined => {
+    const image = getImageFromURL(url)
+    return (
+        image && {
+            ...image,
+            use: {
+                mobile: 'full-size',
+                tablet: 'full-size',
+            },
+        }
+    )
+}
+
+const getCrosswordImage = (type: CrosswordType): TrailImage | undefined => {
     if (type === 'cryptic') {
-        return getImageFromURL(
+        return getCrosswordImageFromURL(
             'https://media.guim.co.uk/70609fd8e274ee8b2cbb19f7537c9a4f3bd6328a/0_0_2048_2048/1000.jpg',
         )
     }
-    return getImageFromURL(
+    return getCrosswordImageFromURL(
         'https://media.guim.co.uk/ddcfc3a9c1963f8769d02c27db1cea6312057f81/0_0_2048_2048/1000.jpg',
     )
 }
 
 type CrosswordArticleOverrides = Pick<
     CAPIArticle,
-    'headline' | 'kicker' | 'image'
+    'headline' | 'kicker' | 'trailImage'
 > &
     Pick<CrosswordArticle, 'crossword'>
 
@@ -44,7 +62,10 @@ export const getCrosswordArticleOverrides = (
     return {
         headline: getCrosswordName(type),
         kicker: getCrosswordKicker(article.crossword),
-        image: getCrosswordImage(type),
-        crossword: article.crossword,
+        trailImage: getCrosswordImage(type),
+        crossword: {
+            ...article.crossword,
+            type,
+        },
     }
 }

@@ -8,7 +8,6 @@ import { StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
-import { AuthProvider } from './authentication/auth-context'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
@@ -28,11 +27,15 @@ import {
     setUserId,
 } from 'src/services/ophan'
 import { NavigationState } from 'react-navigation'
-import { IdentityAuth } from './authentication/credentials-chain'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
 import { UpdateIpAddress } from './components/update-ip-address'
 import { NetInfoProvider } from './hooks/use-net-info'
+import { DeprecateVersionModal } from './screens/deprecate-screen'
+import { AccessProvider } from './authentication/AccessContext'
+import { AnyAttempt, isValid } from './authentication/lib/Attempt'
+import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
+import { IssueSummaryProvider } from './hooks/use-issue-summary'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -120,10 +123,11 @@ const WithProviders = nestProviders(
     Modal,
     ToastProvider,
     NetInfoProvider,
+    IssueSummaryProvider,
 )
 
-const handleIdStatus = (data: IdentityAuth | null) =>
-    setUserId(data && data.info.userDetails.id)
+const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
+    setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
@@ -148,7 +152,7 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <WithProviders>
-                    <AuthProvider onIdentityStatusChange={handleIdStatus}>
+                    <AccessProvider onIdentityStatusChange={handleIdStatus}>
                         <StatusBar
                             animated={true}
                             barStyle="light-content"
@@ -157,6 +161,7 @@ export default class App extends React.Component<{}, {}> {
                         <View style={styles.appContainer}>
                             <RootNavigator
                                 {...rootNavigationProps}
+                                enableURLHandling={false}
                                 onNavigationStateChange={
                                     onNavigationStateChange
                                 }
@@ -166,7 +171,8 @@ export default class App extends React.Component<{}, {}> {
                         </View>
                         <ModalRenderer />
                         <BugButton />
-                    </AuthProvider>
+                        <DeprecateVersionModal />
+                    </AccessProvider>
                 </WithProviders>
             </ErrorBoundary>
         )

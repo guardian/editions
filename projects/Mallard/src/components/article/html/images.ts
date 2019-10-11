@@ -1,6 +1,6 @@
 import { ImageElement, mediaPath } from 'src/common'
-import { backends, defaultSettings } from 'src/helpers/settings/defaults'
-import { Direction } from 'src/helpers/sizes'
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import { Direction, ImageSize } from 'src/common'
 import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -8,7 +8,6 @@ import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { breakOut } from './helpers/layout'
 import { CssProps } from './helpers/props'
-import { imageForScreenSize } from 'src/helpers/screen'
 
 export const renderCaption = ({
     caption,
@@ -40,6 +39,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
     .image {
         position: relative;
         clear: right;
+        z-index: 10000;
     }
     .image img {
         display: block;
@@ -82,7 +82,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
         .image[data-role='thumbnail'] {
             width: ${px(wrapLayout.rail.contentWidth)};
             position: absolute;
-            right: ${px(metrics.article.sides)};
+            right: 0;
         }
     }
 
@@ -182,15 +182,17 @@ const ImageBase = ({
 const Image = ({
     imageElement,
     publishedId,
+    imageSize,
 }: {
     imageElement: ImageElement
     publishedId: string
+    imageSize: ImageSize
 }) => {
     // @TODO: This needs refactoring to work with downloaded content
     const backend = defaultSettings.apiUrl
     const path = `${backend}${mediaPath(
         publishedId,
-        imageForScreenSize(),
+        imageSize,
         imageElement.src.source,
         imageElement.src.path,
     )}`

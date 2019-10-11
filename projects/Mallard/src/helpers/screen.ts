@@ -1,18 +1,19 @@
 import { Dimensions } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { sizeDescriptions, ImageSize } from '../../../common/src'
+import { sizeDescriptions, ImageSize, imageSizes } from '../../../common/src'
+import AsyncStorage from '@react-native-community/async-storage'
 
-const maxScreenSize = (): number => {
+export const maxScreenSize = (): number => {
     const { width, height } = Dimensions.get('window')
     return Math.max(width, height)
 }
 
-const minScreenSize = (): number => {
+export const minScreenSize = (): number => {
     const { width, height } = Dimensions.get('window')
     return Math.min(width, height)
 }
 
-const screenSizeToImageSize = (screenSize: number): number => {
+export const screenSizeToImageSize = (screenSize: number): number => {
     const allSizes = Object.values(sizeDescriptions)
     const minPossibleSize = Math.min(...allSizes)
     if (screenSize <= minPossibleSize) {
@@ -30,7 +31,9 @@ const screenSizeToImageSize = (screenSize: number): number => {
     return Math.min(...availableSizes)
 }
 
-const convertImageSizeToImageDescription = (screenSize: number): ImageSize => {
+export const convertImageSizeToImageDescription = (
+    screenSize: number,
+): ImageSize => {
     if (!screenSize) {
         return 'phone'
     }
@@ -40,15 +43,19 @@ const convertImageSizeToImageDescription = (screenSize: number): ImageSize => {
     return (imageSize as ImageSize) || 'phone'
 }
 
-const imageForScreenSize = () => {
-    const screenSize = DeviceInfo.isTablet() ? maxScreenSize() : minScreenSize()
-    return convertImageSizeToImageDescription(screenSizeToImageSize(screenSize))
-}
+const IMAGE_SIZE_KEY = '@image_size'
 
-export {
-    maxScreenSize,
-    minScreenSize,
-    screenSizeToImageSize,
-    convertImageSizeToImageDescription,
-    imageForScreenSize,
+export const imageForScreenSize = async (): Promise<ImageSize> => {
+    const persisted = await AsyncStorage.getItem(IMAGE_SIZE_KEY)
+    const persistedSize = imageSizes.find(_ => _ == persisted)
+    if (persistedSize != undefined) {
+        return persistedSize
+    }
+    const isTablet = await DeviceInfo.isTablet()
+    const screenSize = isTablet ? maxScreenSize() : minScreenSize()
+    const size = convertImageSizeToImageDescription(
+        screenSizeToImageSize(screenSize),
+    )
+    await AsyncStorage.setItem(IMAGE_SIZE_KEY, size)
+    return size
 }

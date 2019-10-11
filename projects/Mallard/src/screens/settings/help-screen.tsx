@@ -6,7 +6,6 @@ import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { Heading } from 'src/components/layout/ui/row'
-import { AuthContext } from 'src/authentication/auth-context'
 import { createSupportMailto } from 'src/helpers/diagnostics'
 import {
     ISSUE_EMAIL,
@@ -14,9 +13,10 @@ import {
     READERS_EMAIL,
     APPS_FEEDBACK_EMAIL,
 } from 'src/helpers/words'
+import { AccessContext } from 'src/authentication/AccessContext'
 
 const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
-    const { status } = useContext(AuthContext)
+    const { attempt } = useContext(AccessContext)
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
@@ -42,22 +42,22 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                         createSupportMailto(
                             'Report an issue',
                             ISSUE_EMAIL,
-                            status,
+                            attempt,
                         ),
                         createSupportMailto(
                             'Subscription, payment and billing issues',
                             SUBSCRIPTION_EMAIL,
-                            status,
+                            attempt,
                         ),
                         createSupportMailto(
                             'Comment or query about an article',
                             READERS_EMAIL,
-                            status,
+                            attempt,
                         ),
                         createSupportMailto(
                             'Send feedback',
                             APPS_FEEDBACK_EMAIL,
-                            status,
+                            attempt,
                         ),
                     ]}
                 />

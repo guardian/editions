@@ -7,7 +7,7 @@ This is a bit of a mess
 export const backends = [
     {
         title: 'PROD published',
-        value: 'https://editions-store-prod.s3-eu-west-1.amazonaws.com/',
+        value: 'https://editions.guardianapis.com/',
         preview: false,
     },
     {
@@ -17,7 +17,7 @@ export const backends = [
     },
     {
         title: 'CODE published',
-        value: 'https://editions-store-code.s3-eu-west-1.amazonaws.com/',
+        value: 'https://editions.code.dev-guardianapis.com/',
         preview: false,
     },
     {
@@ -43,6 +43,13 @@ export const notificationServiceRegister = {
 
 const apiUrl = backends[0].value
 
+const storeDetails = {
+    ios: 'itms-apps://itunes.apple.com/app/id452707806',
+    android: 'market://details?id=com.guardian.editions',
+}
+
+const contentPrefix = 'daily-edition'
+
 export const defaultSettings: Settings = {
     apiUrl,
     isUsingProdDevtools: false,
@@ -58,9 +65,12 @@ export const defaultSettings: Settings = {
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
         : notificationServiceRegister.prod,
-    zipUrl: apiUrl + 'zips',
     cacheClearUrl: apiUrl + 'cache-clear',
-    contentPrefix: 'daily-edition',
+    deprecationWarningUrl: apiUrl + 'deprecation-warning',
+    contentPrefix,
+    issuesPath: `/${contentPrefix}/issues`,
+    useNonWobblyWebview: true,
+    storeDetails,
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

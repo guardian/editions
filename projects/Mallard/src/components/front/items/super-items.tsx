@@ -2,16 +2,10 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { BylineCutout } from 'src/components/article/article-header/opinion-header'
 import Quote from 'src/components/icons/Quote'
-import { TextWithIcon } from 'src/components/layout/text-with-icon'
-import { StandfirstText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
-import { getFont, getUnscaledFont } from 'src/theme/typography'
-import {
-    getItemRectanglePerc,
-    PageLayoutSizes,
-    toPercentage,
-} from '../helpers/helpers'
+import { getFont } from 'src/theme/typography'
+import { getItemRectanglePerc, toPercentage } from '../helpers/helpers'
 import { ImageResource } from '../image-resource'
 import {
     ItemTappable,
@@ -21,6 +15,8 @@ import {
 import { TextBlock } from './helpers/text-block'
 import { Standfirst } from './helpers/standfirst'
 import { metrics } from 'src/theme/spacing'
+import { useIsOpinionCard } from './helpers/types'
+import { PageLayoutSizes } from '../../../common'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -50,10 +46,10 @@ const superHeroImageStyles = StyleSheet.create({
 const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
+            {'trailImage' in article && article.trailImage ? (
                 <ImageResource
                     style={[superHeroImageStyles.image]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
             ) : null}
             <TextBlock
@@ -86,10 +82,10 @@ const sportSuperStyles = StyleSheet.create({
 const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'image' in article && article.image ? (
+            {'trailImage' in article && article.trailImage ? (
                 <ImageResource
                     style={[superHeroImageStyles.image]}
-                    image={article.image}
+                    image={article.trailImage}
                 />
             ) : null}
             <TextBlock
@@ -172,7 +168,17 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                     },
                 ]}
             >
-                <Quote scale={2} fill={colors.main} />
+                <View
+                    style={{
+                        height: 60,
+                        marginLeft: -18,
+                        marginBottom: -8,
+                        alignItems: 'flex-start',
+                        justifyContent: 'flex-end',
+                    }}
+                >
+                    <Quote scale={2} fill={colors.main} />
+                </View>
                 <Text style={opinionStyles.titleText}>{article.headline}</Text>
 
                 <Text
@@ -200,20 +206,19 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 >
                     {article.trail}
                 </Text>
-
-                {article.bylineImages && article.bylineImages.cutout ? (
-                    <View style={opinionStyles.cutout}>
-                        <BylineCutout cutout={article.bylineImages.cutout} />
-                    </View>
-                ) : null}
             </View>
+            {article.bylineImages && article.bylineImages.cutout ? (
+                <View style={opinionStyles.cutout}>
+                    <BylineCutout cutout={article.bylineImages.cutout} />
+                </View>
+            ) : null}
         </ItemTappable>
     )
 }
 
 const SuperHeroImageItem = (props: PropTypes) => {
     const [, { pillar }] = useArticle()
-    if (pillar === 'opinion') {
+    if (useIsOpinionCard()) {
         return <OpinionSuper {...props} />
     }
     if (pillar === 'sport') {

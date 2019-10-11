@@ -1,9 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
-import { fetchAndPersistCASExpiry } from 'src/authentication/helpers'
-import { AuthContext } from 'src/authentication/auth-context'
-import { CASAuthStatus } from 'src/authentication/credentials-chain'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { LoginInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
@@ -11,6 +8,8 @@ import { useFormField } from 'src/hooks/use-form-field'
 import { getFont } from 'src/theme/typography'
 import { useModal } from 'src/components/modal'
 import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
+import { AccessContext } from 'src/authentication/AccessContext'
+import { isValid } from 'src/authentication/lib/Attempt'
 
 const styles = StyleSheet.create({
     image: { height: 200, width: undefined },
@@ -23,7 +22,7 @@ const CasSignInScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const { setStatus } = useContext(AuthContext)
+    const { authCAS } = useContext(AccessContext)
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -46,22 +45,14 @@ const CasSignInScreen = ({
             setShouldShowError(true)
             return
         }
-        try {
-            const expiry = await fetchAndPersistCASExpiry(
-                subscriberID.value,
-                password.value,
-            )
-            setStatus(CASAuthStatus(expiry))
+        const attempt = await authCAS(subscriberID.value, password.value)
+        if (isValid(attempt)) {
             navigation.goBack()
             open(close => <SubFoundModalCard close={close} />)
-        } catch (err) {
-            setErrorMessage(
-                (err instanceof Error ? err.message : err) ||
-                    'Something went wrong',
-            )
-        } finally {
-            setIsLoading(false)
+        } else {
+            setErrorMessage(attempt.reason || 'Something went wrong')
         }
+        setIsLoading(false)
     }
 
     return (

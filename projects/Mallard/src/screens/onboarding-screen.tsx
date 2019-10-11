@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, SafeAreaView, View } from 'react-native'
+import { StyleSheet, SafeAreaView, View, Image } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -7,7 +7,7 @@ import { OnboardingConsent } from './onboarding/cards'
 
 const styles = StyleSheet.create({
     background: {
-        backgroundColor: color.palette.brand.main,
+        backgroundColor: color.palette.neutral[93],
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
