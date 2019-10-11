@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import ophan.OphanApi;
+import ophan.thrift.device.DeviceClass;
 
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -23,7 +24,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
 
     @Nonnull
     private final File recordStoreDir;
-    //private final DeviceClass deviceClass;
+    private final DeviceClass deviceClass;
 
     @Nonnull
     private OphanApi ophanApi;
@@ -35,9 +36,9 @@ class RNOphanModule extends ReactContextBaseJavaModule {
         super(reactContext);
         recordStoreDir = new File(reactContext.getCacheDir(), "ophan");
         if (reactContext.getResources().getBoolean(R.bool.is_tablet)) {
-            // deviceClass = DeviceClass.TABLET;
+            deviceClass = DeviceClass.TABLET;
         } else {
-            // deviceClass = DeviceClass.PHONE;
+            deviceClass = DeviceClass.PHONE;
         }
         ophanApi = newOphanApi(null);
     }
@@ -49,7 +50,7 @@ class RNOphanModule extends ReactContextBaseJavaModule {
                 Build.VERSION.RELEASE,
                 Build.MODEL,
                 Build.MANUFACTURER,
-                // deviceClass,
+                deviceClass,
                 getDeviceId(),
                 userId,
                 new LogcatLogger(),

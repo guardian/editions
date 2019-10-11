@@ -29,6 +29,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         jcenter()
         maven {
@@ -43,7 +44,7 @@ allprojects {
             //react-native-image-filter-kit
             url 'https://jitpack.io'
         }
-        maven { url 'https://dl.bintray.com/guardian/kotlin' }
+        //maven { url 'https://dl.bintray.com/guardian/kotlin' }
     }
 
 
