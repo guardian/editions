@@ -1,22 +1,13 @@
-import { PageLayout, PageLayoutSizes } from './helpers'
-import {
-    SplashImageItem,
-    SuperHeroImageItem,
-    ImageItem,
-    SplitImageItem,
-    SmallItem,
-    SmallItemLargeText,
-    SidekickImageItem,
-} from '../items/items'
-import { FrontCardAppearance } from 'src/common'
-import { toRectangle } from 'src/helpers/sizes'
+import { PageLayout, PageLayoutSizes, ItemType } from './layout-model'
+import { toRectangle } from '../helpers/sizes'
+import { FrontCardAppearance } from './card-layouts'
 
 const splashPage: PageLayout = {
     [PageLayoutSizes.mobile]: {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: SplashImageItem,
+                item: ItemType.SplashImageItemType,
                 fits: toRectangle(0, 0, 6, 2),
             },
         ],
@@ -25,7 +16,7 @@ const splashPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: SplashImageItem,
+                item: ItemType.SplashImageItemType,
                 fits: toRectangle(0, 0, 4, 3),
             },
         ],
@@ -37,7 +28,7 @@ const superHeroPage: PageLayout = {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: SuperHeroImageItem,
+                item: ItemType.SuperHeroImageItemType,
                 fits: toRectangle(0, 0, 6, 2),
             },
         ],
@@ -46,14 +37,14 @@ const superHeroPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: SuperHeroImageItem,
+                item: ItemType.SuperHeroImageItemType,
                 fits: toRectangle(0, 0, 4, 3),
             },
         ],
     },
 }
 
-const twoStoryPage = (KeyItem = ImageItem): PageLayout => ({
+const twoStoryPage = (KeyItem = ItemType.ImageItemType): PageLayout => ({
     [PageLayoutSizes.mobile]: {
         size: PageLayoutSizes.mobile,
         items: [
@@ -62,7 +53,7 @@ const twoStoryPage = (KeyItem = ImageItem): PageLayout => ({
                 fits: toRectangle(0, 0, 4, 2),
             },
             {
-                item: SplitImageItem,
+                item: ItemType.SplitImageItemType,
                 fits: toRectangle(0, 4, 2, 2),
             },
         ],
@@ -75,14 +66,14 @@ const twoStoryPage = (KeyItem = ImageItem): PageLayout => ({
                 fits: toRectangle(0, 0, 3, 3),
             },
             {
-                item: SplitImageItem,
+                item: ItemType.SplitImageItemType,
                 fits: toRectangle(0, 3, 1, 3),
             },
         ],
     },
 })
 
-const threeStoryPage = (KeyItem = ImageItem): PageLayout => ({
+const threeStoryPage = (KeyItem = ItemType.ImageItemType): PageLayout => ({
     [PageLayoutSizes.mobile]: {
         size: PageLayoutSizes.mobile,
         items: [
@@ -91,11 +82,11 @@ const threeStoryPage = (KeyItem = ImageItem): PageLayout => ({
                 fits: toRectangle(0, 0, 4, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 4, 2, 1),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(1, 4, 2, 1),
             },
         ],
@@ -109,18 +100,20 @@ const threeStoryPage = (KeyItem = ImageItem): PageLayout => ({
                 fits: toRectangle(0, 0, 4, 2),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 0, 2, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 2, 2, 1),
             },
         ],
     },
 })
 
-const threeStoryPageBigPhoto = (KeyItem = ImageItem): PageLayout => ({
+const threeStoryPageBigPhoto = (
+    KeyItem = ItemType.ImageItemType,
+): PageLayout => ({
     ...threeStoryPage(KeyItem),
     [PageLayoutSizes.tablet]: {
         size: PageLayoutSizes.tablet,
@@ -130,11 +123,11 @@ const threeStoryPageBigPhoto = (KeyItem = ImageItem): PageLayout => ({
                 fits: toRectangle(0, 0, 3, 3),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 3, 1, 1),
             },
             {
-                item: SplitImageItem,
+                item: ItemType.SplitImageItemType,
                 fits: toRectangle(1, 3, 1, 2),
             },
         ],
@@ -146,19 +139,19 @@ const fourStoryPage: PageLayout = {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(0, 0, 3, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(1, 0, 3, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(0, 3, 3, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(1, 3, 3, 1),
             },
         ],
@@ -167,19 +160,19 @@ const fourStoryPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(0, 0, 3, 2),
             },
             {
-                item: SplitImageItem,
+                item: ItemType.SplitImageItemType,
                 fits: toRectangle(0, 3, 1, 2),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 0, 2, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 2, 2, 1),
             },
         ],
@@ -191,23 +184,23 @@ const fiveStoryPage: PageLayout = {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(0, 0, 3, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(1, 0, 3, 1),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 3, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 4, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 5, 1, 2),
             },
         ],
@@ -216,23 +209,23 @@ const fiveStoryPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(0, 0, 3, 2),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 0, 2, 1),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 3, 1, 1),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(1, 3, 1, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 2, 2, 1),
             },
         ],
@@ -244,27 +237,27 @@ const sixStoryPage: PageLayout = {
         size: PageLayoutSizes.mobile,
         items: [
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 0, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 1, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 2, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 3, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 4, 1, 2),
             },
             {
-                item: SmallItem,
+                item: ItemType.SmallItemType,
                 fits: toRectangle(0, 5, 1, 2),
             },
         ],
@@ -273,27 +266,27 @@ const sixStoryPage: PageLayout = {
         size: PageLayoutSizes.tablet,
         items: [
             {
-                item: SmallItemLargeText,
+                item: ItemType.SmallItemLargeTextType,
                 fits: toRectangle(0, 0, 1, 2),
             },
             {
-                item: SmallItemLargeText,
+                item: ItemType.SmallItemLargeTextType,
                 fits: toRectangle(0, 1, 1, 2),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 0, 2, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(2, 2, 2, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(0, 2, 2, 1),
             },
             {
-                item: ImageItem,
+                item: ItemType.ImageItemType,
                 fits: toRectangle(1, 2, 2, 1),
             },
         ],
@@ -305,11 +298,11 @@ const layouts: { [key in FrontCardAppearance]: PageLayout } = {
     [FrontCardAppearance.superHeroPage]: superHeroPage,
     [FrontCardAppearance.twoStoryPage]: twoStoryPage(),
     [FrontCardAppearance.twoStoryPageWithSidekick]: twoStoryPage(
-        SidekickImageItem,
+        ItemType.SidekickImageItemType,
     ),
     [FrontCardAppearance.threeStoryPage]: threeStoryPage(),
     [FrontCardAppearance.threeStoryPageWithSidekick]: threeStoryPageBigPhoto(
-        SidekickImageItem,
+        ItemType.SidekickImageItemType,
     ),
     [FrontCardAppearance.fourStoryPage]: fourStoryPage,
     [FrontCardAppearance.fiveStoryPage]: fiveStoryPage,

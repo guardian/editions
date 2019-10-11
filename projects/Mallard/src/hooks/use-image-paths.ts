@@ -6,6 +6,7 @@ import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue } from '../../../common/src'
 import { useSettingsValue } from './use-settings'
 import { useIssueSummary } from './use-issue-summary'
+import { Platform } from 'react-native'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
@@ -29,7 +30,9 @@ export const selectImagePath = async (
 
     const fs = getFsPath(localIssueId, { source, path }, imageSize)
     const fsExists = await RNFetchBlob.fs.exists(fs)
-    return fsExists ? fs : api
+
+    const fsUpdatedPath = Platform.OS === 'android' ? 'file:///' + fs : fs
+    return fsExists ? fsUpdatedPath : api
 }
 
 const compressImagePath = async (path: string, width: number) => {

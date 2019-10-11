@@ -1,5 +1,5 @@
 import { Platform, StatusBar, PixelRatio } from 'react-native'
-import { Size, toSize } from 'src/helpers/sizes'
+import { toSize } from 'src/common'
 import { getFont } from './typography'
 
 const spacing = [0, 3, 6, 12, 18, 30]

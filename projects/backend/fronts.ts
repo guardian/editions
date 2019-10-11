@@ -4,8 +4,10 @@ import {
     BlockElement,
     ArticleType,
     IssuePublicationIdentifier,
+    TrailImage,
+    ImageDeviceUses,
 } from '../common/src'
-import { CAPIContent, CArticle, getArticles } from './capi/articles'
+import { CAPIContent, getArticles } from './capi/articles'
 import {
     CAPIArticle,
     Collection,
@@ -18,14 +20,14 @@ import {
     PublishedCardImage,
     PublishedCollection,
     PublishedFront,
-    PublishedFurtniture,
     PublishedIssue,
+    PublishedFurniture,
 } from './fronts/issue'
 import { getImageFromURL } from './image'
 import { LastModifiedUpdater } from './lastModified'
 import { isPreview } from './preview'
 import { Path, s3fetch } from './s3'
-import { createCardsFromAllArticlesInCollection } from './utils/collection'
+import { createCards } from './utils/collection'
 import { getCrosswordArticleOverrides } from './utils/crossword'
 import {
     attempt,
@@ -70,18 +72,27 @@ const getTrailImage = (
     maybeMainImage: CreditedImage | undefined,
     maybeCapiTrailImage: Image | undefined,
     maybeImageOverride: Image | undefined,
-): Image | undefined => {
-    return maybeImageOverride || maybeMainImage || maybeCapiTrailImage
+    imageUse: ImageDeviceUses,
+): TrailImage | undefined => {
+    const chosenTrailImage =
+        maybeImageOverride || maybeMainImage || maybeCapiTrailImage
+    return (
+        chosenTrailImage && {
+            ...chosenTrailImage,
+            use: imageUse,
+        }
+    )
 }
 
 export const getImages = (
     article: CAPIContent,
-    furniture: PublishedFurtniture,
+    furniture: PublishedFurniture,
+    imageUse: ImageDeviceUses,
 ): {
     image?: CreditedImage
     cardImage?: Image
     cardImageTablet?: Image
-    trailImage?: Image
+    trailImage?: TrailImage
 } => {
     const {
         overrideArticleMainMedia,
@@ -106,6 +117,7 @@ export const getImages = (
         maybeMainImage,
         maybeCapiTrailImage,
         maybeImageOverride,
+        imageUse,
     )
 
     return {
@@ -115,7 +127,11 @@ export const getImages = (
     }
 }
 
-const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
+const commonFields = (
+    article: CAPIContent,
+    furniture: PublishedFurniture,
+    imageUse: ImageDeviceUses,
+) => {
     const kicker = oc(furniture).kicker() || article.kicker || '' // I'm not sure where else we should check for a kicker
     const headline = oc(furniture).headlineOverride() || article.headline
     const trail = striptags(
@@ -125,7 +141,7 @@ const commonFields = (article: CAPIContent, furniture: PublishedFurtniture) => {
     const showByline = furniture.showByline
     const showQuotedHeadline = furniture.showQuotedHeadline
     const mediaType = furniture.mediaType
-    const images = getImages(article, furniture)
+    const images = getImages(article, furniture, imageUse)
     return {
         key: article.path,
         kicker,
@@ -151,10 +167,15 @@ export const patchArticleElements = (article: {
 }
 
 export const patchArticle = (
-    article: CAPIContent,
-    furniture: PublishedFurtniture,
+    capiArticle: CAPIContent,
+    furniture: PublishedFurniture,
+    imageUse: ImageDeviceUses,
 ): [string, CAPIArticle] => {
     const sportScore = oc(furniture).sportScore()
+
+    // get article object without the oldTrailImage which is a different type
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { trailImage: oldTrailImage, ...article } = capiArticle
 
     switch (article.type) {
         case 'crossword':
@@ -162,7 +183,7 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(article, furniture),
+                    ...commonFields(article, furniture, imageUse),
                     ...getCrosswordArticleOverrides(article),
                     sportScore,
                 },
@@ -173,7 +194,7 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(article, furniture),
+                    ...commonFields(article, furniture, imageUse),
                     key: article.path,
                     sportScore,
                 },
@@ -184,14 +205,14 @@ export const patchArticle = (
                 article.path,
                 {
                     ...article,
-                    ...commonFields(article, furniture),
+                    ...commonFields(article, furniture, imageUse),
                     key: article.path,
                     sportScore,
                 },
             ]
 
         case 'article':
-            const fields = commonFields(article, furniture)
+            const fields = commonFields(article, furniture, imageUse)
             return [
                 article.path,
                 {
@@ -216,7 +237,7 @@ export const parseCollection = async (
 ): Promise<Attempt<Collection>> => {
     const articleFragmentList = collectionResponse.items.map((itemResponse): [
         number,
-        PublishedFurtniture,
+        PublishedFurniture,
     ] => [itemResponse.internalPageCode, itemResponse.furniture])
 
     const ids: number[] = articleFragmentList.map(([id]) => id)
@@ -235,7 +256,7 @@ export const parseCollection = async (
             'Could not connect to CAPI',
         )
 
-    const articles: [string, CAPIArticle][] = articleFragmentList
+    const articles: [CAPIContent, PublishedFurniture][] = articleFragmentList
         .filter(([key]) => {
             const inResponse =
                 key in capiPrintArticles || key in capiSearchArticles
@@ -244,16 +265,14 @@ export const parseCollection = async (
             }
             return inResponse
         })
-        .map(([key, furniture]) =>
-            patchArticle(
-                capiSearchArticles[key] || capiPrintArticles[key],
-                furniture,
-            ),
-        )
+        .map(([key, furniture]) => [
+            capiSearchArticles[key] || capiPrintArticles[key],
+            furniture,
+        ])
 
     return {
         key: `${i}:${collectionResponse.name}`,
-        cards: createCardsFromAllArticlesInCollection(articles, front),
+        cards: createCards(articles, front),
     }
 }
 

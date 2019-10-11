@@ -11,6 +11,7 @@ import {
     CrosswordArticle,
     PictureArticle,
     CapiDateTime as CapiDateTime32,
+    Image,
 } from '../common'
 import {
     BufferedTransport,
@@ -32,11 +33,13 @@ type NotInCAPI =
     | 'mediaType'
     | 'slideshowImages'
     | 'sportScore'
+    | 'trailImage'
 
 type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
 
 interface CAPIExtras {
     path: string
+    trailImage?: Image
 }
 
 export type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &

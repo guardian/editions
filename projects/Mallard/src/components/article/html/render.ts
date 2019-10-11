@@ -3,7 +3,8 @@ import {
     BlockElement,
     MediaAtomElement,
     ArticleType,
-} from 'src/common'
+    Direction,
+} from '../../../common'
 import {
     css,
     generateAssetsFontCss,
@@ -27,18 +28,20 @@ import { lineStyles, Line } from './line'
 import { useImageSize } from 'src/hooks/use-image-size'
 import { ratingStyles } from './rating'
 import { Arrow } from './arrow'
-import { Direction } from 'src/helpers/sizes'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
-    ${generateAssetsFontCss(families.text.regular)}
-    ${generateAssetsFontCss(families.icon.regular)}
-    ${generateAssetsFontCss(families.headline.light)}
-    ${generateAssetsFontCss(families.headline.regular)}
-    ${generateAssetsFontCss(families.headline.bold)}
-    ${generateAssetsFontCss(families.sans.regular)}
-    ${generateAssetsFontCss(families.titlepiece.regular)}
+    ${generateAssetsFontCss({ fontFamily: families.text.regular })}
+    ${generateAssetsFontCss({
+        fontFamily: families.icon.regular,
+        extension: 'otf',
+    })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.light })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.bold })}
+    ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
+    ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
     html, body {
         overflow-x: hidden;
     }

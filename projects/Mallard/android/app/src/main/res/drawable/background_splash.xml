@@ -2,11 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/blue"/>
+        android:drawable="@color/grey"/>
 
     <item
-        android:width="200dp"
-        android:height="141dp"
+        android:width="480dp"
+        android:height="800dp"
         android:drawable="@mipmap/icon"
         android:gravity="center" />
 

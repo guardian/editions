@@ -1,4 +1,4 @@
-platform :ios, '10.3'
+platform :ios, '12.4'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'Mallard' do
@@ -31,6 +31,8 @@ target 'Mallard' do
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 #   https://github.com/luggit/react-native-config/issues/187
     pod 'react-native-in-app-utils', :path => '../node_modules/react-native-in-app-utils'
+
+    pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
     post_install do |installer|
     installer.pods_project.targets.each do |target|
