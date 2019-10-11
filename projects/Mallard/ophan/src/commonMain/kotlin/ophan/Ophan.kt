@@ -8,6 +8,8 @@ import ophan.thrift.componentEvent.Action
 import ophan.thrift.componentEvent.ComponentEvent
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.componentEvent.ComponentV2
+import ophan.thrift.device.DeviceClass
+import ophan.thrift.event.Platform
 import ophan.thrift.event.Url
 import ophan.thrift.nativeapp.*
 
@@ -22,6 +24,7 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
             appOsVersion: String,
             deviceName: String,
             deviceManufacturer: String,
+            deviceClass: DeviceClass?,
             deviceId: String,
             userId: String?,
             logger: Logger,
@@ -31,17 +34,19 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
                     version = appVersion,
                     family = appFamily,
                     os = appOsVersion,
-                    edition = Edition.UK
+                    edition = Edition.UK,
+                    platform = Platform.EDITIONS
             ),
             Device(
                     name = deviceName,
-                    manufacturer = deviceManufacturer
+                    manufacturer = deviceManufacturer,
+                    deviceClass = deviceClass
             ),
             deviceId,
             userId,
             logger,
             FileRecordStore(recordStorePath),
-            true
+            false
     ))
 
     private fun newComponentEventDetails(

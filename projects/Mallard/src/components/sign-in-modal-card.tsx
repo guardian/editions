@@ -30,7 +30,7 @@ const SignInModalCard = ({
     <OnboardingCard
         onDismissThisCard={onDismiss}
         title="Already a subscriber?"
-        subtitle="Sign in to continue with the app"
+        subtitle="Sign in with your subscriber details to continue"
         appearance={CardAppearance.blue}
         size="medium"
         bottomContent={
@@ -47,7 +47,7 @@ const SignInModalCard = ({
                             })
                         }}
                     >
-                        Continue
+                        Sign in
                     </ModalButton>
                     <Link
                         style={{ ...getFont('sans', 0.9, 'bold') }}
@@ -61,8 +61,8 @@ const SignInModalCard = ({
         explainerTitle="Not subscribed yet?"
         explainerSubtitle={
             Platform.OS === 'ios'
-                ? 'To get a free trial with our Digital Pack, visit our website'
-                : 'Get a free trial with our Digital Pack'
+                ? 'Get the Daily with a digital subscription from The Guardian website.'
+                : 'Read the Daily with a digital subscription from The Guardian.'
         }
         bottomExplainerContent={
             <>
@@ -76,7 +76,7 @@ const SignInModalCard = ({
                         }}
                         buttonAppearance={ButtonAppearance.dark}
                     >
-                        {'Get your free 14 day trial'}
+                        {'Start your free 14 day trial'}
                     </ModalButton>
                 ) : null}
                 {/* Being hidden temporarily - https://trello.com/c/FsoQQx3m/707-already-a-subscriber-hide-the-learn-more-button */}

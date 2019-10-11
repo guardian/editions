@@ -26,8 +26,8 @@ const SubNotFoundModalCard = ({
         }}
         explainerSubtitle={
             Platform.OS === 'ios'
-                ? 'To get a free trial with our Digital Pack, visit our website'
-                : 'Get a free trial with our Digital Pack'
+                ? 'To get a free trial with our digital subscription, visit our website'
+                : 'Get a free trial with our digital subscription'
         }
         bottomContent={
             <>
