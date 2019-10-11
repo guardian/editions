@@ -10,7 +10,6 @@ const capiApiKey = process.env.CAPI_API_KEY
  */
 const settingsPagePathsToFetch = {
     'help/2019/sep/12/the-guardian-daily-beta-faqs': 'faq',
-    'help/privacy-policy': 'privacy-policy',
     'help/terms-of-service': 'terms-of-service',
 }
 
