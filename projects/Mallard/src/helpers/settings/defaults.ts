@@ -1,4 +1,5 @@
 import { Settings } from '../settings'
+import { Platform } from 'react-native'
 
 /*
 Default settings.
@@ -39,6 +40,31 @@ export const backends = [
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
     code: 'https://notifications.code.dev-guardianapis.com/device/register',
+}
+
+export const notificationEdition = {
+    ios: 'ios-edition',
+    android: 'android-edition',
+}
+
+const notificationTrackingEndpoints = {
+    prod: 'https://mobile-events.guardianapis.com/notification/received',
+    code:
+        'https://mobile-events.code.dev-guardianapis.com/notification/received',
+}
+
+export const notificationTrackingUrl = (notificationId: string) => {
+    const edition =
+        Platform.OS === 'ios'
+            ? notificationEdition.ios
+            : notificationEdition.android
+
+    const params = `?notificationId=${notificationId}&platform=${edition}`
+    const url = __DEV__
+        ? notificationTrackingEndpoints.code
+        : notificationTrackingEndpoints.prod
+
+    return `${url}${params}`
 }
 
 const apiUrl = backends[0].value
