@@ -46,7 +46,7 @@ class OphanApi(private val dispatcher: OphanDispatcher) {
             userId,
             logger,
             FileRecordStore(recordStorePath),
-            true
+            false
     ))
 
     private fun newComponentEventDetails(
