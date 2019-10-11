@@ -44,11 +44,12 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
                 else if (isInterview) return ArticleType.Immersive
-                else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
                 else if (isReview) return ArticleType.Review
+                else if (isSeries) return ArticleType.Article
+                else if (isObituary) return ArticleType.Obituary
                 else return ArticleType.Article
 
             case 'sport':
@@ -56,11 +57,11 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isImmersive) return ArticleType.Immersive
                 else if (isInterview) return ArticleType.Immersive
                 else if (isMatchResult) return ArticleType.MatchResult
-                else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
                 else if (isSeries) return ArticleType.Article
+                else if (isObituary) return ArticleType.Obituary
                 else if (isFeature) return ArticleType.Feature
                 else return ArticleType.Article
 
@@ -82,12 +83,12 @@ const articleTypePicker = (article: IContent): ArticleType => {
                 else if (isReview) return ArticleType.Review
                 else if (isRecipe) return ArticleType.Recipe
                 else if (isInterview) return ArticleType.Immersive
-                else if (isObituary) return ArticleType.Obituary
                 else if (isAnalysis) return ArticleType.Analysis
                 else if (isGallery) return ArticleType.Gallery
                 else if (isLetter) return ArticleType.Letter
                 else if (isComment) return ArticleType.Opinion
                 else if (isSeries) return ArticleType.Article
+                else if (isObituary) return ArticleType.Obituary
                 else if (isFeature) return ArticleType.Feature
                 else return ArticleType.Article
 
