@@ -27,12 +27,15 @@ const styles: string = css`
         font-family: 'GuardianTextEgyptian-Reg';
         padding: ${metrics.vertical}px ${metrics.horizontal}px;
     }
-    .app p {
+    .app p, .app h2 {
         margin-bottom: ${metrics.vertical * 2}px;
     }
     .app a {
         color: ${color.primary};
         text-decoration-color: ${color.line};
+    }
+    .app ul {
+        margin-left: ${metrics.horizontal}px;
     }
 `
 
