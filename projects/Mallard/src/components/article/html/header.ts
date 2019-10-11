@@ -436,7 +436,9 @@ const ImageAsBg = ({
             >
                 
             </button>
-            <div class="image-as-bg-info">${image.credit}</div>
+            <div class="image-as-bg-info">
+                ${image.caption} ${!image.displayCredit ? '' : image.credit}
+            </div>
             ${children}
         </div>
     `

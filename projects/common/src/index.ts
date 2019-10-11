@@ -428,6 +428,8 @@ export interface TrailImage extends Image {
 
 export interface CreditedImage extends Image {
     credit?: string
+    caption?: string
+    displayCredit?: boolean
 }
 export interface Palette {
     //the palette from node-vibrant

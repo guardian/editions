@@ -23,7 +23,7 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
-                <Heading>{`Guardian Digital pack/Digital + Print`}</Heading>
+                <Heading>{`Guardian digital subscription/Digital + Print`}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
                     data={
