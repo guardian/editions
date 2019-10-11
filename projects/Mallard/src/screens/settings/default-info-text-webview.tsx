@@ -1,14 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { PixelRatio, View } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { ScrollContainer } from 'src/components/layout/ui/container'
-import { maxScreenSize } from 'src/helpers/screen'
-import {
-    css,
-    generateAssetsFontCss,
-    makeHtml,
-    parsePing,
-} from 'src/helpers/webview'
+import { css, generateAssetsFontCss, makeHtml } from 'src/helpers/webview'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -28,7 +21,7 @@ const styles: string = css`
         padding: ${metrics.vertical}px ${metrics.horizontal}px;
     }
     .app p, .app h2 {
-        margin-bottom: ${metrics.vertical * 2}px;
+        margin: ${metrics.vertical * 2}px 0;
     }
     .app a {
         color: ${color.primary};
@@ -40,25 +33,13 @@ const styles: string = css`
 `
 
 const DefaultInfoTextWebview = ({ html }: { html: string }) => {
-    const [height, setHeight] = useState<number>(maxScreenSize())
-
     return (
         <WithAppAppearance value={'settings'}>
-            <ScrollContainer>
-                <View style={{ flex: 1 }}>
-                    <WebView
-                        originWhitelist={['*']}
-                        source={{ html: makeHtml({ styles, body: html }) }}
-                        style={{ flex: 1, height }}
-                        onMessage={event => {
-                            const { scrollHeight } = parsePing(
-                                event.nativeEvent.data,
-                            )
-                            setHeight(scrollHeight)
-                        }}
-                    />
-                </View>
-            </ScrollContainer>
+            <WebView
+                originWhitelist={['*']}
+                source={{ html: makeHtml({ styles, body: html }) }}
+                style={{ flex: 1 }}
+            />
         </WithAppAppearance>
     )
 }
