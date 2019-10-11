@@ -1,7 +1,10 @@
 import moment, { MomentInput } from 'moment'
 import { Platform, PushNotificationIOS } from 'react-native'
 import PushNotification from 'react-native-push-notification'
-import { fetchFromNotificationService } from 'src/helpers/fetch'
+import {
+    fetchFromNotificationService,
+    notificationTracking,
+} from 'src/helpers/fetch'
 import {
     clearOldIssues,
     downloadAndUnzipIssue,
@@ -71,6 +74,11 @@ const pushNotifcationRegistration = () => {
         onNotification: async (notification: any) => {
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key
+            const notificationId =
+                Platform.OS === 'ios'
+                    ? notification.data.uniqueIdentifier
+                    : notification.uniqueIdentifier
+
             if (key) {
                 try {
                     const screenSize = await imageForScreenSize()
@@ -85,6 +93,7 @@ const pushNotifcationRegistration = () => {
                     if (!pushImageSummary) return null
 
                     downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    notificationTracking(notificationId)
                 } catch (e) {
                     console.log(
                         `Push notification unable to download: ${e.message}`,

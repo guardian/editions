@@ -11,7 +11,11 @@ import {
 } from './fetch/cached-or-promise'
 import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
 import { Issue } from 'src/common'
-import { defaultSettings } from './settings/defaults'
+import {
+    defaultSettings,
+    notificationTrackingUrl,
+    notificationEdition,
+} from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { Forecast, AccuWeatherLocation, WeatherForecast } from '../common'
 
@@ -318,7 +322,10 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
     const { token } = deviceToken
     const options = {
         deviceToken: token,
-        platform: Platform.OS === 'ios' ? 'ios-edition' : 'android-edition',
+        platform:
+            Platform.OS === 'ios'
+                ? notificationEdition.ios
+                : notificationEdition.android,
         topics: [
             {
                 name: 'uk',
@@ -339,6 +346,11 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
     )
 }
 
+const notificationTracking = (notificationId: string) => {
+    const url = notificationTrackingUrl(notificationId)
+    return fetch(url)
+}
+
 export {
     fetchFromIssue,
     fetchFromApi,
@@ -347,4 +359,5 @@ export {
     fetchAndStoreIpAddress,
     fetchCacheClear,
     fetchDeprecationWarning,
+    notificationTracking,
 }
