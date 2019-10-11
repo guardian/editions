@@ -160,7 +160,6 @@ const IssueFronts = ({
             maxToRenderPerBatch={2}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
-            decelerationRate="fast"
             ListFooterComponent={() => (
                 <>
                     <View style={[styles.illustrationPosition]}>
