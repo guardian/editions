@@ -128,14 +128,14 @@ export const headerStyles = ({
 
     .header-kicker {
         font-family: ${families.titlepiece.regular};
-        font-size: 0.9em;
+        font-size: 1em;
         color: ${colors.main};
-        padding: 0.25rem 0 1rem;
+        padding: 0.25rem 0 0.8rem;
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
     .header h1 {
-        ${getScaledFontCss('headline', 1.6)}
+        ${getScaledFontCss('headline', 1.75)}
         font-family: ${families.headline.regular};
         font-weight: 400;
         margin: 0.1em 1em 0.75em 0;
@@ -191,6 +191,7 @@ export const headerStyles = ({
     }
 
     .header-top p {
+        font-family: ${families.headline.regular};
         font-size: 1.05em;
     }
 
@@ -256,8 +257,8 @@ export const headerStyles = ({
         background-color: ${colors.main};
         color: ${color.textOverDarkBackground};
         border:none;
-        width: 2em;
-        height: 2em;
+        width: ${metrics.fronts.sliderRadius * 2}px;
+        height: ${metrics.fronts.sliderRadius * 2}px;
         display: block;
         line-height: .9;
         text-align: center;
@@ -277,7 +278,10 @@ export const headerStyles = ({
         ${getScaledFontCss('headline', 1.5)}
         font-family: ${families.headline.bold};
     }
-    .header-container[data-type='review'] .header-byline {
+    .header-container[data-type='review'] .header-kicker {
+        color: ${colors.dark};
+    }
+    .header-container[data-type='review'] .header-byline a {
         color: ${colors.dark};
     }
     .header-container[data-type='review'] p {
@@ -349,7 +353,7 @@ export const headerStyles = ({
         font-family: ${families.titlepiece.regular};
         color: ${colors.dark};
     }
-    .header-container[data-type='immersive'] .header-byline {
+    .header-container[data-type='immersive'] .header-byline a {
         color: ${colors.dark};
     }
 
@@ -396,7 +400,9 @@ export const headerStyles = ({
     .header-container[data-type='${ArticleType.Obituary}'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
     }
-    .header-container[data-type='${ArticleType.Obituary}'] .header-byline {
+    .header-container[data-type='${ArticleType.Obituary}'] .header-byline,
+    ${'' /* this is needed to be more specific than an above style */}
+    .header-container[data-type='${ArticleType.Obituary}'] .header-byline a {
         color: ${color.textOverDarkBackground};
     }
 `

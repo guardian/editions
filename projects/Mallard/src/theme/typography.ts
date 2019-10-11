@@ -196,12 +196,12 @@ const scale = {
         },
         1.75: {
             [Breakpoints.smallPhone]: {
-                fontSize: 34,
-                lineHeight: 38,
+                fontSize: 28,
+                lineHeight: 30,
             },
             [Breakpoints.phone]: {
-                fontSize: 34,
-                lineHeight: 38,
+                fontSize: 32,
+                lineHeight: 34,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 40,
