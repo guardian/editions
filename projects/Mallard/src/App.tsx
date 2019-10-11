@@ -131,7 +131,7 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
-        SplashScreen.hide()
+        setTimeout(() => SplashScreen.hide(), 1000)
     }
 
     async componentDidCatch(e: Error) {
