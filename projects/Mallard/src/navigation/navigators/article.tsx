@@ -196,7 +196,6 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             <Dismissable
                                 navigator={Navigator}
                                 navigation={navigation}
-                                getPosition={getPosition}
                             />
                         </Animated.View>
                     </Animated.View>
