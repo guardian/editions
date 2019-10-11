@@ -22,7 +22,7 @@ export const useDismissArticle = () => {
             duration: 0,
             useNativeDriver: true,
         }).start()
-    }, [pos]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [pos, scrollY])
 
     const panResponder = useMemo(
         () =>
