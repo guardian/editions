@@ -52,7 +52,7 @@ const AuthSwitcherScreen = ({
     const { open } = useModal()
 
     const handleAuthClick = async (
-        paramsPromise: Promise<AuthParams>,
+        runGetIdentityAuthParams: () => Promise<AuthParams>,
         {
             requiresFunctionalConsent,
             signInName,
@@ -65,7 +65,9 @@ const AuthSwitcherScreen = ({
                 allow: async () => {
                     setIsLoading(true)
                     try {
-                        const attempt = await authIdentity(await paramsPromise)
+                        const attempt = await authIdentity(
+                            await runGetIdentityAuthParams(),
+                        )
                         if (isValid(attempt)) {
                             setIsLoading(false)
                             if (!canViewEdition(attempt.data)) {
@@ -132,25 +134,29 @@ const AuthSwitcherScreen = ({
             }
             onFacebookPress={() =>
                 handleAuthClick(
-                    facebookAuthWithDeepRedirect(validatorString).then(
-                        token => ({
-                            'facebook-access-token': token,
-                        }),
-                    ),
+                    () =>
+                        facebookAuthWithDeepRedirect(validatorString).then(
+                            token => ({
+                                'facebook-access-token': token,
+                            }),
+                        ),
                     { requiresFunctionalConsent: true, signInName: 'Facebook' },
                 )
             }
             onGooglePress={() =>
                 handleAuthClick(
-                    googleAuthWithDeepRedirect(validatorString).then(token => ({
-                        'google-access-token': token,
-                    })),
+                    () =>
+                        googleAuthWithDeepRedirect(validatorString).then(
+                            token => ({
+                                'google-access-token': token,
+                            }),
+                        ),
                     { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
             }
             onSubmit={() =>
                 handleAuthClick(
-                    Promise.resolve({
+                    async () => ({
                         email: email.value,
                         password: password.value,
                     }),
