@@ -1,7 +1,6 @@
 import { pickClosestBreakpoint, Breakpoints } from './breakpoints'
 import { Dimensions } from 'react-native'
 import { BreakpointList } from 'src/theme/breakpoints'
-import { FontSizes } from 'src/theme/typography'
 
 export const families = {
     icon: {
@@ -196,12 +195,12 @@ const scale = {
         },
         1.75: {
             [Breakpoints.smallPhone]: {
-                fontSize: 34,
-                lineHeight: 38,
+                fontSize: 30,
+                lineHeight: 32,
             },
             [Breakpoints.phone]: {
-                fontSize: 34,
-                lineHeight: 38,
+                fontSize: 32,
+                lineHeight: 34,
             },
             [Breakpoints.tabletVertical]: {
                 fontSize: 40,
