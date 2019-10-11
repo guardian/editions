@@ -54,6 +54,8 @@ const sharedGiven = {
 
 const mainImgExpected = {
     credit: undefined,
+    caption: undefined,
+    displayCredit: undefined,
     path: 'master/asset.com',
     source: 'test',
 }
