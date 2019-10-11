@@ -195,8 +195,8 @@ const scale = {
         },
         1.75: {
             [Breakpoints.smallPhone]: {
-                fontSize: 28,
-                lineHeight: 30,
+                fontSize: 30,
+                lineHeight: 32,
             },
             [Breakpoints.phone]: {
                 fontSize: 32,
