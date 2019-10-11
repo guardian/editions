@@ -3,6 +3,7 @@
 package ophan
 
 import com.gu.ophan.Logger
+import ophan.thrift.device.DeviceClass
 import kotlin.native.concurrent.freeze
 
 fun getThreadSafeOphanApi(
@@ -11,8 +12,9 @@ fun getThreadSafeOphanApi(
         appOsVersion: String,
         deviceName: String,
         deviceManufacturer: String,
+        deviceClass: DeviceClass?,
         deviceId: String,
         userId: String?,
         logger: Logger,
         recordStorePath: String
-): OphanApi = OphanApi(appFamily, appVersion, appOsVersion, deviceName, deviceManufacturer, deviceId, userId, logger, recordStorePath).freeze()
+): OphanApi = OphanApi(appFamily, appVersion, appOsVersion, deviceName, deviceManufacturer, deviceClass, deviceId, userId, logger, recordStorePath).freeze()
