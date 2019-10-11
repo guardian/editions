@@ -9,10 +9,9 @@ import {
 } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
-import { Issue } from 'src/common'
+import { Issue, PageLayoutSizes } from 'src/common'
 import { Button } from 'src/components/button/button'
 import { Front } from 'src/components/front'
-import { PageLayoutSizes } from 'src/components/front/helpers/helpers'
 import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { Header } from 'src/components/layout/header/header'
@@ -161,7 +160,6 @@ const IssueFronts = ({
             maxToRenderPerBatch={2}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
-            decelerationRate="fast"
             ListFooterComponent={() => (
                 <>
                     <View style={[styles.illustrationPosition]}>

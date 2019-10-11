@@ -26,14 +26,14 @@ export interface PublishedCollection {
 }
 export interface PublishedArticle {
     internalPageCode: number
-    furniture: PublishedFurtniture
+    furniture: PublishedFurniture
 }
 export interface PublishedImage {
     height: number
     width: number
     src: string
 }
-export interface PublishedFurtniture {
+export interface PublishedFurniture {
     kicker?: string
     headlineOverride?: string
     trailTextOverride?: string

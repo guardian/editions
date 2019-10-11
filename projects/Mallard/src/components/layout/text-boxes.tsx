@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Rectangle as RectangleType } from 'src/helpers/sizes'
+import { Rectangle as RectangleType } from 'src/common'
 import Svg, { Rect } from 'react-native-svg'
 import { color } from 'src/theme/color'
 

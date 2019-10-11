@@ -5,6 +5,7 @@ import {
     Crossword,
     CrosswordArticle,
     CrosswordType,
+    TrailImage,
 } from '../common'
 import { getImageFromURL } from '../image'
 
@@ -23,13 +24,27 @@ const getCrosswordName = (type: CrosswordType): string =>
 const getCrosswordKicker = (crossword: Crossword) => addCommas(crossword.number)
 
 //TODO: get images according to type
-const getCrosswordImage = (type: CrosswordType) => {
+
+const getCrosswordImageFromURL = (url: string): TrailImage | undefined => {
+    const image = getImageFromURL(url)
+    return (
+        image && {
+            ...image,
+            use: {
+                mobile: 'full-size',
+                tablet: 'full-size',
+            },
+        }
+    )
+}
+
+const getCrosswordImage = (type: CrosswordType): TrailImage | undefined => {
     if (type === 'cryptic') {
-        return getImageFromURL(
+        return getCrosswordImageFromURL(
             'https://media.guim.co.uk/70609fd8e274ee8b2cbb19f7537c9a4f3bd6328a/0_0_2048_2048/1000.jpg',
         )
     }
-    return getImageFromURL(
+    return getCrosswordImageFromURL(
         'https://media.guim.co.uk/ddcfc3a9c1963f8769d02c27db1cea6312057f81/0_0_2048_2048/1000.jpg',
     )
 }

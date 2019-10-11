@@ -2,10 +2,9 @@ import { FunctionComponent } from 'react'
 import { FlatList } from 'react-native'
 import { Animated } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { Front } from 'src/common'
+import { Front, PageLayoutSizes, Rectangle, Size } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useAppAppearance } from 'src/theme/appearance'
-import { Rectangle, Size } from 'src/helpers/sizes'
 import { PropTypes } from '../items/helpers/item-tappable'
 import { safeInterpolation } from 'src/helpers/math'
 
@@ -13,25 +12,6 @@ export type Item = FunctionComponent<PropTypes>
 
 export interface AnimatedFlatListRef {
     _component: FlatList<Front['collections'][0]>
-}
-
-export interface ItemSizes {
-    story: Rectangle
-    layout: PageLayoutSizes
-}
-
-export enum PageLayoutSizes {
-    mobile,
-    tablet,
-}
-export type PageLayout = {
-    [key in PageLayoutSizes]: {
-        size: key
-        items: {
-            item: Item
-            fits: Rectangle
-        }[]
-    }
 }
 
 export const getPageLayoutSizeXY = (size: PageLayoutSizes): Size => {

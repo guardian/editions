@@ -51,10 +51,18 @@ export const getScaledFontCss = <F extends FontFamily>(
     `
 }
 
-export const generateAssetsFontCss = (fontFamily: string, fontWeight = 400) => {
+export const generateAssetsFontCss = ({
+    fontFamily,
+    fontWeight = 400,
+    extension = 'ttf',
+}: {
+    fontFamily: string
+    fontWeight?: number
+    extension?: string
+}) => {
     const fileName = Platform.select({
-        ios: `file:///assets/fonts/${fontFamily}.ttf`,
-        android: `file:///android_asset/fonts/${fontFamily}.ttf`,
+        ios: `file:///assets/fonts/${fontFamily}.${extension}`,
+        android: `file:///android_asset/fonts/${fontFamily}.${extension}`,
     })
 
     return css`
@@ -104,7 +112,7 @@ export const makeHtml = ({
             />
         </head>
         <body>
-            <div id="app">
+            <div id="app" class="app">
                 ${body}
             </div>
             <script>
