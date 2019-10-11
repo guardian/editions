@@ -1,11 +1,17 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useContext } from 'react'
 import { PanResponder, Animated } from 'react-native'
 import { safeInterpolation } from 'src/helpers/math'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
+import { NavigationContext } from 'react-navigation'
 
-export const useDismissResponder = (onDismiss: () => void) => {
+export const useDismissArticle = () => {
+    const navigation = useContext(NavigationContext)
     const [scrollY] = useState(() => new Animated.Value(0))
     const pos = useNavigatorPosition()
+
+    const onDismiss = useCallback(() => {
+        navigation.goBack()
+    }, [navigation])
 
     const attachPos = useCallback(() => {
         Animated.timing(pos, {
@@ -54,5 +60,6 @@ export const useDismissResponder = (onDismiss: () => void) => {
     return {
         scrollY,
         panResponder,
+        onDismiss,
     }
 }

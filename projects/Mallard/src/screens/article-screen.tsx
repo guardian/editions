@@ -11,7 +11,6 @@ import {
     ArticleNavigationProps,
     getArticleNavigationProps,
 } from 'src/navigation/helpers/base'
-import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 import { routeNames } from 'src/navigation/routes'
 import { PathToArticle } from 'src/paths'
 import { sendPageViewEvent } from 'src/services/ophan'
@@ -54,13 +53,11 @@ const styles = StyleSheet.create({
 const ArticleScreenWithProps = ({
     path,
     articleNavigator,
-    onDismiss,
     navigation,
     prefersFullScreen,
-}: Required<ArticleNavigationProps> &
-    ArticleNavigatorInjectedProps & {
-        navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-    }) => {
+}: Required<ArticleNavigationProps> & {
+    navigation: NavigationScreenProp<{}, ArticleNavigationProps>
+}) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
     const firstUpdate = useRef(true)
     const viewRef = useRef<View>()
@@ -98,7 +95,6 @@ const ArticleScreenWithProps = ({
                     <ArticleSlider
                         path={path}
                         articleNavigator={articleNavigator}
-                        onDismiss={onDismiss}
                     />
                 )}
             </View>
@@ -108,10 +104,9 @@ const ArticleScreenWithProps = ({
 
 export const ArticleScreen = ({
     navigation,
-    onDismiss,
 }: {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-} & ArticleNavigatorInjectedProps) =>
+}) =>
     getArticleNavigationProps(navigation, {
         error: () => (
             <FlexErrorMessage
@@ -123,12 +118,7 @@ export const ArticleScreen = ({
             if (props.path && props.path.article) {
                 sendPageViewEvent({ path: props.path.article })
             }
-            return (
-                <ArticleScreenWithProps
-                    {...{ navigation, onDismiss }}
-                    {...props}
-                />
-            )
+            return <ArticleScreenWithProps {...{ navigation }} {...props} />
         },
     })
 

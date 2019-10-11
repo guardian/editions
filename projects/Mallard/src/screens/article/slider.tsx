@@ -11,13 +11,12 @@ import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
-import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 import { PathToArticle } from 'src/paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
-import { useDismissResponder } from 'src/hooks/use-dismiss-responder'
+import { useDismissArticle } from 'src/hooks/use-dismiss-article'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -123,9 +122,7 @@ const SliderBar = ({
 const ArticleSlider = ({
     path,
     articleNavigator,
-    onDismiss,
-}: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>> &
-    ArticleNavigatorInjectedProps) => {
+}: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>>) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
 
     const [articleIsAtTop, setArticleIsAtTop] = useState(true)
@@ -148,7 +145,7 @@ const ArticleSlider = ({
         setArticleIsAtTop(isAtTop)
     }, [])
 
-    const { panResponder } = useDismissResponder(onDismiss)
+    const { panResponder } = useDismissArticle()
 
     const data = isInScroller
         ? articleNavigator.articles

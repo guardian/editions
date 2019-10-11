@@ -18,20 +18,10 @@ const styles = StyleSheet.create({
     },
 })
 
-export const SlideCard = ({
-    children,
-    onDismiss,
-}: {
-    children: ReactNode
-    onDismiss: () => void
-}) => (
+export const SlideCard = ({ children }: { children: ReactNode }) => (
     <Animated.View style={[styles.container]}>
         <View style={[{ flex: 1 }]}>
-            <Header
-                {...{
-                    onDismiss,
-                }}
-            />
+            <Header />
             {children}
         </View>
     </Animated.View>

@@ -4,8 +4,7 @@ import { Chevron } from '../../chevron'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { safeInterpolation } from 'src/helpers/math'
-import { useDismissResponder } from 'src/hooks/use-dismiss-responder'
-import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
+import { useDismissArticle } from 'src/hooks/use-dismiss-article'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -28,8 +27,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = ({ onDismiss }: ArticleNavigatorInjectedProps) => {
-    const { panResponder, scrollY } = useDismissResponder(onDismiss)
+const Header = () => {
+    const { panResponder, scrollY, onDismiss } = useDismissArticle()
     return (
         <Animated.View
             {...panResponder.panHandlers}

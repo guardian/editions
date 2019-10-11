@@ -25,11 +25,6 @@ import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
 import { safeInterpolation, safeValue } from 'src/helpers/math'
 
-type DismissStateChangedFn = (dismissable: boolean) => void
-export interface ArticleNavigatorInjectedProps {
-    onDismiss: () => void
-}
-
 const Dismissable = ({
     navigator,
     navigation,
@@ -37,14 +32,12 @@ const Dismissable = ({
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
     const Navigator = (navigator as unknown) as FunctionComponent<
-        ArticleNavigatorInjectedProps & NavigationInjectedProps
+        NavigationInjectedProps
     >
 
-    const onDismiss = () => navigation.goBack()
-
     return (
-        <SlideCard onDismiss={onDismiss}>
-            <Navigator navigation={navigation} onDismiss={onDismiss} />
+        <SlideCard>
+            <Navigator navigation={navigation} />
         </SlideCard>
     )
 }
@@ -56,7 +49,7 @@ const BasicCardWrapper = ({
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
     const Navigator = (navigator as unknown) as FunctionComponent<
-        ArticleNavigatorInjectedProps & NavigationInjectedProps
+        NavigationInjectedProps
     >
     return (
         <>
@@ -74,10 +67,7 @@ const BasicCardWrapper = ({
             >
                 {null}
             </Header>
-            <Navigator
-                navigation={navigation}
-                onDismiss={() => navigation.goBack()}
-            />
+            <Navigator navigation={navigation} />
         </>
     )
 }
