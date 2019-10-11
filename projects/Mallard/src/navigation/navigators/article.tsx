@@ -27,33 +27,24 @@ import { safeInterpolation, safeValue } from 'src/helpers/math'
 
 type DismissStateChangedFn = (dismissable: boolean) => void
 export interface ArticleNavigatorInjectedProps {
-    onDismissStateChanged?: DismissStateChangedFn
+    onDismiss: () => void
 }
 
 const Dismissable = ({
     navigator,
     navigation,
-    getPosition,
 }: {
     navigator: NavigationContainer
-    getPosition: () => Animated.Value
 } & NavigationInjectedProps) => {
     const Navigator = (navigator as unknown) as FunctionComponent<
         ArticleNavigatorInjectedProps & NavigationInjectedProps
     >
-    const [dismissable, setDismissable] = useState(true)
+
+    const onDismiss = () => navigation.goBack()
+
     return (
-        <SlideCard
-            enabled={dismissable}
-            onDismiss={() => {
-                navigation.goBack()
-            }}
-            getPosition={getPosition}
-        >
-            <Navigator
-                onDismissStateChanged={setDismissable}
-                navigation={navigation}
-            />
+        <SlideCard onDismiss={onDismiss}>
+            <Navigator navigation={navigation} onDismiss={onDismiss} />
         </SlideCard>
     )
 }
@@ -83,7 +74,10 @@ const BasicCardWrapper = ({
             >
                 {null}
             </Header>
-            <Navigator navigation={navigation} />
+            <Navigator
+                navigation={navigation}
+                onDismiss={() => navigation.goBack()}
+            />
         </>
     )
 }

@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import {
-    Animated,
-    Platform,
-    StyleProp,
-    StyleSheet,
-    View,
-    ViewStyle,
-} from 'react-native'
+import { Animated, Platform, StyleSheet, View, ViewProps } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { Appearance, CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
@@ -24,6 +17,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
+import { useDismissResponder } from 'src/hooks/use-dismiss-responder'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -83,13 +77,13 @@ const SliderBar = ({
     total,
     title,
     color,
-    style,
+    wrapperProps,
 }: {
     position: number
     total: number
     title: string
     color: string
-    style: StyleProp<ViewStyle>
+    wrapperProps: ViewProps
 }) => {
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
@@ -102,7 +96,7 @@ const SliderBar = ({
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
     return (
-        <View style={[styles.slider, style]}>
+        <View {...wrapperProps} style={[styles.slider, wrapperProps.style]}>
             <MaxWidthWrap>
                 <View
                     style={[
@@ -129,7 +123,7 @@ const SliderBar = ({
 const ArticleSlider = ({
     path,
     articleNavigator,
-    onDismissStateChanged,
+    onDismiss,
 }: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>> &
     ArticleNavigatorInjectedProps) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
@@ -150,13 +144,11 @@ const ArticleSlider = ({
             })
     }, [width]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const onTopPositionChange = useCallback(
-        (isAtTop: boolean) => {
-            setArticleIsAtTop(isAtTop)
-            onDismissStateChanged && onDismissStateChanged(isAtTop)
-        },
-        [onDismissStateChanged],
-    )
+    const onTopPositionChange = useCallback((isAtTop: boolean) => {
+        setArticleIsAtTop(isAtTop)
+    }, [])
+
+    const { panResponder } = useDismissResponder(onDismiss)
 
     const data = isInScroller
         ? articleNavigator.articles
@@ -170,7 +162,9 @@ const ArticleSlider = ({
                     position={current}
                     title={articleNavigator.frontName}
                     color={getColor(articleNavigator.appearance)}
-                    style={!articleIsAtTop && styles.sliderBorder}
+                    wrapperProps={{
+                        style: !articleIsAtTop && styles.sliderBorder,
+                    }}
                 />
                 <ViewPagerAndroid
                     style={styles.androidPager}
@@ -201,7 +195,10 @@ const ArticleSlider = ({
                 position={current}
                 title={articleNavigator.frontName}
                 color={getColor(articleNavigator.appearance)}
-                style={!articleIsAtTop && styles.sliderBorder}
+                wrapperProps={{
+                    ...panResponder.panHandlers,
+                    style: !articleIsAtTop && styles.sliderBorder,
+                }}
             />
 
             <Animated.FlatList
@@ -212,7 +209,6 @@ const ArticleSlider = ({
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
                 onScroll={(ev: any) => {
-                    onDismissStateChanged && onDismissStateChanged(true)
                     setCurrent(
                         Math.floor(ev.nativeEvent.contentOffset.x / width),
                     )

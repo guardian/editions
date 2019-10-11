@@ -1,15 +1,11 @@
-import React, { useMemo } from 'react'
-import {
-    Animated,
-    StyleSheet,
-    View,
-    TouchableWithoutFeedback,
-    PanResponder,
-} from 'react-native'
+import React from 'react'
+import { Animated, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { Chevron } from '../../chevron'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { safeInterpolation } from 'src/helpers/math'
+import { useDismissResponder } from 'src/hooks/use-dismiss-responder'
+import { ArticleNavigatorInjectedProps } from 'src/navigation/navigators/article'
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -32,40 +28,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const Header = ({
-    scrollY,
-    onDismiss,
-}: {
-    scrollY: Animated.Value
-    onDismiss: () => void
-}) => {
-    const panResponder = useMemo(
-        () =>
-            PanResponder.create({
-                onMoveShouldSetPanResponder: (ev, gestureState) =>
-                    gestureState.dy !== 0, // ignore taps
-                onStartShouldSetPanResponder: () => true,
-                onPanResponderMove: Animated.event([
-                    null,
-                    {
-                        dy: scrollY,
-                    },
-                ]),
-                onPanResponderEnd: (ev, gestureState) => {
-                    if (gestureState.dy > 50) {
-                        onDismiss()
-                        scrollY.stopAnimation()
-                        return
-                    }
-                    Animated.timing(scrollY, {
-                        useNativeDriver: true,
-                        toValue: 0,
-                        duration: 200,
-                    }).start()
-                },
-            }),
-        [onDismiss, scrollY],
-    )
+const Header = ({ onDismiss }: ArticleNavigatorInjectedProps) => {
+    const { panResponder, scrollY } = useDismissResponder(onDismiss)
     return (
         <Animated.View
             {...panResponder.panHandlers}

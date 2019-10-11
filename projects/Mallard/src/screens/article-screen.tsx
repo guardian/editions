@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 const ArticleScreenWithProps = ({
     path,
     articleNavigator,
-    onDismissStateChanged,
+    onDismiss,
     navigation,
     prefersFullScreen,
 }: Required<ArticleNavigationProps> &
@@ -98,7 +98,7 @@ const ArticleScreenWithProps = ({
                     <ArticleSlider
                         path={path}
                         articleNavigator={articleNavigator}
-                        onDismissStateChanged={onDismissStateChanged}
+                        onDismiss={onDismiss}
                     />
                 )}
             </View>
@@ -108,7 +108,7 @@ const ArticleScreenWithProps = ({
 
 export const ArticleScreen = ({
     navigation,
-    onDismissStateChanged,
+    onDismiss,
 }: {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
 } & ArticleNavigatorInjectedProps) =>
@@ -125,7 +125,7 @@ export const ArticleScreen = ({
             }
             return (
                 <ArticleScreenWithProps
-                    {...{ navigation, onDismissStateChanged }}
+                    {...{ navigation, onDismiss }}
                     {...props}
                 />
             )
