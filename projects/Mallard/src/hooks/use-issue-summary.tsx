@@ -11,6 +11,7 @@ import React, {
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
+import { AppState } from 'react-native'
 
 interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
@@ -44,21 +45,31 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     const [error, setError] = useState<string>('')
     const hasConnected = useRef(false)
 
+    const grabIssueSummary = (isConnected: boolean) => {
+        getIssueSummary(isConnected)
+            .then((issueSummary: IssueSummary[]) => {
+                setIssueSummary(issueSummary)
+                setIssueId(issueSummaryToLatestPath(issueSummary))
+                setError('')
+            })
+            .catch(e => {
+                setError(e.message)
+            })
+    }
+
     useEffect(() => {
         NetInfo.addEventListener(({ isConnected }) => {
             if (!hasConnected.current) {
                 hasConnected.current = isConnected
 
-                getIssueSummary(isConnected)
-                    .then((issueSummary: IssueSummary[]) => {
-                        setIssueSummary(issueSummary)
-                        setIssueId(issueSummaryToLatestPath(issueSummary))
-                        setError('')
-                    })
-                    .catch(e => {
-                        setError(e.message)
-                    })
+                grabIssueSummary(isConnected)
             }
+
+            AppState.addEventListener('change', appState => {
+                if (appState === 'active') {
+                    grabIssueSummary(isConnected)
+                }
+            })
         })
     }, [])
 
