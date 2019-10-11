@@ -48,5 +48,12 @@ export const getCreditedImage: (
         return
     }
     const image = getImageFromURL(asset.file)
-    return image && { ...image, credit: oc(element).imageTypeData.credit() }
+    return (
+        image && {
+            ...image,
+            credit: oc(element).imageTypeData.credit(),
+            caption: oc(element).imageTypeData.caption(),
+            displayCredit: oc(element).imageTypeData.displayCredit(),
+        }
+    )
 }
