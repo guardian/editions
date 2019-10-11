@@ -42,7 +42,8 @@ const Header = ({
     const panResponder = useMemo(
         () =>
             PanResponder.create({
-                onMoveShouldSetPanResponder: () => true,
+                onMoveShouldSetPanResponder: (ev, gestureState) =>
+                    gestureState.dy !== 0, // ignore taps
                 onStartShouldSetPanResponder: () => true,
                 onPanResponderMove: Animated.event([
                     null,
