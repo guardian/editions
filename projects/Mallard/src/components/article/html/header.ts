@@ -193,6 +193,7 @@ export const headerStyles = ({
     .header-top p {
         font-family: ${families.headline.regular};
         font-size: 1.05em;
+        letter-spacing: 0.5px;
     }
 
     .header-container:after {
