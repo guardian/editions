@@ -25,35 +25,19 @@ import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
 import { safeInterpolation, safeValue } from 'src/helpers/math'
 
-type DismissStateChangedFn = (dismissable: boolean) => void
-export interface ArticleNavigatorInjectedProps {
-    onDismissStateChanged?: DismissStateChangedFn
-}
-
 const Dismissable = ({
     navigator,
     navigation,
-    getPosition,
 }: {
     navigator: NavigationContainer
-    getPosition: () => Animated.Value
 } & NavigationInjectedProps) => {
     const Navigator = (navigator as unknown) as FunctionComponent<
-        ArticleNavigatorInjectedProps & NavigationInjectedProps
+        NavigationInjectedProps
     >
-    const [dismissable, setDismissable] = useState(true)
+
     return (
-        <SlideCard
-            enabled={dismissable}
-            onDismiss={() => {
-                navigation.goBack()
-            }}
-            getPosition={getPosition}
-        >
-            <Navigator
-                onDismissStateChanged={setDismissable}
-                navigation={navigation}
-            />
+        <SlideCard>
+            <Navigator navigation={navigation} />
         </SlideCard>
     )
 }
@@ -65,7 +49,7 @@ const BasicCardWrapper = ({
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
     const Navigator = (navigator as unknown) as FunctionComponent<
-        ArticleNavigatorInjectedProps & NavigationInjectedProps
+        NavigationInjectedProps
     >
     return (
         <>
@@ -202,7 +186,6 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
                             <Dismissable
                                 navigator={Navigator}
                                 navigation={navigation}
-                                getPosition={getPosition}
                             />
                         </Animated.View>
                     </Animated.View>
