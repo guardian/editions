@@ -1,5 +1,5 @@
 import moment, { MomentInput } from 'moment'
-import { Platform, PushNotificationIOS } from 'react-native'
+import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 import {
     fetchFromNotificationService,
@@ -13,6 +13,9 @@ import {
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushNotificationRegistrationCache } from './storage'
+
+// Missing type definition means we need to use require
+const PushNotificationIOS = require('@react-native-community/push-notification-ios')
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -76,7 +79,7 @@ const pushNotifcationRegistration = () => {
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             const notificationId =
                 Platform.OS === 'ios'
-                    ? notification.data.uniqueIdentifier
+                    ? notification.data.notificationId
                     : notification.uniqueIdentifier
 
             if (key) {
@@ -103,6 +106,9 @@ const pushNotifcationRegistration = () => {
                 // No matter what happens, always clear up old issues
                 clearOldIssues()
             }
+
+            // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
+            notification.finish(PushNotificationIOS.FetchResult.NoData)
         },
         senderID: '43377569438',
         permissions: {
