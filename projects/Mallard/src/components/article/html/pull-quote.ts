@@ -1,4 +1,4 @@
-import { css, html, px, getScaledFontCss } from 'src/helpers/webview'
+import { css, html, px } from 'src/helpers/webview'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { WrapLayout } from '../wrap/wrap'
 import { families } from 'src/theme/typography'
