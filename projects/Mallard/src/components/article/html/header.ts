@@ -1,6 +1,6 @@
 import { PillarColours } from '@guardian/pasteup/palette'
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
-import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
+import { css, html, px } from 'src/helpers/webview'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -64,16 +64,16 @@ export const headerStyles = ({
         background-image: repeating-linear-gradient(
             to bottom,
             ${color.dimLine},
-            ${color.dimLine} 0.0625rem,
-            transparent 0.0625rem,
-            transparent 0.25rem
+            ${color.dimLine} 1px,
+            transparent 1px,
+            transparent 4px
         );
         background-repeat: repeat-x;
         background-position: bottom;
-        background-size: 0.0625rem 0.8125rem;
+        background-size: 1px 16px;
         content: '';
         display: block;
-        height: 0.8125rem;
+        height: 16px;
         margin: 0;
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
@@ -128,19 +128,28 @@ export const headerStyles = ({
 
     .header-kicker {
         font-family: ${families.titlepiece.regular};
-        font-size: 1em;
+        font-size: 16px;
+        line-height: 1;
         color: ${colors.main};
-        padding: 0.25rem 0 0.8rem;
+        padding: 0.25em 0 0.8em;
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
     .header h1 {
-        ${getScaledFontCss('headline', 1.75)}
+        font-size: 28px;
         font-family: ${families.headline.regular};
         font-weight: 400;
+        line-height: 1.125em;
         margin: 0.1em 1em 0.75em 0;
         word-wrap: none;
     }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header h1 {
+            font-size: 40px;
+        }
+    }
+
     .header h1 svg {
         height: .7em;
         transform: scale(1.1);
@@ -153,12 +162,18 @@ export const headerStyles = ({
         color: ${colors.main};
     }
 
+    .header-byline {
+        font-size: 16px;
+        line-height: 1.25em;
+        margin: 0;
+    }
+
     .header-byline-italic {
         font-style: italic;
     }
 
     .header-byline:not(:empty) {
-        padding: 0.25rem 0 2rem;
+        padding: 0.25em 0 1.5em;
         position: relative;
     }
 
@@ -192,8 +207,16 @@ export const headerStyles = ({
 
     .header-top p {
         font-family: ${families.headline.regular};
-        font-size: 1.05em;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.2px;
+        line-height: 1.1875em;
+        margin-bottom: 0.875em;
+        font-size: 16px;
+    }
+
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-top p {
+            font-size: 18px;
+        }
     }
 
     .header-container:after {
