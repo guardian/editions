@@ -3,3 +3,6 @@ declare module '@react-native-community/push-notification-ios' {
 
     export default a
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Node {}

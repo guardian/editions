@@ -21,11 +21,9 @@ const createEmitter = () => {
 }
 
 const createSentry = () => ({
-    config: jest.fn(() => ({
-        install: jest.fn(() => Promise.resolve()),
-    })),
+    init: jest.fn(),
     captureException: jest.fn(() => {}),
-    setTagsContext: jest.fn(() => {}),
+    setTag: jest.fn(() => {}),
 })
 
 jest.mock('src/helpers/release-stream', () => ({
@@ -50,7 +48,7 @@ describe('errors', () => {
 
             errorService.captureException(new Error())
 
-            expect(sentry.config).not.toHaveBeenCalled()
+            expect(sentry.init).not.toHaveBeenCalled()
             expect(sentry.captureException).not.toHaveBeenCalled()
         })
 
@@ -70,7 +68,7 @@ describe('errors', () => {
 
             errorService.captureException(new Error())
 
-            expect(sentry.config).not.toHaveBeenCalled()
+            expect(sentry.init).not.toHaveBeenCalled()
             expect(sentry.captureException).not.toHaveBeenCalled()
         })
 
@@ -90,7 +88,7 @@ describe('errors', () => {
 
             await Promise.resolve()
 
-            expect(sentry.config).toHaveBeenCalledTimes(1)
+            expect(sentry.init).toHaveBeenCalledTimes(1)
         })
 
         it('should not install without consent', async () => {
@@ -109,7 +107,7 @@ describe('errors', () => {
 
             await Promise.resolve()
 
-            expect(sentry.config).not.toHaveBeenCalled()
+            expect(sentry.init).not.toHaveBeenCalled()
         })
 
         it('should install only after consent is set to true', async () => {
@@ -130,7 +128,7 @@ describe('errors', () => {
 
             settingsUpdateEmitter.emit('gdprAllowPerformance', true)
 
-            expect(sentry.config).toHaveBeenCalledTimes(1)
+            expect(sentry.init).toHaveBeenCalledTimes(1)
         })
 
         it('should only listen for the relevant key', async () => {
@@ -151,7 +149,7 @@ describe('errors', () => {
 
             settingsUpdateEmitter.emit('gdprAllowFunctionality', true)
 
-            expect(sentry.config).not.toHaveBeenCalled()
+            expect(sentry.init).not.toHaveBeenCalled()
 
             errorService.captureException(new Error())
 

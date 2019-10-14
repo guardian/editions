@@ -3,7 +3,7 @@ import {
     getSetting,
     GdprSwitchSettings,
 } from 'src/helpers/settings'
-import Sentry from 'react-native-sentry'
+import * as Sentry from '@sentry/react-native'
 import Config from 'react-native-config'
 import { isInBeta } from 'src/helpers/release-stream'
 
@@ -12,14 +12,9 @@ const { SENTRY_DSN_URL } = Config
 const DEFAULT_SETTING_KEY = 'gdprAllowPerformance' as const
 
 interface SentryImpl {
-    config: (
-        dsn: string,
-        options?: object,
-    ) => {
-        install: () => Promise<void>
-    }
+    init(options: { dsn: string }): void
     captureException: (err: Error) => void
-    setTagsContext: (tags: object) => void
+    setTag: (name: string, value: any) => void
 }
 
 enum InitState {
@@ -68,11 +63,12 @@ class ErrorService {
     private handleConsentUpdate(hasConsent: boolean) {
         this.hasConsent = hasConsent
         if (this.hasConsent && !this.hasConfigured) {
-            this.sentryImpl.config(SENTRY_DSN_URL).install()
-            this.sentryImpl.setTagsContext({
-                environment: __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
-                react: true,
-            })
+            this.sentryImpl.init({ dsn: SENTRY_DSN_URL })
+            this.sentryImpl.setTag(
+                'environment',
+                __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
+            )
+            this.sentryImpl.setTag('react', true)
             this.hasConfigured = true
         }
     }
