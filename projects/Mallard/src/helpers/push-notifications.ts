@@ -103,9 +103,6 @@ const pushNotifcationRegistration = () => {
                 // No matter what happens, always clear up old issues
                 clearOldIssues()
             }
-
-            // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-            notification.finish(PushNotificationIOS.FetchResult.NoData)
         },
         senderID: '43377569438',
         permissions: {
