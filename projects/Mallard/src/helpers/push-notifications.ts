@@ -1,5 +1,5 @@
 import moment, { MomentInput } from 'moment'
-import { Platform, PushNotificationIOS } from 'react-native'
+import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 import {
     fetchFromNotificationService,
@@ -13,6 +13,7 @@ import {
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushNotificationRegistrationCache } from './storage'
+import PushNotificationIOS from '@react-native-community/push-notification-ios'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -92,8 +93,10 @@ const pushNotifcationRegistration = () => {
                     // Not there? Fahgettaboudit
                     if (!pushImageSummary) return null
 
-                    downloadAndUnzipIssue(pushImageSummary, screenSize)
                     notificationTracking(notificationId)
+                    await downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
+                    notification.finish(PushNotificationIOS.FetchResult.NoData)
                 } catch (e) {
                     console.log(
                         `Push notification unable to download: ${e.message}`,
@@ -103,9 +106,6 @@ const pushNotifcationRegistration = () => {
                 // No matter what happens, always clear up old issues
                 clearOldIssues()
             }
-
-            // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-            notification.finish(PushNotificationIOS.FetchResult.NoData)
         },
         senderID: '43377569438',
         permissions: {

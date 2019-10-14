@@ -34,6 +34,8 @@ target 'Mallard' do
 
     pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
+    pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
+
     post_install do |installer|
     installer.pods_project.targets.each do |target|
       if target.name == 'react-native-config'

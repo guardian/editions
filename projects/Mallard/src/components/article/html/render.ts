@@ -40,6 +40,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss({ fontFamily: families.headline.light })}
     ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
     ${generateAssetsFontCss({ fontFamily: families.headline.bold })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.medium })}
     ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
     ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
     html, body {
@@ -76,7 +77,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         }
     }
 
-    #app {
+    .app {
         padding: 0 ${px(metrics.article.sides)} ${px(metrics.vertical)};
         width: ${px(wrapLayout.width + metrics.article.sides * 2)};
         margin: auto;
@@ -88,7 +89,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     main, .wrapper {
         max-width: ${px(wrapLayout.content.width + metrics.sides.sides / 2)};
     }
-    #app p,
+    .app p,
     figure {
         margin-bottom: ${px(metrics.vertical * 2)};
     }
@@ -100,11 +101,11 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         margin: 0;
         padding: 0;
     }
-    #app p {
+    .app p {
       line-height: 1.4;
       margin-bottom: 15px;
     }
-    #app h2 {
+    .app h2 {
       font-size: ${px(getScaledFont('headline', 1).lineHeight)};
       line-height: ${px(getScaledFont('headline', 1).lineHeight * 1.1)};
       margin-bottom: ${px(metrics.vertical)};
