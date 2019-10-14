@@ -206,7 +206,7 @@ export const headerStyles = ({
     }
 
     .header-top p {
-        font-family: ${families.headline.regular};
+        font-family: ${families.headline.medium};
         letter-spacing: 0.2px;
         line-height: 1.1875em;
         margin-bottom: 0.875em;
