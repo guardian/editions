@@ -1,5 +1,5 @@
 import moment, { MomentInput } from 'moment'
-import { Platform, PushNotificationIOS } from 'react-native'
+import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 import {
     fetchFromNotificationService,
@@ -13,6 +13,7 @@ import {
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushNotificationRegistrationCache } from './storage'
+import PushNotificationIOS from '@react-native-community/push-notification-ios'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -76,7 +77,7 @@ const pushNotifcationRegistration = () => {
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             const notificationId =
                 Platform.OS === 'ios'
-                    ? notification.data.uniqueIdentifier
+                    ? notification.data.notificationId
                     : notification.uniqueIdentifier
 
             if (key) {
