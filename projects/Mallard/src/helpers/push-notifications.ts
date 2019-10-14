@@ -77,7 +77,7 @@ const pushNotifcationRegistration = () => {
                 Platform.OS === 'ios' ? notification.data.key : notification.key
             const notificationId =
                 Platform.OS === 'ios'
-                    ? notification.data.notificationId
+                    ? notification.data.uniqueIdentifier
                     : notification.uniqueIdentifier
 
             if (key) {
@@ -93,8 +93,10 @@ const pushNotifcationRegistration = () => {
                     // Not there? Fahgettaboudit
                     if (!pushImageSummary) return null
 
-                    downloadAndUnzipIssue(pushImageSummary, screenSize)
                     notificationTracking(notificationId)
+                    await downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
+                    notification.finish(PushNotificationIOS.FetchResult.NoData)
                 } catch (e) {
                     console.log(
                         `Push notification unable to download: ${e.message}`,
@@ -104,9 +106,6 @@ const pushNotifcationRegistration = () => {
                 // No matter what happens, always clear up old issues
                 clearOldIssues()
             }
-
-            // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-            notification.finish(PushNotificationIOS.FetchResult.NoData)
         },
         senderID: '43377569438',
         permissions: {
