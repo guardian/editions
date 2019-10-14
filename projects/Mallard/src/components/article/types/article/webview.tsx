@@ -1,5 +1,5 @@
 import { useNetInfo } from '@react-native-community/netinfo'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Animated } from 'react-native'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { BlockElement, ArticleType } from 'src/common'

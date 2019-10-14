@@ -7,11 +7,9 @@ import {
     SafeAreaView,
     ViewStyle,
     StyleProp,
-    Dimensions,
 } from 'react-native'
 import { UiBodyCopy, UiExplainerCopy } from 'src/components/styled-text'
 import { metrics } from 'src/theme/spacing'
-import { Breakpoints } from 'src/theme/breakpoints'
 
 const styles = StyleSheet.create({
     heading: {
@@ -155,8 +153,6 @@ const RowWrapper = ({
     children: ReactNode
 } & RowWrapperProps) => {
     const { cardBackgroundColor: backgroundColor } = useAppAppearance()
-    const { width } = Dimensions.get('window')
-    const isPhone = width >= Breakpoints.phone
 
     return onPress ? (
         <Highlight onPress={onPress}>

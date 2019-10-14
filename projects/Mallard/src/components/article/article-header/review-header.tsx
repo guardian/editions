@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { Stars } from 'src/components/stars/stars'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
@@ -11,10 +11,6 @@ import { ArticleStandfirst } from '../article-standfirst'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { ArticleHeaderProps } from './types'
 import { HeadlineTypeWrap } from './shared'
-
-const style = StyleSheet.create({
-    byline: { marginBottom: metrics.vertical },
-})
 
 const ReviewHeader = ({
     byline,

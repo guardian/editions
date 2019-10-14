@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
     Animated,
     Dimensions,
@@ -7,7 +7,7 @@ import {
     Image,
     Platform,
 } from 'react-native'
-import { clamp, safeInterpolation } from 'src/helpers/math'
+import { safeInterpolation } from 'src/helpers/math'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
 /*

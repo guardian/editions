@@ -168,7 +168,7 @@ export const useRenderedHTML = (
 ) => {
     const { imageSize } = useImageSize()
     const content = article
-        .map((el, i) => {
+        .map(el => {
             switch (el.id) {
                 case 'html':
                     if (el.hasDropCap) {

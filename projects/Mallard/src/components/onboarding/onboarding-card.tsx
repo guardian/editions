@@ -5,7 +5,6 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { minScreenSize } from 'src/helpers/screen'
-import { Button } from '../button/button'
 import { CloseModalButton } from '../button/close-modal-button'
 
 export enum CardAppearance {

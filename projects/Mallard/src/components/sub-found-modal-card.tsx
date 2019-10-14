@@ -1,6 +1,5 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
-import { ModalButton } from './modal-button'
 
 const SubFoundModalCard = ({ close }: { close: () => void }) => (
     <OnboardingCard

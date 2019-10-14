@@ -1,5 +1,3 @@
-import { WeatherForecast } from 'src/components/weather'
-
 const cacheStore: {
     api: { [path: string]: any }
     issue: { [path: string]: any }
