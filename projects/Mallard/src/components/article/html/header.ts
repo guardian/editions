@@ -1,6 +1,6 @@
 import { PillarColours } from '@guardian/pasteup/palette'
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
-import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
+import { css, html, px } from 'src/helpers/webview'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
