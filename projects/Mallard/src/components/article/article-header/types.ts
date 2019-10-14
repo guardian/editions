@@ -1,4 +1,4 @@
-import { Image, Article, ArticleType } from '../../../common'
+import { Image, Article } from '../../../common'
 import { CreditedImage } from '../../../../../common/src'
 
 export interface ArticleHeaderProps {

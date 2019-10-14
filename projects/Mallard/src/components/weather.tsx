@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-    Text,
-    StyleSheet,
-    View,
-    PixelRatio,
-    StyleProp,
-    ViewStyle,
-} from 'react-native'
+import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
 import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'

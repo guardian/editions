@@ -8,7 +8,6 @@ import {
     ViewStyle,
     TextStyle,
     Text,
-    PixelRatio,
 } from 'react-native'
 import { UiBodyCopy } from '../styled-text'
 import { color } from 'src/theme/color'

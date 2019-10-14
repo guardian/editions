@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import React, { useContext, useState } from 'react'
-import { Alert, StyleSheet, Text, Button } from 'react-native'
+import { Alert, StyleSheet, Text } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'

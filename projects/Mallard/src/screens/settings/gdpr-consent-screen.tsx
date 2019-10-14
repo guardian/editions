@@ -13,7 +13,6 @@ import {
 } from 'src/helpers/words'
 import {
     useGdprSwitches,
-    useSettings,
     useOtherSettingsValues,
     useSettingsValue,
 } from 'src/hooks/use-settings'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ImageSize } from '../../../common/src'
 import { imageForScreenSize } from 'src/helpers/screen'
 

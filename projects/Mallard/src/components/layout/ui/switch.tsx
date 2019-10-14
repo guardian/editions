@@ -1,8 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { color } from 'src/theme/color'
+import { View, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
-import { TouchableOpacity } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 
 export type ThreeWaySwitchValue = null | boolean

@@ -1,6 +1,4 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { HeadlineText } from 'src/components/styled-text'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'

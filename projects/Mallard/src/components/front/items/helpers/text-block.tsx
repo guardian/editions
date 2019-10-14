@@ -88,6 +88,7 @@ const TextBlock = ({
                         style={styles.opinionHeadline}
                         icon={{
                             width: 36,
+                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
                             element: scale => (
                                 <Quote
                                     scale={fontSize / 26}
