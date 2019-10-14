@@ -13,10 +13,7 @@ import {
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushNotificationRegistrationCache } from './storage'
-
-// Missing type definition means we need to use require
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const PushNotificationIOS = require('@react-native-community/push-notification-ios')
+import PushNotificationIOS from '@react-native-community/push-notification-ios'
 
 export interface PushNotificationRegistration {
     registrationDate: string
