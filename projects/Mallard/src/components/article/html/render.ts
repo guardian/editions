@@ -40,6 +40,7 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${generateAssetsFontCss({ fontFamily: families.headline.light })}
     ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
     ${generateAssetsFontCss({ fontFamily: families.headline.bold })}
+    ${generateAssetsFontCss({ fontFamily: families.headline.medium })}
     ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
     ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
     html, body {
