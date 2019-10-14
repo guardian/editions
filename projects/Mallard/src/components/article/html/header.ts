@@ -136,7 +136,7 @@ export const headerStyles = ({
         display: block;
     }
     .header h1 {
-        font-size: 28px;
+        font-size: 30px;
         font-family: ${families.headline.regular};
         font-weight: 400;
         line-height: 1.125em;
@@ -210,7 +210,7 @@ export const headerStyles = ({
         letter-spacing: 0.2px;
         line-height: 1.1875em;
         margin-bottom: 0.875em;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
