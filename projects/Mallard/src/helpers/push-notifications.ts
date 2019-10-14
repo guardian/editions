@@ -101,6 +101,7 @@ const pushNotifcationRegistration = () => {
                     console.log(
                         `Push notification unable to download: ${e.message}`,
                     )
+                    notification.finish(PushNotificationIOS.FetchResult.NoData)
                 }
 
                 // No matter what happens, always clear up old issues
