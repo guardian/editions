@@ -143,7 +143,6 @@ export const HomeScreen = ({
     navigation: NavigationScreenProp<{}>
 }) => {
     const { issueSummary, error, setIssueId } = useIssueSummary()
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
     return (
         <WithAppAppearance value={'tertiary'}>
             <HomeScreenHeader

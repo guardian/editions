@@ -1,5 +1,5 @@
 import React from 'react'
-import { PixelRatio, View } from 'react-native'
+import { PixelRatio } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { css, generateAssetsFontCss, makeHtml } from 'src/helpers/webview'
 import { WithAppAppearance } from 'src/theme/appearance'

@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-    StyleSheet,
-    View,
-    ScrollViewProperties,
-    NativeSyntheticEvent,
-    NativeScrollEvent,
-} from 'react-native'
-import { ScrollView } from 'react-navigation'
+import { StyleSheet, View } from 'react-native'
 import { ArticlePillar, ArticleType } from 'src/common'
 import { ArticleController } from 'src/components/article'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'

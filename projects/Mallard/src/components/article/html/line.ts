@@ -3,11 +3,9 @@ import { css, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { WrapLayout } from '../wrap/wrap'
-import { metrics } from 'src/theme/spacing'
 import { breakOut } from './helpers/layout'
 
 export const lineStyles = ({
-    colors,
     wrapLayout,
 }: {
     colors: PillarColours

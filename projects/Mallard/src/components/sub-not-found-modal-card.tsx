@@ -1,8 +1,7 @@
 import React from 'react'
-import { Platform, Linking } from 'react-native'
+import { Platform } from 'react-native'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { ModalButton } from './modal-button'
-import { ButtonAppearance } from './button/button'
 
 const SubNotFoundModalCard = ({
     close,

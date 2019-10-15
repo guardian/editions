@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Animated, Easing, StyleSheet } from 'react-native'
 import {
     createStackNavigator,

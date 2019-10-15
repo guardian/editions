@@ -37,5 +37,9 @@ module.exports = {
             files: ['*.js'],
             rules: { '@typescript-eslint/no-var-requires': 'off' },
         },
+        {
+            files: ['projects/Mallard/src/**/*'],
+            rules: { '@typescript-eslint/no-unused-vars': 'error' },
+        },
     ],
 }

@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { Animated, Dimensions, StyleSheet } from 'react-native'
 import MaskedView from '@react-native-community/masked-view'
 import { supportsAnimatedClipView } from 'src/helpers/features'

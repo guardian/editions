@@ -1,5 +1,6 @@
 const getMockPromise = <T>(val: T) => jest.fn(() => Promise.resolve(val))
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getMockCache = <T>(val: T) => (buildNumber: string) => ({
     get: () => val,
     set: () => void 0,

@@ -1,4 +1,4 @@
-import { Platform, StatusBar, PixelRatio } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
 import { toSize } from 'src/common'
 import { getFont } from './typography'
 

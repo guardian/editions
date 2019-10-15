@@ -3,12 +3,8 @@ import { StyleSheet, View } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { getFont } from 'src/theme/typography'
 import { MaxWidthWrap } from './max-width'
-import { MultilineWrap } from './multiline-wrap'
-import { Wrap } from './wrap'
 
 const fillStyles = StyleSheet.create({
     root: {

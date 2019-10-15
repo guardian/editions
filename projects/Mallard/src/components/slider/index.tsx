@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, View, PanResponder, StyleSheet } from 'react-native'
@@ -49,7 +49,6 @@ const Slider = ({
     onScrub?: (to: number) => void
     onReleaseScrub?: (to: number) => void
 }) => {
-    let scrubbing = useRef(false).current
     const [panResponder] = useState(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
@@ -57,7 +56,6 @@ const Slider = ({
             onPanResponderTerminationRequest: () => false,
             onShouldBlockNativeResponder: () => true,
             onPanResponderGrant: (ev, gestureState) => {
-                scrubbing = true
                 onScrub &&
                     onScrub(gestureState.x0 - metrics.fronts.sliderRadius)
             },
@@ -66,7 +64,6 @@ const Slider = ({
                     onScrub(gestureState.moveX - metrics.fronts.sliderRadius)
             },
             onPanResponderEnd: (ev, gestureState) => {
-                scrubbing = false
                 onReleaseScrub &&
                     onReleaseScrub(
                         gestureState.x0 +

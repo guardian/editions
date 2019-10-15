@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet } from 'react-native'
 import { NavigationTransitionProps } from 'react-navigation'
 import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { metrics } from 'src/theme/spacing'
-import { BreakpointList, Breakpoints } from 'src/theme/breakpoints'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { safeInterpolation } from 'src/helpers/math'
 
 const sidebarWidth = 360

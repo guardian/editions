@@ -6,13 +6,13 @@ import { WrapLayout } from '../wrap/wrap'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 
-export const ratingStyles = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const ratingStyles = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    config: {
+        colors: PillarColours
+        wrapLayout: WrapLayout
+    },
+) => css`
     .rating {
         font-family: ${families.icon.regular};
         background-color: ${color.palette.highlight.main};
