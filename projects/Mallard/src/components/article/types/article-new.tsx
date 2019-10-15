@@ -59,6 +59,7 @@ const Article = ({
                     }}
                     onMessage={event => {
                         const { isAtTop } = parsePing(event.nativeEvent.data)
+
                         if (ref.current) {
                             // webViewRef is missing from the type definition
                             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore

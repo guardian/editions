@@ -35,6 +35,8 @@ export interface ArticleNavigator {
     frontName: string
 }
 
+const sliderBarHeight = (metrics.fronts.sliderRadius + metrics.vertical) * 2
+
 const getData = (
     navigator: ArticleNavigator,
     currentArticle: PathToArticle,
@@ -56,6 +58,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: color.background,
+    },
+    sliderHider: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: color.background,
+        height: sliderBarHeight,
     },
     innerSlider: {
         width: '100%',
@@ -82,7 +92,7 @@ const SliderBar = ({
     total: number
     title: string
     color: string
-    wrapperProps: ViewProps
+    wrapperProps?: ViewProps
 }) => {
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
@@ -95,7 +105,10 @@ const SliderBar = ({
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
     return (
-        <View {...wrapperProps} style={[styles.slider, wrapperProps.style]}>
+        <View
+            {...wrapperProps}
+            style={[styles.slider, wrapperProps && wrapperProps.style]}
+        >
             <MaxWidthWrap>
                 <View
                     style={[
@@ -116,6 +129,39 @@ const SliderBar = ({
                 </View>
             </MaxWidthWrap>
         </View>
+    )
+}
+
+const SliderBarHider = ({ children, visible = true }) => {
+    const [translate] = useState(() => new Animated.Value(visible ? 0 : 1))
+    useEffect(() => {
+        Animated.timing(translate, {
+            useNativeDriver: true,
+            toValue: visible ? 0 : 1,
+            duration: 50,
+        }).start()
+    }, [visible])
+    return (
+        <Animated.View
+            style={[
+                styles.sliderHider,
+                {
+                    transform: [
+                        {
+                            translateY: translate.interpolate({
+                                inputRange: safeInterpolation([0, 1]),
+                                outputRange: safeInterpolation([
+                                    0,
+                                    sliderBarHeight * -1,
+                                ]),
+                            }),
+                        },
+                    ],
+                },
+            ]}
+        >
+            {children}
+        </Animated.View>
     )
 }
 
@@ -153,16 +199,7 @@ const ArticleSlider = ({
 
     if (Platform.OS === 'android')
         return (
-            <>
-                <SliderBar
-                    total={articleNavigator.articles.length}
-                    position={current}
-                    title={articleNavigator.frontName}
-                    color={getColor(articleNavigator.appearance)}
-                    wrapperProps={{
-                        style: !articleIsAtTop && styles.sliderBorder,
-                    }}
-                />
+            <View style={{ overflow: 'hidden', flex: 1 }}>
                 <ViewPagerAndroid
                     style={styles.androidPager}
                     initialPage={startingPoint}
@@ -182,7 +219,15 @@ const ArticleSlider = ({
                         </View>
                     ))}
                 </ViewPagerAndroid>
-            </>
+                <SliderBarHider visible={articleIsAtTop}>
+                    <SliderBar
+                        total={articleNavigator.articles.length}
+                        position={current}
+                        title={articleNavigator.frontName}
+                        color={getColor(articleNavigator.appearance)}
+                    />
+                </SliderBarHider>
+            </View>
         )
 
     return (
