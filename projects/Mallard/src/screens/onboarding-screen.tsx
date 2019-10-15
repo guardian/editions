@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, SafeAreaView, View, Image } from 'react-native'
+import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { useSettings } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'

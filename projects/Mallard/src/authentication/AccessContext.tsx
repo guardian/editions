@@ -27,11 +27,14 @@ const AccessContext = createContext({
     attempt: NotRun as AnyAttempt<string>,
     canAccess: false,
     authIdentity: (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         params: AuthParams,
     ): Promise<ResolvedAttempt<IdentityAuthData>> =>
         Promise.resolve(InvalidAttempt('offline')),
     authCAS: (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         subscriberId: string,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         password: string,
     ): Promise<ResolvedAttempt<CASExpiry>> =>
         Promise.resolve(InvalidAttempt('offline')),

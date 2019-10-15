@@ -23,6 +23,7 @@ export const families = {
     headline: {
         light: 'GHGuardianHeadline-Light',
         regular: 'GHGuardianHeadline-Regular',
+        medium: 'GHGuardianHeadline-Medium',
         bold: 'GHGuardianHeadline-Bold',
     },
 }

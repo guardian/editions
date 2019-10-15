@@ -16,7 +16,7 @@ const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
     )
 }
 
-const SmallItemLargeText = ({ article, size, ...tappableProps }: PropTypes) => {
+const SmallItemLargeText = ({ article, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock

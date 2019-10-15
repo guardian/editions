@@ -1,8 +1,8 @@
-import React, { useMemo, useState, ReactNode } from 'react'
+import React, { useState, ReactNode } from 'react'
 
 import { color } from 'src/theme/color'
 import { Animated, Text, StyleSheet, View } from 'react-native'
-import { clamp, safeInterpolation } from 'src/helpers/math'
+import { safeInterpolation } from 'src/helpers/math'
 import { ariaHidden } from 'src/helpers/a11y'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'

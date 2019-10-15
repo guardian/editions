@@ -2,13 +2,10 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
-import { metrics } from 'src/theme/spacing'
-import { getFont } from 'src/theme/typography'
 import { ArticleByline } from '../article-byline'
 import { ArticleHeadline } from '../article-headline'
 import { CoverImage } from '../article-image'
 import { ArticleStandfirst } from '../article-standfirst'
-import { LeftSideBleed } from '../wrap/left-side-bleed'
 import { MultilineWrap } from '../wrap/multiline-wrap'
 import { HeadlineTypeWrap } from './shared'
 import { ArticleHeaderProps } from './types'
@@ -25,7 +22,7 @@ const ObituaryHeader = ({
     kicker,
     standfirst,
 }: ArticleHeaderProps) => {
-    const [colors, { pillar }] = useArticle()
+    const [colors] = useArticle()
     return (
         <>
             {image && <CoverImage small image={image} />}

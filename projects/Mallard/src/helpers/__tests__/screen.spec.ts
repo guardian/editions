@@ -3,7 +3,6 @@ import {
     maxScreenSize,
     minScreenSize,
     screenSizeToImageSize,
-    imageForScreenSize,
 } from '../screen'
 
 const mock = jest.fn()

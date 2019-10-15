@@ -47,7 +47,6 @@ import {
     useIssueSummary,
     issueSummaryToLatestPath,
 } from 'src/hooks/use-issue-summary'
-import { IssueSummary } from '../../../common/src'
 
 const styles = StyleSheet.create({
     weatherWide: {

@@ -1,10 +1,6 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import Svg, { Circle, Line } from 'react-native-svg'
-import { View } from 'react-native'
-import { WithBreakpoints } from '../../layout/ui/sizing/with-breakpoints'
-import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
-import { UiBodyCopy } from 'src/components/styled-text'
 
 const Stop = ({
     fill,

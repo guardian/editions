@@ -5,7 +5,6 @@ import {
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
 import { ButtonAppearance } from 'src/components/button/button'
-import { FEEDBACK_EMAIL } from 'src/helpers/words'
 import { useGdprSwitches } from 'src/hooks/use-settings'
 import { ModalButton } from 'src/components/modal-button'
 import { LinkNav } from 'src/components/link'

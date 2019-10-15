@@ -1,4 +1,3 @@
-import { IssueSummary } from '../../../../common/src'
 import { matchSummmaryToKey } from '../files'
 import { issueSummaries } from '../../../../common/src/__tests__/fixtures/IssueSummary'
 

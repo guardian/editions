@@ -43,11 +43,6 @@ export const deleteIssueFiles = async (): Promise<void> => {
     await prepFileSystem()
 }
 
-const fileName = (path: string) => {
-    const sections = path.split('/')
-    return sections[sections.length - 1]
-}
-
 export const getJson = (path: string) =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
