@@ -105,9 +105,10 @@ const ScreenHeader = withNavigation(
                             }
                         }
                     >
-                        {navigation.getParam('shouldShowMoreIssuesBtn') ||
-                        navigation.getParam('shouldShowMoreIssuesBtn') ===
-                            undefined ? (
+                        {!supportsTransparentCards() || // ignore for devices that obscure the button
+                        (navigation.getParam('shouldShowMoreIssuesBtn') ||
+                            navigation.getParam('shouldShowMoreIssuesBtn') ===
+                                undefined) ? (
                             <Button
                                 icon={isTablet ? '' : ''}
                                 alt="More issues"
