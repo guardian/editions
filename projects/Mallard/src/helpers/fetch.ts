@@ -199,74 +199,28 @@ const fetchWeatherForecastForLocation = (): CachedOrPromise<
     WeatherForecast
 > => {
     const {
-        retrieve: retrieveWeatherLocation,
-        store: storeWeatherLocation,
-    } = withCache<AccuWeatherLocation>('weatherLocation')
-    const {
-        retrieve: retrieveWeatherForecast,
-        store: storeWeatherForecast,
-    } = withCache<Forecast[]>('weatherForecasts')
-    const {
         retrieve: retrieveWeatherForecastSummary,
         store: storeWeatherForecastSummary,
     } = withCache<WeatherForecast>('weatherForecastSummary')
 
-    const weatherForecast: Promise<WeatherForecast> = fetchIpAddress().then(
-        async ip => {
-            const location = await createCachedOrPromise<AccuWeatherLocation>(
-                [
-                    retrieveWeatherLocation(
-                        `locations/v1/cities/ipAddress?q=${ip}&details=false`,
-                    ),
-                    async () => {
-                        return fetchFromWeatherApi<AccuWeatherLocation>(
-                            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
-                        )
-                    },
-                ],
-                {
-                    savePromiseResultToValue: locationResult =>
-                        storeWeatherLocation(
-                            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
-                            locationResult,
-                        ),
-                },
-            ).getValue()
+    const getWeatherForecast = async (): Promise<WeatherForecast> => {
+        const ip = await fetchIpAddress()
+        const location = await fetchFromWeatherApi<AccuWeatherLocation>(
+            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+        )
+        const forecasts = await fetchFromWeatherApi<Forecast[]>(
+            `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
+        )
+        const weatherForecast: WeatherForecast = {
+            locationName: location.EnglishName,
+            forecasts,
+        }
 
-            const forecasts = await createCachedOrPromise(
-                [
-                    retrieveWeatherForecast(
-                        `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
-                    ),
-                    async () => {
-                        return fetchFromWeatherApi<Forecast[]>(
-                            `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
-                        )
-                    },
-                ],
-                {
-                    savePromiseResultToValue: forecastsResult =>
-                        storeWeatherForecast(
-                            `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
-                            forecastsResult,
-                        ),
-                },
-            ).getValue()
-
-            const weatherForecast: WeatherForecast = {
-                locationName: location.EnglishName,
-                forecasts,
-            }
-
-            return weatherForecast
-        },
-    )
+        return weatherForecast
+    }
 
     return createCachedOrPromise(
-        [
-            retrieveWeatherForecastSummary(`forecasts`),
-            async () => weatherForecast,
-        ],
+        [retrieveWeatherForecastSummary(`forecasts`), getWeatherForecast],
         {
             savePromiseResultToValue: result =>
                 storeWeatherForecastSummary(`forecasts`, result),
