@@ -53,6 +53,11 @@ const notificationTrackingEndpoints = {
         'https://mobile-events.code.dev-guardianapis.com/notification/received',
 }
 
+export const senderId = {
+    prod: '493559488652',
+    code: '43377569438',
+}
+
 export const notificationTrackingUrl = (notificationId: string) => {
     const edition =
         Platform.OS === 'ios'
@@ -97,6 +102,7 @@ export const defaultSettings: Settings = {
     issuesPath: `/${contentPrefix}/issues`,
     useNonWobblyWebview: true,
     storeDetails,
+    senderId: __DEV__ ? senderId.code : senderId.prod,
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

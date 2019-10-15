@@ -70,6 +70,7 @@ export interface DevSettings {
         android: string
     }
     issuesPath: string
+    senderId: string
 }
 
 interface UserSettings {
