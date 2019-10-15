@@ -173,37 +173,6 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             proxy: rightChevronIcon,
                         },
                         {
-                            key: 'Clear cache',
-                            title: 'Clear cache',
-                            data: {
-                                onPress: () => {
-                                    Alert.alert(
-                                        'Clear caches',
-                                        'You sure?',
-                                        [
-                                            {
-                                                text: 'Delete fetch cache',
-                                                onPress: () => {
-                                                    clearCache()
-                                                },
-                                            },
-                                            {
-                                                text: 'Delete EVERYTHING',
-                                                onPress: () => {
-                                                    AsyncStorage.clear()
-                                                },
-                                            },
-                                            {
-                                                style: 'cancel',
-                                                text: `No don't do it`,
-                                            },
-                                        ],
-                                        { cancelable: false },
-                                    )
-                                },
-                            },
-                        },
-                        {
                             key: 'Credits',
                             title: 'Credits',
                             data: {
