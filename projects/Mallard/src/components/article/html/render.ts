@@ -32,17 +32,62 @@ import { Arrow } from './arrow'
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
 export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
+
+    /* text */
     ${generateAssetsFontCss({ fontFamily: families.text.regular })}
+    ${generateAssetsFontCss({
+        fontFamily: families.text.bold,
+        variant: {
+            showsAsFamily: families.text.regular,
+            weight: 700,
+            style: 'normal',
+        },
+    })}
+    ${generateAssetsFontCss({
+        fontFamily: families.text.regularItalic,
+        variant: {
+            showsAsFamily: families.text.regular,
+            weight: 400,
+            style: 'italic',
+        },
+    })}
+
+    /*headline*/
+    ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
+    ${generateAssetsFontCss({
+        fontFamily: families.headline.light,
+        variant: {
+            showsAsFamily: families.headline.regular,
+            weight: 200,
+            style: 'normal',
+        },
+    })}
+    ${generateAssetsFontCss({
+        fontFamily: families.headline.bold,
+        variant: {
+            showsAsFamily: families.headline.regular,
+            weight: 700,
+            style: 'normal',
+        },
+    })}
+    ${generateAssetsFontCss({
+        fontFamily: families.headline.medium,
+        variant: {
+            showsAsFamily: families.headline.regular,
+            weight: 500,
+            style: 'normal',
+        },
+    })}
+
+    /* other fonts */
+    ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
+    ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
     ${generateAssetsFontCss({
         fontFamily: families.icon.regular,
         extension: 'otf',
     })}
-    ${generateAssetsFontCss({ fontFamily: families.headline.light })}
-    ${generateAssetsFontCss({ fontFamily: families.headline.regular })}
-    ${generateAssetsFontCss({ fontFamily: families.headline.bold })}
-    ${generateAssetsFontCss({ fontFamily: families.headline.medium })}
-    ${generateAssetsFontCss({ fontFamily: families.sans.regular })}
-    ${generateAssetsFontCss({ fontFamily: families.titlepiece.regular })}
+
+    /* css */
     html, body {
         overflow-x: hidden;
     }
