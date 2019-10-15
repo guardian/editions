@@ -35,7 +35,8 @@ export interface ArticleNavigator {
     frontName: string
 }
 
-const sliderBarHeight = (metrics.fronts.sliderRadius + metrics.vertical) * 2
+export const sliderBarHeight =
+    (metrics.fronts.sliderRadius + metrics.vertical) * 2
 
 const getData = (
     navigator: ArticleNavigator,
@@ -132,7 +133,13 @@ const SliderBar = ({
     )
 }
 
-const SliderBarHider = ({ children, visible = true }) => {
+const SliderBarHider = ({
+    children,
+    visible = true,
+}: {
+    children: React.ReactNode
+    visible: boolean
+}) => {
     const [translate] = useState(() => new Animated.Value(visible ? 0 : 1))
     useEffect(() => {
         Animated.timing(translate, {
