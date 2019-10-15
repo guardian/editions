@@ -51,13 +51,19 @@ export const getScaledFontCss = <F extends FontFamily>(
     `
 }
 
+interface AltFont {
+    showsAsFamily: string
+    style: string
+    weight: number
+}
+
 export const generateAssetsFontCss = ({
     fontFamily,
-    fontWeight = 400,
+    variant,
     extension = 'ttf',
 }: {
     fontFamily: string
-    fontWeight?: number
+    variant?: AltFont
     extension?: string
 }) => {
     const fileName = Platform.select({
@@ -68,9 +74,15 @@ export const generateAssetsFontCss = ({
     return css`
         @font-face {
             font-family: '${fontFamily}';
-            font-weight: ${fontWeight};
             src: url("${fileName}")
         }
+        ${variant &&
+            css`@font-face {
+                font-family: '${variant.showsAsFamily}';
+                font-weight: ${variant.weight};
+                font-style: ${variant.style};
+                src: url("${fileName}")
+            }`}
     `
 }
 
