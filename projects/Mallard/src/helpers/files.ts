@@ -199,8 +199,7 @@ export const matchSummmaryToKey = (
     key: string,
 ): IssueSummary => {
     const summaryMatch = issueSummaries.find(
-        issueSummary =>
-            issueSummary.localId === `${defaultSettings.contentPrefix}/${key}`,
+        issueSummary => issueSummary.key === key,
     ) as IssueSummary
     return summaryMatch || null
 }
