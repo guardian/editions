@@ -173,8 +173,8 @@ const IssueFronts = ({
                 </>
             )}
             getItemLayout={(_: any, index: number) => ({
-                length: card.height,
-                offset: card.height * index,
+                length: card.height + metrics.fronts.sliderRadius * 2,
+                offset: (card.height + metrics.fronts.sliderRadius * 2) * index,
                 index,
             })}
             keyExtractor={item => item}
