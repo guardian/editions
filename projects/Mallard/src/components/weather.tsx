@@ -206,9 +206,8 @@ const WeatherWithForecast = ({
     return <></>
 }
 
-const Weather = () => {
+const Weather = React.memo(() => {
     const weatherResponse = useWeatherResponse()
-
     return weatherResponse({
         error: ({}) => <></>,
         pending: () => <></>,
@@ -219,6 +218,6 @@ const Weather = () => {
             />
         ),
     })
-}
+})
 
 export { Weather }
