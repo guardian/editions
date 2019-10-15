@@ -18,6 +18,8 @@ The build order goes up/down according to screen position
 */
 
 export interface PropTypes {
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     children: any
 }
 

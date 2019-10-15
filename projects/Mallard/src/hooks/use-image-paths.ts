@@ -68,12 +68,13 @@ export const useImagePath = (image?: Image) => {
             selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
                 setPaths,
             )
-        }
+        } // (ignored 15/10/19)
+        // eslint-disable-next-line
     }, [
         apiUrl,
         image,
-        issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
-        issueId ? issueId.localIssueId : undefined,
+        issueId ? issueId.publishedIssueId : undefined, // eslint-disable-line
+        issueId ? issueId.localIssueId : undefined, // eslint-disable-line
     ])
     if (image === undefined) return undefined
     return paths
@@ -89,6 +90,7 @@ export const useScaledImage = (largePath: string, width: number) => {
         if (!isRemote) {
             compressImagePath(largePath, width).then(setUri)
         }
-    }, [largePath, width])
+        // (ignored 15/10/19)
+    }, [largePath, width]) //eslint-disable-line
     return uri
 }

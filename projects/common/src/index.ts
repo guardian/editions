@@ -1,5 +1,4 @@
 import { FrontCardAppearance } from './collection/card-layouts'
-import { getImageUse } from './collection/thumbnails'
 export * from './collection/card-layouts'
 export * from './collection/layout-model'
 export * from './collection/layouts'

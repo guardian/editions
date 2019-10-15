@@ -18,6 +18,8 @@ const overlayStyles = StyleSheet.create({
  * of the prop rather than the value at the time it was closed
  * over
  */
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const usePropToRef = <T extends any>(value: T) => {
     const ref = useRef(value)
     useEffect(() => {

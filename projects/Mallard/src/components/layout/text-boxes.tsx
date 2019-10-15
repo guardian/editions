@@ -26,12 +26,18 @@ const Item = () => {
 */
 
 type TextBoxes = RectangleType[]
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const useTextBoxes = (): [(ev: any) => void, TextBoxes] => {
     const [boxes, setBoxes] = useState<TextBoxes>([])
 
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     const onTextLayout = (ev: any) => {
         /* make the boxes a bit bigger vertically for aesthetics*/
         setBoxes(
+            // (ignored 15/10/19)
+            // eslint-disable-next-line
             ev.nativeEvent.lines.map((line: any) => ({
                 x: line.x,
                 y: line.y + 2,

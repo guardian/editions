@@ -106,10 +106,13 @@ const ArticleWebViewAndroid = ({
 
     useEffect(() => {
         onTopPositionChange(false)
-    }, [])
+        // (ignored 15/10/19)
+    }, []) // eslint-disable-line
     return (
         <View style={androidStyles.wrapper}>
             <Animated.View
+                // (ignored 15/10/19)
+                // eslint-disable-next-line
                 onLayout={(ev: any) => {
                     setHeight(ev.nativeEvent.layout.height)
                 }}

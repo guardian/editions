@@ -110,6 +110,8 @@ const LozengeBigHeader = ({
             </Animated.Text>
             <Animated.View
                 {...ariaHidden}
+                // (ignored 15/10/19)
+                // eslint-disable-next-line
                 onLayout={(ev: any) => {
                     setWidth(ev.nativeEvent.layout.width)
                 }}
@@ -213,6 +215,8 @@ const LozengeCircle = ({
 }: {
     fill: string
     children: string
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     style?: any
     position?: Animated.AnimatedInterpolation
 }) => {

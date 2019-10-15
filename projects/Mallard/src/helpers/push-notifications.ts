@@ -72,6 +72,8 @@ const pushNotifcationRegistration = () => {
                 })
             }
         },
+        // (ignored 15/10/19)
+        // eslint-disable-next-line
         onNotification: async (notification: any) => {
             const key =
                 Platform.OS === 'ios' ? notification.data.key : notification.key

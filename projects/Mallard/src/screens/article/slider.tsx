@@ -166,6 +166,8 @@ const ArticleSlider = ({
                 <ViewPagerAndroid
                     style={styles.androidPager}
                     initialPage={startingPoint}
+                    // (ignored 15/10/19)
+                    // eslint-disable-next-line
                     onPageSelected={(ev: any) => {
                         setCurrent(ev.nativeEvent.position)
                     }}
@@ -205,6 +207,8 @@ const ArticleSlider = ({
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
+                // (ignored 15/10/19)
+                // eslint-disable-next-line
                 onScroll={(ev: any) => {
                     setCurrent(
                         Math.floor(ev.nativeEvent.contentOffset.x / width),

@@ -42,7 +42,8 @@ export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
 export const useIssueDate = (issue?: Issue): IssueDate =>
     useMemo(
         () => (issue ? renderIssueDate(issue.date) : { date: '', weekday: '' }),
-        [issue && issue.key, issue],
+        // (ignored 15/10/19)
+        [issue && issue.key, issue], // eslint-disable-line
     )
 
 const dateToFolderConvert = (date: Date): string => {

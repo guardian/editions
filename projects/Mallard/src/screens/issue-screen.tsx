@@ -172,6 +172,8 @@ const IssueFronts = ({
                     <View style={{ height: container.height / 3 }} />
                 </>
             )}
+            // (ignored 15/10/19)
+            // eslint-disable-next-line
             getItemLayout={(_: any, index: number) => ({
                 length: card.height,
                 offset: card.height * index,

@@ -19,6 +19,8 @@ import {
 import { cacheClearCache } from './storage'
 import { Forecast, AccuWeatherLocation, WeatherForecast } from '../common'
 
+// (ignored 15/10/19)
+// eslint-disable-next-line
 export type ValidatorFn<T> = (response: any | T) => boolean
 
 const fetchFromApiSlow = async <T>(

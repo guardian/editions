@@ -5,6 +5,8 @@ import { StyleSheet, View } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const getFirstLast = <T extends any>(arr: T[]): T[] => [
     arr[0],
     arr.slice(-1)[0],

@@ -20,7 +20,8 @@ export type AsyncCache<T> = {
     set: (data: T) => Promise<void>
     reset: () => Promise<void>
 }
-
+// (ignored 15/10/19)
+// eslint-disable-next-line
 class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
     private subscribers: UpdateHandler<T>[] = []
     private attempt: AnyAttempt<T> = NotRun

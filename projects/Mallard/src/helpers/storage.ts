@@ -15,6 +15,8 @@ import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthori
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
  * and not Android.
  */
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const createSettingsCacheIOS = <T = any>(key: string) => ({
     set: async (value: T) => {
         Settings.set({ [key]: value })

@@ -6,6 +6,8 @@ const createListener = (): EventEmitter & {
     addEventListener: EventEmitter['addListener']
     removeEventListener: EventEmitter['removeListener']
 } => {
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     const ee: any = new EventEmitter()
     ee.addEventListener = ee.addListener
     ee.removeEventListener = ee.removeListener

@@ -58,6 +58,8 @@ const styles = StyleSheet.create({
 
 const persistenceKey = 'dev-nav-key-232asdffgdfg1asdffgfdgfdga3413'
 
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const persistNavigationState = async (navState: any) => {
     try {
         await AsyncStorage.setItem(persistenceKey, JSON.stringify(navState))

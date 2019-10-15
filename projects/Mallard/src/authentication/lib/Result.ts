@@ -64,7 +64,11 @@ const fromResponse = async <T>(
         invalid = () => GENERIC_AUTH_ERROR,
     }: {
         error?: string
+        // (ignored 15/10/19)
+        // eslint-disable-next-line
         valid?: (json: any) => T
+        // (ignored 15/10/19)
+        // eslint-disable-next-line
         invalid?: (json: any) => string
     } = {},
 ): Promise<AuthResult<T>> => {

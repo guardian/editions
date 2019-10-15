@@ -25,6 +25,8 @@ const WebviewWithArticle = ({
     headerProps?: ArticleHeaderProps & { type: ArticleType }
     paddingTop?: number
     _ref?: (ref: { _component: WebView }) => void
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()

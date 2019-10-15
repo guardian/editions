@@ -92,6 +92,8 @@ const AccessProvider = ({
             unsubIdentity()
             unsubCAS()
         }
+        // (ignored 15/10/19)
+        // eslint-disable-next-line
     }, [])
 
     const value = useMemo(

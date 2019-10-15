@@ -1,9 +1,21 @@
 const cacheStore: {
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     api: { [path: string]: any }
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     issue: { [path: string]: any }
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     ipAddress: { [path: string]: string }
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     weatherLocation: { [path: string]: any }
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     weatherForecasts: { [path: string]: any }
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     weatherForecastSummary: { [path: string]: any }
 } = {
     api: {},

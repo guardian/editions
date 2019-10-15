@@ -9,6 +9,8 @@ const Stop = ({
     ...props
 }: {
     fill: string
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     [key: string]: any
 }) => {
     return <Circle r={radius} cy={height} fill={fill} {...props} />

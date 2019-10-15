@@ -18,6 +18,8 @@ import { TextWithIcon } from 'src/components/layout/text-with-icon'
 import { MINIMUM_BREAKPOINT } from 'src/theme/breakpoints'
 
 export type ArticleHeadlineProps = {
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     children: any
     hasHighlight?: boolean
     textStyle?: StyleProp<TextStyle>

@@ -49,6 +49,8 @@ const createSimpleAccessController = ({
         a: new Authorizer({
             name: 'a',
             userDataCache: cache,
+            // (ignored 15/10/19)
+            // eslint-disable-next-line
             authCaches: [] as AsyncCache<any>[],
             auth: invalidFromLiveCredentials
                 ? getInvalidUserData
@@ -90,6 +92,8 @@ describe('AccessController', () => {
             a: new Authorizer({
                 name: 'a',
                 userDataCache: cache,
+                // (ignored 15/10/19)
+                // eslint-disable-next-line
                 authCaches: [] as AsyncCache<any>[],
                 auth: async () => {
                     throw new Error()
@@ -211,6 +215,8 @@ describe('AccessController', () => {
                 a: new Authorizer({
                     name: 'a',
                     userDataCache: cache,
+                    // (ignored 15/10/19)
+                    // eslint-disable-next-line
                     authCaches: [] as AsyncCache<any>[],
                     auth: async ([a]: [string]) => {
                         arg = a

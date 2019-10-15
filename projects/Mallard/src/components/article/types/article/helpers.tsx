@@ -7,6 +7,8 @@ const urlIsNotAnEmbed = (url: string) =>
         url.startsWith('https://www.youtube.com/embed')
     )
 
+// (ignored 15/10/19)
+// eslint-disable-next-line
 export const onShouldStartLoadWithRequest = (event: any) => {
     if (
         Platform.select({

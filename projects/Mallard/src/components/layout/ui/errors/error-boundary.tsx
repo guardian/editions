@@ -11,7 +11,8 @@ class ErrorBoundary extends Component<
         super(props)
         this.state = { hasError: false, message: undefined }
     }
-
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     static getDerivedStateFromError(error: any) {
         return { hasError: true, message: JSON.stringify(error) }
     }

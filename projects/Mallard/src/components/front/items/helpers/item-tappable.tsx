@@ -97,9 +97,13 @@ const ItemTappable = withNavigation(
         return (
             <Animated.View
                 style={[style]}
+                // (ignored 15/10/19)
+                // eslint-disable-next-line
                 ref={(view: any) => {
                     if (view) tappableRef.current = view._component as View
                 }}
+                // (ignored 15/10/19)
+                // eslint-disable-next-line
                 onLayout={(ev: any) => {
                     setScreenPositionOfItem(article.key, ev.nativeEvent.layout)
                     tappableRef.current &&

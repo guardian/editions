@@ -6,10 +6,13 @@ import { GENERIC_AUTH_ERROR } from 'src/helpers/words'
 interface ErrorReponse {
     errors: { message: string; description: string }[]
 }
-
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const hasErrorsArray = (json: any): json is ErrorReponse =>
     json && Array.isArray(json.errors)
 
+// (ignored 15/10/19)
+// eslint-disable-next-line
 const getErrorString = (data: any) =>
     hasErrorsArray(data)
         ? data.errors.map(err => err.description).join(', ')

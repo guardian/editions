@@ -14,6 +14,8 @@ and gives us syntax colors
 */
 const passthrough = (
     literals: TemplateStringsArray,
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     ...placeholders: any[]
 ): string =>
     literals.reduce((acc, literal, i) => {

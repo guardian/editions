@@ -17,10 +17,14 @@ interface Icon {
 }
 
 type TextWithIconProps = {
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     children: any
     unscaledFont: ReturnType<typeof getUnscaledFont>
     icon: Icon
     style: StyleProp<TextStyle>
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
 } & { onTextLayout?: any } & TextProps
 
 const styles = StyleSheet.create({

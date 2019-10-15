@@ -12,6 +12,8 @@ import {
 type UpdateHandler = (attempt: AnyAttempt<string>) => void
 
 type AuthMap<I extends {}> = {
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
     [K in keyof I]: I[K] extends Authorizer<any, any, any> ? I[K] : never
 }
 class AccessController<I extends {}> {

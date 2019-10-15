@@ -92,6 +92,8 @@ export type HeadlineTextProps = {
     children: React.ReactNode | React.ReactNode[]
     weight?: 'regular' | 'bold' | 'light' | 'titlepiece'
     style?: StyleProp<TextStyle>
+    // (ignored 15/10/19)
+    // eslint-disable-next-line
 } & TextProps & { onTextLayout?: any }
 
 export const getHeadlineTextStyle = (
