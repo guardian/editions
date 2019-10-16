@@ -137,7 +137,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode vcode
-        versionName "1.0-alpha"
+        versionName "1.0." + buildNumber()
     }
     splits {
         abi {
@@ -196,6 +196,10 @@ android {
         pickFirst 'META-INF/ktor-http-cio.kotlin_module'
         pickFirst 'META-INF/ktor-client-core.kotlin_module'
     }
+}
+
+def buildNumber() {
+    return System.getenv("BUILD_NUMBER")?.toInteger() ?: 1
 }
 
 dependencies {
