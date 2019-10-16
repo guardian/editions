@@ -40,6 +40,8 @@ const superHeroImageStyles = StyleSheet.create({
         ...tappablePadding,
         position: 'absolute',
         bottom: 0,
+        left: 0,
+        right: 0,
     },
 })
 
@@ -97,8 +99,8 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
             />
             <View
                 style={[
-                    sportSuperStyles.card,
                     superHeroImageStyles.textStandBlock,
+                    sportSuperStyles.card,
                 ]}
             >
                 <Standfirst
