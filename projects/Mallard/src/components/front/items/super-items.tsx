@@ -6,7 +6,6 @@ import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { getItemRectanglePerc, toPercentage } from '../helpers/helpers'
-import { ImageResource } from '../image-resource'
 import {
     ItemTappable,
     PropTypes,

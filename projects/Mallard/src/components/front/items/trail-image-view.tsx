@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
+import { StyleSheet, View, StyleProp } from 'react-native'
 import { Stars } from 'src/components/stars/stars'
-import { TrailImage, ItemSizes, CAPIArticle } from 'src/common'
+import { CAPIArticle } from 'src/common'
 import { ImageResource } from '../image-resource'
 
 const trailImageViewStyles = StyleSheet.create({
