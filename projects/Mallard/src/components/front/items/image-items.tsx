@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { ImageResource } from '../image-resource'
