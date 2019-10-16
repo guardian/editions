@@ -14,6 +14,8 @@ import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushNotificationRegistrationCache } from './storage'
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
+import { defaultSettings } from 'src/helpers/settings/defaults'
+import { errorService } from 'src/services/errors'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -69,6 +71,7 @@ const pushNotifcationRegistration = () => {
             if (token) {
                 maybeRegister(token.token).catch(err => {
                     console.log(`Error registering for notifications: ${err}`)
+                    errorService.captureException(err)
                 })
             }
         },
@@ -101,6 +104,7 @@ const pushNotifcationRegistration = () => {
                     console.log(
                         `Push notification unable to download: ${e.message}`,
                     )
+                    errorService.captureException(e)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)
                 }
 
@@ -108,7 +112,7 @@ const pushNotifcationRegistration = () => {
                 clearOldIssues()
             }
         },
-        senderID: '43377569438',
+        senderID: defaultSettings.senderId,
         permissions: {
             alert: false,
             badge: false,

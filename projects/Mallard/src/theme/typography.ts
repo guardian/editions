@@ -12,6 +12,7 @@ export const families = {
     },
     text: {
         regular: 'GuardianTextEgyptian-Reg',
+        regularItalic: 'GuardianTextEgyptian-RegIt',
         bold: 'GuardianTextEgyptian-Bold',
     },
     titlepiece: {
