@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
@@ -28,12 +28,18 @@ export const getRatingAsText = (rating: number) =>
         return s
     })
 
-const Stars = ({ rating }: { rating: number }) => {
+const Stars = ({
+    style,
+    rating,
+}: {
+    style?: StyleProp<ViewStyle>
+    rating: number
+}) => {
     const ratingAsText = useMemo(() => getRatingAsText(rating), [rating])
     return (
         <View
             accessibilityLabel={`${rating.toString()} stars`}
-            style={styles.background}
+            style={[style, styles.background]}
         >
             <Text style={styles.text} accessible={false}>
                 {ratingAsText.join('')}
