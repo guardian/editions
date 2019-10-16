@@ -17,6 +17,7 @@ import { Standfirst } from './helpers/standfirst'
 import { metrics } from 'src/theme/spacing'
 import { useIsOpinionCard } from './helpers/types'
 import { PageLayoutSizes } from '../../../common'
+import { TrailImageView } from './trail-image-view'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -24,8 +25,6 @@ Text below image. To use in news & sport supers
 */
 const superHeroImageStyles = StyleSheet.create({
     image: {
-        width: '100%',
-        flex: 0,
         height: toPercentage(
             getItemRectanglePerc(
                 { width: 2, height: 4, top: 0, left: 0 },
@@ -48,12 +47,10 @@ const superHeroImageStyles = StyleSheet.create({
 const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'trailImage' in article && article.trailImage ? (
-                <ImageResource
-                    style={[superHeroImageStyles.image]}
-                    image={article.trailImage}
-                />
-            ) : null}
+            <TrailImageView
+                article={article}
+                style={superHeroImageStyles.image}
+            />
             <TextBlock
                 byline={article.byline}
                 style={[superHeroImageStyles.textBlock]}
@@ -84,12 +81,10 @@ const sportSuperStyles = StyleSheet.create({
 const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'trailImage' in article && article.trailImage ? (
-                <ImageResource
-                    style={[superHeroImageStyles.image]}
-                    image={article.trailImage}
-                />
-            ) : null}
+            <TrailImageView
+                article={article}
+                style={superHeroImageStyles.image}
+            />
             <TextBlock
                 byline={article.byline}
                 style={[superHeroImageStyles.textBlock]}
