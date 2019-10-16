@@ -28,7 +28,6 @@ const useDimensions = (): ScaledSize => {
                 Math.min(ev.window.width, ev.window.height) >=
                 Breakpoints.tabletVertical
             ) {
-                debugger
                 setDimensions(ev.window)
             }
         }
