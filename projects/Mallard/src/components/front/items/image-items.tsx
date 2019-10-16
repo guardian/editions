@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { ImageResource } from '../image-resource'
@@ -19,15 +19,13 @@ import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
 import { Standfirst } from './helpers/standfirst'
 import { useIsOpinionCard, useIsSportCard } from './helpers/types'
+import { Stars } from 'src/components/stars/stars'
+import { TrailImage, ItemSizes } from 'src/common'
 
 /*
 Normal img on top + text
 */
 const imageStyles = StyleSheet.create({
-    image: {
-        width: '100%',
-        flex: 0,
-    },
     textBlock: {
         paddingTop: metrics.vertical / 2,
     },
@@ -54,15 +52,17 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            {'trailImage' in article && article.trailImage ? (
-                <ImageResource
-                    style={[
-                        imageStyles.image,
-                        { height: getImageHeight(size) },
-                    ]}
+            {article.trailImage && (
+                <TrailImageView
                     image={article.trailImage}
+                    itemSizes={size}
+                    starRating={
+                        article.type === 'article'
+                            ? article.starRating
+                            : undefined
+                    }
                 />
-            ) : null}
+            )}
             {isSportCard && isFullWidthItem(size) ? (
                 <SportItemBackground
                     style={{
@@ -220,4 +220,49 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
         </ItemTappable>
     )
 }
+
+const trailImageViewStyles = StyleSheet.create({
+    frame: {
+        width: '100%',
+        flex: 0,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
+    rating: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        left: 0,
+        bottom: 0,
+    },
+})
+
+/**
+ * If there is a rating for the article (ex. a theater piece rating) then we
+ * display it in the bottom-left corner of the image (by using absolute
+ * positioning).
+ */
+const TrailImageView = ({
+    image,
+    itemSizes,
+    starRating,
+}: {
+    image: TrailImage
+    itemSizes: ItemSizes
+    starRating?: number
+}) => {
+    const height = getImageHeight(itemSizes)
+    const frameStyle = [trailImageViewStyles.frame, { height }]
+    if (starRating == null) {
+        return <ImageResource style={frameStyle} image={image} />
+    }
+    return (
+        <View style={frameStyle}>
+            <ImageResource style={trailImageViewStyles.image} image={image} />
+            <Stars style={trailImageViewStyles.rating} rating={starRating} />
+        </View>
+    )
+}
+
 export { ImageItem, SplitImageItem, SmallItem, SidekickImageItem }
