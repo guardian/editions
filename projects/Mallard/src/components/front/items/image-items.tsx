@@ -134,9 +134,9 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={squareStyles.cover}>
-                <ImageResource
+                <TrailImageView
                     style={[StyleSheet.absoluteFill]}
-                    image={article.trailImage}
+                    article={article}
                 />
                 <View
                     style={[
@@ -198,12 +198,10 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                {'trailImage' in article && article.trailImage ? (
-                    <ImageResource
-                        style={[splitImageStyles.image]}
-                        image={article.trailImage}
-                    />
-                ) : null}
+                <TrailImageView
+                    style={splitImageStyles.image}
+                    article={article}
+                />
             </View>
         </ItemTappable>
     )
