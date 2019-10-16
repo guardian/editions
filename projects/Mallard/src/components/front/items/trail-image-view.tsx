@@ -31,7 +31,7 @@ export const TrailImageView = ({
     style,
 }: {
     article: CAPIArticle
-    style: StyleProp<{ height?: string }>
+    style: StyleProp<{ width?: string; height?: string; marginLeft?: number }>
 }) => {
     const { trailImage: image } = article
     if (image == null) {

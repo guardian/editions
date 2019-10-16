@@ -105,6 +105,9 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 }
 
 const squareStyles = StyleSheet.create({
+    image: {
+        height: '100%',
+    },
     square: {
         position: 'absolute',
         top: '50%',
@@ -134,10 +137,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={squareStyles.cover}>
-                <TrailImageView
-                    style={[StyleSheet.absoluteFill]}
-                    article={article}
-                />
+                <TrailImageView style={squareStyles.image} article={article} />
                 <View
                     style={[
                         squareStyles.square,
@@ -172,7 +172,6 @@ const splitImageStyles = StyleSheet.create({
     image: {
         width: '50%',
         height: '100%',
-        flex: 0,
         marginLeft: metrics.horizontal,
     },
     wideImage: {
