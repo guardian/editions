@@ -168,7 +168,7 @@ export const downloadAndUnzipIssue = async (
                     type: 'unzip',
                     data: 'start',
                 })
-                unzipNamedIssueArchive(localId, imageSize)
+                return unzipNamedIssueArchive(localId, imageSize)
                     .then(() => {
                         onProgress({ type: 'success' }) // null is unstarted or end
                     })
