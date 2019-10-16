@@ -4,7 +4,7 @@ import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../common/src'
-import { lastSevenDays, todayAsFolder } from './issues'
+import { lastSevenDays, todayAsKey } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -205,7 +205,7 @@ export const matchSummmaryToKey = (
 }
 
 export const downloadTodaysIssue = async () => {
-    const todaysKey = todayAsFolder()
+    const todaysKey = todayAsKey()
     try {
         const issueSummaries = await getIssueSummary()
 

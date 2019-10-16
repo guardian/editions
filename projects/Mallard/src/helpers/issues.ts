@@ -1,5 +1,6 @@
 import { Issue } from 'src/common'
 import { useMemo } from 'react'
+import { defaultSettings } from 'src/helpers/settings/defaults'
 
 const months = [
     'Jan',
@@ -53,6 +54,9 @@ const dateToFolderConvert = (date: Date): string => {
 }
 
 export const todayAsFolder = (): string => dateToFolderConvert(new Date())
+
+export const todayAsKey = (): string =>
+    `${defaultSettings.contentPrefix}/${todayAsFolder()}`
 
 export const lastSevenDays = (): string[] => {
     return Array.from({ length: 7 }, (_, i) => {
