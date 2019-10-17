@@ -8,7 +8,6 @@ import { getFont } from 'src/theme/typography'
 import { ArticleByline } from '../article-byline'
 import { ArticleStandfirst } from '../article-standfirst'
 import { MultilineWrap } from '../wrap/multiline-wrap'
-import { BylineCutout } from './opinion-header'
 import { Image as ImageType } from 'src/common'
 
 const styles = StyleSheet.create({
@@ -75,11 +74,6 @@ const GalleryHeader = ({
                         ></ArticleStandfirst>
                     )}
                 </View>
-                {cutout ? (
-                    <View style={styles.cutoutWrapper}>
-                        <BylineCutout cutout={cutout} />
-                    </View>
-                ) : null}
             </View>
         </MultilineWrap>
     )
