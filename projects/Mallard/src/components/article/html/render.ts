@@ -204,7 +204,7 @@ const renderArticleContent = (
     elements: BlockElement[],
     { showMedia, publishedId, imageSize }: ArticleContentProps,
 ) => {
-    elements
+    return elements
         .map(el => {
             switch (el.id) {
                 case 'html':
@@ -261,15 +261,42 @@ export const renderArticle = (
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     } & ArticleContentProps,
 ) => {
-    const content = renderArticleContent(elements, {
-        showMedia,
-        publishedId,
-        imageSize,
-    })
+    let content, header
+    switch (article.type) {
+        case 'picture':
+            header = Header({
+                type,
+                publishedId,
+                headline: article.headline,
+                byline: article.byline,
+                bylineHtml: article.bylineHtml,
+            })
+            content =
+                article.image &&
+                publishedId &&
+                Image({
+                    imageElement: {
+                        src: article.image,
+                        id: 'image',
+                        role: 'immersive',
+                    },
+                    publishedId,
+                    imageSize,
+                })
+            break
+        default:
+            header = Header({ ...article, type, publishedId })
+            content = renderArticleContent(elements, {
+                showMedia,
+                publishedId,
+                imageSize,
+            })
+            break
+    }
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
-        ${showWebHeader && article && Header({ ...article, type, publishedId })}
+        ${showWebHeader && article && header}
         <div class="content-wrap">
             ${showWebHeader && Line({ zIndex: 999 })}
             <main style="padding-top:${px(height)}">

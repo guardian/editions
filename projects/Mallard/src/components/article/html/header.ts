@@ -511,7 +511,12 @@ const Header = ({
                                 ? Rating(headerProps)
                                 : undefined,
                         })}
-                    <span class="header-kicker">${headerProps.kicker}</span>
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
                     ${largeByline
                         ? html`
                               <section class="header-top">
