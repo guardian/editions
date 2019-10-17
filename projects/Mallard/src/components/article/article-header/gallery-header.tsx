@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { GalleryArticle, Image as ImageType } from 'src/common'
+import { GalleryArticle } from 'src/common'
 import { HeadlineText } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
