@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import React, { useContext, ReactNode } from 'react'
+import React, { useContext, ReactNode, useState, useEffect } from 'react'
 import { Alert, Clipboard, View } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { Footer, Heading } from 'src/components/layout/ui/row'
@@ -20,6 +20,8 @@ import { isInTestFlight } from 'src/helpers/release-stream'
 import { FSPaths } from 'src/paths'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
+import DeviceInfo from 'react-native-device-info'
+import RNFetchBlob from 'rn-fetch-blob'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -47,6 +49,19 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const { attempt, signOutCAS } = useContext(AccessContext)
     const apiUrl = useSettingsValue.apiUrl()
     const { showToast } = useToast()
+
+    const [buildNumber, setBuildId] = useState('fetching...')
+    const [files, setFiles] = useState('fetching...')
+    useEffect(() => {
+        DeviceInfo.getBuildNumber().then(buildNumber => setBuildId(buildNumber))
+    }, [])
+
+    useEffect(() => {
+        RNFetchBlob.fs
+            .ls(FSPaths.issuesDir + '/daily-edition')
+            .then(files => setFiles(JSON.stringify(files)))
+    }, [])
+
     return (
         <>
             <Heading>🦆 SECRET DUCK MENU 🦆</Heading>
@@ -135,8 +150,16 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     },
                     {
                         key: 'Build id',
-                        title: 'Build',
+                        title: 'Build commit hash',
                         explainer: getVersionInfo().commitId,
+                        data: {
+                            onPress: () => {},
+                        },
+                    },
+                    {
+                        key: 'Build number',
+                        title: 'Build number',
+                        explainer: buildNumber,
                         data: {
                             onPress: () => {},
                         },
@@ -158,6 +181,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                                 Clipboard.setString(FSPaths.issuesDir)
                                 Alert.alert(FSPaths.issuesDir)
                             },
+                        },
+                    },
+                    {
+                        key: 'Files in Issues',
+                        title: 'Files in Issues',
+                        explainer: files,
+                        data: {
+                            onPress: () => {},
                         },
                     },
                 ]}
