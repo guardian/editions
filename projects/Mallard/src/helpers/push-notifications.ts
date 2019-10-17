@@ -97,7 +97,7 @@ const pushNotifcationRegistration = () => {
                     : notification.uniqueIdentifier
 
             // Do tracking as soon as possible
-            notificationTracking(notificationId)
+            notificationTracking(notificationId, 'received')
 
             sendComponentEvent({
                 componentType: ComponentType.appVideo,
@@ -127,6 +127,7 @@ const pushNotifcationRegistration = () => {
                     })
 
                     await downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    notificationTracking(notificationId, 'downloaded')
                     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)
                 } catch (e) {
