@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { GalleryArticle } from 'src/common'
+import { GalleryArticle, Image as ImageType } from 'src/common'
 import { HeadlineText } from 'src/components/styled-text'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -8,7 +8,6 @@ import { getFont } from 'src/theme/typography'
 import { ArticleByline } from '../article-byline'
 import { ArticleStandfirst } from '../article-standfirst'
 import { MultilineWrap } from '../wrap/multiline-wrap'
-import { Image as ImageType } from 'src/common'
 
 const styles = StyleSheet.create({
     whiteText: { color: color.palette.neutral[100] },

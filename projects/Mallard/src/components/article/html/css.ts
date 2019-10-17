@@ -5,7 +5,6 @@ import {
     getScaledFontCss,
     px,
 } from 'src/helpers/webview'
-import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import { headerStyles } from './components/header'
@@ -82,7 +81,7 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
         background-color: ${themeColors(theme).background}
         color: ${themeColors(theme).text}
     }
-
+∏
     html, body {
         overflow-x: hidden;
     }

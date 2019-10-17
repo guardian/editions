@@ -1,15 +1,5 @@
-import {
-    css,
-    generateAssetsFontCss,
-    getScaledFont,
-    getScaledFontCss,
-    html,
-    makeHtml,
-    px,
-} from 'src/helpers/webview'
+import { html, makeHtml, px } from 'src/helpers/webview'
 import { getPillarColors } from 'src/hooks/use-article'
-import { metrics } from 'src/theme/spacing'
-import { families } from 'src/theme/typography'
 import {
     ArticlePillar,
     ArticleType,
@@ -24,13 +14,10 @@ import { ArticleHeaderProps } from '../article-header/types'
 import { ArticleTheme } from '../types/article'
 import { WrapLayout } from '../wrap/wrap'
 import { Arrow } from './components/arrow'
-import { Header, headerStyles } from './components/header'
-import { CssProps } from './helpers/css'
-import { Image, imageStyles } from './components/images'
-import { Line, lineStyles } from './components/line'
-import { Pullquote, quoteStyles } from './components/pull-quote'
-import { ratingStyles } from './components/rating'
-import { color } from 'src/theme/color'
+import { Header } from './components/header'
+import { Image } from './components/images'
+import { Line } from './components/line'
+import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
