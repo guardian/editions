@@ -1,4 +1,3 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { useImagePath } from 'src/hooks/use-image-paths'
@@ -6,13 +5,13 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { ArticleHeaderProps } from '../article-header/types'
-import { WrapLayout } from '../wrap/wrap'
-import { breakSides } from './helpers/layout'
+import { CreditedImage } from '../../../../../../common/src'
+import { ArticleHeaderProps } from '../../article-header/types'
+import { CssProps, themeColors } from '../helpers/css'
+import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
-import { CreditedImage } from '../../../../../common/src'
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -53,13 +52,7 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
-export const headerStyles = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -366,7 +359,7 @@ export const headerStyles = ({
     .header-container[data-type='${
         ArticleType.Picture
     }'] .header-byline  > span > a {
-        color: var(--text);
+        color: ${themeColors(theme).background};
     }
     .header-container[data-type='${ArticleType.Picture}'] h1 {
         font-family: ${families.titlepiece.regular};

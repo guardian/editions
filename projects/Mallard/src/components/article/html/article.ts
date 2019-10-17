@@ -1,0 +1,171 @@
+import {
+    css,
+    generateAssetsFontCss,
+    getScaledFont,
+    getScaledFontCss,
+    html,
+    makeHtml,
+    px,
+} from 'src/helpers/webview'
+import { getPillarColors } from 'src/hooks/use-article'
+import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
+import {
+    ArticlePillar,
+    ArticleType,
+    BlockElement,
+    CAPIArticle,
+    Direction,
+    ImageSize,
+    Issue,
+    MediaAtomElement,
+} from '../../../common'
+import { ArticleHeaderProps } from '../article-header/types'
+import { ArticleTheme } from '../types/article'
+import { WrapLayout } from '../wrap/wrap'
+import { Arrow } from './components/arrow'
+import { Header, headerStyles } from './components/header'
+import { CssProps } from './helpers/css'
+import { Image, imageStyles } from './components/images'
+import { Line, lineStyles } from './components/line'
+import { Pullquote, quoteStyles } from './components/pull-quote'
+import { ratingStyles } from './components/rating'
+import { color } from 'src/theme/color'
+import { makeCss } from './css'
+
+export const EMBED_DOMAIN = 'https://embed.theguardian.com'
+
+const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
+    return html`
+        <figure class="image" style="overflow: hidden;">
+            <iframe
+                scrolling="no"
+                src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}"
+                style="width: 100%; display: block;"
+                frameborder="0"
+            ></iframe>
+            <figcaption>
+                ${Arrow({ direction: Direction.top })} ${mediaAtomElement.title}
+            </figcaption>
+        </figure>
+    `
+}
+
+interface ArticleContentProps {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    imageSize: ImageSize
+}
+
+const renderArticleContent = (
+    elements: BlockElement[],
+    { showMedia, publishedId, imageSize }: ArticleContentProps,
+) => {
+    return elements
+        .map(el => {
+            switch (el.id) {
+                case 'html':
+                    if (el.hasDropCap) {
+                        return html`
+                            <div class="drop-cap">
+                                ${el.html}
+                            </div>
+                        `
+                    }
+                    return el.html
+                case 'media-atom':
+                    return showMedia ? renderMediaAtom(el) : ''
+                case 'image':
+                    return showMedia && publishedId
+                        ? Image({
+                              imageElement: el,
+                              publishedId,
+                              imageSize,
+                          })
+                        : ''
+                case 'pullquote':
+                    return Pullquote({
+                        cite: el.html,
+                        role: el.role || 'inline',
+                        ...el,
+                    })
+                default:
+                    return ''
+            }
+        })
+        .join('')
+}
+
+export const renderArticle = (
+    elements: BlockElement[],
+    {
+        pillar,
+        wrapLayout,
+        showMedia,
+        height,
+        publishedId,
+        showWebHeader,
+        article,
+        imageSize,
+        type,
+        theme,
+    }: {
+        pillar: ArticlePillar
+        wrapLayout: WrapLayout
+        height: number
+        article: CAPIArticle
+        type: ArticleType
+        showWebHeader: boolean
+        headerProps?: ArticleHeaderProps & { type: ArticleType }
+        theme: ArticleTheme
+    } & ArticleContentProps,
+) => {
+    let content, header
+    switch (article.type) {
+        case 'picture':
+            header = Header({
+                publishedId,
+                type: ArticleType.Picture,
+                headline: article.headline,
+                byline: article.byline,
+                bylineHtml: article.bylineHtml,
+            })
+            content =
+                article.image &&
+                publishedId &&
+                Image({
+                    imageElement: {
+                        src: article.image,
+                        id: 'image',
+                        role: 'immersive',
+                    },
+                    publishedId,
+                    imageSize,
+                })
+            break
+        default:
+            header = Header({ ...article, type, publishedId })
+            content = renderArticleContent(elements, {
+                showMedia,
+                publishedId,
+                imageSize,
+            })
+            break
+    }
+
+    const styles = makeCss({
+        colors: getPillarColors(pillar),
+        wrapLayout,
+        theme,
+    })
+    const body = html`
+        ${showWebHeader && article && header}
+        <div class="content-wrap">
+            ${showWebHeader && Line({ zIndex: 999 })}
+            <main style="padding-top:${px(height)}">
+                ${content}
+            </main>
+        </div>
+    `
+    return makeHtml({ styles, body })
+}
