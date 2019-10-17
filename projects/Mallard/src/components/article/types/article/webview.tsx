@@ -34,7 +34,8 @@ const WebviewWithArticle = ({
     const html = useRenderedHTML(article.elements, {
         pillar,
         wrapLayout,
-        headerProps: { ...article, type },
+        article,
+        type,
         showWebHeader: true,
         showMedia: isConnected,
         height: paddingTop,

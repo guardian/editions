@@ -4,6 +4,7 @@ import {
     MediaAtomElement,
     ArticleType,
     Direction,
+    CAPIArticle,
 } from '../../../common'
 import {
     css,
@@ -193,7 +194,7 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
 }
 
 export const useRenderedHTML = (
-    article: BlockElement[],
+    elements: BlockElement[],
     {
         pillar,
         wrapLayout,
@@ -201,19 +202,22 @@ export const useRenderedHTML = (
         height,
         publishedId,
         showWebHeader,
-        headerProps,
+        article,
+        type,
     }: {
         pillar: ArticlePillar
         wrapLayout: WrapLayout
         showMedia: boolean
         height: number
+        article: CAPIArticle
+        type: ArticleType
         publishedId: Issue['publishedId'] | null
         showWebHeader: boolean
         headerProps?: ArticleHeaderProps & { type: ArticleType }
     },
 ) => {
     const { imageSize } = useImageSize()
-    const content = article
+    const content = elements
         .map(el => {
             switch (el.id) {
                 case 'html':
@@ -249,9 +253,7 @@ export const useRenderedHTML = (
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
-        ${showWebHeader &&
-            headerProps &&
-            Header({ ...headerProps, publishedId })}
+        ${showWebHeader && article && Header({ ...article, type, publishedId })}
         <div class="content-wrap">
             ${showWebHeader && Line({ zIndex: 999 })}
             <main style="padding-top:${px(height)}">
