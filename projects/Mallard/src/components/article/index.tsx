@@ -31,34 +31,20 @@ const ArticleController = ({
     article: CAPIArticle
     onTopPositionChange: OnTopPositionChangeFn
 }) => {
-    const { useNonWobblyWebview } = useOtherSettingsValues()
     switch (article.type) {
         case 'article':
-            return useNonWobblyWebview ? (
+        case 'picture':
+            return (
                 <Article
                     onTopPositionChange={onTopPositionChange}
-                    article={article.elements}
-                    {...article}
+                    article={article}
                 />
-            ) : (
-                <OldArticle
-                    onTopPositionChange={onTopPositionChange}
-                    article={article.elements}
-                    {...article}
-                ></OldArticle>
             )
 
         case 'gallery':
             return (
                 <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
                     <Gallery gallery={article} />
-                </ScrollView>
-            )
-
-        case 'picture':
-            return (
-                <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-                    <Cartoon article={article} />
                 </ScrollView>
             )
 
@@ -69,7 +55,7 @@ const ArticleController = ({
             const message: never = article
             return (
                 <FlexErrorMessage
-                    title={message}
+                    title={'Unable to render article'}
                     style={{ backgroundColor: color.background }}
                 />
             )

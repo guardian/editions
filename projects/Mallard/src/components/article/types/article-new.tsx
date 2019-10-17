@@ -1,14 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import WebView from 'react-native-webview'
-import { BlockElement } from 'src/common'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
 import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
+import { Article as ArticleT, PictureArticle } from '../../../../../common/src'
 import { Fader } from '../../layout/animators/fader'
-import { ArticleHeaderProps } from '../article-header/types'
-import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
 
@@ -35,12 +33,10 @@ const styles = StyleSheet.create({
 const Article = ({
     onTopPositionChange,
     article,
-    ...headerProps
 }: {
-    article: BlockElement[]
+    article: ArticleT | PictureArticle
     onTopPositionChange: OnTopPositionChangeFn
-} & ArticleHeaderProps &
-    StandfirstPropTypes) => {
+}) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
     const ref = useRef<{ _component: WebView } | null>(null)
@@ -48,7 +44,7 @@ const Article = ({
         <Fader>
             {wrapLayout && (
                 <WebviewWithArticle
-                    headerProps={{ ...headerProps, type: type }}
+                    type={type}
                     article={article}
                     scrollEnabled={true}
                     useWebKit={false}
