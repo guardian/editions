@@ -63,7 +63,12 @@ const loginLayoutStyles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
     },
-    spinnerContainer: { alignItems: 'center' },
+    spinnerContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255,255,255,.8)',
+        ...StyleSheet.absoluteFillObject,
+    },
     inputsContainer: {
         flexDirection: 'column',
         flexGrow: 1,
@@ -94,9 +99,6 @@ const LoginLayout = ({
         >
             <View style={loginLayoutStyles.inner}>
                 <LoginHeader onDismiss={onDismiss}>{title}</LoginHeader>
-                <View style={loginLayoutStyles.spinnerContainer}>
-                    {isLoading && <Spinner />}
-                </View>
                 <View style={loginLayoutStyles.inputsContainer}>
                     {errorMessage && (
                         <UiBodyCopy style={loginLayoutStyles.error}>
@@ -106,6 +108,11 @@ const LoginLayout = ({
                     {children}
                 </View>
             </View>
+            {isLoading && (
+                <View style={loginLayoutStyles.spinnerContainer}>
+                    <Spinner />
+                </View>
+            )}
         </KeyboardAvoidingView>
     </View>
 )
