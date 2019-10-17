@@ -300,8 +300,11 @@ const fetchFromNotificationService = async (deviceToken: { token: string }) => {
     )
 }
 
-const notificationTracking = (notificationId: string) => {
-    const url = notificationTrackingUrl(notificationId)
+const notificationTracking = (
+    notificationId: string,
+    type: 'received' | 'complete',
+) => {
+    const url = notificationTrackingUrl(notificationId, type)
     return fetch(url)
 }
 

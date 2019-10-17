@@ -47,10 +47,16 @@ export const notificationEdition = {
     android: 'android-edition',
 }
 
-const notificationTrackingEndpoints = {
+const notificationTrackingReceivedEndpoints = {
     prod: 'https://mobile-events.guardianapis.com/notification/received',
     code:
         'https://mobile-events.code.dev-guardianapis.com/notification/received',
+}
+
+const notificationTrackingCompleteEndpoints = {
+    prod: 'https://mobile-events.guardianapis.com/notification/complete',
+    code:
+        'https://mobile-events.code.dev-guardianapis.com/notification/complete',
 }
 
 export const senderId = {
@@ -58,16 +64,23 @@ export const senderId = {
     code: '43377569438',
 }
 
-export const notificationTrackingUrl = (notificationId: string) => {
+export const notificationTrackingUrl = (
+    notificationId: string,
+    type: 'received' | 'complete',
+) => {
     const edition =
         Platform.OS === 'ios'
             ? notificationEdition.ios
             : notificationEdition.android
 
     const params = `?notificationId=${notificationId}&platform=${edition}`
-    const url = __DEV__
-        ? notificationTrackingEndpoints.code
-        : notificationTrackingEndpoints.prod
+
+    const urlType =
+        type === 'received'
+            ? notificationTrackingReceivedEndpoints
+            : notificationTrackingCompleteEndpoints
+
+    const url = __DEV__ ? urlType.code : urlType.prod
 
     return `${url}${params}`
 }
