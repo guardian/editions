@@ -5,6 +5,7 @@ import {
     ArticleType,
     Direction,
     CAPIArticle,
+    ImageSize,
 } from '../../../common'
 import {
     css,
@@ -193,31 +194,17 @@ const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
     `
 }
 
-export const useRenderedHTML = (
+interface ArticleContentProps {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    imageSize: ImageSize
+}
+
+const renderArticleContent = (
     elements: BlockElement[],
-    {
-        pillar,
-        wrapLayout,
-        showMedia,
-        height,
-        publishedId,
-        showWebHeader,
-        article,
-        type,
-    }: {
-        pillar: ArticlePillar
-        wrapLayout: WrapLayout
-        showMedia: boolean
-        height: number
-        article: CAPIArticle
-        type: ArticleType
-        publishedId: Issue['publishedId'] | null
-        showWebHeader: boolean
-        headerProps?: ArticleHeaderProps & { type: ArticleType }
-    },
+    { showMedia, publishedId, imageSize }: ArticleContentProps,
 ) => {
-    const { imageSize } = useImageSize()
-    const content = elements
+    elements
         .map(el => {
             switch (el.id) {
                 case 'html':
@@ -250,6 +237,35 @@ export const useRenderedHTML = (
             }
         })
         .join('')
+}
+
+export const renderArticle = (
+    elements: BlockElement[],
+    {
+        pillar,
+        wrapLayout,
+        showMedia,
+        height,
+        publishedId,
+        showWebHeader,
+        article,
+        imageSize,
+        type,
+    }: {
+        pillar: ArticlePillar
+        wrapLayout: WrapLayout
+        height: number
+        article: CAPIArticle
+        type: ArticleType
+        showWebHeader: boolean
+        headerProps?: ArticleHeaderProps & { type: ArticleType }
+    } & ArticleContentProps,
+) => {
+    const content = renderArticleContent(elements, {
+        showMedia,
+        publishedId,
+        imageSize,
+    })
 
     const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
     const body = html`
