@@ -53,10 +53,10 @@ const notificationTrackingReceivedEndpoints = {
         'https://mobile-events.code.dev-guardianapis.com/notification/received',
 }
 
-const notificationTrackingCompleteEndpoints = {
-    prod: 'https://mobile-events.guardianapis.com/notification/complete',
+const notificationTrackingDownloadedEndpoints = {
+    prod: 'https://mobile-events.guardianapis.com/notification/downloaded',
     code:
-        'https://mobile-events.code.dev-guardianapis.com/notification/complete',
+        'https://mobile-events.code.dev-guardianapis.com/notification/downloaded',
 }
 
 export const senderId = {
@@ -66,7 +66,7 @@ export const senderId = {
 
 export const notificationTrackingUrl = (
     notificationId: string,
-    type: 'received' | 'complete',
+    type: 'received' | 'downloaded',
 ) => {
     const edition =
         Platform.OS === 'ios'
@@ -78,7 +78,7 @@ export const notificationTrackingUrl = (
     const urlType =
         type === 'received'
             ? notificationTrackingReceivedEndpoints
-            : notificationTrackingCompleteEndpoints
+            : notificationTrackingDownloadedEndpoints
 
     const url = __DEV__ ? urlType.code : urlType.prod
 

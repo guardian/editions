@@ -4,12 +4,12 @@ const notificationId = '1234567890qwertyuio'
 
 export const baseTests = ({
     receiveExpect,
-    completeExpect,
+    downloadedExpect,
     platform,
     env,
 }: {
     receiveExpect: string
-    completeExpect: string
+    downloadedExpect: string
     platform: 'iOS' | 'Android'
     env: 'CODE' | 'PROD'
 }) =>
@@ -23,9 +23,9 @@ export const baseTests = ({
                 receiveExpect,
             )
         })
-        it('should provide a complete endpoint', () => {
-            expect(notificationTrackingUrl(notificationId, 'complete')).toEqual(
-                completeExpect,
-            )
+        it('should provide a downloaded endpoint', () => {
+            expect(
+                notificationTrackingUrl(notificationId, 'downloaded'),
+            ).toEqual(downloadedExpect)
         })
     })
