@@ -19,9 +19,8 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: metrics.horizontal,
-        paddingVertical: metrics.vertical / 1.5,
+        paddingVertical: metrics.vertical,
         marginVertical: StyleSheet.hairlineWidth,
-        paddingBottom: metrics.vertical / 1.5,
     },
     itemFlexer: {
         flexDirection: 'row',
@@ -144,11 +143,13 @@ const TallRow = ({
 
 export interface RowWrapperProps {
     onPress?: () => void
+    narrow?: boolean
 }
 
 const RowWrapper = ({
     children,
     onPress,
+    narrow,
 }: {
     children: ReactNode
 } & RowWrapperProps) => {
@@ -171,6 +172,7 @@ const RowWrapper = ({
         <View
             style={[
                 styles.item,
+                narrow && { paddingVertical: metrics.vertical / 1.5 },
                 {
                     backgroundColor,
                 },
