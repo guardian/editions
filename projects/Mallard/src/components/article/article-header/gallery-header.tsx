@@ -31,13 +31,11 @@ export interface GalleryHeaderProps {
     headline: GalleryArticle['headline']
     byline: GalleryArticle['byline']
     standfirst: GalleryArticle['standfirst']
-    cutout?: ImageType
 }
 const GalleryHeader = ({
     headline,
     byline,
     standfirst,
-    cutout,
 }: GalleryHeaderProps) => {
     return (
         <MultilineWrap
