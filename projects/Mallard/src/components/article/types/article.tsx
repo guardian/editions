@@ -46,7 +46,7 @@ const Article = ({
 }) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
-    const ref = useRef<{ _component: WebView } | null>(null)
+    const ref = useRef<WebView | null>(null)
     return (
         <Fader>
             {wrapLayout && (
@@ -67,7 +67,7 @@ const Article = ({
                             // webViewRef is missing from the type definition
                             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                             // @ts-ignore
-                            ref.current._component.webViewRef.current.measure(
+                            ref.current.webViewRef.current.measure(
                                 (
                                     fx: number,
                                     fy: number,

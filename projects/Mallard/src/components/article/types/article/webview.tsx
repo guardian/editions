@@ -1,6 +1,5 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React from 'react'
-import { Animated } from 'react-native'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -11,8 +10,6 @@ import { renderArticle } from '../../html/render'
 import { WrapLayout } from '../../wrap/wrap'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
-
-const AniWebView = Animated.createAnimatedComponent(WebView)
 
 const WebviewWithArticle = ({
     article,
@@ -28,7 +25,7 @@ const WebviewWithArticle = ({
     wrapLayout: WrapLayout
     paddingTop?: number
     theme: ArticleTheme
-    _ref?: (ref: { _component: WebView }) => void
+    _ref?: (ref: WebView) => void
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
@@ -49,7 +46,7 @@ const WebviewWithArticle = ({
     })
 
     return (
-        <AniWebView
+        <WebView
             {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
