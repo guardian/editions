@@ -182,6 +182,7 @@ export const headerStyles = ({
         text-decoration: none;
         font-weight: 600;
         color: ${colors.main};
+        pointer-events: none;
     }
 
     .header-top-byline > a {
@@ -359,6 +360,17 @@ export const headerStyles = ({
         color: ${colors.main};
         display: block;
         font-family: ${families.titlepiece.regular};
+    }
+
+    /*picture*/
+    .header-container[data-type='${
+        ArticleType.Picture
+    }'] .header-byline  > span > a {
+        color: var(--text);
+    }
+    .header-container[data-type='${ArticleType.Picture}'] h1 {
+        font-family: ${families.titlepiece.regular};
+        min-height: 2em;
     }
 
     /*immersive*/

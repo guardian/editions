@@ -109,11 +109,13 @@ export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
 export const makeHtml = ({
     styles,
     body,
+    rootProps,
 }: {
     styles: string
     body: string
+    rootProps?: string
 }) => html`
-    <html>
+    <html ${rootProps}>
         <head>
             <style>
                 ${styles}

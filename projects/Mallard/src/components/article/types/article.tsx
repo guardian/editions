@@ -1,20 +1,14 @@
-import React, { ReactNode, useState, useEffect } from 'react'
-import { Animated, Dimensions, StyleSheet, View, Platform } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
-import { BlockElement } from 'src/common'
-import { safeInterpolation } from 'src/helpers/math'
+import React, { useRef, useState } from 'react'
+import { StyleSheet } from 'react-native'
+import WebView from 'react-native-webview'
+import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
+import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
-import { ArticleHeader } from '../article-header'
-import { ArticleHeaderProps } from '../article-header/types'
-import { PropTypes as StandfirstPropTypes } from '../article-standfirst'
+import { Article as ArticleT, PictureArticle } from '../../../../../common/src'
+import { Fader } from '../../layout/animators/fader'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
-import {
-    wireScrollBarToDismiss,
-    OnTopPositionChangeFn,
-} from 'src/screens/article/helpers'
-import { parsePing } from 'src/helpers/webview'
 
 const styles = StyleSheet.create({
     block: {
@@ -26,9 +20,8 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     webview: {
-        backgroundColor: 'transparent',
-        width: '100%',
-        height: '100%',
+        flex: 1,
+        overflow: 'hidden',
         /*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
@@ -37,154 +30,62 @@ const styles = StyleSheet.create({
     },
 })
 
-const ArticleWebView = ({
-    header,
-    onTopPositionChange,
-    ...webviewProps
-}: {
-    header: ReactNode
-    article: BlockElement[]
-    onTopPositionChange: OnTopPositionChangeFn
-    wrapLayout: WrapLayout
-}) => {
-    const [height, setHeight] = useState(Dimensions.get('window').height)
-
-    return (
-        <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-            {header}
-            <View>
-                <Wrap>
-                    <View style={{ minHeight: height }}></View>
-                </Wrap>
-
-                <View style={[styles.webviewWrap]}>
-                    <WebviewWithArticle
-                        {...webviewProps}
-                        scrollEnabled={false}
-                        useWebKit={false}
-                        onMessage={event => {
-                            const { scrollHeight } = parsePing(
-                                event.nativeEvent.data,
-                            )
-                            if (scrollHeight > height) {
-                                setHeight(scrollHeight)
-                            }
-                        }}
-                        style={[styles.webview]}
-                    />
-                </View>
-            </View>
-        </ScrollView>
-    )
-}
-
-const androidStyles = StyleSheet.create({
-    header: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        width: '100%',
-        zIndex: 999999,
-    },
-    wrapper: {
-        height: '100%',
-    },
-})
-const ArticleWebViewAndroid = ({
-    header,
-    onTopPositionChange,
-    ...webviewProps
-}: {
-    header: ReactNode
-    article: BlockElement[]
-    wrapLayout: WrapLayout
-    onTopPositionChange: OnTopPositionChangeFn
-}) => {
-    const [height, setHeight] = useState<number | null>(null)
-    const [scrollY] = useState(() => new Animated.Value(0))
-
-    useEffect(() => {
-        onTopPositionChange(false)
-    }, [])
-    return (
-        <View style={androidStyles.wrapper}>
-            <Animated.View
-                onLayout={(ev: any) => {
-                    setHeight(ev.nativeEvent.layout.height)
-                }}
-                pointerEvents="none"
-                style={[
-                    androidStyles.header,
-                    {
-                        transform: [
-                            {
-                                translateY: scrollY.interpolate({
-                                    inputRange: safeInterpolation([-1, 1]),
-                                    outputRange: safeInterpolation([1, -1]),
-                                }),
-                            },
-                        ],
-                    },
-                ]}
-            >
-                {header}
-            </Animated.View>
-
-            {!!height && (
-                <>
-                    <WebviewWithArticle
-                        {...webviewProps}
-                        onScroll={Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: {
-                                            y: scrollY,
-                                        },
-                                    },
-                                },
-                            ],
-                            /* webview doesnt support the native driver just yet :() */
-                            { useNativeDriver: false },
-                        )}
-                        paddingTop={height}
-                        style={StyleSheet.absoluteFillObject}
-                    />
-                </>
-            )}
-        </View>
-    )
+export enum ArticleTheme {
+    Default = 'default',
+    Dark = 'dark',
 }
 
 const Article = ({
-    article,
     onTopPositionChange,
-    ...headerProps
+    article,
+    theme = ArticleTheme.Default,
 }: {
-    article: BlockElement[]
+    article: ArticleT | PictureArticle
     onTopPositionChange: OnTopPositionChangeFn
-} & ArticleHeaderProps &
-    StandfirstPropTypes) => {
+    theme?: ArticleTheme
+}) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
-
-    const WebView =
-        Platform.OS === 'android' ? ArticleWebViewAndroid : ArticleWebView
-
+    const ref = useRef<{ _component: WebView } | null>(null)
     return (
-        <>
+        <Fader>
             {wrapLayout && (
-                <WebView
-                    header={<ArticleHeader {...headerProps} type={type} />}
+                <WebviewWithArticle
+                    type={type}
                     article={article}
-                    onTopPositionChange={onTopPositionChange}
+                    theme={theme}
+                    scrollEnabled={true}
+                    useWebKit={false}
+                    style={[styles.webview]}
                     wrapLayout={wrapLayout}
+                    _ref={r => {
+                        ref.current = r
+                    }}
+                    onMessage={event => {
+                        const { isAtTop } = parsePing(event.nativeEvent.data)
+                        if (ref.current) {
+                            // webViewRef is missing from the type definition
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                            // @ts-ignore
+                            ref.current._component.webViewRef.current.measure(
+                                (
+                                    fx: number,
+                                    fy: number,
+                                    width: number,
+                                    height: number,
+                                    px: number,
+                                ) => {
+                                    if (px === 0) {
+                                        onTopPositionChange(isAtTop)
+                                    }
+                                },
+                            )
+                        }
+                    }}
                 />
             )}
-
             <Wrap onWrapLayout={setWrapLayout}></Wrap>
-        </>
+        </Fader>
     )
 }
 

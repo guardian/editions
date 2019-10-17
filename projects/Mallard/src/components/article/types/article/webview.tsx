@@ -11,6 +11,7 @@ import { onShouldStartLoadWithRequest } from './helpers'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { PictureArticle, Article } from '../../../../../../common/src'
 import { useImageSize } from 'src/hooks/use-image-size'
+import { ArticleTheme } from '../article'
 
 const AniWebView = Animated.createAnimatedComponent(WebView)
 
@@ -20,12 +21,14 @@ const WebviewWithArticle = ({
     wrapLayout,
     paddingTop = 0,
     _ref,
+    theme,
     ...webViewProps
 }: {
     article: Article | PictureArticle
     type: ArticleType
     wrapLayout: WrapLayout
     paddingTop?: number
+    theme: ArticleTheme
     _ref?: (ref: { _component: WebView }) => void
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
@@ -39,6 +42,7 @@ const WebviewWithArticle = ({
         article,
         type,
         imageSize,
+        theme,
         showWebHeader: true,
         showMedia: isConnected,
         height: paddingTop,

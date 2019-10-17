@@ -2,8 +2,8 @@ import React from 'react'
 import { CAPIArticle } from 'src/common'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { color } from 'src/theme/color'
-import { Article as OldArticle } from './types/article'
-import { Article } from './types/article-new'
+import { Article as OldArticle, ArticleTheme } from './types/article'
+import { Article } from './types/article'
 import { Crossword } from './types/crossword'
 import { Gallery } from './types/gallery'
 import { Cartoon } from './types/cartoon'
@@ -33,11 +33,19 @@ const ArticleController = ({
 }) => {
     switch (article.type) {
         case 'article':
+            return (
+                <Article
+                    onTopPositionChange={onTopPositionChange}
+                    article={article}
+                />
+            )
+
         case 'picture':
             return (
                 <Article
                     onTopPositionChange={onTopPositionChange}
                     article={article}
+                    theme={ArticleTheme.Dark}
                 />
             )
 
@@ -52,7 +60,6 @@ const ArticleController = ({
             return <Crossword crosswordArticle={article} />
 
         default:
-            const message: never = article
             return (
                 <FlexErrorMessage
                     title={'Unable to render article'}

@@ -1,13 +1,4 @@
 import {
-    ArticlePillar,
-    BlockElement,
-    MediaAtomElement,
-    ArticleType,
-    Direction,
-    CAPIArticle,
-    ImageSize,
-} from '../../../common'
-import {
     css,
     generateAssetsFontCss,
     getScaledFont,
@@ -19,22 +10,31 @@ import {
 import { getPillarColors } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { Issue } from '../../../common'
+import {
+    ArticlePillar,
+    ArticleType,
+    BlockElement,
+    CAPIArticle,
+    Direction,
+    ImageSize,
+    Issue,
+    MediaAtomElement,
+} from '../../../common'
 import { ArticleHeaderProps } from '../article-header/types'
+import { ArticleTheme } from '../types/article'
 import { WrapLayout } from '../wrap/wrap'
+import { Arrow } from './arrow'
 import { Header, headerStyles } from './header'
 import { CssProps } from './helpers/props'
 import { Image, imageStyles } from './images'
+import { Line, lineStyles } from './line'
 import { Pullquote, quoteStyles } from './pull-quote'
-import { lineStyles, Line } from './line'
-import { useImageSize } from 'src/hooks/use-image-size'
 import { ratingStyles } from './rating'
-import { Arrow } from './arrow'
+import { color } from 'src/theme/color'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
-export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
-
+const makeFontsCss = () => css`
     /* text */
     ${generateAssetsFontCss({ fontFamily: families.text.regular })}
     ${generateAssetsFontCss({
@@ -88,8 +88,28 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         fontFamily: families.icon.regular,
         extension: 'otf',
     })}
+`
 
-    /* css */
+export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
+    ${makeFontsCss()}
+
+    :root {
+        --background: ${color.background};
+        --text: ${color.text};
+    }
+
+    :root[data-theme="dark"] {
+        --background: ${color.photoBackground};
+        --text: ${color.textOverDarkBackground};
+    }
+
+    :root {
+        ${getScaledFontCss('text', 1)}
+        font-family: ${families.text.regular};
+        background-color: var(--background);
+        color: var(--text);
+    }
+
     html, body {
         overflow-x: hidden;
     }
@@ -108,10 +128,6 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         transform: scale(1.335) translateY(1px) translateX(-2px);
         transform-origin: left center;
         margin-right: 25px;
-    }
-    :root {
-        ${getScaledFontCss('text', 1)}
-        font-family: ${families.text.regular};
     }
 
     @keyframes fade {
@@ -251,6 +267,7 @@ export const renderArticle = (
         article,
         imageSize,
         type,
+        theme,
     }: {
         pillar: ArticlePillar
         wrapLayout: WrapLayout
@@ -259,14 +276,15 @@ export const renderArticle = (
         type: ArticleType
         showWebHeader: boolean
         headerProps?: ArticleHeaderProps & { type: ArticleType }
+        theme: ArticleTheme
     } & ArticleContentProps,
 ) => {
     let content, header
     switch (article.type) {
         case 'picture':
             header = Header({
-                type,
                 publishedId,
+                type: ArticleType.Picture,
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
@@ -304,5 +322,5 @@ export const renderArticle = (
             </main>
         </div>
     `
-    return makeHtml({ styles, body })
+    return makeHtml({ styles, body, rootProps: `data-theme="${theme}"` })
 }
