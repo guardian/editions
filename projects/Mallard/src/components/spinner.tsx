@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
 import { color } from 'src/theme/color'
@@ -30,13 +30,22 @@ const Ball = ({ color }: { color: string }) => {
 }
 
 const Spinner = () => {
+    const [visible, setVisible] = useState(false)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setVisible(true)
+        }, 100)
+        return () => clearTimeout(timer)
+    }, [])
     return (
         <View accessibilityLabel={'Loading content'}>
-            <View {...ariaHidden} style={styles.container}>
-                {pillars.map((color, index) => (
-                    <Ball key={index} color={color}></Ball>
-                ))}
-            </View>
+            {visible && (
+                <View {...ariaHidden} style={styles.container}>
+                    {pillars.map((color, index) => (
+                        <Ball key={index} color={color}></Ball>
+                    ))}
+                </View>
+            )}
         </View>
     )
 }
