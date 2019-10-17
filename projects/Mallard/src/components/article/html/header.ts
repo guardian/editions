@@ -254,6 +254,17 @@ export const headerStyles = ({
         position: relative;
     }
 
+    .image-as-bg[data-preserve-ratio=true] {
+        padding-top:0;
+        overflow: visible;
+        height: auto;
+    }
+    .image-as-bg__img {
+        width: 100%;
+        z-index: 0;
+        position: relative;
+    }
+
     .image-as-bg-info {
         position: absolute;
         top:0;
@@ -437,22 +448,30 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
     `
 }
 
-const ImageAsBg = ({
+const MainMediaImage = ({
     image,
     className,
     children,
+    preserveRatio,
 }: {
     image: CreditedImage
     className?: string
     children?: string
+    preserveRatio?: boolean
 }) => {
     const path = useImagePath(image)
+
     return html`
         <div
             class="image-as-bg ${className}"
+            data-preserve-ratio="${preserveRatio || 'false'}"
             style="background-image: url(${path}); "
             data-open="false"
         >
+            ${preserveRatio &&
+                html`
+                    <img class="image-as-bg__img" src="${path}" aria-hidden />
+                `}
             <button
                 aria-hidden
                 onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
@@ -493,7 +512,7 @@ const Header = ({
         ${immersive &&
             headerProps.image &&
             publishedId &&
-            ImageAsBg({
+            MainMediaImage({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
             })}
@@ -504,9 +523,10 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        ImageAsBg({
+                        MainMediaImage({
                             className: 'header-image',
                             image: headerProps.image,
+                            preserveRatio: true,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
                                 : undefined,
