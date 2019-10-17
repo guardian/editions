@@ -113,7 +113,6 @@ export const defaultSettings: Settings = {
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix,
     issuesPath: `/${contentPrefix}/issues`,
-    useNonWobblyWebview: true,
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,
 }

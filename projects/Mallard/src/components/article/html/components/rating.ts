@@ -1,17 +1,13 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import { getRatingAsText } from 'src/components/stars/stars'
 import { css, html, px } from 'src/helpers/webview'
-import { families } from 'src/theme/typography'
-import { WrapLayout } from '../wrap/wrap'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
+import { CssProps } from '../helpers/css'
 
 export const ratingStyles = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    config: {
-        colors: PillarColours
-        wrapLayout: WrapLayout
-    },
+    config: CssProps,
 ) => css`
     .rating {
         font-family: ${families.icon.regular};

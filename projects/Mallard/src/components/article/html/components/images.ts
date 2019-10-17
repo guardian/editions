@@ -6,8 +6,8 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
-import { breakOut } from './helpers/layout'
-import { CssProps } from './helpers/props'
+import { breakOut } from '../helpers/layout'
+import { CssProps } from '../helpers/css'
 
 export const renderCaption = ({
     caption,

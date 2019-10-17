@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { BylineCutout } from 'src/components/article/article-header/opinion-header'
+import { BylineCutout } from './helpers/opinion'
 import Quote from 'src/components/icons/Quote'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'

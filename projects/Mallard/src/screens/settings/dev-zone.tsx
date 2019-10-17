@@ -142,19 +142,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         },
                     },
                     {
-                        key: 'Use non-wobbly webviews',
-                        title: 'Use non-wobbly webviews',
-                        explainer: settings.useNonWobblyWebview ? 'yes' : 'no',
-                        data: {
-                            onPress: () => {
-                                setSetting(
-                                    'useNonWobblyWebview',
-                                    !settings.useNonWobblyWebview,
-                                )
-                            },
-                        },
-                    },
-                    {
                         key: 'Clear CAS caches',
                         title: 'Clear CAS caches',
                         data: {
