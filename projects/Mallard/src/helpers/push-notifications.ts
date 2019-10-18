@@ -16,6 +16,7 @@ import { pushNotificationRegistrationCache } from './storage'
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
+import { ComponentType, Action, sendComponentEvent } from 'src/services/ophan'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -68,8 +69,20 @@ const maybeRegister = async (
 const pushNotifcationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
+            sendComponentEvent({
+                componentType: ComponentType.appVideo,
+                action: Action.view,
+                value: (token && JSON.stringify(token.token)) || '',
+                componentId: 'notificationToken',
+            })
             if (token) {
                 maybeRegister(token.token).catch(err => {
+                    sendComponentEvent({
+                        componentType: ComponentType.appVideo,
+                        action: Action.view,
+                        value: JSON.stringify(err) || '',
+                        componentId: 'notificationTokenError',
+                    })
                     console.log(`Error registering for notifications: ${err}`)
                     errorService.captureException(err)
                 })
@@ -82,6 +95,16 @@ const pushNotifcationRegistration = () => {
                 Platform.OS === 'ios'
                     ? notification.data.uniqueIdentifier
                     : notification.uniqueIdentifier
+
+            // Do tracking as soon as possible
+            notificationTracking(notificationId, 'received')
+
+            sendComponentEvent({
+                componentType: ComponentType.appVideo,
+                action: Action.view,
+                value: JSON.stringify(notification),
+                componentId: 'notification',
+            })
 
             if (key) {
                 try {
@@ -96,8 +119,15 @@ const pushNotifcationRegistration = () => {
                     // Not there? Fahgettaboudit
                     if (!pushImageSummary) return null
 
-                    notificationTracking(notificationId)
+                    sendComponentEvent({
+                        componentType: ComponentType.appVideo,
+                        action: Action.view,
+                        value: JSON.stringify(pushImageSummary),
+                        componentId: 'pushImageSummary',
+                    })
+
                     await downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    notificationTracking(notificationId, 'downloaded')
                     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)
                 } catch (e) {

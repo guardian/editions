@@ -32,6 +32,7 @@ export enum ArticleType {
     Letter = 'letter',
     Recipe = 'recipe',
     Gallery = 'gallery',
+    Picture = 'picture',
     Feature = 'feature',
     Immersive = 'immersive',
 }

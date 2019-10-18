@@ -1,4 +1,4 @@
-import { renderCaption } from '../images'
+import { renderCaption } from '../components/images'
 
 describe('html', () => {
     describe('renderCaption', () => {
