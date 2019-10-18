@@ -122,7 +122,6 @@ const makeCss = ({ colors, theme }: CssProps) => css`
         animation-fill-mode: both;
     }
     main, .wrapper {
-        background: pink;
         margin-right: ${px(
             metrics.article.rightRail + metrics.article.sidesTablet,
         )}

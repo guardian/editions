@@ -11,14 +11,12 @@ import {
     GalleryArticle,
 } from '../../../../../../common/src'
 import { renderArticle } from '../../html/article'
-import { WrapLayout } from '../../wrap/wrap'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
 
 const WebviewWithArticle = ({
     article,
     type,
-    wrapLayout,
     paddingTop = 0,
     _ref,
     theme,
@@ -26,7 +24,6 @@ const WebviewWithArticle = ({
 }: {
     article: Article | PictureArticle | GalleryArticle
     type: ArticleType
-    wrapLayout: WrapLayout
     paddingTop?: number
     theme: ArticleTheme
     _ref?: (ref: WebView) => void
@@ -38,7 +35,6 @@ const WebviewWithArticle = ({
 
     const html = renderArticle(article.elements, {
         pillar,
-        wrapLayout,
         article,
         type,
         imageSize,

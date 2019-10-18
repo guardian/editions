@@ -11,7 +11,6 @@ import {
     Content,
 } from '../../../../../common/src'
 import { Fader } from '../../layout/animators/fader'
-import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
 import { GalleryArticle } from 'src/common'
 
@@ -50,7 +49,6 @@ const Article = ({
     article: ArticleT | PictureArticle | GalleryArticle
     onTopPositionChange: OnTopPositionChangeFn
 }) => {
-    const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
 
@@ -60,42 +58,38 @@ const Article = ({
 
     return (
         <Fader>
-            {wrapLayout && (
-                <WebviewWithArticle
-                    type={type}
-                    article={article}
-                    theme={theme}
-                    scrollEnabled={true}
-                    useWebKit={false}
-                    style={[styles.webview]}
-                    wrapLayout={wrapLayout}
-                    _ref={r => {
-                        ref.current = r
-                    }}
-                    onMessage={event => {
-                        const { isAtTop } = parsePing(event.nativeEvent.data)
-                        if (ref.current) {
-                            // webViewRef is missing from the type definition
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                            // @ts-ignore
-                            ref.current.webViewRef.current.measure(
-                                (
-                                    fx: number,
-                                    fy: number,
-                                    width: number,
-                                    height: number,
-                                    px: number,
-                                ) => {
-                                    if (px === 0) {
-                                        onTopPositionChange(isAtTop)
-                                    }
-                                },
-                            )
-                        }
-                    }}
-                />
-            )}
-            <Wrap onWrapLayout={setWrapLayout}></Wrap>
+            <WebviewWithArticle
+                type={type}
+                article={article}
+                theme={theme}
+                scrollEnabled={true}
+                useWebKit={false}
+                style={[styles.webview]}
+                _ref={r => {
+                    ref.current = r
+                }}
+                onMessage={event => {
+                    const { isAtTop } = parsePing(event.nativeEvent.data)
+                    if (ref.current) {
+                        // webViewRef is missing from the type definition
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                        // @ts-ignore
+                        ref.current.webViewRef.current.measure(
+                            (
+                                fx: number,
+                                fy: number,
+                                width: number,
+                                height: number,
+                                px: number,
+                            ) => {
+                                if (px === 0) {
+                                    onTopPositionChange(isAtTop)
+                                }
+                            },
+                        )
+                    }
+                }}
+            />
         </Fader>
     )
 }

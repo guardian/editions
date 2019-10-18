@@ -27,22 +27,14 @@ const maxWidthStyles = StyleSheet.create({
     },
 })
 
-export const MaxWidthWrap = ({
-    children,
-    invert = false,
-}: {
-    children: ReactNode
-    invert?: boolean
-}) => {
+export const MaxWidthWrap = ({ children }: { children: ReactNode }) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <View
             style={[
                 maxWidthStyles.maxWidth,
-                invert && maxWidthStyles.inverted,
-                invert && isTablet && maxWidthStyles.invertedTablet,
-                !invert && maxWidthStyles.padding,
-                !invert && isTablet && maxWidthStyles.paddingTablet,
+                maxWidthStyles.padding,
+                isTablet && maxWidthStyles.paddingTablet,
             ]}
         >
             {children}
