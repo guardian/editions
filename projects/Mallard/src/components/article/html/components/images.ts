@@ -57,7 +57,7 @@ const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     .image figcaption svg {
         width: 0.8em;
         left: 0;
-        top: 0.35em;
+        top: 0.3em;
         position: absolute;
         right: ${px(breakOut(wrapLayout) * -1)};
     }

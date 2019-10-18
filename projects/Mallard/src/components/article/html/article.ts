@@ -10,11 +10,10 @@ import {
     Issue,
     MediaAtomElement,
 } from '../../../common'
-import { ArticleHeaderProps } from '../article-header/types'
 import { ArticleTheme } from '../types/article'
 import { WrapLayout } from '../wrap/wrap'
 import { Arrow } from './components/arrow'
-import { Header } from './components/header'
+import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
@@ -112,7 +111,7 @@ export const renderArticle = (
         case 'picture':
             header = Header({
                 publishedId,
-                type: ArticleType.Picture,
+                type: ArticleType.Gallery,
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
@@ -129,6 +128,22 @@ export const renderArticle = (
                     publishedId,
                     imageSize,
                 })
+            break
+        case 'gallery':
+            console.log(article)
+            header = Header({
+                publishedId,
+                type: ArticleType.Gallery,
+                headline: article.headline,
+                byline: article.byline,
+                bylineHtml: article.bylineHtml,
+                image: article.image,
+            })
+            content = renderArticleContent(elements, {
+                showMedia,
+                publishedId,
+                imageSize,
+            })
             break
         default:
             header = Header({ ...article, type, publishedId })

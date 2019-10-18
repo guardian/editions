@@ -5,13 +5,23 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { CreditedImage } from '../../../../../../common/src'
-import { ArticleHeaderProps } from '../../article-header/types'
+import { CreditedImage, Article } from '../../../../../../common/src'
 import { CssProps, themeColors } from '../helpers/css'
 import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
+
+export interface ArticleHeaderProps {
+    headline: string
+    byline?: string
+    kicker?: string | null
+    image?: CreditedImage | null
+    standfirst?: string
+    starRating?: Article['starRating']
+    bylineImages?: { cutout?: ImageT }
+    bylineHtml?: string
+}
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -355,13 +365,13 @@ export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
         font-family: ${families.titlepiece.regular};
     }
 
-    /*picture*/
+    /*gallery*/
     .header-container[data-type='${
-        ArticleType.Picture
+        ArticleType.Gallery
     }'] .header-byline  > span > a {
-        color: ${themeColors(theme).background};
+        color: ${themeColors(theme).text};
     }
-    .header-container[data-type='${ArticleType.Picture}'] h1 {
+    .header-container[data-type='${ArticleType.Gallery}'] h1 {
         font-family: ${families.titlepiece.regular};
         min-height: 2em;
     }
@@ -475,7 +485,8 @@ const ImageAsBg = ({
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
-    type === ArticleType.Obituary
+    type === ArticleType.Obituary ||
+    type === ArticleType.Gallery
 
 const hasLargeByline = (type: ArticleType) =>
     type === ArticleType.Opinion || type === ArticleType.Analysis
