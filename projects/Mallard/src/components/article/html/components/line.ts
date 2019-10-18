@@ -11,9 +11,7 @@ export const lineStyles = ({ theme }: CssProps) => css`
             height: '100%';
             background: ${themeColors(theme).line};
             top: 0;
-            right: ${px(
-                metrics.article.rightRail + metrics.article.sides,
-            )};
+            right: ${px(metrics.article.rightRail + metrics.article.sides)};
             bottom: 0;
             display: block;
             z-index: 99999;

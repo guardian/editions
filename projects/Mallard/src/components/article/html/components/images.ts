@@ -17,8 +17,7 @@ const breakoutCaption = (role: ImageElement['role']) => css`
     .image[data-role='${role}'] figcaption {
         position: absolute;
         right: ${px(
-            (metrics.article.rightRail + metrics.article.sides * 1.5) *
-                -1,
+            (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
         )};
         top: -0.5em;
         display: block;
@@ -55,8 +54,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
         top: 0.3em;
         position: absolute;
         right: ${px(
-            (metrics.article.rightRail + metrics.article.sides * 1.5) *
-                -1,
+            (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
         )};
     }
     .image figcaption svg path {
@@ -96,9 +94,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
         }
 
         .image[data-role='supporting'] figcaption {
-            width: ${px(
-                metrics.article.rightRail - metrics.article.sides,
-            )};
+            width: ${px(metrics.article.rightRail - metrics.article.sides)};
             position: absolute;
             right: 0;
         }

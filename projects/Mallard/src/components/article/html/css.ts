@@ -115,9 +115,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
 
     .app {
         padding: 0 ${metrics.article.sides} ${px(metrics.vertical)};
-        max-width: ${px(
-            metrics.article.maxWidth + metrics.article.sides * 2,
-        )};
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
         position: relative;
         animation-duration: .5s;

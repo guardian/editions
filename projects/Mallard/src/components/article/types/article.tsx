@@ -1,18 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
 import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
+import { Fader } from '../../layout/animators/fader'
+import { WebviewWithArticle } from './article/webview'
 import {
     Article as ArticleT,
     PictureArticle,
     Content,
-} from '../../../../../common/src'
-import { Fader } from '../../layout/animators/fader'
-import { WebviewWithArticle } from './article/webview'
-import { GalleryArticle } from 'src/common'
+    GalleryArticle,
+} from 'src/common'
 
 const styles = StyleSheet.create({
     block: {
