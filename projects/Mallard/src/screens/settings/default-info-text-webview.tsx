@@ -14,13 +14,14 @@ const styles: string = css`
     }
     :root {
         font-size: ${17 * PixelRatio.getFontScale()}px;
-        line-height; 1.4;
+        line-height: 1.4;
     }
     .app {
         font-family: 'GuardianTextEgyptian-Reg';
         padding: ${metrics.vertical}px ${metrics.horizontal}px;
     }
-    .app p, .app h2 {
+    .app p,
+    .app h2 {
         margin: ${metrics.vertical * 2}px 0;
     }
     .app a {
@@ -28,7 +29,7 @@ const styles: string = css`
         text-decoration-color: ${color.line};
     }
     .app ul {
-        margin-left: ${metrics.horizontal}px;
+        margin-left: ${metrics.horizontal * 2}px;
     }
 `
 
@@ -39,6 +40,7 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
                 originWhitelist={['*']}
                 source={{ html: makeHtml({ styles, body: html }) }}
                 style={{ flex: 1 }}
+                useWebKit={false}
             />
         </WithAppAppearance>
     )
