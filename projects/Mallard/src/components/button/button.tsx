@@ -175,6 +175,7 @@ const Button = ({
             accessibilityHint={'alt' in innards ? innards.alt : undefined}
             onPress={onPress}
             style={style}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             {...innards}
         >
             <View
