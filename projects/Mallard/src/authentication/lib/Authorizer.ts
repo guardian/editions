@@ -10,6 +10,7 @@ import {
     patchAttempt,
     isNotRun,
     hasRun,
+    ErrorAttempt,
 } from './Attempt'
 import { cataResult, AuthResult, ValidResult, InvalidResult } from './Result'
 
@@ -80,7 +81,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
                     this.clearCaches()
                     return InvalidAttempt(connectivity, reason)
                 },
-                error: reason => InvalidAttempt(connectivity, reason),
+                error: reason => ErrorAttempt(connectivity, reason),
             })
         } catch (e) {
             attempt = InvalidAttempt('online', 'Something went wrong')

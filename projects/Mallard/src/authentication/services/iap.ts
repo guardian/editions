@@ -3,7 +3,12 @@ import { Platform } from 'react-native'
 import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants'
 import { ReceiptValidationResponse } from 'react-native-iap/apple'
 import { NativeModules } from 'react-native'
-import { InvalidResult, AuthResult, ValidResult } from '../lib/Result'
+import {
+    InvalidResult,
+    AuthResult,
+    ValidResult,
+    ErrorResult,
+} from '../lib/Result'
 import { isInBeta } from 'src/helpers/release-stream'
 const { InAppUtils } = NativeModules
 
@@ -66,7 +71,7 @@ const tryRestoreActiveIOSSubscriptionReceipt = async (): Promise<
         const validReceipt = findValidReceipt(decodedReceipt)
         return validReceipt ? ValidResult(validReceipt) : InvalidResult()
     } catch {
-        return InvalidResult()
+        return ErrorResult('Verification error')
     }
 }
 
