@@ -23,9 +23,11 @@ import { CASExpiry } from './services/cas'
 import { ReceiptIOS } from './services/iap'
 import * as NetInfo from '@react-native-community/netinfo'
 
+type AttemptType = 'iap' | 'cas' | 'identity'
+
 type AttemptResponse<T> = {
     attempt: ResolvedAttempt<T>
-    accessAttempt: ResolvedAttempt<string>
+    accessAttempt: ResolvedAttempt<AttemptType>
 }
 
 const defaultAttemptResponse = Promise.resolve({
@@ -34,7 +36,7 @@ const defaultAttemptResponse = Promise.resolve({
 })
 
 const AccessContext = createContext({
-    attempt: NotRun as AnyAttempt<string>,
+    attempt: NotRun as AnyAttempt<AttemptType>,
     canAccess: false,
     authIdentity: (
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,8 +51,9 @@ const AccessContext = createContext({
         Promise.resolve(defaultAttemptResponse),
     authIAP: (): Promise<AttemptResponse<ReceiptIOS>> =>
         Promise.resolve(defaultAttemptResponse),
-    idenityData: null as IdentityAuthData | null,
+    identityData: null as IdentityAuthData | null,
     casData: null as CASExpiry | null,
+    iapData: null as ReceiptIOS | null,
     signOutIdentity: () => {},
     signOutCAS: () => {},
 })
@@ -74,7 +77,7 @@ const AccessProvider = ({
     children: React.ReactNode
     onIdentityStatusChange?: (idAttempt: AnyAttempt<IdentityAuthData>) => void
 }) => {
-    const [attempt, setAttempt] = useState<AnyAttempt<string>>(
+    const [attempt, setAttempt] = useState<AnyAttempt<AttemptType>>(
         controller.getAttempt(),
     )
     const [idAuth, setIdAuth] = useState<AnyAttempt<IdentityAuthData>>(
@@ -82,6 +85,9 @@ const AccessProvider = ({
     )
     const [casAuth, setCASAuth] = useState<AnyAttempt<CASExpiry>>(
         controller.authorizerMap.cas.getAttempt(),
+    )
+    const [iapAuth, setIAPAuth] = useState<AnyAttempt<ReceiptIOS>>(
+        controller.authorizerMap.iap.getAttempt(),
     )
 
     useEffect(() => {
@@ -93,6 +99,7 @@ const AccessProvider = ({
             },
         )
         const unsubCAS = controller.authorizerMap.cas.subscribe(setCASAuth)
+        const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth)
         NetInfo.addEventListener(info =>
             controller.handleConnectionStatusChanged(info.isConnected),
         )
@@ -100,6 +107,7 @@ const AccessProvider = ({
             unsubController()
             unsubIdentity()
             unsubCAS()
+            unsubIAP()
         }
     }, [])
 
@@ -107,15 +115,16 @@ const AccessProvider = ({
         () => ({
             attempt,
             canAccess: !!attempt && isValid(attempt),
-            idenityData: isValid(idAuth) ? idAuth.data : null,
+            identityData: isValid(idAuth) ? idAuth.data : null,
             casData: isValid(casAuth) ? casAuth.data : null,
+            iapData: isValid(iapAuth) ? iapAuth.data : null,
             authCAS,
             authIAP,
             signOutCAS,
             authIdentity,
             signOutIdentity,
         }),
-        [attempt, casAuth, idAuth],
+        [attempt, casAuth, idAuth, iapAuth],
     )
 
     return (
@@ -126,6 +135,6 @@ const AccessProvider = ({
 }
 
 const useAccess = () => useContext(AccessContext).canAccess
-const useIdentity = () => useContext(AccessContext).idenityData
+const useIdentity = () => useContext(AccessContext).identityData
 
 export { AccessProvider, useAccess, useIdentity, AccessContext }
