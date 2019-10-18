@@ -29,6 +29,7 @@ export interface ReceiptIOS {
     quantity: string
     transaction_id: string
     web_order_line_item_id: string
+    name?: string // I haven't seen this in the TestFlight responses but the old app uses it so will add as an optional
 }
 
 const fetchDecodeReceipt = (receipt: string) =>
