@@ -22,11 +22,16 @@ export type AsyncCache<T> = {
     reset: () => Promise<void>
 }
 
-class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
+class Authorizer<
+    S extends string,
+    T,
+    A extends any[],
+    C extends readonly AsyncCache<any>[]
+> {
     private subscribers: UpdateHandler<T>[] = []
     private attempt: AnyAttempt<T> = NotRun
-    private accessAttempt: AnyAttempt<string> = NotRun
-    readonly name: string
+    private accessAttempt: AnyAttempt<S> = NotRun
+    readonly name: S
     private userDataCache: AsyncCache<T>
     private authCaches: C
     /**
@@ -52,7 +57,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
         authWithCachedCredentials,
         checkUserHasAccess,
     }: {
-        name: string
+        name: S
         userDataCache: AsyncCache<T>
         authCaches: C
         auth: (args: A, caches: C) => Promise<AuthResult<T>>
@@ -116,9 +121,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
              * but TS can'd do this :'(
              * https://github.com/microsoft/TypeScript/issues/13995
              */
-            accessAttempt: this.toAccessAttempt(attempt) as ResolvedAttempt<
-                string
-            >,
+            accessAttempt: this.toAccessAttempt(attempt) as ResolvedAttempt<S>,
         }
     }
 
@@ -171,7 +174,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
      * This is probably a bit of a weird conecpt to go on this class
      * but still
      */
-    public toAccessAttempt(attempt: AnyAttempt<T>): AnyAttempt<string> {
+    public toAccessAttempt(attempt: AnyAttempt<T>): AnyAttempt<S> {
         if (isNotRun(attempt)) return attempt
         try {
             return isValid(attempt) && this.checkUserHasAccess(attempt.data)

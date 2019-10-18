@@ -12,6 +12,7 @@ import { useOtherSettingsValues } from 'src/hooks/use-settings'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 import { OnboardingConsentScreen } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
+import { SubscriptionDetailsScreen } from 'src/screens/settings/subscription-details-screen'
 import { ApiScreen } from 'src/screens/settings/api-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
@@ -89,6 +90,7 @@ const AppStack = createModalNavigator(
                 [routeNames.Credits]: CreditsScreen,
                 [routeNames.FAQ]: FAQScreen,
                 [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
+                [routeNames.SubscriptionDetails]: SubscriptionDetailsScreen,
             },
             {
                 defaultNavigationOptions: {
