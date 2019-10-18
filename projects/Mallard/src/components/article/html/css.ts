@@ -78,10 +78,10 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
     :root {
         ${getScaledFontCss('text', 1)}
         font-family: ${families.text.regular};
-        background-color: ${themeColors(theme).background}
-        color: ${themeColors(theme).text}
+        background-color: ${themeColors(theme).background};
+        color: ${themeColors(theme).text};
     }
-∏
+
     html, body {
         overflow-x: hidden;
     }
