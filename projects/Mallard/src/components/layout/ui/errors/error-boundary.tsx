@@ -1,13 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component, ReactNode } from 'react'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { GENERIC_FATAL_ERROR } from 'src/helpers/words'
 import { errorService } from 'src/services/errors'
 
+type Props = {
+    children: ReactNode
+    error?: ReactNode
+}
 class ErrorBoundary extends Component<
-    {},
-    { hasError: boolean; message: string | undefined }
+    Props,
+    {
+        hasError: boolean
+        message: string | undefined
+    }
 > {
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props)
         this.state = { hasError: false, message: undefined }
     }
@@ -22,6 +29,9 @@ class ErrorBoundary extends Component<
 
     render() {
         if (this.state.hasError) {
+            if (this.props.error) {
+                return this.props.error
+            }
             return (
                 <FlexErrorMessage
                     title={GENERIC_FATAL_ERROR}

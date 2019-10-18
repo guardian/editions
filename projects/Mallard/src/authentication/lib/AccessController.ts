@@ -9,23 +9,28 @@ import {
     hasRun,
 } from './Attempt'
 
-type UpdateHandler = (attempt: AnyAttempt<string>) => void
+type UpdateHandler<S> = (attempt: AnyAttempt<S>) => void
 
-type AuthMap<I extends {}> = {
-    [K in keyof I]: I[K] extends Authorizer<any, any, any> ? I[K] : never
+type AuthMap = {
+    [key: string]: Authorizer<any, any, any, any>
 }
-class AccessController<I extends {}> {
-    private attempt: AnyAttempt<string> = NotRun
-    private fetchingConnectivities: Set<Connectivity> = new Set()
-    private subscribers: UpdateHandler[] = []
 
-    constructor(readonly authorizerMap: AuthMap<I>) {
+type AuthName<I extends {}> = {
+    [K in keyof I]: I[K] extends Authorizer<infer S, any, any, any> ? S : never
+}[keyof I]
+
+class AccessController<I extends AuthMap, S extends AuthName<I>> {
+    private attempt: AnyAttempt<S> = NotRun
+    private fetchingConnectivities: Set<Connectivity> = new Set()
+    private subscribers: UpdateHandler<S>[] = []
+
+    constructor(readonly authorizerMap: I) {
         this.authorizers.forEach(auth =>
             auth.subscribe(this.reconcileAttempts.bind(this)),
         )
     }
 
-    public subscribe(fn: UpdateHandler) {
+    public subscribe(fn: UpdateHandler<S>) {
         this.subscribers.push(fn)
         return () => {
             this.subscribers = this.subscribers.filter(sub => sub !== fn)
@@ -33,6 +38,7 @@ class AccessController<I extends {}> {
     }
 
     public get authorizers(): Authorizer<
+        S,
         unknown,
         unknown[],
         ReadonlyArray<AsyncCache<unknown>>
@@ -86,7 +92,7 @@ class AccessController<I extends {}> {
     }
 
     private async reconcileAttempts() {
-        let attempt: AnyAttempt<string> = NotRun
+        let attempt: AnyAttempt<S> = NotRun
         for (const authorizer of this.authorizers) {
             const candidate = authorizer.getAccessAttempt()
             attempt = patchAttempt(attempt, candidate) || attempt
@@ -101,7 +107,7 @@ class AccessController<I extends {}> {
         this.subscribers.forEach(sub => sub(this.attempt))
     }
 
-    private updateAttempt(attempt: AnyAttempt<string>) {
+    private updateAttempt(attempt: AnyAttempt<S>) {
         if (this.attempt === attempt) return
         this.attempt = attempt
         this.notifySubscribers()

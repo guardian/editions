@@ -112,7 +112,7 @@ export const defaultSettings: Settings = {
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix,
-    issuesPath: `/${contentPrefix}/issues`,
+    issuesPath: `/issues`,
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,
 }

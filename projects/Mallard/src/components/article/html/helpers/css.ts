@@ -14,11 +14,13 @@ export const themeColors = (theme: ArticleTheme) => {
         return {
             background: color.photoBackground,
             text: color.textOverDarkBackground,
+            dimText: color.palette.neutral[86],
         }
     }
 
     return {
         background: color.background,
         text: color.text,
+        dimText: color.palette.neutral[46],
     }
 }
