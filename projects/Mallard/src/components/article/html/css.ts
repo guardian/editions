@@ -13,6 +13,7 @@ import { lineStyles } from './components/line'
 import { quoteStyles } from './components/pull-quote'
 import { ratingStyles } from './components/rating'
 import { CssProps, themeColors } from './helpers/css'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -121,10 +122,12 @@ const makeCss = ({ colors, theme }: CssProps) => css`
         animation-name: fade;
         animation-fill-mode: both;
     }
-    main, .wrapper {
-        margin-right: ${px(
-            metrics.article.rightRail + metrics.article.sidesTablet,
-        )}
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        main, .wrapper {
+            margin-right: ${px(
+                metrics.article.rightRail + metrics.article.sidesTablet,
+            )}
+        }
     }
     .app p,
     figure {

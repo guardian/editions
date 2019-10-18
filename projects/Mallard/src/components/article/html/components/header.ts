@@ -53,10 +53,10 @@ const outieHeader = (type: ArticleType) => css`
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
         .header-container[data-type='${type}'] .header {
-            margin-right: 4em;
+            margin-right: 60px;
         }
         .header-container[data-type='${type}'] .header:after {
-            margin-right: -4em;
+            margin-right: ${px((60 + metrics.article.sidesTablet) * -1)};
         }
     }
     ${outieKicker(type)}
