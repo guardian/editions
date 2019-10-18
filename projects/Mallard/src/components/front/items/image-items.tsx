@@ -8,19 +8,14 @@ import {
     PropTypes,
     tappablePadding,
 } from './helpers/item-tappable'
-import {
-    getImageHeight,
-    isFullWidthItem,
-    isSmallItem,
-    isFullHeightItem,
-} from './helpers/sizes'
+import { isFullWidthItem, isSmallItem, isFullHeightItem } from './helpers/sizes'
 import { SportItemBackground } from './helpers/sports'
 import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
 import { Standfirst } from './helpers/standfirst'
 import { useIsOpinionCard, useIsSportCard } from './helpers/types'
-import { Stars } from 'src/components/stars/stars'
-import { TrailImage, ItemSizes } from 'src/common'
+import { TrailImageView } from './trail-image-view'
+import { getImageHeight } from './helpers/sizes'
 
 /*
 Normal img on top + text
@@ -52,17 +47,10 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            {article.trailImage && (
-                <TrailImageView
-                    image={article.trailImage}
-                    itemSizes={size}
-                    starRating={
-                        article.type === 'article'
-                            ? article.starRating
-                            : undefined
-                    }
-                />
-            )}
+            <TrailImageView
+                article={article}
+                style={{ height: getImageHeight(size) }}
+            />
             {isSportCard && isFullWidthItem(size) ? (
                 <SportItemBackground
                     style={{
@@ -117,6 +105,9 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 }
 
 const squareStyles = StyleSheet.create({
+    image: {
+        height: '100%',
+    },
     square: {
         position: 'absolute',
         top: '50%',
@@ -146,10 +137,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={squareStyles.cover}>
-                <ImageResource
-                    style={[StyleSheet.absoluteFill]}
-                    image={article.trailImage}
-                />
+                <TrailImageView style={squareStyles.image} article={article} />
                 <View
                     style={[
                         squareStyles.square,
@@ -184,7 +172,6 @@ const splitImageStyles = StyleSheet.create({
     image: {
         width: '50%',
         height: '100%',
-        flex: 0,
         marginLeft: metrics.horizontal,
     },
     wideImage: {
@@ -210,58 +197,12 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                {'trailImage' in article && article.trailImage ? (
-                    <ImageResource
-                        style={[splitImageStyles.image]}
-                        image={article.trailImage}
-                    />
-                ) : null}
+                <TrailImageView
+                    style={splitImageStyles.image}
+                    article={article}
+                />
             </View>
         </ItemTappable>
-    )
-}
-
-const trailImageViewStyles = StyleSheet.create({
-    frame: {
-        width: '100%',
-        flex: 0,
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-    },
-    rating: {
-        position: 'absolute',
-        backgroundColor: 'white',
-        left: 0,
-        bottom: 0,
-    },
-})
-
-/**
- * If there is a rating for the article (ex. a theater piece rating) then we
- * display it in the bottom-left corner of the image (by using absolute
- * positioning).
- */
-const TrailImageView = ({
-    image,
-    itemSizes,
-    starRating,
-}: {
-    image: TrailImage
-    itemSizes: ItemSizes
-    starRating?: number
-}) => {
-    const height = getImageHeight(itemSizes)
-    const frameStyle = [trailImageViewStyles.frame, { height }]
-    if (starRating == null) {
-        return <ImageResource style={frameStyle} image={image} />
-    }
-    return (
-        <View style={frameStyle}>
-            <ImageResource style={trailImageViewStyles.image} image={image} />
-            <Stars style={trailImageViewStyles.rating} rating={starRating} />
-        </View>
     )
 }
 

@@ -1,10 +1,9 @@
 import { css, html, px } from 'src/helpers/webview'
-import { PillarColours } from '@guardian/pasteup/palette'
-import { WrapLayout } from '../wrap/wrap'
-import { families } from 'src/theme/typography'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
+import { CssProps } from '../helpers/css'
 import { Quotes } from './icon/quotes'
 
 const BubblePointer = () => html`
@@ -28,13 +27,7 @@ const BubblePointer = () => html`
     </svg>
 `
 
-const quoteStyles = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+const quoteStyles = ({ colors, wrapLayout }: CssProps) => css`
     blockquote {
         box-sizing: border-box;
         border: 1px solid ${colors.main};
