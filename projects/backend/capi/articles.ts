@@ -4,6 +4,8 @@ import {
     ContentType,
     ICapiDateTime as CapiDateTime64,
     IContent,
+    IBlocks,
+    ElementType,
 } from '@guardian/capi-ts'
 import {
     Article,
@@ -90,7 +92,6 @@ const parseArticleResult = async (
 
     const starRating = result.fields && result.fields.starRating
 
-    console.log(result.blocks)
     const blocks =
         result.blocks &&
         result.blocks.body &&
@@ -125,6 +126,7 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     elements,
                     starRating,
+                    mediaId: getMainAtomMediaId(result.blocks),
                 },
             ]
             return article
@@ -238,6 +240,24 @@ const parseArticleResult = async (
                 },
             ]
     }
+}
+
+/**
+ * We look for a very specific pattern which we know represent a header video
+ * on an article. The video/media ID is sort of a UUID which can be later used
+ * by the client to build a URL from, ex.
+ * https://embed.theguardian.com/embed/atom/media/1c35effc-5275-45b1-802b-719ec45f0087
+ */
+const getMainAtomMediaId = (capiBlocks?: IBlocks): string | undefined => {
+    if (capiBlocks == null) return
+    const { main } = capiBlocks
+    if (main == null || main.elements == null || main.elements.length !== 1)
+        return
+    const element = main.elements[0]
+    if (element.type !== ElementType.CONTENTATOM) return
+    const { contentAtomTypeData: data } = element
+    if (data == null || data.atomType !== 'media') return
+    return data.atomId
 }
 
 const capiApiKey = process.env.CAPI_KEY

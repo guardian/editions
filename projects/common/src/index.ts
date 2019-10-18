@@ -175,6 +175,7 @@ export interface Article extends Content {
     standfirst: string
     elements: BlockElement[]
     starRating?: number
+    mediaId?: string
 }
 
 export interface CrosswordArticle extends Content {
