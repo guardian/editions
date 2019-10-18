@@ -130,7 +130,6 @@ export const renderArticle = (
                 })
             break
         case 'gallery':
-            console.log(article)
             header = Header({
                 publishedId,
                 type: ArticleType.Gallery,
