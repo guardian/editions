@@ -1,16 +1,10 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import { css, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
-import { WrapLayout } from '../wrap/wrap'
-import { breakOut } from './helpers/layout'
+import { breakOut } from '../helpers/layout'
+import { CssProps } from '../helpers/css'
 
-export const lineStyles = ({
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const lineStyles = ({ wrapLayout }: CssProps) => css`
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .line {
             position: absolute;

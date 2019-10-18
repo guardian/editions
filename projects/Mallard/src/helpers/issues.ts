@@ -1,6 +1,7 @@
 import { Issue } from 'src/common'
 import { useMemo } from 'react'
 import { defaultSettings } from 'src/helpers/settings/defaults'
+import { londonTime } from './date'
 
 const months = [
     'Jan',
@@ -33,10 +34,10 @@ interface IssueDate {
 }
 
 export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
-    const date = new Date(dateString)
+    const date = londonTime(dateString)
     return {
-        date: date.getDate() + ' ' + months[date.getMonth()],
-        weekday: days[date.getDay()],
+        date: date.date() + ' ' + months[date.month()],
+        weekday: days[date.day()],
     }
 }
 
@@ -53,14 +54,16 @@ const dateToFolderConvert = (date: Date): string => {
     )}`
 }
 
-export const todayAsFolder = (): string => dateToFolderConvert(new Date())
+/** today as folder given */
+export const todayAsFolder = (): string =>
+    dateToFolderConvert(londonTime().toDate())
 
 export const todayAsKey = (): string =>
     `${defaultSettings.contentPrefix}/${todayAsFolder()}`
 
 export const lastSevenDays = (): string[] => {
     return Array.from({ length: 7 }, (_, i) => {
-        const d = new Date()
+        const d = londonTime().toDate()
         d.setDate(d.getDate() - i)
         return dateToFolderConvert(d)
     })
