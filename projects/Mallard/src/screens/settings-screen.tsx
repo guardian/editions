@@ -79,7 +79,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                               await signOutIdentity()
                           },
                       },
-                      proxy: <Text style={styles.signOut}>Sign Out</Text>,
+                      proxy: <Text style={styles.signOut}>Sign out</Text>,
                   },
               ]
             : [
@@ -95,7 +95,19 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                   },
               ]),
         ...(canAccess
-            ? []
+            ? [
+                  {
+                      key: 'Subscription details',
+                      title: 'Subscription details',
+                      data: {
+                          onPress: () => {
+                              navigation.navigate(
+                                  routeNames.SubscriptionDetails,
+                              )
+                          },
+                      },
+                  },
+              ]
             : [
                   {
                       key: `I'm already subscribed`,

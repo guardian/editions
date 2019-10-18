@@ -11,6 +11,7 @@ export const routeNames = {
     Credits: 'Credits',
     FAQ: 'FAQ',
     AlreadySubscribed: 'AlreadySubscribed',
+    SubscriptionDetails: 'SubscriptionDetails',
     SignIn: 'SignIn',
     CasSignIn: 'CasSignIn',
     onboarding: {

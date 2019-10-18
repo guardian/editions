@@ -1,4 +1,3 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { useImagePath } from 'src/hooks/use-image-paths'
@@ -6,13 +5,23 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { ArticleHeaderProps } from '../article-header/types'
-import { WrapLayout } from '../wrap/wrap'
-import { breakSides } from './helpers/layout'
+import { CreditedImage, Article } from '../../../../../../common/src'
+import { CssProps, themeColors } from '../helpers/css'
+import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
-import { CreditedImage } from '../../../../../common/src'
+
+export interface ArticleHeaderProps {
+    headline: string
+    byline?: string
+    kicker?: string | null
+    image?: CreditedImage | null
+    standfirst?: string
+    starRating?: Article['starRating']
+    bylineImages?: { cutout?: ImageT }
+    bylineHtml?: string
+}
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
@@ -53,13 +62,7 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
-export const headerStyles = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -182,6 +185,7 @@ export const headerStyles = ({
         text-decoration: none;
         font-weight: 600;
         color: ${colors.main};
+        pointer-events: none;
     }
 
     .header-top-byline > a {
@@ -372,6 +376,17 @@ export const headerStyles = ({
         font-family: ${families.titlepiece.regular};
     }
 
+    /*gallery*/
+    .header-container[data-type='${
+        ArticleType.Gallery
+    }'] .header-byline  > span > a {
+        color: ${themeColors(theme).text};
+    }
+    .header-container[data-type='${ArticleType.Gallery}'] h1 {
+        font-family: ${families.titlepiece.regular};
+        min-height: 2em;
+    }
+
     /*immersive*/
     ${outieHeader(ArticleType.Immersive)}
     .header-container[data-type='immersive'] .header-bg {
@@ -489,7 +504,8 @@ const MainMediaImage = ({
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
-    type === ArticleType.Obituary
+    type === ArticleType.Obituary ||
+    type === ArticleType.Gallery
 
 const hasLargeByline = (type: ArticleType) =>
     type === ArticleType.Opinion || type === ArticleType.Analysis
@@ -531,7 +547,12 @@ const Header = ({
                                 ? Rating(headerProps)
                                 : undefined,
                         })}
-                    <span class="header-kicker">${headerProps.kicker}</span>
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
                     ${largeByline
                         ? html`
                               <section class="header-top">

@@ -1,38 +1,22 @@
 import {
-    ArticlePillar,
-    BlockElement,
-    MediaAtomElement,
-    ArticleType,
-    Direction,
-} from '../../../common'
-import {
     css,
     generateAssetsFontCss,
     getScaledFont,
     getScaledFontCss,
-    html,
-    makeHtml,
     px,
 } from 'src/helpers/webview'
-import { getPillarColors } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { Issue } from '../../../common'
-import { ArticleHeaderProps } from '../article-header/types'
-import { WrapLayout } from '../wrap/wrap'
-import { Header, headerStyles } from './header'
-import { CssProps } from './helpers/props'
-import { Image, imageStyles } from './images'
-import { Pullquote, quoteStyles } from './pull-quote'
-import { lineStyles, Line } from './line'
-import { useImageSize } from 'src/hooks/use-image-size'
-import { ratingStyles } from './rating'
-import { Arrow } from './arrow'
+import { headerStyles } from './components/header'
+import { imageStyles } from './components/images'
+import { lineStyles } from './components/line'
+import { quoteStyles } from './components/pull-quote'
+import { ratingStyles } from './components/rating'
+import { CssProps, themeColors } from './helpers/css'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
-export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
-
+const makeFontsCss = () => css`
     /* text */
     ${generateAssetsFontCss({ fontFamily: families.text.regular })}
     ${generateAssetsFontCss({
@@ -86,8 +70,18 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         fontFamily: families.icon.regular,
         extension: 'otf',
     })}
+`
 
-    /* css */
+const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
+    ${makeFontsCss()}
+
+    :root {
+        ${getScaledFontCss('text', 1)}
+        font-family: ${families.text.regular};
+        background-color: ${themeColors(theme).background};
+        color: ${themeColors(theme).text};
+    }
+
     html, body {
         overflow-x: hidden;
     }
@@ -106,10 +100,6 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
         transform: scale(1.335) translateY(1px) translateX(-2px);
         transform-origin: left center;
         margin-right: 25px;
-    }
-    :root {
-        ${getScaledFontCss('text', 1)}
-        font-family: ${families.text.regular};
     }
 
     @keyframes fade {
@@ -166,98 +156,16 @@ export const makeCss = ({ colors, wrapLayout }: CssProps) => css`
     ${quoteStyles({
         colors,
         wrapLayout,
+        theme,
     })}
     ${headerStyles({
         colors,
         wrapLayout,
+        theme,
     })}
-    ${imageStyles({ colors, wrapLayout })}
-    ${lineStyles({ colors, wrapLayout })}
-    ${ratingStyles({ colors, wrapLayout })}
+    ${imageStyles({ colors, wrapLayout, theme })}
+    ${lineStyles({ colors, wrapLayout, theme })}
+    ${ratingStyles({ colors, wrapLayout, theme })}
 `
 
-const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
-    return html`
-        <figure class="image" style="overflow: hidden;">
-            <iframe
-                scrolling="no"
-                src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}"
-                style="width: 100%; display: block;"
-                frameborder="0"
-            ></iframe>
-            <figcaption>
-                ${Arrow({ direction: Direction.top })} ${mediaAtomElement.title}
-            </figcaption>
-        </figure>
-    `
-}
-
-export const useRenderedHTML = (
-    article: BlockElement[],
-    {
-        pillar,
-        wrapLayout,
-        showMedia,
-        height,
-        publishedId,
-        showWebHeader,
-        headerProps,
-    }: {
-        pillar: ArticlePillar
-        wrapLayout: WrapLayout
-        showMedia: boolean
-        height: number
-        publishedId: Issue['publishedId'] | null
-        showWebHeader: boolean
-        headerProps?: ArticleHeaderProps & { type: ArticleType }
-    },
-) => {
-    const { imageSize } = useImageSize()
-    const content = article
-        .map(el => {
-            switch (el.id) {
-                case 'html':
-                    if (el.hasDropCap) {
-                        return html`
-                            <div class="drop-cap">
-                                ${el.html}
-                            </div>
-                        `
-                    }
-                    return el.html
-                case 'media-atom':
-                    return showMedia ? renderMediaAtom(el) : ''
-                case 'image':
-                    return showMedia && publishedId
-                        ? Image({
-                              imageElement: el,
-                              publishedId,
-                              imageSize,
-                          })
-                        : ''
-                case 'pullquote':
-                    return Pullquote({
-                        cite: el.html,
-                        role: el.role || 'inline',
-                        ...el,
-                    })
-                default:
-                    return ''
-            }
-        })
-        .join('')
-
-    const styles = makeCss({ colors: getPillarColors(pillar), wrapLayout })
-    const body = html`
-        ${showWebHeader &&
-            headerProps &&
-            Header({ ...headerProps, publishedId })}
-        <div class="content-wrap">
-            ${showWebHeader && Line({ zIndex: 999 })}
-            <main style="padding-top:${px(height)}">
-                ${content}
-            </main>
-        </div>
-    `
-    return makeHtml({ styles, body })
-}
+export { makeCss }

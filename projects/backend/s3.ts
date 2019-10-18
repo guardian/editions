@@ -16,7 +16,7 @@ export interface Path {
     key: string
     bucket: 'published' | 'preview'
 }
-const stage = process.env.stage || 'code'
+const stage = process.env.frontsStage || 'code'
 
 const getBucket = (bucketType: Path['bucket']) =>
     `${bucketType}-editions-${stage.toLowerCase()}`

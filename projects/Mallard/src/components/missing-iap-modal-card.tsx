@@ -3,15 +3,19 @@ import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { ModalButton } from './modal-button'
 
 const MissingIAPModalCard = ({
+    title,
+    subtitle,
     close,
     onTryAgain,
 }: {
+    title: string
+    subtitle: string
     close: () => void
     onTryAgain: () => void
 }) => (
     <OnboardingCard
-        title="Verification error"
-        subtitle="There was a problem whilst verifying your subscription"
+        title={title}
+        subtitle={subtitle}
         appearance={CardAppearance.blue}
         size="medium"
         onDismissThisCard={() => {
