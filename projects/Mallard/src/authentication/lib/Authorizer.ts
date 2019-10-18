@@ -179,7 +179,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
                 : InvalidAttempt(
                       attempt.connectivity,
                       (!isValid(attempt) && attempt.reason) ||
-                          'Insufficient privileges',
+                          'Subscription not found',
                       attempt.time,
                   )
         } catch {
