@@ -23,23 +23,32 @@ import { CASExpiry } from './services/cas'
 import { ReceiptIOS } from './services/iap'
 import * as NetInfo from '@react-native-community/netinfo'
 
+type AttemptResponse<T> = {
+    attempt: ResolvedAttempt<T>
+    accessAttempt: ResolvedAttempt<string>
+}
+
+const defaultAttemptResponse = Promise.resolve({
+    attempt: InvalidAttempt('offline'),
+    accessAttempt: InvalidAttempt('offline'),
+})
+
 const AccessContext = createContext({
     attempt: NotRun as AnyAttempt<string>,
     canAccess: false,
     authIdentity: (
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         params: AuthParams,
-    ): Promise<ResolvedAttempt<IdentityAuthData>> =>
-        Promise.resolve(InvalidAttempt('offline')),
+    ): Promise<AttemptResponse<IdentityAuthData>> => defaultAttemptResponse,
     authCAS: (
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         subscriberId: string,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         password: string,
-    ): Promise<ResolvedAttempt<CASExpiry>> =>
-        Promise.resolve(InvalidAttempt('offline')),
-    authIAP: (): Promise<ResolvedAttempt<ReceiptIOS>> =>
-        Promise.resolve(InvalidAttempt('offline')),
+    ): Promise<AttemptResponse<CASExpiry>> =>
+        Promise.resolve(defaultAttemptResponse),
+    authIAP: (): Promise<AttemptResponse<ReceiptIOS>> =>
+        Promise.resolve(defaultAttemptResponse),
     idenityData: null as IdentityAuthData | null,
     casData: null as CASExpiry | null,
     signOutIdentity: () => {},
