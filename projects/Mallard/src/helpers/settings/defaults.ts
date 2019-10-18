@@ -28,7 +28,7 @@ export const backends = [
     },
     {
         title: 'DEV',
-        value: 'https://97d754aa.ngrok.io/',
+        value: 'http://localhost:3131/',
         preview: true,
     },
 ] as {
