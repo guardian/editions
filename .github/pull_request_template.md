@@ -1,25 +1,24 @@
-## Why are you doing this?
+## Summary
 
 <!--
-This sounds super accusatory BUT the idea is to help you work out the scope of the 
-change outside of a typical trello card scope. You don't have to explain why 
-you personally are doing this!
+Why are we doing this?
+
+Explain the scope of the change and how that fits within the bug or the feature
+being worked on. Link the corresponding Trello Card below.
 
 If this PR is a fix, please include a link to the original PR that introduced
-the breakage for reference.
+the breakage, if any, for reference.
 -->
 
 [**Trello Card ->**](https://trello.com)
 
-## Changes
-
-* Change 1
-* Change 2
-
-## Screenshots
+## Test Plan
 
 <!--
-Please try to add visuals! 
-This is super worthwhile for historical reasons as well
-as to allow other contributors who aren't developers to collaborate
+Describe what steps where followed to reproduce the bug and/or to access the
+feature, and what observation confirms it works as expected.
+
+Please try to add visuals!
+This is worthwhile for historical reasons as well as to allow other
+contributors who aren't developers to collaborate.
 -->
