@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import { canViewEdition } from 'src/authentication/helpers'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
 import { NavigationScreenProp } from 'react-navigation'
@@ -65,12 +64,12 @@ const AuthSwitcherScreen = ({
                 allow: async () => {
                     setIsLoading(true)
                     try {
-                        const attempt = await authIdentity(
+                        const { attempt, accessAttempt } = await authIdentity(
                             await runGetIdentityAuthParams(),
                         )
                         if (isValid(attempt)) {
                             setIsLoading(false)
-                            if (!canViewEdition(attempt.data)) {
+                            if (!isValid(accessAttempt)) {
                                 open(close => (
                                     <SignInFailedModalCard
                                         email={
