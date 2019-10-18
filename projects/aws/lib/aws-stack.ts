@@ -18,6 +18,12 @@ export class EditionsStack extends cdk.Stack {
             description: 'Stack',
         })
 
+        const frontsStageParameter = new cdk.CfnParameter(this, 'frontsStage', {
+            type: 'String',
+            description: 'Which stage of fronts to read from',
+            default: 'prod',
+        })
+
         const stageParameter = new cdk.CfnParameter(this, 'stage', {
             type: 'String',
             description: 'Stage',
@@ -160,6 +166,7 @@ export class EditionsStack extends cdk.Stack {
                     ),
                     handler: 'index.handler',
                     environment: {
+                        frontsStage: frontsStageParameter.valueAsString,
                         CAPI_KEY: capiKeyParameter.valueAsString,
                         arn: frontsRoleARN.valueAsString,
                         stage: stageParameter.valueAsString,

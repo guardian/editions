@@ -10,6 +10,7 @@ import {
     patchAttempt,
     isNotRun,
     hasRun,
+    ErrorAttempt,
 } from './Attempt'
 import { cataResult, AuthResult, ValidResult, InvalidResult } from './Result'
 
@@ -21,11 +22,16 @@ export type AsyncCache<T> = {
     reset: () => Promise<void>
 }
 
-class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
+class Authorizer<
+    S extends string,
+    T,
+    A extends any[],
+    C extends readonly AsyncCache<any>[]
+> {
     private subscribers: UpdateHandler<T>[] = []
     private attempt: AnyAttempt<T> = NotRun
-    private accessAttempt: AnyAttempt<string> = NotRun
-    readonly name: string
+    private accessAttempt: AnyAttempt<S> = NotRun
+    readonly name: S
     private userDataCache: AsyncCache<T>
     private authCaches: C
     /**
@@ -51,7 +57,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
         authWithCachedCredentials,
         checkUserHasAccess,
     }: {
-        name: string
+        name: S
         userDataCache: AsyncCache<T>
         authCaches: C
         auth: (args: A, caches: C) => Promise<AuthResult<T>>
@@ -80,7 +86,7 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
                     this.clearCaches()
                     return InvalidAttempt(connectivity, reason)
                 },
-                error: reason => InvalidAttempt(connectivity, reason),
+                error: reason => ErrorAttempt(connectivity, reason),
             })
         } catch (e) {
             attempt = InvalidAttempt('online', 'Something went wrong')
@@ -92,10 +98,31 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
     }
 
     public async runAuth(...args: A) {
-        return this.handleAuthPromise(
+        const attempt = await this.handleAuthPromise(
             this.auth(args, this.authCaches),
             'online',
         )
+
+        /**
+         * This may not correspond to the attempt stored in `this.attempt`
+         * as, if we've already logged in, `getAttempt` this attempt will not
+         * overwrite that attempt.
+         * However, it's useful here to return the _actual_ attempt for the login
+         * here for the UI to display a message,.
+         *
+         * That said, this will likely never be run if we're already logged in anyway.
+         */
+        return {
+            attempt,
+            /**
+             * ideally we could convert this to a `ResolvedAttempt`
+             * using a generic with `toAccessAttempt` and type checking
+             * we're passing in a `ResolvedAttempt` (rather than an `AnyAttempt`)
+             * but TS can'd do this :'(
+             * https://github.com/microsoft/TypeScript/issues/13995
+             */
+            accessAttempt: this.toAccessAttempt(attempt) as ResolvedAttempt<S>,
+        }
     }
 
     private async getLastKnownAuthStatus(): Promise<AuthResult<T>> {
@@ -147,14 +174,15 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
      * This is probably a bit of a weird conecpt to go on this class
      * but still
      */
-    public toAccessAttempt(attempt: AnyAttempt<T>): AnyAttempt<string> {
+    public toAccessAttempt(attempt: AnyAttempt<T>): AnyAttempt<S> {
         if (isNotRun(attempt)) return attempt
         try {
             return isValid(attempt) && this.checkUserHasAccess(attempt.data)
                 ? ValidAttempt(this.name, attempt.connectivity, attempt.time)
                 : InvalidAttempt(
                       attempt.connectivity,
-                      'Insufficient privileges',
+                      (!isValid(attempt) && attempt.reason) ||
+                          'Subscription not found',
                       attempt.time,
                   )
         } catch {
