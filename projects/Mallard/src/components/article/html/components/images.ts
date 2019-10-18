@@ -7,7 +7,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { breakOut } from '../helpers/layout'
-import { CssProps } from '../helpers/css'
+import { CssProps, themeColors } from '../helpers/css'
 
 export const renderCaption = ({
     caption,
@@ -35,7 +35,7 @@ const breakoutCaption = ({
     }
 `
 
-const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
+const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     .image {
         position: relative;
         clear: right;
@@ -48,7 +48,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
     }
     .image figcaption {
         font-family: 'GuardianTextSans-Regular';
-        color: ${color.palette.neutral[46]};
+        color: ${themeColors(theme).dimText};
         ${getScaledFontCss('sans', 0.5)}
         padding: 0 0 0 1em;
         position: relative;

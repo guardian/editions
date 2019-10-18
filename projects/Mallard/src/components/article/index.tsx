@@ -10,15 +10,12 @@ import { color } from 'src/theme/color'
 import { Article, ArticleTheme } from './types/article'
 import { Crossword } from './types/crossword'
 import { Gallery } from './types/gallery'
+import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
 
 /*
 This is the article view! For all of the articles.
 it gets everything it needs from its route
 */
-
-export interface ArticleControllerPropTypes {
-    article: CAPIArticle
-}
 
 const ArticleController = ({
     article,
@@ -27,42 +24,25 @@ const ArticleController = ({
     article: CAPIArticle
     onTopPositionChange: OnTopPositionChangeFn
 }) => {
-    switch (article.type) {
-        case 'article':
-            return (
-                <Article
-                    onTopPositionChange={onTopPositionChange}
-                    article={article}
-                />
-            )
+    if (article.type === 'crossword') {
+        return <Crossword crosswordArticle={article} />
+    }
 
-        case 'picture':
-            return (
-                <Article
-                    onTopPositionChange={onTopPositionChange}
-                    article={article}
-                    theme={ArticleTheme.Dark}
-                />
-            )
-
-        case 'gallery':
-            return (
-                <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-                    <Gallery gallery={article} />
-                </ScrollView>
-            )
-
-        case 'crossword':
-            return <Crossword crosswordArticle={article} />
-
-        default:
-            return (
+    return (
+        <ErrorBoundary
+            error={
                 <FlexErrorMessage
                     title={'Unable to render article'}
                     style={{ backgroundColor: color.background }}
                 />
-            )
-    }
+            }
+        >
+            <Article
+                onTopPositionChange={onTopPositionChange}
+                article={article}
+            />
+        </ErrorBoundary>
+    )
 }
 
 export { ArticleController }
