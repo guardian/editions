@@ -114,8 +114,10 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     }
 
     .app {
-        padding: 0 ${px(metrics.article.sides)} ${px(metrics.vertical)};
-        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
+        padding: 0 ${metrics.article.sides} ${px(metrics.vertical)};
+        max-width: ${px(
+            metrics.article.maxWidth + metrics.article.sides * 2,
+        )};
         margin: auto;
         position: relative;
         animation-duration: .5s;
@@ -125,7 +127,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         main, .wrapper {
             margin-right: ${px(
-                metrics.article.rightRail + metrics.article.sidesTablet,
+                metrics.article.rightRail + metrics.article.sides,
             )}
         }
     }
@@ -156,7 +158,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
         padding-top: ${px(metrics.vertical)};
     }
     .content-wrap .line {
-        margin-right: ${px(metrics.article.sidesTablet * -1)};
+        margin-right: ${px(metrics.article.sides * -1)};
     }
     ${quoteStyles({
         colors,

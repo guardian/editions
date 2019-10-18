@@ -17,7 +17,7 @@ const breakoutCaption = (role: ImageElement['role']) => css`
     .image[data-role='${role}'] figcaption {
         position: absolute;
         right: ${px(
-            (metrics.article.rightRail + metrics.article.sidesTablet * 1.5) *
+            (metrics.article.rightRail + metrics.article.sides * 1.5) *
                 -1,
         )};
         top: -0.5em;
@@ -55,7 +55,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
         top: 0.3em;
         position: absolute;
         right: ${px(
-            (metrics.article.rightRail + metrics.article.sidesTablet * 1.5) *
+            (metrics.article.rightRail + metrics.article.sides * 1.5) *
                 -1,
         )};
     }
@@ -73,7 +73,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
         .image[data-role='thumbnail'] {
             width: 40%;
             float: left;
-            margin-right: ${px(metrics.article.sidesTablet)};
+            margin-right: ${px(metrics.article.sides)};
         }
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
@@ -89,15 +89,15 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
         .image[data-role='supporting'] {
             float: right;
             width: 500px;
-            margin-left: ${px(metrics.article.sidesTablet)};
+            margin-left: ${px(metrics.article.sides)};
             margin-right: ${px(
-                (metrics.article.rightRail + metrics.article.sidesTablet) * -1,
+                (metrics.article.rightRail + metrics.article.sides) * -1,
             )};
         }
 
         .image[data-role='supporting'] figcaption {
             width: ${px(
-                metrics.article.rightRail - metrics.article.sidesTablet,
+                metrics.article.rightRail - metrics.article.sides,
             )};
             position: absolute;
             right: 0;
@@ -110,7 +110,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
         )}) {
         .image[data-role='showcase'] {
             margin-right: ${px(
-                (metrics.article.rightRail + metrics.article.sidesTablet) * -1,
+                (metrics.article.rightRail + metrics.article.sides) * -1,
             )};
         }
 
@@ -141,7 +141,7 @@ const imageStyles = ({ colors, theme }: CssProps) => css`
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .image[data-role='immersive'] {
             margin-right: ${px(
-                (metrics.article.rightRail + metrics.article.sidesTablet) * -1,
+                (metrics.article.rightRail + metrics.article.sides) * -1,
             )};
         }
         .image[data-role='immersive'] figcaption {

@@ -34,7 +34,7 @@ const quoteStyles = ({ colors }: CssProps) => css`
         color: ${colors.main};
         border-top-width: 12px;
         padding: 0 3px ${px(metrics.vertical * 2)}
-            ${px(metrics.article.sidesTablet / 2)};
+            ${px(metrics.article.sides / 2)};
         position: relative;
         margin-bottom: calc(22px + 0.25em);
         margin-top: 0.25em;
@@ -75,7 +75,7 @@ const quoteStyles = ({ colors }: CssProps) => css`
         blockquote[data-role='supporting'] {
             width: 50%;
             float: left;
-            margin-right: ${px(metrics.article.sidesTablet / 2)};
+            margin-right: ${px(metrics.article.sides / 2)};
         }
     }
 
@@ -93,7 +93,7 @@ const quoteStyles = ({ colors }: CssProps) => css`
         blockquote[data-role='showcase'] {
             width: 50%;
             float: left;
-            margin-right: ${px(metrics.article.sides)};
+            margin-right: ${px(metrics.article.sides / 2)};
         }
     }
 

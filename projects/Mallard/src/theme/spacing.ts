@@ -11,24 +11,20 @@ const basicMetrics = {
 }
 
 const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
-
-const sides = {
-    sides: basicMetrics.horizontal / 1,
-    sidesTablet: basicMetrics.horizontal * 1,
-}
+const sides = basicMetrics.horizontal
 const sliderRadius = 18
 
 export const metrics = {
     ...basicMetrics,
     headerHeight,
     buttonHeight,
-    radius: 10,
     sides,
+    radius: 10,
     article: {
-        ...sides,
+        sides,
         maxWidth: 800,
-        rightRail: 180 + sides.sidesTablet,
-        railPaddingLeft: sides.sidesTablet * 1.5,
+        rightRail: 180 + sides,
+        railPaddingLeft: sides * 1.5,
         standfirstBottom: basicMetrics.vertical * 1.5,
     },
     fronts: {

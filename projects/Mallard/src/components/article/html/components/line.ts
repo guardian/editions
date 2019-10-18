@@ -12,7 +12,7 @@ export const lineStyles = ({ theme }: CssProps) => css`
             background: ${themeColors(theme).line};
             top: 0;
             right: ${px(
-                metrics.article.rightRail + metrics.article.sidesTablet,
+                metrics.article.rightRail + metrics.article.sides,
             )};
             bottom: 0;
             display: block;

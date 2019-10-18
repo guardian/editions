@@ -19,7 +19,7 @@ export type ToastList = ToastProps[]
 const styles = StyleSheet.create({
     toast: {
         backgroundColor: color.palette.highlight.main,
-        padding: metrics.sides.sides,
+        padding: metrics.sides,
         paddingTop: metrics.vertical / 2,
         paddingBottom: metrics.vertical * 2,
         borderColor: color.palette.highlight.dark,
@@ -38,7 +38,9 @@ const Toast = ({ title, subtitle }: ToastProps) => {
         <Animated.View
             style={[
                 styles.toast,
-                isTablet && { paddingHorizontal: metrics.sides.sidesTablet },
+                isTablet && {
+                    paddingHorizontal: metrics.sides,
+                },
                 {
                     transform: [
                         {
