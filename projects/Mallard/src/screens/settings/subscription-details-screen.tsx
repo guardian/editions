@@ -10,74 +10,74 @@ import { CasExpiry } from 'src/services/content-auth-service'
 import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 
+const keyValueItem = (key: string, value: string) =>
+    ({
+        title: key,
+        key,
+        linkWeight: 'regular',
+        proxy: <Text>{value}</Text>,
+    } as const)
+
 const IdentityDetails = ({
     identityData,
 }: {
     identityData: IdentityAuthData
 }) => (
     <>
-        <Heading>Guardian: Digital pack</Heading>
+        <Heading>Paper + digital subscription</Heading>
         <List
             onPress={() => {}}
             data={[
-                {
-                    title: 'Name',
-                    key: 'Name',
-                    explainer:
-                        identityData.userDetails.publicFields.displayName,
-                },
-                {
-                    title: 'User ID',
-                    key: 'User ID',
-                    explainer: identityData.membershipData.userId,
-                },
+                keyValueItem(
+                    'Display name',
+                    identityData.userDetails.publicFields.displayName,
+                ),
+                keyValueItem('User ID', identityData.membershipData.userId),
             ]}
         />
     </>
 )
+
+const casCodePrettyLabels: { [key: string]: string } = {
+    SevenDay: 'Guardian / Observer',
+}
+
+const getCASType = (casData: CasExpiry) =>
+    casCodePrettyLabels[casData.subscriptionCode] || casData.subscriptionCode
 
 const CASDetails = ({ casData }: { casData: CasExpiry }) => (
     <>
-        <Heading>Subscription</Heading>
+        <Heading>Paper + digital subscription</Heading>
         <List
             onPress={() => {}}
             data={[
-                {
-                    title: 'Subscription type',
-                    key: 'Subscription type',
-                    explainer: casData.provider,
-                },
-                {
-                    title: 'Subscription code',
-                    key: 'Subscription code',
-                    explainer: casData.subscriptionCode,
-                },
-                {
-                    title: 'Expiry date',
-                    key: 'Expiry date',
-                    explainer: casData.expiryDate,
-                },
+                keyValueItem('Subscription type', getCASType(casData)),
+                keyValueItem('Expiry date', casData.expiryDate),
+                keyValueItem('Subscription prefix', casData.provider),
             ]}
         />
     </>
 )
 
+const productIdPrettyLabels: { [key: string]: string } = {
+    'uk.co.guardian.gce.1monthsub2': 'Guardian Subscription',
+    'uk.co.guardian.gce.observer.1monthsub2': 'Observer Subscription',
+    'uk.co.guardian.gce.plusobserver.1monthsub': 'Seven Day Subscription',
+    'uk.co.guardian.gce.sevenday.1monthsub2': 'Seven Day Subscription',
+}
+
+const getIAPType = (iapData: ReceiptIOS) =>
+    productIdPrettyLabels[iapData.product_id] || iapData.name || 'Unknown'
+
 const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
     <>
-        <Heading>In-app Purchase</Heading>
+        <Heading>Guardian Daily / App Store</Heading>
         <List
             onPress={() => {}}
             data={[
-                {
-                    title: 'Purchase date',
-                    key: 'Purchase date',
-                    explainer: iapData.original_purchase_date,
-                },
-                {
-                    title: 'Expiry date',
-                    key: 'Expiry date',
-                    explainer: iapData.expires_date,
-                },
+                keyValueItem('Subscription type', getIAPType(iapData)),
+                keyValueItem('Purchase date', iapData.original_purchase_date),
+                keyValueItem('Expiry date', iapData.expires_date),
             ]}
         />
     </>
