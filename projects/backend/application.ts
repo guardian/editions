@@ -1,8 +1,8 @@
 import express = require('express')
 import { Request, Response } from 'express'
-import { ImageSize, coloursPath } from '../common/src/index'
-import { issuePath, mediaPath, frontPath, issueSummaryPath } from './common'
 import listEndpoints from 'express-list-endpoints'
+import { ImageSize, ImageThumbnailUse, thumbsPath } from '../common/src/index'
+import { frontPath, issuePath, issueSummaryPath, mediaPath } from './common'
 import { pickIssuePathSegments } from './utils/issue'
 
 export interface EditionsBackendControllers {
@@ -10,7 +10,6 @@ export interface EditionsBackendControllers {
     issueController: (req: Request, res: Response) => void
     frontController: (req: Request, res: Response) => void
     imageController: (req: Request, res: Response) => void
-    imageColourController: (req: Request, res: Response) => void
 }
 
 export const createApp = (
@@ -49,13 +48,22 @@ export const createApp = (
 
     app.get(
         '/' +
-            mediaPath(issuePathSegments, ':size' as ImageSize, ':source', '*?'),
+            mediaPath(issuePathSegments, ':size' as ImageSize, {
+                source: ':source',
+                path: '*?',
+            }),
         controllers.imageController,
     )
 
     app.get(
-        '/' + coloursPath(issuePathSegments, ':source', '*?'),
-        controllers.imageColourController,
+        '/' +
+            thumbsPath(
+                issuePathSegments,
+                ':size' as ImageSize,
+                { source: ':source', path: '*?' },
+                ':use' as ImageThumbnailUse,
+            ),
+        controllers.imageController,
     )
 
     const endpoints = listEndpoints(app)

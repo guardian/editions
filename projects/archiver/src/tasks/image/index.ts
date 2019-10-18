@@ -1,16 +1,20 @@
 import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
+import { ImageUse } from '../../../../common/src'
 import { Image, ImageSize, imageSizes } from '../../../common'
-import { getAndUploadColours, getAndUploadImage } from './helpers/media'
-import pAll = require('p-all')
-import { FrontTaskOutput } from '../front'
 import { handleAndNotifyOnError } from '../../services/task-handler'
+import { FrontTaskOutput } from '../front'
+import {
+    getAndUploadImage,
+    getAndUploadImageUse,
+    getImageUses,
+} from './helpers/media'
+import pAll = require('p-all')
 
 type ImageTaskInput = FrontTaskOutput
 export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {
     failedImages: number
-    failedColours: number
 }
 export const handler: Handler<
     ImageTaskInput,
@@ -18,22 +22,13 @@ export const handler: Handler<
 > = handleAndNotifyOnError(
     async ({ issuePublication, issue, images, ...params }) => {
         const { publishedId } = issue
+        //delete me
 
         const imagesWithSizes: [Image, ImageSize][] = unnest(
             images.map(image =>
                 imageSizes.map((size): [Image, ImageSize] => [image, size]),
             ),
         )
-
-        const colourUploads = await Promise.all(
-            images.map(image => getAndUploadColours(publishedId, image)),
-        )
-
-        const failedColourUploads = colourUploads.filter(hasFailed)
-        failedColourUploads.forEach(error => {
-            console.error('Uploading colour failed.')
-            console.error(JSON.stringify(error))
-        })
 
         const imageUploadActions = imagesWithSizes.map(
             ([image, size]) => async () =>
@@ -47,19 +42,48 @@ export const handler: Handler<
             console.error(JSON.stringify(failure)),
         )
 
+        //to here
+
+        const imagesWithUses: [Image, ImageSize, ImageUse][] = unnest(
+            unnest(
+                images.map(image =>
+                    imageSizes.map(size =>
+                        getImageUses(image).map((use): [
+                            Image,
+                            ImageSize,
+                            ImageUse,
+                        ] => [image, size, use]),
+                    ),
+                ),
+            ),
+        )
+
+        const imageUseUploadActions = imagesWithUses.map(
+            ([image, size, use]) => async () =>
+                attempt(getAndUploadImageUse(publishedId, image, size, use)),
+        )
+
+        const imageUseUploads = await pAll(imageUseUploadActions, {
+            concurrency: 20,
+        })
+
+        const failedImageUseUploads = imageUseUploads.filter(hasFailed)
+        failedImageUploads.map(failure =>
+            console.error(JSON.stringify(failure)),
+        )
         console.log('Uploaded images')
 
-        const failedImages = failedImageUploads.length
-        const failedColours = failedColourUploads.length
-        const success = failedImages + failedColours === 0
+        const failedImages =
+            failedImageUploads.length + failedImageUseUploads.length
+
+        const success = failedImages === 0
 
         return {
             issuePublication,
             issue,
             ...params,
-            failedColours,
             failedImages,
-            message: `Images and colours fetched and uploaded ${
+            message: `Images fetched and uploaded ${
                 success ? 'succesfully' : 'with some errors'
             }.`,
         }

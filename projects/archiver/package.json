@@ -19,7 +19,7 @@
         "typescript": "^3.5.3"
     },
     "scripts": {
-        "build": "ncc build main.ts -o dist -m",
+        "build": "ncc build main.ts -o dist -m -s",
         "start": "AWS_PROFILE='frontend' ts-node local.ts",
         "start:index": "AWS_DEFAULT_PROFILE='frontend' ts-node src/indexer/local.ts",
         "validate": "cd ../.. && script/make validate-archiver",

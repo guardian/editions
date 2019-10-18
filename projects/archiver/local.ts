@@ -36,6 +36,14 @@ const handlers = (main as unknown) as {
 }
 const handler = handlers[task]
 
+if (handler == undefined) {
+    console.log(`Handler ${task} unidentified.`)
+    console.log(`Present handlers are ${Object.keys(handlers).join(' ')}`)
+    process.exit(1)
+}
+
+console.log(`Running ${task} with ${json}`)
+
 const run = handler(JSON.parse(json), {} as Context, () => {}) as Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
 
 run.then(x => {

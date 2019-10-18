@@ -212,7 +212,7 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
     )
 }
 
-const SuperHeroImageItem = (props: PropTypes) => {
+export const SuperHeroImageItem = (props: PropTypes) => {
     const [, { pillar }] = useArticle()
     if (useIsOpinionCard()) {
         return <OpinionSuper {...props} />
@@ -222,5 +222,3 @@ const SuperHeroImageItem = (props: PropTypes) => {
     }
     return <NormalSuper {...props} />
 }
-
-export { SuperHeroImageItem }

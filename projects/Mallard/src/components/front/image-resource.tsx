@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
-import { Image as IImage } from '../../../../common/src'
+import { Image as IImage, ImageUse } from '../../../../common/src'
 
 /**
  * This component abstracts away the endpoint for images
@@ -22,6 +22,7 @@ import { Image as IImage } from '../../../../common/src'
  */
 type ImageResourceProps = {
     image: IImage
+    use: ImageUse
     style?: StyleProp<ImageStyle>
     setAspectRatio?: boolean
 } & Omit<ImageProps, 'source'>
@@ -51,12 +52,14 @@ const ImageResource = ({
     image,
     style,
     setAspectRatio = false,
+    use,
     ...props
 }: ImageResourceProps) => {
     const [width, setWidth] = useState<number | null>(null)
-    const imagePath = useImagePath(image)
+    const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
+
     return width && imagePath ? (
         <ScaledImageResource
             key={imagePath} // an attempt to fix https://github.com/facebook/react-native/issues/9195

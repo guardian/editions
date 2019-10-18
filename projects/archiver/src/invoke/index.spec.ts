@@ -34,6 +34,7 @@ describe('state machine invoker', () => {
         const testDependencies: InvokerDependencies = {
             stateMachineInvoke: invokeStateMachineAllwaysSuccess,
             s3fetch: (params: GetS3ObjParams) => {
+                console.log(JSON.stringify(params))
                 return Promise.resolve(obejctsContentsInput)
             },
         }
@@ -65,6 +66,7 @@ describe('state machine invoker', () => {
         const testDependencies: InvokerDependencies = {
             stateMachineInvoke: invokeStateMachineAllwaysFails,
             s3fetch: (params: GetS3ObjParams) => {
+                console.log(JSON.stringify(params))
                 return Promise.resolve(obejctsContentsInput)
             },
         }

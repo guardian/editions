@@ -1,13 +1,14 @@
 import fetch from 'node-fetch'
 import {
     mediaPath,
-    coloursPath,
     issuePath,
     frontPath,
     Issue,
     Front,
     Image,
     ImageSize,
+    imagePath,
+    ImageUse,
 } from '../../common'
 import {
     attempt,
@@ -46,13 +47,13 @@ export const getFront = async (
         )
     return maybeFront
 }
-
+//Delete me!
 export const getImage = async (
     publishedId: string,
     image: Image,
     size: ImageSize,
 ): Promise<[string, Attempt<Buffer>]> => {
-    const path = mediaPath(publishedId, size, image.source, image.path)
+    const path = mediaPath(publishedId, size, image)
 
     const url = `${URL}/${path}`
     const resp = attempt(fetch(url))
@@ -64,12 +65,20 @@ export const getImage = async (
     return [path, await maybeResponse.buffer()]
 }
 
-export const getColours = async (
+export const getImageUse = async (
     publishedId: string,
     image: Image,
-): Promise<[string, Attempt<{}>]> => {
-    const path = coloursPath(publishedId, image.source, image.path)
+    size: ImageSize,
+    use: ImageUse,
+): Promise<[string, Attempt<Buffer>]> => {
+    const path = imagePath(publishedId, size, image, use)
+
     const url = `${URL}/${path}`
-    const response = await attempt(fetch(url).then(_ => _.json()))
-    return [path, response]
+    const resp = attempt(fetch(url))
+
+    const maybeResponse = await resp
+
+    if (hasFailed(maybeResponse)) return [path, maybeResponse]
+
+    return [path, await maybeResponse.buffer()]
 }

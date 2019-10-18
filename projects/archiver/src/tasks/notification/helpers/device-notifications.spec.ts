@@ -10,6 +10,7 @@ const apiCfg = {
 }
 
 const stub = async (input: ScheduleDeviceNotificationInput) => {
+    console.log(JSON.stringify(input))
     return { statusCode: 200, statusText: 'success' }
 }
 
