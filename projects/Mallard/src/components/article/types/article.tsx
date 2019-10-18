@@ -5,10 +5,15 @@ import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
 import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
-import { Article as ArticleT, PictureArticle } from '../../../../../common/src'
+import {
+    Article as ArticleT,
+    PictureArticle,
+    Content,
+} from '../../../../../common/src'
 import { Fader } from '../../layout/animators/fader'
 import { Wrap, WrapLayout } from '../wrap/wrap'
 import { WebviewWithArticle } from './article/webview'
+import { GalleryArticle } from 'src/common'
 
 const styles = StyleSheet.create({
     block: {
@@ -35,18 +40,23 @@ export enum ArticleTheme {
     Dark = 'dark',
 }
 
+const usesDarkTheme = (type: Content['type']) =>
+    ['picture', 'gallery'].includes(type)
+
 const Article = ({
     onTopPositionChange,
     article,
-    theme = ArticleTheme.Default,
 }: {
-    article: ArticleT | PictureArticle
+    article: ArticleT | PictureArticle | GalleryArticle
     onTopPositionChange: OnTopPositionChangeFn
-    theme?: ArticleTheme
 }) => {
     const [wrapLayout, setWrapLayout] = useState<WrapLayout | null>(null)
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
+
+    const theme = usesDarkTheme(article.type)
+        ? ArticleTheme.Dark
+        : ArticleTheme.Default
     return (
         <Fader>
             {wrapLayout && (

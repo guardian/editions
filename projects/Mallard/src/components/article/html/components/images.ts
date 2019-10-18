@@ -3,11 +3,10 @@ import { defaultSettings } from 'src/helpers/settings/defaults'
 import { Direction, ImageSize } from 'src/common'
 import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { breakOut } from '../helpers/layout'
-import { CssProps } from '../helpers/css'
+import { CssProps, themeColors } from '../helpers/css'
 
 export const renderCaption = ({
     caption,
@@ -35,7 +34,7 @@ const breakoutCaption = ({
     }
 `
 
-const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
+const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     .image {
         position: relative;
         clear: right;
@@ -48,7 +47,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
     }
     .image figcaption {
         font-family: 'GuardianTextSans-Regular';
-        color: ${color.palette.neutral[46]};
+        color: ${themeColors(theme).dimText};
         ${getScaledFontCss('sans', 0.5)}
         padding: 0 0 0 1em;
         position: relative;
@@ -57,7 +56,7 @@ const imageStyles = ({ colors, wrapLayout }: CssProps) => css`
     .image figcaption svg {
         width: 0.8em;
         left: 0;
-        top: 0.35em;
+        top: 0.3em;
         position: absolute;
         right: ${px(breakOut(wrapLayout) * -1)};
     }
