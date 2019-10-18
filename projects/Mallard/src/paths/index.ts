@@ -9,6 +9,7 @@ import {
     ImageSize,
 } from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
+import { defaultSettings } from 'src/helpers/settings/defaults'
 
 export interface PathToIssue {
     localIssueId: Issue['localId']
@@ -39,6 +40,7 @@ export const FSPaths = {
     issuesDir,
     issueRoot,
     mediaRoot,
+    contentPrefixDir: `${issuesDir}/${defaultSettings.contentPrefix}`,
     media: (
         localIssueId: string,
         source: string,

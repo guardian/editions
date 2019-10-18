@@ -186,9 +186,7 @@ export const downloadAndUnzipIssue = async (
 }
 
 export const clearOldIssues = async () => {
-    const files = await RNFetchBlob.fs.ls(
-        `${FSPaths.issuesDir}/${defaultSettings.contentPrefix}`,
-    )
+    const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)
 
     const issuesToDelete = files.filter(
         issue => !lastSevenDays().includes(issue) && issue === 'issues',
@@ -196,9 +194,7 @@ export const clearOldIssues = async () => {
 
     issuesToDelete.map(issue => {
         RNFetchBlob.fs
-            .unlink(
-                `${FSPaths.issuesDir}/${defaultSettings.contentPrefix}/${issue}`,
-            )
+            .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
             .catch(e => errorService.captureException(e))
     })
 }
@@ -240,7 +236,7 @@ export const downloadTodaysIssue = async () => {
 
 export const readIssueSummary = async () =>
     RNFetchBlob.fs
-        .readFile(FSPaths.issuesDir + defaultSettings.issuesPath, 'utf8')
+        .readFile(FSPaths.contentPrefixDir + defaultSettings.issuesPath, 'utf8')
         .then(data => JSON.parse(data))
         .catch(e => {
             throw e
@@ -250,7 +246,7 @@ export const fetchAndStoreIssueSummary = async () => {
     const apiUrl = await getSetting('apiUrl')
     return RNFetchBlob.config({
         overwrite: true,
-        path: FSPaths.issuesDir + defaultSettings.issuesPath,
+        path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
     })
         .fetch('GET', apiUrl + 'issues', {
             'Content-Type': 'application/json',
