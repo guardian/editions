@@ -99,12 +99,13 @@ class Authorizer<T, A extends any[], C extends readonly AsyncCache<any>[]> {
         )
 
         /**
-         * This may not correspond to the attempt stored in the authorizer
-         * as if we've already logged in `getAttempt` will return that attempt
-         * rather than this if it is an invalid attempt.
-         * However, it's useful here to return the actual attempt to login
-         * here for the UI, although this will likely never be run if we're
-         * already logged in anyway.
+         * This may not correspond to the attempt stored in `this.attempt`
+         * as, if we've already logged in, `getAttempt` this attempt will not
+         * overwrite that attempt.
+         * However, it's useful here to return the _actual_ attempt for the login
+         * here for the UI to display a message,.
+         *
+         * That said, this will likely never be run if we're already logged in anyway.
          */
         return {
             attempt,
