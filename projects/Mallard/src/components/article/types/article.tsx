@@ -40,10 +40,8 @@ export enum ArticleTheme {
     Dark = 'dark',
 }
 
-const usesDarkTheme = (type: Content['type']) => {
-    console.log(type)
-    return ['picture', 'gallery'].includes(type)
-}
+const usesDarkTheme = (type: Content['type']) =>
+    ['picture', 'gallery'].includes(type)
 
 const Article = ({
     onTopPositionChange,
