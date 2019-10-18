@@ -90,6 +90,7 @@ const parseArticleResult = async (
 
     const starRating = result.fields && result.fields.starRating
 
+    console.log(result.blocks)
     const blocks =
         result.blocks &&
         result.blocks.body &&
