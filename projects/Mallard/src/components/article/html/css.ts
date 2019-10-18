@@ -81,7 +81,7 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
         background-color: ${themeColors(theme).background}
         color: ${themeColors(theme).text}
     }
-∏
+
     html, body {
         overflow-x: hidden;
     }
