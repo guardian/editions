@@ -27,7 +27,7 @@ export const metrics = {
     article: {
         ...sides,
         maxWidth: 800,
-        rightRail: 170 + sides.sidesTablet,
+        rightRail: 180 + sides.sidesTablet,
         railPaddingLeft: sides.sidesTablet * 1.5,
         standfirstBottom: basicMetrics.vertical * 1.5,
     },

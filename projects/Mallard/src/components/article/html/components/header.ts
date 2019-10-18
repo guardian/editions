@@ -62,7 +62,7 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
-export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
+export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -120,7 +120,7 @@ export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     }
     .header-image.header-image--immersive {
         margin: 0 ${px(metrics.article.sidesTablet * -1)};
-        width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
+        width: calc(100% + ${px(metrics.article.sidesTablet * 2)});
         padding-top: 100%;
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {

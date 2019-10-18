@@ -57,7 +57,7 @@ const Article = ({
     const theme = usesDarkTheme(article.type)
         ? ArticleTheme.Dark
         : ArticleTheme.Default
-    console.log(theme)
+
     return (
         <Fader>
             {wrapLayout && (

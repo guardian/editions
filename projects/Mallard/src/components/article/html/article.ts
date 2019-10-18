@@ -11,7 +11,6 @@ import {
     MediaAtomElement,
 } from '../../../common'
 import { ArticleTheme } from '../types/article'
-import { WrapLayout } from '../wrap/wrap'
 import { Arrow } from './components/arrow'
 import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
@@ -86,7 +85,6 @@ export const renderArticle = (
     elements: BlockElement[],
     {
         pillar,
-        wrapLayout,
         showMedia,
         height,
         publishedId,
@@ -97,7 +95,6 @@ export const renderArticle = (
         theme,
     }: {
         pillar: ArticlePillar
-        wrapLayout: WrapLayout
         height: number
         article: CAPIArticle
         type: ArticleType
@@ -156,7 +153,6 @@ export const renderArticle = (
 
     const styles = makeCss({
         colors: getPillarColors(pillar),
-        wrapLayout,
         theme,
     })
     const body = html`

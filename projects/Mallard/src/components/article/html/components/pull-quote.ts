@@ -27,14 +27,14 @@ const BubblePointer = () => html`
     </svg>
 `
 
-const quoteStyles = ({ colors, wrapLayout }: CssProps) => css`
+const quoteStyles = ({ colors }: CssProps) => css`
     blockquote {
         box-sizing: border-box;
         border: 1px solid ${colors.main};
         color: ${colors.main};
         border-top-width: 12px;
-        padding: 0 1px ${px(metrics.vertical * 2)}
-            ${px(metrics.article.sides / 2)};
+        padding: 0 3px ${px(metrics.vertical * 2)}
+            ${px(metrics.article.sidesTablet / 2)};
         position: relative;
         margin-bottom: calc(22px + 0.25em);
         margin-top: 0.25em;
@@ -75,7 +75,7 @@ const quoteStyles = ({ colors, wrapLayout }: CssProps) => css`
         blockquote[data-role='supporting'] {
             width: 50%;
             float: left;
-            margin-right: ${px(metrics.article.sides)};
+            margin-right: ${px(metrics.article.sidesTablet / 2)};
         }
     }
 
@@ -83,9 +83,9 @@ const quoteStyles = ({ colors, wrapLayout }: CssProps) => css`
         blockquote[data-role='inline'],
         blockquote[data-role='supporting'] {
             position: absolute;
-            right: ${px(metrics.article.sides)};
+            right: 0;
             display: block;
-            width: ${px(wrapLayout.rail.width - metrics.sides.sides + 1)};
+            width: ${px(metrics.article.rightRail + 1)};
         }
     }
 
@@ -101,7 +101,8 @@ const quoteStyles = ({ colors, wrapLayout }: CssProps) => css`
         blockquote[data-role='showcase'] {
             width: 60%;
             margin-left: ${px(
-                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2) * -1,
+                ((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+                    -1,
             )};
         }
     }

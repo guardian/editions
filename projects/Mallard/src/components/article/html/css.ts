@@ -72,7 +72,7 @@ const makeFontsCss = () => css`
     })}
 `
 
-const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
+const makeCss = ({ colors, theme }: CssProps) => css`
     ${makeFontsCss()}
 
     :root {
@@ -114,7 +114,7 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
 
     .app {
         padding: 0 ${px(metrics.article.sides)} ${px(metrics.vertical)};
-        width: ${px(wrapLayout.width + metrics.article.sides * 2)};
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
         position: relative;
         animation-duration: .5s;
@@ -122,7 +122,10 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
         animation-fill-mode: both;
     }
     main, .wrapper {
-        max-width: ${px(wrapLayout.content.width + metrics.sides.sides / 2)};
+        background: pink;
+        margin-right: ${px(
+            metrics.article.rightRail + metrics.article.sidesTablet,
+        )}
     }
     .app p,
     figure {
@@ -155,17 +158,15 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
     }
     ${quoteStyles({
         colors,
-        wrapLayout,
         theme,
     })}
     ${headerStyles({
         colors,
-        wrapLayout,
         theme,
     })}
-    ${imageStyles({ colors, wrapLayout, theme })}
-    ${lineStyles({ colors, wrapLayout, theme })}
-    ${ratingStyles({ colors, wrapLayout, theme })}
+    ${imageStyles({ colors, theme })}
+    ${lineStyles({ colors, theme })}
+    ${ratingStyles({ colors, theme })}
 `
 
 export { makeCss }
