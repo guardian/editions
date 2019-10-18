@@ -5,7 +5,11 @@ import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { useImageSize } from 'src/hooks/use-image-size'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import { Article, PictureArticle } from '../../../../../../common/src'
+import {
+    Article,
+    PictureArticle,
+    GalleryArticle,
+} from '../../../../../../common/src'
 import { renderArticle } from '../../html/article'
 import { WrapLayout } from '../../wrap/wrap'
 import { ArticleTheme } from '../article'
@@ -20,7 +24,7 @@ const WebviewWithArticle = ({
     theme,
     ...webViewProps
 }: {
-    article: Article | PictureArticle
+    article: Article | PictureArticle | GalleryArticle
     type: ArticleType
     wrapLayout: WrapLayout
     paddingTop?: number
