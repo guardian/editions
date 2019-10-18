@@ -123,7 +123,9 @@ const openSupportMailto = async (
     const version = await DeviceInfo.getVersion()
     const buildNumber = await DeviceInfo.getBuildNumber()
 
-    const subject = `${text} - ${Platform.OS} Daily App, ${version} ${buildNumber}`
+    const subject = `${text} - ${Platform.OS} Daily ${
+        isInBeta() ? 'Beta' : ''
+    } App, ${version} ${buildNumber}`
 
     return Linking.openURL(
         `mailto:${email}?subject=${encodeURIComponent(subject)}${

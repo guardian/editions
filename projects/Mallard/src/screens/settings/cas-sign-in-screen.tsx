@@ -45,12 +45,15 @@ const CasSignInScreen = ({
             setShouldShowError(true)
             return
         }
-        const attempt = await authCAS(subscriberID.value, password.value)
-        if (isValid(attempt)) {
+        const { accessAttempt } = await authCAS(
+            subscriberID.value,
+            password.value,
+        )
+        if (isValid(accessAttempt)) {
             navigation.goBack()
             open(close => <SubFoundModalCard close={close} />)
         } else {
-            setErrorMessage(attempt.reason || 'Something went wrong')
+            setErrorMessage(accessAttempt.reason || 'Something went wrong')
         }
         setIsLoading(false)
     }
