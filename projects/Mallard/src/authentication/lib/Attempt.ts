@@ -16,7 +16,14 @@ type InvalidAttempt = {
     time: number
 }
 
-export type ResolvedAttempt<T> = ValidAttempt<T> | InvalidAttempt
+type ErrorAttempt = {
+    type: 'error-attempt'
+    reason?: string
+    connectivity: Connectivity
+    time: number
+}
+
+export type ResolvedAttempt<T> = ValidAttempt<T> | InvalidAttempt | ErrorAttempt
 
 export type AnyAttempt<T> = NotRun | ResolvedAttempt<T>
 
@@ -64,6 +71,17 @@ const ValidAttemptCons = <T>(
     time,
 })
 
+const ErrorAttemptCons = <T>(
+    connectivity: Connectivity,
+    reason?: string,
+    time = Date.now(),
+): ErrorAttempt => ({
+    type: 'error-attempt',
+    reason,
+    connectivity,
+    time,
+})
+
 const isNotRun = <T>(attempt: AnyAttempt<T>): attempt is NotRun =>
     attempt.type === 'not-run-attempt'
 
@@ -72,6 +90,9 @@ const hasRun = <T>(attempt: AnyAttempt<T>): attempt is ResolvedAttempt<T> =>
 
 const isValid = <T>(attempt: AnyAttempt<T>): attempt is ValidAttempt<T> =>
     attempt.type === 'valid-attempt'
+
+const isError = <T>(attempt: AnyAttempt<T>): attempt is ErrorAttempt =>
+    attempt.type === 'error-attempt'
 
 const isOnline = <T>(attempt: ResolvedAttempt<T>) =>
     attempt.connectivity === 'online'
@@ -105,7 +126,9 @@ export {
     NotRunRef as NotRun,
     ValidAttemptCons as ValidAttempt,
     InvalidAttemptCons as InvalidAttempt,
+    ErrorAttemptCons as ErrorAttempt,
     isValid,
+    isError,
     isOnline,
     hasRun,
     isNotRun,
