@@ -1,4 +1,5 @@
 import html from 'src/helpers/webview'
+import { bodyHtml as teamHtml } from './credits/team'
 
 export const bodyHtml = html`
     <h2>async-storage</h2>
@@ -1711,18 +1712,5 @@ export const bodyHtml = html`
         SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     </p>
 
-    <hr />
-
-    <h2>The Guardian Daily Team</h2>
-    <ul>
-        <li>
-            <strong>Laura González</strong> <br />
-            Developer<br />
-            Twitter: @freezydorito<br />
-            Fav emoji: 😻🌈✨🥺
-        </li>
-        <li>
-            can yall add yourselves here
-        </li>
-    </ul>
+    ${teamHtml}
 `
