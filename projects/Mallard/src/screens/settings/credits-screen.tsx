@@ -1,7 +1,7 @@
 import React from 'react'
 import { DefaultInfoTextWebview } from './default-info-text-webview'
 
-const termsAndConditionsHtml = require('src/constants/settings/credits.json')
+const termsAndConditionsHtml = require('src/constants/settings/credits.js')
     .bodyHtml
 
 const CreditsScreen = () => (
