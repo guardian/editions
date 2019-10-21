@@ -13,6 +13,7 @@ import { lineStyles } from './components/line'
 import { quoteStyles } from './components/pull-quote'
 import { ratingStyles } from './components/rating'
 import { CssProps, themeColors } from './helpers/css'
+import { Breakpoints } from 'src/theme/breakpoints'
 
 export const EMBED_DOMAIN = 'https://embed.theguardian.com'
 
@@ -72,7 +73,7 @@ const makeFontsCss = () => css`
     })}
 `
 
-const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
+const makeCss = ({ colors, theme }: CssProps) => css`
     ${makeFontsCss()}
 
     :root {
@@ -113,16 +114,20 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
     }
 
     .app {
-        padding: 0 ${px(metrics.article.sides)} ${px(metrics.vertical)};
-        width: ${px(wrapLayout.width + metrics.article.sides * 2)};
+        padding: 0 ${metrics.article.sides} ${px(metrics.vertical)};
+        max-width: ${px(metrics.article.maxWidth + metrics.article.sides * 2)};
         margin: auto;
         position: relative;
         animation-duration: .5s;
         animation-name: fade;
         animation-fill-mode: both;
     }
-    main, .wrapper {
-        max-width: ${px(wrapLayout.content.width + metrics.sides.sides / 2)};
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        main, .wrapper {
+            margin-right: ${px(
+                metrics.article.rightRail + metrics.article.sides,
+            )}
+        }
     }
     .app p,
     figure {
@@ -151,21 +156,19 @@ const makeCss = ({ colors, wrapLayout, theme }: CssProps) => css`
         padding-top: ${px(metrics.vertical)};
     }
     .content-wrap .line {
-        margin-right: ${px(metrics.article.sidesTablet * -1)};
+        margin-right: ${px(metrics.article.sides * -1)};
     }
     ${quoteStyles({
         colors,
-        wrapLayout,
         theme,
     })}
     ${headerStyles({
         colors,
-        wrapLayout,
         theme,
     })}
-    ${imageStyles({ colors, wrapLayout, theme })}
-    ${lineStyles({ colors, wrapLayout, theme })}
-    ${ratingStyles({ colors, wrapLayout, theme })}
+    ${imageStyles({ colors, theme })}
+    ${lineStyles({ colors, theme })}
+    ${ratingStyles({ colors, theme })}
 `
 
 export { makeCss }
