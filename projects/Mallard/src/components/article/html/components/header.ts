@@ -28,7 +28,7 @@ const outieKicker = (type: ArticleType) => css`
         display: inline-block;
         height: 3em;
         margin-top: -3em;
-        padding-right: ${metrics.article.sidesTablet};
+        padding-right: ${metrics.article.sides};
         margin-left: -10em;
         padding-left: 10em;
         border: none;
@@ -53,16 +53,16 @@ const outieHeader = (type: ArticleType) => css`
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
         .header-container[data-type='${type}'] .header {
-            margin-right: 4em;
+            margin-right: 60px;
         }
         .header-container[data-type='${type}'] .header:after {
-            margin-right: -4em;
+            margin-right: ${px((60 + metrics.article.sides) * -1)};
         }
     }
     ${outieKicker(type)}
 `
 
-export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
+export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -81,7 +81,7 @@ export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header:after {
-            margin-right: ${px(metrics.article.sidesTablet * -1)};
+            margin-right: ${px(metrics.article.sides * -1)};
         }
     }
     .header {
@@ -119,8 +119,8 @@ export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
         left:0;
     }
     .header-image.header-image--immersive {
-        margin: 0 ${px(metrics.article.sidesTablet * -1)};
-        width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
+        margin: 0 ${px(metrics.article.sides * -1)};
+        width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
@@ -200,8 +200,8 @@ export const headerStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
         background-color: ${color.dimLine};
         position: absolute;
         bottom: -1px;
-        left: ${px(metrics.article.sidesTablet * -1)};
-        right: ${px(metrics.article.sidesTablet * -1)};
+        left: ${px(metrics.article.sides * -1)};
+        right: ${px(metrics.article.sides * -1)};
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header-byline:not(:empty):after {

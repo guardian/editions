@@ -5,7 +5,6 @@ import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
-import { breakOut } from '../helpers/layout'
 import { CssProps, themeColors } from '../helpers/css'
 
 export const renderCaption = ({
@@ -14,19 +13,15 @@ export const renderCaption = ({
 }: Pick<ImageElement, 'caption' | 'credit'>) =>
     [caption, credit].filter(s => !!s).join(' ')
 
-const breakoutCaption = ({
-    role,
-    wrapLayout,
-}: {
-    role: ImageElement['role']
-    wrapLayout: CssProps['wrapLayout']
-}) => css`
+const breakoutCaption = (role: ImageElement['role']) => css`
     .image[data-role='${role}'] figcaption {
         position: absolute;
-        right: ${px(breakOut(wrapLayout) * -1)};
+        right: ${px(
+            (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
+        )};
         top: -0.5em;
         display: block;
-        width: ${px(wrapLayout.rail.contentWidth)};
+        width: ${px(metrics.article.rightRail)};
     }
 
     .image[data-role='${role}'] figcaption svg {
@@ -34,7 +29,7 @@ const breakoutCaption = ({
     }
 `
 
-const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
+const imageStyles = ({ colors, theme }: CssProps) => css`
     .image {
         position: relative;
         clear: right;
@@ -58,7 +53,9 @@ const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
         left: 0;
         top: 0.3em;
         position: absolute;
-        right: ${px(breakOut(wrapLayout) * -1)};
+        right: ${px(
+            (metrics.article.rightRail + metrics.article.sides * 1.5) * -1,
+        )};
     }
     .image figcaption svg path {
         fill: ${colors.main};
@@ -66,7 +63,7 @@ const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
 
     /*INLINE*/
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        ${breakoutCaption({ role: 'inline', wrapLayout })}
+        ${breakoutCaption('inline')}
     }
 
     /*THUMBS*/
@@ -74,12 +71,12 @@ const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
         .image[data-role='thumbnail'] {
             width: 40%;
             float: left;
-            margin-right: ${px(metrics.article.sides * 1.5)};
+            margin-right: ${px(metrics.article.sides)};
         }
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .image[data-role='thumbnail'] {
-            width: ${px(wrapLayout.rail.contentWidth)};
+            width: ${px(metrics.article.rightRail)};
             position: absolute;
             right: 0;
         }
@@ -90,12 +87,14 @@ const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
         .image[data-role='supporting'] {
             float: right;
             width: 500px;
-            margin-left: ${px(metrics.article.sides * 1.5)};
-            margin-right: ${px(breakOut(wrapLayout) * -1)};
+            margin-left: ${px(metrics.article.sides)};
+            margin-right: ${px(
+                (metrics.article.rightRail + metrics.article.sides) * -1,
+            )};
         }
 
         .image[data-role='supporting'] figcaption {
-            width: ${px(wrapLayout.rail.contentWidth)};
+            width: ${px(metrics.article.rightRail - metrics.article.sides)};
             position: absolute;
             right: 0;
         }
@@ -106,46 +105,59 @@ const imageStyles = ({ colors, wrapLayout, theme }: CssProps) => css`
             Breakpoints.tabletLandscape,
         )}) {
         .image[data-role='showcase'] {
-            margin-right: ${px(breakOut(wrapLayout) * -1)};
+            margin-right: ${px(
+                (metrics.article.rightRail + metrics.article.sides) * -1,
+            )};
         }
 
         .image[data-role='showcase'] figcaption {
-            width: ${px(wrapLayout.rail.contentWidth)};
+            width: ${px(metrics.article.rightRail)};
             float: right;
         }
     }
     @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
         .image[data-role='showcase'] img {
             margin-left: ${px(
-                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2) * -1,
+                ((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+                    -1,
             )};
             width: calc(
                 100% +
-                    ${px((Breakpoints.tabletLandscape - wrapLayout.width) / 2)}
+                    ${px(
+                        (Breakpoints.tabletLandscape -
+                            metrics.article.maxWidth) /
+                            2,
+                    )}
             );
         }
-        ${breakoutCaption({ role: 'showcase', wrapLayout })}
+        ${breakoutCaption('showcase')}
     }
 
     /*IMMERSIVE*/
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .image[data-role='immersive'] {
-            margin-right: ${px(breakOut(wrapLayout) * -1)};
+            margin-right: ${px(
+                (metrics.article.rightRail + metrics.article.sides) * -1,
+            )};
         }
         .image[data-role='immersive'] figcaption {
-            width: ${px(wrapLayout.rail.contentWidth)};
+            width: ${px(metrics.article.rightRail)};
             float: right;
         }
     }
     @media (min-width: ${px(Breakpoints.tabletLandscape)}) {
         .image[data-role='immersive'] img {
             width: calc(
-                100% + ${px(Breakpoints.tabletLandscape - wrapLayout.width)}
+                100% +
+                    ${px(
+                        Breakpoints.tabletLandscape - metrics.article.maxWidth,
+                    )}
             );
             display: block;
             background: 'red';
             margin-left: ${px(
-                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2) * -1,
+                ((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+                    -1,
             )};
         }
     }
