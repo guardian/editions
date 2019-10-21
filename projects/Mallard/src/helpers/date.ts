@@ -1,6 +1,8 @@
 import moment from 'moment-timezone'
 
-const londonTime = (time?: moment.MomentInput) =>
-    moment(time).tz('Europe/London')
+const londonTime = (time?: string) => {
+    if (time != null) return moment.tz(time, 'Europe/London')
+    return moment.tz('Europe/London')
+}
 
 export { londonTime }
