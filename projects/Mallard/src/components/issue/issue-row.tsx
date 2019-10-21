@@ -125,7 +125,7 @@ const IssueRow = ({
     ])
 
     return (
-        <RowWrapper>
+        <RowWrapper narrow>
             <GridRowSplit proxy={<IssueButton issue={issue} />}>
                 <View style={rowStyles.issueRow}>
                     <Highlight onPress={onPress}>
