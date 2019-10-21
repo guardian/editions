@@ -4,8 +4,8 @@ import { defaultSettings } from 'src/helpers/settings/defaults'
 import { londonTime } from './date'
 
 const months = [
-    'Jan',
-    'Feb',
+    'January',
+    'February',
     'March',
     'April',
     'May',
