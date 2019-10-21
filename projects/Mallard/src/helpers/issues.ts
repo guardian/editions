@@ -34,7 +34,6 @@ interface IssueDate {
 }
 
 export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
-    console.warn(dateString)
     const date = londonTime(dateString)
     return {
         date: date.date() + ' ' + months[date.month()],
