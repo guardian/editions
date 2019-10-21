@@ -4,7 +4,7 @@ import awsServerlessExpress from 'aws-serverless-express'
 import { Handler } from 'aws-lambda'
 import { issueController, issuesSummaryController } from './controllers/issue'
 import { frontController } from './controllers/fronts'
-import { imageController, imageColourController } from './controllers/image'
+import { imageController } from './controllers/image'
 import { createApp, EditionsBackendControllers } from './application'
 import { isPreview } from './preview'
 
@@ -13,7 +13,6 @@ const runtimeControllers: EditionsBackendControllers = {
     issueController,
     frontController,
     imageController,
-    imageColourController,
 }
 
 const asPreview = isPreview

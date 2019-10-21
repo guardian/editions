@@ -42,6 +42,7 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     <ImageResource
                         style={coverStyles.cover}
                         image={article.trailImage}
+                        use="thumb"
                     />
                 ) : null}
                 <TextBlock
@@ -101,6 +102,7 @@ const SplashImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     style={[splashImageStyles.image]}
                     image={cardImage}
                     setAspectRatio
+                    use="thumb"
                 />
             </View>
             <HeadlineCardText style={[splashImageStyles.hidden]}>
