@@ -4,8 +4,8 @@ import { defaultSettings } from 'src/helpers/settings/defaults'
 import { londonTime } from './date'
 
 const months = [
-    'Jan',
-    'Feb',
+    'January',
+    'February',
     'March',
     'April',
     'May',
@@ -34,6 +34,7 @@ interface IssueDate {
 }
 
 export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
+    console.warn(dateString)
     const date = londonTime(dateString)
     return {
         date: date.date() + ' ' + months[date.month()],
