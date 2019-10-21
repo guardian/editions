@@ -4,6 +4,8 @@ import {
     ContentType,
     ICapiDateTime as CapiDateTime64,
     IContent,
+    IBlocks,
+    ElementType,
 } from '@guardian/capi-ts'
 import {
     Article,
@@ -12,6 +14,7 @@ import {
     PictureArticle,
     CapiDateTime as CapiDateTime32,
     Image,
+    MediaAtomElement,
 } from '../common'
 import {
     BufferedTransport,
@@ -61,6 +64,26 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
     iso8601: date.iso8601,
     dateTime: date.dateTime.toNumber(),
 })
+
+/**
+ * We look for a very specific pattern which we know represent a header video
+ * on an article. The video/media ID is sort of a UUID which can be later used
+ * by the client to build a URL from, ex.
+ * https://embed.theguardian.com/embed/atom/media/1c35effc-5275-45b1-802b-719ec45f0087
+ */
+const getMainMediaAtom = (
+    capiBlocks?: IBlocks,
+): MediaAtomElement | undefined => {
+    if (capiBlocks == null) return
+    const { main } = capiBlocks
+    if (main == null || main.elements == null || main.elements.length !== 1)
+        return
+    const element = main.elements[0]
+    if (element.type !== ElementType.CONTENTATOM) return
+    const { contentAtomTypeData: data } = element
+    if (data == null || data.atomType !== 'media') return
+    return { id: 'media-atom', atomId: data.atomId } //, html: main.bodyHtml
+}
 
 const parseArticleResult = async (
     result: IContent,
@@ -124,6 +147,7 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     elements,
                     starRating,
+                    mainMedia: getMainMediaAtom(result.blocks),
                 },
             ]
             return article
