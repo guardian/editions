@@ -2,7 +2,6 @@ import { Issue } from 'src/common'
 import { useMemo } from 'react'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { londonTime } from './date'
-import moment from 'moment-timezone'
 
 const months = [
     'Jan',
