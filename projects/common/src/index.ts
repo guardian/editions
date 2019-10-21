@@ -166,6 +166,7 @@ export interface Content extends WithKey {
     showQuotedHeadline: boolean
     mediaType: MediaType
     sportScore?: string
+    print: boolean
 }
 export interface Article extends Content {
     type: 'article'

@@ -87,6 +87,7 @@ const getMainMediaAtom = (
 
 const parseArticleResult = async (
     result: IContent,
+    print: boolean,
 ): Promise<[number, CAPIContent]> => {
     const path = result.id
     console.log(`Parsing CAPI response for ${path}`)
@@ -148,6 +149,7 @@ const parseArticleResult = async (
                     elements,
                     starRating,
                     mainMedia: getMainMediaAtom(result.blocks),
+                    print,
                 },
             ]
             return article
@@ -167,6 +169,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
+                    print,
                 },
             ]
 
@@ -187,6 +190,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
+                    print,
                 },
             ]
 
@@ -228,6 +232,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     crossword,
+                    print,
                 },
             ]
 
@@ -258,6 +263,7 @@ const parseArticleResult = async (
                             html: `<pre>${JSON.stringify(result.apiUrl)}</pre>`,
                         },
                     ],
+                    print,
                 },
             ]
     }
@@ -280,7 +286,7 @@ export const getArticles = async (
     capi: 'printsent' | 'search',
 ): Promise<{ [key: string]: CAPIContent }> => {
     const paths = ids.map(_ => `internal-code/page/${_}`)
-
+    const print = capi === 'printsent'
     const endpoint = capi === 'printsent' ? printsent(paths) : search(paths)
     if (endpoint.length > 1000) {
         console.warn(
@@ -316,7 +322,7 @@ export const getArticles = async (
     const data = SearchResponseCodec.decode(input)
     const results: IContent[] = data.results
     const articlePromises = await Promise.all(
-        results.map(result => attempt(parseArticleResult(result))),
+        results.map(result => attempt(parseArticleResult(result, print))),
     )
 
     //If we fail to get an article in a collection we just ignore it and move on.
