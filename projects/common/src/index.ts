@@ -174,7 +174,7 @@ export interface Article extends Content {
     standfirst: string
     elements: BlockElement[]
     starRating?: number
-    mediaId?: string
+    mainMedia?: MediaAtomElement
 }
 
 export interface CrosswordArticle extends Content {
@@ -304,7 +304,7 @@ export interface MediaAtomElement {
     id: 'media-atom'
     atomId: string
     image?: Image
-    html: string
+    html?: string
     platform?: 'youtube' | 'dailymotion' | 'mainstream' | 'url'
     assetId?: string
     title?: string

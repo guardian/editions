@@ -14,6 +14,7 @@ import {
     PictureArticle,
     CapiDateTime as CapiDateTime32,
     Image,
+    MediaAtomElement,
 } from '../common'
 import {
     BufferedTransport,
@@ -70,7 +71,9 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
  * by the client to build a URL from, ex.
  * https://embed.theguardian.com/embed/atom/media/1c35effc-5275-45b1-802b-719ec45f0087
  */
-const getMainAtomMediaId = (capiBlocks?: IBlocks): string | undefined => {
+const getMainMediaAtom = (
+    capiBlocks?: IBlocks,
+): MediaAtomElement | undefined => {
     if (capiBlocks == null) return
     const { main } = capiBlocks
     if (main == null || main.elements == null || main.elements.length !== 1)
@@ -79,7 +82,7 @@ const getMainAtomMediaId = (capiBlocks?: IBlocks): string | undefined => {
     if (element.type !== ElementType.CONTENTATOM) return
     const { contentAtomTypeData: data } = element
     if (data == null || data.atomType !== 'media') return
-    return data.atomId
+    return { id: 'media-atom', atomId: data.atomId } //, html: main.bodyHtml
 }
 
 const parseArticleResult = async (
@@ -144,7 +147,7 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     elements,
                     starRating,
-                    mediaId: getMainAtomMediaId(result.blocks),
+                    mainMedia: getMainMediaAtom(result.blocks),
                 },
             ]
             return article
