@@ -20,6 +20,7 @@ test('getImage', () => {
         showQuotedHeadline: false,
         mediaType: 'Image',
         elements: [],
+        fromPrint: true,
     }
     expect(getImagesFromArticle(article)).toContain(image)
 })
