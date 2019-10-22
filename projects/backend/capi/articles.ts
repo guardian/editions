@@ -87,7 +87,7 @@ const getMainMediaAtom = (
 
 const parseArticleResult = async (
     result: IContent,
-    fromPrint: boolean,
+    isFromPrint: boolean,
 ): Promise<[number, CAPIContent]> => {
     const path = result.id
     console.log(`Parsing CAPI response for ${path}`)
@@ -149,7 +149,7 @@ const parseArticleResult = async (
                     elements,
                     starRating,
                     mainMedia: getMainMediaAtom(result.blocks),
-                    fromPrint,
+                    isFromPrint,
                 },
             ]
             return article
@@ -169,7 +169,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
-                    fromPrint,
+                    isFromPrint,
                 },
             ]
 
@@ -190,7 +190,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
-                    fromPrint,
+                    isFromPrint,
                 },
             ]
 
@@ -232,7 +232,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     crossword,
-                    fromPrint,
+                    isFromPrint,
                 },
             ]
 
@@ -263,7 +263,7 @@ const parseArticleResult = async (
                             html: `<pre>${JSON.stringify(result.apiUrl)}</pre>`,
                         },
                     ],
-                    fromPrint,
+                    isFromPrint,
                 },
             ]
     }
@@ -286,7 +286,7 @@ export const getArticles = async (
     capi: 'printsent' | 'search',
 ): Promise<{ [key: string]: CAPIContent }> => {
     const paths = ids.map(_ => `internal-code/page/${_}`)
-    const fromPrint = capi === 'printsent'
+    const isFromPrint = capi === 'printsent'
     const endpoint = capi === 'printsent' ? printsent(paths) : search(paths)
     if (endpoint.length > 1000) {
         console.warn(
@@ -322,7 +322,7 @@ export const getArticles = async (
     const data = SearchResponseCodec.decode(input)
     const results: IContent[] = data.results
     const articlePromises = await Promise.all(
-        results.map(result => attempt(parseArticleResult(result, fromPrint))),
+        results.map(result => attempt(parseArticleResult(result, isFromPrint))),
     )
 
     //If we fail to get an article in a collection we just ignore it and move on.

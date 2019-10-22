@@ -36,7 +36,7 @@ const Content = <T extends string>(
     showQuotedHeadline,
     mediaType,
     sportScore,
-    fromPrint: false,
+    isFromPrint: false,
 })
 
 const Article = ({
