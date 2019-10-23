@@ -12,7 +12,8 @@ const RESOLVERS = {
 
 export const createApolloClient = () => {
     const link = new HttpLink({
-        uri: 'http://localhost:4000/',
+        /** We never fetch from a server at this point in time */
+        uri: '',
     })
     return new ApolloClient({
         cache: new InMemoryCache(),

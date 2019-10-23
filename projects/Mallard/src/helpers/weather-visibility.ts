@@ -16,7 +16,6 @@ const setWeatherVisibility = (
     apolloClient: ApolloClient<object>,
     visibility: WeatherVisibility,
 ) => {
-    console.warn(visibility)
     storeSetting('weatherVisibility', visibility)
     apolloClient.writeData({
         data: {
