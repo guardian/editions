@@ -92,6 +92,7 @@ export const renderArticle = (
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
+                showMedia,
             })
             content =
                 article.image &&
@@ -114,6 +115,7 @@ export const renderArticle = (
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
                 image: article.image,
+                showMedia,
             })
             content = renderArticleContent(elements, {
                 showMedia,
@@ -122,7 +124,7 @@ export const renderArticle = (
             })
             break
         default:
-            header = Header({ ...article, type, publishedId })
+            header = Header({ ...article, type, publishedId, showMedia })
             content = renderArticleContent(elements, {
                 showMedia,
                 publishedId,

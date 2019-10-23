@@ -521,6 +521,7 @@ const Header = ({
     type,
     ...headerProps
 }: {
+    showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
 } & ArticleHeaderProps) => {
@@ -554,7 +555,9 @@ const Header = ({
                                 : undefined,
                         })}
                     ${headerProps.mainMedia &&
-                        renderMediaAtom(headerProps.mainMedia)}
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
                     ${headerProps.kicker &&
                         html`
                             <span class="header-kicker"
