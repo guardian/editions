@@ -5,12 +5,17 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { CreditedImage, Article } from '../../../../../../common/src'
+import {
+    CreditedImage,
+    Article,
+    MediaAtomElement,
+} from '../../../../../../common/src'
 import { CssProps, themeColors } from '../helpers/css'
 import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
+import { renderMediaAtom } from './media-atoms'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -21,6 +26,7 @@ export interface ArticleHeaderProps {
     starRating?: Article['starRating']
     bylineImages?: { cutout?: ImageT }
     bylineHtml?: string
+    mainMedia?: MediaAtomElement
 }
 
 const outieKicker = (type: ArticleType) => css`
@@ -547,6 +553,8 @@ const Header = ({
                                 ? Rating(headerProps)
                                 : undefined,
                         })}
+                    ${headerProps.mainMedia &&
+                        renderMediaAtom(headerProps.mainMedia)}
                     ${headerProps.kicker &&
                         html`
                             <span class="header-kicker"

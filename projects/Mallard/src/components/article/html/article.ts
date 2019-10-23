@@ -5,36 +5,16 @@ import {
     ArticleType,
     BlockElement,
     CAPIArticle,
-    Direction,
     ImageSize,
     Issue,
-    MediaAtomElement,
 } from '../../../common'
 import { ArticleTheme } from '../types/article'
-import { Arrow } from './components/arrow'
 import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
-
-export const EMBED_DOMAIN = 'https://embed.theguardian.com'
-
-const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
-    return html`
-        <figure class="image" style="overflow: hidden;">
-            <iframe
-                scrolling="no"
-                src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}"
-                style="width: 100%; display: block;"
-                frameborder="0"
-            ></iframe>
-            <figcaption>
-                ${Arrow({ direction: Direction.top })} ${mediaAtomElement.title}
-            </figcaption>
-        </figure>
-    `
-}
+import { renderMediaAtom } from './components/media-atoms'
 
 interface ArticleContentProps {
     showMedia: boolean
