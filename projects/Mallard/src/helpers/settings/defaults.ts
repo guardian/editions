@@ -115,6 +115,7 @@ export const defaultSettings: Settings = {
     issuesPath: `/issues`,
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,
+    weatherVisibility: 'shown',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

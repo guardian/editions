@@ -47,7 +47,6 @@ import {
     useIssueSummary,
     issueSummaryToLatestPath,
 } from 'src/hooks/use-issue-summary'
-import { nullLiteral } from '@babel/types'
 import { useWeatherVisibility } from 'src/helpers/weather-visibility'
 
 const styles = StyleSheet.create({

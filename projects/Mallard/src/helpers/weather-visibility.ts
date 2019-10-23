@@ -12,7 +12,7 @@ export const resolveWeatherVisibility = async () => {
 }
 
 const setWeatherVisibility = (
-    apolloClient: ApolloClient<any>,
+    apolloClient: ApolloClient<object>,
     visibility: WeatherVisibility,
 ) => {
     storeSetting('weatherVisibility', visibility)
@@ -24,13 +24,13 @@ const setWeatherVisibility = (
 }
 
 export const toggleWeatherVisibility = (
-    client: ApolloClient<any>,
+    client: ApolloClient<object>,
     value: WeatherVisibility,
 ) => {
     setWeatherVisibility(client, value === 'shown' ? 'hidden' : 'shown')
 }
 
-export const QUERY = gql`
+const QUERY = gql`
     {
         weatherVisibility @client
     }
