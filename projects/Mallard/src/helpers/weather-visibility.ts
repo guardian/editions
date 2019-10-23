@@ -11,10 +11,12 @@ export const resolveWeatherVisibility = async () => {
     return value || 'shown'
 }
 
+/** Can be refactored later as a generic Setting mutator */
 const setWeatherVisibility = (
     apolloClient: ApolloClient<object>,
     visibility: WeatherVisibility,
 ) => {
+    console.warn(visibility)
     storeSetting('weatherVisibility', visibility)
     apolloClient.writeData({
         data: {

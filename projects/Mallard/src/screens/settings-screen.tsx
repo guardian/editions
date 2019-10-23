@@ -25,19 +25,18 @@ import {
 } from 'src/helpers/weather-visibility'
 
 const MiscSettingsList = React.memo(() => {
-    const weatherVisibility = useWeatherVisibility()
-    if (weatherVisibility.loading || weatherVisibility.error) return null
-    const { client, value } = weatherVisibility
+    const { error, loading, value, client } = useWeatherVisibility()
+    if (error) throw error
+    if (loading) return null
+    const onChange = () => toggleWeatherVisibility(client, value)
     const items = [
         {
             key: 'weatherVisibility',
             title: 'Display Weather',
-            data: {
-                onPress: () => {
-                    toggleWeatherVisibility(client, value)
-                },
-            },
-            proxy: <Switch value={weatherVisibility.value === 'shown'} />,
+            data: { onPress: onChange },
+            proxy: (
+                <Switch value={value === 'shown'} onValueChange={onChange} />
+            ),
         },
     ]
     return <List onPress={({ onPress }) => onPress()} data={items} />

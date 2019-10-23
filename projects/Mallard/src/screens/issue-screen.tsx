@@ -63,9 +63,6 @@ const styles = StyleSheet.create({
         borderRightColor: color.line,
         borderRightWidth: 1,
     },
-    sideWeatherHidden: {
-        width: 0,
-    },
     sideBySideFeed: {
         paddingTop: metrics.vertical,
     },
@@ -252,12 +249,8 @@ const IssueScreenWithPath = React.memo(
         const response = useIssueResponse(path)
         const weatherVisibility = useWeatherVisibility()
         if (weatherVisibility.loading) return null
-        let isWeatherShown = false
-        if (weatherVisibility.error) {
-            console.error(weatherVisibility.error)
-        } else {
-            isWeatherShown = weatherVisibility.value === 'shown'
-        }
+        if (weatherVisibility.error) throw weatherVisibility.error
+        const isWeatherShown = weatherVisibility.value === 'shown'
 
         return response({
             error: handleError,
@@ -321,11 +314,7 @@ const IssueScreenWithPath = React.memo(
                                             <View style={styles.sideWeather}>
                                                 <Weather />
                                             </View>
-                                        ) : (
-                                            <View
-                                                style={styles.sideWeatherHidden}
-                                            />
-                                        )}
+                                        ) : null}
 
                                         <WithLayoutRectangle>
                                             {metrics => (
