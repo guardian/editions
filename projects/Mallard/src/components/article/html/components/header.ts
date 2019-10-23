@@ -5,12 +5,17 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { CreditedImage, Article } from '../../../../../../common/src'
+import {
+    CreditedImage,
+    Article,
+    MediaAtomElement,
+} from '../../../../../../common/src'
 import { CssProps, themeColors } from '../helpers/css'
 import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
+import { renderMediaAtom } from './media-atoms'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -21,6 +26,7 @@ export interface ArticleHeaderProps {
     starRating?: Article['starRating']
     bylineImages?: { cutout?: ImageT }
     bylineHtml?: string
+    mainMedia?: MediaAtomElement
 }
 
 const outieKicker = (type: ArticleType) => css`
@@ -63,6 +69,12 @@ const outieHeader = (type: ArticleType) => css`
 `
 
 export const headerStyles = ({ colors, theme }: CssProps) => css`
+
+    /* prevent clicks on byline links */
+    .header a {
+        pointer-events: none;
+    }
+
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -185,7 +197,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         text-decoration: none;
         font-weight: 600;
         color: ${colors.main};
-        pointer-events: none;
     }
 
     .header-top-byline > a {
@@ -515,6 +526,7 @@ const Header = ({
     type,
     ...headerProps
 }: {
+    showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
 } & ArticleHeaderProps) => {
@@ -547,6 +559,10 @@ const Header = ({
                                 ? Rating(headerProps)
                                 : undefined,
                         })}
+                    ${headerProps.mainMedia &&
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
                     ${headerProps.kicker &&
                         html`
                             <span class="header-kicker"
