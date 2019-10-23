@@ -1,9 +1,9 @@
 import React from 'react'
 import {
     Animated,
+    Dimensions,
     StyleSheet,
     TouchableWithoutFeedback,
-    Dimensions,
     View,
 } from 'react-native'
 import {
@@ -15,21 +15,16 @@ import {
 } from 'react-navigation'
 import { ariaHidden } from 'src/helpers/a11y'
 import { supportsTransparentCards } from 'src/helpers/features'
-import { color } from 'src/theme/color'
-import {
-    NavigatorWrapper,
-    addStaticRouterWithPosition,
-} from '../helpers/transition'
-import {
-    screenInterpolator,
-    bottomLayerTransition,
-    topLayerTransition,
-} from './underlay/transition'
-import { addStaticRouter } from '../helpers/base'
 import { safeInterpolation } from 'src/helpers/math'
-import { Button } from 'src/components/button/button'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { addStaticRouter } from '../helpers/base'
+import {
+    addStaticRouterWithPosition,
+    NavigatorWrapper,
+} from '../helpers/transition'
 import { sidebarWidth } from './underlay/positions'
+import { screenInterpolator, topLayerTransition } from './underlay/transition'
 
 const overlayStyles = StyleSheet.create({
     root: {

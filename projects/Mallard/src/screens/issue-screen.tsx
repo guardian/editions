@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react'
 import {
     Animated,
+    Image,
     StyleProp,
     StyleSheet,
     View,
     ViewStyle,
-    Image,
 } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
@@ -25,15 +25,18 @@ import { Weather } from 'src/components/weather'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
-import { safeInterpolation } from 'src/helpers/math'
 import {
+    CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,
     CONNECTION_FAILED_SUB_ERROR,
     REFRESH_BUTTON_TEXT,
-    CONNECTION_FAILED_AUTO_RETRY,
 } from 'src/helpers/words'
 import { useIssueResponse } from 'src/hooks/use-issue'
-import { useMediaQuery, useDimensions } from 'src/hooks/use-screen'
+import {
+    issueSummaryToLatestPath,
+    useIssueSummary,
+} from 'src/hooks/use-issue-summary'
+import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
@@ -43,10 +46,6 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import {
-    useIssueSummary,
-    issueSummaryToLatestPath,
-} from 'src/hooks/use-issue-summary'
 
 const styles = StyleSheet.create({
     weatherWide: {
