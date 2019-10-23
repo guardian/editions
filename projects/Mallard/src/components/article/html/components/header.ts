@@ -63,6 +63,12 @@ const outieHeader = (type: ArticleType) => css`
 `
 
 export const headerStyles = ({ colors, theme }: CssProps) => css`
+
+    /* prevent clicks on byline links */
+    .header a {
+        pointer-events: none;
+    }
+
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -185,7 +191,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         text-decoration: none;
         font-weight: 600;
         color: ${colors.main};
-        pointer-events: none;
     }
 
     .header-top-byline > a {
