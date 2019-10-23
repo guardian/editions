@@ -74,6 +74,7 @@ export interface DevSettings {
 
 interface UserSettings {
     hasOnboarded: boolean
+    weatherVisibility: 'shown' | 'hidden'
 }
 
 export interface Settings

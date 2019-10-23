@@ -47,17 +47,25 @@ import {
     useIssueSummary,
     issueSummaryToLatestPath,
 } from 'src/hooks/use-issue-summary'
+import { nullLiteral } from '@babel/types'
+import { useWeatherVisibility } from 'src/helpers/weather-visibility'
 
 const styles = StyleSheet.create({
     weatherWide: {
         marginHorizontal: metrics.horizontal,
         height: 78,
     },
+    weatherHidden: {
+        height: 16,
+    },
     sideWeather: {
         width: 78,
         flexShrink: 0,
         borderRightColor: color.line,
         borderRightWidth: 1,
+    },
+    sideWeatherHidden: {
+        width: 0,
     },
     sideBySideFeed: {
         paddingTop: metrics.vertical,
@@ -243,6 +251,15 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
+        const weatherVisibility = useWeatherVisibility()
+        if (weatherVisibility.loading) return null
+        let isWeatherShown = false
+        if (weatherVisibility.error) {
+            console.error(weatherVisibility.error)
+        } else {
+            isWeatherShown = weatherVisibility.value === 'shown'
+        }
+
         return response({
             error: handleError,
             pending: handlePending,
@@ -273,13 +290,21 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        <View
-                                                            style={
-                                                                styles.weatherWide
-                                                            }
-                                                        >
-                                                            <Weather />
-                                                        </View>
+                                                        isWeatherShown ? (
+                                                            <View
+                                                                style={
+                                                                    styles.weatherWide
+                                                                }
+                                                            >
+                                                                <Weather />
+                                                            </View>
+                                                        ) : (
+                                                            <View
+                                                                style={
+                                                                    styles.weatherHidden
+                                                                }
+                                                            />
+                                                        )
                                                     }
                                                     issue={issue}
                                                 />
@@ -293,9 +318,15 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        <View style={styles.sideWeather}>
-                                            <Weather />
-                                        </View>
+                                        {isWeatherShown ? (
+                                            <View style={styles.sideWeather}>
+                                                <Weather />
+                                            </View>
+                                        ) : (
+                                            <View
+                                                style={styles.sideWeatherHidden}
+                                            />
+                                        )}
 
                                         <WithLayoutRectangle>
                                             {metrics => (

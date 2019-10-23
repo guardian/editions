@@ -36,10 +36,8 @@ import { AccessProvider } from './authentication/AccessContext'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { IssueSummaryProvider } from './hooks/use-issue-summary'
-import { ApolloClient } from 'apollo-client'
 import { ApolloProvider } from '@apollo/react-hooks'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
+import { createApolloClient } from './apollo'
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -133,15 +131,7 @@ const WithProviders = nestProviders(
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
 
-const apolloClient = (() => {
-    const link = new HttpLink({
-        uri: 'http://localhost:4000/',
-    })
-    return new ApolloClient({
-        cache: new InMemoryCache(),
-        link,
-    })
-})()
+const apolloClient = createApolloClient()
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {

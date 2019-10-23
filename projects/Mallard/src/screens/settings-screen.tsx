@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import React, { useContext, useState } from 'react'
-import { Alert, StyleSheet, Text } from 'react-native'
+import { Alert, StyleSheet, Text, Switch } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'
@@ -19,6 +19,29 @@ import {
     useIdentity,
     useAccess,
 } from 'src/authentication/AccessContext'
+import {
+    useWeatherVisibility,
+    toggleWeatherVisibility,
+} from 'src/helpers/weather-visibility'
+
+const MiscSettingsList = React.memo(() => {
+    const weatherVisibility = useWeatherVisibility()
+    if (weatherVisibility.loading || weatherVisibility.error) return null
+    const { client, value } = weatherVisibility
+    const items = [
+        {
+            key: 'weatherVisibility',
+            title: 'Display Weather',
+            data: {
+                onPress: () => {
+                    toggleWeatherVisibility(client, value)
+                },
+            },
+            proxy: <Switch value={weatherVisibility.value === 'shown'} />,
+        },
+    ]
+    return <List onPress={({ onPress }) => onPress()} data={items} />
+})
 
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const setSetting = useSettings()
@@ -129,6 +152,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     onPress={({ onPress }) => onPress()}
                     data={signInListItems}
                 />
+                <Heading>{``}</Heading>
+                <MiscSettingsList />
                 <Heading>{``}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
