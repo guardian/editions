@@ -1,5 +1,11 @@
 import React from 'react'
-import { Animated, StyleSheet } from 'react-native'
+import {
+    Animated,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    Dimensions,
+    View,
+} from 'react-native'
 import {
     createStackNavigator,
     NavigationContainer,
@@ -14,9 +20,16 @@ import {
     NavigatorWrapper,
     addStaticRouterWithPosition,
 } from '../helpers/transition'
-import { screenInterpolator } from './underlay/transition'
+import {
+    screenInterpolator,
+    bottomLayerTransition,
+    topLayerTransition,
+} from './underlay/transition'
 import { addStaticRouter } from '../helpers/base'
 import { safeInterpolation } from 'src/helpers/math'
+import { Button } from 'src/components/button/button'
+import { Breakpoints } from 'src/theme/breakpoints'
+import { sidebarWidth } from './underlay/positions'
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -26,10 +39,7 @@ const overlayStyles = StyleSheet.create({
     },
 })
 
-const addStaticRouterWithOverlay: NavigatorWrapper = (
-    navigator,
-    getPosition,
-) => {
+const addViewsForTopLayer: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
         const posi = getPosition()
@@ -48,8 +58,60 @@ const addStaticRouterWithOverlay: NavigatorWrapper = (
                         },
                     ]}
                 />
-
                 <Navigator navigation={navigation} />
+            </>
+        )
+    }
+    return addStaticRouter(navigator, Wrapper)
+}
+
+const bottomStyles = StyleSheet.create({
+    content: {
+        flex: 1,
+    },
+    contentTablet: {
+        maxWidth: sidebarWidth,
+        alignSelf: 'flex-end',
+    },
+})
+const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
+    const Navigator = addStaticRouterWithPosition(navigator, getPosition)
+    const isTablet =
+        Dimensions.get('window').width >= Breakpoints.tabletVertical
+
+    /*
+    on this bottom layer we wanna add a 'touchable' that goes back
+    in the size and position of the visible parts of the top
+    layer (eg. the issue list shows a bit of the previous issue.
+    we want a touchable there).
+    This gives the user the illusion that by tapping on the bit of
+    the previous screen they see, they are bringing it back into focus
+    */
+    const backButtonStyles = topLayerTransition(new Animated.Value(1), 0)
+
+    const Wrapper = ({ navigation }: NavigationInjectedProps) => {
+        return (
+            <>
+                <View
+                    style={[
+                        bottomStyles.content,
+                        isTablet && bottomStyles.contentTablet,
+                    ]}
+                >
+                    <Navigator navigation={navigation} />
+                </View>
+                <TouchableWithoutFeedback
+                    onPressIn={() => {
+                        navigation.goBack()
+                    }}
+                >
+                    <Animated.View
+                        style={[
+                            StyleSheet.absoluteFillObject,
+                            backButtonStyles,
+                        ]}
+                    />
+                </TouchableWithoutFeedback>
             </>
         )
     }
@@ -66,12 +128,12 @@ const createUnderlayNavigator = (
 
     const navigation: { [key: string]: NavigationContainer } = {
         _: supportsTransparentCards()
-            ? addStaticRouterWithOverlay(top, () => animatedValue)
+            ? addViewsForTopLayer(top, () => animatedValue)
             : top,
     }
     for (const [key, value] of Object.entries(bottom)) {
         navigation[key] = supportsTransparentCards()
-            ? addStaticRouterWithPosition(value, () => animatedValue)
+            ? addViewsForBottomLayer(value, () => animatedValue)
             : value
     }
 

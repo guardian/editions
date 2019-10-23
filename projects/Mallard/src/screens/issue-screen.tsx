@@ -84,7 +84,6 @@ const ScreenHeader = withNavigation(
         )
 
         const goToIssueList = () => {
-            navigation.setParams({ shouldShowMoreIssuesBtn: false })
             navigateToIssueList(navigation)
         }
 
@@ -95,29 +94,13 @@ const ScreenHeader = withNavigation(
                     goToIssueList()
                 }}
                 action={
-                    <Animated.View
-                        style={
-                            supportsTransparentCards() && {
-                                opacity: position.interpolate({
-                                    inputRange: safeInterpolation([0, 1]),
-                                    outputRange: safeInterpolation([1, 0]),
-                                }),
-                            }
-                        }
-                    >
-                        {!supportsTransparentCards() || // ignore for devices that obscure the button
-                        (navigation.getParam('shouldShowMoreIssuesBtn') ||
-                            navigation.getParam('shouldShowMoreIssuesBtn') ===
-                                undefined) ? (
-                            <Button
-                                icon={isTablet ? '' : ''}
-                                alt="More issues"
-                                onPress={() => {
-                                    goToIssueList()
-                                }}
-                            />
-                        ) : null}
-                    </Animated.View>
+                    <Button
+                        icon={isTablet ? '' : ''}
+                        alt="More issues"
+                        onPress={() => {
+                            goToIssueList()
+                        }}
+                    />
                 }
             >
                 <Animated.View
