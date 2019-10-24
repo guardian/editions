@@ -98,19 +98,16 @@ export interface IssueNavigationProps {
 interface NavigateToIssueProps {
     navigation: NavigationScreenProp<{}>
     navigationProps: IssueNavigationProps
-    shouldShowMoreIssuesBtn?: boolean
     setIssueId: (path: PathToIssue) => void
 }
 
 const navigateToIssue = ({
     navigation,
     navigationProps,
-    shouldShowMoreIssuesBtn = true,
     setIssueId,
 }: NavigateToIssueProps) => {
     navigation.navigate(routeNames.Issue, {
         ...navigationProps,
-        shouldShowMoreIssuesBtn,
     })
     if (navigationProps.path) {
         setIssueId(navigationProps.path)
