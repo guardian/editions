@@ -151,81 +151,12 @@ const fetchFromIssue = <T>(
     )
 }
 
-const fetchFromWeatherApi = async <T>(
-    path: string,
-    {
-        validator = () => true,
-    }: {
-        validator?: ValidatorFn<T>
-    } = {},
-): Promise<T> => {
-    return fetch('http://mobile-weather.guardianapis.com/' + path)
-        .then(res => {
-            if (res.status >= 500) {
-                throw new Error('Failed to fetch') // 500s don't return json
-            }
-            return res.json()
-        })
-        .then(data => {
-            if (data && validator(data)) {
-                return data
-            } else {
-                throw new Error(REQUEST_INVALID_RESPONSE_VALIDATION)
-            }
-        })
-}
-
 const fetchAndStoreIpAddress = async (): Promise<string> => {
     const { store: storeIp } = withCache<string>('ipAddress')
     const resp = await fetch('https://api.ipify.org')
     const ipAddress = await resp.text()
     storeIp('ipAddress', ipAddress)
     return ipAddress
-}
-
-const fetchIpAddress = (): Promise<string> => {
-    const { retrieve: retrieveIp } = withCache<string>('ipAddress')
-
-    const ipAddressFromCache = retrieveIp('ipAddress')
-
-    if (ipAddressFromCache) {
-        return Promise.resolve(ipAddressFromCache)
-    } else {
-        return fetchAndStoreIpAddress()
-    }
-}
-
-const fetchWeatherForecastForLocation = (): CachedOrPromise<
-    WeatherForecast
-> => {
-    const {
-        retrieve: retrieveWeatherForecastSummary,
-        store: storeWeatherForecastSummary,
-    } = withCache<WeatherForecast>('weatherForecastSummary')
-
-    const getWeatherForecast = async (): Promise<WeatherForecast> => {
-        const ip = await fetchIpAddress()
-        const location = await fetchFromWeatherApi<AccuWeatherLocation>(
-            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
-        )
-        const forecasts = await fetchFromWeatherApi<Forecast[]>(
-            `forecasts/v1/hourly/12hour/${location.Key}.json?metric=true&language=en-gb`,
-        )
-        const weatherForecast: WeatherForecast = {
-            locationName: location.EnglishName,
-            forecasts,
-        }
-
-        return weatherForecast
-    }
-
-    return createCachedOrPromise(
-        [retrieveWeatherForecastSummary(`forecasts`), getWeatherForecast],
-        {
-            savePromiseResultToValue: result =>
-                storeWeatherForecastSummary(`forecasts`, result),
-        },
-    )
 }
 
 const fetchDeprecationWarning = async (): Promise<{
@@ -311,7 +242,6 @@ const notificationTracking = (
 export {
     fetchFromIssue,
     fetchFromApi,
-    fetchWeatherForecastForLocation,
     fetchFromNotificationService,
     fetchAndStoreIpAddress,
     fetchCacheClear,

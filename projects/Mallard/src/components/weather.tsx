@@ -1,12 +1,9 @@
 import React from 'react'
 import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
-import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
-import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
-import { fetchWeatherForecastForLocation } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
@@ -14,6 +11,9 @@ import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { Button, ButtonAppearance } from './button/button'
+import { RESULTS } from 'react-native-permissions'
+import { requestLocationPermission } from 'src/helpers/location-permission'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -97,12 +97,6 @@ export interface WeatherForecast {
     forecasts: Forecast[]
 }
 
-const useWeatherResponse = () => {
-    return withResponse<WeatherForecast>(
-        useCachedOrPromise(fetchWeatherForecastForLocation()),
-    )
-}
-
 const WeatherIconView = ({
     forecast,
     style,
@@ -141,9 +135,13 @@ const WeatherIconView = ({
 )
 
 const WeatherWithForecast = ({
+    showSetLocationButton,
+    onSetLocationPress,
     locationName,
     forecasts,
 }: {
+    showSetLocationButton: boolean
+    onSetLocationPress: () => void
     locationName: string
     forecasts: Forecast[]
 }) => {
@@ -157,13 +155,35 @@ const WeatherWithForecast = ({
                         <View style={styles.weatherContainerLong}>
                             <GridRowSplit
                                 proxy={
-                                    <View style={styles.locationNameContainer}>
-                                        <Text style={styles.locationPinIcon}>
-                                            {'\uE01B'}
-                                        </Text>
-                                        <Text style={styles.locationName}>
-                                            {locationName}
-                                        </Text>
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            height: 60,
+                                            flexDirection: 'column',
+                                        }}
+                                    >
+                                        <View
+                                            style={styles.locationNameContainer}
+                                        >
+                                            <Text
+                                                style={styles.locationPinIcon}
+                                            >
+                                                {'\uE01B'}
+                                            </Text>
+                                            <Text style={styles.locationName}>
+                                                {locationName}
+                                            </Text>
+                                        </View>
+                                        {showSetLocationButton && (
+                                            <Button
+                                                onPress={onSetLocationPress}
+                                                appearance={
+                                                    ButtonAppearance.skeleton
+                                                }
+                                            >
+                                                Set Location
+                                            </Button>
+                                        )}
                                     </View>
                                 }
                             >
@@ -198,32 +218,35 @@ const WeatherWithForecast = ({
         )
     }
 
-    return <></>
+    return <Text>invalid weather</Text>
 }
 
-const GET_WEATHER_FORECAST = gql`
-    {
-        weatherForecast @client
+const GET_WEATHER_DATA = gql`
+    query getWeatherData($locationPermissionStatus: String!) {
+        weatherForecast(locationPermissionStatus: $locationPermissionStatus)
+            @client
     }
 `
 
-const Weather = React.memo(() => {
-    // const weatherForecast = useQuery(GET_WEATHER_FORECAST)
-    // if (weatherForecast.loading) return null
-    // if (weatherForecast.error) console.error(weatherForecast.error)
-    // console.warn('got: ', weatherForecast.data)
-
-    const weatherResponse = useWeatherResponse()
-    return weatherResponse({
-        error: ({}) => <></>,
-        pending: () => <></>,
-        success: weatherForecast => (
+export const Weather = React.memo(
+    ({ locationPermissionStatus }: { locationPermissionStatus: string }) => {
+        const weatherData = useQuery(GET_WEATHER_DATA, {
+            variables: { locationPermissionStatus },
+        })
+        if (weatherData.error) console.error(weatherData.error)
+        if (weatherData.loading || weatherData.data == null) return null
+        const { weatherForecast } = weatherData.data
+        return (
             <WeatherWithForecast
                 locationName={weatherForecast.locationName}
                 forecasts={weatherForecast.forecasts}
+                showSetLocationButton={
+                    locationPermissionStatus === RESULTS.DENIED
+                }
+                onSetLocationPress={() => {
+                    requestLocationPermission(weatherData.client)
+                }}
             />
-        ),
-    })
-})
-
-export { Weather }
+        )
+    },
+)

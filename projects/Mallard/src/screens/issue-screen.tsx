@@ -48,6 +48,8 @@ import {
     issueSummaryToLatestPath,
 } from 'src/hooks/use-issue-summary'
 import { useWeatherVisibility } from 'src/helpers/weather-visibility'
+import gql from 'graphql-tag'
+import { useQuery } from '@apollo/react-hooks'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -239,6 +241,13 @@ const handleIssueScreenError = (error: string) => (
     </>
 )
 
+const QUERY = gql`
+    {
+        weatherVisibility @client
+        locationPermissionStatus @client
+    }
+`
+
 /** used to memoize the IssueScreenWithPath */
 const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.localIssueId === b.localIssueId &&
@@ -247,10 +256,10 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
-        const weatherVisibility = useWeatherVisibility()
-        if (weatherVisibility.loading) return null
-        if (weatherVisibility.error) throw weatherVisibility.error
-        const isWeatherShown = weatherVisibility.value === 'shown'
+        const queryResult = useQuery(QUERY)
+        if (queryResult.loading) return null
+        if (queryResult.error) throw queryResult.error
+        const isWeatherShown = queryResult.data.weatherVisibility === 'shown'
 
         return response({
             error: handleError,
@@ -288,7 +297,13 @@ const IssueScreenWithPath = React.memo(
                                                                     styles.weatherWide
                                                                 }
                                                             >
-                                                                <Weather />
+                                                                <Weather
+                                                                    locationPermissionStatus={
+                                                                        queryResult
+                                                                            .data
+                                                                            .locationPermissionStatus
+                                                                    }
+                                                                />
                                                             </View>
                                                         ) : (
                                                             <View
@@ -312,7 +327,12 @@ const IssueScreenWithPath = React.memo(
                                     >
                                         {isWeatherShown ? (
                                             <View style={styles.sideWeather}>
-                                                <Weather />
+                                                <Weather
+                                                    locationPermissionStatus={
+                                                        queryResult.data
+                                                            .locationPermissionStatus
+                                                    }
+                                                />
                                             </View>
                                         ) : null}
 
