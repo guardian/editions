@@ -251,7 +251,6 @@ const IssueScreenWithPath = React.memo(
         if (weatherVisibility.loading) return null
         if (weatherVisibility.error) throw weatherVisibility.error
         const isWeatherShown = weatherVisibility.value === 'shown'
-        console.log('test')
 
         return response({
             error: handleError,

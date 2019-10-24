@@ -12,6 +12,8 @@ import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -199,7 +201,18 @@ const WeatherWithForecast = ({
     return <></>
 }
 
+const GET_WEATHER_FORECAST = gql`
+    {
+        weatherForecast @client
+    }
+`
+
 const Weather = React.memo(() => {
+    // const weatherForecast = useQuery(GET_WEATHER_FORECAST)
+    // if (weatherForecast.loading) return null
+    // if (weatherForecast.error) console.error(weatherForecast.error)
+    // console.warn('got: ', weatherForecast.data)
+
     const weatherResponse = useWeatherResponse()
     return weatherResponse({
         error: ({}) => <></>,
