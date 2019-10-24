@@ -37,25 +37,7 @@ const overlayStyles = StyleSheet.create({
 const addViewsForTopLayer: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
-        const posi = getPosition()
-        return (
-            <>
-                <Animated.View
-                    {...ariaHidden}
-                    pointerEvents="none"
-                    style={[
-                        overlayStyles.root,
-                        {
-                            opacity: posi.interpolate({
-                                inputRange: safeInterpolation([0, 1]),
-                                outputRange: safeInterpolation([0, 0.33]),
-                            }),
-                        },
-                    ]}
-                />
-                <Navigator navigation={navigation} />
-            </>
-        )
+        return <Navigator navigation={navigation} />
     }
     return addStaticRouter(navigator, Wrapper)
 }
@@ -122,9 +104,7 @@ const createUnderlayNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: supportsTransparentCards()
-            ? addViewsForTopLayer(top, () => animatedValue)
-            : top,
+        _: top,
     }
     for (const [key, value] of Object.entries(bottom)) {
         navigation[key] = supportsTransparentCards()

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Animated } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
@@ -30,6 +30,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
+import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
 const HomeScreenHeader = withNavigation(
     ({
