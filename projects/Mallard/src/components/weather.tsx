@@ -228,25 +228,27 @@ const GET_WEATHER_DATA = gql`
     }
 `
 
-export const Weather = React.memo(
-    ({ locationPermissionStatus }: { locationPermissionStatus: string }) => {
-        const weatherData = useQuery(GET_WEATHER_DATA, {
-            variables: { locationPermissionStatus },
-        })
-        if (weatherData.error) console.error(weatherData.error)
-        if (weatherData.loading || weatherData.data == null) return null
-        const { weatherForecast } = weatherData.data
-        return (
-            <WeatherWithForecast
-                locationName={weatherForecast.locationName}
-                forecasts={weatherForecast.forecasts}
-                showSetLocationButton={
-                    locationPermissionStatus === RESULTS.DENIED
-                }
-                onSetLocationPress={() => {
-                    requestLocationPermission(weatherData.client)
-                }}
-            />
-        )
-    },
-)
+type Props = { locationPermissionStatus: string }
+
+/**
+ * We do a local query instead of doing it higher up in the tree so that we
+ * try fetch forecasts only if the weather widget is indeed shown.
+ */
+export const Weather = React.memo(({ locationPermissionStatus }: Props) => {
+    const weatherData = useQuery(GET_WEATHER_DATA, {
+        variables: { locationPermissionStatus },
+    })
+    if (weatherData.error) console.error(weatherData.error)
+    if (weatherData.loading || weatherData.data == null) return null
+    const { weatherForecast } = weatherData.data
+    return (
+        <WeatherWithForecast
+            locationName={weatherForecast.locationName}
+            forecasts={weatherForecast.forecasts}
+            showSetLocationButton={locationPermissionStatus === RESULTS.DENIED}
+            onSetLocationPress={() => {
+                requestLocationPermission(weatherData.client)
+            }}
+        />
+    )
+})
