@@ -5,7 +5,7 @@ import { addStaticRouter } from './base'
 
 export const minScale = 0.9
 export const minOpacity = 0.9
-export const radius = 20
+export const radius = 10
 
 export interface PositionInjectedProps {
     position: Animated.Value

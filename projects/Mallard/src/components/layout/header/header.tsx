@@ -1,7 +1,11 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, View, StatusBar } from 'react-native'
 import { Highlight } from 'src/components/highlight'
-import { GridRowSplit, IssueTitle } from 'src/components/issue/issue-title'
+import {
+    GridRowSplit,
+    IssueTitle,
+    IssueTitleAppearance,
+} from 'src/components/issue/issue-title'
 import { useInsets } from 'src/hooks/use-screen'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
@@ -141,6 +145,7 @@ const IssuePickerHeader = (
     return (
         <Header {...headerProps}>
             <IssueTitle
+                appearance={IssueTitleAppearance.white}
                 {...headerProps}
                 title={`Recent`}
                 subtitle={`Editions`}

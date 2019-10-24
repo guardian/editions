@@ -71,6 +71,7 @@ export enum IssueTitleAppearance {
     default,
     ocean,
     tertiary,
+    white,
 }
 
 export interface IssueTitleProps {
@@ -87,6 +88,9 @@ const appearances: {
 } = {
     [IssueTitleAppearance.default]: StyleSheet.create({
         subtitle: { color: color.palette.highlight.main },
+    }),
+    [IssueTitleAppearance.white]: StyleSheet.create({
+        subtitle: {},
     }),
     [IssueTitleAppearance.ocean]: StyleSheet.create({
         subtitle: { color: color.palette.sport.bright },

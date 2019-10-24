@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     item: {
         padding: metrics.horizontal,
         paddingVertical: metrics.vertical,
-        marginVertical: StyleSheet.hairlineWidth,
+        marginVertical: 1,
     },
     itemFlexer: {
         flexDirection: 'row',
@@ -59,7 +59,7 @@ const Separator = () => {
     return (
         <View
             style={{
-                height: StyleSheet.hairlineWidth,
+                height: 1,
                 backgroundColor: borderColor,
             }}
         />

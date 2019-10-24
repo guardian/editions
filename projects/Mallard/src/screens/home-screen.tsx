@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Animated } from 'react-native'
+import { View } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
@@ -20,17 +20,15 @@ import {
     CONNECTION_FAILED_ERROR,
 } from 'src/helpers/words'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import { useMediaQuery } from 'src/hooks/use-screen'
 import { useSettingsValue } from 'src/hooks/use-settings'
 import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
 import { WithAppAppearance } from 'src/theme/appearance'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
+import { supportsTransparentCards } from '../helpers/features'
 import { ApiState } from './settings/api-screen'
-import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -40,18 +38,11 @@ const HomeScreenHeader = withNavigation(
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
-        const isTablet = useMediaQuery(
-            width => width >= Breakpoints.tabletVertical,
+        const showReturnButton = !supportsTransparentCards()
+        const returnBtn = (
+            <Button icon={'\uE04F'} alt="Return to issue" onPress={onReturn} />
         )
-
-        const action = (
-            <Button
-                icon={isTablet ? '' : ''}
-                alt="Return to issue"
-                onPress={onReturn}
-            />
-        )
-        const settings = (
+        const settingsBtn = (
             <Button
                 icon={'\uE040'}
                 alt="Settings"
@@ -63,10 +54,10 @@ const HomeScreenHeader = withNavigation(
         )
         return (
             <IssuePickerHeader
-                leftAction={settings}
+                leftAction={settingsBtn}
                 accessibilityHint={'Return to issue'}
                 onPress={onReturn}
-                action={action}
+                action={showReturnButton && returnBtn}
             />
         )
     },

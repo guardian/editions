@@ -27,32 +27,31 @@ export const topLayerTransition = (
         outputRange: safeInterpolation([0, -sidebarWidth]),
     })
 
+    const borderRadius = position.interpolate({
+        inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
+        outputRange: safeInterpolation([0, radius]),
+    })
+
     const platformStyles = isTablet
         ? {
               transform: [{ translateX }],
-              shadowOffset: {
-                  width: 10,
-                  height: 10,
-              },
-              shadowOpacity: 1,
-              shadowRadius: 3.84,
-              borderRadius: position.interpolate({
-                  inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
-                  outputRange: safeInterpolation([0, radius / 4]),
-              }),
           }
         : {
               transform: [{ translateY }],
-              borderRadius: position.interpolate({
-                  inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
-                  outputRange: safeInterpolation([0, radius]),
-              }),
           }
 
     return {
-        overflow: 'hidden',
         zIndex: 9999,
-        elevation: 9999,
+        overflow: 'hidden',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        backgroundColor: '#000',
+        shadowOpacity: 0.25,
+        shadowRadius: 3,
+        borderRadius,
         ...StyleSheet.absoluteFillObject,
         ...platformStyles,
     }
@@ -65,22 +64,26 @@ export const bottomLayerTransition = (
     const { height: windowHeight, width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
+    const finalScale = isTablet ? 0.96 : 1
     /*
     these ones r easy
     */
     const scale = position.interpolate({
         inputRange: safeInterpolation([
             sceneIndex - 1,
-            sceneIndex - 0.1,
+            sceneIndex - 0.025,
             sceneIndex,
         ]),
-        outputRange: safeInterpolation([minScale, 1, 1]),
+        outputRange: safeInterpolation([minScale, finalScale, finalScale]),
     })
-    const borderRadius = position.interpolate({
-        inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
-        extrapolate: 'clamp',
-        outputRange: safeInterpolation([radius, 0]),
-    })
+
+    const borderRadius = isTablet
+        ? radius
+        : position.interpolate({
+              inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
+              extrapolate: 'clamp',
+              outputRange: safeInterpolation([radius, 0]),
+          })
     const opacity = position.interpolate({
         inputRange: safeInterpolation([sceneIndex - 1, sceneIndex]),
         outputRange: safeInterpolation([minOpacity, 1]),

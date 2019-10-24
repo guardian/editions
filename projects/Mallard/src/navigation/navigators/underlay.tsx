@@ -25,6 +25,7 @@ import {
 } from '../helpers/transition'
 import { sidebarWidth } from './underlay/positions'
 import { screenInterpolator, topLayerTransition } from './underlay/transition'
+import { UiBodyCopy } from 'src/components/styled-text'
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -77,18 +78,17 @@ const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
                 >
                     <Navigator navigation={navigation} />
                 </View>
-                <TouchableWithoutFeedback
-                    onPressIn={() => {
-                        navigation.pop()
-                    }}
+                <Animated.View
+                    style={[backButtonStyles, { overflow: 'visible' }]}
                 >
-                    <Animated.View
-                        style={[
-                            StyleSheet.absoluteFillObject,
-                            backButtonStyles,
-                        ]}
-                    />
-                </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                        onPressIn={() => {
+                            navigation.pop()
+                        }}
+                    >
+                        <View style={StyleSheet.absoluteFillObject} />
+                    </TouchableWithoutFeedback>
+                </Animated.View>
             </>
         )
     }
