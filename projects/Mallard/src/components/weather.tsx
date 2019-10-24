@@ -14,6 +14,8 @@ import gql from 'graphql-tag'
 import { Button, ButtonAppearance } from './button/button'
 import { RESULTS } from 'react-native-permissions'
 import { requestLocationPermission } from 'src/helpers/location-permission'
+import { withNavigation, NavigationInjectedProps } from 'react-navigation'
+import { routeNames } from 'src/navigation/routes'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -83,6 +85,13 @@ const styles = StyleSheet.create({
         flex: 0,
         width: 'auto',
     },
+    setLocationButtonWrap: {
+        marginTop: 14,
+    },
+    setLocationButton: {
+        paddingHorizontal: 10,
+        height: 40,
+    },
 })
 
 /**
@@ -134,7 +143,7 @@ const WeatherIconView = ({
     </View>
 )
 
-const WeatherWithForecast = ({
+const Forecasts = ({
     showSetLocationButton,
     onSetLocationPress,
     locationName,
@@ -149,72 +158,43 @@ const WeatherWithForecast = ({
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
         const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
         return (
-            <WithBreakpoints>
-                {{
-                    0: () => (
-                        <View style={styles.weatherContainerLong}>
-                            <GridRowSplit
-                                proxy={
-                                    <View
-                                        style={{
-                                            flex: 1,
-                                            height: 60,
-                                            flexDirection: 'column',
-                                        }}
-                                    >
-                                        <View
-                                            style={styles.locationNameContainer}
-                                        >
-                                            <Text
-                                                style={styles.locationPinIcon}
-                                            >
-                                                {'\uE01B'}
-                                            </Text>
-                                            <Text style={styles.locationName}>
-                                                {locationName}
-                                            </Text>
-                                        </View>
-                                        {showSetLocationButton && (
-                                            <Button
-                                                onPress={onSetLocationPress}
-                                                appearance={
-                                                    ButtonAppearance.skeleton
-                                                }
-                                            >
-                                                Set Location
-                                            </Button>
-                                        )}
-                                    </View>
-                                }
-                            >
-                                {intervals.map(forecast => {
-                                    return (
-                                        <WeatherIconView
-                                            style={styles.forecastItemLong}
-                                            key={forecast.EpochDateTime}
-                                            forecast={forecast}
-                                        />
-                                    )
-                                })}
-                            </GridRowSplit>
+            <View style={styles.weatherContainerLong}>
+                <GridRowSplit
+                    proxy={
+                        <View style={styles.locationNameContainer}>
+                            {showSetLocationButton ? (
+                                <Button
+                                    onPress={onSetLocationPress}
+                                    appearance={ButtonAppearance.skeleton}
+                                    style={styles.setLocationButtonWrap}
+                                    buttonStyles={styles.setLocationButton}
+                                >
+                                    Set Location
+                                </Button>
+                            ) : (
+                                <>
+                                    <Text style={styles.locationPinIcon}>
+                                        {'\uE01B'}
+                                    </Text>
+                                    <Text style={styles.locationName}>
+                                        {locationName}
+                                    </Text>
+                                </>
+                            )}
                         </View>
-                    ),
-                    [Breakpoints.tabletVertical]: () => (
-                        <View style={styles.weatherContainerNarrow}>
-                            {intervals.map(forecast => {
-                                return (
-                                    <WeatherIconView
-                                        style={styles.forecastItemNarrow}
-                                        key={forecast.EpochDateTime}
-                                        forecast={forecast}
-                                        iconSize={1.5}
-                                    />
-                                )
-                            })}
-                        </View>
-                    ),
-                }}
-            </WithBreakpoints>
+                    }
+                >
+                    {intervals.map(forecast => {
+                        return (
+                            <WeatherIconView
+                                style={styles.forecastItemLong}
+                                key={forecast.EpochDateTime}
+                                forecast={forecast}
+                            />
+                        )
+                    })}
+                </GridRowSplit>
+            </View>
         )
     }
 
@@ -228,27 +208,31 @@ const GET_WEATHER_DATA = gql`
     }
 `
 
-type Props = { locationPermissionStatus: string }
+type Props = { locationPermissionStatus: string } & NavigationInjectedProps
 
 /**
  * We do a local query instead of doing it higher up in the tree so that we
  * try fetch forecasts only if the weather widget is indeed shown.
  */
-export const Weather = React.memo(({ locationPermissionStatus }: Props) => {
-    const weatherData = useQuery(GET_WEATHER_DATA, {
-        variables: { locationPermissionStatus },
-    })
-    if (weatherData.error) console.error(weatherData.error)
-    if (weatherData.loading) return null
-    const { weatherForecast } = weatherData.data
-    return (
-        <WeatherWithForecast
-            locationName={weatherForecast.locationName}
-            forecasts={weatherForecast.forecasts}
-            showSetLocationButton={locationPermissionStatus === RESULTS.DENIED}
-            onSetLocationPress={() => {
-                requestLocationPermission(weatherData.client)
-            }}
-        />
-    )
-})
+export const Weather = withNavigation(
+    React.memo(({ locationPermissionStatus, navigation }: Props) => {
+        const weatherData = useQuery(GET_WEATHER_DATA, {
+            variables: { locationPermissionStatus },
+        })
+        if (weatherData.error) console.error(weatherData.error)
+        if (weatherData.loading) return null
+        const { weatherForecast } = weatherData.data
+        return (
+            <Forecasts
+                locationName={weatherForecast.locationName}
+                forecasts={weatherForecast.forecasts}
+                showSetLocationButton={
+                    locationPermissionStatus === RESULTS.DENIED
+                }
+                onSetLocationPress={() => {
+                    navigation.navigate(routeNames.WeatherGeolocationConsent)
+                }}
+            />
+        )
+    }),
+)

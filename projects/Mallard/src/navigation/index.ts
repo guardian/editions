@@ -38,6 +38,7 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
+import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -98,6 +99,9 @@ const AppStack = createModalNavigator(
                 },
             },
         ),
+        [routeNames.WeatherGeolocationConsent]: createHeaderStackNavigator({
+            [routeNames.WeatherGeolocationConsent]: WeatherGeolocationConsentScreen,
+        }),
     },
 )
 

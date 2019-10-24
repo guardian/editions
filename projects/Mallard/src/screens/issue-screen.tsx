@@ -322,11 +322,11 @@ const IssueScreenWithPath = React.memo(
                                 [Breakpoints.tabletVertical]: () => (
                                     <View
                                         style={{
-                                            flexDirection: 'row',
+                                            flexDirection: 'column',
                                         }}
                                     >
                                         {isWeatherShown ? (
-                                            <View style={styles.sideWeather}>
+                                            <View style={styles.weatherWide}>
                                                 <Weather
                                                     locationPermissionStatus={
                                                         queryResult.data
@@ -335,7 +335,6 @@ const IssueScreenWithPath = React.memo(
                                                 />
                                             </View>
                                         ) : null}
-
                                         <WithLayoutRectangle>
                                             {metrics => (
                                                 <WithIssueScreenSize

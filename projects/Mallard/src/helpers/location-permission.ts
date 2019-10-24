@@ -11,14 +11,15 @@ export const resolveLocationPermissionStatus = async () => {
     return await check(PERMISSION)
 }
 
-export const requestLocationPermission = (
+export const requestLocationPermission = async (
     apolloClient: ApolloClient<object>,
 ) => {
-    request(PERMISSION).then(result => {
+    return request(PERMISSION).then(result => {
         apolloClient.writeData({
             data: {
                 locationPermissionStatus: result,
             },
         })
+        return result
     })
 }
