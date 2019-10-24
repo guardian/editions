@@ -4,12 +4,12 @@ import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { metrics } from 'src/theme/spacing'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { safeInterpolation } from 'src/helpers/math'
+import { sidebarWidth } from './positions'
 
-const sidebarWidth = 360
-
-const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
-    const { position, scene } = sceneProps
-    const sceneIndex = scene.index
+export const topLayerTransition = (
+    position: NavigationTransitionProps['position'],
+    sceneIndex: number,
+) => {
     const { height: windowHeight, width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
     const isPhone = width >= Breakpoints.phone
@@ -58,9 +58,10 @@ const issueScreenToIssueList = (sceneProps: NavigationTransitionProps) => {
     }
 }
 
-const IssueListToIssueScreen = (sceneProps: NavigationTransitionProps) => {
-    const { position, scene } = sceneProps
-    const sceneIndex = scene.index
+export const bottomLayerTransition = (
+    position: NavigationTransitionProps['position'],
+    sceneIndex: number,
+) => {
     const { height: windowHeight, width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
@@ -95,30 +96,21 @@ const IssueListToIssueScreen = (sceneProps: NavigationTransitionProps) => {
     const translateOffset = (windowHeight - windowHeight * minScale) * -0.5
     const finalTranslate = translateOffset + metrics.slideCardSpacing / 1.5
 
-    const translateY = position.interpolate({
+    const translate = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
         outputRange: safeInterpolation([0, finalTranslate]),
     })
 
-    const platformStyles = isTablet
-        ? {
-              transform: [{ translateX: width - sidebarWidth }, { scale }],
-              width: sidebarWidth,
-          }
-        : {
-              transform: [
-                  { translateY },
-                  {
-                      scale,
-                  },
-              ],
-          }
+    const transform = [
+        { scale },
+        isTablet ? { translateX: translate } : { translateY: translate },
+    ]
 
     return {
         zIndex: 0,
         elevation: 0,
         opacity,
-        ...platformStyles,
+        transform,
         borderRadius,
         overflow: 'hidden',
     }
@@ -126,9 +118,9 @@ const IssueListToIssueScreen = (sceneProps: NavigationTransitionProps) => {
 const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { scene } = sceneProps
     if (scene.route.routeName === '_') {
-        return issueScreenToIssueList(sceneProps)
+        return topLayerTransition(sceneProps.position, sceneProps.scene.index)
     }
-    return IssueListToIssueScreen(sceneProps)
+    return bottomLayerTransition(sceneProps.position, sceneProps.scene.index)
 }
 
 export { screenInterpolator }
