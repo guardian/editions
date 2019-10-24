@@ -79,7 +79,7 @@ const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
                 </View>
                 <TouchableWithoutFeedback
                     onPressIn={() => {
-                        navigation.goBack()
+                        navigation.pop()
                     }}
                 >
                     <Animated.View
