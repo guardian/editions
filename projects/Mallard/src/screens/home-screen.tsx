@@ -76,7 +76,7 @@ const IssueList = withNavigation(
             return (
                 <>
                     <BaseList
-                        style={{ paddingTop: 0 }}
+                        style={{ paddingTop: 0, marginTop: -1 }}
                         data={issueList}
                         renderItem={({ item: issueSummary }) => (
                             <IssueRow

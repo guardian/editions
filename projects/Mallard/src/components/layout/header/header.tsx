@@ -148,7 +148,7 @@ const IssuePickerHeader = (
                 appearance={IssueTitleAppearance.white}
                 {...headerProps}
                 title={`Recent`}
-                subtitle={`Editions`}
+                subtitle={`editions`}
             />
         </Header>
     )

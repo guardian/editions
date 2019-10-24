@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import {
     Animated,
     Dimensions,
     StyleSheet,
     TouchableWithoutFeedback,
     View,
+    PanResponder,
 } from 'react-native'
 import {
     createStackNavigator,
@@ -66,8 +67,29 @@ const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
     the previous screen they see, they are bringing it back into focus
     */
     const backButtonStyles = topLayerTransition(new Animated.Value(1), 0)
-
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
+        const panResponder = useMemo(
+            () =>
+                PanResponder.create({
+                    onMoveShouldSetPanResponderCapture: () => {
+                        return true
+                    },
+                    onStartShouldSetPanResponderCapture: () => {
+                        return true
+                    },
+                    onPanResponderMove: (ev, gesture) => {
+                        const points = [gesture.dx, gesture.dy].map(Math.abs)
+                        if (Math.max(...points) > 10) {
+                            navigation.pop()
+                        }
+                    },
+                    onPanResponderRelease: () => {
+                        navigation.pop()
+                    },
+                }),
+            [],
+        )
+
         return (
             <>
                 <View
@@ -80,15 +102,8 @@ const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
                 </View>
                 <Animated.View
                     style={[backButtonStyles, { overflow: 'visible' }]}
-                >
-                    <TouchableWithoutFeedback
-                        onPressIn={() => {
-                            navigation.pop()
-                        }}
-                    >
-                        <View style={StyleSheet.absoluteFillObject} />
-                    </TouchableWithoutFeedback>
-                </Animated.View>
+                    {...panResponder.panHandlers}
+                />
             </>
         )
     }
