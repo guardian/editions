@@ -239,7 +239,7 @@ export const Weather = React.memo(({ locationPermissionStatus }: Props) => {
         variables: { locationPermissionStatus },
     })
     if (weatherData.error) console.error(weatherData.error)
-    if (weatherData.loading || weatherData.data == null) return null
+    if (weatherData.loading) return null
     const { weatherForecast } = weatherData.data
     return (
         <WeatherWithForecast
