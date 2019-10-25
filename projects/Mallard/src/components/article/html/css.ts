@@ -72,7 +72,11 @@ const makeFontsCss = () => css`
     })}
 `
 
-const makeCss = ({ colors, theme }: CssProps) => css`
+const makeCss = ({
+    colors,
+    paddingTop,
+    theme,
+}: CssProps & { paddingTop: number }) => css`
     ${makeFontsCss()}
 
     :root {
@@ -80,6 +84,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
         font-family: ${families.text.regular};
         background-color: ${themeColors(theme).background};
         color: ${themeColors(theme).text};
+        padding-top:${px(paddingTop)};
     }
 
     html, body {

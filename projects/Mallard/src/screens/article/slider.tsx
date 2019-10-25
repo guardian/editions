@@ -17,6 +17,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
+import { usesViewPagerSlider } from 'src/helpers/features'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -34,9 +35,6 @@ export interface ArticleNavigator {
     appearance: Appearance
     frontName: string
 }
-
-export const sliderBarHeight =
-    (metrics.fronts.sliderRadius + metrics.vertical) * 2
 
 const getData = (
     navigator: ArticleNavigator,
@@ -66,7 +64,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         backgroundColor: color.background,
-        height: sliderBarHeight,
+        height: metrics.article.sliderBarHeight,
     },
     innerSlider: {
         width: '100%',
@@ -159,7 +157,7 @@ const SliderBarHider = ({
                                 inputRange: safeInterpolation([0, 1]),
                                 outputRange: safeInterpolation([
                                     0,
-                                    sliderBarHeight * -1,
+                                    metrics.article.sliderBarHeight * -1,
                                 ]),
                             }),
                         },
@@ -204,7 +202,7 @@ const ArticleSlider = ({
         ? articleNavigator.articles
         : [path, ...articleNavigator.articles]
 
-    if (Platform.OS === 'android')
+    if (usesViewPagerSlider())
         return (
             <View style={{ overflow: 'hidden', flex: 1 }}>
                 <ViewPagerAndroid

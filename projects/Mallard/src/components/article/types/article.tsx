@@ -1,18 +1,19 @@
 import React, { useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import WebView from 'react-native-webview'
+import {
+    Article as ArticleT,
+    Content,
+    GalleryArticle,
+    PictureArticle,
+} from 'src/common'
+import { usesViewPagerSlider } from 'src/helpers/features'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
 import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
 import { WebviewWithArticle } from './article/webview'
-import {
-    Article as ArticleT,
-    PictureArticle,
-    Content,
-    GalleryArticle,
-} from 'src/common'
 
 const styles = StyleSheet.create({
     block: {
@@ -56,11 +57,16 @@ const Article = ({
         ? ArticleTheme.Dark
         : ArticleTheme.Default
 
+    const paddingTop = usesViewPagerSlider()
+        ? metrics.article.sliderBarHeight
+        : 0
+
     return (
         <Fader>
             <WebviewWithArticle
                 type={type}
                 article={article}
+                paddingTop={paddingTop}
                 theme={theme}
                 scrollEnabled={true}
                 useWebKit={false}

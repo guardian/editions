@@ -4,6 +4,8 @@ export const supportsTransparentCards = () => Platform.OS === 'ios'
 
 export const supportsAnimatedClipView = () => Platform.OS === 'ios'
 
+export const usesViewPagerSlider = () => Platform.OS === 'android'
+
 export const areEqualShallow = <A>(
     a: A,
     b: { [key in keyof A]: unknown },

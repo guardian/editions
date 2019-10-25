@@ -26,6 +26,7 @@ export const metrics = {
         rightRail: 180 + sides,
         railPaddingLeft: sides * 1.5,
         standfirstBottom: basicMetrics.vertical * 1.5,
+        sliderBarHeight: (sliderRadius + basicMetrics.vertical) * 2,
     },
     fronts: {
         sides: basicMetrics.horizontal * 1.5,

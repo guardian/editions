@@ -39,9 +39,8 @@ const WebviewWithArticle = ({
         type,
         imageSize,
         theme,
-        showWebHeader: true,
+        paddingTop,
         showMedia: isConnected,
-        height: paddingTop,
         publishedId: (issueId && issueId.publishedIssueId) || null,
     })
 

@@ -25,8 +25,8 @@ const socialButtonStyles = StyleSheet.create({
     },
     icon: {
         marginRight: 10,
-        height: 20,
-        width: 20,
+        height: 24,
+        width: 24,
     },
 })
 

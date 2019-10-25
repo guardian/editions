@@ -66,19 +66,17 @@ export const renderArticle = (
     {
         pillar,
         showMedia,
-        height,
+        paddingTop,
         publishedId,
-        showWebHeader,
         article,
         imageSize,
         type,
         theme,
     }: {
         pillar: ArticlePillar
-        height: number
+        paddingTop: number
         article: CAPIArticle
         type: ArticleType
-        showWebHeader: boolean
         headerProps?: ArticleHeaderProps & { type: ArticleType }
         theme: ArticleTheme
     } & ArticleContentProps,
@@ -136,12 +134,13 @@ export const renderArticle = (
     const styles = makeCss({
         colors: getPillarColors(pillar),
         theme,
+        paddingTop,
     })
     const body = html`
-        ${showWebHeader && article && header}
+        ${article && header}
         <div class="content-wrap">
-            ${showWebHeader && Line({ zIndex: 999 })}
-            <main style="padding-top:${px(height)}">
+            ${Line({ zIndex: 999 })}
+            <main>
                 ${content}
             </main>
         </div>
