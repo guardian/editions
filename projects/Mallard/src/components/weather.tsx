@@ -217,17 +217,25 @@ const GET_WEATHER_DATA = gql`
 
 type Props = { locationPermissionStatus: string } & NavigationInjectedProps
 
+const MS_IN_A_SECOND = 1000
+const SECS_IN_A_MINUTE = 60
+const MINS_IN_AN_HOUR = 60
+const THREE_HOURS = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR * 3
+
 /**
  * We do a local query instead of doing it higher up in the tree so that we
- * try fetch forecasts only if the weather widget is indeed shown. Also, we
- * have a dependency over the `locationPermissionStatus`. Theoretically Apollo
- * would allows us to use the `@export` directive, but it's got bugs (in v2.6
- * at time of writing this).
+ * try fetch forecasts only if the weather widget is indeed shown. We also have
+ * poll interval to refresh weather every so often.
+ *
+ * (Also, we have a dependency over the `locationPermissionStatus`.
+ * Theoretically Apollo would allows us to use the `@export` directive,
+ * but it's got bugs; in v2.6 at time of writing this).
  */
 export const Weather = withNavigation(
     React.memo(({ locationPermissionStatus, navigation }: Props) => {
         const { error, loading, data } = useQuery(GET_WEATHER_DATA, {
             variables: { locationPermissionStatus },
+            pollInterval: THREE_HOURS,
         })
         if (error) throw error
         if (loading) return null
