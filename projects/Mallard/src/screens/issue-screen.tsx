@@ -52,19 +52,10 @@ import { useQuery } from '@apollo/react-hooks'
 const styles = StyleSheet.create({
     weatherWide: {
         marginHorizontal: metrics.horizontal,
-        height: 78,
+        height: 82,
     },
     weatherHidden: {
         height: 16,
-    },
-    sideWeather: {
-        width: 78,
-        flexShrink: 0,
-        borderRightColor: color.line,
-        borderRightWidth: 1,
-    },
-    sideBySideFeed: {
-        paddingTop: metrics.vertical,
     },
     illustrationImage: {
         width: '100%',
@@ -240,7 +231,19 @@ const IssueScreenWithPath = React.memo(
         const queryResult = useQuery(QUERY)
         if (queryResult.loading) return null
         if (queryResult.error) throw queryResult.error
-        const isWeatherShown = queryResult.data.weatherVisibility === 'shown'
+
+        const weatherWidget =
+            queryResult.data.weatherVisibility === 'shown' ? (
+                <View style={styles.weatherWide}>
+                    <Weather
+                        locationPermissionStatus={
+                            queryResult.data.locationPermissionStatus
+                        }
+                    />
+                </View>
+            ) : (
+                <View style={styles.weatherHidden} />
+            )
 
         return response({
             error: handleError,
@@ -258,7 +261,6 @@ const IssueScreenWithPath = React.memo(
                             }}
                         />
                         <ScreenHeader issue={issue} />
-
                         <WithBreakpoints>
                             {{
                                 0: () => (
@@ -272,27 +274,7 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        isWeatherShown ? (
-                                                            <View
-                                                                style={
-                                                                    styles.weatherWide
-                                                                }
-                                                            >
-                                                                <Weather
-                                                                    locationPermissionStatus={
-                                                                        queryResult
-                                                                            .data
-                                                                            .locationPermissionStatus
-                                                                    }
-                                                                />
-                                                            </View>
-                                                        ) : (
-                                                            <View
-                                                                style={
-                                                                    styles.weatherHidden
-                                                                }
-                                                            />
-                                                        )
+                                                        weatherWidget
                                                     }
                                                     issue={issue}
                                                 />
@@ -301,39 +283,23 @@ const IssueScreenWithPath = React.memo(
                                     </WithLayoutRectangle>
                                 ),
                                 [Breakpoints.tabletVertical]: () => (
-                                    <View
-                                        style={{
-                                            flexDirection: 'column',
-                                        }}
-                                    >
-                                        {isWeatherShown ? (
-                                            <View style={styles.weatherWide}>
-                                                <Weather
-                                                    locationPermissionStatus={
-                                                        queryResult.data
-                                                            .locationPermissionStatus
+                                    <WithLayoutRectangle>
+                                        {metrics => (
+                                            <WithIssueScreenSize
+                                                value={[
+                                                    PageLayoutSizes.tablet,
+                                                    metrics,
+                                                ]}
+                                            >
+                                                <IssueFronts
+                                                    ListHeaderComponent={
+                                                        weatherWidget
                                                     }
+                                                    issue={issue}
                                                 />
-                                            </View>
-                                        ) : null}
-                                        <WithLayoutRectangle>
-                                            {metrics => (
-                                                <WithIssueScreenSize
-                                                    value={[
-                                                        PageLayoutSizes.tablet,
-                                                        metrics,
-                                                    ]}
-                                                >
-                                                    <IssueFronts
-                                                        style={
-                                                            styles.sideBySideFeed
-                                                        }
-                                                        issue={issue}
-                                                    />
-                                                </WithIssueScreenSize>
-                                            )}
-                                        </WithLayoutRectangle>
-                                    </View>
+                                            </WithIssueScreenSize>
+                                        )}
+                                    </WithLayoutRectangle>
                                 ),
                             }}
                         </WithBreakpoints>
