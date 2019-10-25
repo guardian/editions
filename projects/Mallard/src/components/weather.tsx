@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'

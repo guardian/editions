@@ -1,4 +1,4 @@
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions'
+import { check, request, PERMISSIONS } from 'react-native-permissions'
 import { Platform } from 'react-native'
 import { ApolloClient } from 'apollo-client'
 

@@ -17,7 +17,6 @@ import {
     notificationEdition,
 } from './settings/defaults'
 import { cacheClearCache } from './storage'
-import { Forecast, AccuWeatherLocation, WeatherForecast } from '../common'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 

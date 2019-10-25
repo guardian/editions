@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { NavigationInjectedProps, ScrollView } from 'react-navigation'
+import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
 import { Button } from 'src/components/button/button'
 import { html } from 'src/helpers/webview'
