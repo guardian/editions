@@ -1,4 +1,4 @@
-import { html, makeHtml, px } from 'src/helpers/webview'
+import { html, makeHtml } from 'src/helpers/webview'
 import { getPillarColors } from 'src/hooks/use-article'
 import {
     ArticlePillar,
