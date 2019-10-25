@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import {
     Animated,
     Dimensions,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    View,
     PanResponder,
+    StyleSheet,
+    View,
 } from 'react-native'
 import {
     createStackNavigator,
@@ -14,9 +13,7 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
-import { ariaHidden } from 'src/helpers/a11y'
 import { supportsTransparentCards } from 'src/helpers/features'
-import { safeInterpolation } from 'src/helpers/math'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { addStaticRouter } from '../helpers/base'
@@ -26,23 +23,6 @@ import {
 } from '../helpers/transition'
 import { sidebarWidth } from './underlay/positions'
 import { screenInterpolator, topLayerTransition } from './underlay/transition'
-import { UiBodyCopy } from 'src/components/styled-text'
-
-const overlayStyles = StyleSheet.create({
-    root: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: color.artboardBackground,
-        zIndex: 999999,
-    },
-})
-
-const addViewsForTopLayer: NavigatorWrapper = (navigator, getPosition) => {
-    const Navigator = addStaticRouterWithPosition(navigator, getPosition)
-    const Wrapper = ({ navigation }: NavigationInjectedProps) => {
-        return <Navigator navigation={navigation} />
-    }
-    return addStaticRouter(navigator, Wrapper)
-}
 
 const bottomStyles = StyleSheet.create({
     content: {
