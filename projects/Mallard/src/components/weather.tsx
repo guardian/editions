@@ -86,11 +86,15 @@ const styles = StyleSheet.create({
         width: 'auto',
     },
     setLocationButtonWrap: {
-        marginTop: 14,
+        marginTop: metrics.vertical,
     },
+    /**
+     * Exceptionnally, make the button smaller so as to fit in the limited
+     * space on smaller devices.
+     */
     setLocationButton: {
-        paddingHorizontal: 10,
-        height: 40,
+        paddingHorizontal: metrics.horizontal * 0.75,
+        height: metrics.buttonHeight * 0.75,
     },
 })
 
@@ -198,7 +202,10 @@ const Forecasts = ({
         )
     }
 
-    return <Text>invalid weather</Text>
+    // FIXME: We really should validate data after fetching, not during
+    // rendering. That way the error would get handled further up the chain
+    // instead of rendering a blank space with no logging.
+    return <></>
 }
 
 const GET_WEATHER_DATA = gql`
@@ -212,16 +219,19 @@ type Props = { locationPermissionStatus: string } & NavigationInjectedProps
 
 /**
  * We do a local query instead of doing it higher up in the tree so that we
- * try fetch forecasts only if the weather widget is indeed shown.
+ * try fetch forecasts only if the weather widget is indeed shown. Also, we
+ * have a dependency over the `locationPermissionStatus`. Theoretically Apollo
+ * would allows us to use the `@export` directive, but it's got bugs (in v2.6
+ * at time of writing this).
  */
 export const Weather = withNavigation(
     React.memo(({ locationPermissionStatus, navigation }: Props) => {
-        const weatherData = useQuery(GET_WEATHER_DATA, {
+        const { error, loading, data } = useQuery(GET_WEATHER_DATA, {
             variables: { locationPermissionStatus },
         })
-        if (weatherData.error) console.error(weatherData.error)
-        if (weatherData.loading) return null
-        const { weatherForecast } = weatherData.data
+        if (error) throw error
+        if (loading) return null
+        const { weatherForecast } = data
         return (
             <Forecasts
                 locationName={weatherForecast.locationName}

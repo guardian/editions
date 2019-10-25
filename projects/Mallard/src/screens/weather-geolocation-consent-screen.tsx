@@ -65,7 +65,7 @@ const WeatherGeolocationConsentScreen = ({
 }
 
 WeatherGeolocationConsentScreen.navigationOptions = {
-    title: ' ',
+    title: 'Set Location',
     showHeaderLeft: false,
     showHeaderRight: true,
 }

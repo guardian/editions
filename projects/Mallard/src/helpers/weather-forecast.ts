@@ -5,6 +5,11 @@ import Geolocation, {
 } from '@react-native-community/geolocation'
 
 Geolocation.setRNConfiguration({
+    /**
+     * We want to control the exact moment the permission pop-up shows, so
+     * we don't rely on the Geolocation module and instead manage permissions
+     * ourselves (see `locationPermissionStatus` Apollo field).
+     */
     skipPermissionRequests: true,
     authorizationLevel: 'whenInUse',
 })
@@ -66,11 +71,9 @@ export const resolveWeatherForecast = async (
     obj: {},
     args: { locationPermissionStatus?: string },
 ): Promise<WeatherForecast | undefined> => {
-    if (args.locationPermissionStatus == null) {
-        return
-    }
-    if (args.locationPermissionStatus !== RESULTS.GRANTED) {
-        return await getIpBasedWeatherForecast()
-    }
-    return await getLocationBasedWeatherForecast()
+    if (args.locationPermissionStatus == null)
+        throw new Error('expected argument "locationPermissionStatus"')
+    if (args.locationPermissionStatus === RESULTS.GRANTED)
+        return await getLocationBasedWeatherForecast()
+    return await getIpBasedWeatherForecast()
 }
