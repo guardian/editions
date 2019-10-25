@@ -4,6 +4,8 @@ import {
     ContentType,
     ICapiDateTime as CapiDateTime64,
     IContent,
+    IBlocks,
+    ElementType,
 } from '@guardian/capi-ts'
 import {
     Article,
@@ -12,6 +14,7 @@ import {
     PictureArticle,
     CapiDateTime as CapiDateTime32,
     Image,
+    MediaAtomElement,
 } from '../common'
 import {
     BufferedTransport,
@@ -62,8 +65,29 @@ const truncateDateTime = (date: CapiDateTime64): CapiDateTime32 => ({
     dateTime: date.dateTime.toNumber(),
 })
 
+/**
+ * We look for a very specific pattern which we know represent a header video
+ * on an article. The video/media ID is sort of a UUID which can be later used
+ * by the client to build a URL from, ex.
+ * https://embed.theguardian.com/embed/atom/media/1c35effc-5275-45b1-802b-719ec45f0087
+ */
+const getMainMediaAtom = (
+    capiBlocks?: IBlocks,
+): MediaAtomElement | undefined => {
+    if (capiBlocks == null) return
+    const { main } = capiBlocks
+    if (main == null || main.elements == null || main.elements.length !== 1)
+        return
+    const element = main.elements[0]
+    if (element.type !== ElementType.CONTENTATOM) return
+    const { contentAtomTypeData: data } = element
+    if (data == null || data.atomType !== 'media') return
+    return { id: 'media-atom', atomId: data.atomId } //, html: main.bodyHtml
+}
+
 const parseArticleResult = async (
     result: IContent,
+    isFromPrint: boolean,
 ): Promise<[number, CAPIContent]> => {
     const path = result.id
     console.log(`Parsing CAPI response for ${path}`)
@@ -124,6 +148,8 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     elements,
                     starRating,
+                    mainMedia: getMainMediaAtom(result.blocks),
+                    isFromPrint,
                 },
             ]
             return article
@@ -143,6 +169,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
+                    isFromPrint,
                 },
             ]
 
@@ -163,6 +190,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     elements,
+                    isFromPrint,
                 },
             ]
 
@@ -204,6 +232,7 @@ const parseArticleResult = async (
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
                     crossword,
+                    isFromPrint,
                 },
             ]
 
@@ -234,6 +263,7 @@ const parseArticleResult = async (
                             html: `<pre>${JSON.stringify(result.apiUrl)}</pre>`,
                         },
                     ],
+                    isFromPrint,
                 },
             ]
     }
@@ -256,7 +286,7 @@ export const getArticles = async (
     capi: 'printsent' | 'search',
 ): Promise<{ [key: string]: CAPIContent }> => {
     const paths = ids.map(_ => `internal-code/page/${_}`)
-
+    const isFromPrint = capi === 'printsent'
     const endpoint = capi === 'printsent' ? printsent(paths) : search(paths)
     if (endpoint.length > 1000) {
         console.warn(
@@ -292,7 +322,7 @@ export const getArticles = async (
     const data = SearchResponseCodec.decode(input)
     const results: IContent[] = data.results
     const articlePromises = await Promise.all(
-        results.map(result => attempt(parseArticleResult(result))),
+        results.map(result => attempt(parseArticleResult(result, isFromPrint))),
     )
 
     //If we fail to get an article in a collection we just ignore it and move on.

@@ -1,5 +1,5 @@
 import MockDate from 'mockdate'
-import { todayAsFolder, lastSevenDays } from '../issues'
+import { todayAsFolder, lastSevenDays, todayAsKey } from '../issues'
 
 describe('helpers/issues', () => {
     describe('todayAsFolder', () => {
@@ -21,6 +21,13 @@ describe('helpers/issues', () => {
                 '2019-08-16',
                 '2019-08-15',
             ])
+        })
+    })
+
+    describe('todayAsKey', () => {
+        it('should return a key in the correct format for "todays" date', () => {
+            MockDate.set('2019-08-21')
+            expect(todayAsKey()).toEqual('daily-edition/2019-08-21')
         })
     })
 })

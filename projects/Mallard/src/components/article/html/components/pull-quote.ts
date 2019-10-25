@@ -1,10 +1,9 @@
 import { css, html, px } from 'src/helpers/webview'
-import { PillarColours } from '@guardian/pasteup/palette'
-import { WrapLayout } from '../wrap/wrap'
-import { families } from 'src/theme/typography'
-import { metrics } from 'src/theme/spacing'
-import { color } from 'src/theme/color'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { families } from 'src/theme/typography'
+import { CssProps } from '../helpers/css'
 import { Quotes } from './icon/quotes'
 
 const BubblePointer = () => html`
@@ -28,19 +27,13 @@ const BubblePointer = () => html`
     </svg>
 `
 
-const quoteStyles = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+const quoteStyles = ({ colors }: CssProps) => css`
     blockquote {
         box-sizing: border-box;
         border: 1px solid ${colors.main};
         color: ${colors.main};
         border-top-width: 12px;
-        padding: 0 1px ${px(metrics.vertical * 2)}
+        padding: 0 3px ${px(metrics.vertical * 2)}
             ${px(metrics.article.sides / 2)};
         position: relative;
         margin-bottom: calc(22px + 0.25em);
@@ -82,7 +75,7 @@ const quoteStyles = ({
         blockquote[data-role='supporting'] {
             width: 50%;
             float: left;
-            margin-right: ${px(metrics.article.sides)};
+            margin-right: ${px(metrics.article.sides / 2)};
         }
     }
 
@@ -90,9 +83,9 @@ const quoteStyles = ({
         blockquote[data-role='inline'],
         blockquote[data-role='supporting'] {
             position: absolute;
-            right: ${px(metrics.article.sides)};
+            right: 0;
             display: block;
-            width: ${px(wrapLayout.rail.width - metrics.sides.sides + 1)};
+            width: ${px(metrics.article.rightRail + 1)};
         }
     }
 
@@ -100,7 +93,7 @@ const quoteStyles = ({
         blockquote[data-role='showcase'] {
             width: 50%;
             float: left;
-            margin-right: ${px(metrics.article.sides)};
+            margin-right: ${px(metrics.article.sides / 2)};
         }
     }
 
@@ -108,7 +101,8 @@ const quoteStyles = ({
         blockquote[data-role='showcase'] {
             width: 60%;
             margin-left: ${px(
-                ((Breakpoints.tabletLandscape - wrapLayout.width) / 2) * -1,
+                ((Breakpoints.tabletLandscape - metrics.article.maxWidth) / 2) *
+                    -1,
             )};
         }
     }

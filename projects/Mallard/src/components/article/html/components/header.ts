@@ -1,4 +1,3 @@
-import { PillarColours } from '@guardian/pasteup/palette'
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { useImagePath } from 'src/hooks/use-image-paths'
@@ -6,20 +5,36 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
-import { ArticleHeaderProps } from '../article-header/types'
-import { WrapLayout } from '../wrap/wrap'
-import { breakSides } from './helpers/layout'
+import {
+    CreditedImage,
+    Article,
+    MediaAtomElement,
+} from '../../../../../../common/src'
+import { CssProps, themeColors } from '../helpers/css'
+import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
-import { CreditedImage } from '../../../../../common/src'
+import { renderMediaAtom } from './media-atoms'
+
+export interface ArticleHeaderProps {
+    headline: string
+    byline?: string
+    kicker?: string | null
+    image?: CreditedImage | null
+    standfirst?: string
+    starRating?: Article['starRating']
+    bylineImages?: { cutout?: ImageT }
+    bylineHtml?: string
+    mainMedia?: MediaAtomElement
+}
 
 const outieKicker = (type: ArticleType) => css`
     .header-container[data-type='${type}'] .header-kicker {
         display: inline-block;
         height: 3em;
         margin-top: -3em;
-        padding-right: ${metrics.article.sidesTablet};
+        padding-right: ${metrics.article.sides};
         margin-left: -10em;
         padding-left: 10em;
         border: none;
@@ -44,22 +59,22 @@ const outieHeader = (type: ArticleType) => css`
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
         .header-container[data-type='${type}'] .header {
-            margin-right: 4em;
+            margin-right: 60px;
         }
         .header-container[data-type='${type}'] .header:after {
-            margin-right: -4em;
+            margin-right: ${px((60 + metrics.article.sides) * -1)};
         }
     }
     ${outieKicker(type)}
 `
 
-export const headerStyles = ({
-    colors,
-    wrapLayout,
-}: {
-    colors: PillarColours
-    wrapLayout: WrapLayout
-}) => css`
+export const headerStyles = ({ colors, theme }: CssProps) => css`
+
+    /* prevent clicks on byline links */
+    .header a {
+        pointer-events: none;
+    }
+
     .header:after {
         background-image: repeating-linear-gradient(
             to bottom,
@@ -78,7 +93,7 @@ export const headerStyles = ({
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header:after {
-            margin-right: ${px(metrics.article.sidesTablet * -1)};
+            margin-right: ${px(metrics.article.sides * -1)};
         }
     }
     .header {
@@ -116,8 +131,8 @@ export const headerStyles = ({
         left:0;
     }
     .header-image.header-image--immersive {
-        margin: 0 ${px(metrics.article.sidesTablet * -1)};
-        width: ${px(wrapLayout.width + metrics.article.sidesTablet * 2)};
+        margin: 0 ${px(metrics.article.sides * -1)};
+        width: calc(100% + ${px(metrics.article.sides * 2)});
         padding-top: 100%;
     }
     @media (max-width: ${px(Breakpoints.tabletVertical)}) {
@@ -196,8 +211,8 @@ export const headerStyles = ({
         background-color: ${color.dimLine};
         position: absolute;
         bottom: -1px;
-        left: ${px(metrics.article.sidesTablet * -1)};
-        right: ${px(metrics.article.sidesTablet * -1)};
+        left: ${px(metrics.article.sides * -1)};
+        right: ${px(metrics.article.sides * -1)};
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header-byline:not(:empty):after {
@@ -251,6 +266,17 @@ export const headerStyles = ({
         padding-top: 60%;
         background-size: cover;
         background-position: center;
+        position: relative;
+    }
+
+    .image-as-bg[data-preserve-ratio=true] {
+        padding-top:0;
+        overflow: visible;
+        height: auto;
+    }
+    .image-as-bg__img {
+        width: 100%;
+        z-index: 0;
         position: relative;
     }
 
@@ -361,6 +387,17 @@ export const headerStyles = ({
         font-family: ${families.titlepiece.regular};
     }
 
+    /*gallery*/
+    .header-container[data-type='${
+        ArticleType.Gallery
+    }'] .header-byline  > span > a {
+        color: ${themeColors(theme).text};
+    }
+    .header-container[data-type='${ArticleType.Gallery}'] h1 {
+        font-family: ${families.titlepiece.regular};
+        min-height: 2em;
+    }
+
     /*immersive*/
     ${outieHeader(ArticleType.Immersive)}
     .header-container[data-type='immersive'] .header-bg {
@@ -437,22 +474,30 @@ const Image = ({ image, className }: { image: ImageT; className?: string }) => {
     `
 }
 
-const ImageAsBg = ({
+const MainMediaImage = ({
     image,
     className,
     children,
+    preserveRatio,
 }: {
     image: CreditedImage
     className?: string
     children?: string
+    preserveRatio?: boolean
 }) => {
     const path = useImagePath(image)
+
     return html`
         <div
             class="image-as-bg ${className}"
+            data-preserve-ratio="${preserveRatio || 'false'}"
             style="background-image: url(${path}); "
             data-open="false"
         >
+            ${preserveRatio &&
+                html`
+                    <img class="image-as-bg__img" src="${path}" aria-hidden />
+                `}
             <button
                 aria-hidden
                 onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
@@ -470,7 +515,8 @@ const ImageAsBg = ({
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
-    type === ArticleType.Obituary
+    type === ArticleType.Obituary ||
+    type === ArticleType.Gallery
 
 const hasLargeByline = (type: ArticleType) =>
     type === ArticleType.Opinion || type === ArticleType.Analysis
@@ -480,6 +526,7 @@ const Header = ({
     type,
     ...headerProps
 }: {
+    showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
 } & ArticleHeaderProps) => {
@@ -493,7 +540,7 @@ const Header = ({
         ${immersive &&
             headerProps.image &&
             publishedId &&
-            ImageAsBg({
+            MainMediaImage({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
             })}
@@ -504,14 +551,24 @@ const Header = ({
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
-                        ImageAsBg({
+                        MainMediaImage({
                             className: 'header-image',
                             image: headerProps.image,
+                            preserveRatio: true,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
                                 : undefined,
                         })}
-                    <span class="header-kicker">${headerProps.kicker}</span>
+                    ${headerProps.mainMedia &&
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
+                    ${headerProps.kicker &&
+                        html`
+                            <span class="header-kicker"
+                                >${headerProps.kicker}</span
+                            >
+                        `}
                     ${largeByline
                         ? html`
                               <section class="header-top">

@@ -1,9 +1,15 @@
 import RNIAP, { Purchase } from 'react-native-iap'
 import { Platform } from 'react-native'
-import { ITUNES_CONNECT_SHARED_SECRET, USE_SANDBOX_IAP } from 'src/constants'
+import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants'
 import { ReceiptValidationResponse } from 'react-native-iap/apple'
 import { NativeModules } from 'react-native'
-import { InvalidResult, AuthResult, ValidResult } from '../lib/Result'
+import {
+    InvalidResult,
+    AuthResult,
+    ValidResult,
+    ErrorResult,
+} from '../lib/Result'
+import { isInBeta } from 'src/helpers/release-stream'
 const { InAppUtils } = NativeModules
 
 export interface ReceiptIOS {
@@ -23,6 +29,7 @@ export interface ReceiptIOS {
     quantity: string
     transaction_id: string
     web_order_line_item_id: string
+    name?: string // I haven't seen this in the TestFlight responses but the old app uses it so will add as an optional
 }
 
 const fetchDecodeReceipt = (receipt: string) =>
@@ -31,7 +38,7 @@ const fetchDecodeReceipt = (receipt: string) =>
             'receipt-data': receipt,
             password: ITUNES_CONNECT_SHARED_SECRET,
         },
-        USE_SANDBOX_IAP,
+        isInBeta() || __DEV__,
     )
 
 const getMostRecentTransactionReceipt = (purchases: Purchase[]) => {
@@ -65,7 +72,7 @@ const tryRestoreActiveIOSSubscriptionReceipt = async (): Promise<
         const validReceipt = findValidReceipt(decodedReceipt)
         return validReceipt ? ValidResult(validReceipt) : InvalidResult()
     } catch {
-        return InvalidResult()
+        return ErrorResult('Verification error')
     }
 }
 

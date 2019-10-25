@@ -8,26 +8,19 @@ import {
     PropTypes,
     tappablePadding,
 } from './helpers/item-tappable'
-import {
-    getImageHeight,
-    isFullWidthItem,
-    isSmallItem,
-    isFullHeightItem,
-} from './helpers/sizes'
+import { isFullWidthItem, isSmallItem, isFullHeightItem } from './helpers/sizes'
 import { SportItemBackground } from './helpers/sports'
 import { TextBlock } from './helpers/text-block'
 import { SmallItem } from './small-items'
 import { Standfirst } from './helpers/standfirst'
 import { useIsOpinionCard, useIsSportCard } from './helpers/types'
+import { TrailImageView } from './trail-image-view'
+import { getImageHeight } from './helpers/sizes'
 
 /*
 Normal img on top + text
 */
 const imageStyles = StyleSheet.create({
-    image: {
-        width: '100%',
-        flex: 0,
-    },
     textBlock: {
         paddingTop: metrics.vertical / 2,
     },
@@ -54,15 +47,10 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     }
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            {'trailImage' in article && article.trailImage ? (
-                <ImageResource
-                    style={[
-                        imageStyles.image,
-                        { height: getImageHeight(size) },
-                    ]}
-                    image={article.trailImage}
-                />
-            ) : null}
+            <TrailImageView
+                article={article}
+                style={{ height: getImageHeight(size) }}
+            />
             {isSportCard && isFullWidthItem(size) ? (
                 <SportItemBackground
                     style={{
@@ -117,6 +105,9 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 }
 
 const squareStyles = StyleSheet.create({
+    image: {
+        height: '100%',
+    },
     square: {
         position: 'absolute',
         top: '50%',
@@ -146,10 +137,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
             <View style={squareStyles.cover}>
-                <ImageResource
-                    style={[StyleSheet.absoluteFill]}
-                    image={article.trailImage}
-                />
+                <TrailImageView style={squareStyles.image} article={article} />
                 <View
                     style={[
                         squareStyles.square,
@@ -184,7 +172,6 @@ const splitImageStyles = StyleSheet.create({
     image: {
         width: '50%',
         height: '100%',
-        flex: 0,
         marginLeft: metrics.horizontal,
     },
     wideImage: {
@@ -210,14 +197,13 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     headline={article.headline}
                     {...{ size }}
                 />
-                {'trailImage' in article && article.trailImage ? (
-                    <ImageResource
-                        style={[splitImageStyles.image]}
-                        image={article.trailImage}
-                    />
-                ) : null}
+                <TrailImageView
+                    style={splitImageStyles.image}
+                    article={article}
+                />
             </View>
         </ItemTappable>
     )
 }
+
 export { ImageItem, SplitImageItem, SmallItem, SidekickImageItem }

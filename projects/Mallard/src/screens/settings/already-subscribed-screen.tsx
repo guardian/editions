@@ -9,9 +9,9 @@ import { RightChevron } from 'src/components/icons/RightChevron'
 import { Platform, Text } from 'react-native'
 import { AccessContext, useAccess } from 'src/authentication/AccessContext'
 import { useModal } from 'src/components/modal'
-import { isValid } from 'src/authentication/lib/Attempt'
-import { isReceiptActive } from 'src/authentication/services/iap'
+import { isValid, isError } from 'src/authentication/lib/Attempt'
 import { MissingIAPModalCard } from 'src/components/missing-iap-modal-card'
+import { SubFoundModalCard } from 'src/components/sub-found-modal-card'
 
 const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
@@ -71,15 +71,29 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                     title: 'Restore App Store subscription',
                                     data: {
                                         onPress: async () => {
-                                            const attempt = await authIAP()
-                                            if (
-                                                isValid(attempt) &&
-                                                isReceiptActive(attempt.data)
-                                            ) {
-                                                return
+                                            const {
+                                                accessAttempt,
+                                            } = await authIAP()
+                                            if (isValid(accessAttempt)) {
+                                                open(close => (
+                                                    <SubFoundModalCard
+                                                        close={close}
+                                                    />
+                                                ))
+                                            } else if (isError(accessAttempt)) {
+                                                open(close => (
+                                                    <MissingIAPModalCard
+                                                        title="Verification error"
+                                                        subtitle="There was a problem whilst verifying your subscription"
+                                                        close={close}
+                                                        onTryAgain={authIAP}
+                                                    />
+                                                ))
                                             } else {
                                                 open(close => (
                                                     <MissingIAPModalCard
+                                                        title="Subscription not found"
+                                                        subtitle="We were unable to find a subscription associated with your Apple ID"
                                                         close={close}
                                                         onTryAgain={authIAP}
                                                     />

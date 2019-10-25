@@ -47,22 +47,40 @@ export const notificationEdition = {
     android: 'android-edition',
 }
 
-const notificationTrackingEndpoints = {
+const notificationTrackingReceivedEndpoints = {
     prod: 'https://mobile-events.guardianapis.com/notification/received',
     code:
         'https://mobile-events.code.dev-guardianapis.com/notification/received',
 }
 
-export const notificationTrackingUrl = (notificationId: string) => {
+const notificationTrackingDownloadedEndpoints = {
+    prod: 'https://mobile-events.guardianapis.com/notification/downloaded',
+    code:
+        'https://mobile-events.code.dev-guardianapis.com/notification/downloaded',
+}
+
+export const senderId = {
+    prod: '493559488652',
+    code: '43377569438',
+}
+
+export const notificationTrackingUrl = (
+    notificationId: string,
+    type: 'received' | 'downloaded',
+) => {
     const edition =
         Platform.OS === 'ios'
             ? notificationEdition.ios
             : notificationEdition.android
 
     const params = `?notificationId=${notificationId}&platform=${edition}`
-    const url = __DEV__
-        ? notificationTrackingEndpoints.code
-        : notificationTrackingEndpoints.prod
+
+    const urlType =
+        type === 'received'
+            ? notificationTrackingReceivedEndpoints
+            : notificationTrackingDownloadedEndpoints
+
+    const url = __DEV__ ? urlType.code : urlType.prod
 
     return `${url}${params}`
 }
@@ -94,9 +112,9 @@ export const defaultSettings: Settings = {
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     contentPrefix,
-    issuesPath: `/${contentPrefix}/issues`,
-    useNonWobblyWebview: true,
+    issuesPath: `/issues`,
     storeDetails,
+    senderId: __DEV__ ? senderId.code : senderId.prod,
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

@@ -1,28 +1,16 @@
 import React from 'react'
 import { CAPIArticle } from 'src/common'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { color } from 'src/theme/color'
-import { Article as OldArticle } from './types/article'
-import { Article } from './types/article-new'
+import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
+import { Article } from './types/article'
 import { Crossword } from './types/crossword'
-import { Gallery } from './types/gallery'
-import { Cartoon } from './types/cartoon'
-
-import { ScrollView } from 'react-native'
-import {
-    OnTopPositionChangeFn,
-    wireScrollBarToDismiss,
-} from 'src/screens/article/helpers'
-import { useOtherSettingsValues } from 'src/hooks/use-settings'
 
 /*
 This is the article view! For all of the articles.
 it gets everything it needs from its route
 */
-
-export interface ArticleControllerPropTypes {
-    article: CAPIArticle
-}
 
 const ArticleController = ({
     article,
@@ -31,49 +19,25 @@ const ArticleController = ({
     article: CAPIArticle
     onTopPositionChange: OnTopPositionChangeFn
 }) => {
-    const { useNonWobblyWebview } = useOtherSettingsValues()
-    switch (article.type) {
-        case 'article':
-            return useNonWobblyWebview ? (
-                <Article
-                    onTopPositionChange={onTopPositionChange}
-                    article={article.elements}
-                    {...article}
-                />
-            ) : (
-                <OldArticle
-                    onTopPositionChange={onTopPositionChange}
-                    article={article.elements}
-                    {...article}
-                ></OldArticle>
-            )
+    if (article.type === 'crossword') {
+        return <Crossword crosswordArticle={article} />
+    }
 
-        case 'gallery':
-            return (
-                <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-                    <Gallery gallery={article} />
-                </ScrollView>
-            )
-
-        case 'picture':
-            return (
-                <ScrollView {...wireScrollBarToDismiss(onTopPositionChange)}>
-                    <Cartoon article={article} />
-                </ScrollView>
-            )
-
-        case 'crossword':
-            return <Crossword crosswordArticle={article} />
-
-        default:
-            const message: never = article
-            return (
+    return (
+        <ErrorBoundary
+            error={
                 <FlexErrorMessage
-                    title={message}
+                    title={'Unable to render article'}
                     style={{ backgroundColor: color.background }}
                 />
-            )
-    }
+            }
+        >
+            <Article
+                onTopPositionChange={onTopPositionChange}
+                article={article}
+            />
+        </ErrorBoundary>
+    )
 }
 
 export { ArticleController }

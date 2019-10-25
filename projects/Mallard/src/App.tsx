@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const persistenceKey = 'dev-nav-key-232asdffgdfg1asdffgfdgfdga3413'
+const persistenceKey = 'dev-nav-key-232asfdffgdfg1asdffgfdgfdga3413'
 
 const persistNavigationState = async (navState: any) => {
     try {

@@ -61,3 +61,20 @@ platform :android do
     )
   end
 end
+
+platform :android do
+  desc "Push a new production build to Google Play's release track"
+  lane :release_to_production do
+    gradle(task: 'assemble',
+           build_type: 'Release',
+           project_dir: 'android/',
+           properties: {
+               "versionName" => version["version"]
+           }
+    )
+    supply(
+      track: 'production',
+      package_name: 'com.guardian.editions'
+    )
+  end
+end

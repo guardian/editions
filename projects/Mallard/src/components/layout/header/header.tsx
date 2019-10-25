@@ -103,6 +103,12 @@ const Header = ({
                                         accessibilityHint={
                                             otherProps.accessibilityHint
                                         }
+                                        hitSlop={{
+                                            top: 10,
+                                            bottom: 10,
+                                            left: 10,
+                                            right: 10,
+                                        }}
                                     >
                                         {children}
                                     </Highlight>

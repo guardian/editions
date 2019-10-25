@@ -166,6 +166,7 @@ export interface Content extends WithKey {
     showQuotedHeadline: boolean
     mediaType: MediaType
     sportScore?: string
+    isFromPrint: boolean
 }
 export interface Article extends Content {
     type: 'article'
@@ -174,6 +175,7 @@ export interface Article extends Content {
     standfirst: string
     elements: BlockElement[]
     starRating?: number
+    mainMedia?: MediaAtomElement
 }
 
 export interface CrosswordArticle extends Content {
@@ -303,7 +305,7 @@ export interface MediaAtomElement {
     id: 'media-atom'
     atomId: string
     image?: Image
-    html: string
+    html?: string
     platform?: 'youtube' | 'dailymotion' | 'mainstream' | 'url'
     assetId?: string
     title?: string

@@ -1,12 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { BylineCutout } from 'src/components/article/article-header/opinion-header'
+import { BylineCutout } from './helpers/opinion'
 import Quote from 'src/components/icons/Quote'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { getItemRectanglePerc, toPercentage } from '../helpers/helpers'
-import { ImageResource } from '../image-resource'
 import {
     ItemTappable,
     PropTypes,
@@ -17,6 +16,7 @@ import { Standfirst } from './helpers/standfirst'
 import { metrics } from 'src/theme/spacing'
 import { useIsOpinionCard } from './helpers/types'
 import { PageLayoutSizes } from '../../../common'
+import { TrailImageView } from './trail-image-view'
 
 /*
 SUPERHERO IMAGE ITEM
@@ -24,8 +24,6 @@ Text below image. To use in news & sport supers
 */
 const superHeroImageStyles = StyleSheet.create({
     image: {
-        width: '100%',
-        flex: 0,
         height: toPercentage(
             getItemRectanglePerc(
                 { width: 2, height: 4, top: 0, left: 0 },
@@ -40,18 +38,18 @@ const superHeroImageStyles = StyleSheet.create({
         ...tappablePadding,
         position: 'absolute',
         bottom: 0,
+        left: 0,
+        right: 0,
     },
 })
 
 const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'trailImage' in article && article.trailImage ? (
-                <ImageResource
-                    style={[superHeroImageStyles.image]}
-                    image={article.trailImage}
-                />
-            ) : null}
+            <TrailImageView
+                article={article}
+                style={superHeroImageStyles.image}
+            />
             <TextBlock
                 byline={article.byline}
                 style={[superHeroImageStyles.textBlock]}
@@ -82,12 +80,10 @@ const sportSuperStyles = StyleSheet.create({
 const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
-            {'trailImage' in article && article.trailImage ? (
-                <ImageResource
-                    style={[superHeroImageStyles.image]}
-                    image={article.trailImage}
-                />
-            ) : null}
+            <TrailImageView
+                article={article}
+                style={superHeroImageStyles.image}
+            />
             <TextBlock
                 byline={article.byline}
                 style={[superHeroImageStyles.textBlock]}
@@ -97,8 +93,8 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
             />
             <View
                 style={[
-                    sportSuperStyles.card,
                     superHeroImageStyles.textStandBlock,
+                    sportSuperStyles.card,
                 ]}
             >
                 <Standfirst

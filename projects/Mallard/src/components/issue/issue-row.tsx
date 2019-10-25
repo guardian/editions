@@ -125,10 +125,13 @@ const IssueRow = ({
     ])
 
     return (
-        <RowWrapper>
+        <RowWrapper narrow>
             <GridRowSplit proxy={<IssueButton issue={issue} />}>
                 <View style={rowStyles.issueRow}>
-                    <Highlight onPress={onPress}>
+                    <Highlight
+                        hitSlop={{ top: 10, bottom: 10, left: 60, right: 60 }}
+                        onPress={onPress}
+                    >
                         <IssueTitle
                             title={weekday}
                             subtitle={date}

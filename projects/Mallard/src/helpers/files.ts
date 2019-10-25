@@ -4,10 +4,11 @@ import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../common/src'
-import { lastSevenDays, todayAsFolder } from './issues'
+import { lastSevenDays, todayAsKey } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
+import { errorService } from 'src/services/errors'
 
 interface BasicFile {
     filename: string
@@ -168,7 +169,7 @@ export const downloadAndUnzipIssue = async (
                     type: 'unzip',
                     data: 'start',
                 })
-                unzipNamedIssueArchive(localId, imageSize)
+                return unzipNamedIssueArchive(localId, imageSize)
                     .then(() => {
                         onProgress({ type: 'success' }) // null is unstarted or end
                     })
@@ -185,13 +186,17 @@ export const downloadAndUnzipIssue = async (
 }
 
 export const clearOldIssues = async () => {
-    const edition = 'daily-edition'
-    const files = await RNFetchBlob.fs.ls(`${FSPaths.issuesDir}/${edition}`)
+    const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)
 
     const issuesToDelete = files.filter(
-        issue => !lastSevenDays().includes(issue),
+        issue => !lastSevenDays().includes(issue) && issue === 'issues',
     )
-    issuesToDelete.map(issue => RNFetchBlob.fs.unlink(FSPaths.issueRoot(issue)))
+
+    issuesToDelete.map(issue => {
+        RNFetchBlob.fs
+            .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
+            .catch(e => errorService.captureException(e))
+    })
 }
 
 export const matchSummmaryToKey = (
@@ -199,14 +204,13 @@ export const matchSummmaryToKey = (
     key: string,
 ): IssueSummary => {
     const summaryMatch = issueSummaries.find(
-        issueSummary =>
-            issueSummary.localId === `${defaultSettings.contentPrefix}/${key}`,
+        issueSummary => issueSummary.key === key,
     ) as IssueSummary
     return summaryMatch || null
 }
 
 export const downloadTodaysIssue = async () => {
-    const todaysKey = todayAsFolder()
+    const todaysKey = todayAsKey()
     try {
         const issueSummaries = await getIssueSummary()
 
@@ -232,7 +236,7 @@ export const downloadTodaysIssue = async () => {
 
 export const readIssueSummary = async () =>
     RNFetchBlob.fs
-        .readFile(FSPaths.issuesDir + defaultSettings.issuesPath, 'utf8')
+        .readFile(FSPaths.contentPrefixDir + defaultSettings.issuesPath, 'utf8')
         .then(data => JSON.parse(data))
         .catch(e => {
             throw e
@@ -242,7 +246,7 @@ export const fetchAndStoreIssueSummary = async () => {
     const apiUrl = await getSetting('apiUrl')
     return RNFetchBlob.config({
         overwrite: true,
-        path: FSPaths.issuesDir + defaultSettings.issuesPath,
+        path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
     })
         .fetch('GET', apiUrl + 'issues', {
             'Content-Type': 'application/json',

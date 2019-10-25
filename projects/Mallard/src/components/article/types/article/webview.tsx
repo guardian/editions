@@ -1,39 +1,44 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import React from 'react'
-import { Animated } from 'react-native'
 import { WebView, WebViewProps } from 'react-native-webview'
-import { BlockElement, ArticleType } from 'src/common'
+import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
-import { ArticleHeaderProps } from '../../article-header/types'
-import { useRenderedHTML } from '../../html/render'
-import { WrapLayout } from '../../wrap/wrap'
-import { onShouldStartLoadWithRequest } from './helpers'
+import { useImageSize } from 'src/hooks/use-image-size'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
-
-const AniWebView = Animated.createAnimatedComponent(WebView)
+import {
+    Article,
+    PictureArticle,
+    GalleryArticle,
+} from '../../../../../../common/src'
+import { renderArticle } from '../../html/article'
+import { ArticleTheme } from '../article'
+import { onShouldStartLoadWithRequest } from './helpers'
 
 const WebviewWithArticle = ({
     article,
-    wrapLayout,
-    headerProps,
+    type,
     paddingTop = 0,
     _ref,
+    theme,
     ...webViewProps
 }: {
-    article: BlockElement[]
-    wrapLayout: WrapLayout
-    headerProps?: ArticleHeaderProps & { type: ArticleType }
+    article: Article | PictureArticle | GalleryArticle
+    type: ArticleType
     paddingTop?: number
-    _ref?: (ref: { _component: WebView }) => void
+    theme: ArticleTheme
+    _ref?: (ref: WebView) => void
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
     const { issueId } = useIssueSummary()
+    const { imageSize } = useImageSize()
 
-    const html = useRenderedHTML(article, {
+    const html = renderArticle(article.elements, {
         pillar,
-        wrapLayout,
-        headerProps,
+        article,
+        type,
+        imageSize,
+        theme,
         showWebHeader: true,
         showMedia: isConnected,
         height: paddingTop,
@@ -41,7 +46,7 @@ const WebviewWithArticle = ({
     })
 
     return (
-        <AniWebView
+        <WebView
             {...webViewProps}
             originWhitelist={['*']}
             scrollEnabled={true}
