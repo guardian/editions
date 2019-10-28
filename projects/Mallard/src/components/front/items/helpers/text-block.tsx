@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
+import { StyleProp, View, ViewStyle, Text } from 'react-native'
 import Quote from 'src/components/icons/Quote'
 import { TextWithIcon } from 'src/components/layout/text-with-icon'
 import { useArticle } from 'src/hooks/use-article'
@@ -58,12 +58,14 @@ const TextBlock = ({
     headline,
     style,
     byline,
+    type,
     monotone = false,
     inverted = false,
     ...sizes
 }: {
     kicker: string
     byline?: string
+    type?: string
     headline: string
     style?: StyleProp<ViewStyle>
     monotone?: boolean
@@ -138,6 +140,11 @@ const TextBlock = ({
                         {kicker + ' '}
                     </HeadlineKickerText>
                     {headline}
+                    {type === 'crossword' ? (
+                        <Text style={{ fontStyle: 'italic' }}>
+                            {'\n'}Set by {byline}
+                        </Text>
+                    ) : null}
                 </HeadlineCardText>
             )}
         </View>
