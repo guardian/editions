@@ -5,6 +5,7 @@ import { css, generateAssetsFontCss, makeHtml } from 'src/helpers/webview'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes'
 
 const styles: string = css`
     ${generateAssetsFontCss({ fontFamily: 'GuardianTextEgyptian-Reg' })}
@@ -43,7 +44,7 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
                 source={{ html: makeHtml({ styles, body: html }), baseUrl: '' }}
                 style={{ flex: 1 }}
                 useWebKit={false}
-                onNavigationStateChange={event => {
+                onNavigationStateChange={(event: WebViewNavigation) => {
                     /**
                      * Open any non-local documents in the external browser
                      * rather than in this webview itself.
