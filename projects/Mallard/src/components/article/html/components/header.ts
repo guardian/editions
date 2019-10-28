@@ -15,6 +15,7 @@ import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
+import { SportScore } from './sport-score'
 import { renderMediaAtom } from './media-atoms'
 
 export interface ArticleHeaderProps {
@@ -24,6 +25,7 @@ export interface ArticleHeaderProps {
     image?: CreditedImage | null
     standfirst?: string
     starRating?: Article['starRating']
+    sportScore?: Article['sportScore']
     bylineImages?: { cutout?: ImageT }
     bylineHtml?: string
     mainMedia?: MediaAtomElement
@@ -125,7 +127,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         z-index: 99;
         position: relative;
     }
-    .header-image > .rating {
+    .header-image > .rating, .sport-score {
         position: absolute;
         bottom:0;
         left:0;
@@ -557,6 +559,10 @@ const Header = ({
                             preserveRatio: true,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
+                                : headerProps.sportScore
+                                ? SportScore({
+                                      sportScore: headerProps.sportScore,
+                                  })
                                 : undefined,
                         })}
                     ${headerProps.mainMedia &&
