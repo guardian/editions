@@ -2,10 +2,15 @@ import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { Image, ImageSize, imageSizes } from '../../../common'
-import { getAndUploadColours, getAndUploadImage } from './helpers/media'
+import {
+    getAndUploadColours,
+    getAndUploadImage,
+    getImagesFromFront,
+} from './helpers/media'
 import pAll = require('p-all')
 import { FrontTaskOutput } from '../front'
 import { handleAndNotifyOnError } from '../../services/task-handler'
+import { getFront } from '../../utils/backend-client'
 
 type ImageTaskInput = FrontTaskOutput
 export interface ImageTaskOutput extends Omit<FrontTaskOutput, 'images'> {
@@ -16,8 +21,19 @@ export const handler: Handler<
     ImageTaskInput,
     ImageTaskOutput
 > = handleAndNotifyOnError(
-    async ({ issuePublication, issue, images, ...params }) => {
+    async ({ issuePublication, issue, frontId, ...params }) => {
         const { publishedId } = issue
+
+        const maybeFront = await getFront(publishedId, frontId)
+
+        if (hasFailed(maybeFront)) {
+            console.error(JSON.stringify(attempt))
+            throw new Error(`Could not download front ${frontId}`)
+        }
+
+        console.log(`succesfully download front ${frontId}`, maybeFront)
+
+        const images: Image[] = unnest(getImagesFromFront(maybeFront))
 
         const imagesWithSizes: [Image, ImageSize][] = unnest(
             images.map(image =>
@@ -56,6 +72,7 @@ export const handler: Handler<
         return {
             issuePublication,
             issue,
+            frontId,
             ...params,
             failedColours,
             failedImages,
