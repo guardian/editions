@@ -1,16 +1,14 @@
 import { Handler } from 'aws-lambda'
-import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
-import { frontPath, Image } from '../../../common'
-import { getImagesFromFront } from '../image/helpers/media'
-import { getFront } from '../../utils/backend-client'
-import { IssueTaskOutput } from '../issue'
-import { Bucket, upload, ONE_WEEK } from '../../utils/s3'
+import { frontPath } from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
+import { getFront } from '../../utils/backend-client'
+import { Bucket, ONE_WEEK, upload } from '../../utils/s3'
+import { IssueTaskOutput } from '../issue'
 
 type FrontTaskInput = IssueTaskOutput
 export interface FrontTaskOutput extends IssueTaskOutput {
-    images: Image[]
+    frontId: string
 }
 export const handler: Handler<
     FrontTaskInput,
@@ -28,8 +26,6 @@ export const handler: Handler<
     }
 
     console.log(`succesfully download front ${frontId}`, maybeFront)
-
-    const images: Image[] = unnest(getImagesFromFront(maybeFront))
 
     const frontUpload = await attempt(
         upload(
@@ -51,7 +47,7 @@ export const handler: Handler<
     return {
         issuePublication,
         issue: { ...issue, fronts: publishedFronts },
-        images,
+        frontId,
         fronts: remainingFronts,
         remainingFronts: remainingFronts.length,
         message: `Succesfully published ${frontId}`,
