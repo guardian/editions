@@ -14,8 +14,7 @@ import { quoteStyles } from './components/pull-quote'
 import { ratingStyles } from './components/rating'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
-
-export const EMBED_DOMAIN = 'https://embed.theguardian.com'
+import { mediaAtomStyles } from './components/media-atoms'
 
 const makeFontsCss = () => css`
     /* text */
@@ -169,6 +168,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     ${imageStyles({ colors, theme })}
     ${lineStyles({ colors, theme })}
     ${ratingStyles({ colors, theme })}
+    ${mediaAtomStyles}
 `
 
 export { makeCss }

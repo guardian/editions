@@ -149,6 +149,12 @@ const pushNotifcationRegistration = () => {
             sound: false,
         },
     })
+
+    // Designed to reset the badge number - can be removed over time
+    PushNotification.getApplicationIconBadgeNumber(
+        number =>
+            number > 0 && PushNotification.setApplicationIconBadgeNumber(0),
+    )
 }
 
 export {
