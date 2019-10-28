@@ -44,18 +44,22 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
                 source={{ html: makeHtml({ styles, body: html }), baseUrl: '' }}
                 style={{ flex: 1 }}
                 useWebKit={false}
-                onNavigationStateChange={(event: WebViewNavigation) => {
+                onShouldStartLoadWithRequest={(event: WebViewNavigation) => {
                     /**
                      * Open any non-local documents in the external browser
                      * rather than in this webview itself.
                      */
                     if (
+                        event.url != 'about:blank' &&
                         !event.url.startsWith('file:///') &&
                         ref.current != null
                     ) {
-                        ref.current.stopLoading()
+                        // ref.current.goBack()
+                        // ref.current.stopLoading()
                         Linking.openURL(event.url)
+                        return false
                     }
+                    return true
                 }}
             />
         </WithAppAppearance>

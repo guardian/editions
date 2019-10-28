@@ -76,8 +76,10 @@ const privacyPolicyHtml = html`
     </ul>
     <p>
         For more information about how we use your data on theguardian.com,
-        please see this privacy policy
-        (ttps://www.theguardian.com/help/privacy-policy).
+        please see this
+        <a href="https://www.theguardian.com/help/privacy-policy"
+            >privacy policy</a
+        >.
     </p>
     <p>
         When you use this app, we may also use technology that is similar to
