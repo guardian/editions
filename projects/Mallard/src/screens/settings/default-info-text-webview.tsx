@@ -54,8 +54,6 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
                         !event.url.startsWith('file:///') &&
                         ref.current != null
                     ) {
-                        // ref.current.goBack()
-                        // ref.current.stopLoading()
                         Linking.openURL(event.url)
                         return false
                     }
