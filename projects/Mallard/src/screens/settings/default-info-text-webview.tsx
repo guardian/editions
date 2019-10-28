@@ -1,10 +1,11 @@
-import React from 'react'
-import { PixelRatio } from 'react-native'
+import React, { useRef } from 'react'
+import { PixelRatio, Linking } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { css, generateAssetsFontCss, makeHtml } from 'src/helpers/webview'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes'
 
 const styles: string = css`
     ${generateAssetsFontCss({ fontFamily: 'GuardianTextEgyptian-Reg' })}
@@ -34,13 +35,30 @@ const styles: string = css`
 `
 
 const DefaultInfoTextWebview = ({ html }: { html: string }) => {
+    const ref = useRef<WebView>()
     return (
         <WithAppAppearance value={'settings'}>
             <WebView
+                ref={ref as any}
                 originWhitelist={['*']}
-                source={{ html: makeHtml({ styles, body: html }) }}
+                source={{ html: makeHtml({ styles, body: html }), baseUrl: '' }}
                 style={{ flex: 1 }}
                 useWebKit={false}
+                onShouldStartLoadWithRequest={(event: WebViewNavigation) => {
+                    /**
+                     * Open any non-local documents in the external browser
+                     * rather than in this webview itself.
+                     */
+                    if (
+                        event.url != 'about:blank' &&
+                        !event.url.startsWith('file:///') &&
+                        ref.current != null
+                    ) {
+                        Linking.openURL(event.url)
+                        return false
+                    }
+                    return true
+                }}
             />
         </WithAppAppearance>
     )
