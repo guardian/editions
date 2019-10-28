@@ -12,7 +12,7 @@ export const resolveWeatherVisibility = async () => {
 }
 
 /** Can be refactored later as a generic Setting mutator */
-const setWeatherVisibility = (
+export const setWeatherVisibility = (
     apolloClient: ApolloClient<object>,
     visibility: WeatherVisibility,
 ) => {

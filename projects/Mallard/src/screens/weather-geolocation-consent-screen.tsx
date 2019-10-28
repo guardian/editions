@@ -1,12 +1,14 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
-import { Button } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/button/button'
 import { html } from 'src/helpers/webview'
 import { requestLocationPermission } from 'src/helpers/location-permission'
 import { useApolloClient } from '@apollo/react-hooks'
 import { RESULTS } from 'react-native-permissions'
+import { setWeatherVisibility } from 'src/helpers/weather-visibility'
+import { metrics } from 'src/theme/spacing'
 
 const content = html`
     <h2>Location-based weather</h2>
@@ -32,14 +34,19 @@ const content = html`
         </li>
         <li>
             For more information about how Accuweather uses your location,
-            please check their <a href="#">privacy policy</a>
+            please check their
+            <a href="https://www.accuweather.com/en/privacy"> privacy policy</a>
         </li>
     </ul>
 `
 
 const styles = StyleSheet.create({
     button: {
-        margin: 20,
+        marginTop: metrics.vertical,
+    },
+    buttons: {
+        marginHorizontal: metrics.horizontal,
+        marginBottom: metrics.vertical * 2,
     },
 })
 
@@ -53,13 +60,26 @@ const WeatherGeolocationConsentScreen = ({
             navigation.dismiss()
         }
     }
+    const onHidePress = () => {
+        setWeatherVisibility(apolloClient, 'hidden')
+        navigation.dismiss()
+    }
 
     return (
         <>
             <DefaultInfoTextWebview html={content} />
-            <Button style={styles.button} onPress={onConsentPress}>
-                I understand and consent
-            </Button>
+            <View style={styles.buttons}>
+                <Button onPress={onConsentPress} style={styles.button}>
+                    I understand and consent
+                </Button>
+                <Button
+                    appearance={ButtonAppearance.skeleton}
+                    onPress={onHidePress}
+                    style={styles.button}
+                >
+                    Hide the weather
+                </Button>
+            </View>
         </>
     )
 }
