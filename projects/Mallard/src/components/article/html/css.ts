@@ -11,7 +11,8 @@ import { headerStyles } from './components/header'
 import { imageStyles } from './components/images'
 import { lineStyles } from './components/line'
 import { quoteStyles } from './components/pull-quote'
-import { ratingStyles } from './components/rating'
+import { starRatingStyles } from './components/rating'
+import { sportScoreStyles } from './components/sport-score'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
@@ -167,7 +168,8 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     })}
     ${imageStyles({ colors, theme })}
     ${lineStyles({ colors, theme })}
-    ${ratingStyles({ colors, theme })}
+    ${starRatingStyles({ colors, theme })}
+    ${sportScoreStyles({ colors, theme })}
     ${mediaAtomStyles}
 `
 
