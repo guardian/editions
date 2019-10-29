@@ -191,14 +191,14 @@ const deleteIssue = (issue: string): Promise<void> =>
         .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
         .catch(e => errorService.captureException(e))
 
-export const clearOldIssues = async () => {
+export const clearOldIssues = async (): Promise<void> => {
     const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)
 
     const issuesToDelete = files.filter(
         issue => !lastSevenDays().includes(issue) && issue !== 'issues',
     )
 
-    Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
+    return Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
         .then(() =>
             sendComponentEvent({
                 componentType: ComponentType.appVideo,
