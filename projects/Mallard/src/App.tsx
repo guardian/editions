@@ -4,7 +4,7 @@
 
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
-import { StatusBar, StyleSheet, View } from 'react-native'
+import { AppState, StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
@@ -42,12 +42,6 @@ import { IssueSummaryProvider } from './hooks/use-issue-summary'
 useScreens()
 prepFileSystem()
 pushNotifcationRegistration()
-clearOldIssues()
-fetchCacheClear().then((weOk: boolean) => {
-    if (weOk) {
-        downloadTodaysIssue()
-    }
-})
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -132,6 +126,16 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
+
+        AppState.addEventListener('change', async appState => {
+            if (appState === 'active') {
+                await clearOldIssues()
+                const weOk = await fetchCacheClear()
+                if (weOk) {
+                    downloadTodaysIssue()
+                }
+            }
+        })
     }
 
     async componentDidCatch(e: Error) {
