@@ -3,6 +3,8 @@ import { StyleSheet, View, StyleProp } from 'react-native'
 import { Stars } from 'src/components/stars/stars'
 import { CAPIArticle } from 'src/common'
 import { ImageResource } from '../image-resource'
+import { SportScore } from 'src/components/sportscore/sportscore'
+import { ArticleType } from '../../../../../common/src'
 
 const trailImageViewStyles = StyleSheet.create({
     frame: {
@@ -38,15 +40,37 @@ export const TrailImageView = ({
         return null
     }
     const frameStyle = [trailImageViewStyles.frame, style]
-    const starRating =
-        article.type === 'article' ? article.starRating : undefined
-    if (starRating == null) {
+    const starRating = article.type === 'article' && article.starRating
+    const sportScore =
+        article.articleType === ArticleType.MatchResult && article.sportScore
+
+    if (starRating) {
+        return (
+            <View style={frameStyle}>
+                <ImageResource
+                    style={trailImageViewStyles.image}
+                    image={image}
+                />
+                <Stars
+                    style={trailImageViewStyles.rating}
+                    rating={starRating}
+                />
+            </View>
+        )
+    } else if (sportScore) {
+        return (
+            <View style={frameStyle}>
+                <ImageResource
+                    style={trailImageViewStyles.image}
+                    image={image}
+                />
+                <SportScore
+                    style={trailImageViewStyles.rating}
+                    sportScore={sportScore}
+                />
+            </View>
+        )
+    } else {
         return <ImageResource style={frameStyle} image={image} />
     }
-    return (
-        <View style={frameStyle}>
-            <ImageResource style={trailImageViewStyles.image} image={image} />
-            <Stars style={trailImageViewStyles.rating} rating={starRating} />
-        </View>
-    )
 }

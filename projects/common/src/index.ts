@@ -175,6 +175,7 @@ export interface Article extends Content {
     standfirst: string
     elements: BlockElement[]
     starRating?: number
+    sportScore?: string
     mainMedia?: MediaAtomElement
 }
 

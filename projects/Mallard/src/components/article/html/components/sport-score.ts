@@ -1,29 +1,28 @@
-import { getRatingAsText } from 'src/components/stars/stars'
 import { css, html, px } from 'src/helpers/webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { families } from 'src/theme/typography'
 import { CssProps } from '../helpers/css'
 
-export const starRatingStyles = (
+export const sportScoreStyles = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     config: CssProps,
 ) => css`
-    .rating {
+    .sport-score {
         font-family: ${families.icon.regular};
         background-color: ${color.palette.highlight.main};
         padding: 0 ${px(metrics.horizontal / 3)} ${px(7)};
         line-height: 1;
-        font-size: 1.2em;
+        font-size: 0.9em;
     }
 `
 
-const Rating = ({ starRating = 3.5 }) => {
+const SportScore = ({ sportScore }: { sportScore: string }) => {
     return html`
-        <div class="rating" aria-label="${starRating} stars">
-            ${getRatingAsText(starRating).join('')}
+        <div class="sport-score">
+            ${sportScore.trim()}
         </div>
     `
 }
 
-export { Rating }
+export { SportScore }
