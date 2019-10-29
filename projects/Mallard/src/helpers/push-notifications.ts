@@ -116,9 +116,6 @@ const pushNotifcationRegistration = () => {
                         key,
                     )
 
-                    // Not there? Fahgettaboudit
-                    if (!pushImageSummary) return null
-
                     sendComponentEvent({
                         componentType: ComponentType.appVideo,
                         action: Action.view,
