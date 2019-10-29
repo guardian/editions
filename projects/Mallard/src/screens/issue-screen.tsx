@@ -46,7 +46,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useWeatherVisibility } from 'src/helpers/weather-visibility'
+import { useIsWeatherShown } from 'src/hooks/use-is-weather-shown'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -229,10 +229,9 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
-        const weatherVisibility = useWeatherVisibility()
-        if (weatherVisibility.loading) return null
-        if (weatherVisibility.error) throw weatherVisibility.error
-        const isWeatherShown = weatherVisibility.value === 'shown'
+        const isWeatherShown = useIsWeatherShown()
+        if (isWeatherShown.loading) return null
+        if (isWeatherShown.error) throw isWeatherShown.error
 
         return response({
             error: handleError,
@@ -264,7 +263,7 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        isWeatherShown ? (
+                                                        isWeatherShown.value ? (
                                                             <View
                                                                 style={
                                                                     styles.weatherWide
@@ -292,7 +291,7 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        {isWeatherShown ? (
+                                        {isWeatherShown.value ? (
                                             <View style={styles.sideWeather}>
                                                 <Weather />
                                             </View>

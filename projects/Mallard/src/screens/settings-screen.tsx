@@ -20,24 +20,22 @@ import {
 } from 'src/authentication/AccessContext'
 import DeviceInfo from 'react-native-device-info'
 import {
-    useWeatherVisibility,
-    toggleWeatherVisibility,
-} from 'src/helpers/weather-visibility'
+    useIsWeatherShown,
+    setIsWeatherShown,
+} from 'src/hooks/use-is-weather-shown'
 
 const MiscSettingsList = React.memo(() => {
-    const visibility = useWeatherVisibility()
-    if (visibility.error) throw visibility.error
-    if (visibility.loading) return null
-    const { value } = visibility
-    const onChange = () => toggleWeatherVisibility(value)
+    const isShown = useIsWeatherShown()
+    if (isShown.error) throw isShown.error
+    if (isShown.loading) return null
+    const { value } = isShown
+    const onChange = () => setIsWeatherShown(!value)
     const items = [
         {
-            key: 'weatherVisibility',
+            key: 'isWeatherShown',
             title: 'Display Weather',
             data: { onPress: onChange },
-            proxy: (
-                <Switch value={value === 'shown'} onValueChange={onChange} />
-            ),
+            proxy: <Switch value={value} onValueChange={onChange} />,
         },
     ]
     return <List onPress={({ onPress }) => onPress()} data={items} />
