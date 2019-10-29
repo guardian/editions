@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { issuePath } from '../../../common'
-import { ImageTaskOutput } from '../image'
+import { ImageTaskOutput } from '../frontAndImage'
 import { IssueTaskOutput } from '../issue'
 import { upload, ONE_WEEK } from '../../utils/s3'
 import { handleAndNotify } from '../../services/task-handler'

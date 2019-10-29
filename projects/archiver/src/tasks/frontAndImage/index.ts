@@ -33,6 +33,29 @@ export const handler: Handler<
 
         console.log(`succesfully download front ${frontId}`, maybeFront)
 
+
+        const frontUpload = await attempt(
+            upload(
+                frontPath(publishedId, frontId),
+                maybeFront,
+                'application/json',
+                ONE_WEEK,
+            ),
+        )
+    
+        if (hasFailed(frontUpload)) {
+            console.error(JSON.stringify(frontUpload))
+            throw new Error('Could not upload front')
+        }
+        const publishedFronts = [...issue.fronts, frontId]
+    
+        console.log(`front uploaded`, publishedFronts)
+
+
+
+
+
+
         const images: Image[] = unnest(getImagesFromFront(maybeFront))
 
         const imagesWithSizes: [Image, ImageSize][] = unnest(
