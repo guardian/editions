@@ -43,42 +43,39 @@ export const taskLambda = (
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
-    const fn = new lambda.Function(
-        scope,
-        `EditionsArchiver${toTitleCase(name)}`,
-        {
-            functionName: `editions-archiver-stepmachine-${name}-${stage}`,
-            runtime: lambda.Runtime.NODEJS_10_X,
-            timeout: Duration.minutes(5),
-            memorySize: 1500,
-            code: Code.bucket(
-                deployBucket,
-                `${stack}/${stage}/archiver/archiver.zip`,
-            ),
-            handler: `index.${name}`,
-            environment: {
-                ...environment,
-                stage: stage,
-                bucket: outputBucket.bucketName,
-                topic: frontsTopicArn,
-                role: frontsTopicRole.roleArn,
-            },
-            initialPolicy: [
-                new iam.PolicyStatement({
-                    actions: ['*'],
-                    resources: [
-                        outputBucket.arnForObjects('*'),
-                        outputBucket.bucketArn,
-                    ],
-                }),
-                new iam.PolicyStatement({
-                    actions: ['sts:AssumeRole'],
-                    resources: [frontsTopicRole.roleArn],
-                }),
-            ],
-            ...overrides,
+    const lambdaName = `EditionsArchiver${toTitleCase(name)}`
+    const fn = new lambda.Function(scope, lambdaName, {
+        functionName: `editions-archiver-stepmachine-${name}-${stage}`,
+        runtime: lambda.Runtime.NODEJS_10_X,
+        timeout: Duration.minutes(5),
+        memorySize: 1500,
+        code: Code.bucket(
+            deployBucket,
+            `${stack}/${stage}/archiver/archiver.zip`,
+        ),
+        handler: `index.${name}`,
+        environment: {
+            ...environment,
+            stage: stage,
+            bucket: outputBucket.bucketName,
+            topic: frontsTopicArn,
+            role: frontsTopicRole.roleArn,
         },
-    )
+        initialPolicy: [
+            new iam.PolicyStatement({
+                actions: ['*'],
+                resources: [
+                    outputBucket.arnForObjects('*'),
+                    outputBucket.bucketArn,
+                ],
+            }),
+            new iam.PolicyStatement({
+                actions: ['sts:AssumeRole'],
+                resources: [frontsTopicRole.roleArn],
+            }),
+        ],
+        ...overrides,
+    })
     Tag.add(fn, 'App', `editions-archiver-${name}`)
     Tag.add(fn, 'Stage', stage)
     Tag.add(fn, 'Stack', stack)
@@ -93,13 +90,7 @@ export const task = (
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
-    const lambda = taskLambda(
-        scope,
-        'front',
-        lambdaParams,
-        environment,
-        overrides,
-    )
+    const lambda = taskLambda(scope, name, lambdaParams, environment, overrides)
 
     const task = new sfn.Task(scope, [name, desc].join(': '), {
         task: new tasks.InvokeFunction(lambda),

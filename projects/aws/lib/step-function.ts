@@ -36,7 +36,7 @@ export const archiverStepFunction = (
         backend: backendURL,
     })
 
-    const frontMap = new sfn.Map(scope, 'Map Fronts', {
+    const frontMap = new sfn.Map(scope, 'EditionsArchiverFrontMap', {
         inputPath: '$.',
         itemsPath: '$.fronts',
         parameters: {
