@@ -318,6 +318,21 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-radius: 100%;
     }
 
+    .share-button {
+        float: right;
+        width: ${metrics.buttonHeight};
+        height: ${metrics.buttonHeight};
+        margin: 0 0 0 8px;
+        border: 1px solid black;
+        border-radius: 1000px;
+        padding: 9px 0 0 0;
+        text-align: center;
+    }
+
+    .clearfix {
+        clear: both;
+    }
+
     /*review*/
     .header-container[data-type='review']:after {
         border-bottom: 1px solid ${color.dimLine};
@@ -621,7 +636,14 @@ const Header = ({
                       `
                     : html`
                           <aside class="header-byline header-byline-italic">
+                              <button
+                                  class="share-button"
+                                  onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
+                              >
+                                  ha
+                              </button>
                               <span>${headerProps.bylineHtml}</span>
+                              <div class="clearfix"></div>
                           </aside>
                       `}
                 <div class="header-bg"></div>
