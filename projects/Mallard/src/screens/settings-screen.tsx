@@ -25,10 +25,11 @@ import {
 } from 'src/helpers/weather-visibility'
 
 const MiscSettingsList = React.memo(() => {
-    const { error, loading, value, client } = useWeatherVisibility()
-    if (error) throw error
-    if (loading) return null
-    const onChange = () => toggleWeatherVisibility(client, value)
+    const visibility = useWeatherVisibility()
+    if (visibility.error) throw visibility.error
+    if (visibility.loading) return null
+    const { value } = visibility
+    const onChange = () => toggleWeatherVisibility(value)
     const items = [
         {
             key: 'weatherVisibility',

@@ -1,43 +1,40 @@
 import { getSetting, storeSetting } from './settings'
-import { ApolloClient } from 'apollo-client'
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { useState, useEffect } from 'react'
 
 type WeatherVisibility = 'shown' | 'hidden'
+type Data =
+    | { loading: true; value?: undefined; error?: undefined }
+    | { loading?: undefined; value: WeatherVisibility; error?: undefined }
+    | { loading?: undefined; value?: undefined; error: Error }
+let data: Data = { loading: true }
+let fetching: boolean = false
+const callbacks: (() => void)[] = []
+const refresh = () => callbacks.forEach(cb => cb())
 
-/** Weather is shown by default */
-export const resolveWeatherVisibility = async () => {
-    const value = await getSetting('weatherVisibility')
-    return value || 'shown'
+const loadWeatherVisibility = () => {
+    fetching = true
+    getSetting('weatherVisibility')
+        .then((value: any) => (data = { value }), error => (data = { error }))
+        .then(refresh)
 }
 
-/** Can be refactored later as a generic Setting mutator */
-const setWeatherVisibility = (
-    apolloClient: ApolloClient<object>,
-    visibility: WeatherVisibility,
-) => {
+const setWeatherVisibility = (visibility: WeatherVisibility) => {
     storeSetting('weatherVisibility', visibility)
-    apolloClient.writeData({
-        data: {
-            weatherVisibility: visibility,
-        },
-    })
+    data = { value: visibility }
+    refresh()
 }
 
-export const toggleWeatherVisibility = (
-    client: ApolloClient<object>,
-    value: WeatherVisibility,
-) => {
-    setWeatherVisibility(client, value === 'shown' ? 'hidden' : 'shown')
+export const toggleWeatherVisibility = (value: WeatherVisibility) => {
+    setWeatherVisibility(value === 'shown' ? 'hidden' : 'shown')
 }
 
-const QUERY = gql`
-    {
-        weatherVisibility @client
-    }
-`
-
-export const useWeatherVisibility = () => {
-    const { data, error, loading, client } = useQuery(QUERY)
-    return { value: data && data.weatherVisibility, error, loading, client }
+export const useWeatherVisibility = (): Data => {
+    const [localData, setLocalData] = useState(data)
+    useEffect(() => {
+        const cb = () => setLocalData(data as any)
+        callbacks.push(cb)
+        if (!fetching) loadWeatherVisibility()
+        return () => void callbacks.splice(callbacks.indexOf(cb), 1)
+    }, [])
+    return localData
 }
