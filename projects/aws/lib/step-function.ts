@@ -41,15 +41,21 @@ export const archiverStepFunction = (
         inputPath: '$.',
         itemsPath: '$.fronts',
         parameters: {
-            'issuePublication.$': '$.issuePublication',
+            'issue.$': '$.issue',
             'front.$': '$$.Map.Item.Value',
         },
-        outputPath: 'DISCARD',
+        outputPath: 'DISCARD', //This makes the output from this be replaced with the input
     })
 
-    const image = task(scope, 'image', 'Fetch images', lambdaParams, {
-        backend: backendURL,
-    })
+    const front = task(
+        scope,
+        'front',
+        'Fetch front and images',
+        { retry: true, ...lambdaParams },
+        {
+            backend: backendURL,
+        },
+    )
 
     const upload = task(scope, 'upload', 'Upload Issue', lambdaParams)
 
@@ -67,19 +73,11 @@ export const archiverStepFunction = (
         },
     )
 
-    //Fetch issue metadata
-    issue.task.next(front.task)
+    issue.task.next(frontMap)
 
-    front.task.next(image.task)
+    frontMap.iterator(front.task)
 
-    const remainingFronts = new sfn.Choice(scope, 'Check for remaining fronts')
-    remainingFronts.when(
-        Condition.numberGreaterThan('$.remainingFronts', 0),
-        frontTask,
-    )
-    remainingFronts.otherwise(uploadTask)
-
-    imageTask.next(remainingFronts)
+    frontMap.next(upload.task)
 
     upload.task.next(zip.task)
 
@@ -87,15 +85,15 @@ export const archiverStepFunction = (
 
     indexer.task.next(notification.task)
 
-    notificationTask.next(new sfn.Succeed(scope, 'successfully-archived'))
+    notification.task.next(new sfn.Succeed(scope, 'successfully-archived'))
 
     const archiverStateMachine = new sfn.StateMachine(
         scope,
         'Archiver State Machine',
         {
             stateMachineName: `Editions-Archiver-State-Machine-${stage}`,
-            definition: issueTask,
-            timeout: Duration.minutes(5),
+            definition: issue.task,
+            timeout: Duration.minutes(10),
         },
     )
 

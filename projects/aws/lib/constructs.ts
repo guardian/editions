@@ -7,6 +7,7 @@ import * as s3 from '@aws-cdk/aws-s3'
 import * as iam from '@aws-cdk/aws-iam'
 import * as sfn from '@aws-cdk/aws-stepfunctions'
 import * as tasks from '@aws-cdk/aws-stepfunctions-tasks'
+import { RetryProps } from '@aws-cdk/aws-stepfunctions'
 
 export interface StepFunctionProps {
     stack: string
@@ -18,13 +19,14 @@ export interface StepFunctionProps {
     frontsTopicRoleArn: string
     guNotifyServiceApiKey: string
 }
-export interface LambdaParams {
+export interface Params {
     stack: string
     stage: string
     deployBucket: s3.IBucket
     outputBucket: s3.IBucket
     frontsTopicArn: string
     frontsTopicRole: iam.IRole
+    retry?: RetryProps | boolean
 }
 
 export const taskLambda = (
@@ -37,7 +39,7 @@ export const taskLambda = (
         outputBucket,
         frontsTopicArn,
         frontsTopicRole,
-    }: LambdaParams,
+    }: Params,
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
@@ -87,7 +89,7 @@ export const task = (
     scope: cdk.Construct,
     name: string,
     desc: string,
-    lambdaParams: LambdaParams,
+    { retry, ...lambdaParams }: Params,
     environment?: { [key: string]: string },
     overrides?: Partial<FunctionProps>,
 ) => {
@@ -102,5 +104,8 @@ export const task = (
     const task = new sfn.Task(scope, [name, desc].join(': '), {
         task: new tasks.InvokeFunction(lambda),
     })
+    if (retry == true) {
+        task.addRetry(retry === true ? {} : retry)
+    }
     return { lambda, task }
 }
