@@ -230,8 +230,7 @@ const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
         const isWeatherShown = useIsWeatherShown()
-        if (isWeatherShown.loading) return null
-        if (isWeatherShown.error) throw isWeatherShown.error
+        if (isWeatherShown == null) return null
 
         return response({
             error: handleError,
@@ -263,7 +262,7 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        isWeatherShown.value ? (
+                                                        isWeatherShown ? (
                                                             <View
                                                                 style={
                                                                     styles.weatherWide
@@ -291,7 +290,7 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        {isWeatherShown.value ? (
+                                        {isWeatherShown ? (
                                             <View style={styles.sideWeather}>
                                                 <Weather />
                                             </View>

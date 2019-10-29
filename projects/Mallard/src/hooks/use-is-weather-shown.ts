@@ -1,11 +1,7 @@
 import { getSetting, storeSetting } from '../helpers/settings'
 import { useState, useEffect } from 'react'
 
-type Data =
-    | { loading: true; value?: undefined; error?: undefined }
-    | { loading?: undefined; value: boolean; error?: undefined }
-    | { loading?: undefined; value?: undefined; error: Error }
-let data: Data = { loading: true }
+let data: { value?: boolean; error?: Error } = {}
 let initialized = false
 const callbacks: (() => void)[] = []
 const refresh = () => callbacks.forEach(cb => cb())
@@ -23,13 +19,15 @@ export const setIsWeatherShown = (visibility: boolean) => {
     refresh()
 }
 
-export const useIsWeatherShown = (): Data => {
+/** Return `undefined` while we're loading the setting. */
+export const useIsWeatherShown = (): boolean | undefined => {
     const [localData, setLocalData] = useState(data)
     useEffect(() => {
-        const cb = () => setLocalData(data as any)
+        const cb = () => setLocalData(data)
         callbacks.push(cb)
         if (!initialized) load()
         return () => void callbacks.splice(callbacks.indexOf(cb), 1)
     }, [])
-    return localData
+    if (localData.error) throw localData.error
+    return localData.value
 }

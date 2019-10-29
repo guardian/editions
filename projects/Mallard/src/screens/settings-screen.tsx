@@ -26,16 +26,14 @@ import {
 
 const MiscSettingsList = React.memo(() => {
     const isShown = useIsWeatherShown()
-    if (isShown.error) throw isShown.error
-    if (isShown.loading) return null
-    const { value } = isShown
-    const onChange = () => setIsWeatherShown(!value)
+    if (isShown == null) return null
+    const onChange = () => setIsWeatherShown(!isShown)
     const items = [
         {
             key: 'isWeatherShown',
             title: 'Display Weather',
             data: { onPress: onChange },
-            proxy: <Switch value={value} onValueChange={onChange} />,
+            proxy: <Switch value={isShown} onValueChange={onChange} />,
         },
     ]
     return <List onPress={({ onPress }) => onPress()} data={items} />
