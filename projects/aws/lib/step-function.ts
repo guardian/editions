@@ -1,9 +1,8 @@
-import * as cdk from '@aws-cdk/core'
-import { Condition } from '@aws-cdk/aws-stepfunctions'
-import { Duration } from '@aws-cdk/core'
-import { StepFunctionProps, task } from './constructs'
 import * as iam from '@aws-cdk/aws-iam'
 import * as sfn from '@aws-cdk/aws-stepfunctions'
+import * as cdk from '@aws-cdk/core'
+import { Duration } from '@aws-cdk/core'
+import { StepFunctionProps, task } from './constructs'
 
 export const archiverStepFunction = (
     scope: cdk.Construct,
