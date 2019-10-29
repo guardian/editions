@@ -195,7 +195,7 @@ export const clearOldIssues = async () => {
     const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)
 
     const issuesToDelete = files.filter(
-        issue => !lastSevenDays().includes(issue) && issue === 'issues',
+        issue => !lastSevenDays().includes(issue) && issue !== 'issues',
     )
 
     Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
