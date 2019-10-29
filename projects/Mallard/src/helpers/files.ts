@@ -9,6 +9,7 @@ import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
+import { sendComponentEvent, Action, ComponentType } from '../services/ophan'
 
 interface BasicFile {
     filename: string
@@ -185,18 +186,28 @@ export const downloadAndUnzipIssue = async (
         })
 }
 
-export const clearOldIssues = async () => {
+const deleteIssue = (issue: string): Promise<void> =>
+    RNFetchBlob.fs
+        .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
+        .catch(e => errorService.captureException(e))
+
+export const clearOldIssues = async (): Promise<void> => {
     const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)
 
     const issuesToDelete = files.filter(
-        issue => !lastSevenDays().includes(issue) && issue === 'issues',
+        issue => !lastSevenDays().includes(issue) && issue !== 'issues',
     )
 
-    issuesToDelete.map(issue => {
-        RNFetchBlob.fs
-            .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
-            .catch(e => errorService.captureException(e))
-    })
+    return Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
+        .then(() =>
+            sendComponentEvent({
+                componentType: ComponentType.appVideo,
+                action: Action.view,
+                value: 'completed',
+                componentId: 'clearOldIssues',
+            }),
+        )
+        .catch(e => errorService.captureException(e))
 }
 
 export const matchSummmaryToKey = (
