@@ -17,6 +17,7 @@ import { Line } from './line'
 import { Rating } from './rating'
 import { SportScore } from './sport-score'
 import { renderMediaAtom } from './media-atoms'
+import { Platform } from 'react-native'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -318,15 +319,27 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-radius: 100%;
     }
 
-    .share-button {
+    .share-touch-zone {
         float: right;
-        width: ${metrics.buttonHeight};
-        height: ${metrics.buttonHeight};
-        margin: 0 0 0 8px;
-        border: 1px solid black;
-        border-radius: 1000px;
-        padding: 9px 0 0 0;
-        text-align: center;
+        margin: -8px -8px 0 0;
+        padding: 8px;
+        background: none;
+        border: none;
+        font-family: ${families.icon.regular};
+        font-size: 1.2em;
+    }
+    .share-button {
+        display: flex;
+        width:  ${metrics.fronts.sliderRadius * 2}px;
+        height: ${metrics.fronts.sliderRadius * 2}px;
+        border: 1px solid ${colors.main};
+        color: ${colors.main};
+        border-radius: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    .share-icon {
+        padding-bottom: .1em;
     }
 
     .clearfix {
@@ -546,6 +559,7 @@ const Header = ({
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
+    canBeShared: boolean
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
     const largeByline = hasLargeByline(type)
@@ -553,6 +567,21 @@ const Header = ({
         type === ArticleType.Opinion &&
         headerProps.bylineImages &&
         headerProps.bylineImages.cutout
+    const shareButton = !headerProps.canBeShared
+        ? ''
+        : html`
+              <button
+                  class="share-touch-zone"
+                  onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
+              >
+                  <div class="share-button">
+                      <div class="share-icon">
+                          ${Platform.OS === 'ios' ? '\uE009' : '\uE008'}
+                      </div>
+                  </div>
+              </button>
+          `
+
     return html`
         ${immersive &&
             headerProps.image &&
@@ -631,17 +660,14 @@ const Header = ({
                 ${largeByline
                     ? html`
                           <aside class="header-byline header-standfirst">
+                              ${shareButton}
                               <span>${headerProps.standfirst}</span>
+                              <div class="clearfix"></div>
                           </aside>
                       `
                     : html`
                           <aside class="header-byline header-byline-italic">
-                              <button
-                                  class="share-button"
-                                  onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
-                              >
-                                  ha
-                              </button>
+                              ${shareButton}
                               <span>${headerProps.bylineHtml}</span>
                               <div class="clearfix"></div>
                           </aside>

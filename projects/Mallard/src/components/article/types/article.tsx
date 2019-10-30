@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { StyleSheet, Share } from 'react-native'
+import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
