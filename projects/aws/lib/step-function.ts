@@ -37,13 +37,12 @@ export const archiverStepFunction = (
     })
 
     const frontMap = new sfn.Map(scope, 'EditionsArchiverFrontMap', {
-        inputPath: '$.',
         itemsPath: '$.issue.fronts',
         parameters: {
             'issue.$': '$.issue',
             'front.$': '$$.Map.Item.Value',
         },
-        outputPath: 'DISCARD', //This makes the output from this be replaced with the input
+        resultPath: 'DISCARD', //This makes the output from this be replaced with the input
     })
 
     const front = task(
