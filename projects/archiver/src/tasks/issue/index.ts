@@ -12,8 +12,6 @@ export interface IssueParams {
 export interface IssueTaskOutput extends IssueParams {
     issue: Issue
     message?: string
-    fronts: string[]
-    remainingFronts: number
 }
 export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
     'started',
@@ -39,9 +37,7 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
 
         return {
             issuePublication,
-            issue: { ...issue, fronts: [] },
-            fronts,
-            remainingFronts: fronts.length,
+            issue,
             message: 'Fetched issue succesfully.',
         }
     },
