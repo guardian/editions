@@ -35,12 +35,13 @@ export const APIPaths = {
 const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
-export const MEDIA_CACHE_DIRECTORY_NAME = 'cached'
+const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`
 
 export const FSPaths = {
     issuesDir,
     contentPrefixDir: `${issuesDir}/${defaultSettings.contentPrefix}`,
     issueRoot,
+    mediaRoot,
     image: (
         localIssueId: string,
         size: ImageSize,
