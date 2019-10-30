@@ -1,38 +1,34 @@
-import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Animated, View, StyleSheet } from 'react-native'
-import { CollectionPage, PropTypes } from './collection-page'
-import { Slider, SliderSkeleton } from '../slider'
-import { Spinner } from '../spinner'
-import { FlexCenter } from '../layout/flex-center'
+import React, { FunctionComponent, useMemo, useRef, useState } from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
 import {
-    Issue,
     ArticlePillar,
-    Front as FrontType,
     ArticleType,
+    Front as FrontType,
+    Issue,
     PageLayoutSizes,
 } from 'src/common'
-import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
+import { safeInterpolation } from 'src/helpers/math'
 import {
     FlatCard,
-    getColor,
-    flattenFlatCardsToFront,
     flattenCollectionsToCards,
+    flattenFlatCardsToFront,
+    getColor,
 } from 'src/helpers/transform'
-import { Wrapper } from './helpers/wrapper'
-import {
-    getTranslateForPage,
-    AnimatedFlatListRef,
-    getNearestPage,
-} from './helpers/helpers'
 import { useFrontsResponse } from 'src/hooks/use-issue'
-import { ArticleNavigator } from '../../screens/article-screen'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
-    WithArticle,
     getAppearancePillar,
     getCollectionPillarOverride,
+    WithArticle,
 } from '../../hooks/use-article'
-import { useIssueScreenSize } from 'src/screens/issue/use-size'
-import { safeInterpolation } from 'src/helpers/math'
+import { ArticleNavigator } from '../../screens/article-screen'
+import { FlexCenter } from '../layout/flex-center'
+import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
+import { Slider, SliderSkeleton } from '../slider'
+import { Spinner } from '../spinner'
+import { CollectionPage, PropTypes } from './collection-page'
+import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
+import { Wrapper } from './helpers/wrapper'
 
 const CollectionPageInFront = ({
     index,
@@ -136,21 +132,6 @@ const FrontWithResponse = React.memo(
                         stops={stops}
                         title={frontData.displayName || 'News'}
                         fill={color}
-                        onReleaseScrub={screenX => {
-                            if (
-                                flatListRef.current &&
-                                flatListRef.current._component
-                            ) {
-                                flatListRef.current._component.scrollToOffset({
-                                    offset:
-                                        getNearestPage(
-                                            container.width,
-                                            screenX,
-                                            stops,
-                                        ) * container.width,
-                                })
-                            }
-                        }}
                         position={scrollX.interpolate({
                             inputRange: [
                                 0,
