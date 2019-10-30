@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import React, { useContext, useState } from 'react'
-import { Alert, StyleSheet, Text } from 'react-native'
+import React, { useContext, useState, useEffect } from 'react'
+import { Alert, StyleSheet, Text, Switch } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
-import { getVersionInfo } from 'src/helpers/settings'
 import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
@@ -19,6 +18,26 @@ import {
     useIdentity,
     useAccess,
 } from 'src/authentication/AccessContext'
+import DeviceInfo from 'react-native-device-info'
+import {
+    useIsWeatherShown,
+    setIsWeatherShown,
+} from 'src/hooks/use-is-weather-shown'
+
+const MiscSettingsList = React.memo(() => {
+    const isShown = useIsWeatherShown()
+    if (isShown == null) return null
+    const onChange = () => setIsWeatherShown(!isShown)
+    const items = [
+        {
+            key: 'isWeatherShown',
+            title: 'Display Weather',
+            data: { onPress: onChange },
+            proxy: <Switch value={isShown} onValueChange={onChange} />,
+        },
+    ]
+    return <List onPress={({ onPress }) => onPress()} data={items} />
+})
 
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const setSetting = useSettings()
@@ -32,6 +51,12 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             color: color.ui.supportBlue,
             ...getFont('sans', 1),
         },
+    })
+
+    const [versionNumber, setVersionNumber] = useState('')
+
+    useEffect(() => {
+        DeviceInfo.getVersion().then(version => setVersionNumber(version))
     })
 
     const versionClickHandler = identityData
@@ -130,6 +155,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={signInListItems}
                 />
                 <Heading>{``}</Heading>
+                <MiscSettingsList />
+                <Heading>{``}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}
                     data={[
@@ -199,7 +226,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                             data: {
                                 onPress: versionClickHandler,
                             },
-                            proxy: <Text>{getVersionInfo().version}</Text>,
+                            proxy: <Text>{versionNumber}</Text>,
                         },
                     ]}
                 />

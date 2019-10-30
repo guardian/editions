@@ -15,7 +15,9 @@ import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'
 import { Line } from './line'
 import { Rating } from './rating'
+import { SportScore } from './sport-score'
 import { renderMediaAtom } from './media-atoms'
+import { Platform } from 'react-native'
 
 export interface ArticleHeaderProps {
     headline: string
@@ -24,6 +26,7 @@ export interface ArticleHeaderProps {
     image?: CreditedImage | null
     standfirst?: string
     starRating?: Article['starRating']
+    sportScore?: Article['sportScore']
     bylineImages?: { cutout?: ImageT }
     bylineHtml?: string
     mainMedia?: MediaAtomElement
@@ -125,7 +128,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         z-index: 99;
         position: relative;
     }
-    .header-image > .rating {
+    .header-image > .rating, .sport-score {
         position: absolute;
         bottom:0;
         left:0;
@@ -314,6 +317,33 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         text-align: center;
         font-size: 1.2em;
         border-radius: 100%;
+    }
+
+    .share-touch-zone {
+        float: right;
+        margin: -8px -8px 0 0;
+        padding: 8px;
+        background: none;
+        border: none;
+        font-family: ${families.icon.regular};
+        font-size: 1.2em;
+    }
+    .share-button {
+        display: flex;
+        width:  ${metrics.fronts.sliderRadius * 2}px;
+        height: ${metrics.fronts.sliderRadius * 2}px;
+        border: 1px solid ${colors.main};
+        color: ${colors.main};
+        border-radius: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    .share-icon {
+        padding-bottom: .1em;
+    }
+
+    .clearfix {
+        clear: both;
     }
 
     /*review*/
@@ -529,6 +559,7 @@ const Header = ({
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
+    canBeShared: boolean
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
     const largeByline = hasLargeByline(type)
@@ -536,6 +567,21 @@ const Header = ({
         type === ArticleType.Opinion &&
         headerProps.bylineImages &&
         headerProps.bylineImages.cutout
+    const shareButton = !headerProps.canBeShared
+        ? ''
+        : html`
+              <button
+                  class="share-touch-zone"
+                  onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
+              >
+                  <div class="share-button">
+                      <div class="share-icon">
+                          ${Platform.OS === 'ios' ? '\uE009' : '\uE008'}
+                      </div>
+                  </div>
+              </button>
+          `
+
     return html`
         ${immersive &&
             headerProps.image &&
@@ -557,6 +603,10 @@ const Header = ({
                             preserveRatio: true,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
+                                : headerProps.sportScore
+                                ? SportScore({
+                                      sportScore: headerProps.sportScore,
+                                  })
                                 : undefined,
                         })}
                     ${headerProps.mainMedia &&
@@ -610,12 +660,16 @@ const Header = ({
                 ${largeByline
                     ? html`
                           <aside class="header-byline header-standfirst">
+                              ${shareButton}
                               <span>${headerProps.standfirst}</span>
+                              <div class="clearfix"></div>
                           </aside>
                       `
                     : html`
                           <aside class="header-byline header-byline-italic">
+                              ${shareButton}
                               <span>${headerProps.bylineHtml}</span>
+                              <div class="clearfix"></div>
                           </aside>
                       `}
                 <div class="header-bg"></div>

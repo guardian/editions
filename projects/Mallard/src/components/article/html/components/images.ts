@@ -204,8 +204,7 @@ const Image = ({
     const path = `${backend}${mediaPath(
         publishedId,
         imageSize,
-        imageElement.src.source,
-        imageElement.src.path,
+        imageElement.src,
     )}`
 
     return ImageBase({ path, ...imageElement })

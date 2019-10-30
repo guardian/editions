@@ -8,14 +8,18 @@ import {
     PropTypes,
     tappablePadding,
 } from './helpers/item-tappable'
-import { isFullWidthItem, isSmallItem, isFullHeightItem } from './helpers/sizes'
+import {
+    getImageHeight,
+    isFullHeightItem,
+    isFullWidthItem,
+    isSmallItem,
+} from './helpers/sizes'
 import { SportItemBackground } from './helpers/sports'
-import { TextBlock } from './helpers/text-block'
-import { SmallItem } from './small-items'
 import { Standfirst } from './helpers/standfirst'
+import { TextBlock } from './helpers/text-block'
 import { useIsOpinionCard, useIsSportCard } from './helpers/types'
+import { SmallItem } from './small-items'
 import { TrailImageView } from './trail-image-view'
-import { getImageHeight } from './helpers/sizes'
 
 /*
 Normal img on top + text
@@ -41,7 +45,6 @@ const imageStyles = StyleSheet.create({
 
 const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
     const [isOpinionCard, isSportCard] = [useIsOpinionCard(), useIsSportCard()]
-
     if (isOpinionCard && isSmallItem(size)) {
         return <RoundImageItem {...{ article, size, ...tappableProps }} />
     }
@@ -98,6 +101,7 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 <ImageResource
                     style={[imageStyles.roundImage]}
                     image={article.bylineImages.cutout}
+                    use="thumb"
                 />
             ) : null}
         </ItemTappable>

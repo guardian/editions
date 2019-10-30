@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Share } from 'react-native'
 import WebView from 'react-native-webview'
 import {
     Article as ArticleT,
@@ -75,7 +75,13 @@ const Article = ({
                     ref.current = r
                 }}
                 onMessage={event => {
-                    const { isAtTop } = parsePing(event.nativeEvent.data)
+                    const parsed = parsePing(event.nativeEvent.data)
+                    if (parsed.type === 'share') {
+                        if (article.webUrl == null) return
+                        Share.share({ message: article.webUrl })
+                        return
+                    }
+                    const { isAtTop } = parsed
                     if (ref.current) {
                         // webViewRef is missing from the type definition
                         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
