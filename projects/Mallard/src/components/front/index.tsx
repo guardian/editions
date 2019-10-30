@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import {
     ArticlePillar,
@@ -14,7 +14,6 @@ import {
     flattenFlatCardsToFront,
     getColor,
 } from 'src/helpers/transform'
-import { useFrontsResponse } from 'src/hooks/use-issue'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
     getAppearancePillar,
@@ -22,10 +21,7 @@ import {
     WithArticle,
 } from '../../hooks/use-article'
 import { ArticleNavigator } from '../../screens/article-screen'
-import { FlexCenter } from '../layout/flex-center'
-import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
-import { Slider, SliderSkeleton } from '../slider'
-import { Spinner } from '../spinner'
+import { Slider } from '../slider'
 import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
@@ -84,7 +80,7 @@ const CollectionPageInFront = ({
 
 const styles = StyleSheet.create({ overflow: { overflow: 'hidden' } })
 
-const FrontWithResponse = React.memo(
+export const Front = React.memo(
     ({
         frontData,
         localIssueId,
@@ -216,35 +212,3 @@ const FrontWithResponse = React.memo(
         )
     },
 )
-
-export const Front: FunctionComponent<{
-    front: string
-    localIssueId: Issue['localId']
-    publishedIssueId: Issue['publishedId']
-}> = ({ front, localIssueId, publishedIssueId }) => {
-    const frontsResponse = useFrontsResponse(
-        localIssueId,
-        publishedIssueId,
-        front,
-    )
-
-    return frontsResponse({
-        pending: () => (
-            <Wrapper scrubber={<SliderSkeleton />}>
-                <FlexCenter>
-                    <Spinner />
-                </FlexCenter>
-            </Wrapper>
-        ),
-        error: err => (
-            <Wrapper scrubber={<SliderSkeleton />}>
-                <FlexErrorMessage debugMessage={err.message} />
-            </Wrapper>
-        ),
-        success: frontData => (
-            <FrontWithResponse
-                {...{ frontData, localIssueId, publishedIssueId }}
-            />
-        ),
-    })
-}

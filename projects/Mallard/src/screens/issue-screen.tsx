@@ -47,6 +47,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { useIsWeatherShown } from 'src/hooks/use-is-weather-shown'
+import { IssueWithFronts } from '../../../common/src'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -79,7 +80,10 @@ const styles = StyleSheet.create({
 })
 
 const ScreenHeader = withNavigation(
-    ({ issue, navigation }: { issue?: Issue } & NavigationInjectedProps) => {
+    ({
+        issue,
+        navigation,
+    }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
         const position = useNavigatorPosition()
         const { date, weekday } = useIssueDate(issue)
         const isTablet = useMediaQuery(
@@ -128,7 +132,7 @@ const IssueFronts = ({
     ListHeaderComponent,
     style,
 }: {
-    issue: Issue
+    issue: IssueWithFronts
     ListHeaderComponent?: ReactElement
     style?: StyleProp<ViewStyle>
 }) => {
@@ -163,16 +167,16 @@ const IssueFronts = ({
                 offset: (card.height + metrics.fronts.sliderRadius * 2) * index,
                 index,
             })}
-            keyExtractor={item => item}
+            keyExtractor={item => item.key}
             data={issue.fronts}
             style={style}
             key={width}
-            renderItem={({ item: key }) => (
+            renderItem={({ item: front }) => (
                 <Front
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
-                    front={key}
-                    key={key}
+                    frontData={front}
+                    key={front.key}
                 />
             )}
         />

@@ -45,7 +45,7 @@ export const deleteIssueFiles = async (): Promise<void> => {
     await prepFileSystem()
 }
 
-export const getJson = (path: string) =>
+export const getJson = <T extends any>(path: string): Promise<T> =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
 
 export const downloadNamedIssueArchive = async (
