@@ -167,6 +167,7 @@ export interface Content extends WithKey {
     mediaType: MediaType
     sportScore?: string
     isFromPrint: boolean
+    webUrl?: string
 }
 export interface Article extends Content {
     type: 'article'
