@@ -38,7 +38,7 @@ export const archiverStepFunction = (
 
     const frontMap = new sfn.Map(scope, 'EditionsArchiverFrontMap', {
         inputPath: '$.',
-        itemsPath: '$.fronts',
+        itemsPath: '$.issue.fronts[*]',
         parameters: {
             'issue.$': '$.issue',
             'front.$': '$$.Map.Item.Value',
