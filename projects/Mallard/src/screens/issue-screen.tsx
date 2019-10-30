@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useMemo } from 'react'
 import {
     Animated,
     Image,
@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
-import { Issue, PageLayoutSizes } from 'src/common'
+import { PageLayoutSizes } from 'src/common'
 import { Button } from 'src/components/button/button'
 import { Front } from 'src/components/front'
 import { IssueTitle } from 'src/components/issue/issue-title'
@@ -47,7 +47,13 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { useIsWeatherShown } from 'src/hooks/use-is-weather-shown'
-import { IssueWithFronts } from '../../../common/src'
+import { IssueWithFronts, Front as TFront } from '../../../common/src'
+import {
+    flattenCollectionsToCards,
+    flattenFlatCardsToFront,
+    FlatCard,
+} from 'src/helpers/transform'
+import { ArticleSpec } from './article-screen'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -138,6 +144,49 @@ const IssueFronts = ({
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
+
+    const {
+        frontWithCards,
+        articleSpecs,
+    }: {
+        frontWithCards: (TFront & { cards: FlatCard[] })[]
+        articleSpecs: ArticleSpec[]
+    } = useMemo(
+        () =>
+            issue.fronts.reduce(
+                (acc, front) => {
+                    const flatCollections = flattenCollectionsToCards(
+                        front.collections,
+                    )
+                    acc.frontWithCards.push({
+                        ...front,
+                        cards: flatCollections,
+                    })
+                    const specs = flattenFlatCardsToFront(flatCollections).map(
+                        ({ article, collection }) => ({
+                            collection: collection.key,
+                            front: front.key,
+                            article: article.key,
+                            localIssueId: issue.localId,
+                            publishedIssueId: issue.publishedId,
+                            appearance: front.appearance,
+                            frontName: front.displayName || '',
+                        }),
+                    )
+                    acc.articleSpecs.push(...specs)
+                    return acc
+                },
+                {
+                    frontWithCards: [],
+                    articleSpecs: [],
+                } as {
+                    frontWithCards: (TFront & { cards: FlatCard[] })[]
+                    articleSpecs: ArticleSpec[]
+                },
+            ),
+        [issue.localId, issue.publishedId, issue.fronts],
+    )
+
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
@@ -168,14 +217,16 @@ const IssueFronts = ({
                 index,
             })}
             keyExtractor={item => item.key}
-            data={issue.fronts}
+            data={frontWithCards}
             style={style}
             key={width}
             renderItem={({ item: front }) => (
                 <Front
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
+                    articleNavigator={articleSpecs}
                     frontData={front}
+                    cards={front.cards}
                     key={front.key}
                 />
             )}

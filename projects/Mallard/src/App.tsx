@@ -78,7 +78,7 @@ const loadNavigationState = async () => {
     }
 }
 
-const rootNavigationProps = __DEV__ && {
+const rootNavigationProps = null && {
     persistNavigationState,
     loadNavigationState,
 }
@@ -101,6 +101,7 @@ const onNavigationStateChange = (
     prevState: NavigationState,
     currentState: NavigationState,
 ) => {
+    console.log(currentState)
     const prevScreen: ScreenTrackingMapping | null = getActiveRouteName(
         prevState,
     )

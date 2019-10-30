@@ -8,23 +8,18 @@ import {
     PageLayoutSizes,
 } from 'src/common'
 import { safeInterpolation } from 'src/helpers/math'
-import {
-    FlatCard,
-    flattenCollectionsToCards,
-    flattenFlatCardsToFront,
-    getColor,
-} from 'src/helpers/transform'
+import { FlatCard, getColor } from 'src/helpers/transform'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
     getAppearancePillar,
     getCollectionPillarOverride,
     WithArticle,
 } from '../../hooks/use-article'
-import { ArticleNavigator } from '../../screens/article-screen'
 import { Slider } from '../slider'
 import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
+import { ArticleNavigator } from 'src/screens/article-screen'
 
 const CollectionPageInFront = ({
     index,
@@ -82,41 +77,23 @@ const styles = StyleSheet.create({ overflow: { overflow: 'hidden' } })
 
 export const Front = React.memo(
     ({
+        articleNavigator,
         frontData,
         localIssueId,
         publishedIssueId,
+        cards,
     }: {
+        articleNavigator: ArticleNavigator
         localIssueId: Issue['localId']
         publishedIssueId: Issue['publishedId']
         frontData: FrontType
+        cards: FlatCard[]
     }) => {
         const color = getColor(frontData.appearance)
         const pillar = getAppearancePillar(frontData.appearance)
 
         const [scrollX] = useState(() => new Animated.Value(0))
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
-        const [cards, articleNavigator]: [
-            FlatCard[],
-            ArticleNavigator,
-        ] = useMemo(() => {
-            const flatCollections = flattenCollectionsToCards(
-                frontData.collections,
-            )
-            const navigator = {
-                articles: flattenFlatCardsToFront(flatCollections).map(
-                    ({ article, collection }) => ({
-                        collection: collection.key,
-                        front: frontData.key,
-                        article: article.key,
-                        localIssueId,
-                        publishedIssueId,
-                    }),
-                ),
-                appearance: frontData.appearance,
-                frontName: frontData.displayName || '',
-            }
-            return [flatCollections, navigator]
-        }, [localIssueId, publishedIssueId, frontData])
 
         const stops = cards.length
         const { card, container } = useIssueScreenSize()

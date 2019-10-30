@@ -11,12 +11,15 @@ import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
-import { PathToArticle } from 'src/paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from '../article/body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
+import {
+    ArticleNavigator,
+    getArticleDataFromNavigator,
+} from '../article-screen'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -27,26 +30,6 @@ export interface PathToArticle {
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
-}
-
-export interface ArticleNavigator {
-    articles: PathToArticle[]
-    appearance: Appearance
-    frontName: string
-}
-
-const getData = (
-    navigator: ArticleNavigator,
-    currentArticle: PathToArticle,
-): {
-    isInScroller: boolean
-    startingPoint: number
-} => {
-    const startingPoint = navigator.articles.findIndex(
-        ({ article }) => currentArticle.article === article,
-    )
-    if (startingPoint < 0) return { isInScroller: false, startingPoint: 0 }
-    return { startingPoint, isInScroller: true }
 }
 
 const styles = StyleSheet.create({
@@ -123,11 +106,12 @@ const ArticleSlider = ({
     path,
     articleNavigator,
 }: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>>) => {
-    const pillar = getAppearancePillar(articleNavigator.appearance)
-
     const [articleIsAtTop, setArticleIsAtTop] = useState(true)
 
-    const { isInScroller, startingPoint } = getData(articleNavigator, path)
+    const { isInScroller, startingPoint } = getArticleDataFromNavigator(
+        articleNavigator,
+        path,
+    )
     const [current, setCurrent] = useState(startingPoint)
 
     const { width } = useDimensions()
@@ -148,17 +132,28 @@ const ArticleSlider = ({
     const { panResponder } = useDismissArticle()
 
     const data = isInScroller
-        ? articleNavigator.articles
-        : [path, ...articleNavigator.articles]
+        ? articleNavigator
+        : [
+              {
+                  ...path,
+                  appearance: { type: 'pillar', name: 'neutral' } as const,
+                  frontName: '',
+              },
+              ...articleNavigator,
+          ]
+
+    const currentArticle = data[current]
+
+    const pillar = getAppearancePillar(currentArticle.appearance)
 
     if (Platform.OS === 'android')
         return (
             <>
                 <SliderBar
-                    total={articleNavigator.articles.length}
+                    total={articleNavigator.length}
                     position={current}
-                    title={articleNavigator.frontName}
-                    color={getColor(articleNavigator.appearance)}
+                    title={currentArticle.frontName}
+                    color={getColor(currentArticle.appearance)}
                     wrapperProps={{
                         style: !articleIsAtTop && styles.sliderBorder,
                     }}
@@ -188,10 +183,10 @@ const ArticleSlider = ({
     return (
         <>
             <SliderBar
-                total={articleNavigator.articles.length}
+                total={articleNavigator.length}
                 position={current}
-                title={articleNavigator.frontName}
-                color={getColor(articleNavigator.appearance)}
+                title={currentArticle.frontName}
+                color={getColor(currentArticle.appearance)}
                 wrapperProps={{
                     ...panResponder.panHandlers,
                     style: !articleIsAtTop && styles.sliderBorder,
@@ -221,19 +216,17 @@ const ArticleSlider = ({
                     offset: width * index,
                     index,
                 })}
-                keyExtractor={(item: ArticleNavigator['articles'][0]) =>
-                    item.article
-                }
+                keyExtractor={(item: ArticleNavigator[number]) => item.article}
                 data={
                     isInScroller
-                        ? articleNavigator.articles
-                        : [path, ...articleNavigator.articles]
+                        ? articleNavigator
+                        : [path, ...articleNavigator]
                 }
                 renderItem={({
                     item,
                     index,
                 }: {
-                    item: ArticleNavigator['articles'][0]
+                    item: ArticleNavigator[number]
                     index: number
                 }) => (
                     <ArticleScreenBody
