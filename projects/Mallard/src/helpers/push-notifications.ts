@@ -109,15 +109,28 @@ const pushNotifcationRegistration = () => {
             if (key) {
                 try {
                     const screenSize = await imageForScreenSize()
+
+                    sendComponentEvent({
+                        componentType: ComponentType.appVideo,
+                        action: Action.view,
+                        value: screenSize,
+                        componentId: 'pushScreenSize',
+                    })
+
                     const issueSummaries = await getIssueSummary()
+
+                    sendComponentEvent({
+                        componentType: ComponentType.appVideo,
+                        action: Action.view,
+                        value: JSON.stringify(issueSummaries),
+                        componentId: 'pushIssueSummaries',
+                    })
+
                     // Check to see if we can find the image summary for the one that is pushed
                     const pushImageSummary = matchSummmaryToKey(
                         issueSummaries,
                         key,
                     )
-
-                    // Not there? Fahgettaboudit
-                    if (!pushImageSummary) return null
 
                     sendComponentEvent({
                         componentType: ComponentType.appVideo,
@@ -127,6 +140,13 @@ const pushNotifcationRegistration = () => {
                     })
 
                     await downloadAndUnzipIssue(pushImageSummary, screenSize)
+
+                    sendComponentEvent({
+                        componentType: ComponentType.appVideo,
+                        action: Action.view,
+                        value: 'completed',
+                        componentId: 'pushDownloadComplete',
+                    })
                     notificationTracking(notificationId, 'downloaded')
                     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)

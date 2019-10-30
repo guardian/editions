@@ -130,6 +130,8 @@ const parseArticleResult = async (
 
     if (elements == null) throw new Error(`Elements was undefined in ${path}!`)
 
+    const webUrl = !isFromPrint ? result.webUrl : undefined
+
     switch (result.type) {
         case ContentType.ARTICLE:
             const article: [number, CArticle] = [
@@ -150,6 +152,7 @@ const parseArticleResult = async (
                     starRating,
                     mainMedia: getMainMediaAtom(result.blocks),
                     isFromPrint,
+                    webUrl,
                 },
             ]
             return article
@@ -170,6 +173,7 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     elements,
                     isFromPrint,
+                    webUrl,
                 },
             ]
 
@@ -191,6 +195,7 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     elements,
                     isFromPrint,
+                    webUrl,
                 },
             ]
 
@@ -233,6 +238,7 @@ const parseArticleResult = async (
                     standfirst: trail || '',
                     crossword,
                     isFromPrint,
+                    webUrl,
                 },
             ]
 
@@ -264,6 +270,7 @@ const parseArticleResult = async (
                         },
                     ],
                     isFromPrint,
+                    webUrl,
                 },
             ]
     }

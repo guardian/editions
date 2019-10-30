@@ -2,10 +2,15 @@ import { Platform, PixelRatio } from 'react-native'
 import { bundles } from 'src/html-bundle-info.json'
 import { getFont, FontSizes, FontFamily } from 'src/theme/typography'
 
-export interface WebViewPing {
-    scrollHeight: number
-    isAtTop: boolean
-}
+export type WebViewPing =
+    | {
+          scrollHeight: number
+          isAtTop: boolean
+          type: undefined
+      }
+    | {
+          type: 'share'
+      }
 
 /*
 this tricks vs code into thinking
