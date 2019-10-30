@@ -12,7 +12,6 @@ export interface IssueParams {
 export interface IssueTaskOutput extends IssueParams {
     issue: Issue
     message?: string
-    fronts: string[]
 }
 export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
     'started',
