@@ -1,5 +1,4 @@
 import { FrontCardAppearance } from './collection/card-layouts'
-import { getImageUse } from './collection/thumbnails'
 export * from './collection/card-layouts'
 export * from './collection/layout-model'
 export * from './collection/layouts'
@@ -219,6 +218,31 @@ export const Editions = [
 
 export type Edition = typeof Editions[number]
 
+export const imageUseSizes: {
+    [u in ImageUse]: { [k in ImageSize]: number }
+} = /*
+Don't really want to run this all the time, so it's calculated below.
+{
+    'full-size': sizeDescriptions,
+    'not-used': { phone: 0, tablet: 0, tabletL: 0, tabletXL: 0 },
+    thumb: {
+        phone: Math.ceil(sizeDescriptions.phone * 0.42),
+        tablet: Math.ceil(sizeDescriptions.tablet * 0.25),
+        tabletL: Math.ceil(sizeDescriptions.tabletL * 0.25),
+        tabletXL: Math.ceil(sizeDescriptions.tabletXL * 0.25),
+    },
+    'thumb-large': {
+        phone: Math.ceil(sizeDescriptions.phone * 0.6),
+        tablet: Math.ceil(sizeDescriptions.tablet * 0.52),
+        tabletL: Math.ceil(sizeDescriptions.tabletL * 0.52),
+        tabletXL: Math.ceil(sizeDescriptions.tabletXL * 0.53),
+    },
+}*/ {
+    'full-size': { phone: 375, tablet: 740, tabletL: 980, tabletXL: 1140 },
+    'not-used': { phone: 0, tablet: 0, tabletL: 0, tabletXL: 0 },
+    thumb: { phone: 158, tablet: 185, tabletL: 245, tabletXL: 285 },
+    'thumb-large': { phone: 225, tablet: 385, tabletL: 510, tabletXL: 605 },
+}
 export interface IssueIdentifier {
     edition: Edition
     issueDate: string
@@ -401,17 +425,13 @@ export const frontPath = (issue: string, frontId: string) =>
 // These have issueids in the path, but you'll need to change the archiver if you want to use them.
 
 export const mediaDir = (issue: string, size: ImageSize) =>
-    `${issueDir(issue)}/media/${size}`
+    `${issueDir(issue)}/media/${size}/`
 
 export const mediaPath = (
     issue: string,
     size: ImageSize,
-    source: string,
-    path: string,
-) => `${mediaDir(issue, size)}/${source}/${path}`
-
-export const coloursPath = (issue: string, source: string, path: string) =>
-    `${issueDir(issue)}/colours/${source}/${path}`
+    { source, path }: Image,
+) => `${mediaDir(issue, size)}${source}/${path}`
 
 export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
@@ -419,7 +439,11 @@ export interface Image {
     path: string
 }
 
-export type ImageUse = 'full-size' | 'thumb' | 'thumb-large' | 'not-used'
+export const imageThumbnailUses = ['thumb', 'thumb-large', 'not-used'] as const
+export const imageUses = [...imageThumbnailUses, 'full-size'] as const
+
+export type ImageThumbnailUse = typeof imageThumbnailUses[number]
+export type ImageUse = typeof imageUses[number]
 
 export interface ImageDeviceUses {
     mobile: ImageUse
@@ -429,6 +453,26 @@ export interface ImageDeviceUses {
 export interface TrailImage extends Image {
     use: ImageDeviceUses
 }
+
+export const thumbsDir = (issue: string, size: ImageSize) =>
+    `${issueDir(issue)}/thumbs/${size}/`
+
+export const thumbsPath = (
+    issue: string,
+    size: ImageSize,
+    image: Image,
+    use: ImageThumbnailUse,
+) => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
+
+export const imagePath = (
+    issue: string,
+    size: ImageSize,
+    image: Image,
+    use: ImageUse = 'full-size',
+) =>
+    use == 'full-size'
+        ? mediaPath(issue, size, image)
+        : thumbsPath(issue, size, image, use)
 
 export interface CreditedImage extends Image {
     credit?: string

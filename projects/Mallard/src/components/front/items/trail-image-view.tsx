@@ -1,7 +1,9 @@
 import React from 'react'
-import { StyleSheet, View, StyleProp } from 'react-native'
+import { StyleProp, StyleSheet, View } from 'react-native'
+import { CAPIArticle, ImageUse } from 'src/common'
 import { Stars } from 'src/components/stars/stars'
-import { CAPIArticle } from 'src/common'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { ImageResource } from '../image-resource'
 import { SportScore } from 'src/components/sportscore/sportscore'
 import { ArticleType } from '../../../../../common/src'
@@ -35,10 +37,18 @@ export const TrailImageView = ({
     article: CAPIArticle
     style: StyleProp<{ width?: string; height?: string; marginLeft?: number }>
 }) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+
     const { trailImage: image } = article
     if (image == null) {
         return null
     }
+    const use: ImageUse =
+        'use' in image
+            ? isTablet
+                ? image.use.tablet
+                : image.use.mobile
+            : 'full-size'
     const frameStyle = [trailImageViewStyles.frame, style]
     const starRating = article.type === 'article' && article.starRating
     const sportScore =
@@ -50,6 +60,7 @@ export const TrailImageView = ({
                 <ImageResource
                     style={trailImageViewStyles.image}
                     image={image}
+                    use={use}
                 />
                 <Stars
                     style={trailImageViewStyles.rating}
@@ -63,6 +74,7 @@ export const TrailImageView = ({
                 <ImageResource
                     style={trailImageViewStyles.image}
                     image={image}
+                    use={use}
                 />
                 <SportScore
                     style={trailImageViewStyles.rating}
@@ -71,6 +83,6 @@ export const TrailImageView = ({
             </View>
         )
     } else {
-        return <ImageResource style={frameStyle} image={image} />
+        return <ImageResource style={frameStyle} image={image} use={use} />
     }
 }

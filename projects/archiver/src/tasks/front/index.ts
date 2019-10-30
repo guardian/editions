@@ -1,13 +1,24 @@
 import { Handler } from 'aws-lambda'
 import { unnest } from 'ramda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
-import { Image, ImageSize, imageSizes, Issue, frontPath } from '../../../common'
+import {
+    frontPath,
+    Image,
+    ImageSize,
+    imageSizes,
+    ImageUse,
+    Issue,
+} from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
 import { getFront } from '../../utils/backend-client'
-import { getAndUploadImage, getImagesFromFront } from './helpers/media'
-import pAll = require('p-all')
+import { ONE_WEEK, upload } from '../../utils/s3'
 import { IssueParams } from '../issue'
-import { upload, ONE_WEEK } from '../../utils/s3'
+import {
+    getAndUploadImageUse,
+    getImagesFromFront,
+    getImageUses,
+} from './helpers/media'
+import pAll = require('p-all')
 
 export interface FrontTaskInput extends IssueParams {
     issue: Issue
@@ -46,26 +57,33 @@ export const handler: Handler<
     console.log(`front uploaded`, front)
 
     const images: Image[] = unnest(getImagesFromFront(maybeFront))
-
-    const imagesWithSizes: [Image, ImageSize][] = unnest(
-        images.map(image =>
-            imageSizes.map((size): [Image, ImageSize] => [image, size]),
+    type ImageSizeUse = [Image, ImageSize, ImageUse]
+    const imagesWithUses: ImageSizeUse[] = unnest(
+        unnest(
+            images.map(image =>
+                imageSizes.map(size =>
+                    getImageUses(image).map(
+                        (use): ImageSizeUse => [image, size, use],
+                    ),
+                ),
+            ),
         ),
     )
 
-    const imageUploadActions = imagesWithSizes.map(
-        ([image, size]) => async () =>
-            attempt(getAndUploadImage(publishedId, image, size)),
+    const imageUseUploadActions = imagesWithUses.map(
+        ([image, size, use]) => async () =>
+            attempt(getAndUploadImageUse(publishedId, image, size, use)),
     )
 
-    const imageUploads = await pAll(imageUploadActions, { concurrency: 20 })
+    const imageUseUploads = await pAll(imageUseUploadActions, {
+        concurrency: 20,
+    })
 
-    const failedImageUploads = imageUploads.filter(hasFailed)
-    failedImageUploads.map(failure => console.error(JSON.stringify(failure)))
-
+    const failedImageUseUploads = imageUseUploads.filter(hasFailed)
+    failedImageUseUploads.map(failure => console.error(JSON.stringify(failure)))
     console.log('Uploaded images')
 
-    const failedImages = failedImageUploads.length
+    const failedImages = failedImageUseUploads.length
     const success = failedImages === 0
 
     return {
