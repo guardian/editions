@@ -46,11 +46,15 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
+import { useIsWeatherShown } from 'src/hooks/use-is-weather-shown'
 
 const styles = StyleSheet.create({
     weatherWide: {
         marginHorizontal: metrics.horizontal,
         height: 78,
+    },
+    weatherHidden: {
+        height: 16,
     },
     sideWeather: {
         width: 78,
@@ -225,6 +229,9 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
+        const isWeatherShown = useIsWeatherShown()
+        if (isWeatherShown == null) return null
+
         return response({
             error: handleError,
             pending: handlePending,
@@ -255,13 +262,21 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        <View
-                                                            style={
-                                                                styles.weatherWide
-                                                            }
-                                                        >
-                                                            <Weather />
-                                                        </View>
+                                                        isWeatherShown ? (
+                                                            <View
+                                                                style={
+                                                                    styles.weatherWide
+                                                                }
+                                                            >
+                                                                <Weather />
+                                                            </View>
+                                                        ) : (
+                                                            <View
+                                                                style={
+                                                                    styles.weatherHidden
+                                                                }
+                                                            />
+                                                        )
                                                     }
                                                     issue={issue}
                                                 />
@@ -275,9 +290,11 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        <View style={styles.sideWeather}>
-                                            <Weather />
-                                        </View>
+                                        {isWeatherShown ? (
+                                            <View style={styles.sideWeather}>
+                                                <Weather />
+                                            </View>
+                                        ) : null}
 
                                         <WithLayoutRectangle>
                                             {metrics => (
