@@ -54,10 +54,11 @@ const getFileList = async () => {
             file.type === 'directory'
                 ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
                       [file.filename]: filestat.map(deepfile => ({
-                          ...deepfile,
+                          path: deepfile.path.replace(FSPaths.issuesDir, ''),
                           lastModified: londonTime(
                               Number(deepfile.lastModified),
                           ).format(),
+                          type: deepfile.type,
                       })),
                   }))
                 : {},
