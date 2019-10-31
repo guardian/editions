@@ -7,12 +7,14 @@ import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { backends, defaultSettings } from 'src/helpers/settings/defaults'
-import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
+import { useApiUrl } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
+import { setApiUrl } from 'src/helpers/settings/setters'
+import { useApolloClient } from '@apollo/react-hooks'
 
 const ApiState = () => {
-    const apiUrl = useSettingsValue.apiUrl()
+    const apiUrl = useApiUrl()
     if (apiUrl === defaultSettings.apiUrl) return null
     return (
         <Footer>
@@ -28,8 +30,8 @@ const ApiScreen = ({
 }: {
     navigation: NavigationScreenProp<{}>
 }) => {
-    const setSetting = useSettings()
-    const apiUrl = useSettingsValue.apiUrl()
+    const client = useApolloClient()
+    const apiUrl = useApiUrl()
 
     return (
         <ScrollContainer>
@@ -44,7 +46,7 @@ const ApiScreen = ({
                 }}
                 onChangeText={value => {
                     if (value) {
-                        setSetting('apiUrl', value)
+                        setApiUrl(client, value)
                     }
                 }}
                 value={apiUrl || ''}
@@ -52,7 +54,7 @@ const ApiScreen = ({
             <Heading>Presets</Heading>
             <List
                 onPress={({ value }) => {
-                    setSetting('apiUrl', value)
+                    setApiUrl(client, value)
                     navigation.goBack()
                 }}
                 data={backends.map(({ title, value }) => ({

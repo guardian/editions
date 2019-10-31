@@ -7,11 +7,6 @@ import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { getVersionInfo } from 'src/helpers/settings'
-import {
-    useSettings,
-    useOtherSettingsValues,
-    useSettingsValue,
-} from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -23,6 +18,13 @@ import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
 import { londonTime } from 'src/helpers/date'
+import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
+import {
+    setHasOnboarded,
+    setIsUsingProdDevtools,
+} from 'src/helpers/settings/setters'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -67,10 +69,7 @@ const getFileList = async () => {
 }
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
-    const setSetting = useSettings()
-    const settings = useOtherSettingsValues()
     const { attempt, signOutCAS } = useContext(AccessContext)
-    const apiUrl = useSettingsValue.apiUrl()
     const { showToast } = useToast()
 
     const [buildNumber, setBuildId] = useState('fetching...')
@@ -85,6 +84,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         })
     }, [])
 
+    const query = useQuery<{ [key: string]: unknown }>(
+        gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
+    )
+    if (query.status == QueryStatus.LOADING) return null
+    const { data, client } = query
+    const { apiUrl } = data
+    if (typeof apiUrl !== 'string') throw new Error('expected string')
+
     return (
         <>
             <Heading>🦆 SECRET DUCK MENU 🦆</Heading>
@@ -97,7 +104,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 <Button
                     onPress={() => {
                         // go back to the main to simulate a fresh app
-                        setSetting('hasOnboarded', false)
+                        setHasOnboarded(client, false)
                         navigation.navigate('Onboarding')
                     }}
                 >
@@ -160,7 +167,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             'Tap the version 7 times & confirm the fake scary message to bring it back',
                         data: {
                             onPress: () => {
-                                setSetting('isUsingProdDevtools', false)
+                                setIsUsingProdDevtools(client, false)
                             },
                         },
                     },
@@ -219,7 +226,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             <Heading>Your settings</Heading>
             <List
                 onPress={() => {}}
-                data={Object.entries(settings)
+                data={Object.entries(data)
                     .map(([title, explainer]) => ({
                         key: title,
                         title,

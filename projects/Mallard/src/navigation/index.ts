@@ -7,8 +7,6 @@ import {
     StackViewTransitionConfigs,
     NavigationTransitionProps,
 } from 'react-navigation'
-import { shouldShowOnboarding } from 'src/helpers/settings'
-import { useOtherSettingsValues } from 'src/hooks/use-settings'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 import { OnboardingConsentScreen } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
@@ -38,6 +36,8 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -147,6 +147,8 @@ const OnboardingStack = createModalNavigator(
     ),
     {},
 )
+
+const ONBOARDING_QUERY = gql('{ hasOnboarded @client }')
 const RootNavigator = createAppContainer(
     createStackNavigator(
         {
@@ -157,9 +159,13 @@ const RootNavigator = createAppContainer(
                     }: {
                         navigation: NavigationScreenProp<{}>
                     }) => {
-                        const settings = useOtherSettingsValues()
+                        const query = useQuery<{ hasOnboarded: boolean }>(
+                            ONBOARDING_QUERY,
+                        )
                         useEffect(() => {
-                            if (shouldShowOnboarding(settings)) {
+                            /** Setting is still loading, do nothing yet. */
+                            if (query.status == QueryStatus.LOADING) return
+                            if (!query.data.hasOnboarded) {
                                 navigation.navigate('Onboarding')
                             } else {
                                 navigation.navigate('App')

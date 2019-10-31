@@ -3,19 +3,24 @@ import { FlatList, View, Alert } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
-import { ThreeWaySwitch } from 'src/components/layout/ui/switch'
+import {
+    ThreeWaySwitch,
+    ThreeWaySwitchValue,
+} from 'src/components/layout/ui/switch'
 import { LinkNav } from 'src/components/link'
 import { UiBodyCopy } from 'src/components/styled-text'
-import { GdprSwitchSettings } from 'src/helpers/settings'
+import {
+    GdprSwitchSettings,
+    CURRENT_CONSENT_VERSION,
+    GdprBuckets,
+    gdprSwitchSettings,
+    GdprSettings,
+    GdprDefaultSettings,
+} from 'src/helpers/settings'
 import {
     PREFS_SAVED_MSG,
     PRIVACY_SETTINGS_HEADER_TITLE,
 } from 'src/helpers/words'
-import {
-    useGdprSwitches,
-    useOtherSettingsValues,
-    useSettingsValue,
-} from 'src/hooks/use-settings'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { useToast } from 'src/hooks/use-toast'
 import { LoginHeader } from 'src/components/login/login-layout'
@@ -25,6 +30,15 @@ import {
     gdprAllowFunctionalityKey,
     gdprAllowPerformanceKey,
 } from 'src/helpers/settings'
+import gql from 'graphql-tag'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { Settings } from 'src/helpers/settings'
+import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
+import {
+    setGdprConsentVersion,
+    setGdprFlag,
+} from 'src/helpers/settings/setters'
+import ApolloClient from 'apollo-client'
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -41,6 +55,45 @@ const essentials: EssentialGdprSwitch = {
         'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
 }
 
+const setConsent = (
+    client: ApolloClient<object>,
+    consentBucketKey: keyof GdprSwitchSettings,
+    value: ThreeWaySwitchValue,
+) => {
+    setGdprFlag(client, consentBucketKey, value)
+    GdprBuckets[consentBucketKey].forEach(key => {
+        setGdprFlag(client, key, value)
+    })
+    setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
+}
+
+const consentToAll = (client: ApolloClient<object>) => {
+    gdprSwitchSettings.forEach(sw => {
+        setConsent(client, sw, true)
+    })
+    setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
+}
+
+const DEVMODE_resetAll = (client: ApolloClient<object>) => {
+    gdprSwitchSettings.forEach(sw => {
+        setConsent(client, sw, null)
+    })
+    setGdprConsentVersion(client, null)
+}
+
+const QUERY = gql`
+    {
+        isUsingProdDevtools @client
+        ${GDPR_SETTINGS_FRAGMENT}
+    }
+`
+
+type QueryData = {
+    isUsingProdDevtools: Settings['isUsingProdDevtools']
+} & GdprSettings &
+    GdprDefaultSettings &
+    GdprSwitchSettings
+
 const GdprConsent = ({
     shouldShowDismissableHeader = false,
     navigation,
@@ -49,12 +102,11 @@ const GdprConsent = ({
     shouldShowDismissableHeader?: boolean
     continueText: string
 } & NavigationInjectedProps) => {
-    const { setConsent, consentToAll } = useGdprSwitches()
-    const settings = useOtherSettingsValues()
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
-
-    const { DEVMODE_resetAll } = useGdprSwitches()
     const { showToast } = useToast()
+    const query = useQuery<QueryData>(QUERY)
+    if (query.status == QueryStatus.LOADING) return null
+    const { client, data } = query
+
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
             key: gdprAllowPerformanceKey,
@@ -73,15 +125,15 @@ const GdprConsent = ({
     }
 
     const onEnableAllAndContinue = () => {
-        consentToAll()
+        consentToAll(client)
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
 
     const onDismiss = () => {
         if (
-            settings.gdprAllowFunctionality != null &&
-            settings.gdprAllowPerformance != null
+            data.gdprAllowFunctionality != null &&
+            data.gdprAllowPerformance != null
         ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
@@ -161,10 +213,10 @@ const GdprConsent = ({
                         proxy={
                             <ThreeWaySwitch
                                 onValueChange={value => {
-                                    setConsent(item.key, value)
+                                    setConsent(client, item.key, value)
                                     showToast(PREFS_SAVED_MSG)
                                 }}
-                                value={settings[item.key]}
+                                value={data[item.key]}
                             />
                         }
                     ></TallRow>
@@ -176,9 +228,11 @@ const GdprConsent = ({
                     Privacy Settings from the Settings menu.
                 </UiBodyCopy>
             </Footer>
-            {isUsingProdDevtools ? (
+            {data.isUsingProdDevtools ? (
                 <Footer>
-                    <Button onPress={DEVMODE_resetAll}>Reset</Button>
+                    <Button onPress={DEVMODE_resetAll.bind(undefined, client)}>
+                        Reset
+                    </Button>
                 </Footer>
             ) : null}
         </View>

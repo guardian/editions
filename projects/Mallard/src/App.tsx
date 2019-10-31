@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
 import { AppState, StatusBar, StyleSheet, View, Platform } from 'react-native'
 import { useScreens } from 'react-native-screens'
-import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
@@ -36,6 +35,8 @@ import { AccessProvider } from './authentication/AccessContext'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { IssueSummaryProvider } from './hooks/use-issue-summary'
+import { ApolloProvider } from '@apollo/react-hooks'
+import { createApolloClient } from './apollo'
 
 const clearAndDownloadIssue = async () => {
     await prepFileSystem()
@@ -122,7 +123,6 @@ const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
 const WithProviders = nestProviders(
-    SettingsProvider,
     Modal,
     ToastProvider,
     NetInfoProvider,
@@ -131,6 +131,12 @@ const WithProviders = nestProviders(
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
+
+/**
+ * Only one global Apollo client. As such, any update done from any component
+ * will cause dependent views to refresh and keep up-to-date.
+ */
+const apolloClient = createApolloClient()
 
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
@@ -162,25 +168,27 @@ export default class App extends React.Component<{}, {}> {
             <ErrorBoundary>
                 <WithProviders>
                     <AccessProvider onIdentityStatusChange={handleIdStatus}>
-                        <StatusBar
-                            animated={true}
-                            barStyle="light-content"
-                            backgroundColor="#041f4a"
-                        />
-                        <View style={styles.appContainer}>
-                            <RootNavigator
-                                {...rootNavigationProps}
-                                enableURLHandling={__DEV__}
-                                onNavigationStateChange={
-                                    onNavigationStateChange
-                                }
+                        <ApolloProvider client={apolloClient}>
+                            <StatusBar
+                                animated={true}
+                                barStyle="light-content"
+                                backgroundColor="#041f4a"
                             />
-                            <NetInfoAutoToast />
-                            <UpdateIpAddress />
-                        </View>
-                        <ModalRenderer />
-                        <BugButton />
-                        <DeprecateVersionModal />
+                            <View style={styles.appContainer}>
+                                <RootNavigator
+                                    {...rootNavigationProps}
+                                    enableURLHandling={__DEV__}
+                                    onNavigationStateChange={
+                                        onNavigationStateChange
+                                    }
+                                />
+                                <NetInfoAutoToast />
+                                <UpdateIpAddress />
+                            </View>
+                            <ModalRenderer />
+                            <BugButton />
+                            <DeprecateVersionModal />
+                        </ApolloProvider>
                     </AccessProvider>
                 </WithProviders>
             </ErrorBoundary>
