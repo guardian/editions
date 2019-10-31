@@ -54,15 +54,21 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
     const { showToast } = useToast()
 
     useEffect(() => {
-        // we probably need a better check for this
-        // e.g. do we have issue json and images?
-        RNFetchBlob.fs
-            .exists(FSPaths.issue(issue.key))
-            .then(exists =>
-                setExists(
-                    exists ? ExistsStatus.doesExist : ExistsStatus.doesNotExist,
-                ),
-            )
+        RNFetchBlob.fs.exists(FSPaths.issue(issue.key)).then(exists => {
+            if (exists) {
+                RNFetchBlob.fs
+                    .exists(FSPaths.mediaRoot(issue.key))
+                    .then(exists => {
+                        setExists(
+                            exists
+                                ? ExistsStatus.doesExist
+                                : ExistsStatus.doesNotExist,
+                        )
+                    })
+            } else {
+                setExists(ExistsStatus.doesNotExist)
+            }
+        })
     }, [issue.key])
 
     const onDownloadIssue = async () => {

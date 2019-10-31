@@ -84,6 +84,7 @@ export const renderArticle = (
     } & ArticleContentProps,
 ) => {
     let content, header
+    const canBeShared = article.webUrl != null
     switch (article.type) {
         case 'picture':
             header = Header({
@@ -93,6 +94,7 @@ export const renderArticle = (
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
                 showMedia,
+                canBeShared,
             })
             content =
                 article.image &&
@@ -116,6 +118,7 @@ export const renderArticle = (
                 bylineHtml: article.bylineHtml,
                 image: article.image,
                 showMedia,
+                canBeShared,
             })
             content = renderArticleContent(elements, {
                 showMedia,
@@ -124,7 +127,13 @@ export const renderArticle = (
             })
             break
         default:
-            header = Header({ ...article, type, publishedId, showMedia })
+            header = Header({
+                ...article,
+                type,
+                publishedId,
+                showMedia,
+                canBeShared,
+            })
             content = renderArticleContent(elements, {
                 showMedia,
                 publishedId,

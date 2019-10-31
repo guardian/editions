@@ -1,12 +1,11 @@
 import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { issuePath } from '../../../common'
-import { ImageTaskOutput } from '../image'
-import { IssueTaskOutput } from '../issue'
-import { upload, ONE_WEEK } from '../../utils/s3'
 import { handleAndNotify } from '../../services/task-handler'
+import { ONE_WEEK, upload } from '../../utils/s3'
+import { IssueTaskOutput } from '../issue'
 
-type UploadTaskInput = ImageTaskOutput
+type UploadTaskInput = IssueTaskOutput
 export type UploadTaskOutput = Pick<
     IssueTaskOutput,
     'issuePublication' | 'message' | 'issue'

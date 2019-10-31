@@ -1,7 +1,6 @@
 import { createHash } from 'crypto'
-import { sizeDescriptions } from '../common/src'
-import { ImageSize, Image } from './common'
-import Vibrant from 'node-vibrant'
+import { ImageUse, imageUseSizes } from '../common/src'
+import { Image, ImageSize } from './common'
 
 const salt = process.env.IMAGE_SALT
 
@@ -27,32 +26,13 @@ const getSignature = (path: string) => {
         .digest('hex')
 }
 
-const sizes: { [k in ImageSize | 'sample']: number } = {
-    ...sizeDescriptions,
-    sample: 200,
-}
-
-export const getImageURL = (image: Image, size: ImageSize | 'sample') => {
-    const newPath = `${image.path}?q=50&dpr=2&w=${sizes[size]}`
+export const getImageURL = (
+    image: Image,
+    size: ImageSize,
+    imageUse: ImageUse,
+) => {
+    const newPath = `${image.path}?q=50&dpr=2&w=${imageUseSizes[imageUse][size]}`
     return `https://i.guim.co.uk/img/${
         image.source
     }/${newPath}&s=${getSignature(newPath)}`
-}
-
-export const getPalette = async (image: Image) => {
-    const url = getImageURL(image, 'sample')
-    console.log(url)
-    const v = Vibrant.from(url).build()
-    const palette = await v.getPalette()
-    return {
-        ...image,
-        palette: {
-            Vibrant: palette.Vibrant && palette.Vibrant.getHex(),
-            Muted: palette.Muted && palette.Muted.getHex(),
-            DarkVibrant: palette.DarkVibrant && palette.DarkVibrant.getHex(),
-            DarkMuted: palette.DarkMuted && palette.DarkMuted.getHex(),
-            LightVibrant: palette.LightVibrant && palette.LightVibrant.getHex(),
-            LightMuted: palette.LightMuted && palette.LightMuted.getHex(),
-        },
-    }
 }

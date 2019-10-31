@@ -26,12 +26,6 @@ describe('paths', () => {
             )
         })
 
-        it('should give correct media root directory', () => {
-            expect(FSPaths.mediaRoot('daily-edition/2019-10-10')).toEqual(
-                'path/to/base/directory/issues/daily-edition/2019-10-10/media',
-            )
-        })
-
         it('should give correct zip file location based on a local issue id and filename', () => {
             expect(
                 FSPaths.zip('daily-edition/2019-10-10', '2019-10-10'),
@@ -57,16 +51,34 @@ describe('paths', () => {
             )
         })
 
-        it('should give a media path on the local device', () => {
+        it('should give a media path on the local device for a full sized image', () => {
             expect(
-                FSPaths.media(
+                FSPaths.image(
                     'daily-edition/2019-10-10',
-                    'source',
-                    'path',
                     'phone',
+                    {
+                        source: 'source',
+                        path: 'path',
+                    },
+                    'full-size',
                 ),
             ).toEqual(
                 'path/to/base/directory/issues/daily-edition/2019-10-10/media/phone/source/path',
+            )
+        })
+        it('should give a media path on the local device for a thumbnail image', () => {
+            expect(
+                FSPaths.image(
+                    'daily-edition/2019-10-10',
+                    'phone',
+                    {
+                        source: 'source',
+                        path: 'path',
+                    },
+                    'thumb',
+                ),
+            ).toEqual(
+                'path/to/base/directory/issues/daily-edition/2019-10-10/thumbs/phone/thumb/source/path',
             )
         })
     })

@@ -1,8 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, StyleProp } from 'react-native'
+import { StyleProp, StyleSheet, View } from 'react-native'
+import { CAPIArticle, ImageUse } from 'src/common'
 import { Stars } from 'src/components/stars/stars'
-import { CAPIArticle } from 'src/common'
+import { useMediaQuery } from 'src/hooks/use-screen'
+import { Breakpoints } from 'src/theme/breakpoints'
 import { ImageResource } from '../image-resource'
+import { SportScore } from 'src/components/sportscore/sportscore'
+import { ArticleType } from '../../../../../common/src'
 
 const trailImageViewStyles = StyleSheet.create({
     frame: {
@@ -33,20 +37,52 @@ export const TrailImageView = ({
     article: CAPIArticle
     style: StyleProp<{ width?: string; height?: string; marginLeft?: number }>
 }) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+
     const { trailImage: image } = article
     if (image == null) {
         return null
     }
+    const use: ImageUse =
+        'use' in image
+            ? isTablet
+                ? image.use.tablet
+                : image.use.mobile
+            : 'full-size'
     const frameStyle = [trailImageViewStyles.frame, style]
-    const starRating =
-        article.type === 'article' ? article.starRating : undefined
-    if (starRating == null) {
-        return <ImageResource style={frameStyle} image={image} />
+    const starRating = article.type === 'article' && article.starRating
+    const sportScore =
+        article.articleType === ArticleType.MatchResult && article.sportScore
+
+    if (starRating) {
+        return (
+            <View style={frameStyle}>
+                <ImageResource
+                    style={trailImageViewStyles.image}
+                    image={image}
+                    use={use}
+                />
+                <Stars
+                    style={trailImageViewStyles.rating}
+                    rating={starRating}
+                />
+            </View>
+        )
+    } else if (sportScore) {
+        return (
+            <View style={frameStyle}>
+                <ImageResource
+                    style={trailImageViewStyles.image}
+                    image={image}
+                    use={use}
+                />
+                <SportScore
+                    style={trailImageViewStyles.rating}
+                    sportScore={sportScore}
+                />
+            </View>
+        )
+    } else {
+        return <ImageResource style={frameStyle} image={image} use={use} />
     }
-    return (
-        <View style={frameStyle}>
-            <ImageResource style={trailImageViewStyles.image} image={image} />
-            <Stars style={trailImageViewStyles.rating} rating={starRating} />
-        </View>
-    )
 }

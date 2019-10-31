@@ -3,32 +3,34 @@ import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
-import { Image, ImageSize, Issue } from '../../../common/src'
+import { Image, ImageSize, Issue, ImageUse } from '../../../common/src'
 import { useSettingsValue } from './use-settings'
 import { useIssueSummary } from './use-issue-summary'
 import { Platform } from 'react-native'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
-    { source, path }: Image,
+    image: Image,
     size: ImageSize,
-) => FSPaths.media(localIssueId, source, path, size)
+    use: ImageUse,
+) => FSPaths.image(localIssueId, size, image, use)
 
 export const selectImagePath = async (
     apiUrl: string,
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
-    { source, path }: Image,
+    image: Image,
+    use: ImageUse,
 ) => {
     const imageSize = await imageForScreenSize()
-    const api = `${apiUrl}${APIPaths.media(
+    const api = `${apiUrl}${APIPaths.image(
         publishedIssueId,
         imageSize,
-        source,
-        path,
+        image,
+        use,
     )}`
 
-    const fs = getFsPath(localIssueId, { source, path }, imageSize)
+    const fs = getFsPath(localIssueId, image, imageSize, use)
     const fsExists = await RNFetchBlob.fs.exists(fs)
 
     const fsUpdatedPath = Platform.OS === 'android' ? 'file:///' + fs : fs
@@ -57,7 +59,7 @@ const compressImagePath = async (path: string, width: number) => {
  *
  *  */
 
-export const useImagePath = (image?: Image) => {
+export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     const { issueId } = useIssueSummary()
 
     const [paths, setPaths] = useState<string | undefined>()
@@ -65,13 +67,18 @@ export const useImagePath = (image?: Image) => {
     useEffect(() => {
         if (issueId && image) {
             const { localIssueId, publishedIssueId } = issueId
-            selectImagePath(apiUrl, localIssueId, publishedIssueId, image).then(
-                setPaths,
-            )
+            selectImagePath(
+                apiUrl,
+                localIssueId,
+                publishedIssueId,
+                image,
+                use,
+            ).then(setPaths)
         }
     }, [
         apiUrl,
         image,
+        use,
         issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
         issueId ? issueId.localIssueId : undefined,
     ])

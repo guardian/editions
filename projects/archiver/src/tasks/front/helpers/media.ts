@@ -1,15 +1,17 @@
-import { unnest } from 'ramda'
-import { attempt, hasFailed } from '../../../../../backend/utils/try'
+import { unnest, uniq } from 'ramda'
+import { hasFailed } from '../../../../../backend/utils/try'
 import {
     BlockElement,
     CAPIArticle,
     Front,
     Image,
     ImageSize,
+    ImageUse,
     notNull,
+    TrailImage,
 } from '../../../../common'
-import { getColours, getImage } from '../../../utils/backend-client'
-import { upload, ONE_WEEK } from '../../../utils/s3'
+import { getImageUse } from '../../../utils/backend-client'
+import { ONE_WEEK, upload } from '../../../utils/s3'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {
@@ -21,9 +23,12 @@ const getImageFromElement = (element: BlockElement): Image | undefined => {
     return undefined
 }
 
-export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
+export const getImagesFromArticle = (
+    article: CAPIArticle,
+): (Image | TrailImage)[] => {
     const image = article.image
     const trailImage = article.trailImage
+
     const elements = article.type !== 'crossword' ? article.elements : []
     const cardImages = [article.cardImage, article.cardImageTablet]
     const bylineImages =
@@ -40,7 +45,7 @@ export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     ].filter(notNull)
 }
 
-export const getImagesFromFront = (front: Front): Image[] => {
+export const getImagesFromFront = (front: Front): (Image | TrailImage)[] => {
     const allCards = unnest(front.collections.map(_ => _.cards))
     const articles = unnest(allCards.map(_ => Object.values(_.articles)))
     const images = unnest(articles.map(getImagesFromArticle))
@@ -48,25 +53,25 @@ export const getImagesFromFront = (front: Front): Image[] => {
     return images
 }
 
-export const getAndUploadColours = async (
-    publishedId: string,
-    image: Image,
-) => {
-    const [colourPath, colours] = await getColours(publishedId, image)
-    if (hasFailed(colours)) {
-        console.error(`Could not get colours for ${colourPath}`)
-        console.error(JSON.stringify(colours))
-        return colours
-    }
-    return attempt(upload(colourPath, colours, 'application/json', ONE_WEEK))
-}
-
-export const getAndUploadImage = async (
+export const getAndUploadImageUse = async (
     publishedId: string,
     image: Image,
     size: ImageSize,
+    use: ImageUse,
 ) => {
-    const [path, data] = await getImage(publishedId, image, size)
+    const [path, data] = await getImageUse(publishedId, image, size, use)
     if (hasFailed(data)) return data
     return upload(path, data, 'image/jpeg', ONE_WEEK)
+}
+
+export const getImageUses = (image: Image | TrailImage): ImageUse[] => {
+    const fallback: ImageUse = 'full-size'
+    if (!('use' in image)) {
+        return [fallback]
+    }
+    return uniq(
+        [image.use.mobile, image.use.tablet, fallback].filter(
+            _ => _ !== 'not-used',
+        ),
+    )
 }

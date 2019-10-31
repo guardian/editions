@@ -4,7 +4,7 @@
 
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
-import { StatusBar, StyleSheet, View } from 'react-native'
+import { AppState, StatusBar, StyleSheet, View, Platform } from 'react-native'
 import { useScreens } from 'react-native-screens'
 import { SettingsProvider } from 'src/hooks/use-settings'
 import { RootNavigator } from 'src/navigation'
@@ -37,17 +37,20 @@ import { AnyAttempt, isValid } from './authentication/lib/Attempt'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { IssueSummaryProvider } from './hooks/use-issue-summary'
 
-// useScreens is not a hook
-// eslint-disable-next-line react-hooks/rules-of-hooks
-useScreens()
-prepFileSystem()
-pushNotifcationRegistration()
-clearOldIssues()
-fetchCacheClear().then((weOk: boolean) => {
+const clearAndDownloadIssue = async () => {
+    await prepFileSystem()
+    await clearOldIssues()
+    const weOk = await fetchCacheClear()
     if (weOk) {
         downloadTodaysIssue()
     }
-})
+}
+
+// useScreens is not a hook
+// eslint-disable-next-line react-hooks/rules-of-hooks
+useScreens()
+pushNotifcationRegistration()
+Platform.OS === 'android' && clearAndDownloadIssue()
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -132,6 +135,12 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
+
+        AppState.addEventListener('change', async appState => {
+            if (appState === 'active') {
+                clearAndDownloadIssue()
+            }
+        })
     }
 
     async componentDidCatch(e: Error) {
