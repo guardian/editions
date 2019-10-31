@@ -23,7 +23,6 @@ import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
 import { londonTime } from 'src/helpers/date'
-import beautify_js from 'js-beautify'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -82,7 +81,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 
     useEffect(() => {
         getFileList().then(fileList => {
-            setFiles(beautify_js(JSON.stringify(fileList)))
+            setFiles(JSON.stringify(fileList, null, 2))
         })
     }, [])
 
