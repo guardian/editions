@@ -55,10 +55,12 @@ const getFileList = async () => {
                 ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
                       [file.filename]: filestat.map(deepfile => ({
                           ...deepfile,
-                          lastModified: moment.tz(
-                              file.lastModified,
-                              'Europe/London',
-                          ),
+                          lastModified: moment
+                              .tz(
+                                  Number(deepfile.lastModified),
+                                  'Europe/London',
+                              )
+                              .format(),
                       })),
                   }))
                 : {},
