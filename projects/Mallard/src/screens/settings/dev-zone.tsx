@@ -22,7 +22,7 @@ import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
-import moment from 'moment-timezone'
+import { londonTime } from 'src/helpers/date'
 import beautify_js from 'js-beautify'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
@@ -55,12 +55,9 @@ const getFileList = async () => {
                 ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
                       [file.filename]: filestat.map(deepfile => ({
                           ...deepfile,
-                          lastModified: moment
-                              .tz(
-                                  Number(deepfile.lastModified),
-                                  'Europe/London',
-                              )
-                              .format(),
+                          lastModified: londonTime(
+                              Number(deepfile.lastModified),
+                          ).format(),
                       })),
                   }))
                 : {},
