@@ -140,7 +140,7 @@ const TextBlock = ({
                         {kicker + ' '}
                     </HeadlineKickerText>
                     {headline}
-                    {type === 'crossword' ? (
+                    {type === 'crossword' && byline ? (
                         <Text style={{ fontStyle: 'italic' }}>
                             {'\n'}Set by {byline}
                         </Text>
