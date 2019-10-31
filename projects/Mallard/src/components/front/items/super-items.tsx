@@ -52,6 +52,7 @@ const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
             />
             <TextBlock
                 byline={article.byline}
+                type={article.type}
                 style={[superHeroImageStyles.textBlock]}
                 kicker={article.kicker}
                 headline={article.headline}
@@ -86,6 +87,7 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
             />
             <TextBlock
                 byline={article.byline}
+                type={article.type}
                 style={[superHeroImageStyles.textBlock]}
                 kicker={article.kicker}
                 headline={article.headline}

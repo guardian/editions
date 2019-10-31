@@ -93,6 +93,7 @@ const RoundImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 byline={article.byline}
                 kicker={article.kicker}
                 headline={article.headline}
+                type={article.type}
                 {...{ size }}
             />
             {'bylineImages' in article &&
@@ -150,6 +151,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 >
                     <TextBlock
                         byline={article.byline}
+                        type={article.type}
                         kicker={article.kicker}
                         headline={article.headline}
                         inverted
@@ -196,6 +198,7 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
             <View style={splitImageStyles.card}>
                 <TextBlock
                     byline={article.byline}
+                    type={article.type}
                     style={splitImageStyles.textBlock}
                     kicker={article.kicker}
                     headline={article.headline}
