@@ -22,6 +22,7 @@ import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
+import { londonTime } from 'src/helpers/date'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -43,6 +44,28 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
     )
 }
 
+const getFileList = async () => {
+    const files = await RNFetchBlob.fs.lstat(
+        FSPaths.issuesDir + '/daily-edition',
+    )
+    const subfolders = await Promise.all(
+        files.map(file =>
+            file.type === 'directory'
+                ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
+                      [file.filename]: filestat.map(deepfile => ({
+                          path: deepfile.path.replace(FSPaths.issuesDir, ''),
+                          lastModified: londonTime(
+                              Number(deepfile.lastModified),
+                          ).format(),
+                          type: deepfile.type,
+                      })),
+                  }))
+                : {},
+        ),
+    )
+    return subfolders.filter(value => Object.keys(value).length !== 0)
+}
+
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const setSetting = useSettings()
     const settings = useOtherSettingsValues()
@@ -57,9 +80,9 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     }, [])
 
     useEffect(() => {
-        RNFetchBlob.fs
-            .ls(FSPaths.issuesDir + '/daily-edition')
-            .then(files => setFiles(JSON.stringify(files)))
+        getFileList().then(fileList => {
+            setFiles(JSON.stringify(fileList, null, 2))
+        })
     }, [])
 
     return (
