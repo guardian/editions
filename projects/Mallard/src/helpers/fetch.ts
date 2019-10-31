@@ -48,18 +48,18 @@ const fetchIssueWithFrontsFromAPI = async (
     }
 }
 
-const fetchIssueWithFrontsFromFS = (id: string): Promise<IssueWithFronts> =>
-    getJson<Issue>(FSPaths.issue(id)).then(async issue => {
-        const fronts = await Promise.all(
-            issue.fronts.map(frontId =>
-                getJson<Front>(FSPaths.front(id, frontId)),
-            ),
-        )
-        return {
-            ...issue,
-            fronts,
-        }
-    })
+const fetchIssueWithFrontsFromFS = async (
+    id: string,
+): Promise<IssueWithFronts> => {
+    const issue = await getJson<Issue>(FSPaths.issue(id))
+    const fronts = await Promise.all(
+        issue.fronts.map(frontId => getJson<Front>(FSPaths.front(id, frontId))),
+    )
+    return {
+        ...issue,
+        fronts,
+    }
+}
 
 const fetchIssue = (
     localIssueId: Issue['localId'],
