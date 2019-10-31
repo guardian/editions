@@ -1,10 +1,7 @@
 import { Platform } from 'react-native'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
-import {
-    REQUEST_INVALID_RESPONSE_VALIDATION,
-    LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
-} from './words'
+import { REQUEST_INVALID_RESPONSE_VALIDATION } from './words'
 import {
     CachedOrPromise,
     createCachedOrPromise,
