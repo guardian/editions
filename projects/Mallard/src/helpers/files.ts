@@ -145,87 +145,96 @@ export const stopListeningToExistingDownload = (
     }
 }
 
+// for testing
+export const updateListeners = (localId: string, status: DLStatus) => {
+    const listeners = (dlCache[localId] || {}).progressListeners || []
+    listeners.forEach(listener => listener(status))
+}
+
+const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
+    const { assets, localId } = issue
+    try {
+        if (!assets) {
+            return
+        }
+
+        const issueDataDownload = await downloadNamedIssueArchive(
+            localId,
+            assets.data,
+        ) // just the issue json
+
+        const dataRes = await issueDataDownload.promise
+
+        const imgDL = await downloadNamedIssueArchive(localId, assets[
+            imageSize
+        ] as string) // just the images
+
+        imgDL.progress((received, total) => {
+            if (total >= received) {
+                // the progress is only driven by the image download which will always
+                // take the longest amount of time
+                const num = (received / total) * 100
+                updateListeners(localId, {
+                    type: 'download',
+                    data: num,
+                })
+            }
+        })
+
+        const imgRes = await imgDL.promise
+
+        updateListeners(localId, {
+            type: 'unzip',
+            data: 'start',
+        })
+
+        try {
+            /**
+             * because `isIssueOnDevice` checks for the issue folder's existence
+             * leave unzipping to be the last thing to do so that, if there is an issue
+             * with the image downloads we don't assume the issue is on the device
+             * and then block things like re-downloading if the images stopped downloading
+             */
+            await unzipNamedIssueArchive(dataRes.path())
+
+            /**
+             * The last thing we do is unzip the directory that will confirm if the issue exists
+             */
+            await unzipNamedIssueArchive(imgRes.path())
+        } catch (error) {
+            updateListeners(localId, { type: 'failure', data: error })
+            console.log('Unzip error: ', error)
+        }
+
+        updateListeners(localId, { type: 'success' }) // null is unstarted or end
+    } catch (error) {
+        updateListeners(localId, { type: 'failure', data: error })
+        console.log('Download error: ', error)
+    }
+}
+
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
 export const downloadAndUnzipIssue = (
     issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
+    run = runDownload,
 ) => {
-    const { assets, localId } = issue
+    const { localId } = issue
     const promise = maybeListenToExistingDownload(issue, onProgress)
     if (promise) return promise
 
     const createDownloadPromise = async () => {
-        const updateListeners = (status: DLStatus) => {
-            const listeners = (dlCache[localId] || {}).progressListeners || []
-            listeners.forEach(listener => listener(status))
-        }
-
         try {
-            if (!assets) {
-                return
-            }
-
-            const issueDataDownload = await downloadNamedIssueArchive(
-                localId,
-                assets.data,
-            ) // just the issue json
-
-            const dataRes = await issueDataDownload.promise
-
-            const imgDL = await downloadNamedIssueArchive(localId, assets[
-                imageSize
-            ] as string) // just the images
-
-            imgDL.progress((received, total) => {
-                if (total >= received) {
-                    // the progress is only driven by the image download which will always
-                    // take the longest amount of time
-                    const num = (received / total) * 100
-                    updateListeners({
-                        type: 'download',
-                        data: num,
-                    })
-                }
-            })
-
-            const imgRes = await imgDL.promise
-
-            updateListeners({
-                type: 'unzip',
-                data: 'start',
-            })
-
-            try {
-                /**
-                 * because `isIssueOnDevice` checks for the issue folder's existence
-                 * leave unzipping to be the last thing to do so that, if there is an issue
-                 * with the image downloads we don't assume the issue is on the device
-                 * and then block things like re-downloading if the images stopped downloading
-                 */
-                await unzipNamedIssueArchive(dataRes.path())
-
-                /**
-                 * The last thing we do is unzip the directory that will confirm if the issue exists
-                 */
-                await unzipNamedIssueArchive(imgRes.path())
-            } catch (error) {
-                updateListeners({ type: 'failure', data: error })
-                console.log('Unzip error: ', error)
-            }
-
-            updateListeners({ type: 'success' }) // null is unstarted or end
-        } catch (error) {
-            updateListeners({ type: 'failure', data: error })
-            console.log('Download error: ', error)
+            return await run(issue, imageSize) // the `await` here is important, it allows the finally to run!
         } finally {
-            // Very important!!
             delete dlCache[localId]
         }
     }
 
     const downloadPromise = createDownloadPromise()
+
     dlCache[localId] = {
         promise: downloadPromise,
         progressListeners: [onProgress],
