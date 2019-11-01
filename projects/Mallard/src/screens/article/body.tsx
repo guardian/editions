@@ -7,7 +7,6 @@ import { UiBodyCopy } from 'src/components/styled-text'
 import { WithArticle, getCollectionPillarOverride } from 'src/hooks/use-article'
 import { useArticleResponse } from 'src/hooks/use-issue'
 import { useIsPreview } from 'src/hooks/use-settings'
-import { OnTopPositionChangeFn } from './helpers'
 import { PathToArticle } from 'src/paths'
 import { color } from 'src/theme/color'
 
@@ -18,11 +17,10 @@ const styles = StyleSheet.create({
 
 const ArticleScreenBody = React.memo<{
     path: PathToArticle
-    onTopPositionChange: OnTopPositionChangeFn
     pillar: ArticlePillar
     width: number
     position?: number
-}>(({ path, onTopPositionChange, pillar, width, position }) => {
+}>(({ path, pillar, width, position }) => {
     const articleResponse = useArticleResponse(path)
     const preview = useIsPreview()
     const previewNotice = preview ? `${path.collection}:${position}` : undefined
@@ -57,10 +55,7 @@ const ArticleScreenBody = React.memo<{
                                 path.collection,
                             )}
                         >
-                            <ArticleController
-                                onTopPositionChange={onTopPositionChange}
-                                article={article.article}
-                            />
+                            <ArticleController article={article.article} />
                         </WithArticle>
                     </>
                 ),

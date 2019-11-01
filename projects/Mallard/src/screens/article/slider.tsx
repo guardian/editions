@@ -62,9 +62,6 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         flexGrow: 1,
     },
-    sliderBorder: {
-        borderBottomColor: color.line,
-    },
     androidPager: {
         flexGrow: 1,
         width: '100%',
@@ -76,13 +73,13 @@ const SliderBar = ({
     total,
     title,
     color,
-    wrapperProps,
+    wrapperProps = {},
 }: {
     position: number
     total: number
     title: string
     color: string
-    wrapperProps: ViewProps
+    wrapperProps?: ViewProps
 }) => {
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
@@ -125,8 +122,6 @@ const ArticleSlider = ({
 }: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>>) => {
     const pillar = getAppearancePillar(articleNavigator.appearance)
 
-    const [articleIsAtTop, setArticleIsAtTop] = useState(true)
-
     const { isInScroller, startingPoint } = getData(articleNavigator, path)
     const [current, setCurrent] = useState(startingPoint)
 
@@ -140,10 +135,6 @@ const ArticleSlider = ({
                 animated: false,
             })
     }, [width]) // eslint-disable-line react-hooks/exhaustive-deps
-
-    const onTopPositionChange = useCallback((isAtTop: boolean) => {
-        setArticleIsAtTop(isAtTop)
-    }, [])
 
     const { panResponder } = useDismissArticle()
 
@@ -159,9 +150,6 @@ const ArticleSlider = ({
                     position={current}
                     title={articleNavigator.frontName}
                     color={getColor(articleNavigator.appearance)}
-                    wrapperProps={{
-                        style: !articleIsAtTop && styles.sliderBorder,
-                    }}
                 />
                 <ViewPagerAndroid
                     style={styles.androidPager}
@@ -176,7 +164,6 @@ const ArticleSlider = ({
                                 width={width}
                                 path={item}
                                 pillar={pillar}
-                                onTopPositionChange={onTopPositionChange}
                                 position={index}
                             />
                         </View>
@@ -192,10 +179,7 @@ const ArticleSlider = ({
                 position={current}
                 title={articleNavigator.frontName}
                 color={getColor(articleNavigator.appearance)}
-                wrapperProps={{
-                    ...panResponder.panHandlers,
-                    style: !articleIsAtTop && styles.sliderBorder,
-                }}
+                wrapperProps={panResponder.panHandlers}
             />
 
             <Animated.FlatList
@@ -240,7 +224,6 @@ const ArticleSlider = ({
                         width={width}
                         path={item}
                         pillar={pillar}
-                        onTopPositionChange={onTopPositionChange}
                         position={index}
                     />
                 )}

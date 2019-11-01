@@ -86,6 +86,22 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     html, body {
         overflow-x: hidden;
     }
+
+    #top-shadow {
+        height: 8px;
+        background: linear-gradient(rgba(0,0,0,.15), rgba(0,0,0,0));
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        transition: opacity .25s;
+    }
+
+    html.scrolled #top-shadow {
+        opacity: 1;
+    }
+
     * {
         margin: 0;
         padding: 0;

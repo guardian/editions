@@ -132,23 +132,46 @@ export const makeHtml = ({
             <div id="app" class="app">
                 ${body}
             </div>
+            <div id="top-shadow" />
             <script>
-                const submitHeight = function() {
-                    window.ReactNativeWebView.postMessage(
-                        JSON.stringify({
-                            scrollHeight: document.documentElement.scrollHeight,
-                            isAtTop: window.scrollY < 10,
-                        }),
-                    )
+                // From https://css-tricks.com/styling-based-on-scroll-position/
+
+                const debounce = fn => {
+                    // This holds the requestAnimationFrame reference, so we can cancel it if we wish
+                    let frame
+
+                    // The debounce function returns a new function that can receive a variable number of arguments
+                    return (...params) => {
+                        // If the frame variable has been defined, clear it now, and queue for next frame
+                        if (frame) {
+                            cancelAnimationFrame(frame)
+                        }
+
+                        // Queue our function call for the next frame
+                        frame = requestAnimationFrame(() => {
+                            // Call our function and pass any params we received
+                            fn(...params)
+                        })
+                    }
                 }
 
-                window.setInterval(function() {
-                    submitHeight()
-                }, 500)
-                window.addEventListener('scroll', function() {
-                    submitHeight()
+                // Reads out the scroll position and stores it in the data attribute
+                // so we can use it in our stylesheets
+                const storeScroll = () => {
+                    if (window.scrollY === 0) {
+                        document.documentElement.classList.remove('scrolled')
+                    } else {
+                        document.documentElement.classList.add('scrolled')
+                    }
+                }
+
+                // Listen for new scroll events, here we debounce our "storeScroll" function
+                document.addEventListener('scroll', debounce(storeScroll), {
+                    passive: true,
                 })
-                submitHeight()
+
+                // Update scroll position for first time
+                storeScroll()
             </script>
         </body>
     </html>

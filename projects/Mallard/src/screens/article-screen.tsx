@@ -89,7 +89,6 @@ const ArticleScreenWithProps = ({
                         path={path}
                         width={width}
                         pillar={pillar}
-                        onTopPositionChange={() => {}}
                     />
                 ) : (
                     <ArticleSlider

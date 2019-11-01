@@ -3,7 +3,6 @@ import { StyleSheet, Share } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
-import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
 import { WebviewWithArticle } from './article/webview'
@@ -43,11 +42,9 @@ const usesDarkTheme = (type: Content['type']) =>
     ['picture', 'gallery'].includes(type)
 
 const Article = ({
-    onTopPositionChange,
     article,
 }: {
     article: ArticleT | PictureArticle | GalleryArticle
-    onTopPositionChange: OnTopPositionChangeFn
 }) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
@@ -74,25 +71,6 @@ const Article = ({
                         if (article.webUrl == null) return
                         Share.share({ message: article.webUrl })
                         return
-                    }
-                    const { isAtTop } = parsed
-                    if (ref.current) {
-                        // webViewRef is missing from the type definition
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                        // @ts-ignore
-                        ref.current.webViewRef.current.measure(
-                            (
-                                fx: number,
-                                fy: number,
-                                width: number,
-                                height: number,
-                                px: number,
-                            ) => {
-                                if (px === 0) {
-                                    onTopPositionChange(isAtTop)
-                                }
-                            },
-                        )
                     }
                 }}
             />
