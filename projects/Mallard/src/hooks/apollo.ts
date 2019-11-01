@@ -24,7 +24,18 @@ export type QueryResult<Data> = (
  */
 export const useQuery = <Data>(query: DocumentNode): QueryResult<Data> => {
     const { loading, error, data, client } = useApolloQuery(query)
-    if (error != null) throw error
-    if (loading) return { status: QueryStatus.LOADING, client }
+    if (error != null) {
+        throw error
+    }
+    if (loading) {
+        return { status: QueryStatus.LOADING, client }
+    }
+    if (data == null) {
+        throw new Error(
+            'Data returned by Apollo is empty, but it has finished loading. ' +
+                'This happens when trying to fetch a @client field that ' +
+                'has no resolver: https://github.com/apollographql/react-apollo/issues/1314',
+        )
+    }
     return { status: QueryStatus.LOADED, client, data }
 }
