@@ -66,7 +66,7 @@ export const renderArticle = (
     {
         pillar,
         showMedia,
-        height,
+        topPadding,
         publishedId,
         showWebHeader,
         article,
@@ -75,7 +75,7 @@ export const renderArticle = (
         theme,
     }: {
         pillar: ArticlePillar
-        height: number
+        topPadding: number
         article: CAPIArticle
         type: ArticleType
         showWebHeader: boolean
@@ -150,10 +150,10 @@ export const renderArticle = (
         ${showWebHeader && article && header}
         <div class="content-wrap">
             ${showWebHeader && Line({ zIndex: 999 })}
-            <main style="padding-top:${px(height)}">
+            <main>
                 ${content}
             </main>
         </div>
     `
-    return makeHtml({ styles, body })
+    return makeHtml({ styles, body, topPadding })
 }

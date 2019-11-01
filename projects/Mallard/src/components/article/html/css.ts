@@ -86,6 +86,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     html, body {
         overflow-x: hidden;
     }
+
     * {
         margin: 0;
         padding: 0;

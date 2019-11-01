@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react'
-import { Animated, Easing, StyleSheet } from 'react-native'
+import React, { FunctionComponent, useState } from 'react'
+import { Animated, Easing, StyleSheet, View } from 'react-native'
 import {
     createStackNavigator,
     NavigationContainer,
@@ -42,6 +42,20 @@ const Dismissable = ({
     )
 }
 
+const BASIC_CARD_HEADER_HEIGHT = 68
+const basicCardStyles = StyleSheet.create({
+    header: {
+        top: 0,
+        height: BASIC_CARD_HEADER_HEIGHT,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+    },
+    hiddenHeader: {
+        top: -BASIC_CARD_HEADER_HEIGHT,
+    },
+})
+
 const BasicCardWrapper = ({
     navigator,
     navigation,
@@ -51,23 +65,37 @@ const BasicCardWrapper = ({
     const Navigator = (navigator as unknown) as FunctionComponent<
         NavigationInjectedProps
     >
+    const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
     return (
         <>
-            <Header
-                white
-                leftAction={
-                    <Button
-                        appearance={ButtonAppearance.skeleton}
-                        icon={'\uE00A'}
-                        alt="Back"
-                        onPress={() => navigation.goBack(null)}
-                    ></Button>
-                }
-                layout={'center'}
+            <Navigator
+                navigation={navigation}
+                onShouldShowHeaderChange={onShouldShowHeaderChange}
+                shouldShowHeader={shouldShowHeader}
+                topPadding={BASIC_CARD_HEADER_HEIGHT}
+            />
+            <View
+                style={[
+                    basicCardStyles.header,
+                    !shouldShowHeader ? basicCardStyles.hiddenHeader : null,
+                ]}
             >
-                {null}
-            </Header>
-            <Navigator navigation={navigation} />
+                <Header
+                    white
+                    leftAction={
+                        <Button
+                            appearance={ButtonAppearance.skeleton}
+                            icon={'\uE00A'}
+                            alt="Back"
+                            onPress={() => navigation.goBack(null)}
+                        ></Button>
+                    }
+                    layout={'center'}
+                    isShown={shouldShowHeader}
+                >
+                    {null}
+                </Header>
+            </View>
         </>
     )
 }

@@ -1,9 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { StyleSheet, Share } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
-import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
 import { WebviewWithArticle } from './article/webview'
@@ -13,6 +12,7 @@ import {
     Content,
     GalleryArticle,
 } from 'src/common'
+import { Redshift } from 'aws-sdk'
 
 const styles = StyleSheet.create({
     block: {
@@ -43,11 +43,15 @@ const usesDarkTheme = (type: Content['type']) =>
     ['picture', 'gallery'].includes(type)
 
 const Article = ({
-    onTopPositionChange,
     article,
+    onShouldShowHeaderChange,
+    shouldShowHeader,
+    topPadding,
 }: {
     article: ArticleT | PictureArticle | GalleryArticle
-    onTopPositionChange: OnTopPositionChangeFn
+    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
+    shouldShowHeader: boolean
+    topPadding: number
 }) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
@@ -55,6 +59,16 @@ const Article = ({
     const theme = usesDarkTheme(article.type)
         ? ArticleTheme.Dark
         : ArticleTheme.Default
+
+    const wasShowingHeader = useRef(true)
+    useEffect(() => {
+        if (ref.current == null) return
+        if (shouldShowHeader === wasShowingHeader.current) return
+        wasShowingHeader.current = shouldShowHeader
+        ref.current.injectJavaScript(
+            `window.shouldShowHeader = ${shouldShowHeader};`,
+        )
+    }, [shouldShowHeader])
 
     return (
         <Fader>
@@ -68,6 +82,7 @@ const Article = ({
                 _ref={r => {
                     ref.current = r
                 }}
+                topPadding={topPadding}
                 onMessage={event => {
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
@@ -75,24 +90,9 @@ const Article = ({
                         Share.share({ message: article.webUrl })
                         return
                     }
-                    const { isAtTop } = parsed
-                    if (ref.current) {
-                        // webViewRef is missing from the type definition
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                        // @ts-ignore
-                        ref.current.webViewRef.current.measure(
-                            (
-                                fx: number,
-                                fy: number,
-                                width: number,
-                                height: number,
-                                px: number,
-                            ) => {
-                                if (px === 0) {
-                                    onTopPositionChange(isAtTop)
-                                }
-                            },
-                        )
+                    if (parsed.type === 'shouldShowHeaderChange') {
+                        wasShowingHeader.current = parsed.shouldShowHeader
+                        onShouldShowHeaderChange(parsed.shouldShowHeader)
                     }
                 }}
             />

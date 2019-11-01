@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View, ViewProps } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
@@ -32,6 +32,8 @@ export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
 
+const ANDROID_SLIDER_HEIGHT = 60
+
 const styles = StyleSheet.create({
     slider: {
         paddingVertical: metrics.vertical,
@@ -39,18 +41,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: color.background,
+        backgroundColor: color.background,
     },
     innerSlider: {
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
     },
-    sliderBorder: {
-        borderBottomColor: color.line,
-    },
     androidPager: {
         flexGrow: 1,
         width: '100%',
+    },
+    androidSlider: {
+        position: 'absolute',
+        height: ANDROID_SLIDER_HEIGHT,
+        left: 0,
+        right: 0,
+        borderBottomColor: color.dimLine,
+        borderBottomWidth: 1,
+    },
+    androidSliderHidden: {
+        top: -ANDROID_SLIDER_HEIGHT,
     },
 })
 
@@ -59,13 +70,13 @@ const SliderBar = ({
     total,
     title,
     color,
-    wrapperProps,
+    wrapperProps = {},
 }: {
     position: number
     total: number
     title: string
     color: string
-    wrapperProps: ViewProps
+    wrapperProps?: ViewProps
 }) => {
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
@@ -105,13 +116,19 @@ const SliderBar = ({
 const ArticleSlider = ({
     path,
     articleNavigator,
-}: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>>) => {
-    const [articleIsAtTop, setArticleIsAtTop] = useState(true)
-
+    onShouldShowHeaderChange,
+    shouldShowHeader,
+    topPadding,
+}: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>> & {
+    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
+    shouldShowHeader: boolean
+    topPadding: number
+}) => {
     const { isInScroller, startingPoint } = getArticleDataFromNavigator(
         articleNavigator,
         path,
     )
+
     const [current, setCurrent] = useState(startingPoint)
 
     const { width } = useDimensions()
@@ -124,10 +141,6 @@ const ArticleSlider = ({
                 animated: false,
             })
     }, [width]) // eslint-disable-line react-hooks/exhaustive-deps
-
-    const onTopPositionChange = useCallback((isAtTop: boolean) => {
-        setArticleIsAtTop(isAtTop)
-    }, [])
 
     const { panResponder } = useDismissArticle()
 
@@ -149,19 +162,11 @@ const ArticleSlider = ({
     if (Platform.OS === 'android')
         return (
             <>
-                <SliderBar
-                    total={articleNavigator.length}
-                    position={current}
-                    title={currentArticle.frontName}
-                    color={getColor(currentArticle.appearance)}
-                    wrapperProps={{
-                        style: !articleIsAtTop && styles.sliderBorder,
-                    }}
-                />
                 <ViewPagerAndroid
                     style={styles.androidPager}
                     initialPage={startingPoint}
                     onPageSelected={(ev: any) => {
+                        onShouldShowHeaderChange(true)
                         setCurrent(ev.nativeEvent.position)
                     }}
                 >
@@ -171,12 +176,32 @@ const ArticleSlider = ({
                                 width={width}
                                 path={item}
                                 pillar={pillar}
-                                onTopPositionChange={onTopPositionChange}
                                 position={index}
+                                onShouldShowHeaderChange={
+                                    onShouldShowHeaderChange
+                                }
+                                shouldShowHeader={shouldShowHeader}
+                                topPadding={topPadding + ANDROID_SLIDER_HEIGHT}
                             />
                         </View>
                     ))}
                 </ViewPagerAndroid>
+
+                <SliderBar
+                    total={articleNavigator.length}
+                    position={current}
+                    title={currentArticle.frontName}
+                    color={getColor(currentArticle.appearance)}
+                    wrapperProps={{
+                        style: [
+                            { top: topPadding },
+                            styles.androidSlider,
+                            !shouldShowHeader
+                                ? styles.androidSliderHidden
+                                : null,
+                        ],
+                    }}
+                />
             </>
         )
 
@@ -187,10 +212,7 @@ const ArticleSlider = ({
                 position={current}
                 title={currentArticle.frontName}
                 color={getColor(currentArticle.appearance)}
-                wrapperProps={{
-                    ...panResponder.panHandlers,
-                    style: !articleIsAtTop && styles.sliderBorder,
-                }}
+                wrapperProps={panResponder.panHandlers}
             />
 
             <Animated.FlatList
@@ -233,8 +255,10 @@ const ArticleSlider = ({
                         width={width}
                         path={item}
                         pillar={pillar}
-                        onTopPositionChange={onTopPositionChange}
                         position={index}
+                        onShouldShowHeaderChange={onShouldShowHeaderChange}
+                        shouldShowHeader={shouldShowHeader}
+                        topPadding={topPadding}
                     />
                 )}
             />

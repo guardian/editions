@@ -4,9 +4,8 @@ import { getFont, FontSizes, FontFamily } from 'src/theme/typography'
 
 export type WebViewPing =
     | {
-          scrollHeight: number
-          isAtTop: boolean
-          type: undefined
+          type: 'shouldShowHeaderChange'
+          shouldShowHeader: boolean
       }
     | {
           type: 'share'
@@ -114,9 +113,11 @@ export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
 export const makeHtml = ({
     styles,
     body,
+    topPadding,
 }: {
     styles: string
     body: string
+    topPadding: number
 }) => html`
     <html>
         <head>
@@ -128,27 +129,72 @@ export const makeHtml = ({
                 content="width=device-width, initial-scale=1"
             />
         </head>
-        <body>
+        <body style="padding-top:${px(topPadding)}">
             <div id="app" class="app">
                 ${body}
             </div>
             <script>
-                const submitHeight = function() {
-                    window.ReactNativeWebView.postMessage(
-                        JSON.stringify({
-                            scrollHeight: document.documentElement.scrollHeight,
-                            isAtTop: window.scrollY < 10,
-                        }),
-                    )
+                // Adapted from https://css-tricks.com/styling-based-on-scroll-position/
+
+                const debounce = fn => {
+                    let frame
+                    return (...params) => {
+                        if (frame) cancelAnimationFrame(frame)
+                        frame = requestAnimationFrame(() => fn(...params))
+                    }
                 }
 
-                window.setInterval(function() {
-                    submitHeight()
-                }, 500)
-                window.addEventListener('scroll', function() {
-                    submitHeight()
+                const TOP_PADDING = ${topPadding}
+
+                let oldScrollY = 0
+                let baseScrollY = 0
+                window.shouldShowHeader = true
+                const THRESHOLD = 30
+                const maxScrollY =
+                    window.document.body.scrollHeight -
+                    window.document.body.clientHeight
+
+                const storeScroll = () => {
+                    const scrollY = window.scrollY
+
+                    // FIXME: instead of absolute delta, measure delta to the
+                    // last time we changed direction.
+
+                    let distanceSinceTurn = scrollY - baseScrollY
+                    const distanceSinceOld = scrollY - oldScrollY
+
+                    if (
+                        (distanceSinceOld > 0 && distanceSinceTurn < 0) ||
+                        (distanceSinceOld < 0 && distanceSinceTurn > 0)
+                    ) {
+                        baseScrollY = oldScrollY
+                        distanceSinceTurn = distanceSinceOld
+                    }
+                    oldScrollY = scrollY
+
+                    const shouldNowShowHeader =
+                        scrollY < TOP_PADDING ||
+                        (distanceSinceTurn < THRESHOLD &&
+                            window.shouldShowHeader) ||
+                        (distanceSinceTurn < -THRESHOLD &&
+                            !window.shouldShowHeader)
+
+                    if (shouldNowShowHeader !== window.shouldShowHeader) {
+                        window.shouldShowHeader = shouldNowShowHeader
+
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({
+                                type: 'shouldShowHeaderChange',
+                                shouldShowHeader: window.shouldShowHeader,
+                            }),
+                        )
+                    }
+                }
+
+                document.addEventListener('scroll', debounce(storeScroll), {
+                    passive: true,
                 })
-                submitHeight()
+                storeScroll()
             </script>
         </body>
     </html>
