@@ -88,7 +88,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
     }
 
     #top-shadow {
-        height: 8px;
+        height: 6px;
         background: linear-gradient(rgba(0,0,0,.15), rgba(0,0,0,0));
         position: fixed;
         top: 0;
