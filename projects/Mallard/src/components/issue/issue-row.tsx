@@ -1,4 +1,10 @@
-import React, { useMemo, ReactNode, useState, useEffect } from 'react'
+import React, {
+    useMemo,
+    ReactNode,
+    useState,
+    useEffect,
+    useCallback,
+} from 'react'
 import {
     IssueTitle,
     IssueTitleAppearance,
@@ -9,7 +15,12 @@ import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
 import { StyleSheet, StyleProp, ViewStyle, View } from 'react-native'
 import { Highlight } from 'src/components/highlight'
-import { DLStatus, downloadAndUnzipIssue } from 'src/helpers/files'
+import {
+    DLStatus,
+    downloadAndUnzipIssue,
+    maybeListenToExistingDownload,
+    stopListeningToExistingDownload,
+} from 'src/helpers/files'
 import { Button, ButtonAppearance } from '../button/button'
 import RNFetchBlob from 'rn-fetch-blob'
 import { FSPaths } from 'src/paths'
@@ -53,7 +64,18 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
 
+    const handleUpdate = useCallback((status: DLStatus) => {
+        setDlStatus(status)
+        if (status.type === 'success') {
+            setExists(ExistsStatus.doesExist)
+        }
+    }, [])
+
     useEffect(() => {
+        const isDownloading = maybeListenToExistingDownload(issue, handleUpdate)
+        setExists(ExistsStatus.pending)
+        if (isDownloading) return
+
         RNFetchBlob.fs.exists(FSPaths.issue(issue.key)).then(exists => {
             if (exists) {
                 RNFetchBlob.fs
@@ -69,7 +91,11 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
                 setExists(ExistsStatus.doesNotExist)
             }
         })
-    }, [issue.key])
+
+        return () => {
+            stopListeningToExistingDownload(issue, handleUpdate)
+        }
+    }, [issue, handleUpdate])
 
     const onDownloadIssue = async () => {
         if (exists !== ExistsStatus.doesNotExist) return
@@ -81,12 +107,7 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
                 value: 'issues_list_issue_clicked',
             })
             const imageSize = await imageForScreenSize()
-            downloadAndUnzipIssue(issue, imageSize, status => {
-                setDlStatus(status)
-                if (status.type === 'success') {
-                    setExists(ExistsStatus.doesExist)
-                }
-            })
+            downloadAndUnzipIssue(issue, imageSize, handleUpdate)
         } else {
             showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE)
         }

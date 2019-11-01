@@ -114,7 +114,36 @@ const deleteIssue = (issue: string): Promise<void> =>
         .catch(e => errorService.captureException(e))
 
 // Cache of current downloads
-const dlCache: { [key: string]: Promise<void> } = {}
+const dlCache: {
+    [key: string]: {
+        promise: Promise<void>
+        progressListeners: ((status: DLStatus) => void)[]
+    }
+} = {}
+
+export const maybeListenToExistingDownload = (
+    issue: IssueSummary,
+    onProgress: (status: DLStatus) => void = () => {},
+) => {
+    const dl = dlCache[issue.localId]
+    if (dlCache[issue.localId]) {
+        dl.progressListeners.push(onProgress)
+        return dl.promise
+    }
+    return false
+}
+
+export const stopListeningToExistingDownload = (
+    issue: IssueSummary,
+    listener: (status: DLStatus) => void,
+) => {
+    const dl = dlCache[issue.localId]
+    if (dlCache[issue.localId]) {
+        const index = dl.progressListeners.indexOf(listener)
+        if (index < 0) return
+        dl.progressListeners.splice(index, 1)
+    }
+}
 
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
@@ -124,10 +153,15 @@ export const downloadAndUnzipIssue = (
     onProgress: (status: DLStatus) => void = () => {},
 ) => {
     const { assets, localId } = issue
-    const currentDownload = dlCache[localId]
-    if (currentDownload) return currentDownload
+    const promise = maybeListenToExistingDownload(issue, onProgress)
+    if (promise) return promise
 
     const createDownloadPromise = async () => {
+        const updateListeners = (status: DLStatus) => {
+            const listeners = (dlCache[localId] || {}).progressListeners || []
+            listeners.forEach(listener => listener(status))
+        }
+
         try {
             if (!assets) {
                 return
@@ -149,7 +183,7 @@ export const downloadAndUnzipIssue = (
                     // the progress is only driven by the image download which will always
                     // take the longest amount of time
                     const num = (received / total) * 100
-                    onProgress({
+                    updateListeners({
                         type: 'download',
                         data: num,
                     })
@@ -158,7 +192,7 @@ export const downloadAndUnzipIssue = (
 
             const imgRes = await imgDL.promise
 
-            onProgress({
+            updateListeners({
                 type: 'unzip',
                 data: 'start',
             })
@@ -177,13 +211,13 @@ export const downloadAndUnzipIssue = (
                  */
                 await unzipNamedIssueArchive(imgRes.path())
             } catch (error) {
-                onProgress({ type: 'failure', data: error })
+                updateListeners({ type: 'failure', data: error })
                 console.log('Unzip error: ', error)
             }
 
-            onProgress({ type: 'success' }) // null is unstarted or end
+            updateListeners({ type: 'success' }) // null is unstarted or end
         } catch (error) {
-            onProgress({ type: 'failure', data: error })
+            updateListeners({ type: 'failure', data: error })
             console.log('Download error: ', error)
         } finally {
             // Very important!!
@@ -192,7 +226,10 @@ export const downloadAndUnzipIssue = (
     }
 
     const downloadPromise = createDownloadPromise()
-    dlCache[localId] = downloadPromise
+    dlCache[localId] = {
+        promise: downloadPromise,
+        progressListeners: [onProgress],
+    }
     return downloadPromise
 }
 
