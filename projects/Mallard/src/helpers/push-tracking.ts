@@ -37,14 +37,10 @@ const pushTracking = async (id: string, value: string) => {
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
 
-        try {
-            await AsyncStorage.setItem(
-                PUSH_TRACKING_KEY,
-                JSON.stringify(saveTracking),
-            )
-        } catch (e) {
-            errorService.captureException(e)
-        }
+        await AsyncStorage.setItem(
+            PUSH_TRACKING_KEY,
+            JSON.stringify(saveTracking),
+        )
     } catch (e) {
         errorService.captureException(e)
     }
