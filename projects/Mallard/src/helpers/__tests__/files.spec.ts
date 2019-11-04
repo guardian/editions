@@ -52,7 +52,7 @@ describe('helpers/files', () => {
     })
 
     describe('downloadAndUnzipIssue', () => {
-        it('should resolve the outer promise when the inner promise resolves', async () => {
+        it('should resolve the outer promise when the download runner resolves', async () => {
             const localId = '1'
 
             const p = downloadAndUnzipIssue(
@@ -60,32 +60,30 @@ describe('helpers/files', () => {
                 'phone',
                 () => {},
                 () => Promise.resolve(),
+                // the above promise is the main downloader that drives the outer promise
+                // and also updates the progress handler
+                // this is not part of the main API but passing it in tests is much easier than mocking
+                // all the downloads
             )
 
             await expect(p).resolves.toBeUndefined()
         })
 
-        it('should not set any statuses without the runner updating them', async () => {
-            let status: DLStatus | null = null
-
-            function updateStatus1(next: DLStatus) {
-                status = next
-            }
-
-            const localId = '1'
+        it('should not set any statuses without the passed promise calling an updater', async () => {
+            const updateStatus = jest.fn(() => {})
 
             const p = downloadAndUnzipIssue(
-                createIssueSummary(localId),
+                createIssueSummary('1'),
                 'phone',
-                updateStatus1,
+                updateStatus,
                 () => Promise.resolve(),
             )
 
-            expect(status).toBe(null)
+            expect(updateStatus).not.toHaveBeenCalled()
             await p
         })
 
-        it('should fetch existing promises from a cache if they are unresolved when trying to download the same issue', async () => {
+        it('should return existing download promises if they are unresolved when trying to download the same issue', async () => {
             const localId = '1'
 
             const p1 = downloadAndUnzipIssue(
@@ -139,7 +137,7 @@ describe('helpers/files', () => {
             await p3
         })
 
-        it('should still register update handlers to the current download', async () => {
+        it('should still register update handlers to the existing download when returning the same download promise', async () => {
             let status1: DLStatus | null = null
             let status2: DLStatus | null = null
 
