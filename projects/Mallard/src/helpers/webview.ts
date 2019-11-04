@@ -113,11 +113,11 @@ export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
 export const makeHtml = ({
     styles,
     body,
-    topPadding,
+    topPadding = 0,
 }: {
     styles: string
     body: string
-    topPadding: number
+    topPadding?: number
 }) => html`
     <html>
         <head>

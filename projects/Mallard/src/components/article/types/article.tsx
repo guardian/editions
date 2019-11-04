@@ -12,7 +12,6 @@ import {
     Content,
     GalleryArticle,
 } from 'src/common'
-import { Redshift } from 'aws-sdk'
 
 const styles = StyleSheet.create({
     block: {

@@ -6,6 +6,9 @@ import {
     NavigationInjectedProps,
     NavigationRouteConfig,
     NavigationTransitionProps,
+    NavigationNavigatorProps,
+    ScreenProps,
+    NavigationRouter,
 } from 'react-navigation'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
@@ -24,6 +27,8 @@ import {
 import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
 import { safeInterpolation, safeValue } from 'src/helpers/math'
+import { NavigationContainerProps } from 'react-navigation'
+import { NavigationState } from 'react-navigation'
 
 const Dismissable = ({
     navigator,
@@ -56,15 +61,27 @@ const basicCardStyles = StyleSheet.create({
     },
 })
 
+interface ArticleNavigationContainer
+    extends React.ComponentClass<
+        NavigationContainerProps &
+            NavigationNavigatorProps<any> & {
+                onShouldShowHeaderChange?: (value: boolean) => void
+                shouldShowHeader?: boolean
+                topPadding?: number
+            }
+    > {
+    router: NavigationRouter<any, any>
+    screenProps: ScreenProps
+    navigationOptions: any
+    state: { nav: NavigationState | null }
+}
+
 const BasicCardWrapper = ({
-    navigator,
+    navigator: Navigator,
     navigation,
 }: {
-    navigator: NavigationContainer
+    navigator: ArticleNavigationContainer
 } & NavigationInjectedProps) => {
-    const Navigator = (navigator as unknown) as FunctionComponent<
-        NavigationInjectedProps
-    >
     const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
     return (
         <>
@@ -91,7 +108,6 @@ const BasicCardWrapper = ({
                         ></Button>
                     }
                     layout={'center'}
-                    isShown={shouldShowHeader}
                 >
                     {null}
                 </Header>
@@ -100,12 +116,15 @@ const BasicCardWrapper = ({
     )
 }
 
-const wrapInBasicCard: NavigatorWrapper = Navigator => {
+const wrapInBasicCard: (
+    Navigator: ArticleNavigationContainer,
+    getPosition: () => Animated.Value,
+) => NavigationContainer = Navigator => {
     const Wrapper = ({ navigation }: NavigationInjectedProps) => (
         <BasicCardWrapper navigator={Navigator} navigation={navigation} />
     )
     return addStaticRouterWithPosition(
-        addStaticRouter(Navigator, Wrapper),
+        addStaticRouter(Navigator as any, Wrapper),
         () => new Animated.Value(1),
     )
 }

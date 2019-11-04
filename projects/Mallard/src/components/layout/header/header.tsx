@@ -68,7 +68,6 @@ type HeaderProps = {
     leftAction?: ReactNode
     layout?: 'issue' | 'center'
     children: ReactNode
-    isShown: boolean
 } & TouchableHeaderProps
 
 const Header = ({
