@@ -41,7 +41,10 @@ export const renderIssueDate = (dateString: Issue['date']): IssueDate => {
     }
 }
 
-export const useIssueDate = (issue?: Issue): IssueDate =>
+export const useIssueDate = (issue?: {
+    date: string
+    key: string
+}): IssueDate =>
     useMemo(
         () => (issue ? renderIssueDate(issue.date) : { date: '', weekday: '' }),
         [issue && issue.key, issue],

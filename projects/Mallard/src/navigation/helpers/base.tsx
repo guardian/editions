@@ -63,11 +63,7 @@ const getArticleNavigationProps = (
 ) => {
     const path = navigation.getParam('path')
     const prefersFullScreen = navigation.getParam('prefersFullScreen', false)
-    const articleNavigator = navigation.getParam('articleNavigator', {
-        articles: [],
-        appearance: { type: 'pillar', name: 'neutral' },
-        frontName: '',
-    })
+    const articleNavigator = navigation.getParam('articleNavigator', [])
 
     if (
         !path ||

@@ -1,5 +1,5 @@
-import { Front, Issue } from 'src/common'
-import { fetchFromIssue } from 'src/helpers/fetch'
+import { Issue } from 'src/common'
+import { fetchIssue } from 'src/helpers/fetch'
 import { CachedOrPromise, chain } from 'src/helpers/fetch/cached-or-promise'
 import { withResponse } from 'src/helpers/response'
 import {
@@ -7,7 +7,7 @@ import {
     flattenFlatCardsToFront,
 } from 'src/helpers/transform'
 import { ERR_404_REMOTE } from 'src/helpers/words'
-import { APIPaths, FSPaths, PathToArticle } from 'src/paths'
+import { PathToArticle } from 'src/paths'
 import { useCachedOrPromise } from './use-cached-or-promise'
 
 export const useIssueWithResponse = <T>(
@@ -20,16 +20,7 @@ export const getIssueResponse = (
     publishedIssueId: Issue['publishedId'],
 ) => {
     //TODO: make this work with twin ids
-    return fetchFromIssue<Issue>(
-        localIssueId,
-        FSPaths.issue(localIssueId),
-        APIPaths.issue(publishedIssueId),
-        {
-            validator: res => {
-                return res.fronts != null
-            },
-        },
-    )
+    return fetchIssue(localIssueId, publishedIssueId)
 }
 
 export const useIssueResponse = (issue: {
@@ -41,39 +32,18 @@ export const useIssueResponse = (issue: {
         [issue],
     )
 
-export const getFrontsResponse = (
-    localIssueId: Issue['localId'],
-    publishedIssueId: Issue['publishedId'],
-    front: Front['key'],
-) =>
-    fetchFromIssue<Front>(
-        localIssueId,
-        FSPaths.front(localIssueId, front),
-        APIPaths.front(publishedIssueId, front),
-        {
-            validator: res => res.collections != null,
-        },
-    )
-
-export const useFrontsResponse = (
-    localIssueId: Issue['localId'],
-    publishedIssueId: Issue['publishedId'],
-    front: Front['key'],
-) =>
-    useIssueWithResponse(
-        getFrontsResponse(localIssueId, publishedIssueId, front),
-        [localIssueId, publishedIssueId, front],
-    )
-
 export const getArticleResponse = ({
     article,
     localIssueId,
     publishedIssueId,
     front,
 }: PathToArticle) =>
-    chain(getFrontsResponse(localIssueId, publishedIssueId, front), front => {
+    chain(getIssueResponse(localIssueId, publishedIssueId), issue => {
+        const maybeFront = issue.fronts.find(f => f.key === front)
+        if (!maybeFront) throw ERR_404_REMOTE
+
         const allArticles = flattenFlatCardsToFront(
-            flattenCollectionsToCards(front.collections),
+            flattenCollectionsToCards(maybeFront.collections),
         )
         const articleContent = allArticles.find(
             ({ article: { key } }) => key === article,

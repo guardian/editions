@@ -264,6 +264,10 @@ export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
 }
 
+export interface IssueWithFronts extends IssueSummary, WithKey {
+    fronts: Front[]
+}
+
 export interface Collection extends WithKey {
     cards: Card[]
 }
