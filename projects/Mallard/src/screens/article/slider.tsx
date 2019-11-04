@@ -1,10 +1,4 @@
-import React, {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-    Fragment,
-} from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View, ViewProps } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
