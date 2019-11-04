@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+    Fragment,
+} from 'react'
 import { Animated, Platform, StyleSheet, View, ViewProps } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
@@ -167,13 +173,15 @@ const ArticleSlider = ({
                 >
                     {data.map((item, index) => (
                         <View key={index}>
-                            <ArticleScreenBody
-                                width={width}
-                                path={item}
-                                pillar={pillar}
-                                onTopPositionChange={onTopPositionChange}
-                                position={index}
-                            />
+                            {index >= current - 1 && index <= current + 1 ? (
+                                <ArticleScreenBody
+                                    width={width}
+                                    path={item}
+                                    pillar={pillar}
+                                    onTopPositionChange={onTopPositionChange}
+                                    position={index}
+                                />
+                            ) : null}
                         </View>
                     ))}
                 </ViewPagerAndroid>
