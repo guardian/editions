@@ -5,9 +5,13 @@ import {
     CardAppearance,
 } from 'src/components/onboarding/onboarding-card'
 import { ButtonAppearance } from 'src/components/button/button'
-import { useGdprSwitches } from 'src/hooks/use-settings'
 import { ModalButton } from 'src/components/modal-button'
 import { LinkNav } from 'src/components/link'
+import { gdprSwitchSettings } from 'src/helpers/settings'
+import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
+import { setGdprFlag } from 'src/helpers/settings/setters'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
     <View
@@ -30,6 +34,8 @@ const styles = StyleSheet.create({
     },
 })
 
+const QUERY = gql(`{ ${GDPR_SETTINGS_FRAGMENT} }`)
+
 const OnboardingConsent = ({
     onOpenGdprConsent,
     onContinue,
@@ -39,7 +45,18 @@ const OnboardingConsent = ({
     onContinue: () => void
     onOpenPrivacyPolicy: () => void
 }) => {
-    const { enableNulls } = useGdprSwitches()
+    const query = useQuery<{ [key: string]: boolean | null }>(QUERY)
+    if (query.status == QueryStatus.LOADING) return null
+    const { data, client } = query
+
+    const enableNulls = () => {
+        gdprSwitchSettings.map(sw => {
+            if (data[sw] === null) {
+                setGdprFlag(client, sw, true)
+            }
+        })
+    }
+
     return (
         <Aligner>
             <OnboardingCard
