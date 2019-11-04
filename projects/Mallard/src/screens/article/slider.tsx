@@ -167,13 +167,15 @@ const ArticleSlider = ({
                 >
                     {data.map((item, index) => (
                         <View key={index}>
-                            <ArticleScreenBody
-                                width={width}
-                                path={item}
-                                pillar={pillar}
-                                onTopPositionChange={onTopPositionChange}
-                                position={index}
-                            />
+                            {index >= current - 1 && index <= current + 1 ? (
+                                <ArticleScreenBody
+                                    width={width}
+                                    path={item}
+                                    pillar={pillar}
+                                    onTopPositionChange={onTopPositionChange}
+                                    position={index}
+                                />
+                            ) : null}
                         </View>
                     ))}
                 </ViewPagerAndroid>
