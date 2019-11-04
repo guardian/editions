@@ -34,11 +34,6 @@ describe('paths', () => {
             )
         })
 
-        it('should give a correct issue zip location based on a local issue id', () => {
-            expect(FSPaths.issueZip('daily-edition/2019-10-10')).toEqual(
-                'path/to/base/directory/issues/daily-edition/2019-10-10/data.zip',
-            )
-        })
         it('should give a correct issue location based on a local issue id', () => {
             expect(FSPaths.issue('daily-edition/2019-10-10')).toEqual(
                 'path/to/base/directory/issues/daily-edition/2019-10-10/issue',

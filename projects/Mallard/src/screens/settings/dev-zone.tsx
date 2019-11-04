@@ -23,8 +23,6 @@ import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
 import { getFileList } from 'src/helpers/files'
-import RNFetchBlob from 'rn-fetch-blob'
-import { londonTime } from 'src/helpers/date'
 import { deleteIssueFiles } from 'src/helpers/files'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
