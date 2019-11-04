@@ -1,10 +1,7 @@
 import { Platform } from 'react-native'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
-import {
-    REQUEST_INVALID_RESPONSE_VALIDATION,
-    LOCAL_JSON_INVALID_RESPONSE_VALIDATION,
-} from './words'
+import { REQUEST_INVALID_RESPONSE_VALIDATION } from './words'
 import {
     CachedOrPromise,
     createCachedOrPromise,
@@ -18,134 +15,76 @@ import {
 } from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { Forecast, AccuWeatherLocation, WeatherForecast } from '../common'
+import { FSPaths, APIPaths } from 'src/paths'
+import { Front, IssueWithFronts } from '../../../common/src'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
-const fetchFromApiSlow = async <T>(
-    path: string,
-    {
-        validator = () => true,
-    }: {
-        validator?: ValidatorFn<T>
-    } = {},
-): Promise<T> => {
+const fetchIssueWithFrontsFromAPI = async (
+    id: string,
+): Promise<IssueWithFronts> => {
     const apiUrl = await getSetting('apiUrl')
-    const url = apiUrl + path
-    return fetch(url)
-        .then(res => {
-            if (res.status >= 500) {
-                throw new Error('Failed to fetch') // 500s don't return json
+    const issue: Issue = await fetch(`${apiUrl}${APIPaths.issue(id)}`).then(
+        res => {
+            if (res.status !== 200) {
+                throw new Error('Failed to fetch')
             }
             return res.json()
-        })
-        .then(data => {
-            if (data && validator(data)) {
-                return data
-            } else {
-                throw new Error(REQUEST_INVALID_RESPONSE_VALIDATION)
-            }
-        })
-        .catch(err => {
-            throw new Error(`${err.message} @ [${apiUrl + path}]`)
-        })
-}
-
-const fetchFromFileSystemSlow = <T>(
-    path: string,
-    {
-        validator = () => true,
-    }: {
-        validator?: ValidatorFn<T>
-    } = {},
-): Promise<T> =>
-    getJson(path).then(data => {
-        if (data && validator(data)) {
-            return data
-        } else {
-            throw new Error(LOCAL_JSON_INVALID_RESPONSE_VALIDATION)
-        }
-    })
-
-/*
-Use these! They'll default to caching if possible.
-
-These fetchers assume a clean split between the app's
-api (sign in, issue list. maybe cachable maybe not)
-and the issue files (always cachable, identical
-across zip file & issue API)
-*/
-const fetchFromApi = <T>(
-    endpointPath: string,
-    {
-        validator,
-        cached = true,
-    }: {
-        validator?: ValidatorFn<T>
-        cached?: boolean
-    } = {},
-): CachedOrPromise<T> => {
-    const { retrieve, store, clear } = withCache<T>('api')
-    if (!cached) {
-        clear(endpointPath)
-        return createCachedOrPromise(
-            [
-                null,
-                () =>
-                    fetchFromApiSlow<T>(endpointPath, {
-                        validator,
-                    }),
-            ],
-            {
-                savePromiseResultToValue: () => {},
-            },
-        )
-    }
-    return createCachedOrPromise(
-        [
-            retrieve(endpointPath),
-            () =>
-                fetchFromApiSlow<T>(endpointPath, {
-                    validator,
-                }),
-        ],
-        {
-            savePromiseResultToValue: result => {
-                store(endpointPath, result)
-            },
         },
     )
+    const fronts: Front[] = await Promise.all(
+        issue.fronts.map(frontId =>
+            fetch(`${apiUrl}${APIPaths.front(id, frontId)}`).then(res => {
+                if (res.status !== 200) {
+                    throw new Error('Failed to fetch')
+                }
+                return res.json()
+            }),
+        ),
+    )
+    return {
+        ...issue,
+        fronts,
+    }
 }
 
-const fetchFromIssue = <T>(
+const fetchIssueWithFrontsFromFS = async (
+    id: string,
+): Promise<IssueWithFronts> => {
+    const issue = await getJson<Issue>(FSPaths.issue(id))
+    const fronts = await Promise.all(
+        issue.fronts.map(frontId => getJson<Front>(FSPaths.front(id, frontId))),
+    )
+    return {
+        ...issue,
+        fronts,
+    }
+}
+
+const fetchIssue = (
     localIssueId: Issue['localId'],
-    fsPath: string,
-    endpointPath: string,
-    { validator }: { validator?: ValidatorFn<T> } = {},
-): CachedOrPromise<T> => {
+    publishedIssueId: Issue['publishedId'],
+): CachedOrPromise<IssueWithFronts> => {
     /*
     retrieve any cached value if we have any
     TODO: invalidate/background refresh these values
     */
-    const { retrieve, store } = withCache<T>('issue')
+    const { retrieve, store } = withCache<IssueWithFronts>('issue')
     return createCachedOrPromise(
         [
-            retrieve(endpointPath),
+            retrieve(localIssueId),
             async () => {
                 const issueOnDevice = await isIssueOnDevice(localIssueId)
                 if (issueOnDevice) {
-                    return fetchFromFileSystemSlow<T>(fsPath, {
-                        validator,
-                    })
+                    return fetchIssueWithFrontsFromFS(localIssueId)
                 } else {
-                    return fetchFromApiSlow<T>(endpointPath, {
-                        validator,
-                    })
+                    return fetchIssueWithFrontsFromAPI(publishedIssueId)
                 }
             },
         ],
         {
             savePromiseResultToValue: result => {
-                store(endpointPath, result)
+                store(localIssueId, result)
             },
         },
     )
@@ -309,8 +248,7 @@ const notificationTracking = (
 }
 
 export {
-    fetchFromIssue,
-    fetchFromApi,
+    fetchIssue,
     fetchWeatherForecastForLocation,
     fetchFromNotificationService,
     fetchAndStoreIpAddress,

@@ -1,38 +1,25 @@
-import React, { useState, useRef, FunctionComponent, useMemo } from 'react'
-import { Animated, View, StyleSheet } from 'react-native'
-import { CollectionPage, PropTypes } from './collection-page'
-import { Slider, SliderSkeleton } from '../slider'
-import { Spinner } from '../spinner'
-import { FlexCenter } from '../layout/flex-center'
+import React, { useMemo, useRef, useState } from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
 import {
-    Issue,
     ArticlePillar,
-    Front as FrontType,
     ArticleType,
+    Front as FrontType,
+    Issue,
     PageLayoutSizes,
 } from 'src/common'
-import { FlexErrorMessage } from '../layout/ui/errors/flex-error-message'
+import { safeInterpolation } from 'src/helpers/math'
+import { FlatCard, getColor } from 'src/helpers/transform'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
-    FlatCard,
-    getColor,
-    flattenFlatCardsToFront,
-    flattenCollectionsToCards,
-} from 'src/helpers/transform'
-import { Wrapper } from './helpers/wrapper'
-import {
-    getTranslateForPage,
-    AnimatedFlatListRef,
-    getNearestPage,
-} from './helpers/helpers'
-import { useFrontsResponse } from 'src/hooks/use-issue'
-import { ArticleNavigator } from '../../screens/article-screen'
-import {
-    WithArticle,
     getAppearancePillar,
     getCollectionPillarOverride,
+    WithArticle,
 } from '../../hooks/use-article'
-import { useIssueScreenSize } from 'src/screens/issue/use-size'
-import { safeInterpolation } from 'src/helpers/math'
+import { Slider } from '../slider'
+import { CollectionPage, PropTypes } from './collection-page'
+import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
+import { Wrapper } from './helpers/wrapper'
+import { ArticleNavigator } from 'src/screens/article-screen'
 
 const CollectionPageInFront = ({
     index,
@@ -88,43 +75,25 @@ const CollectionPageInFront = ({
 
 const styles = StyleSheet.create({ overflow: { overflow: 'hidden' } })
 
-const FrontWithResponse = React.memo(
+export const Front = React.memo(
     ({
+        articleNavigator,
         frontData,
         localIssueId,
         publishedIssueId,
+        cards,
     }: {
+        articleNavigator: ArticleNavigator
         localIssueId: Issue['localId']
         publishedIssueId: Issue['publishedId']
         frontData: FrontType
+        cards: FlatCard[]
     }) => {
         const color = getColor(frontData.appearance)
         const pillar = getAppearancePillar(frontData.appearance)
 
         const [scrollX] = useState(() => new Animated.Value(0))
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
-        const [cards, articleNavigator]: [
-            FlatCard[],
-            ArticleNavigator,
-        ] = useMemo(() => {
-            const flatCollections = flattenCollectionsToCards(
-                frontData.collections,
-            )
-            const navigator = {
-                articles: flattenFlatCardsToFront(flatCollections).map(
-                    ({ article, collection }) => ({
-                        collection: collection.key,
-                        front: frontData.key,
-                        article: article.key,
-                        localIssueId,
-                        publishedIssueId,
-                    }),
-                ),
-                appearance: frontData.appearance,
-                frontName: frontData.displayName || '',
-            }
-            return [flatCollections, navigator]
-        }, [localIssueId, publishedIssueId, frontData])
 
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
@@ -136,21 +105,6 @@ const FrontWithResponse = React.memo(
                         stops={stops}
                         title={frontData.displayName || 'News'}
                         fill={color}
-                        onReleaseScrub={screenX => {
-                            if (
-                                flatListRef.current &&
-                                flatListRef.current._component
-                            ) {
-                                flatListRef.current._component.scrollToOffset({
-                                    offset:
-                                        getNearestPage(
-                                            container.width,
-                                            screenX,
-                                            stops,
-                                        ) * container.width,
-                                })
-                            }
-                        }}
                         position={scrollX.interpolate({
                             inputRange: [
                                 0,
@@ -235,35 +189,3 @@ const FrontWithResponse = React.memo(
         )
     },
 )
-
-export const Front: FunctionComponent<{
-    front: string
-    localIssueId: Issue['localId']
-    publishedIssueId: Issue['publishedId']
-}> = ({ front, localIssueId, publishedIssueId }) => {
-    const frontsResponse = useFrontsResponse(
-        localIssueId,
-        publishedIssueId,
-        front,
-    )
-
-    return frontsResponse({
-        pending: () => (
-            <Wrapper scrubber={<SliderSkeleton />}>
-                <FlexCenter>
-                    <Spinner />
-                </FlexCenter>
-            </Wrapper>
-        ),
-        error: err => (
-            <Wrapper scrubber={<SliderSkeleton />}>
-                <FlexErrorMessage debugMessage={err.message} />
-            </Wrapper>
-        ),
-        success: frontData => (
-            <FrontWithResponse
-                {...{ frontData, localIssueId, publishedIssueId }}
-            />
-        ),
-    })
-}

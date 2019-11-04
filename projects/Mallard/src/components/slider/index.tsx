@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-
+import React from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
+import { safeInterpolation } from 'src/helpers/math'
 import { color } from 'src/theme/color'
-import { Animated, View, PanResponder, StyleSheet } from 'react-native'
-import { Lozenge, MiniLozenge } from './draw/lozenge'
-import { Background } from './draw/background'
 import { metrics } from 'src/theme/spacing'
 import { WithLayoutRectangle } from '../layout/ui/sizing/with-layout-rectangle'
-import { safeInterpolation } from 'src/helpers/math'
+import { Background } from './draw/background'
+import { Lozenge, MiniLozenge } from './draw/lozenge'
 
 const stopRadius = 4
 
@@ -38,44 +37,14 @@ const Slider = ({
     stops = 0,
     title,
     position,
-    onScrub,
-    onReleaseScrub,
 }: {
     small?: boolean
     title: string
     fill: string
     stops: number
     position: Animated.AnimatedInterpolation
-    onScrub?: (to: number) => void
-    onReleaseScrub?: (to: number) => void
 }) => {
-    const [panResponder] = useState(
-        PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponder: () => true,
-            onPanResponderTerminationRequest: () => false,
-            onShouldBlockNativeResponder: () => true,
-            onPanResponderGrant: (ev, gestureState) => {
-                onScrub &&
-                    onScrub(gestureState.x0 - metrics.fronts.sliderRadius)
-            },
-            onPanResponderMove: (ev, gestureState) => {
-                onScrub &&
-                    onScrub(gestureState.moveX - metrics.fronts.sliderRadius)
-            },
-            onPanResponderEnd: (ev, gestureState) => {
-                onReleaseScrub &&
-                    onReleaseScrub(
-                        gestureState.x0 +
-                            gestureState.dx -
-                            metrics.fronts.sliderRadius,
-                    )
-            },
-        }),
-    )
-
     const isScrollable = stops > 1
-    const isScrubbable = onScrub && isScrollable
 
     const lozengePosition = (width: number) =>
         isScrollable
@@ -94,10 +63,7 @@ const Slider = ({
             minHeight={metrics.fronts.sliderRadius}
         >
             {({ width }) => (
-                <View
-                    {...(isScrubbable ? panResponder.panHandlers : {})}
-                    style={styles.root}
-                >
+                <View style={styles.root}>
                     {isScrollable ? (
                         <View style={styles.background}>
                             <Background
