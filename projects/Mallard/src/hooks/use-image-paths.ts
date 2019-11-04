@@ -4,9 +4,9 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue, ImageUse } from '../../../common/src'
-import { useSettingsValue } from './use-settings'
 import { useIssueSummary } from './use-issue-summary'
 import { Platform } from 'react-native'
+import { useApiUrl } from './use-settings'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
@@ -63,7 +63,10 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     const { issueId } = useIssueSummary()
 
     const [paths, setPaths] = useState<string | undefined>()
-    const apiUrl = useSettingsValue.apiUrl()
+
+    // FIXME: we should handle the loading status correctly.
+    const apiUrl = useApiUrl() || ''
+
     useEffect(() => {
         if (issueId && image) {
             const { localIssueId, publishedIssueId } = issueId

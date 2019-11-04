@@ -6,7 +6,6 @@ import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
-import { useSettings, useSettingsValue } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { color } from 'src/theme/color'
@@ -20,28 +19,45 @@ import {
 } from 'src/authentication/AccessContext'
 import DeviceInfo from 'react-native-device-info'
 import {
-    useIsWeatherShown,
     setIsWeatherShown,
-} from 'src/hooks/use-is-weather-shown'
+    setIsUsingProdDevtools,
+} from 'src/helpers/settings/setters'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+import ApolloClient from 'apollo-client'
 
-const MiscSettingsList = React.memo(() => {
-    const isShown = useIsWeatherShown()
-    if (isShown == null) return null
-    const onChange = () => setIsWeatherShown(!isShown)
-    const items = [
-        {
-            key: 'isWeatherShown',
-            title: 'Display Weather',
-            data: { onPress: onChange },
-            proxy: <Switch value={isShown} onValueChange={onChange} />,
-        },
-    ]
-    return <List onPress={({ onPress }) => onPress()} data={items} />
-})
+const MiscSettingsList = React.memo(
+    (props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
+        const onChange = () =>
+            setIsWeatherShown(props.client, !props.isWeatherShown)
+        const items = [
+            {
+                key: 'isWeatherShown',
+                title: 'Display Weather',
+                data: { onPress: onChange },
+                proxy: (
+                    <Switch
+                        value={props.isWeatherShown}
+                        onValueChange={onChange}
+                    />
+                ),
+            },
+        ]
+        return <List onPress={({ onPress }) => onPress()} data={items} />
+    },
+)
+
+type QueryData = { isWeatherShown: boolean; isUsingProdDevtools: boolean }
+
+const QUERY = gql`
+    {
+        isWeatherShown @client
+        isUsingProdDevtools @client
+    }
+`
 
 const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
-    const setSetting = useSettings()
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+    const query = useQuery<QueryData>(QUERY)
     const identityData = useIdentity()
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
@@ -59,6 +75,10 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         DeviceInfo.getVersion().then(version => setVersionNumber(version))
     })
 
+    if (query.status == QueryStatus.LOADING) return null
+    const { client } = query
+    const { isUsingProdDevtools, isWeatherShown } = query.data
+
     const versionClickHandler = identityData
         ? () => {
               if (!isUsingProdDevtools && isStaffMember(identityData))
@@ -72,7 +92,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                                   text: 'Delete data',
                                   style: 'destructive',
                                   onPress: () => {
-                                      setSetting('isUsingProdDevtools', true)
+                                      setIsUsingProdDevtools(client, true)
                                       Alert.alert('You are a developer now!')
                                   },
                               },
@@ -155,7 +175,10 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                     data={signInListItems}
                 />
                 <Heading>{``}</Heading>
-                <MiscSettingsList />
+                <MiscSettingsList
+                    client={client}
+                    isWeatherShown={isWeatherShown}
+                />
                 <Heading>{``}</Heading>
                 <List
                     onPress={({ onPress }) => onPress()}

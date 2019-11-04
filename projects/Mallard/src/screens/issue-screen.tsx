@@ -46,7 +46,8 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useIsWeatherShown } from 'src/hooks/use-is-weather-shown'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
 import { IssueWithFronts, Front as TFront } from '../../../common/src'
 import {
     flattenCollectionsToCards,
@@ -84,6 +85,12 @@ const styles = StyleSheet.create({
         right: 0,
     },
 })
+
+const WEATHER_QUERY = gql('{ isWeatherShown @client }')
+const useIsWeatherShown = () => {
+    const query = useQuery<{ isWeatherShown: boolean }>(WEATHER_QUERY)
+    return query.status == QueryStatus.LOADED && query.data.isWeatherShown
+}
 
 const ScreenHeader = withNavigation(
     ({
