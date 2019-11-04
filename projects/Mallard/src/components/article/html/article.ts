@@ -15,6 +15,7 @@ import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
+import { useImagePath } from 'src/hooks/use-image-paths'
 
 interface ArticleContentProps {
     showMedia: boolean
@@ -40,14 +41,18 @@ const renderArticleContent = (
                     return el.html
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
-                case 'image':
+                case 'image': {
+                    const path = useImagePath({
+                        path: el.src.path,
+                        source: el.src.source,
+                    })
                     return showMedia && publishedId
                         ? Image({
                               imageElement: el,
-                              publishedId,
-                              imageSize,
+                              path,
                           })
                         : ''
+                }
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,

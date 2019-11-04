@@ -192,22 +192,15 @@ const ImageBase = ({
 
 const Image = ({
     imageElement,
-    publishedId,
-    imageSize,
+    path,
 }: {
     imageElement: ImageElement
-    publishedId: string
-    imageSize: ImageSize
+    path: string | undefined
 }) => {
-    // @TODO: This needs refactoring to work with downloaded content
-    const backend = defaultSettings.apiUrl
-    const path = `${backend}${mediaPath(
-        publishedId,
-        imageSize,
-        imageElement.src,
-    )}`
-
-    return ImageBase({ path, ...imageElement })
+    if (path) {
+        return ImageBase({ path, ...imageElement })
+    }
+    return null
 }
 
 export { Image, imageStyles }
