@@ -21,7 +21,8 @@ import { FSPaths } from 'src/paths'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
-import RNFetchBlob from 'rn-fetch-blob'
+import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
+import { getFileList } from 'src/helpers/files'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -52,14 +53,22 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 
     const [buildNumber, setBuildId] = useState('fetching...')
     const [files, setFiles] = useState('fetching...')
+    const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
+
     useEffect(() => {
         DeviceInfo.getBuildNumber().then(buildNumber => setBuildId(buildNumber))
     }, [])
 
     useEffect(() => {
-        RNFetchBlob.fs
-            .ls(FSPaths.issuesDir + '/daily-edition')
-            .then(files => setFiles(JSON.stringify(files)))
+        getFileList().then(fileList => {
+            setFiles(JSON.stringify(fileList, null, 2))
+        })
+    }, [])
+
+    useEffect(() => {
+        getPushTracking().then(pushTracking => {
+            pushTracking && setPushTrackingInfo(pushTracking)
+        })
     }, [])
 
     return (
@@ -187,6 +196,50 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Files in Issues',
                         title: 'Files in Issues',
                         explainer: files,
+                        data: {
+                            onPress: () => {},
+                        },
+                    },
+                    {
+                        key: 'Clear Push Tracking',
+                        title: 'Clear Push Tracking',
+                        explainer:
+                            'Clears out tracking information relating to pushes',
+                        data: {
+                            onPress: () =>
+                                Alert.alert(
+                                    'Are you sure?',
+                                    'Are you sure you want to delete the push tracking infromation. Please note this will be unrecoverable',
+                                    [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => null,
+                                        },
+                                        {
+                                            text: 'Delete',
+                                            onPress: () => {
+                                                clearPushTracking()
+                                                setPushTrackingInfo(
+                                                    'fetching...',
+                                                )
+                                            },
+                                            style: 'cancel',
+                                        },
+                                    ],
+                                ),
+                        },
+                    },
+                    {
+                        key: 'Push Tracking Information',
+                        title: 'Push Tracking Information',
+                        explainer:
+                            pushTrackingInfo !== 'fetching...'
+                                ? JSON.stringify(
+                                      JSON.parse(pushTrackingInfo),
+                                      null,
+                                      2,
+                                  )
+                                : pushTrackingInfo,
                         data: {
                             onPress: () => {},
                         },

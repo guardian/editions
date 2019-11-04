@@ -281,11 +281,26 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.localIssueId === b.localIssueId &&
     a.publishedIssueId === b.publishedIssueId
 
+const MaybeWeather = ({
+    style,
+    otherwise = null,
+}: {
+    style: StyleProp<ViewStyle>
+    otherwise?: React.ReactNode
+}) => {
+    const isWeatherShown = useIsWeatherShown()
+    return isWeatherShown ? (
+        <View style={style}>
+            <Weather />
+        </View>
+    ) : (
+        <>{otherwise}</>
+    )
+}
+
 const IssueScreenWithPath = React.memo(
     ({ path }: { path: PathToIssue }) => {
         const response = useIssueResponse(path)
-        const isWeatherShown = useIsWeatherShown()
-        if (isWeatherShown == null) return null
 
         return response({
             error: handleError,
@@ -317,21 +332,18 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        isWeatherShown ? (
-                                                            <View
-                                                                style={
-                                                                    styles.weatherWide
-                                                                }
-                                                            >
-                                                                <Weather />
-                                                            </View>
-                                                        ) : (
-                                                            <View
-                                                                style={
-                                                                    styles.weatherHidden
-                                                                }
-                                                            />
-                                                        )
+                                                        <MaybeWeather
+                                                            style={
+                                                                styles.weatherWide
+                                                            }
+                                                            otherwise={
+                                                                <View
+                                                                    style={
+                                                                        styles.weatherHidden
+                                                                    }
+                                                                />
+                                                            }
+                                                        />
                                                     }
                                                     issue={issue}
                                                 />
@@ -345,11 +357,9 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        {isWeatherShown ? (
-                                            <View style={styles.sideWeather}>
-                                                <Weather />
-                                            </View>
-                                        ) : null}
+                                        <MaybeWeather
+                                            style={styles.weatherWide}
+                                        />
 
                                         <WithLayoutRectangle>
                                             {metrics => (

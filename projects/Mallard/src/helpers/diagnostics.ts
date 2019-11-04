@@ -24,6 +24,8 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { FSPaths } from 'src/paths'
 import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
 import { canViewEdition } from 'src/authentication/helpers'
+import { getPushTracking } from './push-tracking'
+import { getFileList } from './files'
 
 const getCASCode = () =>
     Promise.all([
@@ -67,6 +69,8 @@ const getDiagnosticInfo = async (authAttempt: AnyAttempt<string>) => {
         deviceId,
         totalDiskCapacity,
         freeDiskStorage,
+        pushTracking,
+        fileList,
     ] = await Promise.all([
         DeviceInfo.getVersion(),
         DeviceInfo.getBuildNumber(),
@@ -75,6 +79,8 @@ const getDiagnosticInfo = async (authAttempt: AnyAttempt<string>) => {
         DeviceInfo.getDeviceId(),
         DeviceInfo.getTotalDiskCapacity(),
         DeviceInfo.getFreeDiskStorage(),
+        getPushTracking(),
+        getFileList(),
     ])
 
     return `
@@ -100,6 +106,10 @@ Privacy settings: ${gdprEntries
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
 Total Disk Space: ${totalDiskCapacity}
 Available Disk Spce: ${freeDiskStorage}
+Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
+
+Push Notification Logs: ${pushTracking &&
+        JSON.stringify(JSON.parse(pushTracking), null, 2)}
 
 -User / Supporter Info-
 Signed In: ${isValid(authAttempt)}

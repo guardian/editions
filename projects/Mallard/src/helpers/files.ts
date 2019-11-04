@@ -10,6 +10,7 @@ import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
 import { sendComponentEvent, Action, ComponentType } from '../services/ophan'
+import { londonTime } from './date'
 
 interface BasicFile {
     filename: string
@@ -268,4 +269,48 @@ export const fetchAndStoreIssueSummary = async () => {
         .catch(e => {
             throw e
         })
+}
+
+const cleanFileDisplay = (stat: {
+    path: string
+    lastModified: string
+    type: string
+}) => ({
+    path: stat.path.replace(FSPaths.issuesDir, ''),
+    lastModified: londonTime(Number(stat.lastModified)).format(),
+    type: stat.type,
+})
+
+export const getFileList = async () => {
+    const files = await RNFetchBlob.fs.lstat(
+        FSPaths.issuesDir + '/daily-edition',
+    )
+
+    const subfolders = await Promise.all(
+        files.map(file =>
+            file.type === 'directory'
+                ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
+                      [file.filename]: filestat.map(deepfile =>
+                          cleanFileDisplay(deepfile),
+                      ),
+                  }))
+                : {},
+        ),
+    )
+
+    const cleanSubfolders = subfolders.filter(
+        value => Object.keys(value).length !== 0,
+    )
+
+    const issuesFile = await RNFetchBlob.fs.stat(
+        FSPaths.issuesDir + '/daily-edition/issues',
+    )
+
+    const cleanIssuesFile = [
+        {
+            issues: cleanFileDisplay(issuesFile),
+        },
+    ]
+
+    return [...cleanSubfolders, ...cleanIssuesFile]
 }

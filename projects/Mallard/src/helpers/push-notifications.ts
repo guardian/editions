@@ -16,7 +16,7 @@ import { pushNotificationRegistrationCache } from './storage'
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
-import { ComponentType, Action, sendComponentEvent } from 'src/services/ophan'
+import { pushTracking } from 'src/helpers/push-tracking'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -69,20 +69,16 @@ const maybeRegister = async (
 const pushNotifcationRegistration = () => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
-            sendComponentEvent({
-                componentType: ComponentType.appVideo,
-                action: Action.view,
-                value: (token && JSON.stringify(token.token)) || '',
-                componentId: 'notificationToken',
-            })
+            pushTracking(
+                'notificationToken',
+                (token && JSON.stringify(token.token)) || '',
+            )
             if (token) {
                 maybeRegister(token.token).catch(err => {
-                    sendComponentEvent({
-                        componentType: ComponentType.appVideo,
-                        action: Action.view,
-                        value: JSON.stringify(err) || '',
-                        componentId: 'notificationTokenError',
-                    })
+                    pushTracking(
+                        'notificationTokenError',
+                        JSON.stringify(err) || '',
+                    )
                     console.log(`Error registering for notifications: ${err}`)
                     errorService.captureException(err)
                 })
@@ -99,32 +95,20 @@ const pushNotifcationRegistration = () => {
             // Do tracking as soon as possible
             notificationTracking(notificationId, 'received')
 
-            sendComponentEvent({
-                componentType: ComponentType.appVideo,
-                action: Action.view,
-                value: JSON.stringify(notification),
-                componentId: 'notification',
-            })
+            pushTracking('notification', JSON.stringify(notification))
 
             if (key) {
                 try {
                     const screenSize = await imageForScreenSize()
 
-                    sendComponentEvent({
-                        componentType: ComponentType.appVideo,
-                        action: Action.view,
-                        value: screenSize,
-                        componentId: 'pushScreenSize',
-                    })
+                    pushTracking('pushScreenSize', screenSize)
 
                     const issueSummaries = await getIssueSummary()
 
-                    sendComponentEvent({
-                        componentType: ComponentType.appVideo,
-                        action: Action.view,
-                        value: JSON.stringify(issueSummaries),
-                        componentId: 'pushIssueSummaries',
-                    })
+                    pushTracking(
+                        'pushIssueSummaries',
+                        JSON.stringify(issueSummaries),
+                    )
 
                     // Check to see if we can find the image summary for the one that is pushed
                     const pushImageSummary = matchSummmaryToKey(
@@ -132,21 +116,15 @@ const pushNotifcationRegistration = () => {
                         key,
                     )
 
-                    sendComponentEvent({
-                        componentType: ComponentType.appVideo,
-                        action: Action.view,
-                        value: JSON.stringify(pushImageSummary),
-                        componentId: 'pushImageSummary',
-                    })
+                    pushTracking(
+                        'pushImageSummary',
+                        JSON.stringify(pushImageSummary),
+                    )
 
                     await downloadAndUnzipIssue(pushImageSummary, screenSize)
 
-                    sendComponentEvent({
-                        componentType: ComponentType.appVideo,
-                        action: Action.view,
-                        value: 'completed',
-                        componentId: 'pushDownloadComplete',
-                    })
+                    pushTracking('pushDownloadComplete', 'completed')
+
                     notificationTracking(notificationId, 'downloaded')
                     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)

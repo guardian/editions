@@ -49,6 +49,7 @@ const SmallItem = ({ article, size, ...tappableProps }: PropTypes) => {
             <SportsWrapper article={article} />
             <TextBlock
                 byline={article.byline}
+                type={article.type}
                 kicker={article.kicker}
                 headline={article.headline}
                 {...{ size }}
@@ -62,6 +63,7 @@ const SmallItemLargeText = ({ article, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }}>
             <TextBlock
                 byline={article.byline}
+                type={article.type}
                 kicker={article.kicker}
                 headline={article.headline}
                 fontSize={1.25}

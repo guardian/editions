@@ -47,6 +47,7 @@ const CoverItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 ) : null}
                 <TextBlock
                     byline={article.byline}
+                    type={article.type}
                     kicker={article.kicker}
                     headline={article.headline}
                     style={coverStyles.text}
