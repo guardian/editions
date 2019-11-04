@@ -52,8 +52,14 @@ const WebviewWithArticle = ({
             scrollEnabled={true}
             source={{
                 html,
-                baseUrl:
-                    '' /* required as per https://stackoverflow.com/a/51931187/609907 */,
+                baseUrl: '',
+                /**
+                 * required as per https://stackoverflow.com/a/51931187/609907
+                 * note, this breaks relative URLs in the document, currently our
+                 * `onShouldStartLoadWithRequest` looks for events that start with
+                 * `file://` and ignores them (this will be true foe all relative
+                 *  paths - certainly on iOS)
+                 */
             }}
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
