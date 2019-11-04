@@ -50,7 +50,6 @@ export const FSPaths = {
     ) => imagePath(issueRoot(localIssueId), size, image, use),
     zip: (localIssueId: string, filename: string) =>
         `${issueRoot(localIssueId)}/${filename}.zip`,
-    issueZip: (localIssueId: string) => `${issueRoot(localIssueId)}/data.zip`,
     issue: (localIssueId: string) => `${issueRoot(localIssueId)}/issue`,
     front: (localIssueId: string, frontId: string) =>
         `${issueRoot(localIssueId)}/front/${frontId}`,

@@ -52,7 +52,6 @@ export const getJson = <T extends any>(path: string): Promise<T> =>
 export const downloadNamedIssueArchive = async (
     localIssueId: Issue['localId'],
     assetPath: string,
-    filename: string,
 ) => {
     const apiUrl = await getSetting('apiUrl')
     const zipUrl = `${apiUrl}${assetPath}`
@@ -65,10 +64,6 @@ export const downloadNamedIssueArchive = async (
         promise: returnable.then(async res => {
             await prepFileSystem()
             await ensureDirExists(FSPaths.issueRoot(localIssueId))
-            await RNFetchBlob.fs.mv(
-                res.path(),
-                FSPaths.zip(localIssueId, filename),
-            )
             return res
         }),
         cancel: returnable.cancel,
@@ -76,11 +71,7 @@ export const downloadNamedIssueArchive = async (
     }
 }
 
-export const unzipNamedIssueArchive = (
-    localIssueId: Issue['localId'],
-    filename: string,
-) => {
-    const zipFilePath = FSPaths.zip(localIssueId, filename)
+export const unzipNamedIssueArchive = (zipFilePath: string) => {
     const outputPath = FSPaths.issuesDir
 
     return unzip(zipFilePath, outputPath).then(() => {
@@ -117,80 +108,139 @@ export type DLStatus =
     | { type: 'success' }
     | { type: 'failure' }
 
-export const downloadAndUnzipIssue = async (
-    issue: IssueSummary,
-    imageSize: ImageSize,
-    onProgress: (status: DLStatus) => void = () => {},
-) => {
-    const { assets, localId } = issue
-    if (!assets) {
-        return null
-    }
-
-    const issueDataDownload = await downloadNamedIssueArchive(
-        localId,
-        assets.data,
-        'data',
-    ) // just the issue json
-
-    issueDataDownload.progress((received, total) => {
-        if (total >= received) {
-            // the progress of the first 10% is driven by the issue
-            const num = (received / total) * 10
-            onProgress({
-                type: 'download',
-                data: num,
-            })
-        }
-    })
-
-    return issueDataDownload.promise
-        .then(async () => {
-            // might not need to await this but it's pretty quick
-            await unzipNamedIssueArchive(localId, 'data')
-
-            const imgDL = await downloadNamedIssueArchive(
-                localId,
-                assets[imageSize] as string,
-                imageSize,
-            ) // just the images
-
-            imgDL.progress((received, total) => {
-                if (total >= received) {
-                    // the progress of the last 90% is driven by the images
-                    const num = 10 + (received / total) * 90
-                    onProgress({
-                        type: 'download',
-                        data: num,
-                    })
-                }
-            })
-
-            return imgDL.promise.then(() => {
-                onProgress({
-                    type: 'unzip',
-                    data: 'start',
-                })
-                return unzipNamedIssueArchive(localId, imageSize)
-                    .then(() => {
-                        onProgress({ type: 'success' }) // null is unstarted or end
-                    })
-                    .catch(error => {
-                        onProgress({ type: 'failure', data: error })
-                        console.log('Unzip error: ', error)
-                    })
-            })
-        })
-        .catch(error => {
-            onProgress({ type: 'failure', data: error })
-            console.log('Download error: ', error)
-        })
-}
-
 const deleteIssue = (issue: string): Promise<void> =>
     RNFetchBlob.fs
         .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
         .catch(e => errorService.captureException(e))
+
+// Cache of current downloads
+const dlCache: {
+    [key: string]: {
+        promise: Promise<void>
+        progressListeners: ((status: DLStatus) => void)[]
+    }
+} = {}
+
+export const maybeListenToExistingDownload = (
+    issue: IssueSummary,
+    onProgress: (status: DLStatus) => void = () => {},
+) => {
+    const dl = dlCache[issue.localId]
+    if (dlCache[issue.localId]) {
+        dl.progressListeners.push(onProgress)
+        return dl.promise
+    }
+    return false
+}
+
+export const stopListeningToExistingDownload = (
+    issue: IssueSummary,
+    listener: (status: DLStatus) => void,
+) => {
+    const dl = dlCache[issue.localId]
+    if (dlCache[issue.localId]) {
+        const index = dl.progressListeners.indexOf(listener)
+        if (index < 0) return
+        dl.progressListeners.splice(index, 1)
+    }
+}
+
+// for testing
+export const updateListeners = (localId: string, status: DLStatus) => {
+    const listeners = (dlCache[localId] || {}).progressListeners || []
+    listeners.forEach(listener => listener(status))
+}
+
+const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
+    const { assets, localId } = issue
+    try {
+        if (!assets) {
+            return
+        }
+
+        const issueDataDownload = await downloadNamedIssueArchive(
+            localId,
+            assets.data,
+        ) // just the issue json
+
+        const dataRes = await issueDataDownload.promise
+
+        const imgDL = await downloadNamedIssueArchive(localId, assets[
+            imageSize
+        ] as string) // just the images
+
+        imgDL.progress((received, total) => {
+            if (total >= received) {
+                // the progress is only driven by the image download which will always
+                // take the longest amount of time
+                const num = (received / total) * 100
+                updateListeners(localId, {
+                    type: 'download',
+                    data: num,
+                })
+            }
+        })
+
+        const imgRes = await imgDL.promise
+
+        updateListeners(localId, {
+            type: 'unzip',
+            data: 'start',
+        })
+
+        try {
+            /**
+             * because `isIssueOnDevice` checks for the issue folder's existence
+             * leave unzipping to be the last thing to do so that, if there is an issue
+             * with the image downloads we don't assume the issue is on the device
+             * and then block things like re-downloading if the images stopped downloading
+             */
+            await unzipNamedIssueArchive(dataRes.path())
+
+            /**
+             * The last thing we do is unzip the directory that will confirm if the issue exists
+             */
+            await unzipNamedIssueArchive(imgRes.path())
+        } catch (error) {
+            updateListeners(localId, { type: 'failure', data: error })
+            console.log('Unzip error: ', error)
+        }
+
+        updateListeners(localId, { type: 'success' }) // null is unstarted or end
+    } catch (error) {
+        updateListeners(localId, { type: 'failure', data: error })
+        console.log('Download error: ', error)
+    }
+}
+
+// This caches downloads so that if there is one already running you
+// will get a reference to that rather promise than triggering a new one
+export const downloadAndUnzipIssue = (
+    issue: IssueSummary,
+    imageSize: ImageSize,
+    onProgress: (status: DLStatus) => void = () => {},
+    run = runDownload,
+) => {
+    const { localId } = issue
+    const promise = maybeListenToExistingDownload(issue, onProgress)
+    if (promise) return promise
+
+    const createDownloadPromise = async () => {
+        try {
+            return await run(issue, imageSize) // the `await` here is important, it allows the finally to run!
+        } finally {
+            delete dlCache[localId]
+        }
+    }
+
+    const downloadPromise = createDownloadPromise()
+
+    dlCache[localId] = {
+        promise: downloadPromise,
+        progressListeners: [onProgress],
+    }
+    return downloadPromise
+}
 
 export const clearOldIssues = async (): Promise<void> => {
     const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)

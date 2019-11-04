@@ -23,6 +23,7 @@ import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
 import { getFileList } from 'src/helpers/files'
+import { deleteIssueFiles } from 'src/helpers/files'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -88,6 +89,30 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     }}
                 >
                     Re-start onboarding
+                </Button>
+                <Button
+                    onPress={() => {
+                        // go back to the main to simulate a fresh app
+                        Alert.alert(
+                            'Delete all issue files',
+                            'You sure?',
+                            [
+                                {
+                                    text: 'Delete issue files',
+                                    onPress: () => {
+                                        deleteIssueFiles()
+                                    },
+                                },
+                                {
+                                    style: 'cancel',
+                                    text: `No don't do it`,
+                                },
+                            ],
+                            { cancelable: false },
+                        )
+                    }}
+                >
+                    Delete issue files
                 </Button>
                 <Button
                     onPress={() => {
