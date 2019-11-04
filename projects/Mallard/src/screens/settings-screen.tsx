@@ -172,7 +172,19 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             <ScrollContainer>
                 <List
                     onPress={({ onPress }) => onPress()}
-                    data={signInListItems}
+                    data={[
+                        ...signInListItems,
+                        {
+                            key: 'Manage editions',
+                            title: 'Manage editions',
+                            data: {
+                                onPress: () =>
+                                    navigation.navigate({
+                                        routeName: routeNames.ManageEditions,
+                                    }),
+                            },
+                        },
+                    ]}
                 />
                 <Heading>{``}</Heading>
                 <MiscSettingsList

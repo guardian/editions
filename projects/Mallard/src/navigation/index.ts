@@ -38,6 +38,7 @@ import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
 import { useQuery, QueryStatus } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
+import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -82,6 +83,7 @@ const AppStack = createModalNavigator(
         [routeNames.Settings]: createHeaderStackNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
+                [routeNames.ManageEditions]: ManageEditionsScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
