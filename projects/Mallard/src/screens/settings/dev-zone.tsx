@@ -149,106 +149,81 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </Button>
             </ButtonList>
             <List
-                onPress={({ onPress }) => onPress()}
                 data={[
                     {
                         key: 'Endpoints',
                         title: 'API Endpoint',
                         explainer: apiUrl,
-                        data: {
-                            onPress: () => {
-                                navigation.navigate(routeNames.Endpoints)
-                            },
+                        onPress: () => {
+                            navigation.navigate(routeNames.Endpoints)
                         },
                     },
                     {
                         key: 'Hide this menu',
                         title: 'Hide this menu',
                         explainer: 'Tap the version 7 times to bring it back',
-                        data: {
-                            onPress: () => {
-                                setIsUsingProdDevtools(client, false)
-                            },
+                        onPress: () => {
+                            setIsUsingProdDevtools(client, false)
                         },
                     },
                     {
                         key: 'Clear CAS caches',
                         title: 'Clear CAS caches',
-                        data: {
-                            onPress: signOutCAS,
-                        },
+                        onPress: signOutCAS,
                     },
                     {
                         key: 'Build id',
                         title: 'Build commit hash',
                         explainer: getVersionInfo().commitId,
-                        data: {
-                            onPress: () => {},
-                        },
                     },
                     {
                         key: 'Build number',
                         title: 'Build number',
                         explainer: buildNumber,
-                        data: {
-                            onPress: () => {},
-                        },
                     },
                     {
                         key: 'Reports as in test flight',
                         title: 'Reports as in test flight',
                         explainer: isInTestFlight().toString(),
-                        data: {
-                            onPress: () => {},
-                        },
                     },
                     {
                         key: 'Copy local path to clipboard',
                         title: 'Copy local path to clipboard',
                         explainer: 'does what it says on the tin',
-                        data: {
-                            onPress: () => {
-                                Clipboard.setString(FSPaths.issuesDir)
-                                Alert.alert(FSPaths.issuesDir)
-                            },
+                        onPress: () => {
+                            Clipboard.setString(FSPaths.issuesDir)
+                            Alert.alert(FSPaths.issuesDir)
                         },
                     },
                     {
                         key: 'Files in Issues',
                         title: 'Files in Issues',
                         explainer: files,
-                        data: {
-                            onPress: () => {},
-                        },
                     },
                     {
                         key: 'Clear Push Tracking',
                         title: 'Clear Push Tracking',
                         explainer:
                             'Clears out tracking information relating to pushes',
-                        data: {
-                            onPress: () =>
-                                Alert.alert(
-                                    'Are you sure?',
-                                    'Are you sure you want to delete the push tracking infromation. Please note this will be unrecoverable',
-                                    [
-                                        {
-                                            text: 'Cancel',
-                                            onPress: () => null,
+                        onPress: () =>
+                            Alert.alert(
+                                'Are you sure?',
+                                'Are you sure you want to delete the push tracking infromation. Please note this will be unrecoverable',
+                                [
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => null,
+                                    },
+                                    {
+                                        text: 'Delete',
+                                        onPress: () => {
+                                            clearPushTracking()
+                                            setPushTrackingInfo('fetching...')
                                         },
-                                        {
-                                            text: 'Delete',
-                                            onPress: () => {
-                                                clearPushTracking()
-                                                setPushTrackingInfo(
-                                                    'fetching...',
-                                                )
-                                            },
-                                            style: 'cancel',
-                                        },
-                                    ],
-                                ),
-                        },
+                                        style: 'cancel',
+                                    },
+                                ],
+                            ),
                     },
                     {
                         key: 'Push Tracking Information',
@@ -261,15 +236,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                                       2,
                                   )
                                 : pushTrackingInfo,
-                        data: {
-                            onPress: () => {},
-                        },
                     },
                 ]}
             />
             <Heading>Your settings</Heading>
             <List
-                onPress={() => {}}
                 data={Object.entries(data)
                     .map(([title, explainer]) => ({
                         key: title,

@@ -5,21 +5,14 @@ import { Separator, Row } from 'src/components/layout/ui/row'
 An item is what the list uses to draw its own row –
 See https://facebook.github.io/react-native/docs/using-a-listview
 */
-export interface Item<D> {
+export interface Item {
     key: string
     title: string
-    explainer?: string
+    explainer?: React.ReactNode
     proxy?: ReactElement
-    data?: D
+    onPress?: () => void
     linkWeight?: 'bold' | 'regular'
 }
-
-/*
-<D> inside of an item is passed to the click handler.
-This is the function that gets called when clicking a row.
-D contains things like the route a row points or the text content of it
-*/
-export type OnPressHandler<D> = (item: D) => void
 
 export const BaseList = <I extends {}>({
     ...flatListProps
@@ -34,25 +27,11 @@ export const BaseList = <I extends {}>({
     )
 }
 
-export const List = <D extends {}>({
-    data,
-    onPress,
-}: {
-    data: Item<D>[]
-    onPress: OnPressHandler<D>
-}) => {
+export const List = ({ data }: { data: Item[] }) => {
     return (
         <BaseList
             data={data}
-            renderItem={({ item }) => (
-                <Row
-                    proxy={item.proxy}
-                    onPress={() => {
-                        if (item.data) onPress(item.data)
-                    }}
-                    {...item}
-                ></Row>
-            )}
+            renderItem={({ item }) => <Row {...item}></Row>}
         />
     )
 }
