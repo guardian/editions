@@ -69,7 +69,7 @@ const Separator = () => {
 interface RowContentProps {
     title: string
     subtitle?: string
-    explainer?: Element
+    explainer?: React.ReactNode
     linkWeight?: 'regular' | 'bold'
 }
 
@@ -86,10 +86,12 @@ const RowContents = ({
                 {subtitle}
             </UiBodyCopy>
         )}
-        {explainer && (
+        {typeof explainer === 'string' ? (
             <UiExplainerCopy style={{ marginTop: metrics.vertical / 8 }}>
                 {explainer}
             </UiExplainerCopy>
+        ) : (
+            explainer
         )}
     </>
 )

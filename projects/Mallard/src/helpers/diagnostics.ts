@@ -168,9 +168,7 @@ const createSupportMailto = (
     key: text,
     title: text,
     linkWeight: 'regular' as const,
-    data: {
-        onPress: createMailtoHandler(text, releaseURL, authAttempt),
-    },
+    onPress: createMailtoHandler(text, releaseURL, authAttempt),
 })
 
 export { createSupportMailto, createMailtoHandler }
