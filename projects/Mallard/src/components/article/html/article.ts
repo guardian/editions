@@ -16,11 +16,27 @@ import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { useImagePath } from 'src/hooks/use-image-paths'
+import { Image as TImage } from '../../../../../common/src'
 
 interface ArticleContentProps {
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     imageSize: ImageSize
+}
+
+const PictureArticleContent = (image: TImage) => {
+    const path = useImagePath({
+        path: image.path,
+        source: image.source,
+    })
+    return Image({
+        imageElement: {
+            src: image,
+            id: 'image',
+            role: 'immersive',
+        },
+        path,
+    })
 }
 
 const renderArticleContent = (
@@ -102,18 +118,7 @@ export const renderArticle = (
                 canBeShared,
             })
             if (article.image && publishedId) {
-                const path = useImagePath({
-                    path: article.image.path,
-                    source: article.image.source,
-                })
-                content = Image({
-                    imageElement: {
-                        src: article.image,
-                        id: 'image',
-                        role: 'immersive',
-                    },
-                    path,
-                })
+                content = PictureArticleContent(article.image)
             }
             break
         case 'gallery':
