@@ -1,6 +1,5 @@
-import { ImageElement, mediaPath } from 'src/common'
-import { defaultSettings } from 'src/helpers/settings/defaults'
-import { Direction, ImageSize } from 'src/common'
+import { ImageElement } from 'src/common'
+import { Direction } from 'src/common'
 import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
@@ -192,22 +191,15 @@ const ImageBase = ({
 
 const Image = ({
     imageElement,
-    publishedId,
-    imageSize,
+    path,
 }: {
     imageElement: ImageElement
-    publishedId: string
-    imageSize: ImageSize
+    path: string | undefined
 }) => {
-    // @TODO: This needs refactoring to work with downloaded content
-    const backend = defaultSettings.apiUrl
-    const path = `${backend}${mediaPath(
-        publishedId,
-        imageSize,
-        imageElement.src,
-    )}`
-
-    return ImageBase({ path, ...imageElement })
+    if (path) {
+        return ImageBase({ path, ...imageElement })
+    }
+    return null
 }
 
 export { Image, imageStyles }
