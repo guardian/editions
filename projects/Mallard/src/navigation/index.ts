@@ -80,10 +80,12 @@ const AppStack = createModalNavigator(
         },
     ),
     {
+        [routeNames.ManageEditions]: createHeaderStackNavigator({
+            [routeNames.ManageEditions]: ManageEditionsScreen,
+        }),
         [routeNames.Settings]: createHeaderStackNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
-                [routeNames.ManageEditions]: ManageEditionsScreen,
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
