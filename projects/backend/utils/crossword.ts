@@ -8,6 +8,7 @@ import {
     TrailImage,
 } from '../common'
 import { getImageFromURL } from '../image'
+import { omit } from 'ramda'
 
 const enumKeyToKebabCase = (key: string) => key.toLowerCase().replace(/_/g, '-')
 
@@ -55,6 +56,28 @@ type CrosswordArticleOverrides = Pick<
 > &
     Pick<CrosswordArticle, 'crossword'>
 
+const shouldHaveSolution = (type: CrosswordType) =>
+    ![CrosswordType.EVERYMAN, CrosswordType.PRIZE].includes(type)
+
+const removeSolutionsFromEntries = (entries: Crossword['entries']) =>
+    entries.map(omit(['solution']))
+
+export const patchCrossword = (
+    crossword: Crossword,
+    type: CrosswordType,
+): Crossword => {
+    const solutionAvailable = shouldHaveSolution(crossword.type)
+    return {
+        ...crossword,
+        // the original type was a number from the CAPI thrift definition here
+        type,
+        solutionAvailable,
+        entries: solutionAvailable
+            ? crossword.entries
+            : removeSolutionsFromEntries(crossword.entries),
+    }
+}
+
 export const getCrosswordArticleOverrides = (
     article: CCrossword,
 ): CrosswordArticleOverrides => {
@@ -63,9 +86,6 @@ export const getCrosswordArticleOverrides = (
         headline: getCrosswordName(type),
         kicker: getCrosswordKicker(article.crossword),
         trailImage: getCrosswordImage(type),
-        crossword: {
-            ...article.crossword,
-            type,
-        },
+        crossword: patchCrossword(article.crossword, type),
     }
 }
