@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react'
 import { color } from '../theme/color'
 import { ArticlePillar, ArticleType, Appearance, Collection } from '../common'
 import { PillarColours } from '@guardian/pasteup/palette'
-import { useSettingsValue } from './use-settings'
+import { useIsUsingProdDevtools } from './use-settings'
 import { DevTools } from 'src/hooks/article/dev-tools'
 
 /*
@@ -46,7 +46,7 @@ const ProvidersAndDevtools = ({ type, pillar, children }: PropTypes) => {
 }
 
 export const WithArticle = (props: PropTypes) => {
-    const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+    const isUsingProdDevtools = useIsUsingProdDevtools()
 
     if (isUsingProdDevtools) return <ProvidersAndDevtools {...props} />
     return <Providers {...props} />

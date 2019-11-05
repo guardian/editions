@@ -29,7 +29,7 @@ export const gdprAllowFunctionalityKey = 'gdprAllowFunctionality'
 
 export const gdprConsentVersionKey = 'gdprConsentVersion'
 
-type GDPRBucketKeys =
+export type GDPRBucketKeys =
     | 'gdprAllowEssential'
     | 'gdprAllowPerformance'
     | 'gdprAllowFunctionality'
@@ -122,21 +122,6 @@ export const getSetting = (setting: keyof Settings) =>
         return unsanitize(item)
     })
 
-export const getAllSettings = async (): Promise<Settings> => {
-    const settings = await Promise.all(
-        (Object.keys(defaultSettings) as (keyof typeof defaultSettings)[]).map(
-            key =>
-                getSetting(key).then(value => ({
-                    key,
-                    value,
-                })),
-        ),
-    )
-    return settings.reduce(
-        (acc, { key, value }) => ({ ...acc, [key]: value }),
-        {} as Settings,
-    )
-}
 export const onSettingChanged = (
     callback: (setting: keyof Settings, value: UnsanitizedSetting) => void,
 ) => {
@@ -156,10 +141,6 @@ export const storeSetting = (
         }
     })
 }
-
-export const shouldShowOnboarding = (
-    settings: Pick<Settings, 'hasOnboarded'>,
-) => !settings.hasOnboarded
 
 export type GdprSwitch = keyof GdprSwitchSettings
 

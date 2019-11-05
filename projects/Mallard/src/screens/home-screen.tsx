@@ -21,7 +21,6 @@ import {
 } from 'src/helpers/words'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
 import { useMediaQuery } from 'src/hooks/use-screen'
-import { useSettingsValue } from 'src/hooks/use-settings'
 import {
     navigateToIssue,
     navigateToSettings,
@@ -30,6 +29,7 @@ import { WithAppAppearance } from 'src/theme/appearance'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
+import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -79,7 +79,7 @@ const IssueList = withNavigation(
         }: {
             issueList: IssueSummary[]
         } & NavigationInjectedProps) => {
-            const isUsingProdDevtools = useSettingsValue.isUsingProdDevtools()
+            const isUsingProdDevtools = useIsUsingProdDevtools()
             const { setIssueId } = useIssueSummary()
             return (
                 <>
