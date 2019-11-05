@@ -7,7 +7,7 @@ import {
 import { RowWrapper } from '../layout/ui/row'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Alert } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import {
     DLStatus,
@@ -24,6 +24,8 @@ import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
+import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
+import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 
 const rowStyles = StyleSheet.create({
     issueRow: {
@@ -38,10 +40,17 @@ const getStatusPercentage = (status: DLStatus): number | null => {
     return null
 }
 
-const IssueButton = ({ issue }: { issue: IssueSummary }) => {
+const IssueButton = ({
+    issue,
+    onGoToSettings,
+}: {
+    issue: IssueSummary
+    onGoToSettings: () => void
+}) => {
     const isOnDevice = useIssueOnDevice(issue.localId)
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
+    const { downloadBlocked } = useNetInfo()
 
     const handleUpdate = useCallback(
         (status: DLStatus) => {
@@ -59,6 +68,19 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
 
     const onDownloadIssue = async () => {
         if (isOnDevice !== ExistsStatus.doesNotExist) return
+        switch (downloadBlocked) {
+            case DownloadBlockedStatus.Offline: {
+                Alert.alert('Unable to download', NOT_CONNECTED)
+                return
+            }
+            case DownloadBlockedStatus.WifiOnly: {
+                Alert.alert('Unable to download', WIFI_ONLY_DOWNLOAD, [
+                    { text: 'Manage editions', onPress: onGoToSettings },
+                    { text: 'Ok' },
+                ])
+                return
+            }
+        }
         if ((await fetch()).isConnected && !dlStatus) {
             sendComponentEvent({
                 componentType: ComponentType.appButton,
@@ -106,9 +128,11 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
 const IssueRow = ({
     issue,
     onPress,
+    onGoToSettings,
 }: {
     issue: IssueSummary
     onPress: () => void
+    onGoToSettings: () => void
 }) => {
     const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
         issue.date,
@@ -116,7 +140,14 @@ const IssueRow = ({
 
     return (
         <RowWrapper narrow>
-            <GridRowSplit proxy={<IssueButton issue={issue} />}>
+            <GridRowSplit
+                proxy={
+                    <IssueButton
+                        issue={issue}
+                        onGoToSettings={onGoToSettings}
+                    />
+                }
+            >
                 <View style={rowStyles.issueRow}>
                     <Highlight
                         hitSlop={{ top: 10, bottom: 10, left: 60, right: 60 }}

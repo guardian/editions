@@ -164,6 +164,11 @@ const IssueList = withNavigation(
                                 })
                             }}
                             issue={issueSummary}
+                            onGoToSettings={() =>
+                                navigation.navigate({
+                                    routeName: routeNames.ManageEditions,
+                                })
+                            }
                         />
                     )}
                 />

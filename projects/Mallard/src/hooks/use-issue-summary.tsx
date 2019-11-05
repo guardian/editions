@@ -11,7 +11,9 @@ import React, {
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
-import { AppState } from 'react-native'
+import { useQuery } from '@apollo/react-hooks'
+import { AppState, AppStateStatus } from 'react-native'
+import gql from 'graphql-tag'
 
 interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
@@ -27,8 +29,11 @@ const IssueSummaryContext = createContext<IssueSummaryState>({
     error: '',
 })
 
-const getIssueSummary = (isConnected = true): Promise<IssueSummary[]> =>
-    isConnected ? fetchAndStoreIssueSummary() : readIssueSummary()
+const getIssueSummary = (
+    pageSize: number,
+    isConnected = true,
+): Promise<IssueSummary[]> =>
+    isConnected ? fetchAndStoreIssueSummary(pageSize) : readIssueSummary()
 
 const issueSummaryToLatestPath = (
     issueSummary: IssueSummary[],
@@ -43,10 +48,17 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         null,
     )
     const [error, setError] = useState<string>('')
-    const hasConnected = useRef(false)
+    const hasConnected = useRef<boolean>(true) // assume we are connected to start with
+    const { data } = useQuery(
+        gql`
+            {
+                maxAvailableEditions @client
+            }
+        `,
+    )
 
-    const grabIssueSummary = (isConnected: boolean) =>
-        getIssueSummary(isConnected)
+    const grabIssueSummary = (pageSize: number, hasConnected: boolean) => {
+        getIssueSummary(pageSize, hasConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
                 setIssueId(issueSummaryToLatestPath(issueSummary))
@@ -55,31 +67,52 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             .catch(e => {
                 setError(e.message)
             })
+    }
+
+    const maxAvailableEditions = data && data.maxAvailableEditions
+
+    // fetch on first mount and leave the other useEffect to handle updates
+    useEffect(() => {
+        if (data) {
+            grabIssueSummary(data.maxAvailableEditions, hasConnected.current)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
-        NetInfo.addEventListener(({ isConnected }) => {
-            // try and get a fresh summary until we made it to online
-            if (!hasConnected.current) {
-                hasConnected.current = isConnected
-
-                grabIssueSummary(isConnected)
-            }
-        })
-
-        AppState.addEventListener('change', async appState => {
-            // when we foreground have another go at fetching again
+        const changeListener = async (appState: AppStateStatus) => {
+            // if we're foregrounding, try and re-fetch if we're online
+            // don't use `hasConnected` as we may now not be online
+            // despite having been online
             if (appState === 'active') {
                 const { isConnected } = await NetInfo.fetch()
                 if (isConnected) {
-                    grabIssueSummary(isConnected)
+                    grabIssueSummary(data.maxAvailableEditions, isConnected)
                 } else {
                     // now we've foregrounded again, wait for a new issue list
                     // seen as we couldn't get one now
+                    // this will trigger `grabIssueSummary` in the below event
+                    // listener
                     hasConnected.current = false
                 }
             }
+        }
+
+        const unsubNet = NetInfo.addEventListener(state => {
+            // if moving online then re-fetch
+            if (!hasConnected.current && state.isConnected) {
+                hasConnected.current = true
+                grabIssueSummary(data.maxAvailableEditions, true)
+            }
         })
-    }, [])
+
+        AppState.addEventListener('change', changeListener)
+
+        return () => {
+            unsubNet()
+            AppState.removeEventListener('change', changeListener)
+        }
+    }, [data, maxAvailableEditions])
 
     return (
         <IssueSummaryContext.Provider

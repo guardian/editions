@@ -137,7 +137,6 @@ const isReactNavPersistenceError = (e: Error) =>
 const WithProviders = nestProviders(
     Modal,
     ToastProvider,
-    NetInfoProvider,
     IssueSummaryProvider,
     NavPositionProvider,
 )
@@ -173,30 +172,34 @@ export default class App extends React.Component<{}, {}> {
     render() {
         return (
             <ErrorBoundary>
-                <WithProviders>
-                    <AccessProvider onIdentityStatusChange={handleIdStatus}>
-                        <ApolloProvider client={apolloClient}>
-                            <StatusBar
-                                animated={true}
-                                barStyle="light-content"
-                                backgroundColor="#041f4a"
-                            />
-                            <View style={styles.appContainer}>
-                                <RootNavigator
-                                    {...rootNavigationProps}
-                                    enableURLHandling={__DEV__}
-                                    onNavigationStateChange={
-                                        onNavigationStateChange
-                                    }
+                <ApolloProvider client={apolloClient}>
+                    <NetInfoProvider>
+                        <WithProviders>
+                            <AccessProvider
+                                onIdentityStatusChange={handleIdStatus}
+                            >
+                                <StatusBar
+                                    animated={true}
+                                    barStyle="light-content"
+                                    backgroundColor="#041f4a"
                                 />
-                                <NetInfoAutoToast />
-                            </View>
-                            <ModalRenderer />
-                            <BugButton />
-                            <DeprecateVersionModal />
-                        </ApolloProvider>
-                    </AccessProvider>
-                </WithProviders>
+                                <View style={styles.appContainer}>
+                                    <RootNavigator
+                                        {...rootNavigationProps}
+                                        enableURLHandling={__DEV__}
+                                        onNavigationStateChange={
+                                            onNavigationStateChange
+                                        }
+                                    />
+                                    <NetInfoAutoToast />
+                                </View>
+                                <ModalRenderer />
+                                <BugButton />
+                                <DeprecateVersionModal />
+                            </AccessProvider>
+                        </WithProviders>
+                    </NetInfoProvider>
+                </ApolloProvider>
             </ErrorBoundary>
         )
     }
