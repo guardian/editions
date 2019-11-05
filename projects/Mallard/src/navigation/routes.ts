@@ -8,6 +8,7 @@ export const routeNames = {
     PrivacyPolicy: 'PrivacyPolicy',
     TermsAndConditions: 'TermsAndConditions',
     Help: 'Help',
+    ManageEditions: 'ManageEditions',
     Credits: 'Credits',
     FAQ: 'FAQ',
     AlreadySubscribed: 'AlreadySubscribed',

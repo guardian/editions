@@ -30,6 +30,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
+import { routeNames } from 'src/navigation/routes'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -106,13 +107,27 @@ const IssueList = withNavigation(
                             />
                         )}
                     />
-                    {isUsingProdDevtools ? (
-                        <View
-                            style={{
-                                padding: metrics.horizontal,
-                                paddingVertical: metrics.vertical * 4,
-                            }}
+                    <View
+                        style={{
+                            padding: metrics.horizontal,
+                            paddingVertical: metrics.vertical * 4,
+                        }}
+                    >
+                        <GridRowSplit
+                            style={{ marginBottom: metrics.vertical }}
                         >
+                            <Button
+                                appearance={ButtonAppearance.skeleton}
+                                onPress={() => {
+                                    navigation.navigate({
+                                        routeName: routeNames.ManageEditions,
+                                    })
+                                }}
+                            >
+                                Manage editions
+                            </Button>
+                        </GridRowSplit>
+                        {isUsingProdDevtools ? (
                             <GridRowSplit>
                                 <Button
                                     appearance={ButtonAppearance.skeleton}
@@ -129,8 +144,8 @@ const IssueList = withNavigation(
                                     Go to latest
                                 </Button>
                             </GridRowSplit>
-                        </View>
-                    ) : null}
+                        ) : null}
+                    </View>
                 </>
             )
         },
