@@ -126,17 +126,15 @@ const pushNotifcationRegistration = () => {
                     pushTracking('pushDownloadComplete', 'completed')
 
                     notificationTracking(notificationId, 'downloaded')
-
-                    // No matter what happens, always clear up old issues
-                    await clearOldIssues()
-                    // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-                    notification.finish(PushNotificationIOS.FetchResult.NoData)
                 } catch (e) {
                     console.log(
                         `Push notification unable to download: ${e.message}`,
                     )
                     errorService.captureException(e)
+                } finally {
+                    // No matter what happens, always clear up old issues
                     await clearOldIssues()
+                    // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
                     notification.finish(PushNotificationIOS.FetchResult.NoData)
                 }
             }
