@@ -11,6 +11,7 @@ import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
 import { sendComponentEvent, Action, ComponentType } from '../services/ophan'
 import { londonTime } from './date'
+import { pushTracking } from 'src/helpers/push-tracking'
 
 interface BasicFile {
     filename: string
@@ -155,8 +156,14 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
     const { assets, localId } = issue
     try {
         if (!assets) {
+            pushTracking('noAssets', 'complete')
             return
         }
+
+        pushTracking(
+            'attemptDataDownload',
+            JSON.stringify({ localId, assets: assets.data }),
+        )
 
         const issueDataDownload = await downloadNamedIssueArchive(
             localId,
@@ -164,6 +171,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
         ) // just the issue json
 
         const dataRes = await issueDataDownload.promise
+
+        pushTracking('attemptDataDownload', 'completed')
+
+        pushTracking(
+            'attemptMediaDownload',
+            JSON.stringify({ localId, assets: assets[imageSize] }),
+        )
 
         const imgDL = await downloadNamedIssueArchive(localId, assets[
             imageSize
@@ -183,6 +197,8 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const imgRes = await imgDL.promise
 
+        pushTracking('attemptMediaDownload', 'completed')
+
         updateListeners(localId, {
             type: 'unzip',
             data: 'start',
@@ -195,19 +211,26 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
              * with the image downloads we don't assume the issue is on the device
              * and then block things like re-downloading if the images stopped downloading
              */
-            await unzipNamedIssueArchive(dataRes.path())
 
+            pushTracking('unzipData', 'start')
+            await unzipNamedIssueArchive(dataRes.path())
+            pushTracking('unzipData', 'end')
             /**
              * The last thing we do is unzip the directory that will confirm if the issue exists
              */
+            pushTracking('unzipImages', 'start')
             await unzipNamedIssueArchive(imgRes.path())
+            pushTracking('unzipImages', 'end')
         } catch (error) {
             updateListeners(localId, { type: 'failure', data: error })
+            pushTracking('unzipError', JSON.stringify(error))
             console.log('Unzip error: ', error)
         }
 
+        pushTracking('downloadAndUnzip', 'complete')
         updateListeners(localId, { type: 'success' }) // null is unstarted or end
     } catch (error) {
+        pushTracking('downloadAndUnzipError', JSON.stringify(error))
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
     }
@@ -227,8 +250,10 @@ export const downloadAndUnzipIssue = (
 
     const createDownloadPromise = async () => {
         try {
+            pushTracking('attemptDownload', JSON.stringify(issue))
             return await run(issue, imageSize) // the `await` here is important, it allows the finally to run!
         } finally {
+            pushTracking('completeAndDeleteCache', 'completed')
             delete dlCache[localId]
         }
     }
