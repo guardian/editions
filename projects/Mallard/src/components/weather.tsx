@@ -16,40 +16,44 @@ import { Breakpoints } from 'src/theme/breakpoints'
 const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
-    weatherContainerLong: {
+    weatherContainer: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         width: 'auto',
         marginBottom: 24,
     },
-    weatherContainerNarrow: {
-        height: 'auto',
-        flexDirection: 'column',
-        paddingLeft: metrics.horizontal,
-    },
     forecastItem: {
         borderStyle: 'solid',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
-    },
-    forecastItemLong: {
-        height: 60,
         borderLeftWidth: 1,
-        flex: 2,
         borderLeftColor: color.line,
-        paddingTop: 2,
-        paddingLeft: 4,
     },
     forecastItemNarrow: {
-        paddingTop: metrics.vertical * 0.6,
-        paddingBottom: metrics.vertical * 1.2,
-        flexShrink: 0,
-        flexGrow: 0,
-        borderBottomColor: color.line,
-        borderBottomWidth: 1,
+        height: 64,
+        width: 50,
+        paddingTop: 2,
+        paddingLeft: 4,
+        paddingRight: 8,
+    },
+    forecastItemWide: {
+        width: 90,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: metrics.horizontal * 0.5,
+        paddingRight: metrics.horizontal,
+        paddingVertical: metrics.vertical,
+    },
+    forecastText: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    forecastTextWide: {
+        marginLeft: metrics.horizontal * 0.5,
     },
     temperature: {
         color: '#E05E00',
+        marginTop: 4,
         ...getFont('sans', 0.5),
     },
     dateTime: {
@@ -57,19 +61,18 @@ const styles = StyleSheet.create({
         ...getFont('sans', 0.5),
     },
     locationNameContainer: {
-        flex: 1,
-        height: 60,
         flexDirection: 'row',
+        marginTop: metrics.vertical * 0.5,
+        marginRight: metrics.horizontal,
     },
     locationName: {
         ...getFont('sans', 0.5),
         color: '#000000',
-        lineHeight: 35,
+        marginTop: 15,
     },
     locationPinIcon: {
         fontFamily: 'GuardianIcons-Regular',
         fontSize: 30,
-        marginLeft: '-1%',
         color: '#ACACAC',
     },
     root: {
@@ -103,40 +106,72 @@ const useWeatherResponse = () => {
 
 const WeatherIconView = ({
     forecast,
-    style,
     iconSize = 1,
 }: {
     forecast: Forecast
-    style?: StyleProp<ViewStyle>
     iconSize?: number
-}) => (
-    <View style={[styles.forecastItem, style]}>
+}) => {
+    const info = (
+        <>
+            <Text
+                allowFontScaling={false}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+                style={styles.temperature}
+            >
+                {Math.round(forecast.Temperature.Value) +
+                    '°' +
+                    forecast.Temperature.Unit}
+            </Text>
+            <Text
+                allowFontScaling={false}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+                style={styles.dateTime}
+            >
+                {Moment(forecast.DateTime).format(
+                    `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
+                )}
+            </Text>
+        </>
+    )
+    const icon = (
         <WeatherIcon
             iconNumber={forecast.WeatherIcon}
             fontSize={30 * iconSize}
         />
-        <Text
-            allowFontScaling={false}
-            numberOfLines={1}
-            ellipsizeMode="clip"
-            style={styles.temperature}
-        >
-            {Math.round(forecast.Temperature.Value) +
-                '°' +
-                forecast.Temperature.Unit}
-        </Text>
-        <Text
-            allowFontScaling={false}
-            numberOfLines={1}
-            ellipsizeMode="clip"
-            style={styles.dateTime}
-        >
-            {Moment(forecast.DateTime).format(
-                `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
-            )}
-        </Text>
-    </View>
-)
+    )
+
+    return (
+        <WithBreakpoints>
+            {{
+                0: () => (
+                    <View
+                        style={[styles.forecastItem, styles.forecastItemNarrow]}
+                    >
+                        {icon}
+                        <View style={styles.forecastText}>{info}</View>
+                    </View>
+                ),
+                [Breakpoints.tabletVertical]: () => (
+                    <View
+                        style={[styles.forecastItem, styles.forecastItemWide]}
+                    >
+                        {icon}
+                        <View
+                            style={[
+                                styles.forecastText,
+                                styles.forecastTextWide,
+                            ]}
+                        >
+                            {info}
+                        </View>
+                    </View>
+                ),
+            }}
+        </WithBreakpoints>
+    )
+}
 
 const WeatherWithForecast = ({
     locationName,
@@ -147,55 +182,28 @@ const WeatherWithForecast = ({
 }) => {
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
-        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
+        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx]).reverse()
         return (
-            <WithBreakpoints>
-                {{
-                    0: () => (
-                        <View style={styles.weatherContainerLong}>
-                            <GridRowSplit
-                                proxy={
-                                    <View style={styles.locationNameContainer}>
-                                        <Text style={styles.locationPinIcon}>
-                                            {'\uE01B'}
-                                        </Text>
-                                        <Text style={styles.locationName}>
-                                            {locationName}
-                                        </Text>
-                                    </View>
-                                }
-                            >
-                                {intervals.map(forecast => {
-                                    return (
-                                        <WeatherIconView
-                                            style={styles.forecastItemLong}
-                                            key={forecast.EpochDateTime}
-                                            forecast={forecast}
-                                        />
-                                    )
-                                })}
-                            </GridRowSplit>
-                        </View>
-                    ),
-                    [Breakpoints.tabletVertical]: () => (
-                        <View style={styles.weatherContainerNarrow}>
-                            {intervals.map(forecast => {
-                                return (
-                                    <WeatherIconView
-                                        style={styles.forecastItemNarrow}
-                                        key={forecast.EpochDateTime}
-                                        forecast={forecast}
-                                        iconSize={1.5}
-                                    />
-                                )
-                            })}
-                        </View>
-                    ),
-                }}
-            </WithBreakpoints>
+            <View style={styles.weatherContainer}>
+                {intervals.map(forecast => {
+                    return (
+                        <WeatherIconView
+                            key={forecast.EpochDateTime}
+                            forecast={forecast}
+                        />
+                    )
+                })}
+                <View style={styles.locationNameContainer}>
+                    <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
+                    <Text style={styles.locationName}>{locationName}</Text>
+                </View>
+            </View>
         )
     }
 
+    // FIXME: We really should validate data after fetching, not during
+    // rendering. That way the error would get handled further up the chain
+    // instead of rendering a blank space with no logging.
     return <></>
 }
 
