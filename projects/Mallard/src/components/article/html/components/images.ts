@@ -1,6 +1,5 @@
-import { ImageElement, mediaPath } from 'src/common'
-import { defaultSettings } from 'src/helpers/settings/defaults'
-import { Direction, ImageSize } from 'src/common'
+import { ImageElement } from 'src/common'
+import { Direction } from 'src/common'
 import { css, getScaledFontCss, html, px } from 'src/helpers/webview'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'

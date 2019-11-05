@@ -25,7 +25,7 @@ interface ArticleContentProps {
 
 const renderArticleContent = (
     elements: BlockElement[],
-    { showMedia, publishedId, imageSize }: ArticleContentProps,
+    { showMedia, publishedId }: ArticleContentProps,
 ) => {
     return elements
         .map(el => {
@@ -101,18 +101,20 @@ export const renderArticle = (
                 showMedia,
                 canBeShared,
             })
-            content =
-                article.image &&
-                publishedId &&
-                Image({
+            if (article.image && publishedId) {
+                const path = useImagePath({
+                    path: article.image.path,
+                    source: article.image.source,
+                })
+                content = Image({
                     imageElement: {
                         src: article.image,
                         id: 'image',
                         role: 'immersive',
                     },
-                    publishedId,
-                    imageSize,
+                    path,
                 })
+            }
             break
         case 'gallery':
             header = Header({
