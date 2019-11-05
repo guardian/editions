@@ -1,14 +1,101 @@
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 import React from 'react'
-import { Alert } from 'react-native'
+import { Alert, Switch, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { List } from 'src/components/lists/list'
+import { UiBodyCopy } from 'src/components/styled-text'
 import { deleteIssueFiles } from 'src/helpers/files'
+import {
+    setMaxAvailableEditions,
+    setWifiOnlyDownloads,
+} from 'src/helpers/settings/setters'
 import { WithAppAppearance } from 'src/theme/appearance'
 
+const buttonStyles = StyleSheet.create({
+    background: {
+        borderWidth: 1,
+        borderRadius: 3,
+        flex: 1,
+        marginHorizontal: 5,
+        padding: 10,
+        alignItems: 'center',
+    },
+})
+
+const MultiButton = ({
+    children,
+    onPress,
+    selected,
+}: {
+    children: string
+    onPress: () => void
+    selected?: boolean
+}) => (
+    <TouchableOpacity
+        style={{ flex: 1 }}
+        accessibilityRole="button"
+        onPress={onPress}
+    >
+        <View
+            style={[
+                buttonStyles.background,
+                {
+                    backgroundColor: selected ? '#0077b3' : 'transparent',
+                    borderColor: selected ? 'transparent' : '#999',
+                },
+            ]}
+        >
+            <UiBodyCopy
+                weight="bold"
+                style={{ color: selected ? 'white' : 'black' }}
+            >
+                {children}
+            </UiBodyCopy>
+        </View>
+    </TouchableOpacity>
+)
+
+const AvailableEditionsButtons = ({
+    numbers,
+    isSelected,
+    onPress,
+}: {
+    numbers: number[]
+    isSelected: (n: number) => boolean
+    onPress: (n: number) => void
+}) => (
+    <View
+        style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginHorizontal: -5,
+            paddingTop: 10,
+        }}
+    >
+        {numbers.map(number => (
+            <MultiButton
+                key={number}
+                selected={isSelected(number)}
+                onPress={() => onPress(number)}
+            >
+                {`${number} days`}
+            </MultiButton>
+        ))}
+    </View>
+)
+
 const ManageEditionsScreen = () => {
+    const client = useApolloClient()
+    const { data, loading } = useQuery(gql`
+        {
+            wifiOnlyDownloads @client
+            maxAvailableEditions @client
+        }
+    `)
+
     return (
         <WithAppAppearance value="settings">
             <List
-                onPress={({ onPress }) => onPress()}
                 data={[
                     {
                         key: 'Delete all downloads',
@@ -32,6 +119,47 @@ const ManageEditionsScreen = () => {
                                 )
                             },
                         },
+
+                        ...(loading
+                            ? []
+                            : [
+                                  {
+                                      key: 'Wifi-only',
+                                      title: 'Wifi-only',
+                                      explainer:
+                                          'Editions will only be downloaded when wi-fi is available',
+                                      proxy: (
+                                          <Switch
+                                              value={data.wifiOnlyDownloads}
+                                              onValueChange={val =>
+                                                  setWifiOnlyDownloads(
+                                                      client,
+                                                      val,
+                                                  )
+                                              }
+                                          />
+                                      ),
+                                  },
+                                  {
+                                      key: 'Available editions',
+                                      title: 'Available editions',
+                                      explainer: (
+                                          <AvailableEditionsButtons
+                                              numbers={[7, 14, 30]}
+                                              isSelected={n =>
+                                                  n ===
+                                                  data.maxAvailableEditions
+                                              }
+                                              onPress={n =>
+                                                  setMaxAvailableEditions(
+                                                      client,
+                                                      n,
+                                                  )
+                                              }
+                                          />
+                                      ),
+                                  },
+                              ]),
                     },
                 ]}
             />

@@ -12,7 +12,7 @@ import {
 } from 'src/components/issue/issue-title'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, Alert } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import {
     DLStatus,
@@ -34,6 +34,9 @@ import { Front, IssueWithFronts } from '../../../../Apps/common/src'
 import { getColor } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+
+import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
+import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -92,10 +95,17 @@ const getStatusPercentage = (status: DLStatus): number | null => {
     return null
 }
 
-const IssueButton = ({ issue }: { issue: IssueSummary }) => {
+const IssueButton = ({
+    issue,
+    onGoToSettings,
+}: {
+    issue: IssueSummary
+    onGoToSettings: () => void
+}) => {
     const isOnDevice = useIssueOnDevice(issue.localId)
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
+    const { downloadBlocked } = useNetInfo()
 
     const handleUpdate = useCallback(
         (status: DLStatus) => {
@@ -113,6 +123,19 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
 
     const onDownloadIssue = async () => {
         if (isOnDevice !== ExistsStatus.doesNotExist) return
+        switch (downloadBlocked) {
+            case DownloadBlockedStatus.Offline: {
+                Alert.alert('Unable to download', NOT_CONNECTED)
+                return
+            }
+            case DownloadBlockedStatus.WifiOnly: {
+                Alert.alert('Unable to download', WIFI_ONLY_DOWNLOAD, [
+                    { text: 'Manage editions', onPress: onGoToSettings },
+                    { text: 'Ok' },
+                ])
+                return
+            }
+        }
         if ((await fetch()).isConnected && !dlStatus) {
             sendComponentEvent({
                 componentType: ComponentType.appButton,
@@ -158,9 +181,15 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
 }
 
 const IssueButtonContainer = React.memo(
-    ({ issue }: { issue: IssueSummary }) => (
+    ({
+        issue,
+        onGoToSettings,
+    }: {
+        issue: IssueSummary
+        onGoToSettings: () => void
+    }) => (
         <View style={styles.issueButtonContainer}>
-            <IssueButton issue={issue} />
+            <IssueButton issue={issue} onGoToSettings={onGoToSettings} />
         </View>
     ),
 )
@@ -227,9 +256,19 @@ const IssueRowHeader = React.memo(
         ])
 
         return (
-            <GridRowSplit proxy={<IssueButtonContainer issue={issue} />}>
+            <GridRowSplit
+                proxy={
+                    <IssueButtonContainer
+                        issue={issue}
+                        onGoToSettings={onGoToSettings}
+                    />
+                }
+            >
                 <View style={styles.issueTitleWrap}>
-                    <Highlight onPress={onPress}>
+                    <Highlight
+                        hitSlop={{ top: 10, bottom: 10, left: 60, right: 60 }}
+                        onPress={onPress}
+                    >
                         <IssueTitle
                             style={styles.issueTitle}
                             title={weekday}

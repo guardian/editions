@@ -65,8 +65,8 @@ export const todayAsFolder = (): string =>
 export const todayAsKey = (): string =>
     `${defaultSettings.contentPrefix}/${todayAsFolder()}`
 
-export const lastSevenDays = (): string[] => {
-    return Array.from({ length: 7 }, (_, i) => {
+export const lastNDays = (n: number): string[] => {
+    return Array.from({ length: n }, (_, i) => {
         const d = londonTime().toDate()
         d.setDate(d.getDate() - i)
         return dateToFolderConvert(d)

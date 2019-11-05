@@ -74,6 +74,8 @@ export interface DevSettings {
 
 interface UserSettings {
     isWeatherShown: boolean
+    wifiOnlyDownloads: boolean
+    maxAvailableEditions: number
 }
 
 export interface Settings
@@ -106,12 +108,14 @@ export const getVersionInfo = () => {
     return versionInfo as { version: string; commitId: string }
 }
 
-export const getSetting = (setting: keyof Settings) =>
+export const getSetting = <S extends keyof Settings>(
+    setting: S,
+): Promise<Settings[S]> =>
     AsyncStorage.getItem('@Setting_' + setting).then(item => {
         if (!item) {
             return defaultSettings[setting]
         }
-        return unsanitize(item)
+        return unsanitize(item) as Settings[S]
     })
 
 export const storeSetting = (
