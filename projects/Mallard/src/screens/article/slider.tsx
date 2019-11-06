@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Platform, StyleSheet, View, ViewProps } from 'react-native'
+import {
+    Animated,
+    Platform,
+    StyleSheet,
+    View,
+    ViewProps,
+    Easing,
+} from 'react-native'
+import { Header } from 'src/components/layout/header/header'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
@@ -20,6 +28,9 @@ import {
     ArticleNavigator,
     getArticleDataFromNavigator,
 } from '../article-screen'
+import { Button, ButtonAppearance } from 'src/components/button/button'
+import { withNavigation } from 'react-navigation'
+import { NavigationInjectedProps } from 'react-navigation'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -32,7 +43,7 @@ export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
 
-const ANDROID_SLIDER_HEIGHT = 60
+const ANDROID_HEADER_HEIGHT = 130
 
 const styles = StyleSheet.create({
     slider: {
@@ -40,7 +51,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: color.background,
+        borderBottomColor: color.line,
         backgroundColor: color.background,
     },
     innerSlider: {
@@ -52,33 +63,21 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         width: '100%',
     },
-    androidSlider: {
+    androidHeader: {
         position: 'absolute',
-        height: ANDROID_SLIDER_HEIGHT,
+        height: ANDROID_HEADER_HEIGHT,
         left: 0,
         right: 0,
-        borderBottomColor: color.dimLine,
-        borderBottomWidth: 1,
     },
 })
 
-const SliderBar = ({
-    position,
-    total,
-    title,
-    color,
-    topPadding,
-    isShown = true,
-    wrapperProps = {},
-}: {
+type SliderBarProps = {
     position: number
     total: number
     title: string
     color: string
-    topPadding: number
-    isShown?: boolean
-    wrapperProps?: ViewProps
-}) => {
+}
+const SliderBar = ({ position, total, title, color }: SliderBarProps) => {
     const sliderPos = useAlphaIn(200, {
         initialValue: 0,
         currentValue: position,
@@ -87,48 +86,76 @@ const SliderBar = ({
         outputRange: safeInterpolation([0, 1]),
     })
 
-    const [top] = useState(new Animated.Value(0))
-    useEffect(() => {
-        if (isShown) {
-            Animated.timing(top, {
-                toValue: topPadding,
-                duration: 200,
-            }).start()
-        } else {
-            Animated.timing(top, {
-                toValue: -ANDROID_SLIDER_HEIGHT,
-                duration: 200,
-            }).start()
-        }
-    }, [isShown])
-
-    let style = [styles.slider, wrapperProps.style, { top }]
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
     return (
-        <Animated.View {...wrapperProps} style={style}>
-            <MaxWidthWrap>
-                <View
-                    style={[
-                        styles.innerSlider,
-                        isTablet && {
-                            marginHorizontal:
-                                metrics.fronts.sliderRadius * -0.8,
-                        },
-                    ]}
-                >
-                    <Slider
-                        small
-                        title={title}
-                        fill={color}
-                        stops={2}
-                        position={sliderPos}
-                    />
-                </View>
-            </MaxWidthWrap>
-        </Animated.View>
+        <MaxWidthWrap>
+            <View
+                style={[
+                    styles.innerSlider,
+                    isTablet && {
+                        marginHorizontal: metrics.fronts.sliderRadius * -0.8,
+                    },
+                ]}
+            >
+                <Slider
+                    small
+                    title={title}
+                    fill={color}
+                    stops={2}
+                    position={sliderPos}
+                />
+            </View>
+        </MaxWidthWrap>
     )
 }
+
+const AndroidHeader = withNavigation(
+    ({
+        isShown,
+        navigation,
+        ...sliderProps
+    }: { isShown: boolean } & SliderBarProps & NavigationInjectedProps) => {
+        const [top] = useState(new Animated.Value(0))
+        useEffect(() => {
+            if (isShown) {
+                Animated.timing(top, {
+                    toValue: 0,
+                    easing: Easing.out(Easing.ease),
+                    duration: 200,
+                }).start()
+            } else {
+                Animated.timing(top, {
+                    toValue: -ANDROID_HEADER_HEIGHT,
+                    easing: Easing.out(Easing.ease),
+                    duration: 200,
+                }).start()
+            }
+        }, [isShown])
+
+        return (
+            <Animated.View style={[styles.androidHeader, { top }]}>
+                <Header
+                    white
+                    leftAction={
+                        <Button
+                            appearance={ButtonAppearance.skeleton}
+                            icon={'\uE00A'}
+                            alt="Back"
+                            onPress={() => navigation.goBack(null)}
+                        ></Button>
+                    }
+                    layout={'center'}
+                >
+                    {null}
+                </Header>
+                <View style={styles.slider}>
+                    <SliderBar {...sliderProps} />
+                </View>
+            </Animated.View>
+        )
+    },
+)
 
 const ArticleSlider = ({
     path,
@@ -200,7 +227,7 @@ const ArticleSlider = ({
                                     }
                                     shouldShowHeader={shouldShowHeader}
                                     topPadding={
-                                        topPadding + ANDROID_SLIDER_HEIGHT
+                                        topPadding + ANDROID_HEADER_HEIGHT
                                     }
                                 />
                             ) : null}
@@ -208,31 +235,26 @@ const ArticleSlider = ({
                     ))}
                 </ViewPagerAndroid>
 
-                <SliderBar
+                <AndroidHeader
                     total={articleNavigator.length}
                     position={current}
                     title={currentArticle.frontName}
                     color={getColor(currentArticle.appearance)}
-                    topPadding={topPadding}
                     isShown={shouldShowHeader}
-                    wrapperProps={{
-                        style: [styles.androidSlider],
-                    }}
                 />
             </>
         )
 
     return (
         <>
-            <SliderBar
-                total={articleNavigator.length}
-                position={current}
-                title={currentArticle.frontName}
-                color={getColor(currentArticle.appearance)}
-                topPadding={topPadding}
-                isShown={true}
-                wrapperProps={panResponder.panHandlers}
-            />
+            <View style={styles.slider} {...panResponder.panHandlers}>
+                <SliderBar
+                    total={articleNavigator.length}
+                    position={current}
+                    title={currentArticle.frontName}
+                    color={getColor(currentArticle.appearance)}
+                />
+            </View>
 
             <Animated.FlatList
                 ref={(flatList: AnimatedFlatListRef) =>

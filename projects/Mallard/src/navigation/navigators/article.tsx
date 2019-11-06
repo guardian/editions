@@ -10,9 +10,7 @@ import {
     ScreenProps,
     NavigationRouter,
 } from 'react-navigation'
-import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import { Header } from 'src/components/layout/header/header'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
 import { useDimensions } from 'src/hooks/use-screen'
@@ -47,20 +45,6 @@ const Dismissable = ({
     )
 }
 
-const BASIC_CARD_HEADER_HEIGHT = 68
-const basicCardStyles = StyleSheet.create({
-    header: {
-        top: 0,
-        height: BASIC_CARD_HEADER_HEIGHT,
-        left: 0,
-        right: 0,
-        position: 'absolute',
-    },
-    hiddenHeader: {
-        top: -BASIC_CARD_HEADER_HEIGHT,
-    },
-})
-
 interface ArticleNavigationContainer
     extends React.ComponentClass<
         NavigationContainerProps &
@@ -89,29 +73,7 @@ const BasicCardWrapper = ({
                 navigation={navigation}
                 onShouldShowHeaderChange={onShouldShowHeaderChange}
                 shouldShowHeader={shouldShowHeader}
-                topPadding={BASIC_CARD_HEADER_HEIGHT}
             />
-            <View
-                style={[
-                    basicCardStyles.header,
-                    !shouldShowHeader ? basicCardStyles.hiddenHeader : null,
-                ]}
-            >
-                <Header
-                    white
-                    leftAction={
-                        <Button
-                            appearance={ButtonAppearance.skeleton}
-                            icon={'\uE00A'}
-                            alt="Back"
-                            onPress={() => navigation.goBack(null)}
-                        ></Button>
-                    }
-                    layout={'center'}
-                >
-                    {null}
-                </Header>
-            </View>
         </>
     )
 }
