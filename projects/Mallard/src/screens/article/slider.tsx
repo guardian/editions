@@ -5,7 +5,7 @@ import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { Slider } from 'src/components/slider'
-import { safeInterpolation } from 'src/helpers/math'
+import { safeInterpolation, clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
@@ -172,17 +172,21 @@ const ArticleSlider = ({
                 >
                     {data.map((item, index) => (
                         <View key={index}>
-                            <ArticleScreenBody
-                                width={width}
-                                path={item}
-                                pillar={pillar}
-                                position={index}
-                                onShouldShowHeaderChange={
-                                    onShouldShowHeaderChange
-                                }
-                                shouldShowHeader={shouldShowHeader}
-                                topPadding={topPadding + ANDROID_SLIDER_HEIGHT}
-                            />
+                            {index >= current - 1 && index <= current + 1 ? (
+                                <ArticleScreenBody
+                                    width={width}
+                                    path={item}
+                                    pillar={pillar}
+                                    position={index}
+                                    onShouldShowHeaderChange={
+                                        onShouldShowHeaderChange
+                                    }
+                                    shouldShowHeader={shouldShowHeader}
+                                    topPadding={
+                                        topPadding + ANDROID_SLIDER_HEIGHT
+                                    }
+                                />
+                            ) : null}
                         </View>
                     ))}
                 </ViewPagerAndroid>
@@ -224,7 +228,11 @@ const ArticleSlider = ({
                 scrollEventThrottle={1}
                 onScroll={(ev: any) => {
                     setCurrent(
-                        Math.floor(ev.nativeEvent.contentOffset.x / width),
+                        clamp(
+                            Math.floor(ev.nativeEvent.contentOffset.x / width),
+                            0,
+                            data.length - 1,
+                        ),
                     )
                 }}
                 maxToRenderPerBatch={1}
@@ -239,11 +247,7 @@ const ArticleSlider = ({
                     index,
                 })}
                 keyExtractor={(item: ArticleNavigator[number]) => item.article}
-                data={
-                    isInScroller
-                        ? articleNavigator
-                        : [path, ...articleNavigator]
-                }
+                data={data}
                 renderItem={({
                     item,
                     index,

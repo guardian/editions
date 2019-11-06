@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react'
 import { StyleSheet, SafeAreaView, View } from 'react-native'
-import { useSettings } from 'src/hooks/use-settings'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { OnboardingConsent } from './onboarding/cards'
+import { useApolloClient } from '@apollo/react-hooks'
+import { setHasOnboarded } from 'src/helpers/settings/setters'
 
 const styles = StyleSheet.create({
     background: {
@@ -35,7 +36,7 @@ const OnboardingConsentScreen = ({
     onContinue: () => void
     onOpenPrivacyPolicy: () => void
 }) => {
-    const setSetting = useSettings()
+    const client = useApolloClient()
     return (
         <Frame>
             <OnboardingConsent
@@ -45,7 +46,7 @@ const OnboardingConsentScreen = ({
                 }}
                 onContinue={() => {
                     onOpenGdprConsent()
-                    setSetting('hasOnboarded', true)
+                    setHasOnboarded(client, true)
                     onContinue()
                 }}
             />

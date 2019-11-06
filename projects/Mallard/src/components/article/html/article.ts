@@ -15,6 +15,8 @@ import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
+import { useImagePath } from 'src/hooks/use-image-paths'
+import { Image as TImage } from '../../../../../common/src'
 
 interface ArticleContentProps {
     showMedia: boolean
@@ -22,9 +24,24 @@ interface ArticleContentProps {
     imageSize: ImageSize
 }
 
+const PictureArticleContent = (image: TImage) => {
+    const path = useImagePath({
+        path: image.path,
+        source: image.source,
+    })
+    return Image({
+        imageElement: {
+            src: image,
+            id: 'image',
+            role: 'immersive',
+        },
+        path,
+    })
+}
+
 const renderArticleContent = (
     elements: BlockElement[],
-    { showMedia, publishedId, imageSize }: ArticleContentProps,
+    { showMedia, publishedId }: ArticleContentProps,
 ) => {
     return elements
         .map(el => {
@@ -40,14 +57,18 @@ const renderArticleContent = (
                     return el.html
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
-                case 'image':
+                case 'image': {
+                    const path = useImagePath({
+                        path: el.src.path,
+                        source: el.src.source,
+                    })
                     return showMedia && publishedId
                         ? Image({
                               imageElement: el,
-                              publishedId,
-                              imageSize,
+                              path,
                           })
                         : ''
+                }
                 case 'pullquote':
                     return Pullquote({
                         cite: el.html,
@@ -96,18 +117,9 @@ export const renderArticle = (
                 showMedia,
                 canBeShared,
             })
-            content =
-                article.image &&
-                publishedId &&
-                Image({
-                    imageElement: {
-                        src: article.image,
-                        id: 'image',
-                        role: 'immersive',
-                    },
-                    publishedId,
-                    imageSize,
-                })
+            if (article.image && publishedId) {
+                content = PictureArticleContent(article.image)
+            }
             break
         case 'gallery':
             header = Header({
