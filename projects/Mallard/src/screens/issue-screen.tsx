@@ -21,7 +21,7 @@ import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoint
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
-import { Weather } from 'src/components/weather'
+import { WeatherWidget } from 'src/components/weather'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
@@ -55,6 +55,7 @@ import {
     FlatCard,
 } from 'src/helpers/transform'
 import { ArticleSpec } from './article-screen'
+import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
 const styles = StyleSheet.create({
     weatherWide: {
@@ -306,7 +307,9 @@ const MaybeWeather = ({
     const isWeatherShown = useIsWeatherShown()
     return isWeatherShown ? (
         <View style={style}>
-            <Weather />
+            <ErrorBoundary>
+                <WeatherWidget />
+            </ErrorBoundary>
         </View>
     ) : (
         <>{otherwise}</>

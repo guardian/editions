@@ -28,7 +28,6 @@ import {
 import { NavigationState } from 'react-navigation'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
-import { UpdateIpAddress } from './components/update-ip-address'
 import { NetInfoProvider } from './hooks/use-net-info'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { AccessProvider } from './authentication/AccessContext'
@@ -184,7 +183,6 @@ export default class App extends React.Component<{}, {}> {
                                     }
                                 />
                                 <NetInfoAutoToast />
-                                <UpdateIpAddress />
                             </View>
                             <ModalRenderer />
                             <BugButton />

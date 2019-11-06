@@ -6,12 +6,14 @@ import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
-import { fetchWeatherForecastForLocation } from 'src/helpers/fetch'
 import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+import { Weather } from 'src/helpers/location'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -93,12 +95,6 @@ const styles = StyleSheet.create({
 export interface WeatherForecast {
     locationName: string
     forecasts: Forecast[]
-}
-
-const useWeatherResponse = () => {
-    return withResponse<WeatherForecast>(
-        useCachedOrPromise(fetchWeatherForecastForLocation()),
-    )
 }
 
 const WeatherIconView = ({
@@ -199,18 +195,30 @@ const WeatherWithForecast = ({
     return <></>
 }
 
-const Weather = React.memo(() => {
-    const weatherResponse = useWeatherResponse()
-    return weatherResponse({
-        error: ({}) => <></>,
-        pending: () => <></>,
-        success: weatherForecast => (
-            <WeatherWithForecast
-                locationName={weatherForecast.locationName}
-                forecasts={weatherForecast.forecasts}
-            />
-        ),
-    })
+type QueryData = {
+    weather: Weather
+}
+
+const QUERY = gql`
+    {
+        weather @client {
+            locationName
+            forecasts
+        }
+    }
+`
+
+const WeatherWidget = React.memo(() => {
+    const query = useQuery<QueryData>(QUERY)
+    if (query.status === QueryStatus.LOADING) return null
+
+    const { data } = query
+    return (
+        <WeatherWithForecast
+            locationName={data.weather.locationName}
+            forecasts={data.weather.forecasts}
+        />
+    )
 })
 
-export { Weather }
+export { WeatherWidget }
