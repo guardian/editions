@@ -181,7 +181,7 @@ const WeatherWithForecast = ({
 }) => {
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
-        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx]).reverse()
+        const intervals = [8, 6, 4, 2, 0].map(idx => forecasts[idx])
         return (
             <View style={styles.weatherContainer}>
                 {intervals.map(forecast => {
