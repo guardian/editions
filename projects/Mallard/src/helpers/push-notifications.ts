@@ -130,6 +130,7 @@ const pushNotifcationRegistration = () => {
                     console.log(
                         `Push notification unable to download: ${e.message}`,
                     )
+                    pushTracking('pushDownloadError', JSON.stringify(e))
                     errorService.captureException(e)
                 } finally {
                     // No matter what happens, always clear up old issues

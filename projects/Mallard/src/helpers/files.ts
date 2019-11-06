@@ -53,23 +53,31 @@ export const getJson = <T extends any>(path: string): Promise<T> =>
 export const downloadNamedIssueArchive = async (
     localIssueId: Issue['localId'],
     assetPath: string,
+    progressListeners = false,
 ) => {
+    await prepFileSystem()
+    await ensureDirExists(FSPaths.issueRoot(localIssueId))
     const apiUrl = await getSetting('apiUrl')
     const zipUrl = `${apiUrl}${assetPath}`
-    const returnable = RNFetchBlob.config({
+    return RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
         IOSBackgroundTask: true,
-    }).fetch('GET', zipUrl)
-    return {
-        promise: returnable.then(async res => {
-            await prepFileSystem()
-            await ensureDirExists(FSPaths.issueRoot(localIssueId))
-            return res
-        }),
-        cancel: returnable.cancel,
-        progress: returnable.progress,
-    }
+    })
+        .fetch('GET', zipUrl)
+        .progress((received, total) => {
+            if (progressListeners) {
+                if (total >= received) {
+                    // the progress is only driven by the image download which will always
+                    // take the longest amount of time
+                    const num = (received / total) * 100
+                    updateListeners(localIssueId, {
+                        type: 'download',
+                        data: num,
+                    })
+                }
+            }
+        })
 }
 
 export const unzipNamedIssueArchive = (zipFilePath: string) => {
@@ -165,12 +173,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             JSON.stringify({ localId, assets: assets.data }),
         )
 
-        const issueDataDownload = await downloadNamedIssueArchive(
-            localId,
-            assets.data,
-        ) // just the issue json
-
-        const dataRes = await issueDataDownload.promise
+        const dataDL = await downloadNamedIssueArchive(localId, assets.data) // just the issue json
 
         pushTracking('attemptDataDownload', 'completed')
 
@@ -179,23 +182,11 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             JSON.stringify({ localId, assets: assets[imageSize] }),
         )
 
-        const imgDL = await downloadNamedIssueArchive(localId, assets[
-            imageSize
-        ] as string) // just the images
-
-        imgDL.progress((received, total) => {
-            if (total >= received) {
-                // the progress is only driven by the image download which will always
-                // take the longest amount of time
-                const num = (received / total) * 100
-                updateListeners(localId, {
-                    type: 'download',
-                    data: num,
-                })
-            }
-        })
-
-        const imgRes = await imgDL.promise
+        const imgDL = await downloadNamedIssueArchive(
+            localId,
+            assets[imageSize] as string,
+            true,
+        ) // just the images
 
         pushTracking('attemptMediaDownload', 'completed')
 
@@ -213,13 +204,13 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
              */
 
             pushTracking('unzipData', 'start')
-            await unzipNamedIssueArchive(dataRes.path())
+            await unzipNamedIssueArchive(dataDL.path())
             pushTracking('unzipData', 'end')
             /**
              * The last thing we do is unzip the directory that will confirm if the issue exists
              */
             pushTracking('unzipImages', 'start')
-            await unzipNamedIssueArchive(imgRes.path())
+            await unzipNamedIssueArchive(imgDL.path())
             pushTracking('unzipImages', 'end')
         } catch (error) {
             updateListeners(localId, { type: 'failure', data: error })
