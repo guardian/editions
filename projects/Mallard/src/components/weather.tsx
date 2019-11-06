@@ -208,7 +208,14 @@ const QUERY = gql`
     {
         weather @client {
             locationName
-            forecasts
+            forecasts {
+                DateTime
+                Temperature {
+                    Value
+                    Unit
+                }
+                WeatherIcon
+            }
         }
     }
 `
