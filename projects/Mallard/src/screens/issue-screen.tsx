@@ -1,13 +1,13 @@
-import React, { ReactElement, useMemo } from 'react'
+import React, { ReactElement, useMemo, useRef, useEffect } from 'react'
 import {
     Animated,
     Image,
+    FlatList,
     StyleProp,
     StyleSheet,
     View,
     ViewStyle,
 } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
 import { Button } from 'src/components/button/button'
@@ -141,6 +141,13 @@ const IssueFronts = ({
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
+    const ref = useRef<FlatList<any> | null>()
+
+    useEffect(() => {
+        if (ref && ref.current && ref.current.scrollToOffset) {
+            ref.current.scrollToOffset({ animated: false, offset: 0 })
+        }
+    }, [issue])
 
     const {
         frontWithCards,
@@ -187,6 +194,7 @@ const IssueFronts = ({
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
+            ref={r => (ref.current = r)}
             showsHorizontalScrollIndicator={false}
             ListHeaderComponent={ListHeaderComponent}
             // These three props are responsible for the majority of
