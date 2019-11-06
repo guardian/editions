@@ -60,9 +60,6 @@ const styles = StyleSheet.create({
         borderBottomColor: color.dimLine,
         borderBottomWidth: 1,
     },
-    androidSliderHidden: {
-        top: -ANDROID_SLIDER_HEIGHT,
-    },
 })
 
 const SliderBar = ({
@@ -70,12 +67,16 @@ const SliderBar = ({
     total,
     title,
     color,
+    topPadding,
+    isShown = true,
     wrapperProps = {},
 }: {
     position: number
     total: number
     title: string
     color: string
+    topPadding: number
+    isShown?: boolean
     wrapperProps?: ViewProps
 }) => {
     const sliderPos = useAlphaIn(200, {
@@ -86,10 +87,26 @@ const SliderBar = ({
         outputRange: safeInterpolation([0, 1]),
     })
 
+    const [top] = useState(new Animated.Value(0))
+    useEffect(() => {
+        if (isShown) {
+            Animated.timing(top, {
+                toValue: topPadding,
+                duration: 200,
+            }).start()
+        } else {
+            Animated.timing(top, {
+                toValue: -ANDROID_SLIDER_HEIGHT,
+                duration: 200,
+            }).start()
+        }
+    }, [isShown])
+
+    let style = [styles.slider, wrapperProps.style, { top }]
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
 
     return (
-        <View {...wrapperProps} style={[styles.slider, wrapperProps.style]}>
+        <Animated.View {...wrapperProps} style={style}>
             <MaxWidthWrap>
                 <View
                     style={[
@@ -109,7 +126,7 @@ const SliderBar = ({
                     />
                 </View>
             </MaxWidthWrap>
-        </View>
+        </Animated.View>
     )
 }
 
@@ -196,14 +213,10 @@ const ArticleSlider = ({
                     position={current}
                     title={currentArticle.frontName}
                     color={getColor(currentArticle.appearance)}
+                    topPadding={topPadding}
+                    isShown={shouldShowHeader}
                     wrapperProps={{
-                        style: [
-                            { top: topPadding },
-                            styles.androidSlider,
-                            !shouldShowHeader
-                                ? styles.androidSliderHidden
-                                : null,
-                        ],
+                        style: [styles.androidSlider],
                     }}
                 />
             </>
@@ -216,6 +229,8 @@ const ArticleSlider = ({
                 position={current}
                 title={currentArticle.frontName}
                 color={getColor(currentArticle.appearance)}
+                topPadding={topPadding}
+                isShown={true}
                 wrapperProps={panResponder.panHandlers}
             />
 
