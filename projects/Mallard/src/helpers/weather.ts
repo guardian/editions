@@ -1,4 +1,6 @@
-import { AccuWeatherLocation, Forecast } from '../../../common/src'
+import { AccuWeatherLocation, Forecast } from 'src/common'
+import { AppState } from 'react-native'
+import ApolloClient from 'apollo-client'
 
 const getIpAddress = async (): Promise<string> => {
     const resp = await fetch('https://api.ipify.org')
@@ -33,10 +35,19 @@ const getWeather = async () => {
 }
 
 export type Weather = { locationName: string; forecasts: Forecast[] }
+/** Assume weather never changes. */
 export const resolveWeather = (() => {
-    let lastWeather: Promise<Weather> | undefined
-    return () => {
+    let lastWeather: { value: Promise<Weather>; ts: number } | undefined
+
+    return (
+        _context: unknown,
+        _args: unknown,
+        { client }: { client: ApolloClient<object> },
+    ) => {
         if (lastWeather !== undefined) return lastWeather
+        AppState.addEventListener('change', status => {
+            if (status !== 'active') return
+        })
         return (lastWeather = getWeather())
     }
 })()

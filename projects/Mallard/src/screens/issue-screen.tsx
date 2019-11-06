@@ -43,7 +43,6 @@ import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 import { PathToIssue } from 'src/paths'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { useQuery, QueryStatus } from 'src/hooks/apollo'
@@ -58,21 +57,12 @@ import { ArticleSpec } from './article-screen'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
 const styles = StyleSheet.create({
-    weatherWide: {
+    shownWeather: {
         marginHorizontal: metrics.horizontal,
         height: 78,
     },
-    weatherHidden: {
+    emptyWeatherSpace: {
         height: 16,
-    },
-    sideWeather: {
-        width: 78,
-        flexShrink: 0,
-        borderRightColor: color.line,
-        borderRightWidth: 1,
-    },
-    sideBySideFeed: {
-        paddingTop: metrics.vertical,
     },
     illustrationImage: {
         width: '100%',
@@ -297,22 +287,18 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.localIssueId === b.localIssueId &&
     a.publishedIssueId === b.publishedIssueId
 
-const MaybeWeather = ({
-    style,
-    otherwise = null,
-}: {
-    style: StyleProp<ViewStyle>
-    otherwise?: React.ReactNode
-}) => {
+const WeatherHeader = () => {
     const isWeatherShown = useIsWeatherShown()
-    return isWeatherShown ? (
-        <View style={style}>
+
+    if (!isWeatherShown) {
+        return <View style={styles.emptyWeatherSpace} />
+    }
+    return (
+        <View style={styles.shownWeather}>
             <ErrorBoundary>
                 <WeatherWidget />
             </ErrorBoundary>
         </View>
-    ) : (
-        <>{otherwise}</>
     )
 }
 
@@ -350,18 +336,7 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        <MaybeWeather
-                                                            style={
-                                                                styles.weatherWide
-                                                            }
-                                                            otherwise={
-                                                                <View
-                                                                    style={
-                                                                        styles.weatherHidden
-                                                                    }
-                                                                />
-                                                            }
-                                                        />
+                                                        <WeatherHeader />
                                                     }
                                                     issue={issue}
                                                 />
@@ -375,10 +350,6 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        <MaybeWeather
-                                            style={styles.weatherWide}
-                                        />
-
                                         <WithLayoutRectangle>
                                             {metrics => (
                                                 <WithIssueScreenSize
@@ -388,8 +359,8 @@ const IssueScreenWithPath = React.memo(
                                                     ]}
                                                 >
                                                     <IssueFronts
-                                                        style={
-                                                            styles.sideBySideFeed
+                                                        ListHeaderComponent={
+                                                            <WeatherHeader />
                                                         }
                                                         issue={issue}
                                                     />
