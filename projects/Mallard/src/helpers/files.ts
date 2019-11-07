@@ -263,11 +263,11 @@ export const downloadAndUnzipIssue = (
     const createDownloadPromise = async () => {
         try {
             pushTracking('attemptDownload', JSON.stringify(issue))
-            return await run(issue, imageSize) // the `await` here is important, it allows the finally to run!
+            await run(issue, imageSize)
+            localIssueListStore.add(localId)
         } finally {
             pushTracking('completeAndDeleteCache', 'completed')
             delete dlCache[localId]
-            localIssueListStore.add(localId)
         }
     }
 
