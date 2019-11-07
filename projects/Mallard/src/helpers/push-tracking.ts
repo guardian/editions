@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { londonTime } from 'src/helpers/date'
 import { errorService } from 'src/services/errors'
 
@@ -18,13 +17,6 @@ const clearPushTracking = async (): Promise<void> =>
     AsyncStorage.removeItem(PUSH_TRACKING_KEY)
 
 const pushTracking = async (id: string, value: string) => {
-    sendComponentEvent({
-        componentType: ComponentType.appVideo,
-        action: Action.view,
-        value,
-        componentId: id,
-    })
-
     try {
         const storedTracking = await AsyncStorage.getItem(PUSH_TRACKING_KEY)
         const tracking: Tracking = {
