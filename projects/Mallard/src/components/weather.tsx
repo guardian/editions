@@ -1,16 +1,45 @@
 import React from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
-import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
-import { fetchWeatherForecastForLocation } from 'src/helpers/fetch'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+
+type QueryForecast = Pick<
+    Forecast,
+    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
+>
+type QueryData = {
+    weather: {
+        locationName: string
+        forecasts: QueryForecast[]
+        available: boolean
+    }
+}
+
+const QUERY = gql`
+    {
+        weather @client {
+            locationName
+            forecasts {
+                DateTime
+                Temperature {
+                    Value
+                    Unit
+                }
+                WeatherIcon
+                EpochDateTime
+            }
+            available
+        }
+    }
+`
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -96,20 +125,14 @@ const styles = StyleSheet.create({
 
 export interface WeatherForecast {
     locationName: string
-    forecasts: Forecast[]
-}
-
-const useWeatherResponse = () => {
-    return withResponse<WeatherForecast>(
-        useCachedOrPromise(fetchWeatherForecastForLocation()),
-    )
+    forecasts: QueryForecast[]
 }
 
 const WeatherIconView = ({
     forecast,
     iconSize = 1,
 }: {
-    forecast: Forecast
+    forecast: QueryForecast
     iconSize?: number
 }) => {
     const info = (
@@ -179,7 +202,7 @@ const WeatherWithForecast = ({
     forecasts,
 }: {
     locationName: string
-    forecasts: Forecast[]
+    forecasts: QueryForecast[]
 }) => {
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
@@ -210,18 +233,18 @@ const WeatherWithForecast = ({
     return <></>
 }
 
-const Weather = React.memo(() => {
-    const weatherResponse = useWeatherResponse()
-    return weatherResponse({
-        error: ({}) => <></>,
-        pending: () => <></>,
-        success: weatherForecast => (
-            <WeatherWithForecast
-                locationName={weatherForecast.locationName}
-                forecasts={weatherForecast.forecasts}
-            />
-        ),
-    })
+const WeatherWidget = React.memo(() => {
+    const query = useQuery<QueryData>(QUERY)
+    if (query.status === QueryStatus.LOADING) return null
+
+    const { data } = query
+    if (!data.weather.available) return null
+    return (
+        <WeatherWithForecast
+            locationName={data.weather.locationName}
+            forecasts={data.weather.forecasts}
+        />
+    )
 })
 
-export { Weather }
+export { WeatherWidget }
