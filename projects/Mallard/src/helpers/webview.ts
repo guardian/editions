@@ -110,6 +110,106 @@ export const getBundleUri = (
 
 export const parsePing = (data: string) => JSON.parse(data) as WebViewPing
 
+const makeJavaScript = (topPadding: number) => html`
+    <script>
+        const TOP_PADDING = ${topPadding}
+
+        const debounce = fn => {
+            let frame
+            return (...params) => {
+                if (frame) cancelAnimationFrame(frame)
+                frame = requestAnimationFrame(() => fn(...params))
+            }
+        }
+
+        // Scroll position since last "scroll" event.
+        let oldScrollY = 0
+
+        // Scroll position since last change of direction (up or down).
+        let baseScrollY = 0
+
+        // Is header currently shown? Needs to be a global so that
+        // it can be updated directly from React Native.
+        window.shouldShowHeader = true
+
+        // Are we at the top?
+        window.isAtTop = true
+
+        // How much do we need scroll down before the header
+        // hides. Even if one scrolls slowly, the header would
+        // predictably hides after that many pixels scrolling down.
+        // We want to avoid relying too much on timing APIs because it
+        // can be fairly unreliable depending on device perf.
+        const DOWN_THRESHOLD = 10
+
+        // How much do we need scroll up before the
+        // header shows up again.
+        const UP_THRESHOLD = 160
+
+        const onScroll = () => {
+            const scrollY = window.scrollY
+
+            // "turn" stands for "last change of direction" here.
+            let distanceSinceTurn = scrollY - baseScrollY
+            const distanceSinceOld = scrollY - oldScrollY
+
+            // If the sign of the scroll direction changed, it's time
+            // to reset our "base" offset.
+            if (
+                (distanceSinceOld > 0 && distanceSinceTurn < 0) ||
+                (distanceSinceOld < 0 && distanceSinceTurn > 0)
+            ) {
+                baseScrollY = oldScrollY
+                distanceSinceTurn = distanceSinceOld
+            }
+            oldScrollY = scrollY
+
+            // We always want to show the header when we are at the top
+            // of the article. Otherwise, we show it as long as it's
+            // been shown and we didn't scroll enough to trigger a
+            // change. Or, if it's not shown and we scrolled *back*
+            // enough.
+            const shouldNowShowHeader =
+                scrollY < TOP_PADDING ||
+                (distanceSinceTurn < DOWN_THRESHOLD &&
+                    window.shouldShowHeader) ||
+                (distanceSinceTurn < -UP_THRESHOLD && !window.shouldShowHeader)
+
+            if (shouldNowShowHeader !== window.shouldShowHeader) {
+                window.shouldShowHeader = shouldNowShowHeader
+
+                // React Native can't "listen" to a particular variable
+                // within the web view, so we need to call it back
+                // though a message.
+                window.ReactNativeWebView.postMessage(
+                    JSON.stringify({
+                        type: 'shouldShowHeaderChange',
+                        shouldShowHeader: window.shouldShowHeader,
+                    }),
+                )
+            }
+
+            const isNowAtTop = scrollY === 0
+            if (isNowAtTop != window.isAtTop) {
+                window.isAtTop = isNowAtTop
+
+                window.ReactNativeWebView.postMessage(
+                    JSON.stringify({
+                        type: 'isAtTopChange',
+                        isAtTop: window.isAtTop,
+                    }),
+                )
+            }
+        }
+
+        // The "passive" flag tells the browser we won't call
+        // "preventDefault", which improve performance.
+        document.addEventListener('scroll', debounce(onScroll), {
+            passive: true,
+        })
+    </script>
+`
+
 /* makes some HTML and posts the height back */
 export const makeHtml = ({
     styles,
@@ -134,104 +234,7 @@ export const makeHtml = ({
             <div id="app" class="app">
                 ${body}
             </div>
-            <script>
-                const debounce = fn => {
-                    let frame
-                    return (...params) => {
-                        if (frame) cancelAnimationFrame(frame)
-                        frame = requestAnimationFrame(() => fn(...params))
-                    }
-                }
-
-                const TOP_PADDING = ${topPadding}
-
-                // Scroll position since last "scroll" event.
-                let oldScrollY = 0
-
-                // Scroll position since last change of direction (up or down).
-                let baseScrollY = 0
-
-                // Is header currently shown? Needs to be a global so that
-                // it can be updated directly from React Native.
-                window.shouldShowHeader = true
-
-                // Are we at the top?
-                window.isAtTop = true
-
-                // How much do we need scroll down before the header
-                // hides. Even if one scrolls slowly, the header would
-                // predictably hides after that many pixels scrolling down.
-                // We want to avoid relying too much on timing APIs because it
-                // can be fairly unreliable depending on device perf.
-                const DOWN_THRESHOLD = 10
-
-                // How much do we need scroll up before the
-                // header shows up again.
-                const UP_THRESHOLD = 160
-
-                const onScroll = () => {
-                    const scrollY = window.scrollY
-
-                    // "turn" stands for "last change of direction" here.
-                    let distanceSinceTurn = scrollY - baseScrollY
-                    const distanceSinceOld = scrollY - oldScrollY
-
-                    // If the sign of the scroll direction changed, it's time
-                    // to reset our "base" offset.
-                    if (
-                        (distanceSinceOld > 0 && distanceSinceTurn < 0) ||
-                        (distanceSinceOld < 0 && distanceSinceTurn > 0)
-                    ) {
-                        baseScrollY = oldScrollY
-                        distanceSinceTurn = distanceSinceOld
-                    }
-                    oldScrollY = scrollY
-
-                    // We always want to show the header when we are at the top
-                    // of the article. Otherwise, we show it as long as it's
-                    // been shown and we didn't scroll enough to trigger a
-                    // change. Or, if it's not shown and we scrolled *back*
-                    // enough.
-                    const shouldNowShowHeader =
-                        scrollY < TOP_PADDING ||
-                        (distanceSinceTurn < DOWN_THRESHOLD &&
-                            window.shouldShowHeader) ||
-                        (distanceSinceTurn < -UP_THRESHOLD &&
-                            !window.shouldShowHeader)
-
-                    if (shouldNowShowHeader !== window.shouldShowHeader) {
-                        window.shouldShowHeader = shouldNowShowHeader
-
-                        // React Native can't "listen" to a particular variable
-                        // within the web view, so we need to call it back
-                        // though a message.
-                        window.ReactNativeWebView.postMessage(
-                            JSON.stringify({
-                                type: 'shouldShowHeaderChange',
-                                shouldShowHeader: window.shouldShowHeader,
-                            }),
-                        )
-                    }
-
-                    const isNowAtTop = scrollY === 0
-                    if (isNowAtTop != window.isAtTop) {
-                        window.isAtTop = isNowAtTop
-
-                        window.ReactNativeWebView.postMessage(
-                            JSON.stringify({
-                                type: 'isAtTopChange',
-                                isAtTop: window.isAtTop,
-                            }),
-                        )
-                    }
-                }
-
-                // The "passive" flag tells the browser we won't call
-                // "preventDefault", which improve performance.
-                document.addEventListener('scroll', debounce(onScroll), {
-                    passive: true,
-                })
-            </script>
+            ${makeJavaScript(topPadding)}
         </body>
     </html>
 `
