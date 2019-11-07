@@ -16,7 +16,11 @@ type QueryForecast = Pick<
     'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
 >
 type QueryData = {
-    weather: { locationName: string; forecasts: QueryForecast[] }
+    weather: {
+        locationName: string
+        forecasts: QueryForecast[]
+        available: boolean
+    }
 }
 
 const QUERY = gql`
@@ -32,6 +36,7 @@ const QUERY = gql`
                 WeatherIcon
                 EpochDateTime
             }
+            available
         }
     }
 `
@@ -233,6 +238,7 @@ const WeatherWidget = React.memo(() => {
     if (query.status === QueryStatus.LOADING) return null
 
     const { data } = query
+    if (!data.weather.available) return null
     return (
         <WeatherWithForecast
             locationName={data.weather.locationName}

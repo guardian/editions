@@ -24,6 +24,7 @@ Date.now = () => now
 const getExpectedWeather = () => ({
     __typename: 'Weather',
     locationName: 'London',
+    available: true,
     forecasts: [
         {
             __typename: 'Forecast',
