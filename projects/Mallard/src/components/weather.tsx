@@ -10,7 +10,31 @@ import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { useQuery, QueryStatus } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
-import { Weather } from 'src/helpers/weather'
+
+type QueryForecast = Pick<
+    Forecast,
+    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
+>
+type QueryData = {
+    weather: { locationName: string; forecasts: QueryForecast[] }
+}
+
+const QUERY = gql`
+    {
+        weather @client {
+            locationName
+            forecasts {
+                DateTime
+                Temperature {
+                    Value
+                    Unit
+                }
+                WeatherIcon
+                EpochDateTime
+            }
+        }
+    }
+`
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -96,14 +120,14 @@ const styles = StyleSheet.create({
 
 export interface WeatherForecast {
     locationName: string
-    forecasts: Forecast[]
+    forecasts: QueryForecast[]
 }
 
 const WeatherIconView = ({
     forecast,
     iconSize = 1,
 }: {
-    forecast: Forecast
+    forecast: QueryForecast
     iconSize?: number
 }) => {
     const info = (
@@ -173,7 +197,7 @@ const WeatherWithForecast = ({
     forecasts,
 }: {
     locationName: string
-    forecasts: Forecast[]
+    forecasts: QueryForecast[]
 }) => {
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
@@ -203,26 +227,6 @@ const WeatherWithForecast = ({
     // instead of rendering a blank space with no logging.
     return <></>
 }
-
-type QueryData = {
-    weather: Weather
-}
-
-const QUERY = gql`
-    {
-        weather @client {
-            locationName
-            forecasts {
-                DateTime
-                Temperature {
-                    Value
-                    Unit
-                }
-                WeatherIcon
-            }
-        }
-    }
-`
 
 const WeatherWidget = React.memo(() => {
     const query = useQuery<QueryData>(QUERY)
