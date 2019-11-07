@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-    Animated,
-    Platform,
-    StyleSheet,
-    View,
-    ViewProps,
-    Easing,
-} from 'react-native'
+import { Animated, Platform, StyleSheet, View, Easing } from 'react-native'
 import { Header } from 'src/components/layout/header/header'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
