@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     forecastItemNarrow: {
         height: 64,
-        width: 50,
+        width: 40,
         paddingTop: 2,
         paddingLeft: 4,
         paddingRight: 8,
@@ -63,11 +63,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: metrics.vertical * 0.5,
         marginRight: metrics.horizontal,
+        flexShrink: 1,
     },
     locationName: {
         ...getFont('sans', 0.5),
         color: '#000000',
         marginTop: 15,
+        flexShrink: 1,
     },
     locationPinIcon: {
         fontFamily: 'GuardianIcons-Regular',
@@ -194,7 +196,9 @@ const WeatherWithForecast = ({
                 })}
                 <View style={styles.locationNameContainer}>
                     <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
-                    <Text style={styles.locationName}>{locationName}</Text>
+                    <Text style={styles.locationName} numberOfLines={2}>
+                        {locationName}
+                    </Text>
                 </View>
             </View>
         )
