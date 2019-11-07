@@ -160,14 +160,9 @@ const AndroidHeader = withNavigation(
 const ArticleSlider = ({
     path,
     articleNavigator,
-    onShouldShowHeaderChange,
-    shouldShowHeader,
-    topPadding,
-}: Required<Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>> & {
-    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
-    shouldShowHeader: boolean
-    topPadding: number
-}) => {
+}: Required<
+    Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>
+> & {}) => {
     const { isInScroller, startingPoint } = getArticleDataFromNavigator(
         articleNavigator,
         path,
@@ -203,6 +198,8 @@ const ArticleSlider = ({
 
     const pillar = getAppearancePillar(currentArticle.appearance)
 
+    const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
+
     if (Platform.OS === 'android')
         return (
             <>
@@ -226,9 +223,7 @@ const ArticleSlider = ({
                                         onShouldShowHeaderChange
                                     }
                                     shouldShowHeader={shouldShowHeader}
-                                    topPadding={
-                                        topPadding + ANDROID_HEADER_HEIGHT
-                                    }
+                                    topPadding={ANDROID_HEADER_HEIGHT}
                                 />
                             ) : null}
                         </View>
@@ -299,7 +294,7 @@ const ArticleSlider = ({
                         position={index}
                         onShouldShowHeaderChange={onShouldShowHeaderChange}
                         shouldShowHeader={shouldShowHeader}
-                        topPadding={topPadding}
+                        topPadding={0}
                     />
                 )}
             />

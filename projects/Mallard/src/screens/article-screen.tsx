@@ -83,14 +83,8 @@ const ArticleScreenWithProps = ({
     articleNavigator,
     navigation,
     prefersFullScreen,
-    onShouldShowHeaderChange,
-    shouldShowHeader,
-    topPadding,
 }: Required<ArticleNavigationProps> & {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
-    shouldShowHeader: boolean
-    topPadding: number
 }) => {
     const current = getArticleDataFromNavigator(articleNavigator, path)
     // TODO use `getData` for this
@@ -120,17 +114,11 @@ const ArticleScreenWithProps = ({
                         path={path}
                         width={width}
                         pillar={pillar}
-                        onShouldShowHeaderChange={onShouldShowHeaderChange}
-                        shouldShowHeader={shouldShowHeader}
-                        topPadding={topPadding}
                     />
                 ) : (
                     <ArticleSlider
                         path={path}
                         articleNavigator={articleNavigator}
-                        onShouldShowHeaderChange={onShouldShowHeaderChange}
-                        shouldShowHeader={shouldShowHeader}
-                        topPadding={topPadding}
                     />
                 )}
             </View>
@@ -140,14 +128,8 @@ const ArticleScreenWithProps = ({
 
 export const ArticleScreen = ({
     navigation,
-    onShouldShowHeaderChange = () => {},
-    shouldShowHeader = true,
-    topPadding = 0,
 }: {
     navigation: NavigationScreenProp<{}, ArticleNavigationProps>
-    onShouldShowHeaderChange?: (shouldShowHeader: boolean) => void
-    shouldShowHeader?: boolean
-    topPadding: number
 }) =>
     getArticleNavigationProps(navigation, {
         error: () => (
@@ -160,15 +142,7 @@ export const ArticleScreen = ({
             if (props.path && props.path.article) {
                 sendPageViewEvent({ path: props.path.article })
             }
-            return (
-                <ArticleScreenWithProps
-                    {...{ navigation }}
-                    {...props}
-                    onShouldShowHeaderChange={onShouldShowHeaderChange}
-                    shouldShowHeader={shouldShowHeader}
-                    topPadding={topPadding}
-                />
-            )
+            return <ArticleScreenWithProps {...{ navigation }} {...props} />
         },
     })
 

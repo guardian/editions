@@ -41,6 +41,48 @@ export enum ArticleTheme {
 const usesDarkTheme = (type: Content['type']) =>
     ['picture', 'gallery'].includes(type)
 
+export type HeaderControlProps = {
+    /**
+     * Called when the user scrolled up or down sufficiently that we want to
+     * auto-hide the article header (slider, navbar...), or show it again.
+     */
+    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
+    /**
+     * Whether the header is shown right now.
+     */
+    shouldShowHeader: boolean
+    /**
+     * A padding, in points/pixel, which should added at the very top of the
+     * article so that it accomodates the header that will be shown with
+     * absolute positionning on top of it.
+     */
+    topPadding: number
+}
+
+/**
+ * This takes care of updating the value of `shouldShowHeader` *within* the web
+ * view. Since the API is imperative, we cannot pass this as a "prop" to the
+ * JavaScript inside the webview. So instead we pass it imperatively when the
+ * value changes. We try to minimize communication for perf. so we don't need to
+ * do anything if the value changed because the webview itself communicated us a
+ * change in the first place; it has the right value already.
+ */
+const useUpdateShowHeader = (
+    webviewRef: React.MutableRefObject<WebView | null>,
+    shouldShowHeader: boolean,
+) => {
+    const wasShowingHeader = useRef(true)
+    useEffect(() => {
+        if (webviewRef.current == null) return
+        if (shouldShowHeader === wasShowingHeader.current) return
+        wasShowingHeader.current = shouldShowHeader
+        webviewRef.current.injectJavaScript(
+            `window.shouldShowHeader = ${shouldShowHeader};`,
+        )
+    }, [shouldShowHeader])
+    return wasShowingHeader
+}
+
 const Article = ({
     article,
     onShouldShowHeaderChange,
@@ -48,10 +90,7 @@ const Article = ({
     topPadding,
 }: {
     article: ArticleT | PictureArticle | GalleryArticle
-    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
-    shouldShowHeader: boolean
-    topPadding: number
-}) => {
+} & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
 
@@ -59,15 +98,7 @@ const Article = ({
         ? ArticleTheme.Dark
         : ArticleTheme.Default
 
-    const wasShowingHeader = useRef(true)
-    useEffect(() => {
-        if (ref.current == null) return
-        if (shouldShowHeader === wasShowingHeader.current) return
-        wasShowingHeader.current = shouldShowHeader
-        ref.current.injectJavaScript(
-            `window.shouldShowHeader = ${shouldShowHeader};`,
-        )
-    }, [shouldShowHeader])
+    const wasShowingHeader = useUpdateShowHeader(ref, shouldShowHeader)
 
     return (
         <Fader>

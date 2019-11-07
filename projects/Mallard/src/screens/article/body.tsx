@@ -9,81 +9,65 @@ import { useArticleResponse } from 'src/hooks/use-issue'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { PathToArticle } from 'src/paths'
 import { color } from 'src/theme/color'
+import { HeaderControlProps } from 'src/components/article/types/article'
 
 const styles = StyleSheet.create({
     flex: { flexGrow: 1 },
     container: { height: '100%' },
 })
 
-const ArticleScreenBody = React.memo<{
-    path: PathToArticle
-    pillar: ArticlePillar
-    width: number
-    position?: number
-    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
-    shouldShowHeader: boolean
-    topPadding: number
-}>(
-    ({
-        path,
-        pillar,
-        width,
-        position,
-        onShouldShowHeaderChange,
-        shouldShowHeader,
-        topPadding,
-    }) => {
-        const articleResponse = useArticleResponse(path)
-        const preview = useIsPreview()
-        const previewNotice = preview
-            ? `${path.collection}:${position}`
-            : undefined
+const ArticleScreenBody = React.memo<
+    {
+        path: PathToArticle
+        pillar: ArticlePillar
+        width: number
+        position?: number
+    } & HeaderControlProps
+>(({ path, pillar, width, position, ...headerControlProps }) => {
+    const articleResponse = useArticleResponse(path)
+    const preview = useIsPreview()
+    const previewNotice = preview ? `${path.collection}:${position}` : undefined
 
-        return (
-            <View style={[styles.container, { width }]}>
-                {articleResponse({
-                    error: ({ message }) => (
-                        <FlexErrorMessage
-                            title={message}
-                            style={{ backgroundColor: color.background }}
-                        />
-                    ),
-                    pending: () => (
-                        <FlexErrorMessage
-                            title={'loading'}
-                            style={{ backgroundColor: color.background }}
-                        />
-                    ),
-                    success: article => (
-                        <>
-                            {previewNotice && (
-                                <UiBodyCopy>{previewNotice}</UiBodyCopy>
+    return (
+        <View style={[styles.container, { width }]}>
+            {articleResponse({
+                error: ({ message }) => (
+                    <FlexErrorMessage
+                        title={message}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                pending: () => (
+                    <FlexErrorMessage
+                        title={'loading'}
+                        style={{ backgroundColor: color.background }}
+                    />
+                ),
+                success: article => (
+                    <>
+                        {previewNotice && (
+                            <UiBodyCopy>{previewNotice}</UiBodyCopy>
+                        )}
+                        <WithArticle
+                            type={
+                                article.article.articleType ||
+                                ArticleType.Article
+                            }
+                            pillar={getCollectionPillarOverride(
+                                pillar,
+                                path.collection,
                             )}
-                            <WithArticle
-                                type={
-                                    article.article.articleType ||
-                                    ArticleType.Article
-                                }
-                                pillar={getCollectionPillarOverride(
-                                    pillar,
-                                    path.collection,
-                                )}
-                            >
-                                <ArticleController
-                                    article={article.article}
-                                    onShouldShowHeaderChange={
-                                        onShouldShowHeaderChange
-                                    }
-                                    shouldShowHeader={shouldShowHeader}
-                                    topPadding={topPadding}
-                                />
-                            </WithArticle>
-                        </>
-                    ),
-                })}
-            </View>
-        )
-    },
-)
+                        >
+                            <ArticleController
+                                article={article.article}
+                                {...headerControlProps}
+                            />
+                        </WithArticle>
+                    </>
+                ),
+            })}
+        </View>
+    )
+})
 
 export { ArticleScreenBody }

@@ -3,7 +3,7 @@ import { CAPIArticle } from 'src/common'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { color } from 'src/theme/color'
 import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
-import { Article } from './types/article'
+import { Article, HeaderControlProps } from './types/article'
 import { Crossword } from './types/crossword'
 
 /*
@@ -13,15 +13,10 @@ it gets everything it needs from its route
 
 const ArticleController = ({
     article,
-    onShouldShowHeaderChange,
-    shouldShowHeader,
-    topPadding,
+    ...headerControlProps
 }: {
     article: CAPIArticle
-    onShouldShowHeaderChange: (shouldShowHeader: boolean) => void
-    shouldShowHeader: boolean
-    topPadding: number
-}) => {
+} & HeaderControlProps) => {
     if (article.type === 'crossword') {
         return <Crossword crosswordArticle={article} />
     }
@@ -35,12 +30,7 @@ const ArticleController = ({
                 />
             }
         >
-            <Article
-                article={article}
-                onShouldShowHeaderChange={onShouldShowHeaderChange}
-                shouldShowHeader={shouldShowHeader}
-                topPadding={topPadding}
-            />
+            <Article article={article} {...headerControlProps} />
         </ErrorBoundary>
     )
 }
