@@ -114,7 +114,9 @@ const ArticleScreenWithProps = ({
                         path={path}
                         width={width}
                         pillar={pillar}
-                        onTopPositionChange={() => {}}
+                        onShouldShowHeaderChange={() => {}}
+                        shouldShowHeader={true}
+                        topPadding={0}
                     />
                 ) : (
                     <ArticleSlider

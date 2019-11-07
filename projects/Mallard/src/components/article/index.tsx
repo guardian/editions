@@ -1,10 +1,9 @@
 import React from 'react'
 import { CAPIArticle } from 'src/common'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { OnTopPositionChangeFn } from 'src/screens/article/helpers'
 import { color } from 'src/theme/color'
 import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
-import { Article } from './types/article'
+import { Article, HeaderControlProps } from './types/article'
 import { Crossword } from './types/crossword'
 
 /*
@@ -14,11 +13,10 @@ it gets everything it needs from its route
 
 const ArticleController = ({
     article,
-    onTopPositionChange,
+    ...headerControlProps
 }: {
     article: CAPIArticle
-    onTopPositionChange: OnTopPositionChangeFn
-}) => {
+} & HeaderControlProps) => {
     if (article.type === 'crossword') {
         return <Crossword crosswordArticle={article} />
     }
@@ -32,10 +30,7 @@ const ArticleController = ({
                 />
             }
         >
-            <Article
-                onTopPositionChange={onTopPositionChange}
-                article={article}
-            />
+            <Article article={article} {...headerControlProps} />
         </ErrorBoundary>
     )
 }
