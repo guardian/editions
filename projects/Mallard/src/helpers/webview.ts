@@ -7,6 +7,7 @@ export type WebViewPing =
           type: 'shouldShowHeaderChange'
           shouldShowHeader: boolean
       }
+    | { type: 'isAtTopChange'; isAtTop: boolean }
     | {
           type: 'share'
       }
@@ -21,8 +22,8 @@ const passthrough = (
     ...placeholders: any[]
 ): string =>
     literals.reduce((acc, literal, i) => {
-        if (placeholders[i]) {
-            return acc + literal + placeholders[i]
+        if (placeholders[i] != null && placeholders[i] !== false) {
+            return acc + literal + String(placeholders[i])
         }
         return acc + literal
     }, '')
@@ -154,6 +155,9 @@ export const makeHtml = ({
                 // it can be updated directly from React Native.
                 window.shouldShowHeader = true
 
+                // Are we at the top?
+                window.isAtTop = true
+
                 // How much do we need scroll down before the header
                 // hides. Even if one scrolls slowly, the header would
                 // predictably hides after that many pixels scrolling down.
@@ -205,6 +209,18 @@ export const makeHtml = ({
                             JSON.stringify({
                                 type: 'shouldShowHeaderChange',
                                 shouldShowHeader: window.shouldShowHeader,
+                            }),
+                        )
+                    }
+
+                    const isNowAtTop = scrollY === 0
+                    if (isNowAtTop != window.isAtTop) {
+                        window.isAtTop = isNowAtTop
+
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({
+                                type: 'isAtTopChange',
+                                isAtTop: window.isAtTop,
                             }),
                         )
                     }

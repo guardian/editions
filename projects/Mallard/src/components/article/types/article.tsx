@@ -41,7 +41,7 @@ export enum ArticleTheme {
 const usesDarkTheme = (type: Content['type']) =>
     ['picture', 'gallery'].includes(type)
 
-export type HeaderControlProps = {
+export type HeaderControlInnerProps = {
     /**
      * Called when the user scrolled up or down sufficiently that we want to
      * auto-hide the article header (slider, navbar...), or show it again.
@@ -59,28 +59,35 @@ export type HeaderControlProps = {
     topPadding: number
 }
 
+export type HeaderControlProps = HeaderControlInnerProps & {
+    /**
+     * Called when we changed from being at the top to being in the middle of
+     * the article.
+     */
+    onIsAtTopChange: (isAtTop: boolean) => void
+}
+
 /**
- * This takes care of updating the value of `shouldShowHeader` *within* the web
+ * This takes care of updating the value of a global *within* the web
  * view. Since the API is imperative, we cannot pass this as a "prop" to the
  * JavaScript inside the webview. So instead we pass it imperatively when the
  * value changes. We try to minimize communication for perf. so we don't need to
  * do anything if the value changed because the webview itself communicated us a
  * change in the first place; it has the right value already.
  */
-const useUpdateShowHeader = (
+const useUpdateWebviewVariable = (
     webviewRef: React.MutableRefObject<WebView | null>,
-    shouldShowHeader: boolean,
+    name: string,
+    value: boolean,
 ) => {
-    const wasShowingHeader = useRef(true)
+    const valueInWebview = useRef(true)
     useEffect(() => {
         if (webviewRef.current == null) return
-        if (shouldShowHeader === wasShowingHeader.current) return
-        wasShowingHeader.current = shouldShowHeader
-        webviewRef.current.injectJavaScript(
-            `window.shouldShowHeader = ${shouldShowHeader};`,
-        )
-    }, [shouldShowHeader])
-    return wasShowingHeader
+        if (value === valueInWebview.current) return
+        valueInWebview.current = value
+        webviewRef.current.injectJavaScript(`window.${name} = ${value};`)
+    }, [value])
+    return valueInWebview
 }
 
 const Article = ({
@@ -88,6 +95,7 @@ const Article = ({
     onShouldShowHeaderChange,
     shouldShowHeader,
     topPadding,
+    onIsAtTopChange,
 }: {
     article: ArticleT | PictureArticle | GalleryArticle
 } & HeaderControlProps) => {
@@ -98,7 +106,11 @@ const Article = ({
         ? ArticleTheme.Dark
         : ArticleTheme.Default
 
-    const wasShowingHeader = useUpdateShowHeader(ref, shouldShowHeader)
+    const wasShowingHeader = useUpdateWebviewVariable(
+        ref,
+        'shouldShowHeader',
+        shouldShowHeader,
+    )
 
     return (
         <Fader>
@@ -123,6 +135,9 @@ const Article = ({
                     if (parsed.type === 'shouldShowHeaderChange') {
                         wasShowingHeader.current = parsed.shouldShowHeader
                         onShouldShowHeaderChange(parsed.shouldShowHeader)
+                    }
+                    if (parsed.type === 'isAtTopChange') {
+                        onIsAtTopChange(parsed.isAtTop)
                     }
                 }}
             />
