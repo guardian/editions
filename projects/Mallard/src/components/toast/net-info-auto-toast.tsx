@@ -1,13 +1,14 @@
 import { useNetInfo } from 'src/hooks/use-net-info'
+import { NetInfoStateType } from '@react-native-community/netinfo'
 import { useEffect } from 'react'
 import { useToast } from 'src/hooks/use-toast'
 
 const NetInfoAutoToast = () => {
     const { showToast } = useToast()
-    const { isConnected } = useNetInfo()
+    const { isConnected, type } = useNetInfo()
     useEffect(() => {
         const time = setTimeout(() => {
-            if (!isConnected) {
+            if (!isConnected && type !== NetInfoStateType.unknown) {
                 showToast('No internet connection')
             }
         }, 100)
