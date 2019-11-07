@@ -1,13 +1,13 @@
-import React, { ReactElement, useMemo } from 'react'
+import React, { ReactElement, useMemo, useRef, useEffect } from 'react'
 import {
     Animated,
     Image,
+    FlatList,
     StyleProp,
     StyleSheet,
     View,
     ViewStyle,
 } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
 import { Button } from 'src/components/button/button'
@@ -43,7 +43,6 @@ import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 import { PathToIssue } from 'src/paths'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { useQuery, QueryStatus } from 'src/hooks/apollo'
@@ -57,21 +56,12 @@ import {
 import { ArticleSpec } from './article-screen'
 
 const styles = StyleSheet.create({
-    weatherWide: {
+    shownWeather: {
         marginHorizontal: metrics.horizontal,
         height: 78,
     },
-    weatherHidden: {
+    emptyWeatherSpace: {
         height: 16,
-    },
-    sideWeather: {
-        width: 78,
-        flexShrink: 0,
-        borderRightColor: color.line,
-        borderRightWidth: 1,
-    },
-    sideBySideFeed: {
-        paddingTop: metrics.vertical,
     },
     illustrationImage: {
         width: '100%',
@@ -151,6 +141,13 @@ const IssueFronts = ({
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
+    const ref = useRef<FlatList<any> | null>()
+
+    useEffect(() => {
+        if (ref && ref.current && ref.current.scrollToOffset) {
+            ref.current.scrollToOffset({ animated: false, offset: 0 })
+        }
+    }, [issue])
 
     const {
         frontWithCards,
@@ -197,6 +194,7 @@ const IssueFronts = ({
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
+            ref={r => (ref.current = r)}
             showsHorizontalScrollIndicator={false}
             ListHeaderComponent={ListHeaderComponent}
             // These three props are responsible for the majority of
@@ -288,20 +286,15 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
     a.localIssueId === b.localIssueId &&
     a.publishedIssueId === b.publishedIssueId
 
-const MaybeWeather = ({
-    style,
-    otherwise = null,
-}: {
-    style: StyleProp<ViewStyle>
-    otherwise?: React.ReactNode
-}) => {
+const WeatherHeader = () => {
     const isWeatherShown = useIsWeatherShown()
-    return isWeatherShown ? (
-        <View style={style}>
+    if (!isWeatherShown) {
+        return <View style={styles.emptyWeatherSpace} />
+    }
+    return (
+        <View style={styles.shownWeather}>
             <Weather />
         </View>
-    ) : (
-        <>{otherwise}</>
     )
 }
 
@@ -339,18 +332,7 @@ const IssueScreenWithPath = React.memo(
                                             >
                                                 <IssueFronts
                                                     ListHeaderComponent={
-                                                        <MaybeWeather
-                                                            style={
-                                                                styles.weatherWide
-                                                            }
-                                                            otherwise={
-                                                                <View
-                                                                    style={
-                                                                        styles.weatherHidden
-                                                                    }
-                                                                />
-                                                            }
-                                                        />
+                                                        <WeatherHeader />
                                                     }
                                                     issue={issue}
                                                 />
@@ -364,10 +346,6 @@ const IssueScreenWithPath = React.memo(
                                             flexDirection: 'row',
                                         }}
                                     >
-                                        <MaybeWeather
-                                            style={styles.weatherWide}
-                                        />
-
                                         <WithLayoutRectangle>
                                             {metrics => (
                                                 <WithIssueScreenSize
@@ -377,8 +355,8 @@ const IssueScreenWithPath = React.memo(
                                                     ]}
                                                 >
                                                     <IssueFronts
-                                                        style={
-                                                            styles.sideBySideFeed
+                                                        ListHeaderComponent={
+                                                            <WeatherHeader />
                                                         }
                                                         issue={issue}
                                                     />
