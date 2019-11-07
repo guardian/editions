@@ -154,11 +154,16 @@ export const makeHtml = ({
                 // it can be updated directly from React Native.
                 window.shouldShowHeader = true
 
-                // How much do we need scroll in any direction before the header
-                // either shows up or hides. Even if one scrolls slowly, the
-                // header would predictably hides after that many pixels
-                // scrolling down.
-                const THRESHOLD = 40
+                // How much do we need scroll down before the header
+                // hides. Even if one scrolls slowly, the header would
+                // predictably hides after that many pixels scrolling down.
+                // We want to avoid relying too much on timing APIs because it
+                // can be fairly unreliable depending on device perf.
+                const DOWN_THRESHOLD = 10
+
+                // How much do we need scroll up before the
+                // header shows up again.
+                const UP_THRESHOLD = 160
 
                 const onScroll = () => {
                     const scrollY = window.scrollY
@@ -185,9 +190,9 @@ export const makeHtml = ({
                     // enough.
                     const shouldNowShowHeader =
                         scrollY < TOP_PADDING ||
-                        (distanceSinceTurn < THRESHOLD &&
+                        (distanceSinceTurn < DOWN_THRESHOLD &&
                             window.shouldShowHeader) ||
-                        (distanceSinceTurn < -THRESHOLD &&
+                        (distanceSinceTurn < -UP_THRESHOLD &&
                             !window.shouldShowHeader)
 
                     if (shouldNowShowHeader !== window.shouldShowHeader) {
