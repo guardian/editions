@@ -12,6 +12,7 @@ import { errorService } from 'src/services/errors'
 import { sendComponentEvent, Action, ComponentType } from '../services/ophan'
 import { londonTime } from './date'
 import { pushTracking } from 'src/helpers/push-tracking'
+import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 
 interface BasicFile {
     filename: string
@@ -44,6 +45,7 @@ export const prepFileSystem = (): Promise<void> =>
 
 export const deleteIssueFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
+    localIssueListStore.reset()
     await prepFileSystem()
 }
 
@@ -80,9 +82,16 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
     })
 }
 
+/**
+ * Only return true if we have both directories
+ */
 export const isIssueOnDevice = async (
     localIssueId: Issue['localId'],
-): Promise<boolean> => RNFetchBlob.fs.exists(FSPaths.issue(localIssueId))
+): Promise<boolean> =>
+    (await Promise.all([
+        RNFetchBlob.fs.exists(FSPaths.issue(localIssueId)),
+        RNFetchBlob.fs.exists(FSPaths.mediaRoot(localIssueId)),
+    ])).every(_ => _)
 
 /*
 Cheeky size helper
@@ -109,10 +118,13 @@ export type DLStatus =
     | { type: 'success' }
     | { type: 'failure' }
 
-const deleteIssue = (issue: string): Promise<void> =>
-    RNFetchBlob.fs
-        .unlink(`${FSPaths.contentPrefixDir}/${issue}`)
+const deleteIssue = (localId: string): Promise<void> => {
+    const promise = RNFetchBlob.fs
+        .unlink(FSPaths.issue(localId))
         .catch(e => errorService.captureException(e))
+    promise.then(() => localIssueListStore.remove(localId))
+    return promise
+}
 
 // Cache of current downloads
 const dlCache: {
@@ -255,6 +267,7 @@ export const downloadAndUnzipIssue = (
         } finally {
             pushTracking('completeAndDeleteCache', 'completed')
             delete dlCache[localId]
+            localIssueListStore.add(localId)
         }
     }
 
@@ -267,11 +280,21 @@ export const downloadAndUnzipIssue = (
     return downloadPromise
 }
 
+const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
+
+export const getLocalIssues = () =>
+    RNFetchBlob.fs
+        .ls(FSPaths.contentPrefixDir)
+        .then(files => files.map(withPathPrefix(defaultSettings.contentPrefix)))
+
 export const clearOldIssues = async (): Promise<void> => {
-    const files = await RNFetchBlob.fs.ls(FSPaths.contentPrefixDir)
+    const files = await getLocalIssues()
 
     const issuesToDelete = files.filter(
-        issue => !lastSevenDays().includes(issue) && issue !== 'issues',
+        issue =>
+            !lastSevenDays()
+                .map(withPathPrefix(defaultSettings.contentPrefix))
+                .includes(issue) && issue !== 'issues',
     )
 
     return Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
