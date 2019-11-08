@@ -19,6 +19,7 @@ import { getArticleDataFromNavigator, ArticleSpec } from '../article-screen'
 import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
+import { useNavPosition } from 'src/hooks/use-nav-position'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -265,6 +266,8 @@ const ArticleSlider = ({
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
 
+    const { setPosition } = useNavPosition()
+
     useEffect(() => {
         flatListRef.current &&
             flatListRef.current._component.scrollToIndex({
@@ -382,13 +385,17 @@ const ArticleSlider = ({
                         listener: (ev: any) => {
                             const newPos =
                                 ev.nativeEvent.contentOffset.x / width
-                            setCurrent(
-                                clamp(
-                                    Math.floor(newPos),
-                                    0,
-                                    flattenedArticles.length - 1,
-                                ),
+                            const index = clamp(
+                                Math.floor(newPos),
+                                0,
+                                flattenedArticles.length - 1,
                             )
+                            setCurrent(index)
+                            setPosition({
+                                frontId: flattenedArticles[index].front,
+                                articleIndex: 0,
+                            })
+                            setCurrent(index)
                         },
                     },
                 )}

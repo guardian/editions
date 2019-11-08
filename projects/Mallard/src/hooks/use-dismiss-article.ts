@@ -3,11 +3,13 @@ import { PanResponder, Animated } from 'react-native'
 import { safeInterpolation } from 'src/helpers/math'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 import { NavigationContext } from 'react-navigation'
+import { useNavPosition } from 'src/hooks/use-nav-position'
 
 export const useDismissArticle = () => {
     const navigation = useContext(NavigationContext)
     const [scrollY] = useState(() => new Animated.Value(0))
     const pos = useNavigatorPosition()
+    const { setTrigger } = useNavPosition()
 
     const onDismiss = useCallback(() => {
         navigation.goBack()
@@ -42,6 +44,7 @@ export const useDismissArticle = () => {
                     },
                 ]),
                 onPanResponderEnd: (ev, gestureState) => {
+                    setTrigger(true)
                     if (gestureState.dy > 50) {
                         onDismiss()
                         scrollY.stopAnimation()

@@ -55,6 +55,7 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
+import { useNavPosition } from 'src/hooks/use-nav-position'
 
 const styles = StyleSheet.create({
     shownWeather: {
@@ -142,6 +143,7 @@ const IssueFronts = ({
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
+    const { position, trigger, setTrigger } = useNavPosition()
     const ref = useRef<FlatList<any> | null>()
 
     useEffect(() => {
@@ -149,6 +151,23 @@ const IssueFronts = ({
             ref.current.scrollToOffset({ animated: false, offset: 0 })
         }
     }, [issue])
+
+    useEffect(() => {
+        if (trigger) {
+            const frontToScrollTo = frontWithCards.find(obj => {
+                return obj.displayName === position.frontId
+            })
+
+            const index = frontToScrollTo
+                ? frontWithCards.findIndex(front => front === frontToScrollTo)
+                : 0
+
+            if (ref && ref.current && ref.current.scrollToOffset) {
+                ref.current.scrollToIndex({ animated: false, index })
+            }
+            setTrigger(false)
+        }
+    }, [trigger])
 
     const {
         frontWithCards,
