@@ -62,7 +62,7 @@ const renderArticleContent = (
                         path: el.src.path,
                         source: el.src.source,
                     })
-                    return showMedia && publishedId
+                    return publishedId
                         ? Image({
                               imageElement: el,
                               path,
