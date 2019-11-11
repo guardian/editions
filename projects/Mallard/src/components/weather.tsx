@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     forecastItemNarrow: {
         height: 64,
-        width: 40,
+        width: 45,
         paddingTop: 2,
         paddingLeft: 4,
         paddingRight: 8,
