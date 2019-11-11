@@ -16,11 +16,15 @@ type QueryForecast = Pick<
     'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
 >
 type QueryData = {
-    weather: {
-        locationName: string
-        forecasts: QueryForecast[]
-        available: boolean
-    }
+    weather:
+        | {
+              locationName: string
+              forecasts: QueryForecast[]
+              available: true
+          }
+        | {
+              available: false
+          }
 }
 
 const QUERY = gql`
