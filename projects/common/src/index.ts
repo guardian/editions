@@ -70,6 +70,8 @@ export interface Forecast {
     PrecipitationProbability: number
     MobileLink: string
     Link: string
+    PrecipitationIntensity: unknown
+    PrecipitationType: unknown
 }
 
 interface AccuWeatherRegion {

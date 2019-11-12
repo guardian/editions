@@ -24,11 +24,14 @@ Date.now = () => now
 const getExpectedWeather = () => ({
     __typename: 'Weather',
     locationName: 'London',
+    lastUpdated: now,
     available: true,
     forecasts: [
         {
             __typename: 'Forecast',
             DateTime: forecasts[0].DateTime,
+            PrecipitationIntensity: null,
+            PrecipitationType: null,
             Temperature: { __typename: 'Temperature' },
         },
     ],
@@ -52,7 +55,7 @@ it('should resolve and update the weather', async () => {
 
     expect(AppState.addEventListener).toHaveBeenCalledTimes(1)
     const cb = (AppState.addEventListener as any).mock.calls[0][1]
-    cb('active')
+    await cb('active')
 
     res = await resolveWeather({}, {}, { client })
     expect(res).toEqual(getExpectedWeather())
