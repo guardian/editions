@@ -85,23 +85,20 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                   setVersionClickedTimes(t => {
                       if (t < 7) return t + 1
                       Alert.alert(
-                          'Delete all stored data',
+                          'Enable Developer Mode',
                           'Are you sure?',
                           [
                               {
-                                  text: 'Delete data',
+                                  text: 'Enable',
                                   style: 'destructive',
                                   onPress: () => {
                                       setIsUsingProdDevtools(client, true)
-                                      Alert.alert('You are a developer now!')
                                   },
                               },
                               {
                                   text: 'Cancel',
                                   style: 'cancel',
-                                  onPress: () => {
-                                      AsyncStorage.clear()
-                                  },
+                                  onPress: () => {},
                               },
                           ],
                           { cancelable: false },
