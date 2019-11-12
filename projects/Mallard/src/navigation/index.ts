@@ -168,7 +168,7 @@ const RootNavigator = createAppContainer(
                         )
                         useEffect(() => {
                             /** Setting is still loading, do nothing yet. */
-                            if (query.status == QueryStatus.LOADING) return
+                            if (query.loading) return
                             if (!query.data.hasOnboarded) {
                                 navigation.navigate('Onboarding')
                             } else {

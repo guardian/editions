@@ -46,7 +46,7 @@ const OnboardingConsent = ({
     onOpenPrivacyPolicy: () => void
 }) => {
     const query = useQuery<{ [key: string]: boolean | null }>(QUERY)
-    if (query.status == QueryStatus.LOADING) return null
+    if (query.loading) return null
     const { data, client } = query
 
     const enableNulls = () => {

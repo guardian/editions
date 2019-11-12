@@ -75,7 +75,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         DeviceInfo.getVersion().then(version => setVersionNumber(version))
     })
 
-    if (query.status == QueryStatus.LOADING) return null
+    if (query.loading) return null
     const { client } = query
     const { isUsingProdDevtools, isWeatherShown } = query.data
 

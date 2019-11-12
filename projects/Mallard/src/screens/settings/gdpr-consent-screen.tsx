@@ -104,7 +104,7 @@ const GdprConsent = ({
 } & NavigationInjectedProps) => {
     const { showToast } = useToast()
     const query = useQuery<QueryData>(QUERY)
-    if (query.status == QueryStatus.LOADING) return null
+    if (query.loading) return null
     const { client, data } = query
 
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {

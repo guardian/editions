@@ -239,7 +239,7 @@ const WeatherWithForecast = ({
 
 const WeatherWidget = React.memo(() => {
     const query = useQuery<QueryData>(QUERY)
-    if (query.status === QueryStatus.LOADING) return null
+    if (query.loading) return null
 
     const { data } = query
     if (!data.weather.available) return null

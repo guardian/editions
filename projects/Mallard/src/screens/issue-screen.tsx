@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 const WEATHER_QUERY = gql('{ isWeatherShown @client }')
 const useIsWeatherShown = () => {
     const query = useQuery<{ isWeatherShown: boolean }>(WEATHER_QUERY)
-    return query.status == QueryStatus.LOADED && query.data.isWeatherShown
+    return !query.loading && query.data.isWeatherShown
 }
 
 const ScreenHeader = withNavigation(
