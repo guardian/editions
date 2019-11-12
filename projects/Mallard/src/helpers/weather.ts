@@ -40,6 +40,7 @@ export type Weather =
     | {
           __typename: 'Weather'
           locationName: string
+          isLocationPrecise: boolean
           forecasts: Forecast[]
           lastUpdated: number
           available: true
@@ -48,6 +49,7 @@ export type Weather =
           __typename: 'Weather'
           // Apollo forces us to have `null`s instead of missing fields
           locationName: null
+          isLocationPrecise: null
           forecasts: null
           lastUpdated: null
           available: false
@@ -56,6 +58,7 @@ export type Weather =
 const UNAVAILABLE_WEATHER: Weather = {
     __typename: 'Weather',
     locationName: null,
+    isLocationPrecise: null,
     forecasts: null,
     lastUpdated: null,
     available: false,
@@ -75,6 +78,7 @@ const getWeather = async (fallback?: Weather): Promise<Weather> => {
         return {
             __typename: 'Weather',
             locationName: loc.EnglishName,
+            isLocationPrecise: false,
             forecasts: forecasts.map(forecast => ({
                 ...forecast,
                 Temperature: {

@@ -20,11 +20,12 @@ module.exports = {
         '@typescript-eslint/explicit-member-accessibility': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         'react/prop-types': 'off',
-        '@typescript-eslint/consistent-type-assertions': 'warn',
+        '@typescript-eslint/consistent-type-assertions': 'error',
         '@typescript-eslint/camelcase': 'off',
         'react-hooks/rules-of-hooks': 'error',
-        'react-hooks/exhaustive-deps': 'warn',
+        'react-hooks/exhaustive-deps': 'error',
         'react/display-name': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
     },
     overrides: [
         {

@@ -47,6 +47,7 @@ export const useIssueDate = (issue?: {
 }): IssueDate =>
     useMemo(
         () => (issue ? renderIssueDate(issue.date) : { date: '', weekday: '' }),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [issue && issue.key, issue],
     )
 
