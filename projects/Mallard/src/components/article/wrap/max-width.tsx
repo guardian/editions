@@ -5,10 +5,8 @@ import { metrics } from 'src/theme/spacing'
 const maxWidthStyles = StyleSheet.create({
     maxWidth: {
         maxWidth: metrics.article.maxWidth,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        flexDirection: 'row',
         overflow: 'visible',
+        width: '100%',
     },
     padding: {
         marginHorizontal: metrics.article.sides,

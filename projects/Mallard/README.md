@@ -39,9 +39,10 @@ The following guides allow you to run the app locally on device emulators, or on
 -   [Android](https://facebook.github.io/react-native/docs/getting-started#installing-dependencies-1)
 -   [iOS](https://facebook.github.io/react-native/docs/getting-started#installing-dependencies)
 
-**Note on installing Xcode:** If you are on a GNM machine chances are the App Store isn't working for you – [click here](https://developer.apple.com/download/more/) to get a direct download.
+**Note on installing Xcode:** If you are on a GNM machine chances are the App Store isn't working for you – [click here](https://developer.apple.com/download/more/) to get a direct download. If using version 10 of Xcode, you will need at least version 10.3.
 
-If you're starting from scratch, we recommend starting out with Android Studio because it takes less time to download.
+If you're starting from scratch, we recommend starting out with Android Studio because it takes less time to download. Once you've downloaded
+android studio, open the project `/projects/Mallard/android` then open up the 'virtual device manager' and install at least one device.
 
 You will also need `frontend` credentials form Janus in order to fetch the `.env` file for local development. This will run as part of either `run-ios` or `run-android` and in order to get the latest environment variables you will need to ensure you have frontend credentials when running at various points in the future.
 
@@ -52,7 +53,9 @@ You will also need `frontend` credentials form Janus in order to fetch the `.env
 ```bash
 $ yarn start
 ```
+
 in separate terminal
+
 ```bash
 $ yarn run-android
 ```
@@ -66,6 +69,7 @@ $ yarn start
 ```
 
 in separate terminal
+
 ```bash
 $ yarn run wifi-android
 ```
@@ -77,6 +81,7 @@ $ yarn start
 ```
 
 in separate terminal
+
 ```bash
 $ yarn run-ios
 ```
