@@ -11,6 +11,9 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { Button, ButtonAppearance } from './button/button'
+import { withNavigation } from 'react-navigation'
+import { routeNames } from 'src/navigation/routes'
+import { NavigationInjectedProps } from 'react-navigation'
 
 type QueryForecast = Pick<
     Forecast,
@@ -214,20 +217,12 @@ const WeatherIconView = ({
     )
 }
 
-const LocationName = ({
-    isLocationPrecise,
-    locationName,
-    isUsingProdDevtools,
-}: {
-    isLocationPrecise: boolean
-    locationName: string
-    isUsingProdDevtools: boolean
-}) => {
-    const onSetLocation = useCallback(() => {
-        Alert.alert('TODO: setting location')
-    }, [])
+const SetLocationButton = withNavigation(
+    ({ navigation }: NavigationInjectedProps) => {
+        const onSetLocation = useCallback(() => {
+            navigation.navigate(routeNames.WeatherGeolocationConsent)
+        }, [])
 
-    if (!isLocationPrecise && isUsingProdDevtools) {
         return (
             <Button
                 onPress={onSetLocation}
@@ -238,6 +233,20 @@ const LocationName = ({
                 Set Location
             </Button>
         )
+    },
+)
+
+const LocationName = ({
+    isLocationPrecise,
+    locationName,
+    isUsingProdDevtools,
+}: {
+    isLocationPrecise: boolean
+    locationName: string
+    isUsingProdDevtools: boolean
+}) => {
+    if (!isLocationPrecise && isUsingProdDevtools) {
+        return <SetLocationButton />
     }
     return (
         <>

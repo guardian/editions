@@ -39,6 +39,7 @@ import { routeNames } from './routes'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
+import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -102,6 +103,9 @@ const AppStack = createModalNavigator(
                 },
             },
         ),
+        [routeNames.WeatherGeolocationConsent]: createHeaderStackNavigator({
+            [routeNames.WeatherGeolocationConsent]: WeatherGeolocationConsentScreen,
+        }),
     },
 )
 
