@@ -10,7 +10,7 @@ import { LinkNav } from 'src/components/link'
 import { gdprSwitchSettings } from 'src/helpers/settings'
 import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setGdprFlag } from 'src/helpers/settings/setters'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (
@@ -46,7 +46,7 @@ const OnboardingConsent = ({
     onOpenPrivacyPolicy: () => void
 }) => {
     const query = useQuery<{ [key: string]: boolean | null }>(QUERY)
-    if (query.status == QueryStatus.LOADING) return null
+    if (query.loading) return null
     const { data, client } = query
 
     const enableNulls = () => {

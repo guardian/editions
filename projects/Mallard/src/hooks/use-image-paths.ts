@@ -78,11 +78,14 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
                 use,
             ).then(setPaths)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         apiUrl,
         image,
         use,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         issueId ? issueId.publishedIssueId : undefined, // Why isn't this just issueId?
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         issueId ? issueId.localIssueId : undefined,
     ])
     if (image === undefined) return undefined
@@ -99,6 +102,7 @@ export const useScaledImage = (largePath: string, width: number) => {
         if (!isRemote) {
             compressImagePath(largePath, width).then(setUri)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [largePath, width])
     return uri
 }
