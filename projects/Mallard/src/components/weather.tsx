@@ -221,7 +221,7 @@ const SetLocationButton = withNavigation(
     ({ navigation }: NavigationInjectedProps) => {
         const onSetLocation = useCallback(() => {
             navigation.navigate(routeNames.WeatherGeolocationConsent)
-        }, [])
+        }, [navigation])
 
         return (
             <Button
