@@ -86,6 +86,7 @@ const useUpdateWebviewVariable = (
         if (value === valueInWebview.current) return
         valueInWebview.current = value
         webviewRef.current.injectJavaScript(`window.${name} = ${value};`)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
     return valueInWebview
 }
