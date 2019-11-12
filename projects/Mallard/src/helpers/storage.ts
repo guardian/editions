@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import { Settings } from 'react-native'
+import { Settings, Platform } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 import {
     LEGACY_SUBSCRIBER_ID_USER_DEFAULT_KEY,
@@ -15,14 +15,25 @@ import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthori
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
  * and not Android.
  */
-const createSettingsCacheIOS = <T = any>(key: string) => ({
-    set: async (value: T) => {
-        Settings.set({ [key]: value })
-    },
-    get: async (): Promise<T | null> => Settings.get(key) || null,
-    reset: async (): Promise<void> => {
-        Settings.set({ [key]: null })
-    },
+const createSettingsCacheIOS = Platform.select({
+    ios: <T = any>(key: string) => ({
+        set: async (value: T) => {
+            Settings.set({ [key]: value })
+        },
+        get: async (): Promise<T | null> => Settings.get(key) || null,
+        reset: async (): Promise<void> => {
+            Settings.set({ [key]: null })
+        },
+    }),
+    default: () => ({
+        set: async () => {
+            throw new Error('not implemented')
+        },
+        get: async () => null,
+        reset: async () => {
+            throw new Error('not implemented')
+        },
+    }),
 })
 
 const legacyCASUsernameCache = createSettingsCacheIOS<string>(
