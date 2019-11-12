@@ -21,7 +21,7 @@ import {
     setHasOnboarded,
     setIsUsingProdDevtools,
 } from 'src/helpers/settings/setters'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
 import { getFileList } from 'src/helpers/files'

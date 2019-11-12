@@ -8,7 +8,7 @@ import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 
 type QueryForecast = Pick<

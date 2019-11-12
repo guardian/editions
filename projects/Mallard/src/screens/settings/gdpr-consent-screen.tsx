@@ -31,7 +31,7 @@ import {
     gdprAllowPerformanceKey,
 } from 'src/helpers/settings'
 import gql from 'graphql-tag'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import { Settings } from 'src/helpers/settings'
 import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import {
