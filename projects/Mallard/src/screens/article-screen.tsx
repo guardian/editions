@@ -62,6 +62,7 @@ export const getArticleDataFromNavigator = (
             currentArticle.article === article &&
             currentArticle.front === front,
     )
+
     if (startingPoint < 0)
         return {
             startingPoint: 0,

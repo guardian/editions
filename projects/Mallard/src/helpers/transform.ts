@@ -50,9 +50,9 @@ export const flattenCollectionsToCards = (
 
 export const flattenFlatCardsToFront = (
     flatCards: FlatCard[],
-): { article: CAPIArticle; collection: Collection }[] =>
+): { article: CAPIArticle; collection: Collection; cardIndex: number }[] =>
     flatCards
-        .map(({ articles, collection }) =>
-            articles.map(article => ({ article, collection })),
+        .map(({ articles, collection }, cardIndex) =>
+            articles.map(article => ({ article, collection, cardIndex })),
         )
         .reduce((acc, val) => acc.concat(val), [])

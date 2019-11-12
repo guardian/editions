@@ -20,6 +20,7 @@ import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
 import { useNavPosition } from 'src/hooks/use-nav-position'
+import { toPosition } from '../../../../common/src'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -265,8 +266,7 @@ const ArticleSlider = ({
 
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
-
-    const { setPosition } = useNavPosition()
+    const { position, setPosition, setTrigger } = useNavPosition()
 
     useEffect(() => {
         flatListRef.current &&
@@ -399,6 +399,14 @@ const ArticleSlider = ({
                         },
                     },
                 )}
+                onScrollEndDrag={() => {
+                    if (
+                        position &&
+                        position.frontId !== flattenedArticles[current].front
+                    ) {
+                        setTrigger(true)
+                    }
+                }}
                 maxToRenderPerBatch={1}
                 windowSize={2}
                 initialNumToRender={1}
