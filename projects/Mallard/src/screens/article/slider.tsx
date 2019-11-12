@@ -129,7 +129,7 @@ const AndroidHeader = withNavigation(
                     duration: 200,
                 }).start()
             }
-        }, [isShown])
+        }, [isShown, top])
 
         return (
             <Animated.View style={[styles.androidHeader, { top }]}>
