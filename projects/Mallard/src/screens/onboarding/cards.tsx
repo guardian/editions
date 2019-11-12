@@ -10,7 +10,7 @@ import { LinkNav } from 'src/components/link'
 import { gdprSwitchSettings } from 'src/helpers/settings'
 import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setGdprFlag } from 'src/helpers/settings/setters'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 
 const Aligner = ({ children }: { children: React.ReactNode }) => (

@@ -45,7 +45,7 @@ import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { IssueWithFronts, Front as TFront } from '../../../common/src'
 import {

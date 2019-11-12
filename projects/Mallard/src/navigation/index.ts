@@ -36,7 +36,7 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
 

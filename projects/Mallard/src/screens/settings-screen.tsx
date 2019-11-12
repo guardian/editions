@@ -22,7 +22,7 @@ import {
     setIsWeatherShown,
     setIsUsingProdDevtools,
 } from 'src/helpers/settings/setters'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 
