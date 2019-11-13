@@ -107,13 +107,6 @@ export const getVersionInfo = () => {
     return versionInfo as { version: string; commitId: string }
 }
 
-/*
-getters & setters
-*/
-let callbacks: ((
-    setting: keyof Settings,
-    value: UnsanitizedSetting,
-) => void)[] = []
 export const getSetting = (setting: keyof Settings) =>
     AsyncStorage.getItem('@Setting_' + setting).then(item => {
         if (!item) {
@@ -122,25 +115,10 @@ export const getSetting = (setting: keyof Settings) =>
         return unsanitize(item)
     })
 
-export const onSettingChanged = (
-    callback: (setting: keyof Settings, value: UnsanitizedSetting) => void,
-) => {
-    callbacks.push(callback)
-    return () => {
-        callbacks = callbacks.filter(item => item !== callback)
-    }
-}
-
 export const storeSetting = (
     setting: keyof Settings,
     value: UnsanitizedSetting,
-) => {
-    AsyncStorage.setItem('@Setting_' + setting, sanitize(value), () => {
-        for (const cb of callbacks) {
-            cb(setting, value)
-        }
-    })
-}
+) => AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
 
 export type GdprSwitch = keyof GdprSwitchSettings
 
