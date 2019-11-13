@@ -6,6 +6,7 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers'
 import { resolveWeather } from './helpers/weather'
+import { resolveLocationPermissionStatus } from './helpers/location-permission'
 
 /**
  * Resolvers is what Apollo uses to get the value of field that has never been
@@ -25,6 +26,7 @@ const RESOLVERS = {
     Query: {
         ...SETTINGS_RESOLVERS,
         weather: resolveWeather,
+        locationPermissionStatus: resolveLocationPermissionStatus,
     },
 }
 

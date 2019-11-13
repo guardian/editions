@@ -7,6 +7,8 @@ import { metrics } from 'src/theme/spacing'
 import { html } from 'src/helpers/webview'
 import { setIsWeatherShown } from 'src/helpers/settings/setters'
 import { Button, ButtonAppearance } from 'src/components/button/button'
+import { requestLocationPermission } from 'src/helpers/location-permission'
+import { RESULTS } from 'react-native-permissions'
 
 const content = html`
     <p>
@@ -53,7 +55,16 @@ const WeatherGeolocationConsentScreen = ({
 }: NavigationInjectedProps) => {
     const apolloClient = useApolloClient()
     const onConsentPress = async () => {
-        Alert.alert('TODO: consent required!')
+        const result = await requestLocationPermission(apolloClient)
+        if (result === RESULTS.BLOCKED) {
+            Alert.alert(
+                'Location permission',
+                'Location permission has been blocked in the system ' +
+                    'settings. Change the app-specific system setting to ' +
+                    'enable location-based weather.',
+            )
+        }
+        if (result === RESULTS.GRANTED) navigation.dismiss()
     }
     const onHidePress = () => {
         setIsWeatherShown(apolloClient, false)
