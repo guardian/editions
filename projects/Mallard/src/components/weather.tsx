@@ -14,6 +14,7 @@ import { Button, ButtonAppearance } from './button/button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
+import { PermissionStatus } from 'react-native-permissions'
 
 type QueryForecast = Pick<
     Forecast,
@@ -28,6 +29,7 @@ type AvailableWeather = {
 type QueryData = {
     weather: AvailableWeather | { available: false }
     isUsingProdDevtools: boolean
+    locationPermissionStatus: PermissionStatus
 }
 
 const QUERY = gql`
@@ -47,6 +49,7 @@ const QUERY = gql`
             available
         }
         isUsingProdDevtools @client
+        locationPermissionStatus @client
     }
 `
 
