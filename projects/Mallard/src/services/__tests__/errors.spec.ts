@@ -119,7 +119,7 @@ describe('errorService', () => {
 
         setMockedConsent(true)
         errorService.captureException(new Error())
-        expect(Sentry.captureException).toHaveBeenCalledTimes(2)
+        expect(Sentry.captureException).toHaveBeenCalledTimes(1)
     })
 
     it('should stop firing errors if consent is revoked in the app', async () => {

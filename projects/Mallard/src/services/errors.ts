@@ -3,6 +3,7 @@ import Config from 'react-native-config'
 import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
+import { GdprSwitchSetting } from 'src/helpers/settings'
 
 const { SENTRY_DSN_URL } = Config
 
@@ -15,19 +16,20 @@ export interface ErrorService {
 }
 
 class ErrorServiceImpl implements ErrorService {
-    private hasConsent: boolean
+    // Can be `null` or boolean. This is kinda confusing and easy to
+    // handle improperly, but not easy to change it's already in prod.
+    private hasConsent: GdprSwitchSetting
     private hasConfigured: boolean
     private pendingQueue: Error[]
 
     constructor() {
-        this.hasConsent = false
+        this.hasConsent = null
         this.hasConfigured = false
         this.pendingQueue = []
     }
 
     public init(apolloClient: ApolloClient<object>) {
-        const obs = apolloClient.watchQuery<QueryData>({ query: QUERY })
-        obs.subscribe({
+        apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
             next: query => {
                 if (query.loading) return
                 this.handleConsentUpdate(query.data.gdprAllowPerformance)
@@ -40,7 +42,7 @@ class ErrorServiceImpl implements ErrorService {
 
     private handleConsentUpdate(hasConsent: boolean) {
         this.hasConsent = hasConsent
-        if (!hasConsent) return
+        if (hasConsent === false || hasConsent === null) return
 
         if (!this.hasConfigured) {
             Sentry.config(SENTRY_DSN_URL).install()
@@ -58,11 +60,15 @@ class ErrorServiceImpl implements ErrorService {
         }
     }
 
+    /**
+     * If there is explicitly no consent, discard errors. If we don't know yet
+     * (`null`), store in a queue that will get logged when we get consent.
+     */
     public captureException(err: Error) {
-        if (this.hasConsent) {
-            Sentry.captureException(err)
-        } else {
+        if (this.hasConsent === null) {
             this.pendingQueue.push(err)
+        } else if (this.hasConsent === true) {
+            Sentry.captureException(err)
         }
     }
 }
