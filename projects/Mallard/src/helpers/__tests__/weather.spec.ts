@@ -68,7 +68,7 @@ it('should resolve and update the weather', async () => {
 
 it('should refresh the weather completely', async () => {
     const client = { writeData: jest.fn() } as any
-    let res = await resolveWeather({}, {}, { client })
+    await resolveWeather({}, {}, { client })
 
     forecasts = [{ DateTime: '1234' }]
     const refreshPromise = refreshWeather(client)

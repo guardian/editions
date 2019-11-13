@@ -136,7 +136,7 @@ const { resolveWeather, refreshWeather } = (() => {
     // which updates any view showing the weather.
     const onAppGoesForeground = async (client: ApolloClient<object>) => {
         if (weather == null) return
-        let value = await weather
+        const value = await weather
         if (value.available && Date.now() < value.lastUpdated + ONE_HOUR) return
         update(client, value)
     }
