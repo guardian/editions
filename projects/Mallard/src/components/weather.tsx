@@ -1,16 +1,54 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
-import { withResponse } from 'src/helpers/response'
 import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
-import { fetchWeatherForecastForLocation } from 'src/helpers/fetch'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { useQuery } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+import { Button, ButtonAppearance } from './button/button'
+import { withNavigation } from 'react-navigation'
+import { routeNames } from 'src/navigation/routes'
+import { NavigationInjectedProps } from 'react-navigation'
+
+type QueryForecast = Pick<
+    Forecast,
+    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
+>
+type AvailableWeather = {
+    locationName: string
+    isLocationPrecise: boolean
+    forecasts: QueryForecast[]
+    available: true
+}
+type QueryData = {
+    weather: AvailableWeather | { available: false }
+    isUsingProdDevtools: boolean
+}
+
+const QUERY = gql`
+    {
+        weather @client {
+            locationName
+            isLocationPrecise
+            forecasts {
+                DateTime
+                Temperature {
+                    Value
+                    Unit
+                }
+                WeatherIcon
+                EpochDateTime
+            }
+            available
+        }
+        isUsingProdDevtools @client
+    }
+`
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -30,7 +68,7 @@ const styles = StyleSheet.create({
     },
     forecastItemNarrow: {
         height: 64,
-        width: 50,
+        width: 45,
         paddingTop: 2,
         paddingLeft: 4,
         paddingRight: 8,
@@ -63,11 +101,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: metrics.vertical * 0.5,
         marginRight: metrics.horizontal,
+        flexShrink: 1,
     },
     locationName: {
         ...getFont('sans', 0.5),
         color: '#000000',
         marginTop: 15,
+        flexShrink: 1,
     },
     locationPinIcon: {
         fontFamily: 'GuardianIcons-Regular',
@@ -83,6 +123,17 @@ const styles = StyleSheet.create({
         flex: 0,
         width: 'auto',
     },
+    setLocationButtonWrap: {
+        marginTop: metrics.vertical,
+    },
+    /**
+     * Exceptionnally, make the button smaller so as to fit in the limited
+     * space on smaller devices.
+     */
+    setLocationButton: {
+        paddingHorizontal: metrics.horizontal * 0.75,
+        height: metrics.buttonHeight * 0.75,
+    },
 })
 
 /**
@@ -94,20 +145,14 @@ const styles = StyleSheet.create({
 
 export interface WeatherForecast {
     locationName: string
-    forecasts: Forecast[]
-}
-
-const useWeatherResponse = () => {
-    return withResponse<WeatherForecast>(
-        useCachedOrPromise(fetchWeatherForecastForLocation()),
-    )
+    forecasts: QueryForecast[]
 }
 
 const WeatherIconView = ({
     forecast,
     iconSize = 1,
 }: {
-    forecast: Forecast
+    forecast: QueryForecast
     iconSize?: number
 }) => {
     const info = (
@@ -172,13 +217,55 @@ const WeatherIconView = ({
     )
 }
 
-const WeatherWithForecast = ({
+const SetLocationButton = withNavigation(
+    ({ navigation }: NavigationInjectedProps) => {
+        const onSetLocation = useCallback(() => {
+            navigation.navigate(routeNames.WeatherGeolocationConsent)
+        }, [navigation])
+
+        return (
+            <Button
+                onPress={onSetLocation}
+                appearance={ButtonAppearance.skeleton}
+                style={styles.setLocationButtonWrap}
+                buttonStyles={styles.setLocationButton}
+            >
+                Set Location
+            </Button>
+        )
+    },
+)
+
+const LocationName = ({
+    isLocationPrecise,
     locationName,
-    forecasts,
+    isUsingProdDevtools,
 }: {
+    isLocationPrecise: boolean
     locationName: string
-    forecasts: Forecast[]
+    isUsingProdDevtools: boolean
 }) => {
+    if (!isLocationPrecise && isUsingProdDevtools) {
+        return <SetLocationButton />
+    }
+    return (
+        <>
+            <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
+            <Text style={styles.locationName} numberOfLines={2}>
+                {locationName}
+            </Text>
+        </>
+    )
+}
+
+const WeatherWithForecast = ({
+    weather,
+    isUsingProdDevtools,
+}: {
+    weather: AvailableWeather
+    isUsingProdDevtools: boolean
+}) => {
+    const { forecasts, locationName, isLocationPrecise } = weather
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
         const intervals = [8, 6, 4, 2, 0].map(idx => forecasts[idx])
@@ -193,8 +280,11 @@ const WeatherWithForecast = ({
                     )
                 })}
                 <View style={styles.locationNameContainer}>
-                    <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
-                    <Text style={styles.locationName}>{locationName}</Text>
+                    <LocationName
+                        locationName={locationName}
+                        isLocationPrecise={isLocationPrecise}
+                        isUsingProdDevtools={isUsingProdDevtools}
+                    />
                 </View>
             </View>
         )
@@ -206,18 +296,18 @@ const WeatherWithForecast = ({
     return <></>
 }
 
-const Weather = React.memo(() => {
-    const weatherResponse = useWeatherResponse()
-    return weatherResponse({
-        error: ({}) => <></>,
-        pending: () => <></>,
-        success: weatherForecast => (
-            <WeatherWithForecast
-                locationName={weatherForecast.locationName}
-                forecasts={weatherForecast.forecasts}
-            />
-        ),
-    })
+const WeatherWidget = React.memo(() => {
+    const query = useQuery<QueryData>(QUERY)
+    if (query.loading) return null
+
+    const { data } = query
+    if (!data.weather.available) return null
+    return (
+        <WeatherWithForecast
+            weather={data.weather}
+            isUsingProdDevtools={data.isUsingProdDevtools}
+        />
+    )
 })
 
-export { Weather }
+export { WeatherWidget }

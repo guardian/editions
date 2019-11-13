@@ -43,13 +43,20 @@ const ALL_NAMES = [
  */
 export const ALL_SETTINGS_FRAGMENT = makeFragment(ALL_NAMES)
 
+export const SettingValues: Map<string, Promise<unknown>> = new Map()
+
 /**
  * Build up a separate Apollo resolver function for each of all the known
  * settings.
  */
 const SETTINGS_RESOLVERS: { [name: string]: any } = {}
 for (const name of ALL_NAMES) {
-    SETTINGS_RESOLVERS[name] = getSetting.bind(undefined, name as any)
+    SETTINGS_RESOLVERS[name] = () => {
+        if (!SettingValues.has(name)) {
+            SettingValues.set(name, getSetting(name as any))
+        }
+        return SettingValues.get(name)
+    }
 }
 
 export { SETTINGS_RESOLVERS }

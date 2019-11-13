@@ -4,13 +4,13 @@
  * directly so that all the fetches are batched.
  */
 import { isPreview } from 'src/helpers/settings/defaults'
-import { useQuery, QueryStatus } from './apollo'
+import { useQuery } from './apollo'
 import gql from 'graphql-tag'
 
 const API_URL_QUERY = gql('{ apiUrl @client }')
 export const useApiUrl = () => {
     const query = useQuery<{ apiUrl: string }>(API_URL_QUERY)
-    if (query.status === QueryStatus.LOADED) return query.data.apiUrl
+    if (!query.loading) return query.data.apiUrl
     return null
 }
 
@@ -24,5 +24,5 @@ const PROD_DEV_QUERY = gql('{ isUsingProdDevtools @client }')
 export const useIsUsingProdDevtools = () => {
     const query = useQuery<{ isUsingProdDevtools: boolean }>(PROD_DEV_QUERY)
     // FIXME: upstream code should be handling the loading status
-    return query.status === QueryStatus.LOADED && query.data.isUsingProdDevtools
+    return !query.loading && query.data.isUsingProdDevtools
 }

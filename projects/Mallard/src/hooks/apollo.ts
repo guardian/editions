@@ -2,14 +2,9 @@ import { useQuery as useApolloQuery } from '@apollo/react-hooks'
 import ApolloClient from 'apollo-client'
 import { DocumentNode } from 'graphql'
 
-export enum QueryStatus {
-    LOADING,
-    LOADED,
-}
-
 export type QueryResult<Data> = (
-    | { status: QueryStatus.LOADING }
-    | { status: QueryStatus.LOADED; data: Data }) & {
+    | { loading: true }
+    | { loading: false; data: Data }) & {
     client: ApolloClient<object>
 }
 
@@ -28,7 +23,7 @@ export const useQuery = <Data>(query: DocumentNode): QueryResult<Data> => {
         throw error
     }
     if (loading) {
-        return { status: QueryStatus.LOADING, client }
+        return { loading: true, client }
     }
     if (data == null) {
         throw new Error(
@@ -37,5 +32,5 @@ export const useQuery = <Data>(query: DocumentNode): QueryResult<Data> => {
                 'has no resolver: https://github.com/apollographql/react-apollo/issues/1314',
         )
     }
-    return { status: QueryStatus.LOADED, client, data }
+    return { loading: false, client, data }
 }

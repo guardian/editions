@@ -40,7 +40,9 @@ export const getArticleDataFromNavigator = (
     frontName: string
 } => {
     const startingPoint = navigator.findIndex(
-        ({ article }) => currentArticle.article === article,
+        ({ article, front }) =>
+            currentArticle.article === article &&
+            currentArticle.front === front,
     )
     if (startingPoint < 0)
         return {
@@ -114,7 +116,9 @@ const ArticleScreenWithProps = ({
                         path={path}
                         width={width}
                         pillar={pillar}
-                        onTopPositionChange={() => {}}
+                        onShouldShowHeaderChange={() => {}}
+                        shouldShowHeader={true}
+                        topPadding={0}
                     />
                 ) : (
                     <ArticleSlider

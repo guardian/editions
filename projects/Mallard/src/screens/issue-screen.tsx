@@ -21,7 +21,7 @@ import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoint
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
-import { Weather } from 'src/components/weather'
+import { WeatherWidget } from 'src/components/weather'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
@@ -45,7 +45,7 @@ import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { IssueWithFronts, Front as TFront } from '../../../common/src'
 import {
@@ -54,6 +54,7 @@ import {
     FlatCard,
 } from 'src/helpers/transform'
 import { ArticleSpec } from './article-screen'
+import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
 const styles = StyleSheet.create({
     shownWeather: {
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
 const WEATHER_QUERY = gql('{ isWeatherShown @client }')
 const useIsWeatherShown = () => {
     const query = useQuery<{ isWeatherShown: boolean }>(WEATHER_QUERY)
-    return query.status == QueryStatus.LOADED && query.data.isWeatherShown
+    return !query.loading && query.data.isWeatherShown
 }
 
 const ScreenHeader = withNavigation(
@@ -288,12 +289,15 @@ const pathsAreEqual = (a: PathToIssue, b: PathToIssue) =>
 
 const WeatherHeader = () => {
     const isWeatherShown = useIsWeatherShown()
+
     if (!isWeatherShown) {
         return <View style={styles.emptyWeatherSpace} />
     }
     return (
         <View style={styles.shownWeather}>
-            <Weather />
+            <ErrorBoundary>
+                <WeatherWidget />
+            </ErrorBoundary>
         </View>
     )
 }
