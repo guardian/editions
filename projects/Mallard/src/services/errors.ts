@@ -7,7 +7,7 @@ import { GdprSwitchSetting } from 'src/helpers/settings'
 
 const { SENTRY_DSN_URL } = Config
 
-type QueryData = { gdprAllowPerformance: boolean }
+type QueryData = { gdprAllowPerformance: GdprSwitchSetting }
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
 export interface ErrorService {
@@ -40,7 +40,7 @@ class ErrorServiceImpl implements ErrorService {
         })
     }
 
-    private handleConsentUpdate(hasConsent: boolean) {
+    private handleConsentUpdate(hasConsent: GdprSwitchSetting) {
         this.hasConsent = hasConsent
         if (hasConsent === false || hasConsent === null) return
 
