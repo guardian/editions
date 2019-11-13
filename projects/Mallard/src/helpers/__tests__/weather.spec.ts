@@ -1,4 +1,4 @@
-import { resolveWeather } from '../weather'
+import { resolveWeather, refreshWeather, UNAVAILABLE_WEATHER } from '../weather'
 import { AppState } from 'react-native'
 
 const CITIES_URL =
@@ -63,5 +63,27 @@ it('should resolve and update the weather', async () => {
 
     expect(client.writeData).toHaveBeenCalledWith({
         data: { weather: res },
+    })
+})
+
+it('should refresh the weather completely', async () => {
+    const client = { writeData: jest.fn() } as any
+    let res = await resolveWeather({}, {}, { client })
+
+    forecasts = [{ DateTime: '1234' }]
+    const refreshPromise = refreshWeather(client)
+
+    expect(client.writeData).toHaveBeenCalledTimes(1)
+    expect(client.writeData).toHaveBeenCalledWith({
+        data: {
+            weather: UNAVAILABLE_WEATHER,
+        },
+    })
+
+    await refreshPromise
+
+    expect(client.writeData).toHaveBeenCalledTimes(2)
+    expect(client.writeData).toHaveBeenCalledWith({
+        data: { weather: getExpectedWeather() },
     })
 })
