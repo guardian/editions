@@ -68,7 +68,7 @@ const useIssueOnDevice = (localId: string) => {
                 const newStatus = localIssueListStore.getStatus(localId)
                 setStatus(newStatus)
             }),
-        [],
+        [localId],
     )
 
     return status
