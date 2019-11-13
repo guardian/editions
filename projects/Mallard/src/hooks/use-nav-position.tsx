@@ -37,7 +37,12 @@ const NavPositionProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <NavPositionContext.Provider
-            value={{ position, setPosition, trigger, setTrigger }}
+            value={{
+                position,
+                setPosition,
+                trigger,
+                setTrigger,
+            }}
         >
             {children}
         </NavPositionContext.Provider>

@@ -20,7 +20,6 @@ import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
 import { useNavPosition } from 'src/hooks/use-nav-position'
-import { toPosition } from '../../../../common/src'
 
 export interface PathToArticle {
     collection: Collection['key']

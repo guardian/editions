@@ -164,17 +164,17 @@ const IssueFronts = ({
                 return obj.displayName === position.frontId
             })
 
-            console.log(frontToScrollTo.key)
+            if (frontToScrollTo.key !== position.frontId) {
+                const index = frontToScrollTo
+                    ? frontWithCards.findIndex(
+                          front => front === frontToScrollTo,
+                      )
+                    : 0
 
-            // if (frontToScrollTo.key !== position.frontId) {
-            const index = frontToScrollTo
-                ? frontWithCards.findIndex(front => front === frontToScrollTo)
-                : 0
-
-            if (ref && ref.current && ref.current.scrollToIndex) {
-                ref.current.scrollToIndex({ animated: false, index })
+                if (ref && ref.current && ref.current.scrollToIndex) {
+                    ref.current.scrollToIndex({ animated: false, index })
+                }
             }
-            // }
             setTrigger(false)
         }
     }, [trigger])
@@ -228,10 +228,6 @@ const IssueFronts = ({
     issue.fronts.map(
         front => (flatlistRefs[front.key as string] = React.createRef()),
     )
-    console.log(flatlistRefs)
-    if (ref && ref.current) {
-        console.log('james', ref.current.scrollToIndex)
-    }
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
