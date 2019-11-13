@@ -18,8 +18,8 @@ const ManageEditionsScreen = () => {
                         data: {
                             onPress: () => {
                                 Alert.alert(
-                                    'Are you sure?',
-                                    'This will delete all your downloaded issues',
+                                    'Are you sure you want to delete all downloads?',
+                                    'You wil still be able to access them and download them again',
                                     [
                                         {
                                             text: 'Ok',
