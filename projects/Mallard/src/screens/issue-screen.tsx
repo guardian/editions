@@ -220,6 +220,12 @@ const IssueFronts = ({
         [issue.localId, issue.publishedId, issue.fronts],
     )
 
+    // Create refs for each front coming up
+    const flatlistRefs = {}
+    issue.fronts.map(
+        front => (flatlistRefs[front.key as string] = React.createRef()),
+    )
+
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
@@ -256,6 +262,7 @@ const IssueFronts = ({
             key={width}
             renderItem={({ item: front }) => (
                 <Front
+                    refToUse={flatlistRefs[front.key]}
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
                     articleNavigator={frontSpecs}
