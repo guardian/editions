@@ -169,8 +169,8 @@ const NetInfoProvider = ({ children }: { children: React.ReactNode }) => {
                         <Text style={devToggleStyles.text}>
                             Net info{': '}
                             {netInfoStateContainer.isForcedOffline
-                                ? 'offline'
-                                : 'online'}
+                                ? 'forced offline'
+                                : netInfo.type}
                         </Text>
                     </TouchableWithoutFeedback>
                 </View>
