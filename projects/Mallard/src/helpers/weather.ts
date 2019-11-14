@@ -55,7 +55,7 @@ export type Weather =
           available: false
       }
 
-const UNAVAILABLE_WEATHER: Weather = {
+export const UNAVAILABLE_WEATHER: Weather = {
     __typename: 'Weather',
     locationName: null,
     isLocationPrecise: null,
@@ -111,27 +111,41 @@ const ONE_HOUR = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR
 /**
  * Resolve weather location information and forecasts. Refetch weather
  * after that if app is foregrounded and data is more than an hour old.
- * (We can't use `setTimeout` because of https://github.com/facebook/react-native/issues/12981)
+ * (We can't use `setTimeout` because of
+ * https://github.com/facebook/react-native/issues/12981)
+ *
+ * `refreshWeather` forces an immediate refresh, can be from user request or
+ * when the location permission change and we can now fetch more
+ * precise weather.
  */
-export const resolveWeather = (() => {
+const { resolveWeather, refreshWeather } = (() => {
     // If `undefined`, weather has never been shown.
     let weather: Promise<Weather> | undefined
+
+    // We update the cache only if no other update happened in-between.
+    const update = async (client: ApolloClient<object>, fallback?: Weather) => {
+        if (weather == null) return
+        const newWeather = (weather = getWeather(fallback))
+        const value = await weather
+        // `weather` might have changed while we were awaiting, in which case
+        // we don't want to update the cache with stale data.
+        if (weather == newWeather)
+            client.writeData({ data: { weather: value } })
+    }
 
     // When going foreground, we get the fresh weather (and potentially new
     // location). Once that resolves we update the cache with the correct value,
     // which updates any view showing the weather.
     const onAppGoesForeground = async (client: ApolloClient<object>) => {
         if (weather == null) return
-        let value = await weather
+        const value = await weather
         if (value.available && Date.now() < value.lastUpdated + ONE_HOUR) return
-        weather = getWeather(value)
-        value = await weather
-        client.writeData({ data: { weather: value } })
+        update(client, value)
     }
 
     // The first time this is called we setup a listener to update the weather
     // from time to time.
-    return (
+    const resolveWeather = (
         _context: unknown,
         _args: {},
         { client }: { client: ApolloClient<object> },
@@ -145,4 +159,14 @@ export const resolveWeather = (() => {
         })
         return weather
     }
+
+    const refreshWeather = async (client: ApolloClient<object>) => {
+        if (weather == null) return
+        client.writeData({ data: { weather: UNAVAILABLE_WEATHER } })
+        await update(client)
+    }
+
+    return { resolveWeather, refreshWeather }
 })()
+
+export { resolveWeather, refreshWeather }
