@@ -127,6 +127,8 @@ const { resolveWeather, refreshWeather } = (() => {
         if (weather == null) return
         const newWeather = (weather = getWeather(fallback))
         const value = await weather
+        // `weather` might have changed while we were awaiting, in which case
+        // we don't want to update the cache with stale data.
         if (weather == newWeather)
             client.writeData({ data: { weather: value } })
     }
