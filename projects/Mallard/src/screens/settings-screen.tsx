@@ -22,7 +22,7 @@ import {
     setIsWeatherShown,
     setIsUsingProdDevtools,
 } from 'src/helpers/settings/setters'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 
@@ -75,7 +75,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         DeviceInfo.getVersion().then(version => setVersionNumber(version))
     })
 
-    if (query.status == QueryStatus.LOADING) return null
+    if (query.loading) return null
     const { client } = query
     const { isUsingProdDevtools, isWeatherShown } = query.data
 

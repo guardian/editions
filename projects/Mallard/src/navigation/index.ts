@@ -36,9 +36,10 @@ import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
 import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
-import { useQuery, QueryStatus } from 'src/hooks/apollo'
+import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
+import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -102,6 +103,9 @@ const AppStack = createModalNavigator(
                 },
             },
         ),
+        [routeNames.WeatherGeolocationConsent]: createHeaderStackNavigator({
+            [routeNames.WeatherGeolocationConsent]: WeatherGeolocationConsentScreen,
+        }),
     },
 )
 
@@ -168,7 +172,7 @@ const RootNavigator = createAppContainer(
                         )
                         useEffect(() => {
                             /** Setting is still loading, do nothing yet. */
-                            if (query.status == QueryStatus.LOADING) return
+                            if (query.loading) return
                             if (!query.data.hasOnboarded) {
                                 navigation.navigate('Onboarding')
                             } else {

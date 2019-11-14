@@ -1,310 +1,151 @@
 import { ErrorService } from '../errors'
-import { getMockPromise } from 'src/test-helpers/test-helpers'
-import { GdprSwitchSettings } from 'src/helpers/settings'
+import gql from 'graphql-tag'
+import Observable from 'zen-observable'
 
-type Sub = (key: keyof GdprSwitchSettings, value: boolean) => void
-
-const createEmitter = () => {
-    let cb: Sub = () => {}
-
-    return {
-        emit: (key: keyof GdprSwitchSettings, value: boolean) => {
-            cb(key, value)
-        },
-        sub: (fn: Sub) => {
-            cb = fn
-            return () => {
-                cb = () => {}
-            }
-        },
-    }
-}
-
-const createSentry = () => ({
+jest.mock('src/helpers/release-stream', () => ({
+    isInBeta: () => false,
+}))
+jest.mock('react-native-sentry', () => ({
     config: jest.fn(() => ({
         install: jest.fn(() => Promise.resolve()),
     })),
     captureException: jest.fn(() => {}),
     setTagsContext: jest.fn(() => {}),
-})
-
-jest.mock('src/helpers/release-stream', () => ({
-    isInBeta: () => false,
 }))
+const QUERY = gql('{ gdprAllowPerformance @client }')
 
-describe('errors', () => {
-    describe('ErrorService', () => {
-        it('should not do anything with calling `init`', async () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
+describe('errorService', () => {
+    let errorService: ErrorService
+    let Sentry: any
+    let apolloClient: any
+    let setMockedConsent: (value: boolean) => void
+    let consentFetchPromise: Promise<void>
 
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
+    beforeEach(() => {
+        jest.resetModules()
+
+        errorService = require('../errors').errorService
+        Sentry = require('react-native-sentry')
+
+        let hasConsent = false
+        const observers: any = []
+
+        const notify = () => {
+            observers.forEach((observer: any) =>
+                observer.next({
+                    data: { gdprAllowPerformance: hasConsent },
+                }),
             )
+        }
+
+        setMockedConsent = (value: boolean) => {
+            hasConsent = value
+            notify()
+        }
+
+        const watchQuery = (opts: any) => {
+            expect(opts.query).toEqual(QUERY)
+            return new Observable(observer => {
+                observers.push(observer)
+                consentFetchPromise = Promise.resolve().then(notify)
+            })
+        }
+        apolloClient = { watchQuery }
+    })
 
-            await Promise.resolve()
+    it('should not do anything before calling `init`', async () => {
+        await Promise.resolve()
+        errorService.captureException(new Error())
 
-            errorService.captureException(new Error())
+        expect(Sentry.config).not.toHaveBeenCalled()
+        expect(Sentry.captureException).not.toHaveBeenCalled()
+    })
 
-            expect(sentry.config).not.toHaveBeenCalled()
-            expect(sentry.captureException).not.toHaveBeenCalled()
-        })
+    it('should default to not having consent', () => {
+        errorService.init(apolloClient)
 
-        it('should default to not having consent', () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
+        errorService.captureException(new Error())
 
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
+        expect(Sentry.config).not.toHaveBeenCalled()
+        expect(Sentry.captureException).not.toHaveBeenCalled()
+    })
 
-            errorService.init()
+    it('should install the if consent is set to true', async () => {
+        setMockedConsent(true)
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-            errorService.captureException(new Error())
+        expect(Sentry.config).toHaveBeenCalledTimes(1)
+    })
 
-            expect(sentry.config).not.toHaveBeenCalled()
-            expect(sentry.captureException).not.toHaveBeenCalled()
-        })
+    it('should not install without consent', async () => {
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-        it('should install the if consent is set to true', async () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
+        expect(Sentry.config).not.toHaveBeenCalled()
+    })
 
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
+    it('should install only after consent is set to true', async () => {
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-            errorService.init()
+        setMockedConsent(true)
+        expect(Sentry.config).toHaveBeenCalledTimes(1)
+    })
 
-            await Promise.resolve()
+    it('should not fire errors without consent', async () => {
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-            expect(sentry.config).toHaveBeenCalledTimes(1)
-        })
+        errorService.captureException(new Error())
+        expect(Sentry.captureException).not.toHaveBeenCalled()
+    })
 
-        it('should not install without consent', async () => {
-            const getSetting = getMockPromise(false)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
+    it('should fire errors with consent', async () => {
+        setMockedConsent(true)
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
+        errorService.captureException(new Error())
+        expect(Sentry.captureException).toHaveBeenCalledTimes(1)
+    })
 
-            errorService.init()
+    it('should start firing errors if consent is granted in the app', async () => {
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-            await Promise.resolve()
+        errorService.captureException(new Error())
+        expect(Sentry.captureException).not.toHaveBeenCalled()
 
-            expect(sentry.config).not.toHaveBeenCalled()
-        })
+        setMockedConsent(true)
+        errorService.captureException(new Error())
+        expect(Sentry.captureException).toHaveBeenCalledTimes(1)
+    })
 
-        it('should install only after consent is set to true', async () => {
-            const getSetting = getMockPromise(false)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
+    it('should stop firing errors if consent is revoked in the app', async () => {
+        setMockedConsent(true)
+        errorService.init(apolloClient)
+        await consentFetchPromise
 
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
+        errorService.captureException(new Error())
+        expect(Sentry.captureException).toHaveBeenCalledTimes(1)
 
-            errorService.init()
+        setMockedConsent(false)
+        errorService.captureException(new Error())
+        expect(Sentry.captureException).toHaveBeenCalledTimes(1)
+    })
 
-            await Promise.resolve()
+    it('should queue errors that happen while waiting to determine whether we have consent and send them if we do', async () => {
+        setMockedConsent(true)
+        errorService.init(apolloClient)
 
-            settingsUpdateEmitter.emit('gdprAllowPerformance', true)
+        errorService.captureException(new Error())
+        errorService.captureException(new Error())
 
-            expect(sentry.config).toHaveBeenCalledTimes(1)
-        })
+        expect(Sentry.captureException).not.toHaveBeenCalled()
 
-        it('should only listen for the relevant key', async () => {
-            const getSetting = getMockPromise(false)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
+        await consentFetchPromise
 
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            await Promise.resolve()
-
-            settingsUpdateEmitter.emit('gdprAllowFunctionality', true)
-
-            expect(sentry.config).not.toHaveBeenCalled()
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).not.toHaveBeenCalled()
-        })
-
-        it('should not fire errors without consent', async () => {
-            const getSetting = getMockPromise(false)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
-
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            await Promise.resolve()
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).not.toHaveBeenCalled()
-        })
-
-        it('should fire errors with consent', async () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
-
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            await Promise.resolve()
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(1)
-        })
-
-        it('should start firing errors if consent is granted in the app', async () => {
-            const getSetting = getMockPromise(false)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
-
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            await Promise.resolve()
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).not.toHaveBeenCalled()
-
-            settingsUpdateEmitter.emit('gdprAllowPerformance', true)
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(1)
-        })
-
-        it('should stop firing errors if consent is revoked in the app', async () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
-
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            await Promise.resolve()
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(1)
-
-            settingsUpdateEmitter.emit('gdprAllowPerformance', false)
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(1)
-        })
-
-        it('should queue errors that happen while waiting to determine whether we have consent and send them if we do', async () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
-
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            errorService.captureException(new Error())
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).not.toHaveBeenCalled()
-
-            await Promise.resolve()
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(2)
-        })
-
-        it('should stop listening for events after calling destroy', async () => {
-            const getSetting = getMockPromise(true)
-            const settingsUpdateEmitter = createEmitter()
-            const sentry = createSentry()
-
-            const errorService = new ErrorService(
-                'gdprAllowPerformance',
-                getSetting,
-                settingsUpdateEmitter.sub,
-                sentry,
-            )
-
-            errorService.init()
-
-            await Promise.resolve()
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(1)
-
-            errorService.destroy()
-
-            settingsUpdateEmitter.emit('gdprAllowPerformance', false)
-
-            errorService.captureException(new Error())
-
-            expect(sentry.captureException).toHaveBeenCalledTimes(2)
-        })
+        expect(Sentry.captureException).toHaveBeenCalledTimes(2)
     })
 })
