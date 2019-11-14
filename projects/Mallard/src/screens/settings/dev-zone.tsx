@@ -174,8 +174,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                     {
                         key: 'Hide this menu',
                         title: 'Hide this menu',
-                        explainer:
-                            'Tap the version 7 times & confirm the fake scary message to bring it back',
+                        explainer: 'Tap the version 7 times to bring it back',
                         data: {
                             onPress: () => {
                                 setIsUsingProdDevtools(client, false)
