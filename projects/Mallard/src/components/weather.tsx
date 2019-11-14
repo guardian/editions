@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
         width: 45,
         paddingTop: 2,
         paddingLeft: 4,
-        paddingRight: 8,
     },
     forecastItemWide: {
         width: 90,

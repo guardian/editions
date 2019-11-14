@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View, Easing } from 'react-native'
-import { Header } from 'src/components/layout/header/header'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
@@ -21,9 +20,7 @@ import {
     ArticleNavigator,
     getArticleDataFromNavigator,
 } from '../article-screen'
-import { Button, ButtonAppearance } from 'src/components/button/button'
-import { withNavigation } from 'react-navigation'
-import { NavigationInjectedProps } from 'react-navigation'
+import { BasicArticleHeader } from './header'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -106,56 +103,37 @@ const SliderBar = ({ position, total, title, color }: SliderBarProps) => {
     )
 }
 
-const AndroidHeader = withNavigation(
-    ({
-        isShown,
-        navigation,
-        isAtTop,
-        ...sliderProps
-    }: { isShown: boolean; isAtTop: boolean } & SliderBarProps &
-        NavigationInjectedProps) => {
-        const [top] = useState(new Animated.Value(0))
-        useEffect(() => {
-            if (isShown) {
-                Animated.timing(top, {
-                    toValue: 0,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            } else {
-                Animated.timing(top, {
-                    toValue: -ANDROID_HEADER_HEIGHT,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            }
-        }, [isShown, top])
+const AndroidHeader = ({
+    isShown,
+    isAtTop,
+    ...sliderProps
+}: { isShown: boolean; isAtTop: boolean } & SliderBarProps) => {
+    const [top] = useState(new Animated.Value(0))
+    useEffect(() => {
+        if (isShown) {
+            Animated.timing(top, {
+                toValue: 0,
+                easing: Easing.out(Easing.ease),
+                duration: 200,
+            }).start()
+        } else {
+            Animated.timing(top, {
+                toValue: -ANDROID_HEADER_HEIGHT,
+                easing: Easing.out(Easing.ease),
+                duration: 200,
+            }).start()
+        }
+    }, [isShown, top])
 
-        return (
-            <Animated.View style={[styles.androidHeader, { top }]}>
-                <Header
-                    white
-                    leftAction={
-                        <Button
-                            appearance={ButtonAppearance.skeleton}
-                            icon={'\uE00A'}
-                            alt="Back"
-                            onPress={() => navigation.goBack(null)}
-                        ></Button>
-                    }
-                    layout={'center'}
-                >
-                    {null}
-                </Header>
-                <View
-                    style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
-                >
-                    <SliderBar {...sliderProps} />
-                </View>
-            </Animated.View>
-        )
-    },
-)
+    return (
+        <Animated.View style={[styles.androidHeader, { top }]}>
+            <BasicArticleHeader />
+            <View style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}>
+                <SliderBar {...sliderProps} />
+            </View>
+        </Animated.View>
+    )
+}
 
 /**
  * We keep track of which articles are scrolled or not so that when we swipe
