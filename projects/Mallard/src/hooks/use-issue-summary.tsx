@@ -1,4 +1,4 @@
-import NetInfo from '@react-native-community/netinfo'
+import * as NetInfo from 'src/hooks/use-net-info'
 import React, {
     createContext,
     Dispatch,
@@ -45,8 +45,8 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     const [error, setError] = useState<string>('')
     const hasConnected = useRef(false)
 
-    const grabIssueSummary = (isConnected: boolean) => {
-        getIssueSummary(isConnected)
+    const grabIssueSummary = async (isConnected: boolean) => {
+        return getIssueSummary(isConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
                 setIssueId(issueSummaryToLatestPath(issueSummary))
@@ -59,17 +59,26 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         NetInfo.addEventListener(({ isConnected }) => {
+            // try and get a fresh summary until we made it to online
             if (!hasConnected.current) {
                 hasConnected.current = isConnected
 
                 grabIssueSummary(isConnected)
             }
+        })
 
-            AppState.addEventListener('change', appState => {
-                if (appState === 'active') {
+        AppState.addEventListener('change', async appState => {
+            // when we foreground have another go at fetching again
+            if (appState === 'active') {
+                const { isConnected } = await NetInfo.fetch()
+                if (isConnected) {
                     grabIssueSummary(isConnected)
+                } else {
+                    // now we've foregrounded again, wait for a new issue list
+                    // seen as we couldn't get one now
+                    hasConnected.current = false
                 }
-            })
+            }
         })
     }, [])
 
