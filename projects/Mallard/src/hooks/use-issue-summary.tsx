@@ -45,8 +45,8 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
     const [error, setError] = useState<string>('')
     const hasConnected = useRef(false)
 
-    const grabIssueSummary = async (isConnected: boolean) => {
-        return getIssueSummary(isConnected)
+    const grabIssueSummary = (isConnected: boolean) =>
+        getIssueSummary(isConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
                 setIssueId(issueSummaryToLatestPath(issueSummary))
@@ -55,7 +55,6 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             .catch(e => {
                 setError(e.message)
             })
-    }
 
     useEffect(() => {
         NetInfo.addEventListener(({ isConnected }) => {
