@@ -5,14 +5,14 @@ import {
     StyleSheet,
     View,
     ViewProps,
-    Alert,
+    Easing,
 } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { Slider } from 'src/components/slider'
-import { safeInterpolation, clamp } from 'src/helpers/math'
+import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 // import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
@@ -55,8 +55,14 @@ const styles = StyleSheet.create({
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
+        paddingLeft: 2,
+        paddingRight: 2,
     },
-    innerSlider: StyleSheet.absoluteFillObject,
+    innerSlider: {
+        ...StyleSheet.absoluteFillObject,
+        paddingLeft: 2,
+        paddingRight: 2,
+    },
     sliderBorder: {
         borderBottomColor: color.line,
     },
@@ -101,11 +107,8 @@ const SliderSectionBar = ({
             }),
     )
 
-    console.log('section: ', width, isFirst)
-
     const xValue = animatedValue.interpolate({
         inputRange: [
-            // section.startIndex === 0 ? -0.001 : section.startIndex - 1,
             section.startIndex - 1,
             section.startIndex,
             section.startIndex + section.items - 1,
@@ -114,10 +117,6 @@ const SliderSectionBar = ({
         outputRange: [width, 0, 0, -width],
         extrapolate: 'clamp',
     })
-    // animatedValue.addListener(val => console.log(val))
-    if (isFirst) {
-        xValue.addListener(x => console.log(x))
-    }
 
     return (
         <Animated.View
@@ -136,7 +135,7 @@ const SliderSectionBar = ({
             ]}
         >
             <Slider
-                small
+                small={false}
                 title={section.title}
                 fill={section.color}
                 stops={2}
@@ -185,8 +184,7 @@ const ArticleSlider = ({
         path,
     )
     const [current, setCurrent] = useState(startingPoint)
-
-    console.log('render!')
+    const [animatedValue] = useState(new Animated.Value(startingPoint))
 
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -227,14 +225,6 @@ const ArticleSlider = ({
         { sectionCounter: 0, sections: [] as SliderSection[] },
     ).sections
 
-    const sectionCount = sliderSections.reduce((acc, s) => acc + s.items, 0)
-    const [animatedValue] = useState(new Animated.Value(startingPoint))
-
-    const interpolatedValue = animatedValue.interpolate({
-        inputRange: [0, sectionCount * width],
-        outputRange: [0, sectionCount],
-    })
-
     if (Platform.OS === 'android')
         return (
             <>
@@ -243,7 +233,7 @@ const ArticleSlider = ({
                     wrapperProps={{
                         style: !articleIsAtTop && styles.sliderBorder,
                     }}
-                    animatedValue={interpolatedValue}
+                    animatedValue={animatedValue}
                     width={width}
                 />
                 <ViewPagerAndroid
@@ -251,6 +241,12 @@ const ArticleSlider = ({
                     initialPage={startingPoint}
                     onPageSelected={(ev: any) => {
                         setCurrent(ev.nativeEvent.position)
+                        Animated.timing(animatedValue, {
+                            duration: 200,
+                            toValue: ev.nativeEvent.position,
+                            easing: Easing.linear,
+                            useNativeDriver: true,
+                        }).start()
                     }}
                 >
                     {flattenedArticles.map((item, index) => (
@@ -278,7 +274,10 @@ const ArticleSlider = ({
                     ...panResponder.panHandlers,
                     style: !articleIsAtTop && styles.sliderBorder,
                 }}
-                animatedValue={interpolatedValue}
+                animatedValue={Animated.divide(
+                    animatedValue,
+                    new Animated.Value(width),
+                )}
                 width={width}
             />
 
