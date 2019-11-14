@@ -317,6 +317,19 @@ const ArticleSlider = ({
                             easing: Easing.linear,
                             useNativeDriver: true,
                         }).start()
+                        if (
+                            position &&
+                            position.frontId !==
+                                flattenedArticles[ev.nativeEvent.position].front
+                        ) {
+                            setPosition({
+                                frontId:
+                                    flattenedArticles[ev.nativeEvent.position]
+                                        .front,
+                                articleIndex: 0,
+                            })
+                            setTrigger(true)
+                        }
                     }}
                 >
                     {flattenedArticles.map((item, index) => (

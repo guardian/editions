@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react'
-import { Animated, FlatList, StyleSheet, View } from 'react-native'
+import React, { useMemo, useRef, useState } from 'react'
+import { Animated, StyleSheet, View } from 'react-native'
 import {
     ArticlePillar,
     ArticleType,
@@ -20,7 +20,6 @@ import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
-import { useNavPosition } from 'src/hooks/use-nav-position'
 
 const CollectionPageInFront = ({
     index,
@@ -83,7 +82,6 @@ export const Front = React.memo(
         localIssueId,
         publishedIssueId,
         cards,
-        refToUse,
     }: {
         articleNavigator: ArticleNavigator
         localIssueId: Issue['localId']
@@ -95,27 +93,10 @@ export const Front = React.memo(
         const pillar = getAppearancePillar(frontData.appearance)
 
         const [scrollX] = useState(() => new Animated.Value(0))
+        const flatListRef = useRef<AnimatedFlatListRef | undefined>()
 
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
-        const { position, trigger } = useNavPosition()
-
-        useEffect(() => {
-            // Navigate to articleIndex here which should match cardIndex
-            if (
-                refToUse &&
-                refToUse.current &&
-                refToUse.current.getNode() &&
-                refToUse.current.getNode().scrollToIndex
-            ) {
-                if (frontData.displayName === position.frontId) {
-                    refToUse.current.getNode().scrollToIndex({
-                        animated: false,
-                        index: position.articleIndex,
-                    })
-                }
-            }
-        }, [trigger])
 
         return (
             <Wrapper
@@ -148,7 +129,7 @@ export const Front = React.memo(
                     style={styles.overflow}
                     decelerationRate="fast"
                     snapToInterval={card.width}
-                    ref={r => (refToUse.current = r)}
+                    ref={flatListRef}
                     getItemLayout={(_: never, index: number) => ({
                         length: card.width,
                         offset: card.width * index,
