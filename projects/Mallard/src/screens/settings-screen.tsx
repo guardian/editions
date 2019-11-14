@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-community/async-storage'
 import React, { useContext, useState, useEffect } from 'react'
 import { Alert, StyleSheet, Text, Switch } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
