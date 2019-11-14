@@ -7,9 +7,7 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
-import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import { Header } from 'src/components/layout/header/header'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
 import { useDimensions } from 'src/hooks/use-screen'
@@ -43,33 +41,12 @@ const Dismissable = ({
 }
 
 const BasicCardWrapper = ({
-    navigator,
+    navigator: Navigator,
     navigation,
 }: {
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
-    const Navigator = (navigator as unknown) as FunctionComponent<
-        NavigationInjectedProps
-    >
-    return (
-        <>
-            <Header
-                white
-                leftAction={
-                    <Button
-                        appearance={ButtonAppearance.skeleton}
-                        icon={'\uE00A'}
-                        alt="Back"
-                        onPress={() => navigation.goBack(null)}
-                    ></Button>
-                }
-                layout={'center'}
-            >
-                {null}
-            </Header>
-            <Navigator navigation={navigation} />
-        </>
-    )
+    return <Navigator navigation={navigation} />
 }
 
 const wrapInBasicCard: NavigatorWrapper = Navigator => {

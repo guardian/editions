@@ -5,6 +5,7 @@
  */
 import { Settings, storeSetting, GdprSwitchSetting } from 'src/helpers/settings'
 import ApolloClient from 'apollo-client'
+import { SettingValues } from './resolvers'
 
 const setSetting = (
     name: keyof Settings,
@@ -12,6 +13,7 @@ const setSetting = (
     value: any,
 ) => {
     storeSetting(name, value as any)
+    SettingValues.set(name, Promise.resolve(value))
     client.writeData({ data: { [name]: value } })
 }
 

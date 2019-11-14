@@ -110,7 +110,7 @@ const IssueList = withNavigation(
                     <View
                         style={{
                             padding: metrics.horizontal,
-                            paddingVertical: metrics.vertical * 4,
+                            paddingVertical: metrics.vertical * 2,
                         }}
                     >
                         <GridRowSplit

@@ -17,16 +17,16 @@ import { onShouldStartLoadWithRequest } from './helpers'
 const WebviewWithArticle = ({
     article,
     type,
-    paddingTop = 0,
     _ref,
     theme,
+    topPadding,
     ...webViewProps
 }: {
     article: Article | PictureArticle | GalleryArticle
     type: ArticleType
-    paddingTop?: number
     theme: ArticleTheme
     _ref?: (ref: WebView) => void
+    topPadding: number
 } & WebViewProps & { onScroll?: any }) => {
     const { isConnected } = useNetInfo()
     const [, { pillar }] = useArticle()
@@ -41,8 +41,8 @@ const WebviewWithArticle = ({
         theme,
         showWebHeader: true,
         showMedia: isConnected,
-        height: paddingTop,
         publishedId: (issueId && issueId.publishedIssueId) || null,
+        topPadding,
     })
 
     return (

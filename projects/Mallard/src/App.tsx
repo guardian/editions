@@ -28,7 +28,6 @@ import {
 import { NavigationState } from 'react-navigation'
 import { BugButton } from './components/BugButton'
 import SplashScreen from 'react-native-splash-screen'
-import { UpdateIpAddress } from './components/update-ip-address'
 import { NetInfoProvider } from './hooks/use-net-info'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { AccessProvider } from './authentication/AccessContext'
@@ -37,6 +36,7 @@ import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorize
 import { IssueSummaryProvider } from './hooks/use-issue-summary'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { createApolloClient } from './apollo'
+import { errorService } from './services/errors'
 
 const clearAndDownloadIssue = async () => {
     await prepFileSystem()
@@ -45,6 +45,16 @@ const clearAndDownloadIssue = async () => {
     if (weOk) {
         downloadTodaysIssue()
     }
+}
+
+/**
+ * Only one global Apollo client. As such, any update done from any component
+ * will cause dependent views to refresh and keep up-to-date.
+ */
+const apolloClient = createApolloClient()
+
+if (!__DEV__) {
+    errorService.init(apolloClient)
 }
 
 // useScreens is not a hook
@@ -133,12 +143,6 @@ const WithProviders = nestProviders(
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
 
-/**
- * Only one global Apollo client. As such, any update done from any component
- * will cause dependent views to refresh and keep up-to-date.
- */
-const apolloClient = createApolloClient()
-
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
@@ -184,7 +188,6 @@ export default class App extends React.Component<{}, {}> {
                                     }
                                 />
                                 <NetInfoAutoToast />
-                                <UpdateIpAddress />
                             </View>
                             <ModalRenderer />
                             <BugButton />

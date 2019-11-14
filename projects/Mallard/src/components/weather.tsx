@@ -1,55 +1,99 @@
-import React from 'react'
-import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
-import { useCachedOrPromise } from 'src/hooks/use-cached-or-promise'
-import { withResponse } from 'src/helpers/response'
+import React, { useCallback } from 'react'
+import { Text, StyleSheet, View } from 'react-native'
 import { Forecast } from '../common'
 import { metrics } from 'src/theme/spacing'
 import { WeatherIcon } from './weather/weatherIcon'
 import Moment from 'moment'
-import { fetchWeatherForecastForLocation } from 'src/helpers/fetch'
-import { GridRowSplit } from './issue/issue-title'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
+import { useQuery } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+import { Button, ButtonAppearance } from './button/button'
+import { withNavigation } from 'react-navigation'
+import { routeNames } from 'src/navigation/routes'
+import { NavigationInjectedProps } from 'react-navigation'
+import { PermissionStatus } from 'react-native-permissions'
+
+type QueryForecast = Pick<
+    Forecast,
+    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
+>
+type AvailableWeather = {
+    locationName: string
+    isLocationPrecise: boolean
+    forecasts: QueryForecast[]
+    available: true
+}
+type QueryData = {
+    weather: AvailableWeather | { available: false }
+    isUsingProdDevtools: boolean
+    locationPermissionStatus: PermissionStatus
+}
+
+const QUERY = gql`
+    {
+        weather @client {
+            locationName
+            isLocationPrecise
+            forecasts {
+                DateTime
+                Temperature {
+                    Value
+                    Unit
+                }
+                WeatherIcon
+                EpochDateTime
+            }
+            available
+        }
+        isUsingProdDevtools @client
+        locationPermissionStatus @client
+    }
+`
 
 const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
-    weatherContainerLong: {
+    weatherContainer: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         width: 'auto',
         marginBottom: 24,
     },
-    weatherContainerNarrow: {
-        height: 'auto',
-        flexDirection: 'column',
-        paddingLeft: metrics.horizontal,
-    },
     forecastItem: {
         borderStyle: 'solid',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
-    },
-    forecastItemLong: {
-        height: 60,
         borderLeftWidth: 1,
-        flex: 2,
         borderLeftColor: color.line,
-        paddingTop: 2,
-        paddingLeft: 4,
     },
     forecastItemNarrow: {
-        paddingTop: metrics.vertical * 0.6,
-        paddingBottom: metrics.vertical * 1.2,
-        flexShrink: 0,
-        flexGrow: 0,
-        borderBottomColor: color.line,
-        borderBottomWidth: 1,
+        height: 64,
+        width: 45,
+        paddingTop: 2,
+        paddingLeft: 4,
+        paddingRight: 8,
+    },
+    forecastItemWide: {
+        width: 90,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: metrics.horizontal * 0.5,
+        paddingRight: metrics.horizontal,
+        paddingVertical: metrics.vertical,
+    },
+    forecastText: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    forecastTextWide: {
+        marginLeft: metrics.horizontal * 0.5,
     },
     temperature: {
         color: '#E05E00',
+        marginTop: 4,
         ...getFont('sans', 0.5),
     },
     dateTime: {
@@ -57,19 +101,20 @@ const styles = StyleSheet.create({
         ...getFont('sans', 0.5),
     },
     locationNameContainer: {
-        flex: 1,
-        height: 60,
         flexDirection: 'row',
+        marginTop: metrics.vertical * 0.5,
+        marginRight: metrics.horizontal,
+        flexShrink: 1,
     },
     locationName: {
         ...getFont('sans', 0.5),
         color: '#000000',
-        lineHeight: 35,
+        marginTop: 15,
+        flexShrink: 1,
     },
     locationPinIcon: {
         fontFamily: 'GuardianIcons-Regular',
         fontSize: 30,
-        marginLeft: '-1%',
         color: '#ACACAC',
     },
     root: {
@@ -80,6 +125,17 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         flex: 0,
         width: 'auto',
+    },
+    setLocationButtonWrap: {
+        marginTop: metrics.vertical,
+    },
+    /**
+     * Exceptionnally, make the button smaller so as to fit in the limited
+     * space on smaller devices.
+     */
+    setLocationButton: {
+        paddingHorizontal: metrics.horizontal * 0.75,
+        height: metrics.buttonHeight * 0.75,
     },
 })
 
@@ -92,125 +148,169 @@ const styles = StyleSheet.create({
 
 export interface WeatherForecast {
     locationName: string
-    forecasts: Forecast[]
-}
-
-const useWeatherResponse = () => {
-    return withResponse<WeatherForecast>(
-        useCachedOrPromise(fetchWeatherForecastForLocation()),
-    )
+    forecasts: QueryForecast[]
 }
 
 const WeatherIconView = ({
     forecast,
-    style,
     iconSize = 1,
 }: {
-    forecast: Forecast
-    style?: StyleProp<ViewStyle>
+    forecast: QueryForecast
     iconSize?: number
-}) => (
-    <View style={[styles.forecastItem, style]}>
+}) => {
+    const info = (
+        <>
+            <Text
+                allowFontScaling={false}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+                style={styles.temperature}
+            >
+                {Math.round(forecast.Temperature.Value) +
+                    '°' +
+                    forecast.Temperature.Unit}
+            </Text>
+            <Text
+                allowFontScaling={false}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+                style={styles.dateTime}
+            >
+                {Moment(forecast.DateTime).format(
+                    `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
+                )}
+            </Text>
+        </>
+    )
+    const icon = (
         <WeatherIcon
             iconNumber={forecast.WeatherIcon}
             fontSize={30 * iconSize}
         />
-        <Text
-            allowFontScaling={false}
-            numberOfLines={1}
-            ellipsizeMode="clip"
-            style={styles.temperature}
-        >
-            {Math.round(forecast.Temperature.Value) +
-                '°' +
-                forecast.Temperature.Unit}
-        </Text>
-        <Text
-            allowFontScaling={false}
-            numberOfLines={1}
-            ellipsizeMode="clip"
-            style={styles.dateTime}
-        >
-            {Moment(forecast.DateTime).format(
-                `h${narrowSpace /* Narrow space for iPhone 5 */}a`,
-            )}
-        </Text>
-    </View>
+    )
+
+    return (
+        <WithBreakpoints>
+            {{
+                0: () => (
+                    <View
+                        style={[styles.forecastItem, styles.forecastItemNarrow]}
+                    >
+                        {icon}
+                        <View style={styles.forecastText}>{info}</View>
+                    </View>
+                ),
+                [Breakpoints.tabletVertical]: () => (
+                    <View
+                        style={[styles.forecastItem, styles.forecastItemWide]}
+                    >
+                        {icon}
+                        <View
+                            style={[
+                                styles.forecastText,
+                                styles.forecastTextWide,
+                            ]}
+                        >
+                            {info}
+                        </View>
+                    </View>
+                ),
+            }}
+        </WithBreakpoints>
+    )
+}
+
+const SetLocationButton = withNavigation(
+    ({ navigation }: NavigationInjectedProps) => {
+        const onSetLocation = useCallback(() => {
+            navigation.navigate(routeNames.WeatherGeolocationConsent)
+        }, [navigation])
+
+        return (
+            <Button
+                onPress={onSetLocation}
+                appearance={ButtonAppearance.skeleton}
+                style={styles.setLocationButtonWrap}
+                buttonStyles={styles.setLocationButton}
+            >
+                Set Location
+            </Button>
+        )
+    },
 )
 
-const WeatherWithForecast = ({
+const LocationName = ({
+    isLocationPrecise,
     locationName,
-    forecasts,
+    isUsingProdDevtools,
 }: {
+    isLocationPrecise: boolean
     locationName: string
-    forecasts: Forecast[]
+    isUsingProdDevtools: boolean
 }) => {
+    if (!isLocationPrecise && isUsingProdDevtools) {
+        return <SetLocationButton />
+    }
+    return (
+        <>
+            <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
+            <Text style={styles.locationName} numberOfLines={2}>
+                {locationName}
+            </Text>
+        </>
+    )
+}
+
+const WeatherWithForecast = ({
+    weather,
+    isUsingProdDevtools,
+}: {
+    weather: AvailableWeather
+    isUsingProdDevtools: boolean
+}) => {
+    const { forecasts, locationName, isLocationPrecise } = weather
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
-        const intervals = [0, 2, 4, 6, 8].map(idx => forecasts[idx])
+        const intervals = [8, 6, 4, 2, 0].map(idx => forecasts[idx])
         return (
-            <WithBreakpoints>
-                {{
-                    0: () => (
-                        <View style={styles.weatherContainerLong}>
-                            <GridRowSplit
-                                proxy={
-                                    <View style={styles.locationNameContainer}>
-                                        <Text style={styles.locationPinIcon}>
-                                            {'\uE01B'}
-                                        </Text>
-                                        <Text style={styles.locationName}>
-                                            {locationName}
-                                        </Text>
-                                    </View>
-                                }
-                            >
-                                {intervals.map(forecast => {
-                                    return (
-                                        <WeatherIconView
-                                            style={styles.forecastItemLong}
-                                            key={forecast.EpochDateTime}
-                                            forecast={forecast}
-                                        />
-                                    )
-                                })}
-                            </GridRowSplit>
-                        </View>
-                    ),
-                    [Breakpoints.tabletVertical]: () => (
-                        <View style={styles.weatherContainerNarrow}>
-                            {intervals.map(forecast => {
-                                return (
-                                    <WeatherIconView
-                                        style={styles.forecastItemNarrow}
-                                        key={forecast.EpochDateTime}
-                                        forecast={forecast}
-                                        iconSize={1.5}
-                                    />
-                                )
-                            })}
-                        </View>
-                    ),
-                }}
-            </WithBreakpoints>
+            <View style={styles.weatherContainer}>
+                {intervals.map(forecast => {
+                    return (
+                        <WeatherIconView
+                            key={forecast.EpochDateTime}
+                            forecast={forecast}
+                        />
+                    )
+                })}
+                <View style={styles.locationNameContainer}>
+                    <LocationName
+                        locationName={locationName}
+                        isLocationPrecise={isLocationPrecise}
+                        isUsingProdDevtools={isUsingProdDevtools}
+                    />
+                </View>
+            </View>
         )
     }
 
+    // FIXME: We really should validate data after fetching, not during
+    // rendering. That way the error would get handled further up the chain
+    // instead of rendering a blank space with no logging.
     return <></>
 }
 
-const Weather = React.memo(() => {
-    const weatherResponse = useWeatherResponse()
-    return weatherResponse({
-        error: ({}) => <></>,
-        pending: () => <></>,
-        success: weatherForecast => (
-            <WeatherWithForecast
-                locationName={weatherForecast.locationName}
-                forecasts={weatherForecast.forecasts}
-            />
-        ),
-    })
+const WeatherWidget = React.memo(() => {
+    const query = useQuery<QueryData>(QUERY)
+    if (query.loading) return null
+
+    const { data } = query
+    if (!data.weather.available) return null
+    return (
+        <WeatherWithForecast
+            weather={data.weather}
+            isUsingProdDevtools={data.isUsingProdDevtools}
+        />
+    )
 })
 
-export { Weather }
+export { WeatherWidget }
