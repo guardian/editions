@@ -5,7 +5,6 @@ import { color } from 'src/theme/color'
 import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
 import { Article, HeaderControlProps } from './types/article'
 import { Crossword } from './types/crossword'
-import { View, Text } from 'react-native'
 
 /*
 This is the article view! For all of the articles.

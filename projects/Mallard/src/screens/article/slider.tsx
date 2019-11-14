@@ -20,9 +20,6 @@ import {
     ArticleNavigator,
     getArticleDataFromNavigator,
 } from '../article-screen'
-import { Button, ButtonAppearance } from 'src/components/button/button'
-import { withNavigation } from 'react-navigation'
-import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
 
 export interface PathToArticle {
