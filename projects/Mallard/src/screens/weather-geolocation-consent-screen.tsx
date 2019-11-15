@@ -11,6 +11,7 @@ import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
 
 const content = html`
+    <h2>Location-based weather</h2>
     <p>
         This is a 3rd party service provided by AccuWeather. It works by taking
         your location coordinates and bringing the weather to you.
@@ -95,7 +96,7 @@ const WeatherGeolocationConsentScreen = ({
 }
 
 WeatherGeolocationConsentScreen.navigationOptions = {
-    title: 'Location-based weather',
+    title: ' ',
     showHeaderLeft: false,
     showHeaderRight: true,
 }
