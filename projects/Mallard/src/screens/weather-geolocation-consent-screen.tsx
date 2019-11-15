@@ -28,8 +28,8 @@ const content = html`
             name or email address
         </li>
         <li>
-            You can switch on/off your geolocation at any time on your app
-            settings
+            You can switch the weather feature on/off at any time on the app
+            Settings
         </li>
         </ul>
         <p>
