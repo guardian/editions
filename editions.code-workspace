@@ -23,6 +23,9 @@
         },
         {
             "path": "docs"
+        },
+        {
+            "path": "projects/html-renderer"
         }
     ],
     "settings": {
