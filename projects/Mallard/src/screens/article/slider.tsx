@@ -78,20 +78,20 @@ const styles = StyleSheet.create({
 
 type SliderBarProps = {
     section: SliderSection
-    animatedValue: Animated.AnimatedInterpolation
+    sliderPosition: Animated.AnimatedInterpolation
     width: number
     isFirst: boolean
 }
 
 const SliderSectionBar = ({
     section,
-    animatedValue,
+    sliderPosition,
     width,
     isFirst,
 }: SliderBarProps) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const [sliderPos] = useState(() =>
-        animatedValue
+        sliderPosition
             .interpolate({
                 inputRange: [
                     section.startIndex,
@@ -113,7 +113,7 @@ const SliderSectionBar = ({
             }),
     )
 
-    const xValue = animatedValue.interpolate({
+    const xValue = sliderPosition.interpolate({
         inputRange: [
             section.startIndex - 1,
             section.startIndex,
@@ -153,11 +153,11 @@ const SliderSectionBar = ({
 
 const SliderBar = ({
     sections,
-    animatedValue,
+    sliderPosition,
     width,
 }: {
     sections: SliderSection[]
-    animatedValue: Animated.AnimatedInterpolation
+    sliderPosition: Animated.AnimatedInterpolation
     width: number
 }) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
@@ -173,7 +173,7 @@ const SliderBar = ({
                 {sections.map((section, index) => (
                     <SliderSectionBar
                         section={section}
-                        animatedValue={animatedValue}
+                        sliderPosition={sliderPosition}
                         key={section.title}
                         width={width}
                         isFirst={index === 0}
@@ -189,13 +189,13 @@ const AndroidHeader = withNavigation(
         isShown,
         isAtTop,
         sections,
-        animatedValue,
+        sliderPosition,
         width,
     }: {
         isShown: boolean
         isAtTop: boolean
         sections: SliderSection[]
-        animatedValue: Animated.AnimatedInterpolation
+        sliderPosition: Animated.AnimatedInterpolation
         width: number
     } & NavigationInjectedProps) => {
         const [top] = useState(new Animated.Value(0))
@@ -223,7 +223,7 @@ const AndroidHeader = withNavigation(
                 >
                     <SliderBar
                         sections={sections}
-                        animatedValue={animatedValue}
+                        sliderPosition={sliderPosition}
                         width={width}
                     />
                 </View>
@@ -265,7 +265,7 @@ const ArticleSlider = ({
     )
 
     const [current, setCurrent] = useState(startingPoint)
-    const [animatedValue] = useState(new Animated.Value(startingPoint))
+    const [sliderPosition] = useState(new Animated.Value(startingPoint))
 
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -314,7 +314,7 @@ const ArticleSlider = ({
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
                         setCurrent(ev.nativeEvent.position)
-                        Animated.timing(animatedValue, {
+                        Animated.timing(sliderPosition, {
                             duration: 200,
                             toValue: ev.nativeEvent.position,
                             easing: Easing.linear,
@@ -345,7 +345,7 @@ const ArticleSlider = ({
                 <AndroidHeader
                     isShown={shouldShowHeader}
                     isAtTop={isAtTop}
-                    animatedValue={animatedValue}
+                    sliderPosition={sliderPosition}
                     width={width}
                     sections={sliderSections}
                 />
@@ -360,8 +360,8 @@ const ArticleSlider = ({
             >
                 <SliderBar
                     sections={sliderSections}
-                    animatedValue={Animated.divide(
-                        animatedValue,
+                    sliderPosition={Animated.divide(
+                        sliderPosition,
                         new Animated.Value(width),
                     )}
                     width={width}
@@ -378,7 +378,7 @@ const ArticleSlider = ({
                     [
                         {
                             nativeEvent: {
-                                contentOffset: { x: animatedValue },
+                                contentOffset: { x: sliderPosition },
                             },
                         },
                     ],
