@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
+import { StyleSheet, View, Alert, Platform } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     },
     buttons: {
         marginHorizontal: metrics.horizontal,
-        marginBottom: metrics.vertical * 2,
+        marginBottom:
+            metrics.vertical * Platform.select({ default: 2, ios: 4 }),
     },
 })
 
