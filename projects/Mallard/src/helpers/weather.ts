@@ -1,8 +1,24 @@
 import { AccuWeatherLocation, Forecast } from 'src/common'
 import { AppState } from 'react-native'
 import ApolloClient from 'apollo-client'
+import Geolocation, {
+    GeolocationResponse,
+} from '@react-native-community/geolocation'
+import gql from 'graphql-tag'
+import { resolveLocationPermissionStatus } from './location-permission'
+import { RESULTS } from 'react-native-permissions'
 
 class CannotFetchError extends Error {}
+
+Geolocation.setRNConfiguration({
+    /**
+     * We want to control the exact moment the permission pop-up shows, so
+     * we don't rely on the Geolocation module and instead manage permissions
+     * ourselves (see `locationPermissionStatus` Apollo field).
+     */
+    skipPermissionRequests: true,
+    authorizationLevel: 'whenInUse',
+})
 
 /**
  * Throw strongly typed error on network error, most notably
@@ -21,6 +37,16 @@ const getIpAddress = async (): Promise<string> => {
     return await resp.text()
 }
 
+const getGeolocation = async (): Promise<GeolocationResponse> => {
+    return new Promise((resolve, reject) => {
+        Geolocation.getCurrentPosition(
+            resolve,
+            error => reject(new Error(error.message)),
+            { enableHighAccuracy: false },
+        )
+    })
+}
+
 const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
     const res = await tryFetch(`http://mobile-weather.guardianapis.com/${path}`)
     if (res.status >= 500) {
@@ -30,10 +56,20 @@ const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
 }
 
 const getCurrentLocation = async () => {
-    const ip = await getIpAddress()
-    return await fetchFromWeatherApi<AccuWeatherLocation>(
-        `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+    const permStatus = await resolveLocationPermissionStatus()
+    if (permStatus !== RESULTS.GRANTED) {
+        const ip = await getIpAddress()
+        const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
+            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+        )
+        return { accuLoc, isPrecise: false }
+    }
+    const geoloc = await getGeolocation()
+    const latLong = `${geoloc.coords.latitude},${geoloc.coords.longitude}`
+    const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
+        `locations/v1/cities/geoposition/search?q=${latLong}&details=false`,
     )
+    return { accuLoc, isPrecise: true }
 }
 
 export type Weather =
@@ -64,6 +100,30 @@ export const UNAVAILABLE_WEATHER: Weather = {
     available: false,
 }
 
+const makeWeatherObject = (
+    accuLoc: AccuWeatherLocation,
+    isPrecise: boolean,
+    forecasts: Forecast[],
+) => ({
+    __typename: 'Weather',
+    locationName: accuLoc.EnglishName,
+    isLocationPrecise: isPrecise,
+    forecasts: forecasts.map(forecast => ({
+        ...forecast,
+        Temperature: {
+            ...forecast.Temperature,
+            __typename: 'Temperature',
+        },
+        // Sometimes the api doesn't provide these fields but Apollo
+        // needs `null`s rather than missing fields.
+        PrecipitationType: forecast.PrecipitationType || null,
+        PrecipitationIntensity: forecast.PrecipitationIntensity || null,
+        __typename: 'Forecast',
+    })),
+    lastUpdated: Date.now(),
+    available: true,
+})
+
 /**
  * We augment the return object with `__typename` fields to that Apollo can
  * "reconcile" the value when we update the cache later. If the wheater if
@@ -71,29 +131,11 @@ export const UNAVAILABLE_WEATHER: Weather = {
  */
 const getWeather = async (fallback?: Weather): Promise<Weather> => {
     try {
-        const loc = await getCurrentLocation()
+        const { accuLoc, isPrecise } = await getCurrentLocation()
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
-            `forecasts/v1/hourly/12hour/${loc.Key}.json?metric=true&language=en-gb`,
+            `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=true&language=en-gb`,
         )
-        return {
-            __typename: 'Weather',
-            locationName: loc.EnglishName,
-            isLocationPrecise: false,
-            forecasts: forecasts.map(forecast => ({
-                ...forecast,
-                Temperature: {
-                    ...forecast.Temperature,
-                    __typename: 'Temperature',
-                },
-                // Sometimes the api doesn't provide these fields but Apollo
-                // needs `null`s rather than missing fields.
-                PrecipitationType: forecast.PrecipitationType || null,
-                PrecipitationIntensity: forecast.PrecipitationIntensity || null,
-                __typename: 'Forecast',
-            })),
-            lastUpdated: Date.now(),
-            available: true,
-        }
+        return makeWeatherObject(accuLoc, isPrecise, forecasts)
     } catch (error) {
         if (error instanceof CannotFetchError) {
             if (fallback != null) return fallback
