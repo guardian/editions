@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View, Easing } from 'react-native'
-import { Header } from 'src/components/layout/header/header'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
@@ -17,9 +16,9 @@ import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody, OnIsAtTopChange } from '../article/body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
 import { getArticleDataFromNavigator, ArticleSpec } from '../article-screen'
-import { Button, ButtonAppearance } from 'src/components/button/button'
 import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
+import { BasicArticleHeader } from './header'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -188,7 +187,6 @@ const SliderBar = ({
 const AndroidHeader = withNavigation(
     ({
         isShown,
-        navigation,
         isAtTop,
         sections,
         animatedValue,
@@ -219,20 +217,7 @@ const AndroidHeader = withNavigation(
 
         return (
             <Animated.View style={[styles.androidHeader, { top }]}>
-                <Header
-                    white
-                    leftAction={
-                        <Button
-                            appearance={ButtonAppearance.skeleton}
-                            icon={'\uE00A'}
-                            alt="Back"
-                            onPress={() => navigation.goBack(null)}
-                        ></Button>
-                    }
-                    layout={'center'}
-                >
-                    {null}
-                </Header>
+                <BasicArticleHeader />
                 <View
                     style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
                 >
@@ -323,12 +308,6 @@ const ArticleSlider = ({
     if (Platform.OS === 'android')
         return (
             <>
-                <SliderBar
-                    sections={sliderSections}
-                    animatedValue={animatedValue}
-                    width={width}
-                />
-
                 <ViewPagerAndroid
                     style={styles.androidPager}
                     initialPage={startingPoint}

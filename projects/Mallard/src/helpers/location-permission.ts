@@ -6,6 +6,7 @@ import {
 } from 'react-native-permissions'
 import { Platform } from 'react-native'
 import { ApolloClient } from 'apollo-client'
+import { refreshWeather } from './weather'
 
 const LOCATION_PERMISSION = Platform.select({
     ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
@@ -31,6 +32,7 @@ const [resolveLocationPermissionStatus, requestLocationPermission] = (() => {
                 locationPermissionStatus: result,
             },
         })
+        refreshWeather(apolloClient)
         return result
     }
 
