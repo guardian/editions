@@ -13,6 +13,11 @@
             "compress": "zip"
         },
         {
+            "action": "html-renderer",
+            "path": "projects/html-renderer/dist",
+            "compress": "zip"
+        },
+        {
             "action": "cloudformation",
             "path": "projects/aws/cloudformation.yaml",
             "compress": false

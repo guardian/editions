@@ -28,6 +28,14 @@ deployments:
                     editions-archiver-stepmachine-zip-,
                     editions-archiver-stepmachine-indexer-,
                 ]
+    html-renderer:
+        type: aws-lambda
+        dependencies: [cloudformation]
+        parameters:
+            prefixStack: false
+            bucket: editions-dist
+            fileName: html-renderer.zip
+            functionNames: [editions-html-renderer-]
     cloudformation:
         type: cloud-formation
         app: editions

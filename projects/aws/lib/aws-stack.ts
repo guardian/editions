@@ -128,6 +128,15 @@ export class EditionsStack extends cdk.Stack {
             description: 'lambda access',
         })
 
+        const htmlRendererLambdaParam = new cdk.CfnParameter(
+            this,
+            'html-renderer-lambda-arn',
+            {
+                type: 'String',
+                description: 'html renderer access',
+            },
+        )
+
         const previewHostname = new cdk.CfnParameter(this, 'preview-hostname', {
             type: 'String',
             description: 'Hostname of the preview endpoint',
@@ -171,6 +180,7 @@ export class EditionsStack extends cdk.Stack {
                         arn: frontsRoleARN.valueAsString,
                         stage: stageParameter.valueAsString,
                         atomArn: atomLambdaParam.valueAsString,
+                        htmlRendererArn: htmlRendererLambdaParam.valueAsString,
                         psurl: printSentURLParameter.valueAsString,
                         IMAGE_SALT: imageSalt.valueAsString,
                         publicationStage,
@@ -182,6 +192,10 @@ export class EditionsStack extends cdk.Stack {
                         }),
                         new iam.PolicyStatement({
                             resources: [atomLambdaParam.valueAsString],
+                            actions: ['lambda:InvokeFunction'],
+                        }),
+                        new iam.PolicyStatement({
+                            resources: [htmlRendererLambdaParam.valueAsString],
                             actions: ['lambda:InvokeFunction'],
                         }),
                     ],
@@ -366,5 +380,26 @@ export class EditionsStack extends cdk.Stack {
             }),
         )
         archiverStateMachine.grantStartExecution(archiveS3EventListener)
+
+        const htmlRendererFunction = () => {
+            const fn = new lambda.Function(this, `EditionsHTMLRenderer`, {
+                functionName: `editions-html-renderer-${stageParameter.valueAsString}`,
+                runtime: lambda.Runtime.NODEJS_10_X,
+                memorySize: 512,
+                timeout: Duration.seconds(60),
+                code: Code.bucket(
+                    deployBucket,
+                    `${stackParameter.valueAsString}/${stageParameter.valueAsString}/html-renderer/html-renderer.zip`,
+                ),
+                handler: 'index.handler',
+                environment: {},
+            })
+            Tag.add(fn, 'App', `editions-html-renderer`)
+            Tag.add(fn, 'Stage', stageParameter.valueAsString)
+            Tag.add(fn, 'Stack', stackParameter.valueAsString)
+            return fn
+        }
+
+        const htmlRenderer = htmlRendererFunction()
     }
 }
