@@ -1,5 +1,3 @@
-import { PerformanceObserver } from 'perf_hooks'
-
 const CITIES_URL =
     'http://mobile-weather.guardianapis.com/locations/v1/cities/ipAddress?q=127.0.0.1&details=false'
 const FORECASTS_URL =
@@ -134,10 +132,13 @@ it('should fetch real location if available', async () => {
     check.mockResolvedValue(RESULTS.GRANTED)
 
     const client = { writeData: jest.fn() } as any
-    let res = await resolveWeather({}, {}, { client })
+    const res = await resolveWeather({}, {}, { client })
     expect(res).toEqual({
         ...getExpectedWeather(),
         isLocationPrecise: true,
         locationName: 'Kings Cross',
     })
 })
+
+// make it a valid ES6 module
+export {}
