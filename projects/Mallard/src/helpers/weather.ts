@@ -4,7 +4,6 @@ import ApolloClient from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
 } from '@react-native-community/geolocation'
-import gql from 'graphql-tag'
 import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
 
@@ -72,39 +71,19 @@ const getCurrentLocation = async () => {
     return { accuLoc, isPrecise: true }
 }
 
-export type Weather =
-    | {
-          __typename: 'Weather'
-          locationName: string
-          isLocationPrecise: boolean
-          forecasts: Forecast[]
-          lastUpdated: number
-          available: true
-      }
-    | {
-          __typename: 'Weather'
-          // Apollo forces us to have `null`s instead of missing fields
-          locationName: null
-          isLocationPrecise: null
-          forecasts: null
-          lastUpdated: null
-          available: false
-      }
-
-export const UNAVAILABLE_WEATHER: Weather = {
-    __typename: 'Weather',
-    locationName: null,
-    isLocationPrecise: null,
-    forecasts: null,
-    lastUpdated: null,
-    available: false,
+export type Weather = {
+    __typename: 'Weather'
+    locationName: string
+    isLocationPrecise: boolean
+    forecasts: Forecast[]
+    lastUpdated: number
 }
 
 const makeWeatherObject = (
     accuLoc: AccuWeatherLocation,
     isPrecise: boolean,
     forecasts: Forecast[],
-) => ({
+): Weather => ({
     __typename: 'Weather',
     locationName: accuLoc.EnglishName,
     isLocationPrecise: isPrecise,
@@ -121,7 +100,6 @@ const makeWeatherObject = (
         __typename: 'Forecast',
     })),
     lastUpdated: Date.now(),
-    available: true,
 })
 
 /**
@@ -129,7 +107,9 @@ const makeWeatherObject = (
  * "reconcile" the value when we update the cache later. If the wheater if
  * unavailable we keep the previous data as a `fallback`.
  */
-const getWeather = async (fallback?: Weather): Promise<Weather> => {
+const getWeather = async (
+    fallback: Weather | null,
+): Promise<Weather | null> => {
     try {
         const { accuLoc, isPrecise } = await getCurrentLocation()
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
@@ -137,11 +117,9 @@ const getWeather = async (fallback?: Weather): Promise<Weather> => {
         )
         return makeWeatherObject(accuLoc, isPrecise, forecasts)
     } catch (error) {
-        if (error instanceof CannotFetchError) {
-            if (fallback != null) return fallback
-            return UNAVAILABLE_WEATHER
-        }
-        throw error
+        if (!(error instanceof CannotFetchError)) throw error
+        if (fallback != null) return fallback
+        return null
     }
 }
 
@@ -162,10 +140,13 @@ const ONE_HOUR = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR
  */
 const { resolveWeather, refreshWeather } = (() => {
     // If `undefined`, weather has never been shown.
-    let weather: Promise<Weather> | undefined
+    let weather: Promise<Weather | null> | undefined
 
     // We update the cache only if no other update happened in-between.
-    const update = async (client: ApolloClient<object>, fallback?: Weather) => {
+    const update = async (
+        client: ApolloClient<object>,
+        fallback: Weather | null,
+    ) => {
         if (weather == null) return
         const newWeather = (weather = getWeather(fallback))
         const value = await weather
@@ -181,7 +162,7 @@ const { resolveWeather, refreshWeather } = (() => {
     const onAppGoesForeground = async (client: ApolloClient<object>) => {
         if (weather == null) return
         const value = await weather
-        if (value.available && Date.now() < value.lastUpdated + ONE_HOUR) return
+        if (value != null && Date.now() < value.lastUpdated + ONE_HOUR) return
         update(client, value)
     }
 
@@ -194,7 +175,7 @@ const { resolveWeather, refreshWeather } = (() => {
     ) => {
         if (weather !== undefined) return weather
 
-        weather = getWeather()
+        weather = getWeather(null)
         AppState.addEventListener('change', status => {
             if (status !== 'active') return
             onAppGoesForeground(client)
@@ -204,8 +185,8 @@ const { resolveWeather, refreshWeather } = (() => {
 
     const refreshWeather = async (client: ApolloClient<object>) => {
         if (weather == null) return
-        client.writeData({ data: { weather: UNAVAILABLE_WEATHER } })
-        await update(client)
+        client.writeData({ data: { weather: null } })
+        await update(client, null)
     }
 
     return { resolveWeather, refreshWeather }
