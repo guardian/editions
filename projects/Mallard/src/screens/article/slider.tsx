@@ -8,7 +8,6 @@ import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { Slider } from 'src/components/slider'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
-// import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
@@ -91,14 +90,6 @@ const SliderSectionBar = ({
     width,
     isFirst,
 }: SliderBarProps) => {
-    // const sliderPos = useAlphaIn(200, {
-    //     initialValue: 0,
-    //     currentValue: position,
-    // }).interpolate({
-    //     inputRange: safeInterpolation([0, total - 1]),
-    //     outputRange: safeInterpolation([0, 1]),
-    // })
-
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const [sliderPos] = useState(() =>
         animatedValue
@@ -163,12 +154,10 @@ const SliderSectionBar = ({
 
 const SliderBar = ({
     sections,
-    // wrapperProps,
     animatedValue,
     width,
 }: {
     sections: SliderSection[]
-    // wrapperProps: ViewProps
     animatedValue: Animated.AnimatedInterpolation
     width: number
 }) => {
@@ -177,7 +166,6 @@ const SliderBar = ({
         <MaxWidthWrap>
             <View
                 style={[
-                    styles.innerSlider,
                     isTablet && {
                         marginHorizontal: metrics.fronts.sliderRadius * -0.8,
                     },
@@ -393,9 +381,6 @@ const ArticleSlider = ({
             >
                 <SliderBar
                     sections={sliderSections}
-                    // wrapperProps={{
-                    //     ...panResponder.panHandlers,
-                    // }}
                     animatedValue={Animated.divide(
                         animatedValue,
                         new Animated.Value(width),
