@@ -4,7 +4,7 @@ import {
     getVersionInfo,
 } from 'src/helpers/settings'
 import DeviceInfo from 'react-native-device-info'
-import NetInfo from '@react-native-community/netinfo'
+import * as NetInfo from 'src/hooks/use-net-info'
 import { isInBeta } from './release-stream'
 import { Platform, Linking } from 'react-native'
 import {
