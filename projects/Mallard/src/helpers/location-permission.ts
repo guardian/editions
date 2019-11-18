@@ -13,16 +13,16 @@ const LOCATION_PERMISSION = Platform.select({
     android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
 })
 
-const [resolveLocationPermissionStatus, requestLocationPermission] = (() => {
+const { resolveLocationPermissionStatus, requestLocationPermission } = (() => {
     let promise: Promise<PermissionStatus> | undefined
 
-    const resolvePermission = () => {
+    const resolveLocationPermissionStatus = () => {
         if (promise) return promise
         promise = check(LOCATION_PERMISSION)
         return promise
     }
 
-    const requestPermission = async (
+    const requestLocationPermission = async (
         apolloClient: ApolloClient<object>,
     ): Promise<PermissionStatus> => {
         promise = request(LOCATION_PERMISSION)
@@ -36,7 +36,7 @@ const [resolveLocationPermissionStatus, requestLocationPermission] = (() => {
         return result
     }
 
-    return [resolvePermission, requestPermission]
+    return { resolveLocationPermissionStatus, requestLocationPermission }
 })()
 
 export { resolveLocationPermissionStatus, requestLocationPermission }
