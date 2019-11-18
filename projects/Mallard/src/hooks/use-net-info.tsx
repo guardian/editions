@@ -61,7 +61,7 @@ export class NetInfoStateContainer {
     private subscribers: ((state: NetInfoState) => void)[] = []
     private forceOffline = false
 
-    constructor(register: (fn: (state: NetInfoState) => void) => () => void) {
+    constructor() {
         this.actualState = {
             type: NetInfoStateType.unknown,
             isConnected: false,
@@ -74,7 +74,7 @@ export class NetInfoStateContainer {
          * it also registers the general update handler
          */
         this.firstStatePromise = new Promise(res =>
-            register(state => {
+            NetInfo.addEventListener(state => {
                 if (this.firstStatePromise) {
                     res(state)
                 }
@@ -130,10 +130,8 @@ export class NetInfoStateContainer {
     }
 }
 
-/** singletong state container */
-const netInfoStateContainer = new NetInfoStateContainer(
-    NetInfo.addEventListener,
-)
+/** singleton state container */
+const netInfoStateContainer = new NetInfoStateContainer()
 
 /** Replace the netinfo API  */
 const addEventListener = netInfoStateContainer.subscribe.bind(
