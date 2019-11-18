@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
+import { StyleSheet, View, Alert, Platform } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -11,6 +11,7 @@ import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
 
 const content = html`
+    <h2>Location-based weather</h2>
     <p>
         This is a 3rd party service provided by AccuWeather. It works by taking
         your location coordinates and bringing the weather to you.
@@ -28,8 +29,8 @@ const content = html`
             name or email address
         </li>
         <li>
-            You can switch on/off your geolocation at any time on your app
-            settings
+            You can switch the weather feature on/off at any time on the app
+            Settings
         </li>
         </ul>
         <p>
@@ -46,7 +47,8 @@ const styles = StyleSheet.create({
     },
     buttons: {
         marginHorizontal: metrics.horizontal,
-        marginBottom: metrics.vertical * 2,
+        marginBottom:
+            metrics.vertical * Platform.select({ default: 2, ios: 4 }),
     },
 })
 
@@ -95,7 +97,7 @@ const WeatherGeolocationConsentScreen = ({
 }
 
 WeatherGeolocationConsentScreen.navigationOptions = {
-    title: 'Location-based weather',
+    title: ' ',
     showHeaderLeft: false,
     showHeaderRight: true,
 }

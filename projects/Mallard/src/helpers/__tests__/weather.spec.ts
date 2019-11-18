@@ -1,10 +1,10 @@
-import { resolveWeather } from '../weather'
-import { AppState } from 'react-native'
-
 const CITIES_URL =
     'http://mobile-weather.guardianapis.com/locations/v1/cities/ipAddress?q=127.0.0.1&details=false'
 const FORECASTS_URL =
     'http://mobile-weather.guardianapis.com/forecasts/v1/hourly/12hour/london.json?metric=true&language=en-gb'
+const GEOLOC_URL =
+    'http://mobile-weather.guardianapis.com/locations/v1/cities/geoposition/search?q=12,34&details=false'
+
 let forecasts = [{ DateTime: '0000' }]
 ;(global as any).fetch = jest.fn().mockImplementation(async (url: string) => {
     if (url === 'https://api.ipify.org')
@@ -15,8 +15,38 @@ let forecasts = [{ DateTime: '0000' }]
                 Promise.resolve({ Key: 'london', EnglishName: 'London' }),
         }
     if (url === FORECASTS_URL) return { json: () => Promise.resolve(forecasts) }
-    throw new Error(`unknown: ${url}`)
+    if (url === GEOLOC_URL)
+        return {
+            json: () =>
+                Promise.resolve({
+                    Key: 'london',
+                    EnglishName: 'Kings Cross',
+                }),
+        }
+    console.error(`unknown url: ${url}`)
+    throw new Error(`unknown url`)
 })
+
+jest.mock('react-native-permissions', () => {
+    return {
+        RESULTS: { GRANTED: 1, DENIED: 2 },
+        PERMISSIONS: {
+            IOS: { LOCATION_WHEN_IN_USE: 1 },
+            ANDROID: { ACCESS_FINE_LOCATION: 1 },
+        },
+        check: jest.fn().mockResolvedValue(2),
+    }
+})
+
+jest.mock('@react-native-community/geolocation', () => ({
+    setRNConfiguration: () => {},
+    getCurrentPosition: (resolve: any) =>
+        Promise.resolve().then(() => {
+            resolve({
+                coords: { latitude: 12, longitude: 34 },
+            })
+        }),
+}))
 
 let now = 100000000
 Date.now = () => now
@@ -26,7 +56,6 @@ const getExpectedWeather = () => ({
     locationName: 'London',
     isLocationPrecise: false,
     lastUpdated: now,
-    available: true,
     forecasts: [
         {
             __typename: 'Forecast',
@@ -36,6 +65,17 @@ const getExpectedWeather = () => ({
             Temperature: { __typename: 'Temperature' },
         },
     ],
+})
+
+let resolveWeather: any, refreshWeather: any
+let AppState: any
+let check: any, RESULTS: any
+
+beforeEach(() => {
+    jest.resetModules()
+    ;({ resolveWeather, refreshWeather } = require('../weather'))
+    ;({ AppState } = require('react-native'))
+    ;({ check, RESULTS } = require('react-native-permissions'))
 })
 
 it('should resolve and update the weather', async () => {
@@ -65,3 +105,40 @@ it('should resolve and update the weather', async () => {
         data: { weather: res },
     })
 })
+
+it('should refresh the weather completely', async () => {
+    const client = { writeData: jest.fn() } as any
+    await resolveWeather({}, {}, { client })
+
+    forecasts = [{ DateTime: '1234' }]
+    const refreshPromise = refreshWeather(client)
+
+    expect(client.writeData).toHaveBeenCalledTimes(1)
+    expect(client.writeData).toHaveBeenCalledWith({
+        data: {
+            weather: null,
+        },
+    })
+
+    await refreshPromise
+
+    expect(client.writeData).toHaveBeenCalledTimes(2)
+    expect(client.writeData).toHaveBeenCalledWith({
+        data: { weather: getExpectedWeather() },
+    })
+})
+
+it('should fetch real location if available', async () => {
+    check.mockResolvedValue(RESULTS.GRANTED)
+
+    const client = { writeData: jest.fn() } as any
+    const res = await resolveWeather({}, {}, { client })
+    expect(res).toEqual({
+        ...getExpectedWeather(),
+        isLocationPrecise: true,
+        locationName: 'Kings Cross',
+    })
+})
+
+// make it a valid ES6 module
+export {}

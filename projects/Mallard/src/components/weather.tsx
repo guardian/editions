@@ -20,14 +20,13 @@ type QueryForecast = Pick<
     Forecast,
     'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
 >
-type AvailableWeather = {
+type Weather = {
     locationName: string
     isLocationPrecise: boolean
     forecasts: QueryForecast[]
-    available: true
 }
 type QueryData = {
-    weather: AvailableWeather | { available: false }
+    weather: Weather | null
     isUsingProdDevtools: boolean
     locationPermissionStatus: PermissionStatus
 }
@@ -46,7 +45,6 @@ const QUERY = gql`
                 WeatherIcon
                 EpochDateTime
             }
-            available
         }
         isUsingProdDevtools @client
         locationPermissionStatus @client
@@ -74,7 +72,6 @@ const styles = StyleSheet.create({
         width: 45,
         paddingTop: 2,
         paddingLeft: 4,
-        paddingRight: 8,
     },
     forecastItemWide: {
         width: 90,
@@ -265,7 +262,7 @@ const WeatherWithForecast = ({
     weather,
     isUsingProdDevtools,
 }: {
-    weather: AvailableWeather
+    weather: Weather
     isUsingProdDevtools: boolean
 }) => {
     const { forecasts, locationName, isLocationPrecise } = weather
@@ -304,7 +301,7 @@ const WeatherWidget = React.memo(() => {
     if (query.loading) return null
 
     const { data } = query
-    if (!data.weather.available) return null
+    if (data.weather == null) return null
     return (
         <WeatherWithForecast
             weather={data.weather}
