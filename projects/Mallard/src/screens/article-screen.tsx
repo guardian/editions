@@ -24,39 +24,63 @@ export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
 
-export type ArticleSpec = PathToArticle & {
-    appearance: Appearance
+export type FrontSpec = {
     frontName: string
+    appearance: Appearance
+    articleSpecs: PathToArticle[]
 }
 
-export type ArticleNavigator = ArticleSpec[]
+export type ArticleSpec = PathToArticle & {
+    frontName: string
+    appearance: Appearance
+}
+
+export type ArticleNavigator = FrontSpec[]
 
 export const getArticleDataFromNavigator = (
     navigator: ArticleNavigator,
     currentArticle: PathToArticle,
 ): {
-    isInScroller: boolean
     startingPoint: number
     appearance: Appearance
     frontName: string
+    flattenedArticles: ArticleSpec[]
 } => {
-    const startingPoint = navigator.findIndex(
+    const flattenedArticles: ArticleSpec[] = []
+    navigator.forEach(frontSpec =>
+        frontSpec.articleSpecs.forEach(as =>
+            flattenedArticles.push({
+                ...as,
+                appearance: frontSpec.appearance,
+                frontName: frontSpec.frontName,
+            }),
+        ),
+    )
+
+    const startingPoint = flattenedArticles.findIndex(
         ({ article, front }) =>
             currentArticle.article === article &&
             currentArticle.front === front,
     )
     if (startingPoint < 0)
         return {
-            isInScroller: false,
             startingPoint: 0,
             appearance: { type: 'pillar', name: 'neutral' } as const,
             frontName: '',
+            flattenedArticles: [
+                {
+                    ...currentArticle,
+                    appearance: { type: 'pillar', name: 'neutral' } as const,
+                    frontName: '',
+                },
+                ...flattenedArticles,
+            ],
         }
     return {
         startingPoint,
-        isInScroller: true,
-        appearance: navigator[startingPoint].appearance,
-        frontName: navigator[startingPoint].frontName,
+        appearance: flattenedArticles[startingPoint].appearance,
+        frontName: flattenedArticles[startingPoint].frontName,
+        flattenedArticles,
     }
 }
 

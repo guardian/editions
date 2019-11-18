@@ -53,7 +53,7 @@ import {
     flattenFlatCardsToFront,
     FlatCard,
 } from 'src/helpers/transform'
-import { ArticleSpec } from './article-screen'
+import { FrontSpec } from './article-screen'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
 const styles = StyleSheet.create({
@@ -152,10 +152,10 @@ const IssueFronts = ({
 
     const {
         frontWithCards,
-        articleSpecs,
+        frontSpecs,
     }: {
         frontWithCards: (TFront & { cards: FlatCard[] })[]
-        articleSpecs: ArticleSpec[]
+        frontSpecs: FrontSpec[]
     } = useMemo(
         () =>
             issue.fronts.reduce(
@@ -174,19 +174,21 @@ const IssueFronts = ({
                             article: article.key,
                             localIssueId: issue.localId,
                             publishedIssueId: issue.publishedId,
-                            appearance: front.appearance,
-                            frontName: front.displayName || '',
                         }),
                     )
-                    acc.articleSpecs.push(...specs)
+                    acc.frontSpecs.push({
+                        appearance: front.appearance,
+                        frontName: front.displayName || '',
+                        articleSpecs: specs,
+                    })
                     return acc
                 },
                 {
                     frontWithCards: [],
-                    articleSpecs: [],
+                    frontSpecs: [],
                 } as {
                     frontWithCards: (TFront & { cards: FlatCard[] })[]
-                    articleSpecs: ArticleSpec[]
+                    frontSpecs: FrontSpec[]
                 },
             ),
         [issue.localId, issue.publishedId, issue.fronts],
@@ -230,7 +232,7 @@ const IssueFronts = ({
                 <Front
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
-                    articleNavigator={articleSpecs}
+                    articleNavigator={frontSpecs}
                     frontData={front}
                     cards={front.cards}
                     key={front.key}
