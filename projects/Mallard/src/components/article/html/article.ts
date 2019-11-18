@@ -25,10 +25,7 @@ interface ArticleContentProps {
 }
 
 const PictureArticleContent = (image: TImage) => {
-    const path = useImagePath({
-        path: image.path,
-        source: image.source,
-    })
+    const path = useImagePath(image)
     return Image({
         imageElement: {
             src: image,
@@ -58,10 +55,7 @@ const renderArticleContent = (
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image': {
-                    const path = useImagePath({
-                        path: el.src.path,
-                        source: el.src.source,
-                    })
+                    const path = useImagePath(el.src)
                     return publishedId
                         ? Image({
                               imageElement: el,

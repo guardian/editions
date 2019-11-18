@@ -21,7 +21,7 @@ import cas from './authorizers/CASAuthorizer'
 import iap from './authorizers/IAPAuthorizer'
 import { CASExpiry } from './services/cas'
 import { ReceiptIOS } from './services/iap'
-import * as NetInfo from '@react-native-community/netinfo'
+import * as NetInfo from 'src/hooks/use-net-info'
 
 type AttemptType = 'iap' | 'cas' | 'identity'
 
