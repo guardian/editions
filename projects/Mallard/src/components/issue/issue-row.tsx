@@ -7,7 +7,7 @@ import {
 import { RowWrapper } from '../layout/ui/row'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { Text, StyleSheet, StyleProp, ViewStyle, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import {
     DLStatus,
