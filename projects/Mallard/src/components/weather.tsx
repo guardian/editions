@@ -125,14 +125,18 @@ const styles = StyleSheet.create({
     },
     setLocationButtonWrap: {
         marginTop: metrics.vertical,
+        marginRight: metrics.horizontal * 0.5,
     },
     /**
      * Exceptionnally, make the button smaller so as to fit in the limited
      * space on smaller devices.
      */
     setLocationButton: {
-        paddingHorizontal: metrics.horizontal * 0.75,
-        height: metrics.buttonHeight * 0.75,
+        paddingHorizontal: metrics.horizontal * 0.65,
+        height: metrics.buttonHeight * 0.65,
+    },
+    setLocationText: {
+        fontSize: 12,
     },
 })
 
@@ -227,8 +231,12 @@ const SetLocationButton = withNavigation(
             <Button
                 onPress={onSetLocation}
                 appearance={ButtonAppearance.skeleton}
-                style={styles.setLocationButtonWrap}
+                style={[
+                    styles.locationNameContainer,
+                    styles.setLocationButtonWrap,
+                ]}
                 buttonStyles={styles.setLocationButton}
+                textStyles={styles.setLocationText}
             >
                 Set Location
             </Button>
@@ -249,12 +257,12 @@ const LocationName = ({
         return <SetLocationButton />
     }
     return (
-        <>
+        <View style={styles.locationNameContainer}>
             <Text style={styles.locationPinIcon}>{'\uE01B'}</Text>
             <Text style={styles.locationName} numberOfLines={2}>
                 {locationName}
             </Text>
-        </>
+        </View>
     )
 }
 
@@ -279,13 +287,11 @@ const WeatherWithForecast = ({
                         />
                     )
                 })}
-                <View style={styles.locationNameContainer}>
-                    <LocationName
-                        locationName={locationName}
-                        isLocationPrecise={isLocationPrecise}
-                        isUsingProdDevtools={isUsingProdDevtools}
-                    />
-                </View>
+                <LocationName
+                    locationName={locationName}
+                    isLocationPrecise={isLocationPrecise}
+                    isUsingProdDevtools={isUsingProdDevtools}
+                />
             </View>
         )
     }
