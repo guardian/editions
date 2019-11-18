@@ -62,7 +62,7 @@ const compressImagePath = async (path: string, width: number) => {
 export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     const { issueId } = useIssueSummary()
 
-    const [paths, setPaths] = useState<string | undefined>()
+    const [path, setPath] = useState<string | undefined>()
 
     // FIXME: we should handle the loading status correctly.
     const apiUrl = useApiUrl() || ''
@@ -76,7 +76,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
                 publishedIssueId,
                 image,
                 use,
-            ).then(setPaths)
+            ).then(setPath)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
@@ -89,7 +89,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
         issueId ? issueId.localIssueId : undefined,
     ])
     if (image === undefined) return undefined
-    return paths
+    return path
 }
 
 export const useScaledImage = (largePath: string, width: number) => {

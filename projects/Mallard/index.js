@@ -7,6 +7,6 @@ Text.defaultProps = Text.defaultProps || {}
 Text.defaultProps.allowFontScaling = false
 
 // Supress Could Not Find Image warnings as a result of our approach to find the image locally
-YellowBox.ignoreWarnings(['Could not find image'])
+YellowBox.ignoreWarnings([])
 
 AppRegistry.registerComponent(appName, () => App)

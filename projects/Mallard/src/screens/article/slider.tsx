@@ -5,9 +5,8 @@ import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { Slider } from 'src/components/slider'
-import { safeInterpolation, clamp } from 'src/helpers/math'
+import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
-import { useAlphaIn } from 'src/hooks/use-alpha-in'
 import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
@@ -16,10 +15,9 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody, OnIsAtTopChange } from '../article/body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
-import {
-    ArticleNavigator,
-    getArticleDataFromNavigator,
-} from '../article-screen'
+import { getArticleDataFromNavigator, ArticleSpec } from '../article-screen'
+import { withNavigation } from 'react-navigation'
+import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
 
 export interface PathToArticle {
@@ -27,6 +25,13 @@ export interface PathToArticle {
     front: Front['key']
     article: CAPIArticle['key']
     issue: Issue['key']
+}
+
+export interface SliderSection {
+    items: number
+    title: string
+    color: string
+    startIndex: number
 }
 
 export interface ArticleTransitionProps {
@@ -47,10 +52,17 @@ const styles = StyleSheet.create({
     sliderAtTop: {
         borderBottomColor: color.background,
     },
-    innerSlider: {
+    firstSlider: {
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
+        paddingLeft: 2,
+        paddingRight: 2,
+    },
+    innerSlider: {
+        ...StyleSheet.absoluteFillObject,
+        paddingLeft: 2,
+        paddingRight: 2,
     },
     androidPager: {
         flexGrow: 1,
@@ -65,75 +77,160 @@ const styles = StyleSheet.create({
 })
 
 type SliderBarProps = {
-    position: number
-    total: number
-    title: string
-    color: string
+    section: SliderSection
+    sliderPosition: Animated.AnimatedInterpolation
+    width: number
+    isFirst: boolean
 }
-const SliderBar = ({ position, total, title, color }: SliderBarProps) => {
-    const sliderPos = useAlphaIn(200, {
-        initialValue: 0,
-        currentValue: position,
-    }).interpolate({
-        inputRange: safeInterpolation([0, total - 1]),
-        outputRange: safeInterpolation([0, 1]),
+
+const SliderSectionBar = ({
+    section,
+    sliderPosition,
+    width,
+    isFirst,
+}: SliderBarProps) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    const [sliderPos] = useState(() =>
+        sliderPosition
+            .interpolate({
+                inputRange: [
+                    section.startIndex,
+                    section.startIndex + section.items - 1,
+                ],
+                outputRange: [
+                    section.startIndex,
+                    section.startIndex + section.items - 1,
+                ],
+                extrapolateLeft: 'clamp',
+                extrapolateRight: 'clamp',
+            })
+            .interpolate({
+                inputRange: [
+                    section.startIndex,
+                    section.startIndex + section.items - 1,
+                ],
+                outputRange: [0, 1],
+            }),
+    )
+
+    const xValue = sliderPosition.interpolate({
+        inputRange: [
+            section.startIndex - 1,
+            section.startIndex,
+            section.startIndex + section.items - 1,
+            section.startIndex + section.items,
+        ],
+        outputRange: [width, 0, 0, -width],
+        extrapolate: 'clamp',
     })
 
-    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
+    return (
+        <Animated.View
+            style={[
+                isFirst ? styles.firstSlider : styles.innerSlider,
+                isTablet && {
+                    marginHorizontal: metrics.fronts.sliderRadius * -0.8,
+                },
+                {
+                    transform: [
+                        {
+                            translateX: xValue,
+                        },
+                    ],
+                },
+            ]}
+        >
+            <Slider
+                small={false}
+                title={section.title}
+                fill={section.color}
+                stops={2}
+                position={sliderPos}
+            />
+        </Animated.View>
+    )
+}
 
+const SliderBar = ({
+    sections,
+    sliderPosition,
+    width,
+}: {
+    sections: SliderSection[]
+    sliderPosition: Animated.AnimatedInterpolation
+    width: number
+}) => {
+    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <MaxWidthWrap>
             <View
                 style={[
-                    styles.innerSlider,
                     isTablet && {
                         marginHorizontal: metrics.fronts.sliderRadius * -0.8,
                     },
                 ]}
             >
-                <Slider
-                    small
-                    title={title}
-                    fill={color}
-                    stops={2}
-                    position={sliderPos}
-                />
+                {sections.map((section, index) => (
+                    <SliderSectionBar
+                        section={section}
+                        sliderPosition={sliderPosition}
+                        key={section.title}
+                        width={width}
+                        isFirst={index === 0}
+                    />
+                ))}
             </View>
         </MaxWidthWrap>
     )
 }
 
-const AndroidHeader = ({
-    isShown,
-    isAtTop,
-    ...sliderProps
-}: { isShown: boolean; isAtTop: boolean } & SliderBarProps) => {
-    const [top] = useState(new Animated.Value(0))
-    useEffect(() => {
-        if (isShown) {
-            Animated.timing(top, {
-                toValue: 0,
-                easing: Easing.out(Easing.ease),
-                duration: 200,
-            }).start()
-        } else {
-            Animated.timing(top, {
-                toValue: -ANDROID_HEADER_HEIGHT,
-                easing: Easing.out(Easing.ease),
-                duration: 200,
-            }).start()
-        }
-    }, [isShown, top])
+const AndroidHeader = withNavigation(
+    ({
+        isShown,
+        isAtTop,
+        sections,
+        sliderPosition,
+        width,
+    }: {
+        isShown: boolean
+        isAtTop: boolean
+        sections: SliderSection[]
+        sliderPosition: Animated.AnimatedInterpolation
+        width: number
+    } & NavigationInjectedProps) => {
+        const [top] = useState(new Animated.Value(0))
+        useEffect(() => {
+            if (isShown) {
+                Animated.timing(top, {
+                    toValue: 0,
+                    easing: Easing.out(Easing.ease),
+                    duration: 200,
+                }).start()
+            } else {
+                Animated.timing(top, {
+                    toValue: -ANDROID_HEADER_HEIGHT,
+                    easing: Easing.out(Easing.ease),
+                    duration: 200,
+                }).start()
+            }
+        }, [isShown, top])
 
-    return (
-        <Animated.View style={[styles.androidHeader, { top }]}>
-            <BasicArticleHeader />
-            <View style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}>
-                <SliderBar {...sliderProps} />
-            </View>
-        </Animated.View>
-    )
-}
+        return (
+            <Animated.View style={[styles.androidHeader, { top }]}>
+                <BasicArticleHeader />
+                <View
+                    style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
+                >
+                    <SliderBar
+                        sections={sections}
+                        sliderPosition={sliderPosition}
+                        width={width}
+                    />
+                </View>
+            </Animated.View>
+        )
+    },
+)
 
 /**
  * We keep track of which articles are scrolled or not so that when we swipe
@@ -162,12 +259,13 @@ const ArticleSlider = ({
 }: Required<
     Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>
 > & {}) => {
-    const { isInScroller, startingPoint } = getArticleDataFromNavigator(
+    const { startingPoint, flattenedArticles } = getArticleDataFromNavigator(
         articleNavigator,
         path,
     )
 
     const [current, setCurrent] = useState(startingPoint)
+    const [sliderPosition] = useState(new Animated.Value(startingPoint))
 
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -182,20 +280,27 @@ const ArticleSlider = ({
 
     const { panResponder } = useDismissArticle()
 
-    const data = isInScroller
-        ? articleNavigator
-        : [
-              {
-                  ...path,
-                  appearance: { type: 'pillar', name: 'neutral' } as const,
-                  frontName: '',
-              },
-              ...articleNavigator,
-          ]
-
-    const currentArticle = data[current]
+    const currentArticle = flattenedArticles[Math.floor(current)]
 
     const pillar = getAppearancePillar(currentArticle.appearance)
+
+    const sliderSections = articleNavigator.reduce(
+        (sectionsWithStartIndex, frontSpec) => {
+            const sections = sectionsWithStartIndex.sections.concat({
+                items: frontSpec.articleSpecs.length,
+                title: frontSpec.frontName,
+                color: getColor(frontSpec.appearance),
+                startIndex: sectionsWithStartIndex.sectionCounter,
+            })
+            return {
+                sectionCounter:
+                    sectionsWithStartIndex.sectionCounter +
+                    frontSpec.articleSpecs.length,
+                sections: sections,
+            }
+        },
+        { sectionCounter: 0, sections: [] as SliderSection[] },
+    ).sections
 
     const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
     const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
@@ -209,9 +314,15 @@ const ArticleSlider = ({
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
                         setCurrent(ev.nativeEvent.position)
+                        Animated.timing(sliderPosition, {
+                            duration: 200,
+                            toValue: ev.nativeEvent.position,
+                            easing: Easing.linear,
+                            useNativeDriver: true,
+                        }).start()
                     }}
                 >
-                    {data.map((item, index) => (
+                    {flattenedArticles.map((item, index) => (
                         <View key={index}>
                             {index >= current - 1 && index <= current + 1 ? (
                                 <ArticleScreenBody
@@ -232,12 +343,11 @@ const ArticleSlider = ({
                 </ViewPagerAndroid>
 
                 <AndroidHeader
-                    total={articleNavigator.length}
-                    position={current}
-                    title={currentArticle.frontName}
-                    color={getColor(currentArticle.appearance)}
                     isShown={shouldShowHeader}
                     isAtTop={isAtTop}
+                    sliderPosition={sliderPosition}
+                    width={width}
+                    sections={sliderSections}
                 />
             </>
         )
@@ -249,13 +359,14 @@ const ArticleSlider = ({
                 {...panResponder.panHandlers}
             >
                 <SliderBar
-                    total={articleNavigator.length}
-                    position={current}
-                    title={currentArticle.frontName}
-                    color={getColor(currentArticle.appearance)}
+                    sections={sliderSections}
+                    sliderPosition={Animated.divide(
+                        sliderPosition,
+                        new Animated.Value(width),
+                    )}
+                    width={width}
                 />
             </View>
-
             <Animated.FlatList
                 ref={(flatList: AnimatedFlatListRef) =>
                     (flatListRef.current = flatList)
@@ -263,15 +374,29 @@ const ArticleSlider = ({
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 scrollEventThrottle={1}
-                onScroll={(ev: any) => {
-                    setCurrent(
-                        clamp(
-                            Math.floor(ev.nativeEvent.contentOffset.x / width),
-                            0,
-                            data.length - 1,
-                        ),
-                    )
-                }}
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: { x: sliderPosition },
+                            },
+                        },
+                    ],
+                    {
+                        useNativeDriver: true,
+                        listener: (ev: any) => {
+                            const newPos =
+                                ev.nativeEvent.contentOffset.x / width
+                            setCurrent(
+                                clamp(
+                                    Math.floor(newPos),
+                                    0,
+                                    flattenedArticles.length - 1,
+                                ),
+                            )
+                        },
+                    },
+                )}
                 maxToRenderPerBatch={1}
                 windowSize={2}
                 initialNumToRender={1}
@@ -283,13 +408,13 @@ const ArticleSlider = ({
                     offset: width * index,
                     index,
                 })}
-                keyExtractor={(item: ArticleNavigator[number]) => item.article}
-                data={data}
+                keyExtractor={(item: ArticleSpec) => item.article}
+                data={flattenedArticles}
                 renderItem={({
                     item,
                     index,
                 }: {
-                    item: ArticleNavigator[number]
+                    item: ArticleSpec
                     index: number
                 }) => (
                     <ArticleScreenBody

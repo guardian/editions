@@ -1,5 +1,5 @@
-import { useNetInfo } from '@react-native-community/netinfo'
-import React from 'react'
+import { fetchImmediate } from 'src/hooks/use-net-info'
+import React, { useState } from 'react'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
@@ -28,7 +28,10 @@ const WebviewWithArticle = ({
     _ref?: (ref: WebView) => void
     topPadding: number
 } & WebViewProps & { onScroll?: any }) => {
-    const { isConnected } = useNetInfo()
+    // This line ensures we don't re-render the article when
+    // the network connection changes, see the comments around
+    // `fetchImmediate` where it is defined
+    const [{ isConnected }] = useState(fetchImmediate())
     const [, { pillar }] = useArticle()
     const { issueId } = useIssueSummary()
     const { imageSize } = useImageSize()
