@@ -1,4 +1,4 @@
-import { ArticleType, BlockElement, HTMLElement } from '../../common/src'
+import { ArticleType, BlockElement, HTMLElement } from '../../Apps/common/src'
 
 const DROP_CAP_ARTICLE_TYPES: ArticleType[] = [
     ArticleType.Feature,

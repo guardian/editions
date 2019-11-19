@@ -1,7 +1,7 @@
 import { Lambda, SharedIniFileCredentials } from 'aws-sdk'
 import { awsToString } from '../parser'
 import { IAtoms, IContentAtomElementFields } from '@guardian/capi-ts'
-import { BlockElement } from '../../common/src'
+import { BlockElement } from '../../Apps/common/src'
 import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 import { attempt, hasFailed } from '../utils/try'
 

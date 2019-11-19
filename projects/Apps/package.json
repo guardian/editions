@@ -1,0 +1,18 @@
+{
+    "name": "apps",
+    "version": "1.0.0",
+    "description": "Monorepo for React Native Apps",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "The Guardian",
+    "license": "ISC",
+    "workspaces": {
+        "packages": [
+            "*"
+        ],
+        "nohoist": []
+    },
+    "private": true
+}

@@ -1,5 +1,5 @@
 import { IContent } from '@guardian/capi-ts/dist/Content'
-import { ArticleType } from '../../common/src/index'
+import { ArticleType } from '../../Apps/common/src/index'
 import { TagType } from '@guardian/capi-ts'
 
 const doesTagExist = (article: IContent, tagId: string): boolean => {

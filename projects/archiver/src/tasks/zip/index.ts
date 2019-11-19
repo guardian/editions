@@ -10,7 +10,7 @@ import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
 import { Bucket } from '../../utils/s3'
-import { thumbsDir } from '../../../../common/src'
+import { thumbsDir } from '../../../../Apps/common/src'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
