@@ -16,5 +16,5 @@ module.exports = {
             },
         }),
     },
-    watchFolders: [resolve(__dirname, '.'), resolve(__dirname, '../common')],
+    watchFolders: [resolve(__dirname, '.'), resolve(__dirname, '../Apps')],
 }
