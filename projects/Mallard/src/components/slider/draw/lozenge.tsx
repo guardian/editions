@@ -7,7 +7,7 @@ import { ariaHidden } from 'src/helpers/a11y'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 
-const fadeLozengeAt = 20
+const fadeLozengeAt = 5
 
 const bubbleStyle = {
     ...StyleSheet.absoluteFillObject,
@@ -97,7 +97,7 @@ const LozengeBigHeader = ({
                                         ]),
                                         outputRange: safeInterpolation([
                                             0,
-                                            width * -0.5,
+                                            width,
                                         ]),
                                         extrapolate: 'clamp',
                                     }),
@@ -142,9 +142,7 @@ const LozengeBigHeader = ({
                                         ]),
                                         outputRange: safeInterpolation([
                                             0,
-                                            fadeLozengeAt * -1 -
-                                                width / 2 +
-                                                metrics.fronts.sliderRadius,
+                                            fadeLozengeAt * -1 - width / 2,
                                         ]),
                                         extrapolate: 'clamp',
                                     }),
@@ -186,10 +184,7 @@ const LozengeBigHeader = ({
                                             ]),
                                             outputRange: safeInterpolation([
                                                 0,
-                                                fadeLozengeAt * -1 -
-                                                    (width -
-                                                        metrics.fronts
-                                                            .sliderRadius),
+                                                fadeLozengeAt * -1 - width,
                                             ]),
                                             extrapolate: 'clamp',
                                         }),
