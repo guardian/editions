@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
-        paddingHorizontal: 13
+        paddingHorizontal: 13,
     },
     innerSlider: {
         ...StyleSheet.absoluteFillObject,
