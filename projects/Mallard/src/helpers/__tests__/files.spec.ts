@@ -4,7 +4,7 @@ import {
     DLStatus,
     updateListeners,
 } from '../files'
-import { issueSummaries } from '../../../../common/src/__tests__/fixtures/IssueSummary'
+import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
 function createRunner(id: string) {
     let resolve = () => {}

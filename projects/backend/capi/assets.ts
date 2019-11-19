@@ -1,7 +1,7 @@
 import { IAsset, IBlockElement } from '@guardian/capi-ts'
 import { Image } from '../common'
 import { getImageFromURL } from '../image'
-import { CreditedImage } from '../../common/src'
+import { CreditedImage } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
 
 const extractImage: (

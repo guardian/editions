@@ -31,6 +31,7 @@ import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
+import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -110,7 +111,10 @@ const IssueList = withNavigation(
                     <View
                         style={{
                             padding: metrics.horizontal,
-                            paddingVertical: metrics.vertical * 2,
+                            paddingTop: metrics.vertical * 2,
+                            paddingBottom:
+                                getIssueCardOverlayAmount() +
+                                metrics.vertical * 2,
                         }}
                     >
                         <GridRowSplit

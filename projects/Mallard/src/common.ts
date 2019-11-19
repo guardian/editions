@@ -1,1 +1,1 @@
-export * from '../../common/src/index'
+export * from '../../Apps/common/src/index'

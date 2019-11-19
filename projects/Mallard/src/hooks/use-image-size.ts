@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ImageSize } from '../../../common/src'
+import { ImageSize } from '../../../Apps/common/src'
 import { imageForScreenSize } from 'src/helpers/screen'
 
 const useImageSize = () => {

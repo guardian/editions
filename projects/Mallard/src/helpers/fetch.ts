@@ -14,7 +14,7 @@ import {
 } from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { FSPaths, APIPaths } from 'src/paths'
-import { Front, IssueWithFronts } from '../../../common/src'
+import { Front, IssueWithFronts } from '../../../Apps/common/src'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 

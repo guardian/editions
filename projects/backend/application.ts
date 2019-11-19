@@ -1,7 +1,11 @@
 import express = require('express')
 import { Request, Response } from 'express'
 import listEndpoints from 'express-list-endpoints'
-import { ImageSize, ImageThumbnailUse, thumbsPath } from '../common/src/index'
+import {
+    ImageSize,
+    ImageThumbnailUse,
+    thumbsPath,
+} from '../Apps/common/src/index'
 import { frontPath, issuePath, issueSummaryPath, mediaPath } from './common'
 import { pickIssuePathSegments } from './utils/issue'
 

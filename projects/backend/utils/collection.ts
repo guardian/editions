@@ -12,7 +12,7 @@ import { fromPairs, zip } from 'ramda'
 import { PublishedFront, PublishedFurniture } from '../fronts/issue'
 import { CAPIContent } from '../capi/articles'
 import { patchArticle } from '../fronts'
-import { ImageDeviceUses } from '../../common/src'
+import { ImageDeviceUses } from '../../Apps/common/src'
 
 const chunk = <T>(arr: T[], size: number) =>
     Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>

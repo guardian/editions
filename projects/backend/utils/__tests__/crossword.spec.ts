@@ -1,4 +1,4 @@
-import { CrosswordType, CrosswordEntry } from '../../../common/src'
+import { CrosswordType, CrosswordEntry } from '../../../Apps/common/src'
 import { patchCrossword } from '../crossword'
 
 const createCrossword = (type: CrosswordType = CrosswordType.QUICK) => ({
