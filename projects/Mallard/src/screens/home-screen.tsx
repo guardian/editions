@@ -87,7 +87,7 @@ const IssueList = withNavigation(
                 <>
                     <BaseList
                         style={{ paddingTop: 0 }}
-                        data={[...issueList, ...issueList]}
+                        data={issueList}
                         renderItem={({ item: issueSummary }) => (
                             <IssueRow
                                 onPress={() => {
