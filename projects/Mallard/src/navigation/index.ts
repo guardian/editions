@@ -40,7 +40,6 @@ import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
-import { QueryData } from '@apollo/react-hooks/lib/data/QueryData'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -163,13 +162,13 @@ const ONBOARDING_QUERY = gql(`{
     gdprAllowFunctionality @client
 }`)
 
-type QueryData = {
+type OnboardingQueryData = {
     gdprAllowEssential: boolean
     gdprAllowPerformance: boolean
     gdprAllowFunctionality: boolean
 }
 
-const hasOnboarded = (data: QueryData) => {
+const hasOnboarded = (data: OnboardingQueryData) => {
     return (
         data.gdprAllowEssential != null &&
         data.gdprAllowFunctionality != null &&
@@ -187,7 +186,9 @@ const RootNavigator = createAppContainer(
                     }: {
                         navigation: NavigationScreenProp<{}>
                     }) => {
-                        const query = useQuery<QueryData>(ONBOARDING_QUERY)
+                        const query = useQuery<OnboardingQueryData>(
+                            ONBOARDING_QUERY,
+                        )
                         useEffect(() => {
                             /** Setting is still loading, do nothing yet. */
                             if (query.loading) return
