@@ -190,11 +190,11 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://cdn.cocoapods.org/:
-    - boost-for-react-native
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Sentry
     - SSZipArchive
+  trunk:
+    - boost-for-react-native
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -343,4 +343,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8f0bbc01628753467e2078e01bc0c2b5099afb92
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4
