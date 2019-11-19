@@ -56,13 +56,11 @@ const styles = StyleSheet.create({
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
-        paddingLeft: 2,
-        paddingRight: 2,
+        paddingHorizonal: 13
     },
     innerSlider: {
         ...StyleSheet.absoluteFillObject,
-        paddingLeft: 2,
-        paddingRight: 2,
+        paddingHorizonal: 13,
     },
     androidPager: {
         flexGrow: 1,
