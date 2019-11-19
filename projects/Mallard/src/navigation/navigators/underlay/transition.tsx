@@ -6,17 +6,20 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { safeInterpolation } from 'src/helpers/math'
 import { sidebarWidth } from './positions'
 
+export const getIssueCardOverlayAmount = () => {
+    const { width, height } = Dimensions.get('window')
+    const isPhone = width >= Breakpoints.phone
+    return isPhone ? height / 5 : height / 5.6
+}
+
 export const topLayerTransition = (
     position: NavigationTransitionProps['position'],
     sceneIndex: number,
 ) => {
-    const { height: windowHeight, width } = Dimensions.get('window')
+    const { width, height } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
-    const isPhone = width >= Breakpoints.phone
 
-    const finalTranslate = isPhone
-        ? windowHeight - windowHeight / 5
-        : windowHeight - windowHeight / 5.6
+    const finalTranslate = height - getIssueCardOverlayAmount()
 
     const translateY = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
