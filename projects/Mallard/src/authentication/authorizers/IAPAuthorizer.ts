@@ -2,7 +2,7 @@ import { iapReceiptCache } from '../../helpers/storage'
 import { Authorizer } from '../lib/Authorizer'
 import {
     fetchActiveIOSSubscriptionReceipt,
-    isReceiptActive,
+    isReceiptValid,
     tryRestoreActiveIOSSubscriptionReceipt,
 } from '../services/iap'
 
@@ -12,5 +12,5 @@ export default new Authorizer({
     authCaches: [],
     auth: tryRestoreActiveIOSSubscriptionReceipt,
     authWithCachedCredentials: fetchActiveIOSSubscriptionReceipt,
-    checkUserHasAccess: isReceiptActive,
+    checkUserHasAccess: isReceiptValid,
 })
