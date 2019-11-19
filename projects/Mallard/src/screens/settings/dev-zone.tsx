@@ -17,10 +17,7 @@ import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 import DeviceInfo from 'react-native-device-info'
 import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
-import {
-    setHasOnboarded,
-    setIsUsingProdDevtools,
-} from 'src/helpers/settings/setters'
+import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
@@ -88,15 +85,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 </UiBodyCopy>
             </Footer>
             <ButtonList>
-                <Button
-                    onPress={() => {
-                        // go back to the main to simulate a fresh app
-                        setHasOnboarded(client, false)
-                        navigation.navigate('Onboarding')
-                    }}
-                >
-                    Re-start onboarding
-                </Button>
                 <Button
                     onPress={() => {
                         // go back to the main to simulate a fresh app

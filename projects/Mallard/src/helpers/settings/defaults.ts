@@ -97,7 +97,6 @@ const contentPrefix = 'daily-edition'
 export const defaultSettings: Settings = {
     apiUrl,
     isUsingProdDevtools: false,
-    hasOnboarded: false,
     gdprAllowEssential: true, // essential defaults to true and not switchable
     gdprAllowPerformance: null,
     gdprAllowFunctionality: null,

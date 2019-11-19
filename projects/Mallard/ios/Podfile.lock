@@ -190,10 +190,11 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
-    - boost-for-react-native
+  https://github.com/CocoaPods/Specs.git:
     - Sentry
     - SSZipArchive
+  trunk:
+    - boost-for-react-native
 
 EXTERNAL SOURCES:
   DoubleConversion:
