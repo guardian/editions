@@ -40,6 +40,7 @@ import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
+import { QueryData } from '@apollo/react-hooks/lib/data/QueryData'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -162,6 +163,20 @@ const ONBOARDING_QUERY = gql(`{
     gdprAllowFunctionality @client
 }`)
 
+type QueryData = {
+    gdprAllowEssential: boolean
+    gdprAllowPerformance: boolean
+    gdprAllowFunctionality: boolean
+}
+
+const hasOnboarded = (data: QueryData) => {
+    return (
+        data.gdprAllowEssential != null &&
+        data.gdprAllowFunctionality != null &&
+        data.gdprAllowPerformance != null
+    )
+}
+
 const RootNavigator = createAppContainer(
     createStackNavigator(
         {
@@ -172,11 +187,7 @@ const RootNavigator = createAppContainer(
                     }: {
                         navigation: NavigationScreenProp<{}>
                     }) => {
-                        const query = useQuery<{
-                            gdprAllowEssential: boolean
-                            gdprAllowPerformance: boolean
-                            gdprAllowFunctionality: boolean
-                        }>(ONBOARDING_QUERY)
+                        const query = useQuery<QueryData>(ONBOARDING_QUERY)
                         useEffect(() => {
                             /** Setting is still loading, do nothing yet. */
                             if (query.loading) return
@@ -184,11 +195,7 @@ const RootNavigator = createAppContainer(
                             // If any flag is unknown still, we want to onboard.
                             // We expected people to give explicit yay/nay to
                             // each GDPR bucket.
-                            if (
-                                data.gdprAllowEssential == null ||
-                                data.gdprAllowFunctionality == null ||
-                                data.gdprAllowPerformance == null
-                            ) {
+                            if (!hasOnboarded(data)) {
                                 navigation.navigate('Onboarding')
                             } else {
                                 navigation.navigate('App')
