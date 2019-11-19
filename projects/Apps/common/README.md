@@ -1,4 +1,4 @@
-# Commo Code package
+# Common Code package
 
 This package is used as a store for common snippets of code used across mutliple package. This often refers to shared types that are used end to end
 
