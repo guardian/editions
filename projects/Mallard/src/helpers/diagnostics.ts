@@ -60,23 +60,20 @@ const getDiagnosticInfo = async (authAttempt: AnyAttempt<string>) => {
     const kilobytes = bytes / 1000
     const megabytes = kilobytes / 1000
     const gigabytes = megabytes / 1000
+    const buildNumber = DeviceInfo.getBuildNumber()
+    const version = DeviceInfo.getVersion()
+    const deviceId = DeviceInfo.getDeviceId()
 
     const [
-        version,
-        buildNumber,
         firstInstallTime,
         lastUpdateTime,
-        deviceId,
         totalDiskCapacity,
         freeDiskStorage,
         pushTracking,
         fileList,
     ] = await Promise.all([
-        DeviceInfo.getVersion(),
-        DeviceInfo.getBuildNumber(),
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
-        DeviceInfo.getDeviceId(),
         DeviceInfo.getTotalDiskCapacity(),
         DeviceInfo.getFreeDiskStorage(),
         getPushTracking(),
@@ -130,8 +127,8 @@ const openSupportMailto = async (
         android: isInBeta() ? ANDROID_BETA_EMAIL : releaseURL,
     })
 
-    const version = await DeviceInfo.getVersion()
-    const buildNumber = await DeviceInfo.getBuildNumber()
+    const version = DeviceInfo.getVersion()
+    const buildNumber = DeviceInfo.getBuildNumber()
 
     const subject = `${text} - ${Platform.OS} Daily ${
         isInBeta() ? 'Beta' : ''

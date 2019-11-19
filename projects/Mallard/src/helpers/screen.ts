@@ -55,7 +55,7 @@ export const imageForScreenSize = async (): Promise<ImageSize> => {
     if (persistedSize != undefined) {
         return persistedSize
     }
-    const isTablet = await DeviceInfo.isTablet()
+    const isTablet = DeviceInfo.isTablet()
     const screenSize = isTablet ? maxScreenSize() : minScreenSize()
     const size = convertImageSizeToImageDescription(
         screenSizeToImageSize(screenSize),

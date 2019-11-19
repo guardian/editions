@@ -68,11 +68,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         },
     })
 
-    const [versionNumber, setVersionNumber] = useState('')
-
-    useEffect(() => {
-        DeviceInfo.getVersion().then(version => setVersionNumber(version))
-    })
+    const versionNumber = DeviceInfo.getVersion()
 
     if (query.loading) return null
     const { client } = query
