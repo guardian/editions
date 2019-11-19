@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { imageSizes, ImageUse, imageUses } from '../../common/src/index'
+import { imageSizes, ImageUse, imageUses } from '../../Apps/common/src/index'
 import { Image } from '../common'
 import { getImageURL } from '../image'
 

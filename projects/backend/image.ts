@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import { ImageUse, imageUseSizes } from '../common/src'
+import { ImageUse, imageUseSizes } from '../Apps/common/src'
 import { Image, ImageSize } from './common'
 
 const salt = process.env.IMAGE_SALT

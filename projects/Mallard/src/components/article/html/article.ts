@@ -16,7 +16,7 @@ import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { Image as TImage } from '../../../../../common/src'
+import { Image as TImage } from '../../../../../Apps/common/src'
 
 interface ArticleContentProps {
     showMedia: boolean

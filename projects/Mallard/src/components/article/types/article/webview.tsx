@@ -9,7 +9,7 @@ import {
     Article,
     PictureArticle,
     GalleryArticle,
-} from '../../../../../../common/src'
+} from '../../../../../../Apps/common/src'
 import { renderArticle } from '../../html/article'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'

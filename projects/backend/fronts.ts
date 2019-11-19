@@ -6,7 +6,7 @@ import {
     IssuePublicationIdentifier,
     TrailImage,
     ImageDeviceUses,
-} from '../common/src'
+} from '../Apps/common/src'
 import { CAPIContent, getArticles } from './capi/articles'
 import {
     CAPIArticle,
