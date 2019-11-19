@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { Alert, StyleSheet, Text, Switch } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { RightChevron } from 'src/components/icons/RightChevron'
@@ -68,11 +68,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
         },
     })
 
-    const [versionNumber, setVersionNumber] = useState('')
-
-    useEffect(() => {
-        DeviceInfo.getVersion().then(version => setVersionNumber(version))
-    })
+    const versionNumber = DeviceInfo.getVersion()
 
     if (query.loading) return null
     const { client } = query
