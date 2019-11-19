@@ -34,7 +34,6 @@ const ALL_NAMES = [
     'apiUrl',
     'isWeatherShown',
     'isUsingProdDevtools',
-    'hasOnboarded',
 ]
 
 /**

@@ -156,7 +156,12 @@ const OnboardingStack = createModalNavigator(
     {},
 )
 
-const ONBOARDING_QUERY = gql('{ hasOnboarded @client }')
+const ONBOARDING_QUERY = gql(`{
+    gdprAllowEssential @client
+    gdprAllowPerformance @client
+    gdprAllowFunctionality @client
+}`)
+
 const RootNavigator = createAppContainer(
     createStackNavigator(
         {
@@ -167,13 +172,23 @@ const RootNavigator = createAppContainer(
                     }: {
                         navigation: NavigationScreenProp<{}>
                     }) => {
-                        const query = useQuery<{ hasOnboarded: boolean }>(
-                            ONBOARDING_QUERY,
-                        )
+                        const query = useQuery<{
+                            gdprAllowEssential: boolean
+                            gdprAllowPerformance: boolean
+                            gdprAllowFunctionality: boolean
+                        }>(ONBOARDING_QUERY)
                         useEffect(() => {
                             /** Setting is still loading, do nothing yet. */
                             if (query.loading) return
-                            if (!query.data.hasOnboarded) {
+                            const { data } = query
+                            // If any flag is unknown still, we want to onboard.
+                            // We expected people to give explicit yay/nay to
+                            // each GDPR bucket.
+                            if (
+                                data.gdprAllowEssential == null ||
+                                data.gdprAllowFunctionality == null ||
+                                data.gdprAllowPerformance == null
+                            ) {
                                 navigation.navigate('Onboarding')
                             } else {
                                 navigation.navigate('App')
