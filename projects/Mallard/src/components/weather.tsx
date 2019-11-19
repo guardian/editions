@@ -247,13 +247,11 @@ const SetLocationButton = withNavigation(
 const LocationName = ({
     isLocationPrecise,
     locationName,
-    isUsingProdDevtools,
 }: {
     isLocationPrecise: boolean
     locationName: string
-    isUsingProdDevtools: boolean
 }) => {
-    if (!isLocationPrecise && isUsingProdDevtools) {
+    if (!isLocationPrecise) {
         return <SetLocationButton />
     }
     return (
@@ -266,13 +264,7 @@ const LocationName = ({
     )
 }
 
-const WeatherWithForecast = ({
-    weather,
-    isUsingProdDevtools,
-}: {
-    weather: Weather
-    isUsingProdDevtools: boolean
-}) => {
+const WeatherWithForecast = ({ weather }: { weather: Weather }) => {
     const { forecasts, locationName, isLocationPrecise } = weather
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
@@ -290,7 +282,6 @@ const WeatherWithForecast = ({
                 <LocationName
                     locationName={locationName}
                     isLocationPrecise={isLocationPrecise}
-                    isUsingProdDevtools={isUsingProdDevtools}
                 />
             </View>
         )
@@ -308,12 +299,7 @@ const WeatherWidget = React.memo(() => {
 
     const { data } = query
     if (data.weather == null) return null
-    return (
-        <WeatherWithForecast
-            weather={data.weather}
-            isUsingProdDevtools={data.isUsingProdDevtools}
-        />
-    )
+    return <WeatherWithForecast weather={data.weather} />
 })
 
 export { WeatherWidget }
