@@ -1,5 +1,5 @@
 import { getIssuesSummary } from '../issue'
-import { IssueSummary } from '../../../common/src'
+import { IssueSummary } from '../../../Apps/common/src'
 import { LIVE_PAGE_SIZE, PREVIEW_PAGE_SIZE } from '../issue'
 
 const dailyEdition = 'daily-edition'

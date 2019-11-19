@@ -9,7 +9,7 @@ import {
     CreditedImage,
     Article,
     MediaAtomElement,
-} from '../../../../../../common/src'
+} from '../../../../../../Apps/common/src'
 import { CssProps, themeColors } from '../helpers/css'
 import { breakSides } from '../helpers/layout'
 import { Quotes } from './icon/quotes'

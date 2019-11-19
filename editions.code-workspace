@@ -13,7 +13,7 @@
             "path": "projects/aws"
         },
         {
-            "path": "projects/common"
+            "path": "projects/Apps/common"
         },
         {
             "path": "projects/editions-crossword-renderer-app"
@@ -23,6 +23,9 @@
         },
         {
             "path": "docs"
+        },
+        {
+            "path": "projects/Apps"
         }
     ],
     "settings": {

@@ -90,28 +90,26 @@ const SliderSectionBar = ({
     isFirst,
 }: SliderBarProps) => {
     const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
-    const [sliderPos] = useState(() =>
-        sliderPosition
-            .interpolate({
-                inputRange: [
-                    section.startIndex,
-                    section.startIndex + section.items - 1,
-                ],
-                outputRange: [
-                    section.startIndex,
-                    section.startIndex + section.items - 1,
-                ],
-                extrapolateLeft: 'clamp',
-                extrapolateRight: 'clamp',
-            })
-            .interpolate({
-                inputRange: [
-                    section.startIndex,
-                    section.startIndex + section.items - 1,
-                ],
-                outputRange: [0, 1],
-            }),
-    )
+    const sliderPos = sliderPosition
+        .interpolate({
+            inputRange: [
+                section.startIndex,
+                section.startIndex + section.items - 1,
+            ],
+            outputRange: [
+                section.startIndex,
+                section.startIndex + section.items - 1,
+            ],
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+        })
+        .interpolate({
+            inputRange: [
+                section.startIndex,
+                section.startIndex + section.items - 1,
+            ],
+            outputRange: [0, 1],
+        })
 
     const xValue = sliderPosition.interpolate({
         inputRange: [

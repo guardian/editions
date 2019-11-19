@@ -12,6 +12,8 @@ import {
 import { isInBeta } from 'src/helpers/release-stream'
 const { InAppUtils } = NativeModules
 
+const THREE_DAYS = 1000 * 60 * 60 * 24 * 3
+
 export interface ReceiptIOS {
     expires_date: string
     expires_date_ms: string
@@ -47,14 +49,15 @@ const getMostRecentTransactionReceipt = (purchases: Purchase[]) => {
         .transactionReceipt
 }
 
-const isReceiptActive = (receipt: ReceiptIOS) => {
+const isReceiptValid = (receipt: ReceiptIOS) => {
     const expirationInMilliseconds = Number(receipt.expires_date_ms)
+    const expirationWithGracePeriod = expirationInMilliseconds + THREE_DAYS
     const nowInMilliseconds = Date.now()
-    return expirationInMilliseconds > nowInMilliseconds
+    return expirationWithGracePeriod > nowInMilliseconds
 }
 
 const findValidReceipt = (receipt: ReceiptValidationResponse) =>
-    (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptActive) || null
+    (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid) || null
 
 /**
  * This will attempt to restore existing purchases
@@ -107,5 +110,5 @@ const fetchActiveIOSSubscriptionReceipt = async (): Promise<
 export {
     fetchActiveIOSSubscriptionReceipt,
     tryRestoreActiveIOSSubscriptionReceipt,
-    isReceiptActive,
+    isReceiptValid,
 }
