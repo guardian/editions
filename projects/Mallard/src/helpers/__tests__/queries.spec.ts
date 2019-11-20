@@ -5,9 +5,9 @@ beforeEach(() => {
     env = new QueryEnvironment()
 })
 
-const createWaitableFn = <Value>(): [
+const createJoinableFn = <Value>(): [
     (value: Value) => void,
-    Promise<Value>,
+    () => Promise<Value>,
 ] => {
     let resolve: any
     let resolved = false
@@ -19,47 +19,50 @@ const createWaitableFn = <Value>(): [
     const promise = new Promise<Value>(r => {
         resolve = r
     })
-    return [fn, promise]
+    const join = async () => {
+        const value = await promise
+        resolved = false
+        return value
+    }
+    return [fn, join]
 }
 
 it('resolves a query', async () => {
-    const HelloWorld = Query.create(async () => {
+    const helloQuery = Query.create(async () => {
         return 'hello, world'
     })
-    const [fn, promise] = createWaitableFn()
 
-    expect(env.peek(HelloWorld, {})).toEqual({ loading: true })
-    const release = env.watch(HelloWorld, {}, fn)
-    const result = await promise
+    expect(env.peek(helloQuery, null)).toEqual({ loading: true })
 
+    const [fn, join] = createJoinableFn()
+    const release = env.watch(helloQuery, {}, fn)
+    const result = await join()
+
+    expect(fn).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ value: 'hello, world' })
     release()
 })
 
-// it('resolves nested queries', () =>
-//     new Promise(resolve => {
-//         let name = 'world'
+it.only('resolves nested queries', async () => {
+    let name = 'world'
+    const nameQuery = Query.create(async () => {
+        return name
+    })
 
-//         const GetName = Query.create(async () => {
-//             return name
-//         })
+    const helloQuery = Query.create(async (vars, resolve) => {
+        const name = await resolve(nameQuery, null)
+        return 'hello, ' + name
+    })
 
-//         const HelloWorld = Query.create(async (vars, resolve) => {
-//             const name = await resolve(GetName, {})
-//             return 'hello, ' + name
-//         })
+    expect(env.peek(helloQuery, null)).toEqual({ loading: true })
 
-//         expect(env.peek(HelloWorld, {})).toEqual({ loading: true })
-//         const release = env.watch(HelloWorld, {}, result => {
-//             expect(result).toEqual({ value: 'hello, world' })
-//             const release2 = env.watch(HelloWorld, {}, result => {
-//                 expect(result).toEqual({ value: 'hello, there' })
-//                 release2()
-//                 resolve()
-//             })
-//             release()
+    const [fn, join] = createJoinableFn()
+    const release = env.watch(helloQuery, {}, fn)
+    const result = await join()
 
-//             name = 'there'
-//             env.invalidate(GetName, {})
-//         })
-//     }))
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(result).toEqual({ value: 'hello, world' })
+
+    name = "y'all"
+    env.invalidate(nameQuery, null)
+})
