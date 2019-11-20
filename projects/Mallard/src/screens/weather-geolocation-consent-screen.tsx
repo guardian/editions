@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Alert, Platform } from 'react-native'
+import { StyleSheet, View, Alert, Platform, Linking } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { DefaultInfoTextWebview } from './settings/default-info-text-webview'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -9,6 +9,7 @@ import { setIsWeatherShown } from 'src/helpers/settings/setters'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
+import { getGeolocation } from 'src/helpers/weather'
 
 const content = html`
     <h2>Location-based weather</h2>
@@ -52,6 +53,15 @@ const styles = StyleSheet.create({
     },
 })
 
+const showIsDisabledAlert = () => {
+    Alert.alert(
+        'Location services',
+        'Location services are disabled in the device ' +
+            'settings. Enable them to see location-based ' +
+            'weather.',
+    )
+}
+
 const WeatherGeolocationConsentScreen = ({
     navigation,
 }: NavigationInjectedProps) => {
@@ -61,12 +71,33 @@ const WeatherGeolocationConsentScreen = ({
         if (result === RESULTS.BLOCKED) {
             Alert.alert(
                 'Location permission',
-                'Location permission has been blocked in the system ' +
-                    'settings. Change the app-specific system setting to ' +
-                    'enable location-based weather.',
+                'Location permission is blocked in the device ' +
+                    'settings. Allow the app to access location to ' +
+                    'see location-based weather.',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            Linking.openSettings()
+                        },
+                    },
+                ],
             )
+            return
         }
-        if (result === RESULTS.GRANTED) navigation.dismiss()
+        if (result === RESULTS.UNAVAILABLE) {
+            showIsDisabledAlert()
+            return
+        }
+        if (result === RESULTS.GRANTED) {
+            try {
+                await getGeolocation()
+            } catch (error) {
+                showIsDisabledAlert()
+                return
+            }
+            navigation.dismiss()
+        }
     }
     const onHidePress = () => {
         setIsWeatherShown(apolloClient, false)
