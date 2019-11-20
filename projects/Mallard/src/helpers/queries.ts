@@ -107,6 +107,7 @@ export class QueryEnvironment {
             preds: new Set(),
             listeners: [],
         }
+        this._graph.set(key, node)
         this._refresh(node)
         return node
     }
