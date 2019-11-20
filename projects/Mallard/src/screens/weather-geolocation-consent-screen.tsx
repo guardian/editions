@@ -57,7 +57,7 @@ const showIsDisabledAlert = () => {
     Alert.alert(
         'Location services',
         'Location services are disabled in the device ' +
-            'setttings. Enable them to see location-based ' +
+            'settings. Enable them to see location-based ' +
             'weather.',
     )
 }
