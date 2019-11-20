@@ -5,7 +5,7 @@ import Observable from 'zen-observable'
 jest.mock('src/helpers/release-stream', () => ({
     isInBeta: () => false,
 }))
-jest.mock('react-native-sentry', () => ({
+jest.mock('@sentry/react-native', () => ({
     config: jest.fn(() => ({
         install: jest.fn(() => Promise.resolve()),
     })),
@@ -25,7 +25,7 @@ describe('errorService', () => {
         jest.resetModules()
 
         errorService = require('../errors').errorService
-        Sentry = require('react-native-sentry')
+        Sentry = require('@sentry/react-native')
 
         let hasConsent = false
         const observers: any = []

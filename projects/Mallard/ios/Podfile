@@ -36,6 +36,8 @@ target 'Mallard' do
 
     pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
 
+    pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
+
     post_install do |installer|
     installer.pods_project.targets.each do |target|
       if target.name == 'react-native-config'
