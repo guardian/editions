@@ -94,6 +94,7 @@ export class NetInfoStateContainer {
 
     subscribe(fn: (state: NetInfoState) => void) {
         this.subscribers.push(fn)
+        fn(this.state)
         return () => {
             this.subscribers = this.subscribers.filter(sub => sub !== fn)
         }
@@ -115,14 +116,9 @@ export class NetInfoStateContainer {
         nextActualState: NetInfoState,
         forceOffline: boolean,
     ) {
-        const prevState = this.state
-        const nextState = forceOffline ? offlineState : nextActualState
         this.actualState = nextActualState
         this.forceOffline = forceOffline
-
-        if (prevState.type !== nextState.type) {
-            this.updateListeners()
-        }
+        this.updateListeners()
     }
 
     private updateListeners() {
