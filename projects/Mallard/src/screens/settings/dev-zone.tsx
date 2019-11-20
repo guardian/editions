@@ -48,13 +48,9 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const { attempt, signOutCAS } = useContext(AccessContext)
     const { showToast } = useToast()
 
-    const [buildNumber, setBuildId] = useState('fetching...')
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
-
-    useEffect(() => {
-        DeviceInfo.getBuildNumber().then(buildNumber => setBuildId(buildNumber))
-    }, [])
+    const buildNumber = DeviceInfo.getBuildNumber()
 
     useEffect(() => {
         getFileList().then(fileList => {

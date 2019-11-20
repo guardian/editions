@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: color.line,
         backgroundColor: color.background,
+        paddingHorizontal: metrics.horizontal * 2 + metrics.fronts.sliderRadius,
     },
     sliderAtTop: {
         borderBottomColor: color.background,
@@ -56,11 +57,9 @@ const styles = StyleSheet.create({
         width: '100%',
         flexShrink: 0,
         flexGrow: 1,
-        paddingHorizontal: 13,
     },
     innerSlider: {
         ...StyleSheet.absoluteFillObject,
-        paddingHorizontal: 13,
     },
     androidPager: {
         flexGrow: 1,

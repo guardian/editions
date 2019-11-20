@@ -36,7 +36,7 @@ const getIpAddress = async (): Promise<string> => {
     return await resp.text()
 }
 
-const getGeolocation = async (): Promise<GeolocationResponse> => {
+export const getGeolocation = async (): Promise<GeolocationResponse> => {
     return new Promise((resolve, reject) => {
         Geolocation.getCurrentPosition(
             resolve,
@@ -54,16 +54,25 @@ const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
     return await res.json()
 }
 
+const getIpBasedLocation = async () => {
+    const ip = await getIpAddress()
+    const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
+        `locations/v1/cities/ipAddress?q=${ip}&details=false`,
+    )
+    return { accuLoc, isPrecise: false }
+}
+
 const getCurrentLocation = async () => {
     const permStatus = await resolveLocationPermissionStatus()
     if (permStatus !== RESULTS.GRANTED) {
-        const ip = await getIpAddress()
-        const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
-            `locations/v1/cities/ipAddress?q=${ip}&details=false`,
-        )
-        return { accuLoc, isPrecise: false }
+        return await getIpBasedLocation()
     }
-    const geoloc = await getGeolocation()
+    let geoloc
+    try {
+        geoloc = await getGeolocation()
+    } catch (error) {
+        return await getIpBasedLocation()
+    }
     const latLong = `${geoloc.coords.latitude},${geoloc.coords.longitude}`
     const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
         `locations/v1/cities/geoposition/search?q=${latLong}&details=false`,
