@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
 const showIsDisabledAlert = () => {
     Alert.alert(
         'Location services',
-        'Location services have been disabled in the system ' +
-            'setttings. Enable them to be able to see location-based ' +
+        'Location services are disabled in the device ' +
+            'setttings. Enable them to see location-based ' +
             'weather.',
     )
 }
@@ -71,9 +71,9 @@ const WeatherGeolocationConsentScreen = ({
         if (result === RESULTS.BLOCKED) {
             Alert.alert(
                 'Location permission',
-                'Location permission has been blocked in the system ' +
-                    'settings. Change the app-specific system setting to ' +
-                    'be able to see location-based weather.',
+                'Location permission is blocked in the device ' +
+                    'settings. Allow the app to access location to ' +
+                    'see location-based weather.',
                 [
                     {
                         text: 'OK',
