@@ -93,8 +93,11 @@ export class NetInfoStateContainer {
     }
 
     subscribe(fn: (state: NetInfoState) => void) {
-        this.subscribers.push(fn)
-        fn(this.state)
+        this.fetch()
+            .then(fn)
+            .finally(() => {
+                this.subscribers.push(fn)
+            })
         return () => {
             this.subscribers = this.subscribers.filter(sub => sub !== fn)
         }
