@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, createContext } from 'react'
 
 type QueryNode = {
     key: string
-    query: unknown
+    query: Query<unknown, unknown>
     promise: Promise<unknown> | undefined
     value: unknown
     error: unknown
@@ -37,6 +37,8 @@ const formatResult = <Value>(node: QueryNode): QueryResult<Value> => {
     if (node.error) return { error: node.error }
     return { loading: true }
 }
+
+const EMPTY_STR_SET: Set<string> = new Set()
 
 export class QueryEnvironment {
     private _graph = new Map<string, QueryNode>()
@@ -78,7 +80,7 @@ export class QueryEnvironment {
         const key = this._getKey(query, variables)
         const node = this._graph.get(key)
         if (node === undefined) return
-        this._refresh(node)
+        this._refresh(node, EMPTY_STR_SET)
     }
 
     private _getKey<Value, Variables>(
@@ -98,7 +100,7 @@ export class QueryEnvironment {
 
         node = {
             key,
-            query,
+            query: (query as unknown) as Query<unknown, unknown>,
             promise: undefined,
             value: undefined,
             error: undefined,
@@ -108,14 +110,18 @@ export class QueryEnvironment {
             listeners: [],
         }
         this._graph.set(key, node)
-        this._refresh(node)
+        this._refresh(node, EMPTY_STR_SET)
         return node
     }
 
-    private _refresh(node: QueryNode) {
+    private _refresh(node: QueryNode, trail: Set<string>) {
+        if (trail.has(node.key))
+            throw new Error('circular dependency between queries')
+
         for (const depKey of node.deps) {
             const dep = this._graph.get(depKey)
-            if (dep === undefined) throw new Error('inconsistent graph')
+            if (dep === undefined || !dep.preds.has(node.key))
+                throw new Error('inconsistent graph')
             dep.preds.delete(node.key)
         }
         node.deps.clear()
@@ -135,9 +141,11 @@ export class QueryEnvironment {
             throw new Error('inconsistent graph')
         }
 
-        const promise = (node.query as Query<unknown, unknown>).resolver(
-            node.variables,
-            (resolve as unknown) as LocalResolver,
+        const promise = Promise.resolve().then(() =>
+            node.query.resolver(
+                node.variables,
+                (resolve as unknown) as LocalResolver,
+            ),
         )
         node.promise = promise
         promise
@@ -164,10 +172,14 @@ export class QueryEnvironment {
                 })
             })
 
+        const innerTrail = new Set(trail)
+        innerTrail.add(node.key)
+
         for (const predKey of node.preds) {
             const pred = this._graph.get(predKey)
-            if (pred === undefined) throw new Error('inconsistent graph')
-            this._refresh(pred)
+            if (pred === undefined || !pred.deps.has(node.key))
+                throw new Error('inconsistent graph')
+            this._refresh(pred, innerTrail)
         }
     }
 

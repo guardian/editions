@@ -16,11 +16,10 @@ const createJoinableFn = <Value>(): [
         resolved = true
         resolve(result)
     })
-    const promise = new Promise<Value>(r => {
-        resolve = r
-    })
+    let promise = new Promise<Value>(r => (resolve = r))
     const join = async () => {
         const value = await promise
+        promise = new Promise<Value>(r => (resolve = r))
         resolved = false
         return value
     }
@@ -28,41 +27,56 @@ const createJoinableFn = <Value>(): [
 }
 
 it('resolves a query', async () => {
-    const helloQuery = Query.create(async () => {
-        return 'hello, world'
-    })
+    const helloQuery = Query.create(
+        jest.fn().mockImplementation(async () => {
+            return 'hello, world'
+        }),
+    )
 
     expect(env.peek(helloQuery, null)).toEqual({ loading: true })
 
     const [fn, join] = createJoinableFn()
     const release = env.watch(helloQuery, {}, fn)
-    const result = await join()
 
-    expect(fn).toHaveBeenCalledTimes(1)
+    const result = await join()
     expect(result).toEqual({ value: 'hello, world' })
+    expect(helloQuery.resolver).toHaveBeenCalledTimes(1)
+
     release()
+    expect(fn).toHaveBeenCalledTimes(1)
 })
 
-it.only('resolves nested queries', async () => {
+it('resolves and updates nested queries', async () => {
     let name = 'world'
-    const nameQuery = Query.create(async () => {
-        return name
-    })
+    const nameQuery = Query.create(
+        jest.fn().mockImplementation(async () => {
+            return name
+        }),
+    )
 
-    const helloQuery = Query.create(async (vars, resolve) => {
-        const name = await resolve(nameQuery, null)
-        return 'hello, ' + name
-    })
+    const helloQuery = Query.create(
+        jest.fn().mockImplementation(async (_vars, resolve) => {
+            const name = await resolve(nameQuery, null)
+            return 'hello, ' + name
+        }),
+    )
 
     expect(env.peek(helloQuery, null)).toEqual({ loading: true })
 
     const [fn, join] = createJoinableFn()
     const release = env.watch(helloQuery, {}, fn)
-    const result = await join()
 
-    expect(fn).toHaveBeenCalledTimes(1)
+    let result = await join()
     expect(result).toEqual({ value: 'hello, world' })
 
     name = "y'all"
     env.invalidate(nameQuery, null)
+
+    result = await join()
+    expect(result).toEqual({ value: "hello, y'all" })
+    expect(nameQuery.resolver).toHaveBeenCalledTimes(2)
+    expect(helloQuery.resolver).toHaveBeenCalledTimes(2)
+
+    release()
+    expect(fn).toHaveBeenCalledTimes(2)
 })
