@@ -5,38 +5,21 @@ import {
     PermissionStatus,
 } from 'react-native-permissions'
 import { Platform } from 'react-native'
-import { ApolloClient } from 'apollo-client'
-import { refreshWeather } from './weather'
+import { Query, QueryEnvironment } from './queries'
 
 const LOCATION_PERMISSION = Platform.select({
     ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
     android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
 })
 
-const { resolveLocationPermissionStatus, requestLocationPermission } = (() => {
-    let promise: Promise<PermissionStatus> | undefined
+export const PERMISSION_STATUS_QUERY = Query.create(async () => {
+    return await check(LOCATION_PERMISSION)
+})
 
-    const resolveLocationPermissionStatus = () => {
-        if (promise) return promise
-        promise = check(LOCATION_PERMISSION)
-        return promise
-    }
-
-    const requestLocationPermission = async (
-        apolloClient: ApolloClient<object>,
-    ): Promise<PermissionStatus> => {
-        promise = request(LOCATION_PERMISSION)
-        const result = await promise
-        apolloClient.writeData({
-            data: {
-                locationPermissionStatus: result,
-            },
-        })
-        refreshWeather(apolloClient)
-        return result
-    }
-
-    return { resolveLocationPermissionStatus, requestLocationPermission }
-})()
-
-export { resolveLocationPermissionStatus, requestLocationPermission }
+export const requestLocationPermission = async (
+    env: QueryEnvironment,
+): Promise<PermissionStatus> => {
+    const result = await request(LOCATION_PERMISSION)
+    env.invalidate(PERMISSION_STATUS_QUERY, undefined)
+    return result
+}

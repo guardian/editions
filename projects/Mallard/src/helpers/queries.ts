@@ -12,30 +12,26 @@ type QueryNode = {
     listeners: (() => void)[]
 }
 
-type LocalResolver = <Value, Variables>(
+export type LocalResolver = <Value, Variables>(
     query: Query<Value, Variables>,
     variables: Variables,
 ) => Promise<Value>
 
-type QueryResolver<Value, Variables> = (
+export type QueryResolver<Value, Variables> = (
     variables: Variables,
     resolve: LocalResolver,
+    prevValue: Value,
 ) => Promise<Value>
 
-type Invalidate<Variables> = (
-    env: QueryEnvironment,
-    variables: Variables,
-) => void
-
 export type QueryResult<Value> =
-    | { loading: true }
-    | { value: Value }
-    | { error: unknown }
+    | { loading: true; value: undefined; error: undefined }
+    | { loading: undefined; value: Value; error: undefined }
+    | { loading: undefined; value: undefined; error: unknown }
 
 const formatResult = <Value>(node: QueryNode): QueryResult<Value> => {
-    if (node.value) return { value: node.value as Value }
-    if (node.error) return { error: node.error }
-    return { loading: true }
+    if (node.value) return { value: node.value as Value } as QueryResult<Value>
+    if (node.error) return { error: node.error } as QueryResult<Value>
+    return { loading: true } as QueryResult<Value>
 }
 
 const EMPTY_STR_SET: Set<string> = new Set()
@@ -69,7 +65,7 @@ export class QueryEnvironment {
     ): QueryResult<Value> {
         const key = this._getKey(query, variables)
         const node = this._graph.get(key)
-        if (node === undefined) return { loading: true }
+        if (node === undefined) return { loading: true } as QueryResult<Value>
         return formatResult(node)
     }
 
@@ -141,10 +137,12 @@ export class QueryEnvironment {
             throw new Error('inconsistent graph')
         }
 
+        const prevValue = node.value
         const promise = Promise.resolve().then(() =>
             node.query.resolver(
                 node.variables,
                 (resolve as unknown) as LocalResolver,
+                prevValue,
             ),
         )
         node.promise = promise

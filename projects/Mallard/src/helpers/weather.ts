@@ -4,8 +4,9 @@ import ApolloClient from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
 } from '@react-native-community/geolocation'
-import { resolveLocationPermissionStatus } from './location-permission'
+import { PERMISSION_STATUS_QUERY } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
+import { Query, QueryEnvironment, LocalResolver } from './queries'
 
 class CannotFetchError extends Error {}
 
@@ -62,8 +63,8 @@ const getIpBasedLocation = async () => {
     return { accuLoc, isPrecise: false }
 }
 
-const getCurrentLocation = async () => {
-    const permStatus = await resolveLocationPermissionStatus()
+const getCurrentLocation = async (resolve: LocalResolver) => {
+    const permStatus = await resolve(PERMISSION_STATUS_QUERY, undefined)
     if (permStatus !== RESULTS.GRANTED) {
         return await getIpBasedLocation()
     }
@@ -117,10 +118,11 @@ const makeWeatherObject = (
  * unavailable we keep the previous data as a `fallback`.
  */
 const getWeather = async (
-    fallback: Weather | null,
-): Promise<Weather | null> => {
+    resolve: LocalResolver,
+    fallback: Weather | undefined,
+): Promise<Weather | undefined> => {
     try {
-        const { accuLoc, isPrecise } = await getCurrentLocation()
+        const { accuLoc, isPrecise } = await getCurrentLocation(resolve)
         const forecasts = await fetchFromWeatherApi<Forecast[]>(
             `forecasts/v1/hourly/12hour/${accuLoc.Key}.json?metric=true&language=en-gb`,
         )
@@ -128,7 +130,7 @@ const getWeather = async (
     } catch (error) {
         if (!(error instanceof CannotFetchError)) throw error
         if (fallback != null) return fallback
-        return null
+        return undefined
     }
 }
 
@@ -147,58 +149,18 @@ const ONE_HOUR = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR
  * when the location permission change and we can now fetch more
  * precise weather.
  */
-const { resolveWeather, refreshWeather } = (() => {
-    // If `undefined`, weather has never been shown.
-    let weather: Promise<Weather | null> | undefined
+export const WEATHER_QUERY = Query.create(
+    async (_, resolve, prevValue: Weather | undefined) => {
+        return await getWeather(resolve, prevValue)
+    },
+)
 
-    // We update the cache only if no other update happened in-between.
-    const update = async (
-        client: ApolloClient<object>,
-        fallback: Weather | null,
-    ) => {
-        if (weather == null) return
-        const newWeather = (weather = getWeather(fallback))
-        const value = await weather
-        // `weather` might have changed while we were awaiting, in which case
-        // we don't want to update the cache with stale data.
-        if (weather == newWeather)
-            client.writeData({ data: { weather: value } })
-    }
-
-    // When going foreground, we get the fresh weather (and potentially new
-    // location). Once that resolves we update the cache with the correct value,
-    // which updates any view showing the weather.
-    const onAppGoesForeground = async (client: ApolloClient<object>) => {
-        if (weather == null) return
-        const value = await weather
-        if (value != null && Date.now() < value.lastUpdated + ONE_HOUR) return
-        update(client, value)
-    }
-
-    // The first time this is called we setup a listener to update the weather
-    // from time to time.
-    const resolveWeather = (
-        _context: unknown,
-        _args: {},
-        { client }: { client: ApolloClient<object> },
-    ) => {
-        if (weather !== undefined) return weather
-
-        weather = getWeather(null)
-        AppState.addEventListener('change', status => {
-            if (status !== 'active') return
-            onAppGoesForeground(client)
-        })
-        return weather
-    }
-
-    const refreshWeather = async (client: ApolloClient<object>) => {
-        if (weather == null) return
-        client.writeData({ data: { weather: null } })
-        await update(client, null)
-    }
-
-    return { resolveWeather, refreshWeather }
-})()
-
-export { resolveWeather, refreshWeather }
+export const registerLiveWeather = (env: QueryEnvironment) => {
+    AppState.addEventListener('change', status => {
+        if (status !== 'active') return
+        const result = env.peek(WEATHER_QUERY, undefined)
+        if (result.value == null) return
+        if (Date.now() < result.value.lastUpdated + ONE_HOUR) return
+        env.invalidate(WEATHER_QUERY, undefined)
+    })
+}
