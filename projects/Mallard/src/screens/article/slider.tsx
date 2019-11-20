@@ -8,9 +8,8 @@ import { Slider } from 'src/components/slider'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 import { getAppearancePillar } from 'src/hooks/use-article'
-import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody, OnIsAtTopChange } from '../article/body'
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: color.line,
         backgroundColor: color.background,
-        paddingHorizontal: metrics.horizontal * 2 + metrics.fronts.sliderRadius,
+        paddingHorizontal: metrics.horizontal,
     },
     sliderAtTop: {
         borderBottomColor: color.background,
@@ -86,7 +85,6 @@ const SliderSectionBar = ({
     width,
     isFirst,
 }: SliderBarProps) => {
-    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     const sliderPos = sliderPosition
         .interpolate({
             inputRange: [
@@ -123,9 +121,6 @@ const SliderSectionBar = ({
         <Animated.View
             style={[
                 isFirst ? styles.firstSlider : styles.innerSlider,
-                isTablet && {
-                    marginHorizontal: metrics.fronts.sliderRadius * -0.8,
-                },
                 {
                     transform: [
                         {
@@ -155,26 +150,17 @@ const SliderBar = ({
     sliderPosition: Animated.AnimatedInterpolation
     width: number
 }) => {
-    const isTablet = useMediaQuery(width => width >= Breakpoints.tabletVertical)
     return (
         <MaxWidthWrap>
-            <View
-                style={[
-                    isTablet && {
-                        marginHorizontal: metrics.fronts.sliderRadius * -0.8,
-                    },
-                ]}
-            >
-                {sections.map((section, index) => (
-                    <SliderSectionBar
-                        section={section}
-                        sliderPosition={sliderPosition}
-                        key={section.title}
-                        width={width}
-                        isFirst={index === 0}
-                    />
-                ))}
-            </View>
+            {sections.map((section, index) => (
+                <SliderSectionBar
+                    section={section}
+                    sliderPosition={sliderPosition}
+                    key={section.title}
+                    width={width}
+                    isFirst={index === 0}
+                />
+            ))}
         </MaxWidthWrap>
     )
 }
