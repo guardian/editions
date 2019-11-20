@@ -15,7 +15,7 @@ type QueryNode = {
 type LocalResolver = <Value, Variables>(
     query: Query<Value, Variables>,
     variables: Variables,
-) => QueryResult<Value>
+) => Promise<Value>
 
 type QueryResolver<Value, Variables> = (
     variables: Variables,
