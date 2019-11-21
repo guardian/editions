@@ -159,18 +159,20 @@ const IssueFronts = ({
     }, [issue])
 
     useEffect(() => {
-        const frontToScrollTo = frontWithCards.find(obj => {
-            return obj.displayName === position.frontId
-        })
+        if (trigger) {
+            const frontToScrollTo = frontWithCards.find(obj => {
+                return obj.displayName === position.frontId
+            })
 
-        const index = frontToScrollTo
-            ? frontWithCards.findIndex(front => front === frontToScrollTo)
-            : 0
+            const index = frontToScrollTo
+                ? frontWithCards.findIndex(front => front === frontToScrollTo)
+                : 0
 
-        if (ref && ref.current && ref.current.scrollToIndex) {
-            ref.current.scrollToIndex({ animated: false, index })
+            if (ref && ref.current && ref.current.scrollToIndex) {
+                ref.current.scrollToIndex({ animated: false, index })
+            }
+            setTrigger(false)
         }
-        setTrigger(false)
     }, [trigger])
 
     const {
