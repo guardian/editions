@@ -265,7 +265,6 @@ const ArticleSlider = ({
 
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
-    const { position, setPosition, setTrigger } = useNavPosition()
 
     useEffect(() => {
         flatListRef.current &&
@@ -301,6 +300,7 @@ const ArticleSlider = ({
 
     const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
     const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
+    const { position, setPosition, setTrigger } = useNavPosition()
 
     if (Platform.OS === 'android')
         return (
@@ -310,26 +310,26 @@ const ArticleSlider = ({
                     initialPage={startingPoint}
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
-                        setCurrent(ev.nativeEvent.position)
+                        const index = ev.nativeEvent.position
+                        setCurrent(index)
+
+                        // Slides the fronts on issue screen in the background if you swipe to new front
+                        if (
+                            flattenedArticles[index].front !== position.frontId
+                        ) {
+                            setPosition({
+                                frontId: flattenedArticles[index].front,
+                                articleIndex: 0,
+                            })
+                            setTrigger(true)
+                        }
+
                         Animated.timing(sliderPosition, {
                             duration: 200,
                             toValue: ev.nativeEvent.position,
                             easing: Easing.linear,
                             useNativeDriver: true,
                         }).start()
-                        if (
-                            position &&
-                            position.frontId !==
-                                flattenedArticles[ev.nativeEvent.position].front
-                        ) {
-                            setPosition({
-                                frontId:
-                                    flattenedArticles[ev.nativeEvent.position]
-                                        .front,
-                                articleIndex: 0,
-                            })
-                            setTrigger(true)
-                        }
                     }}
                 >
                     {flattenedArticles.map((item, index) => (
@@ -397,28 +397,27 @@ const ArticleSlider = ({
                         listener: (ev: any) => {
                             const newPos =
                                 ev.nativeEvent.contentOffset.x / width
-                            const index = clamp(
-                                Math.floor(newPos),
-                                0,
-                                flattenedArticles.length - 1,
+                            setCurrent(
+                                clamp(
+                                    Math.floor(newPos),
+                                    0,
+                                    flattenedArticles.length - 1,
+                                ),
                             )
-                            setCurrent(index)
-                            setPosition({
-                                frontId: flattenedArticles[index].front,
-                                articleIndex: 0,
-                            })
-                            setCurrent(index)
+                            // Slides the fronts on issue screen in the background if you swipe to new front
+                            if (
+                                flattenedArticles[current].front !==
+                                position.frontId
+                            ) {
+                                setPosition({
+                                    frontId: flattenedArticles[current].front,
+                                    articleIndex: 0,
+                                })
+                                setTrigger(true)
+                            }
                         },
                     },
                 )}
-                onScrollEndDrag={() => {
-                    if (
-                        position &&
-                        position.frontId !== flattenedArticles[current].front
-                    ) {
-                        setTrigger(true)
-                    }
-                }}
                 maxToRenderPerBatch={1}
                 windowSize={2}
                 initialNumToRender={1}

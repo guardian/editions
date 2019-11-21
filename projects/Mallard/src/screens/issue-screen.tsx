@@ -159,21 +159,18 @@ const IssueFronts = ({
     }, [issue])
 
     useEffect(() => {
-        console.log('TRIGGER')
-        if (trigger) {
-            const frontToScrollTo = frontWithCards.find(obj => {
-                return obj.displayName === position.frontId
-            })
+        const frontToScrollTo = frontWithCards.find(obj => {
+            return obj.displayName === position.frontId
+        })
 
-            const index = frontToScrollTo
-                ? frontWithCards.findIndex(front => front === frontToScrollTo)
-                : 0
+        const index = frontToScrollTo
+            ? frontWithCards.findIndex(front => front === frontToScrollTo)
+            : 0
 
-            if (ref && ref.current && ref.current.scrollToIndex) {
-                ref.current.scrollToIndex({ animated: false, index })
-            }
-            setTrigger(false)
+        if (ref && ref.current && ref.current.scrollToIndex) {
+            ref.current.scrollToIndex({ animated: false, index })
         }
+        setTrigger(false)
     }, [trigger])
 
     const {
@@ -220,12 +217,6 @@ const IssueFronts = ({
         [issue.localId, issue.publishedId, issue.fronts],
     )
 
-    // Create refs for each front coming up
-    const flatlistRefs = {}
-    issue.fronts.map(
-        front => (flatlistRefs[front.key as string] = React.createRef()),
-    )
-
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
@@ -262,7 +253,6 @@ const IssueFronts = ({
             key={width}
             renderItem={({ item: front }) => (
                 <Front
-                    refToUse={flatlistRefs[front.key]}
                     localIssueId={issue.localId}
                     publishedIssueId={issue.publishedId}
                     articleNavigator={frontSpecs}

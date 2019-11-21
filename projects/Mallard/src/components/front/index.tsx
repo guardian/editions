@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import {
     ArticlePillar,
@@ -20,7 +20,6 @@ import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
-import { useNavPosition } from 'src/hooks/use-nav-position'
 
 const CollectionPageInFront = ({
     index,
@@ -83,14 +82,12 @@ export const Front = React.memo(
         localIssueId,
         publishedIssueId,
         cards,
-        refToUse,
     }: {
         articleNavigator: ArticleNavigator
         localIssueId: Issue['localId']
         publishedIssueId: Issue['publishedId']
         frontData: FrontType
         cards: FlatCard[]
-        refToUse: any
     }) => {
         const color = getColor(frontData.appearance)
         const pillar = getAppearancePillar(frontData.appearance)
@@ -100,23 +97,6 @@ export const Front = React.memo(
 
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
-        const { trigger } = useNavPosition()
-
-        useEffect(() => {
-            // Navigate to articleIndex here which should match cardIndex
-            console.log('Scroll back!')
-            if (
-                refToUse &&
-                refToUse.current &&
-                refToUse.current.getNode() &&
-                refToUse.current.getNode().scrollToIndex
-            ) {
-                refToUse.current.getNode().scrollToIndex({
-                    animated: false,
-                    index: 0,
-                })
-            }
-        }, [trigger])
 
         return (
             <Wrapper
