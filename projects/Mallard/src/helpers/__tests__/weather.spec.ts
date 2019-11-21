@@ -1,3 +1,5 @@
+import { QueryEnvironment } from '../queries'
+
 const CITIES_URL =
     'http://mobile-weather.guardianapis.com/locations/v1/cities/ipAddress?q=127.0.0.1&details=false'
 const FORECASTS_URL =
@@ -67,76 +69,76 @@ const getExpectedWeather = () => ({
     ],
 })
 
-let resolveWeather: any, refreshWeather: any
+let WEATHER_QUERY: any
+let registerLiveWeather: any
 let AppState: any
 let check: any, RESULTS: any
+let env: QueryEnvironment
 
 beforeEach(() => {
     jest.resetModules()
-    ;({ resolveWeather, refreshWeather } = require('../weather'))
+    env = new QueryEnvironment()
+    ;({ WEATHER_QUERY, registerLiveWeather } = require('../weather'))
     ;({ AppState } = require('react-native'))
     ;({ check, RESULTS } = require('react-native-permissions'))
 })
 
-it('should resolve and update the weather', async () => {
-    const client = { writeData: jest.fn() } as any
-    let res = await resolveWeather({}, {}, { client })
-    expect(res).toEqual(getExpectedWeather())
-    expect(fetch).toHaveBeenCalledTimes(3)
+it('should resolve and update the weather', done => {
+    registerLiveWeather(env)
+    let count = 0
 
-    // Second time does no retrigger fetches.
-    res = await resolveWeather({}, {}, { client })
-    expect(res).toEqual(getExpectedWeather())
+    env.watch(WEATHER_QUERY, {}, res => {
+        ++count
+        switch (count) {
+            case 1: {
+                expect(res.loading).toBeFalsy()
+                expect(res.value).toEqual(getExpectedWeather())
+                expect(fetch).toHaveBeenCalledTimes(3)
 
-    expect(client.writeData).not.toHaveBeenCalled()
-    expect(fetch).toHaveBeenCalledTimes(3)
+                forecasts = [{ DateTime: '1234' }]
+                now += 1000 * 60 * 60 * 3
 
-    forecasts = [{ DateTime: '1234' }]
-    now += 1000 * 60 * 60 * 3
+                expect(AppState.addEventListener).toHaveBeenCalledTimes(1)
+                const cb = (AppState.addEventListener as any).mock.calls[0][1]
+                cb('active')
+                break
+            }
 
-    expect(AppState.addEventListener).toHaveBeenCalledTimes(1)
-    const cb = (AppState.addEventListener as any).mock.calls[0][1]
-    await cb('active')
+            case 2: {
+                expect(res.loading).toBeFalsy()
+                expect(res.value).toEqual(getExpectedWeather())
+                expect(fetch).toHaveBeenCalledTimes(6)
 
-    res = await resolveWeather({}, {}, { client })
-    expect(res).toEqual(getExpectedWeather())
+                done()
+                break
+            }
 
-    expect(client.writeData).toHaveBeenCalledWith({
-        data: { weather: res },
+            default:
+                throw new Error('unexpected')
+        }
     })
 })
 
-it('should refresh the weather completely', async () => {
-    const client = { writeData: jest.fn() } as any
-    await resolveWeather({}, {}, { client })
-
-    forecasts = [{ DateTime: '1234' }]
-    const refreshPromise = refreshWeather(client)
-
-    expect(client.writeData).toHaveBeenCalledTimes(1)
-    expect(client.writeData).toHaveBeenCalledWith({
-        data: {
-            weather: null,
-        },
-    })
-
-    await refreshPromise
-
-    expect(client.writeData).toHaveBeenCalledTimes(2)
-    expect(client.writeData).toHaveBeenCalledWith({
-        data: { weather: getExpectedWeather() },
-    })
-})
-
-it('should fetch real location if available', async () => {
+it('should fetch real location if available', done => {
     check.mockResolvedValue(RESULTS.GRANTED)
+    let count = 0
 
-    const client = { writeData: jest.fn() } as any
-    const res = await resolveWeather({}, {}, { client })
-    expect(res).toEqual({
-        ...getExpectedWeather(),
-        isLocationPrecise: true,
-        locationName: 'Kings Cross',
+    env.watch(WEATHER_QUERY, {}, res => {
+        ++count
+        switch (count) {
+            case 1: {
+                expect(res.value).toEqual({
+                    ...getExpectedWeather(),
+                    isLocationPrecise: true,
+                    locationName: 'Kings Cross',
+                })
+                done()
+                break
+            }
+
+            default:
+                throw new Error('unexpected')
+        }
     })
 })
 

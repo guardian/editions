@@ -76,7 +76,7 @@ it('resolves and updates nested queries', async () => {
 
     const helloQuery = Query.create(
         jest.fn().mockImplementation(async (_vars, resolve) => {
-            const name = await resolve(nameQuery, null)
+            const name = await resolve(nameQuery, {})
             return 'hello, ' + name
         }),
     )

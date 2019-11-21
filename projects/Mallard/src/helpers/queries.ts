@@ -39,7 +39,7 @@ type AllowedVariables = {
 /**
  * Resolves a query which the currently running query depends on.
  */
-export type LocalResolver = <Value, Variables>(
+export type LocalResolver = <Value, Variables extends AllowedVariables>(
     query: Query<Value, Variables>,
     variables: Variables,
 ) => Promise<Value>
@@ -168,16 +168,16 @@ export class QueryEnvironment {
     }
 
     private _resolve(
-        parentNode: QueryNode,
-        run: { promise: Promise<unknown> | undefined },
+        context: { node: QueryNode; promise: Promise<unknown> | undefined },
         query: Query<unknown, unknown>,
         variables: unknown,
     ) {
-        if (run.promise !== parentNode.promise) throw new QueryAbortedError()
+        if (context.promise !== context.node.promise)
+            throw new QueryAbortedError()
 
         const subNode = this._getNode(query, variables)
-        parentNode.deps.add(subNode.key)
-        subNode.preds.add(parentNode.key)
+        context.node.deps.add(subNode.key)
+        subNode.preds.add(context.node.key)
         if (subNode.promise !== undefined) return subNode.promise
         if (subNode.value !== undefined) return Promise.resolve(subNode.value)
         if (subNode.error !== undefined) return Promise.reject(subNode.error)
@@ -221,15 +221,18 @@ export class QueryEnvironment {
         node.deps.clear()
 
         const prevValue = node.value
-        let run = { promise: undefined as (Promise<unknown> | undefined) }
-        const resolve: any = this._resolve.bind(this, node, run)
+        const context = {
+            node,
+            promise: undefined as (Promise<unknown> | undefined),
+        }
+        const resolve: any = this._resolve.bind(this, context)
 
         // Use `Promise.resolve()` to ensure that `resolve` is only ever called
         // when this function is done running (ie. asynchronously).
         const promise = Promise.resolve().then(() =>
             node.query.resolver(node.variables, resolve, prevValue),
         )
-        run.promise = promise
+        context.promise = promise
         node.promise = promise
         this._handleNodePromise(node, promise).catch(error => {
             // "Escape" the Promise to throw in the global context so that
@@ -309,11 +312,12 @@ export const useQuery = <Value, Variables extends AllowedVariables>(
     const env = useQueryEnvironment()
     const [result, setResult] = useState(env.peek(query, variables))
     const serializedVars = JSON.stringify(variables)
-    useEffect(() => env.watch(query, JSON.parse(serializedVars), setResult), [
+    useEffect(
+        () => env.watch(query, JSON.parse(serializedVars), setResult),
         // We don't want to depend on an object by referential equality, but
         // instead rely on the object as a value. The easiest way to do this is
         // to serialize that value.
         [env, query, serializedVars],
-    ])
+    )
     return result
 }
