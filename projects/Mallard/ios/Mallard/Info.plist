@@ -123,5 +123,7 @@
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location-based weather</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location-based weather</string>
 </dict>
 </plist>
