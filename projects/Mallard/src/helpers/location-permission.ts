@@ -12,7 +12,7 @@ const LOCATION_PERMISSION = Platform.select({
     android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
 })
 
-export const PERMISSION_STATUS_QUERY = Query.create(async () => {
+export const LOCATION_PERMISSION_STATUS_QUERY = Query.create(async () => {
     return await check(LOCATION_PERMISSION)
 })
 
@@ -20,6 +20,6 @@ export const requestLocationPermission = async (
     env: QueryEnvironment,
 ): Promise<PermissionStatus> => {
     const result = await request(LOCATION_PERMISSION)
-    env.invalidate(PERMISSION_STATUS_QUERY, undefined)
+    env.invalidate(LOCATION_PERMISSION_STATUS_QUERY, {})
     return result
 }

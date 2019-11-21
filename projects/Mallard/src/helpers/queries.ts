@@ -235,12 +235,13 @@ export const useQuery = <Value, Variables>(
 ): QueryResult<Value> => {
     const env = useQueryEnvironment()
     const [result, setResult] = useState(env.peek(query, variables))
+    const serializedVars = JSON.stringify(variables)
     useEffect(
         () =>
-            env.watch(query, variables, newResult => {
+            env.watch(query, JSON.parse(serializedVars), newResult => {
                 setResult(newResult)
             }),
-        [query, variables],
+        [env, query, serializedVars],
     )
     return result
 }

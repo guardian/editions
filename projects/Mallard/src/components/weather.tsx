@@ -8,48 +8,12 @@ import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { useQuery } from 'src/hooks/apollo'
-import gql from 'graphql-tag'
 import { Button, ButtonAppearance } from './button/button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
-import { PermissionStatus } from 'react-native-permissions'
-
-type QueryForecast = Pick<
-    Forecast,
-    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
->
-type Weather = {
-    locationName: string
-    isLocationPrecise: boolean
-    forecasts: QueryForecast[]
-}
-type QueryData = {
-    weather: Weather | null
-    isUsingProdDevtools: boolean
-    locationPermissionStatus: PermissionStatus
-}
-
-const QUERY = gql`
-    {
-        weather @client {
-            locationName
-            isLocationPrecise
-            forecasts {
-                DateTime
-                Temperature {
-                    Value
-                    Unit
-                }
-                WeatherIcon
-                EpochDateTime
-            }
-        }
-        isUsingProdDevtools @client
-        locationPermissionStatus @client
-    }
-`
+import { WEATHER_QUERY, Weather } from 'src/helpers/weather'
+import { useQuery } from 'src/helpers/queries'
 
 const narrowSpace = String.fromCharCode(8201)
 
@@ -149,14 +113,14 @@ const styles = StyleSheet.create({
 
 export interface WeatherForecast {
     locationName: string
-    forecasts: QueryForecast[]
+    forecasts: Forecast[]
 }
 
 const WeatherIconView = ({
     forecast,
     iconSize = 1,
 }: {
-    forecast: QueryForecast
+    forecast: Forecast
     iconSize?: number
 }) => {
     const info = (
@@ -294,12 +258,12 @@ const WeatherWithForecast = ({ weather }: { weather: Weather }) => {
 }
 
 const WeatherWidget = React.memo(() => {
-    const query = useQuery<QueryData>(QUERY)
+    const query = useQuery(WEATHER_QUERY, {})
     if (query.loading) return null
 
-    const { data } = query
-    if (data.weather == null) return null
-    return <WeatherWithForecast weather={data.weather} />
+    const { value } = query
+    if (value == null) return null
+    return <WeatherWithForecast weather={value} />
 })
 
 export { WeatherWidget }

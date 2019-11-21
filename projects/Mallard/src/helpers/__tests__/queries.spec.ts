@@ -129,8 +129,8 @@ it('caches queries in progress watched simutaneously', async () => {
 
     const [fn1, join1] = createJoinableFn()
     const [fn2, join2] = createJoinableFn()
-    let release1 = env.watch(helloQuery, {}, fn1)
-    let release2 = env.watch(helloQuery, {}, fn2)
+    const release1 = env.watch(helloQuery, {}, fn1)
+    const release2 = env.watch(helloQuery, {}, fn2)
 
     expect(helloQuery.resolver).toHaveBeenCalledTimes(0)
     await join1()

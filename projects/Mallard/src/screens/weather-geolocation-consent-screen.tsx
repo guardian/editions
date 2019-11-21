@@ -10,6 +10,7 @@ import { Button, ButtonAppearance } from 'src/components/button/button'
 import { requestLocationPermission } from 'src/helpers/location-permission'
 import { RESULTS } from 'react-native-permissions'
 import { getGeolocation } from 'src/helpers/weather'
+import { useQueryEnvironment } from 'src/helpers/queries'
 
 const content = html`
     <h2>Location-based weather</h2>
@@ -66,8 +67,9 @@ const WeatherGeolocationConsentScreen = ({
     navigation,
 }: NavigationInjectedProps) => {
     const apolloClient = useApolloClient()
+    const env = useQueryEnvironment()
     const onConsentPress = async () => {
-        const result = await requestLocationPermission(apolloClient)
+        const result = await requestLocationPermission(env)
         if (result === RESULTS.BLOCKED) {
             Alert.alert(
                 'Location permission',

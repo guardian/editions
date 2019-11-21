@@ -1,10 +1,9 @@
 import { AccuWeatherLocation, Forecast } from 'src/common'
 import { AppState } from 'react-native'
-import ApolloClient from 'apollo-client'
 import Geolocation, {
     GeolocationResponse,
 } from '@react-native-community/geolocation'
-import { PERMISSION_STATUS_QUERY } from './location-permission'
+import { LOCATION_PERMISSION_STATUS_QUERY } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
 import { Query, QueryEnvironment, LocalResolver } from './queries'
 
@@ -64,7 +63,7 @@ const getIpBasedLocation = async () => {
 }
 
 const getCurrentLocation = async (resolve: LocalResolver) => {
-    const permStatus = await resolve(PERMISSION_STATUS_QUERY, undefined)
+    const permStatus = await resolve(LOCATION_PERMISSION_STATUS_QUERY, {})
     if (permStatus !== RESULTS.GRANTED) {
         return await getIpBasedLocation()
     }
@@ -151,6 +150,7 @@ const ONE_HOUR = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR
  */
 export const WEATHER_QUERY = Query.create(
     async (_, resolve, prevValue: Weather | undefined) => {
+        console.warn('fetching weather')
         return await getWeather(resolve, prevValue)
     },
 )

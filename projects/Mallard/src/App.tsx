@@ -37,6 +37,8 @@ import { IssueSummaryProvider } from './hooks/use-issue-summary'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { createApolloClient } from './apollo'
 import { errorService } from './services/errors'
+import { QueryEnvironment, QueryEnvironmentContext } from './helpers/queries'
+import { registerLiveWeather } from './helpers/weather'
 
 const clearAndDownloadIssue = async () => {
     await prepFileSystem()
@@ -133,11 +135,19 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
+const queryEnv = new QueryEnvironment()
+registerLiveWeather(queryEnv)
+
 const WithProviders = nestProviders(
     Modal,
     ToastProvider,
     NetInfoProvider,
     IssueSummaryProvider,
+    ({ children }) => (
+        <QueryEnvironmentContext.Provider value={queryEnv}>
+            {children}
+        </QueryEnvironmentContext.Provider>
+    ),
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
