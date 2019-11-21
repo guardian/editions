@@ -107,7 +107,16 @@ const fetchActiveIOSSubscriptionReceipt = async (): Promise<
     return validReceipt ? ValidResult(validReceipt) : InvalidResult()
 }
 
+const TEST_PRODUCT_ID = 'uk.co.guardian.gce.sevenday.1monthsub2'
+
+const DEV_getLegacyIAPReceipt = () =>
+    isInBeta() &&
+    InAppUtils.loadProducts([TEST_PRODUCT_ID], () => {
+        InAppUtils.purchaseProduct(TEST_PRODUCT_ID, () => {})
+    })
+
 export {
+    DEV_getLegacyIAPReceipt,
     fetchActiveIOSSubscriptionReceipt,
     tryRestoreActiveIOSSubscriptionReceipt,
     isReceiptValid,
