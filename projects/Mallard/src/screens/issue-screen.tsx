@@ -1,10 +1,4 @@
-import React, {
-    ReactElement,
-    useMemo,
-    useRef,
-    useEffect,
-    useState,
-} from 'react'
+import React, { ReactElement, useMemo, useRef, useEffect } from 'react'
 import {
     Animated,
     Image,
@@ -149,7 +143,6 @@ const IssueFronts = ({
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
-    const { position, trigger, setTrigger } = useNavPosition()
     const ref = useRef<FlatList<any> | null>()
 
     useEffect(() => {
@@ -157,23 +150,6 @@ const IssueFronts = ({
             ref.current.scrollToOffset({ animated: false, offset: 0 })
         }
     }, [issue])
-
-    useEffect(() => {
-        if (trigger) {
-            const frontToScrollTo = frontWithCards.find(obj => {
-                return obj.displayName === position.frontId
-            })
-
-            const index = frontToScrollTo
-                ? frontWithCards.findIndex(front => front === frontToScrollTo)
-                : 0
-
-            if (ref && ref.current && ref.current.scrollToIndex) {
-                ref.current.scrollToIndex({ animated: false, index })
-            }
-            setTrigger(false)
-        }
-    }, [trigger])
 
     const {
         frontWithCards,
@@ -218,6 +194,25 @@ const IssueFronts = ({
             ),
         [issue.localId, issue.publishedId, issue.fronts],
     )
+
+    const { position, trigger, setTrigger } = useNavPosition()
+
+    useEffect(() => {
+        if (trigger && frontWithCards) {
+            const frontToScrollTo = frontWithCards.find(obj => {
+                return obj.displayName === position.frontId
+            })
+
+            const index = frontToScrollTo
+                ? frontWithCards.findIndex(front => front === frontToScrollTo)
+                : 0
+
+            if (ref && ref.current && ref.current.scrollToIndex) {
+                ref.current.scrollToIndex({ animated: false, index })
+            }
+            setTrigger(false)
+        }
+    }, [trigger, position.frontId, setTrigger, frontWithCards])
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
