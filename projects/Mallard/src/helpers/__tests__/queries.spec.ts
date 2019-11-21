@@ -33,7 +33,7 @@ it('resolves a query', async () => {
         }),
     )
 
-    expect(env.peek(helloQuery, null)).toEqual({ loading: true })
+    expect(env.peek(helloQuery, {})).toEqual({ loading: true })
 
     const [fn, join] = createJoinableFn()
     const release = env.watch(helloQuery, {}, fn)
@@ -53,7 +53,7 @@ it('rejects a query', async () => {
         }),
     )
 
-    expect(env.peek(helloQuery, null)).toEqual({ loading: true })
+    expect(env.peek(helloQuery, {})).toEqual({ loading: true })
 
     const [fn, join] = createJoinableFn()
     const release = env.watch(helloQuery, {}, fn)
@@ -81,7 +81,7 @@ it('resolves and updates nested queries', async () => {
         }),
     )
 
-    expect(env.peek(helloQuery, null)).toEqual({ loading: true })
+    expect(env.peek(helloQuery, {})).toEqual({ loading: true })
 
     const [fn, join] = createJoinableFn()
     const release = env.watch(helloQuery, {}, fn)
@@ -90,7 +90,7 @@ it('resolves and updates nested queries', async () => {
     expect(result).toEqual({ value: 'hello, world' })
 
     name = "y'all"
-    env.invalidate(nameQuery, null)
+    env.invalidate(nameQuery, {})
 
     result = await join()
     expect(result).toEqual({ value: "hello, y'all" })
@@ -170,14 +170,16 @@ it('resolves a query with variables', async () => {
 })
 
 it('resolves recursive queries', async () => {
-    const factorialQuery = Query.create(async (n: number, resolve) => {
-        if (n === 0) return 1
-        const result: number = await resolve(factorialQuery, n - 1)
-        return result * n
-    })
+    const factorialQuery = Query.create(
+        async ({ n }: { n: number }, resolve) => {
+            if (n === 0) return 1
+            const result: number = await resolve(factorialQuery, { n: n - 1 })
+            return result * n
+        },
+    )
 
     const [fn, join] = createJoinableFn()
-    const release = env.watch(factorialQuery, 4, fn)
+    const release = env.watch(factorialQuery, { n: 4 }, fn)
     const result = await join()
     expect(result).toEqual({ value: 24 })
 

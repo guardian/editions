@@ -150,7 +150,6 @@ const ONE_HOUR = MS_IN_A_SECOND * SECS_IN_A_MINUTE * MINS_IN_AN_HOUR
  */
 export const WEATHER_QUERY = Query.create(
     async (_, resolve, prevValue: Weather | undefined) => {
-        console.warn('fetching weather')
         return await getWeather(resolve, prevValue)
     },
 )
@@ -158,9 +157,12 @@ export const WEATHER_QUERY = Query.create(
 export const registerLiveWeather = (env: QueryEnvironment) => {
     AppState.addEventListener('change', status => {
         if (status !== 'active') return
-        const result = env.peek(WEATHER_QUERY, undefined)
-        if (result.value == null) return
-        if (Date.now() < result.value.lastUpdated + ONE_HOUR) return
-        env.invalidate(WEATHER_QUERY, undefined)
+        const result = env.peek(WEATHER_QUERY, {})
+        if (
+            result.value != null &&
+            Date.now() < result.value.lastUpdated + ONE_HOUR
+        )
+            return
+        env.invalidate(WEATHER_QUERY, {})
     })
 }

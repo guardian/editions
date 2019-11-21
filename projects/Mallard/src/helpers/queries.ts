@@ -12,6 +12,8 @@ type QueryNode = {
     listeners: (() => void)[]
 }
 
+type AllowedVariables = { [key: string]: number | string }
+
 export type LocalResolver = <Value, Variables>(
     query: Query<Value, Variables>,
     variables: Variables,
@@ -43,7 +45,7 @@ export class QueryEnvironment {
      * Given the specific `query`, call `callback` everytime the value changes.
      * If the query hasn't been resolved yet, this function will do so.
      */
-    watch<Value, Variables>(
+    watch<Value, Variables extends AllowedVariables>(
         query: Query<Value, Variables>,
         variables: Variables,
         listener: (value: QueryResult<Value>) => unknown,
@@ -59,7 +61,7 @@ export class QueryEnvironment {
         }
     }
 
-    peek<Value, Variables>(
+    peek<Value, Variables extends AllowedVariables>(
         query: Query<Value, Variables>,
         variables: Variables,
     ): QueryResult<Value> {
@@ -69,7 +71,7 @@ export class QueryEnvironment {
         return formatResult(node)
     }
 
-    invalidate<Value, Variables>(
+    invalidate<Value, Variables extends AllowedVariables>(
         query: Query<Value, Variables>,
         variables: Variables,
     ): void {
@@ -229,7 +231,7 @@ export const useQueryEnvironment = (): QueryEnvironment => {
     return env
 }
 
-export const useQuery = <Value, Variables>(
+export const useQuery = <Value, Variables extends AllowedVariables>(
     query: Query<Value, Variables>,
     variables: Variables,
 ): QueryResult<Value> => {
