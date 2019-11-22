@@ -5,12 +5,11 @@ import Observable from 'zen-observable'
 jest.mock('src/helpers/release-stream', () => ({
     isInBeta: () => false,
 }))
-jest.mock('react-native-sentry', () => ({
-    config: jest.fn(() => ({
-        install: jest.fn(() => Promise.resolve()),
-    })),
+jest.mock('@sentry/react-native', () => ({
+    init: jest.fn(),
     captureException: jest.fn(() => {}),
-    setTagsContext: jest.fn(() => {}),
+    setTag: jest.fn(() => {}),
+    setExtra: jest.fn(() => {}),
 }))
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
@@ -25,7 +24,7 @@ describe('errorService', () => {
         jest.resetModules()
 
         errorService = require('../errors').errorService
-        Sentry = require('react-native-sentry')
+        Sentry = require('@sentry/react-native')
 
         let hasConsent = false
         const observers: any = []
@@ -57,7 +56,7 @@ describe('errorService', () => {
         await Promise.resolve()
         errorService.captureException(new Error())
 
-        expect(Sentry.config).not.toHaveBeenCalled()
+        expect(Sentry.init).not.toHaveBeenCalled()
         expect(Sentry.captureException).not.toHaveBeenCalled()
     })
 
@@ -66,7 +65,7 @@ describe('errorService', () => {
 
         errorService.captureException(new Error())
 
-        expect(Sentry.config).not.toHaveBeenCalled()
+        expect(Sentry.init).not.toHaveBeenCalled()
         expect(Sentry.captureException).not.toHaveBeenCalled()
     })
 
@@ -75,14 +74,14 @@ describe('errorService', () => {
         errorService.init(apolloClient)
         await consentFetchPromise
 
-        expect(Sentry.config).toHaveBeenCalledTimes(1)
+        expect(Sentry.init).toHaveBeenCalledTimes(1)
     })
 
     it('should not install without consent', async () => {
         errorService.init(apolloClient)
         await consentFetchPromise
 
-        expect(Sentry.config).not.toHaveBeenCalled()
+        expect(Sentry.init).not.toHaveBeenCalled()
     })
 
     it('should install only after consent is set to true', async () => {
@@ -90,7 +89,7 @@ describe('errorService', () => {
         await consentFetchPromise
 
         setMockedConsent(true)
-        expect(Sentry.config).toHaveBeenCalledTimes(1)
+        expect(Sentry.init).toHaveBeenCalledTimes(1)
     })
 
     it('should not fire errors without consent', async () => {
