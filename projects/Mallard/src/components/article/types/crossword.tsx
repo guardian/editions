@@ -10,13 +10,8 @@ const Crossword = ({
     crosswordArticle,
 }: {
     crosswordArticle: CrosswordArticle
-}) => (
-    <View
-        style={{
-            ...StyleSheet.absoluteFillObject,
-            bottom: 150,
-        }}
-    >
+}) => {
+    return (
         <WebView
             key={crosswordArticle.key}
             originWhitelist={['*']}
@@ -30,7 +25,7 @@ const Crossword = ({
             javaScriptEnabled={true}
             style={styles.flex}
         />
-    </View>
-)
+    )
+}
 
 export { Crossword }

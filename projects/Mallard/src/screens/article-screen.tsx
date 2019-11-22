@@ -138,7 +138,6 @@ const ArticleScreenWithProps = ({
             >
                 {prefersFullScreen ? (
                     <>
-                        <BasicArticleHeader />
                         <ArticleScreenBody
                             path={path}
                             width={width}
