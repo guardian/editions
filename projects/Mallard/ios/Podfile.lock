@@ -135,9 +135,9 @@ PODS:
   - RNZipArchive/Core (4.1.2):
     - React
     - SSZipArchive (= 2.2.2)
-  - Sentry (4.4.1):
-    - Sentry/Core (= 4.4.1)
-  - Sentry/Core (4.4.1)
+  - Sentry (4.4.2):
+    - Sentry/Core (= 4.4.2)
+  - Sentry/Core (4.4.2)
   - SSZipArchive (2.2.2)
   - yoga (0.60.4.React)
 
@@ -190,7 +190,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - boost-for-react-native
     - Sentry
     - SSZipArchive
@@ -336,10 +336,10 @@ SPEC CHECKSUMS:
   RNSentry: 932ac1c8b2f581b1c8be5812f88ff556c99e7fb7
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
   RNZipArchive: 2179f7a0755905d68a3b0f2d9332796cca1e7aa4
-  Sentry: 5d312a04e369154aeac616214f4dfc3cbcc8b296
+  Sentry: bba998b0fb157fdd6596aa73290a9d67ae47be79
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   yoga: c2c050f6ae6e222534760cc82f559b89214b67e2
 
 PODFILE CHECKSUM: 54889dd615f9e881ae29ac8db2b0b3dfd674d019
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.7.5
