@@ -36,7 +36,6 @@ public class MainApplication extends Application implements ReactApplication {
             packages.add(new ReleaseStreamPackage());
 
             // packages.add(new MainReactPackage(),
-            packages.add(new RNSentryPackage());
             // packages.add(new RNDeviceInfo());
             // packages.add(new NetInfoPackage());
             // packages.add(new RNSentryPackage());
