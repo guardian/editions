@@ -47,7 +47,7 @@ class Authorizer<
      * e.g. at app open. This basically for silently logging in a user.
      */
     private authWithCachedCredentials: (authCaches: C) => Promise<AuthResult<T>>
-    private checkUserHasAccess: (data: T) => boolean
+    private checkUserHasAccess: (data: T, connectivity: Connectivity) => boolean
 
     constructor({
         name,
@@ -62,7 +62,7 @@ class Authorizer<
         authCaches: C
         auth: (args: A, caches: C) => Promise<AuthResult<T>>
         authWithCachedCredentials: (authCaches: C) => Promise<AuthResult<T>>
-        checkUserHasAccess: (data: T) => boolean
+        checkUserHasAccess: (data: T, connectivity: Connectivity) => boolean
     }) {
         this.name = name
         this.userDataCache = userDataCache
@@ -177,7 +177,8 @@ class Authorizer<
     public toAccessAttempt(attempt: AnyAttempt<T>): AnyAttempt<S> {
         if (isNotRun(attempt)) return attempt
         try {
-            return isValid(attempt) && this.checkUserHasAccess(attempt.data)
+            return isValid(attempt) &&
+                this.checkUserHasAccess(attempt.data, attempt.connectivity)
                 ? ValidAttempt(this.name, attempt.connectivity, attempt.time)
                 : InvalidAttempt(
                       attempt.connectivity,

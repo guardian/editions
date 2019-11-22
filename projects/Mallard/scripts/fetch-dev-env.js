@@ -6,6 +6,20 @@ const chalk = require('chalk').default
 const AWS_PROFILE = 'frontend'
 const ENV_PATH = path.join(__dirname, '../.env')
 
+const sentryPropertiesFileWrite = (platform, file) => {
+    fs.writeFile(
+        path.resolve(__dirname, `../${platform}/sentry.properties`),
+        file.Body.toString(),
+        e => {
+            if (e) {
+                console.error(e)
+                process.exit()
+            }
+            console.log(`${platform} sentry.properties file added`)
+        },
+    )
+}
+
 const s3 = new AWS.S3({
     region: 'eu-west-1',
     credentialProvider: new AWS.CredentialProviderChain([
@@ -42,4 +56,14 @@ s3.getObject({
             )
             process.exit(1)
         }
+    })
+
+s3.getObject({
+    Bucket: 'editions-config',
+    Key: 'Mallard/dev/sentry.properties',
+})
+    .promise()
+    .then(file => {
+        sentryPropertiesFileWrite('ios', file)
+        sentryPropertiesFileWrite('android', file)
     })

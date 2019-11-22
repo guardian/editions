@@ -168,20 +168,24 @@ const IssueFronts = ({
                         ...front,
                         cards: flatCollections,
                     })
-                    const specs = flattenFlatCardsToFront(flatCollections).map(
-                        ({ article, collection }) => ({
+                    const specs = flattenFlatCardsToFront(flatCollections)
+                        // Exlude crosswords because we don't want to be able to
+                        // "slide" onto them.
+                        .filter(({ article }) => article.type !== 'crossword')
+                        .map(({ article, collection }) => ({
                             collection: collection.key,
                             front: front.key,
                             article: article.key,
                             localIssueId: issue.localId,
                             publishedIssueId: issue.publishedId,
-                        }),
-                    )
-                    acc.frontSpecs.push({
-                        appearance: front.appearance,
-                        frontName: front.displayName || '',
-                        articleSpecs: specs,
-                    })
+                        }))
+                    if (specs.length > 0) {
+                        acc.frontSpecs.push({
+                            appearance: front.appearance,
+                            frontName: front.displayName || '',
+                            articleSpecs: specs,
+                        })
+                    }
                     return acc
                 },
                 {

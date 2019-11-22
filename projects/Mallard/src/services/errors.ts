@@ -1,4 +1,4 @@
-import Sentry from 'react-native-sentry'
+import Sentry from '@sentry/react-native'
 import Config from 'react-native-config'
 import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
@@ -45,11 +45,13 @@ class ErrorServiceImpl implements ErrorService {
         if (hasConsent === false || hasConsent === null) return
 
         if (!this.hasConfigured) {
-            Sentry.config(SENTRY_DSN_URL).install()
-            Sentry.setTagsContext({
-                environment: __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
-                react: true,
-            })
+            Sentry.init({ dsn: SENTRY_DSN_URL })
+
+            Sentry.setTag(
+                'environment',
+                __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
+            )
+            Sentry.setExtra('react', true)
             this.hasConfigured = true
         }
 
