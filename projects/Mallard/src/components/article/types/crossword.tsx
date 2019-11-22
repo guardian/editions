@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { CrosswordArticle } from 'src/common'
 import { getBundleUri } from 'src/helpers/webview'

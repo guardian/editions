@@ -18,7 +18,6 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from './article/body'
 import { ArticleSlider } from './article/slider'
-import { BasicArticleHeader } from './article/header'
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
