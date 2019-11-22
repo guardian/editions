@@ -22,6 +22,7 @@ import {
 import { routeNames } from '../routes'
 import { articleScreenMotion, screenInterpolator } from './article/transition'
 import { safeInterpolation, safeValue } from 'src/helpers/math'
+import { BasicArticleHeader } from 'src/screens/article/header'
 
 const Dismissable = ({
     navigator,
@@ -46,7 +47,14 @@ const BasicCardWrapper = ({
 }: {
     navigator: NavigationContainer
 } & NavigationInjectedProps) => {
-    return <Navigator navigation={navigation} />
+    return (
+        <>
+            {navigation.getParam('prefersFullScreen') ? (
+                <BasicArticleHeader />
+            ) : null}
+            <Navigator navigation={navigation} />
+        </>
+    )
 }
 
 const wrapInBasicCard: NavigatorWrapper = Navigator => {
