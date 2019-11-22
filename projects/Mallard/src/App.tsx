@@ -37,6 +37,7 @@ import { IssueSummaryProvider } from './hooks/use-issue-summary'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { createApolloClient } from './apollo'
 import { errorService } from './services/errors'
+import { NavPositionProvider } from 'src/hooks/use-nav-position'
 
 const clearAndDownloadIssue = async () => {
     await prepFileSystem()
@@ -138,6 +139,7 @@ const WithProviders = nestProviders(
     ToastProvider,
     NetInfoProvider,
     IssueSummaryProvider,
+    NavPositionProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>

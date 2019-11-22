@@ -18,6 +18,7 @@ import { getArticleDataFromNavigator, ArticleSpec } from '../article-screen'
 import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
+import { useNavPosition } from 'src/hooks/use-nav-position'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -285,6 +286,7 @@ const ArticleSlider = ({
 
     const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
     const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
+    const { position, setPosition, setTrigger } = useNavPosition()
 
     if (Platform.OS === 'android')
         return (
@@ -294,7 +296,20 @@ const ArticleSlider = ({
                     initialPage={startingPoint}
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
-                        setCurrent(ev.nativeEvent.position)
+                        const index = ev.nativeEvent.position
+                        setCurrent(index)
+
+                        // Slides the fronts on issue screen in the background if you swipe to new front
+                        if (
+                            flattenedArticles[index].front !== position.frontId
+                        ) {
+                            setPosition({
+                                frontId: flattenedArticles[index].front,
+                                articleIndex: 0,
+                            })
+                            setTrigger(true)
+                        }
+
                         Animated.timing(sliderPosition, {
                             duration: 200,
                             toValue: ev.nativeEvent.position,
@@ -375,6 +390,17 @@ const ArticleSlider = ({
                                     flattenedArticles.length - 1,
                                 ),
                             )
+                            // Slides the fronts on issue screen in the background if you swipe to new front
+                            if (
+                                flattenedArticles[current].front !==
+                                position.frontId
+                            ) {
+                                setPosition({
+                                    frontId: flattenedArticles[current].front,
+                                    articleIndex: 0,
+                                })
+                                setTrigger(true)
+                            }
                         },
                     },
                 )}
