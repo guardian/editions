@@ -11,7 +11,7 @@ import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
 import { useToast } from 'src/hooks/use-toast'
-import { isInTestFlight } from 'src/helpers/release-stream'
+import { isInTestFlight, isInBeta } from 'src/helpers/release-stream'
 import { FSPaths } from 'src/paths'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
@@ -23,6 +23,7 @@ import gql from 'graphql-tag'
 import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
 import { getFileList } from 'src/helpers/files'
 import { deleteIssueFiles } from 'src/helpers/files'
+import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -112,6 +113,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                 >
                     Pop a toast
                 </Button>
+                {isInBeta() && (
+                    <Button onPress={() => DEV_getLegacyIAPReceipt()}>
+                        Add legacy IAP receipt
+                    </Button>
+                )}
                 <Button
                     onPress={() => {
                         Alert.alert(

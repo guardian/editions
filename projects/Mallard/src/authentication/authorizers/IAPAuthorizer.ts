@@ -12,5 +12,10 @@ export default new Authorizer({
     authCaches: [],
     auth: tryRestoreActiveIOSSubscriptionReceipt,
     authWithCachedCredentials: fetchActiveIOSSubscriptionReceipt,
-    checkUserHasAccess: isReceiptValid,
+    /**
+     * If we're offline we can't decode the receipt on the device
+     * (not without using OpenSSL). As such we just let them in.
+     */
+    checkUserHasAccess: (receipt, connectivity) =>
+        connectivity === 'offline' ? true : isReceiptValid(receipt),
 })
