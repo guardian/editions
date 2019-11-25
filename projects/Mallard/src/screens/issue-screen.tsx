@@ -55,6 +55,7 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
+import { useNavPosition } from 'src/hooks/use-nav-position'
 
 const styles = StyleSheet.create({
     shownWeather: {
@@ -197,6 +198,25 @@ const IssueFronts = ({
             ),
         [issue.localId, issue.publishedId, issue.fronts],
     )
+
+    const { position, trigger, setTrigger } = useNavPosition()
+
+    useEffect(() => {
+        if (trigger && frontWithCards) {
+            const frontToScrollTo = frontWithCards.find(obj => {
+                return obj.displayName === position.frontId
+            })
+
+            const index = frontToScrollTo
+                ? frontWithCards.findIndex(front => front === frontToScrollTo)
+                : 0
+
+            if (ref && ref.current && ref.current.scrollToIndex) {
+                ref.current.scrollToIndex({ animated: false, index })
+            }
+            setTrigger(false)
+        }
+    }, [trigger, position.frontId, setTrigger, frontWithCards])
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
