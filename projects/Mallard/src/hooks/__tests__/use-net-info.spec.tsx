@@ -101,7 +101,7 @@ describe('use-net-info', () => {
         })
 
         describe('#subscribe', () => {
-            it('forwards messages that are fired from the handlers it has registered with', () => {
+            it('forwards messages that are fired from the handlers it has registered with', async () => {
                 const nisc = new NetInfoStateContainer()
                 const sub = jest.fn()
                 nisc.subscribe(sub)
