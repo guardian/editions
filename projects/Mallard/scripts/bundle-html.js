@@ -1,4 +1,4 @@
-const bundleHTML = require('../../Apps/editions-crossword-renderer-app/scripts/bundle-html')
+const bundleHTML = require('../../Apps/crosswords/scripts/bundle-html')
     .bundleHTML
 
 bundleHTML()

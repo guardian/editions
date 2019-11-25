@@ -24,12 +24,6 @@ test: $(patsubst %, test-%, $(PROJECTS))
 # Overrides
 #
 
-validate-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
-	@echo "\n👟 $@ 🦆\n"
-	@echo "\nSkip validation\n"
-fix-editions-crossword-renderer-app: projects/editions-crossword-renderer-app/node_modules
-	@echo "\n👟 $@ 🦆\n"
-	@echo "\nSkip fix\n"
 build-Mallard:
 	@echo "\n👟 $@ 🦆\n"
 	@echo "\nThis is not yet handled by make\n"

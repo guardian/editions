@@ -1,12 +1,12 @@
 {
-    "name": "@guardian/editions-crossword-renderer-app",
+    "name": "@guardian/crosswords",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
         "watch": "webpack-dev-server",
         "build": "webpack --mode production",
-        "test": "echo \"Info: no test specified for editions-crossword-renderer-app\""
+        "test": "echo \"Info: no test specified for crosswords\""
     },
     "keywords": [],
     "author": "",

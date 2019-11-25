@@ -18,7 +18,7 @@
 module.exports = {
     crosswords: {
         key: 'crosswords',
-        project: 'Apps/editions-crossword-renderer-app',
+        project: 'Apps/crosswords',
         watchPort: 8001,
         watchScript: 'yarn watch',
         buildScript: 'yarn build',

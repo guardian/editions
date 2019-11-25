@@ -46,7 +46,7 @@
         "@sentry/react-native": "^1.1.0",
         "apollo-cache-inmemory": "^1.6.3",
         "apollo-client": "^2.6.4",
-        "chalk": "^2.4.2",
+        "chalk": "^3.0.0",
         "convert-svg-to-png": "^0.5.0",
         "deepmerge": "^4.0.0",
         "events": "^3.0.0",
