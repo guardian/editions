@@ -264,8 +264,6 @@ const ArticleSlider = ({
 
     const currentArticle = flattenedArticles[Math.floor(current)]
 
-    const pillar = getAppearancePillar(currentArticle.appearance)
-
     const sliderSections = articleNavigator.reduce(
         (sectionsWithStartIndex, frontSpec) => {
             const sections = sectionsWithStartIndex.sections.concat({
@@ -324,7 +322,9 @@ const ArticleSlider = ({
                                 <ArticleScreenBody
                                     width={width}
                                     path={item}
-                                    pillar={pillar}
+                                    pillar={getAppearancePillar(
+                                        item.appearance,
+                                    )}
                                     position={index}
                                     onShouldShowHeaderChange={
                                         onShouldShowHeaderChange
@@ -427,7 +427,7 @@ const ArticleSlider = ({
                     <ArticleScreenBody
                         width={width}
                         path={item}
-                        pillar={pillar}
+                        pillar={getAppearancePillar(item.appearance)}
                         position={index}
                         onShouldShowHeaderChange={onShouldShowHeaderChange}
                         shouldShowHeader={shouldShowHeader}
