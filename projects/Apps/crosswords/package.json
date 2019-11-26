@@ -1,12 +1,12 @@
 {
-    "name": "editions-crossword-renderer-app",
+    "name": "@guardian/crosswords",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
         "watch": "webpack-dev-server",
         "build": "webpack --mode production",
-        "test": "echo \"Info: no test specified for editions-crossword-renderer-app\""
+        "test": "echo \"Info: no test specified for crosswords\""
     },
     "keywords": [],
     "author": "",
@@ -23,8 +23,10 @@
     },
     "dependencies": {
         "@guardian/react-crossword": "^0.1.8",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
+        "chalk": "^3.0.0",
+        "kill-port": "^1.6.0",
+        "react": "16.0.0",
+        "react-dom": "16.0.0",
         "webpack-dev-server": "^3.7.2"
     }
 }
