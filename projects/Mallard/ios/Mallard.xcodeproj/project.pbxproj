@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -18,11 +19,11 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
 		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
-		4F62AA36231E8D660052ADBA /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA35231E8D660052ADBA /* ophan.framework */; };
-		4F62AA37231E8D660052ADBA /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F62AA35231E8D660052ADBA /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7836FF3F0ADEA9274CAD15ED /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */; };
 		950E1C012317E06F00F38B92 /* Ophan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950E1C002317E06F00F38B92 /* Ophan.swift */; };
 		95610CA8232BF0FF006B5DF2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */; };
+		95B08633238D6EEA00828D1E /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; };
+		95B08634238D6EEA00828D1E /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
@@ -98,13 +99,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4F62AA38231E8D660052ADBA /* Embed Frameworks */ = {
+		95B08635238D6EEA00828D1E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4F62AA37231E8D660052ADBA /* ophan.framework in Embed Frameworks */,
+				95B08634238D6EEA00828D1E /* ophan.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -160,6 +161,8 @@
 		950E1C002317E06F00F38B92 /* Ophan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ophan.swift; sourceTree = "<group>"; };
 		95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Mallard/LaunchScreen.xib; sourceTree = "<group>"; };
 		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
+		95B0862E238D6E4C00828D1E /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../../Apps/ophan/build/bin/ios/releaseFramework/ophan.framework; sourceTree = "<group>"; };
+		95B08632238D6EEA00828D1E /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../../Apps/ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
 		95CB9F192316B6E900F2F6B0 /* Ophan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ophan.m; sourceTree = "<group>"; };
 		95CB9F1D2316C53F00F2F6B0 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../ophan/build/bin/ios/debugFramework/ophan.framework; sourceTree = "<group>"; };
 		A13D0DC02316783B00505524 /* Mallard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mallard-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -198,7 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */,
-				4F62AA36231E8D660052ADBA /* ophan.framework in Frameworks */,
+				95B08633238D6EEA00828D1E /* ophan.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +299,8 @@
 			isa = PBXGroup;
 			children = (
 				95CB9F1D2316C53F00F2F6B0 /* ophan.framework */,
+				95B0862E238D6E4C00828D1E /* ophan.framework */,
+				95B08632238D6EEA00828D1E /* ophan.framework */,
 				C521D6EF22CF763C00F493D5 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -383,30 +388,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		8883AD18003A47558C70A32B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			path = Application;
-			sourceTree = "<group>";
-		};
-		BA40A83123ED44019A243B44 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			path = Application;
-			sourceTree = "<group>";
-		};
-		14DFF2DEA63A4EB2B975400E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			path = Application;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -439,8 +420,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				4F62AA38231E8D660052ADBA /* Embed Frameworks */,
 				8BA3F98B2BC24E3096C77568 /* Upload Debug Symbols to Sentry */,
+				95B08635238D6EEA00828D1E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -742,7 +723,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../ophan/gradlew\" -p \"$SRCROOT/../ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\" \\\n-Pkotlin.valid.archs=\"$VALID_ARCHS\"\n";
+			shellScript = "\"$SRCROOT/../../Apps/ophan/gradlew\" -p \"$SRCROOT/../../Apps/ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\" \\\n-Pkotlin.valid.archs=\"$VALID_ARCHS\"\n";
 		};
 		B8712F2A6735954686D599F6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -900,7 +881,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 998P9U5NGJ;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/bin/ios/universalFramework";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../../Apps/ophan/build/bin/ios/universalFramework";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
@@ -930,7 +911,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 998P9U5NGJ;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../ophan/build/bin/ios/universalFramework";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../../Apps/ophan/build/bin/ios/universalFramework";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mallard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
