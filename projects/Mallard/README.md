@@ -2,36 +2,12 @@
 
 ## Installing
 
-rn update: run this to clear your cache
-(https://medium.com/@abhisheknalwaya/how-to-clear-react-native-cache-c435c258834e)
-
-```bash
-watchman watch-del-all &&
-rm -rf $TMPDIR/react-native-packager-cache-* &&
-rm -rf $TMPDIR/metro-bundler-cache-* &&
-rm -rf node_modules/ &&
-yarn cache clean &&
-yarn install &&
-yarn start -- --reset-cache
-```
-
-The project uses `nvm` so this will need to be installed before if it's not already:
-
-```bash
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-```
-
-Start by installing our Node.js dependencies:
-
-```bash
-$ nvm use
-$ yarn
-```
+Follow the instructions in the [main README](https://github.com/guardian/editions/blob/master/README.md).
 
 For iOS development you will need to install Xcode from the App Store and then open it once and select "Install" on the pop up asking whether to install other required Xcode dependencies - specifically the simulator. If this doesn't appear go to `Preferences > Components` and download the latest simulator iOS version. Additionally, you need have CocoaPods installed:
 
-```
-$ gem install cocoapods # this may require `sudo` if you're not using rvm or rbenv
+```sh
+gem install cocoapods # this may require `sudo` if you're not using rvm or rbenv
 ```
 
 The following guides allow you to run the app locally on device emulators, or on real devices connected to your dev machine via USB.
@@ -95,3 +71,18 @@ If you wanna add static svgs, put them in the `assets/svgs` folder and run `yarn
 ### iPad testing
 
 To test the iPad version, run `yarn run-ipad`. To test responsive layouts, you can enter multitasking inside the iPad simulator (swipe up from the bottom of the window) and drag another app from the dock to the side until it goes into split view.
+
+### Upgrading React Native
+
+rn update: run this to clear your cache
+(https://medium.com/@abhisheknalwaya/how-to-clear-react-native-cache-c435c258834e)
+
+```bash
+watchman watch-del-all &&
+rm -rf $TMPDIR/react-native-packager-cache-* &&
+rm -rf $TMPDIR/metro-bundler-cache-* &&
+rm -rf node_modules/ &&
+yarn cache clean &&
+yarn install &&
+yarn start -- --reset-cache
+```
