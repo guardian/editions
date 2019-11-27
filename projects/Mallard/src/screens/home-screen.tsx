@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
@@ -12,9 +12,7 @@ import { IssueRow } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { IssuePickerHeader } from 'src/components/layout/header/header'
-import { ScrollContainer } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { BaseList } from 'src/components/lists/list'
 import { Spinner } from 'src/components/spinner'
 import {
     CONNECTION_FAILED_AUTO_RETRY,
