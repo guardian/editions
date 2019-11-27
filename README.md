@@ -18,6 +18,26 @@ To run the client-side app, cd into `projects/Mallard` and check out it's [READM
 
 ## Subprojects
 
+The project is split into several sub projects, located in the projects directory. Each of these contains a `package.json` and `README.md` file.
+
+## Installing, building, testing and linting
+
+Make targets are used to build, lint, test and install dependencies. These can either run against one, some, or all of the subprojects.
+
+-   `make install` install node dependencies with yarn
+-   `make validate` run lint
+-   `make fix` run lint with autofix
+-   `make test` run unit tests
+-   `make build` compile
+-   `make clean` delete node modules and other build related things
+-   `make list`
+
+To run a make target against one project only, follow it with `-` and the project name:
+
+`make install-Mallard`
+
+To exclude one or more projects, set the `EXCLUDE` environment variable to the names of the project seperated by spaces. This is used on CI to produce backend only builds.
+
 ### [Mallard](https://github.com/guardian/editions/tree/master/projects/Mallard)
 
 This is the mobile app for downloading and viewing Editions. It runs on Android and iOS via react-native.
@@ -37,24 +57,6 @@ This is the Amazon architecture for the backend and archiver, expressed as cdk.
 ### [Apps](https://github.com/guardian/editions/tree/master/projects/Apps)
 
 This contains `common` which is the code shared between app and backends and `crosswords` which is the crossword.
-
-## Developer tooling
-
-The project is split into several sub projects, located in the projects directory. Each of these contains a `package.json` and `README.md` file.
-
-Make targets are used to build, lint, test and install dependencies. These can either run against one, some, or all of the subprojects.
-
--   `make install` install node dependencies with yarn
--   `make validate` run lint
--   `make fix` run lint with autofix
--   `make test` run unit tests
--   `make build` compile
--   `make clean` delete node modules and other build related things
--   `make list`
-
-To run a make target against one project only, follow it with `-` and the project name:
-
-`make install-Mallard`
 
 ## Deployment
 
