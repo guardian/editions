@@ -1,10 +1,9 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, FlatList, StyleSheet } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
     withNavigation,
-    FlatList,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/button/button'
@@ -74,20 +73,28 @@ const HomeScreenHeader = withNavigation(
     },
 )
 
+const styles = StyleSheet.create({
+    issueListFooter: {
+        padding: metrics.horizontal,
+        paddingTop: metrics.vertical * 2,
+        paddingBottom: getIssueCardOverlayAmount() + metrics.vertical * 2,
+    },
+    issueListFooterGrid: {
+        marginBottom: metrics.vertical,
+    },
+    issueList: {
+        paddingTop: 0,
+        backgroundColor: color.dimBackground,
+    },
+})
+
 const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
     const isUsingProdDevtools = useIsUsingProdDevtools()
     const { setIssueId } = useIssueSummary()
 
     return (
-        <View
-            style={{
-                padding: metrics.horizontal,
-                paddingTop: metrics.vertical * 2,
-                paddingBottom:
-                    getIssueCardOverlayAmount() + metrics.vertical * 2,
-            }}
-        >
-            <GridRowSplit style={{ marginBottom: metrics.vertical }}>
+        <View style={styles.issueListFooter}>
+            <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
@@ -139,10 +146,7 @@ const IssueList = withNavigation(
                             <IssueListFooter navigation={navigation} />
                         </View>
                     }
-                    style={{
-                        paddingTop: 0,
-                        backgroundColor: color.dimBackground,
-                    }}
+                    style={styles.issueList}
                     data={issueList}
                     renderItem={({ item: issueSummary }) => (
                         <IssueRow
