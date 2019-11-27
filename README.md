@@ -24,11 +24,11 @@ This is the mobile app for downloading and viewing Editions. It runs on Android 
 
 ### [backend](https://github.com/guardian/editions/tree/master/projects/backend)
 
-This is the lambda which processes content for the edition, it can be run as a local http service for development.
+This is the lambda which turns CAPI, fronts data and images into a format the app can use, it can be run as a local http service for development.
 
 ### [archiver](https://github.com/guardian/editions/tree/master/projects/archiver)
 
-This is a collection of lambdas which form a step function which generates the contents of the S3 buckets which the app reads from.
+This is a collection of lambdas which form a step function which uses the backend to generate the contents of the S3 buckets which the app reads from.
 
 ### [aws](https://github.com/guardian/editions/tree/master/projects/aws)
 
