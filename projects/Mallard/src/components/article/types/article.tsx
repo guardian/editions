@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         Bug is only in Android 9
         */
         opacity:
-            DeviceInfo.getVersion() === '9.0' && Platform.OS === 'android'
+            DeviceInfo.getSystemVersion() === '9.0' && Platform.OS === 'android'
                 ? 0.99
                 : 1,
     },
