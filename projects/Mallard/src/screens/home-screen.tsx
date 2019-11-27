@@ -1,9 +1,10 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
     withNavigation,
+    FlatList,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/button/button'
@@ -32,6 +33,8 @@ import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
+import { Separator } from 'src/components/layout/ui/row'
+import { color } from 'src/theme/color'
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -73,6 +76,53 @@ const HomeScreenHeader = withNavigation(
     },
 )
 
+const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
+    const isUsingProdDevtools = useIsUsingProdDevtools()
+    const { setIssueId } = useIssueSummary()
+
+    return (
+        <View
+            style={{
+                padding: metrics.horizontal,
+                paddingTop: metrics.vertical * 2,
+                paddingBottom:
+                    getIssueCardOverlayAmount() + metrics.vertical * 2,
+            }}
+        >
+            <GridRowSplit style={{ marginBottom: metrics.vertical }}>
+                <Button
+                    appearance={ButtonAppearance.skeleton}
+                    onPress={() => {
+                        navigation.navigate({
+                            routeName: routeNames.ManageEditions,
+                        })
+                    }}
+                >
+                    Manage editions
+                </Button>
+            </GridRowSplit>
+            {isUsingProdDevtools ? (
+                <GridRowSplit>
+                    <Button
+                        appearance={ButtonAppearance.skeleton}
+                        onPress={() => {
+                            navigateToIssue({
+                                navigation,
+                                navigationProps: {
+                                    path: undefined,
+                                },
+                                setIssueId,
+                            })
+                        }}
+                    >
+                        Go to latest
+                    </Button>
+                </GridRowSplit>
+            ) : null}
+        </View>
+    )
+}
+
 const IssueList = withNavigation(
     React.memo(
         ({
@@ -81,76 +131,40 @@ const IssueList = withNavigation(
         }: {
             issueList: IssueSummary[]
         } & NavigationInjectedProps) => {
-            const isUsingProdDevtools = useIsUsingProdDevtools()
             const { setIssueId } = useIssueSummary()
             return (
-                <>
-                    <BaseList
-                        style={{ paddingTop: 0 }}
-                        data={issueList}
-                        renderItem={({ item: issueSummary }) => (
-                            <IssueRow
-                                onPress={() => {
-                                    navigateToIssue({
-                                        navigation,
-                                        navigationProps: {
-                                            path: {
-                                                localIssueId:
-                                                    issueSummary.localId,
-                                                publishedIssueId:
-                                                    issueSummary.publishedId,
-                                            },
+                <FlatList
+                    ItemSeparatorComponent={Separator}
+                    ListFooterComponent={
+                        <View>
+                            <Separator />
+                            <IssueListFooter navigation={navigation} />
+                        </View>
+                    }
+                    style={{
+                        paddingTop: 0,
+                        backgroundColor: color.dimBackground,
+                    }}
+                    data={issueList}
+                    renderItem={({ item: issueSummary }) => (
+                        <IssueRow
+                            onPress={() => {
+                                navigateToIssue({
+                                    navigation,
+                                    navigationProps: {
+                                        path: {
+                                            localIssueId: issueSummary.localId,
+                                            publishedIssueId:
+                                                issueSummary.publishedId,
                                         },
-                                        setIssueId,
-                                    })
-                                }}
-                                issue={issueSummary}
-                            />
-                        )}
-                    />
-                    <View
-                        style={{
-                            padding: metrics.horizontal,
-                            paddingTop: metrics.vertical * 2,
-                            paddingBottom:
-                                getIssueCardOverlayAmount() +
-                                metrics.vertical * 2,
-                        }}
-                    >
-                        <GridRowSplit
-                            style={{ marginBottom: metrics.vertical }}
-                        >
-                            <Button
-                                appearance={ButtonAppearance.skeleton}
-                                onPress={() => {
-                                    navigation.navigate({
-                                        routeName: routeNames.ManageEditions,
-                                    })
-                                }}
-                            >
-                                Manage editions
-                            </Button>
-                        </GridRowSplit>
-                        {isUsingProdDevtools ? (
-                            <GridRowSplit>
-                                <Button
-                                    appearance={ButtonAppearance.skeleton}
-                                    onPress={() => {
-                                        navigateToIssue({
-                                            navigation,
-                                            navigationProps: {
-                                                path: undefined,
-                                            },
-                                            setIssueId,
-                                        })
-                                    }}
-                                >
-                                    Go to latest
-                                </Button>
-                            </GridRowSplit>
-                        ) : null}
-                    </View>
-                </>
+                                    },
+                                    setIssueId,
+                                })
+                            }}
+                            issue={issueSummary}
+                        />
+                    )}
+                />
             )
         },
     ),
@@ -176,24 +190,22 @@ export const HomeScreen = ({
                     })
                 }}
             />
-            <ScrollContainer>
-                {issueSummary ? (
-                    <IssueList issueList={issueSummary} />
-                ) : error ? (
-                    <>
-                        <FlexErrorMessage
-                            debugMessage={error}
-                            title={CONNECTION_FAILED_ERROR}
-                            message={CONNECTION_FAILED_AUTO_RETRY}
-                        />
-                    </>
-                ) : (
-                    <FlexCenter>
-                        <Spinner></Spinner>
-                    </FlexCenter>
-                )}
-                <ApiState />
-            </ScrollContainer>
+            {issueSummary ? (
+                <IssueList issueList={issueSummary} />
+            ) : error ? (
+                <>
+                    <FlexErrorMessage
+                        debugMessage={error}
+                        title={CONNECTION_FAILED_ERROR}
+                        message={CONNECTION_FAILED_AUTO_RETRY}
+                    />
+                </>
+            ) : (
+                <FlexCenter>
+                    <Spinner></Spinner>
+                </FlexCenter>
+            )}
+            <ApiState />
         </WithAppAppearance>
     )
 }
