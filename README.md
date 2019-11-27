@@ -16,6 +16,28 @@ You will need `frontend` and `cmsFronts` credentials loaded.
 
 To run the client-side app, cd into `projects/Mallard` and check out it's [README](https://github.com/guardian/editions/tree/master/projects/Mallard).
 
+## Subprojects
+
+### [Mallard](https://github.com/guardian/editions/tree/master/projects/Mallard)
+
+This is the app.
+
+### [backend](https://github.com/guardian/editions/tree/master/projects/backend)
+
+This is the lambda which processes content for the edition, it can be run as a local http service for development.
+
+### [archiver](https://github.com/guardian/editions/tree/master/projects/archiver)
+
+This is a collection of lambdas which form a step function which generates the contents of the S3 buckets which the app reads from.
+
+### [aws](https://github.com/guardian/editions/tree/master/projects/aws)
+
+This is the Amazon architecture for the backend and archiver, expressed as cdk.
+
+### [Apps](https://github.com/guardian/editions/tree/master/projects/Apps)
+
+This contains `common` which is the code shared between app and backends and `crosswords` which is the crossword.
+
 ## Developer tooling
 
 The project is split into several sub projects, located in the projects directory. Each of these contains a `package.json` and `README.md` file.
