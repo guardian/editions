@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
     withNavigation,
+    NavigationRoute,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
 import { Button, ButtonAppearance } from 'src/components/button/button'
-import { IssueRow } from 'src/components/issue/issue-row'
+import {
+    IssueRow,
+    ISSUE_ROW_HEADER_HEIGHT,
+    ISSUE_FRONT_ROW_HEIGHT,
+} from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { IssuePickerHeader } from 'src/components/layout/header/header'
@@ -30,8 +35,27 @@ import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
+import { useNavPosition } from 'src/hooks/use-nav-position'
+import { NavigationParams } from 'react-navigation'
 import { Separator } from 'src/components/layout/ui/row'
 import { color } from 'src/theme/color'
+import { useIssueResponse } from 'src/hooks/use-issue'
+import { IssueWithFronts } from '../../../Apps/common/src'
+
+const styles = StyleSheet.create({
+    issueListFooter: {
+        padding: metrics.horizontal,
+        paddingTop: metrics.vertical * 2,
+        paddingBottom: getIssueCardOverlayAmount() + metrics.vertical * 2,
+    },
+    issueListFooterGrid: {
+        marginBottom: metrics.vertical,
+    },
+    issueList: {
+        paddingTop: 0,
+        backgroundColor: color.dimBackground,
+    },
+})
 
 const HomeScreenHeader = withNavigation(
     ({
@@ -73,20 +97,71 @@ const HomeScreenHeader = withNavigation(
     },
 )
 
-const styles = StyleSheet.create({
-    issueListFooter: {
-        padding: metrics.horizontal,
-        paddingTop: metrics.vertical * 2,
-        paddingBottom: getIssueCardOverlayAmount() + metrics.vertical * 2,
+const IssueRowContainer = React.memo(
+    ({
+        issue,
+        issueDetails,
+        navigation,
+    }: {
+        issue: IssueSummary
+        issueDetails: IssueWithFronts | null
+        navigation: NavigationScreenProp<
+            NavigationRoute<NavigationParams>,
+            NavigationParams
+        >
+    }) => {
+        const { setIssueId } = useIssueSummary()
+        const { localId, publishedId } = issue
+        const { setPosition, setTrigger } = useNavPosition()
+
+        const navToIssue = useCallback(
+            () =>
+                navigateToIssue({
+                    navigation,
+                    navigationProps: {
+                        path: {
+                            localIssueId: localId,
+                            publishedIssueId: publishedId,
+                        },
+                    },
+                    setIssueId,
+                }),
+            [navigation, setIssueId, localId, publishedId],
+        )
+
+        const onPress = useCallback(() => {
+            if (issueDetails != null) {
+                navToIssue()
+                return
+            }
+            setIssueId({
+                localIssueId: localId,
+                publishedIssueId: publishedId,
+            })
+        }, [navToIssue, issueDetails, setIssueId, localId, publishedId])
+
+        const onPressFront = useCallback(
+            frontKey => {
+                navToIssue()
+                setPosition({
+                    frontId: frontKey,
+                    articleIndex: 0,
+                })
+                setTrigger(true)
+            },
+            [setPosition, setTrigger, navToIssue],
+        )
+
+        return (
+            <IssueRow
+                onPress={onPress}
+                onPressFront={onPressFront}
+                issue={issue}
+                issueDetails={issueDetails}
+            />
+        )
     },
-    issueListFooterGrid: {
-        marginBottom: metrics.vertical,
-    },
-    issueList: {
-        paddingTop: 0,
-        backgroundColor: color.dimBackground,
-    },
-})
+)
 
 const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
     const isUsingProdDevtools = useIsUsingProdDevtools()
@@ -128,49 +203,180 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
     )
 }
 
-const IssueList = withNavigation(
+const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + 1
+
+const IssueListView = withNavigation(
     React.memo(
         ({
             issueList,
+            currentIssueDetails,
             navigation,
         }: {
             issueList: IssueSummary[]
+            currentIssueDetails: IssueWithFronts
         } & NavigationInjectedProps) => {
-            const { setIssueId } = useIssueSummary()
+            const { localId, publishedId, fronts } = currentIssueDetails
+
+            // We want to scroll to the current issue, both initially and when
+            // it changes. If not found, just in case, we push it to the end so
+            // that it does not affect `getItemLayout`.
+            let currentIssueIndex = issueList.findIndex(
+                issue =>
+                    issue.localId === localId &&
+                    issue.publishedId === publishedId,
+            )
+            if (currentIssueIndex < 0)
+                currentIssueIndex = Number.MAX_SAFE_INTEGER
+
+            // Scroll to the relevant item if the current issue index has
+            // changed (likely because the selected issue has changed itself).
+            const listRef = useRef<FlatList<IssueSummary>>()
+            useEffect(() => {
+                if (listRef.current == null) {
+                    return
+                }
+
+                /* @types/react doesn't know about scroll functions */
+                ;(listRef.current as any).scrollToIndex({
+                    index: currentIssueIndex,
+                })
+            }, [listRef, currentIssueIndex])
+
+            // We pass down the issue details only for the selected issue.
+            const renderItem = useCallback(
+                ({ item, index }) => (
+                    <IssueRowContainer
+                        issue={item}
+                        issueDetails={
+                            index === currentIssueIndex
+                                ? currentIssueDetails
+                                : null
+                        }
+                        navigation={navigation}
+                    />
+                ),
+                [currentIssueIndex, currentIssueDetails, navigation],
+            )
+
+            // Height of the fronts so we can provide this to `getItemLayout`.
+            const frontRowsHeight = fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
+
+            // Changing the current issue will affect the layout, so that's
+            // indeed a dependency of the callback.
+            const getItemLayout = useCallback(
+                (_, index) => {
+                    return {
+                        length:
+                            ISSUE_ROW_HEIGHT +
+                            (index === currentIssueIndex ? frontRowsHeight : 0),
+                        offset:
+                            index * ISSUE_ROW_HEIGHT +
+                            (index > currentIssueIndex ? frontRowsHeight : 0),
+                        index,
+                    }
+                },
+                [currentIssueIndex, frontRowsHeight],
+            )
+
+            const footer = useMemo(
+                () => (
+                    <View>
+                        <Separator />
+                        <IssueListFooter navigation={navigation} />
+                    </View>
+                ),
+                [navigation],
+            )
+
+            const refFn = useCallback(
+                (ref: FlatList<IssueSummary>) => {
+                    listRef.current = ref
+                },
+                [listRef],
+            )
+
             return (
                 <FlatList
                     ItemSeparatorComponent={Separator}
-                    ListFooterComponent={
-                        <View>
-                            <Separator />
-                            <IssueListFooter navigation={navigation} />
-                        </View>
-                    }
+                    ListFooterComponent={footer}
                     style={styles.issueList}
                     data={issueList}
-                    renderItem={({ item: issueSummary }) => (
-                        <IssueRow
-                            onPress={() => {
-                                navigateToIssue({
-                                    navigation,
-                                    navigationProps: {
-                                        path: {
-                                            localIssueId: issueSummary.localId,
-                                            publishedIssueId:
-                                                issueSummary.publishedId,
-                                        },
-                                    },
-                                    setIssueId,
-                                })
-                            }}
-                            issue={issueSummary}
-                        />
-                    )}
+                    initialScrollIndex={currentIssueIndex}
+                    renderItem={renderItem}
+                    getItemLayout={getItemLayout}
+                    ref={refFn}
                 />
             )
         },
     ),
 )
+
+const IssueListViewWrapper = ({
+    issueList,
+    currentIssueDetails,
+}: {
+    issueList: IssueSummary[]
+    currentIssueDetails: IssueWithFronts | null
+}) => {
+    const [shownIssueDetails, setShownIssueDetails] = useState(
+        currentIssueDetails,
+    )
+
+    // When we just pressed a issue row, it'll take a bit of time to
+    // fetch the details (ex. list of fronts). During this time,
+    // `currentIssueDetails` will be `null`. So in the meantime, we'll
+    // keep showing the previous fronts.
+    useEffect(() => {
+        if (currentIssueDetails != null) {
+            setShownIssueDetails(currentIssueDetails)
+        }
+    }, [currentIssueDetails])
+
+    // This can happen on the very first load of the list, when we don't
+    // have any details at all. However since the "fronts" page would
+    // have loaded the details of the current issue already, this will
+    // rarely happen.
+    if (shownIssueDetails === null) return null
+
+    return (
+        <IssueListView
+            issueList={issueList}
+            currentIssueDetails={shownIssueDetails}
+        />
+    )
+}
+
+const NO_ISSUES: IssueSummary[] = []
+const IssueListContainer = () => {
+    const { issueSummary, issueId } = useIssueSummary()
+    const { localIssueId = '', publishedIssueId = '' } = issueId || {}
+    const resp = useIssueResponse(
+        // FIXME: we are forced to memo this object because `useIssueResponse`
+        // would rerender in a loop otherwise (because we'd provide a different
+        // object reference which gets passed to `useEffect` internally). I tend
+        // to think this is a bug of `useIssueResponse`, which should use value
+        // rather than referential equality to cache keys.
+        useMemo(() => ({ localIssueId, publishedIssueId }), [
+            localIssueId,
+            publishedIssueId,
+        ]),
+    )
+    return resp({
+        error: () => <></>,
+        pending: () => (
+            <IssueListViewWrapper
+                issueList={issueSummary || NO_ISSUES}
+                currentIssueDetails={null}
+            />
+        ),
+        success: details => (
+            <IssueListViewWrapper
+                issueList={issueSummary || NO_ISSUES}
+                currentIssueDetails={details}
+            />
+        ),
+    })
+}
 
 export const HomeScreen = ({
     navigation,
@@ -193,7 +399,7 @@ export const HomeScreen = ({
                 }}
             />
             {issueSummary ? (
-                <IssueList issueList={issueSummary} />
+                <IssueListContainer />
             ) : error ? (
                 <>
                     <FlexErrorMessage
