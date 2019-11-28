@@ -40,6 +40,7 @@ import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
+import { ManageEditionsSettingsScreen } from 'src/screens/settings/manage-editions-settings'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -90,6 +91,7 @@ const AppStack = createModalNavigator(
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
+                [routeNames.ManageEditionsSettings]: ManageEditionsScreen,
                 [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
                 [routeNames.Help]: HelpScreen,
                 [routeNames.Credits]: CreditsScreen,
