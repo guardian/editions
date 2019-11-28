@@ -56,9 +56,12 @@ const fetchFromWeatherApi = async <T>(path: string): Promise<T> => {
 
 const getIpBasedLocation = async () => {
     const ip = await getIpAddress()
-    const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
+    const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation | null>(
         `locations/v1/cities/ipAddress?q=${ip}&details=false`,
     )
+    if (accuLoc == null) {
+        throw new CannotFetchError('Couldn\t identify location from latlong')
+    }
     return { accuLoc, isPrecise: false }
 }
 
@@ -74,9 +77,12 @@ const getCurrentLocation = async () => {
         return await getIpBasedLocation()
     }
     const latLong = `${geoloc.coords.latitude},${geoloc.coords.longitude}`
-    const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation>(
+    const accuLoc = await fetchFromWeatherApi<AccuWeatherLocation | null>(
         `locations/v1/cities/geoposition/search?q=${latLong}&details=false`,
     )
+    if (accuLoc == null) {
+        throw new CannotFetchError('Couldn\t identify location from latlong')
+    }
     return { accuLoc, isPrecise: true }
 }
 
