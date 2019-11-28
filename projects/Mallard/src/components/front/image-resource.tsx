@@ -52,11 +52,11 @@ const ImageResource = ({
     image,
     style,
     setAspectRatio = false,
-    use, //eslint-disable-line
+    use,
     ...props
 }: ImageResourceProps) => {
     const [width, setWidth] = useState<number | null>(null)
-    const imagePath = useImagePath(image, 'full-size') //TODO: This should be changed to use once we have a good amount of content published with trail thumbs
+    const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
 
