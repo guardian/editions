@@ -87,12 +87,10 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
 export const isIssueOnDevice = async (
     localIssueId: Issue['localId'],
 ): Promise<boolean> =>
-    (
-        await Promise.all([
-            RNFetchBlob.fs.exists(FSPaths.issue(localIssueId)),
-            RNFetchBlob.fs.exists(FSPaths.mediaRoot(localIssueId)),
-        ])
-    ).every(_ => _)
+    (await Promise.all([
+        RNFetchBlob.fs.exists(FSPaths.issue(localIssueId)),
+        RNFetchBlob.fs.exists(FSPaths.mediaRoot(localIssueId)),
+    ])).every(_ => _)
 
 /*
 Cheeky size helper
@@ -192,10 +190,9 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             JSON.stringify({ localId, assets: assets[imageSize] }),
         )
 
-        const imgDL = await downloadNamedIssueArchive(
-            localId,
-            assets[imageSize] as string,
-        ) // just the images
+        const imgDL = await downloadNamedIssueArchive(localId, assets[
+            imageSize
+        ] as string) // just the images
 
         imgDL.progress((received, total) => {
             if (total >= received) {
