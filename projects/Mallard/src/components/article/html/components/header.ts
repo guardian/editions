@@ -201,7 +201,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         font-weight: 600;
         color: ${colors.main};
     }
-
+    
     .header-top-byline > a {
         font-style: normal !important;
         text-decoration: none;
@@ -412,7 +412,6 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         text-decoration-thickness: 1px;
     }
     .header-container[data-type='analysis'] h1 .header-top-byline {
-        color: ${colors.main};
         display: block;
         font-family: ${families.titlepiece.regular};
     }
