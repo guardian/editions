@@ -77,7 +77,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             grabIssueSummary(data.maxAvailableEditions, hasConnected.current)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [data])
 
     useEffect(() => {
         const changeListener = async (appState: AppStateStatus) => {

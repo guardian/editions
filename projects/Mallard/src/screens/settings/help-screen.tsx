@@ -34,7 +34,6 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>Contact us</Heading>
                 <List
-                    onPress={({ onPress }) => onPress()}
                     data={[
                         createSupportMailto(
                             'Report an issue',
