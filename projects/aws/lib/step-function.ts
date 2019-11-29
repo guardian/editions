@@ -10,7 +10,8 @@ export const archiverStepFunction = (
         stack,
         stage,
         deployBucket,
-        outputBucket,
+        proofBucket,
+        publishBucket,
         backendURL,
         frontsTopicArn,
         frontsTopicRoleArn,
@@ -27,7 +28,8 @@ export const archiverStepFunction = (
         stack,
         stage,
         deployBucket,
-        outputBucket,
+        proofBucket,
+        publishBucket,
         frontsTopicArn,
         frontsTopicRole,
     }
@@ -59,7 +61,11 @@ export const archiverStepFunction = (
 
     const zip = task(scope, 'zip', 'Make issue bundle', lambdaParams)
 
-    const indexer = task(scope, 'indexer', 'Generate Index', lambdaParams)
+    const indexerProof = task(scope, 'indexer', 'Generate Index', lambdaParams)
+
+    const copier = task(scope, 'copier', 'Copy Issue', lambdaParams)
+
+    const indexerPublish = task(scope, 'indexer', 'Generate Index', lambdaParams)
 
     const notification = task(
         scope,
@@ -79,9 +85,13 @@ export const archiverStepFunction = (
 
     upload.task.next(zip.task)
 
-    zip.task.next(indexer.task)
+    zip.task.next(indexerProof.task)
 
-    indexer.task.next(notification.task)
+    indexerProof.task.next(copier.task)
+
+    copier.task.next(indexerPublish.task)
+
+    indexerPublish.task.next(notification.task)
 
     notification.task.next(new sfn.Succeed(scope, 'successfully-archived'))
 
