@@ -56,9 +56,6 @@ type CrosswordArticleOverrides = Pick<
 > &
     Pick<CrosswordArticle, 'crossword'>
 
-const shouldHaveSolution = (type: CrosswordType) =>
-    ![CrosswordType.EVERYMAN, CrosswordType.PRIZE].includes(type)
-
 const removeSolutionsFromEntries = (entries: Crossword['entries']) =>
     entries.map(omit(['solution']))
 
@@ -66,7 +63,11 @@ export const patchCrossword = (
     crossword: Crossword,
     type: CrosswordType,
 ): Crossword => {
-    const solutionAvailable = shouldHaveSolution(crossword.type)
+    const timeNow = new Date().getTime()
+    const solutionAvailable =
+        !crossword.dateSolutionAvailable ||
+        crossword.dateSolutionAvailable.dateTime < timeNow
+
     return {
         ...crossword,
         // the original type was a number from the CAPI thrift definition here
