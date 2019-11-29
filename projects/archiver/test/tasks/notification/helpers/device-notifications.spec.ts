@@ -2,7 +2,7 @@ import {
     scheduleDeviceNotificationIfEligibleInternal,
     IssueNotificationData,
     ScheduleDeviceNotificationInput,
-} from './device-notifications'
+} from '../../../../src/tasks/notification/helpers/device-notifications'
 
 const apiCfg = {
     domain: 'http://example.com',

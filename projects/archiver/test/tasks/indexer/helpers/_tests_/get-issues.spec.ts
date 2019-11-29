@@ -1,4 +1,4 @@
-import { issueWindow } from '../get-issues'
+import { issueWindow } from '../../../../../src/tasks/indexer/helpers/get-issues'
 
 describe('issueWindow', () => {
     it('should sort issues', () => {

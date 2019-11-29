@@ -1,5 +1,5 @@
-import { getPublishedVersionInternal } from './get-published-version'
-import { IssuePublicationWithStatus } from '../../../services/status'
+import { getPublishedVersionInternal } from '../../../../src/tasks/indexer/helpers/get-published-version'
+import { IssuePublicationWithStatus } from '../../../../src/services/status'
 import { IssueIdentifier } from '../../../../common'
 import moment = require('moment')
 

@@ -1,5 +1,5 @@
-import { internalHandler, Record, InvokerDependencies } from '.'
-import { GetS3ObjParams } from '../utils/s3'
+import { internalHandler, Record, InvokerDependencies } from '../../src/invoke'
+import { GetS3ObjParams } from '../../src/utils/s3'
 import {
     withFailureMessage,
     failure,
