@@ -9,7 +9,7 @@ export const sportScoreStyles = (
     config: CssProps,
 ) => css`
     .sport-score {
-        font-family: ${families.icon.regular};
+        font-family: ${families.text.regular};
         background-color: ${color.palette.highlight.main};
         padding: 0 ${px(metrics.horizontal / 3)} ${px(7)};
         line-height: 1;

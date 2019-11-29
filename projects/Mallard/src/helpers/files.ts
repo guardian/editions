@@ -61,7 +61,6 @@ export const downloadNamedIssueArchive = async (
     const returnable = RNFetchBlob.config({
         fileCache: true,
         overwrite: true,
-        IOSBackgroundTask: true,
     }).fetch('GET', zipUrl)
     return {
         promise: returnable.then(async res => {
