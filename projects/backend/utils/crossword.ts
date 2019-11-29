@@ -63,10 +63,11 @@ export const patchCrossword = (
     crossword: Crossword,
     type: CrosswordType,
 ): Crossword => {
-    const timeNow = new Date().getTime()
+    const oneDay = 24 * 60 * 60 * 1000
+    const thisTimeTomorrow = new Date().getTime() + oneDay
     const solutionAvailable =
         !crossword.dateSolutionAvailable ||
-        crossword.dateSolutionAvailable.dateTime < timeNow
+        crossword.dateSolutionAvailable.dateTime < thisTimeTomorrow
 
     return {
         ...crossword,
