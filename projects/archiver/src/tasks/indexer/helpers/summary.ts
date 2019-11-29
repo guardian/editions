@@ -27,7 +27,7 @@ export const getOtherRecentIssues = (
 ): IssueIdentifier[] => {
     validate(allEditionIssues, currentlyPublishing.edition)
 
-    const recentIssues = issueWindow(allEditionIssues, 7)
+    const recentIssues = issueWindow(allEditionIssues, 30)
 
     // filter out the one we are currently publishing
     const otherRecentIssues = recentIssues.filter(
