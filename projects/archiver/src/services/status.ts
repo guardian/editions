@@ -1,4 +1,4 @@
-import { s3, Bucket, listNestedPrefixes, upload } from '../utils/s3'
+import {s3, listNestedPrefixes, upload, getBucket} from '../utils/s3'
 import { IssuePublicationIdentifier, IssueIdentifier } from '../../common'
 import { getPublishedId, getLocalId } from '../utils/path-builder'
 import { oc } from 'ts-optchain'
@@ -11,6 +11,7 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
 export const publishedStatuses = [
     'bundled', // zip files built and uploaded
     'indexed', // index file generated
+    'copied', // index file generated
     'notified', // notification sent
 ] as const
 export const statuses = [
@@ -36,7 +37,8 @@ export const putStatus = (
     )
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status`
-    return upload(path, { status }, 'application/json', undefined)
+    const Bucket = getBucket('proof')
+    return upload(path, { status }, Bucket, 'application/json', undefined)
 }
 
 /* Given a published instance ID of an issue, return the instance status
@@ -47,6 +49,7 @@ const getStatus = async (
     console.log(`getStatus for ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     //get object
+    const Bucket = getBucket('proof')
     const response = await s3
         .getObject({ Bucket, Key: `${publishedId}/status` })
         .promise()
@@ -86,6 +89,7 @@ const getVersions = async (
 ): Promise<IssuePublicationIdentifier[]> => {
     console.log(`getVersions for ${JSON.stringify(issue)}`)
     const root = getLocalId(issue)
+    const Bucket = getBucket('proof')
     const versions = await listNestedPrefixes(Bucket, root)
     return versions.map(version => ({
         ...issue,

@@ -30,7 +30,15 @@ export const s3 = new S3({
     region: 'eu-west-1',
 })
 
-export const Bucket = process.env.bucket || 'editions-store-code'
+export const getBucket = (bucket: string): string => {
+    if (bucket === 'proof')
+        return process.env.proofBucket || 'editions-store-code'
+    if (bucket === 'publish')
+        return process.env.publishBucket || 'editions-store-code'
+    return 'editions-store-code'
+}
+
+// export const Bucket = process.env.proofBucket || 'editions-store-code'
 
 const addDelimiterIfNotPresent = (prefix: string): string => {
     if (prefix.endsWith('/')) {
@@ -90,10 +98,12 @@ export const FIVE_SECONDS = 5
 export const upload = (
     key: string,
     body: {} | Buffer,
+    bucket: string,
     mime: 'image/jpeg' | 'application/json' | 'application/zip',
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
+        const Bucket = getBucket(bucket)
         s3.upload(
             {
                 Body: body instanceof Buffer ? body : JSON.stringify(body),
@@ -114,6 +124,61 @@ export const upload = (
                 }
                 console.log(`${data.Key} uploaded to ${data.Bucket}`)
                 resolve({ etag: data.ETag })
+            },
+        )
+    })
+}
+
+export const list = (
+    inputBucket: string,
+    baseKey: string,
+): Promise<{ objects: Record<string, any>[] }> => {
+    return new Promise((resolve, reject) => {
+        s3.listObjects(
+            {
+                Bucket: inputBucket,
+                Delimiter: '/',
+                Prefix: baseKey,
+            },
+            function(err, data) {
+                if (err) {
+                    console.error(
+                        `S3 listing of s3://${inputBucket}/${baseKey} failed with`,
+                        err,
+                    )
+                    reject()
+                    return
+                }
+                console.log(`Keys below ${baseKey} fetched from ${inputBucket}`)
+                resolve({ objects: data.Contents || [] })
+            },
+        )
+    })
+}
+
+export const copy = (
+    key: string,
+    inputBucket: string,
+    outputBucket: string,
+): Promise<{}> => {
+    return new Promise((resolve, reject) => {
+        s3.copyObject(
+            {
+                Bucket: '',
+                CopySource: '',
+                Key: `${key}`,
+            },
+            (err, data) => {
+                if (err) {
+                    console.error(
+                        `S3 copy of s3://${inputBucket}/${key} to s3://${outputBucket}/${key}  failed with`,
+                        err,
+                    )
+                    reject()
+                    return
+                }
+                console.log(`${key} copied to ${outputBucket}`)
+                resolve({})
             },
         )
     })
