@@ -4,7 +4,7 @@
     "main": "main.js",
     "license": "MIT",
     "engines": {
-        "node": "10.15"
+        "node": "^10.15"
     },
     "devDependencies": {
         "@types/archiver": "^3.0.0",
