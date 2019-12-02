@@ -61,11 +61,21 @@ export const archiverStepFunction = (
 
     const zip = task(scope, 'zip', 'Make issue bundle', lambdaParams)
 
-    const indexerProof = task(scope, 'indexerProof', 'Generate Index', lambdaParams)
+    const indexerProof = task(
+        scope,
+        'indexerProof',
+        'Generate Index',
+        lambdaParams,
+    )
 
     const copier = task(scope, 'copier', 'Copy Issue', lambdaParams)
 
-    const indexerPublish = task(scope, 'indexerPublish', 'Generate Index', lambdaParams)
+    const indexerPublish = task(
+        scope,
+        'indexerPublish',
+        'Generate Index',
+        lambdaParams,
+    )
 
     const notification = task(
         scope,
