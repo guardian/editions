@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda'
 import { IssueSummary, issueSummarySort } from '../../../common'
 import { getIssueSummary } from './helpers/get-issue-summary'
 import { getOtherIssuesSummariesForEdition } from './helpers/summary'
-import { upload, FIVE_SECONDS, getBucket} from '../../utils/s3'
+import { upload, FIVE_SECONDS, getBucket } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
 

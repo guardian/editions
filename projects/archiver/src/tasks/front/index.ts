@@ -11,7 +11,7 @@ import {
 } from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
 import { getFront } from '../../utils/backend-client'
-import {getBucket, ONE_WEEK, upload} from '../../utils/s3'
+import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
 import { IssueParams } from '../issue'
 import {
     getAndUploadImageUse,

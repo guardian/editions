@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { issuePath } from '../../../common'
 import { handleAndNotify } from '../../services/task-handler'
-import {getBucket, ONE_WEEK, upload} from '../../utils/s3'
+import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
 import { IssueTaskOutput } from '../issue'
 
 type UploadTaskInput = IssueTaskOutput
