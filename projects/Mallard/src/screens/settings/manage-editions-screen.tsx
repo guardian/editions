@@ -19,10 +19,10 @@ const ManageEditionsScreen = () => {
                             onPress: () => {
                                 Alert.alert(
                                     'Are you sure you want to delete all downloads?',
-                                    'You wil still be able to access them and download them again',
+                                    'You will still be able to access them and download them again',
                                     [
                                         {
-                                            text: 'Ok',
+                                            text: 'Delete',
                                             style: 'destructive',
                                             onPress: deleteIssueFiles,
                                         },
