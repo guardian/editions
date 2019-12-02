@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { StyleSheet, Share } from 'react-native'
+import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
 import { useArticle } from 'src/hooks/use-article'
@@ -12,6 +12,7 @@ import {
     Content,
     GalleryArticle,
 } from 'src/common'
+import DeviceInfo from 'react-native-device-info'
 
 const styles = StyleSheet.create({
     block: {
@@ -28,8 +29,12 @@ const styles = StyleSheet.create({
         /*
         The below line fixes crashes on Android
         https://github.com/react-native-community/react-native-webview/issues/429
+        Bug is only in Android 9
         */
-        opacity: 0.99,
+        opacity:
+            DeviceInfo.getSystemVersion() === '9.0' && Platform.OS === 'android'
+                ? 0.99
+                : 1,
     },
 })
 

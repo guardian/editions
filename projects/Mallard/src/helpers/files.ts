@@ -357,6 +357,7 @@ export const fetchAndStoreIssueSummary = async () => {
     return RNFetchBlob.config({
         overwrite: true,
         path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
+        IOSBackgroundTask: true,
     })
         .fetch('GET', apiUrl + 'issues', {
             'Content-Type': 'application/json',
