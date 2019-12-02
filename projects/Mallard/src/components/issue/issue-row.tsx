@@ -28,7 +28,6 @@ import { fetch } from 'src/hooks/use-net-info'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
-import { HeadlineText } from '../styled-text'
 
 import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
 import { Front, IssueWithFronts } from '../../../../Apps/common/src'
