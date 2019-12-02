@@ -33,6 +33,7 @@ describe('state machine invoker', () => {
 
         const testDependencies: InvokerDependencies = {
             stateMachineInvoke: invokeStateMachineAllwaysSuccess,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             s3fetch: (params: GetS3ObjParams) => {
                 return Promise.resolve(obejctsContentsInput)
             },
@@ -45,11 +46,11 @@ describe('state machine invoker', () => {
             version: '2019-10-04T16:08:35.951Z',
             issueDate: '2019-10-09',
         }
-        const expecetd = [
+        const expected = [
             `✅ Invocation of ${JSON.stringify(issueExpected)} succeeded.`,
         ]
 
-        expect(actual).toStrictEqual(expecetd)
+        expect(actual).toStrictEqual(expected)
     })
 
     it('should thorw error when no state machine invocation were made', async () => {
@@ -64,6 +65,7 @@ describe('state machine invoker', () => {
 
         const testDependencies: InvokerDependencies = {
             stateMachineInvoke: invokeStateMachineAllwaysFails,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             s3fetch: (params: GetS3ObjParams) => {
                 return Promise.resolve(obejctsContentsInput)
             },

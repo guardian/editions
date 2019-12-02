@@ -9,6 +9,7 @@ const apiCfg = {
     apiKey: 'some.key',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stub = async (input: ScheduleDeviceNotificationInput) => {
     return { statusCode: 200, statusText: 'success' }
 }

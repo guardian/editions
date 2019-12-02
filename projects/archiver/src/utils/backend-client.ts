@@ -1,6 +1,5 @@
 import fetch from 'node-fetch'
 import {
-    mediaPath,
     issuePath,
     frontPath,
     Issue,

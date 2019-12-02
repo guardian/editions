@@ -168,6 +168,7 @@ export const copy = (
                 CopySource: '',
                 Key: `${key}`,
             },
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (err, data) => {
                 if (err) {
                     console.error(
