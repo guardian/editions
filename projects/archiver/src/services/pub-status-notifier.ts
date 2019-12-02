@@ -4,7 +4,7 @@ import { IssuePublicationIdentifier, Edition } from '../../common'
 import { Status } from '../services/status'
 import { Moment } from 'moment'
 
-export type ToolStatus = 'Processing' | 'Published' | 'Failed'
+export type ToolStatus = 'Processing' | 'Published' | 'Failed' | 'Copied'
 
 export interface PublishEvent {
     edition: Edition
@@ -65,6 +65,13 @@ export const createPublishEvent = (
             return {
                 ...identifier,
                 status: 'Published',
+                message: 'Publication processing complete',
+                timestamp,
+            }
+        case 'copied':
+            return {
+                ...identifier,
+                status: 'Copied',
                 message: 'Publication processing complete',
                 timestamp,
             }
