@@ -46,8 +46,6 @@ const authWithDeepRedirect = async (
         const unlisteners: (() => void)[] = []
 
         const onFinish = async (url?: string) => {
-            console.warn('finish: ' + url)
-
             inAppBrowserImpl.close()
 
             let unlistener
@@ -67,8 +65,6 @@ const authWithDeepRedirect = async (
         }
 
         const runExternalBrowserDeepLink = () => {
-            console.warn('external')
-
             const unlistenLink = addListener(
                 linkingImpl,
                 'url',
@@ -98,53 +94,23 @@ const authWithDeepRedirect = async (
             linkingImpl.openURL(authUrl)
         }
 
-        if (await inAppBrowserImpl.isAvailable()) {
-            let result
-            try {
-                result = await inAppBrowserImpl.openAuth(authUrl, deepLink, {
-                    // iOS Properties
-                    dismissButtonStyle: 'cancel',
-                    // Android Properties
-                    showTitle: false,
-                    enableUrlBarHiding: true,
-                    enableDefaultShare: true,
-                })
-            } catch {
-                runExternalBrowserDeepLink()
-                return
-            }
-            if (result.type === 'success') {
-                onFinish((result as RedirectResult).url)
-            } else {
-                onFinish()
-            }
-
-            // switch (result.type) {
-            //     case 'cancel': {
-            //         /**
-            //          * this was a user cancel so reject the promise
-            //          */
-            //         onFinish()
-            //         break
-            //     }
-            //     case 'dismiss': {
-            //         /**
-            //          * the assumption here is that a dismiss event happens when a deep link
-            //          * happens or some other non-user cirucmstance.
-            //          *
-            //          * On iOS, if this was a deep link then the link handler above should already have fired
-            //          * and resolved / rejected this promise (making the rest of thie code a noop).
-            //          * However, this isn't the case on Android. Also if it _wan't_ a deep link then
-            //          * we should clean up.
-            //          *
-            //          * Hence a second for other handlers to fire before rejecting the promise
-            //          */
-            //         setTimeout(() => onFinish(), 1000)
-            //         break
-            //     }
-            // }
-        } else {
+        if (!(await inAppBrowserImpl.isAvailable())) {
             runExternalBrowserDeepLink()
+            return
+        }
+
+        const result = await inAppBrowserImpl.openAuth(authUrl, deepLink, {
+            // iOS Properties
+            dismissButtonStyle: 'cancel',
+            // Android Properties
+            showTitle: false,
+            enableUrlBarHiding: true,
+            enableDefaultShare: true,
+        })
+        if (result.type === 'success') {
+            onFinish((result as RedirectResult).url)
+        } else {
+            onFinish()
         }
     })
 }
