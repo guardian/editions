@@ -63,7 +63,7 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="fb180444840287" />
+            <data android:scheme="fb528503751025697" />
         </intent-filter>
         <!-- Debug Google oAuth URI scheme -->
         <intent-filter>
