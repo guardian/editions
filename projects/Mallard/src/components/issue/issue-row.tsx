@@ -12,7 +12,7 @@ import {
 } from 'src/components/issue/issue-title'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import {
     DLStatus,
@@ -34,9 +34,13 @@ import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
 import { Front, IssueWithFronts } from '../../../../Apps/common/src'
 import { getColor } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
 
-export const ISSUE_ROW_HEADER_HEIGHT = 68
-export const ISSUE_FRONT_ROW_HEIGHT = 40
+const FRONT_TITLE_FONT = getFont('headline', 0.75, 'bold')
+const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
+
+export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
+export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.7
 
 const styles = StyleSheet.create({
     frontsSelector: {
@@ -50,9 +54,17 @@ const styles = StyleSheet.create({
         height: ISSUE_FRONT_ROW_HEIGHT,
     },
     frontTitle: {
-        paddingVertical: metrics.vertical * 0.7,
+        height: '100%',
+        flexDirection: 'row',
+        alignContent: 'center',
+        alignItems: 'center',
         paddingHorizontal: metrics.horizontal,
     },
+    frontTitleText: {
+        flexShrink: 0,
+        ...FRONT_TITLE_FONT,
+    },
+
     frontSeparator: {
         height: 1,
         backgroundColor: color.line,
@@ -164,13 +176,15 @@ const IssueFrontRow = React.memo(
                 <View style={styles.frontTitleWrap}>
                     <Highlight onPress={onPress}>
                         <View style={styles.frontTitle}>
-                            <HeadlineText
-                                weight="bold"
-                                style={{ color: textColor }}
+                            <Text
+                                style={[
+                                    styles.frontTitleText,
+                                    { color: textColor },
+                                ]}
                                 numberOfLines={1}
                             >
                                 {front.displayName}
-                            </HeadlineText>
+                            </Text>
                         </View>
                     </Highlight>
                 </View>
