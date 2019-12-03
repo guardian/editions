@@ -21,7 +21,6 @@ export class EditionsStack extends cdk.Stack {
         const frontsStageParameter = new cdk.CfnParameter(this, 'frontsStage', {
             type: 'String',
             description: 'Which stage of fronts to read from',
-            default: 'prod',
         })
 
         const stageParameter = new cdk.CfnParameter(this, 'stage', {
