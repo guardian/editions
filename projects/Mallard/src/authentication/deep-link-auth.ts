@@ -92,7 +92,6 @@ const authWithDeepRedirect = async (
             unlisteners.push(unlistenAppState)
             // open in the browser if in app browsers are not supported
             linkingImpl.openURL(authUrl)
-            console.warn('hello')
         }
 
         if (!(await inAppBrowserImpl.isAvailable())) {
