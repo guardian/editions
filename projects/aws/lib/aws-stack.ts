@@ -21,6 +21,7 @@ export class EditionsStack extends cdk.Stack {
         const frontsStageParameter = new cdk.CfnParameter(this, 'frontsStage', {
             type: 'String',
             description: 'Which stage of fronts to read from',
+            allowedValues: ['prod', 'code'],
         })
 
         const stageParameter = new cdk.CfnParameter(this, 'stage', {
@@ -77,11 +78,7 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Archive Bucket',
-                allowedValues: [
-                    'editions-store',
-                    'editions-store-prod',
-                    'editions-store-code',
-                ], //remove editions-store post merge
+                allowedValues: ['editions-store-prod', 'editions-store-code'],
             },
         )
 
