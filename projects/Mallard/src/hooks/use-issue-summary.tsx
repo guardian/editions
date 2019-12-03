@@ -49,8 +49,8 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         getIssueSummary(isConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
-                setIssueId(issueSummaryToLatestPath(issueSummary))
                 setError('')
+                return issueSummary
             })
             .catch(e => {
                 setError(e.message)
@@ -71,7 +71,10 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             if (appState === 'active') {
                 const { isConnected } = await NetInfo.fetch()
                 if (isConnected) {
-                    grabIssueSummary(isConnected)
+                    const issueSummary = await grabIssueSummary(isConnected)
+                    if (issueSummary != null) {
+                        setIssueId(issueSummaryToLatestPath(issueSummary))
+                    }
                 } else {
                     // now we've foregrounded again, wait for a new issue list
                     // seen as we couldn't get one now
