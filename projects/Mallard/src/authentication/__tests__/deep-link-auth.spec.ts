@@ -1,6 +1,6 @@
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { EventEmitter } from 'events'
-import { BrowserResult } from 'react-native-inappbrowser-reborn'
+import { RedirectResult } from 'react-native-inappbrowser-reborn'
 
 const createListener = (): EventEmitter & {
     addEventListener: EventEmitter['addListener']
@@ -15,22 +15,24 @@ const createListener = (): EventEmitter & {
 const createInAppBrowser = ({
     available = true,
     resultType,
+    url,
 }: {
     available?: boolean
-    resultType?: 'cancel' | 'dismiss'
+    resultType?: 'cancel' | 'dismiss' | 'success'
+    url?: string
 } = {}) => ({
-    open: () =>
-        new Promise<BrowserResult>(
-            res => resultType && res({ type: resultType }),
+    openAuth: () =>
+        new Promise<RedirectResult>(
+            res => resultType && res({ type: resultType, url } as any),
         ),
-    close: jest.fn(() => {}),
+    closeAuth: jest.fn(() => {}),
     isAvailable: () => Promise.resolve(available),
 })
 
 describe('deep-link-auth', () => {
     describe('authWithDeepRedirect', () => {
         describe('external link', () => {
-            it('waits for a deep link with a token before resolving', async () => {
+            it.only('waits for a deep link with a token before resolving', async () => {
                 const linking = Object.assign(createListener(), {
                     openURL: () => {},
                 })
@@ -39,6 +41,7 @@ describe('deep-link-auth', () => {
 
                 const promise = authWithDeepRedirect(
                     'https://authurl.com/auth',
+                    'myurl',
                     validator,
                     linking,
                     appState,

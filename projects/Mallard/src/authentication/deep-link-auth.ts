@@ -23,7 +23,7 @@ type ILinking = Emitter<{ url: string }> & {
 
 type IInAppBrowser = Pick<
     typeof InAppBrowser,
-    'openAuth' | 'closeAuth' | 'close' | 'open' | 'isAvailable'
+    'openAuth' | 'closeAuth' | 'isAvailable'
 >
 
 /**
@@ -46,7 +46,7 @@ const authWithDeepRedirect = async (
         const unlisteners: (() => void)[] = []
 
         const onFinish = async (url?: string) => {
-            inAppBrowserImpl.close()
+            inAppBrowserImpl.closeAuth()
 
             let unlistener
             while ((unlistener = unlisteners.pop())) {
@@ -92,6 +92,7 @@ const authWithDeepRedirect = async (
             unlisteners.push(unlistenAppState)
             // open in the browser if in app browsers are not supported
             linkingImpl.openURL(authUrl)
+            console.warn('hello')
         }
 
         if (!(await inAppBrowserImpl.isAvailable())) {
