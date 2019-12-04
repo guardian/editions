@@ -294,8 +294,10 @@ export const clearOldIssues = async (): Promise<void> => {
         issue =>
             !lastSevenDays()
                 .map(withPathPrefix(defaultSettings.contentPrefix))
-                .includes(issue) && issue !== 'issues',
+                .includes(issue) &&
+            issue !== `${defaultSettings.contentPrefix}/issues`,
     )
+    console.log(issuesToDelete)
 
     return Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
         .then(() =>
