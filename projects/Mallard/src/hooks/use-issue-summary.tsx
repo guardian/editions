@@ -56,19 +56,19 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
                 setError(e.message)
             })
 
-    const grabIssueAndSetLatest = async () => {
-        const { isConnected } = await NetInfo.fetch()
-        const issueSummary = await grabIssueSummary(isConnected)
-        if (issueSummary != null) {
-            setIssueId(issueSummaryToLatestPath(issueSummary))
-        } else {
-            // now we've foregrounded again, wait for a new issue list
-            // seen as we couldn't get one now
-            hasConnected.current = false
-        }
-    }
-
     useEffect(() => {
+        const grabIssueAndSetLatest = async () => {
+            const { isConnected } = await NetInfo.fetch()
+            const issueSummary = await grabIssueSummary(isConnected)
+            if (issueSummary != null) {
+                setIssueId(issueSummaryToLatestPath(issueSummary))
+            } else {
+                // now we've foregrounded again, wait for a new issue list
+                // seen as we couldn't get one now
+                hasConnected.current = false
+            }
+        }
+
         // On mount there is no issueId, so set it to latest
         if (!issueId) {
             grabIssueAndSetLatest()
@@ -89,7 +89,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
                 grabIssueAndSetLatest()
             }
         })
-    }, [])
+    }, [issueId])
 
     return (
         <IssueSummaryContext.Provider
