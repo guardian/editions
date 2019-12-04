@@ -1,6 +1,6 @@
 import BackgroundFetch from 'react-native-background-fetch'
 import { pushTracking } from './push-tracking'
-import { clearAndDownloadIssue } from './download-todays-issue'
+import { clearAndDownloadIssue } from './clear-download-issue'
 
 const pushDownloadFailsafe = () => {
     BackgroundFetch.configure(

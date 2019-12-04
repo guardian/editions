@@ -7,8 +7,6 @@ const clearAndDownloadIssue = async () => {
     const weOk = await fetchCacheClear()
     if (weOk) {
         return await downloadTodaysIssue()
-    } else {
-        return Promise.resolve()
     }
 }
 
