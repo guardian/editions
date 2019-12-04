@@ -120,7 +120,7 @@ export type DLStatus =
 
 const deleteIssue = (localId: string): Promise<void> => {
     const promise = RNFetchBlob.fs
-        .unlink(FSPaths.issue(localId))
+        .unlink(FSPaths.issueRoot(localId))
         .catch(e => errorService.captureException(e))
     promise.then(() => localIssueListStore.remove(localId))
     return promise
@@ -287,10 +287,8 @@ export const getLocalIssues = () =>
         .ls(FSPaths.contentPrefixDir)
         .then(files => files.map(withPathPrefix(defaultSettings.contentPrefix)))
 
-export const clearOldIssues = async (): Promise<void> => {
-    const files = await getLocalIssues()
-
-    const issuesToDelete = files.filter(
+export const issuesToDelete = (files: string[]) =>
+    files.filter(
         issue =>
             !lastSevenDays()
                 .map(withPathPrefix(defaultSettings.contentPrefix))
@@ -298,7 +296,12 @@ export const clearOldIssues = async (): Promise<void> => {
             issue !== `${defaultSettings.contentPrefix}/issues`,
     )
 
-    return Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
+export const clearOldIssues = async (): Promise<void> => {
+    const files = await getLocalIssues()
+
+    const iTD: string[] = issuesToDelete(files)
+
+    return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
         .then(() =>
             sendComponentEvent({
                 componentType: ComponentType.appVideo,
