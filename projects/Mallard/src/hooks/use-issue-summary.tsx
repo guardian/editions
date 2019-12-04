@@ -56,22 +56,16 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
                 setError(e.message)
             })
 
-    const checkAndSetId = async () => {
-        const { isConnected } = await NetInfo.fetch()
-        if (isConnected) {
-            const issueSummary = await grabIssueSummary(isConnected)
-            if (issueSummary != null) {
-                setIssueId(issueSummaryToLatestPath(issueSummary))
-            }
-        } else {
-            // now we've foregrounded again, wait for a new issue list
-            // seen as we couldn't get one now
-            hasConnected.current = false
-        }
-    }
-
     useEffect(() => {
-        checkAndSetId()
+        if (!issueId) {
+            ;(async () => {
+                const { isConnected } = await NetInfo.fetch()
+                const issueSummary = await grabIssueSummary(isConnected)
+                if (issueSummary != null) {
+                    setIssueId(issueSummaryToLatestPath(issueSummary))
+                }
+            })()
+        }
 
         NetInfo.addEventListener(({ isConnected }) => {
             // try and get a fresh summary until we made it to online
@@ -85,7 +79,17 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         AppState.addEventListener('change', async appState => {
             // when we foreground have another go at fetching again
             if (appState === 'active') {
-                checkAndSetId()
+                const { isConnected } = await NetInfo.fetch()
+                if (isConnected) {
+                    const issueSummary = await grabIssueSummary(isConnected)
+                    if (issueSummary != null) {
+                        setIssueId(issueSummaryToLatestPath(issueSummary))
+                    }
+                } else {
+                    // now we've foregrounded again, wait for a new issue list
+                    // seen as we couldn't get one now
+                    hasConnected.current = false
+                }
             }
         })
     }, [])
