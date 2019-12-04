@@ -56,15 +56,22 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
                 setError(e.message)
             })
 
+    const grabIssueAndSetLatest = async () => {
+        const { isConnected } = await NetInfo.fetch()
+        const issueSummary = await grabIssueSummary(isConnected)
+        if (issueSummary != null) {
+            setIssueId(issueSummaryToLatestPath(issueSummary))
+        } else {
+            // now we've foregrounded again, wait for a new issue list
+            // seen as we couldn't get one now
+            hasConnected.current = false
+        }
+    }
+
     useEffect(() => {
+        // On mount there is no issueId, so set it to latest
         if (!issueId) {
-            ;(async () => {
-                const { isConnected } = await NetInfo.fetch()
-                const issueSummary = await grabIssueSummary(isConnected)
-                if (issueSummary != null) {
-                    setIssueId(issueSummaryToLatestPath(issueSummary))
-                }
-            })()
+            grabIssueAndSetLatest()
         }
 
         NetInfo.addEventListener(({ isConnected }) => {
@@ -79,17 +86,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         AppState.addEventListener('change', async appState => {
             // when we foreground have another go at fetching again
             if (appState === 'active') {
-                const { isConnected } = await NetInfo.fetch()
-                if (isConnected) {
-                    const issueSummary = await grabIssueSummary(isConnected)
-                    if (issueSummary != null) {
-                        setIssueId(issueSummaryToLatestPath(issueSummary))
-                    }
-                } else {
-                    // now we've foregrounded again, wait for a new issue list
-                    // seen as we couldn't get one now
-                    hasConnected.current = false
-                }
+                grabIssueAndSetLatest()
             }
         })
     }, [])
