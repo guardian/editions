@@ -297,7 +297,6 @@ export const clearOldIssues = async (): Promise<void> => {
                 .includes(issue) &&
             issue !== `${defaultSettings.contentPrefix}/issues`,
     )
-    console.log(issuesToDelete)
 
     return Promise.all(issuesToDelete.map(issue => deleteIssue(issue)))
         .then(() =>
