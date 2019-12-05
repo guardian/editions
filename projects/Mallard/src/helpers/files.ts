@@ -333,7 +333,7 @@ export const downloadTodaysIssue = async () => {
         // Only download it if its not on the device
         if (!isTodaysIssueOnDevice) {
             const imageSize = await imageForScreenSize()
-            downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+            return downloadAndUnzipIssue(todaysIssueSummary, imageSize)
         }
     } catch (e) {
         console.log(`Unable to download todays issue: ${e.message}`)
