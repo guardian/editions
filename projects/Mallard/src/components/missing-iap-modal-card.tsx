@@ -17,7 +17,7 @@ const MissingIAPModalCard = ({
         title={title}
         subtitle={subtitle}
         appearance={CardAppearance.blue}
-        size="medium"
+        size="small"
         onDismissThisCard={() => {
             close()
         }}

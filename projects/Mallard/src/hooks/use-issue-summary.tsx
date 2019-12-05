@@ -49,14 +49,31 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         getIssueSummary(isConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
-                setIssueId(issueSummaryToLatestPath(issueSummary))
                 setError('')
+                return issueSummary
             })
             .catch(e => {
                 setError(e.message)
             })
 
     useEffect(() => {
+        const grabIssueAndSetLatest = async () => {
+            const { isConnected } = await NetInfo.fetch()
+            const issueSummary = await grabIssueSummary(isConnected)
+            if (issueSummary != null) {
+                setIssueId(issueSummaryToLatestPath(issueSummary))
+            } else {
+                // now we've foregrounded again, wait for a new issue list
+                // seen as we couldn't get one now
+                hasConnected.current = false
+            }
+        }
+
+        // On mount there is no issueId, so set it to latest
+        if (!issueId) {
+            grabIssueAndSetLatest()
+        }
+
         NetInfo.addEventListener(({ isConnected }) => {
             // try and get a fresh summary until we made it to online
             if (!hasConnected.current) {
@@ -69,17 +86,10 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         AppState.addEventListener('change', async appState => {
             // when we foreground have another go at fetching again
             if (appState === 'active') {
-                const { isConnected } = await NetInfo.fetch()
-                if (isConnected) {
-                    grabIssueSummary(isConnected)
-                } else {
-                    // now we've foregrounded again, wait for a new issue list
-                    // seen as we couldn't get one now
-                    hasConnected.current = false
-                }
+                grabIssueAndSetLatest()
             }
         })
-    }, [])
+    }, [issueId])
 
     return (
         <IssueSummaryContext.Provider
