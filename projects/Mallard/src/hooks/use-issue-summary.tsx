@@ -35,7 +35,9 @@ const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
         ? await fetchAndStoreIssueSummary()
         : await readIssueSummary()
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
-    return issueSummary.slice(0, maxAvailableEditions)
+    const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
+    console.log('trimmedSummary', trimmedSummary)
+    return trimmedSummary
 }
 
 const issueSummaryToLatestPath = (
@@ -60,7 +62,9 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         `,
     )
 
-    const grabIssueSummary = (hasConnected: boolean) => {
+    const maxAvailableEditions = data && data.maxAvailableEditions
+
+    const grabIssueSummary = (hasConnected: boolean) =>
         getIssueSummary(hasConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
@@ -70,7 +74,6 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             .catch(e => {
                 setError(e.message)
             })
-    }
 
     useEffect(() => {
         const grabIssueAndSetLatest = async () => {
@@ -99,13 +102,16 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             }
         })
 
-        AppState.addEventListener('change', async appState => {
-            // when we foreground have another go at fetching again
-            if (appState === 'active') {
-                grabIssueAndSetLatest()
-            }
-        })
-    }, [issueId])
+        AppState.addEventListener(
+            'change',
+            async (appState: AppStateStatus) => {
+                // when we foreground have another go at fetching again
+                if (appState === 'active') {
+                    grabIssueAndSetLatest()
+                }
+            },
+        )
+    }, [issueId, maxAvailableEditions])
 
     return (
         <IssueSummaryContext.Provider

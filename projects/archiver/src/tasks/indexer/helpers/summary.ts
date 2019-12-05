@@ -27,7 +27,7 @@ export const getOtherRecentIssues = (
 ): IssueIdentifier[] => {
     validate(allEditionIssues, currentlyPublishing.edition)
 
-    const recentIssues = issueWindow(allEditionIssues, 30)
+    const recentIssues = issueWindow(allEditionIssues, 7)
 
     // filter out the one we are currently publishing
     const otherRecentIssues = recentIssues.filter(
@@ -62,9 +62,7 @@ export const getOtherIssuesSummariesForEdition = async (
     const issuePublications = await Promise.all(
         otherRecentIssuesForEdition.map(getPublishedVersion),
     )
-    return (
-        await Promise.all(
-            issuePublications.filter(notNull).map(getIssueSummary),
-        )
-    ).filter(notNull)
+    return (await Promise.all(
+        issuePublications.filter(notNull).map(getIssueSummary),
+    )).filter(notNull)
 }

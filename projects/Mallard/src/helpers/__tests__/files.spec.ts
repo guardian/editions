@@ -2,32 +2,32 @@ import MockDate from 'mockdate'
 import {
     matchSummmaryToKey,
     downloadAndUnzipIssue,
-    DLStatus,
-    updateListeners,
+    // DLStatus,
+    // updateListeners,
     issuesToDelete,
 } from '../files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
-function createRunner(id: string) {
-    let resolve = () => {}
-    let reject = () => {}
+// function createRunner(id: string) {
+//     let resolve = () => {}
+//     let reject = () => {}
 
-    return {
-        runner: () =>
-            new Promise<void>((res, rej) => {
-                resolve = res
-                reject = rej
-            }),
-        update: (status: DLStatus) => {
-            updateListeners(id, status)
-            if (status.type === 'success') {
-                resolve()
-            } else if (status.type === 'failure') {
-                reject()
-            }
-        },
-    }
-}
+//     return {
+//         runner: () =>
+//             new Promise<void>((res, rej) => {
+//                 resolve = res
+//                 reject = rej
+//             }),
+//         update: (status: DLStatus) => {
+//             updateListeners(id, status)
+//             if (status.type === 'success') {
+//                 resolve()
+//             } else if (status.type === 'failure') {
+//                 reject()
+//             }
+//         },
+//     }
+// }
 
 const createIssueSummary = (localId: string) => ({
     key: 'de/1-1-1',
@@ -54,31 +54,31 @@ describe('helpers/files', () => {
     })
 
     describe('downloadAndUnzipIssue', () => {
-        // it('should resolve the outer promise when the download runner resolves', async () => {
-        //     const localId = '1'
-        //     const p = downloadAndUnzipIssue(
-        //         createIssueSummary(localId),
-        //         'phone',
-        //         () => {},
-        //         () => Promise.resolve(),
-        //         // the above promise is the main downloader that drives the outer promise
-        //         // and also updates the progress handler
-        //         // this is not part of the main API but passing it in tests is much easier than mocking
-        //         // all the downloads
-        //     )
-        //     await expect(p).resolves.toBeUndefined()
-        // })
-        // it('should not set any statuses without the passed promise calling an updater', async () => {
-        //     const updateStatus = jest.fn(() => {})
-        //     const p = downloadAndUnzipIssue(
-        //         createIssueSummary('1'),
-        //         'phone',
-        //         updateStatus,
-        //         () => Promise.resolve(),
-        //     )
-        //     expect(updateStatus).not.toHaveBeenCalled()
-        //     await p
-        // })
+        it('should resolve the outer promise when the download runner resolves', async () => {
+            const localId = '1'
+            const p = downloadAndUnzipIssue(
+                createIssueSummary(localId),
+                'phone',
+                () => {},
+                () => Promise.resolve(),
+                // the above promise is the main downloader that drives the outer promise
+                // and also updates the progress handler
+                // this is not part of the main API but passing it in tests is much easier than mocking
+                // all the downloads
+            )
+            await expect(p).resolves.toBeUndefined()
+        })
+        it('should not set any statuses without the passed promise calling an updater', async () => {
+            const updateStatus = jest.fn(() => {})
+            const p = downloadAndUnzipIssue(
+                createIssueSummary('1'),
+                'phone',
+                updateStatus,
+                () => Promise.resolve(),
+            )
+            expect(updateStatus).not.toHaveBeenCalled()
+            await p
+        })
         // it('should return existing download promises if they are unresolved when trying to download the same issue', async () => {
         //     const localId = '1'
         //     const p1 = downloadAndUnzipIssue(
@@ -97,30 +97,30 @@ describe('helpers/files', () => {
         //     expect(p1).toBe(p2)
         //     await Promise.all([p1, p2])
         // })
-        // it('should create new downloads when previous ones have finished', async () => {
-        //     const localId = '1'
-        //     const p1 = downloadAndUnzipIssue(
-        //         createIssueSummary(localId),
-        //         'phone',
-        //         () => {},
-        //         () => Promise.resolve(),
-        //     )
-        //     const p2 = downloadAndUnzipIssue(
-        //         createIssueSummary(localId),
-        //         'phone',
-        //         () => {},
-        //         () => Promise.resolve(),
-        //     )
-        //     await Promise.all([p1, p2])
-        //     const p3 = downloadAndUnzipIssue(
-        //         createIssueSummary(localId),
-        //         'phone',
-        //         () => {},
-        //         () => Promise.resolve(),
-        //     )
-        //     expect(p3).not.toBe(p2)
-        //     await p3
-        // })
+        it('should create new downloads when previous ones have finished', async () => {
+            const localId = '1'
+            const p1 = downloadAndUnzipIssue(
+                createIssueSummary(localId),
+                'phone',
+                () => {},
+                () => Promise.resolve(),
+            )
+            const p2 = downloadAndUnzipIssue(
+                createIssueSummary(localId),
+                'phone',
+                () => {},
+                () => Promise.resolve(),
+            )
+            await Promise.all([p1, p2])
+            const p3 = downloadAndUnzipIssue(
+                createIssueSummary(localId),
+                'phone',
+                () => {},
+                () => Promise.resolve(),
+            )
+            expect(p3).not.toBe(p2)
+            await p3
+        })
         // it('should still register update handlers to the existing download when returning the same download promise', async () => {
         //     let status1: DLStatus | null = null
         //     let status2: DLStatus | null = null
@@ -157,25 +157,25 @@ describe('helpers/files', () => {
 
     describe('issuesToDelete', () => {
         MockDate.set('2019-08-21')
-        it('should return items outside of the 7 days that dont follow the issue naming, or the issue index', () => {
+        it('should return items outside of the 7 days that dont follow the issue naming, or the issue index', async () => {
             const files = [
                 'daily-edition/issues',
                 'some-random-file',
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-14',
             ]
-            expect(issuesToDelete(files)).toEqual([
+            expect(await issuesToDelete(files)).toEqual([
                 'some-random-file',
                 'daily-edition/2019-08-14',
             ])
         })
 
-        it("should return an empty array if there isn't any to delete", () => {
+        it("should return an empty array if there isn't any to delete", async () => {
             const files = [
                 'daily-edition/2019-08-15',
                 'daily-edition/2019-08-16',
             ]
-            expect(issuesToDelete(files)).toEqual([])
+            expect(await issuesToDelete(files)).toEqual([])
         })
     })
 })

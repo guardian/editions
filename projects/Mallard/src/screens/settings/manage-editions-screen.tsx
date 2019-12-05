@@ -10,6 +10,7 @@ import {
     setWifiOnlyDownloads,
 } from 'src/helpers/settings/setters'
 import { WithAppAppearance } from 'src/theme/appearance'
+import { getIssueSummary } from 'src/hooks/use-issue-summary'
 
 const buttonStyles = StyleSheet.create({
     background: {
@@ -102,65 +103,59 @@ const ManageEditionsScreen = () => {
                         title: 'Delete all downloads',
                         explainer:
                             'All downloaded editions will be deleted from your device but will still be available to download',
-                        data: {
-                            onPress: () => {
-                                Alert.alert(
-                                    'Are you sure you want to delete all downloads?',
-                                    'You will still be able to access them and download them again',
-                                    [
-                                        {
-                                            text: 'Delete',
-                                            style: 'destructive',
-                                            onPress: deleteIssueFiles,
-                                        },
-                                        { text: 'Cancel', style: 'cancel' },
-                                    ],
-                                    { cancelable: false },
-                                )
-                            },
+                        onPress: () => {
+                            Alert.alert(
+                                'Are you sure you want to delete all downloads?',
+                                'You will still be able to access them and download them again',
+                                [
+                                    {
+                                        text: 'Delete',
+                                        style: 'destructive',
+                                        onPress: deleteIssueFiles,
+                                    },
+                                    { text: 'Cancel', style: 'cancel' },
+                                ],
+                                { cancelable: false },
+                            )
                         },
-
-                        ...(loading
-                            ? []
-                            : [
-                                  {
-                                      key: 'Wifi-only',
-                                      title: 'Wifi-only',
-                                      explainer:
-                                          'Editions will only be downloaded when wi-fi is available',
-                                      proxy: (
-                                          <Switch
-                                              value={data.wifiOnlyDownloads}
-                                              onValueChange={val =>
-                                                  setWifiOnlyDownloads(
-                                                      client,
-                                                      val,
-                                                  )
-                                              }
-                                          />
-                                      ),
-                                  },
-                                  {
-                                      key: 'Available editions',
-                                      title: 'Available editions',
-                                      explainer: (
-                                          <AvailableEditionsButtons
-                                              numbers={[7, 14, 30]}
-                                              isSelected={n =>
-                                                  n ===
-                                                  data.maxAvailableEditions
-                                              }
-                                              onPress={n =>
-                                                  setMaxAvailableEditions(
-                                                      client,
-                                                      n,
-                                                  )
-                                              }
-                                          />
-                                      ),
-                                  },
-                              ]),
                     },
+                    ...(loading
+                        ? []
+                        : [
+                              {
+                                  key: 'Wifi-only',
+                                  title: 'Wifi-only',
+                                  explainer:
+                                      'Editions will only be downloaded when wi-fi is available',
+                                  proxy: (
+                                      <Switch
+                                          value={data.wifiOnlyDownloads}
+                                          onValueChange={val =>
+                                              setWifiOnlyDownloads(client, val)
+                                          }
+                                      />
+                                  ),
+                              },
+                              {
+                                  key: 'Available editions',
+                                  title: 'Available editions',
+                                  explainer: (
+                                      <AvailableEditionsButtons
+                                          numbers={[7, 14, 30]}
+                                          isSelected={n =>
+                                              n === data.maxAvailableEditions
+                                          }
+                                          onPress={async n => {
+                                              await setMaxAvailableEditions(
+                                                  client,
+                                                  n,
+                                              )
+                                              getIssueSummary(false)
+                                          }}
+                                      />
+                                  ),
+                              },
+                          ]),
                 ]}
             />
         </WithAppAppearance>
