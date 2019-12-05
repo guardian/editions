@@ -78,10 +78,7 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Proof Archive Bucket',
-                allowedValues: [
-                    'editions-proof-prod',
-                    'editions-proof-code',
-                ], //remove editions-store post merge
+                allowedValues: ['editions-proof-prod', 'editions-proof-code'],
             },
         )
 
@@ -91,10 +88,7 @@ export class EditionsStack extends cdk.Stack {
             {
                 type: 'String',
                 description: 'Publish Archive Bucket',
-                allowedValues: [
-                    'editions-store-prod',
-                    'editions-store-code',
-                ], //remove editions-store post merge
+                allowedValues: ['editions-store-prod', 'editions-store-code'],
             },
         )
 
