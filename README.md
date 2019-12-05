@@ -63,3 +63,48 @@ This contains `common` which is the code shared between app and backends and `cr
 ### backend, archiver and aws
 
 These are deployed using [riffraff](https://riffraff.gutools.co.uk) as `editions`.
+
+## Complete Process Flow
+
+1) Editors open the Fronts tool and collate the content for an issue.
+1) Editors click 'Publish'
+1) The list of articles forming the content is written to a json file in a specific s3 bucket
+1) A policy on that bucket notifies a function running in AWS Lambda service
+1) That function (and a bunch of others that follow it) produces the entire issue content and write it to a different s3 bucket
+1) The download location of that content is added to an index file in that bucket
+1) The app is opened and fetches the index file
+1) The user chooses which issues they would like to have
+1) The app fetches those issues
+1) The user reads the paper, there is applause, fireworks, etc.
+
+## Notification Flow
+
+ * Fronts tool (aka facia-tool)  
+   * owned by the `cmsFronts` account, `facia-$STAGE` stack 
+
+writes to
+ 
+ * bucket `published-editions-$STAGE`
+   * owned by the `cmsFronts` account, `facia-db-$STAGE` stack
+
+which notifies
+
+ * the lambda specified in `EdtionsArchiverLambdaArn` (typo is correct) 
+   * owned by the `frontend` account, in the `editions-$STAGE` stack
+   * Currently this is:
+     * `arn:aws:lambda:eu-west-1:642631414762:function:editions-archiver-s3-event-listener-CODE`
+     * `arn:aws:lambda:eu-west-1:642631414762:function:editions-proof-archiver-s3-event-listener-CODE`
+   
+which kicks off the step function, which writes to
+
+ * the s3 bucket `editions-proof-$STAGE`
+   * owned by the `frontend` account, but not created via cloudformation
+   
+until the complete issue is ready to publish, when it is copied to 
+
+ * the s3 bucket `editions-store-$STAGE`
+   * owned by the `frontend` account, but not created via cloudformation
+
+NB This means that updates to the `editions-$STAGE` stack can imply that changes will need to be made
+in the `facia-db-$STAGE` stack.
+
