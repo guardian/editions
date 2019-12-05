@@ -2,51 +2,38 @@
 //
 // In this file, we'll be kicking off our app or storybook.
 
+import { ApolloProvider } from '@apollo/react-hooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
-import { AppState, StatusBar, StyleSheet, View, Platform } from 'react-native'
+import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { useScreens } from 'react-native-screens'
+import SplashScreen from 'react-native-splash-screen'
+import { NavigationState } from 'react-navigation'
+import { clearAndDownloadIssue } from 'src/helpers/clear-download-issue'
+import { pushDownloadFailsafe } from 'src/helpers/push-download-failsafe'
+import { NavPositionProvider } from 'src/hooks/use-nav-position'
 import { RootNavigator } from 'src/navigation'
+import {
+    ScreenTracking,
+    ScreenTrackingMapping,
+    sendAppScreenEvent,
+    setUserId,
+} from 'src/services/ophan'
+import { createApolloClient } from './apollo'
+import { AccessProvider } from './authentication/AccessContext'
+import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
+import { AnyAttempt, isValid } from './authentication/lib/Attempt'
+import { BugButton } from './components/BugButton'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
-import { ToastProvider } from './hooks/use-toast'
-import {
-    prepFileSystem,
-    clearOldIssues,
-    downloadTodaysIssue,
-} from './helpers/files'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
-import { fetchCacheClear } from './helpers/fetch'
-import {
-    sendAppScreenEvent,
-    ScreenTracking,
-    ScreenTrackingMapping,
-    setUserId,
-} from 'src/services/ophan'
-import { NavigationState } from 'react-navigation'
-import { BugButton } from './components/BugButton'
-import SplashScreen from 'react-native-splash-screen'
-import { NetInfoProvider } from './hooks/use-net-info'
-import { DeprecateVersionModal } from './screens/deprecate-screen'
-import { AccessProvider } from './authentication/AccessContext'
-import { AnyAttempt, isValid } from './authentication/lib/Attempt'
-import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { IssueSummaryProvider } from './hooks/use-issue-summary'
-import { ApolloProvider } from '@apollo/react-hooks'
-import { createApolloClient } from './apollo'
+import { NetInfoProvider } from './hooks/use-net-info'
+import { ToastProvider } from './hooks/use-toast'
+import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
-import { NavPositionProvider } from 'src/hooks/use-nav-position'
-
-const clearAndDownloadIssue = async () => {
-    await prepFileSystem()
-    await clearOldIssues()
-    const weOk = await fetchCacheClear()
-    if (weOk) {
-        downloadTodaysIssue()
-    }
-}
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -154,6 +141,8 @@ export default class App extends React.Component<{}, {}> {
                 clearAndDownloadIssue()
             }
         })
+
+        pushDownloadFailsafe()
     }
 
     async componentDidCatch(e: Error) {

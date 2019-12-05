@@ -1,8 +1,10 @@
+import MockDate from 'mockdate'
 import {
     matchSummmaryToKey,
     downloadAndUnzipIssue,
     DLStatus,
     updateListeners,
+    issuesToDelete,
 } from '../files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
 
@@ -178,6 +180,30 @@ describe('helpers/files', () => {
 
             // these should both now be resolved when the inner runner promise resolves
             await Promise.all([p1, p2])
+        })
+    })
+
+    describe('issuesToDelete', () => {
+        MockDate.set('2019-08-21')
+        it('should return items outside of the 7 days that dont follow the issue naming, or the issue index', () => {
+            const files = [
+                'daily-edition/issues',
+                'some-random-file',
+                'daily-edition/2019-08-15',
+                'daily-edition/2019-08-14',
+            ]
+            expect(issuesToDelete(files)).toEqual([
+                'some-random-file',
+                'daily-edition/2019-08-14',
+            ])
+        })
+
+        it("should return an empty array if there isn't any to delete", () => {
+            const files = [
+                'daily-edition/2019-08-15',
+                'daily-edition/2019-08-16',
+            ]
+            expect(issuesToDelete(files)).toEqual([])
         })
     })
 })

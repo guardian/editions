@@ -11,8 +11,7 @@ import { getFont } from 'src/theme/typography'
 const styles = StyleSheet.create({
     background: {
         backgroundColor: color.primary,
-        padding: metrics.vertical,
-        paddingHorizontal: metrics.horizontal,
+        paddingVertical: metrics.vertical,
         justifyContent: 'flex-end',
         flexDirection: 'row',
     },
@@ -20,8 +19,7 @@ const styles = StyleSheet.create({
         backgroundColor: color.background,
         borderBottomColor: color.line,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        padding: metrics.vertical,
-        paddingHorizontal: metrics.horizontal,
+        paddingVertical: metrics.vertical,
         justifyContent: 'flex-end',
         flexDirection: 'row',
     },
@@ -39,6 +37,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         flexGrow: 1,
         flexShrink: 0,
+        paddingHorizontal: metrics.horizontal,
     },
 
     centerWrapper: {
@@ -53,8 +52,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         zIndex: 1,
     },
+    leftAction: {
+        zIndex: 2,
+        paddingLeft: metrics.horizontal,
+    },
     centerAction: {
         zIndex: 2,
+        paddingRight: metrics.horizontal,
     },
 })
 
@@ -92,7 +96,11 @@ const Header = ({
             <View style={[bg]}>
                 {layout === 'issue' ? (
                     <GridRowSplit
-                        proxy={leftAction}
+                        proxy={
+                            <View style={{ paddingLeft: metrics.horizontal }}>
+                                {leftAction}
+                            </View>
+                        }
                         style={[{ marginTop }, styles.height]}
                     >
                         <View style={[styles.headerSplit]}>
@@ -116,15 +124,15 @@ const Header = ({
                                     children
                                 )}
                             </View>
-                            {action}
+                            <View style={{ paddingRight: metrics.horizontal }}>
+                                {action}
+                            </View>
                         </View>
                     </GridRowSplit>
                 ) : (
                     <View style={{ marginTop, width: '100%' }}>
                         <View style={[styles.height, styles.centerWrapper]}>
-                            <View style={styles.centerAction}>
-                                {leftAction}
-                            </View>
+                            <View style={styles.leftAction}>{leftAction}</View>
                             <View style={styles.centerAction}>{action}</View>
                             <View style={styles.centerTitle}>{children}</View>
                         </View>

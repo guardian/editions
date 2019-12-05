@@ -100,27 +100,28 @@ const appearances: {
     }),
 }
 
-const IssueTitle = ({
-    title,
-    subtitle,
-    appearance,
-    style,
-}: IssueTitleProps & { appearance: IssueTitleAppearance }) => (
-    <View style={style}>
-        <IssueTitleText style={[styles.text, appearances[appearance].title]}>
-            {title}
-        </IssueTitleText>
-        {!!subtitle && (
+const IssueTitle = React.memo(
+    ({
+        title,
+        subtitle,
+        appearance = IssueTitleAppearance.default,
+        style,
+    }: IssueTitleProps & { appearance?: IssueTitleAppearance }) => (
+        <View style={style}>
             <IssueTitleText
-                style={[styles.text, appearances[appearance].subtitle]}
+                style={[styles.text, appearances[appearance].title]}
             >
-                {subtitle}
+                {title}
             </IssueTitleText>
-        )}
-    </View>
+            {!!subtitle && (
+                <IssueTitleText
+                    style={[styles.text, appearances[appearance].subtitle]}
+                >
+                    {subtitle}
+                </IssueTitleText>
+            )}
+        </View>
+    ),
 )
-IssueTitle.defaultProps = {
-    appearance: IssueTitleAppearance.default,
-}
 
 export { IssueTitle, GridRowSplit }
