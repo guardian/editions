@@ -18,6 +18,10 @@ const clearPushTracking = async (): Promise<void> =>
 
 const pushTracking = async (id: string, value: string) => {
     try {
+        if (__DEV__) {
+            console.log(`Push Tracking: ${id} | ${value}`)
+        }
+
         const storedTracking = await AsyncStorage.getItem(PUSH_TRACKING_KEY)
         const tracking: Tracking = {
             time: londonTime().format(),
@@ -29,7 +33,7 @@ const pushTracking = async (id: string, value: string) => {
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
 
-        await AsyncStorage.setItem(
+        return await AsyncStorage.setItem(
             PUSH_TRACKING_KEY,
             JSON.stringify(saveTracking),
         )
