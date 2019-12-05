@@ -39,7 +39,7 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
         return {
             issuePublication,
             issue,
-            message: 'Fetched issue succesfully.',
+            message: 'Fetched issue successfully.',
         }
     },
 )

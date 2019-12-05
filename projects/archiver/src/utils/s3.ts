@@ -38,8 +38,6 @@ export const getBucket = (bucket: string): string => {
     return 'editions-store-code'
 }
 
-// export const Bucket = process.env.proofBucket || 'editions-store-code'
-
 const addDelimiterIfNotPresent = (prefix: string): string => {
     if (prefix.endsWith('/')) {
         return prefix
