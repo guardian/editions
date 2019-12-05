@@ -1,6 +1,6 @@
 import { authWithDeepRedirect } from '../deep-link-auth'
 import { EventEmitter } from 'events'
-import { RedirectResult } from 'react-native-inappbrowser-reborn'
+import { RedirectResult, BrowserResult } from 'react-native-inappbrowser-reborn'
 
 const createListener = (): EventEmitter & {
     addEventListener: EventEmitter['addListener']
@@ -12,19 +12,20 @@ const createListener = (): EventEmitter & {
     return ee
 }
 
+type AuthSessionResult = RedirectResult | BrowserResult
+
 const createInAppBrowser = ({
     available = true,
-    resultType,
-    url,
+    result,
 }: {
     available?: boolean
-    resultType?: 'cancel' | 'dismiss' | 'success'
-    url?: string
+    result?: AuthSessionResult
 } = {}) => ({
     openAuth: () =>
-        new Promise<RedirectResult>(
-            res => resultType && res({ type: resultType, url } as any),
-        ),
+        new Promise<AuthSessionResult>(res => {
+            if (result == null) throw new Error('missing result')
+            return res(result)
+        }),
     closeAuth: jest.fn(() => {}),
     isAvailable: () => Promise.resolve(available),
 })
@@ -39,7 +40,7 @@ describe('deep-link-auth', () => {
                         // original. Must be asynchronous for consistency with
                         // real behavior.
                         setImmediate(() => {
-                            linking.emit('url', { url: 'myurl' })
+                            linking.emit('url', { url: 'callback://url' })
                         })
                     },
                 })
@@ -48,7 +49,7 @@ describe('deep-link-auth', () => {
 
                 const val = await authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
@@ -56,7 +57,7 @@ describe('deep-link-auth', () => {
                 )
 
                 expect(val).toBe('token')
-                expect(validator).toBeCalledWith('myurl')
+                expect(validator).toBeCalledWith('callback://url')
             })
 
             it('will throw if the app is foregrounded without a deep link', async () => {
@@ -67,7 +68,7 @@ describe('deep-link-auth', () => {
                             appState.emit('change', 'active')
                             // This should not be able to save us,
                             // the error should already be fired.
-                            linking.emit('url', { url: 'myurl' })
+                            linking.emit('url', { url: 'callback://url' })
                         })
                     },
                 })
@@ -75,7 +76,7 @@ describe('deep-link-auth', () => {
 
                 const promise = authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
@@ -91,7 +92,7 @@ describe('deep-link-auth', () => {
                     openURL: () => {
                         setImmediate(() => {
                             appState.emit('change', 'inactive')
-                            linking.emit('url', { url: 'myurl' })
+                            linking.emit('url', { url: 'callback://url' })
                         })
                     },
                 })
@@ -99,7 +100,7 @@ describe('deep-link-auth', () => {
 
                 const val = await authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
@@ -107,14 +108,14 @@ describe('deep-link-auth', () => {
                 )
 
                 expect(val).toBe('token')
-                expect(validator).toBeCalledWith('myurl')
+                expect(validator).toBeCalledWith('callback://url')
             })
 
             it('will throw if the validator throws', async () => {
                 const linking = Object.assign(createListener(), {
                     openURL: () => {
                         setImmediate(() => {
-                            linking.emit('url', { url: 'myurl' })
+                            linking.emit('url', { url: 'callback://url' })
                         })
                     },
                 })
@@ -125,7 +126,7 @@ describe('deep-link-auth', () => {
 
                 const promise = authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
@@ -147,13 +148,12 @@ describe('deep-link-auth', () => {
                 const validator = jest.fn(async () => 'token')
                 const browser = createInAppBrowser({
                     available: true,
-                    resultType: 'success',
-                    url: 'myurl',
+                    result: { type: 'success', url: 'callback://url' },
                 })
 
                 const val = await authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
@@ -161,7 +161,7 @@ describe('deep-link-auth', () => {
                 )
 
                 expect(val).toBe('token')
-                expect(validator).toBeCalledWith('myurl')
+                expect(validator).toBeCalledWith('callback://url')
                 expect(browser.closeAuth).toBeCalled()
             })
 
@@ -177,13 +177,12 @@ describe('deep-link-auth', () => {
                 })
                 const browser = createInAppBrowser({
                     available: true,
-                    resultType: 'success',
-                    url: 'myurl',
+                    result: { type: 'success', url: 'callback://url' },
                 })
 
                 const promise = authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
@@ -204,12 +203,12 @@ describe('deep-link-auth', () => {
                 const validator = jest.fn(async () => 'token')
                 const browser = createInAppBrowser({
                     available: true,
-                    resultType: 'cancel',
+                    result: { type: 'cancel' },
                 })
 
                 const promise = authWithDeepRedirect(
                     'https://authurl.com/auth',
-                    'myurl',
+                    'callback://url',
                     validator,
                     linking,
                     appState,
