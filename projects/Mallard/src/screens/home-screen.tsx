@@ -311,7 +311,7 @@ const IssueListView = withNavigation(
     ),
 )
 
-const IssueListViewWrapper = ({
+const IssueListViewWithDelay = ({
     issueList,
     currentIssueDetails,
 }: {
@@ -347,7 +347,7 @@ const IssueListViewWrapper = ({
 }
 
 const NO_ISSUES: IssueSummary[] = []
-const IssueListContainer = () => {
+const IssueListFetchContainer = () => {
     const { issueSummary, issueId } = useIssueSummary()
     const { localIssueId = '', publishedIssueId = '' } = issueId || {}
     const resp = useIssueResponse(
@@ -364,13 +364,13 @@ const IssueListContainer = () => {
     return resp({
         error: () => <></>,
         pending: () => (
-            <IssueListViewWrapper
+            <IssueListViewWithDelay
                 issueList={issueSummary || NO_ISSUES}
                 currentIssueDetails={null}
             />
         ),
         success: details => (
-            <IssueListViewWrapper
+            <IssueListViewWithDelay
                 issueList={issueSummary || NO_ISSUES}
                 currentIssueDetails={details}
             />
@@ -399,7 +399,7 @@ export const HomeScreen = ({
                 }}
             />
             {issueSummary ? (
-                <IssueListContainer />
+                <IssueListFetchContainer />
             ) : error ? (
                 <>
                     <FlexErrorMessage

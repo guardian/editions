@@ -16,7 +16,6 @@ export const color = {
     background: palette.neutral[100],
     text: palette.neutral[7],
     dimBackground: palette.neutral[93],
-    // only slightly darker than `dimBackground`
     dimmerBackground: palette.neutral[86],
     dimText: palette.neutral[20],
     darkBackground: palette.neutral[20],
