@@ -114,16 +114,15 @@ export const FIVE_SECONDS = 5
 export const upload = (
     key: string,
     body: {} | Buffer,
-    bucket: string,
+    bucketName: string,
     mime: 'image/jpeg' | 'application/json' | 'application/zip',
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
     return new Promise((resolve, reject) => {
-        const Bucket = getBucket(bucket)
         s3.upload(
             {
                 Body: body instanceof Buffer ? body : JSON.stringify(body),
-                Bucket,
+                Bucket: bucketName,
                 Key: `${key}`,
                 ACL: 'public-read',
                 ContentType: mime,
@@ -132,7 +131,7 @@ export const upload = (
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 upload of s3://${Bucket}/${key} failed with`,
+                        `S3 upload of s3://${bucketName}/${key} failed with`,
                         err,
                     )
                     reject()
