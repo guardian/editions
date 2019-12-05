@@ -31,11 +31,29 @@ export const s3 = new S3({
 })
 
 export const getBucket = (bucket: string): string => {
-    if (bucket === 'proof')
-        return process.env.proofBucket || 'editions-store-code'
-    if (bucket === 'publish')
-        return process.env.publishBucket || 'editions-store-code'
-    return 'editions-store-code'
+    if (bucket === 'proof') {
+        if (!!process.env.proofBucket) {
+            console.log('Returning proofBucket env var')
+            return process.env.proofBucket
+        } else {
+            console.log(
+                'Returning default bucket editions-store-code for proof bucket',
+            )
+            return 'editions-store-code'
+        }
+    } else if (bucket === 'publish') {
+        if (!!process.env.publishBucket) {
+            console.log('Returning proofBucket env var')
+            return process.env.publishBucket
+        } else {
+            console.log(
+                'Returning default bucket editions-store-code for publish bucket',
+            )
+            return 'editions-store-code'
+        }
+    } else {
+        return 'editions-store-code'
+    }
 }
 
 const addDelimiterIfNotPresent = (prefix: string): string => {
