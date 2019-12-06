@@ -27,8 +27,8 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         // Loop over them creating copy promises
         // Gather the promises into one and return
         const copyPromises = await Promise.all(
-            keys.objects.map(key =>
-                attempt(copy(key.toString(), inputBucket, outputBucket)),
+            keys.objects.map(object =>
+                attempt(copy(object.key, inputBucket, outputBucket)),
             ),
         )
 
