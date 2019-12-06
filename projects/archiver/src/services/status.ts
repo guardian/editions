@@ -10,15 +10,16 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
 
 export const publishedStatuses = [
     'bundled', // zip files built and uploaded
-    'indexed', // index file generated
-    'copied', // index file generated
+    'proofed', // index file generated in proof bucket
+    'copied', // copied across to publish bucket
+    'published', // index file generated in publish bucket
     'notified', // notification sent
 ] as const
 export const statuses = [
     ...publishedStatuses,
     'started', // started the process of building
     'assembled', // assembled assets into S3
-    'unknown',
+    'errored',
 ] as const
 export type Status = typeof statuses[number]
 
@@ -69,11 +70,11 @@ const getStatus = async (
                 issuePublication,
             )} was not a string :( but was actually a ${typeof statusResponse}`,
         )
-        return { ...issuePublication, status: 'unknown', updated: new Date(0) }
+        return { ...issuePublication, status: 'errored', updated: new Date(0) }
     }
     const decodedStatus = JSON.parse(statusResponse)
     const status: Status =
-        statuses.find(_ => _ === decodedStatus.status) || 'unknown'
+        statuses.find(_ => _ === decodedStatus.status) || 'errored'
     const updated = oc(response).LastModified() || new Date(0)
     console.log(
         `Status for ${JSON.stringify(

@@ -5,6 +5,7 @@ import { getOtherIssuesSummariesForEdition } from './helpers/summary'
 import { upload, FIVE_SECONDS, getBucket } from '../../utils/s3'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
+import { Status } from '../../services/status'
 
 type IndexTaskInput = UploadTaskOutput
 export interface IndexTaskOutput extends UploadTaskOutput {
@@ -14,8 +15,9 @@ export interface IndexTaskOutput extends UploadTaskOutput {
 
 const handlerCurry: (
     bucket: string,
-) => Handler<IndexTaskInput, IndexTaskOutput> = bucket =>
-    handleAndNotify('indexed', async ({ issuePublication, issue }) => {
+    statusOnSuccess: Status,
+) => Handler<IndexTaskInput, IndexTaskOutput> = (bucket, statusOnSuccess) =>
+    handleAndNotify(statusOnSuccess, async ({ issuePublication, issue }) => {
         const Bucket = getBucket(bucket)
         // at the moment we create and recreate these issue summaries every time
         // an optimisation would be to move the issue summary creation to the previous task
@@ -79,5 +81,5 @@ const handlerCurry: (
         }
     })
 
-export const handlerProof = handlerCurry('proof')
-export const handlerPublish = handlerCurry('publish')
+export const handlerProof = handlerCurry('proof', 'proofed')
+export const handlerPublish = handlerCurry('publish', 'published')

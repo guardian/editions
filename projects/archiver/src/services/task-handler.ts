@@ -34,7 +34,7 @@ export type HandlerDependencies = {
 }
 
 export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
-    statusOnSuccess: Status | undefined,
+    statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
     dependencies: HandlerDependencies,
 ): Handler<I, O> {
@@ -96,7 +96,7 @@ export function handleAndNotifyOnError<I extends InputWithIdentifier, O>(
     handler: (input: I) => Promise<O>,
 ): Handler<I, O> {
     return handleAndNotifyInternal(
-        undefined,
+        'errored',
         handler,
         runtimeHandlerDependencies,
     )
