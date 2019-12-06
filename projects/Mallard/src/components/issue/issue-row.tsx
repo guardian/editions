@@ -250,7 +250,15 @@ const IssueFrontsSelector = React.memo(
 )
 
 const IssueRowHeader = React.memo(
-    ({ issue, onPress }: { issue: IssueSummary; onPress: () => void }) => {
+    ({
+        issue,
+        onPress,
+        onGoToSettings,
+    }: {
+        issue: IssueSummary
+        onPress: () => void
+        onGoToSettings: () => void
+    }) => {
         const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
             issue.date,
         ])
@@ -288,14 +296,20 @@ export const IssueRow = React.memo(
         issueDetails,
         onPress,
         onPressFront,
+        onGoToSettings,
     }: {
         issue: IssueSummary
         issueDetails: IssueWithFronts | null
         onPress: () => void
         onPressFront: (key: string) => void
+        onGoToSettings: () => void
     }) => (
         <>
-            <IssueRowHeader onPress={onPress} issue={issue} />
+            <IssueRowHeader
+                onPress={onPress}
+                issue={issue}
+                onGoToSettings={onGoToSettings}
+            />
             {issueDetails != null && (
                 <IssueFrontsSelector
                     fronts={issueDetails.fronts}
