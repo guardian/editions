@@ -267,7 +267,7 @@ const IssueListView = withNavigation(
                             (index === currentIssueIndex ? frontRowsHeight : 0),
                         offset:
                             index * ISSUE_ROW_HEIGHT +
-                            (currentIssueIndex > 0 && index > currentIssueIndex
+                            (currentIssueIndex >= 0 && index > currentIssueIndex
                                 ? frontRowsHeight
                                 : 0),
                         index,
@@ -300,7 +300,7 @@ const IssueListView = withNavigation(
                     style={styles.issueList}
                     data={issueList}
                     initialScrollIndex={
-                        currentIssueIndex > 0 ? currentIssueIndex : undefined
+                        currentIssueIndex >= 0 ? currentIssueIndex : undefined
                     }
                     renderItem={renderItem}
                     getItemLayout={getItemLayout}
