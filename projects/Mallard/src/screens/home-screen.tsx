@@ -218,7 +218,7 @@ const IssueListView = withNavigation(
             const { localId, publishedId, fronts } = currentIssueDetails
 
             // We want to scroll to the current issue.
-            let currentIssueIndex = issueList.findIndex(
+            const currentIssueIndex = issueList.findIndex(
                 issue =>
                     issue.localId === localId &&
                     issue.publishedId === publishedId,
