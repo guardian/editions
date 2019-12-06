@@ -1,6 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { Alert, StyleSheet, Text, Switch } from 'react-native'
-import { NavigationInjectedProps } from 'react-navigation'
+import {
+    NavigationInjectedProps,
+    NavigationRoute,
+    NavigationParams,
+} from 'react-navigation'
 import { RightChevron } from 'src/components/icons/RightChevron'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Heading } from 'src/components/layout/ui/row'
@@ -24,9 +28,17 @@ import {
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
+import { NavigationScreenProp } from 'react-navigation'
 
 const MiscSettingsList = React.memo(
-    (props: { isWeatherShown: boolean; client: ApolloClient<object> }) => {
+    (props: {
+        isWeatherShown: boolean
+        client: ApolloClient<object>
+        navigation: NavigationScreenProp<
+            NavigationRoute<NavigationParams>,
+            NavigationParams
+        >
+    }) => {
         const onChange = () =>
             setIsWeatherShown(props.client, !props.isWeatherShown)
         const items = [
@@ -40,6 +52,17 @@ const MiscSettingsList = React.memo(
                         onValueChange={onChange}
                     />
                 ),
+            },
+            {
+                key: 'manageEditions',
+                title: 'Manage Editions',
+                data: {
+                    onPress: () =>
+                        props.navigation.navigate(
+                            routeNames.ManageEditionsSettings,
+                        ),
+                },
+                proxy: <RightChevron />,
             },
         ]
         return <List onPress={({ onPress }) => onPress()} data={items} />
@@ -170,6 +193,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 <MiscSettingsList
                     client={client}
                     isWeatherShown={isWeatherShown}
+                    navigation={navigation}
                 />
                 <Heading>{``}</Heading>
                 <List
