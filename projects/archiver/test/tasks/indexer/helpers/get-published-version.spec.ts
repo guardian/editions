@@ -22,7 +22,7 @@ describe('getPublishedVersionInternal', () => {
             {
                 ...issue,
                 version: '2019-09-30T17:45:23.699Z',
-                status: 'indexed',
+                status: 'proofed',
                 updated: moment(dt)
                     .add(1, 'hours')
                     .toDate(),
@@ -61,7 +61,7 @@ describe('getPublishedVersionInternal', () => {
             {
                 ...issue,
                 version: '2019-09-30T17:45:23.699Z',
-                status: 'indexed',
+                status: 'proofed',
                 updated: moment(dt)
                     .add(1, 'hours')
                     .toDate(),
@@ -125,7 +125,7 @@ describe('getPublishedVersionInternal', () => {
             {
                 ...issue,
                 version: '2019-09-30T18:45:23.699Z',
-                status: 'unknown',
+                status: 'errored',
                 updated: moment(dt)
                     .add(2, 'hours')
                     .toDate(),
