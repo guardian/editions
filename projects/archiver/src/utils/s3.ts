@@ -5,6 +5,7 @@ import {
 } from 'aws-sdk'
 import { attempt, notNull } from '../../common'
 import { oc } from 'ts-optchain'
+import {ListObjectsV2Output} from "aws-sdk/clients/s3";
 
 const createCMSFrontsS3Client = () => {
     console.log(`Creating S3 client with role arn: ${process.env.arn}`)
@@ -147,9 +148,9 @@ export const upload = (
 export const list = (
     inputBucket: string,
     baseKey: string,
-): Promise<{ objects: Record<string, any>[] }> => {
+): Promise<{ objects: ListObjectsV2Output }> => {
     return new Promise((resolve, reject) => {
-        s3.listObjects(
+        s3.listObjectsV2(
             {
                 Bucket: inputBucket,
                 Delimiter: '/',
@@ -166,7 +167,7 @@ export const list = (
                 }
                 console.log(`Keys below ${baseKey} fetched from ${inputBucket}`)
                 console.log(data.Contents)
-                resolve({ objects: data.Contents || [] })
+                resolve({ objects: data })
             },
         )
     })
@@ -236,20 +237,20 @@ export const recursiveCopy = async (
     outputBucket: string,
     baseKey: string,
 ): Promise<{}[]> => {
-    // List all keys
-    const keys = await list(inputBucket, baseKey)
-    const childKeys = keys.objects.filter(o => o.Key != baseKey)
+    const listing = await list(inputBucket, baseKey)
+    const keys = listing.objects.Contents!
+    const subfolders = listing.objects.CommonPrefixes!
 
     // Loop over creating copy promises
     const copyPromises = await Promise.all(
-        childKeys.map(object =>
-            attempt(copy(object.Key, inputBucket, outputBucket)),
+        keys.map(object =>
+            attempt(copy(object.Key!, inputBucket, outputBucket)),
         ),
     )
     // Loop over creating recursive copy promises
     const recursionPromises = await Promise.all(
-        childKeys.map(object =>
-            attempt(recursiveCopy(inputBucket, outputBucket, object.Key + '/')),
+        subfolders.map(object =>
+            attempt(recursiveCopy(inputBucket, outputBucket, object.Prefix!)),
         ),
     )
     // Gather the promises into one array and return
