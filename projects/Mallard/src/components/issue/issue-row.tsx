@@ -1,13 +1,18 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import React, {
+    useMemo,
+    useState,
+    useEffect,
+    useCallback,
+    Fragment,
+} from 'react'
 import {
     IssueTitle,
     IssueTitleAppearance,
     GridRowSplit,
 } from 'src/components/issue/issue-title'
-import { RowWrapper } from '../layout/ui/row'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import {
     DLStatus,
@@ -23,11 +28,62 @@ import { fetch } from 'src/hooks/use-net-info'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
-import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
 
-const rowStyles = StyleSheet.create({
-    issueRow: {
+import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
+import { Front, IssueWithFronts } from '../../../../Apps/common/src'
+import { getColor } from 'src/helpers/transform'
+import { metrics } from 'src/theme/spacing'
+import { getFont } from 'src/theme/typography'
+
+const FRONT_TITLE_FONT = getFont('headline', 0.75, 'bold')
+const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
+
+export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
+export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.7
+
+const styles = StyleSheet.create({
+    frontsSelector: {
+        backgroundColor: color.dimmerBackground,
+        borderTopWidth: 1,
+        borderTopColor: color.line,
+    },
+
+    frontTitleWrap: {
+        flex: 1,
+        height: ISSUE_FRONT_ROW_HEIGHT,
+    },
+    frontTitle: {
+        height: '100%',
+        flexDirection: 'row',
+        alignContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: metrics.horizontal,
+    },
+    frontTitleText: {
+        flexShrink: 0,
+        ...FRONT_TITLE_FONT,
+    },
+
+    frontSeparator: {
+        height: 1,
+        backgroundColor: color.line,
+        flex: 1,
+        marginLeft: metrics.horizontal,
+    },
+
+    issueButtonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         flexGrow: 1,
+        paddingHorizontal: metrics.horizontal,
+    },
+    issueTitleWrap: {
+        flex: 1,
+        height: ISSUE_ROW_HEADER_HEIGHT,
+    },
+    issueTitle: {
+        paddingHorizontal: metrics.horizontal,
+        paddingVertical: metrics.vertical,
     },
 })
 
@@ -103,26 +159,81 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
     )
 }
 
-const IssueRow = ({
-    issue,
-    onPress,
-}: {
-    issue: IssueSummary
-    onPress: () => void
-}) => {
-    const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
-        issue.date,
-    ])
+const IssueButtonContainer = React.memo(
+    ({ issue }: { issue: IssueSummary }) => (
+        <View style={styles.issueButtonContainer}>
+            <IssueButton issue={issue} />
+        </View>
+    ),
+)
 
-    return (
-        <RowWrapper narrow>
-            <GridRowSplit proxy={<IssueButton issue={issue} />}>
-                <View style={rowStyles.issueRow}>
-                    <Highlight
-                        hitSlop={{ top: 10, bottom: 10, left: 60, right: 60 }}
-                        onPress={onPress}
-                    >
+const IssueFrontRow = React.memo(
+    ({ front, onPress }: { front: Front; onPress: () => void }) => {
+        const textColor = getColor(front.appearance)
+        return (
+            <GridRowSplit>
+                <View style={styles.frontTitleWrap}>
+                    <Highlight onPress={onPress}>
+                        <View style={styles.frontTitle}>
+                            <Text
+                                style={[
+                                    styles.frontTitleText,
+                                    { color: textColor },
+                                ]}
+                                numberOfLines={1}
+                            >
+                                {front.displayName}
+                            </Text>
+                        </View>
+                    </Highlight>
+                </View>
+            </GridRowSplit>
+        )
+    },
+)
+
+const IssueFrontSeparator = React.memo(() => (
+    <GridRowSplit>
+        <View style={styles.frontSeparator} />
+    </GridRowSplit>
+))
+
+const IssueFrontsSelector = React.memo(
+    ({
+        fronts,
+        onPressFront,
+    }: {
+        fronts: Front[]
+        onPressFront: (key: string) => void
+    }) => {
+        return (
+            <View style={styles.frontsSelector}>
+                {fronts.map((front, index) => (
+                    <Fragment key={front.key}>
+                        {index > 0 && <IssueFrontSeparator />}
+                        <IssueFrontRow
+                            onPress={() => onPressFront(front.key)}
+                            front={front}
+                        />
+                    </Fragment>
+                ))}
+            </View>
+        )
+    },
+)
+
+const IssueRowHeader = React.memo(
+    ({ issue, onPress }: { issue: IssueSummary; onPress: () => void }) => {
+        const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
+            issue.date,
+        ])
+
+        return (
+            <GridRowSplit proxy={<IssueButtonContainer issue={issue} />}>
+                <View style={styles.issueTitleWrap}>
+                    <Highlight onPress={onPress}>
                         <IssueTitle
+                            style={styles.issueTitle}
                             title={weekday}
                             subtitle={date}
                             appearance={IssueTitleAppearance.tertiary}
@@ -130,8 +241,30 @@ const IssueRow = ({
                     </Highlight>
                 </View>
             </GridRowSplit>
-        </RowWrapper>
-    )
-}
+        )
+    },
+)
 
-export { IssueRow }
+export const IssueRow = React.memo(
+    ({
+        issue,
+        issueDetails,
+        onPress,
+        onPressFront,
+    }: {
+        issue: IssueSummary
+        issueDetails: IssueWithFronts | null
+        onPress: () => void
+        onPressFront: (key: string) => void
+    }) => (
+        <>
+            <IssueRowHeader onPress={onPress} issue={issue} />
+            {issueDetails != null && (
+                <IssueFrontsSelector
+                    fronts={issueDetails.fronts}
+                    onPressFront={onPressFront}
+                />
+            )}
+        </>
+    ),
+)
