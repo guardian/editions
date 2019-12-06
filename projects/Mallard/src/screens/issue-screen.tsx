@@ -54,14 +54,9 @@ import {
     FlatCard,
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
-import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 import { useNavPosition } from 'src/hooks/use-nav-position'
 
 const styles = StyleSheet.create({
-    shownWeather: {
-        marginHorizontal: metrics.horizontal,
-        height: 78,
-    },
     emptyWeatherSpace: {
         height: 16,
     },
@@ -319,13 +314,8 @@ const WeatherHeader = () => {
     if (!isWeatherShown) {
         return <View style={styles.emptyWeatherSpace} />
     }
-    return (
-        <View style={styles.shownWeather}>
-            <ErrorBoundary>
-                <WeatherWidget />
-            </ErrorBoundary>
-        </View>
-    )
+
+    return <WeatherWidget />
 }
 
 const IssueScreenWithPath = React.memo(

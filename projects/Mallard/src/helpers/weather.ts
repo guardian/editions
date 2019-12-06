@@ -119,7 +119,7 @@ const makeWeatherObject = (
 
 /**
  * We augment the return object with `__typename` fields to that Apollo can
- * "reconcile" the value when we update the cache later. If the wheater if
+ * "reconcile" the value when we update the cache later. If the weather is
  * unavailable we keep the previous data as a `fallback`.
  */
 const getWeather = async (

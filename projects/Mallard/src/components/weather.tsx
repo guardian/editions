@@ -8,13 +8,14 @@ import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { WithBreakpoints } from './layout/ui/sizing/with-breakpoints'
 import { Breakpoints } from 'src/theme/breakpoints'
-import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { Button, ButtonAppearance } from './button/button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
 import { PermissionStatus } from 'react-native-permissions'
+import { useQuery } from 'src/hooks/apollo'
+import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
 type QueryForecast = Pick<
     Forecast,
@@ -54,6 +55,13 @@ const QUERY = gql`
 const narrowSpace = String.fromCharCode(8201)
 
 const styles = StyleSheet.create({
+    shownWeather: {
+        marginHorizontal: metrics.horizontal,
+        height: 78,
+    },
+    emptyWeatherSpace: {
+        height: 16,
+    },
     weatherContainer: {
         display: 'flex',
         flexDirection: 'row-reverse',
@@ -238,7 +246,7 @@ const SetLocationButton = withNavigation(
                 buttonStyles={styles.setLocationButton}
                 textStyles={styles.setLocationText}
             >
-                Set Location
+                Use location
             </Button>
         )
     },
@@ -264,7 +272,7 @@ const LocationName = ({
     )
 }
 
-const WeatherWithForecast = ({ weather }: { weather: Weather }) => {
+const WeatherForecast = ({ weather }: { weather: Weather }) => {
     const { forecasts, locationName, isLocationPrecise } = weather
     if (forecasts && forecasts.length >= 9) {
         /*Get the hourly forecast in 2 hour intervals from the 12 hour forecast.*/
@@ -286,20 +294,30 @@ const WeatherWithForecast = ({ weather }: { weather: Weather }) => {
             </View>
         )
     }
-
-    // FIXME: We really should validate data after fetching, not during
-    // rendering. That way the error would get handled further up the chain
-    // instead of rendering a blank space with no logging.
     return <></>
 }
 
 const WeatherWidget = React.memo(() => {
     const query = useQuery<QueryData>(QUERY)
-    if (query.loading) return null
+    if (query.loading) return <View style={styles.emptyWeatherSpace} />
 
     const { data } = query
-    if (data.weather == null) return null
-    return <WeatherWithForecast weather={data.weather} />
+
+    if (
+        data.weather == null ||
+        !data.weather.forecasts ||
+        data.weather.forecasts.length < 9
+    ) {
+        return <View style={styles.emptyWeatherSpace} />
+    }
+
+    return (
+        <View style={styles.shownWeather}>
+            <ErrorBoundary>
+                <WeatherForecast weather={data.weather} />
+            </ErrorBoundary>
+        </View>
+    )
 })
 
 export { WeatherWidget }
