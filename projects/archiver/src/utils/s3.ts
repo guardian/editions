@@ -188,7 +188,7 @@ export const copy = (
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 copy of s3://${inputBucket}/${key} to s3://${outputBucket}/${key}  failed with`,
+                        `S3 copy of s3://${inputBucket}/${key} to s3://${outputBucket}/${key} failed with`,
                         err,
                     )
                     reject()
@@ -238,18 +238,20 @@ export const recursiveCopy = async (
 ): Promise<{}[]> => {
     // List all keys
     const keys = await list(inputBucket, baseKey)
+    const childKeys = keys.objects.filter(o => o.Key != baseKey)
 
-    // Loop over them creating copy promises
-    // Gather the promises into one and return
+    // Loop over creating copy promises
     const copyPromises = await Promise.all(
-        keys.objects.map(object =>
+        childKeys.map(object =>
             attempt(copy(object.Key, inputBucket, outputBucket)),
         ),
     )
+    // Loop over creating recursive copy promises
     const recursionPromises = await Promise.all(
-        keys.objects.map(object =>
+        childKeys.map(object =>
             attempt(recursiveCopy(inputBucket, outputBucket, object.Key)),
         ),
     )
+    // Gather the promises into one array and return
     return copyPromises.concat(recursionPromises)
 }
