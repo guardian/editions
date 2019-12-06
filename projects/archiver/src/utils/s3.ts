@@ -3,7 +3,7 @@ import {
     ChainableTemporaryCredentials,
     SharedIniFileCredentials,
 } from 'aws-sdk'
-import {attempt, Issue, IssuePublicationIdentifier, notNull} from '../../common'
+import { attempt, notNull } from '../../common'
 import { oc } from 'ts-optchain'
 
 const createCMSFrontsS3Client = () => {
@@ -237,10 +237,7 @@ export const recursiveCopy = async (
     baseKey: string,
 ): Promise<{}[]> => {
     // List all keys
-    const keys = await list(
-        inputBucket,
-        baseKey,
-    )
+    const keys = await list(inputBucket, baseKey)
 
     // Loop over them creating copy promises
     // Gather the promises into one and return
