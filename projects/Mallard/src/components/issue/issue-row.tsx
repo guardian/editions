@@ -35,11 +35,11 @@ import { getColor } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 
-const FRONT_TITLE_FONT = getFont('headline', 0.75, 'bold')
+const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
 
 export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
-export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.7
+export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.9
 
 const styles = StyleSheet.create({
     frontsSelector: {
@@ -55,8 +55,7 @@ const styles = StyleSheet.create({
     frontTitle: {
         height: '100%',
         flexDirection: 'row',
-        alignContent: 'center',
-        alignItems: 'center',
+        paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.15,
         paddingHorizontal: metrics.horizontal,
     },
     frontTitleText: {
