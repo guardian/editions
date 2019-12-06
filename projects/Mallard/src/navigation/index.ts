@@ -40,7 +40,6 @@ import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
-import { ManageEditionsSettingsScreen } from 'src/screens/settings/manage-editions-settings'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
