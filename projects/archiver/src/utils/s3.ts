@@ -5,7 +5,7 @@ import {
 } from 'aws-sdk'
 import { attempt, notNull } from '../../common'
 import { oc } from 'ts-optchain'
-import {ListObjectsV2Output} from "aws-sdk/clients/s3";
+import { ListObjectsV2Output } from 'aws-sdk/clients/s3'
 
 const createCMSFrontsS3Client = () => {
     console.log(`Creating S3 client with role arn: ${process.env.arn}`)
