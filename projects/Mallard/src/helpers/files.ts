@@ -9,7 +9,6 @@ import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
-import { sendComponentEvent, Action, ComponentType } from '../services/ophan'
 import { londonTime } from './date'
 import { pushTracking } from 'src/helpers/push-tracking'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
@@ -302,14 +301,7 @@ export const clearOldIssues = async (): Promise<void> => {
     const iTD: string[] = issuesToDelete(files)
 
     return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
-        .then(() =>
-            sendComponentEvent({
-                componentType: ComponentType.appVideo,
-                action: Action.view,
-                value: 'completed',
-                componentId: 'clearOldIssues',
-            }),
-        )
+        .then(() => pushTracking('clearOldIssues', 'completed'))
         .catch(e => errorService.captureException(e))
 }
 
