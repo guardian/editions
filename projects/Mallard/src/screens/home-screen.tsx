@@ -217,22 +217,18 @@ const IssueListView = withNavigation(
         } & NavigationInjectedProps) => {
             const { localId, publishedId, fronts } = currentIssueDetails
 
-            // We want to scroll to the current issue, both initially and when
-            // it changes. If not found, just in case, we push it to the end so
-            // that it does not affect `getItemLayout`.
-            let currentIssueIndex = issueList.findIndex(
+            // We want to scroll to the current issue.
+            const currentIssueIndex = issueList.findIndex(
                 issue =>
                     issue.localId === localId &&
                     issue.publishedId === publishedId,
             )
-            if (currentIssueIndex < 0)
-                currentIssueIndex = Number.MAX_SAFE_INTEGER
 
             // Scroll to the relevant item if the current issue index has
             // changed (likely because the selected issue has changed itself).
             const listRef = useRef<FlatList<IssueSummary>>()
             useEffect(() => {
-                if (listRef.current == null) {
+                if (listRef.current == null || currentIssueIndex < 0) {
                     return
                 }
 
@@ -271,7 +267,9 @@ const IssueListView = withNavigation(
                             (index === currentIssueIndex ? frontRowsHeight : 0),
                         offset:
                             index * ISSUE_ROW_HEIGHT +
-                            (index > currentIssueIndex ? frontRowsHeight : 0),
+                            (currentIssueIndex > 0 && index > currentIssueIndex
+                                ? frontRowsHeight
+                                : 0),
                         index,
                     }
                 },
@@ -301,7 +299,9 @@ const IssueListView = withNavigation(
                     ListFooterComponent={footer}
                     style={styles.issueList}
                     data={issueList}
-                    initialScrollIndex={currentIssueIndex}
+                    initialScrollIndex={
+                        currentIssueIndex > 0 ? currentIssueIndex : undefined
+                    }
                     renderItem={renderItem}
                     getItemLayout={getItemLayout}
                     ref={refFn}
