@@ -1,5 +1,5 @@
 import { Linking, AppState } from 'react-native'
-import InAppBrowser from 'react-native-inappbrowser-reborn'
+import InAppBrowser, { RedirectResult } from 'react-native-inappbrowser-reborn'
 
 interface Emitter<T> {
     addEventListener(type: string, cb: (e: T) => void): void
@@ -21,7 +21,10 @@ type ILinking = Emitter<{ url: string }> & {
     openURL: (url: string) => void
 }
 
-type IInAppBrowser = Pick<typeof InAppBrowser, 'close' | 'open' | 'isAvailable'>
+type IInAppBrowser = Pick<
+    typeof InAppBrowser,
+    'openAuth' | 'closeAuth' | 'isAvailable'
+>
 
 /**
  * This function will open an auth url and wait for the first navigation back to the app
@@ -32,6 +35,7 @@ type IInAppBrowser = Pick<typeof InAppBrowser, 'close' | 'open' | 'isAvailable'>
  */
 const authWithDeepRedirect = async (
     authUrl: string,
+    deepLink: string,
     extractTokenAndValidateState: (url: string) => Promise<string>,
     /* mocks for testing */
     linkingImpl: ILinking = Linking,
@@ -42,7 +46,7 @@ const authWithDeepRedirect = async (
         const unlisteners: (() => void)[] = []
 
         const onFinish = async (url?: string) => {
-            inAppBrowserImpl.close()
+            inAppBrowserImpl.closeAuth()
 
             let unlistener
             while ((unlistener = unlisteners.pop())) {
@@ -60,16 +64,16 @@ const authWithDeepRedirect = async (
             }
         }
 
-        const unlistenLink = addListener(
-            linkingImpl,
-            'url',
-            // eslint-disable-next-line
-            (event: { url: string }) => onFinish(event.url),
-        )
-
-        unlisteners.push(unlistenLink)
-
         const runExternalBrowserDeepLink = () => {
+            const unlistenLink = addListener(
+                linkingImpl,
+                'url',
+                // eslint-disable-next-line
+                (event: { url: string }) => onFinish(event.url),
+            )
+
+            unlisteners.push(unlistenLink)
+
             const unlistenAppState = addListener(
                 appStateImpl,
                 'change',
@@ -90,48 +94,23 @@ const authWithDeepRedirect = async (
             linkingImpl.openURL(authUrl)
         }
 
-        if (await inAppBrowserImpl.isAvailable()) {
-            let result
-            try {
-                result = await inAppBrowserImpl.open(authUrl, {
-                    // iOS Properties
-                    dismissButtonStyle: 'cancel',
-                    // Android Properties
-                    showTitle: false,
-                    enableUrlBarHiding: true,
-                    enableDefaultShare: true,
-                })
-            } catch {
-                runExternalBrowserDeepLink()
-                return
-            }
-
-            switch (result.type) {
-                case 'cancel': {
-                    /**
-                     * this was a user cancel so reject the promise
-                     */
-                    onFinish()
-                    break
-                }
-                case 'dismiss': {
-                    /**
-                     * the assumption here is that a dismiss event happens when a deep link
-                     * happens or some other non-user cirucmstance.
-                     *
-                     * On iOS, if this was a deep link then the link handler above should already have fired
-                     * and resolved / rejected this promise (making the rest of thie code a noop).
-                     * However, this isn't the case on Android. Also if it _wan't_ a deep link then
-                     * we should clean up.
-                     *
-                     * Hence a second for other handlers to fire before rejecting the promise
-                     */
-                    setTimeout(() => onFinish(), 1000)
-                    break
-                }
-            }
-        } else {
+        if (!(await inAppBrowserImpl.isAvailable())) {
             runExternalBrowserDeepLink()
+            return
+        }
+
+        const result = await inAppBrowserImpl.openAuth(authUrl, deepLink, {
+            // iOS Properties
+            dismissButtonStyle: 'cancel',
+            // Android Properties
+            showTitle: false,
+            enableUrlBarHiding: true,
+            enableDefaultShare: true,
+        })
+        if (result.type === 'success') {
+            onFinish((result as RedirectResult).url)
+        } else {
+            onFinish()
         }
     })
 }
