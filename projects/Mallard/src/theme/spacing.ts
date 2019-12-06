@@ -37,7 +37,7 @@ export const metrics = {
     },
     gridRowSplit: {
         narrow: (width: number) => width * 0.65,
-        wide: 240,
+        wide: 260,
     },
     slideCardSpacing:
         Platform.OS === 'ios'
