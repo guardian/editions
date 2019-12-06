@@ -249,7 +249,7 @@ export const recursiveCopy = async (
     // Loop over creating recursive copy promises
     const recursionPromises = await Promise.all(
         childKeys.map(object =>
-            attempt(recursiveCopy(inputBucket, outputBucket, object.Key)),
+            attempt(recursiveCopy(inputBucket, outputBucket, object.Key + '/')),
         ),
     )
     // Gather the promises into one array and return
