@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     },
     frontTitle: {
         height: '100%',
-        flexDirection: 'row',
         paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.15,
         paddingHorizontal: metrics.horizontal,
     },
