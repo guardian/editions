@@ -340,6 +340,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .share-icon {
         padding-bottom: .1em;
+        color: ${colors.main};
     }
 
     .clearfix {
@@ -493,6 +494,12 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     ${'' /* this is needed to be more specific than an above style */}
     .header-container[data-type='${ArticleType.Obituary}'] .header-byline a {
         color: ${color.textOverDarkBackground};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .share-icon {
+        color: ${color.textOverDarkBackground};
+    }
+    .header-container[data-type='${ArticleType.Obituary}'] .share-button {
+        border: 1px solid ${color.textOverDarkBackground};
     }
 `
 
