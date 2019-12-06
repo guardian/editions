@@ -9,6 +9,7 @@ export const routeNames = {
     TermsAndConditions: 'TermsAndConditions',
     Help: 'Help',
     ManageEditions: 'ManageEditions',
+    ManageEditionsSettings: 'ManageEditionsSettings',
     Credits: 'Credits',
     FAQ: 'FAQ',
     AlreadySubscribed: 'AlreadySubscribed',
