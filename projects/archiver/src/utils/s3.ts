@@ -43,7 +43,7 @@ export const getBucket = (bucket: string): string => {
         }
     } else if (bucket === 'publish') {
         if (!!process.env.publishBucket) {
-            console.log('Returning proofBucket env var')
+            console.log('Returning publishBucket env var')
             return process.env.publishBucket
         } else {
             console.log(
