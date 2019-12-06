@@ -70,7 +70,7 @@ const getGoogleTokenFromCode = (code: string) =>
  */
 const googleAuthWithDeepRedirect = (validatorString: string): Promise<string> =>
     getGoogleOAuthURL(validatorString).then(authUrl =>
-        authWithDeepRedirect(authUrl, async url => {
+        authWithDeepRedirect(authUrl, googleRedirectURI, async url => {
             invariant(url.startsWith(googleRedirectURI), 'Sign-in cancelled')
 
             const params = qs.parse(url.split('?')[1])
