@@ -54,7 +54,14 @@ export const createPublishEvent = (
         case 'started':
         case 'assembled':
         case 'bundled':
-        case 'indexed':
+        case 'proofed':
+            return {
+                ...identifier,
+                status: 'Processing',
+                message: `Publication stage: ${status}`,
+                timestamp,
+            }
+        case 'published':
             return {
                 ...identifier,
                 status: 'Processing',
@@ -75,7 +82,7 @@ export const createPublishEvent = (
                 message: 'Publication processing complete',
                 timestamp,
             }
-        case 'unknown':
+        case 'errored':
             throw new Error('Can\'t make publish event with status "unknown"')
         default:
             return throwBadStatus(status)
