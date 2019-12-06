@@ -11,6 +11,7 @@ import {
 } from 'src/helpers/settings/setters'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
+import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 
 const buttonStyles = StyleSheet.create({
     background: {
@@ -117,6 +118,12 @@ const ManageEditionsScreen = () => {
                                 ],
                                 { cancelable: false },
                             )
+                            sendComponentEvent({
+                                componentType: ComponentType.appButton,
+                                action: Action.click,
+                                value: 'deleteAllDownload',
+                                componentId: 'manageEditions',
+                            })
                         },
                     },
                     ...(loading
@@ -130,9 +137,17 @@ const ManageEditionsScreen = () => {
                                   proxy: (
                                       <Switch
                                           value={data.wifiOnlyDownloads}
-                                          onValueChange={val =>
+                                          onValueChange={val => {
                                               setWifiOnlyDownloads(client, val)
-                                          }
+                                              sendComponentEvent({
+                                                  componentType:
+                                                      ComponentType.appButton,
+                                                  action: Action.click,
+                                                  componentId:
+                                                      'manageEditionsWifiDownload',
+                                                  value: val.toString(),
+                                              })
+                                          }}
                                       />
                                   ),
                               },
@@ -151,6 +166,14 @@ const ManageEditionsScreen = () => {
                                                   n,
                                               )
                                               getIssueSummary(false)
+                                              sendComponentEvent({
+                                                  componentType:
+                                                      ComponentType.appButton,
+                                                  action: Action.click,
+                                                  componentId:
+                                                      'manageEditionsAvailableEditions',
+                                                  value: n.toString(),
+                                              })
                                           }}
                                       />
                                   ),
