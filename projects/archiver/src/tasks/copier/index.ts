@@ -19,7 +19,7 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         const outputBucket = getBucket('publish')
         console.log(`Copying all files from ${inputBucket} to ${outputBucket}`)
         // List all keys
-        const keys = await list(inputBucket, issue.key)
+        const keys = await list(inputBucket, issue.key + '/' + issue.date)
 
         // Loop over them creating copy promises
         // Gather the promises into one and return

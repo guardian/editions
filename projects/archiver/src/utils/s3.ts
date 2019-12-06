@@ -165,6 +165,7 @@ export const list = (
                     return
                 }
                 console.log(`Keys below ${baseKey} fetched from ${inputBucket}`)
+                console.log(data.Contents)
                 resolve({ objects: data.Contents || [] })
             },
         )
