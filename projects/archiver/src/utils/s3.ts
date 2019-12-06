@@ -180,8 +180,8 @@ export const copy = (
     return new Promise((resolve, reject) => {
         s3.copyObject(
             {
-                Bucket: '',
-                CopySource: '',
+                Bucket: outputBucket,
+                CopySource: `${inputBucket}/${key}`,
                 Key: `${key}`,
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
