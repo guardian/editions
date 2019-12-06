@@ -90,6 +90,7 @@ const AppStack = createModalNavigator(
                 [routeNames.Endpoints]: ApiScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
+                [routeNames.ManageEditionsSettings]: ManageEditionsScreen,
                 [routeNames.TermsAndConditions]: TermsAndConditionsScreen,
                 [routeNames.Help]: HelpScreen,
                 [routeNames.Credits]: CreditsScreen,
