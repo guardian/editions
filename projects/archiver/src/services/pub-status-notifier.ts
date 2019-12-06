@@ -1,7 +1,7 @@
 import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
 import { IssuePublicationIdentifier, Edition } from '../../common'
-import { Status } from '../services/status'
+import { Status } from './status'
 import { Moment } from 'moment'
 
 export type ToolStatus = 'Processing' | 'Published' | 'Failed' | 'Copied'
@@ -83,7 +83,7 @@ export const createPublishEvent = (
                 timestamp,
             }
         case 'errored':
-            throw new Error('Can\'t make publish event with status "unknown"')
+            throw new Error('Can\'t make publish event with status "errored"')
         default:
             return throwBadStatus(status)
     }

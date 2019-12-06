@@ -44,7 +44,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
             console.log('input:', JSON.stringify(input))
             const result = await handler(input)
             console.log('output:', JSON.stringify(result))
-            if (statusOnSuccess) {
+            if (statusOnSuccess != 'errored') {
                 await dependencies.putStatus(issuePublication, statusOnSuccess)
                 const event = createPublishEvent(
                     issuePublication,
