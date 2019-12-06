@@ -71,6 +71,8 @@ export const taskLambda = (
                 resources: [
                     proofBucket.arnForObjects('*'),
                     proofBucket.bucketArn,
+                    publishBucket.arnForObjects('*'),
+                    publishBucket.bucketArn,
                 ],
             }),
             new iam.PolicyStatement({
