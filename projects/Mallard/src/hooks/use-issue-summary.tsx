@@ -36,7 +36,6 @@ const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
         : await readIssueSummary()
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
     const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
-    console.log('trimmedSummary', trimmedSummary)
     return trimmedSummary
 }
 
