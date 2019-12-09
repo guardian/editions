@@ -1,6 +1,6 @@
 import { getIssuesSummary } from '../issue'
 import { IssueSummary } from '../../../Apps/common/src'
-import { LIVE_PAGE_SIZE, PREVIEW_PAGE_SIZE } from '../issue'
+import { DEFAULT_LIVE_PAGE_SIZE, DEFAULT_PREVIEW_PAGE_SIZE } from '../issue'
 
 const dailyEdition = 'daily-edition'
 
@@ -163,13 +163,13 @@ describe('getIssuesSummary', () => {
         expect(issues).toHaveLength(7)
 
         const issues2 = await getIssuesSummary(dailyEdition, isPreview)
-        expect(issues2).toHaveLength(LIVE_PAGE_SIZE)
+        expect(issues2).toHaveLength(DEFAULT_LIVE_PAGE_SIZE)
     })
 
     it('returns the correct numer of issues when in preview stage', async () => {
         const isPreview = true
         const issues = await getIssuesSummary(dailyEdition, isPreview)
-        expect(issues).toHaveLength(PREVIEW_PAGE_SIZE)
+        expect(issues).toHaveLength(DEFAULT_PREVIEW_PAGE_SIZE)
     })
 
     it('returns the most recent issues', async () => {

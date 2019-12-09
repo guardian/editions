@@ -4,7 +4,7 @@ import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../Apps/common/src'
-import { lastSevenDays, todayAsKey } from './issues'
+import { lastNDays, todayAsKey } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -12,6 +12,8 @@ import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { pushTracking } from 'src/helpers/push-tracking'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
+import { fetch } from '@react-native-community/netinfo'
+import { getDownloadBlockedStatus } from 'src/hooks/use-net-info'
 
 interface BasicFile {
     filename: string
@@ -249,12 +251,18 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
-export const downloadAndUnzipIssue = (
+export const downloadAndUnzipIssue = async (
     issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
     run = runDownload,
 ) => {
+    const downloadBlocked = getDownloadBlockedStatus(
+        ...(await Promise.all([fetch(), getSetting('wifiOnlyDownloads')])),
+    )
+    if (downloadBlocked) {
+        return
+    }
     const { localId } = issue
     const promise = maybeListenToExistingDownload(issue, onProgress)
     if (promise) return promise
@@ -285,19 +293,22 @@ export const getLocalIssues = () =>
         .ls(FSPaths.contentPrefixDir)
         .then(files => files.map(withPathPrefix(defaultSettings.contentPrefix)))
 
-export const issuesToDelete = (files: string[]) =>
-    files.filter(
+export const issuesToDelete = async (files: string[]) => {
+    const maxAvailableEditions = await getSetting('maxAvailableEditions')
+    const lastNumberOfDays = lastNDays(maxAvailableEditions)
+    return files.filter(
         issue =>
-            !lastSevenDays()
+            !lastNumberOfDays
                 .map(withPathPrefix(defaultSettings.contentPrefix))
                 .includes(issue) &&
             issue !== `${defaultSettings.contentPrefix}/issues`,
     )
+}
 
 export const clearOldIssues = async (): Promise<void> => {
     const files = await getLocalIssues()
 
-    const iTD: string[] = issuesToDelete(files)
+    const iTD: string[] = await issuesToDelete(files)
 
     return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
         .then(() => pushTracking('clearOldIssues', 'completed'))
@@ -339,7 +350,7 @@ export const downloadTodaysIssue = async () => {
     }
 }
 
-export const readIssueSummary = async () =>
+export const readIssueSummary = async (): Promise<IssueSummary[]> =>
     RNFetchBlob.fs
         .readFile(FSPaths.contentPrefixDir + defaultSettings.issuesPath, 'utf8')
         .then(data => JSON.parse(data))
@@ -347,14 +358,14 @@ export const readIssueSummary = async () =>
             throw e
         })
 
-export const fetchAndStoreIssueSummary = async () => {
+export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const apiUrl = await getSetting('apiUrl')
     return RNFetchBlob.config({
         overwrite: true,
         path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
         IOSBackgroundTask: true,
     })
-        .fetch('GET', apiUrl + 'issues', {
+        .fetch('GET', `${apiUrl}issues`, {
             'Content-Type': 'application/json',
         })
         .then(async res => {
