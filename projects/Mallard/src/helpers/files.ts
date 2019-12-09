@@ -167,11 +167,11 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
     const { assets, localId } = issue
     try {
         if (!assets) {
-            pushTracking('noAssets', 'complete')
+            await pushTracking('noAssets', 'complete')
             return
         }
 
-        pushTracking(
+        await pushTracking(
             'attemptDataDownload',
             JSON.stringify({ localId, assets: assets.data }),
         )
@@ -183,9 +183,9 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const dataRes = await issueDataDownload.promise
 
-        pushTracking('attemptDataDownload', 'completed')
+        await pushTracking('attemptDataDownload', 'completed')
 
-        pushTracking(
+        await pushTracking(
             'attemptMediaDownload',
             JSON.stringify({ localId, assets: assets[imageSize] }),
         )
@@ -208,7 +208,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const imgRes = await imgDL.promise
 
-        pushTracking('attemptMediaDownload', 'completed')
+        await pushTracking('attemptMediaDownload', 'completed')
 
         updateListeners(localId, {
             type: 'unzip',
@@ -223,25 +223,25 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
              * and then block things like re-downloading if the images stopped downloading
              */
 
-            pushTracking('unzipData', 'start')
+            await pushTracking('unzipData', 'start')
             await unzipNamedIssueArchive(dataRes.path())
-            pushTracking('unzipData', 'end')
+            await pushTracking('unzipData', 'end')
             /**
              * The last thing we do is unzip the directory that will confirm if the issue exists
              */
-            pushTracking('unzipImages', 'start')
+            await pushTracking('unzipImages', 'start')
             await unzipNamedIssueArchive(imgRes.path())
-            pushTracking('unzipImages', 'end')
+            await pushTracking('unzipImages', 'end')
         } catch (error) {
             updateListeners(localId, { type: 'failure', data: error })
-            pushTracking('unzipError', JSON.stringify(error))
+            await pushTracking('unzipError', JSON.stringify(error))
             console.log('Unzip error: ', error)
         }
 
-        pushTracking('downloadAndUnzip', 'complete')
+        await pushTracking('downloadAndUnzip', 'complete')
         updateListeners(localId, { type: 'success' }) // null is unstarted or end
     } catch (error) {
-        pushTracking('downloadAndUnzipError', JSON.stringify(error))
+        await pushTracking('downloadAndUnzipError', JSON.stringify(error))
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
     }
@@ -261,11 +261,10 @@ export const downloadAndUnzipIssue = (
 
     const createDownloadPromise = async () => {
         try {
-            pushTracking('attemptDownload', JSON.stringify(issue))
             await run(issue, imageSize)
             localIssueListStore.add(localId)
         } finally {
-            pushTracking('completeAndDeleteCache', 'completed')
+            await pushTracking('completeAndDeleteCache', 'completed')
             delete dlCache[localId]
         }
     }
