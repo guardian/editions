@@ -30,10 +30,11 @@ import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 
 import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
-import { Front, IssueWithFronts } from '../../../../Apps/common/src'
-import { getColor } from 'src/helpers/transform'
+import { Front, IssueWithFronts, Appearance } from '../../../../Apps/common/src'
+import { getPillarColors } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import { colour } from '@guardian/pasteup/palette'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -165,9 +166,35 @@ const IssueButtonContainer = React.memo(
     ),
 )
 
+/**
+ * Custom palette for Front titles. We use the dark variants for some pillars
+ * because their "main" counterpart isn't legible enough for text on a light
+ * background.
+ */
+const getCustomColor = (appr: Appearance): colour => {
+    switch (appr.type) {
+        case 'pillar': {
+            const colors = getPillarColors(appr.name)
+            switch (appr.name) {
+                case 'culture':
+                case 'lifestyle':
+                    return colors.dark
+                default:
+                    return colors.main
+            }
+        }
+        case 'custom': {
+            return appr.color
+        }
+        default: {
+            return getPillarColors('neutral').main
+        }
+    }
+}
+
 const IssueFrontRow = React.memo(
     ({ front, onPress }: { front: Front; onPress: () => void }) => {
-        const textColor = getColor(front.appearance)
+        const textColor = getCustomColor(front.appearance)
         return (
             <GridRowSplit>
                 <View style={styles.frontTitleWrap}>
