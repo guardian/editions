@@ -16,7 +16,7 @@ const getPushTracking = async (): Promise<string | null> =>
 const clearPushTracking = async (): Promise<void> =>
     AsyncStorage.removeItem(PUSH_TRACKING_KEY)
 
-const pushTracking = async (id: string, value: string) => {
+const pushTracking = async (id: string, value: string): Promise<void> => {
     try {
         if (__DEV__) {
             console.log(`Push Tracking: ${id} | ${value}`)
