@@ -87,8 +87,7 @@ const AvailableEditionsButtons = ({
 )
 
 const ManageEditionsScreen = () => {
-    const client = useApolloClient()
-    const { data, loading } = useQuery(gql`
+    const { client, data, loading } = useQuery(gql`
         {
             wifiOnlyDownloads @client
             maxAvailableEditions @client

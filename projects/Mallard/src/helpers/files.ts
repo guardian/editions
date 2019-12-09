@@ -295,9 +295,10 @@ export const getLocalIssues = () =>
 
 export const issuesToDelete = async (files: string[]) => {
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
+    const lastNumberOfDays = lastNDays(maxAvailableEditions)
     return files.filter(
         issue =>
-            !lastNDays(maxAvailableEditions)
+            !lastNumberOfDays
                 .map(withPathPrefix(defaultSettings.contentPrefix))
                 .includes(issue) &&
             issue !== `${defaultSettings.contentPrefix}/issues`,

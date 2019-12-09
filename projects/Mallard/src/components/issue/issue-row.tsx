@@ -273,10 +273,7 @@ const IssueRowHeader = React.memo(
                 }
             >
                 <View style={styles.issueTitleWrap}>
-                    <Highlight
-                        hitSlop={{ top: 10, bottom: 10, left: 60, right: 60 }}
-                        onPress={onPress}
-                    >
+                    <Highlight onPress={onPress}>
                         <IssueTitle
                             style={styles.issueTitle}
                             title={weekday}

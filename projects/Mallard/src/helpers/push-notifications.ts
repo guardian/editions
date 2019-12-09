@@ -103,7 +103,7 @@ const pushNotifcationRegistration = () => {
 
                     await pushTracking('pushScreenSize', screenSize)
 
-                    const issueSummaries = await getIssueSummary(true)
+                    const issueSummaries = await getIssueSummary()
 
                     await pushTracking(
                         'pushIssueSummaries',

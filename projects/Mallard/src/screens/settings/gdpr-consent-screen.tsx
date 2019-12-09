@@ -165,26 +165,23 @@ const GdprConsent = ({
             <TallRow
                 title={''}
                 explainer={
-                    <>
-                        <Text>
-                            Below you can manage your privacy settings for
-                            cookies and similar technologies for this service.
-                            These technologies are provided by us and by our
-                            third-party partners. To find out more, read our{' '}
-                            <LinkNav
-                                onPress={() =>
-                                    navigation.navigate(
-                                        routeNames.onboarding
-                                            .PrivacyPolicyInline,
-                                    )
-                                }
-                            >
-                                privacy policy
-                            </LinkNav>
-                            . If you disable a category, you may need to restart
-                            the app for your changes to fully take effect.
-                        </Text>
-                    </>
+                    <Text>
+                        Below you can manage your privacy settings for cookies
+                        and similar technologies for this service. These
+                        technologies are provided by us and by our third-party
+                        partners. To find out more, read our{' '}
+                        <LinkNav
+                            onPress={() =>
+                                navigation.navigate(
+                                    routeNames.onboarding.PrivacyPolicyInline,
+                                )
+                            }
+                        >
+                            privacy policy
+                        </LinkNav>
+                        . If you disable a category, you may need to restart the
+                        app for your changes to fully take effect.
+                    </Text>
                 }
                 proxy={
                     <Button
