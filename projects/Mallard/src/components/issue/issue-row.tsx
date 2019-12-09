@@ -136,14 +136,16 @@ const IssueButton = ({
                 return
             }
         }
-        if ((await fetch()).isConnected && !dlStatus) {
-            sendComponentEvent({
-                componentType: ComponentType.appButton,
-                action: Action.click,
-                value: 'issues_list_issue_clicked',
-            })
-            const imageSize = await imageForScreenSize()
-            downloadAndUnzipIssue(issue, imageSize, handleUpdate)
+        if ((await fetch()).isConnected) {
+            if (!dlStatus) {
+                sendComponentEvent({
+                    componentType: ComponentType.appButton,
+                    action: Action.click,
+                    value: 'issues_list_issue_clicked',
+                })
+                const imageSize = await imageForScreenSize()
+                downloadAndUnzipIssue(issue, imageSize, handleUpdate)
+            }
         } else {
             showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE)
         }
