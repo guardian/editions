@@ -48,6 +48,11 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: color.line,
     },
+    errorMessage: {
+        height: ISSUE_FRONT_ROW_HEIGHT,
+        paddingHorizontal: metrics.horizontal,
+        paddingTop: metrics.vertical,
+    },
 
     frontTitleWrap: {
         flex: 1,
@@ -252,7 +257,7 @@ export const IssueRow = React.memo(
         onPressFront,
     }: {
         issue: IssueSummary
-        issueDetails: Loaded<IssueWithFronts>
+        issueDetails: Loaded<IssueWithFronts> | null
         onPress: () => void
         onPressFront: (key: string) => void
     }) => (
@@ -263,6 +268,15 @@ export const IssueRow = React.memo(
                     fronts={issueDetails.value.fronts}
                     onPressFront={onPressFront}
                 />
+            )}
+            {issueDetails != null && issueDetails.error != null && (
+                <View style={styles.frontsSelector}>
+                    <GridRowSplit>
+                        <Text style={styles.errorMessage}>
+                            Failed to fetch the issue
+                        </Text>
+                    </GridRowSplit>
+                </View>
             )}
         </>
     ),

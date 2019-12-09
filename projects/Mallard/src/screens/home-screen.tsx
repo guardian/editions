@@ -246,15 +246,17 @@ const IssueListView = withNavigation(
 
             // We pass down the issue details only for the selected issue.
             const renderItem = useCallback(
-                ({ item, index }) => (
-                    <IssueRowContainer
-                        issue={item}
-                        issueDetails={
-                            index === currentIssueIndex ? details : null
-                        }
-                        navigation={navigation}
-                    />
-                ),
+                ({ item, index }) => {
+                    return (
+                        <IssueRowContainer
+                            issue={item}
+                            issueDetails={
+                                index === currentIssueIndex ? details : null
+                            }
+                            navigation={navigation}
+                        />
+                    )
+                },
                 [currentIssueIndex, details, navigation],
             )
 
@@ -309,6 +311,7 @@ const IssueListView = withNavigation(
                         currentIssueIndex >= 0 ? currentIssueIndex : undefined
                     }
                     renderItem={renderItem}
+                    extraData={details}
                     getItemLayout={getItemLayout}
                     ref={refFn}
                 />
