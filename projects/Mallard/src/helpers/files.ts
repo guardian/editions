@@ -261,7 +261,6 @@ export const downloadAndUnzipIssue = (
 
     const createDownloadPromise = async () => {
         try {
-            await pushTracking('attemptDownload', JSON.stringify(issue))
             await run(issue, imageSize)
             localIssueListStore.add(localId)
         } finally {
