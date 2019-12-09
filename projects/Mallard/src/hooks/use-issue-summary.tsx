@@ -92,7 +92,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             grabIssueAndSetLatest()
         }
 
-        NetInfo.addEventListener(({ isConnected }) => {
+        const unsubNet = NetInfo.addEventListener(({ isConnected }) => {
             // try and get a fresh summary until we made it to online
             if (!hasConnected.current) {
                 hasConnected.current = isConnected
@@ -101,15 +101,19 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             }
         })
 
-        AppState.addEventListener(
-            'change',
-            async (appState: AppStateStatus) => {
-                // when we foreground have another go at fetching again
-                if (appState === 'active') {
-                    grabIssueAndSetLatest()
-                }
-            },
-        )
+        const appStateChangeListener = async (appState: AppStateStatus) => {
+            // when we foreground have another go at fetching again
+            if (appState === 'active') {
+                grabIssueAndSetLatest()
+            }
+        }
+
+        AppState.addEventListener('change', appStateChangeListener)
+
+        return () => {
+            unsubNet()
+            AppState.removeEventListener('change', appStateChangeListener)
+        }
     }, [issueId, maxAvailableEditions])
 
     return (
