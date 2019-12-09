@@ -19,6 +19,9 @@ import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
 import { useNavPosition } from 'src/hooks/use-nav-position'
+import { isPreview } from 'src/helpers/settings/defaults'
+import { Button } from 'src/components/button/button'
+import { getSetting } from 'src/helpers/settings'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -118,6 +121,14 @@ const SliderSectionBar = ({
         extrapolate: 'clamp',
     })
 
+    const [previewMode, setPreviewMode] = useState(false)
+
+    useEffect(() => {
+        getSetting('apiUrl').then(apiUrl => {
+            setPreviewMode(isPreview(apiUrl))
+        })
+    }, [])
+
     return (
         <Animated.View
             style={[
@@ -129,8 +140,10 @@ const SliderSectionBar = ({
                         },
                     ],
                 },
+                { flexDirection: 'row' },
             ]}
         >
+            {previewMode && <Button>&larr;</Button>}
             <Slider
                 small={false}
                 title={section.title}
@@ -138,6 +151,7 @@ const SliderSectionBar = ({
                 stops={2}
                 position={sliderPos}
             />
+            {previewMode && <Button>&rarr;</Button>}
         </Animated.View>
     )
 }
