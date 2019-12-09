@@ -28,6 +28,7 @@ import { fetch } from 'src/hooks/use-net-info'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
+import { Loaded } from 'src/helpers/Loaded'
 
 import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
 import { Front, IssueWithFronts } from '../../../../Apps/common/src'
@@ -251,15 +252,15 @@ export const IssueRow = React.memo(
         onPressFront,
     }: {
         issue: IssueSummary
-        issueDetails: IssueWithFronts | null
+        issueDetails: Loaded<IssueWithFronts>
         onPress: () => void
         onPressFront: (key: string) => void
     }) => (
         <>
             <IssueRowHeader onPress={onPress} issue={issue} />
-            {issueDetails != null && (
+            {issueDetails != null && issueDetails.value != null && (
                 <IssueFrontsSelector
-                    fronts={issueDetails.fronts}
+                    fronts={issueDetails.value.fronts}
                     onPressFront={onPressFront}
                 />
             )}

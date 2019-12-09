@@ -41,6 +41,8 @@ import { Separator } from 'src/components/layout/ui/row'
 import { color } from 'src/theme/color'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import { IssueWithFronts } from '../../../Apps/common/src'
+import { PathToIssue } from 'src/paths'
+import { Loaded, LOADING } from 'src/helpers/Loaded'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -104,7 +106,7 @@ const IssueRowContainer = React.memo(
         navigation,
     }: {
         issue: IssueSummary
-        issueDetails: IssueWithFronts | null
+        issueDetails: Loaded<IssueWithFronts> | null
         navigation: NavigationScreenProp<
             NavigationRoute<NavigationParams>,
             NavigationParams
@@ -209,13 +211,17 @@ const IssueListView = withNavigation(
     React.memo(
         ({
             issueList,
-            currentIssueDetails,
+            currentIssue,
             navigation,
         }: {
             issueList: IssueSummary[]
-            currentIssueDetails: IssueWithFronts
+            currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> }
         } & NavigationInjectedProps) => {
-            const { localId, publishedId, fronts } = currentIssueDetails
+            const {
+                localIssueId: localId,
+                publishedIssueId: publishedId,
+            } = currentIssue.id
+            const { details } = currentIssue
 
             // We want to scroll to the current issue.
             const currentIssueIndex = issueList.findIndex(
@@ -244,17 +250,17 @@ const IssueListView = withNavigation(
                     <IssueRowContainer
                         issue={item}
                         issueDetails={
-                            index === currentIssueIndex
-                                ? currentIssueDetails
-                                : null
+                            index === currentIssueIndex ? details : null
                         }
                         navigation={navigation}
                     />
                 ),
-                [currentIssueIndex, currentIssueDetails, navigation],
+                [currentIssueIndex, details, navigation],
             )
 
             // Height of the fronts so we can provide this to `getItemLayout`.
+            const fronts =
+                !details.isLoading && details.value ? details.value.fronts : []
             const frontRowsHeight = fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
 
             // Changing the current issue will affect the layout, so that's
@@ -313,43 +319,38 @@ const IssueListView = withNavigation(
 
 const IssueListViewWithDelay = ({
     issueList,
-    currentIssueDetails,
+    currentId,
+    currentIssue,
 }: {
     issueList: IssueSummary[]
-    currentIssueDetails: IssueWithFronts | null
+    currentId: PathToIssue
+    currentIssue: Loaded<IssueWithFronts>
 }) => {
-    const [shownIssueDetails, setShownIssueDetails] = useState(
-        currentIssueDetails,
-    )
+    const [shownIssue, setShownIssue] = useState({
+        id: currentId,
+        details: currentIssue,
+    })
 
     // When we just pressed a issue row, it'll take a bit of time to
     // fetch the details (ex. list of fronts). During this time,
     // `currentIssueDetails` will be `null`. So in the meantime, we'll
     // keep showing the previous fronts.
     useEffect(() => {
-        if (currentIssueDetails != null) {
-            setShownIssueDetails(currentIssueDetails)
+        if (!currentIssue.isLoading) {
+            setShownIssue({ id: currentId, details: currentIssue })
         }
-    }, [currentIssueDetails])
+    }, [currentId, currentIssue])
 
-    // This can happen on the very first load of the list, when we don't
-    // have any details at all. However since the "fronts" page would
-    // have loaded the details of the current issue already, this will
-    // rarely happen.
-    if (shownIssueDetails === null) return null
-
-    return (
-        <IssueListView
-            issueList={issueList}
-            currentIssueDetails={shownIssueDetails}
-        />
-    )
+    return <IssueListView issueList={issueList} currentIssue={shownIssue} />
 }
 
 const NO_ISSUES: IssueSummary[] = []
+const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' }
 const IssueListFetchContainer = () => {
-    const { issueSummary, issueId } = useIssueSummary()
-    const { localIssueId = '', publishedIssueId = '' } = issueId || {}
+    const data = useIssueSummary()
+    const issueSummary = data.issueSummary || NO_ISSUES
+    const issueId = data.issueId || EMPTY_ISSUE_ID
+    const { localIssueId, publishedIssueId } = issueId
     const resp = useIssueResponse(
         // FIXME: we are forced to memo this object because `useIssueResponse`
         // would rerender in a loop otherwise (because we'd provide a different
@@ -362,17 +363,25 @@ const IssueListFetchContainer = () => {
         ]),
     )
     return resp({
-        error: () => <></>,
-        pending: () => (
+        error: (error: Error) => (
             <IssueListViewWithDelay
-                issueList={issueSummary || NO_ISSUES}
-                currentIssueDetails={null}
+                issueList={issueSummary}
+                currentId={issueId}
+                currentIssue={{ error }}
             />
         ),
-        success: details => (
+        pending: () => (
             <IssueListViewWithDelay
-                issueList={issueSummary || NO_ISSUES}
-                currentIssueDetails={details}
+                issueList={issueSummary}
+                currentId={issueId}
+                currentIssue={{ isLoading: true }}
+            />
+        ),
+        success: (value: IssueWithFronts) => (
+            <IssueListViewWithDelay
+                issueList={issueSummary}
+                currentId={issueId}
+                currentIssue={{ value }}
             />
         ),
     })
@@ -401,13 +410,12 @@ export const HomeScreen = ({
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (
-                <>
-                    <FlexErrorMessage
-                        debugMessage={error}
-                        title={CONNECTION_FAILED_ERROR}
-                        message={CONNECTION_FAILED_AUTO_RETRY}
-                    />
-                </>
+                <FlexErrorMessage
+                    style={styles.issueList}
+                    debugMessage={error}
+                    title={CONNECTION_FAILED_ERROR}
+                    message={CONNECTION_FAILED_AUTO_RETRY}
+                />
             ) : (
                 <FlexCenter>
                     <Spinner></Spinner>

@@ -19,6 +19,10 @@ export const getIssueResponse = (
     localIssueId: Issue['localId'],
     publishedIssueId: Issue['publishedId'],
 ) => {
+    return {
+        type: 'promise',
+        getValue: () => Promise.reject(new Error('hello')),
+    }
     //TODO: make this work with twin ids
     return fetchIssue(localIssueId, publishedIssueId)
 }
