@@ -1,4 +1,4 @@
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import React from 'react'
 import { Alert, Switch, TouchableOpacity, View, StyleSheet } from 'react-native'
