@@ -80,6 +80,8 @@ type SliderBarProps = {
     sliderPosition: Animated.AnimatedInterpolation
     width: number
     isFirst: boolean
+    goNext: () => void
+    goPrevious: () => void
 }
 
 const SliderSectionBar = ({
@@ -87,6 +89,8 @@ const SliderSectionBar = ({
     sliderPosition,
     width,
     isFirst,
+    goNext,
+    goPrevious,
 }: SliderBarProps) => {
     const sliderPos = sliderPosition
         .interpolate({
@@ -136,7 +140,7 @@ const SliderSectionBar = ({
                 { flexDirection: 'row' },
             ]}
         >
-            {isPreview && <Button>&larr;</Button>}
+            {isPreview && <Button onPress={goPrevious}>&larr;</Button>}
             <Slider
                 small={false}
                 title={section.title}
@@ -144,16 +148,20 @@ const SliderSectionBar = ({
                 stops={2}
                 position={sliderPos}
             />
-            {isPreview && <Button>&rarr;</Button>}
+            {isPreview && <Button onPress={goNext}>&rarr;</Button>}
         </Animated.View>
     )
 }
 
 const SliderBar = ({
+    goNext,
+    goPrevious,
     sections,
     sliderPosition,
     width,
 }: {
+    goNext: () => void
+    goPrevious: () => void
     sections: SliderSection[]
     sliderPosition: Animated.AnimatedInterpolation
     width: number
@@ -167,6 +175,8 @@ const SliderBar = ({
                     key={section.title}
                     width={width}
                     isFirst={index === 0}
+                    goNext={goNext}
+                    goPrevious={goPrevious}
                 />
             ))}
         </MaxWidthWrap>
@@ -180,12 +190,16 @@ const AndroidHeader = withNavigation(
         sections,
         sliderPosition,
         width,
+        goNext,
+        goPrevious,
     }: {
         isShown: boolean
         isAtTop: boolean
         sections: SliderSection[]
         sliderPosition: Animated.AnimatedInterpolation
         width: number
+        goNext: () => void
+        goPrevious: () => void
     } & NavigationInjectedProps) => {
         const [top] = useState(new Animated.Value(0))
         useEffect(() => {
@@ -214,6 +228,8 @@ const AndroidHeader = withNavigation(
                         sections={sections}
                         sliderPosition={sliderPosition}
                         width={width}
+                        goNext={goNext}
+                        goPrevious={goPrevious}
                     />
                 </View>
             </Animated.View>
@@ -258,6 +274,7 @@ const ArticleSlider = ({
 
     const { width } = useDimensions()
     const flatListRef = useRef<AnimatedFlatListRef | undefined>()
+    const viewPagerRef = useRef<ViewPagerAndroid | null>()
 
     useEffect(() => {
         flatListRef.current &&
@@ -293,12 +310,42 @@ const ArticleSlider = ({
     const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
     const { position, setPosition, setTrigger } = useNavPosition()
 
+    const scroller = (index: number) => {
+        if (Platform.OS === 'ios') {
+            if (flatListRef && flatListRef.current) {
+                flatListRef.current._component.scrollToIndex({
+                    index,
+                    animated: true,
+                })
+            }
+        } else {
+            if (viewPagerRef && viewPagerRef.current) {
+                viewPagerRef.current.setPage(index)
+            }
+        }
+    }
+
+    const goNext = () => {
+        scroller(
+            current === flattenedArticles.length - 1
+                ? flattenedArticles.length - 1
+                : current + 1,
+        )
+    }
+
+    const goPrevious = () => {
+        scroller(current === 0 ? 0 : current - 1)
+    }
+
     if (Platform.OS === 'android')
         return (
             <>
                 <ViewPagerAndroid
                     style={styles.androidPager}
                     initialPage={startingPoint}
+                    ref={viewPager => {
+                        viewPagerRef.current = viewPager
+                    }}
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
                         const index = ev.nativeEvent.position
@@ -351,6 +398,8 @@ const ArticleSlider = ({
                     sliderPosition={sliderPosition}
                     width={width}
                     sections={sliderSections}
+                    goNext={goNext}
+                    goPrevious={goPrevious}
                 />
             </>
         )
@@ -362,6 +411,8 @@ const ArticleSlider = ({
                 {...panResponder.panHandlers}
             >
                 <SliderBar
+                    goNext={goNext}
+                    goPrevious={goPrevious}
                     sections={sliderSections}
                     sliderPosition={Animated.divide(
                         sliderPosition,
