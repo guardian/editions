@@ -95,17 +95,17 @@ const pushNotifcationRegistration = () => {
             // Do tracking as soon as possible
             notificationTracking(notificationId, 'received')
 
-            pushTracking('notification', JSON.stringify(notification))
+            await pushTracking('notification', JSON.stringify(notification))
 
             if (key) {
                 try {
                     const screenSize = await imageForScreenSize()
 
-                    pushTracking('pushScreenSize', screenSize)
+                    await pushTracking('pushScreenSize', screenSize)
 
                     const issueSummaries = await getIssueSummary()
 
-                    pushTracking(
+                    await pushTracking(
                         'pushIssueSummaries',
                         JSON.stringify(issueSummaries),
                     )
@@ -116,20 +116,18 @@ const pushNotifcationRegistration = () => {
                         key,
                     )
 
-                    pushTracking(
+                    await pushTracking(
                         'pushImageSummary',
                         JSON.stringify(pushImageSummary),
                     )
 
                     await downloadAndUnzipIssue(pushImageSummary, screenSize)
 
-                    pushTracking('pushDownloadComplete', 'completed')
+                    await pushTracking('pushDownloadComplete', 'completed')
 
                     notificationTracking(notificationId, 'downloaded')
                 } catch (e) {
-                    console.log(
-                        `Push notification unable to download: ${e.message}`,
-                    )
+                    await pushTracking('pushDownloadError', JSON.stringify(e))
                     errorService.captureException(e)
                 } finally {
                     // No matter what happens, always clear up old issues

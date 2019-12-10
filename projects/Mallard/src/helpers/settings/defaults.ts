@@ -125,6 +125,8 @@ export const defaultSettings: Settings = {
     storeDetails,
     senderId: __DEV__ ? senderId.code : senderId.prod,
     isWeatherShown: true,
+    wifiOnlyDownloads: false,
+    maxAvailableEditions: 7,
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {

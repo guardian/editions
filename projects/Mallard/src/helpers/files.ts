@@ -4,7 +4,7 @@ import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
 import { ImageSize, IssueSummary } from '../../../Apps/common/src'
-import { lastSevenDays, todayAsKey } from './issues'
+import { lastNDays, todayAsKey } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
@@ -12,6 +12,8 @@ import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { pushTracking } from 'src/helpers/push-tracking'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
+import { fetch } from '@react-native-community/netinfo'
+import { getDownloadBlockedStatus } from 'src/hooks/use-net-info'
 
 interface BasicFile {
     filename: string
@@ -167,11 +169,11 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
     const { assets, localId } = issue
     try {
         if (!assets) {
-            pushTracking('noAssets', 'complete')
+            await pushTracking('noAssets', 'complete')
             return
         }
 
-        pushTracking(
+        await pushTracking(
             'attemptDataDownload',
             JSON.stringify({ localId, assets: assets.data }),
         )
@@ -183,9 +185,9 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const dataRes = await issueDataDownload.promise
 
-        pushTracking('attemptDataDownload', 'completed')
+        await pushTracking('attemptDataDownload', 'completed')
 
-        pushTracking(
+        await pushTracking(
             'attemptMediaDownload',
             JSON.stringify({ localId, assets: assets[imageSize] }),
         )
@@ -208,7 +210,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const imgRes = await imgDL.promise
 
-        pushTracking('attemptMediaDownload', 'completed')
+        await pushTracking('attemptMediaDownload', 'completed')
 
         updateListeners(localId, {
             type: 'unzip',
@@ -223,25 +225,25 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
              * and then block things like re-downloading if the images stopped downloading
              */
 
-            pushTracking('unzipData', 'start')
+            await pushTracking('unzipData', 'start')
             await unzipNamedIssueArchive(dataRes.path())
-            pushTracking('unzipData', 'end')
+            await pushTracking('unzipData', 'end')
             /**
              * The last thing we do is unzip the directory that will confirm if the issue exists
              */
-            pushTracking('unzipImages', 'start')
+            await pushTracking('unzipImages', 'start')
             await unzipNamedIssueArchive(imgRes.path())
-            pushTracking('unzipImages', 'end')
+            await pushTracking('unzipImages', 'end')
         } catch (error) {
             updateListeners(localId, { type: 'failure', data: error })
-            pushTracking('unzipError', JSON.stringify(error))
+            await pushTracking('unzipError', JSON.stringify(error))
             console.log('Unzip error: ', error)
         }
 
-        pushTracking('downloadAndUnzip', 'complete')
+        await pushTracking('downloadAndUnzip', 'complete')
         updateListeners(localId, { type: 'success' }) // null is unstarted or end
     } catch (error) {
-        pushTracking('downloadAndUnzipError', JSON.stringify(error))
+        await pushTracking('downloadAndUnzipError', JSON.stringify(error))
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
     }
@@ -249,23 +251,28 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
-export const downloadAndUnzipIssue = (
+export const downloadAndUnzipIssue = async (
     issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
     run = runDownload,
 ) => {
+    const downloadBlocked = getDownloadBlockedStatus(
+        ...(await Promise.all([fetch(), getSetting('wifiOnlyDownloads')])),
+    )
+    if (downloadBlocked) {
+        return
+    }
     const { localId } = issue
     const promise = maybeListenToExistingDownload(issue, onProgress)
     if (promise) return promise
 
     const createDownloadPromise = async () => {
         try {
-            pushTracking('attemptDownload', JSON.stringify(issue))
             await run(issue, imageSize)
             localIssueListStore.add(localId)
         } finally {
-            pushTracking('completeAndDeleteCache', 'completed')
+            await pushTracking('completeAndDeleteCache', 'completed')
             delete dlCache[localId]
         }
     }
@@ -286,19 +293,22 @@ export const getLocalIssues = () =>
         .ls(FSPaths.contentPrefixDir)
         .then(files => files.map(withPathPrefix(defaultSettings.contentPrefix)))
 
-export const issuesToDelete = (files: string[]) =>
-    files.filter(
+export const issuesToDelete = async (files: string[]) => {
+    const maxAvailableEditions = await getSetting('maxAvailableEditions')
+    const lastNumberOfDays = lastNDays(maxAvailableEditions)
+    return files.filter(
         issue =>
-            !lastSevenDays()
+            !lastNumberOfDays
                 .map(withPathPrefix(defaultSettings.contentPrefix))
                 .includes(issue) &&
             issue !== `${defaultSettings.contentPrefix}/issues`,
     )
+}
 
 export const clearOldIssues = async (): Promise<void> => {
     const files = await getLocalIssues()
 
-    const iTD: string[] = issuesToDelete(files)
+    const iTD: string[] = await issuesToDelete(files)
 
     return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
         .then(() => pushTracking('clearOldIssues', 'completed'))
@@ -340,7 +350,7 @@ export const downloadTodaysIssue = async () => {
     }
 }
 
-export const readIssueSummary = async () =>
+export const readIssueSummary = async (): Promise<IssueSummary[]> =>
     RNFetchBlob.fs
         .readFile(FSPaths.contentPrefixDir + defaultSettings.issuesPath, 'utf8')
         .then(data => JSON.parse(data))
@@ -348,14 +358,14 @@ export const readIssueSummary = async () =>
             throw e
         })
 
-export const fetchAndStoreIssueSummary = async () => {
+export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const apiUrl = await getSetting('apiUrl')
     return RNFetchBlob.config({
         overwrite: true,
         path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
         IOSBackgroundTask: true,
     })
-        .fetch('GET', apiUrl + 'issues', {
+        .fetch('GET', `${apiUrl}issues`, {
             'Content-Type': 'application/json',
         })
         .then(async res => {

@@ -1,5 +1,5 @@
 import MockDate from 'mockdate'
-import { todayAsFolder, lastSevenDays, todayAsKey } from '../issues'
+import { todayAsFolder, lastNDays, todayAsKey } from '../issues'
 
 describe('helpers/issues', () => {
     describe('todayAsFolder', () => {
@@ -9,10 +9,10 @@ describe('helpers/issues', () => {
         })
     })
 
-    describe('lastSevenDays', () => {
+    describe('lastNDays', () => {
         it('should give the last seven days, including today in the correct format', () => {
             MockDate.set('2019-08-21')
-            expect(lastSevenDays()).toEqual([
+            expect(lastNDays(7)).toEqual([
                 '2019-08-21',
                 '2019-08-20',
                 '2019-08-19',
