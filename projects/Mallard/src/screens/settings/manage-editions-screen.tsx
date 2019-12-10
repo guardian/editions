@@ -98,33 +98,6 @@ const ManageEditionsScreen = () => {
         <WithAppAppearance value="settings">
             <List
                 data={[
-                    {
-                        key: 'Delete all downloads',
-                        title: 'Delete all downloads',
-                        explainer:
-                            'All downloaded editions will be deleted from your device but will still be available to download',
-                        onPress: () => {
-                            Alert.alert(
-                                'Are you sure you want to delete all downloads?',
-                                'You will still be able to access them and download them again',
-                                [
-                                    {
-                                        text: 'Delete',
-                                        style: 'destructive',
-                                        onPress: deleteIssueFiles,
-                                    },
-                                    { text: 'Cancel', style: 'cancel' },
-                                ],
-                                { cancelable: false },
-                            )
-                            sendComponentEvent({
-                                componentType: ComponentType.appButton,
-                                action: Action.click,
-                                value: 'deleteAllDownload',
-                                componentId: 'manageEditions',
-                            })
-                        },
-                    },
                     ...(loading
                         ? []
                         : [
@@ -178,6 +151,33 @@ const ManageEditionsScreen = () => {
                                   ),
                               },
                           ]),
+                    {
+                        key: 'Delete all downloads',
+                        title: 'Delete all downloads',
+                        explainer:
+                            'All downloaded editions will be deleted from your device but will still be available to download',
+                        onPress: () => {
+                            Alert.alert(
+                                'Are you sure you want to delete all downloads?',
+                                'You will still be able to access them and download them again',
+                                [
+                                    {
+                                        text: 'Delete',
+                                        style: 'destructive',
+                                        onPress: deleteIssueFiles,
+                                    },
+                                    { text: 'Cancel', style: 'cancel' },
+                                ],
+                                { cancelable: false },
+                            )
+                            sendComponentEvent({
+                                componentType: ComponentType.appButton,
+                                action: Action.click,
+                                value: 'deleteAllDownload',
+                                componentId: 'manageEditions',
+                            })
+                        },
+                    },
                 ]}
             />
         </WithAppAppearance>
