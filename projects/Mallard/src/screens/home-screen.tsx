@@ -12,6 +12,7 @@ import {
     IssueRow,
     ISSUE_ROW_HEADER_HEIGHT,
     ISSUE_FRONT_ROW_HEIGHT,
+    ISSUE_FRONT_ERROR_HEIGHT,
 } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
@@ -207,6 +208,13 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 
 const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + 1
 
+const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
+    if (issue.isLoading) return 0
+    if (issue.error) return ISSUE_FRONT_ERROR_HEIGHT + 1
+    const { fronts } = issue.value
+    return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
+}
+
 const IssueListView = withNavigation(
     React.memo(
         ({
@@ -261,9 +269,7 @@ const IssueListView = withNavigation(
             )
 
             // Height of the fronts so we can provide this to `getItemLayout`.
-            const fronts =
-                !details.isLoading && details.value ? details.value.fronts : []
-            const frontRowsHeight = fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
+            const frontRowsHeight = getFrontRowsHeight(details)
 
             // Changing the current issue will affect the layout, so that's
             // indeed a dependency of the callback.

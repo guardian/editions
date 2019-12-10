@@ -41,6 +41,7 @@ const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
 
 export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
 export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.9
+export const ISSUE_FRONT_ERROR_HEIGHT = 120
 
 const styles = StyleSheet.create({
     frontsSelector: {
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
         borderTopColor: color.line,
     },
     errorMessage: {
-        height: ISSUE_FRONT_ROW_HEIGHT,
+        height: ISSUE_FRONT_ERROR_HEIGHT,
         paddingHorizontal: metrics.horizontal,
         paddingTop: metrics.vertical,
     },
@@ -249,6 +250,18 @@ const IssueRowHeader = React.memo(
     },
 )
 
+const IssueFrontsError = () => (
+    <View style={styles.frontsSelector}>
+        <GridRowSplit>
+            <Text style={styles.errorMessage}>
+                We could not load the sections of this edition. If you're
+                offline, try going online and downloading the edition.
+                Otherwise, close and open the app again.
+            </Text>
+        </GridRowSplit>
+    </View>
+)
+
 export const IssueRow = React.memo(
     ({
         issue,
@@ -270,13 +283,7 @@ export const IssueRow = React.memo(
                 />
             )}
             {issueDetails != null && issueDetails.error != null && (
-                <View style={styles.frontsSelector}>
-                    <GridRowSplit>
-                        <Text style={styles.errorMessage}>
-                            Failed to fetch the issue
-                        </Text>
-                    </GridRowSplit>
-                </View>
+                <IssueFrontsError />
             )}
         </>
     ),
