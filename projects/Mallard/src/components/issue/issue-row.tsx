@@ -42,7 +42,7 @@ const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
 
 export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
-export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.9
+export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.65
 
 const styles = StyleSheet.create({
     frontsSelector: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     },
     frontTitle: {
         height: '100%',
-        paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.15,
+        paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.1,
         paddingHorizontal: metrics.horizontal,
     },
     frontTitleText: {
