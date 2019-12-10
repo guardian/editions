@@ -5,4 +5,5 @@ module.exports = {
     NetInfoStateType: {
         unknown: 'unknown',
     },
+    fetch: jest.fn(() => Promise.resolve(true)),
 }

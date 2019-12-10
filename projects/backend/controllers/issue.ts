@@ -16,8 +16,8 @@ import {
     decodeVersionOrPreview,
 } from '../utils/issue'
 
-export const LIVE_PAGE_SIZE = 7
-export const PREVIEW_PAGE_SIZE = 35
+export const DEFAULT_LIVE_PAGE_SIZE = 7
+export const DEFAULT_PREVIEW_PAGE_SIZE = 35
 
 export const issueController = (req: Request, res: Response) => {
     const issueDate: string = req.params.date
@@ -48,6 +48,7 @@ export const issueController = (req: Request, res: Response) => {
 export const getIssuesSummary = async (
     maybeEdition: string,
     isPreview: boolean,
+    pageSize?: number,
 ): Promise<Attempt<IssueSummary[]>> => {
     /**
      * fallbacks to 'daily-edition'
@@ -86,6 +87,7 @@ export const getIssuesSummary = async (
                 : b,
         ),
     )
+
     return issues
         .map(issuePublication => {
             const date = new Date(issuePublication.issueDate)
@@ -108,13 +110,20 @@ export const getIssuesSummary = async (
             localId: `${compositeKey.edition}/${compositeKey.issueDate}`,
             publishedId: `${compositeKey.edition}/${compositeKey.issueDate}/${compositeKey.version}`,
         }))
-        .slice(0, isPreview ? PREVIEW_PAGE_SIZE : LIVE_PAGE_SIZE)
+        .slice(
+            0,
+            pageSize ||
+                (isPreview
+                    ? DEFAULT_PREVIEW_PAGE_SIZE
+                    : DEFAULT_LIVE_PAGE_SIZE),
+        )
 }
 
 export const issuesSummaryController = (req: Request, res: Response) => {
     console.log('Issue summary requested.')
     const issueEdition = req.params.edition
-    getIssuesSummary(issueEdition, isPreviewStage)
+    const pageSize = req.query.pageSize && parseInt(req.query.pageSize, 10)
+    getIssuesSummary(issueEdition, isPreviewStage, pageSize)
         .then(data => {
             if (hasFailed(data)) {
                 console.error(JSON.stringify(data))

@@ -25,19 +25,14 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
             <ScrollContainer>
                 <Heading>{`Guardian digital subscription/Digital + Print`}</Heading>
                 <List
-                    onPress={({ onPress }) => onPress()}
                     data={
                         !canAccess
                             ? [
                                   {
                                       key: 'Sign in to activate',
                                       title: 'Sign in to activate',
-                                      data: {
-                                          onPress: () => {
-                                              navigation.navigate(
-                                                  routeNames.SignIn,
-                                              )
-                                          },
+                                      onPress: () => {
+                                          navigation.navigate(routeNames.SignIn)
                                       },
                                       proxy: rightChevronIcon,
                                       linkWeight: 'regular',
@@ -45,12 +40,10 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                                   {
                                       key: 'Activate with subscriber ID',
                                       title: 'Activate with subscriber ID',
-                                      data: {
-                                          onPress: () => {
-                                              navigation.navigate(
-                                                  routeNames.CasSignIn,
-                                              )
-                                          },
+                                      onPress: () => {
+                                          navigation.navigate(
+                                              routeNames.CasSignIn,
+                                          )
                                       },
                                       proxy: rightChevronIcon,
                                       linkWeight: 'regular',
@@ -64,42 +57,39 @@ const AlreadySubscribedScreen = ({ navigation }: NavigationInjectedProps) => {
                         <Heading>{``}</Heading>
                         <Heading>{`Daily Edition`}</Heading>
                         <List
-                            onPress={({ onPress }) => onPress()}
                             data={[
                                 {
                                     key: 'Restore App Store subscription',
                                     title: 'Restore App Store subscription',
-                                    data: {
-                                        onPress: async () => {
-                                            const {
-                                                accessAttempt,
-                                            } = await authIAP()
-                                            if (isValid(accessAttempt)) {
-                                                open(close => (
-                                                    <SubFoundModalCard
-                                                        close={close}
-                                                    />
-                                                ))
-                                            } else if (isError(accessAttempt)) {
-                                                open(close => (
-                                                    <MissingIAPModalCard
-                                                        title="Verification error"
-                                                        subtitle="There was a problem whilst verifying your subscription"
-                                                        close={close}
-                                                        onTryAgain={authIAP}
-                                                    />
-                                                ))
-                                            } else {
-                                                open(close => (
-                                                    <MissingIAPModalCard
-                                                        title="Subscription not found"
-                                                        subtitle="We were unable to find a subscription associated with your Apple ID"
-                                                        close={close}
-                                                        onTryAgain={authIAP}
-                                                    />
-                                                ))
-                                            }
-                                        },
+                                    onPress: async () => {
+                                        const {
+                                            accessAttempt,
+                                        } = await authIAP()
+                                        if (isValid(accessAttempt)) {
+                                            open(close => (
+                                                <SubFoundModalCard
+                                                    close={close}
+                                                />
+                                            ))
+                                        } else if (isError(accessAttempt)) {
+                                            open(close => (
+                                                <MissingIAPModalCard
+                                                    title="Verification error"
+                                                    subtitle="There was a problem whilst verifying your subscription"
+                                                    close={close}
+                                                    onTryAgain={authIAP}
+                                                />
+                                            ))
+                                        } else {
+                                            open(close => (
+                                                <MissingIAPModalCard
+                                                    title="Subscription not found"
+                                                    subtitle="We were unable to find a subscription associated with your Apple ID"
+                                                    close={close}
+                                                    onTryAgain={authIAP}
+                                                />
+                                            ))
+                                        }
                                     },
                                     proxy: rightChevronIcon,
                                     linkWeight: 'regular',

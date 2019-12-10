@@ -12,7 +12,7 @@ import {
 } from 'src/components/issue/issue-title'
 import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, Alert } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import {
     DLStatus,
@@ -35,6 +35,9 @@ import { getPillarColors } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { colour } from '@guardian/pasteup/palette'
+
+import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
+import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -93,10 +96,17 @@ const getStatusPercentage = (status: DLStatus): number | null => {
     return null
 }
 
-const IssueButton = ({ issue }: { issue: IssueSummary }) => {
+const IssueButton = ({
+    issue,
+    onGoToSettings,
+}: {
+    issue: IssueSummary
+    onGoToSettings: () => void
+}) => {
     const isOnDevice = useIssueOnDevice(issue.localId)
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
+    const { downloadBlocked } = useNetInfo()
 
     const handleUpdate = useCallback(
         (status: DLStatus) => {
@@ -114,14 +124,29 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
 
     const onDownloadIssue = async () => {
         if (isOnDevice !== ExistsStatus.doesNotExist) return
-        if ((await fetch()).isConnected && !dlStatus) {
-            sendComponentEvent({
-                componentType: ComponentType.appButton,
-                action: Action.click,
-                value: 'issues_list_issue_clicked',
-            })
-            const imageSize = await imageForScreenSize()
-            downloadAndUnzipIssue(issue, imageSize, handleUpdate)
+        switch (downloadBlocked) {
+            case DownloadBlockedStatus.Offline: {
+                Alert.alert('Unable to download', NOT_CONNECTED)
+                return
+            }
+            case DownloadBlockedStatus.WifiOnly: {
+                Alert.alert('Unable to download', WIFI_ONLY_DOWNLOAD, [
+                    { text: 'Manage editions', onPress: onGoToSettings },
+                    { text: 'Ok' },
+                ])
+                return
+            }
+        }
+        if ((await fetch()).isConnected) {
+            if (!dlStatus) {
+                sendComponentEvent({
+                    componentType: ComponentType.appButton,
+                    action: Action.click,
+                    value: 'issues_list_issue_clicked',
+                })
+                const imageSize = await imageForScreenSize()
+                downloadAndUnzipIssue(issue, imageSize, handleUpdate)
+            }
         } else {
             showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE)
         }
@@ -159,9 +184,15 @@ const IssueButton = ({ issue }: { issue: IssueSummary }) => {
 }
 
 const IssueButtonContainer = React.memo(
-    ({ issue }: { issue: IssueSummary }) => (
+    ({
+        issue,
+        onGoToSettings,
+    }: {
+        issue: IssueSummary
+        onGoToSettings: () => void
+    }) => (
         <View style={styles.issueButtonContainer}>
-            <IssueButton issue={issue} />
+            <IssueButton issue={issue} onGoToSettings={onGoToSettings} />
         </View>
     ),
 )
@@ -248,13 +279,28 @@ const IssueFrontsSelector = React.memo(
 )
 
 const IssueRowHeader = React.memo(
-    ({ issue, onPress }: { issue: IssueSummary; onPress: () => void }) => {
+    ({
+        issue,
+        onPress,
+        onGoToSettings,
+    }: {
+        issue: IssueSummary
+        onPress: () => void
+        onGoToSettings: () => void
+    }) => {
         const { date, weekday } = useMemo(() => renderIssueDate(issue.date), [
             issue.date,
         ])
 
         return (
-            <GridRowSplit proxy={<IssueButtonContainer issue={issue} />}>
+            <GridRowSplit
+                proxy={
+                    <IssueButtonContainer
+                        issue={issue}
+                        onGoToSettings={onGoToSettings}
+                    />
+                }
+            >
                 <View style={styles.issueTitleWrap}>
                     <Highlight onPress={onPress}>
                         <IssueTitle
@@ -276,14 +322,20 @@ export const IssueRow = React.memo(
         issueDetails,
         onPress,
         onPressFront,
+        onGoToSettings,
     }: {
         issue: IssueSummary
         issueDetails: IssueWithFronts | null
         onPress: () => void
         onPressFront: (key: string) => void
+        onGoToSettings: () => void
     }) => (
         <>
-            <IssueRowHeader onPress={onPress} issue={issue} />
+            <IssueRowHeader
+                onPress={onPress}
+                issue={issue}
+                onGoToSettings={onGoToSettings}
+            />
             {issueDetails != null && (
                 <IssueFrontsSelector
                     fronts={issueDetails.fronts}

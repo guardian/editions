@@ -53,15 +53,14 @@ const ApiScreen = ({
             />
             <Heading>Presets</Heading>
             <List
-                onPress={({ value }) => {
-                    setApiUrl(client, value)
-                    navigation.goBack()
-                }}
                 data={backends.map(({ title, value }) => ({
                     title: (apiUrl === value ? '✅ ' : '') + title,
                     explainer: value,
                     key: value,
-                    data: { value },
+                    onPress: () => {
+                        setApiUrl(client, value)
+                        navigation.goBack()
+                    },
                 }))}
             />
         </ScrollContainer>
