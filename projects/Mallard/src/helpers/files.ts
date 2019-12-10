@@ -13,7 +13,10 @@ import { londonTime } from './date'
 import { pushTracking } from 'src/helpers/push-tracking'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import { fetch } from '@react-native-community/netinfo'
-import { getDownloadBlockedStatus } from 'src/hooks/use-net-info'
+import {
+    getDownloadBlockedStatus,
+    DownloadBlockedStatus,
+} from 'src/hooks/use-net-info'
 
 interface BasicFile {
     filename: string
@@ -260,9 +263,12 @@ export const downloadAndUnzipIssue = async (
     const downloadBlocked = getDownloadBlockedStatus(
         ...(await Promise.all([fetch(), getSetting('wifiOnlyDownloads')])),
     )
-    if (downloadBlocked) {
+
+    if (downloadBlocked !== DownloadBlockedStatus.NotBlocked) {
+        pushTracking('downloadBlocked', DownloadBlockedStatus[downloadBlocked])
         return
     }
+
     const { localId } = issue
     const promise = maybeListenToExistingDownload(issue, onProgress)
     if (promise) return promise
