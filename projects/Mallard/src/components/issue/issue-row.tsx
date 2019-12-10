@@ -202,25 +202,14 @@ const IssueButtonContainer = React.memo(
  * because their "main" counterpart isn't legible enough for text on a light
  * background.
  */
+const DARK_COLOURED_PILLARS = new Set(['culture', 'lifestyle'])
 const getCustomColor = (appr: Appearance): colour => {
-    switch (appr.type) {
-        case 'pillar': {
-            const colors = getPillarColors(appr.name)
-            switch (appr.name) {
-                case 'culture':
-                case 'lifestyle':
-                    return colors.dark
-                default:
-                    return colors.main
-            }
-        }
-        case 'custom': {
-            return appr.color
-        }
-        default: {
-            return getPillarColors('neutral').main
-        }
+    if (appr.type === 'pillar') {
+        const colors = getPillarColors(appr.name)
+        return DARK_COLOURED_PILLARS.has(appr.name) ? colors.dark : colors.main
     }
+    if (appr.type === 'custom') return appr.color
+    return getPillarColors('neutral').main
 }
 
 const IssueFrontRow = React.memo(
