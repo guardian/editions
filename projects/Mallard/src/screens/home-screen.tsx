@@ -161,6 +161,11 @@ const IssueRowContainer = React.memo(
                 onPressFront={onPressFront}
                 issue={issue}
                 issueDetails={issueDetails}
+                onGoToSettings={() =>
+                    navigation.navigate({
+                        routeName: routeNames.ManageEditions,
+                    })
+                }
             />
         )
     },

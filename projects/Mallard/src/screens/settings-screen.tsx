@@ -45,7 +45,7 @@ const MiscSettingsList = React.memo(
             {
                 key: 'isWeatherShown',
                 title: 'Display Weather',
-                data: { onPress: onChange },
+                onPress: onChange,
                 proxy: (
                     <Switch
                         value={props.isWeatherShown}
@@ -65,7 +65,7 @@ const MiscSettingsList = React.memo(
                 proxy: <RightChevron />,
             },
         ]
-        return <List onPress={({ onPress }) => onPress()} data={items} />
+        return <List data={items} />
     },
 )
 
@@ -134,10 +134,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                   {
                       key: `Sign out`,
                       title: identityData.userDetails.publicFields.displayName,
-                      data: {
-                          onPress: async () => {
-                              await signOutIdentity()
-                          },
+                      onPress: async () => {
+                          await signOutIdentity()
                       },
                       proxy: <Text style={styles.signOut}>Sign out</Text>,
                   },
@@ -146,10 +144,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                   {
                       key: `Sign in`,
                       title: `Sign in`,
-                      data: {
-                          onPress: () => {
-                              navigation.navigate(routeNames.SignIn)
-                          },
+                      onPress: () => {
+                          navigation.navigate(routeNames.SignIn)
                       },
                       proxy: rightChevronIcon,
                   },
@@ -159,12 +155,8 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                   {
                       key: 'Subscription details',
                       title: 'Subscription details',
-                      data: {
-                          onPress: () => {
-                              navigation.navigate(
-                                  routeNames.SubscriptionDetails,
-                              )
-                          },
+                      onPress: () => {
+                          navigation.navigate(routeNames.SubscriptionDetails)
                       },
                   },
               ]
@@ -172,11 +164,10 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                   {
                       key: `I'm already subscribed`,
                       title: `I'm already subscribed`,
-                      data: {
-                          onPress: () => {
-                              navigation.navigate(routeNames.AlreadySubscribed)
-                          },
+                      onPress: () => {
+                          navigation.navigate(routeNames.AlreadySubscribed)
                       },
+
                       proxy: rightChevronIcon,
                   },
               ]),
@@ -185,10 +176,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
-                <List
-                    onPress={({ onPress }) => onPress()}
-                    data={signInListItems}
-                />
+                <List data={signInListItems} />
                 <Heading>{``}</Heading>
                 <MiscSettingsList
                     client={client}
@@ -197,39 +185,30 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>{``}</Heading>
                 <List
-                    onPress={({ onPress }) => onPress()}
                     data={[
                         {
                             key: 'Privacy settings',
                             title: 'Privacy settings',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(routeNames.GdprConsent)
-                                },
-                            },
                             proxy: rightChevronIcon,
+                            onPress: () => {
+                                navigation.navigate(routeNames.GdprConsent)
+                            },
                         },
                         {
                             key: 'Privacy policy',
                             title: 'Privacy policy',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(
-                                        routeNames.PrivacyPolicy,
-                                    )
-                                },
-                            },
                             proxy: rightChevronIcon,
+                            onPress: () => {
+                                navigation.navigate(routeNames.PrivacyPolicy)
+                            },
                         },
                         {
                             key: 'Terms and conditions',
                             title: 'Terms and conditions',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(
-                                        routeNames.TermsAndConditions,
-                                    )
-                                },
+                            onPress: () => {
+                                navigation.navigate(
+                                    routeNames.TermsAndConditions,
+                                )
                             },
                             proxy: rightChevronIcon,
                         },
@@ -237,34 +216,27 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>{``}</Heading>
                 <List
-                    onPress={({ onPress }) => onPress()}
                     data={[
                         {
                             key: 'Help',
                             title: 'Help',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(routeNames.Help)
-                                },
+                            onPress: () => {
+                                navigation.navigate(routeNames.Help)
                             },
                             proxy: rightChevronIcon,
                         },
                         {
                             key: 'Credits',
                             title: 'Credits',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(routeNames.Credits)
-                                },
+                            onPress: () => {
+                                navigation.navigate(routeNames.Credits)
                             },
                             proxy: rightChevronIcon,
                         },
                         {
                             key: 'Version',
                             title: 'Version',
-                            data: {
-                                onPress: versionClickHandler,
-                            },
+                            onPress: versionClickHandler,
                             proxy: <Text>{versionNumber}</Text>,
                         },
                     ]}
