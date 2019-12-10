@@ -265,7 +265,10 @@ export const downloadAndUnzipIssue = async (
     )
 
     if (downloadBlocked !== DownloadBlockedStatus.NotBlocked) {
-        pushTracking('downloadBlocked', DownloadBlockedStatus[downloadBlocked])
+        await pushTracking(
+            'downloadBlocked',
+            DownloadBlockedStatus[downloadBlocked],
+        )
         return
     }
 
