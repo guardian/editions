@@ -63,6 +63,9 @@ export const patchCrossword = (
     crossword: Crossword,
     type: CrosswordType,
 ): Crossword => {
+    // for crosswords with a dateSolutionAvailable in the future, hide solutions
+    // this will be permanent even after the date has passed unless the edition is republished
+    // editions might be pressed before a crosssord is due to be published so + 1 day
     const oneDay = 24 * 60 * 60 * 1000
     const thisTimeTomorrow = new Date().getTime() + oneDay
     const solutionAvailable =
