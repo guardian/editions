@@ -43,7 +43,7 @@ import { color } from 'src/theme/color'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import { IssueWithFronts } from '../../../Apps/common/src'
 import { PathToIssue } from 'src/paths'
-import { Loaded, LOADING } from 'src/helpers/Loaded'
+import { Loaded } from 'src/helpers/Loaded'
 
 const styles = StyleSheet.create({
     issueListFooter: {
@@ -210,7 +210,7 @@ const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + 1
 
 const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
     if (issue.isLoading) return 0
-    if (issue.error) return ISSUE_FRONT_ERROR_HEIGHT + 1
+    if (issue.error != null) return ISSUE_FRONT_ERROR_HEIGHT + 1
     const { fronts } = issue.value
     return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
 }
@@ -254,17 +254,15 @@ const IssueListView = withNavigation(
 
             // We pass down the issue details only for the selected issue.
             const renderItem = useCallback(
-                ({ item, index }) => {
-                    return (
-                        <IssueRowContainer
-                            issue={item}
-                            issueDetails={
-                                index === currentIssueIndex ? details : null
-                            }
-                            navigation={navigation}
-                        />
-                    )
-                },
+                ({ item, index }) => (
+                    <IssueRowContainer
+                        issue={item}
+                        issueDetails={
+                            index === currentIssueIndex ? details : null
+                        }
+                        navigation={navigation}
+                    />
+                ),
                 [currentIssueIndex, details, navigation],
             )
 
@@ -317,6 +315,8 @@ const IssueListView = withNavigation(
                         currentIssueIndex >= 0 ? currentIssueIndex : undefined
                     }
                     renderItem={renderItem}
+                    // Necessary to make sure we re-render visible
+                    // items when details changes.
                     extraData={details}
                     getItemLayout={getItemLayout}
                     ref={refFn}
@@ -345,10 +345,14 @@ const IssueListViewWithDelay = ({
     // `currentIssueDetails` will be `null`. So in the meantime, we'll
     // keep showing the previous fronts.
     useEffect(() => {
-        if (!currentIssue.isLoading) {
+        if (
+            !currentIssue.isLoading &&
+            (currentIssue.value !== shownIssue.details.value ||
+                currentIssue.error !== shownIssue.details.error)
+        ) {
             setShownIssue({ id: currentId, details: currentIssue })
         }
-    }, [currentId, currentIssue])
+    }, [currentId, currentIssue, shownIssue])
 
     return <IssueListView issueList={issueList} currentIssue={shownIssue} />
 }
@@ -372,7 +376,7 @@ const IssueListFetchContainer = () => {
         ]),
     )
     return resp({
-        error: (error: Error) => (
+        error: (error: {}) => (
             <IssueListViewWithDelay
                 issueList={issueSummary}
                 currentId={issueId}

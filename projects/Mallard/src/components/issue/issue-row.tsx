@@ -254,7 +254,7 @@ const IssueFrontsError = () => (
     <View style={styles.frontsSelector}>
         <GridRowSplit>
             <Text style={styles.errorMessage}>
-                We could not load the sections of this edition. If you're
+                We could not load the sections of this edition. If you{"'"}re
                 offline, try going online and downloading the edition.
                 Otherwise, close and open the app again.
             </Text>

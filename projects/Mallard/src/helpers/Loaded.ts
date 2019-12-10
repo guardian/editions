@@ -4,5 +4,5 @@ export type Loaded<Value> =
           error?: undefined
           isLoading?: undefined
       }
-    | { value?: undefined; error: Error; isLoading?: undefined }
+    | { value?: undefined; error: {}; isLoading?: undefined }
     | { isLoading: true; value?: undefined; error?: undefined }
