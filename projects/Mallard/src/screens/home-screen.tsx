@@ -349,15 +349,16 @@ const IssueListViewWithDelay = ({
     // fetch the details (ex. list of fronts). During this time,
     // `currentIssueDetails` will be `null`. So in the meantime, we'll
     // keep showing the previous fronts.
+    const { details } = shownIssue
     useEffect(() => {
         if (
             !currentIssue.isLoading &&
-            (currentIssue.value !== shownIssue.details.value ||
-                currentIssue.error !== shownIssue.details.error)
+            (currentIssue.value !== details.value ||
+                currentIssue.error !== details.error)
         ) {
             setShownIssue({ id: currentId, details: currentIssue })
         }
-    }, [currentId, currentIssue, shownIssue])
+    }, [currentId, currentIssue, details])
 
     return <IssueListView issueList={issueList} currentIssue={shownIssue} />
 }
