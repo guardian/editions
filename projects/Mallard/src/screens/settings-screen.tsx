@@ -56,12 +56,10 @@ const MiscSettingsList = React.memo(
             {
                 key: 'manageEditions',
                 title: 'Manage editions',
-                data: {
-                    onPress: () =>
-                        props.navigation.navigate(
-                            routeNames.ManageEditionsSettings,
-                        ),
-                },
+                onPress: () =>
+                    props.navigation.navigate(
+                        routeNames.ManageEditionsSettings,
+                    ),
                 proxy: <RightChevron />,
             },
         ]
