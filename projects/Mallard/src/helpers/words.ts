@@ -24,6 +24,8 @@ export const CONNECTION_FAILED_AUTO_RETRY =
 export const GENERIC_ERROR = `Sorry! This didn't work`
 export const GENERIC_AUTH_ERROR = `Something went wrong`
 export const GENERIC_FATAL_ERROR = `Sorry! We broke the app. Can you email us at ${FEEDBACK_EMAIL} and tell us what happened?`
+export const NOT_CONNECTED = 'You are not connected to the internet'
+export const WIFI_ONLY_DOWNLOAD = `You must be connected to wifi to download, you can change this under 'Manage editions'`
 
 export const DIAGNOSTICS_TITLE = 'Found a bug?'
 export const DIAGNOSTICS_REQUEST = `Would you like us to include diagnostic information to help answer your query?${

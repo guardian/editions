@@ -1,8 +1,16 @@
 import * as NetInfo from '@react-native-community/netinfo'
 import { NetInfoState } from '@react-native-community/netinfo' // types
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    useMemo,
+} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 /**
  * The purpose of this module is to create a wrapper around netinfo
@@ -28,10 +36,19 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const { NetInfoStateType } = NetInfo
 
-const StableNetInfoContext = createContext<NetInfoState>({
+export enum DownloadBlockedStatus {
+    WifiOnly,
+    Offline,
+    NotBlocked,
+}
+
+const StableNetInfoContext = createContext<
+    NetInfoState & { downloadBlocked: DownloadBlockedStatus }
+>({
     type: NetInfoStateType.unknown,
     isConnected: false,
     details: null,
+    downloadBlocked: DownloadBlockedStatus.NotBlocked,
 })
 
 const offlineState = {
@@ -140,6 +157,15 @@ const netInfoStateContainer = new NetInfoStateContainer()
 const addEventListener = netInfoStateContainer.subscribe.bind(
     netInfoStateContainer,
 )
+const getDownloadBlockedStatus = (
+    netInfo: NetInfoState,
+    wifiOnlyDownloads: boolean,
+): DownloadBlockedStatus =>
+    !netInfo.isConnected
+        ? DownloadBlockedStatus.Offline
+        : wifiOnlyDownloads && netInfo.type !== 'wifi'
+        ? DownloadBlockedStatus.WifiOnly
+        : DownloadBlockedStatus.NotBlocked
 
 /**
  * Replace the netinfo API
@@ -157,8 +183,27 @@ const fetchImmediate = () => netInfoStateContainer.state
 const NetInfoProvider = ({ children }: { children: React.ReactNode }) => {
     const [netInfo, setNetInfo] = useState(netInfoStateContainer.state)
     useEffect(() => addEventListener(setNetInfo), [])
+    const { data } = useQuery(
+        gql`
+            {
+                wifiOnlyDownloads @client
+            }
+        `,
+    )
+    const downloadBlocked = getDownloadBlockedStatus(
+        netInfo,
+        data && data.wifiOnlyDownloads,
+    )
+
+    const value = useMemo(
+        () => ({
+            ...netInfo,
+            downloadBlocked,
+        }),
+        [netInfo, downloadBlocked],
+    )
     return (
-        <StableNetInfoContext.Provider value={netInfo}>
+        <StableNetInfoContext.Provider value={value}>
             {children}
             {__DEV__ && (
                 <View style={devToggleStyles.bg}>
@@ -189,4 +234,5 @@ export {
     addEventListener,
     fetch,
     fetchImmediate,
+    getDownloadBlockedStatus,
 }

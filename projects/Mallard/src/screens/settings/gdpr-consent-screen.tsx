@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, View, Alert } from 'react-native'
+import { FlatList, View, Alert, Text } from 'react-native'
 import { Button, ButtonAppearance } from 'src/components/button/button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
@@ -165,7 +165,7 @@ const GdprConsent = ({
             <TallRow
                 title={''}
                 explainer={
-                    <>
+                    <Text>
                         Below you can manage your privacy settings for cookies
                         and similar technologies for this service. These
                         technologies are provided by us and by our third-party
@@ -181,7 +181,7 @@ const GdprConsent = ({
                         </LinkNav>
                         . If you disable a category, you may need to restart the
                         app for your changes to fully take effect.
-                    </>
+                    </Text>
                 }
                 proxy={
                     <Button

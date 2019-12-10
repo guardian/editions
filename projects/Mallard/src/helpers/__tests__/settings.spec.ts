@@ -10,7 +10,7 @@ describe('settings', () => {
                         allow: () => true,
                         deny: () => false,
                     },
-                    () => Promise.resolve(null),
+                    () => Promise.resolve(null as any),
                 ),
             ).toBe(false)
         })
@@ -23,7 +23,7 @@ describe('settings', () => {
                         allow: () => true,
                         deny: () => false,
                     },
-                    () => Promise.resolve(false),
+                    () => Promise.resolve(false as any),
                 ),
             ).toBe(false)
         })
@@ -36,7 +36,7 @@ describe('settings', () => {
                         allow: () => true,
                         deny: () => false,
                     },
-                    () => Promise.resolve(true),
+                    () => Promise.resolve(true as any),
                 ),
             ).toBe(true)
         })
@@ -49,7 +49,7 @@ describe('settings', () => {
                         allow: () => true,
                         deny: () => false,
                     },
-                    () => Promise.resolve(false),
+                    () => Promise.resolve(false as any),
                 ),
             ).toBe(true)
         })

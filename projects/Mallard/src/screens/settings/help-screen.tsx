@@ -21,15 +21,12 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
                 <List
-                    onPress={({ onPress }) => onPress()}
                     data={[
                         {
                             key: 'Frequently Asked Questions',
                             title: 'Frequently Asked Questions',
-                            data: {
-                                onPress: () => {
-                                    navigation.navigate(routeNames.FAQ)
-                                },
+                            onPress: () => {
+                                navigation.navigate(routeNames.FAQ)
                             },
                             proxy: <RightChevron />,
                         },
@@ -37,7 +34,6 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                 />
                 <Heading>Contact us</Heading>
                 <List
-                    onPress={({ onPress }) => onPress()}
                     data={[
                         createSupportMailto(
                             'Report an issue',

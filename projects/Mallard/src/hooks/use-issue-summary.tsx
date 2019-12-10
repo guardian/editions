@@ -11,7 +11,10 @@ import React, {
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
-import { AppState } from 'react-native'
+import { useQuery } from '@apollo/react-hooks'
+import { AppState, AppStateStatus } from 'react-native'
+import gql from 'graphql-tag'
+import { getSetting } from '../helpers/settings'
 
 interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
@@ -27,8 +30,14 @@ const IssueSummaryContext = createContext<IssueSummaryState>({
     error: '',
 })
 
-const getIssueSummary = (isConnected = true): Promise<IssueSummary[]> =>
-    isConnected ? fetchAndStoreIssueSummary() : readIssueSummary()
+const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
+    const issueSummary = isConnected
+        ? await fetchAndStoreIssueSummary()
+        : await readIssueSummary()
+    const maxAvailableEditions = await getSetting('maxAvailableEditions')
+    const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
+    return trimmedSummary
+}
 
 const issueSummaryToLatestPath = (
     issueSummary: IssueSummary[],
@@ -43,10 +52,19 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
         null,
     )
     const [error, setError] = useState<string>('')
-    const hasConnected = useRef(false)
+    const hasConnected = useRef<boolean>(true) // assume we are connected to start with
+    const { data } = useQuery(
+        gql`
+            {
+                maxAvailableEditions @client
+            }
+        `,
+    )
 
-    const grabIssueSummary = (isConnected: boolean) =>
-        getIssueSummary(isConnected)
+    const maxAvailableEditions = data && data.maxAvailableEditions
+
+    const grabIssueSummary = (hasConnected: boolean) =>
+        getIssueSummary(hasConnected)
             .then((issueSummary: IssueSummary[]) => {
                 setIssueSummary(issueSummary)
                 setError('')
@@ -74,7 +92,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             grabIssueAndSetLatest()
         }
 
-        NetInfo.addEventListener(({ isConnected }) => {
+        const unsubNet = NetInfo.addEventListener(({ isConnected }) => {
             // try and get a fresh summary until we made it to online
             if (!hasConnected.current) {
                 hasConnected.current = isConnected
@@ -83,13 +101,20 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             }
         })
 
-        AppState.addEventListener('change', async appState => {
+        const appStateChangeListener = async (appState: AppStateStatus) => {
             // when we foreground have another go at fetching again
             if (appState === 'active') {
                 grabIssueAndSetLatest()
             }
-        })
-    }, [issueId])
+        }
+
+        AppState.addEventListener('change', appStateChangeListener)
+
+        return () => {
+            unsubNet()
+            AppState.removeEventListener('change', appStateChangeListener)
+        }
+    }, [issueId, maxAvailableEditions])
 
     return (
         <IssueSummaryContext.Provider

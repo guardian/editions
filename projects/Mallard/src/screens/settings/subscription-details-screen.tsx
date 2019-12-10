@@ -26,7 +26,6 @@ const IdentityDetails = ({
     <>
         <Heading>Paper + digital subscription</Heading>
         <List
-            onPress={() => {}}
             data={[
                 keyValueItem(
                     'Display name',
@@ -49,7 +48,6 @@ const CASDetails = ({ casData }: { casData: CasExpiry }) => (
     <>
         <Heading>Paper + digital subscription</Heading>
         <List
-            onPress={() => {}}
             data={[
                 keyValueItem('Subscription type', getCASType(casData)),
                 keyValueItem('Expiry date', casData.expiryDate),
@@ -73,7 +71,6 @@ const IAPDetails = ({ iapData }: { iapData: ReceiptIOS }) => (
     <>
         <Heading>Guardian Daily / App Store</Heading>
         <List
-            onPress={() => {}}
             data={[
                 keyValueItem('Subscription type', getIAPType(iapData)),
                 keyValueItem('Purchase date', iapData.original_purchase_date),
