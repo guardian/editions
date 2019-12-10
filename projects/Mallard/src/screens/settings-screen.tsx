@@ -44,7 +44,7 @@ const MiscSettingsList = React.memo(
         const items = [
             {
                 key: 'isWeatherShown',
-                title: 'Display Weather',
+                title: 'Display weather',
                 onPress: onChange,
                 proxy: (
                     <Switch
@@ -55,7 +55,7 @@ const MiscSettingsList = React.memo(
             },
             {
                 key: 'manageEditions',
-                title: 'Manage Editions',
+                title: 'Manage editions',
                 data: {
                     onPress: () =>
                         props.navigation.navigate(
