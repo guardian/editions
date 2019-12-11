@@ -62,7 +62,6 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { useNavPosition } from 'src/hooks/use-nav-position'
-import { useQuery as useApolloQuery } from '@apollo/react-hooks'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -212,11 +211,6 @@ const IssueFronts = ({
     )
 
     const { position, trigger, setTrigger } = useNavPosition()
-    const isWeatherShown = useIsWeatherShown()
-    const weatherResult = useQuery<WeatherQueryData>(
-        // query must contain at least 1 item, even if we don't need it
-        isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
-    )
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
 
     useEffect(() => {

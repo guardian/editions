@@ -13,10 +13,8 @@ import { Button, ButtonAppearance } from './button/button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
-import { PermissionStatus } from 'react-native-permissions'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
-import { ApolloQueryResult } from 'apollo-client'
 
 type QueryForecast = Pick<
     Forecast,
