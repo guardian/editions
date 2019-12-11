@@ -39,6 +39,7 @@ import { colour } from '@guardian/pasteup/palette'
 
 import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
+import { UiBodyCopy } from '../styled-text'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -314,13 +315,11 @@ const IssueRowHeader = React.memo(
 
 const IssueFrontsError = () => (
     <View style={styles.frontsSelector}>
-        <GridRowSplit>
-            <Text style={styles.errorMessage}>
-                We could not load the sections of this edition. If you{"'"}re
-                offline, try going online and downloading the edition.
-                Otherwise, close and open the app again.
-            </Text>
-        </GridRowSplit>
+        <UiBodyCopy style={styles.errorMessage}>
+            We could not load the sections of this edition. If you{"'"}re
+            offline, try going online and downloading the edition. Otherwise,
+            close and open the app&nbsp;again.
+        </UiBodyCopy>
     </View>
 )
 
