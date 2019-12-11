@@ -99,10 +99,11 @@ export const getIssueSummaryInternal = (
 
 export const getIssueSummary = async (
     issuePublication: IssuePublicationIdentifier,
+    bucket: string,
 ): Promise<IssueSummary | undefined> => {
     const publishedIssuePrefix = getPublishedId(issuePublication)
     const Prefix = `zips/${publishedIssuePrefix}/`
-    const Bucket: string = getBucket('proof')
+    const Bucket: string = getBucket(bucket)
     const assetKeyList = await s3
         .listObjectsV2({
             Bucket,

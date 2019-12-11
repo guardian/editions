@@ -66,6 +66,8 @@ export const getOtherIssuesSummariesForEdition = async (
         ),
     )
     return (await Promise.all(
-        issuePublications.filter(notNull).map(getIssueSummary),
+        issuePublications
+            .filter(notNull)
+            .map(issuePub => getIssueSummary(issuePub, bucket)),
     )).filter(notNull)
 }
