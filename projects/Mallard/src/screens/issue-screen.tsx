@@ -198,14 +198,11 @@ const IssueFronts = ({
 
     useEffect(() => {
         if (trigger && frontWithCards) {
-            const frontToScrollTo = frontWithCards.find(obj => {
-                return obj.displayName === position.frontId
-            })
-
-            const index = frontToScrollTo
-                ? frontWithCards.findIndex(front => front === frontToScrollTo)
-                : 0
-
+            let index = frontWithCards.findIndex(
+                front => front.key === position.frontId,
+            )
+            // Invalid index, navigate to the first one. Not sure this is right.
+            if (index < 0) index = 0
             if (ref && ref.current && ref.current.scrollToIndex) {
                 ref.current.scrollToIndex({ animated: false, index })
             }
