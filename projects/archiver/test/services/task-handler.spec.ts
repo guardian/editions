@@ -1,6 +1,9 @@
-import { handleAndNotifyInternal } from './task-handler'
+import { handleAndNotifyInternal } from '../../src/services/task-handler'
 import moment = require('moment')
-import { createPublishEvent, PublishEvent } from './pub-status-notifier'
+import {
+    createPublishEvent,
+    PublishEvent,
+} from '../../src/services/pub-status-notifier'
 import { IssuePublicationIdentifier } from '../../common'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,10 +34,10 @@ const getDependencies = () => {
 }
 
 describe('handleAndNotifyInternal', () => {
-    it('should return result of handler and not call depnedencies when success-status is undefimed', async () => {
+    it('should return result of handler and not call dependencies when success-status is errored', async () => {
         const dependencies = getDependencies()
         const actual = await handleAndNotifyInternal(
-            undefined,
+            'errored',
             successHandler,
             dependencies,
         )(input, dontCare, dontCare)
@@ -44,7 +47,7 @@ describe('handleAndNotifyInternal', () => {
         expect(dependencies.sendPublishStatusToTopic).toBeCalledTimes(0)
     })
 
-    it('should return result of handler and call depnedencies when success-status is provided', async () => {
+    it('should return result of handler and call dependencies when success-status is provided', async () => {
         const dependencies = getDependencies()
         const actual = await handleAndNotifyInternal(
             'started',

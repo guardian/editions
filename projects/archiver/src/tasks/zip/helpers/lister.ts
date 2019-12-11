@@ -1,11 +1,12 @@
 import { notNull } from '../../../../common'
-import { Bucket, s3 } from '../../../utils/s3'
+import { getBucket, s3 } from '../../../utils/s3'
 
 type lsResponse = { keys: string[]; continuationToken: string | undefined }
 
 //This function gets all objects matching a prefix, and filters them by those that match any of the prefixes
 //It will return a "continuationToken" which can be used as a prefix to get more objects
 const listAndFilterPage = async (Prefix: string): Promise<lsResponse> => {
+    const Bucket = getBucket('proof')
     const objects = await s3
         .listObjectsV2({
             Bucket,

@@ -34,7 +34,7 @@ export type HandlerDependencies = {
 }
 
 export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
-    statusOnSuccess: Status | undefined,
+    statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
     dependencies: HandlerDependencies,
 ): Handler<I, O> {
@@ -44,7 +44,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
             console.log('input:', JSON.stringify(input))
             const result = await handler(input)
             console.log('output:', JSON.stringify(result))
-            if (statusOnSuccess) {
+            if (statusOnSuccess != 'errored') {
                 await dependencies.putStatus(issuePublication, statusOnSuccess)
                 const event = createPublishEvent(
                     issuePublication,
@@ -96,7 +96,7 @@ export function handleAndNotifyOnError<I extends InputWithIdentifier, O>(
     handler: (input: I) => Promise<O>,
 ): Handler<I, O> {
     return handleAndNotifyInternal(
-        undefined,
+        'errored',
         handler,
         runtimeHandlerDependencies,
     )
