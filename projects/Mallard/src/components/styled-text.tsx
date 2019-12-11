@@ -174,7 +174,7 @@ export const UiBodyCopy = ({
     weight = 'regular',
     ...props
 }: {
-    children: string
+    children: string | string[]
     weight?: 'regular' | 'bold'
     style?: StyleProp<TextStyle>
 } & TextProps) => {
