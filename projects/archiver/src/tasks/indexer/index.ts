@@ -22,7 +22,7 @@ const handlerCurry: (
         // at the moment we create and recreate these issue summaries every time
         // an optimisation would be to move the issue summary creation to the previous task
         // so it would only have to be done once and can easily be read in and stiched together
-        const thisIssueSummary = await getIssueSummary(issuePublication)
+        const thisIssueSummary = await getIssueSummary(issuePublication, bucket)
 
         if (thisIssueSummary == undefined) {
             throw new Error(
