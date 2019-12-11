@@ -9,8 +9,8 @@ import {
 import { zip } from './helpers/zipper'
 import { UploadTaskOutput } from '../upload'
 import { handleAndNotify } from '../../services/task-handler'
-import { Bucket } from '../../utils/s3'
 import { thumbsDir } from '../../../../Apps/common/src'
+import { getBucket } from '../../utils/s3'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
@@ -28,7 +28,9 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             },
         )
 
-        console.log(`data zip uploaded to: s3://${Bucket}/${publishedId}`)
+        console.log(
+            `data zip uploaded to: s3://${getBucket('proof')}/${publishedId}`,
+        )
         await Promise.all(
             imageSizes.map(
                 async (size): Promise<[ImageSize, string]> => {

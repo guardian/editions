@@ -12,6 +12,11 @@ export const backends = [
         preview: false,
     },
     {
+        title: 'PROD proofed',
+        value: 'https://editions-proof-prod.s3-eu-west-1.amazonaws.com/',
+        preview: false,
+    },
+    {
         title: 'PROD preview',
         value: 'https://preview.editions.guardianapis.com/',
         preview: true,
@@ -19,6 +24,11 @@ export const backends = [
     {
         title: 'CODE published',
         value: 'https://editions.code.dev-guardianapis.com/',
+        preview: false,
+    },
+    {
+        title: 'CODE proofed',
+        value: 'https://editions-proof-code.s3-eu-west-1.amazonaws.com/',
         preview: false,
     },
     {

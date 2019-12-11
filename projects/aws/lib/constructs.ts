@@ -13,7 +13,8 @@ export interface StepFunctionProps {
     stack: string
     stage: string
     deployBucket: s3.IBucket
-    outputBucket: s3.IBucket
+    proofBucket: s3.IBucket
+    publishBucket: s3.IBucket
     backendURL: string
     frontsTopicArn: string
     frontsTopicRoleArn: string
@@ -23,7 +24,8 @@ export interface Params {
     stack: string
     stage: string
     deployBucket: s3.IBucket
-    outputBucket: s3.IBucket
+    proofBucket: s3.IBucket
+    publishBucket: s3.IBucket
     frontsTopicArn: string
     frontsTopicRole: iam.IRole
     retry?: RetryProps | boolean
@@ -36,7 +38,8 @@ export const taskLambda = (
         stack,
         stage,
         deployBucket,
-        outputBucket,
+        proofBucket,
+        publishBucket,
         frontsTopicArn,
         frontsTopicRole,
     }: Params,
@@ -57,7 +60,8 @@ export const taskLambda = (
         environment: {
             ...environment,
             stage: stage,
-            bucket: outputBucket.bucketName,
+            proofBucket: proofBucket.bucketName,
+            publishBucket: publishBucket.bucketName,
             topic: frontsTopicArn,
             role: frontsTopicRole.roleArn,
         },
@@ -65,8 +69,10 @@ export const taskLambda = (
             new iam.PolicyStatement({
                 actions: ['*'],
                 resources: [
-                    outputBucket.arnForObjects('*'),
-                    outputBucket.bucketArn,
+                    proofBucket.arnForObjects('*'),
+                    proofBucket.bucketArn,
+                    publishBucket.arnForObjects('*'),
+                    publishBucket.bucketArn,
                 ],
             }),
             new iam.PolicyStatement({
