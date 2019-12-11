@@ -28,27 +28,36 @@ import { fetch } from 'src/hooks/use-net-info'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
+import { Loaded } from 'src/helpers/Loaded'
 
 import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
-import { Front, IssueWithFronts } from '../../../../Apps/common/src'
-import { getColor } from 'src/helpers/transform'
+import { Front, IssueWithFronts, Appearance } from '../../../../Apps/common/src'
+import { getPillarColors } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
+import { colour } from '@guardian/pasteup/palette'
 
 import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
+import { UiBodyCopy } from '../styled-text'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
 
 export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
-export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.9
+export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.65
+export const ISSUE_FRONT_ERROR_HEIGHT = 120
 
 const styles = StyleSheet.create({
     frontsSelector: {
         backgroundColor: color.dimmerBackground,
         borderTopWidth: 1,
         borderTopColor: color.line,
+    },
+    errorMessage: {
+        height: ISSUE_FRONT_ERROR_HEIGHT,
+        paddingHorizontal: metrics.horizontal,
+        paddingTop: metrics.vertical,
     },
 
     frontTitleWrap: {
@@ -57,7 +66,7 @@ const styles = StyleSheet.create({
     },
     frontTitle: {
         height: '100%',
-        paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.15,
+        paddingTop: ISSUE_FRONT_ROW_HEIGHT * 0.1,
         paddingHorizontal: metrics.horizontal,
     },
     frontTitleText: {
@@ -196,9 +205,24 @@ const IssueButtonContainer = React.memo(
     ),
 )
 
+/**
+ * Custom palette for Front titles. We use the dark variants for some pillars
+ * because their "main" counterpart isn't legible enough for text on a light
+ * background.
+ */
+const DARK_COLOURED_PILLARS = new Set(['culture', 'lifestyle'])
+const getCustomColor = (appr: Appearance): colour => {
+    if (appr.type === 'pillar') {
+        const colors = getPillarColors(appr.name)
+        return DARK_COLOURED_PILLARS.has(appr.name) ? colors.dark : colors.main
+    }
+    if (appr.type === 'custom') return appr.color
+    return getPillarColors('neutral').main
+}
+
 const IssueFrontRow = React.memo(
     ({ front, onPress }: { front: Front; onPress: () => void }) => {
-        const textColor = getColor(front.appearance)
+        const textColor = getCustomColor(front.appearance)
         return (
             <GridRowSplit>
                 <View style={styles.frontTitleWrap}>
@@ -289,6 +313,16 @@ const IssueRowHeader = React.memo(
     },
 )
 
+const IssueFrontsError = () => (
+    <View style={styles.frontsSelector}>
+        <UiBodyCopy style={styles.errorMessage}>
+            We could not load the sections of this edition. If you{"'"}re
+            offline, try going online and downloading the edition. Otherwise,
+            close and open the app&nbsp;again.
+        </UiBodyCopy>
+    </View>
+)
+
 export const IssueRow = React.memo(
     ({
         issue,
@@ -298,7 +332,7 @@ export const IssueRow = React.memo(
         onGoToSettings,
     }: {
         issue: IssueSummary
-        issueDetails: IssueWithFronts | null
+        issueDetails: Loaded<IssueWithFronts> | null
         onPress: () => void
         onPressFront: (key: string) => void
         onGoToSettings: () => void
@@ -309,11 +343,14 @@ export const IssueRow = React.memo(
                 issue={issue}
                 onGoToSettings={onGoToSettings}
             />
-            {issueDetails != null && (
+            {issueDetails != null && issueDetails.value != null && (
                 <IssueFrontsSelector
-                    fronts={issueDetails.fronts}
+                    fronts={issueDetails.value.fronts}
                     onPressFront={onPressFront}
                 />
+            )}
+            {issueDetails != null && issueDetails.error != null && (
+                <IssueFrontsError />
             )}
         </>
     ),

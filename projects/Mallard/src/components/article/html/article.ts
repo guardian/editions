@@ -1,5 +1,4 @@
 import { html, makeHtml } from 'src/helpers/webview'
-import { getPillarColors } from 'src/hooks/use-article'
 import {
     ArticlePillar,
     ArticleType,
@@ -17,6 +16,7 @@ import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Image as TImage } from '../../../../../Apps/common/src'
+import { getPillarColors } from 'src/helpers/transform'
 
 interface ArticleContentProps {
     showMedia: boolean

@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from 'react'
-import { color } from '../theme/color'
 import { ArticlePillar, ArticleType, Appearance, Collection } from '../common'
 import { PillarColours } from '@guardian/pasteup/palette'
 import { useIsUsingProdDevtools } from './use-settings'
 import { DevTools } from 'src/hooks/article/dev-tools'
+import { getPillarColors } from 'src/helpers/transform'
 
 /*
   Exports
@@ -51,17 +51,6 @@ export const WithArticle = (props: PropTypes) => {
     if (isUsingProdDevtools) return <ProvidersAndDevtools {...props} />
     return <Providers {...props} />
 }
-
-const neutrals: PillarColours = {
-    dark: color.palette.neutral[7],
-    main: color.palette.neutral[7],
-    bright: color.palette.neutral[20],
-    pastel: color.palette.neutral[60],
-    faded: color.palette.neutral[97],
-}
-
-export const getPillarColors = (pillar: ArticlePillar) =>
-    pillar === 'neutral' ? neutrals : color.palette[pillar]
 
 export const useArticle = (): [
     PillarColours,
