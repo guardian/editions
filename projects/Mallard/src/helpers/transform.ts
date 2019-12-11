@@ -4,7 +4,8 @@ import {
     Appearance,
     FrontCardAppearance,
 } from 'src/common'
-import { palette } from '@guardian/pasteup/palette'
+import { palette, PillarColours } from '@guardian/pasteup/palette'
+import { ArticlePillar } from '../../../Apps/common/src'
 
 export interface FlatCard {
     collection: Collection
@@ -13,24 +14,34 @@ export interface FlatCard {
 }
 
 const colorMap = {
-    news: palette.news.main,
-    opinion: palette.opinion.main,
-    sport: palette.sport.main,
-    culture: palette.culture.main,
-    lifestyle: palette.lifestyle.main,
-    neutral: palette.neutral[7],
+    news: palette.news,
+    opinion: palette.opinion,
+    sport: palette.sport,
+    culture: palette.culture,
+    lifestyle: palette.lifestyle,
+    neutral: {
+        dark: palette.neutral[7],
+        main: palette.neutral[7],
+        bright: palette.neutral[20],
+        pastel: palette.neutral[60],
+        faded: palette.neutral[97],
+    },
+}
+
+export const getPillarColors = (pillar: ArticlePillar): PillarColours => {
+    return colorMap[pillar]
 }
 
 export const getColor = (app: Appearance): string => {
     switch (app.type) {
         case 'pillar': {
-            return colorMap[app.name]
+            return getPillarColors(app.name).main
         }
         case 'custom': {
             return app.color
         }
         default: {
-            return colorMap.neutral
+            return colorMap.neutral.main
         }
     }
 }
