@@ -37,6 +37,7 @@ const handlerCurry: (
         const otherIssuesSummariesForEdition = await getOtherIssuesSummariesForEdition(
             issuePublication,
             edition,
+            bucket,
         )
 
         console.log(
