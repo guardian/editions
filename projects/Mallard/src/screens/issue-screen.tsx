@@ -206,7 +206,7 @@ const IssueFronts = ({
                 ref.current.scrollToIndex({ animated: false, index })
             }
         },
-        [frontWithCards, ref],
+        [frontWithCards],
     )
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
