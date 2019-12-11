@@ -21,7 +21,14 @@ import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoint
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
-import { WeatherWidget } from 'src/components/weather'
+import {
+    WeatherWidget,
+    WeatherQueryData,
+    WEATHER_QUERY as FULL_WEATHER_QUERY,
+    EMPTY_WEATHER_HEIGHT,
+    WEATHER_HEIGHT,
+    getValidWeatherData,
+} from 'src/components/weather'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
@@ -55,6 +62,7 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useQuery as useApolloQuery } from '@apollo/react-hooks'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -77,6 +85,15 @@ const WEATHER_QUERY = gql('{ isWeatherShown @client }')
 const useIsWeatherShown = () => {
     const query = useQuery<{ isWeatherShown: boolean }>(WEATHER_QUERY)
     return !query.loading && query.data.isWeatherShown
+}
+
+const useIsWeatherActuallyShown = () => {
+    const isWeatherShown = useIsWeatherShown()
+    const weatherResult = useQuery<WeatherQueryData>(
+        // query must contain at least 1 item, even if we don't need it
+        isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
+    )
+    return getValidWeatherData(weatherResult) != null
 }
 
 const ScreenHeader = withNavigation(
@@ -195,6 +212,12 @@ const IssueFronts = ({
     )
 
     const { position, trigger, setTrigger } = useNavPosition()
+    const isWeatherShown = useIsWeatherShown()
+    const weatherResult = useQuery<WeatherQueryData>(
+        // query must contain at least 1 item, even if we don't need it
+        isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
+    )
+    const isWeatherActuallyShown = useIsWeatherActuallyShown()
 
     useEffect(() => {
         if (trigger && frontWithCards) {
@@ -204,7 +227,11 @@ const IssueFronts = ({
             // Invalid index, navigate to the first one. Not sure this is right.
             if (index < 0) index = 0
             if (ref && ref.current && ref.current.scrollToIndex) {
-                ref.current.scrollToIndex({ animated: false, index })
+                ref.current.scrollToIndex({
+                    animated: false,
+                    index,
+                    viewOffset: metrics.vertical,
+                })
             }
             setTrigger(false)
         }
@@ -237,7 +264,11 @@ const IssueFronts = ({
             )}
             getItemLayout={(_: any, index: number) => ({
                 length: card.height + metrics.fronts.sliderRadius * 2,
-                offset: (card.height + metrics.fronts.sliderRadius * 2) * index,
+                offset:
+                    (card.height + metrics.fronts.sliderRadius * 2) * index +
+                    (isWeatherActuallyShown
+                        ? WEATHER_HEIGHT
+                        : EMPTY_WEATHER_HEIGHT),
                 index,
             })}
             keyExtractor={item => item.key}
