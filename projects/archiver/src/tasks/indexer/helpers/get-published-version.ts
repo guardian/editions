@@ -45,9 +45,11 @@ export const getPublishedVersionInternal = (
  */
 export const getPublishedVersion = async (
     issue: IssueIdentifier,
+    bucket: string,
 ): Promise<IssuePublicationIdentifier | undefined> => {
     const publicationStatuses: IssuePublicationWithStatus[] = await getStatuses(
         issue,
+        bucket,
     )
     console.log(
         `getPublishedVersion: fetched list of publications for ${JSON.stringify(

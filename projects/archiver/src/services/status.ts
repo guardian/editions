@@ -87,10 +87,11 @@ const getStatus = async (
 /* Given an edition name and date provide a list of versions */
 const getVersions = async (
     issue: IssueIdentifier,
+    bucket: string,
 ): Promise<IssuePublicationIdentifier[]> => {
     console.log(`getVersions for ${JSON.stringify(issue)}`)
     const root = getLocalId(issue)
-    const Bucket = getBucket('proof')
+    const Bucket = getBucket(bucket)
     const versions = await listNestedPrefixes(Bucket, root)
     return versions.map(version => ({
         ...issue,
@@ -102,9 +103,11 @@ const getVersions = async (
  * of that issue */
 export const getStatuses = async (
     issuePublication: IssueIdentifier,
+    bucket: string,
 ): Promise<IssuePublicationWithStatus[]> => {
     const allVersions: IssuePublicationIdentifier[] = await getVersions(
         issuePublication,
+        bucket,
     )
     return Promise.all(allVersions.map(getStatus))
 }

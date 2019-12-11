@@ -61,7 +61,9 @@ export const getOtherIssuesSummariesForEdition = async (
     )
 
     const issuePublications = await Promise.all(
-        otherRecentIssuesForEdition.map(getPublishedVersion),
+        otherRecentIssuesForEdition.map(issue =>
+            getPublishedVersion(issue, bucket),
+        ),
     )
     return (await Promise.all(
         issuePublications.filter(notNull).map(getIssueSummary),
