@@ -26,7 +26,8 @@ export const NavPositionProvider = ({ children }: Props) => (
 
 /**
  * Return a function to set the current position of the view
- * showing the current issue.
+ * showing the current issue. `state` is a ref so never changes, so this will
+ * never cause a re-render.
  */
 export const useSetNavPosition = () => {
     const state = useContext(NavPositionContext)
