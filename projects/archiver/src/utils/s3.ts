@@ -181,20 +181,22 @@ export const copy = (
         s3.copyObject(
             {
                 Bucket: outputBucket,
-                CopySource: `${inputBucket}/${key}`,
+                CopySource: `${inputBucket}${key}`,
                 Key: `${key}`,
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 copy of s3://${inputBucket}/${key} to s3://${outputBucket}/${key} failed with`,
+                        `S3 copy of s3://${inputBucket}${key} to s3://${outputBucket}${key} failed with`,
                         err,
                     )
                     reject()
                     return
                 }
-                console.log(`${key} copied to ${outputBucket}`)
+                console.log(
+                    `${inputBucket}${key} copied to ${outputBucket}${key}`,
+                )
                 resolve({})
             },
         )
@@ -243,7 +245,7 @@ export const recursiveCopy = async (
     // Loop over creating copy promises
     const copyPromises = await Promise.all(
         keys.map(object =>
-            attempt(copy(object.Key!, inputBucket, outputBucket)),
+            attempt(copy('/' + object.Key!, inputBucket, outputBucket)),
         ),
     )
     // Loop over creating recursive copy promises
