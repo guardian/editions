@@ -13,19 +13,16 @@ interface Position {
     articleIndex: number // X coordinate
 }
 
-type Subscriber = (p: Position) => void
-type Subscribers = MutableRefObject<Subscriber[]> | undefined
-const NavPositionContext = createContext<Subscribers | undefined>(undefined)
+type Subscriber = ((p: Position) => void) | undefined
+type SubscriberRef = MutableRefObject<Subscriber> | undefined
+const NavPositionContext = createContext<SubscriberRef>(undefined)
 
 type Props = { children: React.ReactNode }
-export const NavPositionProvider = ({ children }: Props) => {
-    const subscribers = useRef<Subscriber[]>([])
-    return (
-        <NavPositionContext.Provider value={subscribers}>
-            {children}
-        </NavPositionContext.Provider>
-    )
-}
+export const NavPositionProvider = ({ children }: Props) => (
+    <NavPositionContext.Provider value={useRef<Subscriber>(undefined)}>
+        {children}
+    </NavPositionContext.Provider>
+)
 
 /**
  * Return a function to set the current position of the view
@@ -36,9 +33,7 @@ export const useSetNavPosition = () => {
     return useCallback(
         (newPosition: Position) => {
             if (state === undefined) return
-            for (const sub of state.current) {
-                sub(newPosition)
-            }
+            if (state.current !== undefined) state.current(newPosition)
         },
         [state],
     )
@@ -56,9 +51,10 @@ export const useNavPositionChange = (
     const state = useContext(NavPositionContext)
     useEffect(() => {
         if (state === undefined) return () => {}
-        const { current } = state
-        current.push(handler)
-        return () => current.splice(current.indexOf(handler))
+        if (state.current != null)
+            throw new Error('cannot subscribe to nav position change twice')
+        state.current = handler
+        return () => (state.current = undefined)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state, ...deps])
 }
