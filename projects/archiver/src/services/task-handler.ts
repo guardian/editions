@@ -1,5 +1,5 @@
 import { IssuePublicationIdentifier } from '../../common'
-import { Status, putStatus } from '../services/status'
+import { Status, putStatus } from './status'
 import moment, { Moment } from 'moment'
 import {
     sendPublishStatusToTopic,

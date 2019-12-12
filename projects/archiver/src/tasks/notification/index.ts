@@ -6,7 +6,7 @@ import {
 } from './helpers/device-notifications'
 import { IndexTaskOutput } from '../indexer'
 import { IssuePublicationIdentifier } from '../../../common'
-import {getBucket} from "../../utils/s3";
+import { getBucket } from '../../utils/s3'
 
 export type NotificationTaskInput = IndexTaskOutput
 export interface NotificationTaskOutput {
