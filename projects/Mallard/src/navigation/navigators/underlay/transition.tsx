@@ -6,12 +6,6 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { safeInterpolation } from 'src/helpers/math'
 import { sidebarWidth } from './positions'
 
-export const getIssueCardOverlayAmount = () => {
-    const { width, height } = Dimensions.get('window')
-    const isPhone = width >= Breakpoints.phone
-    return isPhone ? height / 5 : height / 5.6
-}
-
 export const topLayerTransition = (
     position: NavigationTransitionProps['position'],
     sceneIndex: number,
@@ -19,11 +13,9 @@ export const topLayerTransition = (
     const { width, height } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
-    const finalTranslate = height - getIssueCardOverlayAmount()
-
     const translateY = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
-        outputRange: safeInterpolation([0, finalTranslate]),
+        outputRange: safeInterpolation([0, height]),
     })
     const translateX = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
@@ -33,12 +25,6 @@ export const topLayerTransition = (
     const platformStyles = isTablet
         ? {
               transform: [{ translateX }],
-              shadowOffset: {
-                  width: 10,
-                  height: 10,
-              },
-              shadowOpacity: 1,
-              shadowRadius: 3.84,
               borderRadius: position.interpolate({
                   inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
                   outputRange: safeInterpolation([0, radius / 4]),
@@ -46,10 +32,6 @@ export const topLayerTransition = (
           }
         : {
               transform: [{ translateY }],
-              borderRadius: position.interpolate({
-                  inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
-                  outputRange: safeInterpolation([0, radius]),
-              }),
           }
 
     return {
