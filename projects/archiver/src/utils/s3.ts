@@ -181,7 +181,7 @@ export const copy = (
         s3.copyObject(
             {
                 Bucket: outputBucket,
-                CopySource: `${inputBucket}${key}`,
+                CopySource: `${inputBucket}/${key}`,
                 Key: `/${key}`,
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
