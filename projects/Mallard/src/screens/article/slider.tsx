@@ -18,7 +18,7 @@ import { getArticleDataFromNavigator, ArticleSpec } from '../article-screen'
 import { withNavigation } from 'react-navigation'
 import { NavigationInjectedProps } from 'react-navigation'
 import { BasicArticleHeader } from './header'
-import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { Button } from 'src/components/button/button'
 import { useIsPreview } from 'src/hooks/use-settings'
 
@@ -308,7 +308,7 @@ const ArticleSlider = ({
 
     const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
     const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
-    const { position, setPosition, setTrigger } = useNavPosition()
+    const setNavPosition = useSetNavPosition()
 
     const scroller = (index: number) => {
         if (Platform.OS === 'ios') {
@@ -337,6 +337,15 @@ const ArticleSlider = ({
         scroller(current === 0 ? 0 : current - 1)
     }
 
+    // Slides the fronts on issue screen in the background
+    // if you swipe to new front
+    const slideToFrontFor = (newIndex: number) => {
+        // Slides the fronts on issue screen in the background if you swipe to new front
+        const frontId = flattenedArticles[newIndex].front
+        if (frontId === flattenedArticles[current].front) return
+        setNavPosition({ frontId, articleIndex: 0 })
+    }
+
     if (Platform.OS === 'android')
         return (
             <>
@@ -348,19 +357,9 @@ const ArticleSlider = ({
                     }}
                     onPageSelected={(ev: any) => {
                         onShouldShowHeaderChange(true)
-                        const index = ev.nativeEvent.position
-                        setCurrent(index)
-
-                        // Slides the fronts on issue screen in the background if you swipe to new front
-                        if (
-                            flattenedArticles[index].front !== position.frontId
-                        ) {
-                            setPosition({
-                                frontId: flattenedArticles[index].front,
-                                articleIndex: 0,
-                            })
-                            setTrigger(true)
-                        }
+                        const newIndex = ev.nativeEvent.position
+                        setCurrent(newIndex)
+                        slideToFrontFor(newIndex)
 
                         Animated.timing(sliderPosition, {
                             duration: 200,
@@ -441,24 +440,13 @@ const ArticleSlider = ({
                         listener: (ev: any) => {
                             const newPos =
                                 ev.nativeEvent.contentOffset.x / width
-                            setCurrent(
-                                clamp(
-                                    Math.floor(newPos),
-                                    0,
-                                    flattenedArticles.length - 1,
-                                ),
+                            const newIndex = clamp(
+                                Math.floor(newPos),
+                                0,
+                                flattenedArticles.length - 1,
                             )
-                            // Slides the fronts on issue screen in the background if you swipe to new front
-                            if (
-                                flattenedArticles[current].front !==
-                                position.frontId
-                            ) {
-                                setPosition({
-                                    frontId: flattenedArticles[current].front,
-                                    articleIndex: 0,
-                                })
-                                setTrigger(true)
-                            }
+                            setCurrent(newIndex)
+                            slideToFrontFor(newIndex)
                         },
                     },
                 )}
