@@ -188,7 +188,7 @@ export const copy = (
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 copy of s3://${inputBucket}${key} to s3://${outputBucket}${key} failed with`,
+                        `S3 copy of s3://${inputBucket}/${key} to s3://${outputBucket}/${key} failed with`,
                         err,
                     )
                     reject()
