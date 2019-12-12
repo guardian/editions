@@ -26,7 +26,7 @@ const handlerCurry: (
             // so it would only have to be done once and can easily be read in and stiched together
             const thisIssueSummary = await getIssueSummary(
                 issuePublication,
-                bucket,
+                Bucket,
             )
 
             if (thisIssueSummary == undefined) {
