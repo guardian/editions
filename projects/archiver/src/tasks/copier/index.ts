@@ -21,7 +21,7 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         const copyPromises = await recursiveCopy(
             inputBucket,
             outputBucket,
-            '/' + issue.key + '/' + issuePublication.version + '/',
+            issue.key + '/' + issuePublication.version + '/',
         )
 
         if (copyPromises.filter(hasFailed).length)
@@ -30,7 +30,7 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         const zipCopyPromises = await recursiveCopy(
             inputBucket,
             outputBucket,
-            '/zips/' + issue.key + '/' + issuePublication.version + '/',
+            'zips/' + issue.key + '/' + issuePublication.version + '/',
         )
 
         if (zipCopyPromises.filter(hasFailed).length)
