@@ -14,6 +14,9 @@ import { getBucket } from '../../utils/s3'
 
 type ZipTaskInput = UploadTaskOutput
 type ZipTaskOutput = UploadTaskOutput
+
+const Bucket = getBucket('proof')
+
 export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
     'bundled',
     async ({ issuePublication, issue }) => {
@@ -28,9 +31,8 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             },
         )
 
-        console.log(
-            `data zip uploaded to: s3://${getBucket('proof')}/${publishedId}`,
-        )
+        console.log(`data zip uploaded to: s3://${Bucket}/${publishedId}`)
+
         await Promise.all(
             imageSizes.map(
                 async (size): Promise<[ImageSize, string]> => {
@@ -57,4 +59,5 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             message: `Issue ${issueDate} zipped`,
         }
     },
+    Bucket,
 )

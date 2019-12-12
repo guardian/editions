@@ -11,11 +11,12 @@ export type CopyTaskOutput = Pick<
     'issuePublication' | 'message' | 'issue'
 >
 
+const inputBucket = getBucket('proof')
+const outputBucket = getBucket('publish')
+
 export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
     'copied',
     async ({ issuePublication, issue }) => {
-        const inputBucket = getBucket('proof')
-        const outputBucket = getBucket('publish')
         console.log(`Copying all files from ${inputBucket} to ${outputBucket}`)
         const copyPromises = await recursiveCopy(
             inputBucket,
@@ -32,4 +33,5 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
             issue,
         }
     },
+    outputBucket,
 )

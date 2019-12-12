@@ -41,9 +41,9 @@ export const getOtherRecentIssues = (
 export const getOtherIssuesSummariesForEdition = async (
     currentlyPublishing: IssuePublicationIdentifier,
     edition: Edition,
-    bucket: string,
+    Bucket: string,
 ): Promise<IssueSummary[]> => {
-    const allEditionIssues = await getIssuesByEdition(edition, bucket)
+    const allEditionIssues = await getIssuesByEdition(edition, Bucket)
 
     console.log(
         `allEditionIssues for ${edition}`,
@@ -62,12 +62,12 @@ export const getOtherIssuesSummariesForEdition = async (
 
     const issuePublications = await Promise.all(
         otherRecentIssuesForEdition.map(issue =>
-            getPublishedVersion(issue, bucket),
+            getPublishedVersion(issue, Bucket),
         ),
     )
     return (await Promise.all(
         issuePublications
             .filter(notNull)
-            .map(issuePub => getIssueSummary(issuePub, bucket)),
+            .map(issuePub => getIssueSummary(issuePub, Bucket)),
     )).filter(notNull)
 }

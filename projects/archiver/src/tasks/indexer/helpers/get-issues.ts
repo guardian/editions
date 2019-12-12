@@ -4,9 +4,8 @@ import { getBucket, listNestedPrefixes } from '../../../utils/s3'
 /* Crawl S3 for a list of all of the issues that are available */
 export const getIssuesBy = async (
     edition: Edition,
-    bucket: string,
+    Bucket: string,
 ): Promise<IssueIdentifier[]> => {
-    const Bucket = getBucket(bucket)
     const prefixes = await listNestedPrefixes(Bucket, edition)
 
     return prefixes.map(issueDate => ({

@@ -26,6 +26,7 @@ export type HandlerDependencies = {
     putStatus: (
         issuePublication: IssuePublicationIdentifier,
         status: Status,
+        Bucket: string,
     ) => Promise<{ etag: string }>
     sendPublishStatusToTopic: (
         event: PublishEvent,
@@ -37,6 +38,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
     statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
     dependencies: HandlerDependencies,
+    Bucket: string,
 ): Handler<I, O> {
     return async (input: I) => {
         const { issuePublication } = input
@@ -45,7 +47,11 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
             const result = await handler(input)
             console.log('output:', JSON.stringify(result))
             if (statusOnSuccess != 'errored') {
-                await dependencies.putStatus(issuePublication, statusOnSuccess)
+                await dependencies.putStatus(
+                    issuePublication,
+                    statusOnSuccess,
+                    Bucket,
+                )
                 const event = createPublishEvent(
                     issuePublication,
                     statusOnSuccess,
@@ -81,11 +87,13 @@ const runtimeHandlerDependencies = {
 export function handleAndNotify<I extends InputWithIdentifier, O>(
     statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
+    Bucket: string,
 ): Handler<I, O> {
     return handleAndNotifyInternal(
         statusOnSuccess,
         handler,
         runtimeHandlerDependencies,
+        Bucket,
     )
 }
 
@@ -94,10 +102,12 @@ export function handleAndNotify<I extends InputWithIdentifier, O>(
  */
 export function handleAndNotifyOnError<I extends InputWithIdentifier, O>(
     handler: (input: I) => Promise<O>,
+    Bucket: string,
 ): Handler<I, O> {
     return handleAndNotifyInternal(
         'errored',
         handler,
         runtimeHandlerDependencies,
+        Bucket,
     )
 }

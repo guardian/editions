@@ -40,6 +40,7 @@ describe('handleAndNotifyInternal', () => {
             'errored',
             successHandler,
             dependencies,
+            dontCare,
         )(input, dontCare, dontCare)
 
         expect(actual).toBe('banana')
@@ -53,6 +54,7 @@ describe('handleAndNotifyInternal', () => {
             'started',
             successHandler,
             dependencies,
+            'myBucket',
         )(input, dontCare, dontCare)
 
         expect(actual).toBe('banana')
@@ -62,6 +64,7 @@ describe('handleAndNotifyInternal', () => {
         expect(dependencies.putStatus).toBeCalledWith(
             input.issuePublication,
             'started',
+            'myBucket',
         )
         const event = createPublishEvent(input.issuePublication, 'started', now)
         expect(dependencies.sendPublishStatusToTopic).toBeCalledWith(event)
@@ -71,11 +74,12 @@ describe('handleAndNotifyInternal', () => {
         const dependencies = getDependencies()
 
         await expect(
-            handleAndNotifyInternal('started', failureHandler, dependencies)(
-                input,
+            handleAndNotifyInternal(
+                'started',
+                failureHandler,
+                dependencies,
                 dontCare,
-                dontCare,
-            ),
+            )(input, dontCare, dontCare),
         ).rejects.toThrow()
 
         expect(dependencies.putStatus).toBeCalledTimes(0)

@@ -32,13 +32,13 @@ export const isPublished = (status: Status): boolean => {
 export const putStatus = (
     issuePublication: IssuePublicationIdentifier,
     status: Status,
+    Bucket: string,
 ) => {
     console.log(
         `Changing state of ${JSON.stringify(issuePublication)} to ${status}`,
     )
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status`
-    const Bucket = getBucket('proof')
     return upload(path, { status }, Bucket, 'application/json', undefined)
 }
 
@@ -46,11 +46,11 @@ export const putStatus = (
  * from the status file - this contains the status and modified time */
 const getStatus = async (
     issuePublication: IssuePublicationIdentifier,
+    Bucket: string,
 ): Promise<IssuePublicationWithStatus> => {
     console.log(`getStatus for ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     //get object
-    const Bucket = getBucket('proof')
     const response = await s3
         .getObject({ Bucket, Key: `${publishedId}/status` })
         .promise()
@@ -87,11 +87,10 @@ const getStatus = async (
 /* Given an edition name and date provide a list of versions */
 const getVersions = async (
     issue: IssueIdentifier,
-    bucket: string,
+    Bucket: string,
 ): Promise<IssuePublicationIdentifier[]> => {
     console.log(`getVersions for ${JSON.stringify(issue)}`)
     const root = getLocalId(issue)
-    const Bucket = getBucket(bucket)
     const versions = await listNestedPrefixes(Bucket, root)
     return versions.map(version => ({
         ...issue,
@@ -103,11 +102,11 @@ const getVersions = async (
  * of that issue */
 export const getStatuses = async (
     issuePublication: IssueIdentifier,
-    bucket: string,
+    Bucket: string,
 ): Promise<IssuePublicationWithStatus[]> => {
     const allVersions: IssuePublicationIdentifier[] = await getVersions(
         issuePublication,
-        bucket,
+        Bucket,
     )
-    return Promise.all(allVersions.map(getStatus))
+    return Promise.all(allVersions.map(version => getStatus(version, Bucket)))
 }

@@ -13,10 +13,12 @@ export interface IssueTaskOutput extends IssueParams {
     issue: Issue
     message?: string
 }
+
+const Bucket = getBucket('proof')
+
 export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
     'started',
     async ({ issuePublication }) => {
-        const Bucket = getBucket('proof')
         console.log(
             `Attempting to upload ${JSON.stringify(
                 issuePublication,
@@ -42,4 +44,5 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
             message: 'Fetched issue successfully.',
         }
     },
+    Bucket,
 )

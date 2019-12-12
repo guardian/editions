@@ -25,6 +25,8 @@ export interface FrontTaskInput extends IssueParams {
     front: string //This is filled in by the state machine's map construct
 }
 
+const Bucket = getBucket('proof')
+
 export const handler: Handler<
     FrontTaskInput,
     { message: string } //This is ignored by the state machine
@@ -40,7 +42,6 @@ export const handler: Handler<
 
     console.log(`succesfully download front ${front}`, maybeFront)
 
-    const Bucket = getBucket('proof')
     const frontUpload = await attempt(
         upload(
             frontPath(publishedId, front),
@@ -93,4 +94,4 @@ export const handler: Handler<
             success ? 'succesfully' : 'with some images missing'
         }.`,
     }
-})
+}, Bucket)
