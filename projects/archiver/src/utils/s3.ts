@@ -182,7 +182,7 @@ export const copy = (
             {
                 Bucket: outputBucket,
                 CopySource: `${inputBucket}${key}`,
-                Key: `${key}`,
+                Key: `/${key}`,
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (err, data) => {
