@@ -10,7 +10,7 @@ import {
 import { getPublishedId } from '../../../utils/path-builder'
 import { issue } from '../../../../main'
 import { getEditionDisplayName } from '../../../services/editions-mappings'
-import { getBucket, s3 } from '../../../utils/s3'
+import { Bucket, s3 } from '../../../utils/s3'
 
 // from a list of S3 keys, create an object of the basename to filename
 const identifyAssetFiles = (assetKeys: string[]) => {
@@ -99,13 +99,13 @@ export const getIssueSummaryInternal = (
 
 export const getIssueSummary = async (
     issuePublication: IssuePublicationIdentifier,
-    Bucket: string,
+    bucket: Bucket,
 ): Promise<IssueSummary | undefined> => {
     const publishedIssuePrefix = getPublishedId(issuePublication)
     const Prefix = `zips/${publishedIssuePrefix}/`
     const assetKeyList = await s3
         .listObjectsV2({
-            Bucket,
+            Bucket: bucket.name,
             Prefix,
         })
         .promise()
@@ -116,7 +116,7 @@ export const getIssueSummary = async (
         .filter(notNull)
 
     console.log(
-        `getIssueSummary, get assetKeyList from s3://${Bucket}/${Prefix}`,
+        `getIssueSummary, get assetKeyList from s3://${bucket.name}/${Prefix}`,
         JSON.stringify(assetKeyList),
     )
 

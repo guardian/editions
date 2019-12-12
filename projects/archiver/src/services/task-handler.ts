@@ -11,6 +11,7 @@ import { Attempt } from '../../../backend/utils/try'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import SNS from 'aws-sdk/clients/sns'
 import { AWSError } from 'aws-sdk'
+import { Bucket } from '../utils/s3'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const errorToString = (err: any): string => {
@@ -26,7 +27,7 @@ export type HandlerDependencies = {
     putStatus: (
         issuePublication: IssuePublicationIdentifier,
         status: Status,
-        Bucket: string,
+        bucket: Bucket,
     ) => Promise<{ etag: string }>
     sendPublishStatusToTopic: (
         event: PublishEvent,
@@ -38,7 +39,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
     statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
     dependencies: HandlerDependencies,
-    Bucket: string,
+    bucket: Bucket,
 ): Handler<I, O> {
     return async (input: I) => {
         const { issuePublication } = input
@@ -50,7 +51,7 @@ export function handleAndNotifyInternal<I extends InputWithIdentifier, O>(
                 await dependencies.putStatus(
                     issuePublication,
                     statusOnSuccess,
-                    Bucket,
+                    bucket,
                 )
                 const event = createPublishEvent(
                     issuePublication,
@@ -87,13 +88,13 @@ const runtimeHandlerDependencies = {
 export function handleAndNotify<I extends InputWithIdentifier, O>(
     statusOnSuccess: Status,
     handler: (input: I) => Promise<O>,
-    Bucket: string,
+    bucket: Bucket,
 ): Handler<I, O> {
     return handleAndNotifyInternal(
         statusOnSuccess,
         handler,
         runtimeHandlerDependencies,
-        Bucket,
+        bucket,
     )
 }
 
@@ -102,12 +103,12 @@ export function handleAndNotify<I extends InputWithIdentifier, O>(
  */
 export function handleAndNotifyOnError<I extends InputWithIdentifier, O>(
     handler: (input: I) => Promise<O>,
-    Bucket: string,
+    bucket: Bucket,
 ): Handler<I, O> {
     return handleAndNotifyInternal(
         'errored',
         handler,
         runtimeHandlerDependencies,
-        Bucket,
+        bucket,
     )
 }

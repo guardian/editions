@@ -31,7 +31,7 @@ export const handler: Handler<ZipTaskInput, ZipTaskOutput> = handleAndNotify(
             },
         )
 
-        console.log(`data zip uploaded to: s3://${Bucket}/${publishedId}`)
+        console.log(`data zip uploaded to: s3://${Bucket.name}/${publishedId}`)
 
         await Promise.all(
             imageSizes.map(

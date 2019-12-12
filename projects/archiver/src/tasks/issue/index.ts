@@ -22,7 +22,7 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
         console.log(
             `Attempting to upload ${JSON.stringify(
                 issuePublication,
-            )} to ${Bucket}`,
+            )} to ${Bucket.name}`,
         )
         const publishedId = getPublishedId(issuePublication)
         const issue = await attempt(getIssue(publishedId))
