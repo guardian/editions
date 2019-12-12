@@ -36,7 +36,7 @@ import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
 import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
-import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { NavigationParams } from 'react-navigation'
 import { Separator } from 'src/components/layout/ui/row'
 import { color } from 'src/theme/color'
@@ -115,7 +115,7 @@ const IssueRowContainer = React.memo(
     }) => {
         const { setIssueId } = useIssueSummary()
         const { localId, publishedId } = issue
-        const { setPosition, setTrigger } = useNavPosition()
+        const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
             () =>
@@ -146,13 +146,12 @@ const IssueRowContainer = React.memo(
         const onPressFront = useCallback(
             frontKey => {
                 navToIssue()
-                setPosition({
+                setNavPosition({
                     frontId: frontKey,
                     articleIndex: 0,
                 })
-                setTrigger(true)
             },
-            [setPosition, setTrigger, navToIssue],
+            [setNavPosition, navToIssue],
         )
 
         return (

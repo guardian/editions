@@ -61,7 +61,7 @@ import {
     FlatCard,
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
-import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useNavPositionChange } from 'src/hooks/use-nav-position'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -210,11 +210,12 @@ const IssueFronts = ({
         [issue.localId, issue.publishedId, issue.fronts],
     )
 
-    const { position, trigger, setTrigger } = useNavPosition()
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
 
-    useEffect(() => {
-        if (trigger && frontWithCards) {
+    useNavPositionChange(
+        position => {
+            if (!frontWithCards) return
+
             let index = frontWithCards.findIndex(
                 front => front.key === position.frontId,
             )
@@ -227,9 +228,9 @@ const IssueFronts = ({
                     viewOffset: metrics.vertical,
                 })
             }
-            setTrigger(false)
-        }
-    }, [trigger, position.frontId, setTrigger, frontWithCards])
+        },
+        [frontWithCards],
+    )
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (

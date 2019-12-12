@@ -1,9 +1,11 @@
 import React, {
     createContext,
     useContext,
-    useState,
-    Dispatch,
-    SetStateAction,
+    useRef,
+    useEffect,
+    MutableRefObject,
+    DependencyList,
+    useCallback,
 } from 'react'
 
 interface Position {
@@ -11,43 +13,49 @@ interface Position {
     articleIndex: number // X coordinate
 }
 
-interface NavPositionState {
-    position: Position
-    setPosition: Dispatch<SetStateAction<Position>>
-    trigger: boolean
-    setTrigger: Dispatch<SetStateAction<boolean>>
-}
+type Subscriber = ((p: Position) => void) | undefined
+type SubscriberRef = MutableRefObject<Subscriber> | undefined
+const NavPositionContext = createContext<SubscriberRef>(undefined)
 
-const initialState: NavPositionState = {
-    position: {
-        frontId: '',
-        articleIndex: 0,
-    },
-    setPosition: () => {},
-    trigger: false,
-    setTrigger: () => {},
-}
+type Props = { children: React.ReactNode }
+export const NavPositionProvider = ({ children }: Props) => (
+    <NavPositionContext.Provider value={useRef<Subscriber>(undefined)}>
+        {children}
+    </NavPositionContext.Provider>
+)
 
-const NavPositionContext = createContext<NavPositionState>(initialState)
-
-const NavPositionProvider = ({ children }: { children: React.ReactNode }) => {
-    const [position, setPosition] = useState<Position>(initialState.position)
-    const [trigger, setTrigger] = useState<boolean>(false)
-
-    return (
-        <NavPositionContext.Provider
-            value={{
-                position,
-                setPosition,
-                trigger,
-                setTrigger,
-            }}
-        >
-            {children}
-        </NavPositionContext.Provider>
+/**
+ * Return a function to set the current position of the view
+ * showing the current issue. `state` is a ref so never changes, so this will
+ * never cause a re-render.
+ */
+export const useSetNavPosition = () => {
+    const state = useContext(NavPositionContext)
+    return useCallback(
+        (newPosition: Position) => {
+            if (state === undefined) return
+            if (state.current !== undefined) state.current(newPosition)
+        },
+        [state],
     )
 }
 
-const useNavPosition = () => useContext<NavPositionState>(NavPositionContext)
-
-export { NavPositionProvider, useNavPosition }
+/**
+ * Subscribe to a requested change of position of the view showing the
+ * current issue. `deps` is anything the handler depends on,
+ * just as with `useEffect`.
+ */
+export const useNavPositionChange = (
+    handler: (p: Position) => void,
+    deps: DependencyList = [],
+) => {
+    const state = useContext(NavPositionContext)
+    useEffect(() => {
+        if (state === undefined) return () => {}
+        if (state.current != null)
+            throw new Error('cannot subscribe to nav position change twice')
+        state.current = handler
+        return () => (state.current = undefined)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state, ...deps])
+}
