@@ -21,7 +21,14 @@ import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoint
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
-import { WeatherWidget } from 'src/components/weather'
+import {
+    WeatherWidget,
+    WeatherQueryData,
+    WEATHER_QUERY as FULL_WEATHER_QUERY,
+    EMPTY_WEATHER_HEIGHT,
+    WEATHER_HEIGHT,
+    getValidWeatherData,
+} from 'src/components/weather'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
@@ -77,6 +84,15 @@ const WEATHER_QUERY = gql('{ isWeatherShown @client }')
 const useIsWeatherShown = () => {
     const query = useQuery<{ isWeatherShown: boolean }>(WEATHER_QUERY)
     return !query.loading && query.data.isWeatherShown
+}
+
+const useIsWeatherActuallyShown = () => {
+    const isWeatherShown = useIsWeatherShown()
+    const weatherResult = useQuery<WeatherQueryData>(
+        // query must contain at least 1 item, even if we don't need it
+        isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
+    )
+    return getValidWeatherData(weatherResult) != null
 }
 
 const ScreenHeader = withNavigation(
@@ -194,16 +210,23 @@ const IssueFronts = ({
         [issue.localId, issue.publishedId, issue.fronts],
     )
 
+    const isWeatherActuallyShown = useIsWeatherActuallyShown()
+
     useNavPositionChange(
         position => {
             if (!frontWithCards) return
+
             let index = frontWithCards.findIndex(
                 front => front.key === position.frontId,
             )
             // Invalid index, navigate to the first one. Not sure this is right.
             if (index < 0) index = 0
             if (ref && ref.current && ref.current.scrollToIndex) {
-                ref.current.scrollToIndex({ animated: false, index })
+                ref.current.scrollToIndex({
+                    animated: false,
+                    index,
+                    viewOffset: metrics.vertical,
+                })
             }
         },
         [frontWithCards],
@@ -236,7 +259,11 @@ const IssueFronts = ({
             )}
             getItemLayout={(_: any, index: number) => ({
                 length: card.height + metrics.fronts.sliderRadius * 2,
-                offset: (card.height + metrics.fronts.sliderRadius * 2) * index,
+                offset:
+                    (card.height + metrics.fronts.sliderRadius * 2) * index +
+                    (isWeatherActuallyShown
+                        ? WEATHER_HEIGHT
+                        : EMPTY_WEATHER_HEIGHT),
                 index,
             })}
             keyExtractor={item => item.key}
