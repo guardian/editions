@@ -142,6 +142,9 @@ const createUnderlayNavigator = (
         }
     }
 
+    const { width } = Dimensions.get('window')
+    const isTablet = width >= Breakpoints.tabletVertical
+
     return createStackNavigator(navigation, {
         initialRouteName: '_',
         defaultNavigationOptions: {
@@ -151,8 +154,8 @@ const createUnderlayNavigator = (
         ...(supportsTransparentCards()
             ? {
                   mode: 'modal',
-                  transparentCard: true,
-                  cardOverlayEnabled: true,
+                  transparentCard: isTablet,
+                  cardOverlayEnabled: isTablet,
                   transitionConfig,
               }
             : {}),
