@@ -1,6 +1,6 @@
 export type Connectivity = 'online' | 'offline'
 
-export type TNotRun = { type: 'not-run-attempt' }
+type NotRun = { type: 'not-run-attempt' }
 
 export type TValidAttempt<T> = {
     type: 'valid-attempt'
@@ -28,7 +28,7 @@ export type ResolvedAttempt<T> =
     | TInvalidAttempt
     | TErrorAttempt
 
-export type AnyAttempt<T> = TNotRun | ResolvedAttempt<T>
+export type AnyAttempt<T> = NotRun | ResolvedAttempt<T>
 
 const withConnectivity = <T>(
     connectivity: Connectivity,
@@ -48,7 +48,7 @@ const withConnectivity = <T>(
     }
 }
 
-const NotRunRef: TNotRun = {
+const NotRunRef: NotRun = {
     type: 'not-run-attempt',
 }
 
@@ -85,14 +85,14 @@ const ErrorAttemptCons = <T>(
     time,
 })
 
-const isNotRun = <T>(attempt: AnyAttempt<T>): attempt is TNotRun =>
+const isNotRun = <T>(attempt: AnyAttempt<T>): attempt is NotRun =>
     attempt.type === 'not-run-attempt'
 
 const hasRun = <T>(attempt: AnyAttempt<T>): attempt is ResolvedAttempt<T> =>
     !isNotRun(attempt)
 
 const isValid = <T>(attempt: AnyAttempt<T>): attempt is TValidAttempt<T> =>
-    attempt.type === 'valid-attempt' || isNotRun(attempt)
+    attempt.type === 'valid-attempt'
 
 const isError = <T>(attempt: AnyAttempt<T>): attempt is TErrorAttempt =>
     attempt.type === 'error-attempt'

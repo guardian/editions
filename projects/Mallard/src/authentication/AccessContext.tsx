@@ -12,6 +12,7 @@ import {
     ResolvedAttempt,
     InvalidAttempt,
     NotRun,
+    isNotRun,
 } from './lib/Attempt'
 import identity, {
     IdentityAuthData,
@@ -115,7 +116,7 @@ const AccessProvider = ({
     const value = useMemo(
         () => ({
             attempt,
-            canAccess: !!attempt && isValid(attempt),
+            canAccess: (!!attempt && isValid(attempt)) || isNotRun(attempt),
             identityData: isValid(idAuth) ? idAuth.data : null,
             casData: isValid(casAuth) ? casAuth.data : null,
             iapData: isValid(iapAuth) ? iapAuth.data : null,
