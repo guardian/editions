@@ -35,7 +35,6 @@ import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
-import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
 import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { NavigationParams } from 'react-navigation'
 import { Separator } from 'src/components/layout/ui/row'
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
     issueListFooter: {
         padding: metrics.horizontal,
         paddingTop: metrics.vertical * 2,
-        paddingBottom: getIssueCardOverlayAmount() + metrics.vertical * 2,
+        paddingBottom: metrics.vertical * 8,
     },
     issueListFooterGrid: {
         marginBottom: metrics.vertical,
