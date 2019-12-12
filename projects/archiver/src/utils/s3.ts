@@ -238,9 +238,15 @@ export const recursiveCopy = async (
     outputBucket: string,
     baseKey: string,
 ): Promise<{}[]> => {
+    console.log(
+        `Recursively copying ${baseKey} from ${inputBucket} to ${outputBucket}`,
+    )
+
     const listing = await list(inputBucket, baseKey)
-    const keys = listing.objects.Contents!
-    const subfolders = listing.objects.CommonPrefixes!
+    const keys = listing.objects.Contents || []
+    const subfolders = listing.objects.CommonPrefixes || []
+
+    console.log(`Found ${keys.length} keys and ${subfolders.length} folders`)
 
     // Loop over creating copy promises
     const copyPromises = await Promise.all(
