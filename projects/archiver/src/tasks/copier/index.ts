@@ -27,6 +27,15 @@ export const handler: Handler<CopyTaskInput, CopyTaskOutput> = handleAndNotify(
         if (copyPromises.filter(hasFailed).length)
             throw new Error('Failed to copy some objects')
 
+        const zipCopyPromises = await recursiveCopy(
+            inputBucket,
+            outputBucket,
+            'zips/' + issue.key + '/' + issuePublication.version + '/',
+        )
+
+        if (zipCopyPromises.filter(hasFailed).length)
+            throw new Error('Failed to copy some zips')
+
         return {
             issuePublication,
             message: 'Issue copied successfully',
