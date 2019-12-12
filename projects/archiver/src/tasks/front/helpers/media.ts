@@ -11,7 +11,7 @@ import {
     TrailImage,
 } from '../../../../common'
 import { getImageUse } from '../../../utils/backend-client'
-import { ONE_WEEK, upload } from '../../../utils/s3'
+import { getBucket, ONE_WEEK, upload } from '../../../utils/s3'
 
 const getImageFromElement = (element: BlockElement): Image | undefined => {
     switch (element.id) {
@@ -61,7 +61,8 @@ export const getAndUploadImageUse = async (
 ) => {
     const [path, data] = await getImageUse(publishedId, image, size, use)
     if (hasFailed(data)) return data
-    return upload(path, data, 'image/jpeg', ONE_WEEK)
+    const Bucket = getBucket('proof')
+    return upload(path, data, Bucket, 'image/jpeg', ONE_WEEK)
 }
 
 export const getImageUses = (image: Image | TrailImage): ImageUse[] => {

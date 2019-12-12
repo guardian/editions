@@ -1,4 +1,4 @@
-import { parseRecordInternal } from './parser'
+import { parseRecordInternal } from '../../src/invoke/parser'
 import { hasFailed } from '../../common'
 
 describe('parseRecord', () => {

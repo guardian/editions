@@ -1,6 +1,6 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
-import { s3, Bucket, ONE_WEEK } from '../../../utils/s3'
+import { s3, getBucket, ONE_WEEK } from '../../../utils/s3'
 import { getMatchingObjects } from './lister'
 
 export const zip = async (
@@ -9,6 +9,7 @@ export const zip = async (
     options: { removeFromOutputPath?: string },
 ) => {
     const output = new PassThrough()
+    const Bucket = getBucket('proof')
 
     const upload = s3
         .upload({

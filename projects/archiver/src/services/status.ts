@@ -1,4 +1,4 @@
-import { s3, Bucket, listNestedPrefixes, upload } from '../utils/s3'
+import { s3, listNestedPrefixes, upload, getBucket } from '../utils/s3'
 import { IssuePublicationIdentifier, IssueIdentifier } from '../../common'
 import { getPublishedId, getLocalId } from '../utils/path-builder'
 import { oc } from 'ts-optchain'
@@ -10,14 +10,16 @@ export type IssuePublicationWithStatus = IssuePublicationIdentifier & {
 
 export const publishedStatuses = [
     'bundled', // zip files built and uploaded
-    'indexed', // index file generated
+    'proofed', // index file generated in proof bucket
+    'copied', // copied across to publish bucket
+    'published', // index file generated in publish bucket
     'notified', // notification sent
 ] as const
 export const statuses = [
     ...publishedStatuses,
     'started', // started the process of building
     'assembled', // assembled assets into S3
-    'unknown',
+    'errored',
 ] as const
 export type Status = typeof statuses[number]
 
@@ -36,7 +38,8 @@ export const putStatus = (
     )
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status`
-    return upload(path, { status }, 'application/json', undefined)
+    const Bucket = getBucket('proof')
+    return upload(path, { status }, Bucket, 'application/json', undefined)
 }
 
 /* Given a published instance ID of an issue, return the instance status
@@ -47,6 +50,7 @@ const getStatus = async (
     console.log(`getStatus for ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     //get object
+    const Bucket = getBucket('proof')
     const response = await s3
         .getObject({ Bucket, Key: `${publishedId}/status` })
         .promise()
@@ -66,11 +70,11 @@ const getStatus = async (
                 issuePublication,
             )} was not a string :( but was actually a ${typeof statusResponse}`,
         )
-        return { ...issuePublication, status: 'unknown', updated: new Date(0) }
+        return { ...issuePublication, status: 'errored', updated: new Date(0) }
     }
     const decodedStatus = JSON.parse(statusResponse)
     const status: Status =
-        statuses.find(_ => _ === decodedStatus.status) || 'unknown'
+        statuses.find(_ => _ === decodedStatus.status) || 'errored'
     const updated = oc(response).LastModified() || new Date(0)
     console.log(
         `Status for ${JSON.stringify(
@@ -86,6 +90,7 @@ const getVersions = async (
 ): Promise<IssuePublicationIdentifier[]> => {
     console.log(`getVersions for ${JSON.stringify(issue)}`)
     const root = getLocalId(issue)
+    const Bucket = getBucket('proof')
     const versions = await listNestedPrefixes(Bucket, root)
     return versions.map(version => ({
         ...issue,

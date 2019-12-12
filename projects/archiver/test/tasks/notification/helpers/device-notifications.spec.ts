@@ -2,13 +2,14 @@ import {
     scheduleDeviceNotificationIfEligibleInternal,
     IssueNotificationData,
     ScheduleDeviceNotificationInput,
-} from './device-notifications'
+} from '../../../../src/tasks/notification/helpers/device-notifications'
 
 const apiCfg = {
     domain: 'http://example.com',
     apiKey: 'some.key',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stub = async (input: ScheduleDeviceNotificationInput) => {
     return { statusCode: 200, statusText: 'success' }
 }

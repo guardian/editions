@@ -72,12 +72,22 @@ export class EditionsStack extends cdk.Stack {
             description: 'image signing',
         })
 
-        const archiveBucketParameter = new cdk.CfnParameter(
+        const proofArchiveBucketParameter = new cdk.CfnParameter(
             this,
-            'archive-bucket-param',
+            'proof-archive-bucket-param',
             {
                 type: 'String',
-                description: 'Archive Bucket',
+                description: 'Proof Archive Bucket',
+                allowedValues: ['editions-proof-prod', 'editions-proof-code'],
+            },
+        )
+
+        const publishArchiveBucketParameter = new cdk.CfnParameter(
+            this,
+            'publish-archive-bucket-param',
+            {
+                type: 'String',
+                description: 'Publish Archive Bucket',
                 allowedValues: ['editions-store-prod', 'editions-store-code'],
             },
         )
@@ -274,10 +284,16 @@ export class EditionsStack extends cdk.Stack {
             value: `https://${previewDist.domainName}`,
         })
 
-        const archive = s3.Bucket.fromBucketName(
+        const proofArchive = s3.Bucket.fromBucketName(
             this,
-            'archive-bucket',
-            archiveBucketParameter.valueAsString,
+            'proof-archive-bucket',
+            proofArchiveBucketParameter.valueAsString,
+        )
+
+        const publishArchive = s3.Bucket.fromBucketName(
+            this,
+            'publish-archive-bucket',
+            publishArchiveBucketParameter.valueAsString,
         )
 
         const publishedBucket = s3.Bucket.fromBucketName(
@@ -286,31 +302,31 @@ export class EditionsStack extends cdk.Stack {
             publishedEditionsBucketnameParameter.valueAsString,
         )
 
-        //Archiver step function
-
-        const archiverStateMachine = archiverStepFunction(this, {
+        //proof archiver step function
+        const proofArchiverStateMachine = archiverStepFunction(this, {
             stack: stackParameter.valueAsString,
             stage: stageParameter.valueAsString,
             deployBucket,
-            outputBucket: archive,
+            proofBucket: proofArchive,
+            publishBucket: publishArchive,
             backendURL,
             frontsTopicArn: frontsTopicARN.valueAsString,
             frontsTopicRoleArn: frontsTopicRoleARN.valueAsString,
             guNotifyServiceApiKey: guNotifyServiceApiKeyParameter.valueAsString,
         })
 
-        new CfnOutput(this, 'archiver-state-machine-arn', {
-            description: 'ARN for archiver state machine',
-            exportName: `archiver-state-machine-arn-${stageParameter.valueAsString}`,
-            value: archiverStateMachine.stateMachineArn,
+        new CfnOutput(this, 'proof-archiver-state-machine-arn', {
+            description: 'ARN for proof archiver state machine',
+            exportName: `proof-archiver-state-machine-arn-${stageParameter.valueAsString}`,
+            value: proofArchiverStateMachine.stateMachineArn,
         })
 
-        const archiveS3EventListenerFunction = () => {
+        const proofArchiveS3EventListenerFunction = () => {
             const fn = new lambda.Function(
                 this,
-                'EditionsArchiverS3EventListener',
+                'EditionsProofArchiverS3EventListener',
                 {
-                    functionName: `editions-archiver-s3-event-listener-${stageParameter.valueAsString}`,
+                    functionName: `editions-proof-archiver-s3-event-listener-${stageParameter.valueAsString}`,
                     runtime: lambda.Runtime.NODEJS_10_X,
                     timeout: Duration.minutes(5),
                     memorySize: 256,
@@ -321,7 +337,8 @@ export class EditionsStack extends cdk.Stack {
                     handler: 'index.invoke',
                     environment: {
                         stage: stageParameter.valueAsString,
-                        stateMachineARN: archiverStateMachine.stateMachineArn,
+                        stateMachineARN:
+                            proofArchiverStateMachine.stateMachineArn,
                         arn: frontsRoleARN.valueAsString,
                     },
                 },
@@ -329,38 +346,40 @@ export class EditionsStack extends cdk.Stack {
             Tag.add(
                 fn,
                 'App',
-                `editions-archiver-s3-event-listener-${stageParameter.valueAsString}`,
+                `editions-proof-archiver-s3-event-listener-${stageParameter.valueAsString}`,
             )
             Tag.add(fn, 'Stage', stageParameter.valueAsString)
             Tag.add(fn, 'Stack', stackParameter.valueAsString)
             return fn
         }
 
-        const archiveS3EventListener = archiveS3EventListenerFunction()
+        const proofArchiveS3EventListener = proofArchiveS3EventListenerFunction()
 
-        new CfnOutput(this, 'archiver-s3-event-listener-arn', {
-            description: 'ARN for archiver state machine trigger lambda',
-            exportName: `archiver-s3-event-listener-arn-${stageParameter.valueAsString}`,
-            value: archiveS3EventListener.functionArn,
+        new CfnOutput(this, 'proof-archiver-s3-event-listener-arn', {
+            description: 'ARN for proof-archiver state machine trigger lambda',
+            exportName: `proof-archiver-s3-event-listener-arn-${stageParameter.valueAsString}`,
+            value: proofArchiveS3EventListener.functionArn,
         })
         new lambda.CfnPermission(
             this,
-            'PublishedEditionsArchiverS3EventListenerInvokePermission',
+            'PublishedEditionsProofArchiverS3EventListenerInvokePermission',
             {
                 principal: 's3.amazonaws.com',
-                functionName: archiveS3EventListener.functionName,
+                functionName: proofArchiveS3EventListener.functionName,
                 action: 'lambda:InvokeFunction',
                 sourceAccount: cmsFrontsAccountIdParameter.valueAsString,
                 sourceArn: publishedBucket.bucketArn,
             },
         )
 
-        archiveS3EventListener.addToRolePolicy(
+        proofArchiveS3EventListener.addToRolePolicy(
             new iam.PolicyStatement({
                 actions: ['sts:AssumeRole'],
                 resources: [frontsAccess.roleArn],
             }),
         )
-        archiverStateMachine.grantStartExecution(archiveS3EventListener)
+        proofArchiverStateMachine.grantStartExecution(
+            proofArchiveS3EventListener,
+        )
     }
 }
