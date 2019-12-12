@@ -14,7 +14,7 @@ const watchHTML = () => {
             setTimeout(() => {
                 console.log(chalk.green(`Watching ${key}`))
                 exec(
-                    [`cd ../../projects/${project}`, watchScript].join(' && '),
+                    [`cd ../../../${project}`, watchScript].join(' && '),
                     (err, stdout, stderr) => {
                         if (err || stderr) {
                             if (stderr.includes('SIGKILL')) {

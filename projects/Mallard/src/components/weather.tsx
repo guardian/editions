@@ -13,8 +13,7 @@ import { Button, ButtonAppearance } from './button/button'
 import { withNavigation } from 'react-navigation'
 import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
-import { PermissionStatus } from 'react-native-permissions'
-import { useQuery } from 'src/hooks/apollo'
+import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
 type QueryForecast = Pick<
@@ -26,13 +25,11 @@ type Weather = {
     isLocationPrecise: boolean
     forecasts: QueryForecast[]
 }
-type QueryData = {
+export type WeatherQueryData = {
     weather: Weather | null
-    isUsingProdDevtools: boolean
-    locationPermissionStatus: PermissionStatus
 }
 
-const QUERY = gql`
+export const WEATHER_QUERY = gql`
     {
         weather @client {
             locationName
@@ -47,20 +44,21 @@ const QUERY = gql`
                 EpochDateTime
             }
         }
-        isUsingProdDevtools @client
-        locationPermissionStatus @client
     }
 `
 
 const narrowSpace = String.fromCharCode(8201)
 
+export const WEATHER_HEIGHT = 78
+export const EMPTY_WEATHER_HEIGHT = 16
+
 const styles = StyleSheet.create({
     shownWeather: {
         marginHorizontal: metrics.horizontal,
-        height: 78,
+        height: WEATHER_HEIGHT,
     },
     emptyWeatherSpace: {
-        height: 16,
+        height: EMPTY_WEATHER_HEIGHT,
     },
     weatherContainer: {
         display: 'flex',
@@ -297,24 +295,27 @@ const WeatherForecast = ({ weather }: { weather: Weather }) => {
     return <></>
 }
 
-const WeatherWidget = React.memo(() => {
-    const query = useQuery<QueryData>(QUERY)
-    if (query.loading) return <View style={styles.emptyWeatherSpace} />
-
-    const { data } = query
-
+export const getValidWeatherData = (result: QueryResult<WeatherQueryData>) => {
     if (
-        data.weather == null ||
-        !data.weather.forecasts ||
-        data.weather.forecasts.length < 9
-    ) {
+        !result.loading &&
+        result.data.weather != null &&
+        result.data.weather.forecasts.length >= 9
+    )
+        return result.data.weather
+    return undefined
+}
+
+const WeatherWidget = React.memo(() => {
+    const query = useQuery<WeatherQueryData>(WEATHER_QUERY)
+    const weather = getValidWeatherData(query)
+    if (weather == null) {
         return <View style={styles.emptyWeatherSpace} />
     }
 
     return (
         <View style={styles.shownWeather}>
             <ErrorBoundary>
-                <WeatherForecast weather={data.weather} />
+                <WeatherForecast weather={weather} />
             </ErrorBoundary>
         </View>
     )

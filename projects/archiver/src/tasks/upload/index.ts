@@ -2,7 +2,7 @@ import { Handler } from 'aws-lambda'
 import { attempt, hasFailed } from '../../../../backend/utils/try'
 import { issuePath } from '../../../common'
 import { handleAndNotify } from '../../services/task-handler'
-import { ONE_WEEK, upload } from '../../utils/s3'
+import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
 import { IssueTaskOutput } from '../issue'
 
 type UploadTaskInput = IssueTaskOutput
@@ -16,8 +16,9 @@ export const handler: Handler<
 > = handleAndNotify('assembled', async ({ issuePublication, issue }) => {
     const { publishedId } = issue
     const path = issuePath(publishedId)
+    const Bucket = getBucket('proof')
     const issueUpload = await attempt(
-        upload(path, issue, 'application/json', ONE_WEEK),
+        upload(path, issue, Bucket, 'application/json', ONE_WEEK),
     )
     if (hasFailed(issueUpload)) {
         console.error(JSON.stringify(issueUpload))

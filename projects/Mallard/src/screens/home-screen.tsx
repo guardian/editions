@@ -12,6 +12,7 @@ import {
     IssueRow,
     ISSUE_ROW_HEADER_HEIGHT,
     ISSUE_FRONT_ROW_HEIGHT,
+    ISSUE_FRONT_ERROR_HEIGHT,
 } from 'src/components/issue/issue-row'
 import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
@@ -34,19 +35,20 @@ import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
-import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
-import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { NavigationParams } from 'react-navigation'
 import { Separator } from 'src/components/layout/ui/row'
 import { color } from 'src/theme/color'
 import { useIssueResponse } from 'src/hooks/use-issue'
 import { IssueWithFronts } from '../../../Apps/common/src'
+import { PathToIssue } from 'src/paths'
+import { Loaded } from 'src/helpers/Loaded'
 
 const styles = StyleSheet.create({
     issueListFooter: {
         padding: metrics.horizontal,
         paddingTop: metrics.vertical * 2,
-        paddingBottom: getIssueCardOverlayAmount() + metrics.vertical * 2,
+        paddingBottom: metrics.vertical * 8,
     },
     issueListFooterGrid: {
         marginBottom: metrics.vertical,
@@ -104,7 +106,7 @@ const IssueRowContainer = React.memo(
         navigation,
     }: {
         issue: IssueSummary
-        issueDetails: IssueWithFronts | null
+        issueDetails: Loaded<IssueWithFronts> | null
         navigation: NavigationScreenProp<
             NavigationRoute<NavigationParams>,
             NavigationParams
@@ -112,7 +114,7 @@ const IssueRowContainer = React.memo(
     }) => {
         const { setIssueId } = useIssueSummary()
         const { localId, publishedId } = issue
-        const { setPosition, setTrigger } = useNavPosition()
+        const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
             () =>
@@ -143,13 +145,12 @@ const IssueRowContainer = React.memo(
         const onPressFront = useCallback(
             frontKey => {
                 navToIssue()
-                setPosition({
+                setNavPosition({
                     frontId: frontKey,
                     articleIndex: 0,
                 })
-                setTrigger(true)
             },
-            [setPosition, setTrigger, navToIssue],
+            [setNavPosition, navToIssue],
         )
 
         return (
@@ -210,17 +211,28 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
 
 const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + 1
 
+const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
+    if (issue.isLoading) return 0
+    if (issue.error != null) return ISSUE_FRONT_ERROR_HEIGHT + 1
+    const { fronts } = issue.value
+    return fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
+}
+
 const IssueListView = withNavigation(
     React.memo(
         ({
             issueList,
-            currentIssueDetails,
+            currentIssue,
             navigation,
         }: {
             issueList: IssueSummary[]
-            currentIssueDetails: IssueWithFronts
+            currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> }
         } & NavigationInjectedProps) => {
-            const { localId, publishedId, fronts } = currentIssueDetails
+            const {
+                localIssueId: localId,
+                publishedIssueId: publishedId,
+            } = currentIssue.id
+            const { details } = currentIssue
 
             // We want to scroll to the current issue.
             const currentIssueIndex = issueList.findIndex(
@@ -249,18 +261,16 @@ const IssueListView = withNavigation(
                     <IssueRowContainer
                         issue={item}
                         issueDetails={
-                            index === currentIssueIndex
-                                ? currentIssueDetails
-                                : null
+                            index === currentIssueIndex ? details : null
                         }
                         navigation={navigation}
                     />
                 ),
-                [currentIssueIndex, currentIssueDetails, navigation],
+                [currentIssueIndex, details, navigation],
             )
 
             // Height of the fronts so we can provide this to `getItemLayout`.
-            const frontRowsHeight = fronts.length * (ISSUE_FRONT_ROW_HEIGHT + 1)
+            const frontRowsHeight = getFrontRowsHeight(details)
 
             // Changing the current issue will affect the layout, so that's
             // indeed a dependency of the callback.
@@ -308,6 +318,9 @@ const IssueListView = withNavigation(
                         currentIssueIndex >= 0 ? currentIssueIndex : undefined
                     }
                     renderItem={renderItem}
+                    // Necessary to make sure we re-render visible
+                    // items when details changes.
+                    extraData={details}
                     getItemLayout={getItemLayout}
                     ref={refFn}
                 />
@@ -318,43 +331,43 @@ const IssueListView = withNavigation(
 
 const IssueListViewWithDelay = ({
     issueList,
-    currentIssueDetails,
+    currentId,
+    currentIssue,
 }: {
     issueList: IssueSummary[]
-    currentIssueDetails: IssueWithFronts | null
+    currentId: PathToIssue
+    currentIssue: Loaded<IssueWithFronts>
 }) => {
-    const [shownIssueDetails, setShownIssueDetails] = useState(
-        currentIssueDetails,
-    )
+    const [shownIssue, setShownIssue] = useState({
+        id: currentId,
+        details: currentIssue,
+    })
 
     // When we just pressed a issue row, it'll take a bit of time to
     // fetch the details (ex. list of fronts). During this time,
     // `currentIssueDetails` will be `null`. So in the meantime, we'll
     // keep showing the previous fronts.
+    const { details } = shownIssue
     useEffect(() => {
-        if (currentIssueDetails != null) {
-            setShownIssueDetails(currentIssueDetails)
+        if (
+            !currentIssue.isLoading &&
+            (currentIssue.value !== details.value ||
+                currentIssue.error !== details.error)
+        ) {
+            setShownIssue({ id: currentId, details: currentIssue })
         }
-    }, [currentIssueDetails])
+    }, [currentId, currentIssue, details])
 
-    // This can happen on the very first load of the list, when we don't
-    // have any details at all. However since the "fronts" page would
-    // have loaded the details of the current issue already, this will
-    // rarely happen.
-    if (shownIssueDetails === null) return null
-
-    return (
-        <IssueListView
-            issueList={issueList}
-            currentIssueDetails={shownIssueDetails}
-        />
-    )
+    return <IssueListView issueList={issueList} currentIssue={shownIssue} />
 }
 
 const NO_ISSUES: IssueSummary[] = []
+const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' }
 const IssueListFetchContainer = () => {
-    const { issueSummary, issueId } = useIssueSummary()
-    const { localIssueId = '', publishedIssueId = '' } = issueId || {}
+    const data = useIssueSummary()
+    const issueSummary = data.issueSummary || NO_ISSUES
+    const issueId = data.issueId || EMPTY_ISSUE_ID
+    const { localIssueId, publishedIssueId } = issueId
     const resp = useIssueResponse(
         // FIXME: we are forced to memo this object because `useIssueResponse`
         // would rerender in a loop otherwise (because we'd provide a different
@@ -367,17 +380,25 @@ const IssueListFetchContainer = () => {
         ]),
     )
     return resp({
-        error: () => <></>,
-        pending: () => (
+        error: (error: {}) => (
             <IssueListViewWithDelay
-                issueList={issueSummary || NO_ISSUES}
-                currentIssueDetails={null}
+                issueList={issueSummary}
+                currentId={issueId}
+                currentIssue={{ error }}
             />
         ),
-        success: details => (
+        pending: () => (
             <IssueListViewWithDelay
-                issueList={issueSummary || NO_ISSUES}
-                currentIssueDetails={details}
+                issueList={issueSummary}
+                currentId={issueId}
+                currentIssue={{ isLoading: true }}
+            />
+        ),
+        success: (value: IssueWithFronts) => (
+            <IssueListViewWithDelay
+                issueList={issueSummary}
+                currentId={issueId}
+                currentIssue={{ value }}
             />
         ),
     })
@@ -406,13 +427,12 @@ export const HomeScreen = ({
             {issueSummary ? (
                 <IssueListFetchContainer />
             ) : error ? (
-                <>
-                    <FlexErrorMessage
-                        debugMessage={error}
-                        title={CONNECTION_FAILED_ERROR}
-                        message={CONNECTION_FAILED_AUTO_RETRY}
-                    />
-                </>
+                <FlexErrorMessage
+                    style={styles.issueList}
+                    debugMessage={error}
+                    title={CONNECTION_FAILED_ERROR}
+                    message={CONNECTION_FAILED_AUTO_RETRY}
+                />
             ) : (
                 <FlexCenter>
                     <Spinner></Spinner>

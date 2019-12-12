@@ -1,10 +1,10 @@
 import { attempt } from '../../../backend/utils/try'
 import { TemporaryCredentials, SNS } from 'aws-sdk'
 import { IssuePublicationIdentifier, Edition } from '../../common'
-import { Status } from '../services/status'
+import { Status } from './status'
 import { Moment } from 'moment'
 
-export type ToolStatus = 'Processing' | 'Published' | 'Failed'
+export type ToolStatus = 'Processing' | 'Published' | 'Failed' | 'Copied'
 
 export interface PublishEvent {
     edition: Edition
@@ -54,7 +54,14 @@ export const createPublishEvent = (
         case 'started':
         case 'assembled':
         case 'bundled':
-        case 'indexed':
+        case 'proofed':
+            return {
+                ...identifier,
+                status: 'Processing',
+                message: `Publication stage: ${status}`,
+                timestamp,
+            }
+        case 'published':
             return {
                 ...identifier,
                 status: 'Processing',
@@ -68,8 +75,15 @@ export const createPublishEvent = (
                 message: 'Publication processing complete',
                 timestamp,
             }
-        case 'unknown':
-            throw new Error('Can\'t make publish event with status "unknown"')
+        case 'copied':
+            return {
+                ...identifier,
+                status: 'Copied',
+                message: 'Publication processing complete',
+                timestamp,
+            }
+        case 'errored':
+            throw new Error('Can\'t make publish event with status "errored"')
         default:
             return throwBadStatus(status)
     }

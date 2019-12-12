@@ -11,7 +11,7 @@ import {
 } from '../../../common'
 import { handleAndNotifyOnError } from '../../services/task-handler'
 import { getFront } from '../../utils/backend-client'
-import { ONE_WEEK, upload } from '../../utils/s3'
+import { getBucket, ONE_WEEK, upload } from '../../utils/s3'
 import { IssueParams } from '../issue'
 import {
     getAndUploadImageUse,
@@ -40,10 +40,12 @@ export const handler: Handler<
 
     console.log(`succesfully download front ${front}`, maybeFront)
 
+    const Bucket = getBucket('proof')
     const frontUpload = await attempt(
         upload(
             frontPath(publishedId, front),
             maybeFront,
+            Bucket,
             'application/json',
             ONE_WEEK,
         ),
