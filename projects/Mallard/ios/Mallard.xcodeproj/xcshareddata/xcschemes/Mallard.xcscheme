@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Mallard.app"
+               BuildableName = "GuardianDaily.app"
                BlueprintName = "Mallard"
                ReferencedContainer = "container:Mallard.xcodeproj">
             </BuildableReference>
@@ -55,19 +55,17 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-      </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Mallard.app"
+            BuildableName = "GuardianDaily.app"
             BlueprintName = "Mallard"
             ReferencedContainer = "container:Mallard.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
+      <Testables>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -84,13 +82,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Mallard.app"
+            BuildableName = "GuardianDaily.app"
             BlueprintName = "Mallard"
             ReferencedContainer = "container:Mallard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -103,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Mallard.app"
+            BuildableName = "GuardianDaily.app"
             BlueprintName = "Mallard"
             ReferencedContainer = "container:Mallard.xcodeproj">
          </BuildableReference>
