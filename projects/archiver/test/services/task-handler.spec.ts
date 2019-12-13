@@ -5,8 +5,7 @@ import {
     PublishEvent,
 } from '../../src/services/pub-status-notifier'
 import { IssuePublicationIdentifier } from '../../common'
-import {Bucket} from "../../src/utils/s3";
-
+import { Bucket } from '../../src/utils/s3'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dontCare = {} as any
