@@ -82,7 +82,7 @@
         "react-native-zip-archive": "5.0.0",
         "react-navigation": "3.11.1",
         "react-navigation-fluid-transitions": "^0.3.2",
-        "rn-fetch-blob": "0.10.16",
+        "rn-fetch-blob": "0.11.2",
         "validator": "^11.1.0"
     },
     "devDependencies": {

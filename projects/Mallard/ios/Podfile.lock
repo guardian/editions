@@ -101,7 +101,7 @@ PODS:
   - React-RCTWebSocket (0.60.4):
     - React-Core (= 0.60.4)
     - React-fishhook (= 0.60.4)
-  - rn-fetch-blob (0.10.16):
+  - rn-fetch-blob (0.11.2):
     - React-Core
   - RNBackgroundFetch (2.7.1):
     - React
@@ -327,7 +327,7 @@ SPEC CHECKSUMS:
   React-RCTText: e0f224898b13af9aa036ea7cb3d438daa68c1044
   React-RCTVibration: 0bea40cd51bd089bd591a8f74c86e91fdf2666c5
   React-RCTWebSocket: 163873f4cdd5f1058a9483443404fc3801581cb6
-  rn-fetch-blob: 651b8d076b43d0d7aa294a3d9ec16c00aab8bef9
+  rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
   RNBackgroundFetch: 8d8d66b47eafcb9e772b2eb95057939038b3ef95
   RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
   RNCMaskedView: b79e193409a90bf6b5170d421684f437ff4e2278
