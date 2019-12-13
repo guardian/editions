@@ -22,7 +22,7 @@ export const zip = async (
         })
         .promise()
 
-    const files = await getMatchingObjects(prefixes)
+    const files = await getMatchingObjects(prefixes, bucket)
 
     console.log('Got file names')
     console.log('zipping', JSON.stringify(files))
