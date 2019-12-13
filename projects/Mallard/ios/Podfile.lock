@@ -130,11 +130,11 @@ PODS:
     - Sentry (~> 4.4.0)
   - RNSVG (9.6.2):
     - React
-  - RNZipArchive (4.1.2):
+  - RNZipArchive (5.0.0):
     - React
-    - RNZipArchive/Core (= 4.1.2)
+    - RNZipArchive/Core (= 5.0.0)
     - SSZipArchive (= 2.2.2)
-  - RNZipArchive/Core (4.1.2):
+  - RNZipArchive/Core (5.0.0):
     - React
     - SSZipArchive (= 2.2.2)
   - Sentry (4.4.0):
@@ -341,7 +341,7 @@ SPEC CHECKSUMS:
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNSentry: 932ac1c8b2f581b1c8be5812f88ff556c99e7fb7
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
-  RNZipArchive: 2179f7a0755905d68a3b0f2d9332796cca1e7aa4
+  RNZipArchive: be636657a6630e9771d4a3223dc8fd0bd0137b55
   Sentry: 26650184fe71eb7476dfd2737acb5ea6cc64b4b1
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   yoga: c2c050f6ae6e222534760cc82f559b89214b67e2
