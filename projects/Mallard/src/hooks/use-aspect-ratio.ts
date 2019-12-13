@@ -11,15 +11,17 @@ const useAspectRatio = (path?: string) => {
     const [ratio, setRatio] = useState(isLandscape ? 2 : 1.5)
 
     useEffect(() => {
+        let localSetRatio = setRatio
         if (path) {
             Image.getSize(
                 path,
                 (w, h) => {
-                    setRatio(w / h)
+                    localSetRatio(w / h)
                 },
                 () => {},
             )
         }
+        return () => void (localSetRatio = () => {})
     }, [path])
 
     return ratio
