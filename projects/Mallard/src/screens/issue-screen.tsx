@@ -43,7 +43,7 @@ import {
     issueSummaryToLatestPath,
     useIssueSummary,
 } from 'src/hooks/use-issue-summary'
-import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
@@ -102,9 +102,6 @@ const ScreenHeader = withNavigation(
     }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
         const position = useNavigatorPosition()
         const { date, weekday } = useIssueDate(issue)
-        const isTablet = useMediaQuery(
-            width => width >= Breakpoints.tabletVertical,
-        )
 
         const goToIssueList = () => {
             navigateToIssueList(navigation)
@@ -118,7 +115,7 @@ const ScreenHeader = withNavigation(
                 }}
                 action={
                     <Button
-                        icon={isTablet ? '' : ''}
+                        icon={'\uE04A'}
                         alt="More issues"
                         onPress={() => {
                             goToIssueList()
