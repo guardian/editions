@@ -20,9 +20,9 @@ export const handler: Handler<IssueParams, IssueTaskOutput> = handleAndNotify(
     'started',
     async ({ issuePublication }) => {
         console.log(
-            `Attempting to upload ${JSON.stringify(
-                issuePublication,
-            )} to ${Bucket.name}`,
+            `Attempting to upload ${JSON.stringify(issuePublication)} to ${
+                Bucket.name
+            }`,
         )
         const publishedId = getPublishedId(issuePublication)
         const issue = await attempt(getIssue(publishedId))
