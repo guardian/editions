@@ -68,6 +68,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     const apiUrl = useApiUrl() || ''
 
     useEffect(() => {
+        let localSetPath = setPath
         if (issueId && image) {
             const { localIssueId, publishedIssueId } = issueId
             selectImagePath(
@@ -76,8 +77,9 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
                 publishedIssueId,
                 image,
                 use,
-            ).then(setPath)
+            ).then(newPath => localSetPath(newPath))
         }
+        return () => void (localSetPath = () => {})
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         apiUrl,
