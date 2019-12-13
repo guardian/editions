@@ -38,15 +38,19 @@ export const selectImagePath = async (
 }
 
 const compressImagePath = async (path: string, width: number) => {
-    const resized = await ImageResizer.createResizedImage(
-        path,
-        width,
-        99999,
-        'JPEG',
-        100,
-        0,
-    )
-    return resized.uri
+    try {
+        const resized = await ImageResizer.createResizedImage(
+            path,
+            width,
+            99999,
+            'JPEG',
+            100,
+            0,
+        )
+        return resized.uri
+    } catch {
+        return path
+    }
 }
 
 /**

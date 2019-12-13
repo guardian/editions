@@ -43,12 +43,18 @@ export enum DownloadBlockedStatus {
 }
 
 const StableNetInfoContext = createContext<
-    NetInfoState & { downloadBlocked: DownloadBlockedStatus }
+    NetInfoState & {
+        downloadBlocked: DownloadBlockedStatus
+        showDevButton: boolean
+        setShowDevButton: (v: boolean) => void
+    }
 >({
     type: NetInfoStateType.unknown,
     isConnected: false,
     details: null,
     downloadBlocked: DownloadBlockedStatus.NotBlocked,
+    showDevButton: false,
+    setShowDevButton: () => {},
 })
 
 const offlineState = {
@@ -180,6 +186,25 @@ const fetch = netInfoStateContainer.fetch.bind(netInfoStateContainer)
  */
 const fetchImmediate = () => netInfoStateContainer.state
 
+const DevButton = ({
+    netInfo,
+}: {
+    netInfo: typeof netInfoStateContainer.state
+}) => (
+    <View style={devToggleStyles.bg}>
+        <TouchableWithoutFeedback
+            onPress={() => netInfoStateContainer.toggleForceOffline()}
+        >
+            <Text style={devToggleStyles.text}>
+                Net info{': '}
+                {netInfoStateContainer.isForcedOffline
+                    ? 'forced offline'
+                    : netInfo.type}
+            </Text>
+        </TouchableWithoutFeedback>
+    </View>
+)
+
 const NetInfoProvider = ({ children }: { children: React.ReactNode }) => {
     const [netInfo, setNetInfo] = useState(netInfoStateContainer.state)
     useEffect(() => addEventListener(setNetInfo), [])
@@ -194,33 +219,22 @@ const NetInfoProvider = ({ children }: { children: React.ReactNode }) => {
         netInfo,
         data && data.wifiOnlyDownloads,
     )
+    const [showDevButton, setShowDevButton] = useState(false)
 
     const value = useMemo(
         () => ({
             ...netInfo,
             downloadBlocked,
+            showDevButton,
+            setShowDevButton,
         }),
-        [netInfo, downloadBlocked],
+        [netInfo, downloadBlocked, showDevButton],
     )
+
     return (
         <StableNetInfoContext.Provider value={value}>
             {children}
-            {__DEV__ && (
-                <View style={devToggleStyles.bg}>
-                    <TouchableWithoutFeedback
-                        onPress={() =>
-                            netInfoStateContainer.toggleForceOffline()
-                        }
-                    >
-                        <Text style={devToggleStyles.text}>
-                            Net info{': '}
-                            {netInfoStateContainer.isForcedOffline
-                                ? 'forced offline'
-                                : netInfo.type}
-                        </Text>
-                    </TouchableWithoutFeedback>
-                </View>
-            )}
+            {__DEV__ && showDevButton && <DevButton netInfo={netInfo} />}
         </StableNetInfoContext.Provider>
     )
 }
