@@ -2,13 +2,25 @@ const AWS = require('aws-sdk')
 const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
+const argv = require('yargs').argv
+
+const appRelativePath = argv.appRelativePath || '../../../Mallard'
+const envBucket = argv.envBucket || 'Mallard/dev/.env'
+const sentryBucket = argv.sentryBucket || 'Mallard/dev/sentry.properties'
 
 const AWS_PROFILE = 'frontend'
-const ENV_PATH = path.join(__dirname, '../.env')
+const ENV_PATH = path.join(__dirname, `${appRelativePath}/.env`)
+const SENTRY_PATH = path.join(
+    __dirname,
+    `${appRelativePath}/ios/sentry.properties`,
+)
 
 const sentryPropertiesFileWrite = (platform, file) => {
     fs.writeFile(
-        path.resolve(__dirname, `../${platform}/sentry.properties`),
+        path.resolve(
+            __dirname,
+            `${appRelativePath}/${platform}/sentry.properties`,
+        ),
         file.Body.toString(),
         e => {
             if (e) {
@@ -18,6 +30,16 @@ const sentryPropertiesFileWrite = (platform, file) => {
             console.log(chalk.green(`${platform} sentry.properties file added`))
         },
     )
+}
+
+const failureMessage = path => {
+    const message = `Unable to update environment variables, check you have \`${AWS_PROFILE}\` credentials and your args are correct.`
+    if (fs.existsSync(path)) {
+        console.log(chalk.yellow(message))
+    } else {
+        console.log(chalk.red(message))
+        process.exit(1)
+    }
 }
 
 const s3 = new AWS.S3({
@@ -31,39 +53,21 @@ const s3 = new AWS.S3({
 
 s3.getObject({
     Bucket: 'editions-config',
-    Key: 'Mallard/dev/.env',
+    Key: envBucket,
 })
     .promise()
     .then(file => {
         fs.writeFileSync(ENV_PATH, file.Body)
     })
-    .catch(() => {
-        /**
-         * if the file exists already then don't worry too much
-         * otherwise we want to exit
-         */
-        if (fs.existsSync(ENV_PATH)) {
-            console.log(
-                chalk.yellow(
-                    `Unable to update environment variables, check you have \`${AWS_PROFILE}\` credentials.`,
-                ),
-            )
-        } else {
-            console.log(
-                chalk.red(
-                    `Unable to fetch environment variables, check you have \`${AWS_PROFILE}\` credentials`,
-                ),
-            )
-            process.exit(1)
-        }
-    })
+    .catch(() => failureMessage(ENV_PATH))
 
 s3.getObject({
     Bucket: 'editions-config',
-    Key: 'Mallard/dev/sentry.properties',
+    Key: sentryBucket,
 })
     .promise()
     .then(file => {
         sentryPropertiesFileWrite('ios', file)
         sentryPropertiesFileWrite('android', file)
     })
+    .catch(() => failureMessage(SENTRY_PATH))

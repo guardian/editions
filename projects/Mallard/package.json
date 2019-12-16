@@ -22,7 +22,7 @@
         "bundle-html": "node ../Apps/scripts/src/bundle-html.js",
         "watch-html": "yarn bundle-html && open ../Apps/scripts/src/watch-html.command",
         "convert-svg": "node ./scripts/svgs.js",
-        "fetch-dev-env": "node ./scripts/fetch-dev-env.js",
+        "fetch-dev-env": "node ../Apps/scripts/src/fetch-dev-env.js",
         "write-prod-env": "node .env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
         "write-version-file": "node ./scripts/versioning.js",
