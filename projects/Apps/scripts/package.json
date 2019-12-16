@@ -8,11 +8,9 @@
     },
     "dependencies": {
         "aws-sdk": "^2.511.0",
-        "chalk": "^3.0.0"
+        "chalk": "^3.0.0",
+        "yargs": "^15.0.2"
     },
     "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "yargs": "^15.0.2"
-    }
+    "license": "ISC"
 }
