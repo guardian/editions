@@ -185,7 +185,7 @@ const ManageEditionsScreen = () => {
 }
 
 ManageEditionsScreen.navigationOptions = {
-    title: 'Manage editions',
+    title: 'Manage Editions',
 }
 
 export { ManageEditionsScreen }
