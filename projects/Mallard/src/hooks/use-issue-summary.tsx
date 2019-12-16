@@ -127,7 +127,16 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             unsubNet()
             AppState.removeEventListener('change', appStateChangeListener)
         }
-    }, [issueId, maxAvailableEditions, issueSummary])
+    }, [issueId, issueSummary])
+
+    useEffect(() => {
+        ;(async () => {
+            if (maxAvailableEditions) {
+                const { isConnected } = await NetInfo.fetch()
+                grabIssueSummary(isConnected)
+            }
+        })()
+    }, [maxAvailableEditions])
 
     return (
         <IssueSummaryContext.Provider
