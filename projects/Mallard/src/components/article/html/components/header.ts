@@ -449,27 +449,28 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     /*longread*/
     ${outieHeader(ArticleType.Longread)}
-    .header-container[data-type='longread'] {
+    .header-container[data-type='${ArticleType.Longread}'] {
         color: ${color.textOverDarkBackground};
     }
-    .header-container[data-type='longread'] .header-bg {
+    .header-container[data-type='${ArticleType.Longread}'] .header-bg {
         background-color: ${color.palette.neutral[7]};
     }
-    .header-container[data-type='longread'] .header {
+    .header-container[data-type='${ArticleType.Longread}'] .header {
         background-color: ${color.palette.neutral[7]};
     }
-    .header-container[data-type='longread'] .header-kicker {
+    .header-container[data-type='${ArticleType.Longread}'] .header-kicker {
         background-color: ${colors.main};
         color: ${color.textOverDarkBackground};
         font-family: ${families.headline.bold};
     }
-    .header-container[data-type='longread'] .header-top h1 {
+    .header-container[data-type='${ArticleType.Longread}'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
     }
-    .header-container[data-type='longread'] .header-byline {
+    .header-container[data-type='${ArticleType.Longread}'] .header-byline,
+    ${'' /* this is needed to be more specific than an above style */}
+    .header-container[data-type='${ArticleType.Longread}'] .header-byline a {
         color: ${color.textOverDarkBackground};
     }
-
 
     /*obit*/
     ${outieKicker(ArticleType.Obituary)}
