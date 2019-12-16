@@ -1,3 +1,11 @@
+/**
+ * Command line script to fetch the required credentials to run an Editions app. Defaults to Mallard
+ * Optional Arguments
+ * - appRelativePath:  Relative path from the scripts folder to the app that needs it
+ * - envBucket: S3 bucket path for the environment variables needed for a dev version of the app
+ * - entryBucket: S3 bucket path for the sentry.properties file
+ */
+
 const AWS = require('aws-sdk')
 const path = require('path')
 const fs = require('fs')
