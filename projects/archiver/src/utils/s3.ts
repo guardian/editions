@@ -180,6 +180,7 @@ export const copy = (
                 Bucket: outputBucket.name,
                 CopySource: `${inputBucket.name}/${key}`,
                 Key: `${key}`,
+                ACL: 'public-read',
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (err, data) => {
