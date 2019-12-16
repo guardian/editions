@@ -1,19 +1,19 @@
 import { PassThrough } from 'stream'
 import archiver = require('archiver')
-import { s3, getBucket, ONE_WEEK } from '../../../utils/s3'
+import { s3, ONE_WEEK, Bucket } from '../../../utils/s3'
 import { getMatchingObjects } from './lister'
 
 export const zip = async (
     name: string,
     prefixes: string[],
     options: { removeFromOutputPath?: string },
+    bucket: Bucket,
 ) => {
     const output = new PassThrough()
-    const Bucket = getBucket('proof')
 
     const upload = s3
         .upload({
-            Bucket,
+            Bucket: bucket.name,
             Key: `zips/${name}.zip`,
             Body: output,
             ACL: 'public-read',
@@ -22,7 +22,7 @@ export const zip = async (
         })
         .promise()
 
-    const files = await getMatchingObjects(prefixes)
+    const files = await getMatchingObjects(prefixes, bucket)
 
     console.log('Got file names')
     console.log('zipping', JSON.stringify(files))
@@ -40,7 +40,7 @@ export const zip = async (
                 : file
             console.log(`getting ${file}`)
             const s3response = await s3
-                .getObject({ Bucket, Key: file })
+                .getObject({ Bucket: bucket.name, Key: file })
                 .promise()
             if (s3response.Body == null) return false
 

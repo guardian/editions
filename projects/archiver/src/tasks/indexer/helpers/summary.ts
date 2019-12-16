@@ -1,14 +1,15 @@
 import {
+    Edition,
+    IssueIdentifier,
+    IssuePublicationIdentifier,
     IssueSummary,
     notNull,
-    IssuePublicationIdentifier,
-    IssueIdentifier,
-    Edition,
 } from '../../../../common'
 import { getIssuesBy as getIssuesByEdition, issueWindow } from './get-issues'
 import { getIssueSummary } from './get-issue-summary'
 import { getPublishedVersion } from './get-published-version'
 import { oc } from 'ts-optchain'
+import { Bucket } from '../../../utils/s3'
 
 const validate = (allEditionIssues: IssueIdentifier[], edition: Edition) => {
     const otherEditions = allEditionIssues.filter(
@@ -29,19 +30,17 @@ export const getOtherRecentIssues = (
 
     const recentIssues = issueWindow(allEditionIssues, 7)
 
-    // filter out the one we are currently publishing
-    const otherRecentIssues = recentIssues.filter(
+    // filter out the one we are currently publishing and return
+    return recentIssues.filter(
         issue => issue.issueDate !== oc(currentlyPublishing).issueDate(),
     )
-
-    return otherRecentIssues
 }
 
 // currently publishing will remove this issue from the index, it should be generated in the indextask
 export const getOtherIssuesSummariesForEdition = async (
     currentlyPublishing: IssuePublicationIdentifier,
     edition: Edition,
-    bucket: string,
+    bucket: Bucket,
 ): Promise<IssueSummary[]> => {
     const allEditionIssues = await getIssuesByEdition(edition, bucket)
 
@@ -61,9 +60,13 @@ export const getOtherIssuesSummariesForEdition = async (
     )
 
     const issuePublications = await Promise.all(
-        otherRecentIssuesForEdition.map(getPublishedVersion),
+        otherRecentIssuesForEdition.map(issue =>
+            getPublishedVersion(issue, bucket),
+        ),
     )
     return (await Promise.all(
-        issuePublications.filter(notNull).map(getIssueSummary),
+        issuePublications
+            .filter(notNull)
+            .map(issuePub => getIssueSummary(issuePub, bucket)),
     )).filter(notNull)
 }
