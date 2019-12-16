@@ -76,14 +76,27 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const grabIssueAndSetLatest = async () => {
+            const previousLatest =
+                issueSummary && issueSummaryToLatestPath(issueSummary)
+
             const { isConnected } = await NetInfo.fetch()
-            const issueSummary = await grabIssueSummary(isConnected)
-            if (issueSummary != null) {
-                setIssueId(issueSummaryToLatestPath(issueSummary))
-            } else {
+            const newIssueSummary = await grabIssueSummary(isConnected)
+            if (newIssueSummary == null) {
                 // now we've foregrounded again, wait for a new issue list
                 // seen as we couldn't get one now
                 hasConnected.current = false
+                return
+            }
+
+            const newLatest = issueSummaryToLatestPath(newIssueSummary)
+            // only update to latest issue if there is indeed a new latest issue
+            if (
+                !previousLatest ||
+                (previousLatest.localIssueId !== newLatest.localIssueId &&
+                    previousLatest.publishedIssueId !==
+                        newLatest.publishedIssueId)
+            ) {
+                setIssueId(newLatest)
             }
         }
 
@@ -114,7 +127,7 @@ const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
             unsubNet()
             AppState.removeEventListener('change', appStateChangeListener)
         }
-    }, [issueId, maxAvailableEditions])
+    }, [issueId, maxAvailableEditions, issueSummary])
 
     return (
         <IssueSummaryContext.Provider

@@ -38,15 +38,19 @@ export const selectImagePath = async (
 }
 
 const compressImagePath = async (path: string, width: number) => {
-    const resized = await ImageResizer.createResizedImage(
-        path,
-        width,
-        99999,
-        'JPEG',
-        100,
-        0,
-    )
-    return resized.uri
+    try {
+        const resized = await ImageResizer.createResizedImage(
+            path,
+            width,
+            99999,
+            'JPEG',
+            100,
+            0,
+        )
+        return resized.uri
+    } catch {
+        return path
+    }
 }
 
 /**
@@ -68,6 +72,7 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     const apiUrl = useApiUrl() || ''
 
     useEffect(() => {
+        let localSetPath = setPath
         if (issueId && image) {
             const { localIssueId, publishedIssueId } = issueId
             selectImagePath(
@@ -76,8 +81,9 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
                 publishedIssueId,
                 image,
                 use,
-            ).then(setPath)
+            ).then(newPath => localSetPath(newPath))
         }
+        return () => void (localSetPath = () => {})
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         apiUrl,

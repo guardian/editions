@@ -53,9 +53,10 @@ const useInsets = () => {
         right: 0,
     })
     useEffect(() => {
+        let localSetInsets = setInsets
         const updateInsets = () => {
             currentInsets().then(insets => {
-                setInsets({
+                localSetInsets({
                     ...insets,
                     top: insets.top ? insets.top : getStatusBarHeight(true),
                 })
@@ -67,6 +68,7 @@ const useInsets = () => {
                 updateInsets()
             })
         })
+        return () => void (localSetInsets = () => {})
     }, [])
     return insets
 }

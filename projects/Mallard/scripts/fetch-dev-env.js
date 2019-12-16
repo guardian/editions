@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const path = require('path')
 const fs = require('fs')
-const chalk = require('chalk').default
+const chalk = require('chalk')
 
 const AWS_PROFILE = 'frontend'
 const ENV_PATH = path.join(__dirname, '../.env')
@@ -15,7 +15,7 @@ const sentryPropertiesFileWrite = (platform, file) => {
                 console.error(e)
                 process.exit()
             }
-            console.log(`${platform} sentry.properties file added`)
+            console.log(chalk.green(`${platform} sentry.properties file added`))
         },
     )
 }
