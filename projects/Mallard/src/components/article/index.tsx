@@ -5,6 +5,7 @@ import { color } from 'src/theme/color'
 import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
 import { Article, HeaderControlProps } from './types/article'
 import { Crossword } from './types/crossword'
+import { PathToArticle } from 'src/paths'
 
 /*
 This is the article view! For all of the articles.
@@ -13,9 +14,11 @@ it gets everything it needs from its route
 
 const ArticleController = ({
     article,
+    path,
     ...headerControlProps
 }: {
     article: CAPIArticle
+    path: PathToArticle
 } & HeaderControlProps) => {
     if (article.type === 'crossword') {
         return <Crossword crosswordArticle={article} />
@@ -30,7 +33,7 @@ const ArticleController = ({
                 />
             }
         >
-            <Article article={article} {...headerControlProps} />
+            <Article article={article} path={path} {...headerControlProps} />
         </ErrorBoundary>
     )
 }

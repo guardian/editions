@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import { useArticle } from 'src/hooks/use-article'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { collectImagePath } from 'src/hooks/use-collected-image-paths'
 import { color } from 'src/theme/color'
 import { CreditedImage } from '../../common'
 import { Button } from '../button/button'
@@ -40,7 +40,7 @@ interface PropTypes {
 }
 
 const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
-    const path = useImagePath(image)
+    const path = collectImagePath(image)
     const defaultAspectRatio = useAspectRatio(path)
 
     const [showCredit, setShowCredit] = useState(false)

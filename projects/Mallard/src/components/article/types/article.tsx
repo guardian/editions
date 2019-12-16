@@ -13,6 +13,7 @@ import {
     GalleryArticle,
 } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
+import { PathToArticle } from 'src/paths'
 
 const styles = StyleSheet.create({
     block: {
@@ -98,12 +99,14 @@ const useUpdateWebviewVariable = (
 
 const Article = ({
     article,
+    path,
     onShouldShowHeaderChange,
     shouldShowHeader,
     topPadding,
     onIsAtTopChange,
 }: {
     article: ArticleT | PictureArticle | GalleryArticle
+    path: PathToArticle
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
@@ -123,6 +126,7 @@ const Article = ({
             <WebviewWithArticle
                 type={type}
                 article={article}
+                path={path}
                 theme={theme}
                 scrollEnabled={true}
                 useWebKit={false}

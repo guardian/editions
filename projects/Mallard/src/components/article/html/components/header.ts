@@ -1,6 +1,6 @@
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { collectImagePath } from 'src/hooks/use-collected-image-paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -504,7 +504,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
 `
 
 const Image = ({ image, className }: { image: ImageT; className?: string }) => {
-    const path = useImagePath(image)
+    const path = collectImagePath(image)
     return html`
         <img class="${className}" src="${path}" />
     `
@@ -521,7 +521,7 @@ const MainMediaImage = ({
     children?: string
     preserveRatio?: boolean
 }) => {
-    const path = useImagePath(image)
+    const path = collectImagePath(image)
 
     return html`
         <div

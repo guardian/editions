@@ -14,7 +14,7 @@ import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { collectImagePath } from 'src/hooks/use-collected-image-paths'
 import { Image as TImage } from '../../../../../Apps/common/src'
 import { getPillarColors } from 'src/helpers/transform'
 
@@ -25,7 +25,7 @@ interface ArticleContentProps {
 }
 
 const PictureArticleContent = (image: TImage) => {
-    const path = useImagePath(image)
+    const path = collectImagePath(image)
     return Image({
         imageElement: {
             src: image,
@@ -55,7 +55,7 @@ const renderArticleContent = (
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image': {
-                    const path = useImagePath(el.src)
+                    const path = collectImagePath(el.src)
                     return publishedId
                         ? Image({
                               imageElement: el,
