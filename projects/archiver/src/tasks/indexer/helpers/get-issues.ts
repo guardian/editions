@@ -1,13 +1,12 @@
 import { IssueIdentifier, Edition } from '../../../../common'
-import { getBucket, listNestedPrefixes } from '../../../utils/s3'
+import { Bucket, listNestedPrefixes } from '../../../utils/s3'
 
 /* Crawl S3 for a list of all of the issues that are available */
 export const getIssuesBy = async (
     edition: Edition,
-    bucket: string,
+    bucket: Bucket,
 ): Promise<IssueIdentifier[]> => {
-    const Bucket = getBucket(bucket)
-    const prefixes = await listNestedPrefixes(Bucket, edition)
+    const prefixes = await listNestedPrefixes(bucket, edition)
 
     return prefixes.map(issueDate => ({
         edition,

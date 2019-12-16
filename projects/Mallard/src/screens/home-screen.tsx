@@ -24,13 +24,11 @@ import {
     CONNECTION_FAILED_ERROR,
 } from 'src/helpers/words'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import { useMediaQuery } from 'src/hooks/use-screen'
 import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
 import { WithAppAppearance } from 'src/theme/appearance'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
@@ -67,16 +65,8 @@ const HomeScreenHeader = withNavigation(
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
-        const isTablet = useMediaQuery(
-            width => width >= Breakpoints.tabletVertical,
-        )
-
         const action = (
-            <Button
-                icon={isTablet ? '' : ''}
-                alt="Return to issue"
-                onPress={onReturn}
-            />
+            <Button icon={'\uE04F'} alt="Return to issue" onPress={onReturn} />
         )
         const settings = (
             <Button

@@ -1,4 +1,4 @@
-import { s3, listNestedPrefixes, upload, getBucket } from '../utils/s3'
+import { s3, listNestedPrefixes, upload, Bucket } from '../utils/s3'
 import { IssuePublicationIdentifier, IssueIdentifier } from '../../common'
 import { getPublishedId, getLocalId } from '../utils/path-builder'
 import { oc } from 'ts-optchain'
@@ -32,27 +32,27 @@ export const isPublished = (status: Status): boolean => {
 export const putStatus = (
     issuePublication: IssuePublicationIdentifier,
     status: Status,
+    bucket: Bucket,
 ) => {
     console.log(
         `Changing state of ${JSON.stringify(issuePublication)} to ${status}`,
     )
     const publishedId = getPublishedId(issuePublication)
     const path = `${publishedId}/status`
-    const Bucket = getBucket('proof')
-    return upload(path, { status }, Bucket, 'application/json', undefined)
+    return upload(path, { status }, bucket, 'application/json', undefined)
 }
 
 /* Given a published instance ID of an issue, return the instance status
  * from the status file - this contains the status and modified time */
 const getStatus = async (
     issuePublication: IssuePublicationIdentifier,
+    bucket: Bucket,
 ): Promise<IssuePublicationWithStatus> => {
     console.log(`getStatus for ${JSON.stringify(issuePublication)}`)
     const publishedId = getPublishedId(issuePublication)
     //get object
-    const Bucket = getBucket('proof')
     const response = await s3
-        .getObject({ Bucket, Key: `${publishedId}/status` })
+        .getObject({ Bucket: bucket.name, Key: `${publishedId}/status` })
         .promise()
         .catch(() => {
             return undefined
@@ -87,11 +87,11 @@ const getStatus = async (
 /* Given an edition name and date provide a list of versions */
 const getVersions = async (
     issue: IssueIdentifier,
+    bucket: Bucket,
 ): Promise<IssuePublicationIdentifier[]> => {
     console.log(`getVersions for ${JSON.stringify(issue)}`)
     const root = getLocalId(issue)
-    const Bucket = getBucket('proof')
-    const versions = await listNestedPrefixes(Bucket, root)
+    const versions = await listNestedPrefixes(bucket, root)
     return versions.map(version => ({
         ...issue,
         version,
@@ -102,9 +102,11 @@ const getVersions = async (
  * of that issue */
 export const getStatuses = async (
     issuePublication: IssueIdentifier,
+    bucket: Bucket,
 ): Promise<IssuePublicationWithStatus[]> => {
     const allVersions: IssuePublicationIdentifier[] = await getVersions(
         issuePublication,
+        bucket,
     )
-    return Promise.all(allVersions.map(getStatus))
+    return Promise.all(allVersions.map(version => getStatus(version, bucket)))
 }

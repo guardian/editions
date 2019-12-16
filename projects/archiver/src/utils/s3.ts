@@ -31,29 +31,26 @@ export const s3 = new S3({
     region: 'eu-west-1',
 })
 
-export const getBucket = (bucket: string): string => {
+export type Bucket = {
+    name: string
+    context: 'proof' | 'publish' | 'default'
+}
+
+export const getBucket = (bucket: string): Bucket => {
     if (bucket === 'proof') {
         if (!!process.env.proofBucket) {
-            console.log('Returning proofBucket env var')
-            return process.env.proofBucket
+            return { name: process.env.proofBucket, context: bucket }
         } else {
-            console.log(
-                'Returning default bucket editions-store-code for proof bucket',
-            )
-            return 'editions-store-code'
+            return { name: 'editions-store-code', context: 'default' }
         }
     } else if (bucket === 'publish') {
         if (!!process.env.publishBucket) {
-            console.log('Returning publishBucket env var')
-            return process.env.publishBucket
+            return { name: process.env.publishBucket, context: bucket }
         } else {
-            console.log(
-                'Returning default bucket editions-store-code for publish bucket',
-            )
-            return 'editions-store-code'
+            return { name: 'editions-store-code', context: 'default' }
         }
     } else {
-        return 'editions-store-code'
+        return { name: 'editions-store-code', context: 'default' }
     }
 }
 
@@ -81,13 +78,13 @@ const stripPrefix = (input: string, prefix: string): string => {
 /* List nested prefixes in a given prefix
  */
 export const listNestedPrefixes = async (
-    bucket: string,
+    bucket: Bucket,
     prefix: string,
 ): Promise<string[]> => {
     const prefixWithDelimiter = addDelimiterIfNotPresent(prefix)
     const resp = await s3
         .listObjectsV2({
-            Bucket: bucket,
+            Bucket: bucket.name,
             Prefix: prefixWithDelimiter,
             Delimiter: '/',
         })
@@ -115,7 +112,7 @@ export const FIVE_SECONDS = 5
 export const upload = (
     key: string,
     body: {} | Buffer,
-    bucketName: string,
+    bucket: Bucket,
     mime: 'image/jpeg' | 'application/json' | 'application/zip',
     maxAge: number | undefined,
 ): Promise<{ etag: string }> => {
@@ -123,7 +120,7 @@ export const upload = (
         s3.upload(
             {
                 Body: body instanceof Buffer ? body : JSON.stringify(body),
-                Bucket: bucketName,
+                Bucket: bucket.name,
                 Key: `${key}`,
                 ACL: 'public-read',
                 ContentType: mime,
@@ -132,7 +129,7 @@ export const upload = (
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 upload of s3://${bucketName}/${key} failed with`,
+                        `S3 upload of s3://${bucket.name}/${key} failed with`,
                         err,
                     )
                     reject()
@@ -146,13 +143,13 @@ export const upload = (
 }
 
 export const list = (
-    inputBucket: string,
+    inputBucket: Bucket,
     baseKey: string,
 ): Promise<{ objects: ListObjectsV2Output }> => {
     return new Promise((resolve, reject) => {
         s3.listObjectsV2(
             {
-                Bucket: inputBucket,
+                Bucket: inputBucket.name,
                 Delimiter: '/',
                 Prefix: baseKey,
             },
@@ -174,27 +171,29 @@ export const list = (
 
 export const copy = (
     key: string,
-    inputBucket: string,
-    outputBucket: string,
+    inputBucket: Bucket,
+    outputBucket: Bucket,
 ): Promise<{}> => {
     return new Promise((resolve, reject) => {
         s3.copyObject(
             {
-                Bucket: outputBucket,
-                CopySource: `${inputBucket}/${key}`,
+                Bucket: outputBucket.name,
+                CopySource: `${inputBucket.name}/${key}`,
                 Key: `${key}`,
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (err, data) => {
                 if (err) {
                     console.error(
-                        `S3 copy of s3://${inputBucket}/${key} to s3://${outputBucket}/${key} failed with`,
+                        `S3 copy of s3://${inputBucket.name}/${key} to s3://${outputBucket.name}/${key} failed with`,
                         err,
                     )
                     reject()
                     return
                 }
-                console.log(`${key} copied to ${outputBucket}`)
+                console.log(
+                    `${inputBucket.name}/${key} copied to ${outputBucket.name}/${key}`,
+                )
                 resolve({})
             },
         )
@@ -232,13 +231,19 @@ export const fetchfromCMSFrontsS3 = async (
 }
 
 export const recursiveCopy = async (
-    inputBucket: string,
-    outputBucket: string,
+    inputBucket: Bucket,
+    outputBucket: Bucket,
     baseKey: string,
 ): Promise<{}[]> => {
+    console.log(
+        `Recursively copying ${baseKey} from ${inputBucket} to ${outputBucket}`,
+    )
+
     const listing = await list(inputBucket, baseKey)
-    const keys = listing.objects.Contents!
-    const subfolders = listing.objects.CommonPrefixes!
+    const keys = listing.objects.Contents || []
+    const subfolders = listing.objects.CommonPrefixes || []
+
+    console.log(`Found ${keys.length} keys and ${subfolders.length} folders`)
 
     // Loop over creating copy promises
     const copyPromises = await Promise.all(

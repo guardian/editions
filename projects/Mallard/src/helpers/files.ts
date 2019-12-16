@@ -247,6 +247,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
         updateListeners(localId, { type: 'success' }) // null is unstarted or end
     } catch (error) {
         await pushTracking('downloadAndUnzipError', JSON.stringify(error))
+        errorService.captureException(error)
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
     }

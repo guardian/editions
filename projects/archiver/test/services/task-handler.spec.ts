@@ -5,6 +5,7 @@ import {
     PublishEvent,
 } from '../../src/services/pub-status-notifier'
 import { IssuePublicationIdentifier } from '../../common'
+import { Bucket } from '../../src/utils/s3'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dontCare = {} as any
@@ -40,6 +41,7 @@ describe('handleAndNotifyInternal', () => {
             'errored',
             successHandler,
             dependencies,
+            dontCare,
         )(input, dontCare, dontCare)
 
         expect(actual).toBe('banana')
@@ -48,11 +50,13 @@ describe('handleAndNotifyInternal', () => {
     })
 
     it('should return result of handler and call dependencies when success-status is provided', async () => {
+        const bucket: Bucket = { name: 'myBucket', context: 'default' }
         const dependencies = getDependencies()
         const actual = await handleAndNotifyInternal(
             'started',
             successHandler,
             dependencies,
+            bucket,
         )(input, dontCare, dontCare)
 
         expect(actual).toBe('banana')
@@ -62,6 +66,7 @@ describe('handleAndNotifyInternal', () => {
         expect(dependencies.putStatus).toBeCalledWith(
             input.issuePublication,
             'started',
+            bucket,
         )
         const event = createPublishEvent(input.issuePublication, 'started', now)
         expect(dependencies.sendPublishStatusToTopic).toBeCalledWith(event)
@@ -71,11 +76,12 @@ describe('handleAndNotifyInternal', () => {
         const dependencies = getDependencies()
 
         await expect(
-            handleAndNotifyInternal('started', failureHandler, dependencies)(
-                input,
+            handleAndNotifyInternal(
+                'started',
+                failureHandler,
+                dependencies,
                 dontCare,
-                dontCare,
-            ),
+            )(input, dontCare, dontCare),
         ).rejects.toThrow()
 
         expect(dependencies.putStatus).toBeCalledTimes(0)
