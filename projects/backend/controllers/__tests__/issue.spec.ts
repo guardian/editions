@@ -160,7 +160,7 @@ describe('getIssuesSummary', () => {
     it('returns the correct number of issues when on live stage', async () => {
         const isPreview = false
         const issues = await getIssuesSummary(dailyEdition, isPreview)
-        expect(issues).toHaveLength(7)
+        expect(issues).toHaveLength(30)
 
         const issues2 = await getIssuesSummary(dailyEdition, isPreview)
         expect(issues2).toHaveLength(DEFAULT_LIVE_PAGE_SIZE)
@@ -184,6 +184,29 @@ describe('getIssuesSummary', () => {
             getNthKey(30),
             getNthKey(29),
             getNthKey(28),
+            getNthKey(27),
+            getNthKey(26),
+            getNthKey(25),
+            getNthKey(24),
+            getNthKey(23),
+            getNthKey(22),
+            getNthKey(21),
+            getNthKey(20),
+            getNthKey(19),
+            getNthKey(18),
+            getNthKey(17),
+            getNthKey(16),
+            getNthKey(15),
+            getNthKey(14),
+            getNthKey(13),
+            getNthKey(12),
+            getNthKey(11),
+            getNthKey(10),
+            getNthKey(9),
+            getNthKey(8),
+            getNthKey(7),
+            getNthKey(6),
+            getNthKey(5),
         ])
     })
 })
