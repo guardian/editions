@@ -57,27 +57,32 @@ const handlerCurry: (
             const all = [thisIssueSummary, ...otherIssuesSummariesForEdition]
             const allSortedEditionsIssues = issueSummarySort(all)
 
-            await upload(
-                `${issuePublication.edition}/issues`,
-                allSortedEditionsIssues,
-                Bucket,
-                'application/json',
-                FIVE_SECONDS,
-            )
-
-            // Also upload the index into the root for older clients
-            // TODO: this can be removed once we are happy that the clients are consuming the namespaced index
-            if (issuePublication.edition === 'daily-edition') {
+            // make sure we don't upload an empty list of editions
+            if (allSortedEditionsIssues.length > 0) {
                 await upload(
-                    'issues',
+                    `${issuePublication.edition}/issues`,
                     allSortedEditionsIssues,
                     Bucket,
                     'application/json',
                     FIVE_SECONDS,
                 )
-            }
 
-            console.log('Uploaded new issues file')
+                // Also upload the index into the root for older clients
+                // TODO: this can be removed once we are happy that the clients are consuming the namespaced index
+                if (issuePublication.edition === 'daily-edition') {
+                    await upload(
+                        'issues',
+                        allSortedEditionsIssues,
+                        Bucket,
+                        'application/json',
+                        FIVE_SECONDS,
+                    )
+                }
+
+                console.log('Uploaded new issues file')
+            } else {
+                console.error('New issues file is empty. Upload cancelled.')
+            }
 
             return {
                 issuePublication,
