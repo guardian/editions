@@ -81,7 +81,7 @@ const handlerCurry: (
 
                 console.log('Uploaded new issues file')
             } else {
-                console.warn('New issues file is empty. Upload cancelled.')
+                console.error('New issues file is empty. Upload cancelled.')
             }
 
             return {
