@@ -3,9 +3,8 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "pre-run": "run-p -ln --aggregate-output fetch-dev-env watch-html write-version-file",
+        "pre-run": "run-p -ln --aggregate-output fetch-dev-env watch-html",
         "pre-bundle": "run-p -ln --aggregate-output write-prod-env bundle-html",
-        "postinstall": "yarn write-version-file",
         "start": "yarn pre-run && react-native start",
         "test": "jest --coverage",
         "test:watch": "jest --watch",
@@ -25,7 +24,6 @@
         "fetch-dev-env": "node ./scripts/fetch-dev-env.js",
         "write-prod-env": "node .env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
-        "write-version-file": "node ./scripts/versioning.js",
         "install-pods": "cd ios && pod install"
     },
     "rnpm": {
