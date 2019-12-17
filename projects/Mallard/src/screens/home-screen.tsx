@@ -199,7 +199,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
     )
 }
 
-const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + 1
+const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + StyleSheet.hairlineWidth
 
 const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
     if (issue.isLoading) return 0
@@ -234,16 +234,20 @@ const IssueListView = withNavigation(
             // Scroll to the relevant item if the current issue index has
             // changed (likely because the selected issue has changed itself).
             const listRef = useRef<FlatList<IssueSummary>>()
+            const prevCurrentIndexRef = useRef<number>(currentIssueIndex)
             useEffect(() => {
                 if (listRef.current == null || currentIssueIndex < 0) {
                     return
                 }
 
+                if (prevCurrentIndexRef.current === currentIssueIndex) return
+                prevCurrentIndexRef.current = currentIssueIndex
+
                 /* @types/react doesn't know about scroll functions */
                 ;(listRef.current as any).scrollToIndex({
                     index: currentIssueIndex,
                 })
-            }, [listRef, currentIssueIndex])
+            }, [currentIssueIndex])
 
             // We pass down the issue details only for the selected issue.
             const renderItem = useCallback(
@@ -268,7 +272,7 @@ const IssueListView = withNavigation(
                 (_, index) => {
                     return {
                         length:
-                            ISSUE_ROW_HEIGHT +
+                            ISSUE_ROW_HEADER_HEIGHT +
                             (index === currentIssueIndex ? frontRowsHeight : 0),
                         offset:
                             index * ISSUE_ROW_HEIGHT +
