@@ -1,8 +1,4 @@
-import {
-    gdprSwitchSettings,
-    getSetting,
-    getVersionInfo,
-} from 'src/helpers/settings'
+import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
 import DeviceInfo from 'react-native-device-info'
 import * as NetInfo from 'src/hooks/use-net-info'
 import { isInBeta } from './release-stream'
@@ -87,7 +83,6 @@ The information below will help us to better understand your query:
 -App-
 Product: Daily App
 App Version: ${version} ${buildNumber}
-Commit id: ${getVersionInfo().commitId}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
 App Edition: UK
 First app start: ${firstInstallTime}

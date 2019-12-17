@@ -6,7 +6,6 @@ import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { getVersionInfo } from 'src/helpers/settings'
 import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -178,11 +177,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Clear CAS caches',
                         title: 'Clear CAS caches',
                         onPress: signOutCAS,
-                    },
-                    {
-                        key: 'Build id',
-                        title: 'Build commit hash',
-                        explainer: getVersionInfo().commitId,
                     },
                     {
                         key: 'Build number',
