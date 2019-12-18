@@ -399,7 +399,7 @@ export interface CapiDateTime {
 
 export interface Crossword {
     name: string
-    type: CrosswordType
+    type: CrosswordType //NOTE: this is a number as it comes from the capi thrift enum
     number: number
     date: CapiDateTime
     dimensions: CrosswordDimensions

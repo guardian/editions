@@ -41,7 +41,7 @@ export const renderMediaAtom = (mediaAtomElement: MediaAtomElement) => {
             <div class="mediaWrapper">
                 <iframe
                     scrolling="no"
-                    src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}"
+                    src="${EMBED_DOMAIN}/embed/atom/media/${mediaAtomElement.atomId}#noadsaf"
                     class="mediaIframe"
                     frameborder="0"
                 ></iframe>

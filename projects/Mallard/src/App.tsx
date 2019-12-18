@@ -34,6 +34,7 @@ import { NetInfoProvider } from './hooks/use-net-info'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
+import { ImageSizeProvider } from './hooks/use-image-size'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -126,6 +127,7 @@ const WithProviders = nestProviders(
     ToastProvider,
     IssueSummaryProvider,
     NavPositionProvider,
+    ImageSizeProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
