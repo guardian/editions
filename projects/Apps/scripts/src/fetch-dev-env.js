@@ -12,22 +12,22 @@ const fs = require('fs')
 const chalk = require('chalk')
 const argv = require('yargs').argv
 
-const appRelativePath = argv.appRelativePath || '../../../Mallard'
+const appRelativePath = argv.appRelativePath || '../../../Mallard/'
 const envBucket = argv.envBucket || 'Mallard/dev/.env'
 const sentryBucket = argv.sentryBucket || 'Mallard/dev/sentry.properties'
 
 const AWS_PROFILE = 'frontend'
-const ENV_PATH = path.join(__dirname, `${appRelativePath}/.env`)
+const ENV_PATH = path.join(__dirname, `${appRelativePath}.env`)
 const SENTRY_PATH = path.join(
     __dirname,
-    `${appRelativePath}/ios/sentry.properties`,
+    `${appRelativePath}ios/sentry.properties`,
 )
 
 const sentryPropertiesFileWrite = (platform, file) => {
     fs.writeFile(
         path.resolve(
             __dirname,
-            `${appRelativePath}/${platform}/sentry.properties`,
+            `${appRelativePath}${platform}/sentry.properties`,
         ),
         file.Body.toString(),
         e => {
