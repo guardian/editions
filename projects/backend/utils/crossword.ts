@@ -66,7 +66,7 @@ export const patchCrossword = (
     crossword: Crossword,
     type: CrosswordType,
 ): Crossword => {
-    const solutionAvailable = shouldHaveSolution(crossword.type)
+    const solutionAvailable = shouldHaveSolution(type)
     return {
         ...crossword,
         // the original type was a number from the CAPI thrift definition here
