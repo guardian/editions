@@ -32,6 +32,7 @@ export const getImage: (
     assetArray: IAsset[],
 ) => Image | undefined = assetArray => {
     console.log('Asset array == ' + assetArray)
+    console.log('Asset array type == ' + typeof assetArray)
     const asset = extractImage(assetArray)
     if (!(asset && asset.file)) {
         console.warn('Image asset potentially invalid.', JSON.stringify(asset))
