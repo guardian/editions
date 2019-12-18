@@ -34,7 +34,7 @@ const WebviewWithArticle = ({
     const [{ isConnected }] = useState(fetchImmediate())
     const [, { pillar }] = useArticle()
     const { issueId } = useIssueSummary()
-    const { imageSize } = useImageSize()
+    const imageSize = useImageSize()
 
     const html = renderArticle(article.elements, {
         pillar,
