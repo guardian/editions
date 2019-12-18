@@ -24,19 +24,16 @@ import {
     CONNECTION_FAILED_ERROR,
 } from 'src/helpers/words'
 import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import { useMediaQuery } from 'src/hooks/use-screen'
 import {
     navigateToIssue,
     navigateToSettings,
 } from 'src/navigation/helpers/base'
 import { WithAppAppearance } from 'src/theme/appearance'
-import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { ApiState } from './settings/api-screen'
 import { useIsUsingProdDevtools } from 'src/hooks/use-settings'
 import { routeNames } from 'src/navigation/routes'
-import { getIssueCardOverlayAmount } from 'src/navigation/navigators/underlay/transition'
-import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { NavigationParams } from 'react-navigation'
 import { Separator } from 'src/components/layout/ui/row'
 import { color } from 'src/theme/color'
@@ -49,7 +46,7 @@ const styles = StyleSheet.create({
     issueListFooter: {
         padding: metrics.horizontal,
         paddingTop: metrics.vertical * 2,
-        paddingBottom: getIssueCardOverlayAmount() + metrics.vertical * 2,
+        paddingBottom: metrics.vertical * 8,
     },
     issueListFooterGrid: {
         marginBottom: metrics.vertical,
@@ -68,16 +65,8 @@ const HomeScreenHeader = withNavigation(
         onReturn: () => void
         onSettings: () => void
     } & NavigationInjectedProps) => {
-        const isTablet = useMediaQuery(
-            width => width >= Breakpoints.tabletVertical,
-        )
-
         const action = (
-            <Button
-                icon={isTablet ? '' : ''}
-                alt="Return to issue"
-                onPress={onReturn}
-            />
+            <Button icon={'\uE04F'} alt="Return to issue" onPress={onReturn} />
         )
         const settings = (
             <Button
@@ -115,7 +104,7 @@ const IssueRowContainer = React.memo(
     }) => {
         const { setIssueId } = useIssueSummary()
         const { localId, publishedId } = issue
-        const { setPosition, setTrigger } = useNavPosition()
+        const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
             () =>
@@ -146,13 +135,12 @@ const IssueRowContainer = React.memo(
         const onPressFront = useCallback(
             frontKey => {
                 navToIssue()
-                setPosition({
+                setNavPosition({
                     frontId: frontKey,
                     articleIndex: 0,
                 })
-                setTrigger(true)
             },
-            [setPosition, setTrigger, navToIssue],
+            [setNavPosition, navToIssue],
         )
 
         return (
@@ -211,7 +199,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
     )
 }
 
-const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + 1
+const ISSUE_ROW_HEIGHT = ISSUE_ROW_HEADER_HEIGHT + StyleSheet.hairlineWidth
 
 const getFrontRowsHeight = (issue: Loaded<IssueWithFronts>) => {
     if (issue.isLoading) return 0
@@ -246,16 +234,20 @@ const IssueListView = withNavigation(
             // Scroll to the relevant item if the current issue index has
             // changed (likely because the selected issue has changed itself).
             const listRef = useRef<FlatList<IssueSummary>>()
+            const prevCurrentIndexRef = useRef<number>(currentIssueIndex)
             useEffect(() => {
                 if (listRef.current == null || currentIssueIndex < 0) {
                     return
                 }
 
+                if (prevCurrentIndexRef.current === currentIssueIndex) return
+                prevCurrentIndexRef.current = currentIssueIndex
+
                 /* @types/react doesn't know about scroll functions */
                 ;(listRef.current as any).scrollToIndex({
                     index: currentIssueIndex,
                 })
-            }, [listRef, currentIssueIndex])
+            }, [currentIssueIndex])
 
             // We pass down the issue details only for the selected issue.
             const renderItem = useCallback(
@@ -280,7 +272,7 @@ const IssueListView = withNavigation(
                 (_, index) => {
                     return {
                         length:
-                            ISSUE_ROW_HEIGHT +
+                            ISSUE_ROW_HEADER_HEIGHT +
                             (index === currentIssueIndex ? frontRowsHeight : 0),
                         offset:
                             index * ISSUE_ROW_HEIGHT +

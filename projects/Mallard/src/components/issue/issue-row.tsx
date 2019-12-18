@@ -44,8 +44,12 @@ import { UiBodyCopy } from '../styled-text'
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
 
-export const ISSUE_ROW_HEADER_HEIGHT = ISSUE_TITLE_FONT.lineHeight * 2.6
-export const ISSUE_FRONT_ROW_HEIGHT = FRONT_TITLE_FONT.lineHeight * 1.65
+export const ISSUE_ROW_HEADER_HEIGHT = Math.floor(
+    ISSUE_TITLE_FONT.lineHeight * 2.6,
+)
+export const ISSUE_FRONT_ROW_HEIGHT = Math.floor(
+    FRONT_TITLE_FONT.lineHeight * 1.65,
+)
 export const ISSUE_FRONT_ERROR_HEIGHT = 120
 
 const styles = StyleSheet.create({

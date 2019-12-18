@@ -6,7 +6,6 @@ import { Footer, Heading } from 'src/components/layout/ui/row'
 import { List } from 'src/components/lists/list'
 import { UiBodyCopy } from 'src/components/styled-text'
 import { clearCache } from 'src/helpers/fetch/cache'
-import { getVersionInfo } from 'src/helpers/settings'
 import { routeNames } from 'src/navigation/routes'
 import { Button } from 'src/components/button/button'
 import { metrics } from 'src/theme/spacing'
@@ -24,6 +23,8 @@ import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
 import { getFileList } from 'src/helpers/files'
 import { deleteIssueFiles } from 'src/helpers/files'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
+import { Switch } from 'react-native-gesture-handler'
+import { useNetInfo } from 'src/hooks/use-net-info'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -46,6 +47,12 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
 }
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
+    const {
+        showDevButton: showNetInfoButton,
+        setShowDevButton: setShowNetInfoButton,
+    } = useNetInfo()
+    const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
+
     const { attempt, signOutCAS } = useContext(AccessContext)
     const { showToast } = useToast()
 
@@ -172,11 +179,6 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         onPress: signOutCAS,
                     },
                     {
-                        key: 'Build id',
-                        title: 'Build commit hash',
-                        explainer: getVersionInfo().commitId,
-                    },
-                    {
                         key: 'Build number',
                         title: 'Build number',
                         explainer: buildNumber,
@@ -194,6 +196,17 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                             Clipboard.setString(FSPaths.issuesDir)
                             Alert.alert(FSPaths.issuesDir)
                         },
+                    },
+                    {
+                        key: 'Display NetInfo Button',
+                        title: 'Display NetInfo Button',
+                        onPress: onToggleNetInfoButton,
+                        proxy: (
+                            <Switch
+                                value={showNetInfoButton}
+                                onValueChange={onToggleNetInfoButton}
+                            />
+                        ),
                     },
                     {
                         key: 'Files in Issues',

@@ -38,7 +38,10 @@ import { createUnderlayNavigator } from './navigators/underlay'
 import { routeNames } from './routes'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
-import { ManageEditionsScreen } from 'src/screens/settings/manage-editions-screen'
+import {
+    ManageEditionsScreen,
+    ManageEditionScreenFromIssuePicker,
+} from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 
 const navOptionsWithGraunHeader = {
@@ -82,7 +85,7 @@ const AppStack = createModalNavigator(
     ),
     {
         [routeNames.ManageEditions]: createHeaderStackNavigator({
-            [routeNames.ManageEditions]: ManageEditionsScreen,
+            [routeNames.ManageEditions]: ManageEditionScreenFromIssuePicker,
         }),
         [routeNames.Settings]: createHeaderStackNavigator(
             {

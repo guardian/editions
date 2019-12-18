@@ -21,7 +21,14 @@ import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoint
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
 import { Spinner } from 'src/components/spinner'
-import { WeatherWidget } from 'src/components/weather'
+import {
+    WeatherWidget,
+    WeatherQueryData,
+    WEATHER_QUERY as FULL_WEATHER_QUERY,
+    EMPTY_WEATHER_HEIGHT,
+    WEATHER_HEIGHT,
+    getValidWeatherData,
+} from 'src/components/weather'
 import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
@@ -36,7 +43,7 @@ import {
     issueSummaryToLatestPath,
     useIssueSummary,
 } from 'src/hooks/use-issue-summary'
-import { useDimensions, useMediaQuery } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { useNavigatorPosition } from 'src/navigation/helpers/transition'
@@ -54,7 +61,7 @@ import {
     FlatCard,
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
-import { useNavPosition } from 'src/hooks/use-nav-position'
+import { useNavPositionChange } from 'src/hooks/use-nav-position'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -79,6 +86,15 @@ const useIsWeatherShown = () => {
     return !query.loading && query.data.isWeatherShown
 }
 
+const useIsWeatherActuallyShown = () => {
+    const isWeatherShown = useIsWeatherShown()
+    const weatherResult = useQuery<WeatherQueryData>(
+        // query must contain at least 1 item, even if we don't need it
+        isWeatherShown ? FULL_WEATHER_QUERY : WEATHER_QUERY,
+    )
+    return getValidWeatherData(weatherResult) != null
+}
+
 const ScreenHeader = withNavigation(
     ({
         issue,
@@ -86,9 +102,6 @@ const ScreenHeader = withNavigation(
     }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
         const position = useNavigatorPosition()
         const { date, weekday } = useIssueDate(issue)
-        const isTablet = useMediaQuery(
-            width => width >= Breakpoints.tabletVertical,
-        )
 
         const goToIssueList = () => {
             navigateToIssueList(navigation)
@@ -102,7 +115,7 @@ const ScreenHeader = withNavigation(
                 }}
                 action={
                     <Button
-                        icon={isTablet ? '' : ''}
+                        icon={'\uE04A'}
                         alt="More issues"
                         onPress={() => {
                             goToIssueList()
@@ -194,21 +207,27 @@ const IssueFronts = ({
         [issue.localId, issue.publishedId, issue.fronts],
     )
 
-    const { position, trigger, setTrigger } = useNavPosition()
+    const isWeatherActuallyShown = useIsWeatherActuallyShown()
 
-    useEffect(() => {
-        if (trigger && frontWithCards) {
+    useNavPositionChange(
+        position => {
+            if (!frontWithCards) return
+
             let index = frontWithCards.findIndex(
                 front => front.key === position.frontId,
             )
             // Invalid index, navigate to the first one. Not sure this is right.
             if (index < 0) index = 0
             if (ref && ref.current && ref.current.scrollToIndex) {
-                ref.current.scrollToIndex({ animated: false, index })
+                ref.current.scrollToIndex({
+                    animated: false,
+                    index,
+                    viewOffset: metrics.vertical,
+                })
             }
-            setTrigger(false)
-        }
-    }, [trigger, position.frontId, setTrigger, frontWithCards])
+        },
+        [frontWithCards],
+    )
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
@@ -237,7 +256,11 @@ const IssueFronts = ({
             )}
             getItemLayout={(_: any, index: number) => ({
                 length: card.height + metrics.fronts.sliderRadius * 2,
-                offset: (card.height + metrics.fronts.sliderRadius * 2) * index,
+                offset:
+                    (card.height + metrics.fronts.sliderRadius * 2) * index +
+                    (isWeatherActuallyShown
+                        ? WEATHER_HEIGHT
+                        : EMPTY_WEATHER_HEIGHT),
                 index,
             })}
             keyExtractor={item => item.key}

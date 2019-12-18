@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { defaultSettings } from './settings/defaults'
-import versionInfo from '../version-info.json'
 
 /**
  * History of Consent Management
@@ -102,10 +101,6 @@ const unsanitize = (value: string): UnsanitizedSetting => {
     } catch {
         return value
     }
-}
-
-export const getVersionInfo = () => {
-    return versionInfo as { version: string; commitId: string }
 }
 
 export const getSetting = <S extends keyof Settings>(

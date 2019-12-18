@@ -4,6 +4,7 @@ import {
     isPublished,
     IssuePublicationWithStatus,
 } from '../../../services/status'
+import { Bucket } from '../../../utils/s3'
 
 export const getPublishedVersionInternal = (
     publicationStatuses: IssuePublicationWithStatus[],
@@ -45,9 +46,11 @@ export const getPublishedVersionInternal = (
  */
 export const getPublishedVersion = async (
     issue: IssueIdentifier,
+    bucket: Bucket,
 ): Promise<IssuePublicationIdentifier | undefined> => {
     const publicationStatuses: IssuePublicationWithStatus[] = await getStatuses(
         issue,
+        bucket,
     )
     console.log(
         `getPublishedVersion: fetched list of publications for ${JSON.stringify(

@@ -12,6 +12,7 @@ import {
 import { WithAppAppearance } from 'src/theme/appearance'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
+import { MANAGE_EDITIONS_TITLE } from 'src/helpers/words'
 
 const buttonStyles = StyleSheet.create({
     background: {
@@ -184,8 +185,16 @@ const ManageEditionsScreen = () => {
     )
 }
 
+const ManageEditionScreenFromIssuePicker = () => <ManageEditionsScreen />
+
 ManageEditionsScreen.navigationOptions = {
-    title: 'Manage editions',
+    title: MANAGE_EDITIONS_TITLE,
 }
 
-export { ManageEditionsScreen }
+ManageEditionScreenFromIssuePicker.navigationOptions = {
+    title: MANAGE_EDITIONS_TITLE,
+    showHeaderLeft: false,
+    showHeaderRight: true,
+}
+
+export { ManageEditionsScreen, ManageEditionScreenFromIssuePicker }

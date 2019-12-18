@@ -19,8 +19,6 @@
 #  git_pull
 # end
 
-version = JSON.parse(open("../src/version-info.json").read)
-
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
@@ -50,10 +48,7 @@ platform :android do
   lane :beta do
     gradle(task: 'assemble',
            build_type: 'Release',
-           project_dir: 'android/',
-           properties: {
-               "versionName" => version["version"]
-           }
+           project_dir: 'android/'
     )
     supply(
       track: 'internal',
@@ -67,10 +62,7 @@ platform :android do
   lane :release_to_production do
     gradle(task: 'assemble',
            build_type: 'Release',
-           project_dir: 'android/',
-           properties: {
-               "versionName" => version["version"]
-           }
+           project_dir: 'android/'
     )
     supply(
       track: 'production',
