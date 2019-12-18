@@ -216,6 +216,7 @@ export const Editions = [
     'american-edition',
     'australian-edition',
     'training-edition',
+    'the-dummy-edition',
 ] as const
 
 export type Edition = typeof Editions[number]

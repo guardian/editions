@@ -18,10 +18,20 @@ const getTrailImage = (result: IContent): Image | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
-    console.log(maybeThumbnailElement)
+    console.log(
+        result.apiUrl +
+            ' maybeThumbnailElement: ' +
+            JSON.stringify(maybeThumbnailElement),
+    )
 
     const maybeThumbnailImage =
         maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
+    console.log(
+        result.apiUrl +
+            ' maybeThumbnailImage: ' +
+            JSON.stringify(maybeThumbnailImage),
+    )
+
     return maybeThumbnailImage
 }
 
@@ -31,10 +41,12 @@ interface ImageAndTrailImage {
 }
 
 const getImages = (result: IContent): ImageAndTrailImage => {
-    return {
+    const images = {
         image: getMainImage(result),
         trailImage: getTrailImage(result),
     }
+    console.log('Found images: ' + JSON.stringify(images))
+    return images
 }
 
 export { getImages, ImageAndTrailImage }
