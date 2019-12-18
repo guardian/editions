@@ -31,10 +31,12 @@ interface ImageAndTrailImage {
 }
 
 const getImages = (result: IContent): ImageAndTrailImage => {
-    return {
+    const images = {
         image: getMainImage(result),
         trailImage: getTrailImage(result),
     }
+    console.log('Found images: ' + images)
+    return images
 }
 
 export { getImages, ImageAndTrailImage }
