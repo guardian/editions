@@ -18,10 +18,12 @@ const getTrailImage = (result: IContent): Image | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
-    console.log(result.apiUrl + ': ' + maybeThumbnailElement)
+    console.log(result.apiUrl + ' maybeThumbnailElement: ' + maybeThumbnailElement)
 
     const maybeThumbnailImage =
         maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
+    console.log(result.apiUrl + ' maybeThumbnailImage: ' + maybeThumbnailImage)
+
     return maybeThumbnailImage
 }
 
