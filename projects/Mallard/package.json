@@ -21,7 +21,8 @@
         "bundle-html": "node ../Apps/scripts/src/bundle-html.js",
         "watch-html": "yarn bundle-html && open ../Apps/scripts/src/watch-html.command",
         "fetch-dev-env": "node ../Apps/scripts/src/fetch-dev-env.js",
-        "write-prod-env": "node .env.production.js",
+        "write-prod-env": "node ../Apps/scripts/src/.env.production.js",
+        "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
         "install-pods": "cd ios && pod install"
     },
     "rnpm": {

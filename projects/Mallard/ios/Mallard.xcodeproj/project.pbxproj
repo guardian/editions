@@ -122,7 +122,7 @@
 		066221D953054F3682287E74 /* GuardianTextEgyptian-RegIt.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GuardianTextEgyptian-RegIt.ttf"; path = "../src/assets/fonts/GuardianTextEgyptian-RegIt.ttf"; sourceTree = "<group>"; };
 		0BAE21BBF3F8EE5432E6C63F /* Pods-Mallard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mallard.release.xcconfig"; path = "Target Support Files/Pods-Mallard/Pods-Mallard.release.xcconfig"; sourceTree = "<group>"; };
 		11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mallard-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07F961A680F5B00A75B9A /* Mallard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mallard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* GuardianDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GuardianDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Mallard/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Mallard/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Mallard/Images.xcassets; sourceTree = "<group>"; };
@@ -356,7 +356,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Mallard.app */,
+				13B07F961A680F5B00A75B9A /* GuardianDaily.app */,
 				00E356EE1AD99517003FC87E /* MallardTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* Mallard-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */,
@@ -432,7 +432,7 @@
 			);
 			name = Mallard;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* Mallard.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* GuardianDaily.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* Mallard-tvOS */ = {
@@ -894,7 +894,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				KOTLIN_BUILD_TYPE = DEBUG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 5.3;
+				MARKETING_VERSION = 5.4;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = GuardianDaily;
@@ -928,7 +928,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				KOTLIN_BUILD_TYPE = RELEASE;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 5.3;
+				MARKETING_VERSION = 5.4;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = GuardianDaily;
