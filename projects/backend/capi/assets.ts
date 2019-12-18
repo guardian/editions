@@ -8,7 +8,7 @@ const extractImage: (
     assetArray: IAsset[],
 ) => IAsset | undefined = assetArray => {
     if (assetArray.length === 0) {
-        console.warn('No assets found in asset array.')
+        console.warn('No assets found in asset array: ' + assetArray)
         return undefined
     }
 
@@ -31,6 +31,7 @@ const extractImage: (
 export const getImage: (
     assetArray: IAsset[],
 ) => Image | undefined = assetArray => {
+    console.log('Asset array == ' + assetArray)
     const asset = extractImage(assetArray)
     if (!(asset && asset.file)) {
         console.warn('Image asset potentially invalid.', JSON.stringify(asset))
