@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers'
 import { resolveWeather } from './helpers/weather'
 import { resolveLocationPermissionStatus } from './helpers/location-permission'
+import { resolveScaledImage } from './hooks/use-image-paths'
 
 /**
  * Resolvers is what Apollo uses to get the value of field that has never been
@@ -27,6 +28,7 @@ const RESOLVERS = {
         ...SETTINGS_RESOLVERS,
         weather: resolveWeather,
         locationPermissionStatus: resolveLocationPermissionStatus,
+        scaledImage: resolveScaledImage,
     },
 }
 

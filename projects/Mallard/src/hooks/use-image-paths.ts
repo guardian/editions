@@ -7,6 +7,10 @@ import { Image, ImageSize, Issue, ImageUse } from '../../../Apps/common/src'
 import { useIssueSummary } from './use-issue-summary'
 import { Platform } from 'react-native'
 import { useApiUrl } from './use-settings'
+import { errorService } from 'src/services/errors'
+import gql from 'graphql-tag'
+import { useQuery } from './apollo'
+import ApolloClient from 'apollo-client'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
@@ -48,7 +52,8 @@ const compressImagePath = async (path: string, width: number) => {
             0,
         )
         return resized.uri
-    } catch {
+    } catch (error) {
+        errorService.captureException(error)
         return path
     }
 }
@@ -98,17 +103,37 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     return path
 }
 
-export const useScaledImage = (largePath: string, width: number) => {
-    const isRemote = largePath.slice(0, 4) === 'http'
+type QueryValue = { scaledImage: { uri: string | null } }
+type QueryVars = { path: string; width: number }
+const SCALED_IMAGE_QUERY = gql`
+    query($path: String, $width: Int) {
+        scaledImage(path: $path, width: $width) @client
+    }
+`
 
-    const [uri, setUri] = useState<string | undefined>(
-        isRemote ? largePath : undefined,
-    )
-    useEffect(() => {
-        if (!isRemote) {
-            compressImagePath(largePath, width).then(setUri)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [largePath, width])
-    return uri
+export const resolveScaledImage = (
+    _: unknown,
+    variables: QueryVars,
+    context: { client: ApolloClient<object> },
+) => {
+    const { path, width } = variables
+    if (path.slice(0, 4) === 'http')
+        return { __typename: 'ScaledImage', uri: path }
+    compressImagePath(path, width).then(uri => {
+        context.client.writeQuery({
+            query: SCALED_IMAGE_QUERY,
+            variables,
+            data: { scaledImage: { __typename: 'ScaledImage', uri } },
+        })
+    })
+    return { __typename: 'ScaledImage', uri: undefined }
+}
+
+export const useScaledImage = (largePath: string, width: number) => {
+    const query = useQuery<QueryValue, QueryVars>(SCALED_IMAGE_QUERY, {
+        path: largePath,
+        width,
+    })
+    if (query.loading) return undefined
+    return (query.data && query.data.scaledImage.uri) || undefined
 }
