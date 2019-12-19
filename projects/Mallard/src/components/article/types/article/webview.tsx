@@ -13,9 +13,11 @@ import {
 import { renderArticle } from '../../html/article'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
+import { PathToArticle } from 'src/paths'
 
 const WebviewWithArticle = ({
     article,
+    path,
     type,
     _ref,
     theme,
@@ -23,6 +25,7 @@ const WebviewWithArticle = ({
     ...webViewProps
 }: {
     article: Article | PictureArticle | GalleryArticle
+    path: PathToArticle
     type: ArticleType
     theme: ArticleTheme
     _ref?: (ref: WebView) => void
@@ -32,8 +35,11 @@ const WebviewWithArticle = ({
     // the network connection changes, see the comments around
     // `fetchImmediate` where it is defined
     const [{ isConnected }] = useState(fetchImmediate())
+
+    // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
-    const { issueId } = useIssueSummary()
+
+    const { localIssueId, publishedIssueId } = path
     const imageSize = useImageSize()
 
     const html = renderArticle(article.elements, {
@@ -44,7 +50,7 @@ const WebviewWithArticle = ({
         theme,
         showWebHeader: true,
         showMedia: isConnected,
-        publishedId: (issueId && issueId.publishedIssueId) || null,
+        publishedId: publishedIssueId || null,
         topPadding,
     })
 

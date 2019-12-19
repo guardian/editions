@@ -83,6 +83,7 @@ const ArticleScreenBody = React.memo<
                             >
                                 <ArticleController
                                     {...headerControlProps}
+                                    path={path}
                                     article={article.article}
                                     onIsAtTopChange={handleIsAtTopChange}
                                 />
