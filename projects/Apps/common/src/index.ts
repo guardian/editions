@@ -458,7 +458,7 @@ export interface ImageDeviceUses {
 }
 
 export interface TrailImage extends Image {
-    use: ImageDeviceUses
+    use?: ImageDeviceUses
 }
 
 export const thumbsDir = (issue: string, size: ImageSize) =>
