@@ -1,20 +1,13 @@
 import * as NetInfo from 'src/hooks/use-net-info'
-import React, {
-    createContext,
-    Dispatch,
-    SetStateAction,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
-import { useQuery } from '@apollo/react-hooks'
 import { AppState, AppStateStatus } from 'react-native'
 import gql from 'graphql-tag'
 import { getSetting } from '../helpers/settings'
+import { useQuery } from './apollo'
+import ApolloClient from 'apollo-client'
 
 interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
@@ -22,13 +15,6 @@ interface IssueSummaryState {
     setIssueId: Dispatch<SetStateAction<PathToIssue | null>>
     error: string
 }
-
-const IssueSummaryContext = createContext<IssueSummaryState>({
-    issueSummary: null,
-    issueId: null,
-    setIssueId: () => {},
-    error: '',
-})
 
 const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
     const issueSummary = isConnected
@@ -46,112 +32,140 @@ const issueSummaryToLatestPath = (
     publishedIssueId: issueSummary[0].publishedId,
 })
 
-const IssueSummaryProvider = ({ children }: { children: React.ReactNode }) => {
-    const [issueId, setIssueId] = useState<PathToIssue | null>(null)
-    const [issueSummary, setIssueSummary] = useState<IssueSummary[] | null>(
-        null,
-    )
-    const [error, setError] = useState<string>('')
-    const hasConnected = useRef<boolean>(true) // assume we are connected to start with
-    const { data } = useQuery(
-        gql`
-            {
-                maxAvailableEditions @client
-            }
-        `,
-    )
+const __typename = 'IssueSummary'
 
-    const maxAvailableEditions = data && data.maxAvailableEditions
+type QueryValue = { issueSummary: IssueSummaryState }
+const QUERY = gql`
+    {
+        issueSummary @client {
+            issueSummary @client
+            issueId @client
+            setIssueId @client
+            error @client
+        }
+    }
+`
 
-    const grabIssueSummary = (hasConnected: boolean) =>
-        getIssueSummary(hasConnected)
-            .then((issueSummary: IssueSummary[]) => {
-                setIssueSummary(issueSummary)
-                setError('')
-                return issueSummary
+type InnerQueryValue = { maxAvailableEditions: number }
+const INNER_QUERY = gql`
+    {
+        maxAvailableEditions @client
+    }
+`
+
+export const setIssueId = (
+    client: ApolloClient<object>,
+    newIssueId: PathToIssue,
+) => {
+    client.writeQuery({
+        query: QUERY,
+        data: {
+            issueSummary: { __typename, issueId: newIssueId },
+        },
+    })
+}
+
+export const initIssueSummary = (client: ApolloClient<object>) => {
+    let hasConnected = true // assume we are connected to start with
+
+    client.cache.writeQuery({
+        query: QUERY,
+        data: {
+            issueSummary: {
+                __typename,
+                issueSummary: null,
+                issueId: null,
+                setIssueId: setIssueId.bind(null, client),
+                error: '',
+            },
+        },
+    })
+
+    const grabIssueSummary = async (hasConnected: boolean) => {
+        let issueSummary: IssueSummary[]
+        try {
+            issueSummary = await getIssueSummary(hasConnected)
+        } catch (error) {
+            client.writeQuery({
+                query: QUERY,
+                data: { issueSummary: { __typename, error } },
             })
-            .catch(e => {
-                setError(e.message)
-            })
+            return
+        }
+        client.writeQuery({
+            query: QUERY,
+            data: {
+                issueSummary: {
+                    __typename,
+                    issueSummary,
+                    error: '',
+                },
+            },
+        })
+        return issueSummary
+    }
 
-    useEffect(() => {
-        const grabIssueAndSetLatest = async () => {
-            const previousLatest =
-                issueSummary && issueSummaryToLatestPath(issueSummary)
+    const grabIssueAndSetLatest = async () => {
+        const result = client.cache.readQuery<QueryValue>({ query: QUERY })
+        const issueSummary = result && result.issueSummary.issueSummary
+        const previousLatest =
+            issueSummary && issueSummaryToLatestPath(issueSummary)
 
-            const { isConnected } = await NetInfo.fetch()
-            const newIssueSummary = await grabIssueSummary(isConnected)
-            if (newIssueSummary == null) {
-                // now we've foregrounded again, wait for a new issue list
-                // seen as we couldn't get one now
-                hasConnected.current = false
-                return
-            }
-
-            const newLatest = issueSummaryToLatestPath(newIssueSummary)
-            // only update to latest issue if there is indeed a new latest issue
-            if (
-                !previousLatest ||
-                (previousLatest.localIssueId !== newLatest.localIssueId &&
-                    previousLatest.publishedIssueId !==
-                        newLatest.publishedIssueId)
-            ) {
-                setIssueId(newLatest)
-            }
+        const { isConnected } = await NetInfo.fetch()
+        const newIssueSummary = await grabIssueSummary(isConnected)
+        if (newIssueSummary == null) {
+            // now we've foregrounded again, wait for a new issue list
+            // seen as we couldn't get one now
+            hasConnected = false
+            return
         }
 
-        // On mount there is no issueId, so set it to latest
-        if (!issueId) {
+        const newLatest = issueSummaryToLatestPath(newIssueSummary)
+        // only update to latest issue if there is indeed a new latest issue
+        if (
+            !previousLatest ||
+            (previousLatest.localIssueId !== newLatest.localIssueId &&
+                previousLatest.publishedIssueId !== newLatest.publishedIssueId)
+        ) {
+            setIssueId(client, newLatest)
+        }
+    }
+
+    // On mount there is no issueId, so set it to latest
+    grabIssueAndSetLatest()
+
+    NetInfo.addEventListener(({ isConnected }) => {
+        // try and get a fresh summary until we made it to online
+        if (!hasConnected) {
+            hasConnected = isConnected
+
+            grabIssueSummary(isConnected)
+        }
+    })
+
+    AppState.addEventListener('change', async (appState: AppStateStatus) => {
+        // when we foreground have another go at fetching again
+        if (appState === 'active') {
             grabIssueAndSetLatest()
         }
+    })
 
-        const unsubNet = NetInfo.addEventListener(({ isConnected }) => {
-            // try and get a fresh summary until we made it to online
-            if (!hasConnected.current) {
-                hasConnected.current = isConnected
-
-                grabIssueSummary(isConnected)
-            }
+    client
+        .watchQuery<InnerQueryValue>({
+            query: INNER_QUERY,
         })
-
-        const appStateChangeListener = async (appState: AppStateStatus) => {
-            // when we foreground have another go at fetching again
-            if (appState === 'active') {
-                grabIssueAndSetLatest()
-            }
-        }
-
-        AppState.addEventListener('change', appStateChangeListener)
-
-        return () => {
-            unsubNet()
-            AppState.removeEventListener('change', appStateChangeListener)
-        }
-    }, [issueId, issueSummary])
-
-    useEffect(() => {
-        ;(async () => {
+        .subscribe(async maxAvailableEditions => {
             if (maxAvailableEditions) {
                 const { isConnected } = await NetInfo.fetch()
                 grabIssueSummary(isConnected)
             }
-        })()
-    }, [maxAvailableEditions])
-
-    return (
-        <IssueSummaryContext.Provider
-            value={{ issueSummary, issueId, setIssueId, error }}
-        >
-            {children}
-        </IssueSummaryContext.Provider>
-    )
+        })
 }
 
-const useIssueSummary = () => useContext<IssueSummaryState>(IssueSummaryContext)
-
-export {
-    IssueSummaryProvider,
-    useIssueSummary,
-    issueSummaryToLatestPath,
-    getIssueSummary,
+const useIssueSummary = (): IssueSummaryState => {
+    const res = useQuery<QueryValue>(QUERY)
+    if (res.loading) throw new Error('unavailable issue summary state')
+    return res.data.issueSummary
 }
+
+export { useIssueSummary, issueSummaryToLatestPath, getIssueSummary }

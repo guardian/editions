@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers'
 import { resolveWeather } from './helpers/weather'
 import { resolveLocationPermissionStatus } from './helpers/location-permission'
+import { initIssueSummary } from './hooks/use-issue-summary'
 
 /**
  * Resolvers is what Apollo uses to get the value of field that has never been
@@ -51,9 +52,13 @@ const link = {
     },
 }
 
-export const createApolloClient = () =>
-    new ApolloClient({
+export const createApolloClient = () => {
+    const client = new ApolloClient({
         cache: new InMemoryCache(),
         link,
         resolvers: RESOLVERS,
     })
+
+    initIssueSummary(client)
+    return client
+}
