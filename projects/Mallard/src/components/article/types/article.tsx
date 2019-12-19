@@ -14,6 +14,7 @@ import {
 } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
+import { IssueOrigin } from '../../../../../Apps/common/src'
 
 const styles = StyleSheet.create({
     block: {
@@ -104,9 +105,11 @@ const Article = ({
     shouldShowHeader,
     topPadding,
     onIsAtTopChange,
+    origin,
 }: {
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
+    origin: IssueOrigin
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
@@ -135,6 +138,7 @@ const Article = ({
                     ref.current = r
                 }}
                 topPadding={topPadding}
+                origin={origin}
                 onMessage={event => {
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {

@@ -8,6 +8,8 @@ import { useIssueSummary } from './use-issue-summary'
 import { Platform } from 'react-native'
 import { useApiUrl } from './use-settings'
 
+export type GetImagePath = (image?: Image, use?: ImageUse) => string | undefined
+
 const getFsPath = (
     localIssueId: Issue['localId'],
     image: Image,

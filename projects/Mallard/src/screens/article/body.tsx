@@ -86,6 +86,7 @@ const ArticleScreenBody = React.memo<
                                     path={path}
                                     article={article.article}
                                     onIsAtTopChange={handleIsAtTopChange}
+                                    origin={article.origin}
                                 />
                             </WithArticle>
                         </>
