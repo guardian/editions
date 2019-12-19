@@ -111,22 +111,25 @@ const SCALED_IMAGE_QUERY = gql`
     }
 `
 
-export const resolveScaledImage = (
-    _: unknown,
-    variables: QueryVars,
-    context: { client: ApolloClient<object> },
-) => {
-    const { path, width } = variables
-    if (path.slice(0, 4) === 'http')
-        return { __typename: 'ScaledImage', uri: path }
-    compressImagePath(path, width).then(uri => {
-        context.client.writeQuery({
-            query: SCALED_IMAGE_QUERY,
-            variables,
-            data: { scaledImage: { __typename: 'ScaledImage', uri } },
+export const createScaledImageResolver = () => {
+    const promises = new Map()
+
+    return (_: unknown, variables: QueryVars) => {
+        const { path, width } = variables
+        if (path.slice(0, 4) === 'http')
+            return { __typename: 'ScaledImage', uri: path }
+
+        const key = JSON.stringify([path, width])
+        const value = promises.get(key)
+        if (value != null) return value
+
+        const promise = compressImagePath(path, width).then(uri => {
+            return { __typename: 'ScaledImage', uri }
         })
-    })
-    return { __typename: 'ScaledImage', uri: undefined }
+
+        promises.set(key, promise)
+        return promise
+    }
 }
 
 export const useScaledImage = (largePath: string, width: number) => {
@@ -134,6 +137,7 @@ export const useScaledImage = (largePath: string, width: number) => {
         path: largePath,
         width,
     })
+
     if (query.loading) return undefined
     return (query.data && query.data.scaledImage.uri) || undefined
 }
