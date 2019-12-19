@@ -36,13 +36,15 @@ export const getImagesFromArticle = (
 
     const images = elements.map(getImageFromElement)
 
-    return [
+    const requiredImages = [
         ...images,
         ...cardImages,
         ...bylineImages,
         image,
         trailImage,
     ].filter(notNull)
+    console.log('Required images are: ' + JSON.stringify(requiredImages))
+    return requiredImages
 }
 
 export const getImagesFromFront = (front: Front): (Image | TrailImage)[] => {
