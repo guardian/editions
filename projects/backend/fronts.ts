@@ -4,7 +4,7 @@ import {
     BlockElement,
     ArticleType,
     IssuePublicationIdentifier,
-    Image,
+    // Image,
     ImageDeviceUses,
 } from '../Apps/common/src'
 import { CAPIContent, getArticles } from './capi/articles'
@@ -117,7 +117,7 @@ export const getImages = (
         maybeMainImage,
         maybeCapiTrailImage,
         maybeImageOverride,
-        imageUse,
+        // imageUse,
     )
 
     return {
