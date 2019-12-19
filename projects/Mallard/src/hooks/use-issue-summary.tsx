@@ -65,6 +65,33 @@ export const setIssueId = (
     })
 }
 
+const grabIssueSummary = async (
+    client: ApolloClient<object>,
+    hasConnected: boolean,
+) => {
+    let issueSummary: IssueSummary[]
+    try {
+        issueSummary = await getIssueSummary(hasConnected)
+    } catch (error) {
+        client.writeQuery({
+            query: QUERY,
+            data: { issueSummary: { __typename, error } },
+        })
+        return
+    }
+    client.writeQuery({
+        query: QUERY,
+        data: {
+            issueSummary: {
+                __typename,
+                issueSummary,
+                error: '',
+            },
+        },
+    })
+    return issueSummary
+}
+
 export const initIssueSummary = (client: ApolloClient<object>) => {
     let hasConnected = true // assume we are connected to start with
 
@@ -81,30 +108,6 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
         },
     })
 
-    const grabIssueSummary = async (hasConnected: boolean) => {
-        let issueSummary: IssueSummary[]
-        try {
-            issueSummary = await getIssueSummary(hasConnected)
-        } catch (error) {
-            client.writeQuery({
-                query: QUERY,
-                data: { issueSummary: { __typename, error } },
-            })
-            return
-        }
-        client.writeQuery({
-            query: QUERY,
-            data: {
-                issueSummary: {
-                    __typename,
-                    issueSummary,
-                    error: '',
-                },
-            },
-        })
-        return issueSummary
-    }
-
     const grabIssueAndSetLatest = async () => {
         const result = client.cache.readQuery<QueryValue>({ query: QUERY })
         const issueSummary = result && result.issueSummary.issueSummary
@@ -112,7 +115,7 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
             issueSummary && issueSummaryToLatestPath(issueSummary)
 
         const { isConnected } = await NetInfo.fetch()
-        const newIssueSummary = await grabIssueSummary(isConnected)
+        const newIssueSummary = await grabIssueSummary(client, isConnected)
         if (newIssueSummary == null) {
             // now we've foregrounded again, wait for a new issue list
             // seen as we couldn't get one now
@@ -131,7 +134,7 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
         }
     }
 
-    // On mount there is no issueId, so set it to latest
+    // Fetch the initial summary and set the initial issue to be shown
     grabIssueAndSetLatest()
 
     NetInfo.addEventListener(({ isConnected }) => {
@@ -139,7 +142,7 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
         if (!hasConnected) {
             hasConnected = isConnected
 
-            grabIssueSummary(isConnected)
+            grabIssueSummary(client, isConnected)
         }
     })
 
@@ -151,14 +154,10 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
     })
 
     client
-        .watchQuery<InnerQueryValue>({
-            query: INNER_QUERY,
-        })
-        .subscribe(async maxAvailableEditions => {
-            if (maxAvailableEditions) {
-                const { isConnected } = await NetInfo.fetch()
-                grabIssueSummary(isConnected)
-            }
+        .watchQuery<InnerQueryValue>({ query: INNER_QUERY })
+        .subscribe(async () => {
+            const { isConnected } = await NetInfo.fetch()
+            grabIssueSummary(client, isConnected)
         })
 }
 
