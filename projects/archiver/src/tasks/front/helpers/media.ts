@@ -75,7 +75,7 @@ export const getAndUploadImageUse = async (
     return upload(path, data, Bucket, 'image/jpeg', ONE_WEEK)
 }
 
-export const getImageUses = (image: Image): ImageUse[] => {
+export const getImageUses = (): ImageUse[] => {
     const fallback: ImageUse = 'full-size'
     // if (!('use' in image)) {
     return [fallback]
