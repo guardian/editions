@@ -36,9 +36,13 @@ type NotInCAPI =
     | 'mediaType'
     | 'slideshowImages'
     | 'sportScore'
-    | 'trailImage'
 
-type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
+type OptionalInCAPI =
+    | 'kicker'
+    | 'bylineImages'
+    | 'trail'
+    | 'articleType'
+    | 'trailImage'
 
 interface CAPIExtras {
     path: string
