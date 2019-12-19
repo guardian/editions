@@ -156,7 +156,7 @@ export interface Content extends WithKey {
     articleType?: ArticleType
     trail: string
     image?: CreditedImage
-    trailImage?: TrailImage
+    trailImage?: Image
     cardImage?: Image
     cardImageTablet?: Image
     standfirst?: string
@@ -455,10 +455,6 @@ export type ImageUse = typeof imageUses[number]
 export interface ImageDeviceUses {
     mobile: ImageUse
     tablet: ImageUse
-}
-
-export interface TrailImage extends Image {
-    use?: ImageDeviceUses
 }
 
 export const thumbsDir = (issue: string, size: ImageSize) =>

@@ -4,7 +4,7 @@ import {
     BlockElement,
     ArticleType,
     IssuePublicationIdentifier,
-    TrailImage,
+    Image,
     ImageDeviceUses,
 } from '../Apps/common/src'
 import { CAPIContent, getArticles } from './capi/articles'
@@ -73,13 +73,13 @@ const getTrailImage = (
     maybeCapiTrailImage: Image | undefined,
     maybeImageOverride: Image | undefined,
     imageUse: ImageDeviceUses,
-): TrailImage | undefined => {
+): Image | undefined => {
     const chosenTrailImage =
         maybeImageOverride || maybeMainImage || maybeCapiTrailImage
     return (
         chosenTrailImage && {
             ...chosenTrailImage,
-            use: imageUse,
+            // use: imageUse,
         }
     )
 }
@@ -92,7 +92,7 @@ export const getImages = (
     image?: CreditedImage
     cardImage?: Image
     cardImageTablet?: Image
-    trailImage?: TrailImage
+    trailImage?: Image
 } => {
     const {
         overrideArticleMainMedia,

@@ -8,7 +8,6 @@ import {
     ImageSize,
     ImageUse,
     notNull,
-    TrailImage,
 } from '../../../../common'
 import { getImageUse } from '../../../utils/backend-client'
 import { getBucket, ONE_WEEK, upload } from '../../../utils/s3'
@@ -23,9 +22,7 @@ const getImageFromElement = (element: BlockElement): Image | undefined => {
     return undefined
 }
 
-export const getImagesFromArticle = (
-    article: CAPIArticle,
-): (Image | TrailImage)[] => {
+export const getImagesFromArticle = (article: CAPIArticle): Image[] => {
     const elements = article.type !== 'crossword' ? article.elements : []
 
     const images = elements.map(getImageFromElement)
@@ -56,7 +53,7 @@ export const getImagesFromArticle = (
     return requiredImages
 }
 
-export const getImagesFromFront = (front: Front): (Image | TrailImage)[] => {
+export const getImagesFromFront = (front: Front): Image[] => {
     console.log('Getting images for front ' + JSON.stringify(front))
 
     const allCards = unnest(front.collections.map(_ => _.cards))
@@ -78,14 +75,13 @@ export const getAndUploadImageUse = async (
     return upload(path, data, Bucket, 'image/jpeg', ONE_WEEK)
 }
 
-export const getImageUses = (image: Image | TrailImage): ImageUse[] => {
+export const getImageUses = (image: Image): ImageUse[] => {
     const fallback: ImageUse = 'full-size'
-    if (!('use' in image)) {
-        return [fallback]
-    }
-    return uniq(
-        [image.use.mobile, image.use.tablet, fallback].filter(
-            _ => _ !== 'not-used',
-        ),
-    )
+    // if (!('use' in image)) {
+    return [fallback]
+    // }
+    // return uniq(
+    //     // [image.use.mobile, image.use.tablet,
+    //     [fallback].filter(_ => _ !== 'not-used'),
+    // )
 }
