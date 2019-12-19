@@ -42,7 +42,6 @@ type OptionalInCAPI =
     | 'bylineImages'
     | 'trail'
     | 'articleType'
-    | 'trailImage'
 
 interface CAPIExtras {
     path: string
