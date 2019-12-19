@@ -26,15 +26,23 @@ const getImageFromElement = (element: BlockElement): Image | undefined => {
 export const getImagesFromArticle = (
     article: CAPIArticle,
 ): (Image | TrailImage)[] => {
-    const image = article.image
-    const trailImage = article.trailImage
-
     const elements = article.type !== 'crossword' ? article.elements : []
-    const cardImages = [article.cardImage, article.cardImageTablet]
-    const bylineImages =
-        (article.bylineImages && [article.bylineImages.cutout]) || []
 
     const images = elements.map(getImageFromElement)
+    console.log('Images are: ' + JSON.stringify(images))
+
+    const cardImages = [article.cardImage, article.cardImageTablet]
+    console.log('Card images are: ' + JSON.stringify(cardImages))
+
+    const bylineImages =
+        (article.bylineImages && [article.bylineImages.cutout]) || []
+    console.log('Byline images are: ' + JSON.stringify(bylineImages))
+
+    const image = article.image
+    console.log('Article image is: ' + JSON.stringify(image))
+
+    const trailImage = article.trailImage
+    console.log('Trail image is: ' + JSON.stringify(trailImage))
 
     const requiredImages = [
         ...images,
@@ -44,6 +52,7 @@ export const getImagesFromArticle = (
         trailImage,
     ].filter(notNull)
     console.log('Required images are: ' + JSON.stringify(requiredImages))
+
     return requiredImages
 }
 
