@@ -1,4 +1,4 @@
-import { unnest, uniq } from 'ramda'
+import { unnest } from 'ramda'
 import { hasFailed } from '../../../../../backend/utils/try'
 import {
     BlockElement,
@@ -78,14 +78,7 @@ export const getAndUploadImageUse = async (
     return upload(path, data, Bucket, 'image/jpeg', ONE_WEEK)
 }
 
-export const getImageUses = (image: Image | TrailImage): ImageUse[] => {
+export const getImageUses = (): ImageUse[] => {
     const fallback: ImageUse = 'full-size'
-    if (!('use' in image)) {
-        return [fallback]
-    }
-    return uniq(
-        [image.use.mobile, image.use.tablet, fallback].filter(
-            _ => _ !== 'not-used',
-        ),
-    )
+    return [fallback]
 }

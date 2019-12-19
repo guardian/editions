@@ -36,7 +36,6 @@ type NotInCAPI =
     | 'mediaType'
     | 'slideshowImages'
     | 'sportScore'
-    | 'trailImage'
 
 type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
 

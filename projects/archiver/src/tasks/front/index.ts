@@ -65,7 +65,7 @@ export const handler: Handler<
         unnest(
             images.map(image =>
                 imageSizes.map(size =>
-                    getImageUses(image).map(
+                    getImageUses().map(
                         (use): ImageSizeUse => [image, size, use],
                     ),
                 ),
