@@ -10,7 +10,6 @@ import { useApiUrl } from './use-settings'
 import { errorService } from 'src/services/errors'
 import gql from 'graphql-tag'
 import { useQuery } from './apollo'
-import ApolloClient from 'apollo-client'
 
 const getFsPath = (
     localIssueId: Issue['localId'],
