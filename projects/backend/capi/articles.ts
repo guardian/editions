@@ -331,10 +331,10 @@ export const getArticles = async (
     const articlePromises = await Promise.all(
         results.map(result => attempt(parseArticleResult(result, isFromPrint))),
     )
-    console.log(JSON.stringify(articlePromises))
 
     //If we fail to get an article in a collection we just ignore it and move on.
     articlePromises.forEach(attempt => {
+        console.log('Got article: ' + JSON.stringify(attempt))
         if (hasFailed(attempt)) {
             console.log('failure when parsing', attempt.error)
         }
