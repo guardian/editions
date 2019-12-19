@@ -72,7 +72,7 @@ const getTrailImage = (
     maybeMainImage: CreditedImage | undefined,
     maybeCapiTrailImage: Image | undefined,
     maybeImageOverride: Image | undefined,
-    imageUse: ImageDeviceUses,
+    // imageUse: ImageDeviceUses,
 ): Image | undefined => {
     const chosenTrailImage =
         maybeImageOverride || maybeMainImage || maybeCapiTrailImage

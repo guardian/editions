@@ -1,4 +1,4 @@
-import { unnest, uniq } from 'ramda'
+import { unnest } from 'ramda'
 import { hasFailed } from '../../../../../backend/utils/try'
 import {
     BlockElement,
