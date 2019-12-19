@@ -57,6 +57,8 @@ export const getImagesFromArticle = (
 }
 
 export const getImagesFromFront = (front: Front): (Image | TrailImage)[] => {
+    console.log('Getting images for front ' + JSON.stringify(front))
+
     const allCards = unnest(front.collections.map(_ => _.cards))
     const articles = unnest(allCards.map(_ => Object.values(_.articles)))
     const images = unnest(articles.map(getImagesFromArticle))
