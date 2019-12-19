@@ -2,28 +2,31 @@ export type Connectivity = 'online' | 'offline'
 
 type NotRun = { type: 'not-run-attempt' }
 
-type ValidAttempt<T> = {
+export type TValidAttempt<T> = {
     type: 'valid-attempt'
     data: T
     connectivity: Connectivity
     time: number
 }
 
-type InvalidAttempt = {
+export type TInvalidAttempt = {
     type: 'invalid-attempt'
     reason?: string
     connectivity: Connectivity
     time: number
 }
 
-type ErrorAttempt = {
+export type TErrorAttempt = {
     type: 'error-attempt'
     reason?: string
     connectivity: Connectivity
     time: number
 }
 
-export type ResolvedAttempt<T> = ValidAttempt<T> | InvalidAttempt | ErrorAttempt
+export type ResolvedAttempt<T> =
+    | TValidAttempt<T>
+    | TInvalidAttempt
+    | TErrorAttempt
 
 export type AnyAttempt<T> = NotRun | ResolvedAttempt<T>
 
@@ -53,7 +56,7 @@ const InvalidAttemptCons = (
     connectivity: Connectivity,
     reason?: string,
     time = Date.now(),
-): InvalidAttempt => ({
+): TInvalidAttempt => ({
     type: 'invalid-attempt',
     reason,
     connectivity,
@@ -64,7 +67,7 @@ const ValidAttemptCons = <T>(
     data: T,
     connectivity: Connectivity,
     time = Date.now(),
-): ValidAttempt<T> => ({
+): TValidAttempt<T> => ({
     type: 'valid-attempt',
     connectivity,
     data,
@@ -75,7 +78,7 @@ const ErrorAttemptCons = <T>(
     connectivity: Connectivity,
     reason?: string,
     time = Date.now(),
-): ErrorAttempt => ({
+): TErrorAttempt => ({
     type: 'error-attempt',
     reason,
     connectivity,
@@ -88,10 +91,10 @@ const isNotRun = <T>(attempt: AnyAttempt<T>): attempt is NotRun =>
 const hasRun = <T>(attempt: AnyAttempt<T>): attempt is ResolvedAttempt<T> =>
     !isNotRun(attempt)
 
-const isValid = <T>(attempt: AnyAttempt<T>): attempt is ValidAttempt<T> =>
+const isValid = <T>(attempt: AnyAttempt<T>): attempt is TValidAttempt<T> =>
     attempt.type === 'valid-attempt'
 
-const isError = <T>(attempt: AnyAttempt<T>): attempt is ErrorAttempt =>
+const isError = <T>(attempt: AnyAttempt<T>): attempt is TErrorAttempt =>
     attempt.type === 'error-attempt'
 
 const isOnline = <T>(attempt: ResolvedAttempt<T>) =>
