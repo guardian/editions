@@ -110,8 +110,13 @@ const SCALED_IMAGE_QUERY = gql`
     }
 `
 
+/**
+ * Return a resolver function for Apollo to resolve the "scaledImage" top-level
+ * field. We delete pending promises because Apollo will cache the final
+ * results.
+ */
 export const createScaledImageResolver = () => {
-    const promises = new Map()
+    const pendingImagesByPath = new Map()
 
     return (_: unknown, variables: QueryVars) => {
         const { path, width } = variables
@@ -119,14 +124,14 @@ export const createScaledImageResolver = () => {
             return { __typename: 'ScaledImage', uri: path }
 
         const key = JSON.stringify([path, width])
-        const value = promises.get(key)
+        const value = pendingImagesByPath.get(key)
         if (value != null) return value
 
-        const promise = compressImagePath(path, width).then(uri => {
-            return { __typename: 'ScaledImage', uri }
-        })
+        const promise = compressImagePath(path, width)
+            .then(uri => ({ __typename: 'ScaledImage', uri }))
+            .finally(() => void pendingImagesByPath.delete(key))
 
-        promises.set(key, promise)
+        pendingImagesByPath.set(key, promise)
         return promise
     }
 }
