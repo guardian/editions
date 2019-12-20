@@ -3,16 +3,21 @@ import React, { useState } from 'react'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
-import { useImageSize } from 'src/hooks/use-image-size'
-import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import {
-    Article,
-    PictureArticle,
-    GalleryArticle,
-} from '../../../../../../Apps/common/src'
+import { Article, PictureArticle, GalleryArticle, ImageSize } from 'src/common'
 import { renderArticle } from '../../html/article'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
+import { useQuery } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+import { PathToIssue } from 'src/paths'
+
+type QueryValue = { imageSize: ImageSize; issueId: PathToIssue }
+const QUERY = gql`
+    {
+        imageSize @client
+        issueId @client
+    }
+`
 
 const WebviewWithArticle = ({
     article,
@@ -33,8 +38,11 @@ const WebviewWithArticle = ({
     // `fetchImmediate` where it is defined
     const [{ isConnected }] = useState(fetchImmediate())
     const [, { pillar }] = useArticle()
-    const { issueId } = useIssueSummary()
-    const imageSize = useImageSize()
+
+    const res = useQuery<QueryValue>(QUERY)
+    // Hold off rendering until we have all the necessary data.
+    if (res.loading) return null
+    const { imageSize, issueId } = res.data
 
     const html = renderArticle(article.elements, {
         pillar,

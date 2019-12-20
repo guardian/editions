@@ -161,6 +161,10 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
         })
 }
 
+/**
+ * Avoid using this function if you can consolidate it into another query
+ * instead.
+ */
 const useIssueSummary = (): IssueSummaryState => {
     const res = useQuery<QueryValue>(QUERY)
     if (res.loading) throw new Error('unavailable issue summary state')
