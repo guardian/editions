@@ -24,7 +24,6 @@ import { Button, ButtonAppearance } from '../button/button'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
 import { imageForScreenSize } from 'src/helpers/screen'
-import { fetch } from 'src/hooks/use-net-info'
 import { useToast } from 'src/hooks/use-toast'
 import { DOWNLOAD_ISSUE_MESSAGE_OFFLINE } from 'src/helpers/words'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
@@ -40,6 +39,7 @@ import { colour } from '@guardian/pasteup/palette'
 import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 import { UiBodyCopy } from '../styled-text'
+import { useApolloClient } from '@apollo/react-hooks'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -118,7 +118,8 @@ const IssueButton = ({
     const isOnDevice = useIssueOnDevice(issue.localId)
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
-    const { downloadBlocked } = useNetInfo()
+    const { downloadBlocked, isConnected } = useNetInfo()
+    const client = useApolloClient()
 
     const handleUpdate = useCallback(
         (status: DLStatus) => {
@@ -149,7 +150,7 @@ const IssueButton = ({
                 return
             }
         }
-        if ((await fetch()).isConnected) {
+        if (isConnected) {
             if (!dlStatus) {
                 sendComponentEvent({
                     componentType: ComponentType.appButton,
@@ -157,7 +158,7 @@ const IssueButton = ({
                     value: 'issues_list_issue_clicked',
                 })
                 const imageSize = await imageForScreenSize()
-                downloadAndUnzipIssue(issue, imageSize, handleUpdate)
+                downloadAndUnzipIssue(client, issue, imageSize, handleUpdate)
             }
         } else {
             showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE)

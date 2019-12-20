@@ -1,4 +1,3 @@
-import * as NetInfo from 'src/hooks/use-net-info'
 import { Dispatch, SetStateAction } from 'react'
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
@@ -46,10 +45,16 @@ const QUERY = gql`
     }
 `
 
-type InnerQueryValue = { maxAvailableEditions: number }
+type InnerQueryValue = {
+    maxAvailableEditions: number
+    netInfo: { isConnected: boolean }
+}
 const INNER_QUERY = gql`
     {
         maxAvailableEditions @client
+        netInfo @client {
+            isConnected @client
+        }
     }
 `
 
@@ -109,12 +114,15 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
     })
 
     const grabIssueAndSetLatest = async () => {
-        const result = client.cache.readQuery<QueryValue>({ query: QUERY })
+        const result = client.readQuery<QueryValue>({ query: QUERY })
         const issueSummary = result && result.issueSummary.issueSummary
         const previousLatest =
             issueSummary && issueSummaryToLatestPath(issueSummary)
 
-        const { isConnected } = await NetInfo.fetch()
+        const res = await client.query<InnerQueryValue>({
+            query: INNER_QUERY,
+        })
+        const { isConnected } = res.data.netInfo
         const newIssueSummary = await grabIssueSummary(client, isConnected)
         if (newIssueSummary == null) {
             // now we've foregrounded again, wait for a new issue list
@@ -137,15 +145,6 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
     // Fetch the initial summary and set the initial issue to be shown
     grabIssueAndSetLatest()
 
-    NetInfo.addEventListener(({ isConnected }) => {
-        // try and get a fresh summary until we made it to online
-        if (!hasConnected) {
-            hasConnected = isConnected
-
-            grabIssueSummary(client, isConnected)
-        }
-    })
-
     AppState.addEventListener('change', async (appState: AppStateStatus) => {
         // when we foreground have another go at fetching again
         if (appState === 'active') {
@@ -155,8 +154,11 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
 
     client
         .watchQuery<InnerQueryValue>({ query: INNER_QUERY })
-        .subscribe(async () => {
-            const { isConnected } = await NetInfo.fetch()
+        .subscribe(async res => {
+            const { isConnected } = res.data.netInfo
+            if (!hasConnected) {
+                hasConnected = isConnected
+            }
             grabIssueSummary(client, isConnected)
         })
 }

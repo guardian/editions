@@ -1,22 +1,16 @@
 import * as NetInfo from '@react-native-community/netinfo'
-import { NetInfoState } from '@react-native-community/netinfo' // types
-import React, {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    useMemo,
-} from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
-import { useQuery } from '@apollo/react-hooks'
+import { NetInfoState, NetInfoStateType } from '@react-native-community/netinfo'
+import React, { Dispatch } from 'react'
 import gql from 'graphql-tag'
+import ApolloClient from 'apollo-client'
+import { useQuery } from './apollo'
+import { StyleSheet, View, TouchableWithoutFeedback, Text } from 'react-native'
+import { isEqual } from 'apollo-utilities'
 
 /**
  * The purpose of this module is to create a wrapper around netinfo
  *
- * This has two benefits:
- * 1. We can fake our offline status in the app. This _doesn't_ mean
+ * We can fake our offline status in the app. This _doesn't_ mean
  * all `fetch` requests will fail. It just means that wherever we're
  * explicitly checking the netinfo status, we can override it in __DEV__
  *
@@ -28,13 +22,7 @@ import gql from 'graphql-tag'
  * if it would be helpful to both not fetch when we're offline and again,
  * mock an offline status.
  *
- * 2. The original `useNetInfo` hook seemed to exhibit a re-render quickly
- * after the first mount. Now that we store the info in a state container
- * we can immediately return the current value without having to return
- * unknown while waiting for a promise to resolve
  **/
-
-const { NetInfoStateType } = NetInfo
 
 export enum DownloadBlockedStatus {
     WifiOnly,
@@ -42,127 +30,42 @@ export enum DownloadBlockedStatus {
     NotBlocked,
 }
 
-const StableNetInfoContext = createContext<
-    NetInfoState & {
-        downloadBlocked: DownloadBlockedStatus
-        showDevButton: boolean
-        setShowDevButton: (v: boolean) => void
-    }
->({
-    type: NetInfoStateType.unknown,
-    isConnected: false,
-    details: null,
-    downloadBlocked: DownloadBlockedStatus.NotBlocked,
-    showDevButton: false,
-    setShowDevButton: () => {},
-})
-
-const offlineState = {
-    type: NetInfoStateType.none,
-    isConnected: false,
-    details: null,
-} as const
-
-const devToggleStyles = StyleSheet.create({
-    bg: {
-        backgroundColor: 'black',
-        padding: 8,
-        borderRadius: 999,
-        position: 'absolute',
-        bottom: 20,
-        left: 20,
-        zIndex: 999999999,
-    },
-    text: {
-        color: 'white',
-    },
-})
-
-export class NetInfoStateContainer {
-    private firstStatePromise: Promise<NetInfoState> | null
-    private actualState: NetInfoState
-    private subscribers: ((state: NetInfoState) => void)[] = []
-    private forceOffline = false
-
-    constructor() {
-        this.actualState = {
-            type: NetInfoStateType.unknown,
-            isConnected: false,
-            details: null,
-        }
-        /**
-         * this will wait for the first state and then clear itself,
-         * in order to return an accurate value for fetch for the first time
-         *
-         * it also registers the general update handler
-         */
-        this.firstStatePromise = new Promise(res =>
-            NetInfo.addEventListener(state => {
-                if (this.firstStatePromise) {
-                    res(state)
-                }
-                this.onInternalStateChanged(state, this.forceOffline)
-                this.firstStatePromise = null
-            }),
-        )
-    }
-
-    get state() {
-        return this.forceOffline ? offlineState : this.actualState
-    }
-
-    get isForcedOffline() {
-        return this.forceOffline
-    }
-
-    subscribe(fn: (state: NetInfoState) => void) {
-        let isSubscribed = true
-        this.subscribers.push(fn)
-        this.fetch().then(state => {
-            if (isSubscribed) {
-                fn(state)
-            }
-        })
-
-        return () => {
-            isSubscribed = false
-            this.subscribers = this.subscribers.filter(sub => sub !== fn)
+const QUERY = gql`
+    {
+        netInfo @client {
+            type @client
+            isConnected @client
+            details @client
+            isForcedOffline @client
+            downloadBlocked @client
+            setIsForcedOffline @client
+            isDevButtonShown @client
+            setIsDevButtonShown @client
         }
     }
+`
 
-    fetch() {
-        return this.firstStatePromise || Promise.resolve(this.state)
-    }
-
-    toggleForceOffline() {
-        this.setForceOffline(!this.forceOffline)
-    }
-
-    setForceOffline(value: boolean) {
-        this.onInternalStateChanged(this.actualState, value)
-    }
-
-    private onInternalStateChanged(
-        nextActualState: NetInfoState,
-        forceOffline: boolean,
-    ) {
-        this.actualState = nextActualState
-        this.forceOffline = forceOffline
-        this.updateListeners()
-    }
-
-    private updateListeners() {
-        this.subscribers.forEach(_ => _(this.state))
-    }
+type CommonState = {
+    isForcedOffline: boolean
+    setIsForcedOffline: Dispatch<boolean>
+    isDevButtonShown: boolean
+    setIsDevButtonShown: Dispatch<boolean>
 }
 
-/** singleton state container */
-const netInfoStateContainer = new NetInfoStateContainer()
+const __typename = 'NetInfo'
+export type NetInfo = CommonState & {
+    __typename: 'NetInfo'
+    type: NetInfoStateType
+    isConnected: boolean
+    details: unknown
+    downloadBlocked: DownloadBlockedStatus
+}
 
-/** Replace the netinfo API  */
-const addEventListener = netInfoStateContainer.subscribe.bind(
-    netInfoStateContainer,
-)
+type InternalState = CommonState & {
+    netInfo: NetInfoState
+    wifiOnlyDownloads: boolean
+}
+
 const getDownloadBlockedStatus = (
     netInfo: NetInfoState,
     wifiOnlyDownloads: boolean,
@@ -173,80 +76,168 @@ const getDownloadBlockedStatus = (
         ? DownloadBlockedStatus.WifiOnly
         : DownloadBlockedStatus.NotBlocked
 
-/**
- * Replace the netinfo API
- *
- **/
-const fetch = netInfoStateContainer.fetch.bind(netInfoStateContainer)
+const FORCED_OFFLINE_NETINFO: NetInfoState = {
+    type: NetInfoStateType.none,
+    isConnected: false,
+    details: null,
+}
 
 /**
- * This _may_ return unknown in the first few moments of the app launching
- * is useful for getting a synchronous result, at the rist of potentially
- * receiving an `unknown` state
+ * Translate the internal state into the clean, exposed NetInfo data. This must
+ * not have any side effects. For example we simulate a netinfo of type "none"
+ * if we are currently forced offline (but the internal state keeps track of the
+ * real state).
  */
-const fetchImmediate = () => netInfoStateContainer.state
+const assembleNetInfo = (state: InternalState): NetInfo => {
+    const netInfo = state.isForcedOffline
+        ? FORCED_OFFLINE_NETINFO
+        : state.netInfo
+    const { type, isConnected, details } = netInfo
+    return {
+        __typename,
+        type,
+        isConnected,
+        details,
+        isForcedOffline: state.isForcedOffline,
+        downloadBlocked: getDownloadBlockedStatus(
+            netInfo,
+            state.wifiOnlyDownloads,
+        ),
+        setIsForcedOffline: state.setIsForcedOffline,
+        isDevButtonShown: state.isDevButtonShown,
+        setIsDevButtonShown: state.setIsDevButtonShown,
+    }
+}
 
-const DevButton = ({
-    netInfo,
-}: {
-    netInfo: typeof netInfoStateContainer.state
-}) => (
-    <View style={devToggleStyles.bg}>
-        <TouchableWithoutFeedback
-            onPress={() => netInfoStateContainer.toggleForceOffline()}
-        >
-            <Text style={devToggleStyles.text}>
-                Net info{': '}
-                {netInfoStateContainer.isForcedOffline
-                    ? 'forced offline'
-                    : netInfo.type}
-            </Text>
-        </TouchableWithoutFeedback>
-    </View>
-)
+export const createNetInfoResolver = () => {
+    let statePromise: Promise<InternalState> | undefined
 
-const NetInfoProvider = ({ children }: { children: React.ReactNode }) => {
-    const [netInfo, setNetInfo] = useState(netInfoStateContainer.state)
-    useEffect(() => addEventListener(setNetInfo), [])
-    const { data } = useQuery(
-        gql`
-            {
-                wifiOnlyDownloads @client
-            }
-        `,
-    )
-    const downloadBlocked = getDownloadBlockedStatus(
-        netInfo,
-        data && data.wifiOnlyDownloads,
-    )
-    const [showDevButton, setShowDevButton] = useState(false)
-
-    const value = useMemo(
-        () => ({
-            ...netInfo,
-            downloadBlocked,
-            showDevButton,
-            setShowDevButton,
-        }),
-        [netInfo, downloadBlocked, showDevButton],
-    )
-
+    /**
+     * The first time try to fetch the NetInfo state, we register a few event
+     * listeners and fetch our initial value. If the resolver is called again we
+     * always return the same promise. On some events, we directly update the
+     * Apollo cache to propagate the updates.
+     */
     return (
-        <StableNetInfoContext.Provider value={value}>
-            {children}
-            {__DEV__ && showDevButton && <DevButton netInfo={netInfo} />}
-        </StableNetInfoContext.Provider>
-    )
+        _obj: unknown,
+        _vars: unknown,
+        { client }: { client: ApolloClient<object> },
+    ): Promise<NetInfo> => {
+        /**
+         * We already have a past update (either in progress or already
+         * resolved), so return that. We pass it through `assembleNetInfo`
+         * because we don't expose our entire internal state.
+         */
+        if (statePromise != null) {
+            return statePromise.then(assembleNetInfo)
+        }
+
+        /**
+         * This is called whenever we want to update the state in response to a
+         * change in the environment. We first wait on the current update by
+         * awaiting `statePromise` (we don't want updates running concurrently
+         * and corrupting the state). Then we replace it with our new Promise
+         * and finally we update the cache once this resolves.
+         */
+        const update = async (
+            reducer: (_: InternalState) => Promise<InternalState>,
+        ) => {
+            if (statePromise == null) return
+            statePromise = reducer(await statePromise)
+            const state = await statePromise
+            const netInfo = assembleNetInfo(state)
+            client.writeQuery({ query: QUERY, data: { netInfo } })
+        }
+
+        /**
+         * The main reason we might want to update is when the real NetInfo
+         * itself changes. We use `isEqual` to avoid overriding the state if
+         * nothing really changed (this happens notably at the very beginning
+         * because NetInfo sends the initial value to its event listeners).
+         */
+        NetInfo.addEventListener(async netInfo => {
+            if (statePromise == null) return
+            const state = await statePromise
+            if (isEqual(netInfo, state.netInfo)) return
+            update(async prevState => ({ ...prevState, netInfo }))
+        })
+
+        /**
+         * When the "wifiOnlyDownloads" setting changes, we want to update
+         * this as this is used to block or allow downloading editions.
+         */
+        type InnerQueryValue = { wifiOnlyDownloads: boolean }
+        const INNER_QUERY = gql('{ wifiOnlyDownloads @client }')
+        client
+            .watchQuery<InnerQueryValue>({ query: INNER_QUERY })
+            .subscribe(value => {
+                const wifiOnlyDownloads = value.data!.wifiOnlyDownloads
+                update(async prevState => ({ ...prevState, wifiOnlyDownloads }))
+            })
+
+        /**
+         * Then we have the mutators for the debug controls.
+         */
+        const setIsForcedOffline = (isForcedOffline: boolean) => {
+            update(async prevState => ({ ...prevState, isForcedOffline }))
+        }
+        const setIsDevButtonShown = (isDevButtonShown: boolean) => {
+            update(async prevState => ({ ...prevState, isDevButtonShown }))
+        }
+
+        /**
+         * Finally we initialize the result promise with our first value. By
+         * returning this, Apollo will wait until it resolves before returning
+         * any data to React components, instead returning a loading status.
+         * Components shouldn't render anything expensive while loading, so
+         * that we then only do a single render once it is indeed loaded.
+         */
+        statePromise = (async (): Promise<InternalState> => {
+            const [netInfo, innerQuery] = await Promise.all([
+                NetInfo.fetch(),
+                client.query<InnerQueryValue>({ query: INNER_QUERY }),
+            ])
+            return {
+                netInfo,
+                isForcedOffline: false,
+                setIsForcedOffline,
+                wifiOnlyDownloads: innerQuery.data.wifiOnlyDownloads,
+                isDevButtonShown: false,
+                setIsDevButtonShown,
+            }
+        })()
+
+        return statePromise.then(assembleNetInfo)
+    }
 }
 
-const useNetInfo = () => useContext(StableNetInfoContext)
+/**
+ * Deprecated. Instead, one should directly use `useQuery` with the specific
+ * fields one wish to query. This is because otherwise, your React component
+ * will re-render whenever any of the fields change, even ones not in use
+ * by the component.
+ */
+const useNetInfo = (() => {
+    const LOADING: NetInfo = {
+        __typename,
+        type: NetInfoStateType.unknown,
+        isConnected: false,
+        details: null,
+        isForcedOffline: false,
+        downloadBlocked: DownloadBlockedStatus.NotBlocked,
+        setIsForcedOffline: () => {},
+        isDevButtonShown: false,
+        setIsDevButtonShown: () => {},
+    }
 
-export {
-    NetInfoProvider,
-    NetInfoStateType,
-    useNetInfo,
-    addEventListener,
-    fetch,
-    fetchImmediate,
-    getDownloadBlockedStatus,
-}
+    return (): NetInfo => {
+        const res = useQuery<{ netInfo: NetInfo }>(QUERY)
+        // FIXME: having a fake 'loading' set of data causes the UI to render
+        // with some invalid values at first only to re-render later with the
+        // final values. Instead we shouldn't render until it's finished
+        // loading.
+        return res.loading ? LOADING : res.data.netInfo
+    }
+})()
+
+export { useNetInfo }

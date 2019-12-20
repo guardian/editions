@@ -5,6 +5,7 @@ import { Button } from './button/button'
 import { isInBeta } from 'src/helpers/release-stream'
 import { StyleSheet } from 'react-native'
 import { AccessContext } from 'src/authentication/AccessContext'
+import { useApolloClient } from '@apollo/react-hooks'
 
 const styles = StyleSheet.create({
     button: {
@@ -17,10 +18,11 @@ const styles = StyleSheet.create({
 
 const BugButton = () => {
     const { attempt } = useContext(AccessContext)
+    const client = useApolloClient()
     return isInBeta() ? (
         <Button
             style={styles.button}
-            onPress={createMailtoHandler('Report a bug', '', attempt)}
+            onPress={createMailtoHandler(client, 'Report a bug', '', attempt)}
             alt="Report a bug"
             icon=""
         />

@@ -29,11 +29,11 @@ import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
-import { NetInfoProvider } from './hooks/use-net-info'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
 import { ImageSizeProvider } from './hooks/use-image-size'
+import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -48,8 +48,8 @@ if (!__DEV__) {
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
 useScreens()
-pushNotifcationRegistration()
-Platform.OS === 'android' && clearAndDownloadIssue()
+pushNotifcationRegistration(apolloClient)
+Platform.OS === 'android' && clearAndDownloadIssue(apolloClient)
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -137,11 +137,11 @@ export default class App extends React.Component<{}, {}> {
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
-                clearAndDownloadIssue()
+                clearAndDownloadIssue(apolloClient)
             }
         })
 
-        pushDownloadFailsafe()
+        pushDownloadFailsafe(apolloClient)
     }
 
     async componentDidCatch(e: Error) {
@@ -162,7 +162,7 @@ export default class App extends React.Component<{}, {}> {
         return (
             <ErrorBoundary>
                 <ApolloProvider client={apolloClient}>
-                    <NetInfoProvider>
+                    <NetInfoDevOverlay>
                         <WithProviders>
                             <AccessProvider
                                 onIdentityStatusChange={handleIdStatus}
@@ -187,7 +187,7 @@ export default class App extends React.Component<{}, {}> {
                                 <DeprecateVersionModal />
                             </AccessProvider>
                         </WithProviders>
-                    </NetInfoProvider>
+                    </NetInfoDevOverlay>
                 </ApolloProvider>
             </ErrorBoundary>
         )

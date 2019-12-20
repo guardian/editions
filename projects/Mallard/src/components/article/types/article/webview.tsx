@@ -1,4 +1,3 @@
-import { fetchImmediate } from 'src/hooks/use-net-info'
 import React, { useState } from 'react'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleType } from 'src/common'
@@ -13,6 +12,8 @@ import {
 import { renderArticle } from '../../html/article'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
+import { useApolloClient } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 const WebviewWithArticle = ({
     article,
@@ -28,10 +29,15 @@ const WebviewWithArticle = ({
     _ref?: (ref: WebView) => void
     topPadding: number
 } & WebViewProps & { onScroll?: any }) => {
+    const client = useApolloClient()
     // This line ensures we don't re-render the article when
     // the network connection changes, see the comments around
     // `fetchImmediate` where it is defined
-    const [{ isConnected }] = useState(fetchImmediate())
+    const [{ isConnected }] = useState(
+        client.readQuery({
+            query: gql('{ netInfo @client { isConnected @client } }'),
+        })!.netInfo.isConnected,
+    )
     const [, { pillar }] = useArticle()
     const { issueId } = useIssueSummary()
     const imageSize = useImageSize()

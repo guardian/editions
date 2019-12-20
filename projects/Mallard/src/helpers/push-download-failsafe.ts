@@ -1,8 +1,9 @@
 import BackgroundFetch from 'react-native-background-fetch'
 import { pushTracking } from './push-tracking'
 import { clearAndDownloadIssue } from './clear-download-issue'
+import ApolloClient from 'apollo-client'
 
-const pushDownloadFailsafe = () => {
+const pushDownloadFailsafe = (client: ApolloClient<object>) => {
     BackgroundFetch.configure(
         {
             minimumFetchInterval: 120, // Every 2 hours
@@ -11,7 +12,7 @@ const pushDownloadFailsafe = () => {
         },
         async () => {
             await pushTracking('backgroundFetch', 'started')
-            await clearAndDownloadIssue()
+            await clearAndDownloadIssue(client)
             await pushTracking('backgroundFetch', 'ended')
             BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA)
         },
