@@ -8,6 +8,7 @@ import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers'
 import { resolveWeather } from './helpers/weather'
 import { resolveLocationPermissionStatus } from './helpers/location-permission'
 import { createScaledImageResolver } from './hooks/use-image-paths'
+import { initIssueSummary } from './hooks/use-issue-summary'
 
 /**
  * The `Link` is the interface Apollo uses to reach GraphQL servers. Since we
@@ -54,9 +55,12 @@ export const createApolloClient = () => {
         },
     }
 
-    return new ApolloClient({
+    const client = new ApolloClient({
         cache: new InMemoryCache(),
         link,
         resolvers,
     })
+
+    initIssueSummary(client)
+    return client
 }
