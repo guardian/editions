@@ -126,6 +126,7 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
         const newLatest = issueSummaryToLatestPath(newIssueSummary)
         // only update to latest issue if there is indeed a new latest issue
         if (
+            (result && result.issueSummary.issueId == null) ||
             !previousLatest ||
             (previousLatest.localIssueId !== newLatest.localIssueId &&
                 previousLatest.publishedIssueId !== newLatest.publishedIssueId)
