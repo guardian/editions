@@ -150,7 +150,7 @@ export const createIssueSummaryResolver = () => {
             const prevIssueSummary = await result
             result = reducer(prevIssueSummary)
             const issueSummary = await result
-            client.cache.writeQuery({ query: QUERY, data: { issueSummary } })
+            client.writeQuery({ query: QUERY, data: { issueSummary } })
         }
 
         const refetchUpdate = update.bind(null, refetch)
