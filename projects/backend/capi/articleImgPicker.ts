@@ -1,5 +1,5 @@
 import { IContent } from '@guardian/capi-ts'
-import {Image, CreditedImage, TrailImage, ImageUse} from '../../Apps/common/src'
+import { CreditedImage, TrailImage } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
 

@@ -4,8 +4,8 @@ import {
     BlockElement,
     ArticleType,
     IssuePublicationIdentifier,
-    // Image,
-    ImageDeviceUses, TrailImage,
+    ImageDeviceUses,
+    TrailImage,
 } from '../Apps/common/src'
 import { CAPIContent, getArticles } from './capi/articles'
 import {
