@@ -117,7 +117,7 @@ export const getImages = (
         maybeMainImage,
         maybeCapiTrailImage,
         maybeImageOverride,
-        // imageUse,
+        imageUse,
     )
 
     return {
