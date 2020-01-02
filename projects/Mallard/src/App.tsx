@@ -29,7 +29,6 @@ import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
 import { nestProviders } from './helpers/provider'
 import { pushNotifcationRegistration } from './helpers/push-notifications'
-import { IssueSummaryProvider } from './hooks/use-issue-summary'
 import { NetInfoProvider } from './hooks/use-net-info'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
@@ -125,7 +124,6 @@ const isReactNavPersistenceError = (e: Error) =>
 const WithProviders = nestProviders(
     Modal,
     ToastProvider,
-    IssueSummaryProvider,
     NavPositionProvider,
     ImageSizeProvider,
 )

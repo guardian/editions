@@ -17,8 +17,13 @@ export type QueryResult<Data> = (
  * Once all the data is available, the component re-renders and
  * `useQuery` will return the final data.
  */
-export const useQuery = <Data>(query: DocumentNode): QueryResult<Data> => {
-    const { loading, error, data, client } = useApolloQuery(query)
+export const useQuery = <Data, Variables = undefined>(
+    query: DocumentNode,
+    variables?: Variables,
+): QueryResult<Data> => {
+    const { loading, error, data, client } = useApolloQuery(query, {
+        variables,
+    })
     if (error != null) {
         throw error
     }
