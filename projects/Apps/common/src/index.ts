@@ -156,7 +156,7 @@ export interface Content extends WithKey {
     articleType?: ArticleType
     trail: string
     image?: CreditedImage
-    trailImage?: Image
+    trailImage?: TrailImage
     cardImage?: Image
     cardImageTablet?: Image
     standfirst?: string
