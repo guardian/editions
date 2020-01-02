@@ -40,7 +40,10 @@ export const handler: Handler<
         throw new Error(`Could not download front ${front}`)
     }
 
-    console.log(`succesfully download front ${front}`, maybeFront)
+    console.log(
+        `succesfully download front ${front}`,
+        JSON.stringify(maybeFront),
+    )
 
     const frontUpload = await attempt(
         upload(

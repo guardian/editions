@@ -35,12 +35,14 @@ export const getFront = async (
     const path = `${URL}${frontPath(publishedId, front)}`
     console.log(`attempt to getFront from path: ${path}`)
     const response = await fetch(path)
+    console.log(`got response: ${JSON.stringify(response.json())}`)
     const maybeFront = await attempt(response.json() as Promise<Front>)
     if (hasFailed(maybeFront))
         return withFailureMessage(
             maybeFront,
             `Failed to download front ${front} from ${publishedId}`,
         )
+    console.log(`got front: ${JSON.stringify(maybeFront)}`)
     return maybeFront
 }
 
