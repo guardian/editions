@@ -1,5 +1,5 @@
 import { IContent } from '@guardian/capi-ts'
-import { Image, CreditedImage } from '../../Apps/common/src'
+import {Image, CreditedImage, TrailImage, ImageUse} from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
 
@@ -14,7 +14,7 @@ const getMainImage = (result: IContent): CreditedImage | undefined => {
     return maybeCreditedMainImage
 }
 
-const getTrailImage = (result: IContent): Image | undefined => {
+const getTrailImage = (result: IContent): TrailImage | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
@@ -33,11 +33,19 @@ const getTrailImage = (result: IContent): Image | undefined => {
     )
 
     return maybeThumbnailImage
+        ? {
+              ...maybeThumbnailImage,
+              use: {
+                  mobile: 'full-size',
+                  tablet: 'full-size',
+              },
+          }
+        : undefined
 }
 
 interface ImageAndTrailImage {
     image: CreditedImage | undefined
-    trailImage: Image | undefined
+    trailImage: TrailImage | undefined
 }
 
 const getImages = (result: IContent): ImageAndTrailImage => {

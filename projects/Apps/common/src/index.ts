@@ -457,6 +457,10 @@ export interface ImageDeviceUses {
     tablet: ImageUse
 }
 
+export interface TrailImage extends Image {
+    use: ImageDeviceUses
+}
+
 export const thumbsDir = (issue: string, size: ImageSize) =>
     `${issueDir(issue)}/thumbs/${size}/`
 

@@ -5,7 +5,7 @@ import {
     ArticleType,
     IssuePublicationIdentifier,
     // Image,
-    ImageDeviceUses,
+    ImageDeviceUses, TrailImage,
 } from '../Apps/common/src'
 import { CAPIContent, getArticles } from './capi/articles'
 import {
@@ -72,14 +72,14 @@ const getTrailImage = (
     maybeMainImage: CreditedImage | undefined,
     maybeCapiTrailImage: Image | undefined,
     maybeImageOverride: Image | undefined,
-    // imageUse: ImageDeviceUses,
-): Image | undefined => {
+    imageUse: ImageDeviceUses,
+): TrailImage | undefined => {
     const chosenTrailImage =
         maybeImageOverride || maybeMainImage || maybeCapiTrailImage
     return (
         chosenTrailImage && {
             ...chosenTrailImage,
-            // use: imageUse,
+            use: imageUse,
         }
     )
 }
@@ -117,7 +117,7 @@ export const getImages = (
         maybeMainImage,
         maybeCapiTrailImage,
         maybeImageOverride,
-        // imageUse,
+        imageUse,
     )
 
     return {

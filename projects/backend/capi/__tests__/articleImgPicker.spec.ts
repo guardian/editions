@@ -77,7 +77,13 @@ describe('articleImgPicker.getImages', () => {
 
         const withBoth: ImageAndTrailImage = {
             image: { ...mainImgExpected },
-            trailImage: { ...thumbnailExpected },
+            trailImage: {
+                ...thumbnailExpected,
+                use: {
+                    mobile: 'full-size',
+                    tablet: 'full-size',
+                },
+            },
         }
 
         expect(actual).toStrictEqual(withBoth)
@@ -93,7 +99,13 @@ describe('articleImgPicker.getImages', () => {
 
         const withTrailOnly: ImageAndTrailImage = {
             image: undefined,
-            trailImage: { ...thumbnailExpected },
+            trailImage: {
+                ...thumbnailExpected,
+                use: {
+                    mobile: 'full-size',
+                    tablet: 'full-size',
+                },
+            },
         }
 
         expect(actual).toStrictEqual(withTrailOnly)
