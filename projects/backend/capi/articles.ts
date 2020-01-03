@@ -13,7 +13,6 @@ import {
     CrosswordArticle,
     PictureArticle,
     CapiDateTime as CapiDateTime32,
-    Image,
     MediaAtomElement,
     TrailImage,
 } from '../common'

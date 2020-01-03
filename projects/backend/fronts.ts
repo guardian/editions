@@ -92,7 +92,7 @@ export const getImages = (
     image?: CreditedImage
     cardImage?: Image
     cardImageTablet?: Image
-    trailImage?: Image
+    trailImage?: TrailImage
 } => {
     const {
         overrideArticleMainMedia,
