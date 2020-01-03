@@ -266,7 +266,7 @@ export interface Issue extends IssueSummary, WithKey {
     fronts: Front['key'][]
 }
 
-export type IssueOrigin = 'fs' | 'api'
+export type IssueOrigin = 'filesystem' | 'api'
 
 export interface IssueWithFronts extends IssueSummary, WithKey {
     fronts: Front[]

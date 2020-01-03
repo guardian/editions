@@ -52,10 +52,11 @@ const WebviewWithArticle = ({
     const getImagePath = (image?: Image, use: ImageUse = 'full-size') => {
         if (image == null) return undefined
 
-        if (origin === 'fs') {
+        if (origin === 'filesystem') {
             const fs = FSPaths.image(localIssueId, imageSize, image, use)
             return Platform.OS === 'android' ? 'file:///' + fs : fs
         }
+        if (origin !== 'api') throw new Error('unrecognized "origin"')
 
         const issueId = publishedIssueId
         const imagePath = APIPaths.image(issueId, imageSize, image, use)

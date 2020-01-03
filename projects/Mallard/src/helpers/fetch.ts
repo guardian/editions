@@ -56,7 +56,7 @@ const fetchIssueWithFrontsFromFS = async (
     )
     return {
         ...issue,
-        origin: 'fs',
+        origin: 'filesystem',
         fronts,
     }
 }
