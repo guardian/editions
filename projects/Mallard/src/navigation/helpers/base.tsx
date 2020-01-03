@@ -89,12 +89,13 @@ const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
 export interface IssueNavigationProps {
     path?: PathToIssue
     issue?: Issue
+    initialFrontKey?: string
 }
 
 interface NavigateToIssueProps {
     navigation: NavigationScreenProp<{}>
     navigationProps: IssueNavigationProps
-    setIssueId: (path: PathToIssue) => void
+    setIssueId: (path: PathToIssue, navigationProps?: string) => void
 }
 
 const navigateToIssue = ({
@@ -106,7 +107,7 @@ const navigateToIssue = ({
         ...navigationProps,
     })
     if (navigationProps.path) {
-        setIssueId(navigationProps.path)
+        setIssueId(navigationProps.path, navigationProps.initialFrontKey)
     }
     sendComponentEvent({
         componentType: ComponentType.appButton,

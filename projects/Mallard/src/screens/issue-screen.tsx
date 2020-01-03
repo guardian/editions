@@ -144,20 +144,16 @@ const IssueFronts = ({
     issue,
     ListHeaderComponent,
     style,
+    initialFrontKey,
 }: {
     issue: IssueWithFronts
     ListHeaderComponent?: ReactElement
     style?: StyleProp<ViewStyle>
+    initialFrontKey: string | undefined
 }) => {
     const { container, card } = useIssueScreenSize()
     const { width } = useDimensions()
     const ref = useRef<FlatList<any> | null>()
-
-    useEffect(() => {
-        if (ref && ref.current && ref.current.scrollToOffset) {
-            ref.current.scrollToOffset({ animated: false, offset: 0 })
-        }
-    }, [issue])
 
     const {
         frontWithCards,
@@ -207,15 +203,29 @@ const IssueFronts = ({
         [issue.localId, issue.publishedId, issue.fronts],
     )
 
+    const findFrontIndex = (frontKey: string) =>
+        frontWithCards.findIndex(front => front.key === frontKey)
+
+    const initialScrollIndex =
+        initialFrontKey != null ? findFrontIndex(initialFrontKey) : 0
+
+    useEffect(() => {
+        if (ref && ref.current && ref.current.scrollToOffset) {
+            console.warn(initialFrontKey, initialScrollIndex)
+            ref.current.scrollToOffset({
+                animated: false,
+                offset: initialScrollIndex,
+            })
+        }
+    }, [issue])
+
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
 
     useNavPositionChange(
         position => {
             if (!frontWithCards) return
 
-            let index = frontWithCards.findIndex(
-                front => front.key === position.frontId,
-            )
+            let index = findFrontIndex(position.frontId)
             // Invalid index, navigate to the first one. Not sure this is right.
             if (index < 0) index = 0
             if (ref && ref.current && ref.current.scrollToIndex) {
@@ -233,6 +243,7 @@ const IssueFronts = ({
     return (
         <FlatList
             ref={r => (ref.current = r)}
+            initialScrollIndex={initialScrollIndex}
             showsHorizontalScrollIndicator={false}
             ListHeaderComponent={ListHeaderComponent}
             // These three props are responsible for the majority of
@@ -339,7 +350,13 @@ const WeatherHeader = () => {
 }
 
 const IssueScreenWithPath = React.memo(
-    ({ path }: { path: PathToIssue }) => {
+    ({
+        path,
+        initialFrontKey,
+    }: {
+        path: PathToIssue
+        initialFrontKey: string | undefined
+    }) => {
         const response = useIssueResponse(path)
 
         return response({
@@ -375,6 +392,9 @@ const IssueScreenWithPath = React.memo(
                                                         <WeatherHeader />
                                                     }
                                                     issue={issue}
+                                                    initialFrontKey={
+                                                        initialFrontKey
+                                                    }
                                                 />
                                             </WithIssueScreenSize>
                                         )}
@@ -399,6 +419,9 @@ const IssueScreenWithPath = React.memo(
                                                             <WeatherHeader />
                                                         }
                                                         issue={issue}
+                                                        initialFrontKey={
+                                                            initialFrontKey
+                                                        }
                                                     />
                                                 </WithIssueScreenSize>
                                             )}
@@ -416,14 +439,18 @@ const IssueScreenWithPath = React.memo(
 )
 
 export const IssueScreen = () => {
-    const { issueSummary, issueId, error } = useIssueSummary()
+    const { issueSummary, issueId, error, initialFrontKey } = useIssueSummary()
     return (
         <Container>
             {issueId ? (
-                <IssueScreenWithPath path={issueId} />
+                <IssueScreenWithPath
+                    path={issueId}
+                    initialFrontKey={initialFrontKey}
+                />
             ) : issueSummary ? (
                 <IssueScreenWithPath
                     path={issueSummaryToLatestPath(issueSummary)}
+                    initialFrontKey={initialFrontKey}
                 />
             ) : error ? (
                 error && handleIssueScreenError(error)

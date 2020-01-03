@@ -14,6 +14,7 @@ interface IssueSummaryState {
     issueId: PathToIssue | null
     setIssueId: Dispatch<SetStateAction<PathToIssue | null>>
     error: string
+    initialFrontKey: string | undefined
 }
 
 const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
@@ -42,6 +43,7 @@ const QUERY = gql`
             issueId @client
             setIssueId @client
             error @client
+            initialFrontKey @client
         }
     }
 `
@@ -56,11 +58,13 @@ const INNER_QUERY = gql`
 export const setIssueId = (
     client: ApolloClient<object>,
     newIssueId: PathToIssue,
+    initialFrontKey?: string,
 ) => {
     client.writeQuery({
         query: QUERY,
         data: {
             issueSummary: { __typename, issueId: newIssueId },
+            initialFrontKey: initialFrontKey || null,
         },
     })
 }
@@ -104,6 +108,7 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
                 issueId: null,
                 setIssueId: setIssueId.bind(null, client),
                 error: '',
+                initialFrontKey: null,
             },
         },
     })
