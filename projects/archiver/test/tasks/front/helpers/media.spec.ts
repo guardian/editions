@@ -1,4 +1,4 @@
-import { CAPIArticle, Image } from '../../../../common'
+import { CAPIArticle, TrailImage } from '../../../../common'
 import { getImagesFromArticle } from '../../../../src/tasks/front/helpers/media'
 
 test('getImage', () => {
@@ -26,10 +26,13 @@ test('getImage', () => {
 })
 
 test('getImageUse', () => {
-    const image: Image = {
+    const image: TrailImage = {
         source: 'test',
         path: 'image',
-        // use: { mobile: 'full-size', tablet: 'thumb' },
+        use: {
+            mobile: 'full-size',
+            tablet: 'thumb',
+        },
     }
     const article: CAPIArticle = {
         key: '🔑',
