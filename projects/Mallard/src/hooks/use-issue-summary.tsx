@@ -200,6 +200,10 @@ export const createIssueSummaryResolver = () => {
     }
 }
 
+/**
+ * Avoid using this function if you can consolidate it into another query
+ * instead.
+ */
 const useIssueSummary = (): IssueSummaryState => {
     const res = useQuery<QueryValue>(QUERY)
     // FIXME: this is poor practice as this causes UI to render with empty data
