@@ -41,7 +41,7 @@ type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
 
 interface CAPIExtras {
     path: string
-    trailImage?: TrailImage
+    trailImage: TrailImage | undefined
 }
 
 export type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
@@ -232,6 +232,7 @@ const parseArticleResult = async (
                     trail,
                     path: path,
                     headline: title,
+                    trailImage: undefined,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
@@ -341,3 +342,4 @@ export const getArticles = async (
     const articleEntries = articlePromises.filter(hasSucceeded)
     return fromPairs(articleEntries)
 }
+
