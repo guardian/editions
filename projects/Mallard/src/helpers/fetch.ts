@@ -42,6 +42,7 @@ const fetchIssueWithFrontsFromAPI = async (
     )
     return {
         ...issue,
+        origin: 'api',
         fronts,
     }
 }
@@ -55,6 +56,7 @@ const fetchIssueWithFrontsFromFS = async (
     )
     return {
         ...issue,
+        origin: 'filesystem',
         fronts,
     }
 }
