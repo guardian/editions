@@ -32,7 +32,6 @@ import { pushNotifcationRegistration } from './helpers/push-notifications'
 import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
-import { ImageSizeProvider } from './hooks/use-image-size'
 import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
 
 /**
@@ -121,12 +120,7 @@ const onNavigationStateChange = (
 const isReactNavPersistenceError = (e: Error) =>
     __DEV__ && e.message.includes('There is no route defined for')
 
-const WithProviders = nestProviders(
-    Modal,
-    ToastProvider,
-    NavPositionProvider,
-    ImageSizeProvider,
-)
+const WithProviders = nestProviders(Modal, ToastProvider, NavPositionProvider)
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)

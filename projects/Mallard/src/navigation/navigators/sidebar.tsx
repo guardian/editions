@@ -23,8 +23,8 @@ import {
     addStaticRouterWithPosition,
     NavigatorWrapper,
 } from '../helpers/transition'
-import { sidebarWidth } from './underlay/positions'
-import { screenInterpolator, topLayerTransition } from './underlay/transition'
+import { sidebarWidth } from './sidebar/positions'
+import { screenInterpolator, mainLayerTransition } from './sidebar/transition'
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -34,7 +34,7 @@ const overlayStyles = StyleSheet.create({
     },
 })
 
-const addViewsForTopLayer: NavigatorWrapper = (navigator, getPosition) => {
+const addViewsForMainLayer: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
         const posi = getPosition()
@@ -69,7 +69,7 @@ const bottomStyles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
 })
-const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
+const addViewsForSidebarLayer: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const isTablet =
         Dimensions.get('window').width >= Breakpoints.tabletVertical
@@ -82,7 +82,7 @@ const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
     This gives the user the illusion that by tapping on the bit of
     the previous screen they see, they are bringing it back into focus
     */
-    const backButtonStyles = topLayerTransition(new Animated.Value(1), 0)
+    const backButtonStyles = mainLayerTransition()
 
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
         return (
@@ -113,9 +113,9 @@ const addViewsForBottomLayer: NavigatorWrapper = (navigator, getPosition) => {
     return addStaticRouter(navigator, Wrapper)
 }
 
-const createUnderlayNavigator = (
-    top: NavigationRouteConfig,
-    bottom: {
+export const createSidebarNavigator = (
+    mainRoute: NavigationRouteConfig,
+    sidebarRoute: {
         [name: string]: NavigationRouteConfig
     },
 ) => {
@@ -123,12 +123,12 @@ const createUnderlayNavigator = (
 
     const navigation: { [key: string]: NavigationContainer } = {
         _: supportsTransparentCards()
-            ? addViewsForTopLayer(top, () => animatedValue)
-            : top,
+            ? addViewsForMainLayer(mainRoute, () => animatedValue)
+            : mainRoute,
     }
-    for (const [key, value] of Object.entries(bottom)) {
+    for (const [key, value] of Object.entries(sidebarRoute)) {
         navigation[key] = supportsTransparentCards()
-            ? addViewsForBottomLayer(value, () => animatedValue)
+            ? addViewsForSidebarLayer(value, () => animatedValue)
             : value
     }
 
@@ -161,5 +161,3 @@ const createUnderlayNavigator = (
             : {}),
     })
 }
-
-export { createUnderlayNavigator }

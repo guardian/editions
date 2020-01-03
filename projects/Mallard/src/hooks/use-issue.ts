@@ -50,7 +50,7 @@ export const getArticleResponse = ({
         )
 
         if (articleContent) {
-            return chain.end(articleContent)
+            return chain.end({ ...articleContent, origin: issue.origin })
         }
         throw ERR_404_REMOTE
     })
