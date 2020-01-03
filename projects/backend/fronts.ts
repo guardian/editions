@@ -92,7 +92,7 @@ export const getImages = (
     image?: CreditedImage
     cardImage?: Image
     cardImageTablet?: Image
-    trailImage?: TrailImage
+    trailImage: TrailImage | undefined
 } => {
     const {
         overrideArticleMainMedia,
@@ -175,7 +175,14 @@ export const patchArticle = (
 
     // get article object without the oldTrailImage which is a different type
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { trailImage: oldTrailImage, ...article } = capiArticle
+    const {
+        trailImage: oldTrailImage,
+        ...articleWithoutTrailImage
+    } = capiArticle
+    const article = {
+        trailImage: undefined,
+        ...articleWithoutTrailImage,
+    }
 
     switch (article.type) {
         case 'crossword':
