@@ -3,38 +3,69 @@ import React, { useState } from 'react'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
-import { useImageSize } from 'src/hooks/use-image-size'
-import { useIssueSummary } from 'src/hooks/use-issue-summary'
-import {
-    Article,
-    PictureArticle,
-    GalleryArticle,
-} from '../../../../../../Apps/common/src'
+import { Article, PictureArticle, GalleryArticle, ImageSize } from 'src/common'
 import { renderArticle } from '../../html/article'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
+import { useQuery } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
+import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
+import { Platform } from 'react-native'
+import { Image, ImageUse, IssueOrigin } from 'src/common'
+
+type QueryValue = { imageSize: ImageSize; apiUrl: string }
+const QUERY = gql`
+    {
+        imageSize @client
+        apiUrl @client
+    }
+`
 
 const WebviewWithArticle = ({
     article,
+    path,
     type,
     _ref,
     theme,
     topPadding,
+    origin,
     ...webViewProps
 }: {
     article: Article | PictureArticle | GalleryArticle
+    path: PathToArticle
     type: ArticleType
     theme: ArticleTheme
     _ref?: (ref: WebView) => void
     topPadding: number
+    origin: IssueOrigin
 } & WebViewProps & { onScroll?: any }) => {
     // This line ensures we don't re-render the article when
     // the network connection changes, see the comments around
     // `fetchImmediate` where it is defined
     const [{ isConnected }] = useState(fetchImmediate())
+
+    // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
-    const { issueId } = useIssueSummary()
-    const imageSize = useImageSize()
+
+    const res = useQuery<QueryValue>(QUERY)
+    // Hold off rendering until we have all the necessary data.
+    if (res.loading) return null
+    const { imageSize, apiUrl } = res.data
+    const { localIssueId, publishedIssueId } = path
+
+    const getImagePath = (image?: Image, use: ImageUse = 'full-size') => {
+        if (image == null) return undefined
+
+        if (origin === 'filesystem') {
+            const fs = FSPaths.image(localIssueId, imageSize, image, use)
+            return Platform.OS === 'android' ? 'file:///' + fs : fs
+        }
+        if (origin !== 'api') throw new Error('unrecognized "origin"')
+
+        const issueId = publishedIssueId
+        const imagePath = APIPaths.image(issueId, imageSize, image, use)
+        return `${apiUrl}${imagePath}`
+    }
 
     const html = renderArticle(article.elements, {
         pillar,
@@ -44,8 +75,9 @@ const WebviewWithArticle = ({
         theme,
         showWebHeader: true,
         showMedia: isConnected,
-        publishedId: (issueId && issueId.publishedIssueId) || null,
+        publishedId: publishedIssueId || null,
         topPadding,
+        getImagePath,
     })
 
     return (

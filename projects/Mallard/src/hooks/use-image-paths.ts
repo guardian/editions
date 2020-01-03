@@ -11,6 +11,8 @@ import { errorService } from 'src/services/errors'
 import gql from 'graphql-tag'
 import { useQuery } from './apollo'
 
+export type GetImagePath = (image?: Image, use?: ImageUse) => string | undefined
+
 const getFsPath = (
     localIssueId: Issue['localId'],
     image: Image,
