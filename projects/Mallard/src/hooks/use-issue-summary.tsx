@@ -1,5 +1,4 @@
 import * as NetInfo from 'src/hooks/use-net-info'
-import { Dispatch, SetStateAction } from 'react'
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
@@ -8,12 +7,15 @@ import gql from 'graphql-tag'
 import { getSetting } from '../helpers/settings'
 import { useQuery } from './apollo'
 import ApolloClient from 'apollo-client'
+import { Dispatch } from 'react'
 
 interface IssueSummaryState {
+    __typename: 'IssueSummary'
+    isFromAPI: boolean
     issueSummary: IssueSummary[] | null
     issueId: PathToIssue | null
-    setIssueId: Dispatch<SetStateAction<PathToIssue | null>>
     error: string
+    setIssueId: Dispatch<PathToIssue>
 }
 
 const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
@@ -25,12 +27,11 @@ const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
     return trimmedSummary
 }
 
-const issueSummaryToLatestPath = (
-    issueSummary: IssueSummary[],
-): PathToIssue => ({
-    localIssueId: issueSummary[0].localId,
-    publishedIssueId: issueSummary[0].publishedId,
-})
+const issueSummaryToLatestPath = (issueSummary: IssueSummary[]): PathToIssue =>
+    issueSummary && {
+        localIssueId: issueSummary[0].localId,
+        publishedIssueId: issueSummary[0].publishedId,
+    }
 
 const __typename = 'IssueSummary'
 
@@ -38,6 +39,7 @@ type QueryValue = { issueSummary: IssueSummaryState }
 const QUERY = gql`
     {
         issueSummary @client {
+            isFromAPI @client
             issueSummary @client
             issueId @client
             setIssueId @client
@@ -46,119 +48,156 @@ const QUERY = gql`
     }
 `
 
-type InnerQueryValue = { maxAvailableEditions: number }
-const INNER_QUERY = gql`
-    {
-        maxAvailableEditions @client
-    }
-`
+/**
+ * Based on the previous value and current environment conditions (ex. network),
+ * fetch a new version of the list of issues and update to the latest issue
+ * available if a new one was published.
+ */
+const refetch = async (
+    prevIssueSummary: IssueSummaryState,
+): Promise<IssueSummaryState> => {
+    // FIXME: `prevIssueSummary.issueSummary` is weird naming. Rename this
+    // (however this requires refactoring the places using it).
+    const previousLatest =
+        prevIssueSummary &&
+        prevIssueSummary.issueSummary &&
+        issueSummaryToLatestPath(prevIssueSummary.issueSummary)
 
-export const setIssueId = (
-    client: ApolloClient<object>,
-    newIssueId: PathToIssue,
-) => {
-    client.writeQuery({
-        query: QUERY,
-        data: {
-            issueSummary: { __typename, issueId: newIssueId },
-        },
-    })
-}
-
-const grabIssueSummary = async (
-    client: ApolloClient<object>,
-    hasConnected: boolean,
-) => {
+    const { isConnected } = await NetInfo.fetch()
     let issueSummary: IssueSummary[]
     try {
-        issueSummary = await getIssueSummary(hasConnected)
+        issueSummary = await getIssueSummary(isConnected)
     } catch (error) {
-        client.writeQuery({
-            query: QUERY,
-            data: { issueSummary: { __typename, error } },
-        })
-        return
+        // We do not discard the existing issue summary if there's one, we only
+        // append the error in case the UI needs to display it.
+        //
+        // FIXME: string exceptions in JS are an anti-pattern, as they don't
+        // collect stack traces, etc. We should instead forward an `Error`
+        // object. Additionally, it is poor practice to just display a message
+        // from an error as it could contain technical details that are
+        // irrelevant for end users; instead errors should be coded (ex. with
+        // numeric error code, each of which has a corresponding UI message).
+        return { ...prevIssueSummary, error }
     }
-    client.writeQuery({
-        query: QUERY,
-        data: {
-            issueSummary: {
-                __typename,
-                issueSummary,
-                error: '',
-            },
-        },
-    })
-    return issueSummary
+
+    const newLatest = issueSummaryToLatestPath(issueSummary)
+    let issueId = prevIssueSummary && prevIssueSummary.issueId
+
+    // Update to latest issue if there is a new latest issue
+    if (
+        issueId == null ||
+        !previousLatest ||
+        (previousLatest.localIssueId !== newLatest.localIssueId &&
+            previousLatest.publishedIssueId !== newLatest.publishedIssueId)
+    ) {
+        issueId = newLatest
+    }
+
+    return {
+        ...prevIssueSummary,
+        isFromAPI: isConnected,
+        issueSummary,
+        issueId,
+        error: '',
+    }
 }
 
-export const initIssueSummary = (client: ApolloClient<object>) => {
-    let hasConnected = true // assume we are connected to start with
+const EMPTY_ISSUE_SUMMARY: IssueSummaryState = {
+    __typename,
+    isFromAPI: false,
+    issueSummary: null,
+    issueId: null,
+    error: '',
+    setIssueId: () => {},
+}
 
-    client.cache.writeQuery({
-        query: QUERY,
-        data: {
-            issueSummary: {
-                __typename,
-                issueSummary: null,
-                issueId: null,
-                setIssueId: setIssueId.bind(null, client),
-                error: '',
-            },
-        },
-    })
+export const createIssueSummaryResolver = () => {
+    let result: Promise<IssueSummaryState> | undefined
 
-    const grabIssueAndSetLatest = async () => {
-        const result = client.cache.readQuery<QueryValue>({ query: QUERY })
-        const issueSummary = result && result.issueSummary.issueSummary
-        const previousLatest =
-            issueSummary && issueSummaryToLatestPath(issueSummary)
+    /**
+     * First time we try to resolve the "issue summary" (the list of issues
+     * available, essentially), we register a few event listeners and fetch our
+     * first value. If the resolver is called again we always return the same
+     * promise. Finally, on particular events, we directly update the Apollo
+     * cache to represent the updates.
+     */
+    return (
+        _obj: unknown,
+        _vars: unknown,
+        { client }: { client: ApolloClient<object> },
+    ) => {
+        // We're already in the process of fetching or updating the summary, so
+        // let's return that.
+        if (result != null) return result
 
-        const { isConnected } = await NetInfo.fetch()
-        const newIssueSummary = await grabIssueSummary(client, isConnected)
-        if (newIssueSummary == null) {
-            // now we've foregrounded again, wait for a new issue list
-            // seen as we couldn't get one now
-            hasConnected = false
-            return
+        /**
+         * This is called whenever we want to update the "issue summary" in response
+         * to a change in the environment. For example, we selected "14 days" of
+         * issues, or the network is back on, etc. To do so, we first wait on the
+         * current update by awaiting `result` (we don't want updates running
+         * concurrently and corrupting the state). Then we replace that `result`
+         * with our new fetch Promise and finally we update the cache once this
+         * resolves.
+         *
+         * An alternative strategy would be to discard the current update if there
+         * is one, but because `reduce` can have side-effects (ex. writing the fetch
+         * summary to disk), this would not be safe.
+         */
+        const update = async (
+            reducer: (_: IssueSummaryState) => Promise<IssueSummaryState>,
+        ) => {
+            if (result == null) return
+            const prevIssueSummary = await result
+            result = reducer(prevIssueSummary)
+            const issueSummary = await result
+            client.writeQuery({ query: QUERY, data: { issueSummary } })
         }
 
-        const newLatest = issueSummaryToLatestPath(newIssueSummary)
-        // only update to latest issue if there is indeed a new latest issue
-        if (
-            !previousLatest ||
-            (previousLatest.localIssueId !== newLatest.localIssueId &&
-                previousLatest.publishedIssueId !== newLatest.publishedIssueId)
-        ) {
-            setIssueId(client, newLatest)
-        }
-    }
+        const refetchUpdate = update.bind(null, refetch)
 
-    // Fetch the initial summary and set the initial issue to be shown
-    grabIssueAndSetLatest()
-
-    NetInfo.addEventListener(({ isConnected }) => {
-        // try and get a fresh summary until we made it to online
-        if (!hasConnected) {
-            hasConnected = isConnected
-
-            grabIssueSummary(client, isConnected)
-        }
-    })
-
-    AppState.addEventListener('change', async (appState: AppStateStatus) => {
-        // when we foreground have another go at fetching again
-        if (appState === 'active') {
-            grabIssueAndSetLatest()
-        }
-    })
-
-    client
-        .watchQuery<InnerQueryValue>({ query: INNER_QUERY })
-        .subscribe(async () => {
-            const { isConnected } = await NetInfo.fetch()
-            grabIssueSummary(client, isConnected)
+        // Otherwise we register our callbacks:
+        //
+        // 1. When we connect and the summary we already have isn't from API,
+        //    fetch a fresh one.
+        NetInfo.addEventListener(async ({ isConnected }) => {
+            const issueSummary = await result
+            if (issueSummary && !issueSummary.isFromAPI && isConnected)
+                refetchUpdate()
         })
+
+        // 2. When we foreground, just always refresh the summary (note: we
+        //    might want to consider refreshing only if the data is older than X
+        //    minutes).
+        AppState.addEventListener(
+            'change',
+            async (appState: AppStateStatus) => {
+                if (appState === 'active') refetchUpdate()
+            },
+        )
+
+        // 3. If the number of editions we need to display changed (ex. user
+        //    selected "14 days" when they used to have only 7 days), then fetch
+        //    a new list of editions as well.
+        {
+            type QueryValue = { maxAvailableEditions: number }
+            const query = gql('{maxAvailableEditions @client}')
+            client.watchQuery<QueryValue>({ query }).subscribe(refetchUpdate)
+        }
+
+        /**
+         * Enqueue an update that simply set a new issue ID, no fetch happening.
+         * This can be called when selecting a new issue in the UI.
+         */
+        const setIssueId = (issueId: PathToIssue) => {
+            update(async prevIssueSummary => ({
+                ...prevIssueSummary,
+                issueId,
+            }))
+        }
+
+        // Finally, grab the initial value for the issue summary and return it.
+        return (result = refetch({ ...EMPTY_ISSUE_SUMMARY, setIssueId }))
+    }
 }
 
 /**
@@ -167,7 +206,9 @@ export const initIssueSummary = (client: ApolloClient<object>) => {
  */
 const useIssueSummary = (): IssueSummaryState => {
     const res = useQuery<QueryValue>(QUERY)
-    if (res.loading) throw new Error('unavailable issue summary state')
+    // FIXME: this is poor practice as this causes UI to render with empty data
+    // instead of correctly handling the "loading" state.
+    if (res.loading) return EMPTY_ISSUE_SUMMARY
     return res.data.issueSummary
 }
 
