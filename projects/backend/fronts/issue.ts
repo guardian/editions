@@ -1,4 +1,4 @@
-import { MediaType } from '../common'
+import { MediaType, TrailImage } from '../common'
 
 export interface PublishedIssue {
     id: string
