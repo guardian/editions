@@ -172,9 +172,6 @@ export const patchArticle = (
     imageUse: ImageDeviceUses,
 ): [string, CAPIArticle] => {
     const sportScore = oc(furniture).sportScore()
-
-    // get article object without the oldTrailImage which is a different type
-
     switch (article.type) {
         case 'crossword':
             return [
