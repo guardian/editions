@@ -1,10 +1,9 @@
 import * as NetInfo from '@react-native-community/netinfo'
 import { NetInfoState, NetInfoStateType } from '@react-native-community/netinfo'
-import React, { Dispatch } from 'react'
+import { Dispatch } from 'react'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 import { useQuery } from './apollo'
-import { StyleSheet, View, TouchableWithoutFeedback, Text } from 'react-native'
 import { isEqual } from 'apollo-utilities'
 
 /**
@@ -178,12 +177,10 @@ export const createNetInfoResolver = () => {
         /**
          * Then we have the mutators for the debug controls.
          */
-        const setIsForcedOffline = (isForcedOffline: boolean) => {
+        const setIsForcedOffline = (isForcedOffline: boolean) =>
             update(async prevState => ({ ...prevState, isForcedOffline }))
-        }
-        const setIsDevButtonShown = (isDevButtonShown: boolean) => {
+        const setIsDevButtonShown = (isDevButtonShown: boolean) =>
             update(async prevState => ({ ...prevState, isDevButtonShown }))
-        }
 
         /**
          * Finally we initialize the result promise with our first value. By

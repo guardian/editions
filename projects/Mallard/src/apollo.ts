@@ -11,27 +11,7 @@ import { createScaledImageResolver } from './hooks/use-image-paths'
 import { createNetInfoResolver } from './hooks/use-net-info'
 import { createIssueSummaryResolver } from './hooks/use-issue-summary'
 import { createImageSizeResolver } from './helpers/screen'
-
-/**
- * The `Link` is the interface Apollo uses to reach GraphQL servers. Since we
- * don't fetch anything from GraphQL endpoints at the moment, we use a no-op
- * `Link` object. We *must* throw to prevent bad queries from carrying through.
- *
- * Apollo would try to use the `Link` if you have a query such as `{ foo }`
- * without the `@client` annotation. In our current use case, `@client` always
- * needs to be specified.
- */
-const link = {
-    split: () => {
-        throw new Error('Not implemented. Did you forget to use `@client`?')
-    },
-    concat: () => {
-        throw new Error('not implemented Did you forget to use `@client`?')
-    },
-    request: () => {
-        throw new Error('not implemented Did you forget to use `@client`?')
-    },
-}
+import { NON_IMPLEMENTED_LINK } from './helpers/apollo_link'
 
 export const createApolloClient = () => {
     /**
@@ -62,7 +42,7 @@ export const createApolloClient = () => {
 
     const client = new ApolloClient({
         cache: new InMemoryCache(),
-        link,
+        link: NON_IMPLEMENTED_LINK,
         resolvers,
     })
 
