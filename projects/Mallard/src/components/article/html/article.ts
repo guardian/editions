@@ -14,7 +14,7 @@ import { Line } from './components/line'
 import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { GetImagePath } from 'src/hooks/use-image-paths'
 import { Image as TImage } from '../../../../../Apps/common/src'
 import { getPillarColors } from 'src/helpers/transform'
 
@@ -22,10 +22,11 @@ interface ArticleContentProps {
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     imageSize: ImageSize
+    getImagePath: GetImagePath
 }
 
-const PictureArticleContent = (image: TImage) => {
-    const path = useImagePath(image)
+const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
+    const path = getImagePath(image)
     return Image({
         imageElement: {
             src: image,
@@ -38,7 +39,7 @@ const PictureArticleContent = (image: TImage) => {
 
 const renderArticleContent = (
     elements: BlockElement[],
-    { showMedia, publishedId }: ArticleContentProps,
+    { showMedia, publishedId, getImagePath }: ArticleContentProps,
 ) => {
     return elements
         .map(el => {
@@ -55,7 +56,7 @@ const renderArticleContent = (
                 case 'media-atom':
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image': {
-                    const path = useImagePath(el.src)
+                    const path = getImagePath(el.src)
                     return publishedId
                         ? Image({
                               imageElement: el,
@@ -88,6 +89,7 @@ export const renderArticle = (
         imageSize,
         type,
         theme,
+        getImagePath,
     }: {
         pillar: ArticlePillar
         topPadding: number
@@ -110,9 +112,10 @@ export const renderArticle = (
                 bylineHtml: article.bylineHtml,
                 showMedia,
                 canBeShared,
+                getImagePath,
             })
             if (article.image && publishedId) {
-                content = PictureArticleContent(article.image)
+                content = PictureArticleContent(article.image, getImagePath)
             }
             break
         case 'gallery':
@@ -125,11 +128,13 @@ export const renderArticle = (
                 image: article.image,
                 showMedia,
                 canBeShared,
+                getImagePath,
             })
             content = renderArticleContent(elements, {
                 showMedia,
                 publishedId,
                 imageSize,
+                getImagePath,
             })
             break
         default:
@@ -139,11 +144,13 @@ export const renderArticle = (
                 publishedId,
                 showMedia,
                 canBeShared,
+                getImagePath,
             })
             content = renderArticleContent(elements, {
                 showMedia,
                 publishedId,
                 imageSize,
+                getImagePath,
             })
             break
     }
