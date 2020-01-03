@@ -1,6 +1,6 @@
 import { ArticleType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
-import { useImagePath } from 'src/hooks/use-image-paths'
+import { GetImagePath } from 'src/hooks/use-image-paths'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -504,8 +504,16 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
 `
 
-const Image = ({ image, className }: { image: ImageT; className?: string }) => {
-    const path = useImagePath(image)
+const Image = ({
+    image,
+    className,
+    getImagePath,
+}: {
+    image: ImageT
+    className?: string
+    getImagePath: GetImagePath
+}) => {
+    const path = getImagePath(image)
     return html`
         <img class="${className}" src="${path}" />
     `
@@ -516,13 +524,15 @@ const MainMediaImage = ({
     className,
     children,
     preserveRatio,
+    getImagePath,
 }: {
     image: CreditedImage
     className?: string
     children?: string
     preserveRatio?: boolean
+    getImagePath: GetImagePath
 }) => {
-    const path = useImagePath(image)
+    const path = getImagePath(image)
 
     return html`
         <div
@@ -561,12 +571,14 @@ const hasLargeByline = (type: ArticleType) =>
 const Header = ({
     publishedId,
     type,
+    getImagePath,
     ...headerProps
 }: {
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     canBeShared: boolean
+    getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
     const largeByline = hasLargeByline(type)
@@ -596,6 +608,7 @@ const Header = ({
             MainMediaImage({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
+                getImagePath,
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -615,6 +628,7 @@ const Header = ({
                                       sportScore: headerProps.sportScore,
                                   })
                                 : undefined,
+                            getImagePath,
                         })}
                     ${headerProps.mainMedia &&
                         (headerProps.showMedia
@@ -648,6 +662,7 @@ const Header = ({
                                               <div>
                                                   ${Image({
                                                       image: cutout,
+                                                      getImagePath,
                                                   })}
                                               </div>
                                           `}
