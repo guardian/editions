@@ -43,10 +43,11 @@ const WebviewWithArticle = ({
     // This line ensures we don't re-render the article when
     // the network connection changes, see the comments around
     // `fetchImmediate` where it is defined
-    const [{ isConnected }] = useState(
-        client.readQuery({
-            query: gql('{ netInfo @client { isConnected @client } }'),
-        })!.netInfo.isConnected,
+    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
+        query: gql('{ netInfo @client { isConnected @client } }'),
+    })
+    const [isConnected] = useState(
+        data != null ? data.netInfo.isConnected : false,
     )
 
     // FIXME: pass this as article data instead so it's never out-of-sync?

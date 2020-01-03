@@ -170,7 +170,7 @@ export const createNetInfoResolver = () => {
         client
             .watchQuery<InnerQueryValue>({ query: INNER_QUERY })
             .subscribe(value => {
-                const wifiOnlyDownloads = value.data!.wifiOnlyDownloads
+                const wifiOnlyDownloads = value.data.wifiOnlyDownloads
                 update(async prevState => ({ ...prevState, wifiOnlyDownloads }))
             })
 
