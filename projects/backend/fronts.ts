@@ -167,22 +167,13 @@ export const patchArticleElements = (article: {
 }
 
 export const patchArticle = (
-    capiArticle: CAPIContent,
+    article: CAPIContent,
     furniture: PublishedFurniture,
     imageUse: ImageDeviceUses,
 ): [string, CAPIArticle] => {
     const sportScore = oc(furniture).sportScore()
 
     // get article object without the oldTrailImage which is a different type
-    const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        trailImage: oldTrailImage,
-        ...articleWithoutTrailImage
-    } = capiArticle
-    const article = {
-        trailImage: undefined,
-        ...articleWithoutTrailImage,
-    }
 
     switch (article.type) {
         case 'crossword':
