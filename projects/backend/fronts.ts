@@ -174,8 +174,8 @@ export const patchArticle = (
     const sportScore = oc(furniture).sportScore()
 
     // get article object without the oldTrailImage which is a different type
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         trailImage: oldTrailImage,
         ...articleWithoutTrailImage
     } = capiArticle

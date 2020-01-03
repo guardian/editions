@@ -1,4 +1,4 @@
-import { MediaType } from '../common'
+import { MediaType, TrailImage } from '../common'
 
 export interface PublishedIssue {
     id: string
@@ -42,7 +42,7 @@ export interface PublishedFurniture {
     showQuotedHeadline: boolean
     mediaType: MediaType
     imageSrcOverride?: PublishedImage
-    trailImage?: PublishedImage
+    trailImage: TrailImage | undefined
     sportScore?: string
     overrideArticleMainMedia: boolean
     coverCardImages?: PublishedCardImage
