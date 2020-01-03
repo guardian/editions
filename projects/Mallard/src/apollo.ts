@@ -9,6 +9,7 @@ import { resolveWeather } from './helpers/weather'
 import { resolveLocationPermissionStatus } from './helpers/location-permission'
 import { createScaledImageResolver } from './hooks/use-image-paths'
 import { initIssueSummary } from './hooks/use-issue-summary'
+import { createImageSizeResolver } from './helpers/screen'
 
 /**
  * The `Link` is the interface Apollo uses to reach GraphQL servers. Since we
@@ -52,6 +53,7 @@ export const createApolloClient = () => {
             weather: resolveWeather,
             locationPermissionStatus: resolveLocationPermissionStatus,
             scaledImage: createScaledImageResolver(),
+            imageSize: createImageSizeResolver(),
         },
     }
 
