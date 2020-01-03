@@ -39,9 +39,9 @@ const quoteStyles = ({ colors }: CssProps) => css`
         margin-bottom: calc(22px + 0.25em);
         margin-top: 0.25em;
         font-size: 1.1em;
-        -webkit-hyphens: auto;
-        -moz-hyphens: auto;
-        hyphens: auto;
+        -webkit-hyphens: manual;
+        -moz-hyphens: manual;
+        hyphens: manual;
         z-index: 10000;
     }
 
