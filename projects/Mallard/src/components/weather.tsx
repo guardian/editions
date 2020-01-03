@@ -16,14 +16,10 @@ import { NavigationInjectedProps } from 'react-navigation'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
-type QueryForecast = Pick<
-    Forecast,
-    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
->
 type Weather = {
     locationName: string
     isLocationPrecise: boolean
-    forecasts: QueryForecast[]
+    forecasts: Forecast[]
 }
 export type WeatherQueryData = {
     weather: Weather | null
@@ -34,15 +30,7 @@ export const WEATHER_QUERY = gql`
         weather @client {
             locationName
             isLocationPrecise
-            forecasts {
-                DateTime
-                Temperature {
-                    Value
-                    Unit
-                }
-                WeatherIcon
-                EpochDateTime
-            }
+            forecasts
         }
     }
 `

@@ -6,6 +6,8 @@ import Geolocation, {
 } from '@react-native-community/geolocation'
 import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
+import { QueryData } from '@apollo/react-hooks/lib/data/QueryData'
+import gql from 'graphql-tag'
 
 class CannotFetchError extends Error {}
 
@@ -86,6 +88,17 @@ const getCurrentLocation = async () => {
     return { accuLoc, isPrecise: true }
 }
 
+const QUERY = gql`
+    {
+        weather @client {
+            locationName @client
+            isLocationPrecise @client
+            forecasts @client
+            lastUpdated @client
+        }
+    }
+`
+
 export type Weather = {
     __typename: 'Weather'
     locationName: string
@@ -102,18 +115,7 @@ const makeWeatherObject = (
     __typename: 'Weather',
     locationName: accuLoc.EnglishName,
     isLocationPrecise: isPrecise,
-    forecasts: forecasts.map(forecast => ({
-        ...forecast,
-        Temperature: {
-            ...forecast.Temperature,
-            __typename: 'Temperature',
-        },
-        // Sometimes the api doesn't provide these fields but Apollo
-        // needs `null`s rather than missing fields.
-        PrecipitationType: forecast.PrecipitationType || null,
-        PrecipitationIntensity: forecast.PrecipitationIntensity || null,
-        __typename: 'Forecast',
-    })),
+    forecasts,
     lastUpdated: Date.now(),
 })
 
@@ -168,7 +170,7 @@ const { resolveWeather, refreshWeather } = (() => {
         // `weather` might have changed while we were awaiting, in which case
         // we don't want to update the cache with stale data.
         if (weather == newWeather)
-            client.writeData({ data: { weather: value } })
+            client.writeQuery({ query: QUERY, data: { weather: value } })
     }
 
     // When going foreground, we get the fresh weather (and potentially new
@@ -200,7 +202,7 @@ const { resolveWeather, refreshWeather } = (() => {
 
     const refreshWeather = async (client: ApolloClient<object>) => {
         if (weather == null) return
-        client.writeData({ data: { weather: null } })
+        client.writeQuery({ query: QUERY, data: { weather: null } })
         await update(client, null)
     }
 
