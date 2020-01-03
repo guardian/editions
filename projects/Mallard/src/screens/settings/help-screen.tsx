@@ -14,9 +14,11 @@ import {
     APPS_FEEDBACK_EMAIL,
 } from 'src/helpers/words'
 import { AccessContext } from 'src/authentication/AccessContext'
+import { useApolloClient } from '@apollo/react-hooks'
 
 const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
     const { attempt } = useContext(AccessContext)
+    const client = useApolloClient()
     return (
         <WithAppAppearance value={'settings'}>
             <ScrollContainer>
@@ -36,21 +38,25 @@ const HelpScreen = ({ navigation }: NavigationInjectedProps) => {
                 <List
                     data={[
                         createSupportMailto(
+                            client,
                             'Report an issue',
                             ISSUE_EMAIL,
                             attempt,
                         ),
                         createSupportMailto(
+                            client,
                             'Subscription, payment and billing issues',
                             SUBSCRIPTION_EMAIL,
                             attempt,
                         ),
                         createSupportMailto(
+                            client,
                             'Comment or query about an article',
                             READERS_EMAIL,
                             attempt,
                         ),
                         createSupportMailto(
+                            client,
                             'Send feedback',
                             APPS_FEEDBACK_EMAIL,
                             attempt,

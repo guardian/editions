@@ -48,8 +48,8 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
 
 const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const {
-        showDevButton: showNetInfoButton,
-        setShowDevButton: setShowNetInfoButton,
+        isDevButtonShown: showNetInfoButton,
+        setIsDevButtonShown: setShowNetInfoButton,
     } = useNetInfo()
     const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
 

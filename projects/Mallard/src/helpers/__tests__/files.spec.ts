@@ -5,6 +5,8 @@ import {
     issuesToDelete,
 } from '../files'
 import { issueSummaries } from '../../../../Apps/common/src/__tests__/fixtures/IssueSummary'
+import { DownloadBlockedStatus } from 'src/hooks/use-net-info'
+import ApolloClient from 'apollo-client'
 
 const createIssueSummary = (localId: string) => ({
     key: 'de/1-1-1',
@@ -14,6 +16,16 @@ const createIssueSummary = (localId: string) => ({
     publishedId: '1/1',
     assets: { data: '' },
 })
+
+const apolloClientMock: ApolloClient<object> = {
+    query: () => ({
+        data: {
+            netInfo: {
+                dowloadBlocked: DownloadBlockedStatus.NotBlocked,
+            },
+        },
+    }),
+} as any
 
 describe('helpers/files', () => {
     describe('matchSummmaryToKey', () => {
@@ -34,6 +46,7 @@ describe('helpers/files', () => {
         it('should resolve the outer promise when the download runner resolves', async () => {
             const localId = '1'
             const p = downloadAndUnzipIssue(
+                apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
                 () => {},
@@ -48,6 +61,7 @@ describe('helpers/files', () => {
         it('should not set any statuses without the passed promise calling an updater', async () => {
             const updateStatus = jest.fn(() => {})
             const p = downloadAndUnzipIssue(
+                apolloClientMock,
                 createIssueSummary('1'),
                 'phone',
                 updateStatus,
@@ -59,12 +73,14 @@ describe('helpers/files', () => {
         it('should create new downloads when previous ones have finished', async () => {
             const localId = '1'
             const p1 = downloadAndUnzipIssue(
+                apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
                 () => {},
                 () => Promise.resolve(),
             )
             const p2 = downloadAndUnzipIssue(
+                apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
                 () => {},
@@ -72,6 +88,7 @@ describe('helpers/files', () => {
             )
             await Promise.all([p1, p2])
             const p3 = downloadAndUnzipIssue(
+                apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
                 () => {},

@@ -1,4 +1,3 @@
-import { fetchImmediate } from 'src/hooks/use-net-info'
 import React, { useState } from 'react'
 import { WebView, WebViewProps } from 'react-native-webview'
 import { ArticleType } from 'src/common'
@@ -7,8 +6,9 @@ import { Article, PictureArticle, GalleryArticle, ImageSize } from 'src/common'
 import { renderArticle } from '../../html/article'
 import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
-import { useQuery } from 'src/hooks/apollo'
+import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { useQuery } from 'src/hooks/apollo'
 import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
@@ -39,10 +39,16 @@ const WebviewWithArticle = ({
     topPadding: number
     origin: IssueOrigin
 } & WebViewProps & { onScroll?: any }) => {
+    const client = useApolloClient()
     // This line ensures we don't re-render the article when
     // the network connection changes, see the comments around
     // `fetchImmediate` where it is defined
-    const [{ isConnected }] = useState(fetchImmediate())
+    const data = client.readQuery<{ netInfo: { isConnected: boolean } }>({
+        query: gql('{ netInfo @client { isConnected @client } }'),
+    })
+    const [isConnected] = useState(
+        data != null ? data.netInfo.isConnected : false,
+    )
 
     // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()

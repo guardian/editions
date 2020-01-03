@@ -1,4 +1,4 @@
-import * as NetInfo from 'src/hooks/use-net-info'
+import { Dispatch } from 'react'
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
@@ -7,7 +7,6 @@ import gql from 'graphql-tag'
 import { getSetting } from '../helpers/settings'
 import { useQuery } from './apollo'
 import ApolloClient from 'apollo-client'
-import { Dispatch } from 'react'
 
 interface IssueSummaryState {
     __typename: 'IssueSummary'
@@ -48,12 +47,16 @@ const QUERY = gql`
     }
 `
 
+type NetInfoQueryValue = { netInfo: { isConnected: boolean } }
+const NET_INFO_QUERY = gql('{netInfo @client {isConnected @client}}')
+
 /**
  * Based on the previous value and current environment conditions (ex. network),
  * fetch a new version of the list of issues and update to the latest issue
  * available if a new one was published.
  */
 const refetch = async (
+    client: ApolloClient<object>,
     prevIssueSummary: IssueSummaryState,
 ): Promise<IssueSummaryState> => {
     // FIXME: `prevIssueSummary.issueSummary` is weird naming. Rename this
@@ -63,7 +66,11 @@ const refetch = async (
         prevIssueSummary.issueSummary &&
         issueSummaryToLatestPath(prevIssueSummary.issueSummary)
 
-    const { isConnected } = await NetInfo.fetch()
+    const netInfoRes = await client.query<NetInfoQueryValue>({
+        query: NET_INFO_QUERY,
+    })
+    const isConnected = netInfoRes.data.netInfo.isConnected
+
     let issueSummary: IssueSummary[]
     try {
         issueSummary = await getIssueSummary(isConnected)
@@ -153,17 +160,22 @@ export const createIssueSummaryResolver = () => {
             client.writeQuery({ query: QUERY, data: { issueSummary } })
         }
 
-        const refetchUpdate = update.bind(null, refetch)
+        const refetchUpdate = update.bind(null, refetch.bind(null, client))
 
         // Otherwise we register our callbacks:
         //
         // 1. When we connect and the summary we already have isn't from API,
         //    fetch a fresh one.
-        NetInfo.addEventListener(async ({ isConnected }) => {
-            const issueSummary = await result
-            if (issueSummary && !issueSummary.isFromAPI && isConnected)
-                refetchUpdate()
-        })
+        {
+            client
+                .watchQuery<NetInfoQueryValue>({ query: NET_INFO_QUERY })
+                .subscribe(async res => {
+                    const issueSummary = await result
+                    const { isConnected } = res.data.netInfo
+                    if (issueSummary && !issueSummary.isFromAPI && isConnected)
+                        refetchUpdate()
+                })
+        }
 
         // 2. When we foreground, just always refresh the summary (note: we
         //    might want to consider refreshing only if the data is older than X
@@ -196,7 +208,10 @@ export const createIssueSummaryResolver = () => {
         }
 
         // Finally, grab the initial value for the issue summary and return it.
-        return (result = refetch({ ...EMPTY_ISSUE_SUMMARY, setIssueId }))
+        return (result = refetch(client, {
+            ...EMPTY_ISSUE_SUMMARY,
+            setIssueId,
+        }))
     }
 }
 
