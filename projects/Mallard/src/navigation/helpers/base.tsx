@@ -89,13 +89,13 @@ const navigateToIssueList = (navigation: NavigationScreenProp<{}>): void => {
 export interface IssueNavigationProps {
     path?: PathToIssue
     issue?: Issue
-    initialFrontKey?: string
+    initialFrontKey?: string | null
 }
 
 interface NavigateToIssueProps {
     navigation: NavigationScreenProp<{}>
     navigationProps: IssueNavigationProps
-    setIssueId: (path: PathToIssue, navigationProps?: string) => void
+    setIssueId: (path: PathToIssue, initialFrontKey?: string | null) => void
 }
 
 const navigateToIssue = ({

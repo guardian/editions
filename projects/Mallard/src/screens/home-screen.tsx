@@ -116,7 +116,7 @@ const IssueRowContainer = React.memo(
         const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
-            (initialFrontKey?: string) =>
+            (initialFrontKey: string | null) =>
                 navigateToIssue({
                     navigation,
                     navigationProps: {
@@ -133,7 +133,8 @@ const IssueRowContainer = React.memo(
 
         const onPress = useCallback(() => {
             if (issueDetails != null) {
-                navToIssue()
+                setNavPosition(null)
+                navToIssue(null)
                 return
             }
             setLocalIssueId({
@@ -141,10 +142,10 @@ const IssueRowContainer = React.memo(
                 publishedIssueId: publishedId,
             })
         }, [
+            setNavPosition,
             navToIssue,
             issueDetails,
             setLocalIssueId,
-            setIssueId,
             localId,
             publishedId,
         ])
@@ -163,7 +164,7 @@ const IssueRowContainer = React.memo(
                 }
                 navToIssue(frontKey)
             },
-            [setNavPosition, navToIssue, issueId],
+            [setNavPosition, navToIssue, issueId, publishedId, localId],
         )
 
         return (
@@ -286,7 +287,7 @@ const IssueListView = withNavigation(
                         navigation={navigation}
                     />
                 ),
-                [currentIssueIndex, details, navigation],
+                [currentIssueIndex, details, navigation, setIssueId],
             )
 
             // Height of the fronts so we can provide this to `getItemLayout`.
