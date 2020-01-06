@@ -1,7 +1,7 @@
 import { useNetInfo } from 'src/hooks/use-net-info'
-import { NetInfoStateType } from 'src/hooks/use-net-info'
 import { useEffect } from 'react'
 import { useToast } from 'src/hooks/use-toast'
+import { NetInfoStateType } from '@react-native-community/netinfo'
 
 const NetInfoAutoToast = () => {
     const { showToast } = useToast()

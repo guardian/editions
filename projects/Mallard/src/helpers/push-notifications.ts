@@ -17,6 +17,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
 import { pushTracking } from 'src/helpers/push-tracking'
+import ApolloClient from 'apollo-client'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -66,7 +67,7 @@ const maybeRegister = async (
     return false
 }
 
-const pushNotifcationRegistration = () => {
+const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
     PushNotification.configure({
         onRegister: (token: { token: string } | undefined) => {
             pushTracking(
@@ -121,7 +122,11 @@ const pushNotifcationRegistration = () => {
                         JSON.stringify(pushImageSummary),
                     )
 
-                    await downloadAndUnzipIssue(pushImageSummary, screenSize)
+                    await downloadAndUnzipIssue(
+                        apolloClient,
+                        pushImageSummary,
+                        screenSize,
+                    )
 
                     await pushTracking('pushDownloadComplete', 'completed')
 

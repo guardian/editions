@@ -22,7 +22,8 @@ import cas from './authorizers/CASAuthorizer'
 import iap from './authorizers/IAPAuthorizer'
 import { CASExpiry } from './services/cas'
 import { ReceiptIOS } from './services/iap'
-import * as NetInfo from 'src/hooks/use-net-info'
+import { useApolloClient } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 type AttemptType = 'iap' | 'cas' | 'identity'
 
@@ -90,6 +91,7 @@ const AccessProvider = ({
     const [iapAuth, setIAPAuth] = useState<AnyAttempt<ReceiptIOS>>(
         controller.authorizerMap.iap.getAttempt(),
     )
+    const client = useApolloClient()
 
     useEffect(() => {
         const unsubController = controller.subscribe(setAttempt)
@@ -101,9 +103,15 @@ const AccessProvider = ({
         )
         const unsubCAS = controller.authorizerMap.cas.subscribe(setCASAuth)
         const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth)
-        NetInfo.addEventListener(info =>
-            controller.handleConnectionStatusChanged(info.isConnected),
-        )
+        client
+            .watchQuery({
+                query: gql('{ netInfo @client { isConnected @client } }'),
+            })
+            .subscribe(res => {
+                controller.handleConnectionStatusChanged(
+                    res.data.netInfo.isConnected,
+                )
+            })
         return () => {
             unsubController()
             unsubIdentity()
