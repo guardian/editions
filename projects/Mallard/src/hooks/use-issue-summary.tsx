@@ -14,6 +14,7 @@ interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
     issueId: PathToIssue | null
     error: string
+    initialFrontKey: string | null
     setIssueId: Dispatch<PathToIssue>
 }
 
@@ -42,6 +43,7 @@ const QUERY = gql`
             issueSummary @client
             issueId @client
             setIssueId @client
+            initialFrontKey @client
             error @client
         }
     }
@@ -62,7 +64,6 @@ const refetch = async (
     // FIXME: `prevIssueSummary.issueSummary` is weird naming. Rename this
     // (however this requires refactoring the places using it).
     const previousLatest =
-        prevIssueSummary &&
         prevIssueSummary.issueSummary &&
         issueSummaryToLatestPath(prevIssueSummary.issueSummary)
 
@@ -88,9 +89,10 @@ const refetch = async (
     }
 
     const newLatest = issueSummaryToLatestPath(issueSummary)
-    let issueId = prevIssueSummary && prevIssueSummary.issueId
+    let { issueId, initialFrontKey } = prevIssueSummary
 
-    // Update to latest issue if there is a new latest issue
+    // Update to latest issue if there is a new latest issue, and clear up the
+    // initial Fronts key as we want to show the issue scrolled to the very top.
     if (
         issueId == null ||
         !previousLatest ||
@@ -98,6 +100,7 @@ const refetch = async (
             previousLatest.publishedIssueId !== newLatest.publishedIssueId)
     ) {
         issueId = newLatest
+        initialFrontKey = null
     }
 
     return {
@@ -105,6 +108,7 @@ const refetch = async (
         isFromAPI: isConnected,
         issueSummary,
         issueId,
+        initialFrontKey,
         error: '',
     }
 }
@@ -115,6 +119,7 @@ const EMPTY_ISSUE_SUMMARY: IssueSummaryState = {
     issueSummary: null,
     issueId: null,
     error: '',
+    initialFrontKey: null,
     setIssueId: () => {},
 }
 
@@ -200,10 +205,11 @@ export const createIssueSummaryResolver = () => {
          * Enqueue an update that simply set a new issue ID, no fetch happening.
          * This can be called when selecting a new issue in the UI.
          */
-        const setIssueId = (issueId: PathToIssue) => {
+        const setIssueId = (issueId: PathToIssue, frontKey?: string) => {
             update(async prevIssueSummary => ({
                 ...prevIssueSummary,
                 issueId,
+                initialFrontKey: frontKey != null ? frontKey : null,
             }))
         }
 

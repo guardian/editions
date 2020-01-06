@@ -13,7 +13,7 @@ interface Position {
     articleIndex: number // X coordinate
 }
 
-type Subscriber = ((p: Position) => void) | undefined
+type Subscriber = ((p: Position | null) => void) | undefined
 type SubscriberRef = MutableRefObject<Subscriber> | undefined
 const NavPositionContext = createContext<SubscriberRef>(undefined)
 
@@ -27,12 +27,13 @@ export const NavPositionProvider = ({ children }: Props) => (
 /**
  * Return a function to set the current position of the view
  * showing the current issue. `state` is a ref so never changes, so this will
- * never cause a re-render.
+ * never cause a re-render. A position of `null` means we should scroll to the
+ * very top (ex. where the weather is shown).
  */
 export const useSetNavPosition = () => {
     const state = useContext(NavPositionContext)
     return useCallback(
-        (newPosition: Position) => {
+        (newPosition: Position | null) => {
             if (state === undefined) return
             if (state.current !== undefined) state.current(newPosition)
         },
@@ -46,7 +47,7 @@ export const useSetNavPosition = () => {
  * just as with `useEffect`.
  */
 export const useNavPositionChange = (
-    handler: (p: Position) => void,
+    handler: (p: Position | null) => void,
     deps: DependencyList = [],
 ) => {
     const state = useContext(NavPositionContext)
