@@ -396,7 +396,7 @@ const IssueListFetchContainer = () => {
     const data = useIssueSummary()
     const issueSummary = data.issueSummary || NO_ISSUES
     const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID)
-    // const { localIssueId, publishedIssueId } = issueId
+
     const resp = useIssueResponse(issueId)
     return resp({
         error: (error: {}) => (
