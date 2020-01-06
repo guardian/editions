@@ -6,7 +6,6 @@ import Geolocation, {
 } from '@react-native-community/geolocation'
 import { resolveLocationPermissionStatus } from './location-permission'
 import { RESULTS } from 'react-native-permissions'
-import { QueryData } from '@apollo/react-hooks/lib/data/QueryData'
 import gql from 'graphql-tag'
 
 class CannotFetchError extends Error {}

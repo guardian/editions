@@ -134,23 +134,16 @@ const styles = StyleSheet.create({
     },
 })
 
-/**
- * In future iterations we will use the device to access the user's lat/lon co-ordinates
- * and make a request to http://mobile-weather.guardianapis.com/locations/v1/cities/geoposition/search?q=$LAT,$LON
- * in order to fetch a more specific location code to make the below request. This will require permission from the user
- * to use their location.
- */
-
 export interface WeatherForecast {
     locationName: string
-    forecasts: QueryForecast[]
+    forecasts: Forecast[]
 }
 
 const WeatherIconView = ({
     forecast,
     iconSize = 1,
 }: {
-    forecast: QueryForecast
+    forecast: Forecast
     iconSize?: number
 }) => {
     const info = (
