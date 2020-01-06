@@ -12,11 +12,9 @@ import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { pushTracking } from 'src/helpers/push-tracking'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
-import { fetch } from '@react-native-community/netinfo'
-import {
-    getDownloadBlockedStatus,
-    DownloadBlockedStatus,
-} from 'src/hooks/use-net-info'
+import { NetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
+import gql from 'graphql-tag'
+import ApolloClient from 'apollo-client'
 
 interface BasicFile {
     filename: string
@@ -253,17 +251,30 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
     }
 }
 
+type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
+const DOWNLOAD_BLOCKED_QUERY = gql`
+    {
+        netInfo @client {
+            downloadBlocked @client
+        }
+    }
+`
+
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
 export const downloadAndUnzipIssue = async (
+    client: ApolloClient<object>,
     issue: IssueSummary,
     imageSize: ImageSize,
     onProgress: (status: DLStatus) => void = () => {},
     run = runDownload,
 ) => {
-    const downloadBlocked = getDownloadBlockedStatus(
-        ...(await Promise.all([fetch(), getSetting('wifiOnlyDownloads')])),
-    )
+    const queryResult = await client.query<DlBlkQueryValue>({
+        query: DOWNLOAD_BLOCKED_QUERY,
+    })
+    const {
+        netInfo: { downloadBlocked },
+    } = queryResult.data
 
     if (downloadBlocked !== DownloadBlockedStatus.NotBlocked) {
         await pushTracking(
@@ -335,7 +346,7 @@ export const matchSummmaryToKey = (
     return summaryMatch || null
 }
 
-export const downloadTodaysIssue = async () => {
+export const downloadTodaysIssue = async (client: ApolloClient<object>) => {
     const todaysKey = todayAsKey()
     try {
         const issueSummaries = await getIssueSummary()
@@ -353,7 +364,7 @@ export const downloadTodaysIssue = async () => {
         // Only download it if its not on the device
         if (!isTodaysIssueOnDevice) {
             const imageSize = await imageForScreenSize()
-            return downloadAndUnzipIssue(todaysIssueSummary, imageSize)
+            return downloadAndUnzipIssue(client, todaysIssueSummary, imageSize)
         }
     } catch (e) {
         console.log(`Unable to download todays issue: ${e.message}`)

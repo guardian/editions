@@ -16,14 +16,10 @@ import { NavigationInjectedProps } from 'react-navigation'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
 
-type QueryForecast = Pick<
-    Forecast,
-    'DateTime' | 'Temperature' | 'WeatherIcon' | 'EpochDateTime'
->
 type Weather = {
     locationName: string
     isLocationPrecise: boolean
-    forecasts: QueryForecast[]
+    forecasts: Forecast[]
 }
 export type WeatherQueryData = {
     weather: Weather | null
@@ -34,15 +30,7 @@ export const WEATHER_QUERY = gql`
         weather @client {
             locationName
             isLocationPrecise
-            forecasts {
-                DateTime
-                Temperature {
-                    Value
-                    Unit
-                }
-                WeatherIcon
-                EpochDateTime
-            }
+            forecasts
         }
     }
 `
@@ -146,23 +134,16 @@ const styles = StyleSheet.create({
     },
 })
 
-/**
- * In future iterations we will use the device to access the user's lat/lon co-ordinates
- * and make a request to http://mobile-weather.guardianapis.com/locations/v1/cities/geoposition/search?q=$LAT,$LON
- * in order to fetch a more specific location code to make the below request. This will require permission from the user
- * to use their location.
- */
-
 export interface WeatherForecast {
     locationName: string
-    forecasts: QueryForecast[]
+    forecasts: Forecast[]
 }
 
 const WeatherIconView = ({
     forecast,
     iconSize = 1,
 }: {
-    forecast: QueryForecast
+    forecast: Forecast
     iconSize?: number
 }) => {
     const info = (

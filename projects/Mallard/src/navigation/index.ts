@@ -34,7 +34,7 @@ import { mapNavigationToProps } from './helpers/base'
 import { createArticleNavigator } from './navigators/article'
 import { createHeaderStackNavigator } from './navigators/header'
 import { createModalNavigator } from './navigators/modal'
-import { createUnderlayNavigator } from './navigators/underlay'
+import { createSidebarNavigator } from './navigators/sidebar'
 import { routeNames } from './routes'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
@@ -77,12 +77,9 @@ const dynamicModalTransition = (
 }
 
 const AppStack = createModalNavigator(
-    createUnderlayNavigator(
-        createArticleNavigator(IssueScreen, ArticleScreen),
-        {
-            [routeNames.IssueList]: HomeScreen,
-        },
-    ),
+    createSidebarNavigator(createArticleNavigator(IssueScreen, ArticleScreen), {
+        [routeNames.IssueList]: HomeScreen,
+    }),
     {
         [routeNames.ManageEditions]: createHeaderStackNavigator({
             [routeNames.ManageEditions]: ManageEditionScreenFromIssuePicker,
