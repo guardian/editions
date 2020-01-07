@@ -6,7 +6,7 @@ const NEWLINE = '\n'
 const removeWhiteSpace = s => s.trim()
 const isNonEmpty = s => s
 
-const appRelativePath = argv.appRelativePath || '../../../Mallard/'
+const appRelativePath = argv.appRelativePath || './'
 
 /**
  *
