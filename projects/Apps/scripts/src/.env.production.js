@@ -32,10 +32,9 @@ const getValueFromEnvironment = key => {
     return `${writeKey}=${value}`
 }
 const writeToFile = (relativePaths, data) =>
-    relativePaths.forEach(relativePath => {
-        console.log(path.join(process.cwd(), relativePath))
-        return fs.writeFileSync(path.join(process.cwd(), relativePath), data)
-    })
+    relativePaths.forEach(relativePath =>
+        fs.writeFileSync(path.join(process.cwd(), relativePath), data),
+    )
 
 const writeEnvVarsToFiles = (...paths) => strings =>
     writeToFile(
