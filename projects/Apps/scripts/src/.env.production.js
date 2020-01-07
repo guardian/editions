@@ -31,10 +31,12 @@ const getValueFromEnvironment = key => {
         throw new Error(`Could not find ${readKey} in environment`)
     return `${writeKey}=${value}`
 }
-const writeToFile = (relativePaths, data) =>
-    relativePaths.forEach(relativePath =>
-        fs.writeFileSync(path.join(process.cwd(), relativePath), data),
-    )
+const writeToFile = (relativePaths, data) => {
+    console.log(path.join(process.cwd(), relativePath))
+    return relativePaths.forEach(relativePath =>
+        fs.writeFileSync(path.join(process.cwd(), relativePath), data)
+}
+    
 
 const writeEnvVarsToFiles = (...paths) => strings =>
     writeToFile(
