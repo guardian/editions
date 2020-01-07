@@ -13,8 +13,8 @@ import {
     CrosswordArticle,
     PictureArticle,
     CapiDateTime as CapiDateTime32,
-    Image,
     MediaAtomElement,
+    TrailImage,
 } from '../common'
 import {
     BufferedTransport,
@@ -36,13 +36,12 @@ type NotInCAPI =
     | 'mediaType'
     | 'slideshowImages'
     | 'sportScore'
-    | 'trailImage'
 
 type OptionalInCAPI = 'kicker' | 'bylineImages' | 'trail' | 'articleType'
 
 interface CAPIExtras {
     path: string
-    trailImage?: Image
+    trailImage: TrailImage | undefined
 }
 
 export type CArticle = Omit<Article, NotInCAPI | OptionalInCAPI> &
@@ -233,6 +232,7 @@ const parseArticleResult = async (
                     trail,
                     path: path,
                     headline: title,
+                    trailImage: undefined,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
@@ -334,6 +334,7 @@ export const getArticles = async (
 
     //If we fail to get an article in a collection we just ignore it and move on.
     articlePromises.forEach(attempt => {
+        console.log('Got article: ' + JSON.stringify(attempt))
         if (hasFailed(attempt)) {
             console.log('failure when parsing', attempt.error)
         }
