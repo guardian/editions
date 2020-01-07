@@ -6,7 +6,6 @@ const createEditionToDisplayNameMap = () => {
     map.set('american-edition', 'American Edition')
     map.set('australian-edition', 'Australian Edition')
     map.set('training-edition', 'Training Edition')
-    map.set('the-dummy-edition', 'The Dummy Edition')
     return map
 }
 
