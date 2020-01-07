@@ -39,7 +39,7 @@ export const getImagesFromArticle = (
     console.log('Byline images are: ' + JSON.stringify(bylineImages))
 
     const image = article.image
-    console.log('Article image is: ' + JSON.stringify(image))
+    console.log('Main media image is: ' + JSON.stringify(image))
 
     const trailImage = article.trailImage
     console.log('Trail image is: ' + JSON.stringify(trailImage))
