@@ -117,9 +117,6 @@ Total Disk Space: ${totalDiskCapacity}
 Available Disk Spce: ${freeDiskStorage}
 Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
 
-Push Notification Logs: ${pushTracking &&
-        JSON.stringify(JSON.parse(pushTracking), null, 2)}
-
 -User / Supporter Info-
 Signed In: ${isValid(authAttempt)}
 Digital Pack subscription: ${idData && canViewEdition(idData)}
