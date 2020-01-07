@@ -34,15 +34,15 @@ export const getImagesFromArticle = (
 
     const elements = article.type !== 'crossword' ? article.elements : []
 
-    const images = elements.map(getImageFromElement)
-    console.log('Images are: ' + JSON.stringify(images))
-
     const cardImages = [article.cardImage, article.cardImageTablet]
     console.log('Card images are: ' + JSON.stringify(cardImages))
 
     const bylineImages =
         (article.bylineImages && [article.bylineImages.cutout]) || []
     console.log('Byline images are: ' + JSON.stringify(bylineImages))
+
+    const images = elements.map(getImageFromElement)
+    console.log('Images are: ' + JSON.stringify(images))
 
     const requiredImages = [
         ...images,
