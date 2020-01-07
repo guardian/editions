@@ -26,6 +26,12 @@ const getImageFromElement = (element: BlockElement): Image | undefined => {
 export const getImagesFromArticle = (
     article: CAPIArticle,
 ): (Image | TrailImage)[] => {
+    const image = article.image
+    console.log('Main media image is: ' + JSON.stringify(image))
+
+    const trailImage = article.trailImage
+    console.log('Trail image is: ' + JSON.stringify(trailImage))
+
     const elements = article.type !== 'crossword' ? article.elements : []
 
     const images = elements.map(getImageFromElement)
@@ -37,12 +43,6 @@ export const getImagesFromArticle = (
     const bylineImages =
         (article.bylineImages && [article.bylineImages.cutout]) || []
     console.log('Byline images are: ' + JSON.stringify(bylineImages))
-
-    const image = article.image
-    console.log('Main media image is: ' + JSON.stringify(image))
-
-    const trailImage = article.trailImage
-    console.log('Trail image is: ' + JSON.stringify(trailImage))
 
     const requiredImages = [
         ...images,
