@@ -9,7 +9,7 @@ import {
     PublishedImage,
     PublishedCardImage,
 } from '../fronts/issue'
-import { CreditedImage, ArticleType, Image } from '../../Apps/common/src'
+import { CreditedImage, ArticleType, TrailImage } from '../../Apps/common/src'
 
 const notUsed = {
     use: {
@@ -119,9 +119,13 @@ describe('fronts', () => {
             source: 'test',
         }
 
-        const trailImg: Image = {
+        const trailImg: TrailImage = {
             path: 'trail/asset.com',
             source: 'test',
+            use: {
+                mobile: 'not-used',
+                tablet: 'not-used',
+            },
         }
 
         const pubImg: PublishedImage = {
