@@ -1,4 +1,4 @@
-import * as NetInfo from 'src/hooks/use-net-info'
+import { Dispatch } from 'react'
 import { PathToIssue } from 'src/paths'
 import { IssueSummary } from '../common'
 import { fetchAndStoreIssueSummary, readIssueSummary } from '../helpers/files'
@@ -7,7 +7,6 @@ import gql from 'graphql-tag'
 import { getSetting } from '../helpers/settings'
 import { useQuery } from './apollo'
 import ApolloClient from 'apollo-client'
-import { Dispatch } from 'react'
 
 interface IssueSummaryState {
     __typename: 'IssueSummary'
@@ -15,6 +14,7 @@ interface IssueSummaryState {
     issueSummary: IssueSummary[] | null
     issueId: PathToIssue | null
     error: string
+    initialFrontKey: string | null
     setIssueId: Dispatch<PathToIssue>
 }
 
@@ -43,10 +43,14 @@ const QUERY = gql`
             issueSummary @client
             issueId @client
             setIssueId @client
+            initialFrontKey @client
             error @client
         }
     }
 `
+
+type NetInfoQueryValue = { netInfo: { isConnected: boolean } }
+const NET_INFO_QUERY = gql('{netInfo @client {isConnected @client}}')
 
 /**
  * Based on the previous value and current environment conditions (ex. network),
@@ -54,16 +58,20 @@ const QUERY = gql`
  * available if a new one was published.
  */
 const refetch = async (
+    client: ApolloClient<object>,
     prevIssueSummary: IssueSummaryState,
 ): Promise<IssueSummaryState> => {
     // FIXME: `prevIssueSummary.issueSummary` is weird naming. Rename this
     // (however this requires refactoring the places using it).
     const previousLatest =
-        prevIssueSummary &&
         prevIssueSummary.issueSummary &&
         issueSummaryToLatestPath(prevIssueSummary.issueSummary)
 
-    const { isConnected } = await NetInfo.fetch()
+    const netInfoRes = await client.query<NetInfoQueryValue>({
+        query: NET_INFO_QUERY,
+    })
+    const isConnected = netInfoRes.data.netInfo.isConnected
+
     let issueSummary: IssueSummary[]
     try {
         issueSummary = await getIssueSummary(isConnected)
@@ -81,9 +89,10 @@ const refetch = async (
     }
 
     const newLatest = issueSummaryToLatestPath(issueSummary)
-    let issueId = prevIssueSummary && prevIssueSummary.issueId
+    let { issueId, initialFrontKey } = prevIssueSummary
 
-    // Update to latest issue if there is a new latest issue
+    // Update to latest issue if there is a new latest issue, and clear up the
+    // initial Fronts key as we want to show the issue scrolled to the very top.
     if (
         issueId == null ||
         !previousLatest ||
@@ -91,6 +100,7 @@ const refetch = async (
             previousLatest.publishedIssueId !== newLatest.publishedIssueId)
     ) {
         issueId = newLatest
+        initialFrontKey = null
     }
 
     return {
@@ -98,6 +108,7 @@ const refetch = async (
         isFromAPI: isConnected,
         issueSummary,
         issueId,
+        initialFrontKey,
         error: '',
     }
 }
@@ -108,6 +119,7 @@ const EMPTY_ISSUE_SUMMARY: IssueSummaryState = {
     issueSummary: null,
     issueId: null,
     error: '',
+    initialFrontKey: null,
     setIssueId: () => {},
 }
 
@@ -153,17 +165,22 @@ export const createIssueSummaryResolver = () => {
             client.writeQuery({ query: QUERY, data: { issueSummary } })
         }
 
-        const refetchUpdate = update.bind(null, refetch)
+        const refetchUpdate = update.bind(null, refetch.bind(null, client))
 
         // Otherwise we register our callbacks:
         //
         // 1. When we connect and the summary we already have isn't from API,
         //    fetch a fresh one.
-        NetInfo.addEventListener(async ({ isConnected }) => {
-            const issueSummary = await result
-            if (issueSummary && !issueSummary.isFromAPI && isConnected)
-                refetchUpdate()
-        })
+        {
+            client
+                .watchQuery<NetInfoQueryValue>({ query: NET_INFO_QUERY })
+                .subscribe(async res => {
+                    const issueSummary = await result
+                    const { isConnected } = res.data.netInfo
+                    if (issueSummary && !issueSummary.isFromAPI && isConnected)
+                        refetchUpdate()
+                })
+        }
 
         // 2. When we foreground, just always refresh the summary (note: we
         //    might want to consider refreshing only if the data is older than X
@@ -188,15 +205,19 @@ export const createIssueSummaryResolver = () => {
          * Enqueue an update that simply set a new issue ID, no fetch happening.
          * This can be called when selecting a new issue in the UI.
          */
-        const setIssueId = (issueId: PathToIssue) => {
+        const setIssueId = (issueId: PathToIssue, frontKey?: string) => {
             update(async prevIssueSummary => ({
                 ...prevIssueSummary,
                 issueId,
+                initialFrontKey: frontKey != null ? frontKey : null,
             }))
         }
 
         // Finally, grab the initial value for the issue summary and return it.
-        return (result = refetch({ ...EMPTY_ISSUE_SUMMARY, setIssueId }))
+        return (result = refetch(client, {
+            ...EMPTY_ISSUE_SUMMARY,
+            setIssueId,
+        }))
     }
 }
 

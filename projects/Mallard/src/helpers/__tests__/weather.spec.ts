@@ -58,11 +58,7 @@ const getExpectedWeather = () => ({
     lastUpdated: now,
     forecasts: [
         {
-            __typename: 'Forecast',
             DateTime: forecasts[0].DateTime,
-            PrecipitationIntensity: null,
-            PrecipitationType: null,
-            Temperature: { __typename: 'Temperature' },
         },
     ],
 })
@@ -79,7 +75,7 @@ beforeEach(() => {
 })
 
 it('should resolve and update the weather', async () => {
-    const client = { writeData: jest.fn() } as any
+    const client = { writeQuery: jest.fn() } as any
     let res = await resolveWeather({}, {}, { client })
     expect(res).toEqual(getExpectedWeather())
     expect(fetch).toHaveBeenCalledTimes(3)
@@ -88,7 +84,7 @@ it('should resolve and update the weather', async () => {
     res = await resolveWeather({}, {}, { client })
     expect(res).toEqual(getExpectedWeather())
 
-    expect(client.writeData).not.toHaveBeenCalled()
+    expect(client.writeQuery).not.toHaveBeenCalled()
     expect(fetch).toHaveBeenCalledTimes(3)
 
     forecasts = [{ DateTime: '1234' }]
@@ -101,20 +97,22 @@ it('should resolve and update the weather', async () => {
     res = await resolveWeather({}, {}, { client })
     expect(res).toEqual(getExpectedWeather())
 
-    expect(client.writeData).toHaveBeenCalledWith({
+    expect(client.writeQuery).toHaveBeenCalledWith({
+        query: expect.anything(),
         data: { weather: res },
     })
 })
 
 it('should refresh the weather completely', async () => {
-    const client = { writeData: jest.fn() } as any
+    const client = { writeQuery: jest.fn() } as any
     await resolveWeather({}, {}, { client })
 
     forecasts = [{ DateTime: '1234' }]
     const refreshPromise = refreshWeather(client)
 
-    expect(client.writeData).toHaveBeenCalledTimes(1)
-    expect(client.writeData).toHaveBeenCalledWith({
+    expect(client.writeQuery).toHaveBeenCalledTimes(1)
+    expect(client.writeQuery).toHaveBeenCalledWith({
+        query: expect.anything(),
         data: {
             weather: null,
         },
@@ -122,8 +120,9 @@ it('should refresh the weather completely', async () => {
 
     await refreshPromise
 
-    expect(client.writeData).toHaveBeenCalledTimes(2)
-    expect(client.writeData).toHaveBeenCalledWith({
+    expect(client.writeQuery).toHaveBeenCalledTimes(2)
+    expect(client.writeQuery).toHaveBeenCalledWith({
+        query: expect.anything(),
         data: { weather: getExpectedWeather() },
     })
 })
@@ -131,7 +130,7 @@ it('should refresh the weather completely', async () => {
 it('should fetch real location if available', async () => {
     check.mockResolvedValue(RESULTS.GRANTED)
 
-    const client = { writeData: jest.fn() } as any
+    const client = { writeQuery: jest.fn() } as any
     const res = await resolveWeather({}, {}, { client })
     expect(res).toEqual({
         ...getExpectedWeather(),

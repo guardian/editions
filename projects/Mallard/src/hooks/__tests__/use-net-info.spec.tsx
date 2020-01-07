@@ -1,18 +1,20 @@
-import {
-    NetInfoStateContainer as NISC,
-    NetInfoStateType,
-} from '../use-net-info'
 import { NetInfoState } from '@react-native-community/netinfo'
+import { NetInfo as NetInfoType, DownloadBlockedStatus } from '../use-net-info'
+import ApolloClient from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { NON_IMPLEMENTED_LINK } from 'src/helpers/apollo_link'
+import gql from 'graphql-tag'
 
 type Handler = (state: NetInfoState) => void
 
 type NetInfoMock = {
     addEventListener: jest.Mock<(fn: Handler) => void>
     emit: Handler
+    fetch: jest.MockedFunction<() => Promise<NetInfoState>>
 }
 
 const wifiState = {
-    type: NetInfoStateType.wifi,
+    type: 'wifi',
     isConnected: true,
     details: {
         isConnectionExpensive: false,
@@ -20,7 +22,7 @@ const wifiState = {
 } as NetInfoState
 
 const cellularState = {
-    type: NetInfoStateType.cellular,
+    type: 'cellular',
     isConnected: true,
     details: {
         isConnectionExpensive: true,
@@ -28,7 +30,7 @@ const cellularState = {
 } as NetInfoState
 
 const offlineState = {
-    type: NetInfoStateType.none,
+    type: 'none',
     isConnected: false,
     details: null,
 } as NetInfoState
@@ -46,90 +48,127 @@ jest.mock(
         const ret = {
             NetInfoStateType: {
                 unknown: 'unknown',
+                none: 'none',
             },
             addEventListener,
             emit: (state: NetInfoState) => bound(state),
+            fetch: jest.fn(),
         }
         return ret
     },
 )
 
 describe('use-net-info', () => {
-    describe('NetInfoStateContainer', () => {
+    describe('createNetInfoResolver', () => {
         let NetInfo: NetInfoMock
-        let NetInfoStateContainer: typeof NISC
+        let createNetInfoResolver: () => (
+            _obj: unknown,
+            _vars: unknown,
+            opts: { client: ApolloClient<object> },
+        ) => Promise<NetInfoType>
+        let client: ApolloClient<object>
 
         beforeEach(() => {
             jest.resetModules()
-            NetInfoStateContainer = require('../use-net-info')
-                .NetInfoStateContainer
+            createNetInfoResolver = require('../use-net-info')
+                .createNetInfoResolver
             NetInfo = require('@react-native-community/netinfo')
             NetInfo.addEventListener.mockClear() // ignore side-effects form module load
+            client = new ApolloClient({
+                cache: new InMemoryCache(),
+                link: NON_IMPLEMENTED_LINK,
+                resolvers: {},
+            })
+            // Some mock data that the NetInfo resolver depends on.
+            client.writeData({ data: { wifiOnlyDownloads: false } })
         })
 
-        it('registers when instantiated', () => {
-            new NetInfoStateContainer()
+        it('registers when resolver is called', () => {
+            const resolve = createNetInfoResolver()
+            resolve(null, null, { client })
             expect(NetInfo.addEventListener).toHaveBeenCalledTimes(1)
         })
 
-        describe('#fetch', () => {
-            it('returns a promise that will resolves the first time the bound handler is called', async () => {
-                const nisc = new NetInfoStateContainer()
-                const promise = nisc.fetch()
-                NetInfo.emit(wifiState)
-                const state = await promise
-                expect(state).toBe(wifiState)
-            })
+        it('returns a promise with the first value of NetInfo.fetch()', async () => {
+            const resolve = createNetInfoResolver()
+            NetInfo.fetch.mockResolvedValue(wifiState)
 
-            it('returns the latest value of the emitter as a promise', async () => {
-                const nisc = new NetInfoStateContainer()
-                NetInfo.emit(wifiState)
-                NetInfo.emit(cellularState)
-                const state = await nisc.fetch()
-                expect(state).toBe(cellularState)
+            const state = await resolve(null, null, { client })
+            expect(state).toEqual({
+                __typename: 'NetInfo',
+                ...wifiState,
+                downloadBlocked: DownloadBlockedStatus.NotBlocked,
+                isDevButtonShown: false,
+                isForcedOffline: false,
+                setIsDevButtonShown: expect.any(Function),
+                setIsForcedOffline: expect.any(Function),
             })
         })
 
-        describe('#state', () => {
-            it('returns the current state value', async () => {
-                const nisc = new NetInfoStateContainer()
-                const promise = nisc.fetch()
-                NetInfo.emit(wifiState)
-                await promise
-                expect(nisc.state).toBe(wifiState)
+        it('returns the latest value of the emitter as a promise', async () => {
+            const resolve = createNetInfoResolver()
+            NetInfo.fetch.mockResolvedValue(wifiState)
+            await resolve(null, null, { client })
+
+            NetInfo.fetch.mockResolvedValue(cellularState)
+            await NetInfo.emit(cellularState)
+
+            const state = await resolve(null, null, { client })
+            expect(state).toEqual({
+                __typename: 'NetInfo',
+                ...cellularState,
+                downloadBlocked: DownloadBlockedStatus.NotBlocked,
+                isDevButtonShown: false,
+                isForcedOffline: false,
+                setIsDevButtonShown: expect.any(Function),
+                setIsForcedOffline: expect.any(Function),
             })
         })
 
-        describe('#subscribe', () => {
-            it('forwards messages that are fired from the handlers it has registered with', async () => {
-                const nisc = new NetInfoStateContainer()
-                const sub = jest.fn()
-                nisc.subscribe(sub)
-                NetInfo.emit(wifiState)
-                expect(sub).toBeCalledWith(wifiState)
+        it('updates Apollo client with the the latest value', async () => {
+            const resolve = createNetInfoResolver()
+            NetInfo.fetch.mockResolvedValue(wifiState)
+            await resolve(null, null, { client })
+
+            const query = gql`
+                {
+                    netInfo @client {
+                        type @client
+                        details @client
+                        isConnected @client
+                    }
+                }
+            `
+
+            NetInfo.fetch.mockResolvedValue(cellularState)
+            await NetInfo.emit(cellularState)
+            await Promise.resolve()
+
+            const res = client.cache.readQuery<any>({
+                query,
+            })
+            expect(res.netInfo).toEqual({
+                ...cellularState,
+                __typename: 'NetInfo',
             })
         })
 
-        describe('#setForceOffline', () => {
-            it('sets the state to be offline', async () => {
-                const nisc = new NetInfoStateContainer()
-                nisc.setForceOffline(true)
-                expect(nisc.state).toStrictEqual(offlineState)
-            })
+        it('applies the setForceOffline() override', async () => {
+            const resolve = createNetInfoResolver()
+            NetInfo.fetch.mockResolvedValue(wifiState)
+            let state = await resolve(null, null, { client })
 
-            it('overrides the actual state', async () => {
-                const nisc = new NetInfoStateContainer()
-                NetInfo.emit(wifiState)
-                nisc.setForceOffline(true)
-                expect(nisc.state).toStrictEqual(offlineState)
-            })
+            await state.setIsForcedOffline(true)
 
-            it('runs the registerd handlers on change', async () => {
-                const nisc = new NetInfoStateContainer()
-                const sub = jest.fn()
-                nisc.subscribe(sub)
-                nisc.setForceOffline(true)
-                expect(sub).toBeCalledWith(offlineState)
+            state = await resolve(null, null, { client })
+            expect(state).toEqual({
+                __typename: 'NetInfo',
+                ...offlineState,
+                downloadBlocked: DownloadBlockedStatus.Offline,
+                isDevButtonShown: false,
+                isForcedOffline: true,
+                setIsDevButtonShown: expect.any(Function),
+                setIsForcedOffline: expect.any(Function),
             })
         })
     })

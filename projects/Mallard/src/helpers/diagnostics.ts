@@ -1,6 +1,6 @@
 import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
 import DeviceInfo from 'react-native-device-info'
-import * as NetInfo from 'src/hooks/use-net-info'
+import { NetInfo } from 'src/hooks/use-net-info'
 import { isInBeta } from './release-stream'
 import { Platform, Linking } from 'react-native'
 import {
@@ -22,6 +22,8 @@ import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
 import { canViewEdition } from 'src/authentication/helpers'
 import { getPushTracking } from './push-tracking'
 import { getFileList } from './files'
+import gql from 'graphql-tag'
+import ApolloClient from 'apollo-client'
 
 const getCASCode = () =>
     Promise.all([
@@ -36,20 +38,35 @@ const getGDPREntries = () =>
         ),
     )
 
-const getDiagnosticInfo = async (authAttempt: AnyAttempt<string>) => {
+const getDiagnosticInfo = async (
+    client: ApolloClient<object>,
+    authAttempt: AnyAttempt<string>,
+) => {
     const [
-        netInfo,
+        netInfoResult,
         gdprEntries,
         casCode,
         idData,
         receiptData,
     ] = await Promise.all([
-        NetInfo.fetch(),
+        client.query<{ netInfo: NetInfo }>({
+            query: gql`
+                {
+                    netInfo @client {
+                        type @client
+                        isConnected @client
+                        details @client
+                    }
+                }
+            `,
+        }),
         getGDPREntries(),
         getCASCode(),
         userDataCache.get(),
         iapReceiptCache.get(),
     ])
+    const netInfo = netInfoResult.data.netInfo
+
     const folderStat = await RNFetchBlob.fs.stat(FSPaths.issuesDir)
     const size = parseInt(folderStat.size)
     const bytes = size
@@ -137,6 +154,7 @@ const openSupportMailto = async (
 }
 
 const createMailtoHandler = (
+    client: ApolloClient<object>,
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
@@ -145,7 +163,7 @@ const createMailtoHandler = (
         {
             text: 'Include',
             onPress: async () => {
-                const diagnostics = await getDiagnosticInfo(authAttempt)
+                const diagnostics = await getDiagnosticInfo(client, authAttempt)
                 openSupportMailto(text, releaseURL, diagnostics)
             },
         },
@@ -156,6 +174,7 @@ const createMailtoHandler = (
     ])
 
 const createSupportMailto = (
+    client: ApolloClient<object>,
     text: string,
     releaseURL: string,
     authAttempt: AnyAttempt<string>,
@@ -163,7 +182,7 @@ const createSupportMailto = (
     key: text,
     title: text,
     linkWeight: 'regular' as const,
-    onPress: createMailtoHandler(text, releaseURL, authAttempt),
+    onPress: createMailtoHandler(client, text, releaseURL, authAttempt),
 })
 
 export { createSupportMailto, createMailtoHandler }
