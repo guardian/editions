@@ -73,7 +73,7 @@ const makeFontsCss = () => css`
     })}
 `
 
-const makeCss = ({ colors, theme }: CssProps) => css`
+const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
     ${makeFontsCss()}
 
     :root {
@@ -166,7 +166,7 @@ const makeCss = ({ colors, theme }: CssProps) => css`
         colors,
         theme,
     })}
-    ${imageStyles({ colors, theme })}
+    ${imageStyles({ colors, theme }, contentType)}
     ${lineStyles({ colors, theme })}
     ${starRatingStyles({ colors, theme })}
     ${sportScoreStyles({ colors, theme })}
