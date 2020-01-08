@@ -4,6 +4,9 @@
             "path": "."
         },
         {
+            "path": "projects/Apps/editionsSrc"
+        },
+        {
             "path": "projects/Apps/Mallard"
         },
         {
