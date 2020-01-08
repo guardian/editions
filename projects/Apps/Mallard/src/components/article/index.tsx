@@ -6,7 +6,7 @@ import { ErrorBoundary } from '../layout/ui/errors/error-boundary'
 import { Article, HeaderControlProps } from './types/article'
 import { Crossword } from './types/crossword'
 import { PathToArticle } from 'src/paths'
-import { IssueOrigin } from '../../../../Apps/common/src'
+import { IssueOrigin } from '@guardian/editions-common'
 
 /*
 This is the article view! For all of the articles.

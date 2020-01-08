@@ -30,7 +30,7 @@ import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 import { Loaded } from 'src/helpers/Loaded'
 
 import { useIssueOnDevice, ExistsStatus } from 'src/hooks/use-issue-on-device'
-import { Front, IssueWithFronts, Appearance } from '../../../../Apps/common/src'
+import { Front, IssueWithFronts, Appearance } from '@guardian/editions-common'
 import { getPillarColors } from 'src/helpers/transform'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'

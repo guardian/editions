@@ -11,7 +11,7 @@ import {
 } from 'src/common'
 import RNFetchBlob from 'rn-fetch-blob'
 import { defaultSettings } from 'src/helpers/settings/defaults'
-import { imagePath } from '../../../Apps/common/src'
+import { imagePath } from '@guardian/editions-common'
 
 export interface PathToIssue {
     localIssueId: Issue['localId']

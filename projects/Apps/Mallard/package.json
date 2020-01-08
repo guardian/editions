@@ -1,5 +1,5 @@
 {
-    "name": "mallard",
+    "name": "@guardian/mallard",
     "version": "0.0.1",
     "private": true,
     "scripts": {
@@ -13,15 +13,15 @@
         "run-android": "yarn pre-run && adb reverse tcp:8081 tcp:8081 && adb reverse tcp:8097 tcp:8097 && adb reverse tcp:3131 tcp:3131 && react-native run-android",
         "run-ios": "yarn pre-run && yarn install-pods && react-native run-ios",
         "run-ipad": "yarn pre-run && react-native run-ios --simulator=\"iPad Air 2\"",
-        "validate": "cd ../.. && make validate-mallard",
-        "fix": "cd ../.. && make fix-mallard",
+        "validate": "cd ../../.. && make validate-mallard",
+        "fix": "cd ../../.. && make fix-mallard",
         "bundle-android": "yarn pre-bundle && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/generated/res/react/release",
         "bundle-ios": "yarn pre-bundle && yarn install-pods && react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest=ios",
         "rn-link": "react-native link",
-        "bundle-html": "node ../Apps/scripts/src/bundle-html.js",
-        "watch-html": "yarn bundle-html && open ../Apps/scripts/src/watch-html.command",
-        "fetch-dev-env": "node ../Apps/scripts/src/fetch-dev-env.js",
-        "write-prod-env": "node ../Apps/scripts/src/.env.production.js",
+        "bundle-html": "node ../scripts/src/bundle-html.js",
+        "watch-html": "yarn bundle-html && open ../scripts/src/watch-html.command",
+        "fetch-dev-env": "node ../scripts/src/fetch-dev-env.js",
+        "write-prod-env": "node ../scripts/src/.env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
         "install-pods": "cd ios && pod install"
     },

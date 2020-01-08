@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
-import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
+import { Image as IImage, ImageUse } from '@guardian/editions-common'
 
 /**
  * This component abstracts away the endpoint for images

@@ -14,7 +14,7 @@ import {
 } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
-import { IssueOrigin } from '../../../../../Apps/common/src'
+import { IssueOrigin } from '@guardian/editions-common'
 
 const styles = StyleSheet.create({
     block: {

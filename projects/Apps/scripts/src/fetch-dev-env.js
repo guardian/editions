@@ -12,7 +12,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const argv = require('yargs').argv
 
-const appRelativePath = argv.appRelativePath || '../../../Mallard/'
+const appRelativePath = argv.appRelativePath || '../../Mallard/'
 const envBucket = argv.envBucket || 'Mallard/dev/.env'
 const sentryBucket = argv.sentryBucket || 'Mallard/dev/sentry.properties'
 

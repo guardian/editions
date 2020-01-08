@@ -7,7 +7,7 @@ import {
 import { routeNames } from 'src/navigation/routes'
 import { PathToArticle, PathToIssue } from 'src/paths'
 import { ArticleNavigator } from 'src/screens/article-screen'
-import { Issue } from '../../../../Apps/common/src'
+import { Issue } from '@guardian/editions-common'
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element

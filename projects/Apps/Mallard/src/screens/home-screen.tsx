@@ -45,7 +45,7 @@ import { NavigationParams } from 'react-navigation'
 import { Separator } from 'src/components/layout/ui/row'
 import { color } from 'src/theme/color'
 import { useIssueResponse } from 'src/hooks/use-issue'
-import { IssueWithFronts } from '../../../Apps/common/src'
+import { IssueWithFronts } from '@guardian/editions-common'
 import { PathToIssue } from 'src/paths'
 import { Loaded } from 'src/helpers/Loaded'
 

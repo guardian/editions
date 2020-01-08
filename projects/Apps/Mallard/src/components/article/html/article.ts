@@ -15,7 +15,7 @@ import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { GetImagePath } from 'src/hooks/use-image-paths'
-import { Image as TImage } from '../../../../../Apps/common/src'
+import { Image as TImage } from '@guardian/editions-common'
 import { getPillarColors } from 'src/helpers/transform'
 
 interface ArticleContentProps {
