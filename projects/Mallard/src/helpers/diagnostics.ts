@@ -20,7 +20,6 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { FSPaths } from 'src/paths'
 import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
 import { canViewEdition } from 'src/authentication/helpers'
-import { getPushTracking } from './push-tracking'
 import { getFileList } from './files'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
@@ -82,14 +81,12 @@ const getDiagnosticInfo = async (
         lastUpdateTime,
         totalDiskCapacity,
         freeDiskStorage,
-        pushTracking,
         fileList,
     ] = await Promise.all([
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
         DeviceInfo.getTotalDiskCapacity(),
         DeviceInfo.getFreeDiskStorage(),
-        getPushTracking(),
         getFileList(),
     ])
 
@@ -116,9 +113,6 @@ Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigab
 Total Disk Space: ${totalDiskCapacity}
 Available Disk Spce: ${freeDiskStorage}
 Issues on device: ${fileList && JSON.stringify(fileList, null, 2)}
-
-Push Notification Logs: ${pushTracking &&
-        JSON.stringify(JSON.parse(pushTracking), null, 2)}
 
 -User / Supporter Info-
 Signed In: ${isValid(authAttempt)}
