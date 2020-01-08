@@ -7,7 +7,7 @@ import {
 
 const mock = jest.fn()
 
-jest.mock('Dimensions', () => ({
+jest.mock('react-native/Libraries/Utilities/Dimensions', () => ({
     get: mock,
 }))
 
