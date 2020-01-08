@@ -32,9 +32,11 @@ export const frontController = (req: Request, res: Response) => {
                 }
                 return
             }
+            const json = JSON.stringify(data)
+            console.log(`Got front: ${json}`)
             res.setHeader('Last-Modifed', date())
             res.setHeader('Content-Type', 'application/json')
-            res.send(JSON.stringify(data))
+            res.send(json)
         })
         .catch(error => {
             console.error('Error in the fronts controller.')

@@ -3,8 +3,10 @@ import { baseTests } from './defaults.base'
 describe('defaults', () => {
     describe('notificationTrackingUrl', () => {
         beforeEach(() => {
-            jest.mock('Platform', () => {
-                const Platform = require.requireActual('Platform')
+            jest.mock('react-native/Libraries/Utilities/Platform', () => {
+                const Platform = require.requireActual(
+                    'react-native/Libraries/Utilities/Platform',
+                )
                 Platform.OS = 'android'
                 return Platform
             })

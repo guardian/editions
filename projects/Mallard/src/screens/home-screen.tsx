@@ -1,4 +1,11 @@
-import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
+import React, {
+    useCallback,
+    useState,
+    useEffect,
+    useRef,
+    useMemo,
+    Dispatch,
+} from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
 import {
     NavigationInjectedProps,
@@ -91,10 +98,12 @@ const HomeScreenHeader = withNavigation(
 
 const IssueRowContainer = React.memo(
     ({
+        setIssueId: setLocalIssueId,
         issue,
         issueDetails,
         navigation,
     }: {
+        setIssueId: Dispatch<PathToIssue>
         issue: IssueSummary
         issueDetails: Loaded<IssueWithFronts> | null
         navigation: NavigationScreenProp<
@@ -102,12 +111,12 @@ const IssueRowContainer = React.memo(
             NavigationParams
         >
     }) => {
-        const { setIssueId } = useIssueSummary()
+        const { issueId, setIssueId } = useIssueSummary()
         const { localId, publishedId } = issue
         const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
-            () =>
+            (initialFrontKey: string | null) =>
                 navigateToIssue({
                     navigation,
                     navigationProps: {
@@ -115,6 +124,7 @@ const IssueRowContainer = React.memo(
                             localIssueId: localId,
                             publishedIssueId: publishedId,
                         },
+                        initialFrontKey,
                     },
                     setIssueId,
                 }),
@@ -123,24 +133,38 @@ const IssueRowContainer = React.memo(
 
         const onPress = useCallback(() => {
             if (issueDetails != null) {
-                navToIssue()
+                setNavPosition(null)
+                navToIssue(null)
                 return
             }
-            setIssueId({
+            setLocalIssueId({
                 localIssueId: localId,
                 publishedIssueId: publishedId,
             })
-        }, [navToIssue, issueDetails, setIssueId, localId, publishedId])
+        }, [
+            setNavPosition,
+            navToIssue,
+            issueDetails,
+            setLocalIssueId,
+            localId,
+            publishedId,
+        ])
 
         const onPressFront = useCallback(
             frontKey => {
-                navToIssue()
-                setNavPosition({
-                    frontId: frontKey,
-                    articleIndex: 0,
-                })
+                if (
+                    issueId != null &&
+                    issueId.publishedIssueId === publishedId &&
+                    issueId.localIssueId === localId
+                ) {
+                    setNavPosition({
+                        frontId: frontKey,
+                        articleIndex: 0,
+                    })
+                }
+                navToIssue(frontKey)
             },
-            [setNavPosition, navToIssue],
+            [setNavPosition, navToIssue, issueId, publishedId, localId],
         )
 
         return (
@@ -214,9 +238,11 @@ const IssueListView = withNavigation(
             issueList,
             currentIssue,
             navigation,
+            setIssueId,
         }: {
             issueList: IssueSummary[]
             currentIssue: { id: PathToIssue; details: Loaded<IssueWithFronts> }
+            setIssueId: Dispatch<PathToIssue>
         } & NavigationInjectedProps) => {
             const {
                 localIssueId: localId,
@@ -253,6 +279,7 @@ const IssueListView = withNavigation(
             const renderItem = useCallback(
                 ({ item, index }) => (
                     <IssueRowContainer
+                        setIssueId={setIssueId}
                         issue={item}
                         issueDetails={
                             index === currentIssueIndex ? details : null
@@ -260,7 +287,7 @@ const IssueListView = withNavigation(
                         navigation={navigation}
                     />
                 ),
-                [currentIssueIndex, details, navigation],
+                [currentIssueIndex, details, navigation, setIssueId],
             )
 
             // Height of the fronts so we can provide this to `getItemLayout`.
@@ -327,10 +354,12 @@ const IssueListViewWithDelay = ({
     issueList,
     currentId,
     currentIssue,
+    setIssueId,
 }: {
     issueList: IssueSummary[]
     currentId: PathToIssue
     currentIssue: Loaded<IssueWithFronts>
+    setIssueId: Dispatch<PathToIssue>
 }) => {
     const [shownIssue, setShownIssue] = useState({
         id: currentId,
@@ -352,7 +381,13 @@ const IssueListViewWithDelay = ({
         }
     }, [currentId, currentIssue, details])
 
-    return <IssueListView issueList={issueList} currentIssue={shownIssue} />
+    return (
+        <IssueListView
+            setIssueId={setIssueId}
+            issueList={issueList}
+            currentIssue={shownIssue}
+        />
+    )
 }
 
 const NO_ISSUES: IssueSummary[] = []
@@ -360,22 +395,13 @@ const EMPTY_ISSUE_ID = { localIssueId: '', publishedIssueId: '' }
 const IssueListFetchContainer = () => {
     const data = useIssueSummary()
     const issueSummary = data.issueSummary || NO_ISSUES
-    const issueId = data.issueId || EMPTY_ISSUE_ID
-    const { localIssueId, publishedIssueId } = issueId
-    const resp = useIssueResponse(
-        // FIXME: we are forced to memo this object because `useIssueResponse`
-        // would rerender in a loop otherwise (because we'd provide a different
-        // object reference which gets passed to `useEffect` internally). I tend
-        // to think this is a bug of `useIssueResponse`, which should use value
-        // rather than referential equality to cache keys.
-        useMemo(() => ({ localIssueId, publishedIssueId }), [
-            localIssueId,
-            publishedIssueId,
-        ]),
-    )
+    const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID)
+
+    const resp = useIssueResponse(issueId)
     return resp({
         error: (error: {}) => (
             <IssueListViewWithDelay
+                setIssueId={setIssueId}
                 issueList={issueSummary}
                 currentId={issueId}
                 currentIssue={{ error }}
@@ -383,6 +409,7 @@ const IssueListFetchContainer = () => {
         ),
         pending: () => (
             <IssueListViewWithDelay
+                setIssueId={setIssueId}
                 issueList={issueSummary}
                 currentId={issueId}
                 currentIssue={{ isLoading: true }}
@@ -390,6 +417,7 @@ const IssueListFetchContainer = () => {
         ),
         success: (value: IssueWithFronts) => (
             <IssueListViewWithDelay
+                setIssueId={setIssueId}
                 issueList={issueSummary}
                 currentId={issueId}
                 currentIssue={{ value }}

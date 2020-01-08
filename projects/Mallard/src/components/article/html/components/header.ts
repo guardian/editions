@@ -414,7 +414,12 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .header-container[data-type='analysis'] h1 .header-top-byline {
         display: block;
+        font-family: ${families.headline.regular};
+        font-style: italic;
+    }
+    .header-container[data-type='analysis'] h1 .header-top-byline > a {
         font-family: ${families.titlepiece.regular};
+        font-style: normal;
     }
 
     /*gallery*/

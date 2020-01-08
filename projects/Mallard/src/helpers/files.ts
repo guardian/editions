@@ -30,6 +30,13 @@ interface IssueFile extends BasicFile {
     type: 'issue'
 }
 
+class IssueSummaryError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = 'IssueSummaryError'
+    }
+}
+
 export type File = OtherFile | IssueFile
 export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
@@ -367,7 +374,9 @@ export const downloadTodaysIssue = async (client: ApolloClient<object>) => {
             return downloadAndUnzipIssue(client, todaysIssueSummary, imageSize)
         }
     } catch (e) {
-        console.log(`Unable to download todays issue: ${e.message}`)
+        e.message = `Unable to download todays issue: ${e.message}`
+        errorService.captureException(e)
+        console.log(e.message)
     }
 }
 
@@ -392,7 +401,16 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
         .then(async res => {
             return res.json()
         })
+        .then(async resJson => {
+            if (!Array.isArray(resJson) || resJson.length === 0) {
+                throw new IssueSummaryError('No issues in issue summary')
+            }
+            return resJson
+        })
         .catch(e => {
+            e.message = `Failed to fetch valid issue summary: ${e.message}`
+            errorService.captureException(e)
+            console.log(e.message)
             throw e
         })
 }

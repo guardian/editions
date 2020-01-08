@@ -1,5 +1,5 @@
 import { IContent } from '@guardian/capi-ts'
-import { Image, CreditedImage } from '../../Apps/common/src'
+import { CreditedImage, TrailImage } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
 
@@ -14,27 +14,47 @@ const getMainImage = (result: IContent): CreditedImage | undefined => {
     return maybeCreditedMainImage
 }
 
-const getTrailImage = (result: IContent): Image | undefined => {
+const getTrailImage = (result: IContent): TrailImage | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
-    console.log(maybeThumbnailElement)
+    console.log(
+        result.apiUrl +
+            ' maybeThumbnailElement: ' +
+            JSON.stringify(maybeThumbnailElement),
+    )
 
     const maybeThumbnailImage =
         maybeThumbnailElement && getImage(maybeThumbnailElement.assets)
+    console.log(
+        result.apiUrl +
+            ' maybeThumbnailImage: ' +
+            JSON.stringify(maybeThumbnailImage),
+    )
+
     return maybeThumbnailImage
+        ? {
+              ...maybeThumbnailImage,
+              use: {
+                  mobile: 'full-size',
+                  tablet: 'full-size',
+              },
+          }
+        : undefined
 }
 
 interface ImageAndTrailImage {
     image: CreditedImage | undefined
-    trailImage: Image | undefined
+    trailImage: TrailImage | undefined
 }
 
 const getImages = (result: IContent): ImageAndTrailImage => {
-    return {
+    const images = {
         image: getMainImage(result),
         trailImage: getTrailImage(result),
     }
+    console.log('Found images: ' + JSON.stringify(images))
+    return images
 }
 
 export { getImages, ImageAndTrailImage }
