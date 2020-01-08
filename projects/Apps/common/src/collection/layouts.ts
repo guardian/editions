@@ -300,9 +300,15 @@ const layouts: { [key in FrontCardAppearance]: PageLayout } = {
     [FrontCardAppearance.twoStoryPageWithSidekick]: twoStoryPage(
         ItemType.SidekickImageItemType,
     ),
+    [FrontCardAppearance.twoStoryStarter]: twoStoryPage(
+        ItemType.StarterItemType,
+    ),
     [FrontCardAppearance.threeStoryPage]: threeStoryPage(),
     [FrontCardAppearance.threeStoryPageWithSidekick]: threeStoryPageBigPhoto(
         ItemType.SidekickImageItemType,
+    ),
+    [FrontCardAppearance.threeStoryStarter]: threeStoryPage(
+        ItemType.StarterItemType,
     ),
     [FrontCardAppearance.fourStoryPage]: fourStoryPage,
     [FrontCardAppearance.fiveStoryPage]: fiveStoryPage,

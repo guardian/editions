@@ -51,11 +51,19 @@ export const flattenCollectionsToCards = (
 ): FlatCard[] =>
     collections
         .map(collection =>
-            collection.cards.map(({ articles, appearance }) => ({
-                articles: Object.values(articles || {}),
-                appearance,
-                collection,
-            })),
+            collection.cards.map(({ articles, appearance }, index) => {
+                if (index === 0) {
+                    if (appearance === FrontCardAppearance.twoStoryPage)
+                        appearance = FrontCardAppearance.twoStoryStarter
+                    if (appearance === FrontCardAppearance.threeStoryPage)
+                        appearance = FrontCardAppearance.threeStoryStarter
+                }
+                return {
+                    articles: Object.values(articles || {}),
+                    appearance,
+                    collection,
+                }
+            }),
         )
         .reduce((acc, val) => acc.concat(val), [])
 
