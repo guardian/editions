@@ -155,10 +155,13 @@ export const renderArticle = (
             break
     }
 
-    const styles = makeCss({
-        colors: getPillarColors(pillar),
-        theme,
-    })
+    const styles = makeCss(
+        {
+            colors: getPillarColors(pillar),
+            theme,
+        },
+        article.type,
+    )
     const body = html`
         ${showWebHeader && article && header}
         <div class="content-wrap">
