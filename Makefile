@@ -28,6 +28,10 @@ build-Mallard:
 	@echo "\n👟 $@ 🦆\n"
 	@echo "\nThis is not yet handled by make\n"
 
+validate-Apps:
+	@echo "\n👟 $@ 🦆\n"
+	@echo "\nThis is not yet handled by make\n"
+
 validate-editionsSrc: projects/Apps/node_modules node_modules
 	@echo "\n👟🧶 $@ ESLINT 🦆\n"
 	yarn eslint 'projects/Apps/editionsSrc/**/*.{ts,tsx}' --parser-options=project:./projects/Apps/editionsSrc/tsconfig.json
