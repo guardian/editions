@@ -99,7 +99,6 @@ const onNavigationStateChange = (
     prevState: NavigationState,
     currentState: NavigationState,
 ) => {
-    console.log(currentState)
     const prevScreen: ScreenTrackingMapping | null = getActiveRouteName(
         prevState,
     )
