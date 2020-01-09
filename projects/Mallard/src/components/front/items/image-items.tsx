@@ -87,7 +87,10 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 export const StarterItem = ({ article, size, ...tappableProps }: PropTypes) => {
     return (
         <ItemTappable {...tappableProps} {...{ article }}>
-            <TrailImageView article={article} style={{ height: '60%' }} />
+            <TrailImageView
+                article={article}
+                style={{ height: getImageHeight(size, 'starter') }}
+            />
 
             <TextBlock
                 style={imageStyles.textBlock}
@@ -95,6 +98,11 @@ export const StarterItem = ({ article, size, ...tappableProps }: PropTypes) => {
                 fontSize={1.5}
                 {...article}
             />
+            {isFullHeightItem(size) && (
+                <Standfirst style={imageStyles.standfirst}>
+                    {article.trail}
+                </Standfirst>
+            )}
         </ItemTappable>
     )
 }

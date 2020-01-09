@@ -170,6 +170,9 @@ const thirdPageCoverLayout = (
  * ones.
  */
 const denseLayout = (): FrontCardsForArticleCount => {
+    // Delete this once the client-side changes are running in the released
+    // non-beta version of the app.
+    if (process.env.EDITIONS_DENSE_LAYOUT !== 'enabled') return defaultLayout(1)
     return {
         0: [],
         1: [1],
