@@ -172,9 +172,7 @@ const GdprConsent = ({
                         partners. To find out more, read our{' '}
                         <LinkNav
                             onPress={() =>
-                                navigation.navigate(
-                                    routeNames.onboarding.PrivacyPolicyInline,
-                                )
+                                navigation.navigate(routeNames.PrivacyPolicy)
                             }
                         >
                             privacy policy

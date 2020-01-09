@@ -9,7 +9,7 @@ import {
 } from '../ophan'
 import { NativeModules } from 'react-native'
 
-jest.mock('NativeModules', () => ({
+jest.mock('react-native/Libraries/BatchedBridge/NativeModules', () => ({
     Ophan: {
         setUserId: jest.fn(),
         sendAppScreenEvent: jest.fn(),
