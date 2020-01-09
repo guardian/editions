@@ -1,6 +1,6 @@
 import MockDate from 'mockdate'
 import {
-    matchSummmaryToKey,
+    // matchSummmaryToKey,
     downloadAndUnzipIssue,
     issuesToDelete,
 } from '../files'
