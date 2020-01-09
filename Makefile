@@ -38,6 +38,10 @@ validate-editionsSrc: projects/Apps/node_modules node_modules
 	@echo "\n👟🚂 $@ TSC 🦆\n"
 	cd projects/Apps/editionsSrc && yarn tsc --noEmit
 
+test-editionsSrc: projects/Apps/node_modules node_modules
+	@echo "\n👟 $@ 🦆\n"
+	cd projects/Apps/editionsSrc && yarn test
+
 #
 # Project commands
 #
