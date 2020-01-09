@@ -1,6 +1,10 @@
 import { getPageLayoutSizeXY } from '../../helpers/helpers'
 import { PageLayoutSizes, ItemSizes } from '../../../../common'
 
+/**
+ * "starter" cards use a bigger font, so we need to reduce the size taken by
+ * the image a little bit in all cases.
+ */
 export const getImageHeight = (
     { story, layout }: ItemSizes,
     type: 'starter' | 'default' = 'default',
