@@ -29,7 +29,6 @@ const breakoutCaption = (role: ImageElement['role']) => css`
 `
 
 const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
-    console.log('contenttype: ', contentType)
     const galleryStyles = css`
         /*INLINE*/
         @media (min-width: ${px(Breakpoints.tabletVertical)}) {

@@ -85,6 +85,9 @@ const refetch = async (
         // from an error as it could contain technical details that are
         // irrelevant for end users; instead errors should be coded (ex. with
         // numeric error code, each of which has a corresponding UI message).
+        if (error instanceof Error) {
+            error = error.message
+        }
         return { ...prevIssueSummary, error }
     }
 
