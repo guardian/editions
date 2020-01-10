@@ -107,7 +107,8 @@
     },
     "resolutions": {
         "@types/react": "16.9.1",
-        "@types/react-native": "0.60.5"
+        "@types/react-native": "0.60.5",
+        "handlebars": "4.6.0"
     },
     "jest": {
         "preset": "react-native"
