@@ -83,6 +83,30 @@ const ImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
         </ItemTappable>
     )
 }
+
+export const StarterItem = ({ article, size, ...tappableProps }: PropTypes) => {
+    return (
+        <ItemTappable {...tappableProps} {...{ article }}>
+            <TrailImageView
+                article={article}
+                style={{ height: getImageHeight(size, 'starter') }}
+            />
+
+            <TextBlock
+                style={imageStyles.textBlock}
+                size={size}
+                fontSize={1.5}
+                {...article}
+            />
+            {isFullHeightItem(size) && (
+                <Standfirst style={imageStyles.standfirst}>
+                    {article.trail}
+                </Standfirst>
+            )}
+        </ItemTappable>
+    )
+}
+
 /*
 The opinion cards with tha circles
 */

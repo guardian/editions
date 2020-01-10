@@ -1,24 +1,32 @@
 import { getPageLayoutSizeXY } from '../../helpers/helpers'
 import { PageLayoutSizes, ItemSizes } from '../../../../common'
 
-export const getImageHeight = ({ story, layout }: ItemSizes) => {
+/**
+ * "starter" cards use a bigger font, so we need to reduce the size taken by
+ * the image a little bit in all cases.
+ */
+export const getImageHeight = (
+    { story, layout }: ItemSizes,
+    type: 'starter' | 'default' = 'default',
+) => {
+    const isDefault = type === 'default'
     if (layout === PageLayoutSizes.tablet) {
         if (story.height >= 4) {
-            return '50%'
+            return isDefault ? '50%' : '40%'
         }
         if (story.height >= 3) {
-            return '66.66%'
+            return isDefault ? '66.66%' : '60%'
         }
         if (story.height >= 2) {
-            return '50%'
+            return isDefault ? '50%' : '40%'
         }
-        return '75.5%'
+        return isDefault ? '75.5%' : '60%'
     }
     if (layout === PageLayoutSizes.mobile) {
         if (story.height >= 4) {
-            return '75.5%'
+            return isDefault ? '75.5%' : '60%'
         }
-        return '50%'
+        return isDefault ? '50%' : '40%'
     }
 }
 

@@ -51,11 +51,26 @@ export const flattenCollectionsToCards = (
 ): FlatCard[] =>
     collections
         .map(collection =>
-            collection.cards.map(({ articles, appearance }) => ({
-                articles: Object.values(articles || {}),
-                appearance,
-                collection,
-            })),
+            collection.cards.map(({ articles, appearance }, index) => {
+                /**
+                 * We cannot have the server return us these value directly
+                 * because it would break compatibility with older versions of
+                 * the app. Instead, it sends 2 or 3-story cards, that we
+                 * convert into "starter" cards with bigger headline if they
+                 * happen to be in first position of their collection.
+                 */
+                if (index === 0) {
+                    if (appearance === FrontCardAppearance.twoStoryPage)
+                        appearance = FrontCardAppearance.twoStoryStarter
+                    else if (appearance === FrontCardAppearance.threeStoryPage)
+                        appearance = FrontCardAppearance.threeStoryStarter
+                }
+                return {
+                    articles: Object.values(articles || {}),
+                    appearance,
+                    collection,
+                }
+            }),
         )
         .reduce((acc, val) => acc.concat(val), [])
 

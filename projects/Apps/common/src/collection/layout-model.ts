@@ -5,6 +5,7 @@ export enum ItemType {
     SuperHeroImageItemType,
     ImageItemType,
     SmallItemType,
+    StarterItemType,
     SplitImageItemType,
     SidekickImageItemType,
     SmallItemLargeTextType,

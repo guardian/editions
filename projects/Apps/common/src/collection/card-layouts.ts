@@ -5,8 +5,10 @@ export enum FrontCardAppearance {
     superHeroPage = 'super',
     twoStoryPage = 'two',
     twoStoryPageWithSidekick = 'two-plus-sidekick',
+    twoStoryStarter = 'two-starter',
     threeStoryPage = 'three',
     threeStoryPageWithSidekick = 'three-plus-sidekick',
+    threeStoryStarter = 'three-starter',
     fourStoryPage = 'four',
     fiveStoryPage = 'five',
     sixStoryPage = 'six',
@@ -30,8 +32,10 @@ const frontCardAppearanceInfo: {
     [FrontCardAppearance.superHeroPage]: { fits: 1 },
     [FrontCardAppearance.twoStoryPage]: { fits: 2 },
     [FrontCardAppearance.twoStoryPageWithSidekick]: { fits: 2 },
+    [FrontCardAppearance.twoStoryStarter]: { fits: 2 },
     [FrontCardAppearance.threeStoryPage]: { fits: 3 },
     [FrontCardAppearance.threeStoryPageWithSidekick]: { fits: 3 },
+    [FrontCardAppearance.threeStoryStarter]: { fits: 3 },
     [FrontCardAppearance.fourStoryPage]: { fits: 4 },
     [FrontCardAppearance.fiveStoryPage]: { fits: 5 },
     [FrontCardAppearance.sixStoryPage]: { fits: 6 },
@@ -151,10 +155,76 @@ const thirdPageCoverLayout = (
     }
 }
 
+/**
+ * Denser layout than the default, that allows 2 or 3 articles on front card
+ * (aka. front page) of a collection. The way the list is constructed is by
+ * progressively increasing density, but avoiding repeating densities. (Ex. we
+ * want to avoid 2 successive card with 4 articles each, to prevent a monotonous
+ * layout.) Finally, we add a new card if we can't fit an additional article
+ * anymore without getting a crowded and monotonous layout.
+ *
+ * We also make sure to progresively increase the number of the first card, but
+ * never decrease it. This is because it'd otherwise be confusing for the
+ * production/editioral team, where you might get better result adding 1 more
+ * article in the collection, instead of breaking down a collection in smaller
+ * ones.
+ */
+const denseLayout = (): FrontCardsForArticleCount => {
+    // Delete this once the client-side changes are running in the released
+    // non-beta version of the app.
+    if (process.env.EDITIONS_DENSE_LAYOUT !== 'enabled') return defaultLayout(1)
+    return {
+        0: [],
+        1: [1],
+
+        // We do not want to switch to 2 articles on front page right away. Prod
+        // team can decide to add more articles if they need a denser layout.
+        2: [1, 1],
+        3: [1, 2],
+        4: [1, 3],
+        // Growing up to 2 articles on front page to distribute density.
+        5: [2, 3],
+        6: [2, 4],
+        7: [2, 5],
+
+        // We want to avoid [2, 6], so breakdown into more cards at this point.
+        8: [2, 3, 3],
+        // 4-article cards have more pictures than 3x ones so let's swap them.
+        9: [2, 4, 3],
+        10: [2, 3, 5],
+        11: [2, 4, 5],
+        // Growing up to 3 articles on front page to avoid additional cards yet.
+        12: [3, 4, 5],
+        13: [3, 4, 6],
+        14: [3, 5, 6],
+
+        // Need more breathing room, let's add a card.
+        15: [3, 4, 3, 5],
+        16: [3, 4, 4, 5],
+        17: [3, 4, 5, 5],
+        18: [3, 4, 5, 6],
+        19: [3, 5, 5, 6],
+
+        // Alternate densities to avoid monotonous layouts for these very high
+        // article-count collections.
+        20: [3, 4, 3, 4, 6],
+        21: [3, 4, 3, 5, 6],
+        22: [3, 4, 4, 4, 6],
+        23: [3, 5, 4, 5, 6],
+
+        24: [3, 4, 3, 5, 3, 6],
+        25: [3, 4, 3, 4, 5, 6],
+    }
+}
+
 export const getCardsForFront = (
     frontName: string,
 ): FrontCardsForArticleCount => {
     switch (frontName) {
+        case 'National':
+        case 'World':
+        case 'Financial':
+            return denseLayout()
         case 'Crosswords':
             return {
                 0: [],

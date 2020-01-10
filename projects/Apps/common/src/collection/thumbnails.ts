@@ -17,6 +17,8 @@ export const getImageUse = (
             return 'not-used'
         case ItemType.SplitImageItemType:
             return 'thumb'
+        case ItemType.StarterItemType:
+
         case ItemType.ImageItemType:
             if (cardSize.width === 1) {
                 return 'thumb'
