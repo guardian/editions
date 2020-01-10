@@ -62,6 +62,10 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         backgroundColor: color.dimBackground,
     },
+    listPlaceholder: {
+        backgroundColor: color.dimmerBackground,
+        height: '100%',
+    },
 })
 
 const HomeScreenHeader = withNavigation(
@@ -331,6 +335,9 @@ const IssueListView = withNavigation(
 
             return (
                 <FlatList
+                    // Only render 4 because the fronts list will take up most
+                    // space on the screen. This improves performance.
+                    initialNumToRender={4}
                     ItemSeparatorComponent={Separator}
                     ListFooterComponent={footer}
                     style={styles.issueList}
@@ -396,8 +403,25 @@ const IssueListFetchContainer = () => {
     const data = useIssueSummary()
     const issueSummary = data.issueSummary || NO_ISSUES
     const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID)
+    const [isShown, setIsShown] = useState(false)
+
+    useEffect(() => {
+        // Adding a tiny delay before doing full rendering means that the
+        // animation opening the "sidebar" of the app will happen immediately,
+        // and while the animation happens we render the list. This better
+        // parallelisation means we can get better perceived performance, but
+        // the downside is that causes the list itself to "flash" in. Ideally
+        // we'd have better rendering performance but that's not the case at
+        // this point in time.
+        //
+        // `setTimeout` is necessary, otherwise React merges the `setIsShown`
+        // within the original rendering.
+        setTimeout(() => setIsShown(true), 0)
+    }, [])
 
     const resp = useIssueResponse(issueId)
+    if (!isShown) return <View style={styles.listPlaceholder} />
+
     return resp({
         error: (error: {}) => (
             <IssueListViewWithDelay
