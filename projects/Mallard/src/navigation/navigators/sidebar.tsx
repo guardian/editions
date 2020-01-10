@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     View,
+    Platform,
 } from 'react-native'
 import {
     createStackNavigator,
@@ -25,6 +26,11 @@ import {
 } from '../helpers/transition'
 import { sidebarWidth } from './sidebar/positions'
 import { screenInterpolator, mainLayerTransition } from './sidebar/transition'
+
+const USE_SIDEBAR_ANIMATION =
+    supportsTransparentCards() ||
+    /* Android API Level 29; would need to test further on lower versions */
+    (Platform.OS === 'android' && Platform.Version >= 29)
 
 const overlayStyles = StyleSheet.create({
     root: {
@@ -122,12 +128,12 @@ export const createSidebarNavigator = (
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
-        _: supportsTransparentCards()
+        _: USE_SIDEBAR_ANIMATION
             ? addViewsForMainLayer(mainRoute, () => animatedValue)
             : mainRoute,
     }
     for (const [key, value] of Object.entries(sidebarRoute)) {
-        navigation[key] = supportsTransparentCards()
+        navigation[key] = USE_SIDEBAR_ANIMATION
             ? addViewsForSidebarLayer(value, () => animatedValue)
             : value
     }
@@ -151,7 +157,7 @@ export const createSidebarNavigator = (
             gesturesEnabled: false,
         },
         headerMode: 'none',
-        ...(supportsTransparentCards()
+        ...(USE_SIDEBAR_ANIMATION
             ? {
                   mode: 'modal',
                   transparentCard: isTablet,
