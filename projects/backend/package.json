@@ -48,5 +48,8 @@
         "striptags": "^3.1.1",
         "ts-optchain": "^0.1.8",
         "utility-types": "^3.7.0"
+    },
+    "resolutions": {
+        "handlebars": "4.6.0"
     }
 }
