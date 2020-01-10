@@ -36,10 +36,12 @@ import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { colour } from '@guardian/pasteup/palette'
 
-import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
+import { DownloadBlockedStatus, NetInfo } from 'src/hooks/use-net-info'
 import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 import { UiBodyCopy } from '../styled-text'
 import { useApolloClient } from '@apollo/react-hooks'
+import { useQuery } from 'src/hooks/apollo'
+import gql from 'graphql-tag'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)
@@ -108,6 +110,18 @@ const getStatusPercentage = (status: DLStatus): number | null => {
     return null
 }
 
+const NET_INFO_QUERY = gql`
+    {
+        netInfo @client {
+            downloadBlocked @client
+            isConnected @client
+        }
+    }
+`
+type NetInfoQueryValue = {
+    netInfo: Pick<NetInfo, 'downloadBlocked' | 'isConnected'>
+}
+
 const IssueButton = ({
     issue,
     onGoToSettings,
@@ -118,7 +132,7 @@ const IssueButton = ({
     const isOnDevice = useIssueOnDevice(issue.localId)
     const [dlStatus, setDlStatus] = useState<DLStatus | null>(null)
     const { showToast } = useToast()
-    const { downloadBlocked, isConnected } = useNetInfo()
+    const res = useQuery<NetInfoQueryValue>(NET_INFO_QUERY)
     const client = useApolloClient()
 
     const handleUpdate = useCallback(
@@ -135,6 +149,8 @@ const IssueButton = ({
         maybeListenToExistingDownload(issue, handleUpdate)
     }, [issue, handleUpdate])
 
+    if (res.loading) return null
+    const { downloadBlocked, isConnected } = res.data.netInfo
     const onDownloadIssue = async () => {
         if (isOnDevice !== ExistsStatus.doesNotExist) return
         switch (downloadBlocked) {

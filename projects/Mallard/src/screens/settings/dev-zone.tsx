@@ -24,7 +24,7 @@ import { getFileList } from 'src/helpers/files'
 import { deleteIssueFiles } from 'src/helpers/files'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
 import { Switch } from 'react-native-gesture-handler'
-import { useNetInfo } from 'src/hooks/use-net-info'
+import { NetInfo } from 'src/hooks/use-net-info'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -46,13 +46,19 @@ const ButtonList = ({ children }: { children: ReactNode }) => {
     )
 }
 
-const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
-    const {
-        isDevButtonShown: showNetInfoButton,
-        setIsDevButtonShown: setShowNetInfoButton,
-    } = useNetInfo()
-    const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
+const NET_INFO_QUERY = gql`
+    {
+        netInfo @client {
+            isDevButtonShown @client
+            setIsDevButtonShown @client
+        }
+    }
+`
+type NetInfoQueryValue = {
+    netInfo: Pick<NetInfo, 'isDevButtonShown' | 'setIsDevButtonShown'>
+}
 
+const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     const { attempt, signOutCAS } = useContext(AccessContext)
     const { showToast } = useToast()
 
@@ -72,13 +78,21 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         })
     }, [])
 
+    const netInfoRes = useQuery<NetInfoQueryValue>(NET_INFO_QUERY)
+
     const query = useQuery<{ [key: string]: unknown }>(
         gql(`{ ${ALL_SETTINGS_FRAGMENT} }`),
     )
-    if (query.loading) return null
+    if (query.loading || netInfoRes.loading) return null
     const { data, client } = query
     const { apiUrl } = data
     if (typeof apiUrl !== 'string') throw new Error('expected string')
+
+    const {
+        isDevButtonShown: showNetInfoButton,
+        setIsDevButtonShown: setShowNetInfoButton,
+    } = netInfoRes.data.netInfo
+    const onToggleNetInfoButton = () => setShowNetInfoButton(!showNetInfoButton)
 
     return (
         <>

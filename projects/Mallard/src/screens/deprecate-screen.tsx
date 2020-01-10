@@ -13,8 +13,10 @@ import { useDeprecationModal } from 'src/hooks/use-deprecation-screen'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
 import { TitlepieceText } from '../components/styled-text'
-import { useNetInfo } from '../hooks/use-net-info'
 import { defaultSettings } from 'src/helpers/settings/defaults'
+import { useQuery } from 'src/hooks/apollo'
+import { NetInfo } from 'src/hooks/use-net-info'
+import gql from 'graphql-tag'
 
 const styles = StyleSheet.create({
     container: {
@@ -61,10 +63,21 @@ const StoreLink = () => {
     )
 }
 
+const NET_INFO_QUERY = gql`
+    {
+        netInfo @client {
+            isConnected @client
+        }
+    }
+`
+type NetInfoQueryValue = { netInfo: Pick<NetInfo, 'isConnected'> }
+
 const DeprecateVersionModal = () => {
-    const { isConnected } = useNetInfo()
+    const res = useQuery<NetInfoQueryValue>(NET_INFO_QUERY)
     const { showModal } = useDeprecationModal()
 
+    if (res.loading) return null
+    const { isConnected } = res.data.netInfo
     return (
         <Modal visible={isConnected && showModal}>
             <SafeAreaView style={styles.container}>

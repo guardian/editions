@@ -3,7 +3,6 @@ import { NetInfoState, NetInfoStateType } from '@react-native-community/netinfo'
 import { Dispatch } from 'react'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
-import { useQuery } from './apollo'
 import { isEqual } from 'apollo-utilities'
 
 /**
@@ -207,34 +206,3 @@ export const createNetInfoResolver = () => {
         return statePromise.then(assembleNetInfo)
     }
 }
-
-/**
- * Deprecated. Instead, one should directly use `useQuery` with the specific
- * fields one wish to query. This is because otherwise, your React component
- * will re-render whenever any of the fields change, even ones not in use
- * by the component.
- */
-const useNetInfo = (() => {
-    const LOADING: NetInfo = {
-        __typename,
-        type: NetInfoStateType.unknown,
-        isConnected: false,
-        details: null,
-        isForcedOffline: false,
-        downloadBlocked: DownloadBlockedStatus.NotBlocked,
-        setIsForcedOffline: () => {},
-        isDevButtonShown: false,
-        setIsDevButtonShown: () => {},
-    }
-
-    return (): NetInfo => {
-        const res = useQuery<{ netInfo: NetInfo }>(QUERY)
-        // FIXME: having a fake 'loading' set of data causes the UI to render
-        // with some invalid values at first only to re-render later with the
-        // final values. Instead we shouldn't render until it's finished
-        // loading.
-        return res.loading ? LOADING : res.data.netInfo
-    }
-})()
-
-export { useNetInfo }
