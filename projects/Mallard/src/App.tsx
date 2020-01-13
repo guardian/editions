@@ -127,6 +127,7 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
+        clearAndDownloadIssue(apolloClient)
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
