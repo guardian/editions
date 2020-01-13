@@ -6,7 +6,7 @@ import React, {
     useMemo,
     Dispatch,
 } from 'react'
-import { View, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet, Platform } from 'react-native'
 import {
     NavigationInjectedProps,
     NavigationScreenProp,
@@ -403,7 +403,11 @@ const IssueListFetchContainer = () => {
     const data = useIssueSummary()
     const issueSummary = data.issueSummary || NO_ISSUES
     const [issueId, setIssueId] = useState(data.issueId || EMPTY_ISSUE_ID)
-    const [isShown, setIsShown] = useState(false)
+    const [isShown, setIsShown] = useState(
+        // on iOS there is bug that causes wrong rendering of the scroll bar
+        // if this is enabled. See below description of this mechanism.
+        Platform.select({ android: false, default: true }),
+    )
 
     useEffect(() => {
         // Adding a tiny delay before doing full rendering means that the
