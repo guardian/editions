@@ -15,6 +15,7 @@ import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import { NetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
+import { withCache } from './fetch/cache'
 
 interface BasicFile {
     filename: string
@@ -74,6 +75,9 @@ export const downloadNamedIssueArchive = async (
     }).fetch('GET', zipUrl)
     return {
         promise: returnable.then(async res => {
+            // Ensure issue is removed from the cache on completion
+            const { clear } = withCache('issue')
+            clear(localIssueId)
             await prepFileSystem()
             await ensureDirExists(FSPaths.issueRoot(localIssueId))
             return res
