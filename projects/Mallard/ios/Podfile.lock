@@ -289,7 +289,7 @@ PODS:
   - SDWebImage (5.4.2):
     - SDWebImage/Core (= 5.4.2)
   - SDWebImage/Core (5.4.2)
-  - SDWebImageWebPCoder (0.2.5):
+  - SDWebImageWebPCoder (0.2.3):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.0)
   - Sentry (4.4.0):
@@ -521,7 +521,7 @@ SPEC CHECKSUMS:
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
   RNZipArchive: be636657a6630e9771d4a3223dc8fd0bd0137b55
   SDWebImage: 4ca2dc4eefae4224bea8f504251cda485a363745
-  SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
+  SDWebImageWebPCoder: 7568737603c50f6237850afedd7e9e28e5917e6b
   Sentry: 26650184fe71eb7476dfd2737acb5ea6cc64b4b1
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
