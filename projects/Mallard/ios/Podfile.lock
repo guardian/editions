@@ -286,9 +286,9 @@ PODS:
   - RNZipArchive/Core (5.0.0):
     - React
     - SSZipArchive (= 2.2.2)
-  - SDWebImage (5.4.2):
-    - SDWebImage/Core (= 5.4.2)
-  - SDWebImage/Core (5.4.2)
+  - SDWebImage (5.0.0):
+    - SDWebImage/Core (= 5.0.0)
+  - SDWebImage/Core (5.0.0)
   - SDWebImageWebPCoder (0.2.3):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.0)
