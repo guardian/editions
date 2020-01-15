@@ -15,20 +15,12 @@ export const useIssueWithResponse = <T>(
     deps: unknown[] = [],
 ) => withResponse<T>(useCachedOrPromise<T>(getter, deps))
 
-export const getIssueResponse = (
-    localIssueId: Issue['localId'],
-    publishedIssueId: Issue['publishedId'],
-) => {
-    //TODO: make this work with twin ids
-    return fetchIssue(localIssueId, publishedIssueId)
-}
-
 export const useIssueResponse = (issue: {
     localIssueId: Issue['localId']
     publishedIssueId: Issue['publishedId']
 }) =>
     useIssueWithResponse(
-        getIssueResponse(issue.localIssueId, issue.publishedIssueId),
+        fetchIssue(issue.localIssueId, issue.publishedIssueId),
         [issue],
     )
 
@@ -38,7 +30,7 @@ export const getArticleResponse = ({
     publishedIssueId,
     front,
 }: PathToArticle) =>
-    chain(getIssueResponse(localIssueId, publishedIssueId), issue => {
+    chain(fetchIssue(localIssueId, publishedIssueId), issue => {
         const maybeFront = issue.fronts.find(f => f.key === front)
         if (!maybeFront) throw ERR_404_REMOTE
 
