@@ -16,7 +16,7 @@ const useConfig = () => {
                 deviceMemory > oneGB &&
                 setConfig({ ...config, optimisedFlatList: false }),
         )
-    }, [])
+    }, [config])
 
     return {
         config,

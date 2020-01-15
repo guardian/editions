@@ -68,7 +68,6 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
-import DeviceInfo from 'react-native-device-info'
 import { useConfig } from 'src/hooks/use-config'
 
 const styles = StyleSheet.create({
