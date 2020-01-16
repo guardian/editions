@@ -72,7 +72,7 @@ export const generateAssetsFontCss = ({
     extension?: string
 }) => {
     const fileName = Platform.select({
-        ios: `file:///assets/fonts/${fontFamily}.${extension}`,
+        ios: `${fontFamily}.${extension}`,
         android: `file:///android_asset/fonts/${fontFamily}.${extension}`,
     })
 
