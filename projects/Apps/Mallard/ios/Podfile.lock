@@ -19,15 +19,15 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - libwebp (1.1.0):
-    - libwebp/demux (= 1.1.0)
-    - libwebp/mux (= 1.1.0)
-    - libwebp/webp (= 1.1.0)
-  - libwebp/demux (1.1.0):
+  - libwebp (1.0):
+    - libwebp/demux (= 1.0)
+    - libwebp/mux (= 1.0)
+    - libwebp/webp (= 1.0)
+  - libwebp/demux (1.0):
     - libwebp/webp
-  - libwebp/mux (1.1.0):
+  - libwebp/mux (1.0):
     - libwebp/demux
-  - libwebp/webp (1.1.0)
+  - libwebp/webp (1.0)
   - Permission-LocationWhenInUse (2.0.9):
     - RNPermissions
   - RCTRequired (0.61.5)
@@ -260,8 +260,8 @@ PODS:
     - React
   - RNFastImage (7.0.2):
     - React
-    - SDWebImage (~> 5.4.2)
-    - SDWebImageWebPCoder (~> 0.2.5)
+    - SDWebImage (~> 5.0)
+    - SDWebImageWebPCoder (~> 0.2.3)
   - RNGestureHandler (1.5.3):
     - React
   - RNIap (3.5.9):
@@ -286,10 +286,10 @@ PODS:
   - RNZipArchive/Core (5.0.0):
     - React
     - SSZipArchive (= 2.2.2)
-  - SDWebImage (5.4.2):
-    - SDWebImage/Core (= 5.4.2)
-  - SDWebImage/Core (5.4.2)
-  - SDWebImageWebPCoder (0.2.5):
+  - SDWebImage (5.0):
+    - SDWebImage/Core (= 5.0)
+  - SDWebImage/Core (5.0)
+  - SDWebImageWebPCoder (0.2.3):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.0)
   - Sentry (4.4.3):
