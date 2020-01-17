@@ -5,7 +5,7 @@ import {
     FrontCardAppearance,
 } from 'src/common'
 import { palette, PillarColours } from '@guardian/pasteup/palette'
-import { ArticlePillar } from '../../../Apps/common/src'
+import { ArticlePillar } from '@guardian/editions-common'
 
 export interface FlatCard {
     collection: Collection

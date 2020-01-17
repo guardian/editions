@@ -1,5 +1,5 @@
 const path = require('path')
-const { crosswords } = require('../../Mallard/html/manifest')
+const { crosswords } = require('../Mallard/html/manifest')
 
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 module.exports = {

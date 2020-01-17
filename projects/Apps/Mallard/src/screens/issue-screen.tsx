@@ -60,7 +60,7 @@ import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize, WithIssueScreenSize } from './issue/use-size'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
-import { IssueWithFronts, Front as TFront } from '../../../Apps/common/src'
+import { IssueWithFronts, Front as TFront } from '@guardian/editions-common'
 import {
     flattenCollectionsToCards,
     flattenFlatCardsToFront,

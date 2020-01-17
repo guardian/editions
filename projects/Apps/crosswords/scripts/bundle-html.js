@@ -8,10 +8,10 @@ const bundleHTML = (location = 'Mallard') => {
     )) {
         exec(
             [
-                `cd ../../projects/${project}`,
+                `cd ../../../projects/${project}`,
                 buildScript,
-                `rm -rf ../../../projects/${location}/html/${key}.bundle`,
-                `mv ./${buildPath} ../../../projects/${location}/html/${key}.bundle`,
+                `rm -rf ../../../projects/Apps/${location}/html/${key}.bundle`,
+                `mv ./${buildPath} ../../../projects/Apps/${location}/html/${key}.bundle`,
             ].join(' && '),
             (err, _, stderr) => {
                 if (err || stderr) {

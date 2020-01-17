@@ -4,7 +4,7 @@ import {
     sizeDescriptions,
     ImageSize,
     imageSizes,
-} from '../../../Apps/common/src'
+} from '@guardian/editions-common'
 import AsyncStorage from '@react-native-community/async-storage'
 
 export const maxScreenSize = (): number => {
