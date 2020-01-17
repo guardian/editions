@@ -12,73 +12,51 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		144ED6CC5BE2FA6DEDDB6DF4 /* libPods-Mallard-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAD660688DF776E1FA0A2130 /* libPods-Mallard-tvOS.a */; };
-		230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */ = {isa = PBXBuildFile; fileRef = CEC9D18600B14CC098C48387 /* guardianIcons_1.12.otf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* MallardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MallardTests.m */; };
-		30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B8F9A4ED48041FBB588FDD5 /* GuardianWeatherIcons-Regular.ttf */; };
 		7836FF3F0ADEA9274CAD15ED /* libPods-Mallard-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C512E12ECC343D6E33F7A1 /* libPods-Mallard-tvOSTests.a */; };
 		950E1C012317E06F00F38B92 /* Ophan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950E1C002317E06F00F38B92 /* Ophan.swift */; };
 		9518F33E23D1C7F200F45458 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9518F33D23D1C7F100F45458 /* RNBackgroundFetch+AppDelegate.m */; };
 		9518F34023D1CEF200F45458 /* ophan.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9518F33F23D1CEF200F45458 /* ophan.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9518F39323D1DCA200F45458 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34523D1DBAC00F45458 /* GHGuardianHeadline-Black.ttf */; };
+		9518F39423D1DCA200F45458 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35023D1DBAC00F45458 /* GHGuardianHeadline-BlackItalic.ttf */; };
+		9518F39523D1DCA200F45458 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34123D1DBAB00F45458 /* GHGuardianHeadline-Bold.ttf */; };
+		9518F39623D1DCA200F45458 /* GHGuardianHeadline-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34A23D1DBAC00F45458 /* GHGuardianHeadline-BoldItalic.ttf */; };
+		9518F39723D1DCA200F45458 /* GHGuardianHeadline-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34D23D1DBAC00F45458 /* GHGuardianHeadline-Light.ttf */; };
+		9518F39823D1DCA200F45458 /* GHGuardianHeadline-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34923D1DBAC00F45458 /* GHGuardianHeadline-LightItalic.ttf */; };
+		9518F39923D1DCA200F45458 /* GHGuardianHeadline-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35623D1DBAD00F45458 /* GHGuardianHeadline-Medium.ttf */; };
+		9518F39A23D1DCA200F45458 /* GHGuardianHeadline-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34723D1DBAC00F45458 /* GHGuardianHeadline-MediumItalic.ttf */; };
+		9518F39B23D1DCA200F45458 /* GHGuardianHeadline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35823D1DBAD00F45458 /* GHGuardianHeadline-Regular.ttf */; };
+		9518F39C23D1DCA200F45458 /* GHGuardianHeadline-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34223D1DBAB00F45458 /* GHGuardianHeadline-RegularItalic.ttf */; };
+		9518F39D23D1DCA200F45458 /* GHGuardianHeadline-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35223D1DBAD00F45458 /* GHGuardianHeadline-Semibold.ttf */; };
+		9518F39E23D1DCA200F45458 /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34F23D1DBAC00F45458 /* GHGuardianHeadline-SemiboldItalic.ttf */; };
+		9518F39F23D1DCA200F45458 /* GTGuardianDaily-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35523D1DBAD00F45458 /* GTGuardianDaily-Regular.otf */; };
+		9518F3A023D1DCA200F45458 /* GTGuardianTitlepiece-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34E23D1DBAC00F45458 /* GTGuardianTitlepiece-Bold.ttf */; };
+		9518F3A123D1DCA200F45458 /* guardianIcons_1.12.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34423D1DBAC00F45458 /* guardianIcons_1.12.otf */; };
+		9518F3A223D1DCA200F45458 /* GuardianIcons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34C23D1DBAC00F45458 /* GuardianIcons-Regular.otf */; };
+		9518F3A323D1DCA200F45458 /* GuardianTextEgyptian-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34623D1DBAC00F45458 /* GuardianTextEgyptian-Bold.ttf */; };
+		9518F3A423D1DCA200F45458 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34823D1DBAC00F45458 /* GuardianTextEgyptian-BoldItalic.ttf */; };
+		9518F3A523D1DCA200F45458 /* GuardianTextEgyptian-Reg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35723D1DBAD00F45458 /* GuardianTextEgyptian-Reg.ttf */; };
+		9518F3A623D1DCA200F45458 /* GuardianTextEgyptian-RegIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35A23D1DBAD00F45458 /* GuardianTextEgyptian-RegIt.ttf */; };
+		9518F3A723D1DCA200F45458 /* GuardianTextSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35323D1DBAD00F45458 /* GuardianTextSans-Bold.ttf */; };
+		9518F3A823D1DCA200F45458 /* GuardianTextSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34B23D1DBAC00F45458 /* GuardianTextSans-BoldItalic.ttf */; };
+		9518F3A923D1DCA200F45458 /* GuardianTextSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35B23D1DBAD00F45458 /* GuardianTextSans-Regular.ttf */; };
+		9518F3AA23D1DCA200F45458 /* GuardianTextSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35423D1DBAD00F45458 /* GuardianTextSans-RegularItalic.ttf */; };
+		9518F3AB23D1DCA200F45458 /* GuardianWeatherIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F34323D1DBAB00F45458 /* GuardianWeatherIcons-Regular.ttf */; };
+		9518F3AC23D1DCA200F45458 /* SpaceMono-Regular copy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35923D1DBAD00F45458 /* SpaceMono-Regular copy.ttf */; };
+		9518F3AD23D1DCA200F45458 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9518F35123D1DBAD00F45458 /* SpaceMono-Regular.ttf */; };
 		95610CA8232BF0FF006B5DF2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */; };
 		95B08633238D6EEA00828D1E /* ophan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B08632238D6EEA00828D1E /* ophan.framework */; };
 		95CB9F1B2316B6E900F2F6B0 /* Ophan.m in Sources */ = {isa = PBXBuildFile; fileRef = 95CB9F192316B6E900F2F6B0 /* Ophan.m */; };
 		9BBB47E16F9C3A412F678A92 /* libPods-Mallard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9F542F9A3CB816E7750C23 /* libPods-Mallard.a */; };
 		A13D0DC22316783B00505524 /* ReleaseStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC12316783B00505524 /* ReleaseStream.swift */; };
 		A13D0DC423167BB400505524 /* ReleaseStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A13D0DC323167BB400505524 /* ReleaseStream.m */; };
-		AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 390F189D7C21419CBF783434 /* GTGuardianDaily-Regular.otf */; };
 		BB77E8F846CDE9D32C493592 /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
-		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
-		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
-		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
-		C549379A22B149BB00B1D9A2 /* GHGuardianHeadline-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DA2FD0EC69B436384494394 /* GHGuardianHeadline-BoldItalic.ttf */; };
-		C549379B22B149BB00B1D9A2 /* GHGuardianHeadline-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED175DCD22A3452EA1C9C2E4 /* GHGuardianHeadline-Light.ttf */; };
-		C549379C22B149BB00B1D9A2 /* GHGuardianHeadline-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D91ACCF49F13465D84BB81D7 /* GHGuardianHeadline-LightItalic.ttf */; };
-		C549379D22B149BB00B1D9A2 /* GHGuardianHeadline-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 274228DDF01142578ACE0F48 /* GHGuardianHeadline-Medium.ttf */; };
-		C549379E22B149BB00B1D9A2 /* GHGuardianHeadline-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92C66C5662CA467DB9BDFDCB /* GHGuardianHeadline-MediumItalic.ttf */; };
-		C549379F22B149BB00B1D9A2 /* GHGuardianHeadline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 633BB1AFE255417982D19DF7 /* GHGuardianHeadline-Regular.ttf */; };
-		C54937A022B149BB00B1D9A2 /* GHGuardianHeadline-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6AF18C71E29042F4BCB55E18 /* GHGuardianHeadline-RegularItalic.ttf */; };
-		C54937A122B149BB00B1D9A2 /* GHGuardianHeadline-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9D9CF659A9A46959578BE69 /* GHGuardianHeadline-Semibold.ttf */; };
-		C54937A222B149BB00B1D9A2 /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C9724288715471BB3FE3B73 /* GHGuardianHeadline-SemiboldItalic.ttf */; };
-		C54937A322B149BB00B1D9A2 /* GTGuardianTitlepiece-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4B8720580854D169FC0E89F /* GTGuardianTitlepiece-Bold.ttf */; };
-		C54937A422B149BB00B1D9A2 /* GuardianTextEgyptian-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 20EAB36C2768498C8DA8BFE4 /* GuardianTextEgyptian-Bold.ttf */; };
-		C54937A522B149BB00B1D9A2 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 199EA3FD38444461A2EDB428 /* GuardianTextEgyptian-BoldItalic.ttf */; };
-		C54937A622B149BB00B1D9A2 /* GuardianTextEgyptian-Reg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90A50D1828ED405BB7AD9145 /* GuardianTextEgyptian-Reg.ttf */; };
-		C54937A722B149BB00B1D9A2 /* GuardianTextEgyptian-RegIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 066221D953054F3682287E74 /* GuardianTextEgyptian-RegIt.ttf */; };
-		C54937A822B149BB00B1D9A2 /* GuardianTextSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C73DD286DF1C4408BBB2D277 /* GuardianTextSans-Bold.ttf */; };
-		C54937A922B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32B3CC9963BA4216B98F3053 /* GuardianTextSans-BoldItalic.ttf */; };
-		C54937AA22B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 574E262EB3A24AA6AA8027CA /* GuardianTextSans-Regular.ttf */; };
-		C54937AB22B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5025F485D71B4A288ED193B0 /* GuardianTextSans-RegularItalic.ttf */; };
-		C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9D5A81177BD4E53AE3E6D4C /* SpaceMono-Regular copy.ttf */; };
 		C555A75222848D6C002DF16C /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = C555A72822848D6C002DF16C /* Icon-1024.png */; };
-		E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 79BBF3A13361423996CF9307 /* GuardianIcons-Regular.otf */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -162,6 +140,33 @@
 		950E1C002317E06F00F38B92 /* Ophan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ophan.swift; sourceTree = "<group>"; };
 		9518F33D23D1C7F100F45458 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		9518F33F23D1CEF200F45458 /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../../ophan/build/bin/ios/universalFramework/ophan.framework; sourceTree = "<group>"; };
+		9518F34123D1DBAB00F45458 /* GHGuardianHeadline-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-Bold.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-Bold.ttf"; sourceTree = "<group>"; };
+		9518F34223D1DBAB00F45458 /* GHGuardianHeadline-RegularItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-RegularItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-RegularItalic.ttf"; sourceTree = "<group>"; };
+		9518F34323D1DBAB00F45458 /* GuardianWeatherIcons-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianWeatherIcons-Regular.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianWeatherIcons-Regular.ttf"; sourceTree = "<group>"; };
+		9518F34423D1DBAC00F45458 /* guardianIcons_1.12.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = guardianIcons_1.12.otf; path = "../../../editions-src/src/assets/fonts/guardianIcons_1.12.otf"; sourceTree = "<group>"; };
+		9518F34523D1DBAC00F45458 /* GHGuardianHeadline-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-Black.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-Black.ttf"; sourceTree = "<group>"; };
+		9518F34623D1DBAC00F45458 /* GuardianTextEgyptian-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextEgyptian-Bold.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextEgyptian-Bold.ttf"; sourceTree = "<group>"; };
+		9518F34723D1DBAC00F45458 /* GHGuardianHeadline-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-MediumItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-MediumItalic.ttf"; sourceTree = "<group>"; };
+		9518F34823D1DBAC00F45458 /* GuardianTextEgyptian-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextEgyptian-BoldItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextEgyptian-BoldItalic.ttf"; sourceTree = "<group>"; };
+		9518F34923D1DBAC00F45458 /* GHGuardianHeadline-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-LightItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-LightItalic.ttf"; sourceTree = "<group>"; };
+		9518F34A23D1DBAC00F45458 /* GHGuardianHeadline-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-BoldItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-BoldItalic.ttf"; sourceTree = "<group>"; };
+		9518F34B23D1DBAC00F45458 /* GuardianTextSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-BoldItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		9518F34C23D1DBAC00F45458 /* GuardianIcons-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianIcons-Regular.otf"; path = "../../../editions-src/src/assets/fonts/GuardianIcons-Regular.otf"; sourceTree = "<group>"; };
+		9518F34D23D1DBAC00F45458 /* GHGuardianHeadline-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-Light.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-Light.ttf"; sourceTree = "<group>"; };
+		9518F34E23D1DBAC00F45458 /* GTGuardianTitlepiece-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GTGuardianTitlepiece-Bold.ttf"; path = "../../../editions-src/src/assets/fonts/GTGuardianTitlepiece-Bold.ttf"; sourceTree = "<group>"; };
+		9518F34F23D1DBAC00F45458 /* GHGuardianHeadline-SemiboldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-SemiboldItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-SemiboldItalic.ttf"; sourceTree = "<group>"; };
+		9518F35023D1DBAC00F45458 /* GHGuardianHeadline-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-BlackItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-BlackItalic.ttf"; sourceTree = "<group>"; };
+		9518F35123D1DBAD00F45458 /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SpaceMono-Regular.ttf"; path = "../../../editions-src/src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
+		9518F35223D1DBAD00F45458 /* GHGuardianHeadline-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-Semibold.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-Semibold.ttf"; sourceTree = "<group>"; };
+		9518F35323D1DBAD00F45458 /* GuardianTextSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-Bold.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextSans-Bold.ttf"; sourceTree = "<group>"; };
+		9518F35423D1DBAD00F45458 /* GuardianTextSans-RegularItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-RegularItalic.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextSans-RegularItalic.ttf"; sourceTree = "<group>"; };
+		9518F35523D1DBAD00F45458 /* GTGuardianDaily-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GTGuardianDaily-Regular.otf"; path = "../../../editions-src/src/assets/fonts/GTGuardianDaily-Regular.otf"; sourceTree = "<group>"; };
+		9518F35623D1DBAD00F45458 /* GHGuardianHeadline-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-Medium.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-Medium.ttf"; sourceTree = "<group>"; };
+		9518F35723D1DBAD00F45458 /* GuardianTextEgyptian-Reg.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextEgyptian-Reg.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextEgyptian-Reg.ttf"; sourceTree = "<group>"; };
+		9518F35823D1DBAD00F45458 /* GHGuardianHeadline-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GHGuardianHeadline-Regular.ttf"; path = "../../../editions-src/src/assets/fonts/GHGuardianHeadline-Regular.ttf"; sourceTree = "<group>"; };
+		9518F35923D1DBAD00F45458 /* SpaceMono-Regular copy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SpaceMono-Regular copy.ttf"; path = "../../../editions-src/src/assets/fonts/SpaceMono-Regular copy.ttf"; sourceTree = "<group>"; };
+		9518F35A23D1DBAD00F45458 /* GuardianTextEgyptian-RegIt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextEgyptian-RegIt.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextEgyptian-RegIt.ttf"; sourceTree = "<group>"; };
+		9518F35B23D1DBAD00F45458 /* GuardianTextSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GuardianTextSans-Regular.ttf"; path = "../../../editions-src/src/assets/fonts/GuardianTextSans-Regular.ttf"; sourceTree = "<group>"; };
 		95610CA7232BF0FF006B5DF2 /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Mallard/LaunchScreen.xib; sourceTree = "<group>"; };
 		95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SpaceMono-Regular.ttf"; path = "../src/assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; };
 		95B0862E238D6E4C00828D1E /* ophan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ophan.framework; path = ../Apps/ophan/build/bin/ios/releaseFramework/ophan.framework; sourceTree = "<group>"; };
@@ -336,6 +341,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9518F37723D1DBC100F45458 /* Fonts */,
 				4F62AA35231E8D660052ADBA /* ophan.framework */,
 				9518F33F23D1CEF200F45458 /* ophan.framework */,
 				A10F237623191F62004C70CC /* ReleaseStream */,
@@ -364,6 +370,40 @@
 				2D02E4901E0B4A5D006451C7 /* Mallard-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9518F37723D1DBC100F45458 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				9518F34523D1DBAC00F45458 /* GHGuardianHeadline-Black.ttf */,
+				9518F35023D1DBAC00F45458 /* GHGuardianHeadline-BlackItalic.ttf */,
+				9518F34123D1DBAB00F45458 /* GHGuardianHeadline-Bold.ttf */,
+				9518F34A23D1DBAC00F45458 /* GHGuardianHeadline-BoldItalic.ttf */,
+				9518F34D23D1DBAC00F45458 /* GHGuardianHeadline-Light.ttf */,
+				9518F34923D1DBAC00F45458 /* GHGuardianHeadline-LightItalic.ttf */,
+				9518F35623D1DBAD00F45458 /* GHGuardianHeadline-Medium.ttf */,
+				9518F34723D1DBAC00F45458 /* GHGuardianHeadline-MediumItalic.ttf */,
+				9518F35823D1DBAD00F45458 /* GHGuardianHeadline-Regular.ttf */,
+				9518F34223D1DBAB00F45458 /* GHGuardianHeadline-RegularItalic.ttf */,
+				9518F35223D1DBAD00F45458 /* GHGuardianHeadline-Semibold.ttf */,
+				9518F34F23D1DBAC00F45458 /* GHGuardianHeadline-SemiboldItalic.ttf */,
+				9518F35523D1DBAD00F45458 /* GTGuardianDaily-Regular.otf */,
+				9518F34E23D1DBAC00F45458 /* GTGuardianTitlepiece-Bold.ttf */,
+				9518F34423D1DBAC00F45458 /* guardianIcons_1.12.otf */,
+				9518F34C23D1DBAC00F45458 /* GuardianIcons-Regular.otf */,
+				9518F34623D1DBAC00F45458 /* GuardianTextEgyptian-Bold.ttf */,
+				9518F34823D1DBAC00F45458 /* GuardianTextEgyptian-BoldItalic.ttf */,
+				9518F35723D1DBAD00F45458 /* GuardianTextEgyptian-Reg.ttf */,
+				9518F35A23D1DBAD00F45458 /* GuardianTextEgyptian-RegIt.ttf */,
+				9518F35323D1DBAD00F45458 /* GuardianTextSans-Bold.ttf */,
+				9518F34B23D1DBAC00F45458 /* GuardianTextSans-BoldItalic.ttf */,
+				9518F35B23D1DBAD00F45458 /* GuardianTextSans-Regular.ttf */,
+				9518F35423D1DBAD00F45458 /* GuardianTextSans-RegularItalic.ttf */,
+				9518F34323D1DBAB00F45458 /* GuardianWeatherIcons-Regular.ttf */,
+				9518F35923D1DBAD00F45458 /* SpaceMono-Regular copy.ttf */,
+				9518F35123D1DBAD00F45458 /* SpaceMono-Regular.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		95CB9F182316B6E900F2F6B0 /* Ophan */ = {
@@ -553,59 +593,37 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* (null) in Resources */,
-				C549378122B149BB00B1D9A2 /* (null) in Resources */,
-				C549378222B149BB00B1D9A2 /* (null) in Resources */,
-				C549378322B149BB00B1D9A2 /* (null) in Resources */,
-				C549378422B149BB00B1D9A2 /* (null) in Resources */,
-				C549378522B149BB00B1D9A2 /* (null) in Resources */,
-				C549378622B149BB00B1D9A2 /* (null) in Resources */,
-				C549378722B149BB00B1D9A2 /* (null) in Resources */,
-				C549378822B149BB00B1D9A2 /* (null) in Resources */,
-				C549378922B149BB00B1D9A2 /* (null) in Resources */,
-				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
-				C549379022B149BB00B1D9A2 /* (null) in Resources */,
-				C549379122B149BB00B1D9A2 /* (null) in Resources */,
-				C549379222B149BB00B1D9A2 /* (null) in Resources */,
-				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* (null) in Resources */,
-				C549379522B149BB00B1D9A2 /* (null) in Resources */,
-				C549379622B149BB00B1D9A2 /* (null) in Resources */,
-				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
-				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
-				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
-				C549379A22B149BB00B1D9A2 /* GHGuardianHeadline-BoldItalic.ttf in Resources */,
-				C549379B22B149BB00B1D9A2 /* GHGuardianHeadline-Light.ttf in Resources */,
-				C549379C22B149BB00B1D9A2 /* GHGuardianHeadline-LightItalic.ttf in Resources */,
-				C549379D22B149BB00B1D9A2 /* GHGuardianHeadline-Medium.ttf in Resources */,
-				C549379E22B149BB00B1D9A2 /* GHGuardianHeadline-MediumItalic.ttf in Resources */,
-				C549379F22B149BB00B1D9A2 /* GHGuardianHeadline-Regular.ttf in Resources */,
-				C54937A022B149BB00B1D9A2 /* GHGuardianHeadline-RegularItalic.ttf in Resources */,
-				C54937A122B149BB00B1D9A2 /* GHGuardianHeadline-Semibold.ttf in Resources */,
-				C54937A222B149BB00B1D9A2 /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */,
-				C54937A322B149BB00B1D9A2 /* GTGuardianTitlepiece-Bold.ttf in Resources */,
-				C54937A422B149BB00B1D9A2 /* GuardianTextEgyptian-Bold.ttf in Resources */,
-				C54937A522B149BB00B1D9A2 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */,
-				C54937A622B149BB00B1D9A2 /* GuardianTextEgyptian-Reg.ttf in Resources */,
-				C54937A722B149BB00B1D9A2 /* GuardianTextEgyptian-RegIt.ttf in Resources */,
-				C54937A822B149BB00B1D9A2 /* GuardianTextSans-Bold.ttf in Resources */,
-				C54937A922B149BB00B1D9A2 /* GuardianTextSans-BoldItalic.ttf in Resources */,
+				9518F39323D1DCA200F45458 /* GHGuardianHeadline-Black.ttf in Resources */,
+				9518F39423D1DCA200F45458 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
+				9518F39523D1DCA200F45458 /* GHGuardianHeadline-Bold.ttf in Resources */,
+				9518F39623D1DCA200F45458 /* GHGuardianHeadline-BoldItalic.ttf in Resources */,
+				9518F39723D1DCA200F45458 /* GHGuardianHeadline-Light.ttf in Resources */,
+				9518F39823D1DCA200F45458 /* GHGuardianHeadline-LightItalic.ttf in Resources */,
+				9518F39923D1DCA200F45458 /* GHGuardianHeadline-Medium.ttf in Resources */,
+				9518F39A23D1DCA200F45458 /* GHGuardianHeadline-MediumItalic.ttf in Resources */,
+				9518F39B23D1DCA200F45458 /* GHGuardianHeadline-Regular.ttf in Resources */,
+				9518F39C23D1DCA200F45458 /* GHGuardianHeadline-RegularItalic.ttf in Resources */,
+				9518F39D23D1DCA200F45458 /* GHGuardianHeadline-Semibold.ttf in Resources */,
+				9518F39E23D1DCA200F45458 /* GHGuardianHeadline-SemiboldItalic.ttf in Resources */,
+				9518F39F23D1DCA200F45458 /* GTGuardianDaily-Regular.otf in Resources */,
+				9518F3A023D1DCA200F45458 /* GTGuardianTitlepiece-Bold.ttf in Resources */,
+				9518F3A123D1DCA200F45458 /* guardianIcons_1.12.otf in Resources */,
+				9518F3A223D1DCA200F45458 /* GuardianIcons-Regular.otf in Resources */,
+				9518F3A323D1DCA200F45458 /* GuardianTextEgyptian-Bold.ttf in Resources */,
+				9518F3A423D1DCA200F45458 /* GuardianTextEgyptian-BoldItalic.ttf in Resources */,
+				9518F3A523D1DCA200F45458 /* GuardianTextEgyptian-Reg.ttf in Resources */,
+				9518F3A623D1DCA200F45458 /* GuardianTextEgyptian-RegIt.ttf in Resources */,
+				9518F3A723D1DCA200F45458 /* GuardianTextSans-Bold.ttf in Resources */,
+				9518F3A823D1DCA200F45458 /* GuardianTextSans-BoldItalic.ttf in Resources */,
+				9518F3A923D1DCA200F45458 /* GuardianTextSans-Regular.ttf in Resources */,
+				9518F3AA23D1DCA200F45458 /* GuardianTextSans-RegularItalic.ttf in Resources */,
+				9518F3AB23D1DCA200F45458 /* GuardianWeatherIcons-Regular.ttf in Resources */,
+				9518F3AC23D1DCA200F45458 /* SpaceMono-Regular copy.ttf in Resources */,
+				9518F3AD23D1DCA200F45458 /* SpaceMono-Regular.ttf in Resources */,
 				C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */,
-				C54937AA22B149BB00B1D9A2 /* GuardianTextSans-Regular.ttf in Resources */,
-				C54937AB22B149BB00B1D9A2 /* GuardianTextSans-RegularItalic.ttf in Resources */,
-				C54937AC22B149BB00B1D9A2 /* SpaceMono-Regular copy.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C555A75222848D6C002DF16C /* Icon-1024.png in Resources */,
 				95610CA8232BF0FF006B5DF2 /* LaunchScreen.xib in Resources */,
-				E13446919E2A4683B21C5249 /* GuardianIcons-Regular.otf in Resources */,
-				30A65E2732C54D5E94DFE6CD /* GuardianWeatherIcons-Regular.ttf in Resources */,
-				230F903D8CD24F6AA5B55117 /* guardianIcons_1.12.otf in Resources */,
-				AF8876CCFAB04FDDA8588A9E /* GTGuardianDaily-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

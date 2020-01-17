@@ -1,0 +1,20 @@
+# OSX
+#
+.DS_Store
+
+# Visual Studio Code
+#
+# .vscode/
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Bundle artifact
+*.jsbundle
+
+
+#jest files
+coverage
