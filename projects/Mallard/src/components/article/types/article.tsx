@@ -132,7 +132,7 @@ const Article = ({
                 path={path}
                 theme={theme}
                 scrollEnabled={true}
-                useWebKit={true}
+                useWebKit={false}
                 style={[styles.webview]}
                 _ref={r => {
                     ref.current = r
