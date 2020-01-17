@@ -260,8 +260,8 @@ PODS:
     - React
   - RNFastImage (7.0.2):
     - React
-    - SDWebImage (~> 5.0)
-    - SDWebImageWebPCoder (~> 0.2.3)
+    - SDWebImage (~> 5.4.2)
+    - SDWebImageWebPCoder (~> 0.2.5)
   - RNGestureHandler (1.5.3):
     - React
   - RNIap (3.5.9):
