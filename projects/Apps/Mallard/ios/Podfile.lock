@@ -294,7 +294,7 @@ PODS:
     - SDWebImage/Core (~> 5.0)
   - Sentry (4.4.0):
     - Sentry/Core (= 4.4.0)
-  - Sentry/Core (4.4.3)
+  - Sentry/Core (4.4.0)
   - SSZipArchive (2.2.2)
   - Yoga (1.14.0)
 
