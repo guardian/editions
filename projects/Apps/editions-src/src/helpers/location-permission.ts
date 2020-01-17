@@ -18,22 +18,26 @@ const { resolveLocationPermissionStatus, requestLocationPermission } = (() => {
 
     const resolveLocationPermissionStatus = () => {
         if (promise) return promise
-        promise = check(LOCATION_PERMISSION)
+        promise = LOCATION_PERMISSION && check(LOCATION_PERMISSION)
         return promise
     }
 
     const requestLocationPermission = async (
         apolloClient: ApolloClient<object>,
     ): Promise<PermissionStatus> => {
-        promise = request(LOCATION_PERMISSION)
-        const result = await promise
-        apolloClient.writeData({
-            data: {
-                locationPermissionStatus: result,
-            },
-        })
-        refreshWeather(apolloClient)
-        return result
+        if (LOCATION_PERMISSION) {
+            promise = request(LOCATION_PERMISSION)
+            const result = await promise
+            apolloClient.writeData({
+                data: {
+                    locationPermissionStatus: result,
+                },
+            })
+            refreshWeather(apolloClient)
+            return result
+        } else {
+            return 'unavailable'
+        }
     }
 
     return { resolveLocationPermissionStatus, requestLocationPermission }

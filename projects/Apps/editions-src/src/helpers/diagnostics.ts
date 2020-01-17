@@ -64,7 +64,9 @@ const getDiagnosticInfo = async (
         userDataCache.get(),
         iapReceiptCache.get(),
     ])
-    const netInfo = netInfoResult.data.netInfo
+    const netInfo = (netInfoResult && netInfoResult.data.netInfo) || {
+        type: 'Unknown',
+    }
 
     const folderStat = await RNFetchBlob.fs.stat(FSPaths.issuesDir)
     const size = parseInt(folderStat.size)
@@ -106,9 +108,8 @@ Last updated: ${lastUpdateTime}
 ${Platform.OS} Version: ${Platform.Version}
 Device Type: ${deviceId}
 Network availability: ${netInfo.type}
-Privacy settings: ${gdprEntries
-        .map(([key, value]) => `${key}:${value}`)
-        .join(' ')}
+Privacy settings: ${gdprEntries &&
+        gdprEntries.map(([key, value]) => `${key}:${value}`).join(' ')}
 Editions Data Folder Size: ${bytes}B / ${kilobytes}KB / ${megabytes}MB / ${gigabytes}GB
 Total Disk Space: ${totalDiskCapacity}
 Available Disk Spce: ${freeDiskStorage}

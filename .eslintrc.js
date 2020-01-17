@@ -10,7 +10,7 @@ module.exports = {
     settings: {
         react: {
             version: (() => {
-                const mallardPackage = require('./projects/Mallard/package.json')
+                const mallardPackage = require('./projects/Apps/editions-src/package.json')
                 return mallardPackage.dependencies.react.substring(1)
             })(),
         },

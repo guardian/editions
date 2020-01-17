@@ -6,7 +6,7 @@
         "build": "script/make build -j8 -Orecurse",
         "test": "script/make test -j8 -Orecurse",
         "install-mallard": "script/make install",
-        "validate-mallard": "script/make validate-Mallard",
+        "validate-mallard": "echo 'no longer used'",
         "validate-mallard-tsc": "echo 'no longer used'",
         "test-mallard": "script/make test-Mallard"
     },

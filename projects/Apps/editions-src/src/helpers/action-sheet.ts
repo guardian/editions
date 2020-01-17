@@ -16,7 +16,7 @@ const runActionSheet = (
         text: 'Cancel',
         onPress: () => {},
     })
-    return Platform.select({
+    const toRun = Platform.select({
         ios: () =>
             ActionSheetIOS.showActionSheetWithOptions(
                 {
@@ -30,7 +30,8 @@ const runActionSheet = (
             ),
         android: () =>
             Alert.alert(title, message, optionsWithCancel.slice().reverse()),
-    })()
+    })
+    toRun && toRun()
 }
 
 export { runActionSheet }

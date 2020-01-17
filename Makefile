@@ -27,6 +27,21 @@ test: $(patsubst %, test-%, $(PROJECTS))
 build-Mallard:
 	@echo "\n👟 $@ 🦆\n"
 	@echo "\nThis is not yet handled by make\n"
+
+validate-Apps:
+	@echo "\n👟 $@ 🦆\n"
+	@echo "\nThis is not yet handled by make\n"
+
+validate-editions-src: projects/Apps/node_modules node_modules
+	@echo "\n👟🧶 $@ ESLINT 🦆\n"
+	yarn eslint 'projects/Apps/editions-src/**/*.{ts,tsx}' --parser-options=project:./projects/Apps/editions-src/tsconfig.json
+	@echo "\n👟🚂 $@ TSC 🦆\n"
+	cd projects/Apps/editions-src && yarn tsc --noEmit
+
+test-editions-src: projects/Apps/node_modules node_modules
+	@echo "\n👟 $@ 🦆\n"
+	cd projects/Apps/editionsSrc && yarn test
+
 #
 # Project commands
 #

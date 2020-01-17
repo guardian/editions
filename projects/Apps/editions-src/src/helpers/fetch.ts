@@ -110,6 +110,11 @@ const fetchCacheClear = async (): Promise<boolean> => {
             cacheClearCache.get(),
         ])
 
+        if (cacheNumber === null) {
+            // Network request has failed, therefore lets carry on as normal
+            return true
+        }
+
         if (cacheNumberStorage === null) {
             // No data, so store it
             await cacheClearCache.set(cacheNumber.cacheClear)

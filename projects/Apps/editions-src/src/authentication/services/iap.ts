@@ -1,7 +1,6 @@
 import RNIAP, { Purchase } from 'react-native-iap'
 import { Platform } from 'react-native'
 import { ITUNES_CONNECT_SHARED_SECRET } from 'src/constants'
-import { ReceiptValidationResponse } from 'react-native-iap/apple'
 import { NativeModules } from 'react-native'
 import {
     InvalidResult,
@@ -56,7 +55,7 @@ const isReceiptValid = (receipt: ReceiptIOS) => {
     return expirationWithGracePeriod > nowInMilliseconds
 }
 
-const findValidReceipt = (receipt: ReceiptValidationResponse) =>
+const findValidReceipt = (receipt: any) =>
     (receipt.latest_receipt_info as ReceiptIOS[]).find(isReceiptValid) || null
 
 /**

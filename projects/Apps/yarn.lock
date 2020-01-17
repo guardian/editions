@@ -2099,7 +2099,7 @@
   resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-3.0.7.tgz#eeced67f709918c237698ce261f296f469236a4d"
   integrity sha512-7UNlO635Lew05Os/Ex+wzMTDI7XpDYbuGNGwFDfIXvZOGUVoUcyKC6GNy28hfViM9iAT3rQ3K9fDTcW2fqVRnQ==
 
-"@types/react-native@^0.60.5":
+"@types/react-native@^0.60.31", "@types/react-native@^0.60.5":
   version "0.60.31"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.60.31.tgz#a7af12197f884ad8dd22cda2df9862ed72973ded"
   integrity sha512-Y0Q+nv50KHnLL+jM0UH68gQQv7Wt6v2KuNepiHKwK1DoWGVd1oYun/GJCnvUje+/V8pMQQWW6QuBvHZz1pV7tQ==
@@ -2121,7 +2121,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.9.1":
+"@types/react@*", "@types/react@^16.9.0", "@types/react@^16.9.1":
   version "16.9.17"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.17.tgz#58f0cc0e9ec2425d1441dd7b623421a867aa253e"
   integrity sha512-UP27In4fp4sWF5JgyV6pwVPAQM83Fj76JOcg02X5BZcpSu5Wx+fP9RMqc2v0ssBoQIFvD5JdKY41gjJJKmw6Bg==
@@ -6239,7 +6239,7 @@ jest@^24.8.0, jest@^24.9.0:
     import-local "^2.0.0"
     jest-cli "^24.9.0"
 
-jetifier@^1.6.2, jetifier@^1.6.3:
+jetifier@^1.6.2, jetifier@^1.6.3, jetifier@^1.6.5:
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
   integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
@@ -8365,7 +8365,7 @@ react-native-fast-image@^7.0.2:
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-7.0.2.tgz#e06b21f42f4a9786eaa86f3db35d919070fb8403"
   integrity sha512-MfuzJbC0RjYobR2gFCdqe1I7jvNOCfDkjQ7VGOHXniqjohhULMkcWNBE9Umovi9Dx93lJ6t5utcE2wf/09zvlg==
 
-react-native-gesture-handler@^1.5.3:
+react-native-gesture-handler@^1.3.0, react-native-gesture-handler@^1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.5.3.tgz#191b44701fab7ba54c27a2438cb5eaa252666e66"
   integrity sha512-y2/jw0uHAQtEPR02PHAah6tdMymrVtZFoHqjlEWdhK807w2sgU5CySYINK/nOTczd+zB4GMX+9euA3VfbGJ5aA==
@@ -8461,10 +8461,10 @@ react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   dependencies:
     prop-types "^15.6.1"
 
-react-native-webview@^6.9.0:
-  version "6.11.1"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-6.11.1.tgz#51fab0838ef9bdf3efd0d3f27147dddda5119f94"
-  integrity sha512-0OaNCEzdyywJZ70y6Z4fmmuAd2AHYq2AEByIr15z3YetpMXhm9lXUe2V/8BXQIZXeC9FJosj2DAKu48lpZ0nEg==
+react-native-webview@6.9.0:
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-6.9.0.tgz#d637618fe65ddc9972a55a1d181fd6879a2fcebd"
+  integrity sha512-pipcyQNhSjSfMyle+JugLwYXJBJ0rQCnJOgkz7EcsZbrAvGjFbQOAjDRYi86y9Ibw+h+sjdhPWcLi/kSHScc+w==
   dependencies:
     escape-string-regexp "1.0.5"
     invariant "2.2.4"

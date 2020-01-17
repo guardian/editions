@@ -16,5 +16,8 @@
         ],
         "nohoist": []
     },
+    "devDependencies": {
+        "jetifier": "^1.6.5"
+    },
     "private": true
 }
