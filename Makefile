@@ -40,7 +40,7 @@ validate-editions-src: projects/Apps/node_modules node_modules
 
 test-editions-src: projects/Apps/node_modules node_modules
 	@echo "\n👟 $@ 🦆\n"
-	cd projects/Apps/editionsSrc && yarn test
+	cd projects/Apps/editions-src && yarn test
 
 #
 # Project commands
