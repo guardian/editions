@@ -4,6 +4,7 @@
     "description": "Monorepo for React Native Apps",
     "main": "index.js",
     "scripts": {
+        "postinstall": "npx jetifier",
         "test": "yarn workspace @guardian/editions-common run test",
         "build": "echo 'Apps does not need building.'"
     },

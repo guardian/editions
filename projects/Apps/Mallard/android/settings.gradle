@@ -1,7 +1,7 @@
 rootProject.name = 'Mallard'
 include ':@sentry_react-native'
-project(':@sentry_react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@sentry/react-native/android')
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+project(':@sentry_react-native').projectDir = new File(rootProject.projectDir, '../../node_modules/@sentry/react-native/android')
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':ophan'
-project(':ophan').projectDir = new File(rootProject.projectDir, '../../Apps/ophan/')
+project(':ophan').projectDir = new File(rootProject.projectDir, '../../ophan/')
 include ':app'
