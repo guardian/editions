@@ -16,6 +16,9 @@
         ],
         "nohoist": []
     },
+    "dependencies": {
+        "react-native": "0.61.5"
+    },
     "devDependencies": {
         "jetifier": "^1.6.5"
     },
