@@ -81,6 +81,11 @@ project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
 
+project.ext.sentryCli = [
+    logLevel: "debug",
+    sentryProperties: "../sentry.properties"
+]
+
 apply from: "../../../node_modules/react-native/react.gradle"
 apply from: "../../../node_modules/@sentry/react-native/sentry.gradle"
 

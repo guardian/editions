@@ -65,4 +65,5 @@ defaults.url=SENTRY_DEFAULTS_URL
 defaults.org=SENTRY_DEFAULTS_ORG
 defaults.project=SENTRY_DEFAULTS_PROJECT
 auth.token=SENTRY_AUTH_TOKEN
+cli.executable=SENTRY_CLI_EXECUTABLE
 `
