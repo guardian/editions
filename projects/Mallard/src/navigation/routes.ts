@@ -18,6 +18,7 @@ export const routeNames = {
     SignIn: 'SignIn',
     CasSignIn: 'CasSignIn',
     WeatherGeolocationConsent: 'WeatherGeolocationConsent',
+    Lightbox: 'Lightbox',
     onboarding: {
         OnboardingStart: 'OnboardingStart',
         OnboardingConsent: 'OnboardingConsent',

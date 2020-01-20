@@ -174,12 +174,14 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
 
 const ImageBase = ({
     path,
+    index,
     alt,
     caption,
     credit,
     role,
 }: {
     path: string
+    index?: number
     alt?: string
     caption?: string
     credit?: string
@@ -188,7 +190,7 @@ const ImageBase = ({
     const figcaption = renderCaption({ caption, credit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" />
+            <img src="${path}" alt="${alt}" onclick="selectImage(${index})" />
             ${figcaption &&
                 html`
                     <figcaption>
@@ -202,12 +204,14 @@ const ImageBase = ({
 const Image = ({
     imageElement,
     path,
+    index,
 }: {
     imageElement: ImageElement
     path: string | undefined
+    index: number | undefined
 }) => {
     if (path) {
-        return ImageBase({ path, ...imageElement })
+        return ImageBase({ path, index, ...imageElement })
     }
     return null
 }

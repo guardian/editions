@@ -16,6 +16,7 @@ import { renderMediaAtom } from './components/media-atoms'
 import { GetImagePath } from 'src/hooks/use-image-paths'
 import { Image as TImage, Content } from '../../../../../Apps/common/src'
 import { getPillarColors } from 'src/helpers/transform'
+import { getLightboxImages } from '../types/article'
 
 interface ArticleContentProps {
     showMedia: boolean
@@ -48,6 +49,7 @@ const renderArticleContent = (
     elements: BlockElement[],
     { showMedia, publishedId, getImagePath }: ArticleContentProps,
 ) => {
+    const imagePaths = getLightboxImages(elements).map(i => i.src.path)
     return elements
         .map(el => {
             switch (el.id) {
@@ -64,10 +66,12 @@ const renderArticleContent = (
                     return showMedia ? renderMediaAtom(el) : ''
                 case 'image': {
                     const path = getImagePath(el.src)
+                    const index = imagePaths.findIndex(e => e === el.src.path)
                     return publishedId
                         ? Image({
                               imageElement: el,
                               path,
+                              index,
                           })
                         : ''
                 }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
@@ -9,7 +9,16 @@ import { WebviewWithArticle } from './article/webview'
 import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
-import { IssueOrigin } from '../../../../../Apps/common/src'
+import {
+    IssueOrigin,
+    BlockElement,
+    ImageElement,
+} from '../../../../../Apps/common/src'
+import {
+    useLightboxModal,
+    useLightboxProvider,
+    LightboxContext,
+} from '../../../screens/use-lightbox-modal'
 
 const styles = StyleSheet.create({
     block: {
@@ -60,6 +69,12 @@ export type HeaderControlProps = HeaderControlInnerProps & {
      */
     onIsAtTopChange: (isAtTop: boolean) => void
 }
+export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
+    const images: ImageElement[] = elements.filter(
+        (e: BlockElement): e is ImageElement => e.id === 'image',
+    )
+    return images
+}
 
 /**
  * This takes care of updating the value of a global *within* the web
@@ -100,12 +115,15 @@ const Article = ({
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
+    // const { setShowLightbox } = useLightboxModal()
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
         'shouldShowHeader',
         shouldShowHeader,
     )
+
+    const lbv = useContext(LightboxContext)
 
     return (
         <Fader>
@@ -133,6 +151,12 @@ const Article = ({
                     }
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
+                    }
+                    if (parsed.type === 'imageSelected') {
+                        console.log('image selected yay!')
+                        const lbimages = getLightboxImages(article.elements)
+                        lbv.setLightboxData(lbimages, parsed.index)
+                        lbv.setLightboxVisible(true)
                     }
                 }}
             />

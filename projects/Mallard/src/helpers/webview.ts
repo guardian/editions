@@ -11,6 +11,10 @@ export type WebViewPing =
     | {
           type: 'share'
       }
+    | {
+          type: 'imageSelected'
+          index: number
+      }
 
 /*
 this tricks vs code into thinking
@@ -212,6 +216,16 @@ const makeJavaScript = (topPadding: number) => html`
         document.addEventListener('scroll', debounce(onScroll), {
             passive: true,
         })
+
+        const selectImage = index => {
+            console.log('hi hi hi ')
+            window.ReactNativeWebView.postMessage(
+                JSON.stringify({
+                    type: 'imageSelected',
+                    index: index,
+                }),
+            )
+        }
     </script>
 `
 
