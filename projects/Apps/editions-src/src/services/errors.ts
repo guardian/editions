@@ -45,20 +45,20 @@ class ErrorServiceImpl implements ErrorService {
         if (hasConsent === false || hasConsent === null) return
 
         if (!this.hasConfigured) {
-            Sentry.init({ dsn: SENTRY_DSN_URL })
+            // Sentry.init({ dsn: SENTRY_DSN_URL })
 
-            Sentry.setTag(
-                'environment',
-                __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
-            )
-            Sentry.setExtra('react', true)
+            // Sentry.setTag(
+            //     'environment',
+            //     __DEV__ ? 'DEV' : isInBeta() ? 'BETA' : 'RELEASE',
+            // )
+            // Sentry.setExtra('react', true)
             this.hasConfigured = true
         }
 
         while (this.pendingQueue.length > 0) {
             const err = this.pendingQueue.pop()
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            Sentry.captureException(err!)
+            // Sentry.captureException(err!)
         }
     }
 
@@ -70,7 +70,7 @@ class ErrorServiceImpl implements ErrorService {
         if (this.hasConsent === null) {
             this.pendingQueue.push(err)
         } else if (this.hasConsent === true) {
-            Sentry.captureException(err)
+            // Sentry.captureException(err)
         }
     }
 }
