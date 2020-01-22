@@ -203,11 +203,10 @@ def buildNumber() {
 }
 
 dependencies {
-    def withoutStuff = { 
+    implementation project(':@sentry_react-native')
+    implementation fileTree(dir: "libs", include: ["*.jar"]){
         exclude group: 'com.android.support', module: 'support-v4' 
     }
-    implementation project(':@sentry_react-native')
-    implementation fileTree(dir: "libs", include: ["*.jar"]), withoutStuff
     implementation "com.facebook.react:react-native:+"  // From node_modules
     // These should be auto linked. TODO: TEST THIS
     implementation "com.google.firebase:firebase-core:17.0.1"
