@@ -19,7 +19,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.1")
+        classpath("com.android.tools.build:gradle:3.4.2")
         classpath("com.google.gms:google-services:4.2.0")
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -47,13 +47,13 @@ allprojects {
     }
 
 
-    configurations.all 
+    configurations.all {
+            force 'androidx.core:core:1.0.1'
             resolutionStrategy {
                 force 'com.google.android.gms:play-services-gcm:16.1.0'
                 dependencySubstitution {
                     substitute module("com.android.support:appcompat-v7:1.0.2") because "this is a simulcrum module because react-native-notifications isn't actively developed any more" with module("androidx.appcompat:appcompat:1.0.2")
                 }
-                force 'androidx.core:core:1.0.1'
            }
     }
 }
