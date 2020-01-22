@@ -204,10 +204,10 @@ def buildNumber() {
 
 dependencies {
     implementation project(':@sentry_react-native')
-    implementation project(':react-native-splash-screen'){
+    compile project(':react-native-splash-screen'){
         exclude group: 'com.android.support', module: 'support-v4' 
     }
-    implementation project(':react-native-push-notifications'){
+    complile project(':react-native-push-notifications'){
         exclude group: 'com.android.support', module: 'support-v4' 
     }
     implementation fileTree(dir: "libs", include: ["*.jar"])
