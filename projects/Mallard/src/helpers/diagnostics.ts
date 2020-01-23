@@ -23,6 +23,7 @@ import { canViewEdition } from 'src/authentication/helpers'
 import { getFileList } from './files'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
+import { locale } from './locale'
 
 const getCASCode = () =>
     Promise.all([
@@ -99,6 +100,7 @@ Product: Daily App
 App Version: ${version} ${buildNumber}
 Release Channel: ${isInBeta() ? 'BETA' : 'RELEASE'}
 App Edition: UK
+Locale: ${locale}
 First app start: ${firstInstallTime}
 Last updated: ${lastUpdateTime}
 
