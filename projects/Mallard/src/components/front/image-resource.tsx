@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import {
+    Image,
     ImageProps,
     ImageStyle,
-    PixelRatio,
     StyleProp,
     View,
+    PixelRatio,
 } from 'react-native'
-import FastImage from 'react-native-fast-image'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
 import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
@@ -38,7 +38,14 @@ const ScaledImageResource = ({
     style?: StyleProp<ImageStyle>
 }) => {
     const uri = useScaledImage(imagePath, width)
-    return <FastImage {...props} style={style} source={{ uri }} />
+    return (
+        <Image
+            resizeMethod={'resize'}
+            {...props}
+            style={style}
+            source={{ uri }}
+        />
+    )
 }
 
 const ImageResource = ({

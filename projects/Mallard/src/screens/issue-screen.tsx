@@ -68,7 +68,6 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
-import { useConfig } from 'src/hooks/use-config'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -275,12 +274,6 @@ const IssueFronts = ({
 
     useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref)
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
-    const { config } = useConfig()
-    const flatListOptimisationProps = config.optimisedFlatList && {
-        initialNumToRender: 2,
-        windowSize: 2,
-        maxToRenderPerBatch: 2,
-    }
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
@@ -290,7 +283,9 @@ const IssueFronts = ({
             ListHeaderComponent={ListHeaderComponent}
             // These three props are responsible for the majority of
             // performance improvements
-            {...flatListOptimisationProps}
+            initialNumToRender={2}
+            windowSize={2}
+            maxToRenderPerBatch={2}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
             ListFooterComponent={() => (
