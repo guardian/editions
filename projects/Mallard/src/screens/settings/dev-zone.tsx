@@ -25,6 +25,7 @@ import { deleteIssueFiles } from 'src/helpers/files'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
 import { Switch } from 'react-native-gesture-handler'
 import { useNetInfo } from 'src/hooks/use-net-info'
+import { locale } from 'src/helpers/locale'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -182,6 +183,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         key: 'Build number',
                         title: 'Build number',
                         explainer: buildNumber,
+                    },
+                    {
+                        key: 'Locale',
+                        title: 'Device locale',
+                        explainer: locale,
                     },
                     {
                         key: 'Reports as in test flight',
