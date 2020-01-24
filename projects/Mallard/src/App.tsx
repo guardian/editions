@@ -34,7 +34,7 @@ import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
 import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
 import { ConfigProvider } from 'src/hooks/use-config-provider'
-import { LightboxWrapper } from './screens/lightbox'
+import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
 
 /**
@@ -188,7 +188,7 @@ export default class App extends React.Component<{}, {}> {
                                 <ModalRenderer />
                                 <BugButton />
                                 <DeprecateVersionModal />
-                                <LightboxWrapper />
+                                <Lightbox />
                             </AccessProvider>
                         </WithProviders>
                     </NetInfoDevOverlay>

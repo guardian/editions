@@ -14,11 +14,7 @@ import {
     BlockElement,
     ImageElement,
 } from '../../../../../Apps/common/src'
-import {
-    useLightboxModal,
-    useLightboxProvider,
-    LightboxContext,
-} from '../../../screens/use-lightbox-modal'
+import { LightboxContext } from '../../../screens/use-lightbox-modal'
 
 const styles = StyleSheet.create({
     block: {
@@ -152,10 +148,9 @@ const Article = ({
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }
-                    if (parsed.type === 'imageSelected') {
-                        console.log('image selected yay!')
+                    if (parsed.type === 'openLightbox') {
                         const lbimages = getLightboxImages(article.elements)
-                        lbv.setLightboxData(lbimages, parsed.index)
+                        lbv.setLightboxData(lbimages, parsed.index, 'sport')
                         lbv.setLightboxVisible(true)
                     }
                 }}

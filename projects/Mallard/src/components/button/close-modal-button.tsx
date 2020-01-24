@@ -16,14 +16,6 @@ const closeModalButtonStyles = (buttonColor?: string) =>
         },
     })
 
-// const buttonColorStyle = (buttonColor: string) =>
-//     StyleSheet.create({
-//         style: {
-//             backgroundColor: buttonColor,
-//             borderWidth: 0,
-//         },
-//     })
-
 const CloseModalButton = ({
     onPress,
     color,

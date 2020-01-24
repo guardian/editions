@@ -4,7 +4,6 @@ import {
     SafeAreaView,
     View,
     Image,
-    Dimensions,
     Animated,
     Text,
     StyleSheet,
@@ -18,7 +17,7 @@ import {
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { CloseModalButton } from 'src/components/button/close-modal-button'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { NativeArrow } from 'src/components/article/html/components/native-arrow'
+import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-screen'
 
@@ -39,11 +38,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingRight: 10,
     },
-    lightboxImage: {
-        // display: 'flex',
-        // alignItems: 'center',
-        // flexDirection: 'column',
-    },
 })
 
 const LightboxImage = ({
@@ -55,7 +49,6 @@ const LightboxImage = ({
 }) => {
     const imagePath = useImagePath(image.src, 'full-size')
     const aspectRatio = useAspectRatio(imagePath)
-    // console.log(aspectRatio)
     return (
         <>
             <Image
@@ -85,8 +78,6 @@ export const LightboxScreen = ({
     pillar: ArticlePillar
     index: number
 }) => {
-    // const [, { pillar }] = useArticle()
-    // console.log('PILLAR: ', pillar)
     const pillarColors = getPillarColors(pillar)
     const { width } = useDimensions()
     return (
@@ -117,14 +108,8 @@ export const LightboxScreen = ({
                             offset: width * index,
                             index,
                         })}
-                        renderItem={({
-                            item,
-                        }: // index,
-                        {
-                            item: ImageElement
-                            index: number
-                        }) => (
-                            <View style={[{ width }, styles.lightboxImage]}>
+                        renderItem={({ item }: { item: ImageElement }) => (
+                            <View style={[{ width }]}>
                                 <LightboxImage
                                     image={item}
                                     arrowColor={pillarColors.main}
@@ -132,19 +117,13 @@ export const LightboxScreen = ({
                             </View>
                         )}
                     />
-                    {/* {images && images[0] && (
-                        <LightboxImage
-                            image={images[0]}
-                            arrowColor={pillarColors.main}
-                        />
-                    )} */}
                 </View>
             </SafeAreaView>
         </Modal>
     )
 }
 
-export const LightboxWrapper = () => {
+export const Lightbox = () => {
     const lightboxContext: LightboxContextType = useContext(LightboxContext)
     return (
         <LightboxScreen

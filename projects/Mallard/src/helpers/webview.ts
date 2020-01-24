@@ -12,7 +12,7 @@ export type WebViewPing =
           type: 'share'
       }
     | {
-          type: 'imageSelected'
+          type: 'openLightbox'
           index: number
       }
 
@@ -217,11 +217,10 @@ const makeJavaScript = (topPadding: number) => html`
             passive: true,
         })
 
-        const selectImage = index => {
-            console.log('hi hi hi ')
+        const openLightbox = index => {
             window.ReactNativeWebView.postMessage(
                 JSON.stringify({
-                    type: 'imageSelected',
+                    type: 'openLightbox',
                     index: index,
                 }),
             )
