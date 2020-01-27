@@ -7,7 +7,7 @@ const ConfigContext = createContext({
     largeDeviceMemeory: false,
 })
 
-const largeDeviceMemory = async () => {
+export const largeDeviceMemory = async () => {
     return DeviceInfo.getTotalMemory().then(
         deviceMemory => deviceMemory < oneGB,
     )
