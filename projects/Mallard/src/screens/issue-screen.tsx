@@ -68,7 +68,7 @@ import {
 } from 'src/helpers/transform'
 import { FrontSpec } from './article-screen'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
-import { useConfig } from 'src/hooks/use-config'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -275,8 +275,8 @@ const IssueFronts = ({
 
     useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref)
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
-    const { config } = useConfig()
-    const flatListOptimisationProps = config.optimisedFlatList && {
+    const largeDeviceMemory = useLargeDeviceMemory()
+    const flatListOptimisationProps = largeDeviceMemory && {
         initialNumToRender: 2,
         windowSize: 2,
         maxToRenderPerBatch: 2,

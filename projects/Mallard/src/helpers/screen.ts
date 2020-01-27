@@ -6,7 +6,7 @@ import {
     imageSizes,
 } from '../../../Apps/common/src'
 import AsyncStorage from '@react-native-community/async-storage'
-import { largeDeviceMemory } from 'src/hooks/use-config'
+import { largeDeviceMemory } from 'src/hooks/use-config-provider'
 
 export const maxScreenSize = (): number => {
     const { width, height } = Dimensions.get('window')
