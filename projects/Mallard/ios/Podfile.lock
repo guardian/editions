@@ -19,30 +19,6 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - libwebp (1.0.0):
-    - libwebp/core (= 1.0.0)
-    - libwebp/dec (= 1.0.0)
-    - libwebp/demux (= 1.0.0)
-    - libwebp/dsp (= 1.0.0)
-    - libwebp/enc (= 1.0.0)
-    - libwebp/mux (= 1.0.0)
-    - libwebp/utils (= 1.0.0)
-    - libwebp/webp (= 1.0.0)
-  - libwebp/core (1.0.0):
-    - libwebp/webp
-  - libwebp/dec (1.0.0):
-    - libwebp/core
-  - libwebp/demux (1.0.0):
-    - libwebp/core
-  - libwebp/dsp (1.0.0):
-    - libwebp/core
-  - libwebp/enc (1.0.0):
-    - libwebp/core
-  - libwebp/mux (1.0.0):
-    - libwebp/core
-  - libwebp/utils (1.0.0):
-    - libwebp/core
-  - libwebp/webp (1.0.0)
   - Permission-LocationWhenInUse (2.0.3):
     - RNPermissions
   - RCTRequired (0.61.5)
@@ -261,7 +237,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - rn-fetch-blob (0.12.0):
+  - rn-fetch-blob (0.11.2):
     - React-Core
   - RNBackgroundFetch (2.7.1):
     - React
@@ -297,12 +273,6 @@ PODS:
   - RNZipArchive/Core (5.0.0):
     - React
     - SSZipArchive (= 2.2.2)
-  - SDWebImage (5.0.0):
-    - SDWebImage/Core (= 5.0.0)
-  - SDWebImage/Core (5.0.0)
-  - SDWebImageWebPCoder (0.2.3):
-    - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.0)
   - Sentry (4.4.0):
     - Sentry/Core (= 4.4.0)
   - Sentry/Core (4.4.0)
@@ -479,7 +449,6 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  libwebp: d7e0c95fe97245c97e08101eba10702ebb0f6101
   Permission-LocationWhenInUse: 5cb8e0df1463dfab567d2a3d2589ab557fda68cb
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -509,7 +478,7 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
   RNBackgroundFetch: 8d8d66b47eafcb9e772b2eb95057939038b3ef95
   RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
   RNCMaskedView: b79e193409a90bf6b5170d421684f437ff4e2278
@@ -524,8 +493,6 @@ SPEC CHECKSUMS:
   RNSentry: 932ac1c8b2f581b1c8be5812f88ff556c99e7fb7
   RNSVG: ff9b094e39dd4a437ebe17d1c7ceed286e75f426
   RNZipArchive: be636657a6630e9771d4a3223dc8fd0bd0137b55
-  SDWebImage: 5de80a0302de9e377e62f47d2fa1304efff0e55f
-  SDWebImageWebPCoder: 7568737603c50f6237850afedd7e9e28e5917e6b
   Sentry: 26650184fe71eb7476dfd2737acb5ea6cc64b4b1
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
