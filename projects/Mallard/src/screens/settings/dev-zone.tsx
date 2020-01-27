@@ -26,6 +26,7 @@ import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
 import { Switch } from 'react-native-gesture-handler'
 import { useNetInfo } from 'src/hooks/use-net-info'
 import { locale } from 'src/helpers/locale'
+import { imageForScreenSize } from 'src/helpers/screen'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (
@@ -59,6 +60,7 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
 
     const [files, setFiles] = useState('fetching...')
     const [pushTrackingInfo, setPushTrackingInfo] = useState('fetching...')
+    const [imageSize, setImageSize] = useState('fetching...')
     const buildNumber = DeviceInfo.getBuildNumber()
 
     useEffect(() => {
@@ -71,6 +73,12 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
         getPushTracking().then(pushTracking => {
             pushTracking && setPushTrackingInfo(pushTracking)
         })
+    }, [])
+
+    useEffect(() => {
+        imageForScreenSize().then(
+            imageSize => imageSize && setImageSize(imageSize),
+        )
     }, [])
 
     const query = useQuery<{ [key: string]: unknown }>(
@@ -213,6 +221,11 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                                 onValueChange={onToggleNetInfoButton}
                             />
                         ),
+                    },
+                    {
+                        key: 'Image Size used for Editions',
+                        title: 'Image Size used for Editions',
+                        explainer: imageSize,
                     },
                     {
                         key: 'Files in Issues',

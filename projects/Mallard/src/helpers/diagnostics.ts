@@ -24,6 +24,7 @@ import { getFileList } from './files'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 import { locale } from './locale'
+import { imageForScreenSize } from './screen'
 
 const getCASCode = () =>
     Promise.all([
@@ -83,12 +84,14 @@ const getDiagnosticInfo = async (
         totalDiskCapacity,
         freeDiskStorage,
         fileList,
+        imageSize,
     ] = await Promise.all([
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
         DeviceInfo.getTotalDiskCapacity(),
         DeviceInfo.getFreeDiskStorage(),
         getFileList(),
+        imageForScreenSize(),
     ])
 
     return `
@@ -103,6 +106,7 @@ App Edition: UK
 Locale: ${locale}
 First app start: ${firstInstallTime}
 Last updated: ${lastUpdateTime}
+Image Size for Downloads: ${imageSize}
 
 -Device-
 ${Platform.OS} Version: ${Platform.Version}

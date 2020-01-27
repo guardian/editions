@@ -7,14 +7,18 @@ type Config = {
     optimisedFlatList: boolean
 }
 
+const largeDeviceMemory = async () => {
+    return DeviceInfo.getTotalMemory().then(
+        deviceMemory => deviceMemory > oneGB,
+    )
+}
+
 const useConfig = () => {
     const [config, setConfig] = useState<Config>({ optimisedFlatList: true })
 
     useEffect(() => {
-        DeviceInfo.getTotalMemory().then(
-            deviceMemory =>
-                deviceMemory > oneGB &&
-                setConfig({ ...config, optimisedFlatList: false }),
+        largeDeviceMemory().then(deviceMemory =>
+            setConfig({ ...config, optimisedFlatList: deviceMemory }),
         )
     }, [config])
 
@@ -23,4 +27,4 @@ const useConfig = () => {
     }
 }
 
-export { useConfig }
+export { largeDeviceMemory, useConfig }
