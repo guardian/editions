@@ -6,7 +6,7 @@ import {
     imageSizes,
 } from '../../../Apps/common/src'
 import AsyncStorage from '@react-native-community/async-storage'
-import { largeDeviceMemory } from 'src/hooks/use-config'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 export const maxScreenSize = (): number => {
     const { width, height } = Dimensions.get('window')
@@ -58,7 +58,7 @@ export const imageForScreenSize = async (): Promise<ImageSize> => {
     }
 
     // Provide only phone images for low powered devices
-    const largeAmountOfMemory = await largeDeviceMemory()
+    const largeAmountOfMemory = useLargeDeviceMemory()
     if (!largeAmountOfMemory) {
         return 'phone'
     }
