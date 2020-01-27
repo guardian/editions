@@ -99,6 +99,7 @@ const WebviewWithArticle = ({
             ref={_ref}
             onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
             allowFileAccess={true}
+            allowFileAccessFromFileURLs={true}
         />
     )
 }
