@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
-import { imageForScreenSize } from 'src/helpers/screen'
+import { imageForScreenSize, maxScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue, ImageUse } from '../../../Apps/common/src'
 import { useIssueSummary } from './use-issue-summary'
@@ -47,10 +47,9 @@ const compressImagePath = async (path: string, width: number) => {
         const resized = await ImageResizer.createResizedImage(
             path,
             width,
-            99999,
-            'JPEG',
-            100,
-            0,
+            maxScreenSize(),
+            Platform.OS === 'android' ? 'WEBP' : 'JPEG',
+            70,
         )
         return resized.uri
     } catch (error) {
