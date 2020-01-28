@@ -4,6 +4,7 @@ export const routeNames = {
     IssueList: 'IssueList',
     Settings: 'Settings',
     Endpoints: 'Endpoints',
+    Edition: 'Edition',
     GdprConsent: 'GdprConsent',
     PrivacyPolicy: 'PrivacyPolicy',
     TermsAndConditions: 'TermsAndConditions',

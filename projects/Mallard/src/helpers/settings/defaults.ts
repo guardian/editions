@@ -47,6 +47,14 @@ export const backends = [
     preview: boolean
 }[]
 
+export const editions = {
+    daily: 'daily-edition',
+    ausWeekly: 'australian-edition',
+    usWeekly: 'american-edition',
+    dummy: 'the-dummy-edition',
+    training: 'training-edition',
+}
+
 export const notificationServiceRegister = {
     prod: 'https://notifications.guardianapis.com/device/register',
     code: 'https://notifications.code.dev-guardianapis.com/device/register',
@@ -97,6 +105,8 @@ export const notificationTrackingUrl = (
 
 const apiUrl = backends[0].value
 
+const edition = editions.daily
+
 const storeDetails = {
     ios: 'itms-apps://itunes.apple.com/app/id452707806',
     android: 'market://details?id=com.guardian.editions',
@@ -106,6 +116,7 @@ const contentPrefix = 'daily-edition'
 
 export const defaultSettings: Settings = {
     apiUrl,
+    edition,
     isUsingProdDevtools: false,
     gdprAllowEssential: true, // essential defaults to true and not switchable
     gdprAllowPerformance: null,

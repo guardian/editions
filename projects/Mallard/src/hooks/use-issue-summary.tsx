@@ -204,6 +204,15 @@ export const createIssueSummaryResolver = () => {
             client.watchQuery<QueryValue>({ query }).subscribe(refetchUpdate)
         }
 
+        // 4. If the edition we need to display changed (ex. user
+        //    selected "australian-edition" when they used to have 'daily-edition'), then fetch
+        //    a new list of editions as well.
+        {
+            type QueryValue = { edition: string }
+            const query = gql('{edition @client}')
+            client.watchQuery<QueryValue>({ query }).subscribe(refetchUpdate)
+        }
+
         /**
          * Enqueue an update that simply set a new issue ID, no fetch happening.
          * This can be called when selecting a new issue in the UI.
