@@ -4,7 +4,6 @@ import { ArticleType } from 'src/common'
 import { useArticle } from 'src/hooks/use-article'
 import { Article, PictureArticle, GalleryArticle, ImageSize } from 'src/common'
 import { renderArticle } from '../../html/article'
-import { ArticleTheme } from '../article'
 import { onShouldStartLoadWithRequest } from './helpers'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -26,7 +25,6 @@ const WebviewWithArticle = ({
     path,
     type,
     _ref,
-    theme,
     topPadding,
     origin,
     ...webViewProps
@@ -34,7 +32,6 @@ const WebviewWithArticle = ({
     article: Article | PictureArticle | GalleryArticle
     path: PathToArticle
     type: ArticleType
-    theme: ArticleTheme
     _ref?: (ref: WebView) => void
     topPadding: number
     origin: IssueOrigin
@@ -78,7 +75,6 @@ const WebviewWithArticle = ({
         article,
         type,
         imageSize,
-        theme,
         showWebHeader: true,
         showMedia: isConnected,
         publishedId: publishedIssueId || null,
