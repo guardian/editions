@@ -394,12 +394,16 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> =>
 
 export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const apiUrl = await getSetting('apiUrl')
+    const edition = await getSetting('edition')
+
+    const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
+
     return RNFetchBlob.config({
         overwrite: true,
         path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
         IOSBackgroundTask: true,
     })
-        .fetch('GET', `${apiUrl}issues`, {
+        .fetch('GET', fetchIssueSummaryUrl, {
             'Content-Type': 'application/json',
         })
         .then(async res => {

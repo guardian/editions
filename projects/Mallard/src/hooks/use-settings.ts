@@ -14,6 +14,13 @@ export const useApiUrl = () => {
     return null
 }
 
+const EDITION_QUERY = gql('{ edition @client }')
+export const useEdition = () => {
+    const query = useQuery<{ edition: string }>(EDITION_QUERY)
+    if (!query.loading) return query.data.edition
+    return null
+}
+
 export const useIsPreview = () => {
     const apiUrl = useApiUrl()
     // FIXME: upstream code should be handling the loading status

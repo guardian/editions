@@ -12,6 +12,7 @@ import { OnboardingConsentScreen } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
 import { SubscriptionDetailsScreen } from 'src/screens/settings/subscription-details-screen'
 import { ApiScreen } from 'src/screens/settings/api-screen'
+import { EditionsScreen } from 'src/screens/settings/editions-screen'
 import { CasSignInScreen } from 'src/screens/settings/cas-sign-in-screen'
 import { CreditsScreen } from 'src/screens/settings/credits-screen'
 import { FAQScreen } from 'src/screens/settings/faq-screen'
@@ -88,6 +89,7 @@ const AppStack = createModalNavigator(
             {
                 [routeNames.Settings]: SettingsScreen,
                 [routeNames.Endpoints]: ApiScreen,
+                [routeNames.Edition]: EditionsScreen,
                 [routeNames.GdprConsent]: GdprConsentScreen,
                 [routeNames.PrivacyPolicy]: PrivacyPolicyScreen,
                 [routeNames.ManageEditionsSettings]: ManageEditionsScreen,

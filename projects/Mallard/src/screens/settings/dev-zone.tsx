@@ -86,8 +86,9 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
     )
     if (query.loading) return null
     const { data, client } = query
-    const { apiUrl } = data
-    if (typeof apiUrl !== 'string') throw new Error('expected string')
+    const { apiUrl, edition } = data
+    if (typeof apiUrl !== 'string' || typeof edition !== 'string')
+        throw new Error('expected string')
 
     return (
         <>
@@ -172,6 +173,14 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
                         explainer: apiUrl,
                         onPress: () => {
                             navigation.navigate(routeNames.Endpoints)
+                        },
+                    },
+                    {
+                        key: 'Editions',
+                        title: 'Editions',
+                        explainer: edition,
+                        onPress: () => {
+                            navigation.navigate(routeNames.Edition)
                         },
                     },
                     {
