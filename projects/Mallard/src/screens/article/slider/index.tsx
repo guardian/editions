@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View, Easing } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
-import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
-import { Slider } from 'src/components/slider'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 import { getAppearancePillar } from 'src/hooks/use-article'
@@ -12,15 +10,13 @@ import { useDimensions } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { ArticleScreenBody, OnIsAtTopChange } from '../article/body'
+import { ArticleScreenBody, OnIsAtTopChange } from '../body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
-import { getArticleDataFromNavigator, ArticleSpec } from '../article-screen'
-import { withNavigation } from 'react-navigation'
-import { NavigationInjectedProps } from 'react-navigation'
-import { BasicArticleHeader } from './header'
+import { getArticleDataFromNavigator, ArticleSpec } from '../../article-screen'
 import { useSetNavPosition } from 'src/hooks/use-nav-position'
-import { Button } from 'src/components/button/button'
-import { useIsPreview } from 'src/hooks/use-settings'
+import { LowEndHeader, ANDROID_HEADER_HEIGHT } from './lowEndHeader'
+import { SliderSection } from './types'
+import { SliderBar } from './sliderBar'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -29,18 +25,9 @@ export interface PathToArticle {
     issue: Issue['key']
 }
 
-export interface SliderSection {
-    items: number
-    title: string
-    color: string
-    startIndex: number
-}
-
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
 }
-
-const ANDROID_HEADER_HEIGHT = 130
 
 const styles = StyleSheet.create({
     slider: {
@@ -55,187 +42,11 @@ const styles = StyleSheet.create({
     sliderAtTop: {
         borderBottomColor: color.background,
     },
-    firstSlider: {
-        width: '100%',
-        flexShrink: 0,
-        flexGrow: 1,
-    },
-    innerSlider: {
-        ...StyleSheet.absoluteFillObject,
-    },
     androidPager: {
         flexGrow: 1,
         width: '100%',
     },
-    androidHeader: {
-        position: 'absolute',
-        height: ANDROID_HEADER_HEIGHT,
-        left: 0,
-        right: 0,
-    },
 })
-
-type SliderBarProps = {
-    section: SliderSection
-    sliderPosition: Animated.AnimatedInterpolation
-    width: number
-    isFirst: boolean
-    goNext: () => void
-    goPrevious: () => void
-}
-
-const SliderSectionBar = ({
-    section,
-    sliderPosition,
-    width,
-    isFirst,
-    goNext,
-    goPrevious,
-}: SliderBarProps) => {
-    const sliderPos = sliderPosition
-        .interpolate({
-            inputRange: [
-                section.startIndex,
-                section.startIndex + section.items - 1,
-            ],
-            outputRange: [
-                section.startIndex,
-                section.startIndex + section.items - 1,
-            ],
-            extrapolateLeft: 'clamp',
-            extrapolateRight: 'clamp',
-        })
-        .interpolate({
-            inputRange: [
-                section.startIndex,
-                section.startIndex + section.items - 1,
-            ],
-            outputRange: [0, 1],
-        })
-
-    const xValue = sliderPosition.interpolate({
-        inputRange: [
-            section.startIndex - 1,
-            section.startIndex,
-            section.startIndex + section.items - 1,
-            section.startIndex + section.items,
-        ],
-        outputRange: [width, 0, 0, -width],
-        extrapolate: 'clamp',
-    })
-
-    const isPreview = useIsPreview()
-
-    return (
-        <Animated.View
-            style={[
-                isFirst ? styles.firstSlider : styles.innerSlider,
-                {
-                    transform: [
-                        {
-                            translateX: xValue,
-                        },
-                    ],
-                },
-                { flexDirection: 'row' },
-            ]}
-        >
-            {isPreview && <Button onPress={goPrevious}>&larr;</Button>}
-            <Slider
-                small={false}
-                title={section.title}
-                fill={section.color}
-                stops={2}
-                position={sliderPos}
-            />
-            {isPreview && <Button onPress={goNext}>&rarr;</Button>}
-        </Animated.View>
-    )
-}
-
-const SliderBar = ({
-    goNext,
-    goPrevious,
-    sections,
-    sliderPosition,
-    width,
-}: {
-    goNext: () => void
-    goPrevious: () => void
-    sections: SliderSection[]
-    sliderPosition: Animated.AnimatedInterpolation
-    width: number
-}) => {
-    return (
-        <MaxWidthWrap>
-            {sections.map((section, index) => (
-                <SliderSectionBar
-                    section={section}
-                    sliderPosition={sliderPosition}
-                    key={section.title}
-                    width={width}
-                    isFirst={index === 0}
-                    goNext={goNext}
-                    goPrevious={goPrevious}
-                />
-            ))}
-        </MaxWidthWrap>
-    )
-}
-
-const AndroidHeader = withNavigation(
-    ({
-        isShown,
-        isAtTop,
-        sections,
-        sliderPosition,
-        width,
-        goNext,
-        goPrevious,
-    }: {
-        isShown: boolean
-        isAtTop: boolean
-        sections: SliderSection[]
-        sliderPosition: Animated.AnimatedInterpolation
-        width: number
-        goNext: () => void
-        goPrevious: () => void
-    } & NavigationInjectedProps) => {
-        const [top] = useState(new Animated.Value(0))
-        useEffect(() => {
-            if (isShown) {
-                Animated.timing(top, {
-                    toValue: 0,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            } else {
-                Animated.timing(top, {
-                    toValue: -ANDROID_HEADER_HEIGHT,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            }
-        }, [isShown, top])
-
-        return (
-            <Animated.View style={[styles.androidHeader, { top }]}>
-                <BasicArticleHeader />
-                <View
-                    style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
-                >
-                    <SliderBar
-                        sections={sections}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
-                    />
-                </View>
-            </Animated.View>
-        )
-    },
-)
 
 /**
  * We keep track of which articles are scrolled or not so that when we swipe
@@ -391,7 +202,7 @@ const ArticleSlider = ({
                     ))}
                 </ViewPagerAndroid>
 
-                <AndroidHeader
+                <LowEndHeader
                     isShown={shouldShowHeader}
                     isAtTop={isAtTop}
                     sliderPosition={sliderPosition}
