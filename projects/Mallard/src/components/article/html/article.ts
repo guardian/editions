@@ -7,7 +7,6 @@ import {
     ImageSize,
     Issue,
 } from '../../../common'
-import { ArticleTheme } from '../types/article'
 import { Header, ArticleHeaderProps } from './components/header'
 import { Image } from './components/images'
 import { Line } from './components/line'
@@ -15,7 +14,7 @@ import { Pullquote } from './components/pull-quote'
 import { makeCss } from './css'
 import { renderMediaAtom } from './components/media-atoms'
 import { GetImagePath } from 'src/hooks/use-image-paths'
-import { Image as TImage } from '../../../../../Apps/common/src'
+import { Image as TImage, Content } from '../../../../../Apps/common/src'
 import { getPillarColors } from 'src/helpers/transform'
 
 interface ArticleContentProps {
@@ -24,6 +23,14 @@ interface ArticleContentProps {
     imageSize: ImageSize
     getImagePath: GetImagePath
 }
+
+export enum ArticleTheme {
+    Default = 'default',
+    Dark = 'dark',
+}
+
+const usesDarkTheme = (type: Content['type']) =>
+    ['picture', 'gallery'].includes(type)
 
 const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
     const path = getImagePath(image)
@@ -88,7 +95,6 @@ export const renderArticle = (
         article,
         imageSize,
         type,
-        theme,
         getImagePath,
     }: {
         pillar: ArticlePillar
@@ -97,11 +103,11 @@ export const renderArticle = (
         type: ArticleType
         showWebHeader: boolean
         headerProps?: ArticleHeaderProps & { type: ArticleType }
-        theme: ArticleTheme
     } & ArticleContentProps,
 ) => {
     let content, header
     const canBeShared = article.webUrl != null
+
     switch (article.type) {
         case 'picture':
             header = Header({
@@ -154,6 +160,10 @@ export const renderArticle = (
             })
             break
     }
+
+    const theme: ArticleTheme = usesDarkTheme(article.type)
+        ? ArticleTheme.Dark
+        : ArticleTheme.Default
 
     const styles = makeCss(
         {

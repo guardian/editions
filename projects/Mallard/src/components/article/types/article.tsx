@@ -6,12 +6,7 @@ import { useArticle } from 'src/hooks/use-article'
 import { metrics } from 'src/theme/spacing'
 import { Fader } from '../../layout/animators/fader'
 import { WebviewWithArticle } from './article/webview'
-import {
-    Article as ArticleT,
-    PictureArticle,
-    Content,
-    GalleryArticle,
-} from 'src/common'
+import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
 import { IssueOrigin } from '../../../../../Apps/common/src'
@@ -39,14 +34,6 @@ const styles = StyleSheet.create({
                 : 1,
     },
 })
-
-export enum ArticleTheme {
-    Default = 'default',
-    Dark = 'dark',
-}
-
-const usesDarkTheme = (type: Content['type']) =>
-    ['picture', 'gallery'].includes(type)
 
 export type HeaderControlInnerProps = {
     /**
@@ -114,10 +101,6 @@ const Article = ({
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
 
-    const theme = usesDarkTheme(article.type)
-        ? ArticleTheme.Dark
-        : ArticleTheme.Default
-
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,
         'shouldShowHeader',
@@ -130,7 +113,6 @@ const Article = ({
                 type={type}
                 article={article}
                 path={path}
-                theme={theme}
                 scrollEnabled={true}
                 style={[styles.webview]}
                 _ref={r => {
