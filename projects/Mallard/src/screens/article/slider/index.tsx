@@ -14,9 +14,9 @@ import { ArticleScreenBody, OnIsAtTopChange } from '../body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
 import { getArticleDataFromNavigator, ArticleSpec } from '../../article-screen'
 import { useSetNavPosition } from 'src/hooks/use-nav-position'
-import { LowEndHeader, ANDROID_HEADER_HEIGHT } from './lowEndHeader'
+import { LowEndHeader, ANDROID_HEADER_HEIGHT } from './headerLowEnd'
 import { SliderSection } from './types'
-import { SliderBar } from './sliderBar'
+import { HighEndHeader } from './headerHighEnd'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -30,18 +30,6 @@ export interface ArticleTransitionProps {
 }
 
 const styles = StyleSheet.create({
-    slider: {
-        paddingVertical: metrics.vertical,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: color.line,
-        backgroundColor: color.background,
-        paddingHorizontal: metrics.horizontal,
-    },
-    sliderAtTop: {
-        borderBottomColor: color.background,
-    },
     androidPager: {
         flexGrow: 1,
         width: '100%',
@@ -216,21 +204,16 @@ const ArticleSlider = ({
 
     return (
         <>
-            <View
-                style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
-                {...panResponder.panHandlers}
-            >
-                <SliderBar
-                    goNext={goNext}
-                    goPrevious={goPrevious}
-                    sections={sliderSections}
-                    sliderPosition={Animated.divide(
-                        sliderPosition,
-                        new Animated.Value(width),
-                    )}
-                    width={width}
-                />
-            </View>
+            <HighEndHeader
+                isShown={shouldShowHeader}
+                isAtTop={isAtTop}
+                sections={sliderSections}
+                sliderPosition={sliderPosition}
+                width={width}
+                goNext={goNext}
+                goPrevious={goPrevious}
+                panResponder={panResponder}
+            />
             <Animated.FlatList
                 ref={(flatList: AnimatedFlatListRef) =>
                     (flatListRef.current = flatList)
