@@ -17,7 +17,7 @@ import { sendPageViewEvent } from 'src/services/ophan'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { ArticleScreenBody } from './article/body'
-import { ArticleSlider } from './article/slider'
+import { ArticleSlider } from './article/slider/Slider'
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number

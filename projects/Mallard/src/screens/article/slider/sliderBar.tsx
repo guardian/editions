@@ -1,7 +1,7 @@
 import React from 'react'
 import { Animated } from 'react-native'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
-import { SliderSectionBar } from './sliderSectionBar'
+import { SliderSectionBar } from './SliderSectionBar'
 import { SliderSection } from './types'
 
 const SliderBar = ({

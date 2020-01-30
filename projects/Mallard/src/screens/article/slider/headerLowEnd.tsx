@@ -5,7 +5,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
 import { SliderSection } from './types'
-import { SliderBar } from './sliderBar'
+import { SliderBar } from './SliderBar'
 
 const ANDROID_HEADER_HEIGHT = 130
 

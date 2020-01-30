@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View, PanResponder } from 'react-native'
 import { NavigationInjectedProps } from 'react-navigation'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { SliderBar } from './sliderBar'
+import { SliderBar } from './SliderBar'
 import { SliderSection } from './types'
 
 const styles = StyleSheet.create({

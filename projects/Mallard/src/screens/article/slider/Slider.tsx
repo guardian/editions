@@ -14,9 +14,9 @@ import { ArticleScreenBody, OnIsAtTopChange } from '../body'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
 import { getArticleDataFromNavigator, ArticleSpec } from '../../article-screen'
 import { useSetNavPosition } from 'src/hooks/use-nav-position'
-import { LowEndHeader, ANDROID_HEADER_HEIGHT } from './headerLowEnd'
+import { LowEndHeader, ANDROID_HEADER_HEIGHT } from './HeaderLowEnd'
 import { SliderSection } from './types'
-import { HighEndHeader } from './headerHighEnd'
+import { HighEndHeader } from './HeaderHighEnd'
 
 export interface PathToArticle {
     collection: Collection['key']
