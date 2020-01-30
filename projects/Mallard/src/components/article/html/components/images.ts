@@ -174,21 +174,24 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
 
 const ImageBase = ({
     path,
+    index,
     alt,
     caption,
     credit,
     role,
 }: {
     path: string
+    index?: number
     alt?: string
     caption?: string
     credit?: string
     role?: ImageElement['role']
 }) => {
     const figcaption = renderCaption({ caption, credit })
+    // add onclick="openLightbox(${index})" to re-enable lightbox
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" />
+            <img src="${path}" alt="${alt}" id="img-${index}" />
             ${figcaption &&
                 html`
                     <figcaption>
@@ -202,12 +205,14 @@ const ImageBase = ({
 const Image = ({
     imageElement,
     path,
+    index,
 }: {
     imageElement: ImageElement
     path: string | undefined
+    index?: number | undefined
 }) => {
     if (path) {
-        return ImageBase({ path, ...imageElement })
+        return ImageBase({ path, index, ...imageElement })
     }
     return null
 }
