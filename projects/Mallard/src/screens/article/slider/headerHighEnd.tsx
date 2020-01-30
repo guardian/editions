@@ -1,6 +1,5 @@
 import React from 'react'
-import { Animated, StyleSheet, View, PanResponder } from 'react-native'
-import { NavigationInjectedProps } from 'react-navigation'
+import { Animated, StyleSheet, View } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { SliderBar } from './SliderBar'
