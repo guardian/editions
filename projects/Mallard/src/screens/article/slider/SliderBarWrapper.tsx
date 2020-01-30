@@ -1,0 +1,37 @@
+import React from 'react'
+import { Animated } from 'react-native'
+import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
+import { SliderBarContainer } from './SliderBarContainer'
+import { SliderSection } from './types'
+
+const SliderBarWrapper = ({
+    goNext,
+    goPrevious,
+    sections,
+    sliderPosition,
+    width,
+}: {
+    goNext: () => void
+    goPrevious: () => void
+    sections: SliderSection[]
+    sliderPosition: Animated.AnimatedInterpolation
+    width: number
+}) => {
+    return (
+        <MaxWidthWrap>
+            {sections.map((section, index) => (
+                <SliderBarContainer
+                    section={section}
+                    sliderPosition={sliderPosition}
+                    key={section.title}
+                    width={width}
+                    isFirst={index === 0}
+                    goNext={goNext}
+                    goPrevious={goPrevious}
+                />
+            ))}
+        </MaxWidthWrap>
+    )
+}
+
+export { SliderBarWrapper }
