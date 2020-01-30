@@ -12,8 +12,8 @@ import { useDimensions } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { ArticleSpec, getArticleDataFromNavigator } from '../../article-screen'
 import { ArticleScreenBody, OnIsAtTopChange } from '../body'
-import { HighEndHeader } from './HeaderHighEnd'
-import { ANDROID_HEADER_HEIGHT, LowEndHeader } from './HeaderLowEnd'
+import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
+import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
 
 export interface PathToArticle {
@@ -188,7 +188,7 @@ const ArticleSlider = ({
                     ))}
                 </ViewPagerAndroid>
 
-                <LowEndHeader
+                <SliderHeaderLowEnd
                     isShown={shouldShowHeader}
                     isAtTop={isAtTop}
                     sliderPosition={sliderPosition}
@@ -202,7 +202,7 @@ const ArticleSlider = ({
 
     return (
         <>
-            <HighEndHeader
+            <SliderHeaderHighEnd
                 isShown={shouldShowHeader}
                 isAtTop={isAtTop}
                 sections={sliderSections}

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Animated } from 'react-native'
 import { MaxWidthWrap } from 'src/components/article/wrap/max-width'
-import { SliderSectionBar } from './SliderSectionBar'
+import { SliderBarContainer } from './SliderBarContainer'
 import { SliderSection } from './types'
 
-const SliderBar = ({
+const SliderBarWrapper = ({
     goNext,
     goPrevious,
     sections,
@@ -20,7 +20,7 @@ const SliderBar = ({
     return (
         <MaxWidthWrap>
             {sections.map((section, index) => (
-                <SliderSectionBar
+                <SliderBarContainer
                     section={section}
                     sliderPosition={sliderPosition}
                     key={section.title}
@@ -34,4 +34,4 @@ const SliderBar = ({
     )
 }
 
-export { SliderBar }
+export { SliderBarWrapper }

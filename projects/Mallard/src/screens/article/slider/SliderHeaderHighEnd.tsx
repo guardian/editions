@@ -2,7 +2,7 @@ import React from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { SliderBar } from './SliderBar'
+import { SliderBarWrapper } from './SliderBarWrapper'
 import { SliderSection } from './types'
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const HighEndHeader = ({
+const SliderHeaderHighEnd = ({
     isAtTop,
     sections,
     sliderPosition,
@@ -42,7 +42,7 @@ const HighEndHeader = ({
         style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
         {...panResponder.panHandlers}
     >
-        <SliderBar
+        <SliderBarWrapper
             goNext={goNext}
             goPrevious={goPrevious}
             sections={sections}
@@ -55,4 +55,4 @@ const HighEndHeader = ({
     </View>
 )
 
-export { HighEndHeader }
+export { SliderHeaderHighEnd }

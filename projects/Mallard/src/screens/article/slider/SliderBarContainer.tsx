@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const SliderSectionBar = ({
+const SliderBarContainer = ({
     section,
     sliderPosition,
     width,
@@ -94,4 +94,4 @@ const SliderSectionBar = ({
     )
 }
 
-export { SliderSectionBar }
+export { SliderBarContainer }

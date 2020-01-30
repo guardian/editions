@@ -5,7 +5,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
 import { SliderSection } from './types'
-import { SliderBar } from './SliderBar'
+import { SliderBarWrapper } from './SliderBarWrapper'
 
 const ANDROID_HEADER_HEIGHT = 130
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const LowEndHeader = withNavigation(
+const SliderHeaderLowEnd = withNavigation(
     ({
         isShown,
         isAtTop,
@@ -71,7 +71,7 @@ const LowEndHeader = withNavigation(
                 <View
                     style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
                 >
-                    <SliderBar
+                    <SliderBarWrapper
                         sections={sections}
                         sliderPosition={sliderPosition}
                         width={width}
@@ -84,4 +84,4 @@ const LowEndHeader = withNavigation(
     },
 )
 
-export { LowEndHeader, ANDROID_HEADER_HEIGHT }
+export { SliderHeaderLowEnd, ANDROID_HEADER_HEIGHT }
