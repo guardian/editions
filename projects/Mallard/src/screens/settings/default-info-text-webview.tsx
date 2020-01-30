@@ -43,6 +43,7 @@ const DefaultInfoTextWebview = ({ html }: { html: string }) => {
                 originWhitelist={['*']}
                 source={{ html: makeHtml({ styles, body: html }), baseUrl: '' }}
                 style={{ flex: 1 }}
+                useWebKit={false}
                 onShouldStartLoadWithRequest={(event: WebViewNavigation) => {
                     /**
                      * Open any non-local documents in the external browser
