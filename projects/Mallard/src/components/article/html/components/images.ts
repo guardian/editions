@@ -191,7 +191,7 @@ const ImageBase = ({
     // add onclick="openLightbox(${index})" to re-enable lightbox
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" />
+            <img src="${path}" alt="${alt}" id="img-${index}" />
             ${figcaption &&
                 html`
                     <figcaption>
@@ -209,7 +209,7 @@ const Image = ({
 }: {
     imageElement: ImageElement
     path: string | undefined
-    index: number | undefined
+    index?: number | undefined
 }) => {
     if (path) {
         return ImageBase({ path, index, ...imageElement })
