@@ -13,7 +13,6 @@ import {
     StyleSheet,
     View,
     ViewStyle,
-    Platform,
 } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
