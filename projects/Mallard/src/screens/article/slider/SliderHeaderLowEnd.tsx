@@ -6,6 +6,7 @@ import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
 import { SliderSection } from './types'
 import { SliderBarWrapper } from './SliderBarWrapper'
+import { supportsAnimation } from 'src/helpers/features'
 
 const ANDROID_HEADER_HEIGHT = 130
 
@@ -49,21 +50,23 @@ const SliderHeaderLowEnd = withNavigation(
         goPrevious: () => void
     } & NavigationInjectedProps) => {
         const [top] = useState(new Animated.Value(0))
-        useEffect(() => {
-            if (isShown) {
-                Animated.timing(top, {
-                    toValue: 0,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            } else {
-                Animated.timing(top, {
-                    toValue: -ANDROID_HEADER_HEIGHT,
-                    easing: Easing.out(Easing.ease),
-                    duration: 200,
-                }).start()
-            }
-        }, [isShown, top])
+        if (supportsAnimation()) {
+            useEffect(() => {
+                if (isShown) {
+                    Animated.timing(top, {
+                        toValue: 0,
+                        easing: Easing.out(Easing.ease),
+                        duration: 200,
+                    }).start()
+                } else {
+                    Animated.timing(top, {
+                        toValue: -ANDROID_HEADER_HEIGHT,
+                        easing: Easing.out(Easing.ease),
+                        duration: 200,
+                    }).start()
+                }
+            }, [isShown, top])
+        }
 
         return (
             <Animated.View style={[styles.androidHeader, { top }]}>
