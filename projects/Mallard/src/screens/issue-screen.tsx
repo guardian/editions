@@ -13,6 +13,7 @@ import {
     StyleSheet,
     View,
     ViewStyle,
+    Platform,
 } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
@@ -132,12 +133,13 @@ const ScreenHeader = withNavigation(
             >
                 <Animated.View
                     style={
-                        supportsTransparentCards() && {
+                        supportsTransparentCards() ||
+                        (Platform.OS === 'ios' && {
                             opacity: position.interpolate({
                                 inputRange: [0, 1],
                                 outputRange: [1, 0],
                             }),
-                        }
+                        })
                     }
                 >
                     <IssueTitle title={weekday} subtitle={date} />

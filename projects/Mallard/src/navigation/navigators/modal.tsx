@@ -8,7 +8,7 @@ import {
 
 import React from 'react'
 
-import { Animated } from 'react-native'
+import { Animated, Platform } from 'react-native'
 import { ModalForTablet } from 'src/components/layout/ui/modal-for-tablet'
 import { addStaticRouter } from '../helpers/base'
 import { supportsTransparentCards } from 'src/helpers/features'
@@ -41,7 +41,8 @@ const createModalNavigator = (
         navigation[key] = addStaticRouterWithModal(value, () => animatedValue)
     }
 
-    if (!supportsTransparentCards()) {
+    // Android has issues with transparency
+    if (Platform.OS !== 'ios' && !supportsTransparentCards()) {
         return createStackNavigator(navigation, {
             headerMode: 'none',
             initialRouteName: '_',

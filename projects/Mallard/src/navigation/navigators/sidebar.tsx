@@ -28,6 +28,7 @@ import { sidebarWidth } from './sidebar/positions'
 import { screenInterpolator, mainLayerTransition } from './sidebar/transition'
 
 const USE_SIDEBAR_ANIMATION =
+    Platform.OS === 'ios' ||
     supportsTransparentCards() ||
     /* Android API Level 29; would need to test further on lower versions */
     (Platform.OS === 'android' && Platform.Version >= 29)

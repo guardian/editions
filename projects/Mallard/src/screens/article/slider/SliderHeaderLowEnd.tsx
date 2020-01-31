@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, Easing, StyleSheet, View } from 'react-native'
+import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
@@ -73,7 +73,14 @@ const SliderHeaderLowEnd = withNavigation(
                 >
                     <SliderBarWrapper
                         sections={sections}
-                        sliderPosition={sliderPosition}
+                        sliderPosition={
+                            Platform.OS === 'android'
+                                ? sliderPosition
+                                : Animated.divide(
+                                      sliderPosition,
+                                      new Animated.Value(width),
+                                  )
+                        }
                         width={width}
                         goNext={goNext}
                         goPrevious={goPrevious}
