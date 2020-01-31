@@ -8,7 +8,10 @@ import {
     NavigationTransitionProps,
 } from 'react-navigation'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
-import { supportsTransparentCards } from 'src/helpers/features'
+import {
+    supportsTransparentCards,
+    supportsAnimation,
+} from 'src/helpers/features'
 import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
 import { useDimensions } from 'src/hooks/use-screen'
 import { color } from 'src/theme/color'
@@ -195,9 +198,10 @@ const createArticleNavigator = (
             front,
             () => animatedValue,
         ),
-        [routeNames.Article]: supportsTransparentCards()
-            ? wrapInSlideCard(article, () => animatedValue)
-            : wrapInBasicCard(article, () => new Animated.Value(1)),
+        [routeNames.Article]:
+            !supportsAnimation() || !supportsTransparentCards()
+                ? wrapInBasicCard(article, () => new Animated.Value(1))
+                : wrapInSlideCard(article, () => animatedValue),
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
@@ -217,7 +221,7 @@ const createArticleNavigator = (
             gesturesEnabled: false,
         },
         headerMode: 'none',
-        ...(supportsTransparentCards()
+        ...(supportsTransparentCards() && supportsAnimation()
             ? {
                   mode: 'modal',
                   transparentCard: true,

@@ -15,6 +15,7 @@ import { ArticleScreenBody, OnIsAtTopChange } from '../body'
 import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
 import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
+import { supportsAnimation } from 'src/helpers/features'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -202,16 +203,18 @@ const ArticleSlider = ({
 
     return (
         <>
-            <SliderHeaderHighEnd
-                isShown={shouldShowHeader}
-                isAtTop={isAtTop}
-                sections={sliderSections}
-                sliderPosition={sliderPosition}
-                width={width}
-                goNext={goNext}
-                goPrevious={goPrevious}
-                panResponder={panResponder}
-            />
+            {supportsAnimation() && (
+                <SliderHeaderHighEnd
+                    isShown={shouldShowHeader}
+                    isAtTop={isAtTop}
+                    sections={sliderSections}
+                    sliderPosition={sliderPosition}
+                    width={width}
+                    goNext={goNext}
+                    goPrevious={goPrevious}
+                    panResponder={panResponder}
+                />
+            )}
             <Animated.FlatList
                 ref={(flatList: AnimatedFlatListRef) =>
                     (flatListRef.current = flatList)
@@ -244,7 +247,6 @@ const ArticleSlider = ({
                 )}
                 maxToRenderPerBatch={1}
                 windowSize={1.5}
-                removeClippedSubviews={true}
                 initialNumToRender={1}
                 horizontal={true}
                 initialScrollIndex={startingPoint}
@@ -270,11 +272,25 @@ const ArticleSlider = ({
                         position={index}
                         onShouldShowHeaderChange={onShouldShowHeaderChange}
                         shouldShowHeader={shouldShowHeader}
-                        topPadding={0}
+                        topPadding={
+                            supportsAnimation() ? 0 : ANDROID_HEADER_HEIGHT
+                        }
                         onIsAtTopChange={onIsAtTopChange}
                     />
                 )}
             />
+
+            {!supportsAnimation() && (
+                <SliderHeaderLowEnd
+                    isShown={shouldShowHeader}
+                    isAtTop={isAtTop}
+                    sliderPosition={sliderPosition}
+                    width={width}
+                    sections={sliderSections}
+                    goNext={goNext}
+                    goPrevious={goPrevious}
+                />
+            )}
         </>
     )
 }
