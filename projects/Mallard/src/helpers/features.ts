@@ -1,6 +1,5 @@
 import { Platform } from 'react-native'
 
-// TEMP FUNCTION FOR TESTING WILL USE DEVICE MEMORY
 export const supportsAnimation = () =>
     (Platform.OS === 'ios' && parseInt(String(Platform.Version), 10) >= 12) ||
     Platform.OS === 'android'

@@ -41,7 +41,6 @@ const createModalNavigator = (
         navigation[key] = addStaticRouterWithModal(value, () => animatedValue)
     }
 
-    // Android has issues with transparency
     if (!supportsTransparentCards()) {
         return createStackNavigator(navigation, {
             headerMode: 'none',

@@ -247,7 +247,6 @@ const ArticleSlider = ({
                 )}
                 maxToRenderPerBatch={1}
                 windowSize={1.5}
-                // removeClippedSubviews={true}
                 initialNumToRender={1}
                 horizontal={true}
                 initialScrollIndex={startingPoint}
