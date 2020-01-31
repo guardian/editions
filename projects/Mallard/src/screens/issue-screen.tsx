@@ -133,13 +133,12 @@ const ScreenHeader = withNavigation(
             >
                 <Animated.View
                     style={
-                        supportsTransparentCards() ||
-                        (Platform.OS === 'ios' && {
+                        supportsTransparentCards() && {
                             opacity: position.interpolate({
                                 inputRange: [0, 1],
                                 outputRange: [1, 0],
                             }),
-                        })
+                        }
                     }
                 >
                     <IssueTitle title={weekday} subtitle={date} />
