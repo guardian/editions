@@ -6,7 +6,6 @@ import React, {
     MutableRefObject,
 } from 'react'
 import {
-    Animated,
     Image,
     FlatList,
     StyleProp,
@@ -35,7 +34,6 @@ import {
     WEATHER_HEIGHT,
     getValidWeatherData,
 } from 'src/components/weather'
-import { supportsTransparentCards } from 'src/helpers/features'
 import { clearCache } from 'src/helpers/fetch/cache'
 import { useIssueDate } from 'src/helpers/issues'
 import {
@@ -52,7 +50,6 @@ import {
 import { useDimensions } from 'src/hooks/use-screen'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
-import { useNavigatorPosition } from 'src/navigation/helpers/transition'
 import { PathToIssue } from 'src/paths'
 import { sendPageViewEvent } from 'src/services/ophan'
 import { Breakpoints } from 'src/theme/breakpoints'
@@ -107,7 +104,6 @@ const ScreenHeader = withNavigation(
         issue,
         navigation,
     }: { issue?: IssueWithFronts } & NavigationInjectedProps) => {
-        const position = useNavigatorPosition()
         const { date, weekday } = useIssueDate(issue)
 
         const goToIssueList = () => {
@@ -130,18 +126,9 @@ const ScreenHeader = withNavigation(
                     />
                 }
             >
-                <Animated.View
-                    style={
-                        supportsTransparentCards() && {
-                            opacity: position.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [1, 0],
-                            }),
-                        }
-                    }
-                >
+                <View>
                     <IssueTitle title={weekday} subtitle={date} />
-                </Animated.View>
+                </View>
             </Header>
         )
     },
