@@ -24,7 +24,7 @@ export const getImageHeight = (
     }
     if (layout === PageLayoutSizes.mobile) {
         if (story.height >= 4) {
-            return isDefault ? '75.5%' : '60%'
+            return isDefault ? '65%' : '60%'
         }
         return isDefault ? '50%' : '40%'
     }
