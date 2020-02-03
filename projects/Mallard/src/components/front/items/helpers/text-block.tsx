@@ -38,14 +38,20 @@ const styles = {
 const getFontSize = ({ layout, story }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
         if (story.width >= 3) {
+            if (story.height == 3) return 1.75
             if (story.height >= 3) return 1.5
             if (story.height >= 2) return 1
         }
         if (story.width >= 2) {
+            if (story.height == 4) return 1.5
             if (story.height >= 3) return 1.25
             return 0.75
         }
         return 0.75
+    }
+    // top story for 2 and 3 story cards should have a larger font
+    if (story.height == 4 && story.width === 2) {
+        return 1.25
     }
     if (story.height > 4) {
         return 1.5
