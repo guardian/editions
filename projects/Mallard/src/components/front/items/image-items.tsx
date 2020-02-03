@@ -89,7 +89,7 @@ export const StarterItem = ({ article, size, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }}>
             <TrailImageView
                 article={article}
-                style={{ height: getImageHeight(size, 'starter') }}
+                style={{ height: getImageHeight(size) }}
             />
 
             <TextBlock
