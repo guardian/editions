@@ -10,7 +10,6 @@ import { useScreens } from 'react-native-screens'
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationState } from 'react-navigation'
 import { clearAndDownloadIssue } from 'src/helpers/clear-download-issue'
-import { pushDownloadFailsafe } from 'src/helpers/push-download-failsafe'
 import { NavPositionProvider } from 'src/hooks/use-nav-position'
 import { RootNavigator } from 'src/navigation'
 import {
@@ -143,8 +142,6 @@ export default class App extends React.Component<{}, {}> {
                 clearAndDownloadIssue(apolloClient)
             }
         })
-
-        pushDownloadFailsafe(apolloClient)
     }
 
     async componentDidCatch(e: Error) {
