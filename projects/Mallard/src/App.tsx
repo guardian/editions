@@ -35,6 +35,7 @@ import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
 import { ConfigProvider } from 'src/hooks/use-config-provider'
 import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
+import { weatherHider } from './helpers/weather-hider'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -135,6 +136,7 @@ const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
+        weatherHider(apolloClient)
         clearAndDownloadIssue(apolloClient)
 
         AppState.addEventListener('change', async appState => {
