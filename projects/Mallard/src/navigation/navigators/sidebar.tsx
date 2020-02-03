@@ -106,7 +106,7 @@ const addViewsForSidebarLayer: NavigatorWrapper = (navigator, getPosition) => {
                         navigation.goBack()
                     }}
                 >
-                    <Animated.View
+                    <View
                         style={[
                             StyleSheet.absoluteFillObject,
                             backButtonStyles,
