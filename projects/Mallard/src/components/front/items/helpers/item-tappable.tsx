@@ -4,7 +4,7 @@ import {
     Easing,
     StyleProp,
     StyleSheet,
-    TouchableWithoutFeedback,
+    TouchableHighlight,
     View,
     ViewStyle,
 } from 'react-native'
@@ -122,7 +122,7 @@ const ItemTappable = withNavigation(
                     }}
                 />
 
-                <TouchableWithoutFeedback
+                <TouchableHighlight
                     onPress={() => {
                         supportsTransparentCards() && fade(opacity, 'out')
                         navigateToArticle(navigation, {
@@ -131,6 +131,7 @@ const ItemTappable = withNavigation(
                             prefersFullScreen: article.type === 'crossword',
                         })
                     }}
+                    activeOpacity={0.95}
                 >
                     <View
                         style={[
@@ -141,7 +142,7 @@ const ItemTappable = withNavigation(
                     >
                         {children}
                     </View>
-                </TouchableWithoutFeedback>
+                </TouchableHighlight>
 
                 <Animated.View
                     {...ariaHidden}
