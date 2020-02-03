@@ -10,10 +10,10 @@ export const getImageHeight = ({ story, layout }: ItemSizes) => {
         if (story.height >= 4) {
             return '50%'
         }
-        if (story.height >= 3) {
+        if (story.height == 3) {
             return '66.66%'
         }
-        if (story.height >= 2) {
+        if (story.height == 2) {
             return '50%'
         }
         return '75.5%'
