@@ -259,7 +259,7 @@ PODS:
     - React
   - RNPermissions (2.0.3):
     - React
-  - RNScreens (1.0.0-alpha.23):
+  - RNScreens (2.0.0-alpha.34):
     - React
   - RNSentry (1.1.0):
     - React
@@ -489,7 +489,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: 0800f17fd7ed9fc503eb68e427befebb41ee719b
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNPermissions: 9e437a90de84a5402ff689d4da233730b81556c2
-  RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+  RNScreens: 9d8a2900cd4f967af70dbfed74b64f77fbb6600a
   RNSentry: 932ac1c8b2f581b1c8be5812f88ff556c99e7fb7
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNZipArchive: be636657a6630e9771d4a3223dc8fd0bd0137b55
