@@ -14,7 +14,7 @@ export const NativeArrow = ({
         height={9}
         viewBox="0 0 11 9"
         fill="none"
-        rotate={direction}
+        transform={{ rotation: direction }}
     >
         <G opacity="0.5">
             <Path
