@@ -204,6 +204,8 @@ dependencies {
     // These should be auto linked. TODO: TEST THIS
     implementation "com.google.firebase:firebase-core:17.0.1"
     implementation "com.google.firebase:firebase-messaging:19.0.1"
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     implementation project(":ophan")
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermes-engine/android/";
