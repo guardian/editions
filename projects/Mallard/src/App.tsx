@@ -170,7 +170,6 @@ export default class App extends React.Component<{}, {}> {
                                 onIdentityStatusChange={handleIdStatus}
                             >
                                 <StatusBar
-                                    animated={true}
                                     barStyle="light-content"
                                     backgroundColor="#041f4a"
                                 />
