@@ -20,6 +20,7 @@ import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 const CollectionPageInFront = ({
     index,
@@ -97,6 +98,16 @@ export const Front = React.memo(
 
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
+        const largeDeviceMemory = useLargeDeviceMemory()
+        const flatListOptimisationProps = largeDeviceMemory
+            ? {
+                  windowSize: 2,
+                  maxToRenderPerBatch: 1,
+              }
+            : {
+                  windowSize: 2,
+                  maxToRenderPerBatch: 3,
+              }
 
         return (
             <Wrapper
@@ -121,8 +132,7 @@ export const Front = React.memo(
                     // These three props are responsible for the majority of
                     // performance improvements
                     initialNumToRender={2}
-                    windowSize={3}
-                    maxToRenderPerBatch={2}
+                    {...flatListOptimisationProps}
                     showsVerticalScrollIndicator={false}
                     scrollEventThrottle={1}
                     horizontal={true}
