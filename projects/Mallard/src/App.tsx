@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import React from 'react'
 import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native'
-import { useScreens } from 'react-native-screens'
+import { enableScreens } from 'react-native-screens'
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationState } from 'react-navigation'
 import { clearAndDownloadIssue } from 'src/helpers/clear-download-issue'
@@ -49,7 +49,7 @@ if (!__DEV__) {
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
-useScreens()
+enableScreens()
 pushNotifcationRegistration(apolloClient)
 Platform.OS === 'android' && clearAndDownloadIssue(apolloClient)
 
