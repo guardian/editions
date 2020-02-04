@@ -265,8 +265,8 @@ const IssueFronts = ({
     const largeDeviceMemory = useLargeDeviceMemory()
     const flatListOptimisationProps = largeDeviceMemory && {
         initialNumToRender: 2,
-        windowSize: 2,
-        maxToRenderPerBatch: 2,
+        windowSize: 1,
+        maxToRenderPerBatch: 1,
     }
 
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
