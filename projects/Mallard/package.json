@@ -40,6 +40,7 @@
         "@react-native-community/netinfo": "^3.2.1",
         "@react-native-community/push-notification-ios": "^1.0.2",
         "@react-native-community/viewpager": "^2.0.1",
+        "@react-navigation/native-stack": "^5.0.0-alpha.35",
         "@sentry/react-native": "^1.1.0",
         "apollo-cache-inmemory": "^1.6.3",
         "apollo-client": "^2.6.4",
@@ -70,6 +71,7 @@
         "react-native-permissions": "^2.0.3",
         "react-native-progress-circle": "^2.1.0",
         "react-native-push-notification": "^3.1.7",
+        "react-native-safe-area-context": "^0.6.4",
         "react-native-screens": "^2.0.0-alpha.34",
         "react-native-splash-screen": "^3.2.0",
         "react-native-status-bar-height": "^2.4.0",
@@ -78,6 +80,7 @@
         "react-native-zip-archive": "5.0.0",
         "react-navigation": "3.11.1",
         "react-navigation-fluid-transitions": "^0.3.2",
+        "react-navigation-stack": "^2.1.1",
         "rn-fetch-blob": "0.11.2",
         "validator": "^11.1.0"
     },
