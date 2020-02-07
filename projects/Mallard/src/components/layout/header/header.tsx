@@ -87,11 +87,7 @@ const Header = ({
     return (
         <WithAppAppearance value={white ? 'default' : 'primary'}>
             {white && (
-                <StatusBar
-                    animated={true}
-                    barStyle="dark-content"
-                    backgroundColor="#fff"
-                />
+                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
             )}
             <View style={[bg]}>
                 {layout === 'issue' ? (
