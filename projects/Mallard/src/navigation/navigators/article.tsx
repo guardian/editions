@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement } from 'react'
+import React, { FunctionComponent } from 'react'
 import {
     Animated,
     Easing,
