@@ -31,7 +31,6 @@ import {
 } from '../helpers/transition'
 import { sidebarWidth } from './sidebar/positions'
 import { screenInterpolator, mainLayerTransition } from './sidebar/transition'
-import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 const USE_SIDEBAR_ANIMATION =
     supportsTransparentCards() ||

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, ReactElement } from 'react'
 import {
     Animated,
     Easing,
@@ -53,13 +53,6 @@ const Dismissable = ({
     )
 }
 
-const IosNineWrapper = ({ children }) =>
-    !supportsAnimation() && Platform.OS !== 'android' ? (
-        <View style={styles.basicCardWrapper}>{children}</View>
-    ) : (
-        children
-    )
-
 const BasicCardWrapper = ({
     navigator: Navigator,
     navigation,
@@ -107,6 +100,14 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
     },
 })
+
+const IosNineWrapper = ({ children }: { children: any }) =>
+    !supportsAnimation() && Platform.OS !== 'android' ? (
+        <View style={styles.basicCardWrapper}>{children}</View>
+    ) : (
+        children
+    )
+
 const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
     const Wrapper = ({ navigation }: NavigationInjectedProps) => {
