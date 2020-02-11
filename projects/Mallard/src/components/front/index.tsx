@@ -167,7 +167,7 @@ export const Front = React.memo(
                                 const feelFactor = 50
                                 const pos =
                                     ev.nativeEvent.contentOffset.x /
-                                    (card.width - 50)
+                                    (card.width - feelFactor)
                                 const index = clamp(Math.floor(pos), 0, stops)
                                 setCardIndex(index)
                             },

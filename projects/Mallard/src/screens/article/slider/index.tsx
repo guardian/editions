@@ -227,6 +227,7 @@ const ArticleSlider = React.memo(
                         sections={sliderSections}
                         goNext={goNext}
                         goPrevious={goPrevious}
+                        sliderDetails={sliderDetails}
                     />
                 </>
             )
@@ -243,10 +244,9 @@ const ArticleSlider = React.memo(
                         goNext={goNext}
                         goPrevious={goPrevious}
                         panResponder={panResponder}
+                        sliderDetails={sliderDetails}
                     />
                 )}
-
-                <SliderTitle {...sliderDetails} />
 
                 <Animated.FlatList
                     ref={(flatList: AnimatedFlatListRef) =>
@@ -322,6 +322,7 @@ const ArticleSlider = React.memo(
                         sections={sliderSections}
                         goNext={goNext}
                         goPrevious={goPrevious}
+                        sliderDetails={sliderDetails}
                     />
                 )}
             </>

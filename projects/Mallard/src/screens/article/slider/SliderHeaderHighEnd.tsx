@@ -4,6 +4,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { SliderBarWrapper } from './SliderBarWrapper'
 import { SliderSection } from './types'
+import { ISliderTitle, SliderTitle } from './SliderTitle'
 
 const styles = StyleSheet.create({
     slider: {
@@ -28,6 +29,7 @@ const SliderHeaderHighEnd = ({
     goNext,
     goPrevious,
     panResponder,
+    sliderDetails,
 }: {
     isShown: boolean
     isAtTop: boolean
@@ -37,11 +39,14 @@ const SliderHeaderHighEnd = ({
     goNext: () => void
     goPrevious: () => void
     panResponder: any
+    sliderDetails: ISliderTitle
 }) => (
     <View
         style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
         {...panResponder.panHandlers}
-    />
+    >
+        <SliderTitle {...sliderDetails} />
+    </View>
 )
 
 export { SliderHeaderHighEnd }

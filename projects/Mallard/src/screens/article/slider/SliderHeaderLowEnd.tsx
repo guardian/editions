@@ -4,11 +4,15 @@ import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
-import { SliderSection } from './types'
-import { SliderBarWrapper } from './SliderBarWrapper'
 import { supportsAnimation } from 'src/helpers/features'
+import { SliderTitle, ISliderTitle } from './SliderTitle'
+import DeviceInfo from 'react-native-device-info'
 
-const ANDROID_HEADER_HEIGHT = 130
+const ANDROID_HEADER_HEIGHT = DeviceInfo.isTablet()
+    ? Platform.OS === 'ios'
+        ? 160
+        : 140
+    : 135
 
 const styles = StyleSheet.create({
     slider: {
@@ -35,19 +39,11 @@ const SliderHeaderLowEnd = withNavigation(
     ({
         isShown,
         isAtTop,
-        sections,
-        sliderPosition,
-        width,
-        goNext,
-        goPrevious,
+        sliderDetails,
     }: {
         isShown: boolean
         isAtTop: boolean
-        sections: SliderSection[]
-        sliderPosition: Animated.AnimatedInterpolation
-        width: number
-        goNext: () => void
-        goPrevious: () => void
+        sliderDetails: ISliderTitle
     } & NavigationInjectedProps) => {
         const [top] = useState(new Animated.Value(0))
         if (supportsAnimation()) {
@@ -74,20 +70,7 @@ const SliderHeaderLowEnd = withNavigation(
                 <View
                     style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
                 >
-                    <SliderBarWrapper
-                        sections={sections}
-                        sliderPosition={
-                            Platform.OS === 'android'
-                                ? sliderPosition
-                                : Animated.divide(
-                                      sliderPosition,
-                                      new Animated.Value(width),
-                                  )
-                        }
-                        width={width}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
-                    />
+                    <SliderTitle {...sliderDetails} />
                 </View>
             </Animated.View>
         )

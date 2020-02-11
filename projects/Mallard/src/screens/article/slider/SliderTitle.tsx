@@ -1,9 +1,21 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { getFont } from 'src/theme/typography'
 
-const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet() ? 80 : 60
+const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
+    ? Platform.OS === 'android'
+        ? 100
+        : 90
+    : 60
+
+interface ISliderTitle {
+    title: string
+    numOfItems: number
+    itemIndex: number
+    color: string
+    location?: 'article' | 'front'
+}
 
 const styles = (color: string, location: string, isTablet: boolean) => {
     const titleShared = {
@@ -38,8 +50,8 @@ const styles = (color: string, location: string, isTablet: boolean) => {
 
     return StyleSheet.create({
         container: {
-            paddingHorizontal: location === 'article' ? 15 : 5,
-            maxWidth: location === 'article' ? 825 : undefined,
+            paddingLeft: location === 'front' ? 10 : 0,
+            maxWidth: location === 'article' ? 800 : undefined,
             width: '100%',
             alignSelf: 'center',
         },
@@ -47,7 +59,6 @@ const styles = (color: string, location: string, isTablet: boolean) => {
         dotsContainer: {
             flexDirection: 'row',
             paddingTop: 8,
-            paddingBottom: 16,
         },
         dot,
         selected: {
@@ -62,13 +73,7 @@ const SliderTitle = ({
     itemIndex,
     color,
     location = 'article',
-}: {
-    title: string
-    numOfItems: number
-    itemIndex: number
-    color: string
-    location?: 'article' | 'front'
-}) => {
+}: ISliderTitle) => {
     const dots = []
     const isTablet = DeviceInfo.isTablet()
     const appliedStyle = styles(color, location, isTablet)
@@ -77,6 +82,7 @@ const SliderTitle = ({
         const backgroundColor = i === itemIndex ? color : '#DCDCDC'
         dots.push(
             <View
+                key={`${title}${i}`}
                 style={[
                     appliedStyle.dot,
                     {
@@ -95,4 +101,4 @@ const SliderTitle = ({
     )
 }
 
-export { SliderTitle, SLIDER_FRONT_HEIGHT }
+export { SliderTitle, SLIDER_FRONT_HEIGHT, ISliderTitle }
