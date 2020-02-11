@@ -21,6 +21,7 @@ import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
+import { SliderTitle } from 'src/screens/article/slider/SliderTitle'
 
 const CollectionPageInFront = ({
     index,
@@ -112,18 +113,12 @@ export const Front = React.memo(
         return (
             <Wrapper
                 scrubber={
-                    <Slider
-                        stops={stops}
+                    <SliderTitle
                         title={frontData.displayName || 'News'}
-                        fill={color}
-                        position={scrollX.interpolate({
-                            inputRange: [
-                                0,
-                                card.width * (stops <= 0 ? stops : stops - 1) +
-                                    0.001,
-                            ],
-                            outputRange: safeInterpolation([0, 1]),
-                        })}
+                        numOfItems={stops}
+                        color={color}
+                        itemIndex={5}
+                        location="front"
                     />
                 }
             >

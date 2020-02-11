@@ -129,7 +129,6 @@ const ArticleSlider = React.memo(
                 numOfItems: displaySection[0].items,
                 itemIndex,
                 color: displaySection[0].color,
-                isTablet: DeviceInfo.isTablet(),
             }
         }
         const sliderDetails = getFrontNameAndPosition()
