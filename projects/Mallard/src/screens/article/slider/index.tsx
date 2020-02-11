@@ -1,6 +1,13 @@
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
+import {
+    Animated,
+    Easing,
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { clamp } from 'src/helpers/math'
@@ -16,6 +23,8 @@ import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
 import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
 import { supportsAnimation } from 'src/helpers/features'
+import { SliderTitle } from './SliderTitle'
+import DeviceInfo from 'react-native-device-info'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -104,6 +113,26 @@ const ArticleSlider = React.memo(
             },
             { sectionCounter: 0, sections: [] as SliderSection[] },
         ).sections
+
+        // console.log(sliderSections)
+        // console.log(current)
+
+        const getFrontNameAndPosition = () => {
+            const displaySection = sliderSections.filter(
+                section =>
+                    section.startIndex <= current &&
+                    section.startIndex + section.items > current,
+            )
+            const itemIndex = current - displaySection[0].startIndex
+            return {
+                title: displaySection[0].title,
+                numOfItems: displaySection[0].items,
+                itemIndex,
+                color: displaySection[0].color,
+                isTablet: DeviceInfo.isTablet(),
+            }
+        }
+        const sliderDetails = getFrontNameAndPosition()
 
         const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
         const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
@@ -217,6 +246,9 @@ const ArticleSlider = React.memo(
                         panResponder={panResponder}
                     />
                 )}
+
+                <SliderTitle {...sliderDetails} />
+
                 <Animated.FlatList
                     ref={(flatList: AnimatedFlatListRef) =>
                         (flatListRef.current = flatList)
@@ -238,7 +270,7 @@ const ArticleSlider = React.memo(
                                 const newPos =
                                     ev.nativeEvent.contentOffset.x / width
                                 const newIndex = clamp(
-                                    Math.floor(newPos),
+                                    Math.ceil(newPos),
                                     0,
                                     flattenedArticles.length - 1,
                                 )

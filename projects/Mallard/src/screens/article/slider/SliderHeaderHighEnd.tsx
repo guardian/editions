@@ -41,18 +41,7 @@ const SliderHeaderHighEnd = ({
     <View
         style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
         {...panResponder.panHandlers}
-    >
-        <SliderBarWrapper
-            goNext={goNext}
-            goPrevious={goPrevious}
-            sections={sections}
-            sliderPosition={Animated.divide(
-                sliderPosition,
-                new Animated.Value(width),
-            )}
-            width={width}
-        />
-    </View>
+    />
 )
 
 export { SliderHeaderHighEnd }
