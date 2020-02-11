@@ -7,7 +7,7 @@ import {
     Issue,
     PageLayoutSizes,
 } from 'src/common'
-import { safeInterpolation, clamp } from 'src/helpers/math'
+import { clamp } from 'src/helpers/math'
 import { FlatCard, getColor } from 'src/helpers/transform'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
@@ -15,7 +15,6 @@ import {
     getCollectionPillarOverride,
     WithArticle,
 } from '../../hooks/use-article'
-import { Slider } from '../slider'
 import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
@@ -167,8 +166,8 @@ export const Front = React.memo(
                                 const feelFactor = 50
                                 const pos =
                                     ev.nativeEvent.contentOffset.x /
-                                    (card.width - feelFactor)
-                                const index = clamp(Math.floor(pos), 0, stops)
+                                    (card.width + feelFactor)
+                                const index = clamp(Math.ceil(pos), 0, stops)
                                 setCardIndex(index)
                             },
                         },

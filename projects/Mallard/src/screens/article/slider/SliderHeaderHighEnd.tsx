@@ -2,7 +2,6 @@ import React from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { SliderBarWrapper } from './SliderBarWrapper'
 import { SliderSection } from './types'
 import { ISliderTitle, SliderTitle } from './SliderTitle'
 

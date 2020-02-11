@@ -1,15 +1,9 @@
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-    Animated,
-    Easing,
-    Platform,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
+import { supportsAnimation } from 'src/helpers/features'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 import { getAppearancePillar } from 'src/hooks/use-article'
@@ -22,9 +16,6 @@ import { ArticleScreenBody, OnIsAtTopChange } from '../body'
 import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
 import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
-import { supportsAnimation } from 'src/helpers/features'
-import { SliderTitle } from './SliderTitle'
-import DeviceInfo from 'react-native-device-info'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -222,11 +213,6 @@ const ArticleSlider = React.memo(
                     <SliderHeaderLowEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        sections={sliderSections}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
                         sliderDetails={sliderDetails}
                     />
                 </>
