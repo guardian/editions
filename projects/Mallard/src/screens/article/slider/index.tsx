@@ -224,11 +224,6 @@ const ArticleSlider = React.memo(
                     <SliderHeaderHighEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
-                        sections={sliderSections}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
                         panResponder={panResponder}
                         sliderDetails={sliderDetails}
                     />
@@ -303,11 +298,6 @@ const ArticleSlider = React.memo(
                     <SliderHeaderLowEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        sections={sliderSections}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
                         sliderDetails={sliderDetails}
                     />
                 )}

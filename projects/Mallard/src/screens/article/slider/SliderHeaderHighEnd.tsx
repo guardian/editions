@@ -21,22 +21,13 @@ const styles = StyleSheet.create({
 })
 
 const SliderHeaderHighEnd = ({
+    isShown,
     isAtTop,
-    sections,
-    sliderPosition,
-    width,
-    goNext,
-    goPrevious,
     panResponder,
     sliderDetails,
 }: {
     isShown: boolean
     isAtTop: boolean
-    sections: SliderSection[]
-    sliderPosition: Animated.AnimatedInterpolation
-    width: number
-    goNext: () => void
-    goPrevious: () => void
     panResponder: any
     sliderDetails: ISliderTitle
 }) => (
