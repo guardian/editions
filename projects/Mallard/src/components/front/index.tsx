@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import { Animated, StyleSheet, View, Dimensions } from 'react-native'
 import {
     ArticlePillar,
     ArticleType,
@@ -7,7 +7,7 @@ import {
     Issue,
     PageLayoutSizes,
 } from 'src/common'
-import { safeInterpolation } from 'src/helpers/math'
+import { safeInterpolation, clamp } from 'src/helpers/math'
 import { FlatCard, getColor } from 'src/helpers/transform'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
@@ -110,6 +110,8 @@ export const Front = React.memo(
                   maxToRenderPerBatch: 3,
               }
 
+        const [cardIndex, setCardIndex] = useState(0)
+
         return (
             <Wrapper
                 scrubber={
@@ -117,7 +119,7 @@ export const Front = React.memo(
                         title={frontData.displayName || 'News'}
                         numOfItems={stops}
                         color={color}
-                        itemIndex={5}
+                        itemIndex={cardIndex}
                         location="front"
                     />
                 }
@@ -154,13 +156,22 @@ export const Front = React.memo(
                         [
                             {
                                 nativeEvent: {
-                                    contentOffset: {
-                                        x: scrollX,
-                                    },
+                                    contentOffset: { x: scrollX },
                                 },
                             },
                         ],
-                        { useNativeDriver: true },
+                        {
+                            useNativeDriver: true,
+                            listener: (ev: any) => {
+                                // From playing around it felt the width used in the calculation needed to be a bit "less"
+                                const feelFactor = 50
+                                const pos =
+                                    ev.nativeEvent.contentOffset.x /
+                                    (card.width - 50)
+                                const index = clamp(Math.floor(pos), 0, stops)
+                                setCardIndex(index)
+                            },
+                        },
                     )}
                     // this needs to be referential equal or will trigger
                     // a re-render
