@@ -180,11 +180,11 @@ const denseLayout = (): FrontCardsForArticleCount => {
         // We do not want to switch to 2 articles on front page right away. Prod
         // team can decide to add more articles if they need a denser layout.
         2: [1, 1],
-        3: [3, 2],
+        3: [1, 2],
         4: [2, 2],
         // Growing up to 2 articles on front page to distribute density.
         5: [3, 2],
-        6: [3, 3],
+        6: [2, 4],
         7: [2, 5],
 
         8: [3, 5],
