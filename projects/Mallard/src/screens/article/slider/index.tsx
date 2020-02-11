@@ -105,9 +105,6 @@ const ArticleSlider = React.memo(
             { sectionCounter: 0, sections: [] as SliderSection[] },
         ).sections
 
-        // console.log(sliderSections)
-        // console.log(current)
-
         const getFrontNameAndPosition = () => {
             const displaySection = sliderSections.filter(
                 section =>
@@ -120,6 +117,7 @@ const ArticleSlider = React.memo(
                 numOfItems: displaySection[0].items,
                 itemIndex,
                 color: displaySection[0].color,
+                subtitle: currentArticle.collection,
             }
         }
         const sliderDetails = getFrontNameAndPosition()

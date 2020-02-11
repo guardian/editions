@@ -15,6 +15,7 @@ interface ISliderTitle {
     itemIndex: number
     color: string
     location?: 'article' | 'front'
+    subtitle: string
 }
 
 const styles = (color: string, location: string, isTablet: boolean) => {
@@ -55,7 +56,14 @@ const styles = (color: string, location: string, isTablet: boolean) => {
             width: '100%',
             alignSelf: 'center',
         },
+        titleContainer: {
+            flexDirection: 'row',
+        },
         title,
+        subtitle: {
+            ...title,
+            color: 'grey', //TBC
+        },
         dotsContainer: {
             flexDirection: 'row',
             paddingTop: 8,
@@ -73,10 +81,15 @@ const SliderTitle = ({
     itemIndex,
     color,
     location = 'article',
+    subtitle,
 }: ISliderTitle) => {
     const dots = []
     const isTablet = DeviceInfo.isTablet()
     const appliedStyle = styles(color, location, isTablet)
+    // takes a key e.g. O:Top Stories and provides the end part
+    const transformedSubtitle = subtitle.split(':')[
+        subtitle.split(':').length - 1
+    ]
 
     for (let i = 0; i < numOfItems; i++) {
         const backgroundColor = i === itemIndex ? color : '#DCDCDC'
@@ -95,7 +108,15 @@ const SliderTitle = ({
 
     return (
         <View style={appliedStyle.container}>
-            <Text style={appliedStyle.title}>{title}</Text>
+            <View style={appliedStyle.titleContainer}>
+                <Text style={appliedStyle.title}>{title}</Text>
+                {transformedSubtitle !== title && (
+                    <Text style={appliedStyle.subtitle}>
+                        {' '}
+                        {transformedSubtitle}
+                    </Text>
+                )}
+            </View>
             <View style={appliedStyle.dotsContainer}>{dots}</View>
         </View>
     )
