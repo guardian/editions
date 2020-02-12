@@ -69,7 +69,8 @@ const ArticleSlider = React.memo(
         } = getArticleDataFromNavigator(articleNavigator, path)
 
         const [current, setCurrent] = useState(startingPoint)
-        const [sliderPosition] = useState(new Animated.Value(startingPoint))
+        const [sliderPosition] = useState(new Animated.Value(0))
+        const [position, setPosition] = useState(new Animated.Value(0))
 
         const { width } = useDimensions()
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -111,13 +112,14 @@ const ArticleSlider = React.memo(
                     section.startIndex <= current &&
                     section.startIndex + section.items > current,
             )
-            const itemIndex = current - displaySection[0].startIndex
+
             return {
                 title: displaySection[0].title,
                 numOfItems: displaySection[0].items,
-                itemIndex,
                 color: displaySection[0].color,
                 subtitle: currentArticle.collection,
+                startIndex: displaySection[0].startIndex,
+                position,
             }
         }
         const sliderDetails = getFrontNameAndPosition()
@@ -177,12 +179,11 @@ const ArticleSlider = React.memo(
                             setCurrent(newIndex)
                             slideToFrontFor(newIndex)
 
-                            Animated.timing(sliderPosition, {
-                                duration: 200,
-                                toValue: ev.nativeEvent.position,
-                                easing: Easing.linear,
-                                useNativeDriver: true,
-                            }).start()
+                            const position = Animated.divide(
+                                ev.nativeEvent.contentOffset.x,
+                                width,
+                            )
+                            setPosition(position)
                         }}
                     >
                         {flattenedArticles.map((item, index) => (
@@ -254,6 +255,12 @@ const ArticleSlider = React.memo(
                                 )
                                 setCurrent(newIndex)
                                 slideToFrontFor(newIndex)
+
+                                const position = Animated.divide(
+                                    ev.nativeEvent.contentOffset.x,
+                                    width,
+                                )
+                                setPosition(position)
                             },
                         },
                     )}

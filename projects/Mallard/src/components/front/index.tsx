@@ -106,6 +106,7 @@ export const Front = React.memo(
         }
 
         const [cardIndex, setCardIndex] = useState(0)
+        const [position, setPosition] = useState(new Animated.Value(0))
 
         return (
             <Wrapper
@@ -114,13 +115,13 @@ export const Front = React.memo(
                         title={frontData.displayName || 'News'}
                         numOfItems={stops}
                         color={color}
-                        itemIndex={cardIndex}
                         location="front"
                         subtitle={
                             cards[cardIndex] &&
                             cards[cardIndex].collection &&
                             cards[cardIndex].collection.key
                         }
+                        position={position}
                     />
                 }
             >
@@ -134,6 +135,7 @@ export const Front = React.memo(
                     scrollEventThrottle={1}
                     horizontal={true}
                     style={styles.overflow}
+                    pagingEnabled={true}
                     decelerationRate="fast"
                     snapToInterval={card.width}
                     ref={flatListRef}
@@ -168,6 +170,12 @@ export const Front = React.memo(
 
                                 const index = clamp(Math.ceil(pos), 0, stops)
                                 setCardIndex(index)
+
+                                const position = Animated.divide(
+                                    ev.nativeEvent.contentOffset.x,
+                                    card.width,
+                                )
+                                setPosition(position)
                             },
                         },
                     )}

@@ -1,7 +1,8 @@
 import React from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { getFont } from 'src/theme/typography'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'android'
@@ -12,10 +13,11 @@ const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
 interface ISliderTitle {
     title: string
     numOfItems: number
-    itemIndex: number
     color: string
     location?: 'article' | 'front'
     subtitle?: string
+    position: Animated.AnimatedInterpolation
+    startIndex: number
 }
 
 const styles = (color: string, location: string, isTablet: boolean) => {
@@ -78,10 +80,11 @@ const styles = (color: string, location: string, isTablet: boolean) => {
 const SliderTitle = ({
     title,
     numOfItems,
-    itemIndex,
     color,
     location = 'article',
     subtitle,
+    position,
+    startIndex,
 }: ISliderTitle) => {
     const dots = []
     const isTablet = DeviceInfo.isTablet()
@@ -90,10 +93,36 @@ const SliderTitle = ({
     const transformedSubtitle =
         subtitle && subtitle.split(':')[subtitle.split(':').length - 1]
 
+    const newPos = startIndex
+        ? Animated.subtract(position, startIndex)
+        : position
+
+    const largeDeviceMemory = useLargeDeviceMemory()
+    const range = (i: number) =>
+        largeDeviceMemory
+            ? {
+                  inputRange: [
+                      i - 0.50000000001,
+                      i - 0.5,
+                      i,
+                      i + 0.5,
+                      i + 0.50000000001,
+                  ],
+                  outputRange: ['#DCDCDC', color, color, color, '#DCDCDC'],
+              }
+            : {
+                  inputRange: [i - 1, i, i + 1],
+                  outputRange: ['#DCDCDC', color, '#DCDCDC'],
+              }
+
     for (let i = 0; i < numOfItems; i++) {
-        const backgroundColor = i === itemIndex ? color : '#DCDCDC'
+        let backgroundColor = newPos.interpolate({
+            ...range(i),
+            extrapolate: 'clamp',
+        })
+
         dots.push(
-            <View
+            <Animated.View
                 key={`${title}${i}`}
                 style={[
                     appliedStyle.dot,
@@ -101,7 +130,7 @@ const SliderTitle = ({
                         backgroundColor,
                     },
                 ]}
-            ></View>,
+            ></Animated.View>,
         )
     }
 
