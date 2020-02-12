@@ -178,12 +178,7 @@ const ArticleSlider = React.memo(
                             const newIndex = ev.nativeEvent.position
                             setCurrent(newIndex)
                             slideToFrontFor(newIndex)
-
-                            const position = Animated.divide(
-                                ev.nativeEvent.contentOffset.x,
-                                width,
-                            )
-                            setPosition(position)
+                            setPosition(newIndex)
                         }}
                     >
                         {flattenedArticles.map((item, index) => (

@@ -93,9 +93,12 @@ const SliderTitle = ({
     const transformedSubtitle =
         subtitle && subtitle.split(':')[subtitle.split(':').length - 1]
 
-    const newPos = startIndex
-        ? Animated.subtract(position, startIndex)
-        : position
+    const newPos =
+        Platform.OS === 'android' && location === 'article'
+            ? position - startIndex
+            : startIndex
+            ? Animated.subtract(position, startIndex)
+            : position
 
     const largeDeviceMemory = useLargeDeviceMemory()
     const range = (i: number) =>
@@ -116,10 +119,15 @@ const SliderTitle = ({
               }
 
     for (let i = 0; i < numOfItems; i++) {
-        let backgroundColor = newPos.interpolate({
-            ...range(i),
-            extrapolate: 'clamp',
-        })
+        let backgroundColor =
+            Platform.OS === 'android' && location === 'article'
+                ? i === newPos
+                    ? color
+                    : '#DCDCDC'
+                : newPos.interpolate({
+                      ...range(i),
+                      extrapolate: 'clamp',
+                  })
 
         dots.push(
             <Animated.View
