@@ -120,7 +120,11 @@ export const Front = React.memo(
                         color={color}
                         itemIndex={cardIndex}
                         location="front"
-                        subtitle={cards[cardIndex].collection.key}
+                        subtitle={
+                            cards[cardIndex] &&
+                            cards[cardIndex].collection &&
+                            cards[cardIndex].collection.key
+                        }
                     />
                 }
             >

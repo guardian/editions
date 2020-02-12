@@ -15,7 +15,7 @@ interface ISliderTitle {
     itemIndex: number
     color: string
     location?: 'article' | 'front'
-    subtitle: string
+    subtitle?: string
 }
 
 const styles = (color: string, location: string, isTablet: boolean) => {
@@ -87,9 +87,8 @@ const SliderTitle = ({
     const isTablet = DeviceInfo.isTablet()
     const appliedStyle = styles(color, location, isTablet)
     // takes a key e.g. O:Top Stories and provides the end part
-    const transformedSubtitle = subtitle.split(':')[
-        subtitle.split(':').length - 1
-    ]
+    const transformedSubtitle =
+        subtitle && subtitle.split(':')[subtitle.split(':').length - 1]
 
     for (let i = 0; i < numOfItems; i++) {
         const backgroundColor = i === itemIndex ? color : '#DCDCDC'
