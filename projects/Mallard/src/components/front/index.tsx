@@ -99,15 +99,11 @@ export const Front = React.memo(
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
         const largeDeviceMemory = useLargeDeviceMemory()
-        const flatListOptimisationProps = largeDeviceMemory
-            ? {
-                  windowSize: 2,
-                  maxToRenderPerBatch: 1,
-              }
-            : {
-                  windowSize: 2,
-                  maxToRenderPerBatch: 3,
-              }
+        const flatListOptimisationProps = !largeDeviceMemory && {
+            windowSize: 2,
+            maxToRenderPerBatch: 1,
+            initialNumToRender: 2,
+        }
 
         const [cardIndex, setCardIndex] = useState(0)
 
@@ -167,11 +163,9 @@ export const Front = React.memo(
                         {
                             useNativeDriver: true,
                             listener: (ev: any) => {
-                                // From playing around it felt the width used in the calculation needed to be a bit "less"
-                                const feelFactor = 50
                                 const pos =
-                                    ev.nativeEvent.contentOffset.x /
-                                    (card.width + feelFactor)
+                                    ev.nativeEvent.contentOffset.x / card.width
+
                                 const index = clamp(Math.ceil(pos), 0, stops)
                                 setCardIndex(index)
                             },

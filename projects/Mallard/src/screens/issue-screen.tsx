@@ -263,7 +263,7 @@ const IssueFronts = ({
     useScrollToFrontBehavior(frontWithCards, initialFrontKey, ref)
     const isWeatherActuallyShown = useIsWeatherActuallyShown()
     const largeDeviceMemory = useLargeDeviceMemory()
-    const flatListOptimisationProps = largeDeviceMemory && {
+    const flatListOptimisationProps = !largeDeviceMemory && {
         initialNumToRender: 2,
         windowSize: 1,
         maxToRenderPerBatch: 1,
