@@ -217,7 +217,6 @@ const denseLayout = (): FrontCardsForArticleCount => {
     }
 }
 
-// as of Feb 2020 this function is only used in the backend
 export const getCardsForFront = (
     frontName: string,
 ): FrontCardsForArticleCount => {
