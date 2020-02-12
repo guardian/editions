@@ -1,36 +1,36 @@
 import React from 'react'
-import { StyleSheet, Animated, View } from 'react-native'
-import { metrics } from 'src/theme/spacing'
-
-import { color } from 'src/theme/color'
+import { Animated, StyleSheet, View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import {
-    CAPIArticle,
-    Issue,
-    Collection,
-    Front,
-    defaultCardAppearances,
-    FrontCardAppearance,
     ArticleType,
-    PageLayout,
+    CAPIArticle,
+    Collection,
+    defaultCardAppearances,
+    Front,
+    FrontCardAppearance,
+    Issue,
+    ItemSizes,
     layouts,
+    PageLayout,
+    PageLayoutSizes,
     Rectangle,
     Size,
-    ItemSizes,
-    PageLayoutSizes,
 } from 'src/common'
+import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
+import { Multiline } from 'src/components/multiline'
+import { WithArticleType } from 'src/hooks/use-article'
+import { useIssueScreenSize } from 'src/screens/issue/use-size'
+import { color } from 'src/theme/color'
+import { metrics } from 'src/theme/spacing'
+import { ArticleNavigator } from '../../screens/article-screen'
 import {
-    useCardBackgroundStyle,
     getItemRectanglePerc,
     getPageLayoutSizeXY,
-    toAbsoluteRectangle,
     Item as TItem,
+    toAbsoluteRectangle,
+    useCardBackgroundStyle,
 } from './helpers/helpers'
-import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { itemTypeLookup } from './helpers/item-type-lookup'
-import { ArticleNavigator } from '../../screens/article-screen'
-import { Multiline } from 'src/components/multiline'
-import { useIssueScreenSize } from 'src/screens/issue/use-size'
-import { WithArticleType } from 'src/hooks/use-article'
 
 const styles = StyleSheet.create({
     root: {
@@ -47,8 +47,10 @@ const styles = StyleSheet.create({
         elevation: 2,
         flex: 1,
         margin: metrics.fronts.sides,
-        marginTop: metrics.fronts.sides / 2,
-        marginBottom: metrics.fronts.sides * 1.5,
+        marginTop: DeviceInfo.isTablet()
+            ? metrics.fronts.sides / 2
+            : metrics.fronts.sides / 10,
+        marginBottom: metrics.fronts.sides * 1.35,
     },
     itemHolder: {
         overflow: 'hidden',
