@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Animated, StyleSheet, View, Easing } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { SliderSection } from './types'
 import { ISliderTitle, SliderTitle } from './SliderTitle'
 import { supportsAnimation } from 'src/helpers/features'
-import { ANDROID_HEADER_HEIGHT } from './SliderHeaderLowEnd'
+import DeviceInfo from 'react-native-device-info'
+
+const HEADER_HIGH_END_HEIGHT = DeviceInfo.isTablet() ? 75 : 67
 
 const styles = StyleSheet.create({
     slider: {
@@ -20,9 +21,9 @@ const styles = StyleSheet.create({
     sliderAtTop: {
         borderBottomColor: color.background,
     },
-    androidHeader: {
+    header: {
         position: 'absolute',
-        height: ANDROID_HEADER_HEIGHT,
+        height: HEADER_HIGH_END_HEIGHT,
         left: 0,
         right: 0,
     },
@@ -50,7 +51,7 @@ const SliderHeaderHighEnd = ({
                 }).start()
             } else {
                 Animated.timing(top, {
-                    toValue: -80,
+                    toValue: -HEADER_HIGH_END_HEIGHT,
                     easing: Easing.out(Easing.ease),
                     duration: 200,
                 }).start()
@@ -58,7 +59,7 @@ const SliderHeaderHighEnd = ({
         }, [isShown, top])
     }
     return (
-        <Animated.View style={[styles.androidHeader, { top }]}>
+        <Animated.View style={[styles.header, { top }]}>
             <View
                 style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
                 {...panResponder.panHandlers}
@@ -69,4 +70,4 @@ const SliderHeaderHighEnd = ({
     )
 }
 
-export { SliderHeaderHighEnd }
+export { SliderHeaderHighEnd, HEADER_HIGH_END_HEIGHT }

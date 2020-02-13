@@ -13,8 +13,11 @@ import { useDimensions } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { ArticleSpec, getArticleDataFromNavigator } from '../../article-screen'
 import { ArticleScreenBody, OnIsAtTopChange } from '../body'
-import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
-import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
+import {
+    SliderHeaderHighEnd,
+    HEADER_HIGH_END_HEIGHT,
+} from './SliderHeaderHighEnd'
+import { HEADER_LOW_END_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { PreviewControls } from 'src/components/article/preview-controls'
@@ -200,7 +203,7 @@ const ArticleSlider = React.memo(
                                             onShouldShowHeaderChange
                                         }
                                         shouldShowHeader={shouldShowHeader}
-                                        topPadding={ANDROID_HEADER_HEIGHT}
+                                        topPadding={HEADER_LOW_END_HEIGHT}
                                         onIsAtTopChange={onIsAtTopChange}
                                     />
                                 ) : null}
@@ -299,7 +302,9 @@ const ArticleSlider = React.memo(
                             onShouldShowHeaderChange={onShouldShowHeaderChange}
                             shouldShowHeader={shouldShowHeader}
                             topPadding={
-                                supportsAnimation() ? 80 : ANDROID_HEADER_HEIGHT
+                                supportsAnimation()
+                                    ? HEADER_HIGH_END_HEIGHT
+                                    : HEADER_LOW_END_HEIGHT
                             }
                             onIsAtTopChange={onIsAtTopChange}
                         />

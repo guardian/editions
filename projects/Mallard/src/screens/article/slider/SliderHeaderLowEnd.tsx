@@ -8,7 +8,7 @@ import { supportsAnimation } from 'src/helpers/features'
 import { SliderTitle, ISliderTitle } from './SliderTitle'
 import DeviceInfo from 'react-native-device-info'
 
-const ANDROID_HEADER_HEIGHT = DeviceInfo.isTablet()
+const HEADER_LOW_END_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'ios'
         ? 160
         : 140
@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
     sliderAtTop: {
         borderBottomColor: color.background,
     },
-    androidHeader: {
+    header: {
         position: 'absolute',
-        height: ANDROID_HEADER_HEIGHT,
+        height: HEADER_LOW_END_HEIGHT,
         left: 0,
         right: 0,
     },
@@ -56,7 +56,7 @@ const SliderHeaderLowEnd = withNavigation(
                     }).start()
                 } else {
                     Animated.timing(top, {
-                        toValue: -ANDROID_HEADER_HEIGHT,
+                        toValue: -HEADER_LOW_END_HEIGHT,
                         easing: Easing.out(Easing.ease),
                         duration: 200,
                     }).start()
@@ -65,7 +65,7 @@ const SliderHeaderLowEnd = withNavigation(
         }
 
         return (
-            <Animated.View style={[styles.androidHeader, { top }]}>
+            <Animated.View style={[styles.header, { top }]}>
                 <BasicArticleHeader />
                 <View
                     style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
@@ -77,4 +77,4 @@ const SliderHeaderLowEnd = withNavigation(
     },
 )
 
-export { SliderHeaderLowEnd, ANDROID_HEADER_HEIGHT }
+export { SliderHeaderLowEnd, HEADER_LOW_END_HEIGHT }
