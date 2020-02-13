@@ -252,6 +252,7 @@ const ArticleSlider = React.memo(
                         {
                             useNativeDriver: true,
                             listener: (ev: any) => {
+                                onShouldShowHeaderChange(true)
                                 const newPos =
                                     ev.nativeEvent.contentOffset.x / width
                                 const newIndex = clamp(
@@ -298,7 +299,7 @@ const ArticleSlider = React.memo(
                             onShouldShowHeaderChange={onShouldShowHeaderChange}
                             shouldShowHeader={shouldShowHeader}
                             topPadding={
-                                supportsAnimation() ? 0 : ANDROID_HEADER_HEIGHT
+                                supportsAnimation() ? 80 : ANDROID_HEADER_HEIGHT
                             }
                             onIsAtTopChange={onIsAtTopChange}
                         />
@@ -309,6 +310,15 @@ const ArticleSlider = React.memo(
                     <SliderHeaderLowEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
+                        sliderDetails={sliderDetails}
+                    />
+                )}
+
+                {supportsAnimation() && (
+                    <SliderHeaderHighEnd
+                        isShown={shouldShowHeader}
+                        isAtTop={isAtTop}
+                        panResponder={panResponder}
                         sliderDetails={sliderDetails}
                     />
                 )}
