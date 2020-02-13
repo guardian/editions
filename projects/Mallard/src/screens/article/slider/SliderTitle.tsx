@@ -10,14 +10,14 @@ const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
         : 90
     : 60
 
-interface ISliderTitle {
+interface SliderTitleProps {
     title: string
     numOfItems: number
     color: string
     location?: 'article' | 'front'
     subtitle?: string
-    position: Animated.AnimatedInterpolation
-    startIndex: number
+    position: any
+    startIndex?: number
 }
 
 const styles = (color: string, location: string, isTablet: boolean) => {
@@ -85,7 +85,7 @@ const SliderTitle = ({
     subtitle,
     position,
     startIndex,
-}: ISliderTitle) => {
+}: SliderTitleProps) => {
     const dots = []
     const isTablet = DeviceInfo.isTablet()
     const appliedStyle = styles(color, location, isTablet)
@@ -93,8 +93,8 @@ const SliderTitle = ({
     const transformedSubtitle =
         subtitle && subtitle.split(':')[subtitle.split(':').length - 1]
 
-    const newPos =
-        Platform.OS === 'android' && location === 'article'
+    const newPos: any =
+        Platform.OS === 'android' && startIndex
             ? position - startIndex
             : startIndex
             ? Animated.subtract(position, startIndex)
@@ -119,7 +119,7 @@ const SliderTitle = ({
               }
 
     for (let i = 0; i < numOfItems; i++) {
-        let backgroundColor =
+        const backgroundColor =
             Platform.OS === 'android' && location === 'article'
                 ? i === newPos
                     ? color
@@ -158,4 +158,4 @@ const SliderTitle = ({
     )
 }
 
-export { SliderTitle, SLIDER_FRONT_HEIGHT, ISliderTitle }
+export { SliderTitle, SLIDER_FRONT_HEIGHT, SliderTitleProps }

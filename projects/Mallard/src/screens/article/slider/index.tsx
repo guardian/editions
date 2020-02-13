@@ -1,6 +1,6 @@
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
+import { Animated, Platform, StyleSheet, View } from 'react-native'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { supportsAnimation } from 'src/helpers/features'
@@ -75,7 +75,7 @@ const ArticleSlider = React.memo(
 
         const [current, setCurrent] = useState(startingPoint)
         const [sliderPosition] = useState(new Animated.Value(0))
-        const [position, setPosition] = useState(new Animated.Value(0))
+        const [position, setPosition] = useState<any>(new Animated.Value(0))
 
         const { width } = useDimensions()
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()

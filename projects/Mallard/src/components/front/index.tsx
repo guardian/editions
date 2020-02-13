@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { Animated, StyleSheet, View, Dimensions } from 'react-native'
+import { Animated, StyleSheet, View } from 'react-native'
 import {
     ArticlePillar,
     ArticleType,
@@ -106,7 +106,7 @@ export const Front = React.memo(
         }
 
         const [cardIndex, setCardIndex] = useState(0)
-        const [position, setPosition] = useState(new Animated.Value(0))
+        const [position, setPosition] = useState<any>(new Animated.Value(0))
 
         return (
             <Wrapper
