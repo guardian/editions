@@ -16,6 +16,8 @@ import { ArticleScreenBody, OnIsAtTopChange } from '../body'
 import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
 import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
+import { useIsPreview } from 'src/hooks/use-settings'
+import { PreviewControls } from 'src/components/article/preview-controls'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -75,6 +77,8 @@ const ArticleSlider = React.memo(
         const { width } = useDimensions()
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
         const viewPagerRef = useRef<ViewPagerAndroid | null>()
+
+        const preview = useIsPreview()
 
         useEffect(() => {
             flatListRef.current &&
@@ -209,6 +213,13 @@ const ArticleSlider = React.memo(
                         isAtTop={isAtTop}
                         sliderDetails={sliderDetails}
                     />
+
+                    {preview && (
+                        <PreviewControls
+                            goNext={goNext}
+                            goPrevious={goPrevious}
+                        />
+                    )}
                 </>
             )
 
@@ -300,6 +311,10 @@ const ArticleSlider = React.memo(
                         isAtTop={isAtTop}
                         sliderDetails={sliderDetails}
                     />
+                )}
+
+                {preview && (
+                    <PreviewControls goNext={goNext} goPrevious={goPrevious} />
                 )}
             </>
         )
