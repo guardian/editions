@@ -170,7 +170,16 @@ export const Front = React.memo(
                                 const pos =
                                     ev.nativeEvent.contentOffset.x / card.width
 
-                                const index = clamp(Math.ceil(pos), 0, stops)
+                                const slideIndex = clamp(
+                                    Math.ceil(pos),
+                                    0,
+                                    stops,
+                                )
+                                // Prevent the index being greater than the stops due to flatlist bounce
+                                const index =
+                                    slideIndex >= stops - 1
+                                        ? stops - 1
+                                        : slideIndex
                                 setCardIndex(index)
 
                                 const position = Animated.divide(
