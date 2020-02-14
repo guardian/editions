@@ -16,7 +16,7 @@ interface SliderTitleProps {
     color: string
     location?: 'article' | 'front'
     subtitle?: string
-    position: any
+    position: Animated.AnimatedInterpolation
     startIndex?: number
 }
 
@@ -95,7 +95,7 @@ const SliderTitle = ({
 
     const newPos: any =
         Platform.OS === 'android' && startIndex
-            ? position - startIndex
+            ? Number(position) - startIndex
             : startIndex
             ? Animated.subtract(position, startIndex)
             : position

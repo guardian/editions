@@ -75,7 +75,9 @@ const ArticleSlider = React.memo(
 
         const [current, setCurrent] = useState(startingPoint)
         const [sliderPosition] = useState(new Animated.Value(0))
-        const [position, setPosition] = useState<any>(new Animated.Value(0))
+        const [position, setPosition] = useState<
+            Animated.AnimatedInterpolation
+        >(new Animated.Value(0))
 
         const { width } = useDimensions()
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
@@ -268,7 +270,7 @@ const ArticleSlider = React.memo(
 
                                 const position = Animated.divide(
                                     ev.nativeEvent.contentOffset.x,
-                                    width,
+                                    new Animated.Value(width),
                                 )
                                 setPosition(position)
                             },

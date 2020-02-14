@@ -106,7 +106,9 @@ export const Front = React.memo(
         }
 
         const [cardIndex, setCardIndex] = useState(0)
-        const [position, setPosition] = useState<any>(new Animated.Value(0))
+        const [position, setPosition] = useState<
+            Animated.AnimatedInterpolation
+        >(new Animated.Value(0))
 
         return (
             <Wrapper
@@ -173,7 +175,7 @@ export const Front = React.memo(
 
                                 const position = Animated.divide(
                                     ev.nativeEvent.contentOffset.x,
-                                    card.width,
+                                    new Animated.Value(card.width),
                                 )
                                 setPosition(position)
                             },
