@@ -105,11 +105,14 @@ const AccessProvider = ({
         const unsubIAP = controller.authorizerMap.iap.subscribe(setIAPAuth)
         client
             .watchQuery({
-                query: gql('{ netInfo @client { isConnected @client } }'),
+                query: gql(
+                    '{ netInfo @client { isConnected @client, isPoorConnection @client } }',
+                ),
             })
             .subscribe(res => {
                 controller.handleConnectionStatusChanged(
                     res.data.netInfo.isConnected,
+                    res.data.netInfo.isPoorConnection,
                 )
             })
         return () => {
