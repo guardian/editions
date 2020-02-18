@@ -21,6 +21,7 @@ import { HEADER_LOW_END_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { PreviewControls } from 'src/components/article/preview-controls'
+import { issueDateFromId } from './slider-helpers'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -129,6 +130,7 @@ const ArticleSlider = React.memo(
                 subtitle: currentArticle.collection,
                 startIndex: displaySection[0].startIndex,
                 position,
+                editionDate: issueDateFromId(path.publishedIssueId),
             }
         }
         const sliderDetails = getFrontNameAndPosition()
