@@ -54,14 +54,18 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
-    public handleConnectionStatusChanged(isConnected: boolean) {
+    public handleConnectionStatusChanged(
+        isConnected: boolean,
+        isPoorConnection = false,
+    ) {
+        const hasConnection = isConnected && !isPoorConnection
         if (!this.hasAuthRun) {
-            if (isConnected) {
+            if (hasConnection) {
                 return this.runCachedAuth('online')
             } else {
                 return this.runCachedAuth('offline')
             }
-        } else if (!this.isAuthOnline && isConnected) {
+        } else if (!this.isAuthOnline && hasConnection) {
             return this.runCachedAuth('online')
         }
     }
