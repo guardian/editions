@@ -21,6 +21,7 @@ import { Wrapper } from './helpers/wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 import { SliderTitle } from 'src/screens/article/slider/SliderTitle'
+import { issueDateFromId } from 'src/screens/article/slider/slider-helpers'
 
 const CollectionPageInFront = ({
     index,
@@ -124,6 +125,7 @@ export const Front = React.memo(
                             cards[cardIndex].collection.key
                         }
                         position={position}
+                        editionDate={issueDateFromId(publishedIssueId)}
                     />
                 }
             >

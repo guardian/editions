@@ -10,6 +10,8 @@ const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
         : 90
     : 60
 
+const FIRST_SUBTITLE_DATE = new Date('2020-02-17').getTime()
+
 interface SliderTitleProps {
     title: string
     numOfItems: number
@@ -18,6 +20,7 @@ interface SliderTitleProps {
     subtitle?: string
     position: Animated.AnimatedInterpolation
     startIndex?: number
+    editionDate: Date | undefined //temporary until we have subtitles for the last 30 editions
 }
 
 const styles = (color: string, location: string, isTablet: boolean) => {
@@ -86,6 +89,7 @@ const SliderTitle = React.memo(
         subtitle,
         position,
         startIndex,
+        editionDate,
     }: SliderTitleProps) => {
         const dots = []
         const isTablet = DeviceInfo.isTablet()
@@ -93,6 +97,11 @@ const SliderTitle = React.memo(
         // takes a key e.g. O:Top Stories and provides the end part
         const transformedSubtitle =
             subtitle && subtitle.split(':')[subtitle.split(':').length - 1]
+        const showSubtitle =
+            transformedSubtitle !== title &&
+            // this check (and associated editionDate prop) can be removed one month after HIDE_SUBTITLE_BEFORE
+            // this is to hide subtitles on past issues created before subtitles were a thing
+            (!editionDate || editionDate.getTime() > FIRST_SUBTITLE_DATE)
 
         const newPos: any =
             Platform.OS === 'android' && startIndex
@@ -147,7 +156,7 @@ const SliderTitle = React.memo(
             <View style={appliedStyle.container}>
                 <View style={appliedStyle.titleContainer}>
                     <Text style={appliedStyle.title}>{title}</Text>
-                    {transformedSubtitle !== title && (
+                    {showSubtitle && (
                         <Text style={appliedStyle.subtitle}>
                             {' '}
                             {transformedSubtitle}

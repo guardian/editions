@@ -2,12 +2,14 @@ import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
 import { SliderTitle } from '../SliderTitle'
 import { Animated } from 'react-native'
+import { issueDateFromId } from '../slider-helpers'
 
 const sliderDetails = {
     title: 'Top Stories',
     numOfItems: 3,
     color: '#000000',
     position: new Animated.Value(3),
+    editionDate: new Date(),
 }
 
 const baseTests = (title: string) =>
@@ -75,6 +77,13 @@ const baseTests = (title: string) =>
                 <SliderTitle {...sliderDetails} startIndex={2} />,
             ).toJSON()
             expect(component).toMatchSnapshot()
+        })
+
+        it('should correctly extract dates from an edition id', () => {
+            const id = 'daily-edition/2020-02-18/2020-02-18T01:55:13.3'
+            const extractedDate = issueDateFromId(id)
+            expect(extractedDate).toStrictEqual(new Date('2020-02-18'))
+            expect(issueDateFromId('jasdhklasdfa')).toBe(undefined)
         })
     })
 
