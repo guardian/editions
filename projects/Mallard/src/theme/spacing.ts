@@ -12,7 +12,6 @@ const basicMetrics = {
 
 const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
 const sides = basicMetrics.horizontal
-const sliderRadius = 18
 
 export const metrics = {
     ...basicMetrics,
@@ -29,11 +28,10 @@ export const metrics = {
     },
     fronts: {
         sides: basicMetrics.horizontal * 1.5,
-        cardContainerHeightExtra: sliderRadius * 2,
         cardSize: toSize(540, 530),
         cardSizeTablet: toSize(650, 725),
         cardSizeTabletShort: toSize(650, 660),
-        sliderRadius,
+        circleButtonDiameter: 36,
     },
     gridRowSplit: {
         narrow: (width: number) => width * 0.65,

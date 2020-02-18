@@ -201,7 +201,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         font-weight: 600;
         color: ${colors.main};
     }
-    
+
     .header-top-byline > a {
         font-style: normal !important;
         text-decoration: none;
@@ -310,8 +310,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         background-color: ${colors.main};
         color: ${color.textOverDarkBackground};
         border:none;
-        width: ${metrics.fronts.sliderRadius * 2}px;
-        height: ${metrics.fronts.sliderRadius * 2}px;
+        width: ${metrics.fronts.circleButtonDiameter}px;
+        height: ${metrics.fronts.circleButtonDiameter}px;
         display: block;
         line-height: .9;
         text-align: center;
@@ -330,8 +330,8 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     }
     .share-button {
         display: flex;
-        width:  ${metrics.fronts.sliderRadius * 2}px;
-        height: ${metrics.fronts.sliderRadius * 2}px;
+        width:  ${metrics.fronts.circleButtonDiameter}px;
+        height: ${metrics.fronts.circleButtonDiameter}px;
         border: 1px solid ${colors.main};
         color: ${colors.main};
         border-radius: 100%;

@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react'
 import { metrics } from 'src/theme/spacing'
 import { Dimensions, LayoutRectangle } from 'react-native'
 import { PageLayoutSizes } from 'src/common'
+import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 
 const BreakpointContext = createContext<[PageLayoutSizes, LayoutRectangle]>([
     PageLayoutSizes.mobile,
@@ -17,7 +18,7 @@ const useIssueScreenSize = () => {
             ? metrics.fronts.cardSizeTablet
             : metrics.fronts.cardSizeTabletShort
     const container = {
-        height: metrics.fronts.cardContainerHeightExtra + card.height,
+        height: SLIDER_FRONT_HEIGHT + card.height,
         width: layout.width,
     }
 
