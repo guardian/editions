@@ -181,18 +181,18 @@ const denseLayout = (): FrontCardsForArticleCount => {
         // team can decide to add more articles if they need a denser layout.
         2: [1, 1],
         3: [1, 2],
-        4: [1, 3],
+        4: [2, 2],
         // Growing up to 2 articles on front page to distribute density.
-        5: [2, 3],
+        5: [3, 2],
         6: [2, 4],
         7: [2, 5],
 
-        // We want to avoid [2, 6], so breakdown into more cards at this point.
-        8: [2, 3, 3],
+        8: [3, 5],
+        // We want to avoid [3, 6], so breakdown into more cards at this point.
         // 4-article cards have more pictures than 3x ones so let's swap them.
-        9: [2, 4, 3],
-        10: [2, 3, 5],
-        11: [2, 4, 5],
+        9: [3, 2, 4],
+        10: [3, 2, 5],
+        11: [3, 3, 5],
         // Growing up to 3 articles on front page to avoid additional cards yet.
         12: [3, 4, 5],
         13: [3, 4, 6],
@@ -222,7 +222,9 @@ export const getCardsForFront = (
 ): FrontCardsForArticleCount => {
     switch (frontName) {
         case 'National':
+            return denseLayout()
         case 'World':
+            return denseLayout()
         case 'Financial':
             return denseLayout()
         case 'Crosswords':
