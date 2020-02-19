@@ -66,6 +66,7 @@ import {
 import { FrontSpec } from './article-screen'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
+import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -293,9 +294,9 @@ const IssueFronts = ({
                 </>
             )}
             getItemLayout={(_: any, index: number) => ({
-                length: card.height + metrics.fronts.sliderRadius * 2,
+                length: card.height + SLIDER_FRONT_HEIGHT,
                 offset:
-                    (card.height + metrics.fronts.sliderRadius * 2) * index +
+                    (card.height + SLIDER_FRONT_HEIGHT) * index +
                     (isWeatherActuallyShown
                         ? WEATHER_HEIGHT
                         : EMPTY_WEATHER_HEIGHT),
