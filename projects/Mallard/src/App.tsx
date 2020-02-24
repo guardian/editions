@@ -49,7 +49,7 @@ if (!__DEV__) {
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks
-enableScreens()
+Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
 Platform.OS === 'android' && clearAndDownloadIssue(apolloClient)
 
