@@ -28,12 +28,12 @@ const styles = (color: string, location: string, isTablet: boolean) => {
 
     const titleArticle = {
         ...titleShared,
-        fontSize: isTablet ? 30 : 26,
+        fontSize: isTablet ? 30 : 20,
     }
 
     const titleFront = {
         ...titleShared,
-        fontSize: isTablet ? 50 : 28,
+        fontSize: isTablet ? 38 : 28,
     }
 
     const title = location === 'article' ? titleArticle : titleFront
@@ -45,7 +45,7 @@ const styles = (color: string, location: string, isTablet: boolean) => {
         marginRight,
     })
 
-    const dotFront = isTablet ? dotBuilder(16, 7) : dotBuilder(10, 4)
+    const dotFront = isTablet ? dotBuilder(14, 7) : dotBuilder(10, 4)
 
     const dotArticle = dotBuilder(8, 2)
 
