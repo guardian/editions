@@ -230,15 +230,6 @@ const ArticleSlider = React.memo(
 
         return (
             <>
-                {supportsAnimation() && (
-                    <SliderHeaderHighEnd
-                        isShown={shouldShowHeader}
-                        isAtTop={isAtTop}
-                        panResponder={panResponder}
-                        sliderDetails={sliderDetails}
-                    />
-                )}
-
                 <Animated.FlatList
                     ref={(flatList: AnimatedFlatListRef) =>
                         (flatListRef.current = flatList)
