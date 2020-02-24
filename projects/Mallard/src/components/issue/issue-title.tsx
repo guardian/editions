@@ -12,7 +12,6 @@ const splitStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         width: '100%',
-        alignSelf: 'flex-end',
     },
     inner: {
         flexDirection: 'row',
@@ -40,14 +39,8 @@ const GridRowSplit = ({
         >
     >
 }) => {
-    const Inner = ({
-        width,
-        innerStyle,
-    }: {
-        width: number
-        innerStyle?: ViewStyle
-    }) => (
-        <View style={[splitStyles.container, style, innerStyle]}>
+    const Inner = ({ width }: { width: number }) => (
+        <View style={[splitStyles.container, style]}>
             {proxy && <View style={{ flexGrow: 1 }}>{proxy}</View>}
             <View style={[splitStyles.inner, { width }]}>{children}</View>
         </View>
@@ -60,11 +53,7 @@ const GridRowSplit = ({
                     <Inner width={metrics.gridRowSplit.narrow(width)} />
                 ),
                 [Breakpoints.tabletVertical]: () => (
-                    <Inner
-                        width={metrics.gridRowSplit.wide}
-                        // -iOS12 and Android style to make the menu look palatable
-                        innerStyle={{ maxWidth: 360 }}
-                    />
+                    <Inner width={metrics.gridRowSplit.wide} />
                 ),
             }}
         </WithBreakpoints>

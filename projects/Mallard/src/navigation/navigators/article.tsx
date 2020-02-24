@@ -1,12 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import {
-    Animated,
-    Easing,
-    StyleSheet,
-    View,
-    Dimensions,
-    Platform,
-} from 'react-native'
+import { Animated, Easing, StyleSheet } from 'react-native'
 import {
     createStackNavigator,
     NavigationContainer,
@@ -14,8 +7,6 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
-const createNativeStackNavigator = require('react-native-screens/createNativeStackNavigator')
-    .default
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import {
     supportsTransparentCards,
@@ -61,12 +52,10 @@ const BasicCardWrapper = ({
 } & NavigationInjectedProps) => {
     return (
         <>
-            <IosNineWrapper>
-                {navigation.getParam('prefersFullScreen') ? (
-                    <BasicArticleHeader />
-                ) : null}
-                <Navigator navigation={navigation} />
-            </IosNineWrapper>
+            {navigation.getParam('prefersFullScreen') ? (
+                <BasicArticleHeader />
+            ) : null}
+            <Navigator navigation={navigation} />
         </>
     )
 }
@@ -94,19 +83,7 @@ const styles = StyleSheet.create({
         marginBottom: metrics.slideCardSpacing,
     },
     basicCard: { backgroundColor: color.background, overflow: 'hidden' },
-    basicCardWrapper: {
-        backgroundColor: 'white',
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
-    },
 })
-
-const IosNineWrapper = ({ children }: { children: any }) =>
-    !supportsAnimation() && Platform.OS !== 'android' ? (
-        <View style={styles.basicCardWrapper}>{children}</View>
-    ) : (
-        children
-    )
 
 const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
     const Navigator = addStaticRouterWithPosition(navigator, getPosition)
@@ -240,11 +217,10 @@ const createArticleNavigator = (
     }
 
     if (!supportsAnimation()) {
-        return createNativeStackNavigator(navigation, {
+        return createStackNavigator(navigation, {
             initialRouteName: routeNames.Issue,
             defaultNavigationOptions: {
                 gesturesEnabled: false,
-                stackPresentation: 'modal',
             },
             headerMode: 'none',
             mode: 'modal',
