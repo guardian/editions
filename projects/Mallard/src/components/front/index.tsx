@@ -7,7 +7,7 @@ import {
     Issue,
     PageLayoutSizes,
 } from 'src/common'
-import { safeInterpolation } from 'src/helpers/math'
+import { clamp } from 'src/helpers/math'
 import { FlatCard, getColor } from 'src/helpers/transform'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
 import {
@@ -15,12 +15,12 @@ import {
     getCollectionPillarOverride,
     WithArticle,
 } from '../../hooks/use-article'
-import { Slider } from '../slider'
 import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
 import { Wrapper } from './helpers/wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
+import { SliderTitle } from 'src/screens/article/slider/SliderTitle'
 
 const CollectionPageInFront = ({
     index,
@@ -99,31 +99,31 @@ export const Front = React.memo(
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
         const largeDeviceMemory = useLargeDeviceMemory()
-        const flatListOptimisationProps = largeDeviceMemory
-            ? {
-                  windowSize: 2,
-                  maxToRenderPerBatch: 1,
-              }
-            : {
-                  windowSize: 2,
-                  maxToRenderPerBatch: 3,
-              }
+        const flatListOptimisationProps = !largeDeviceMemory && {
+            windowSize: 2,
+            maxToRenderPerBatch: 1,
+            initialNumToRender: 2,
+        }
+
+        const [cardIndex, setCardIndex] = useState(0)
+        const [position, setPosition] = useState<
+            Animated.AnimatedInterpolation
+        >(new Animated.Value(0))
 
         return (
             <Wrapper
                 scrubber={
-                    <Slider
-                        stops={stops}
+                    <SliderTitle
                         title={frontData.displayName || 'News'}
-                        fill={color}
-                        position={scrollX.interpolate({
-                            inputRange: [
-                                0,
-                                card.width * (stops <= 0 ? stops : stops - 1) +
-                                    0.001,
-                            ],
-                            outputRange: safeInterpolation([0, 1]),
-                        })}
+                        numOfItems={stops}
+                        color={color}
+                        location="front"
+                        subtitle={
+                            cards[cardIndex] &&
+                            cards[cardIndex].collection &&
+                            cards[cardIndex].collection.key
+                        }
+                        position={position}
                     />
                 }
             >
@@ -137,6 +137,7 @@ export const Front = React.memo(
                     scrollEventThrottle={1}
                     horizontal={true}
                     style={styles.overflow}
+                    pagingEnabled={true}
                     decelerationRate="fast"
                     snapToInterval={card.width}
                     ref={flatListRef}
@@ -159,13 +160,35 @@ export const Front = React.memo(
                         [
                             {
                                 nativeEvent: {
-                                    contentOffset: {
-                                        x: scrollX,
-                                    },
+                                    contentOffset: { x: scrollX },
                                 },
                             },
                         ],
-                        { useNativeDriver: true },
+                        {
+                            useNativeDriver: true,
+                            listener: (ev: any) => {
+                                const pos =
+                                    ev.nativeEvent.contentOffset.x / card.width
+
+                                const slideIndex = clamp(
+                                    Math.ceil(pos),
+                                    0,
+                                    stops,
+                                )
+                                // Prevent the index being greater than the stops due to flatlist bounce
+                                const index =
+                                    slideIndex >= stops - 1
+                                        ? stops - 1
+                                        : slideIndex
+                                setCardIndex(index)
+
+                                const position = Animated.divide(
+                                    ev.nativeEvent.contentOffset.x,
+                                    new Animated.Value(card.width),
+                                )
+                                setPosition(position)
+                            },
+                        },
                     )}
                     // this needs to be referential equal or will trigger
                     // a re-render

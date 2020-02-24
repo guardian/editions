@@ -1,0 +1,583 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SliderTitle - Android - Mobile should display a Front SliderTitle with the correct styles 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": undefined,
+      "paddingLeft": 10,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 28,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "grey",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 28,
+        }
+      }
+    >
+       
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`SliderTitle - Android - Mobile should display an Article SliderTitle with a subtitle different to the title 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": 800,
+      "paddingLeft": 0,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "grey",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+       
+      Scary News
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`SliderTitle - Android - Mobile should display an Article SliderTitle with a subtitle the same as the title 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": 800,
+      "paddingLeft": 0,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`SliderTitle - Android - Mobile should display an Article SliderTitle with the correct styles 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": 800,
+      "paddingLeft": 0,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "grey",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+       
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`SliderTitle - Android - Mobile should display an Front SliderTitle with a subtitle different to the title 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": undefined,
+      "paddingLeft": 10,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 28,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "grey",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 28,
+        }
+      }
+    >
+       
+      Scary News
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`SliderTitle - Android - Mobile should display an Front SliderTitle with a subtitle the same as the title 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": undefined,
+      "paddingLeft": 10,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 28,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(220, 220, 220, 1)",
+          "borderRadius": 5,
+          "height": 10,
+          "marginRight": 4,
+          "width": 10,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`SliderTitle - Android - Mobile should display an default SliderTitle with a prescribed start index 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": 800,
+      "paddingLeft": 0,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "grey",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 26,
+        }
+      }
+    >
+       
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "paddingTop": 8,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "backgroundColor": "#DCDCDC",
+          "borderRadius": 4,
+          "height": 8,
+          "marginRight": 2,
+          "width": 8,
+        }
+      }
+    />
+  </View>
+</View>
+`;

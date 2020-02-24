@@ -4,11 +4,15 @@ import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { BasicArticleHeader } from '../header'
-import { SliderSection } from './types'
-import { SliderBarWrapper } from './SliderBarWrapper'
 import { supportsAnimation } from 'src/helpers/features'
+import { SliderTitle, SliderTitleProps } from './SliderTitle'
+import DeviceInfo from 'react-native-device-info'
 
-const ANDROID_HEADER_HEIGHT = 130
+const HEADER_LOW_END_HEIGHT = DeviceInfo.isTablet()
+    ? Platform.OS === 'ios'
+        ? 160
+        : 140
+    : 135
 
 const styles = StyleSheet.create({
     slider: {
@@ -23,9 +27,9 @@ const styles = StyleSheet.create({
     sliderAtTop: {
         borderBottomColor: color.background,
     },
-    androidHeader: {
+    header: {
         position: 'absolute',
-        height: ANDROID_HEADER_HEIGHT,
+        height: HEADER_LOW_END_HEIGHT,
         left: 0,
         right: 0,
     },
@@ -35,19 +39,11 @@ const SliderHeaderLowEnd = withNavigation(
     ({
         isShown,
         isAtTop,
-        sections,
-        sliderPosition,
-        width,
-        goNext,
-        goPrevious,
+        sliderDetails,
     }: {
         isShown: boolean
         isAtTop: boolean
-        sections: SliderSection[]
-        sliderPosition: Animated.AnimatedInterpolation
-        width: number
-        goNext: () => void
-        goPrevious: () => void
+        sliderDetails: SliderTitleProps
     } & NavigationInjectedProps) => {
         const [top] = useState(new Animated.Value(0))
         if (supportsAnimation()) {
@@ -60,7 +56,7 @@ const SliderHeaderLowEnd = withNavigation(
                     }).start()
                 } else {
                     Animated.timing(top, {
-                        toValue: -ANDROID_HEADER_HEIGHT,
+                        toValue: -HEADER_LOW_END_HEIGHT,
                         easing: Easing.out(Easing.ease),
                         duration: 200,
                     }).start()
@@ -69,29 +65,16 @@ const SliderHeaderLowEnd = withNavigation(
         }
 
         return (
-            <Animated.View style={[styles.androidHeader, { top }]}>
+            <Animated.View style={[styles.header, { top }]}>
                 <BasicArticleHeader />
                 <View
                     style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
                 >
-                    <SliderBarWrapper
-                        sections={sections}
-                        sliderPosition={
-                            Platform.OS === 'android'
-                                ? sliderPosition
-                                : Animated.divide(
-                                      sliderPosition,
-                                      new Animated.Value(width),
-                                  )
-                        }
-                        width={width}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
-                    />
+                    <SliderTitle {...sliderDetails} />
                 </View>
             </Animated.View>
         )
     },
 )
 
-export { SliderHeaderLowEnd, ANDROID_HEADER_HEIGHT }
+export { SliderHeaderLowEnd, HEADER_LOW_END_HEIGHT }

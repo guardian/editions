@@ -1,8 +1,9 @@
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
+import { Animated, Platform, StyleSheet, View } from 'react-native'
 import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
+import { supportsAnimation } from 'src/helpers/features'
 import { clamp } from 'src/helpers/math'
 import { getColor } from 'src/helpers/transform'
 import { getAppearancePillar } from 'src/hooks/use-article'
@@ -12,10 +13,14 @@ import { useDimensions } from 'src/hooks/use-screen'
 import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { ArticleSpec, getArticleDataFromNavigator } from '../../article-screen'
 import { ArticleScreenBody, OnIsAtTopChange } from '../body'
-import { SliderHeaderHighEnd } from './SliderHeaderHighEnd'
-import { ANDROID_HEADER_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
+import {
+    SliderHeaderHighEnd,
+    HEADER_HIGH_END_HEIGHT,
+} from './SliderHeaderHighEnd'
+import { HEADER_LOW_END_HEIGHT, SliderHeaderLowEnd } from './SliderHeaderLowEnd'
 import { SliderSection } from './types'
-import { supportsAnimation } from 'src/helpers/features'
+import { useIsPreview } from 'src/hooks/use-settings'
+import { PreviewControls } from 'src/components/article/preview-controls'
 
 export interface PathToArticle {
     collection: Collection['key']
@@ -69,11 +74,16 @@ const ArticleSlider = React.memo(
         } = getArticleDataFromNavigator(articleNavigator, path)
 
         const [current, setCurrent] = useState(startingPoint)
-        const [sliderPosition] = useState(new Animated.Value(startingPoint))
+        const [sliderPosition] = useState(new Animated.Value(0))
+        const [position, setPosition] = useState<
+            Animated.AnimatedInterpolation
+        >(new Animated.Value(0))
 
         const { width } = useDimensions()
         const flatListRef = useRef<AnimatedFlatListRef | undefined>()
         const viewPagerRef = useRef<ViewPagerAndroid | null>()
+
+        const preview = useIsPreview()
 
         useEffect(() => {
             flatListRef.current &&
@@ -104,6 +114,24 @@ const ArticleSlider = React.memo(
             },
             { sectionCounter: 0, sections: [] as SliderSection[] },
         ).sections
+
+        const getFrontNameAndPosition = () => {
+            const displaySection = sliderSections.filter(
+                section =>
+                    section.startIndex <= current &&
+                    section.startIndex + section.items > current,
+            )
+
+            return {
+                title: displaySection[0].title,
+                numOfItems: displaySection[0].items,
+                color: displaySection[0].color,
+                subtitle: currentArticle.collection,
+                startIndex: displaySection[0].startIndex,
+                position,
+            }
+        }
+        const sliderDetails = getFrontNameAndPosition()
 
         const [shouldShowHeader, onShouldShowHeaderChange] = useState(true)
         const [isAtTop, onIsAtTopChange] = useIsAtTop(currentArticle.article)
@@ -159,13 +187,7 @@ const ArticleSlider = React.memo(
                             const newIndex = ev.nativeEvent.position
                             setCurrent(newIndex)
                             slideToFrontFor(newIndex)
-
-                            Animated.timing(sliderPosition, {
-                                duration: 200,
-                                toValue: ev.nativeEvent.position,
-                                easing: Easing.linear,
-                                useNativeDriver: true,
-                            }).start()
+                            setPosition(newIndex)
                         }}
                     >
                         {flattenedArticles.map((item, index) => (
@@ -183,7 +205,7 @@ const ArticleSlider = React.memo(
                                             onShouldShowHeaderChange
                                         }
                                         shouldShowHeader={shouldShowHeader}
-                                        topPadding={ANDROID_HEADER_HEIGHT}
+                                        topPadding={HEADER_LOW_END_HEIGHT}
                                         onIsAtTopChange={onIsAtTopChange}
                                     />
                                 ) : null}
@@ -194,12 +216,15 @@ const ArticleSlider = React.memo(
                     <SliderHeaderLowEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        sections={sliderSections}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
+                        sliderDetails={sliderDetails}
                     />
+
+                    {preview && (
+                        <PreviewControls
+                            goNext={goNext}
+                            goPrevious={goPrevious}
+                        />
+                    )}
                 </>
             )
 
@@ -209,14 +234,11 @@ const ArticleSlider = React.memo(
                     <SliderHeaderHighEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
-                        sections={sliderSections}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
                         panResponder={panResponder}
+                        sliderDetails={sliderDetails}
                     />
                 )}
+
                 <Animated.FlatList
                     ref={(flatList: AnimatedFlatListRef) =>
                         (flatListRef.current = flatList)
@@ -235,15 +257,22 @@ const ArticleSlider = React.memo(
                         {
                             useNativeDriver: true,
                             listener: (ev: any) => {
+                                onShouldShowHeaderChange(true)
                                 const newPos =
                                     ev.nativeEvent.contentOffset.x / width
                                 const newIndex = clamp(
-                                    Math.floor(newPos),
+                                    Math.ceil(newPos),
                                     0,
                                     flattenedArticles.length - 1,
                                 )
                                 setCurrent(newIndex)
                                 slideToFrontFor(newIndex)
+
+                                const position = Animated.divide(
+                                    ev.nativeEvent.contentOffset.x,
+                                    new Animated.Value(width),
+                                )
+                                setPosition(position)
                             },
                         },
                     )}
@@ -275,7 +304,9 @@ const ArticleSlider = React.memo(
                             onShouldShowHeaderChange={onShouldShowHeaderChange}
                             shouldShowHeader={shouldShowHeader}
                             topPadding={
-                                supportsAnimation() ? 0 : ANDROID_HEADER_HEIGHT
+                                supportsAnimation()
+                                    ? HEADER_HIGH_END_HEIGHT
+                                    : HEADER_LOW_END_HEIGHT
                             }
                             onIsAtTopChange={onIsAtTopChange}
                         />
@@ -286,12 +317,21 @@ const ArticleSlider = React.memo(
                     <SliderHeaderLowEnd
                         isShown={shouldShowHeader}
                         isAtTop={isAtTop}
-                        sliderPosition={sliderPosition}
-                        width={width}
-                        sections={sliderSections}
-                        goNext={goNext}
-                        goPrevious={goPrevious}
+                        sliderDetails={sliderDetails}
                     />
+                )}
+
+                {supportsAnimation() && (
+                    <SliderHeaderHighEnd
+                        isShown={shouldShowHeader}
+                        isAtTop={isAtTop}
+                        panResponder={panResponder}
+                        sliderDetails={sliderDetails}
+                    />
+                )}
+
+                {preview && (
+                    <PreviewControls goNext={goNext} goPrevious={goPrevious} />
                 )}
             </>
         )

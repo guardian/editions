@@ -1,9 +1,11 @@
-import React from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Animated, StyleSheet, View, Easing } from 'react-native'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
-import { SliderBarWrapper } from './SliderBarWrapper'
-import { SliderSection } from './types'
+import { SliderTitleProps, SliderTitle } from './SliderTitle'
+import DeviceInfo from 'react-native-device-info'
+
+const HEADER_HIGH_END_HEIGHT = DeviceInfo.isTablet() ? 75 : 67
 
 const styles = StyleSheet.create({
     slider: {
@@ -18,41 +20,52 @@ const styles = StyleSheet.create({
     sliderAtTop: {
         borderBottomColor: color.background,
     },
+    header: {
+        position: 'absolute',
+        height: HEADER_HIGH_END_HEIGHT,
+        left: 0,
+        right: 0,
+    },
 })
 
 const SliderHeaderHighEnd = ({
+    isShown,
     isAtTop,
-    sections,
-    sliderPosition,
-    width,
-    goNext,
-    goPrevious,
     panResponder,
+    sliderDetails,
 }: {
     isShown: boolean
     isAtTop: boolean
-    sections: SliderSection[]
-    sliderPosition: Animated.AnimatedInterpolation
-    width: number
-    goNext: () => void
-    goPrevious: () => void
     panResponder: any
-}) => (
-    <View
-        style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
-        {...panResponder.panHandlers}
-    >
-        <SliderBarWrapper
-            goNext={goNext}
-            goPrevious={goPrevious}
-            sections={sections}
-            sliderPosition={Animated.divide(
-                sliderPosition,
-                new Animated.Value(width),
-            )}
-            width={width}
-        />
-    </View>
-)
+    sliderDetails: SliderTitleProps
+}) => {
+    const [top] = useState(new Animated.Value(0))
+    useEffect(() => {
+        if (isShown) {
+            Animated.timing(top, {
+                toValue: 0,
+                easing: Easing.out(Easing.ease),
+                duration: 200,
+            }).start()
+        } else {
+            Animated.timing(top, {
+                toValue: -HEADER_HIGH_END_HEIGHT,
+                easing: Easing.out(Easing.ease),
+                duration: 200,
+            }).start()
+        }
+    }, [isShown, top])
 
-export { SliderHeaderHighEnd }
+    return (
+        <Animated.View style={[styles.header, { top }]}>
+            <View
+                style={[styles.slider, isAtTop ? styles.sliderAtTop : null]}
+                {...panResponder.panHandlers}
+            >
+                <SliderTitle {...sliderDetails} />
+            </View>
+        </Animated.View>
+    )
+}
+
+export { SliderHeaderHighEnd, HEADER_HIGH_END_HEIGHT }
