@@ -14,7 +14,13 @@ import {
     NavigationRouteConfig,
     NavigationTransitionProps,
 } from 'react-navigation'
+const createNativeStackNavigator = require('react-native-screens/createNativeStackNavigator')
+    .default
 import { ariaHidden } from 'src/helpers/a11y'
+import {
+    supportsTransparentCards,
+    supportsAnimation,
+} from 'src/helpers/features'
 import { safeInterpolation } from 'src/helpers/math'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { color } from 'src/theme/color'
@@ -25,7 +31,6 @@ import {
 } from '../helpers/transition'
 import { sidebarWidth } from './sidebar/positions'
 import { screenInterpolator, mainLayerTransition } from './sidebar/transition'
-import { supportsTransparentCards } from 'src/helpers/features'
 
 const USE_SIDEBAR_ANIMATION =
     supportsTransparentCards() ||
@@ -133,9 +138,25 @@ export const createSidebarNavigator = (
             : mainRoute,
     }
     for (const [key, value] of Object.entries(sidebarRoute)) {
-        navigation[key] = USE_SIDEBAR_ANIMATION
-            ? addViewsForSidebarLayer(value, () => animatedValue)
-            : value
+        if (!supportsAnimation()) {
+            navigation[key] = value
+        } else {
+            navigation[key] = USE_SIDEBAR_ANIMATION
+                ? addViewsForSidebarLayer(value, () => animatedValue)
+                : value
+        }
+    }
+
+    // -iOS12 only use Native navigator
+    if (!supportsAnimation()) {
+        return createNativeStackNavigator(navigation, {
+            initialRouteName: '_',
+            defaultNavigationOptions: {
+                gesturesEnabled: false,
+            },
+            headerMode: 'none',
+            mode: 'card',
+        })
     }
 
     const transitionConfig = (transitionProps: NavigationTransitionProps) => {
