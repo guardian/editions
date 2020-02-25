@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         marginTop: DeviceInfo.isTablet()
             ? metrics.fronts.sides / 2
             : metrics.fronts.sides / 10,
-        marginBottom: metrics.fronts.sides * 1.35,
+        marginBottom: metrics.fronts.sides * 1.85,
     },
     itemHolder: {
         overflow: 'hidden',
