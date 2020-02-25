@@ -10,7 +10,7 @@ const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
         : 70
     : 60
 
-const FIRST_SUBTITLE_DATE = new Date('2020-02-17').getTime()
+const FIRST_SUBTITLE_DATE = new Date('2020-03-05').getTime()
 
 interface SliderTitleProps {
     title: string
