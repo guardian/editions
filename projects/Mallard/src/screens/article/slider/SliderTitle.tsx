@@ -8,7 +8,7 @@ import { metrics } from 'src/theme/spacing'
 const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'android'
         ? 100
-        : 90
+        : 70
     : 60
 
 interface SliderTitleProps {
