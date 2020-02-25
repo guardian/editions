@@ -45,7 +45,7 @@ exports[`SliderTitle - Android - Mobile should display a Front SliderTitle with 
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -109,7 +109,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -120,7 +120,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
         Object {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -132,7 +132,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -196,7 +196,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -207,7 +207,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -271,7 +271,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -282,7 +282,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
         Object {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -293,7 +293,7 @@ exports[`SliderTitle - Android - Mobile should display an Article SliderTitle wi
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -380,7 +380,7 @@ exports[`SliderTitle - Android - Mobile should display an Front SliderTitle with
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -455,7 +455,7 @@ exports[`SliderTitle - Android - Mobile should display an Front SliderTitle with
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -519,7 +519,7 @@ exports[`SliderTitle - Android - Mobile should display an default SliderTitle wi
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -530,7 +530,7 @@ exports[`SliderTitle - Android - Mobile should display an default SliderTitle wi
         Object {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 26,
+          "fontSize": 20,
         }
       }
     >
@@ -541,7 +541,7 @@ exports[`SliderTitle - Android - Mobile should display an default SliderTitle wi
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
