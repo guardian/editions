@@ -70,7 +70,7 @@ import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
-        height: 16,
+        height: EMPTY_WEATHER_HEIGHT,
     },
     illustrationImage: {
         width: '100%',

@@ -37,8 +37,8 @@ export const WEATHER_QUERY = gql`
 
 const narrowSpace = String.fromCharCode(8201)
 
-export const WEATHER_HEIGHT = 78
-export const EMPTY_WEATHER_HEIGHT = 16
+export const WEATHER_HEIGHT = 65
+export const EMPTY_WEATHER_HEIGHT = 8
 
 const styles = StyleSheet.create({
     shownWeather: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row-reverse',
         width: 'auto',
-        marginBottom: 24,
+        marginBottom: 5,
     },
     forecastItem: {
         borderStyle: 'solid',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         borderLeftColor: color.line,
     },
     forecastItemNarrow: {
-        height: 64,
+        height: WEATHER_HEIGHT - 1,
         width: 45,
         paddingTop: 2,
         paddingLeft: 4,

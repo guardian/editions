@@ -23,7 +23,7 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 50,
+          "fontSize": 38,
         }
       }
     >
@@ -34,7 +34,7 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
         Object {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 50,
+          "fontSize": 38,
         }
       }
     >
@@ -45,7 +45,7 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -53,10 +53,10 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -64,10 +64,10 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -75,10 +75,10 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -132,7 +132,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -207,7 +207,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -293,7 +293,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -357,7 +357,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 50,
+          "fontSize": 38,
         }
       }
     >
@@ -368,7 +368,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
         Object {
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 50,
+          "fontSize": 38,
         }
       }
     >
@@ -380,7 +380,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -388,10 +388,10 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -399,10 +399,10 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -410,10 +410,10 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -444,7 +444,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
         Object {
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
-          "fontSize": 50,
+          "fontSize": 38,
         }
       }
     >
@@ -455,7 +455,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >
@@ -463,10 +463,10 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -474,10 +474,10 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -485,10 +485,10 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
       style={
         Object {
           "backgroundColor": "rgba(220, 220, 220, 1)",
-          "borderRadius": 8,
-          "height": 16,
+          "borderRadius": 7,
+          "height": 14,
           "marginRight": 7,
-          "width": 16,
+          "width": 14,
         }
       }
     />
@@ -541,7 +541,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 8,
+        "paddingTop": 10,
       }
     }
   >

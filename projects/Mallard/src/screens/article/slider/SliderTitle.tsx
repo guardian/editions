@@ -3,11 +3,12 @@ import { Animated, Platform, StyleSheet, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { getFont } from 'src/theme/typography'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
+import { metrics } from 'src/theme/spacing'
 
 const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'android'
         ? 100
-        : 90
+        : 70
     : 60
 
 interface SliderTitleProps {
@@ -28,12 +29,12 @@ const styles = (color: string, location: string, isTablet: boolean) => {
 
     const titleArticle = {
         ...titleShared,
-        fontSize: isTablet ? 30 : 26,
+        fontSize: isTablet ? 30 : 20,
     }
 
     const titleFront = {
         ...titleShared,
-        fontSize: isTablet ? 50 : 28,
+        fontSize: isTablet ? 38 : 28,
     }
 
     const title = location === 'article' ? titleArticle : titleFront
@@ -45,7 +46,7 @@ const styles = (color: string, location: string, isTablet: boolean) => {
         marginRight,
     })
 
-    const dotFront = isTablet ? dotBuilder(16, 7) : dotBuilder(10, 4)
+    const dotFront = isTablet ? dotBuilder(14, 7) : dotBuilder(10, 4)
 
     const dotArticle = dotBuilder(8, 2)
 
@@ -68,7 +69,7 @@ const styles = (color: string, location: string, isTablet: boolean) => {
         },
         dotsContainer: {
             flexDirection: 'row',
-            paddingTop: 8,
+            paddingTop: metrics.vertical,
         },
         dot,
         selected: {

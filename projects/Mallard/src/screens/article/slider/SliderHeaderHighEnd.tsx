@@ -5,11 +5,11 @@ import { metrics } from 'src/theme/spacing'
 import { SliderTitleProps, SliderTitle } from './SliderTitle'
 import DeviceInfo from 'react-native-device-info'
 
-const HEADER_HIGH_END_HEIGHT = DeviceInfo.isTablet() ? 75 : 67
+const HEADER_HIGH_END_HEIGHT = DeviceInfo.isTablet() ? 65 : 55
 
 const styles = StyleSheet.create({
     slider: {
-        paddingVertical: metrics.vertical,
+        paddingBottom: metrics.vertical,
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
