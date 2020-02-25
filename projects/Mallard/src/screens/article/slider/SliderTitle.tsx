@@ -3,6 +3,7 @@ import { Animated, Platform, StyleSheet, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { getFont } from 'src/theme/typography'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
+import { metrics } from 'src/theme/spacing'
 
 const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'android'
@@ -68,7 +69,7 @@ const styles = (color: string, location: string, isTablet: boolean) => {
         },
         dotsContainer: {
             flexDirection: 'row',
-            paddingTop: 8,
+            paddingTop: metrics.vertical,
         },
         dot,
         selected: {

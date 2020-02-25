@@ -100,7 +100,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
     .header {
-        padding-top: ${px(metrics.vertical)};
+        padding-top: ${px(metrics.vertical / 2)};
     }
     .header-container-line-wrap,
     .header-container {
