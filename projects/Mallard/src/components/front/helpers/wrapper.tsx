@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react'
 import { View, Platform, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { useIssueScreenSize } from 'src/screens/issue/use-size'
-import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
 
 const styles = StyleSheet.create({
     outer: {
@@ -10,7 +9,7 @@ const styles = StyleSheet.create({
         paddingRight: metrics.horizontal,
         marginBottom: Platform.OS === 'android' ? 5 : 0,
         marginTop: 0,
-        height: SLIDER_FRONT_HEIGHT,
+        paddingBottom: metrics.vertical,
     },
 })
 
