@@ -232,12 +232,18 @@ export const getCardsForFront = (
                 0: [],
                 1: [2],
             }
+
         case 'Life':
         case 'Culture':
             return thirdPageCoverLayout(FrontCardAppearance.splashPage, true)
+        case 'Food':
+        case 'Review':
+        case 'Travel':
+        case 'Books':
+            return defaultLayout(FrontCardAppearance.splashPage, true)
         case 'Sport':
             return defaultLayout(1, true)
         default:
-            return defaultLayout(FrontCardAppearance.splashPage, true)
+            return defaultLayout(1)
     }
 }
