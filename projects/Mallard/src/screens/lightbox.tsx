@@ -23,6 +23,7 @@ import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-screen'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { ArticleTheme } from 'src/components/article/html/article'
+import { ProgressIndicator } from 'src/components/article/progress-indicator'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
     },
     background: {
         height: '100%',
@@ -39,10 +41,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         paddingTop: 5,
-        paddingHorizontal: 5,
+        paddingHorizontal: 10,
     },
     captionText: {
         color: themeColors(ArticleTheme.Dark).dimText,
+        paddingLeft: 2,
     },
     closeButton: {
         position: 'absolute',
@@ -50,11 +53,7 @@ const styles = StyleSheet.create({
         right: 0,
         paddingTop: 10,
         paddingRight: 10,
-    },
-    progressIndicator: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        top: 0,
     },
     progressWrapper: {
         position: 'absolute',
@@ -63,61 +62,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 })
-
-type ProgressType = 'current' | 'small' | 'big'
-
-type ProgressIndicatorProps = {
-    imageCount: number
-    currentIndex: number
-    windowStart: number
-    windowSize: number
-}
-
-const progressStyle = (type: ProgressType) => {
-    const diameter = type === 'small' ? 5 : 10
-    const colour =
-        type === 'current' ? 'white' : themeColors(ArticleTheme.Dark).line
-    return {
-        width: diameter,
-        height: diameter,
-        borderRadius: diameter / 2,
-        backgroundColor: colour,
-        margin: 3,
-    }
-}
-
-const ProgressCircle = ({ type }: { type: ProgressType }) => {
-    return <View style={progressStyle(type)} />
-}
-
-const ProgressIndicator = ({
-    imageCount,
-    currentIndex,
-    windowStart,
-    windowSize,
-}: ProgressIndicatorProps) => {
-    const current = currentIndex - windowStart
-    const showStarter = windowStart > 0
-    const showEnd = imageCount > windowStart + windowSize
-    const circles = Array(windowSize)
-        .fill('', 0)
-        .map((e, index) =>
-            (showStarter && index === 0) ||
-            (showEnd && index === windowSize - 1)
-                ? 'small'
-                : index === current
-                ? 'current'
-                : 'big',
-        )
-
-    return (
-        <View style={styles.progressIndicator}>
-            {circles.map((t, i) => (
-                <ProgressCircle type={t} key={`circle-${i}`} />
-            ))}
-        </View>
-    )
-}
 
 const LightboxImage = ({
     image,
@@ -199,63 +143,68 @@ export const LightboxScreen = ({
                                 color={pillarColors.main}
                             />
                         </View>
-                        <Animated.FlatList
-                            showsHorizontalScrollIndicator={false}
-                            showsVerticalScrollIndicator={false}
-                            scrollEventThrottle={1}
-                            maxToRenderPerBatch={1}
-                            windowSize={2}
-                            initialNumToRender={1}
-                            horizontal={true}
-                            initialScrollIndex={index}
-                            pagingEnabled
-                            keyExtractor={(item: ImageElement) => item.src.path}
-                            data={images}
-                            onScrollEndDrag={(ev: any) => {
-                                const newIndex =
-                                    ev.nativeEvent.targetContentOffset.x / width
-                                setCurrentIndex(newIndex)
-                                console.log(
-                                    'newindex, windowStart, maxDots',
-                                    newIndex,
-                                    windowStart,
-                                    maxDots,
-                                )
-                                if (
-                                    newIndex >= windowStart + maxDots - 1 &&
-                                    newIndex < images.length - 1
-                                ) {
-                                    setWindowsStart(windowStart + 1)
+                        <View>
+                            <Animated.FlatList
+                                showsHorizontalScrollIndicator={false}
+                                showsVerticalScrollIndicator={false}
+                                scrollEventThrottle={1}
+                                maxToRenderPerBatch={1}
+                                windowSize={2}
+                                initialNumToRender={1}
+                                horizontal={true}
+                                initialScrollIndex={index}
+                                pagingEnabled
+                                keyExtractor={(item: ImageElement) =>
+                                    item.src.path
                                 }
-                                if (
-                                    newIndex <= windowStart &&
-                                    windowStart > 0
-                                ) {
-                                    setWindowsStart(windowStart - 1)
-                                }
-                            }}
-                            getItemLayout={(_: never, index: number) => ({
-                                length: width,
-                                offset: width * index,
-                                index,
-                            })}
-                            renderItem={({
-                                item,
-                                index,
-                            }: {
-                                item: ImageElement
-                                index: number
-                            }) => {
-                                return (
-                                    <View style={[{ width }]}>
-                                        <LightboxImage
-                                            image={item}
-                                            arrowColor={pillarColors.main}
-                                        />
-                                    </View>
-                                )
-                            }}
-                        />
+                                data={images}
+                                onScrollEndDrag={(ev: any) => {
+                                    const newIndex =
+                                        ev.nativeEvent.targetContentOffset.x /
+                                        width
+                                    setCurrentIndex(newIndex)
+                                    console.log(
+                                        'newindex, windowStart, maxDots',
+                                        newIndex,
+                                        windowStart,
+                                        maxDots,
+                                    )
+                                    if (
+                                        newIndex >= windowStart + maxDots - 1 &&
+                                        newIndex < images.length - 1
+                                    ) {
+                                        setWindowsStart(windowStart + 1)
+                                    }
+                                    if (
+                                        newIndex <= windowStart &&
+                                        windowStart > 0
+                                    ) {
+                                        setWindowsStart(windowStart - 1)
+                                    }
+                                }}
+                                getItemLayout={(_: never, index: number) => ({
+                                    length: width,
+                                    offset: width * index,
+                                    index,
+                                })}
+                                renderItem={({
+                                    item,
+                                    index,
+                                }: {
+                                    item: ImageElement
+                                    index: number
+                                }) => {
+                                    return (
+                                        <View style={[{ width }]}>
+                                            <LightboxImage
+                                                image={item}
+                                                arrowColor={pillarColors.main}
+                                            />
+                                        </View>
+                                    )
+                                }}
+                            />
+                        </View>
                         <View style={styles.progressWrapper}>
                             <ProgressIndicator
                                 currentIndex={currentIndex}
