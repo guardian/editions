@@ -581,3 +581,47 @@ exports[`SliderTitle - Android - Mobile should display an default SliderTitle wi
   </View>
 </View>
 `;
+
+exports[`SliderTitle - Android - Mobile should display no dots when numOfItems is 1 or less 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "center",
+      "maxWidth": 800,
+      "paddingLeft": 0,
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 20,
+        }
+      }
+    >
+      Top Stories
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "grey",
+          "fontFamily": "GTGuardianTitlepiece-Bold",
+          "fontSize": 20,
+        }
+      }
+    >
+       
+    </Text>
+  </View>
+</View>
+`;

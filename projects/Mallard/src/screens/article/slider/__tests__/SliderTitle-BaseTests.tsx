@@ -76,6 +76,13 @@ const baseTests = (title: string) =>
             ).toJSON()
             expect(component).toMatchSnapshot()
         })
+
+        it('should display no dots when numOfItems is 1 or less', () => {
+            const component: ReactTestRendererJSON | null = TestRenderer.create(
+                <SliderTitle {...sliderDetails} numOfItems={1} />,
+            ).toJSON()
+            expect(component).toMatchSnapshot()
+        })
     })
 
 export { baseTests }
