@@ -9,7 +9,7 @@ const sliderDetails = {
     numOfItems: 3,
     color: '#000000',
     position: new Animated.Value(3),
-    editionDate: new Date(),
+    editionDate: new Date('2020-03-30'),
 }
 
 const baseTests = (title: string) =>
