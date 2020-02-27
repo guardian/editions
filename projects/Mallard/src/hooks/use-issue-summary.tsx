@@ -18,10 +18,14 @@ interface IssueSummaryState {
     setIssueId: Dispatch<PathToIssue>
 }
 
-const getIssueSummary = async (isConnected = true): Promise<IssueSummary[]> => {
-    const issueSummary = isConnected
-        ? await fetchAndStoreIssueSummary()
-        : await readIssueSummary()
+const getIssueSummary = async (
+    isConnected = true,
+    isPoorConnection = false,
+): Promise<IssueSummary[]> => {
+    const issueSummary =
+        isConnected && !isPoorConnection
+            ? await fetchAndStoreIssueSummary()
+            : await readIssueSummary()
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
     const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
     return trimmedSummary
@@ -49,8 +53,12 @@ const QUERY = gql`
     }
 `
 
-type NetInfoQueryValue = { netInfo: { isConnected: boolean } }
-const NET_INFO_QUERY = gql('{netInfo @client {isConnected @client}}')
+type NetInfoQueryValue = {
+    netInfo: { isConnected: boolean; isPoorConnection: boolean }
+}
+const NET_INFO_QUERY = gql(
+    '{netInfo @client {isConnected @client isPoorConnection @client}}',
+)
 
 /**
  * Based on the previous value and current environment conditions (ex. network),
@@ -70,11 +78,11 @@ const refetch = async (
     const netInfoRes = await client.query<NetInfoQueryValue>({
         query: NET_INFO_QUERY,
     })
-    const isConnected = netInfoRes.data.netInfo.isConnected
+    const { isConnected, isPoorConnection } = netInfoRes.data.netInfo
 
     let issueSummary: IssueSummary[]
     try {
-        issueSummary = await getIssueSummary(isConnected)
+        issueSummary = await getIssueSummary(isConnected, isPoorConnection)
     } catch (error) {
         // We do not discard the existing issue summary if there's one, we only
         // append the error in case the UI needs to display it.
