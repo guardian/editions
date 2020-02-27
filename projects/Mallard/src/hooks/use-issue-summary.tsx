@@ -96,7 +96,22 @@ const refetch = async (
         if (error instanceof Error) {
             error = error.message
         }
-        return { ...prevIssueSummary, error }
+
+        // If we error in this process, we should not assume we have an issue
+        // summary state to fall back on. Therefore we force a read from the
+        // filestore and populate the issue id. If this the very first time
+        // the app is openend, then users will see there error scren.
+        const backupIssueSummary = !prevIssueSummary.issueSummary
+            ? await getIssueSummary(false)
+            : prevIssueSummary.issueSummary
+
+        const backupIssueIds = issueSummaryToLatestPath(backupIssueSummary)
+        return {
+            ...prevIssueSummary,
+            error,
+            issueSummary: backupIssueSummary,
+            issueId: backupIssueIds,
+        }
     }
 
     const newLatest = issueSummaryToLatestPath(issueSummary)
