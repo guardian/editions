@@ -100,17 +100,26 @@ const refetch = async (
         // If we error in this process, we should not assume we have an issue
         // summary state to fall back on. Therefore we force a read from the
         // filestore and populate the issue id. If this the very first time
-        // the app is openend, then users will see there error scren.
-        const backupIssueSummary = !prevIssueSummary.issueSummary
-            ? await getIssueSummary(false)
-            : prevIssueSummary.issueSummary
+        // the app is openend, then users will see there error screen.
+        // Try catch here prevents crashing bug based on:
+        // https://github.com/apollographql/react-apollo/issues/1314
+        try {
+            const backupIssueSummary = !prevIssueSummary.issueSummary
+                ? await getIssueSummary(false)
+                : prevIssueSummary.issueSummary
 
-        const backupIssueIds = issueSummaryToLatestPath(backupIssueSummary)
-        return {
-            ...prevIssueSummary,
-            error,
-            issueSummary: backupIssueSummary,
-            issueId: backupIssueIds,
+            const backupIssueIds = issueSummaryToLatestPath(backupIssueSummary)
+            return {
+                ...prevIssueSummary,
+                error,
+                issueSummary: backupIssueSummary,
+                issueId: backupIssueIds,
+            }
+        } catch {
+            return {
+                ...prevIssueSummary,
+                error,
+            }
         }
     }
 
