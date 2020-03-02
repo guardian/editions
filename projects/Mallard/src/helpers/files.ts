@@ -419,7 +419,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
             e.message = `Failed to fetch valid issue summary: ${e.message}`
             errorService.captureException(e)
             console.log(e.message)
-            throw e
+            return readIssueSummary()
         })
 }
 
