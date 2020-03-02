@@ -133,7 +133,6 @@ const ArticleScreenWithProps = ({
                 ref={r => {
                     if (r) viewRef.current = r
                 }}
-                removeClippedSubviews
             >
                 {prefersFullScreen ? (
                     <>
