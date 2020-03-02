@@ -37,6 +37,8 @@ const ProgressCircle = ({ type }: { type: ProgressType }) => {
     return <View style={progressStyle(type)} />
 }
 
+// TODO: write tests for getWindowStart and getNewWindowStart
+// following verdict whether this is the way we want to render these dots
 export const getWindowStart = (
     index: number,
     numDots: number,
@@ -54,6 +56,7 @@ export const getWindowStart = (
     }
 }
 
+// needs tests - see above
 export const getNewWindowStart = (
     newIndex: number,
     currentWindowStart: number,
