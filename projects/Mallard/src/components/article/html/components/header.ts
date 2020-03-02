@@ -319,6 +319,12 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-radius: 100%;
     }
 
+    button:focus {
+        outline: 0;
+        outline-style:none;
+        outline-width:0;
+    }
+
     .share-touch-zone {
         float: right;
         margin: -8px -8px 0 0;
