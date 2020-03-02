@@ -23,7 +23,11 @@ import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-screen'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { ArticleTheme } from 'src/components/article/html/article'
-import { ProgressIndicator } from 'src/components/article/progress-indicator'
+import {
+    ProgressIndicator,
+    getWindowStart,
+    getNewWindowStart,
+} from 'src/components/article/progress-indicator'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -109,26 +113,14 @@ export const LightboxScreen = ({
     const [windowStart, setWindowsStart] = useState(0)
     const [currentIndex, setCurrentIndex] = useState(index)
 
-    const maxDots = 6
+    const numDots = images.length < 6 ? images.length : 6
 
     const resetProgressState = () => {
         setCurrentIndex(index)
-
-        if (index >= maxDots) {
-            // if we're not at the start or the end stick the dot in the middle
-            if (index < images.length - maxDots) {
-                setWindowsStart(index - 2)
-            } else {
-                setWindowsStart(images.length - maxDots)
-            }
-        } else {
-            setWindowsStart(0)
-        }
+        setWindowsStart(getWindowStart(index, numDots, images.length))
     }
 
     useEffect(() => resetProgressState(), [visible])
-
-    console.log(Dimensions.get('window').width)
 
     return (
         <Modal visible={visible}>
@@ -163,24 +155,14 @@ export const LightboxScreen = ({
                                         ev.nativeEvent.targetContentOffset.x /
                                         width
                                     setCurrentIndex(newIndex)
-                                    console.log(
-                                        'newindex, windowStart, maxDots',
-                                        newIndex,
-                                        windowStart,
-                                        maxDots,
+                                    setWindowsStart(
+                                        getNewWindowStart(
+                                            newIndex,
+                                            windowStart,
+                                            images.length,
+                                            numDots,
+                                        ),
                                     )
-                                    if (
-                                        newIndex >= windowStart + maxDots - 1 &&
-                                        newIndex < images.length - 1
-                                    ) {
-                                        setWindowsStart(windowStart + 1)
-                                    }
-                                    if (
-                                        newIndex <= windowStart &&
-                                        windowStart > 0
-                                    ) {
-                                        setWindowsStart(windowStart - 1)
-                                    }
                                 }}
                                 getItemLayout={(_: never, index: number) => ({
                                     length: width,
@@ -189,7 +171,6 @@ export const LightboxScreen = ({
                                 })}
                                 renderItem={({
                                     item,
-                                    index,
                                 }: {
                                     item: ImageElement
                                     index: number
@@ -209,7 +190,7 @@ export const LightboxScreen = ({
                             <ProgressIndicator
                                 currentIndex={currentIndex}
                                 imageCount={images.length}
-                                windowSize={maxDots}
+                                windowSize={numDots}
                                 windowStart={windowStart}
                             />
                         </View>

@@ -37,6 +37,41 @@ const ProgressCircle = ({ type }: { type: ProgressType }) => {
     return <View style={progressStyle(type)} />
 }
 
+export const getWindowStart = (
+    index: number,
+    numDots: number,
+    numItems: number,
+): number => {
+    if (index >= numDots) {
+        // if we're not at the start or the end stick the dot in the middle
+        if (index < numItems - numDots) {
+            return index - 2
+        } else {
+            return numItems - numDots
+        }
+    } else {
+        return 0
+    }
+}
+
+export const getNewWindowStart = (
+    newIndex: number,
+    currentWindowStart: number,
+    numItems: number,
+    numDots: number,
+): number => {
+    if (
+        newIndex >= currentWindowStart + numDots - 1 &&
+        newIndex < numItems - 1
+    ) {
+        return currentWindowStart + 1
+    }
+    if (newIndex <= currentWindowStart && currentWindowStart > 0) {
+        return currentWindowStart - 1
+    }
+    return currentWindowStart
+}
+
 export const ProgressIndicator = ({
     imageCount,
     currentIndex,
