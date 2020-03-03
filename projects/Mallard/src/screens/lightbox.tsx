@@ -19,7 +19,7 @@ import { CloseModalButton } from 'src/components/button/close-modal-button'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { getPillarColors } from 'src/helpers/transform'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-config-provider'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { ArticleTheme } from 'src/components/article/html/article'
 import {

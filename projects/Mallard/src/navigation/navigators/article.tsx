@@ -13,7 +13,7 @@ import {
     supportsAnimation,
 } from 'src/helpers/features'
 import { getScreenPositionOfItem } from 'src/navigation/navigators/article/positions'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-config-provider'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { SlideCard } from '../../components/layout/slide-card/index'
