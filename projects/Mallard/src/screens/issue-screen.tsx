@@ -47,7 +47,7 @@ import {
     issueSummaryToLatestPath,
     useIssueSummary,
 } from 'src/hooks/use-issue-summary'
-import { useDimensions } from 'src/hooks/use-screen'
+import { useDimensions } from 'src/hooks/use-config-provider'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { navigateToIssueList } from 'src/navigation/helpers/base'
 import { PathToIssue } from 'src/paths'
