@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Wrapper = ({
+const FrontWrapper = ({
     children,
     scrubber,
 }: {
@@ -31,4 +31,4 @@ const Wrapper = ({
     )
 }
 
-export { Wrapper }
+export { FrontWrapper }

@@ -17,7 +17,7 @@ import {
 } from '../../hooks/use-article'
 import { CollectionPage, PropTypes } from './collection-page'
 import { AnimatedFlatListRef, getTranslateForPage } from './helpers/helpers'
-import { Wrapper } from './helpers/wrapper'
+import { FrontWrapper } from './helpers/front-wrapper'
 import { ArticleNavigator } from 'src/screens/article-screen'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 import { SliderTitle } from 'src/screens/article/slider/SliderTitle'
@@ -112,7 +112,7 @@ export const Front = React.memo(
         >(new Animated.Value(0))
 
         return (
-            <Wrapper
+            <FrontWrapper
                 scrubber={
                     <SliderTitle
                         title={frontData.displayName || 'News'}
@@ -220,7 +220,7 @@ export const Front = React.memo(
                         />
                     )}
                 />
-            </Wrapper>
+            </FrontWrapper>
         )
     },
 )
