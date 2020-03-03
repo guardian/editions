@@ -114,12 +114,10 @@ export const LightboxScreen = ({
 
     const numDots = images.length < 6 ? images.length : 6
 
-    const resetProgressState = () => {
+    useEffect(() => {
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
-    }
-
-    useEffect(() => resetProgressState(), [visible])
+    }, [visible, index, numDots, images.length])
 
     return (
         <Modal visible={visible}>
