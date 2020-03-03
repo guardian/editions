@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { Dimensions } from 'react-native'
+import { Dimensions, ScaledSize } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
 
@@ -7,7 +7,12 @@ const oneGB = 1073741824
 
 const ConfigContext = createContext({
     largeDeviceMemeory: false,
-    dimensions: Dimensions.get('window'),
+    dimensions: {
+        width: 0,
+        height: 0,
+        scale: 0,
+        fontScale: 0,
+    },
 })
 
 export const largeDeviceMemory = () => {
