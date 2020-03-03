@@ -111,7 +111,6 @@ const Article = ({
 } & HeaderControlProps) => {
     const [, { type }] = useArticle()
     const ref = useRef<WebView | null>(null)
-    // const { setShowLightbox } = useLightboxModal()
 
     const wasShowingHeader = useUpdateWebviewVariable(
         ref,

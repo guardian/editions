@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import {
     Modal,
     SafeAreaView,
@@ -20,16 +20,35 @@ import { useImagePath } from 'src/hooks/use-image-paths'
 import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-screen'
+import { themeColors } from 'src/components/article/html/helpers/css'
+import { ArticleTheme } from 'src/components/article/html/article'
+import {
+    ProgressIndicator,
+    getWindowStart,
+    getNewWindowStart,
+} from 'src/components/article/progress-indicator'
 
 const styles = StyleSheet.create({
     lightboxPage: {
         width: '100%',
         height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    background: {
+        height: '100%',
+        backgroundColor: themeColors(ArticleTheme.Dark).background,
     },
     caption: {
         display: 'flex',
         flexDirection: 'row',
         paddingTop: 5,
+        paddingHorizontal: 10,
+    },
+    captionText: {
+        color: themeColors(ArticleTheme.Dark).dimText,
+        paddingLeft: 2,
     },
     closeButton: {
         position: 'absolute',
@@ -37,6 +56,13 @@ const styles = StyleSheet.create({
         right: 0,
         paddingTop: 10,
         paddingRight: 10,
+        top: 0,
+    },
+    progressWrapper: {
+        position: 'absolute',
+        bottom: 0,
+        paddingBottom: 20,
+        width: '100%',
     },
 })
 
@@ -49,6 +75,7 @@ const LightboxImage = ({
 }) => {
     const imagePath = useImagePath(image.src, 'full-size')
     const aspectRatio = useAspectRatio(imagePath)
+
     return (
         <>
             <Image
@@ -59,7 +86,9 @@ const LightboxImage = ({
             />
             <View style={styles.caption}>
                 <NativeArrow fill={arrowColor} direction={Direction.top} />
-                {image.caption && <Text>{image.caption}</Text>}
+                {image.caption && (
+                    <Text style={styles.captionText}>{image.caption}</Text>
+                )}
             </View>
         </>
     )
@@ -80,45 +109,91 @@ export const LightboxScreen = ({
 }) => {
     const pillarColors = getPillarColors(pillar)
     const { width } = useDimensions()
+    const [windowStart, setWindowsStart] = useState(0)
+    const [currentIndex, setCurrentIndex] = useState(index)
+
+    const numDots = images.length < 6 ? images.length : 6
+
+    useEffect(() => {
+        setCurrentIndex(index)
+        setWindowsStart(getWindowStart(index, numDots, images.length))
+    }, [visible, index, numDots, images.length])
+
     return (
         <Modal visible={visible}>
-            <SafeAreaView>
-                <View>
-                    <View style={styles.closeButton}>
-                        <CloseModalButton
-                            onPress={closeLightbox}
-                            color={pillarColors.main}
-                        />
+            <View style={styles.background}>
+                <SafeAreaView>
+                    <View style={styles.lightboxPage}>
+                        <View style={styles.closeButton}>
+                            <CloseModalButton
+                                onPress={() => {
+                                    closeLightbox()
+                                }}
+                                color={pillarColors.main}
+                            />
+                        </View>
+                        <View>
+                            <Animated.FlatList
+                                showsHorizontalScrollIndicator={false}
+                                showsVerticalScrollIndicator={false}
+                                scrollEventThrottle={1}
+                                maxToRenderPerBatch={1}
+                                windowSize={2}
+                                initialNumToRender={1}
+                                horizontal={true}
+                                initialScrollIndex={index}
+                                pagingEnabled
+                                keyExtractor={(item: ImageElement) =>
+                                    item.src.path
+                                }
+                                data={images}
+                                onScrollEndDrag={(ev: any) => {
+                                    const newIndex =
+                                        ev.nativeEvent.targetContentOffset.x /
+                                        width
+                                    setCurrentIndex(newIndex)
+                                    setWindowsStart(
+                                        getNewWindowStart(
+                                            newIndex,
+                                            windowStart,
+                                            images.length,
+                                            numDots,
+                                        ),
+                                    )
+                                }}
+                                getItemLayout={(_: never, index: number) => ({
+                                    length: width,
+                                    offset: width * index,
+                                    index,
+                                })}
+                                renderItem={({
+                                    item,
+                                }: {
+                                    item: ImageElement
+                                    index: number
+                                }) => {
+                                    return (
+                                        <View style={[{ width }]}>
+                                            <LightboxImage
+                                                image={item}
+                                                arrowColor={pillarColors.main}
+                                            />
+                                        </View>
+                                    )
+                                }}
+                            />
+                        </View>
+                        <View style={styles.progressWrapper}>
+                            <ProgressIndicator
+                                currentIndex={currentIndex}
+                                imageCount={images.length}
+                                windowSize={numDots}
+                                windowStart={windowStart}
+                            />
+                        </View>
                     </View>
-
-                    <Animated.FlatList
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        scrollEventThrottle={1}
-                        maxToRenderPerBatch={1}
-                        windowSize={2}
-                        initialNumToRender={1}
-                        horizontal={true}
-                        initialScrollIndex={index}
-                        pagingEnabled
-                        keyExtractor={(item: ImageElement) => item.src.path}
-                        data={images}
-                        getItemLayout={(_: never, index: number) => ({
-                            length: width,
-                            offset: width * index,
-                            index,
-                        })}
-                        renderItem={({ item }: { item: ImageElement }) => (
-                            <View style={[{ width }]}>
-                                <LightboxImage
-                                    image={item}
-                                    arrowColor={pillarColors.main}
-                                />
-                            </View>
-                        )}
-                    />
-                </View>
-            </SafeAreaView>
+                </SafeAreaView>
+            </View>
         </Modal>
     )
 }
