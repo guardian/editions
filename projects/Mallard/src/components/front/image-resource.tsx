@@ -44,7 +44,6 @@ const ScaledImageResource = ({
             {...props}
             style={style}
             source={{ uri }}
-            onclick="openLightbox(${index})"
         />
     )
 }
