@@ -15,6 +15,7 @@ import { routeNames } from 'src/navigation/routes'
 import { NavigationInjectedProps } from 'react-navigation'
 import { useQuery, QueryResult } from 'src/hooks/apollo'
 import { ErrorBoundary } from 'src/components/layout/ui/errors/error-boundary'
+import DeviceInfo from 'react-native-device-info'
 
 type Weather = {
     locationName: string
@@ -37,7 +38,7 @@ export const WEATHER_QUERY = gql`
 
 const narrowSpace = String.fromCharCode(8201)
 
-export const WEATHER_HEIGHT = 65
+export const WEATHER_HEIGHT = DeviceInfo.isTablet() ? 50 : 65
 export const EMPTY_WEATHER_HEIGHT = 8
 
 const styles = StyleSheet.create({
