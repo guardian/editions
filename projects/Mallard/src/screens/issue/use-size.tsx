@@ -14,9 +14,7 @@ const useIssueScreenSize = () => {
     const card =
         size === PageLayoutSizes.mobile
             ? metrics.fronts.cardSize
-            : layout.height > 980
-            ? metrics.fronts.cardSizeTablet
-            : metrics.fronts.cardSizeTabletShort
+            : metrics.fronts.cardSizeTablet
     const container = {
         height: SLIDER_FRONT_HEIGHT + card.height,
         width: layout.width,
