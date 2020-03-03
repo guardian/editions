@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { Dimensions, ScaledSize } from 'react-native'
+import { Dimensions } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { Breakpoints } from 'src/theme/breakpoints'
 
