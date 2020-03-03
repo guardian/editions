@@ -4,11 +4,16 @@ import DeviceInfo from 'react-native-device-info'
 import { getFont } from 'src/theme/typography'
 import { SliderDots } from './SliderDots'
 
-const SLIDER_FRONT_HEIGHT = DeviceInfo.isTablet()
-    ? Platform.OS === 'android'
-        ? 100
-        : 70
-    : 60
+const getSliderHeight = (): number => {
+    const isTablet = DeviceInfo.isTablet()
+    if (Platform.OS === 'android') {
+        return isTablet ? 95 : 76
+    } else {
+        return isTablet ? 81 : 65
+    }
+}
+
+const SLIDER_FRONT_HEIGHT = getSliderHeight()
 
 const FIRST_SUBTITLE_DATE = new Date('2020-03-05').getTime()
 
