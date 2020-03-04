@@ -7,6 +7,7 @@ import {
     Animated,
     Text,
     StyleSheet,
+    Dimensions,
 } from 'react-native'
 import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
 import {
@@ -27,6 +28,7 @@ import {
     getWindowStart,
     getNewWindowStart,
 } from 'src/components/article/progress-indicator'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -45,6 +47,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingTop: 5,
         paddingHorizontal: 10,
+    },
+    imageWrapper: {
+        height: '100%',
+    },
+    image: {
+        position: 'absolute',
+        width: '100%',
+        // bottom: '30%',
+    },
+    captionWrapper: {
+        position: 'absolute',
+        zIndex: 1,
+        opacity: 0.8,
+        backgroundColor: themeColors(ArticleTheme.Dark).background,
+        bottom: 0,
+        height: '30%',
+        width: '100%',
     },
     captionText: {
         color: themeColors(ArticleTheme.Dark).dimText,
@@ -66,31 +85,54 @@ const styles = StyleSheet.create({
     },
 })
 
-const LightboxImage = ({
-    image,
-    arrowColor,
-}: {
-    image: ImageElement
-    arrowColor: string
-}) => {
-    const imagePath = useImagePath(image.src, 'full-size')
-    const aspectRatio = useAspectRatio(imagePath)
+const imageBottom = (portrait: boolean, imageHeight: number) => {
+    const tallImage = imageHeight / Dimensions.get('window').height > 0.7
+    const bottom = portrait || tallImage ? '0%' : '30%'
+    return StyleSheet.create({
+        bottomOffset: { bottom: bottom },
+    })
+}
 
+const LightboxCaption = ({
+    caption,
+    pillarColor,
+    captionVisible,
+}: {
+    caption?: string
+    pillarColor: string
+    captionVisible: boolean
+}) => {
     return (
         <>
+            {captionVisible && caption && (
+                <View style={styles.captionWrapper}>
+                    <View style={styles.caption}>
+                        <NativeArrow
+                            fill={pillarColor}
+                            direction={Direction.top}
+                        />
+                        <Text style={styles.captionText}>{caption}</Text>
+                    </View>
+                </View>
+            )}
+        </>
+    )
+}
+
+const LightboxImage = ({ image }: { image: ImageElement }) => {
+    const imagePath = useImagePath(image.src, 'full-size')
+    const aspectRatio = useAspectRatio(imagePath)
+    console.warn(aspectRatio)
+    console.warn('fixed: ' + aspectRatio.toFixed())
+    return (
+        <View style={[styles.image, imageBottom(false, 500)]}>
             <Image
                 source={{
                     uri: imagePath,
                 }}
-                style={{ aspectRatio }}
+                style={[{ aspectRatio }]}
             />
-            <View style={styles.caption}>
-                <NativeArrow fill={arrowColor} direction={Direction.top} />
-                {image.caption && (
-                    <Text style={styles.captionText}>{image.caption}</Text>
-                )}
-            </View>
-        </>
+        </View>
     )
 }
 
@@ -114,6 +156,8 @@ export const LightboxScreen = ({
 
     const numDots = images.length < 6 ? images.length : 6
 
+    const [captionVisible, setCaptionVisible] = useState(false)
+
     useEffect(() => {
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
@@ -132,7 +176,8 @@ export const LightboxScreen = ({
                                 color={pillarColors.main}
                             />
                         </View>
-                        <View>
+
+                        <View style={styles.imageWrapper}>
                             <Animated.FlatList
                                 showsHorizontalScrollIndicator={false}
                                 showsVerticalScrollIndicator={false}
@@ -173,16 +218,36 @@ export const LightboxScreen = ({
                                     index: number
                                 }) => {
                                     return (
-                                        <View style={[{ width }]}>
-                                            <LightboxImage
-                                                image={item}
-                                                arrowColor={pillarColors.main}
-                                            />
-                                        </View>
+                                        <TouchableWithoutFeedback
+                                            onPress={() =>
+                                                setCaptionVisible(
+                                                    !captionVisible,
+                                                )
+                                            }
+                                        >
+                                            <View
+                                                style={[
+                                                    { width },
+                                                    styles.imageWrapper,
+                                                ]}
+                                            >
+                                                <LightboxImage image={item} />
+                                                <LightboxCaption
+                                                    caption={item.caption}
+                                                    pillarColor={
+                                                        pillarColors.main
+                                                    }
+                                                    captionVisible={
+                                                        captionVisible
+                                                    }
+                                                />
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     )
                                 }}
                             />
                         </View>
+
                         <View style={styles.progressWrapper}>
                             <ProgressIndicator
                                 currentIndex={currentIndex}
