@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         marginTop: DeviceInfo.isTablet()
             ? metrics.fronts.sides / 2
             : metrics.fronts.sides / 10,
-        marginBottom: metrics.fronts.sides * 1.85,
+        marginBottom: metrics.fronts.marginBottom,
     },
     itemHolder: {
         overflow: 'hidden',
@@ -157,7 +157,8 @@ const Item = React.memo(
                             getItemRectanglePerc(story, layout),
                             {
                                 width: card.width - metrics.fronts.sides * 2,
-                                height: card.height - metrics.fronts.sides * 2,
+                                height:
+                                    card.height - metrics.fronts.marginBottom,
                             },
                         ),
                     ]}
