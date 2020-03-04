@@ -233,6 +233,21 @@ const scale = {
                 lineHeight: 44,
             },
         },
+        // currently only used by journal cards. not in design system
+        2.5: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 32,
+                lineHeight: 37,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 32,
+                lineHeight: 37,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 50,
+                lineHeight: 58,
+            },
+        },
     },
     titlepiece: {
         1: {

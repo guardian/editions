@@ -39,12 +39,16 @@ const getFontSize = ({ layout, story }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
         if (story.width == 3) {
             if (story.height > 3) return 1.5
-            if (story.height == 3) return 1.75
+            if (story.height == 3) return 1.5
             if (story.height == 2) return 1
+            if (story.height == 1) return 1.25
         }
         if (story.width == 2) {
             if (story.height == 4) return 1.5
             if (story.height >= 3) return 1.25
+            return 0.75
+        }
+        if (story.width == 1) {
             return 0.75
         }
         return 0.75

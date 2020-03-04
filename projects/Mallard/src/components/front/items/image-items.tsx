@@ -200,7 +200,7 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 */
 const splitImageStyles = StyleSheet.create({
     image: {
-        width: '50%',
+        width: '33%',
         height: '100%',
         marginLeft: metrics.horizontal,
     },

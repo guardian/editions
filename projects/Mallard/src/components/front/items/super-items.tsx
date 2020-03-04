@@ -125,20 +125,20 @@ const opinionStyles = StyleSheet.create({
         height: '66.66666%',
     },
     titleText: {
-        ...getFont('headline', 1.5, 'light'),
+        ...getFont('headline', 2.5, 'light'),
         paddingTop: metrics.vertical / 2,
         color: color.text,
     },
     trailText: {
-        ...getFont('headline', 0.75, 'light'),
+        ...getFont('headline', 1.25, 'light'),
         color: color.textOverDarkBackground,
     },
     trailTextPadding: {
         paddingRight: '40%',
     },
     bylineText: {
-        ...getFont('headline', 1.5),
-        fontFamily: getFont('titlepiece', 1.5).fontFamily,
+        ...getFont('headline', 2.5),
+        fontFamily: getFont('titlepiece', 2).fontFamily,
         color: color.textOverDarkBackground,
     },
     cutout: {

@@ -30,7 +30,7 @@ export const metrics = {
         sides: basicMetrics.horizontal * 1.5,
         marginBottom: basicMetrics.horizontal * 2,
         cardSize: toSize(540, 530),
-        cardSizeTablet: toSize(650, 650),
+        cardSizeTablet: toSize(650, 646),
         circleButtonDiameter: 36,
     },
     gridRowSplit: {
