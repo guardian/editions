@@ -5,7 +5,6 @@ import Quote from 'src/components/icons/Quote'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'
-import { getItemRectanglePerc, toPercentage } from '../helpers/helpers'
 import {
     ItemTappable,
     PropTypes,
@@ -17,20 +16,13 @@ import { metrics } from 'src/theme/spacing'
 import { useIsOpinionCard } from './helpers/types'
 import { PageLayoutSizes } from '../../../common'
 import { TrailImageView } from './trail-image-view'
+import { getImageHeight } from './helpers/sizes'
 
 /*
 SUPERHERO IMAGE ITEM
 Text below image. To use in news & sport supers
 */
 const superHeroImageStyles = StyleSheet.create({
-    image: {
-        height: toPercentage(
-            getItemRectanglePerc(
-                { width: 2, height: 4, top: 0, left: 0 },
-                PageLayoutSizes.mobile,
-            ).height,
-        ),
-    },
     textBlock: {
         ...tappablePadding,
     },
@@ -48,7 +40,7 @@ const NormalSuper = ({ article, size, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <TrailImageView
                 article={article}
-                style={superHeroImageStyles.image}
+                style={{ height: getImageHeight(size) }}
             />
             <TextBlock
                 byline={article.byline}
@@ -83,7 +75,7 @@ const SportSuper = ({ article, size, ...tappableProps }: PropTypes) => {
         <ItemTappable {...tappableProps} {...{ article }} hasPadding={false}>
             <TrailImageView
                 article={article}
-                style={superHeroImageStyles.image}
+                style={{ height: getImageHeight(size) }}
             />
             <TextBlock
                 byline={article.byline}

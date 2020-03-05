@@ -7,21 +7,58 @@ import { PageLayoutSizes, ItemSizes } from '../../../../common'
  */
 export const getImageHeight = ({ story, layout }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
-        if (story.height >= 4) {
-            return '50%'
-        }
-        if (story.height == 3) {
+        // 1 story main
+        if (story.height == 4 && story.width === 3) {
             return '66.66%'
         }
-        if (story.height == 2) {
+        // 3 story main
+        if (story.height === 4 && story.width == 2) {
             return '50%'
+        }
+        // 2 story main
+        if (story.height === 3) {
+            return '66.66%'
+        }
+        // 3/4/5 story secondary
+        if (story.height === 2) {
+            return '50%'
+        }
+        // 2/4 story secondary
+        if (story.height === 1 && (story.width === 2 || story.width === 3)) {
+            return '100%'
         }
         return '75.5%'
     }
     if (layout === PageLayoutSizes.mobile) {
-        if (story.height >= 4) {
-            return '65%'
+        // 1 story main
+        if (story.height === 6) {
+            return '68%'
         }
+        // 2/3 story main
+        if (story.height === 4) {
+            return '66%'
+        }
+        // 3/4/5 story secondary
+        if (story.height == 3) {
+            return '51%'
+        }
+        // 2 story secondary
+        if (story.height == 2) {
+            return '98%'
+        }
+        return '50%'
+    }
+}
+
+// most image widths are 100% - this is use in SplitImageItem - where text and images are on the same row
+export const getImageWidth = ({ story, layout }: ItemSizes) => {
+    if (layout === PageLayoutSizes.tablet) {
+        if (story.width === 3) {
+            return '33%'
+        }
+        return '50%'
+    }
+    if (layout === PageLayoutSizes.mobile) {
         return '50%'
     }
 }

@@ -37,29 +37,35 @@ const styles = {
 
 const getFontSize = ({ layout, story }: ItemSizes) => {
     if (layout === PageLayoutSizes.tablet) {
+        // full width cards
         if (story.width == 3) {
-            if (story.height > 3) return 1.5
-            if (story.height == 3) return 1.5
-            if (story.height == 2) return 1
+            // 1 and 2 story (non journal) main
+            if (story.height == 3 || story.height == 4) return 1.5
+            // 2 story secondary
             if (story.height == 1) return 1.25
         }
+        // 2/3 width cards
         if (story.width == 2) {
+            // 3 story card main
             if (story.height == 4) return 1.5
-            if (story.height >= 3) return 1.25
+            // 4 story card main
+            if (story.height == 3) return 1.25
+            // 4 story card bottom left secondary
+            if (story.height == 1) return 0.9
             return 0.75
         }
+        // 1/3 width cards - 3,4,5 story secondary
         if (story.width == 1) {
-            return 0.75
+            return 0.9
         }
-        return 0.75
+        return 0.75 // this should never happen but is a safe 'small' size
     }
     // mobile layout
-    // top story for 2 and 3 story cards should have a larger font
-    if (story.height == 4 && story.width === 2) {
-        return 1.25
-    }
     if (story.height > 4) {
         return 1.5
+    }
+    if (story.height == 4 && story.width === 2) {
+        return 1.25
     }
     return 1
 }

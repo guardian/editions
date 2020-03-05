@@ -13,6 +13,7 @@ import {
     isFullHeightItem,
     isFullWidthItem,
     isSmallItem,
+    getImageWidth,
 } from './helpers/sizes'
 import { SportItemBackground } from './helpers/sports'
 import { Standfirst } from './helpers/standfirst'
@@ -200,7 +201,6 @@ const SidekickImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
 */
 const splitImageStyles = StyleSheet.create({
     image: {
-        width: '33%',
         height: '100%',
         marginLeft: metrics.horizontal,
     },
@@ -229,7 +229,11 @@ const SplitImageItem = ({ article, size, ...tappableProps }: PropTypes) => {
                     {...{ size }}
                 />
                 <TrailImageView
-                    style={splitImageStyles.image}
+                    style={[
+                        splitImageStyles.image,
+                        { width: getImageWidth(size) },
+                        { height: getImageHeight(size) },
+                    ]}
                     article={article}
                 />
             </View>
