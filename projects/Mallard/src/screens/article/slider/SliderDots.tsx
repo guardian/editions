@@ -29,7 +29,7 @@ const styles = (color: string, location: string, isTablet: boolean) => {
     return StyleSheet.create({
         dotsContainer: {
             flexDirection: 'row',
-            paddingTop: metrics.vertical,
+            paddingTop: 2,
         },
         dot,
         selected: {

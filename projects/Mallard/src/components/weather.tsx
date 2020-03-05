@@ -38,7 +38,7 @@ export const WEATHER_QUERY = gql`
 
 const narrowSpace = String.fromCharCode(8201)
 
-export const WEATHER_HEIGHT = DeviceInfo.isTablet() ? 50 : 65
+export const WEATHER_HEIGHT = DeviceInfo.isTablet() ? 45 : 65
 export const EMPTY_WEATHER_HEIGHT = 8
 
 const styles = StyleSheet.create({
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: metrics.horizontal * 0.5,
         paddingRight: metrics.horizontal,
-        paddingVertical: metrics.vertical,
+        paddingVertical: metrics.vertical / 2,
     },
     forecastText: {
         display: 'flex',
