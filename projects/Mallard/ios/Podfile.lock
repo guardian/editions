@@ -192,7 +192,7 @@ PODS:
     - React
   - react-native-in-app-utils (6.0.2):
     - React
-  - react-native-netinfo (5.3.3):
+  - react-native-netinfo (5.5.1):
     - React
   - react-native-safe-area-context (0.6.4):
     - React
@@ -468,7 +468,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-image-resizer: 48eb06a18a6d0a632ffa162a51ca61a68fb5322f
   react-native-in-app-utils: 07ea1df4bb6e8cbb27337d42a65ffe4cf7a35e97
-  react-native-netinfo: 8884d510fe67349940b4399c01db3e3591c922aa
+  react-native-netinfo: 3bf235d94cc291cf0673ad9fd9eaae82f84ed8a9
   react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
   react-native-safe-area-insets: 5f827f8f343c8a02347a65f1a7861c195dcb1a2c
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
