@@ -9,6 +9,7 @@ const HEADER_HIGH_END_HEIGHT = DeviceInfo.isTablet() ? 65 : 55
 
 const styles = StyleSheet.create({
     slider: {
+        paddingTop: 2,
         paddingBottom: metrics.vertical,
         justifyContent: 'center',
         alignItems: 'center',
