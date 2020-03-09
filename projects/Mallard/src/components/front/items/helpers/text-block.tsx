@@ -36,6 +36,9 @@ const styles = {
 }
 
 const getFontSize = ({ layout, story }: ItemSizes) => {
+    // this should be 0.9 pending production changes
+    const tabletSecondaryFontSize = 0.75
+
     if (layout === PageLayoutSizes.tablet) {
         // full width cards
         if (story.width == 3) {
@@ -51,12 +54,12 @@ const getFontSize = ({ layout, story }: ItemSizes) => {
             // 4 story card main
             if (story.height == 3) return 1.25
             // 4 story card bottom left secondary
-            if (story.height == 1) return 0.9
+            if (story.height == 1) return tabletSecondaryFontSize
             return 0.75
         }
         // 1/3 width cards - 3,4,5 story secondary
         if (story.width == 1) {
-            return 0.9
+            return tabletSecondaryFontSize
         }
         return 0.75 // this should never happen but is a safe 'small' size
     }
