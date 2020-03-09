@@ -122,8 +122,8 @@ const LightboxCaption = ({
 const LightboxImage = ({ image }: { image: ImageElement }) => {
     const imagePath = useImagePath(image.src, 'full-size')
     const aspectRatio = useAspectRatio(imagePath)
-    console.warn(aspectRatio)
-    console.warn('fixed: ' + aspectRatio.toFixed())
+    // console.warn(aspectRatio)
+    // console.warn('fixed: ' + aspectRatio.toFixed())
     return (
         <View style={[styles.image, imageBottom(false, 500)]}>
             <Image
