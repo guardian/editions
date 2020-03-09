@@ -125,6 +125,9 @@ const opinionStyles = StyleSheet.create({
         ...getFont('headline', 1.25, 'light'),
         color: color.textOverDarkBackground,
     },
+    trailTextMobile: {
+        ...getFont('headline', 1, 'light'),
+    },
     trailTextPadding: {
         paddingRight: '40%',
     },
@@ -188,6 +191,8 @@ const OpinionSuper = ({ article, ...tappableProps }: PropTypes) => {
                 <Text
                     style={[
                         opinionStyles.trailText,
+                        tappableProps.size.layout === PageLayoutSizes.mobile &&
+                            opinionStyles.trailTextMobile,
                         article.bylineImages &&
                             article.bylineImages.cutout &&
                             opinionStyles.trailTextPadding,
