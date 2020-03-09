@@ -2,7 +2,6 @@ import React from 'react'
 import { Animated, Platform, StyleSheet, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
-import { metrics } from 'src/theme/spacing'
 
 interface SliderDotsProps {
     numOfItems: number
