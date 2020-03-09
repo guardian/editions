@@ -24,6 +24,7 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 38,
+          "lineHeight": 42,
         }
       }
     >
@@ -35,6 +36,7 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 38,
+          "lineHeight": 42,
         }
       }
     >
@@ -45,7 +47,7 @@ exports[`SliderTitle - iOS - Tablet should display a Front SliderTitle with the 
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -110,6 +112,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -121,6 +124,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -132,7 +136,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -197,6 +201,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -207,7 +212,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -272,6 +277,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -283,6 +289,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -293,7 +300,7 @@ exports[`SliderTitle - iOS - Tablet should display an Article SliderTitle with t
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -358,6 +365,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 38,
+          "lineHeight": 42,
         }
       }
     >
@@ -369,6 +377,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 38,
+          "lineHeight": 42,
         }
       }
     >
@@ -380,7 +389,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -445,6 +454,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 38,
+          "lineHeight": 42,
         }
       }
     >
@@ -455,7 +465,7 @@ exports[`SliderTitle - iOS - Tablet should display an Front SliderTitle with a s
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -520,6 +530,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -531,6 +542,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -541,7 +553,7 @@ exports[`SliderTitle - iOS - Tablet should display an default SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 10,
+        "paddingTop": 2,
       }
     }
   >
@@ -606,6 +618,7 @@ exports[`SliderTitle - iOS - Tablet should display no dots when numOfItems is 1 
           "color": "#000000",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
@@ -617,6 +630,7 @@ exports[`SliderTitle - iOS - Tablet should display no dots when numOfItems is 1 
           "color": "grey",
           "fontFamily": "GTGuardianTitlepiece-Bold",
           "fontSize": 30,
+          "lineHeight": 33,
         }
       }
     >
