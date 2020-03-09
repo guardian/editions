@@ -52,17 +52,18 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     image: {
-        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
         width: '100%',
-        // bottom: '30%',
+        height: '100%',
     },
     captionWrapper: {
         position: 'absolute',
         zIndex: 1,
         opacity: 0.8,
         backgroundColor: themeColors(ArticleTheme.Dark).background,
-        bottom: 0,
-        height: '30%',
+        bottom: 50,
         width: '100%',
     },
     captionText: {
@@ -84,14 +85,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 })
-
-const imageBottom = (portrait: boolean, imageHeight: number) => {
-    const tallImage = imageHeight / Dimensions.get('window').height > 0.7
-    const bottom = portrait || tallImage ? '0%' : '30%'
-    return StyleSheet.create({
-        bottomOffset: { bottom: bottom },
-    })
-}
 
 const LightboxCaption = ({
     caption,
@@ -125,7 +118,7 @@ const LightboxImage = ({ image }: { image: ImageElement }) => {
     // console.warn(aspectRatio)
     // console.warn('fixed: ' + aspectRatio.toFixed())
     return (
-        <View style={[styles.image, imageBottom(false, 500)]}>
+        <View style={styles.image}>
             <Image
                 source={{
                     uri: imagePath,
