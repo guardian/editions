@@ -11,12 +11,13 @@ import DeviceInfo from 'react-native-device-info'
 const HEADER_LOW_END_HEIGHT = DeviceInfo.isTablet()
     ? Platform.OS === 'ios'
         ? 160
-        : 140
-    : 135
+        : 100
+    : 110
 
 const styles = StyleSheet.create({
     slider: {
         paddingBottom: metrics.vertical,
+        paddingTop: metrics.vertical / 2,
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,

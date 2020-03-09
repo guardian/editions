@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         paddingRight: metrics.horizontal,
         marginBottom: Platform.OS === 'android' ? 5 : 0,
         marginTop: 0,
-        paddingBottom: metrics.vertical,
+        paddingBottom: 2,
     },
 })
 
