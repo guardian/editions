@@ -7,7 +7,6 @@ import {
     Animated,
     Text,
     StyleSheet,
-    Dimensions,
 } from 'react-native'
 import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
 import {
