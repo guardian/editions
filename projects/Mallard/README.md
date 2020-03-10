@@ -4,7 +4,7 @@
 
 Follow the instructions in the [main README](https://github.com/guardian/editions/blob/master/README.md).
 
-For iOS development you will need to install Xcode from the App Store and then open it once and select "Install" on the pop up asking whether to install other required Xcode dependencies - specifically the simulator. If this doesn't appear go to `Preferences > Components` and download the latest simulator iOS version. Additionally, you need have CocoaPods installed:
+For iOS development you will need to install Xcode from the App Store and then open it once and select "Install" on the pop up asking whether to install other required Xcode dependencies - specifically the simulator. If this doesn't appear go to `Preferences > Components` and download the latest simulator iOS version. Additionally, you need to have CocoaPods installed. CocoaPods is a ruby thing, for a reliable install it's worth installing [Ruby Version Manager](https://rvm.io/rvm/install) first.
 
 ```sh
 gem install cocoapods # this may require `sudo` if you're not using rvm or rbenv
