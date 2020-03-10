@@ -258,7 +258,7 @@ export const Lightbox = () => {
             images={lightboxContext.images}
             visible={lightboxContext.visible}
             closeLightbox={() => lightboxContext.setLightboxVisible(false)}
-            pillar={'sport'}
+            pillar={lightboxContext.pillar}
             index={lightboxContext.index}
         />
     )
