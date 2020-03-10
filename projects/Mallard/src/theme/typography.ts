@@ -83,16 +83,16 @@ const scale = {
     text: {
         0.9: {
             [Breakpoints.smallPhone]: {
-                fontSize: 14,
-                lineHeight: 18,
+                fontSize: 15,
+                lineHeight: 17,
             },
             [Breakpoints.phone]: {
-                fontSize: 14,
-                lineHeight: 16,
+                fontSize: 15,
+                lineHeight: 17,
             },
             [Breakpoints.tabletVertical]: {
-                fontSize: 18,
-                lineHeight: 22,
+                fontSize: 17,
+                lineHeight: 20,
             },
         },
         1: {
@@ -151,6 +151,21 @@ const scale = {
             [Breakpoints.tabletVertical]: {
                 fontSize: 21,
                 lineHeight: 22,
+            },
+        },
+        // this block defies the design system - size 22 isn't a thing normally but we need it
+        0.9: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 18,
+                lineHeight: 20,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 18,
+                lineHeight: 20,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 22,
+                lineHeight: 25,
             },
         },
         1: {
@@ -231,6 +246,21 @@ const scale = {
             [Breakpoints.phone]: {
                 fontSize: 40,
                 lineHeight: 44,
+            },
+        },
+        // currently only used by journal cards. not in design system
+        2.5: {
+            [Breakpoints.smallPhone]: {
+                fontSize: 32,
+                lineHeight: 37,
+            },
+            [Breakpoints.phone]: {
+                fontSize: 32,
+                lineHeight: 37,
+            },
+            [Breakpoints.tabletVertical]: {
+                fontSize: 50,
+                lineHeight: 58,
             },
         },
     },
