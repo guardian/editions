@@ -7,9 +7,9 @@ import { SliderDots } from './SliderDots'
 const getSliderHeight = (): number => {
     const isTablet = DeviceInfo.isTablet()
     if (Platform.OS === 'android') {
-        return isTablet ? 95 : 76
+        return isTablet ? 66 : 52
     } else {
-        return isTablet ? 81 : 65
+        return isTablet ? 59 : 46
     }
 }
 
