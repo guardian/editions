@@ -47,7 +47,7 @@ exports[`SliderTitle - iOS - Mobile should display a Front SliderTitle with the 
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
@@ -136,7 +136,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
@@ -212,7 +212,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
@@ -300,7 +300,7 @@ exports[`SliderTitle - iOS - Mobile should display an Article SliderTitle with t
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
@@ -389,7 +389,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
@@ -465,7 +465,7 @@ exports[`SliderTitle - iOS - Mobile should display an Front SliderTitle with a s
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
@@ -553,7 +553,7 @@ exports[`SliderTitle - iOS - Mobile should display an default SliderTitle with a
     style={
       Object {
         "flexDirection": "row",
-        "paddingTop": 2,
+        "paddingVertical": 2,
       }
     }
   >
