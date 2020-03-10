@@ -63,12 +63,13 @@ const styles = StyleSheet.create({
         zIndex: 1,
         opacity: 0.8,
         backgroundColor: themeColors(ArticleTheme.Dark).background,
-        bottom: 50,
+        bottom: 0,
         width: '100%',
     },
     captionText: {
         color: themeColors(ArticleTheme.Dark).dimText,
         paddingLeft: 2,
+        paddingBottom: 50,
     },
     closeButton: {
         position: 'absolute',
@@ -151,7 +152,16 @@ export const LightboxScreen = ({
 
     const [captionVisible, setCaptionVisible] = useState(false)
 
+    const handleScrollEndEvent = (ev: any) => {
+        const newIndex = Math.ceil(ev.nativeEvent.contentOffset.x / width)
+        setCurrentIndex(newIndex)
+        setWindowsStart(
+            getNewWindowStart(newIndex, windowStart, images.length, numDots),
+        )
+    }
+
     useEffect(() => {
+        setCaptionVisible(true)
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
     }, [visible, index, numDots, images.length])
@@ -185,20 +195,7 @@ export const LightboxScreen = ({
                                     item.src.path
                                 }
                                 data={images}
-                                onScrollEndDrag={(ev: any) => {
-                                    const newIndex =
-                                        ev.nativeEvent.targetContentOffset.x /
-                                        width
-                                    setCurrentIndex(newIndex)
-                                    setWindowsStart(
-                                        getNewWindowStart(
-                                            newIndex,
-                                            windowStart,
-                                            images.length,
-                                            numDots,
-                                        ),
-                                    )
-                                }}
+                                onScrollEndDrag={handleScrollEndEvent}
                                 getItemLayout={(_: never, index: number) => ({
                                     length: width,
                                     offset: width * index,
