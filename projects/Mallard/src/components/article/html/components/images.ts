@@ -188,7 +188,6 @@ const ImageBase = ({
     role?: ImageElement['role']
 }) => {
     const figcaption = renderCaption({ caption, credit })
-    // add onclick="openLightbox(${index})" to re-enable lightbox
     return html`
         <figure class="image" data-role="${role || 'inline'}">
             <img

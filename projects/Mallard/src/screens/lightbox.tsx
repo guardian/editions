@@ -121,7 +121,7 @@ const LightboxImage = ({ image }: { image: ImageElement }) => {
                 source={{
                     uri: imagePath,
                 }}
-                style={[{ aspectRatio }]}
+                style={{ aspectRatio }}
             />
         </View>
     )

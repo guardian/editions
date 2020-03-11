@@ -14,9 +14,10 @@ export const NativeArrow = ({
         height={9}
         viewBox="0 0 11 9"
         fill="none"
+        style={{ marginTop: 4 }}
         rotation={direction}
     >
-        <G opacity="0.5">
+        <G opacity="1.0">
             <Path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
