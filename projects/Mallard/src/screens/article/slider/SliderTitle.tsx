@@ -7,12 +7,14 @@ import { SliderDots } from './SliderDots'
 const getSliderHeight = (): number => {
     const isTablet = DeviceInfo.isTablet()
     if (Platform.OS === 'android') {
-        return isTablet ? 95 : 76
+        return isTablet ? 68 : 54
     } else {
-        return isTablet ? 81 : 65
+        return isTablet ? 61 : 48
     }
 }
 
+// SLIDER_FRONT_HEIGHT isn't actually used in this file but is important for calculating the layout of fronts in issue-screen.
+// the 'jump to section' feature from the nav depends on this value being accurate
 const SLIDER_FRONT_HEIGHT = getSliderHeight()
 
 const FIRST_SUBTITLE_DATE = new Date('2020-03-05').getTime()
