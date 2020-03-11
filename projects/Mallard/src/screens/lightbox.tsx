@@ -27,6 +27,7 @@ import {
     getWindowStart,
     getNewWindowStart,
 } from 'src/components/article/progress-indicator'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -46,9 +47,28 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingHorizontal: 10,
     },
+    imageWrapper: {
+        height: '100%',
+    },
+    image: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+    },
+    captionWrapper: {
+        position: 'absolute',
+        zIndex: 1,
+        opacity: 0.8,
+        backgroundColor: themeColors(ArticleTheme.Dark).background,
+        bottom: 0,
+        width: '100%',
+    },
     captionText: {
         color: themeColors(ArticleTheme.Dark).dimText,
         paddingLeft: 2,
+        paddingBottom: 50,
     },
     closeButton: {
         position: 'absolute',
@@ -66,31 +86,44 @@ const styles = StyleSheet.create({
     },
 })
 
-const LightboxImage = ({
-    image,
-    arrowColor,
+const LightboxCaption = ({
+    caption,
+    pillarColor,
+    captionVisible,
 }: {
-    image: ImageElement
-    arrowColor: string
+    caption?: string
+    pillarColor: string
+    captionVisible: boolean
 }) => {
-    const imagePath = useImagePath(image.src, 'full-size')
-    const aspectRatio = useAspectRatio(imagePath)
-
     return (
         <>
+            {captionVisible && caption && (
+                <View style={styles.captionWrapper}>
+                    <View style={styles.caption}>
+                        <NativeArrow
+                            fill={pillarColor}
+                            direction={Direction.top}
+                        />
+                        <Text style={styles.captionText}>{caption}</Text>
+                    </View>
+                </View>
+            )}
+        </>
+    )
+}
+
+const LightboxImage = ({ image }: { image: ImageElement }) => {
+    const imagePath = useImagePath(image.src, 'full-size')
+    const aspectRatio = useAspectRatio(imagePath)
+    return (
+        <View style={styles.image}>
             <Image
                 source={{
                     uri: imagePath,
                 }}
                 style={{ aspectRatio }}
             />
-            <View style={styles.caption}>
-                <NativeArrow fill={arrowColor} direction={Direction.top} />
-                {image.caption && (
-                    <Text style={styles.captionText}>{image.caption}</Text>
-                )}
-            </View>
-        </>
+        </View>
     )
 }
 
@@ -114,7 +147,18 @@ export const LightboxScreen = ({
 
     const numDots = images.length < 6 ? images.length : 6
 
+    const [captionVisible, setCaptionVisible] = useState(false)
+
+    const handleScrollEndEvent = (ev: any) => {
+        const newIndex = Math.ceil(ev.nativeEvent.contentOffset.x / width)
+        setCurrentIndex(newIndex)
+        setWindowsStart(
+            getNewWindowStart(newIndex, windowStart, images.length, numDots),
+        )
+    }
+
     useEffect(() => {
+        setCaptionVisible(true)
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
     }, [visible, index, numDots, images.length])
@@ -132,7 +176,8 @@ export const LightboxScreen = ({
                                 color={pillarColors.main}
                             />
                         </View>
-                        <View>
+
+                        <View style={styles.imageWrapper}>
                             <Animated.FlatList
                                 showsHorizontalScrollIndicator={false}
                                 showsVerticalScrollIndicator={false}
@@ -146,21 +191,9 @@ export const LightboxScreen = ({
                                 keyExtractor={(item: ImageElement) =>
                                     item.src.path
                                 }
+                                key={width}
                                 data={images}
-                                onScrollEndDrag={(ev: any) => {
-                                    const newIndex =
-                                        ev.nativeEvent.targetContentOffset.x /
-                                        width
-                                    setCurrentIndex(newIndex)
-                                    setWindowsStart(
-                                        getNewWindowStart(
-                                            newIndex,
-                                            windowStart,
-                                            images.length,
-                                            numDots,
-                                        ),
-                                    )
-                                }}
+                                onScrollEndDrag={handleScrollEndEvent}
                                 getItemLayout={(_: never, index: number) => ({
                                     length: width,
                                     offset: width * index,
@@ -173,16 +206,36 @@ export const LightboxScreen = ({
                                     index: number
                                 }) => {
                                     return (
-                                        <View style={[{ width }]}>
-                                            <LightboxImage
-                                                image={item}
-                                                arrowColor={pillarColors.main}
-                                            />
-                                        </View>
+                                        <TouchableWithoutFeedback
+                                            onPress={() =>
+                                                setCaptionVisible(
+                                                    !captionVisible,
+                                                )
+                                            }
+                                        >
+                                            <View
+                                                style={[
+                                                    { width },
+                                                    styles.imageWrapper,
+                                                ]}
+                                            >
+                                                <LightboxImage image={item} />
+                                                <LightboxCaption
+                                                    caption={item.caption}
+                                                    pillarColor={
+                                                        pillarColors.main
+                                                    }
+                                                    captionVisible={
+                                                        captionVisible
+                                                    }
+                                                />
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     )
                                 }}
                             />
                         </View>
+
                         <View style={styles.progressWrapper}>
                             <ProgressIndicator
                                 currentIndex={currentIndex}
@@ -205,7 +258,7 @@ export const Lightbox = () => {
             images={lightboxContext.images}
             visible={lightboxContext.visible}
             closeLightbox={() => lightboxContext.setLightboxVisible(false)}
-            pillar={'sport'}
+            pillar={lightboxContext.pillar}
             index={lightboxContext.index}
         />
     )

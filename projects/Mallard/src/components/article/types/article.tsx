@@ -120,6 +120,8 @@ const Article = ({
 
     const lbv = useContext(LightboxContext)
 
+    const [, { pillar }] = useArticle()
+
     return (
         <Fader>
             <WebviewWithArticle
@@ -150,7 +152,7 @@ const Article = ({
                     }
                     if (parsed.type === 'openLightbox') {
                         const lbimages = getLightboxImages(article.elements)
-                        lbv.setLightboxData(lbimages, parsed.index, 'sport')
+                        lbv.setLightboxData(lbimages, parsed.index, pillar)
                         lbv.setLightboxVisible(true)
                     }
                 }}
