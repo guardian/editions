@@ -140,7 +140,16 @@ const Article = ({
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return
-                        Share.share({ message: article.webUrl })
+                        Share.share(
+                            {
+                                title: article.headline,
+                                url: article.webUrl,
+                                message: article.webUrl, // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
+                            },
+                            {
+                                subject: article.headline,
+                            },
+                        )
                         return
                     }
                     if (parsed.type === 'shouldShowHeaderChange') {
