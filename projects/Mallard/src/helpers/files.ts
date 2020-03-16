@@ -61,18 +61,23 @@ export const prepFileSystem = (): Promise<void> =>
         ensureDirExists(`${FSPaths.issuesDir}/daily-edition`),
     )
 
-const deleteFiles = (files: string[]) => {
-    files.map(RNFetchBlob.fs.unlink)
-}
-
 const removeOrphanedTempFiles = async (dir: string) => {
-    if (RNFetchBlob.fs.isDir(dir)) {
-        RNFetchBlob.fs.ls(dir).then(files => {
-            const fullyQualifiedTempPaths = files
-                .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
-                .map(f => dir + f)
-            deleteFiles(fullyQualifiedTempPaths)
-        })
+    try {
+        if (RNFetchBlob.fs.isDir(dir)) {
+            RNFetchBlob.fs.ls(dir).then(files => {
+                files
+                    .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
+                    .map(f => dir + f)
+                    .map(RNFetchBlob.fs.unlink)
+            })
+        }
+    } catch (error) {
+        await pushTracking('tempFileRemoveError', JSON.stringify(error))
+        console.log(
+            `Error cleaning up temp issue files in directory ${dir}: `,
+            error,
+        )
+        errorService.captureException(error)
     }
 }
 
@@ -81,6 +86,7 @@ export const deleteIssueFiles = async (): Promise<void> => {
     localIssueListStore.reset()
 
     TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
+
     await prepFileSystem()
 }
 
