@@ -100,11 +100,17 @@ export const Front = React.memo(
         const stops = cards.length
         const { card, container } = useIssueScreenSize()
         const largeDeviceMemory = useLargeDeviceMemory()
-        const flatListOptimisationProps = !largeDeviceMemory && {
-            windowSize: 2,
-            maxToRenderPerBatch: 1,
-            initialNumToRender: 2,
-        }
+        const flatListOptimisationProps = largeDeviceMemory
+            ? {
+                  windowSize: 3,
+                  maxToRenderPerBatch: 2,
+                  initialNumToRender: 3,
+              }
+            : {
+                  windowSize: 2,
+                  maxToRenderPerBatch: 1,
+                  initialNumToRender: 2,
+              }
 
         const [cardIndex, setCardIndex] = useState(0)
         const [position, setPosition] = useState<
