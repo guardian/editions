@@ -17,6 +17,14 @@ import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 import { withCache } from './fetch/cache'
 
+// for cleaning up temporary files when the user hits 'delete all downlods'
+// NOTE: these hard coded names may change when rn-fetch-blob is updated
+const TEMP_FILE_LOCATIONS = [
+    `${RNFetchBlob.fs.dirs.DocumentDir}/`,
+    `${RNFetchBlob.fs.dirs.DocumentDir}/RNFetchBlob_tmp/`,
+]
+const RN_FETCH_TEMP_PREFIX = 'RNFetchBlobTmp'
+
 interface BasicFile {
     filename: string
     path: string
@@ -53,9 +61,26 @@ export const prepFileSystem = (): Promise<void> =>
         ensureDirExists(`${FSPaths.issuesDir}/daily-edition`),
     )
 
+const deleteFiles = (files: string[]) => {
+    files.map(RNFetchBlob.fs.unlink)
+}
+
+const removeOrphanedTempFiles = async (dir: string) => {
+    if (RNFetchBlob.fs.isDir(dir)) {
+        RNFetchBlob.fs.ls(dir).then(files => {
+            const fullyQualifiedTempPaths = files
+                .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
+                .map(f => dir + f)
+            deleteFiles(fullyQualifiedTempPaths)
+        })
+    }
+}
+
 export const deleteIssueFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
     localIssueListStore.reset()
+
+    TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
     await prepFileSystem()
 }
 
