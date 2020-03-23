@@ -61,31 +61,41 @@ export const prepFileSystem = (): Promise<void> =>
         ensureDirExists(`${FSPaths.issuesDir}/daily-edition`),
     )
 
-const removeOrphanedTempFiles = async (dir: string) => {
-    try {
-        if (RNFetchBlob.fs.isDir(dir)) {
-            RNFetchBlob.fs.ls(dir).then(files => {
-                files
-                    .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
-                    .map(f => dir + f)
-                    .map(RNFetchBlob.fs.unlink)
-            })
+/**
+ * rn-fetch-blob stores the zip file we donwnload in a temporary file. Sometimes,
+ * the process that deletes these post extraction fails. This function attempts
+ * to clean up such files in a fairly stupid way - just searching for files
+ * with RNFetchBlobTmp at the start of the filename
+ */
+
+const removeTempFiles = () => {
+    const removeOrphanedTempFiles = async (dir: string) => {
+        try {
+            if (RNFetchBlob.fs.isDir(dir)) {
+                RNFetchBlob.fs.ls(dir).then(files => {
+                    files
+                        .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
+                        .map(f => dir + f)
+                        .map(RNFetchBlob.fs.unlink)
+                })
+            }
+        } catch (error) {
+            await pushTracking('tempFileRemoveError', JSON.stringify(error))
+            console.log(
+                `Error cleaning up temp issue files in directory ${dir}: `,
+                error,
+            )
+            errorService.captureException(error)
         }
-    } catch (error) {
-        await pushTracking('tempFileRemoveError', JSON.stringify(error))
-        console.log(
-            `Error cleaning up temp issue files in directory ${dir}: `,
-            error,
-        )
-        errorService.captureException(error)
     }
+    TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
 }
 
 export const deleteIssueFiles = async (): Promise<void> => {
     await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
     localIssueListStore.reset()
 
-    TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
+    removeTempFiles()
 
     await prepFileSystem()
 }
@@ -369,6 +379,9 @@ export const issuesToDelete = async (files: string[]) => {
 }
 
 export const clearOldIssues = async (): Promise<void> => {
+    // remove any temp files at this point too
+    removeTempFiles()
+
     const files = await getLocalIssues()
 
     const iTD: string[] = await issuesToDelete(files)
