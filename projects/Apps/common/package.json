@@ -15,6 +15,9 @@
         "jest": "^25.1.0",
         "ts-jest": "^25.1.0"
     },
+    "resolutions": {
+        "jsdom": "16.2.1"
+    },
     "scripts": {
         "build": "echo 'Common does not need building.'",
         "test": "jest"
