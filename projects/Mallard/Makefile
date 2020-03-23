@@ -1,5 +1,4 @@
-export DEVELOPER_DIR=/Applications/Xcode_11.3.1.app/Contents/Developer/
-export JAVA_OPTS = -Xmx4096m -Dsun.jnu.encoding=UTF-8
+export DEVELOPER_DIR=/Applications/Xcode_11.app/Contents/Developer/
 
 debug-android:
 	mkdir -p android/app/src/main/assets
@@ -15,6 +14,7 @@ debug-ios:
 
 beta-ios:
 	yarn bundle-ios
+	fastlane run setup_ci force:true
 	fastlane ios beta
 
 beta-android:

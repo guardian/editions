@@ -261,7 +261,7 @@ PODS:
     - React
   - RNScreens (2.0.0-alpha.34):
     - React
-  - RNSentry (1.3.3):
+  - RNSentry (1.1.0):
     - React
     - Sentry (~> 4.4.0)
   - RNSVG (9.13.6):
@@ -490,7 +490,7 @@ SPEC CHECKSUMS:
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNPermissions: 9e437a90de84a5402ff689d4da233730b81556c2
   RNScreens: 9d8a2900cd4f967af70dbfed74b64f77fbb6600a
-  RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
+  RNSentry: 932ac1c8b2f581b1c8be5812f88ff556c99e7fb7
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNZipArchive: be636657a6630e9771d4a3223dc8fd0bd0137b55
   Sentry: 26650184fe71eb7476dfd2737acb5ea6cc64b4b1
