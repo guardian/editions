@@ -131,7 +131,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
             ? [
                   {
                       key: `Sign out`,
-                      title: identityData.userDetails.publicFields.displayName,
+                      title: identityData.userDetails.primaryEmailAddress,
                       onPress: async () => {
                           await signOutIdentity()
                       },
