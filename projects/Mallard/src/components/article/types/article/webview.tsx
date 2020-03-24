@@ -85,7 +85,6 @@ const WebviewWithArticle = ({
     return (
         <WebView
             {...webViewProps}
-            bounces={false}
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{
