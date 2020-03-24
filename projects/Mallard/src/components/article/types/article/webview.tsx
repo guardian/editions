@@ -51,6 +51,8 @@ const WebviewWithArticle = ({
     // FIXME: pass this as article data instead so it's never out-of-sync?
     const [, { pillar }] = useArticle()
 
+    const largeDeviceMemory = useLargeDeviceMemory()
+
     const res = useQuery<QueryValue>(QUERY)
     // Hold off rendering until we have all the necessary data.
     if (res.loading) return null
@@ -86,7 +88,7 @@ const WebviewWithArticle = ({
     return (
         <WebView
             {...webViewProps}
-            bounces={useLargeDeviceMemory() ? true : false}
+            bounces={largeDeviceMemory ? true : false}
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{
