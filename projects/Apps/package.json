@@ -15,5 +15,8 @@
         ],
         "nohoist": []
     },
+    "resolutions": {
+        "jsdom": "16.2.1"
+    },
     "private": true
 }
