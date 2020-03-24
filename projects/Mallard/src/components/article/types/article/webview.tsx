@@ -11,6 +11,7 @@ import { useQuery } from 'src/hooks/apollo'
 import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`
@@ -85,6 +86,7 @@ const WebviewWithArticle = ({
     return (
         <WebView
             {...webViewProps}
+            bounces={useLargeDeviceMemory() ? true : false}
             originWhitelist={['*']}
             scrollEnabled={true}
             source={{
