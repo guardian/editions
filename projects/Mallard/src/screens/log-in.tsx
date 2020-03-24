@@ -9,6 +9,7 @@ import { getFont } from 'src/theme/typography'
 import { FormField } from 'src/hooks/use-form-field'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
+import AppleSignIn from 'src/components/apple-sign-in/apple-sign-in'
 import { LoginButton } from 'src/components/login/login-button'
 
 const socialButtonStyles = StyleSheet.create({
@@ -137,6 +138,7 @@ const Login = ({
                             Continue with Google
                         </SocialButton>
                     </View>
+                    <AppleSignIn />
                     <TitlepieceText style={loginStyles.or}>or</TitlepieceText>
                 </>
             )}
