@@ -894,7 +894,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				KOTLIN_BUILD_TYPE = DEBUG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 6.0;
+				MARKETING_VERSION = 6.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = GuardianDaily;
@@ -928,7 +928,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				KOTLIN_BUILD_TYPE = RELEASE;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 6.0;
+				MARKETING_VERSION = 6.1;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.guardian.gce;
 				PRODUCT_NAME = GuardianDaily;
