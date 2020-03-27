@@ -120,7 +120,11 @@ const IssueRowContainer = React.memo(
         const setNavPosition = useSetNavPosition()
 
         const navToIssue = useCallback(
-            (initialFrontKey: string | null) =>
+            (initialFrontKey: string | null) => {
+                // Are we within the same edition? If so no need to navigate
+                if(issueId?.localIssueId === issue.localId && issueId?.publishedIssueId === issue.publishedId ){
+                    navigation.goBack()
+                } else {
                 navigateToIssue({
                     navigation,
                     navigationProps: {
@@ -131,7 +135,9 @@ const IssueRowContainer = React.memo(
                         initialFrontKey,
                     },
                     setIssueId,
-                }),
+                })
+            }
+            },
             [navigation, setIssueId, localId, publishedId],
         )
 
