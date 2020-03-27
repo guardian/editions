@@ -145,8 +145,6 @@ export const isIssueOnDevice = async (
     (await Promise.all([
         RNFetchBlob.fs.exists(FSPaths.issue(localIssueId)),
         RNFetchBlob.fs.exists(FSPaths.mediaRoot(localIssueId)),
-        RNFetchBlob.fs.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
-        RNFetchBlob.fs.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
     ])).every(_ => _)
 
 /*
