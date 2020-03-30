@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import {
     ArticlePillar,
@@ -117,6 +117,11 @@ export const Front = React.memo(
             Animated.AnimatedInterpolation
         >(new Animated.Value(0))
 
+        // Whenever we change edition, this resets us back to 0 scroll index for all fronts
+        useEffect(() => {
+            flatListRef.current?._component.scrollToIndex({animated: false, index: 0})
+        }, [frontData])
+
         return (
             <FrontWrapper
                 scrubber={
@@ -148,7 +153,7 @@ export const Front = React.memo(
                     pagingEnabled={true}
                     decelerationRate="fast"
                     snapToInterval={card.width}
-                    ref={flatListRef}
+                    ref={r => (flatListRef.current = r)}
                     getItemLayout={(_: never, index: number) => ({
                         length: card.width,
                         offset: card.width * index,
