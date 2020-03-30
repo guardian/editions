@@ -158,7 +158,7 @@ export const Front = React.memo(
                     pagingEnabled={true}
                     decelerationRate="fast"
                     snapToInterval={card.width}
-                    ref={r => (flatListRef.current = r)}
+                    ref={(r: AnimatedFlatListRef) => (flatListRef.current = r)}
                     getItemLayout={(_: never, index: number) => ({
                         length: card.width,
                         offset: card.width * index,
