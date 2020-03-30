@@ -174,7 +174,7 @@ const IssueButton = ({
                     ? color.primary
                     : undefined
             }
-            borderWidth={1}
+            borderWidth={2}
             shadowColor="#ccc"
             color={color.primary}
         >
