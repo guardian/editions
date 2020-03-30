@@ -3,6 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native'
 import { ariaHidden } from 'src/helpers/a11y'
 import { color } from 'src/theme/color'
 import { safeInterpolation } from 'src/helpers/math'
+import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 
 const styles = StyleSheet.create({
     ball: {
@@ -21,6 +22,14 @@ const pillars = [
     color.palette.culture.main,
     color.palette.lifestyle.main,
 ]
+
+const StaticBall = ({ color }: { color: string }) => {
+    return (
+        <Animated.View
+            style={[styles.ball, { backgroundColor: color }]}
+        ></Animated.View>
+    )
+}
 
 const Ball = ({ color, jump }: { color: string; jump: Animated.Value }) => {
     return (
@@ -63,6 +72,7 @@ const animateJumps = (value: Animated.Value, delay = 0) => {
 }
 
 const Spinner = () => {
+    const largeDeviceMemory = useLargeDeviceMemory()
     const [visible, setVisible] = useState(false)
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -89,13 +99,17 @@ const Spinner = () => {
         <View accessibilityLabel={'Loading content'}>
             {visible && (
                 <View {...ariaHidden} style={styles.container}>
-                    {pillars.map((color, index) => (
-                        <Ball
-                            key={index}
-                            jump={jumps[index]}
-                            color={color}
-                        ></Ball>
-                    ))}
+                    {pillars.map((color, index) =>
+                        largeDeviceMemory ? (
+                            <Ball
+                                key={index}
+                                jump={jumps[index]}
+                                color={color}
+                            />
+                        ) : (
+                            <StaticBall key={index} color={color} />
+                        ),
+                    )}
                 </View>
             )}
         </View>
