@@ -101,6 +101,13 @@ const DevZone = withNavigation(({ navigation }: NavigationInjectedProps) => {
             <ButtonList>
                 <Button
                     onPress={() => {
+                        navigation.navigate(routeNames.Storybook)
+                    }}
+                >
+                    Storybook
+                </Button>
+                <Button
+                    onPress={() => {
                         // go back to the main to simulate a fresh app
                         Alert.alert(
                             'Delete all issue files',

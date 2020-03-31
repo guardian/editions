@@ -25,4 +25,5 @@ export const routeNames = {
         OnboardingConsentInline: 'OnboardingConsentInline',
         PrivacyPolicyInline: 'PrivacyPolicyInline',
     },
+    Storybook: 'Storybook',
 }

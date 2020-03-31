@@ -10,6 +10,7 @@ import {
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath, useScaledImage } from 'src/hooks/use-image-paths'
 import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
+import DeviceInfo from 'react-native-device-info'
 
 /**
  * This component abstracts away the endpoint for images
@@ -59,6 +60,17 @@ const ImageResource = ({
     const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
+
+    if (DeviceInfo.isEmulatorSync()) {
+        return (
+            <Image
+                resizeMethod={'resize'}
+                {...props}
+                style={style}
+                source={{ uri: imagePath }}
+            />
+        )
+    }
 
     return width && imagePath ? (
         <ScaledImageResource
