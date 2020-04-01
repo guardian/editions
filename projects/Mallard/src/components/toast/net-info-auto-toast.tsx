@@ -11,7 +11,7 @@ const NetInfoAutoToast = () => {
             if (!isConnected && type !== NetInfoStateType.unknown) {
                 showToast('No internet connection')
             }
-        }, 500)
+        }, 1000)
         return () => {
             clearTimeout(time)
         }
