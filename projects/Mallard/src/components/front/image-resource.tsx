@@ -1,12 +1,5 @@
-import React, { useState } from 'react'
-import {
-    Image,
-    ImageProps,
-    ImageStyle,
-    StyleProp,
-    View,
-    PixelRatio,
-} from 'react-native'
+import React from 'react'
+import { Image, ImageProps, ImageStyle, StyleProp, View } from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
@@ -34,30 +27,20 @@ const ImageResource = ({
     use,
     ...props
 }: ImageResourceProps) => {
-    const [width, setWidth] = useState<number | null>(null)
     const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
 
-    return width && imagePath ? (
+    return imagePath ? (
         <Image
             key={imagePath}
             resizeMethod={'resize'}
             {...props}
-            style={style}
+            style={[styles, style]}
             source={{ uri: imagePath }}
         />
     ) : (
-        <View
-            style={styles}
-            onLayout={ev => {
-                setWidth(
-                    PixelRatio.getPixelSizeForLayoutSize(
-                        ev.nativeEvent.layout.width,
-                    ),
-                )
-            }}
-        ></View>
+        <View style={styles}></View>
     )
 }
 
