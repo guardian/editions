@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import {
     createAppContainer,
     createStackNavigator,
@@ -101,9 +101,7 @@ const AppStack = createModalNavigator(
                 [routeNames.FAQ]: FAQScreen,
                 [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
                 [routeNames.SubscriptionDetails]: SubscriptionDetailsScreen,
-                [routeNames.Storybook]: DeviceInfo.isEmulatorSync()
-                    ? StorybookScreen
-                    : null,
+                [routeNames.Storybook]: __DEV__ ? StorybookScreen : Fragment,
             },
             {
                 defaultNavigationOptions: {
