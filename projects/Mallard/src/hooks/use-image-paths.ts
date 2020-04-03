@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react'
-import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
-import { imageForScreenSize, maxScreenSize } from 'src/helpers/screen'
+import { imageForScreenSize } from 'src/helpers/screen'
 import { APIPaths, FSPaths } from 'src/paths'
 import { Image, ImageSize, Issue, ImageUse } from '../../../Apps/common/src'
 import { useIssueSummary } from './use-issue-summary'
 import { Platform } from 'react-native'
 import { useApiUrl } from './use-settings'
-import { errorService } from 'src/services/errors'
-import gql from 'graphql-tag'
-import { useQuery } from './apollo'
 
 export type GetImagePath = (image?: Image, use?: ImageUse) => string | undefined
 
@@ -40,22 +36,6 @@ export const selectImagePath = async (
 
     const fsUpdatedPath = Platform.OS === 'android' ? 'file:///' + fs : fs
     return fsExists ? fsUpdatedPath : api
-}
-
-const compressImagePath = async (path: string, width: number) => {
-    try {
-        const resized = await ImageResizer.createResizedImage(
-            path,
-            width,
-            maxScreenSize(),
-            Platform.OS === 'android' ? 'WEBP' : 'JPEG',
-            70,
-        )
-        return resized.uri
-    } catch (error) {
-        errorService.captureException(error)
-        return path
-    }
 }
 
 /**
@@ -101,48 +81,4 @@ export const useImagePath = (image?: Image, use: ImageUse = 'full-size') => {
     ])
     if (image === undefined) return undefined
     return path
-}
-
-type QueryValue = { scaledImage: { uri: string | null } }
-type QueryVars = { path: string; width: number }
-const SCALED_IMAGE_QUERY = gql`
-    query($path: String, $width: Int) {
-        scaledImage(path: $path, width: $width) @client
-    }
-`
-
-/**
- * Return a resolver function for Apollo to resolve the "scaledImage" top-level
- * field. We delete pending promises because Apollo will cache the final
- * results.
- */
-export const createScaledImageResolver = () => {
-    const pendingImagesByPath = new Map()
-
-    return (_: unknown, variables: QueryVars) => {
-        const { path, width } = variables
-        if (path.slice(0, 4) === 'http')
-            return { __typename: 'ScaledImage', uri: path }
-
-        const key = JSON.stringify([path, width])
-        const value = pendingImagesByPath.get(key)
-        if (value != null) return value
-
-        const promise = compressImagePath(path, width)
-            .then(uri => ({ __typename: 'ScaledImage', uri }))
-            .finally(() => void pendingImagesByPath.delete(key))
-
-        pendingImagesByPath.set(key, promise)
-        return promise
-    }
-}
-
-export const useScaledImage = (largePath: string, width: number) => {
-    const query = useQuery<QueryValue, QueryVars>(SCALED_IMAGE_QUERY, {
-        path: largePath,
-        width,
-    })
-
-    if (query.loading) return undefined
-    return (query.data && query.data.scaledImage.uri) || undefined
 }

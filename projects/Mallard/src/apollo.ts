@@ -7,7 +7,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { SETTINGS_RESOLVERS } from './helpers/settings/resolvers'
 import { resolveWeather } from './helpers/weather'
 import { resolveLocationPermissionStatus } from './helpers/location-permission'
-import { createScaledImageResolver } from './hooks/use-image-paths'
 import { createNetInfoResolver } from './hooks/use-net-info'
 import { createIssueSummaryResolver } from './hooks/use-issue-summary'
 import { createImageSizeResolver } from './helpers/screen'
@@ -33,7 +32,6 @@ export const createApolloClient = () => {
             ...SETTINGS_RESOLVERS,
             weather: resolveWeather,
             locationPermissionStatus: resolveLocationPermissionStatus,
-            scaledImage: createScaledImageResolver(),
             netInfo: createNetInfoResolver(),
             issueSummary: createIssueSummaryResolver(),
             imageSize: createImageSizeResolver(),
