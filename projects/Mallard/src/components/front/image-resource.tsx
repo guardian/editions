@@ -34,30 +34,20 @@ const ImageResource = ({
     use,
     ...props
 }: ImageResourceProps) => {
-    const [width, setWidth] = useState<number | null>(null)
     const imagePath = useImagePath(image, use)
     const aspectRatio = useAspectRatio(imagePath)
     const styles = [style, setAspectRatio && aspectRatio ? { aspectRatio } : {}]
 
-    return width && imagePath ? (
+    return imagePath ? (
         <Image
             key={imagePath}
             resizeMethod={'resize'}
             {...props}
-            style={style}
+            style={[styles, style]}
             source={{ uri: imagePath }}
         />
     ) : (
-        <View
-            style={styles}
-            onLayout={ev => {
-                setWidth(
-                    PixelRatio.getPixelSizeForLayoutSize(
-                        ev.nativeEvent.layout.width,
-                    ),
-                )
-            }}
-        ></View>
+        <View style={styles}></View>
     )
 }
 
