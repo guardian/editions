@@ -1,12 +1,5 @@
-import React, { useState } from 'react'
-import {
-    Image,
-    ImageProps,
-    ImageStyle,
-    StyleProp,
-    View,
-    PixelRatio,
-} from 'react-native'
+import React from 'react'
+import { Image, ImageProps, ImageStyle, StyleProp, View } from 'react-native'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
