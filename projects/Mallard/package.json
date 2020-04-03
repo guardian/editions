@@ -125,7 +125,7 @@
             "searchDir": [
                 "./src"
             ],
-            "pattern": "**/*.stories.*",
+            "pattern": "**/*stories.*",
             "outputFile": "./storybook/storyLoader.js"
         }
     }
