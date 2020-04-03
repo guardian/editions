@@ -24,7 +24,8 @@
         "write-prod-env": "node ../Apps/scripts/src/.env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
         "install-pods": "cd ios && pod install",
-        "storybook": "start-storybook -p 7007"
+        "storybook": "start-storybook -p 7007",
+        "prestorybook": "rnstl"
     },
     "rnpm": {
         "assets": [
@@ -106,6 +107,7 @@
         "jest": "^25.1.0",
         "metro-react-native-babel-preset": "^0.56.0",
         "mockdate": "^2.0.5",
+        "react-native-storybook-loader": "^1.8.1",
         "react-test-renderer": "16.9.0",
         "typescript": "^3.5.3"
     },
@@ -117,5 +119,14 @@
     },
     "jest": {
         "preset": "react-native"
+    },
+    "config": {
+        "react-native-storybook-loader": {
+            "searchDir": [
+                "./src"
+            ],
+            "pattern": "**/*.stories.js",
+            "outputFile": "./storybook/storyLoader.js"
+        }
     }
 }

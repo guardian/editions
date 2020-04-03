@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react'
+import { useEffect } from 'react'
 import {
     createAppContainer,
     createStackNavigator,
@@ -44,7 +44,6 @@ import {
     ManageEditionScreenFromIssuePicker,
 } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
-import DeviceInfo from 'react-native-device-info'
 import StorybookScreen from 'src/screens/storybook-screen'
 
 const navOptionsWithGraunHeader = {
