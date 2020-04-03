@@ -101,7 +101,7 @@ const AppStack = createModalNavigator(
                 [routeNames.FAQ]: FAQScreen,
                 [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
                 [routeNames.SubscriptionDetails]: SubscriptionDetailsScreen,
-                [routeNames.Storybook]: __DEV__ ? StorybookScreen : Fragment,
+                [routeNames.Storybook]: StorybookScreen,
             },
             {
                 defaultNavigationOptions: {
