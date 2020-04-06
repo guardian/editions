@@ -34,7 +34,7 @@ validate-%: projects/%/node_modules node_modules
 	@echo "\n👟🧶 $@ ESLINT 🦆\n"
 	yarn eslint 'projects/$*/**/*.{ts,tsx}' --parser-options=project:./projects/$*/tsconfig.json
 	@echo "\n👟🚂 $@ TSC 🦆\n"
-	cd projects/$* && yarn tsc --noEmit
+	cd projects/$* && yarn tsc --noEmit --skipLibCheck
 fix-%: node_modules projects/%/node_modules node_modules
 	@echo "\n👟 $@ 🦆\n"
 	yarn eslint 'projects/$*/**/*.{ts,tsx}' --parser-options=project:./projects/$*/tsconfig.json --fix

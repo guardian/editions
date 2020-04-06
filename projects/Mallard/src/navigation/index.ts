@@ -44,6 +44,7 @@ import {
     ManageEditionScreenFromIssuePicker,
 } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
+import StorybookScreen from 'src/screens/storybook-screen'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -99,6 +100,7 @@ const AppStack = createModalNavigator(
                 [routeNames.FAQ]: FAQScreen,
                 [routeNames.AlreadySubscribed]: AlreadySubscribedScreen,
                 [routeNames.SubscriptionDetails]: SubscriptionDetailsScreen,
+                [routeNames.Storybook]: StorybookScreen,
             },
             {
                 defaultNavigationOptions: {

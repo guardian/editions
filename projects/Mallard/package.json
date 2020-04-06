@@ -23,7 +23,9 @@
         "fetch-dev-env": "node ../Apps/scripts/src/fetch-dev-env.js",
         "write-prod-env": "node ../Apps/scripts/src/.env.production.js",
         "update-settings-pages-html": "node ./scripts/get-settings-pages-html.js",
-        "install-pods": "cd ios && pod install"
+        "install-pods": "cd ios && pod install",
+        "storybook": "start-storybook -p 7007",
+        "prestorybook": "rnstl"
     },
     "rnpm": {
         "assets": [
@@ -84,6 +86,8 @@
     "devDependencies": {
         "@babel/core": "^7.6.2",
         "@babel/runtime": "^7.6.2",
+        "@storybook/react-native": "^5.3.14",
+        "@storybook/react-native-server": "^5.3.14",
         "@types/events": "^3.0.0",
         "@types/fetch-mock": "^7.3.1",
         "@types/invariant": "^2.2.30",
@@ -98,10 +102,12 @@
         "@types/validator": "^10.11.2",
         "aws-sdk": "^2.511.0",
         "babel-jest": "^25.1.0",
+        "babel-loader": "^8.0.6",
         "fetch-mock": "^7.3.7",
         "jest": "^25.1.0",
         "metro-react-native-babel-preset": "^0.56.0",
         "mockdate": "^2.0.5",
+        "react-native-storybook-loader": "^1.8.1",
         "react-test-renderer": "16.9.0",
         "typescript": "^3.5.3"
     },
@@ -113,5 +119,14 @@
     },
     "jest": {
         "preset": "react-native"
+    },
+    "config": {
+        "react-native-storybook-loader": {
+            "searchDir": [
+                "./src"
+            ],
+            "pattern": "**/*stories.*",
+            "outputFile": "./storybook/storyLoader.js"
+        }
     }
 }
