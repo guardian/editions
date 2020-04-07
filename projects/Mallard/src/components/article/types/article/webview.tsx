@@ -79,7 +79,7 @@ const WebviewWithArticle = ({
         type,
         imageSize,
         showWebHeader: true,
-        showMedia: isConnected,
+        showMediaAtom: isConnected,
         publishedId: publishedIssueId || null,
         topPadding,
         getImagePath,

@@ -19,7 +19,7 @@ import { getPillarColors } from 'src/helpers/transform'
 import { getLightboxImages } from '../types/article'
 
 interface ArticleContentProps {
-    showMedia: boolean
+    showMediaAtom: boolean
     publishedId: Issue['publishedId'] | null
     imageSize: ImageSize
     getImagePath: GetImagePath
@@ -47,7 +47,7 @@ const PictureArticleContent = (image: TImage, getImagePath: GetImagePath) => {
 
 const renderArticleContent = (
     elements: BlockElement[],
-    { showMedia, publishedId, getImagePath }: ArticleContentProps,
+    { showMediaAtom, publishedId, getImagePath }: ArticleContentProps,
 ) => {
     const imagePaths = getLightboxImages(elements).map(i => i.src.path)
     return elements
@@ -63,7 +63,7 @@ const renderArticleContent = (
                     }
                     return el.html
                 case 'media-atom':
-                    return showMedia ? renderMediaAtom(el) : ''
+                    return showMediaAtom ? renderMediaAtom(el) : ''
                 case 'image': {
                     const path = getImagePath(el.src)
                     const index = imagePaths.findIndex(e => e === el.src.path)
@@ -92,7 +92,7 @@ export const renderArticle = (
     elements: BlockElement[],
     {
         pillar,
-        showMedia,
+        showMediaAtom,
         topPadding,
         publishedId,
         showWebHeader,
@@ -120,7 +120,7 @@ export const renderArticle = (
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
-                showMedia,
+                showMediaAtom,
                 canBeShared,
                 getImagePath,
             })
@@ -136,12 +136,12 @@ export const renderArticle = (
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
                 image: article.image,
-                showMedia,
+                showMediaAtom,
                 canBeShared,
                 getImagePath,
             })
             content = renderArticleContent(elements, {
-                showMedia,
+                showMediaAtom,
                 publishedId,
                 imageSize,
                 getImagePath,
@@ -152,12 +152,12 @@ export const renderArticle = (
                 ...article,
                 type,
                 publishedId,
-                showMedia,
+                showMediaAtom,
                 canBeShared,
                 getImagePath,
             })
             content = renderArticleContent(elements, {
-                showMedia,
+                showMediaAtom,
                 publishedId,
                 imageSize,
                 getImagePath,

@@ -585,7 +585,7 @@ const Header = ({
     getImagePath,
     ...headerProps
 }: {
-    showMedia: boolean
+    showMediaAtom: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
     canBeShared: boolean
@@ -642,7 +642,7 @@ const Header = ({
                             getImagePath,
                         })}
                     ${headerProps.mainMedia &&
-                        (headerProps.showMedia
+                        (headerProps.showMediaAtom
                             ? renderMediaAtom(headerProps.mainMedia)
                             : null)}
                     ${headerProps.kicker &&
