@@ -86,6 +86,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.6.2",
+        "@babel/helper-validator-identifier": "^7.9.5",
         "@babel/runtime": "^7.6.2",
         "@storybook/react-native": "^5.3.14",
         "@storybook/react-native-server": "^5.3.14",
