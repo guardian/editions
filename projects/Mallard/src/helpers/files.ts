@@ -71,7 +71,8 @@ export const prepFileSystem = (): Promise<void> =>
 const removeTempFiles = () => {
     const removeOrphanedTempFiles = async (dir: string) => {
         try {
-            if (RNFetchBlob.fs.isDir(dir)) {
+            const isDir = await RNFetchBlob.fs.isDir(dir)
+            if (isDir) {
                 RNFetchBlob.fs.ls(dir).then(files => {
                     files
                         .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
