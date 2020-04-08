@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { facebookAuthWithDeepRedirect } from 'src/authentication/services/facebook'
 import { googleAuthWithDeepRedirect } from 'src/authentication/services/google'
+import { appleAuth } from 'src/authentication/services/apple'
 import { NavigationScreenProp } from 'react-navigation'
 import { useModal } from 'src/components/modal'
 import { SignInFailedModalCard } from 'src/components/sign-in-failed-modal-card'
@@ -102,9 +103,19 @@ const AuthSwitcherScreen = ({
                         }
                     } catch (e) {
                         setIsLoading(false)
-                        setError(
-                            typeof e === 'string' ? e : 'Something went wrong',
-                        )
+                        if (
+                            String(e).includes(
+                                'Error: The Apple authentication request has been canceled by the user',
+                            )
+                        ) {
+                            setError('Sign in was cancelled by the user.')
+                        } else {
+                            setError(
+                                typeof e === 'string'
+                                    ? e
+                                    : 'Something went wrong',
+                            )
+                        }
                     }
                 },
                 deny: async () => {
@@ -152,6 +163,12 @@ const AuthSwitcherScreen = ({
                         ),
                     { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
+            }
+            onApplePress={() =>
+                handleAuthClick(appleAuth, {
+                    requiresFunctionalConsent: true,
+                    signInName: 'Apple',
+                })
             }
             onSubmit={() =>
                 handleAuthClick(

@@ -31,7 +31,25 @@ type GoogleCreds = {
     'google-access-token': string
 }
 
-export type AuthParams = BasicCreds | FacebookCreds | GoogleCreds
+export type AppleCreds = {
+    authorizationCode: string
+    idToken: string
+    givenName: string
+    familyName: string
+}
+
+export type AuthParams = BasicCreds | FacebookCreds | GoogleCreds | AppleCreds
+
+export type AuthType = 'apple' | 'google' | 'facebook' | 'email' | 'unknown'
+
+// TODO: Write unit test?
+const detectAuthType = (params: AuthParams): AuthType => {
+    if ('email' in params) return 'email'
+    if ('facebook-access-token' in params) return 'facebook'
+    if ('google-access-token' in params) return 'google'
+    if ('idToken' in params) return 'apple'
+    return 'unknown'
+}
 
 export type IdentityAuthData = {
     userDetails: User
@@ -56,11 +74,23 @@ const authWithTokens = async (
     )
 }
 
-const getUserNameFromParams = (params: AuthParams) => {
-    if ('email' in params) return params.email
-    if ('facebook-access-token' in params) return 'gu-editions::token::facebook'
-    if ('google-access-token' in params) return 'gu-editions::token::google'
-    const x: never = params
+// TODO: This function needs a unit test
+const getUserName = (authType: AuthType, params: AuthParams) => {
+    const x = params
+    switch (authType) {
+        case 'email':
+            if ('email' in params) {
+                return params.email
+            }
+        case 'facebook':
+            return 'gu-editions::token::facebook'
+        case 'google':
+            return 'gu-editions::token::google'
+        case 'apple':
+            return 'gu-editions::token::apple'
+        default:
+            return x
+    }
     return x
 }
 
@@ -73,11 +103,14 @@ export default new Authorizer({
         legacyUserAccessTokenKeychain,
     ] as const,
     auth: async ([params]: [AuthParams], [utc, mtc]) => {
-        const username = getUserNameFromParams(params)
-        const utokenResult = await fetchAuth<string>(params)
+        const authType = detectAuthType(params)
+        const username = getUserName(authType, params)
+        const utokenResult = await fetchAuth<string>(params, authType)
+
         return flat(utokenResult, async utoken => {
             utc.set({ username, token: utoken })
             const mtokenResult = await fetchMembershipToken(utoken)
+
             return flat(mtokenResult, mtoken => {
                 mtc.set({ username, token: mtoken })
                 return authWithTokens(utoken, mtoken)

@@ -11,6 +11,15 @@ import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
 
+import { Platform } from 'react-native'
+
+function canOSSupportAppleSignin(): boolean {
+    const osVersion = Number(String(Platform.Version).split('.')[0])
+    const osName = Platform.OS
+
+    return osName === 'ios' && osVersion >= 13
+}
+
 const socialButtonStyles = StyleSheet.create({
     button: {
         flexDirection: 'row',
@@ -81,6 +90,7 @@ const Login = ({
     title,
     email,
     password,
+    onApplePress,
     onFacebookPress,
     onGooglePress,
     onSubmit,
@@ -94,6 +104,7 @@ const Login = ({
 }: {
     title: string
     onFacebookPress: () => void
+    onApplePress: () => void
     onGooglePress: () => void
     email: FormField
     password: FormField
@@ -130,12 +141,22 @@ const Login = ({
                         >
                             Continue with Facebook
                         </SocialButton>
+
                         <SocialButton
                             onPress={onGooglePress}
                             iconRequire={require('src/assets/images/google.png')}
                         >
                             Continue with Google
                         </SocialButton>
+
+                        {canOSSupportAppleSignin() && (
+                            <SocialButton
+                                onPress={onApplePress}
+                                iconRequire={require('src/assets/images/apple.png')}
+                            >
+                                Continue with Apple
+                            </SocialButton>
+                        )}
                     </View>
                     <TitlepieceText style={loginStyles.or}>or</TitlepieceText>
                 </>
