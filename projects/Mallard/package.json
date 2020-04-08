@@ -48,6 +48,7 @@
         "chalk": "^3.0.0",
         "deepmerge": "^4.0.0",
         "events": "^3.0.0",
+        "expo-apple-authentication": "^2.1.0",
         "graphql": "^14.5.8",
         "graphql-tag": "^2.10.1",
         "invariant": "^2.2.4",
