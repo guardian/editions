@@ -4,7 +4,7 @@ import { ItemTappable, PropTypes } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { SuperHeroImageItem } from './super-items'
 import { Stars } from 'src/components/stars/stars'
-import { SportScore } from 'src/components/sportscore/sportscore'
+import { SportScore } from 'src/components/SportScore/SportScore'
 import { View } from 'react-native'
 import { CAPIArticle } from 'src/common'
 
@@ -34,10 +34,7 @@ const SportsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.sportScore == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <SportScore
-                style={styles.starsAndSportScore}
-                sportScore={article.sportScore}
-            />
+            <SportScore type="stars" sportScore={article.sportScore} />
         </View>
     )
 }

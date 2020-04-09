@@ -5,7 +5,7 @@ import { color } from 'src/theme/color'
 import { useInsets } from 'src/hooks/use-screen'
 import { CloseModalButton } from '../button/close-modal-button'
 import { TitlepieceText, UiBodyCopy } from '../styled-text'
-import { Spinner } from '../Spinner'
+import { Spinner } from '../Spinner/Spinner'
 
 const loginHeaderStyles = StyleSheet.create({
     wrapper: {

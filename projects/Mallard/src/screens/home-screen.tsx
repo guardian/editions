@@ -25,7 +25,7 @@ import { GridRowSplit } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
 import { IssuePickerHeader } from 'src/components/layout/header/header'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
-import { Spinner } from 'src/components/Spinner'
+import { Spinner } from 'src/components/Spinner/Spinner'
 import {
     CONNECTION_FAILED_AUTO_RETRY,
     CONNECTION_FAILED_ERROR,

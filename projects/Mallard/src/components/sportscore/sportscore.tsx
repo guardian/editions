@@ -15,23 +15,34 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         ...getFont('headline', 0.5),
     },
+    stars: {
+        flex: 0,
+    },
+    rating: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        left: 0,
+        bottom: 0,
+    },
 })
 
 const SportScore = ({
-    style,
     sportScore,
+    type,
 }: {
-    style?: StyleProp<ViewStyle>
     sportScore: string
-}) => {
-    return (
-        <View
-            accessibilityLabel={sportScore}
-            style={[style, styles.background]}
-        >
-            <Text style={styles.text}>{sportScore}</Text>
-        </View>
-    )
-}
+    type?: 'stars' | 'rating'
+}) => (
+    <View
+        accessibilityLabel={sportScore}
+        style={[
+            styles.background,
+            type === 'stars' && styles.stars,
+            type === 'rating' && styles.rating,
+        ]}
+    >
+        <Text style={styles.text}>{sportScore}</Text>
+    </View>
+)
 
 export { SportScore }

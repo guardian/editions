@@ -25,7 +25,7 @@ import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-mes
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
 import { ReloadButton } from 'src/components/reloadButton'
-import { Spinner } from 'src/components/Spinner'
+import { Spinner } from 'src/components/Spinner/Spinner'
 import {
     WeatherWidget,
     WeatherQueryData,

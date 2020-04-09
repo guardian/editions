@@ -5,7 +5,7 @@ import { Stars } from 'src/components/stars/stars'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { ImageResource } from '../image-resource'
-import { SportScore } from 'src/components/sportscore/sportscore'
+import { SportScore } from 'src/components/SportScore/SportScore'
 import { ArticleType } from '../../../../../Apps/common/src'
 
 const trailImageViewStyles = StyleSheet.create({
@@ -76,10 +76,7 @@ export const TrailImageView = ({
                     image={image}
                     use={use}
                 />
-                <SportScore
-                    style={trailImageViewStyles.rating}
-                    sportScore={sportScore}
-                />
+                <SportScore type="rating" sportScore={sportScore} />
             </View>
         )
     } else {
