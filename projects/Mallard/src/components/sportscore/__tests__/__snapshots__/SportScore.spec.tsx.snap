@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SportScore should show a SportScore with default styling 1`] = `
+<View
+  accessibilityLabel="Luton 3 - 0 Watford"
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#ffe500",
+        "padding": 0,
+        "paddingBottom": 2,
+        "paddingHorizontal": 4.666666666666667,
+      },
+      false,
+      false,
+    ]
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontFamily": "GHGuardianHeadline-Regular",
+        "fontSize": 16,
+        "letterSpacing": 0.25,
+        "lineHeight": 17,
+      }
+    }
+  >
+    Luton 3 - 0 Watford
+  </Text>
+</View>
+`;
+
+exports[`SportScore should show a SportScore with rating styling 1`] = `
+<View
+  accessibilityLabel="Luton 3 - 0 Watford"
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#ffe500",
+        "padding": 0,
+        "paddingBottom": 2,
+        "paddingHorizontal": 4.666666666666667,
+      },
+      false,
+      Object {
+        "backgroundColor": "white",
+        "bottom": 0,
+        "left": 0,
+        "position": "absolute",
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontFamily": "GHGuardianHeadline-Regular",
+        "fontSize": 16,
+        "letterSpacing": 0.25,
+        "lineHeight": 17,
+      }
+    }
+  >
+    Luton 3 - 0 Watford
+  </Text>
+</View>
+`;
+
+exports[`SportScore should show a SportScore with stars styling 1`] = `
+<View
+  accessibilityLabel="Luton 3 - 0 Watford"
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#ffe500",
+        "padding": 0,
+        "paddingBottom": 2,
+        "paddingHorizontal": 4.666666666666667,
+      },
+      Object {
+        "flex": 0,
+      },
+      false,
+    ]
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontFamily": "GHGuardianHeadline-Regular",
+        "fontSize": 16,
+        "letterSpacing": 0.25,
+        "lineHeight": 17,
+      }
+    }
+  >
+    Luton 3 - 0 Watford
+  </Text>
+</View>
+`;

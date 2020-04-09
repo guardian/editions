@@ -34,10 +34,7 @@ const SportsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.sportScore == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <SportScore
-                style={styles.starsAndSportScore}
-                sportScore={article.sportScore}
-            />
+            <SportScore type="stars" sportScore={article.sportScore} />
         </View>
     )
 }

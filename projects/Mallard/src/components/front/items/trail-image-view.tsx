@@ -76,10 +76,7 @@ export const TrailImageView = ({
                     image={image}
                     use={use}
                 />
-                <SportScore
-                    style={trailImageViewStyles.rating}
-                    sportScore={sportScore}
-                />
+                <SportScore type="rating" sportScore={sportScore} />
             </View>
         )
     } else {
