@@ -5,7 +5,7 @@ import { Stars } from 'src/components/stars/stars'
 import { useMediaQuery } from 'src/hooks/use-screen'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { ImageResource } from '../image-resource'
-import { SportScore } from 'src/components/SportScore/SportScore'
+import { SportScore } from 'src/components/Sportscore/Sportscore'
 import { ArticleType } from '../../../../../Apps/common/src'
 
 const trailImageViewStyles = StyleSheet.create({
