@@ -5,7 +5,7 @@
 
 function loadStories() {
     require('../src/components/Spinner/Spinner.stories')
-    require('../src/components/Sportscore/Sportscore.stories')
+    require('../src/components/sportscore/sportscore.stories')
 }
 
 const stories = [

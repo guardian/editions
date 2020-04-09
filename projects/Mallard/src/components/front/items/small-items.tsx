@@ -4,7 +4,7 @@ import { ItemTappable, PropTypes } from './helpers/item-tappable'
 import { TextBlock } from './helpers/text-block'
 import { SuperHeroImageItem } from './super-items'
 import { Stars } from 'src/components/stars/stars'
-import { SportScore } from 'src/components/Sportscore/Sportscore'
+import { SportScore } from 'src/components/sportscore/sportscore'
 import { View } from 'react-native'
 import { CAPIArticle } from 'src/common'
 
