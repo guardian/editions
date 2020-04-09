@@ -21,6 +21,17 @@ const QUERY = gql`
     }
 `
 
+// Landscape immersive images get stretched into portrait mode
+// to prevent this resulting in pixelated images, use a larger image
+const immersiveSize = (imageSize: ImageSize): ImageSize => {
+    switch (imageSize) {
+        case 'phone':
+            return 'tablet'
+        default:
+            return 'tabletXL'
+    }
+}
+
 const WebviewWithArticle = ({
     article,
     path,
@@ -59,8 +70,14 @@ const WebviewWithArticle = ({
     const { imageSize, apiUrl } = res.data
     const { localIssueId, publishedIssueId } = path
 
-    const getImagePath = (image?: Image, use: ImageUse = 'full-size') => {
+    const getImagePath = (
+        image?: Image,
+        use: ImageUse = 'full-size',
+        immersive = false,
+    ) => {
         if (image == null) return undefined
+
+        const scaledSize = immersive ? immersiveSize(imageSize) : imageSize
 
         if (origin === 'filesystem') {
             const fs = FSPaths.image(localIssueId, imageSize, image, use)
@@ -69,7 +86,7 @@ const WebviewWithArticle = ({
         if (origin !== 'api') throw new Error('unrecognized "origin"')
 
         const issueId = publishedIssueId
-        const imagePath = APIPaths.image(issueId, imageSize, image, use)
+        const imagePath = APIPaths.image(issueId, scaledSize, image, use)
         return `${apiUrl}${imagePath}`
     }
 

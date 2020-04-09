@@ -536,15 +536,16 @@ const MainMediaImage = ({
     children,
     preserveRatio,
     getImagePath,
+    immersive,
 }: {
     image: CreditedImage
     className?: string
     children?: string
     preserveRatio?: boolean
     getImagePath: GetImagePath
+    immersive: boolean
 }) => {
-    const path = getImagePath(image)
-
+    const path = getImagePath(image, 'full-size', immersive)
     return html`
         <div
             class="image-as-bg ${className}"
@@ -620,6 +621,7 @@ const Header = ({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
                 getImagePath,
+                immersive,
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -640,6 +642,7 @@ const Header = ({
                                   })
                                 : undefined,
                             getImagePath,
+                            immersive,
                         })}
                     ${headerProps.mainMedia &&
                         (headerProps.showMediaAtom
