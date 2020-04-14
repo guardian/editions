@@ -577,8 +577,8 @@ const MainMediaImage = ({
 
 enum HeaderStyle {
     noByline = 'noByline',
-    largeByLine = 'largeByLine',
-    regular = 'regular',
+    largeByline = 'largeByline',
+    regularByline = 'regularByline',
 }
 
 const isImmersive = (type: ArticleType) =>
@@ -589,12 +589,13 @@ const isImmersive = (type: ArticleType) =>
 
 const headerStyle = (type: ArticleType): HeaderStyle => {
     switch (type) {
-        case (ArticleType.Opinion, ArticleType.Analysis):
-            return HeaderStyle.largeByLine
+        case ArticleType.Opinion:
+        case ArticleType.Analysis:
+            return HeaderStyle.largeByline
         case ArticleType.Letter: //TODO: need to change this logic
             return HeaderStyle.noByline
         default:
-            return HeaderStyle.regular
+            return HeaderStyle.regularByline
     }
 }
 
@@ -609,51 +610,61 @@ const setStandFirst = (
         type === ArticleType.Opinion &&
         headerProps.bylineImages &&
         headerProps.bylineImages.cutout
-    switch (articleHeaderStyle) {
-        case HeaderStyle.largeByLine:
-            return html`
-                <section class="header-top">
-                    <div class="${cutout && `header-opinion-flex`}">
-                        <h1>
-                            ${type === ArticleType.Opinion && Quotes()}
-                            <span class="header-top-headline"
-                                >${headerProps.headline}
-                            </span>
-                            <span class="header-top-byline"
-                                >${headerProps.bylineHtml}
-                            </span>
-                        </h1>
-                        ${publishedId &&
-                            cutout &&
-                            html`
-                                <div>
-                                    ${Image({
-                                        image: cutout,
-                                        getImagePath,
-                                    })}
-                                </div>
-                            `}
-                    </div>
-                </section>
-            `
+    if (articleHeaderStyle === HeaderStyle.largeByline) {
+        return html`
+            <section class="header-top">
+                <div class="${cutout && `header-opinion-flex`}">
+                    <h1>
+                        ${type === ArticleType.Opinion && Quotes()}
+                        <span class="header-top-headline"
+                            >${headerProps.headline}
+                        </span>
+                        <span class="header-top-byline"
+                            >${headerProps.bylineHtml}
+                        </span>
+                    </h1>
+                    ${publishedId &&
+                        cutout &&
+                        html`
+                            <div>
+                                ${Image({
+                                    image: cutout,
+                                    getImagePath,
+                                })}
+                            </div>
+                        `}
+                </div>
+            </section>
+        `
+    } else {
+        return html`
+            <section class="header-top">
+                <h1>
+                    ${headerProps.headline}
+                </h1>
+                ${articleHeaderStyle === HeaderStyle.regularByline
+                    ? `<p>
+                        ${headerProps.standfirst}
+                      </p>`
+                    : ``}
+            </section>
+        `
+    }
+}
+
+const getHeaderClassForStyle = (headerStyle: HeaderStyle): string => {
+    switch (headerStyle) {
         case HeaderStyle.noByline:
             return html`
-                <section class="header-top">
-                    <h1>
-                        ${headerProps.headline}
-                    </h1>
-                </section>
+                header-byline header-standfirst
+            `
+        case HeaderStyle.largeByline:
+            return html`
+                header-byline header-standfirst-color
             `
         default:
             return html`
-                <section class="header-top">
-                    <h1>
-                        ${headerProps.headline}
-                    </h1>
-                    <p>
-                        ${headerProps.standfirst}
-                    </p>
-                </section>
+                header-byline header-byline-italic
             `
     }
 }
@@ -663,6 +674,11 @@ const setByLine = (
     canBeShared: boolean,
     headerProps: ArticleHeaderProps,
 ): string => {
+    const headerClass = getHeaderClassForStyle(headerStyle)
+    const bylineText =
+        headerStyle === HeaderStyle.regularByline
+            ? headerProps.bylineHtml
+            : headerProps.standfirst
     const shareButton = !canBeShared
         ? ''
         : html`
@@ -677,32 +693,13 @@ const setByLine = (
                   </div>
               </button>
           `
-    switch (headerStyle) {
-        case HeaderStyle.largeByLine:
-            return html`
-                <aside class="header-byline header-standfirst-color">
-                    ${shareButton}
-                    <span> ${headerProps.standfirst}</span>
-                    <div class="clearfix"></div>
-                </aside>
-            `
-        case HeaderStyle.noByline:
-            return html`
-                <aside class="header-byline header-standfirst">
-                    ${shareButton}
-                    <span> ${headerProps.standfirst}</span>
-                    <div class="clearfix"></div>
-                </aside>
-            `
-        default:
-            return html`
-                <aside class="header-byline header-byline-italic">
-                    ${shareButton}
-                    <span>${headerProps.bylineHtml}</span>
-                    <div class="clearfix"></div>
-                </aside>
-            `
-    }
+    return html`
+        <aside class="${headerClass}">
+            ${shareButton}
+            <span>${bylineText} ${headerClass}</span>
+            <div class="clearfix"></div>
+        </aside>
+    `
 }
 
 const Header = ({
