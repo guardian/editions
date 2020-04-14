@@ -696,7 +696,7 @@ const setByLine = (
     return html`
         <aside class="${headerClass}">
             ${shareButton}
-            <span>${bylineText} ${headerClass}</span>
+            <span>${bylineText}</span>
             <div class="clearfix"></div>
         </aside>
     `
