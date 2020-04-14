@@ -74,6 +74,10 @@ If you wanna add static svgs, put them in the `assets/svgs` folder and run `yarn
 
 To test the iPad version, run `yarn run-ipad`. To test responsive layouts, you can enter multitasking inside the iPad simulator (swipe up from the bottom of the window) and drag another app from the dock to the side until it goes into split view.
 
+### Storybook
+
+Within the dev menu, there is a link to Storybook. [Storybook](https://storybook.js.org/) allows us to view components in isolation and helps to define a component library whilst looking at all potential edge cases. A useful tool for both FE developers and the UX/UI team. Storybook will automatically open in a browser when running `run-ios`, `run-android` or `run-ipad`. This browser window allows the user to the control what is happening in the Storybook window of the app.
+
 ### Upgrading React Native
 
 rn update: run this to clear your cache
