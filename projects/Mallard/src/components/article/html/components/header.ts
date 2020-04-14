@@ -175,9 +175,14 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         fill: ${colors.main};
     }
 
-    .header-standfirst {
+    .header-standfirst-color {
         font-weight: 600;
         color: ${colors.main};
+    }
+
+    .header-standfirst { 
+        font-weight: 600; 
+        color: ${color.palette.neutral[46]};
     }
 
     .header-byline {
@@ -570,34 +575,95 @@ const MainMediaImage = ({
     `
 }
 
+enum HeaderStyle {
+    noByline = 'noByline',
+    largeByLine = 'largeByLine',
+    regular = 'regular',
+}
+
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
     type === ArticleType.Obituary ||
     type === ArticleType.Gallery
 
-const hasLargeByline = (type: ArticleType) =>
-    type === ArticleType.Opinion || type === ArticleType.Analysis
+const headerStyle = (type: ArticleType): HeaderStyle => {
+    switch (type) {
+        case (ArticleType.Opinion, ArticleType.Analysis):
+            return HeaderStyle.largeByLine
+        case ArticleType.Letter: //TODO: need to change this logic
+            return HeaderStyle.noByline
+        default:
+            return HeaderStyle.regular
+    }
+}
 
-const Header = ({
-    publishedId,
-    type,
-    getImagePath,
-    ...headerProps
-}: {
-    showMedia: boolean
-    publishedId: Issue['publishedId'] | null
-    type: ArticleType
-    canBeShared: boolean
-    getImagePath: GetImagePath
-} & ArticleHeaderProps) => {
-    const immersive = isImmersive(type)
-    const largeByline = hasLargeByline(type)
+const setStandFirst = (
+    articleHeaderStyle: HeaderStyle,
+    type: ArticleType,
+    headerProps: ArticleHeaderProps,
+    publishedId: Issue['publishedId'] | null,
+    getImagePath: GetImagePath,
+): string => {
     const cutout =
         type === ArticleType.Opinion &&
         headerProps.bylineImages &&
         headerProps.bylineImages.cutout
-    const shareButton = !headerProps.canBeShared
+    switch (articleHeaderStyle) {
+        case HeaderStyle.largeByLine:
+            return html`
+                <section class="header-top">
+                    <div class="${cutout && `header-opinion-flex`}">
+                        <h1>
+                            ${type === ArticleType.Opinion && Quotes()}
+                            <span class="header-top-headline"
+                                >${headerProps.headline}
+                            </span>
+                            <span class="header-top-byline"
+                                >${headerProps.bylineHtml}
+                            </span>
+                        </h1>
+                        ${publishedId &&
+                            cutout &&
+                            html`
+                                <div>
+                                    ${Image({
+                                        image: cutout,
+                                        getImagePath,
+                                    })}
+                                </div>
+                            `}
+                    </div>
+                </section>
+            `
+        case HeaderStyle.noByline:
+            return html`
+                <section class="header-top">
+                    <h1>
+                        ${headerProps.headline}
+                    </h1>
+                </section>
+            `
+        default:
+            return html`
+                <section class="header-top">
+                    <h1>
+                        ${headerProps.headline}
+                    </h1>
+                    <p>
+                        ${headerProps.standfirst}
+                    </p>
+                </section>
+            `
+    }
+}
+
+const setByLine = (
+    headerStyle: HeaderStyle,
+    canBeShared: boolean,
+    headerProps: ArticleHeaderProps,
+): string => {
+    const shareButton = !canBeShared
         ? ''
         : html`
               <button
@@ -611,7 +677,48 @@ const Header = ({
                   </div>
               </button>
           `
+    switch (headerStyle) {
+        case HeaderStyle.largeByLine:
+            return html`
+                <aside class="header-byline header-standfirst-color">
+                    ${shareButton}
+                    <span> ${headerProps.standfirst}</span>
+                    <div class="clearfix"></div>
+                </aside>
+            `
+        case HeaderStyle.noByline:
+            return html`
+                <aside class="header-byline header-standfirst">
+                    ${shareButton}
+                    <span> ${headerProps.standfirst}</span>
+                    <div class="clearfix"></div>
+                </aside>
+            `
+        default:
+            return html`
+                <aside class="header-byline header-byline-italic">
+                    ${shareButton}
+                    <span>${headerProps.bylineHtml}</span>
+                    <div class="clearfix"></div>
+                </aside>
+            `
+    }
+}
 
+const Header = ({
+    publishedId,
+    type,
+    getImagePath,
+    ...headerProps
+}: {
+    showMedia: boolean
+    publishedId: Issue['publishedId'] | null
+    type: ArticleType
+    canBeShared: boolean
+    getImagePath: GetImagePath
+} & ArticleHeaderProps) => {
+    const articleHeaderStyle = headerStyle(type)
+    const immersive = isImmersive(type)
     return html`
         ${immersive &&
             headerProps.image &&
@@ -651,60 +758,19 @@ const Header = ({
                                 >${headerProps.kicker}</span
                             >
                         `}
-                    ${largeByline
-                        ? html`
-                              <section class="header-top">
-                                  <div
-                                      class="${cutout && `header-opinion-flex`}"
-                                  >
-                                      <h1>
-                                          ${type === ArticleType.Opinion &&
-                                              Quotes()}
-                                          <span class="header-top-headline"
-                                              >${headerProps.headline}</span
-                                          >
-                                          <span class="header-top-byline"
-                                              >${headerProps.bylineHtml}</span
-                                          >
-                                      </h1>
-                                      ${publishedId &&
-                                          cutout &&
-                                          html`
-                                              <div>
-                                                  ${Image({
-                                                      image: cutout,
-                                                      getImagePath,
-                                                  })}
-                                              </div>
-                                          `}
-                                  </div>
-                              </section>
-                          `
-                        : html`
-                              <section class="header-top">
-                                  <h1>
-                                      ${headerProps.headline}
-                                  </h1>
-                                  <p>${headerProps.standfirst}</p>
-                              </section>
-                          `}
+                    ${setStandFirst(
+                        articleHeaderStyle,
+                        type,
+                        headerProps,
+                        publishedId,
+                        getImagePath,
+                    )}
                 </header>
-
-                ${largeByline
-                    ? html`
-                          <aside class="header-byline header-standfirst">
-                              ${shareButton}
-                              <span>${headerProps.standfirst}</span>
-                              <div class="clearfix"></div>
-                          </aside>
-                      `
-                    : html`
-                          <aside class="header-byline header-byline-italic">
-                              ${shareButton}
-                              <span>${headerProps.bylineHtml}</span>
-                              <div class="clearfix"></div>
-                          </aside>
-                      `}
+                ${setByLine(
+                    articleHeaderStyle,
+                    headerProps.canBeShared,
+                    headerProps as ArticleHeaderProps,
+                )}
                 <div class="header-bg"></div>
             </div>
         </div>
