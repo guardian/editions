@@ -1,4 +1,4 @@
-import { ArticleType, Image as ImageT, Issue } from 'src/common'
+import { ArticleType, HeaderType, Image as ImageT, Issue } from 'src/common'
 import { css, html, px } from 'src/helpers/webview'
 import { GetImagePath } from 'src/hooks/use-image-paths'
 import { Breakpoints } from 'src/theme/breakpoints'
@@ -575,32 +575,14 @@ const MainMediaImage = ({
     `
 }
 
-enum HeaderStyle {
-    noByline = 'noByline',
-    largeByline = 'largeByline',
-    regularByline = 'regularByline',
-}
-
 const isImmersive = (type: ArticleType) =>
     type === ArticleType.Immersive ||
     type === ArticleType.Longread ||
     type === ArticleType.Obituary ||
     type === ArticleType.Gallery
 
-const headerStyle = (type: ArticleType): HeaderStyle => {
-    switch (type) {
-        case ArticleType.Opinion:
-        case ArticleType.Analysis:
-            return HeaderStyle.largeByline
-        case ArticleType.Letter: //TODO: need to change this logic
-            return HeaderStyle.noByline
-        default:
-            return HeaderStyle.regularByline
-    }
-}
-
 const setStandFirst = (
-    articleHeaderStyle: HeaderStyle,
+    articleHeaderType: HeaderType,
     type: ArticleType,
     headerProps: ArticleHeaderProps,
     publishedId: Issue['publishedId'] | null,
@@ -610,7 +592,7 @@ const setStandFirst = (
         type === ArticleType.Opinion &&
         headerProps.bylineImages &&
         headerProps.bylineImages.cutout
-    if (articleHeaderStyle === HeaderStyle.largeByline) {
+    if (articleHeaderType === HeaderType.LargeByline) {
         return html`
             <section class="header-top">
                 <div class="${cutout && `header-opinion-flex`}">
@@ -642,7 +624,7 @@ const setStandFirst = (
                 <h1>
                     ${headerProps.headline}
                 </h1>
-                ${articleHeaderStyle === HeaderStyle.regularByline
+                ${articleHeaderType === HeaderType.RegularByline
                     ? `<p>
                         ${headerProps.standfirst}
                       </p>`
@@ -652,17 +634,17 @@ const setStandFirst = (
     }
 }
 
-const getHeaderClassForStyle = (headerStyle: HeaderStyle): string => {
-    switch (headerStyle) {
-        case HeaderStyle.noByline:
+const getHeaderClassForType = (headerType: HeaderType): string => {
+    switch (headerType) {
+        case HeaderType.NoByline:
             return html`
                 header-byline header-standfirst
             `
-        case HeaderStyle.largeByline:
+        case HeaderType.LargeByline:
             return html`
                 header-byline header-standfirst-color
             `
-        default:
+        case HeaderType.RegularByline:
             return html`
                 header-byline header-byline-italic
             `
@@ -670,15 +652,16 @@ const getHeaderClassForStyle = (headerStyle: HeaderStyle): string => {
 }
 
 const setByLine = (
-    headerStyle: HeaderStyle,
+    headerType: HeaderType,
     canBeShared: boolean,
     headerProps: ArticleHeaderProps,
 ): string => {
-    const headerClass = getHeaderClassForStyle(headerStyle)
+    const headerClass = getHeaderClassForType(headerType)
     const bylineText =
-        headerStyle === HeaderStyle.regularByline
-            ? headerProps.bylineHtml
-            : headerProps.standfirst
+        headerType === HeaderType.NoByline ||
+        headerType === HeaderType.LargeByline
+            ? headerProps.standfirst
+            : headerProps.bylineHtml
     const shareButton = !canBeShared
         ? ''
         : html`
@@ -705,16 +688,17 @@ const setByLine = (
 const Header = ({
     publishedId,
     type,
+    headerType,
     getImagePath,
     ...headerProps
 }: {
     showMedia: boolean
     publishedId: Issue['publishedId'] | null
     type: ArticleType
+    headerType: HeaderType
     canBeShared: boolean
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
-    const articleHeaderStyle = headerStyle(type)
     const immersive = isImmersive(type)
     return html`
         ${immersive &&
@@ -756,7 +740,7 @@ const Header = ({
                             >
                         `}
                     ${setStandFirst(
-                        articleHeaderStyle,
+                        headerType,
                         type,
                         headerProps,
                         publishedId,
@@ -764,7 +748,7 @@ const Header = ({
                     )}
                 </header>
                 ${setByLine(
-                    articleHeaderStyle,
+                    headerType,
                     headerProps.canBeShared,
                     headerProps as ArticleHeaderProps,
                 )}

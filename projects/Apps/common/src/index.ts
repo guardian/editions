@@ -35,6 +35,11 @@ export enum ArticleType {
     Immersive = 'immersive',
 }
 
+export enum HeaderType {
+    NoByline = 'nobyline',
+    LargeByline = 'largebyline',
+    RegularByline = 'regularbyline',
+}
 export type ArticlePillar = typeof articlePillars[number]
 
 export interface ColorAppearance {
@@ -154,6 +159,7 @@ export interface Content extends WithKey {
     headline: string
     kicker: string
     articleType?: ArticleType
+    headerType?: HeaderType
     trail: string
     image?: CreditedImage
     trailImage?: TrailImage

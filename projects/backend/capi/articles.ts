@@ -26,7 +26,7 @@ import { fromPairs } from 'ramda'
 import { kickerPicker } from './kickerPicker'
 import { getBylineImages } from './byline'
 import { rationaliseAtoms } from './atoms'
-import { articleTypePicker } from './articleTypePicker'
+import { articleTypePicker, headerTypePicker } from './articleTypePicker'
 import { getImages } from './articleImgPicker'
 
 type NotInCAPI =
@@ -103,6 +103,8 @@ const parseArticleResult = async (
 
     const articleType = articleTypePicker(result)
 
+    const headerType = headerTypePicker(result)
+
     const trail = result.fields && result.fields.trailText
 
     const byline = result.fields && result.fields.byline
@@ -141,6 +143,7 @@ const parseArticleResult = async (
                     headline: title,
                     kicker,
                     articleType,
+                    headerType,
                     trail,
                     ...images,
                     byline: byline || '',
@@ -166,6 +169,7 @@ const parseArticleResult = async (
                     trail,
                     kicker,
                     articleType,
+                    headerType,
                     ...images,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
@@ -188,6 +192,7 @@ const parseArticleResult = async (
                     trail,
                     kicker,
                     articleType,
+                    headerType,
                     ...images,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
@@ -232,6 +237,7 @@ const parseArticleResult = async (
                     trail,
                     path: path,
                     headline: title,
+                    headerType: headerType,
                     trailImage: undefined,
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
@@ -257,6 +263,7 @@ const parseArticleResult = async (
                     byline: byline || '',
                     bylineHtml: bylineHtml || '',
                     standfirst: trail || '',
+                    headerType: headerType,
                     elements: [
                         {
                             id: 'html',

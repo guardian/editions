@@ -1,5 +1,5 @@
 import { IContent } from '@guardian/capi-ts/dist/Content'
-import { ArticleType } from '../../Apps/common/src/index'
+import { ArticleType, HeaderType } from '../../Apps/common/src/index'
 import { TagType } from '@guardian/capi-ts'
 
 const doesTagExist = (article: IContent, tagId: string): boolean => {
@@ -120,4 +120,32 @@ const articleTypePicker = (article: IContent): ArticleType => {
     }
 }
 
-export { articleTypePicker }
+const headerTypePicker = (article: IContent): HeaderType => {
+    const isTagPresent = (tagId: string): boolean =>
+        doesTagExist(article, tagId)
+    const isCorrection: boolean = isTagPresent(
+        'theguardian/series/correctionsandclarifications',
+    )
+    const isBirthday: boolean = isTagPresent('news/birthdays')
+    const isSoundAndVision: boolean = isTagPresent(
+        'tv-and-radio/series/the-10-best-tv-shows-in-the-uk-this-week',
+    )
+    const articleType = articleTypePicker(article)
+    if (
+        articleType === ArticleType.Letter ||
+        isCorrection ||
+        isBirthday ||
+        isSoundAndVision
+    ) {
+        return HeaderType.NoByline
+    } else if (
+        articleType === ArticleType.Opinion ||
+        articleType === ArticleType.Analysis
+    ) {
+        return HeaderType.LargeByline
+    } else {
+        return HeaderType.RegularByline
+    }
+}
+
+export { articleTypePicker, headerTypePicker }

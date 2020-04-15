@@ -2,6 +2,7 @@ import { html, makeHtml } from 'src/helpers/webview'
 import {
     ArticlePillar,
     ArticleType,
+    HeaderType,
     BlockElement,
     CAPIArticle,
     ImageSize,
@@ -110,13 +111,14 @@ export const renderArticle = (
     } & ArticleContentProps,
 ) => {
     let content, header
+    const headerType = article.headerType || HeaderType.RegularByline
     const canBeShared = article.webUrl != null
-
     switch (article.type) {
         case 'picture':
             header = Header({
                 publishedId,
                 type: ArticleType.Gallery,
+                headerType: HeaderType.RegularByline,
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
@@ -132,6 +134,7 @@ export const renderArticle = (
             header = Header({
                 publishedId,
                 type: ArticleType.Gallery,
+                headerType: HeaderType.RegularByline,
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
@@ -151,6 +154,7 @@ export const renderArticle = (
             header = Header({
                 ...article,
                 type,
+                headerType,
                 publishedId,
                 showMedia,
                 canBeShared,
