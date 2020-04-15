@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import { withKnobs, number } from '@storybook/addon-knobs'
-import { Stars } from './Stars'
+import { Stars } from 'src/components/Stars/Stars'
 
 const rating = number('rating', 3)
 
