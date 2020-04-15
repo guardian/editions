@@ -34,6 +34,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
     const isReview: boolean = isTagPresent('tone/reviews')
     const isRecipe: boolean = isTagPresent('tone/recipes')
     const isMatchResult: boolean = isTagPresent('tone/matchreports')
+    const isCorrection: boolean = isTagPresent('theguardian/series/correctionsandclarifications')
+    const isBirthday: boolean = isTagPresent('news/birthdays')
+    const isSoundAndVision: boolean = isTagPresent('tv-and-radio/series/the-10-best-tv-shows-in-the-uk-this-week')
+
 
     /**
      * Order of conditionals under each pillar is important as certain conditions take precedent.
