@@ -1,27 +1,27 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { SportScore } from '../sportscore'
+import { Stars } from '../stars'
 
-const sportScore = 'Luton 3 - 0 Watford'
+const rating = 5
 
-describe('SportScore', () => {
-    it('should show a SportScore with default styling', () => {
+describe('Stars', () => {
+    it('should show a Stars with default styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <SportScore sportScore={sportScore} />,
+            <Stars rating={rating} />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
 
-    it('should show a SportScore with trailImage styling', () => {
+    it('should show a Stars with trailImage styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <SportScore sportScore={sportScore} type="trailImage" />,
+            <Stars rating={rating} type="trailImage" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
 
-    it('should show a SportScore with smallItems styling', () => {
+    it('should show a Stars with smallItems styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <SportScore sportScore={sportScore} type="smallItems" />,
+            <Stars rating={rating} type="smallItems" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })

@@ -22,10 +22,7 @@ const StarsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.starRating == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <Stars
-                style={styles.starsAndSportScore}
-                rating={article.starRating}
-            />
+            <Stars type="smallItems" rating={article.starRating} />
         </View>
     )
 }
@@ -34,7 +31,7 @@ const SportsWrapper = ({ article }: { article: CAPIArticle }) => {
     if (article.type != 'article' || article.sportScore == null) return null
     return (
         <View style={styles.starsAndSportScoreWrapper}>
-            <SportScore type="stars" sportScore={article.sportScore} />
+            <SportScore type="smallItems" sportScore={article.sportScore} />
         </View>
     )
 }

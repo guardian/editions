@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { color } from 'src/theme/color'
@@ -15,6 +15,15 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         ...getFont('icon', 1),
     },
+    trailImage: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        left: 0,
+        bottom: 0,
+    },
+    smallItems: {
+        flex: 0,
+    },
 })
 
 export const getRatingAsText = (rating: number) =>
@@ -29,17 +38,17 @@ export const getRatingAsText = (rating: number) =>
     })
 
 const Stars = ({
-    style,
+    type,
     rating,
 }: {
-    style?: StyleProp<ViewStyle>
+    type?: 'trailImage' | 'smallItems'
     rating: number
 }) => {
     const ratingAsText = useMemo(() => getRatingAsText(rating), [rating])
     return (
         <View
             accessibilityLabel={`${rating.toString()} stars`}
-            style={[style, styles.background]}
+            style={[styles.background, type && styles[type]]}
         >
             <Text style={styles.text} accessible={false}>
                 {ratingAsText.join('')}
