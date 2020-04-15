@@ -27,10 +27,10 @@ jobs:
                   yarn
                   yarn install-mallard
 
-            - name: validate Mallard project
-              run: |
-                  cd projects/Mallard
-                  yarn validate
+            # - name: validate Mallard project
+            #   run: |
+            #       cd projects/Mallard
+            #       yarn validate
 
             # Runs a set of commands using the runners shell
             - name: publish app

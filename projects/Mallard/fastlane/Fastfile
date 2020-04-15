@@ -22,7 +22,33 @@
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-  sync_code_signing(type: "appstore", readonly: true)
+
+    create_keychain(
+      name: "CI",
+      password: ENV["FASTLANE_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+
+    # Get the distribution certificate
+    sync_code_signing(
+      type: "appstore",
+      readonly: true,
+      git_url: "https://github.com/guardian/code-signing.git",
+      keychain_name: "CI",
+      keychain_password: ENV["FASTLANE_PASSWORD"]
+    )
+
+    # get_provisioning_profile(app_identifier: "uk.co.guardian.gce", readonly: true)
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "ios/Mallard.xcodeproj",
+      profile_name: "match AppStore uk.co.guardian.gce 1586248549"
+    )
+
     increment_build_number(
       xcodeproj: "ios/Mallard.xcodeproj",
       build_number: latest_testflight_build_number.to_i + 1

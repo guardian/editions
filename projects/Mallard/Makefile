@@ -14,7 +14,6 @@ debug-ios:
 
 beta-ios:
 	yarn bundle-ios
-	fastlane run setup_ci force:true
 	fastlane ios beta
 
 beta-android:
