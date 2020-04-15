@@ -58,7 +58,7 @@ platform :ios do
       workspace: "ios/Mallard.xcworkspace",
       xcargs: "-allowProvisioningUpdates",
       export_options: {
-        exportOptionsPlist: "exports-plists/debug.plist"
+        exportOptionsPlist: "exports-plists/release.plist"
       }
     )
     upload_to_testflight(
