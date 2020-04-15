@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import { SportScore } from '../sportscore'
+import { SportScore } from '../SportScore'
 
 const sportScore = 'Luton 3 - 0 Watford'
 

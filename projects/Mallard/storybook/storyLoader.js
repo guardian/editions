@@ -5,14 +5,14 @@
 
 function loadStories() {
 	require('../src/components/Spinner/Spinner.stories');
-	require('../src/components/sportscore/SportScore.stories');
-	require('../src/components/stars/Stars.stories');
+	require('../src/components/SportScore/SportScore.stories');
+	require('../src/components/Stars/Stars.stories');
 }
 
 const stories = [
 	'../src/components/Spinner/Spinner.stories',
-	'../src/components/sportscore/SportScore.stories',
-	'../src/components/stars/Stars.stories'
+	'../src/components/SportScore/SportScore.stories',
+	'../src/components/Stars/Stars.stories'
 ];
 
 module.exports = {

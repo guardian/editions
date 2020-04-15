@@ -1,4 +1,4 @@
-import { getRatingAsText } from 'src/components/stars/stars'
+import { getRatingAsText } from 'src/components/Stars/Stars'
 import { css, html, px } from 'src/helpers/webview'
 import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
