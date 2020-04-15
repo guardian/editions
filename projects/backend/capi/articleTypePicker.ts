@@ -123,6 +123,7 @@ const articleTypePicker = (article: IContent): ArticleType => {
 const headerTypePicker = (article: IContent): HeaderType => {
     const isTagPresent = (tagId: string): boolean =>
         doesTagExist(article, tagId)
+
     const isCorrection: boolean = isTagPresent(
         'theguardian/series/correctionsandclarifications',
     )
