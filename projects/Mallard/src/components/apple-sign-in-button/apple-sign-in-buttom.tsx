@@ -13,21 +13,28 @@ const buttonStyles = { width: 200, height: 44 }
 async function asyncAppleGuardianAuth(
     authorizationCode: string | null,
     idToken: string | null,
-    name: AppleAuthenticationFullName | null
+    name: AppleAuthenticationFullName | null,
 ) {
     if (!authorizationCode || !idToken || !name)
         return console.error('error message')
 
     const url = 'https://id.guardianapis.com/auth'
 
+    const body = JSON.stringify({
+        authorizationCode: authorizationCode,
+        idToken: idToken,
+        givenName: name.givenName,
+        familyName: name.familyName,
+    })
+
     const options = {
         method: 'POST',
-        body: {
-            authorizationCode,
-            idToken,
-            givenName: name.givenName,
-            familyName: name.familyName,
+        headers: {
+            'X-GU-ID-Client-Access-Token':
+                'Bearer 39a23f018d10eb643c09c8bed717debb',
+            'Content-Type': 'application/json',
         },
+        body,
     }
 
     const response = await fetch(url, options)
