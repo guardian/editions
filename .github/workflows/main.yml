@@ -1,10 +1,9 @@
-# This is a basic workflow to help you get started with Actions
+name: ios-beta
 
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
-on: [push]
+on:
+    schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 14 * * 1-5' # every day at 2pm
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -21,18 +20,16 @@ jobs:
               with:
                   node-version: '10.15'
 
-            # Runs a set of commands using the runners shell
             - name: install mallard
               run: |
                   yarn
                   yarn install-mallard
 
-            # - name: validate Mallard project
-            #   run: |
-            #       cd projects/Mallard
-            #       yarn validate
+            - name: validate Mallard project
+              run: |
+                  cd projects/Mallard
+                  yarn validate
 
-            # Runs a set of commands using the runners shell
             - name: publish app
               run: |
                   cd projects/Mallard
@@ -52,10 +49,6 @@ jobs:
                 FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
                 ANDROID_RELEASE_STREAM: ${{ secrets.ANDROID_RELEASE_STREAM }}
                 USE_SANDBOX_IAP: ' '
-                MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
-                MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
-                MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
-                MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
                 FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
                 MATCH_USERNAME: ${{ secrets.FASTLANE_USER }}
                 MATCH_STORAGE_MODE: git
@@ -63,3 +56,8 @@ jobs:
                 MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
                 MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
                 MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+                # S3 credentials are not currently used but might be in future
+                MATCH_S3_REGION: ${{ secrets.MATCH_S3_REGION }}
+                MATCH_S3_ACCESS_KEY: ${{ secrets.MATCH_S3_ACCESS_KEY }}
+                MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
+                MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
