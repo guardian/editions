@@ -5,19 +5,13 @@ import {
     View,
     Image,
     Animated,
-    Text,
     StyleSheet,
 } from 'react-native'
 import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
-import {
-    ImageElement,
-    Direction,
-    ArticlePillar,
-} from '../../../Apps/common/src'
+import { ImageElement, ArticlePillar } from '../../../Apps/common/src'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { CloseModalButton } from 'src/components/button/close-modal-button'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-config-provider'
 import { themeColors } from 'src/components/article/html/helpers/css'
@@ -28,6 +22,7 @@ import {
     getNewWindowStart,
 } from 'src/components/article/progress-indicator'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -85,32 +80,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 })
-
-const LightboxCaption = ({
-    caption,
-    pillarColor,
-    captionVisible,
-}: {
-    caption?: string
-    pillarColor: string
-    captionVisible: boolean
-}) => {
-    return (
-        <>
-            {captionVisible && caption && (
-                <View style={styles.captionWrapper}>
-                    <View style={styles.caption}>
-                        <NativeArrow
-                            fill={pillarColor}
-                            direction={Direction.top}
-                        />
-                        <Text style={styles.captionText}>{caption}</Text>
-                    </View>
-                </View>
-            )}
-        </>
-    )
-}
 
 const LightboxImage = ({ image }: { image: ImageElement }) => {
     const imagePath = useImagePath(image.src, 'full-size')
@@ -220,15 +189,17 @@ export const LightboxScreen = ({
                                                 ]}
                                             >
                                                 <LightboxImage image={item} />
-                                                <LightboxCaption
-                                                    caption={item.caption}
-                                                    pillarColor={
-                                                        pillarColors.main
-                                                    }
-                                                    captionVisible={
-                                                        captionVisible
-                                                    }
-                                                />
+                                                {captionVisible &&
+                                                    item.caption && (
+                                                        <LightboxCaption
+                                                            caption={
+                                                                item.caption
+                                                            }
+                                                            pillarColor={
+                                                                pillarColors.main
+                                                            }
+                                                        />
+                                                    )}
                                             </View>
                                         </TouchableWithoutFeedback>
                                     )

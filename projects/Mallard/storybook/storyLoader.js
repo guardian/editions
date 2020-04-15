@@ -4,11 +4,13 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
+	require('../src/components/Lightbox/LightboxCaption.stories');
 	require('../src/components/Spinner/Spinner.stories');
 	require('../src/components/sportscore/SportScore.stories');
 }
 
 const stories = [
+	'../src/components/Lightbox/LightboxCaption.stories',
 	'../src/components/Spinner/Spinner.stories',
 	'../src/components/sportscore/SportScore.stories'
 ];
