@@ -12,7 +12,6 @@ import { FSPaths, APIPaths, PathToArticle } from 'src/paths'
 import { Platform } from 'react-native'
 import { Image, ImageUse, IssueOrigin } from 'src/common'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
-import { HeaderStyle } from '../../../../../../Apps/common/src'
 
 type QueryValue = { imageSize: ImageSize; apiUrl: string }
 const QUERY = gql`

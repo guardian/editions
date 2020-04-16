@@ -581,7 +581,7 @@ const isImmersive = (type: ArticleType) =>
     type === ArticleType.Obituary ||
     type === ArticleType.Gallery
 
-const setStandFirst = (
+const getStandFirst = (
     articleHeaderType: HeaderType,
     type: ArticleType,
     headerProps: ArticleHeaderProps,
@@ -624,11 +624,10 @@ const setStandFirst = (
                 <h1>
                     ${headerProps.headline}
                 </h1>
-                ${articleHeaderType === HeaderType.RegularByline
-                    ? `<p>
+                ${articleHeaderType === HeaderType.RegularByline &&
+                    `<p>
                         ${headerProps.standfirst}
-                      </p>`
-                    : ``}
+                      </p>`}
             </section>
         `
     }
@@ -651,7 +650,7 @@ const getHeaderClassForType = (headerType: HeaderType): string => {
     }
 }
 
-const setByLine = (
+const getByLine = (
     headerType: HeaderType,
     canBeShared: boolean,
     headerProps: ArticleHeaderProps,
@@ -739,7 +738,7 @@ const Header = ({
                                 >${headerProps.kicker}</span
                             >
                         `}
-                    ${setStandFirst(
+                    ${getStandFirst(
                         headerType,
                         type,
                         headerProps,
@@ -747,7 +746,7 @@ const Header = ({
                         getImagePath,
                     )}
                 </header>
-                ${setByLine(
+                ${getByLine(
                     headerType,
                     headerProps.canBeShared,
                     headerProps as ArticleHeaderProps,
