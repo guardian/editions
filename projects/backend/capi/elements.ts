@@ -27,9 +27,7 @@ export const elementParser = (
                     id: 'image',
                     src: image,
                     alt: element.imageTypeData.alt,
-                    caption:
-                        element.imageTypeData.caption &&
-                        cleanupHtml(element.imageTypeData.caption),
+                    caption: element.imageTypeData.caption,
                     copyright: element.imageTypeData.copyright,
                     credit: element.imageTypeData.credit,
                     role: element.imageTypeData.role,
