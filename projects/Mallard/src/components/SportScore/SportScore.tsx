@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         ...getFont('headline', 0.5),
     },
-    stars: {
+    smallItems: {
         flex: 0,
     },
-    rating: {
+    trailImage: {
         position: 'absolute',
         backgroundColor: 'white',
         left: 0,
@@ -31,15 +31,11 @@ const SportScore = ({
     type,
 }: {
     sportScore: string
-    type?: 'stars' | 'rating'
+    type?: 'smallItems' | 'trailImage'
 }) => (
     <View
         accessibilityLabel={sportScore}
-        style={[
-            styles.background,
-            type === 'stars' && styles.stars,
-            type === 'rating' && styles.rating,
-        ]}
+        style={[styles.background, type && styles[type]]}
     >
         <Text style={styles.text}>{sportScore}</Text>
     </View>
