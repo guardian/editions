@@ -2,7 +2,6 @@ import { IBlockElement, ElementType } from '@guardian/capi-ts'
 import { BlockElement } from '../common'
 import { getImage } from './assets'
 import { renderAtomElement } from './atoms'
-import { cleanupHtml } from '../utils/html'
 import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 
 export const elementParser = (
