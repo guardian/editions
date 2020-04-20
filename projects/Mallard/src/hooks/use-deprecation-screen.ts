@@ -18,7 +18,9 @@ const useDeprecationModal = (): {
                         ? buildNumbers.ios
                         : buildNumbers.android
                 const buildNumber = DeviceInfo.getBuildNumber()
+                console.warn('Build:' + DeviceInfo.getBuildNumber())
                 if (
+                    !__DEV__ &&
                     buildNumber &&
                     buildNumber <= platformDeprecationBuildNumber
                 ) {
