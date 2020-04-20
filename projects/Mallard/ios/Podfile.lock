@@ -266,11 +266,11 @@ PODS:
     - Sentry (~> 4.4.0)
   - RNSVG (9.13.6):
     - React
-  - RNZipArchive (5.0.0):
+  - RNZipArchive (5.0.1):
     - React
-    - RNZipArchive/Core (= 5.0.0)
+    - RNZipArchive/Core (= 5.0.1)
     - SSZipArchive (= 2.2.2)
-  - RNZipArchive/Core (5.0.0):
+  - RNZipArchive/Core (5.0.1):
     - React
     - SSZipArchive (= 2.2.2)
   - Sentry (4.4.0):
