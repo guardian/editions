@@ -3,7 +3,7 @@ name: ios-beta
 on:
     push:
         branches:
-            - update-pod
+            - master
     schedule:
         # * is a special character in YAML so you have to quote this string
         - cron: '0 14 * * 1-5' # every day at 2pm
