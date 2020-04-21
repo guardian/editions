@@ -4,10 +4,26 @@ import { getImage } from './assets'
 import { renderAtomElement } from './atoms'
 import { IAtom } from '@guardian/capi-ts/dist/com/gu/contentatom/thrift/Atom'
 
-export const elementParser = (
-    id: string,
-    atoms: { [key: string]: IAtom[] },
-) => async (element: IBlockElement): Promise<BlockElement> => {
+const parseImageElement = (
+    element: IBlockElement,
+): BlockElement | undefined => {
+    const image = getImage(element.assets)
+    if (element.imageTypeData && image) {
+        return {
+            id: 'image',
+            src: image,
+            alt: element.imageTypeData.alt,
+            caption: element.imageTypeData.caption,
+            copyright: element.imageTypeData.copyright,
+            credit: element.imageTypeData.credit,
+            role: element.imageTypeData.role,
+        }
+    }
+}
+
+const elementParser = (id: string, atoms: { [key: string]: IAtom[] }) => async (
+    element: IBlockElement,
+): Promise<BlockElement> => {
     switch (element.type) {
         case ElementType.TEXT:
             if (element.textTypeData && element.textTypeData.html) {
@@ -20,20 +36,13 @@ export const elementParser = (
             break
 
         case ElementType.IMAGE:
-            const image = getImage(element.assets)
-            if (element.imageTypeData && image) {
-                return {
-                    id: 'image',
-                    src: image,
-                    alt: element.imageTypeData.alt,
-                    caption: element.imageTypeData.caption,
-                    copyright: element.imageTypeData.copyright,
-                    credit: element.imageTypeData.credit,
-                    role: element.imageTypeData.role,
-                }
+            const parsedImageElement = parseImageElement(element)
+            if (parsedImageElement) {
+                return parsedImageElement
             }
             console.warn(`Image element missing element data.`)
             break
+
         case ElementType.TWEET:
             if (
                 element.tweetTypeData &&
@@ -65,3 +74,5 @@ export const elementParser = (
     console.warn(`Failed to render element ${JSON.stringify(element)}`)
     return { id: 'unknown' }
 }
+
+export { parseImageElement, elementParser }
