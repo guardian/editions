@@ -98,7 +98,8 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
-def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+//For legacy reason we are adding current build number (13412887) from Play Store
+def appVersionCode = 13412887 + buildNumber() 
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -137,8 +138,8 @@ android {
         applicationId "com.guardian.editions"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode vcode
-        versionName "1.0." + buildNumber()
+        versionCode appVersionCode
+        versionName appVersionName()
     }
     splits {
         abi {
@@ -199,6 +200,24 @@ android {
 
 def buildNumber() {
     return System.getenv("BUILD_NUMBER")?.toInteger() ?: 1
+}
+
+def appVersionName() {
+    def majorVersion = 2 // On updating this number make sure to update seedNumber in minAppVersion()
+    return majorVersion + "." + minorAppVersion() + "." + buildNumber()
+}
+
+def minorAppVersion() {
+    // Update the minor version after every 2nd build.
+    // Update seedNumber if major number changes that will be equal to the 
+    // TeamCity build number (currently it is 7)
+    // The app version will increment like this:
+    // 2.0.7 
+    // 2.0.8
+    // 2.1.9
+    def seedNumber = 7
+    int diff = (buildNumber() - seedNumber) / 2
+    return Math.max(0, diff)
 }
 
 dependencies {
