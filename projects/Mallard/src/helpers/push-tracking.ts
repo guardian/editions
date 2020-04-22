@@ -1,9 +1,33 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { londonTime } from 'src/helpers/date'
 import { lastNDays } from 'src/helpers/issues'
-import { errorService } from 'src/services/errors'
 
 const PUSH_TRACKING_KEY = '@push-tracking'
+
+type PushTrackingId =
+    | 'notification'
+    | 'pushScreenSize'
+    | 'pushIssueSummaries'
+    | 'pushImageSummary'
+    | 'pushDownloadComplete'
+    | 'pushDownloadError'
+    | 'notificationToken'
+    | 'notificationTokenError'
+    | 'tempFileRemoveError'
+    | 'noAssets'
+    | 'attemptDataDownload'
+    | 'attemptMediaDownload'
+    | 'unzipData'
+    | 'unzipImages'
+    | 'unzipError'
+    | 'downloadAndUnzip'
+    | 'downloadAndUnzipError'
+    | 'downloadBlocked'
+    | 'completeAndDeleteCache'
+    | 'clearOldIssues'
+    | 'backgroundFetch'
+    | 'backgroundFetchStatus'
+    | 'backgroundFetchError'
 
 interface Tracking {
     time: string
@@ -14,10 +38,33 @@ interface Tracking {
 const getPushTracking = async (): Promise<string | null> =>
     AsyncStorage.getItem(PUSH_TRACKING_KEY)
 
+// Only get the start and end of the push notification process
+const getDiagnosticPushTracking = async () => {
+    try {
+        const pushTrackingString = await AsyncStorage.getItem(PUSH_TRACKING_KEY)
+        if (!pushTrackingString) {
+            return null
+        }
+
+        const pushTracking = JSON.parse(pushTrackingString)
+        // return [{ james: 'woohoo' }]
+        return pushTracking.find(
+            (o: Tracking) =>
+                o.id === 'notification' || o.id === 'pushDownloadComplete',
+        )
+    } catch (e) {
+        // Unessential so just log errors to console
+        console.log('getDiagnosticPushTracking Error:', e)
+    }
+}
+
 const clearPushTracking = async (): Promise<void> =>
     AsyncStorage.removeItem(PUSH_TRACKING_KEY)
 
-const pushTracking = async (id: string, value: string): Promise<void> => {
+const pushTracking = async (
+    id: PushTrackingId,
+    value: string,
+): Promise<void> => {
     try {
         if (__DEV__) {
             console.log(`Push Tracking: ${id} | ${value}`)
@@ -39,7 +86,8 @@ const pushTracking = async (id: string, value: string): Promise<void> => {
             JSON.stringify(saveTracking),
         )
     } catch (e) {
-        errorService.captureException(e)
+        // Unessential so just log errors to console
+        console.log('Push Tracking Error:', e)
     }
 }
 
@@ -72,4 +120,5 @@ export {
     getPushTracking,
     clearPushTracking,
     cleanPushTrackingByDays,
+    getDiagnosticPushTracking,
 }

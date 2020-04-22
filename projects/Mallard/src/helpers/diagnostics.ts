@@ -1,30 +1,31 @@
-import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
+import ApolloClient from 'apollo-client'
+import gql from 'graphql-tag'
+import { Linking, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import RNFetchBlob from 'rn-fetch-blob'
+import { canViewEdition } from 'src/authentication/helpers'
+import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
+import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
 import { NetInfo } from 'src/hooks/use-net-info'
+import { FSPaths } from 'src/paths'
+import { runActionSheet } from './action-sheet'
+import { getFileList } from './files'
+import { locale } from './locale'
+import { getDiagnosticPushTracking } from './push-tracking'
 import { isInBeta } from './release-stream'
-import { Platform, Linking } from 'react-native'
+import { imageForScreenSize } from './screen'
 import {
-    IOS_BETA_EMAIL,
+    casCredentialsKeychain,
+    iapReceiptCache,
+    legacyCASUsernameCache,
+    userDataCache,
+} from './storage'
+import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
     DIAGNOSTICS_TITLE,
+    IOS_BETA_EMAIL,
 } from './words'
-import { runActionSheet } from './action-sheet'
-import {
-    legacyCASUsernameCache,
-    casCredentialsKeychain,
-    userDataCache,
-    iapReceiptCache,
-} from './storage'
-import RNFetchBlob from 'rn-fetch-blob'
-import { FSPaths } from 'src/paths'
-import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
-import { canViewEdition } from 'src/authentication/helpers'
-import { getFileList } from './files'
-import gql from 'graphql-tag'
-import ApolloClient from 'apollo-client'
-import { locale } from './locale'
-import { imageForScreenSize } from './screen'
 
 const getCASCode = () =>
     Promise.all([
@@ -85,6 +86,7 @@ const getDiagnosticInfo = async (
         freeDiskStorage,
         fileList,
         imageSize,
+        pushTracking,
     ] = await Promise.all([
         DeviceInfo.getFirstInstallTime(),
         DeviceInfo.getLastUpdateTime(),
@@ -92,6 +94,7 @@ const getDiagnosticInfo = async (
         DeviceInfo.getFreeDiskStorage(),
         getFileList(),
         imageForScreenSize(),
+        getDiagnosticPushTracking(),
     ])
 
     return `
@@ -126,6 +129,9 @@ Digital Pack subscription: ${idData && canViewEdition(idData)}
 Apple IAP Transaction Details: ${receiptData &&
         `\n${JSON.stringify(receiptData, null, 2)}`}
 Subscriber ID: ${casCode}
+
+-Push Downloads-
+${pushTracking && JSON.stringify(pushTracking, null, 2)}
 `
 }
 
