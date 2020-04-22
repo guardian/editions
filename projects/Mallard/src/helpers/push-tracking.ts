@@ -47,13 +47,12 @@ const getDiagnosticPushTracking = async () => {
         }
 
         const pushTracking = JSON.parse(pushTrackingString)
-        // return [{ james: 'woohoo' }]
         return pushTracking.find(
             (o: Tracking) =>
                 o.id === 'notification' || o.id === 'pushDownloadComplete',
         )
     } catch (e) {
-        // Unessential so just log errors to console
+        // Not essential so just log errors to console
         console.log('getDiagnosticPushTracking Error:', e)
     }
 }
@@ -86,7 +85,7 @@ const pushTracking = async (
             JSON.stringify(saveTracking),
         )
     } catch (e) {
-        // Unessential so just log errors to console
+        // Not essential so just log errors to console
         console.log('Push Tracking Error:', e)
     }
 }
