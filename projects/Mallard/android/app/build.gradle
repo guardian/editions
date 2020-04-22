@@ -98,7 +98,8 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
-def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+//For legacy reason we are adding current build number (13412887) from Play Store
+def appVersionCode = 13412887 + buildNumber() 
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -137,7 +138,7 @@ android {
         applicationId "com.guardian.editions"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode vcode
+        versionCode appVersionCode
         versionName appVersionName()
     }
     splits {
