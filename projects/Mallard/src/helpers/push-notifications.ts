@@ -93,10 +93,8 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     ? notification.data.uniqueIdentifier
                     : notification.uniqueIdentifier
 
-            // Do tracking as soon as possible
-            notificationTracking(notificationId, 'received')
-
             await pushTracking('notification', JSON.stringify(notification))
+            notificationTracking(notificationId, 'received')
 
             if (key) {
                 try {
@@ -129,7 +127,6 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     )
 
                     await pushTracking('pushDownloadComplete', 'completed')
-
                     notificationTracking(notificationId, 'downloaded')
                 } catch (e) {
                     await pushTracking('pushDownloadError', JSON.stringify(e))
