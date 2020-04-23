@@ -67,6 +67,8 @@ const pushNotificationRegistrationCache = createAsyncCache<
 
 const cacheClearCache = createAsyncCache<string>('cacheClear')
 
+const validAttemptDateCache = createAsyncCache<Date>('validAttemptDate-cache')
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -126,4 +128,5 @@ export {
     legacyCASPasswordCache,
     iapReceiptCache,
     cacheClearCache,
+    validAttemptCache,
 }

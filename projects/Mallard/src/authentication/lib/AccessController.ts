@@ -19,6 +19,8 @@ type AuthName<I extends {}> = {
     [K in keyof I]: I[K] extends Authorizer<infer S, any, any, any> ? S : never
 }[keyof I]
 
+const ONE_MONTH = 30 * 1000 * 60 * 60 * 24
+
 class AccessController<I extends AuthMap, S extends AuthName<I>> {
     private attempt: AnyAttempt<S> = NotRun
     private fetchingConnectivities: Set<Connectivity> = new Set()
@@ -54,6 +56,10 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
+    private isPreviousAuthValid(cachedDate?: Date) {
+        return cachedDate && Date.now() - cachedDate.getTime() > ONE_MONTH
+    }
+
     public handleConnectionStatusChanged(
         isConnected: boolean,
         isPoorConnection = false,
@@ -86,7 +92,12 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         try {
             this.fetchingConnectivities.add(connectivity)
             for (const authorizer of this.authorizers) {
-                if (authorizer.isAuth(connectivity)) continue
+                const lastValidAttemptDate = await authorizer.validAttemptCache.get()
+                if (
+                    authorizer.isAuth(connectivity) ||
+                    this.isPreviousAuthValid(lastValidAttemptDate || undefined)
+                )
+                    continue
                 await authorizer.runAuthWithCachedCredentials(connectivity)
                 if (isValid(this.attempt)) return
             }

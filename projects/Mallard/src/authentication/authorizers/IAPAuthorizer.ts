@@ -1,4 +1,4 @@
-import { iapReceiptCache } from '../../helpers/storage'
+import { iapReceiptCache, validAttemptDateCache } from '../../helpers/storage'
 import { Authorizer } from '../lib/Authorizer'
 import {
     fetchActiveIOSSubscriptionReceipt,
@@ -11,6 +11,7 @@ export default new Authorizer({
     userDataCache: iapReceiptCache,
     authCaches: [],
     auth: tryRestoreActiveIOSSubscriptionReceipt,
+    validAttemptCache: validAttemptDateCache,
     authWithCachedCredentials: fetchActiveIOSSubscriptionReceipt,
     /**
      * If we're offline we can't decode the receipt on the device

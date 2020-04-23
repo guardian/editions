@@ -3,6 +3,7 @@ import {
     casDataCache,
     legacyCASUsernameCache,
     legacyCASPasswordCache,
+    validAttemptDateCache,
 } from 'src/helpers/storage'
 import { Authorizer } from '../lib/Authorizer'
 import { flat, ValidResult, ErrorResult } from '../lib/Result'
@@ -16,6 +17,7 @@ export default new Authorizer({
         legacyCASUsernameCache,
         legacyCASPasswordCache,
     ] as const,
+    validAttemptCache: validAttemptDateCache,
     auth: async ([subscriberId, password]: [string, string], [creds]) => {
         const casResult = await fetchCASSubscription(subscriberId, password)
         return flat(casResult, async expiry => {
