@@ -625,6 +625,7 @@ const getStandFirst = (
                     ${headerProps.headline}
                 </h1>
                 ${articleHeaderType === HeaderType.RegularByline &&
+                    headerProps.standfirst &&
                     `<p>
                         ${headerProps.standfirst}
                       </p>`}
