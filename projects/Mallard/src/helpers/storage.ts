@@ -128,5 +128,5 @@ export {
     legacyCASPasswordCache,
     iapReceiptCache,
     cacheClearCache,
-    validAttemptCache,
+    validAttemptDateCache,
 }
