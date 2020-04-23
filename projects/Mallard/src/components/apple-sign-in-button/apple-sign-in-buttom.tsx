@@ -1,65 +1,55 @@
 import React from 'react'
 import {
+    AppleAuthenticationCredential,
     AppleAuthenticationButton,
     AppleAuthenticationButtonStyle,
     AppleAuthenticationButtonType,
     AppleAuthenticationScope,
-    AppleAuthenticationFullName,
     signInAsync,
 } from 'expo-apple-authentication'
 
 const buttonStyles = { width: 200, height: 44 }
 
-async function asyncAppleGuardianAuth(
-    authorizationCode: string | null,
-    idToken: string | null,
-    name: AppleAuthenticationFullName | null,
-) {
-    if (!authorizationCode || !idToken || !name)
-        return console.error('error message')
-
-    const url = 'https://id.guardianapis.com/auth'
-
-    const body = JSON.stringify({
-        authorizationCode: authorizationCode,
-        idToken: idToken,
-        givenName: name.givenName,
-        familyName: name.familyName,
-    })
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'X-GU-ID-Client-Access-Token':
-                'Bearer 39a23f018d10eb643c09c8bed717debb',
-            'Content-Type': 'application/json',
-        },
-        body,
-    }
-
-    const response = await fetch(url, options)
-
-    return response.json()
+interface GuardianCredentials {
+    authorizationCode: string | null
+    idToken: string | null
+    givenName: string | null
+    familyName: string | null
 }
 
-function AppleSignInButton() {
+function mapCredentials(
+    appleCredentials: AppleAuthenticationCredential,
+): GuardianCredentials {
+    const { identityToken, authorizationCode, fullName } = appleCredentials
+    const givenName = fullName ? fullName.givenName : null
+    const familyName = fullName ? fullName.familyName : null
+
+    return {
+        authorizationCode,
+        givenName: givenName,
+        familyName: familyName,
+        idToken: identityToken,
+    }
+}
+
+interface AppleSignInButtonProps {
+    onClick: (credentials: GuardianCredentials) => void
+}
+
+function AppleSignInButton(props: AppleSignInButtonProps) {
+    const { onClick } = props
+
     async function asyncHandleOnPress() {
         try {
-            const credential = await signInAsync({
+            const appleCredentials = await signInAsync({
                 requestedScopes: [
                     AppleAuthenticationScope.FULL_NAME,
                     AppleAuthenticationScope.EMAIL,
                 ],
             })
 
-            console.log('debug apple handshake', credential)
-            const guardianHandshake = await asyncAppleGuardianAuth(
-                credential.authorizationCode,
-                credential.identityToken,
-                credential.fullName,
-            )
-
-            console.log('debug guardian handshake', guardianHandshake)
+            const guardianCredentials = mapCredentials(appleCredentials)
+            onClick(guardianCredentials)
         } catch (e) {
             if (e.code === 'ERR_CANCLED') {
                 // handle that the user canceled the sign-in flow

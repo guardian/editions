@@ -153,6 +153,20 @@ const AuthSwitcherScreen = ({
                     { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
             }
+            onApplePress={(credentials: any) =>
+                handleAuthClick(
+                    () => {
+                        return {
+                            ...credentials,
+                            'apple-access-token': credentials.idToken,
+                        }
+                    },
+                    {
+                        requiresFunctionalConsent: true,
+                        signInName: 'Apple',
+                    },
+                )
+            }
             onSubmit={() =>
                 handleAuthClick(
                     async () => ({

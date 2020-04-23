@@ -82,6 +82,7 @@ const Login = ({
     title,
     email,
     password,
+    onApplePress,
     onFacebookPress,
     onGooglePress,
     onSubmit,
@@ -95,6 +96,7 @@ const Login = ({
 }: {
     title: string
     onFacebookPress: () => void
+    onApplePress: (credentials: any) => void
     onGooglePress: () => void
     email: FormField
     password: FormField
@@ -137,7 +139,11 @@ const Login = ({
                         >
                             Continue with Google
                         </SocialButton>
-                        <AppleSignInButton />
+                        <AppleSignInButton
+                            onClick={(credentials: any) =>
+                                onApplePress(credentials)
+                            }
+                        />
                     </View>
                     <TitlepieceText style={loginStyles.or}>or</TitlepieceText>
                 </>

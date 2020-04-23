@@ -28,6 +28,11 @@ const fetchAuth = async <T>(
         },
         body: qs.stringify(params),
     })
+
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
+    console.log('AUTH PARAMS', params, authUrl, token)
+    console.log('AUTH CALL', res)
+
     return fromResponse(res, {
         valid: data => data.accessToken.accessToken,
         invalid: getErrorString,
