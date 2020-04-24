@@ -1,5 +1,5 @@
 import { unzip } from 'react-native-zip-archive'
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob, { RNFetchBlobStat } from 'rn-fetch-blob'
 import { Issue } from 'src/common'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
@@ -480,6 +480,7 @@ const cleanFileDisplay = (stat: {
 })
 
 export const getFileList = async () => {
+    const imageFolders: RNFetchBlobStat[] = []
     const files = await RNFetchBlob.fs.lstat(
         FSPaths.issuesDir + '/daily-edition',
     )
@@ -488,12 +489,37 @@ export const getFileList = async () => {
         files.map(file =>
             file.type === 'directory'
                 ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
-                      [file.filename]: filestat.map(deepfile =>
-                          cleanFileDisplay(deepfile),
-                      ),
+                      [file.filename]: filestat.map(deepfile => {
+                          if (
+                              deepfile.filename === 'media' ||
+                              deepfile.filename === 'thumbs'
+                          ) {
+                              imageFolders.push(deepfile)
+                          }
+                          return cleanFileDisplay(deepfile)
+                      }),
                   }))
                 : {},
         ),
+    )
+
+    const imageSize = await imageForScreenSize()
+
+    // Grab one images from each image folder to confirm successful unzip
+    const imageFolderSearch = await Promise.all(
+        imageFolders.map(async (file: RNFetchBlobStat) => {
+            return await RNFetchBlob.fs
+                .lstat(
+                    file.filename === 'media'
+                        ? `${file.path}/${imageSize}/media`
+                        : `${file.path}/${imageSize}/thumb/media`,
+                )
+                .then(filestat =>
+                    filestat
+                        .map(deepfile => cleanFileDisplay(deepfile))
+                        .slice(0, 1),
+                )
+        }),
     )
 
     const cleanSubfolders = subfolders.filter(
@@ -510,5 +536,5 @@ export const getFileList = async () => {
         },
     ]
 
-    return [...cleanSubfolders, ...cleanIssuesFile]
+    return [...cleanSubfolders, ...cleanIssuesFile, ...imageFolderSearch]
 }
