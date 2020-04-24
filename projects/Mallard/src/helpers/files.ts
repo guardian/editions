@@ -132,9 +132,11 @@ export const downloadNamedIssueArchive = async (
 export const unzipNamedIssueArchive = (zipFilePath: string) => {
     const outputPath = FSPaths.issuesDir
 
-    return unzip(zipFilePath, outputPath).then(() => {
-        return RNFetchBlob.fs.unlink(zipFilePath)
-    })
+    return unzip(zipFilePath, outputPath)
+        .then(() => {
+            return RNFetchBlob.fs.unlink(zipFilePath)
+        })
+        .catch(e => errorService.captureException(e))
 }
 
 /**
@@ -335,6 +337,9 @@ export const downloadAndUnzipIssue = async (
         await pushTracking(
             'downloadBlocked',
             DownloadBlockedStatus[downloadBlocked],
+        )
+        errorService.captureException(
+            new Error('Download Blocked: Required signal not available'),
         )
         return
     }
