@@ -70,16 +70,14 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         isPoorConnection = false,
     ) {
         const hasConnection = isConnected && !isPoorConnection
-        if (!this.isPreviousAuthValid()) {
-            if (!this.hasAuthRun) {
-                if (hasConnection) {
-                    return this.runCachedAuth('online')
-                } else {
-                    return this.runCachedAuth('offline')
-                }
-            } else if (!this.isAuthOnline && hasConnection) {
+        if (!this.hasAuthRun) {
+            if (hasConnection) {
                 return this.runCachedAuth('online')
+            } else {
+                return this.runCachedAuth('offline')
             }
+        } else if (!this.isAuthOnline && hasConnection) {
+            return this.runCachedAuth('online')
         }
     }
 
@@ -120,10 +118,6 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         // when we get a valid attempt we want to store this (only for new valid attempts)
         if (isValid(attempt) && !this.isPreviousAuthValid()) {
             validAttemptCache.set(attempt)
-            console.log(
-                'setting validAttempt to cache in reconcile attempts',
-                attempt,
-            )
         }
         this.updateAttempt(attempt)
     }
