@@ -3,6 +3,7 @@ import {
     Connectivity,
     isValid,
     ValidAttempt,
+    TValidAttempt,
     InvalidAttempt,
     AnyAttempt,
     ResolvedAttempt,
@@ -34,7 +35,7 @@ class Authorizer<
     readonly name: S
     private userDataCache: AsyncCache<T>
     private authCaches: C
-    readonly validAttemptCache: AsyncCache<Date>
+    readonly validAttemptCache: AsyncCache<TValidAttempt<string>>
     /**
      * the main method for authing against a backend, takes the raw credentials
      * that would be input by the user and returns either an object representing
@@ -65,7 +66,7 @@ class Authorizer<
         auth: (args: A, caches: C) => Promise<AuthResult<T>>
         authWithCachedCredentials: (authCaches: C) => Promise<AuthResult<T>>
         checkUserHasAccess: (data: T, connectivity: Connectivity) => boolean
-        validAttemptCache: AsyncCache<Date>
+        validAttemptCache: AsyncCache<TValidAttempt<string>>
     }) {
         this.name = name
         this.userDataCache = userDataCache
@@ -86,7 +87,7 @@ class Authorizer<
 
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
                 valid: data => {
-                    this.validAttemptCache.set(new Date())
+                    // could we instead set an attempt here?
                     return ValidAttempt(data, connectivity)
                 },
                 invalid: reason => {

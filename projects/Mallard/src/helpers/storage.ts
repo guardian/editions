@@ -9,7 +9,7 @@ import { CasExpiry } from 'src/services/content-auth-service'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
-
+import { TValidAttempt } from '../authentication/lib/Attempt'
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
@@ -67,7 +67,9 @@ const pushNotificationRegistrationCache = createAsyncCache<
 
 const cacheClearCache = createAsyncCache<string>('cacheClear')
 
-const validAttemptDateCache = createAsyncCache<Date>('validAttemptDate-cache')
+const validAttemptCache = createAsyncCache<TValidAttempt<string>>(
+    'validAttempt-cache',
+)
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
@@ -128,5 +130,5 @@ export {
     legacyCASPasswordCache,
     iapReceiptCache,
     cacheClearCache,
-    validAttemptDateCache,
+    validAttemptCache,
 }

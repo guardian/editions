@@ -79,7 +79,7 @@ const AccessProvider = ({
     children: React.ReactNode
     onIdentityStatusChange?: (idAttempt: AnyAttempt<IdentityAuthData>) => void
 }) => {
-    const [attempt, setAttempt] = useState<AnyAttempt<AttemptType>>(
+    const [attempt, setAttempt] = useState<AnyAttempt<string>>(
         controller.getAttempt(),
     )
     const [idAuth, setIdAuth] = useState<AnyAttempt<IdentityAuthData>>(
@@ -127,7 +127,10 @@ const AccessProvider = ({
     const value = useMemo(
         () => ({
             attempt,
-            canAccess: (!!attempt && isValid(attempt)) || isNotRun(attempt),
+            canAccess:
+                (!!attempt && isValid(attempt)) ||
+                isNotRun(attempt) ||
+                controller.isPreviousAuthValid(),
             identityData: isValid(idAuth) ? idAuth.data : null,
             casData: isValid(casAuth) ? casAuth.data : null,
             iapData: isValid(iapAuth) ? iapAuth.data : null,

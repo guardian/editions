@@ -8,6 +8,7 @@ import {
     Connectivity,
     hasRun,
 } from './Attempt'
+import { validAttemptCache } from 'src/helpers/storage'
 
 type UpdateHandler<S> = (attempt: AnyAttempt<S>) => void
 
@@ -56,8 +57,12 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
-    private isPreviousAuthValid(cachedDate?: Date) {
-        return cachedDate && Date.now() - cachedDate.getTime() > ONE_MONTH
+    public async isPreviousAuthValid() {
+        const cachedValidAttempt = await validAttemptCache.get()
+        return (
+            cachedValidAttempt &&
+            Date.now() - cachedValidAttempt.time < ONE_MONTH
+        )
     }
 
     public handleConnectionStatusChanged(
@@ -65,14 +70,16 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         isPoorConnection = false,
     ) {
         const hasConnection = isConnected && !isPoorConnection
-        if (!this.hasAuthRun) {
-            if (hasConnection) {
+        if (!this.isPreviousAuthValid()) {
+            if (!this.hasAuthRun) {
+                if (hasConnection) {
+                    return this.runCachedAuth('online')
+                } else {
+                    return this.runCachedAuth('offline')
+                }
+            } else if (!this.isAuthOnline && hasConnection) {
                 return this.runCachedAuth('online')
-            } else {
-                return this.runCachedAuth('offline')
             }
-        } else if (!this.isAuthOnline && hasConnection) {
-            return this.runCachedAuth('online')
         }
     }
 
@@ -92,12 +99,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         try {
             this.fetchingConnectivities.add(connectivity)
             for (const authorizer of this.authorizers) {
-                const lastValidAttemptDate = await authorizer.validAttemptCache.get()
-                if (
-                    authorizer.isAuth(connectivity) ||
-                    this.isPreviousAuthValid(lastValidAttemptDate || undefined)
-                )
-                    continue
+                if (authorizer.isAuth(connectivity)) continue
                 await authorizer.runAuthWithCachedCredentials(connectivity)
                 if (isValid(this.attempt)) return
             }
@@ -114,6 +116,14 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
             if (isValid(attempt)) {
                 break
             }
+        }
+        // when we get a valid attempt we want to store this (only for new valid attempts)
+        if (isValid(attempt) && !this.isPreviousAuthValid()) {
+            validAttemptCache.set(attempt)
+            console.log(
+                'setting validAttempt to cache in reconcile attempts',
+                attempt,
+            )
         }
         this.updateAttempt(attempt)
     }
