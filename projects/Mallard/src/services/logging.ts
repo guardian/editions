@@ -1,56 +1,61 @@
 // Logging Service that sends event logs to ELK
 import DeviceInfo from 'react-native-device-info'
+import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
+import { Platform } from 'react-native'
+import { isInBeta } from 'src/helpers/release-stream'
 
-type Level = 'info' | 'error'
+type Level = 'WARN' | 'INFO' | 'ERROR' | 'DEBUG'
 
 interface Log {
-    stack: 'editions'
     app: string
-    stage: 'CODE' | 'PROD'
-    '@timestamp': Date
-    '@version': string
+    timestamp: Date
+    version: string
     buildNumber: string
     level: Level
-    level_value: number
     message: object
+    release_channel: 'BETA' | 'RELEASE'
+    os: 'android' | 'ios'
+    device: string
+    network_status: NetInfoStateType
 }
 
 // TASK 1
-// Additional fields we may want
+// Additional fields we may want but need to check with Privacy team
 /*
     - Device Id
     - User Id
+    - Edition type they are looking at (one for later)
     - Subscription type
     - Subscription Status
-    - Edition type they are looking at (one for later)
-    - Release Channel
-    - OS
-    - Device
-    - Network availability at time of log
  */
 
-const baseLog = ({
+const baseLog = async ({
     level,
-    level_value,
     message,
     ...optionalFields
 }: {
     level: Level
-    level_value: number
     message: object
     optionalFields?: object
-}): Log => ({
-    stack: 'editions',
-    app: DeviceInfo.getBundleId(),
-    stage: __DEV__ ? 'CODE' : 'PROD',
-    '@version': DeviceInfo.getVersion(),
-    buildNumber: DeviceInfo.getBuildNumber(),
-    '@timestamp': new Date(),
-    level,
-    level_value,
-    message,
-    ...optionalFields,
-})
+}): Promise<Log> => {
+    const network_status = await NetInfo.fetch()
+    return {
+        app: DeviceInfo.getBundleId(),
+        version: DeviceInfo.getVersion(),
+        buildNumber: DeviceInfo.getBuildNumber(),
+        os: Platform.OS === 'ios' ? 'ios' : 'android',
+        device: DeviceInfo.getDeviceId(),
+        network_status: network_status.type,
+        release_channel: isInBeta() ? 'BETA' : 'RELEASE',
+        timestamp: new Date(),
+        level,
+        message,
+        ...optionalFields,
+    }
+}
+
+// TASK 1.5
+// Consent management?
 
 // TASK 2
 // Post to an external service the log
@@ -63,6 +68,18 @@ Offline considerations:
  - What to do when they come back online
  - Cleanup when successful logging queue has been processed
  - How do we manage different status codes coming back from logging service (and online)
+
+ Async storage cache helpers/storage
+ -- offline
+ -- get from async cache
+ -- append to end
+ -- set in async cache
+ -- loop while offline
+ -- online? send logs
+ -- success? reset cache
+
+ -- look to keep last 100 logs?
+
 */
 //
 

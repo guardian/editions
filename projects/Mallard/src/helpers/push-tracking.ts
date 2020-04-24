@@ -81,14 +81,12 @@ const pushTracking = async (
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
 
-        console.log(
-            baseLog({
-                level: 'info',
-                level_value: 2,
-                message: { value },
-                optionalFields: { id },
-            }),
-        )
+        baseLog({
+            level: 'info',
+            level_value: 2,
+            message: { value },
+            optionalFields: { id },
+        })
 
         return await AsyncStorage.setItem(
             PUSH_TRACKING_KEY,
