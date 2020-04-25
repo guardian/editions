@@ -59,10 +59,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
 
     private async isPreviousAuthValid() {
         const cachedValidAttempt = await validAttemptCache.get()
-        return (
-            cachedValidAttempt &&
-            Date.now() - cachedValidAttempt.time < ONE_MONTH
-        )
+        return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
     }
 
     public async handleConnectionStatusChanged(
@@ -122,7 +119,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         // when we get a valid attempt we want to store this (only for new valid attempts)
         const isCacheAttemptValid = await this.isPreviousAuthValid()
         if (isValid(attempt) && !isCacheAttemptValid) {
-            validAttemptCache.set(attempt)
+            validAttemptCache.set(attempt.time)
         }
         this.updateAttempt(attempt)
     }

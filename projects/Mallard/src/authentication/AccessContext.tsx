@@ -79,7 +79,7 @@ const AccessProvider = ({
     children: React.ReactNode
     onIdentityStatusChange?: (idAttempt: AnyAttempt<IdentityAuthData>) => void
 }) => {
-    const [attempt, setAttempt] = useState<AnyAttempt<string>>(
+    const [attempt, setAttempt] = useState<AnyAttempt<AttemptType>>(
         controller.getAttempt(),
     )
     const [idAuth, setIdAuth] = useState<AnyAttempt<IdentityAuthData>>(

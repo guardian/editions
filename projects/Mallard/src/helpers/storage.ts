@@ -9,7 +9,6 @@ import { CasExpiry } from 'src/services/content-auth-service'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 import { PushNotificationRegistration } from 'src/helpers/push-notifications'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
-import { TValidAttempt } from '../authentication/lib/Attempt'
 /**
  * this is ostensibly used to get the legacy data from the old GCE app
  * `Settings` only works on iOS but we only ever had a legacy app on iOS
@@ -48,7 +47,7 @@ const legacyCASPasswordCache = createSettingsCacheIOS<string>(
  * A wrapper around AsyncStorage, with json handling and standardizing the interface
  * between AsyncStorage and the keychain helper below
  */
-const createAsyncCache = <T extends object | string>(key: string) => ({
+const createAsyncCache = <T extends object | string | number>(key: string) => ({
     set: (value: T) => AsyncStorage.setItem(key, JSON.stringify(value)),
     get: (): Promise<T | null> =>
         AsyncStorage.getItem(key).then(value => value && JSON.parse(value)),
@@ -67,9 +66,7 @@ const pushNotificationRegistrationCache = createAsyncCache<
 
 const cacheClearCache = createAsyncCache<string>('cacheClear')
 
-const validAttemptCache = createAsyncCache<TValidAttempt<string>>(
-    'validAttempt-cache',
-)
+const validAttemptCache = createAsyncCache<number>('validAttempt-cache')
 
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
