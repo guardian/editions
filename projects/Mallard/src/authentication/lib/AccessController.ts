@@ -57,7 +57,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
-    public async isPreviousAuthValid() {
+    private async isPreviousAuthValid() {
         const cachedValidAttempt = await validAttemptCache.get()
         return (
             cachedValidAttempt &&
@@ -65,11 +65,15 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         )
     }
 
-    public handleConnectionStatusChanged(
+    public async handleConnectionStatusChanged(
         isConnected: boolean,
         isPoorConnection = false,
     ) {
         const hasConnection = isConnected && !isPoorConnection
+        const isPreviousAuthValid = await this.isPreviousAuthValid()
+        if (isPreviousAuthValid) {
+            return this.runCachedAuth('offline')
+        }
         if (!this.hasAuthRun) {
             if (hasConnection) {
                 return this.runCachedAuth('online')
@@ -116,7 +120,8 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
             }
         }
         // when we get a valid attempt we want to store this (only for new valid attempts)
-        if (isValid(attempt) && !this.isPreviousAuthValid()) {
+        const isCacheAttemptValid = await this.isPreviousAuthValid()
+        if (isValid(attempt) && !isCacheAttemptValid) {
             validAttemptCache.set(attempt)
         }
         this.updateAttempt(attempt)
