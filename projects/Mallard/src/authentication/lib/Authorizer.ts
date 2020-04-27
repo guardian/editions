@@ -85,9 +85,7 @@ class Authorizer<
             const result = await promise
 
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
-                valid: data => {
-                    return ValidAttempt(data, connectivity)
-                },
+                valid: data => ValidAttempt(data, connectivity),
                 invalid: reason => {
                     this.clearCaches()
                     return InvalidAttempt(connectivity, reason)

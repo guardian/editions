@@ -15,7 +15,6 @@ import {
     userAccessTokenKeychain,
     membershipAccessTokenKeychain,
     legacyUserAccessTokenKeychain,
-    validAttemptCache,
 } from 'src/helpers/storage'
 import { canViewEdition } from '../helpers'
 
@@ -73,7 +72,6 @@ export default new Authorizer({
         membershipAccessTokenKeychain,
         legacyUserAccessTokenKeychain,
     ] as const,
-    validAttemptCache: validAttemptCache,
     auth: async ([params]: [AuthParams], [utc, mtc]) => {
         const username = getUserNameFromParams(params)
         const utokenResult = await fetchAuth<string>(params)
