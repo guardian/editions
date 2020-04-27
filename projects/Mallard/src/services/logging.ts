@@ -3,8 +3,27 @@ import DeviceInfo from 'react-native-device-info'
 import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
 import { Platform } from 'react-native'
 import { isInBeta } from 'src/helpers/release-stream'
+import { User } from '@sentry/react-native'
+import { CASExpiry } from 'src/authentication/services/cas'
+import {
+    userDataCache,
+    casCredentialsKeychain,
+    legacyCASUsernameCache,
+    iapReceiptCache,
+} from 'src/helpers/storage'
 
-type Level = 'WARN' | 'INFO' | 'ERROR' | 'DEBUG'
+enum Level {
+    INFO = 'INFO',
+    WARN = 'WARN',
+    ERROR = 'ERROR',
+    DEBUG = 'DEBUG',
+}
+
+/* Do we add this to help us filter in ELK? */
+// enum Feature {
+//     DOWNLOAD = 'DOWNLOAD',
+//     PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
+// }
 
 interface Log {
     app: string
@@ -17,7 +36,21 @@ interface Log {
     os: 'android' | 'ios'
     device: string
     network_status: NetInfoStateType
+    // feature: Feature
+    // May need to consent for the below
+    deviceId: string
+    signedIn: boolean
+    userId: User['id'] | null
+    digitalSub: boolean
+    casCode: CASExpiry['subscriptionCode'] | null
+    iAP: boolean
 }
+
+const getCASCode = () =>
+    Promise.all([
+        casCredentialsKeychain.get(),
+        legacyCASUsernameCache.get(),
+    ]).then(([current, legacy]) => (current && current.username) || legacy)
 
 // TASK 1
 // Additional fields we may want but need to check with Privacy team
@@ -39,6 +72,21 @@ const baseLog = async ({
     optionalFields?: object
 }): Promise<Log> => {
     const network_status = await NetInfo.fetch()
+
+    // User Data and Subscription
+    const userData = await userDataCache.get()
+    const userId =
+        (userData && userData.userDetails && userData.userDetails.id) || ''
+    const digitalSub =
+        (userData &&
+            userData.membershipData &&
+            userData.membershipData.contentAccess &&
+            userData.membershipData.contentAccess.digitalPack) ||
+        false
+    const casCode = await getCASCode()
+    const iapReceipt = await iapReceiptCache.get()
+    const iAP = iapReceipt ? true : false
+
     return {
         app: DeviceInfo.getBundleId(),
         version: DeviceInfo.getVersion(),
@@ -50,12 +98,15 @@ const baseLog = async ({
         timestamp: new Date(),
         level,
         message,
+        deviceId: DeviceInfo.getUniqueId(),
+        signedIn: true, // WILL COME BACK TO THIS
+        userId,
+        digitalSub,
+        casCode,
+        iAP,
         ...optionalFields,
     }
 }
-
-// TASK 1.5
-// Consent management?
 
 // TASK 2
 // Post to an external service the log
@@ -83,4 +134,4 @@ Offline considerations:
 */
 //
 
-export { baseLog }
+export { baseLog, Level }
