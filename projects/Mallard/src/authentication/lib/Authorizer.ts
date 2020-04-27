@@ -12,6 +12,7 @@ import {
     hasRun,
     ErrorAttempt,
 } from './Attempt'
+import { validAttemptCache } from 'src/helpers/storage'
 import { cataResult, AuthResult, ValidResult, InvalidResult } from './Result'
 
 type UpdateHandler<T> = (data: AnyAttempt<T>) => void
@@ -34,7 +35,6 @@ class Authorizer<
     readonly name: S
     private userDataCache: AsyncCache<T>
     private authCaches: C
-    readonly validAttemptCache: AsyncCache<number>
     /**
      * the main method for authing against a backend, takes the raw credentials
      * that would be input by the user and returns either an object representing
@@ -57,7 +57,6 @@ class Authorizer<
         auth,
         authWithCachedCredentials,
         checkUserHasAccess,
-        validAttemptCache,
     }: {
         name: S
         userDataCache: AsyncCache<T>
@@ -65,7 +64,6 @@ class Authorizer<
         auth: (args: A, caches: C) => Promise<AuthResult<T>>
         authWithCachedCredentials: (authCaches: C) => Promise<AuthResult<T>>
         checkUserHasAccess: (data: T, connectivity: Connectivity) => boolean
-        validAttemptCache: AsyncCache<number>
     }) {
         this.name = name
         this.userDataCache = userDataCache
@@ -73,7 +71,6 @@ class Authorizer<
         this.auth = auth
         this.authWithCachedCredentials = authWithCachedCredentials
         this.checkUserHasAccess = checkUserHasAccess
-        this.validAttemptCache = validAttemptCache
     }
 
     private async handleAuthPromise(
@@ -158,7 +155,7 @@ class Authorizer<
             this.authCaches
                 .map(cache => cache.reset())
                 .concat(this.userDataCache.reset())
-                .concat(this.validAttemptCache.reset()),
+                .concat(validAttemptCache.reset()),
         ).then(() => {})
     }
 
