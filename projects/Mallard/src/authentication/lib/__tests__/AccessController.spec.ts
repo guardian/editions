@@ -2,7 +2,6 @@ import { Authorizer, AsyncCache } from '../Authorizer'
 import { AccessController } from '../AccessController'
 import { AnyAttempt } from '../Attempt'
 import { AuthResult, ValidResult, InvalidResult } from '../Result'
-import { validAttemptCache } from 'src/helpers/storage'
 
 class AsyncStorage<T> {
     constructor(private data: T | null = null) {}
