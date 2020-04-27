@@ -57,8 +57,10 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
-    // to avoid re-authorising the user more than needed we will used a cached
-    // auth result if there has been a valid attempt made within the last month
+    /**
+     * to avoid re-authorising the user more than needed we will use a cached
+     * auth result if a valid attempt has been made within the last month
+     */
     private async isPreviousAuthValid() {
         const cachedValidAttempt = await validAttemptCache.get()
         return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
