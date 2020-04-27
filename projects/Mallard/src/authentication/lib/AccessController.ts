@@ -8,7 +8,6 @@ import {
     Connectivity,
     hasRun,
 } from './Attempt'
-import { validAttemptCache } from 'src/helpers/storage'
 
 type UpdateHandler<S> = (attempt: AnyAttempt<S>) => void
 
@@ -23,14 +22,19 @@ type AuthName<I extends {}> = {
 const ONE_MONTH = 30 * 1000 * 60 * 60 * 24
 
 class AccessController<I extends AuthMap, S extends AuthName<I>> {
+    private validAttemptCache: AsyncCache<number>
     private attempt: AnyAttempt<S> = NotRun
     private fetchingConnectivities: Set<Connectivity> = new Set()
     private subscribers: UpdateHandler<S>[] = []
 
-    constructor(readonly authorizerMap: I) {
+    constructor(
+        readonly authorizerMap: I,
+        validAttemptCache: AsyncCache<number>,
+    ) {
         this.authorizers.forEach(auth =>
             auth.subscribe(this.reconcileAttempts.bind(this)),
         )
+        this.validAttemptCache = validAttemptCache
     }
 
     public subscribe(fn: UpdateHandler<S>) {
@@ -62,7 +66,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
      * auth result if a valid attempt has been made within the last month
      */
     private async isPreviousAuthValid() {
-        const cachedValidAttempt = await validAttemptCache.get()
+        const cachedValidAttempt = await this.validAttemptCache.get()
         return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
     }
 
@@ -123,7 +127,7 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         // when we get a valid attempt we want to store this (only for new valid attempts)
         const isPreviousAuthValid = await this.isPreviousAuthValid()
         if (isValid(attempt) && !isPreviousAuthValid) {
-            validAttemptCache.set(attempt.time)
+            this.validAttemptCache.set(attempt.time)
         }
         this.updateAttempt(attempt)
     }
