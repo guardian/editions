@@ -1,6 +1,6 @@
 import { Authorizer, AsyncCache } from '../Authorizer'
 import { AccessController } from '../AccessController'
-import { AnyAttempt, TValidAttempt, isValid } from '../Attempt'
+import { AnyAttempt } from '../Attempt'
 import { AuthResult, ValidResult, InvalidResult } from '../Result'
 
 class AsyncStorage<T> {
