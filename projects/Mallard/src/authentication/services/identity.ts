@@ -20,6 +20,8 @@ const fetchAuth = async <T>(
     authUrl: string = ID_API_URL,
     token: string = ID_ACCESS_TOKEN,
 ): Promise<AuthResult<T>> => {
+    console.log("FETCH_AUTH", params, authUrl, token)
+
     const res = await fetch(`${authUrl}/auth`, {
         method: 'POST',
         headers: {
@@ -29,9 +31,9 @@ const fetchAuth = async <T>(
         body: qs.stringify(params),
     })
 
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
-    console.log('AUTH PARAMS', params, authUrl, token)
-    console.log('AUTH CALL', res)
+    // console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
+    // console.log('AUTH PARAMS', params, authUrl, token)
+    // console.log('AUTH CALL', res)
 
     return fromResponse(res, {
         valid: data => data.accessToken.accessToken,

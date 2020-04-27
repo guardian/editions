@@ -141,7 +141,7 @@ const Login = ({
                         </SocialButton>
                         <AppleSignInButton
                             onClick={(credentials: any) =>
-                                onApplePress(credentials)
+                                onApplePress({...credentials, 'apple-access-token': 'string'})
                             }
                         />
                     </View>

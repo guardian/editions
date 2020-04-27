@@ -11,7 +11,7 @@ import isEmail from 'validator/lib/isEmail'
 import { useFormField } from 'src/hooks/use-form-field'
 import { withConsent } from 'src/helpers/settings'
 import { Alert } from 'react-native'
-import { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer'
+import { AuthParams, AppleCreds } from 'src/authentication/authorizers/IdentityAuthorizer'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
 
@@ -64,9 +64,15 @@ const AuthSwitcherScreen = ({
                 allow: async () => {
                     setIsLoading(true)
                     try {
-                        const { attempt, accessAttempt } = await authIdentity(
-                            await runGetIdentityAuthParams(),
-                        )
+                        console.log("BEFORE")
+                        
+                        const params = await runGetIdentityAuthParams()
+                        console.log("PARAMS", params)
+
+                        const { attempt, accessAttempt } = await authIdentity(params)
+
+                        console.log('PARTY TIME')
+
                         if (isValid(attempt)) {
                             setIsLoading(false)
                             if (!isValid(accessAttempt)) {
@@ -102,6 +108,7 @@ const AuthSwitcherScreen = ({
                         }
                     } catch (e) {
                         setIsLoading(false)
+                        console.log('FAIL', e)
                         setError(
                             typeof e === 'string' ? e : 'Something went wrong',
                         )
@@ -113,9 +120,14 @@ const AuthSwitcherScreen = ({
                         `You have disabled ${signInName ||
                             'social'} sign-in. You can enable it in Settings > Privacy Settings > Functional`,
                     )
+                
                 },
             },
         )
+    }
+
+    function appleClick(credentials: AppleCreds) {
+        return new Promise(credentials)
     }
 
     return (
@@ -153,18 +165,12 @@ const AuthSwitcherScreen = ({
                     { requiresFunctionalConsent: true, signInName: 'Google' },
                 )
             }
-            onApplePress={(credentials: any) =>
+            onApplePress={(credentials: any) => {
                 handleAuthClick(
-                    () => {
-                        const payload = {
-                            'apple-access-token': credentials.idToken,
-                        }
-
-                        return new Promise(payload)
-                    },
-                    { requiresFunctionalConsent: true },
+                    appleClick(credentials)
+                    { requiresFunctionalConsent: true, signInName: 'Apple' },
                 )
-            }
+            }}
             onSubmit={() =>
                 handleAuthClick(
                     async () => ({

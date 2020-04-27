@@ -31,7 +31,15 @@ type GoogleCreds = {
     'google-access-token': string
 }
 
-export type AuthParams = BasicCreds | FacebookCreds | GoogleCreds
+export type AppleCreds = {
+    'apple-access-token': string
+    authorizationCode: string
+    idToken: string
+    givenName: string
+    familyName: string
+}
+
+export type AuthParams = BasicCreds | FacebookCreds | GoogleCreds | AppleCreds
 
 export type IdentityAuthData = {
     userDetails: User
