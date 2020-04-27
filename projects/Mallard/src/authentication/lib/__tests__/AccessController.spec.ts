@@ -1,6 +1,6 @@
 import { Authorizer, AsyncCache } from '../Authorizer'
 import { AccessController } from '../AccessController'
-import { AnyAttempt } from '../Attempt'
+import { AnyAttempt, TValidAttempt, isValid } from '../Attempt'
 import { AuthResult, ValidResult, InvalidResult } from '../Result'
 
 class AsyncStorage<T> {
@@ -34,18 +34,20 @@ const createSimpleAccessController = ({
     invalidFromLiveCredentials = false,
     invalidFromCachedCredentials = false,
     grantAccessFromUserData = true,
+    existingValidAttempt = false,
 } = {}) => {
     let attempt: AnyAttempt<string> | null = null
 
     const handler = (_attempt: AnyAttempt<string>) => {
         attempt = _attempt
     }
-
     const cache = new AsyncStorage<UserData>(
         existingOfflineCache ? { id: '123' } : undefined,
     )
 
-    const validAttemptCache = new AsyncStorage<number>(123)
+    const validAttemptCache = new AsyncStorage<number>(
+        existingValidAttempt ? Date.now() : undefined,
+    )
 
     const controller = new AccessController(
         {
@@ -72,6 +74,7 @@ const createSimpleAccessController = ({
     return {
         cache,
         controller,
+        validAttemptCache,
         attempt: {
             // this allows us to read an attempt as seen by a subscriber
             get current() {
@@ -198,6 +201,20 @@ describe('AccessController', () => {
                 type: 'invalid-attempt',
             })
         })
+
+        it('returns valid offline attempt when previous auth is valid', async () => {
+            const { controller, attempt } = createSimpleAccessController({
+                existingOfflineCache: true,
+                grantAccessFromUserData: true,
+                existingValidAttempt: true,
+            })
+            await controller.handleConnectionStatusChanged(true)
+
+            expect(attempt.current).toMatchObject({
+                connectivity: 'offline',
+                type: 'valid-attempt',
+            })
+        })
     })
 
     describe('authorizerMap', () => {
@@ -319,6 +336,7 @@ describe('AccessController', () => {
 
             await expect(cacheA.get()).resolves.toBe('a')
             await expect(cacheB.get()).resolves.toBe(1)
+            await expect(validAttemptCache.get()).toBeDefined()
         })
 
         it('is not purged after Invalid auth requests', async () => {
@@ -347,6 +365,22 @@ describe('AccessController', () => {
 
             await expect(cacheA.get()).resolves.toBe(null)
             await expect(cacheB.get()).resolves.toBe(null)
+        })
+    })
+
+    describe('validAttemptCache', () => {
+        it('is populated with the attempt date after valid auths', async () => {
+            const {
+                controller,
+                validAttemptCache,
+            } = createSimpleAccessController({
+                grantAccessFromUserData: true,
+            })
+            await expect(validAttemptCache.get()).resolves.toBe(null)
+
+            await controller.authorizerMap.a.runAuth()
+
+            await expect(validAttemptCache.get()).resolves.toBeDefined()
         })
     })
 })
