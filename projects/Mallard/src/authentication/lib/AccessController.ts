@@ -57,6 +57,8 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return hasRun(this.attempt) && isOnline(this.attempt)
     }
 
+    // to avoid re-authorising the user more than needed we will used a cached
+    // auth result if there has been a valid attempt made within the last month
     private async isPreviousAuthValid() {
         const cachedValidAttempt = await validAttemptCache.get()
         return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
@@ -117,8 +119,8 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
             }
         }
         // when we get a valid attempt we want to store this (only for new valid attempts)
-        const isCacheAttemptValid = await this.isPreviousAuthValid()
-        if (isValid(attempt) && !isCacheAttemptValid) {
+        const isPreviousAuthValid = await this.isPreviousAuthValid()
+        if (isValid(attempt) && !isPreviousAuthValid) {
             validAttemptCache.set(attempt.time)
         }
         this.updateAttempt(attempt)

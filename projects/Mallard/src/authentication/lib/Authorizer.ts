@@ -3,7 +3,6 @@ import {
     Connectivity,
     isValid,
     ValidAttempt,
-    TValidAttempt,
     InvalidAttempt,
     AnyAttempt,
     ResolvedAttempt,
@@ -87,7 +86,6 @@ class Authorizer<
 
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
                 valid: data => {
-                    // could we instead set an attempt here?
                     return ValidAttempt(data, connectivity)
                 },
                 invalid: reason => {
