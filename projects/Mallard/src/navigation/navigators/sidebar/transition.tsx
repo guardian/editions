@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native'
+import { NavigationTransitionProps } from 'react-navigation'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { safeInterpolation } from 'src/helpers/math'
 import { sidebarWidth } from './positions'
@@ -12,7 +13,10 @@ export const mainLayerTransition = () => {
     }
 }
 
-export const sidebarLayerTransition = (position: any, sceneIndex: number) => {
+export const sidebarLayerTransition = (
+    position: NavigationTransitionProps['position'],
+    sceneIndex: number,
+) => {
     const { width } = Dimensions.get('window')
     const isTablet = width >= Breakpoints.tabletVertical
 
@@ -29,7 +33,7 @@ export const sidebarLayerTransition = (position: any, sceneIndex: number) => {
     }
 }
 
-const screenInterpolator = (sceneProps: any) => {
+const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { scene } = sceneProps
     if (scene.route.routeName === '_') {
         return mainLayerTransition()

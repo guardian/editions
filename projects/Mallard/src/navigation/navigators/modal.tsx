@@ -2,11 +2,9 @@ import {
     NavigationContainer,
     AnimatedValue,
     NavigationInjectedProps,
-} from 'react-navigation'
-import {
     createStackNavigator,
     StackViewTransitionConfigs,
-} from 'react-navigation-stack'
+} from 'react-navigation'
 
 import React from 'react'
 

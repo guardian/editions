@@ -1,4 +1,5 @@
 import { Animated, Dimensions, LayoutRectangle, ScaledSize } from 'react-native'
+import { NavigationTransitionProps } from 'react-navigation'
 import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { routeNames } from 'src/navigation/routes'
 import { metrics } from 'src/theme/spacing'
@@ -8,7 +9,7 @@ const getScaleForArticle = (width: LayoutRectangle['width']) => {
     return width / Dimensions.get('window').width
 }
 
-const issueScreenInterpolator = (sceneProps: any) => {
+const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
     const { height: windowHeight } = Dimensions.get('window')
@@ -148,7 +149,7 @@ const articleScreenMotion = ({
     }
 }
 
-const screenInterpolator = (sceneProps: any) => {
+const screenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const { scene } = sceneProps
     if (scene.route.routeName === routeNames.Issue) {
         return issueScreenInterpolator(sceneProps)

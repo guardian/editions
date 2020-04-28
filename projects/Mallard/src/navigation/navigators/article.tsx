@@ -1,7 +1,12 @@
 import React, { FunctionComponent } from 'react'
 import { Animated, Easing, StyleSheet } from 'react-native'
-import { NavigationContainer, NavigationInjectedProps } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack'
+import {
+    createStackNavigator,
+    NavigationContainer,
+    NavigationInjectedProps,
+    NavigationRouteConfig,
+    NavigationTransitionProps,
+} from 'react-navigation'
 import { ClipFromTop } from 'src/components/layout/animators/clipFromTop'
 import {
     supportsTransparentCards,
@@ -183,7 +188,10 @@ const wrapInSlideCard: NavigatorWrapper = (navigator, getPosition) => {
     )
 }
 
-const createArticleNavigator = (front: any, article: any) => {
+const createArticleNavigator = (
+    front: NavigationRouteConfig,
+    article: NavigationRouteConfig,
+) => {
     let animatedValue = new Animated.Value(0)
 
     const navigation: { [key: string]: NavigationContainer } = {
@@ -197,7 +205,7 @@ const createArticleNavigator = (front: any, article: any) => {
                 : wrapInSlideCard(article, () => animatedValue),
     }
 
-    const transitionConfig = (transitionProps: any) => {
+    const transitionConfig = (transitionProps: NavigationTransitionProps) => {
         animatedValue = transitionProps.position
         return {
             containerStyle: {
