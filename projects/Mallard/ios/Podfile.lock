@@ -249,7 +249,7 @@ PODS:
     - React
   - RNDeviceInfo (5.3.1):
     - React
-  - RNGestureHandler (1.5.3):
+  - RNGestureHandler (1.6.1):
     - React
   - RNIap (3.3.9):
     - React
@@ -258,6 +258,8 @@ PODS:
   - RNKeychain (3.1.3):
     - React
   - RNPermissions (2.0.3):
+    - React
+  - RNReanimated (1.8.0):
     - React
   - RNScreens (2.0.0-alpha.34):
     - React
@@ -273,9 +275,9 @@ PODS:
   - RNZipArchive/Core (5.0.1):
     - React
     - SSZipArchive (= 2.2.2)
-  - Sentry (4.4.0):
-    - Sentry/Core (= 4.4.0)
-  - Sentry/Core (4.4.0)
+  - Sentry (4.4.3):
+    - Sentry/Core (= 4.4.3)
+  - Sentry/Core (4.4.3)
   - SSZipArchive (2.2.2)
   - Yoga (1.14.0)
 
@@ -328,6 +330,7 @@ DEPENDENCIES:
   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -335,7 +338,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/cocoapods/specs.git:
     - boost-for-react-native
     - Sentry
     - SSZipArchive
@@ -431,6 +434,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keychain"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSentry:
@@ -484,19 +489,20 @@ SPEC CHECKSUMS:
   RNCMaskedView: b79e193409a90bf6b5170d421684f437ff4e2278
   RNCPushNotificationIOS: 0b8d06ff190d84627dd17501bfb96652375970e4
   RNDeviceInfo: 6f20764111df002b4484f90cbe0a861be29bcc6c
-  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
+  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNIap: 89befcc43b4077663968b1e3d0c1e3fbd0a1eaca
   RNInAppBrowser: 0800f17fd7ed9fc503eb68e427befebb41ee719b
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNPermissions: 9e437a90de84a5402ff689d4da233730b81556c2
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: 9d8a2900cd4f967af70dbfed74b64f77fbb6600a
   RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
-  RNZipArchive: be636657a6630e9771d4a3223dc8fd0bd0137b55
-  Sentry: 26650184fe71eb7476dfd2737acb5ea6cc64b4b1
+  RNZipArchive: 87111bb6130a38edd68c8d2059d46ac94d53ffe4
+  Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 6f3fb3cc2db96d753c4cb301f1618796162d6d7c
 
-COCOAPODS: 1.9.0
+COCOAPODS: 1.7.5

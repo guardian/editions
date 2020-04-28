@@ -1,12 +1,13 @@
 import { useEffect } from 'react'
 import {
     createAppContainer,
-    createStackNavigator,
     createSwitchNavigator,
     NavigationScreenProp,
-    StackViewTransitionConfigs,
-    NavigationTransitionProps,
 } from 'react-navigation'
+import {
+    createStackNavigator,
+    StackViewTransitionConfigs,
+} from 'react-navigation-stack'
 import { AuthSwitcherScreen } from 'src/screens/identity-login-screen'
 import { OnboardingConsentScreen } from 'src/screens/onboarding-screen'
 import { AlreadySubscribedScreen } from 'src/screens/settings/already-subscribed-screen'
@@ -61,8 +62,8 @@ const IOS_MODAL_ROUTES = [
 ]
 
 const dynamicModalTransition = (
-    transitionProps: NavigationTransitionProps,
-    prevTransitionProps: NavigationTransitionProps,
+    transitionProps: any,
+    prevTransitionProps: any,
 ) => {
     const isModal = IOS_MODAL_ROUTES.some(
         screenName =>

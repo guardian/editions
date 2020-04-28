@@ -7,13 +7,8 @@ import {
     View,
     Platform,
 } from 'react-native'
-import {
-    createStackNavigator,
-    NavigationContainer,
-    NavigationInjectedProps,
-    NavigationRouteConfig,
-    NavigationTransitionProps,
-} from 'react-navigation'
+import { NavigationContainer, NavigationInjectedProps } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 const createNativeStackNavigator = require('react-native-screens/createNativeStackNavigator')
     .default
 import { ariaHidden } from 'src/helpers/a11y'
@@ -125,9 +120,9 @@ const addViewsForSidebarLayer: NavigatorWrapper = (navigator, getPosition) => {
 }
 
 export const createSidebarNavigator = (
-    mainRoute: NavigationRouteConfig,
+    mainRoute: any,
     sidebarRoute: {
-        [name: string]: NavigationRouteConfig
+        [name: string]: any
     },
 ) => {
     let animatedValue = new Animated.Value(0)
@@ -159,7 +154,7 @@ export const createSidebarNavigator = (
         })
     }
 
-    const transitionConfig = (transitionProps: NavigationTransitionProps) => {
+    const transitionConfig = (transitionProps: any) => {
         animatedValue = transitionProps.position
         return {
             containerStyle: {

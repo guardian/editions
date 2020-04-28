@@ -1,10 +1,9 @@
 import {
     NavigationContainer,
     NavigationInjectedProps,
-    createStackNavigator,
     NavigationParams,
 } from 'react-navigation'
-
+import { createStackNavigator } from 'react-navigation-stack'
 import React from 'react'
 import { Header } from 'src/components/layout/header/header'
 import { Button } from 'src/components/button/button'
