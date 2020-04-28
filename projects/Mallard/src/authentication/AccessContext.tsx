@@ -24,6 +24,7 @@ import { CASExpiry } from './services/cas'
 import { ReceiptIOS } from './services/iap'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { validAttemptCache } from 'src/helpers/storage'
 
 type AttemptType = 'iap' | 'cas' | 'identity'
 
@@ -60,11 +61,14 @@ const AccessContext = createContext({
     signOutCAS: () => {},
 })
 
-const controller = new AccessController({
-    identity,
-    cas,
-    iap,
-})
+const controller = new AccessController(
+    {
+        identity,
+        cas,
+        iap,
+    },
+    validAttemptCache,
+)
 
 const authCAS = cas.runAuth.bind(cas)
 const authIAP = iap.runAuth.bind(iap)

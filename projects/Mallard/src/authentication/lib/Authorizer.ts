@@ -12,6 +12,7 @@ import {
     hasRun,
     ErrorAttempt,
 } from './Attempt'
+import { validAttemptCache } from 'src/helpers/storage'
 import { cataResult, AuthResult, ValidResult, InvalidResult } from './Result'
 
 type UpdateHandler<T> = (data: AnyAttempt<T>) => void
@@ -153,7 +154,8 @@ class Authorizer<
         return Promise.all(
             this.authCaches
                 .map(cache => cache.reset())
-                .concat(this.userDataCache.reset()),
+                .concat(this.userDataCache.reset())
+                .concat(validAttemptCache.reset()),
         ).then(() => {})
     }
 
