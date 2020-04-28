@@ -33,29 +33,29 @@
 		AFD31518245851F500496DFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AFD31517245851F500496DFE /* GoogleService-Info.plist */; };
 		BB77E8F846CDE9D32C493592 /* libPods-MallardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2885A2F6E37B4C44D653BBC3 /* libPods-MallardTests.a */; };
 		C51056C322D60C1700ED3078 /* crosswords.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C51056C222D60C1700ED3078 /* crosswords.bundle */; };
-		C549378022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378322B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378722B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378822B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378922B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378A22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378B22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378C22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378D22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378E22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549378F22B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379022B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379122B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379222B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549378022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378322B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378722B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378822B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378922B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378A22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378B22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378C22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378D22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378E22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549378F22B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379022B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379122B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379222B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AD4DE12520484BA6D0363B /* SpaceMono-Regular.ttf */; };
-		C549379422B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379522B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		C549379622B149BB00B1D9A2 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		C549379422B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379522B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		C549379622B149BB00B1D9A2 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49561E0DB7FA414FA55A9C83 /* GHGuardianHeadline-Black.ttf */; };
 		C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DB496EF7E68447CA16BCCA0 /* GHGuardianHeadline-BlackItalic.ttf */; };
 		C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9D849C88374564AA777EF3 /* GHGuardianHeadline-Bold.ttf */; };
@@ -429,6 +429,7 @@
 				8BA3F98B2BC24E3096C77568 /* Upload Debug Symbols to Sentry */,
 				95B08635238D6EEA00828D1E /* Embed Frameworks */,
 				3A021B4FF87E0B903AEE9BB8 /* [CP-User] [RNFB] Core Configuration */,
+				A2EA4A0E62E193829FADF594 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -555,30 +556,30 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C549378022B149BB00B1D9A2 /* (null) in Resources */,
-				C549378122B149BB00B1D9A2 /* (null) in Resources */,
-				C549378222B149BB00B1D9A2 /* (null) in Resources */,
-				C549378322B149BB00B1D9A2 /* (null) in Resources */,
-				C549378422B149BB00B1D9A2 /* (null) in Resources */,
-				C549378522B149BB00B1D9A2 /* (null) in Resources */,
-				C549378622B149BB00B1D9A2 /* (null) in Resources */,
-				C549378722B149BB00B1D9A2 /* (null) in Resources */,
-				C549378822B149BB00B1D9A2 /* (null) in Resources */,
-				C549378922B149BB00B1D9A2 /* (null) in Resources */,
-				C549378A22B149BB00B1D9A2 /* (null) in Resources */,
+				C549378022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378222B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378322B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378622B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378722B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378822B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378922B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378A22B149BB00B1D9A2 /* BuildFile in Resources */,
 				AFD31518245851F500496DFE /* GoogleService-Info.plist in Resources */,
-				C549378B22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378C22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378D22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378E22B149BB00B1D9A2 /* (null) in Resources */,
-				C549378F22B149BB00B1D9A2 /* (null) in Resources */,
-				C549379022B149BB00B1D9A2 /* (null) in Resources */,
-				C549379122B149BB00B1D9A2 /* (null) in Resources */,
-				C549379222B149BB00B1D9A2 /* (null) in Resources */,
+				C549378B22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378C22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378D22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378E22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549378F22B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379022B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379122B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379222B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379322B149BB00B1D9A2 /* SpaceMono-Regular.ttf in Resources */,
-				C549379422B149BB00B1D9A2 /* (null) in Resources */,
-				C549379522B149BB00B1D9A2 /* (null) in Resources */,
-				C549379622B149BB00B1D9A2 /* (null) in Resources */,
+				C549379422B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379522B149BB00B1D9A2 /* BuildFile in Resources */,
+				C549379622B149BB00B1D9A2 /* BuildFile in Resources */,
 				C549379722B149BB00B1D9A2 /* GHGuardianHeadline-Black.ttf in Resources */,
 				C549379822B149BB00B1D9A2 /* GHGuardianHeadline-BlackItalic.ttf in Resources */,
 				C549379922B149BB00B1D9A2 /* GHGuardianHeadline-Bold.ttf in Resources */,
@@ -742,6 +743,16 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$SRCROOT/../../Apps/ophan/gradlew\" -p \"$SRCROOT/../../Apps/ophan\" copyFatFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\" \\\n-Pkotlin.valid.archs=\"$VALID_ARCHS\"\n";
+		};
+		A2EA4A0E62E193829FADF594 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec Fabric Run from Pods\"\n  \"${PODS_ROOT}/Fabric/run\"\nelse\n  echo \"info: Exec Fabric Run from framework\"\n  \"${PROJECT_DIR}/Fabric.framework/run\"\nfi\n";
 		};
 		B8712F2A6735954686D599F6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
