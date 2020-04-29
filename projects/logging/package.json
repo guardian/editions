@@ -1,0 +1,43 @@
+{
+    "name": "editions-logging",
+    "version": "0.0.1",
+    "main": "index.js",
+    "license": "MIT",
+    "engines": {
+        "node": "^10.15"
+    },
+    "devDependencies": {
+        "@types/aws-serverless-express": "^3.3.1",
+        "@types/express": "^4.17.0",
+        "@zeit/ncc": "^0.20.4",
+        "chai": "^4.1.2",
+        "chai-http": "^4.0.0",
+        "dotenv": "^8.0.0",
+        "ts-jest": "^24.0.2",
+        "ts-node": "^8.3.0",
+        "ts-node-dev": "^1.0.0-pre.40",
+        "typescript": "^3.5.3"
+    },
+    "scripts": {
+        "build": "ncc build index.ts -o dist -m -e aws-sdk",
+        "start": "ts-node-dev --ignore-watch node_modules index.ts",
+        "validate": "cd ../.. && script/make validate-logging",
+        "fix": "cd ../.. && script/make fix-logging",
+        "test": "jest --coverage",
+        "test:watch": "jest --watch"
+    },
+    "dependencies": {
+        "@creditkarma/thrift-server-core": "^0.14.1",
+        "@types/aws-lambda": "^8.10.31",
+        "@types/jest": "^24.0.17",
+        "aws-sdk": "2.507.0",
+        "aws-serverless-express": "^3.3.6",
+        "encoding": "^0.1.12",
+        "express": "^4.17.1",
+        "jest": "^24.8.0"
+
+    },
+    "resolutions": {
+        "handlebars": "4.6.0"
+    }
+}

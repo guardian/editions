@@ -8,7 +8,7 @@
         "compile": "tsc",
         "watch": "tsc -w",
         "cdk": "cdk",
-        "synth": "cdk synth > cloudformation.yaml",
+        "synth": "cdk synth > cloudformation.yaml && cdk synth --app 'bin/logging.js' > logging-cloudformation.yaml",
         "clean": "rm -v bin/*.js bin/*.d.ts lib/*.js lib/*.d.ts",
         "build": "run-s -ln compile synth clean",
         "test": "echo 'no tests are defined for project aws'"

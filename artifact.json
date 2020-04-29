@@ -16,6 +16,11 @@
             "action": "cloudformation",
             "path": "projects/aws/cloudformation.yaml",
             "compress": false
-        }
+        },
+        {
+            "action": "logging",
+            "path": "projects/logging/dist",
+            "compress": "zip"
+        },
     ]
 }
