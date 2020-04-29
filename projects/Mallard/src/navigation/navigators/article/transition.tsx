@@ -1,4 +1,10 @@
-import { Animated, Dimensions, LayoutRectangle, ScaledSize } from 'react-native'
+import {
+    Animated,
+    Dimensions,
+    LayoutRectangle,
+    ScaledSize,
+    Platform,
+} from 'react-native'
 import { NavigationTransitionProps } from 'react-navigation'
 import { minOpacity, minScale, radius } from 'src/navigation/helpers/transition'
 import { routeNames } from 'src/navigation/routes'
@@ -10,6 +16,9 @@ const getScaleForArticle = (width: LayoutRectangle['width']) => {
 }
 
 const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
+    // FIXME - iOS13 hack for dodgy background scale issue
+    const majorVersionIOS =
+        Platform.OS === 'ios' ? parseInt(Platform.Version as string, 10) : 0
     const { position, scene } = sceneProps
     const sceneIndex = scene.index
     const { height: windowHeight } = Dimensions.get('window')
@@ -23,7 +32,11 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
             sceneIndex + 0.1,
             sceneIndex + 1,
         ]),
-        outputRange: safeInterpolation([1, 1, minScale]),
+        outputRange: safeInterpolation([
+            1,
+            1,
+            majorVersionIOS === 13 ? 1 : minScale,
+        ]),
     })
     const borderRadius = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 1]),
@@ -33,7 +46,10 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     const opacity = position.interpolate({
         inputRange: safeInterpolation([sceneIndex, sceneIndex + 0.1]),
         extrapolate: 'clamp',
-        outputRange: safeInterpolation([1, minOpacity]),
+        outputRange: safeInterpolation([
+            1,
+            majorVersionIOS === 13 ? 0.5 : minOpacity,
+        ]),
     })
 
     /*
@@ -52,12 +68,7 @@ const issueScreenInterpolator = (sceneProps: NavigationTransitionProps) => {
     })
 
     return {
-        transform: [
-            { translateY },
-            {
-                scale,
-            },
-        ],
+        transform: [{ translateY }, { scale }],
         opacity,
         borderRadius,
         overflow: 'hidden',
