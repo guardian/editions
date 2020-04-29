@@ -4,9 +4,10 @@ import lambda = require('@aws-cdk/aws-lambda')
 import { Code } from '@aws-cdk/aws-lambda'
 import s3 = require('@aws-cdk/aws-s3')
 import iam = require('@aws-cdk/aws-iam')
-import { Duration, Tag } from '@aws-cdk/core'
+import { CfnOutput, Duration, Tag } from '@aws-cdk/core'
 import { Effect } from '@aws-cdk/aws-iam'
 import { EndpointType } from '@aws-cdk/aws-apigateway'
+import acm = require('@aws-cdk/aws-certificatemanager')
 
 export class LoggingStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -22,25 +23,25 @@ export class LoggingStack extends cdk.Stack {
             description: 'Stage',
         })
 
-        // const loggingCertificateArn = new cdk.CfnParameter(
-        //     this,
-        //     'logging-certificate-arn',
-        //     {
-        //         type: 'String',
-        //         description: 'ARN of ACM certificate for logging endpoint',
-        //     },
-        // )
+        const loggingCertificateArn = new cdk.CfnParameter(
+            this,
+            'logging-certificate-arn',
+            {
+                type: 'String',
+                description: 'ARN of ACM certificate for logging endpoint',
+            },
+        )
 
-        // const loggingHostName = new cdk.CfnParameter(this, 'logging-hostname', {
-        //     type: 'String',
-        //     description: 'Hostname for logging endpoint',
-        // })
+        const loggingHostName = new cdk.CfnParameter(this, 'logging-hostname', {
+            type: 'String',
+            description: 'Hostname for logging endpoint',
+        })
 
-        // const loggingCertificate = acm.Certificate.fromCertificateArn(
-        //     this,
-        //     'logging-certificate',
-        //     loggingCertificateArn.valueAsString,
-        // )
+        const loggingCertificate = acm.Certificate.fromCertificateArn(
+            this,
+            'logging-certificate',
+            loggingCertificateArn.valueAsString,
+        )
 
         const deployBucket = s3.Bucket.fromBucketName(
             this,
@@ -79,29 +80,33 @@ export class LoggingStack extends cdk.Stack {
         })
         loggingApiPolicyStatement.addAnyPrincipal()
 
-        new apigateway.LambdaRestApi(this, 'editions-logging', {
-            handler: loggingBackend,
-            endpointTypes: [EndpointType.EDGE],
-            policy: new iam.PolicyDocument({
-                statements: [loggingApiPolicyStatement],
-            }),
+        const loggingApi = new apigateway.LambdaRestApi(
+            this,
+            'editions-logging',
+            {
+                handler: loggingBackend,
+                endpointTypes: [EndpointType.EDGE],
+                policy: new iam.PolicyDocument({
+                    statements: [loggingApiPolicyStatement],
+                }),
+            },
+        )
+
+        const loggingDomainName = new apigateway.DomainName(
+            this,
+            'logging-domain-name',
+            {
+                domainName: loggingHostName.valueAsString,
+                certificate: loggingCertificate,
+                endpointType: apigateway.EndpointType.EDGE,
+            },
+        )
+
+        loggingDomainName.addBasePathMapping(loggingApi)
+
+        new CfnOutput(this, 'Logging-Api-Target-Hostname', {
+            description: 'hostname',
+            value: `${loggingDomainName.domainNameAliasDomainName}`,
         })
-
-        // const loggingDomainName = new apigateway.DomainName(
-        //     this,
-        //     'logging-domain-name',
-        //     {
-        //         domainName: loggingHostName.valueAsString,
-        //         certificate: loggingCertificate,
-        //         endpointType: apigateway.EndpointType.REGIONAL,
-        //     },
-        // )
-
-        // loggingDomainName.addBasePathMapping(loggingApi)
-
-        // new CfnOutput(this, 'Logging-Api-Target-Hostname', {
-        //     description: 'hostname',
-        //     value: `${loggingDomainName.domainNameAliasDomainName}`,
-        // })
     }
 }

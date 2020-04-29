@@ -16,7 +16,7 @@ export const createApp = (): express.Application => {
 
     app.post('/log', express.json(), (req: Request, res: Response) => {
         console.log('This is the log endpoint')
-        console.log('body: ', req.body)
+        console.log(req.body)
         res.send('this is the log endpoint')
     })
 
