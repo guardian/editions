@@ -21,6 +21,6 @@
             "action": "logging",
             "path": "projects/logging/dist",
             "compress": "zip"
-        },
+        }
     ]
 }
