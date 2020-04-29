@@ -18,6 +18,11 @@
             "compress": false
         },
         {
+            "action": "logging-cloudformation",
+            "path": "projects/aws/logging-cloudformation.yaml",
+            "compress": false
+        },
+        {
             "action": "logging",
             "path": "projects/logging/dist",
             "compress": "zip"
