@@ -1,5 +1,6 @@
 import express = require('express')
 import { Request, Response } from 'express'
+import { logger } from './logger'
 
 interface LogStashFormat {
     '@timestamp': string
@@ -19,11 +20,6 @@ const prepareForLogStash = (logData: any): LogStashFormat => {
 export const createApp = (): express.Application => {
     const app: express.Application = express()
 
-    app.use((req, res, next) => {
-        // console.log(req.url) // uncomment this to enable request path logging
-        next()
-    })
-
     app.get('/healthcheck', (req: Request, res: Response) => {
         console.log('Healthcheck')
         res.send('I am the editions logger')
@@ -31,9 +27,10 @@ export const createApp = (): express.Application => {
 
     app.post('/log', express.json(), (req: Request, res: Response) => {
         const logData = prepareForLogStash(req.body)
-        console.log({
+        logger.info({
             ...logData,
-            ...logData.extraFields,
+            // TODO: this is unsafe, extraFields should have a type imported from common lib shared with Mallard
+            ...req.body.extraFields,
         })
         res.send('this is the log endpoint')
     })
