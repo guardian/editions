@@ -23,6 +23,12 @@ export class LoggingStack extends cdk.Stack {
             description: 'Stage',
         })
 
+        const apiKeyParameter = new cdk.CfnParameter(this, 'apiKey', {
+            type: 'String',
+            description: 'Shared secret for log endpoint.',
+            default: 'changeme',
+        })
+
         const loggingCertificateArn = new cdk.CfnParameter(
             this,
             'logging-certificate-arn',
@@ -63,6 +69,7 @@ export class LoggingStack extends cdk.Stack {
                     STAGE: stageParameter.valueAsString,
                     STACK: stackParameter.valueAsString,
                     APP: 'editions-logging',
+                    API_Key: apiKeyParameter.valueAsString,
                 },
             })
             Tag.add(fn, 'App', `editions-logging`)

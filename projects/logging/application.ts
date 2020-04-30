@@ -26,13 +26,17 @@ export const createApp = (): express.Application => {
     })
 
     app.post('/log', express.json(), (req: Request, res: Response) => {
-        const logData = prepareForLogStash(req.body)
-        logger.info({
-            ...logData,
-            // TODO: this is unsafe, extraFields should have a type imported from common lib shared with Mallard
-            ...req.body.extraFields,
-        })
-        res.send('this is the log endpoint')
+        if (req.body.apiKey !== process.env.API_KEY) {
+            res.status(403).send('Missing or invalid apiKey')
+        } else {
+            const logData = prepareForLogStash(req.body)
+            logger.info({
+                ...logData,
+                // TODO: this is unsafe, extraFields should have a type imported from common lib shared with Mallard
+                ...req.body.extraFields,
+            })
+            res.send('Log success')
+        }
     })
 
     return app
