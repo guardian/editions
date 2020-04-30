@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, View, StatusBar, Dimensions } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
 import { Highlight } from 'src/components/highlight'
 import { GridRowSplit, IssueTitle } from 'src/components/issue/issue-title'
 import { useInsets } from 'src/hooks/use-screen'
