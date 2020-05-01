@@ -68,6 +68,8 @@ const cacheClearCache = createAsyncCache<string>('cacheClear')
 
 const validAttemptCache = createAsyncCache<number>('validAttempt-cache')
 
+const loggingQueueCache = createAsyncCache<string>('loggingQueue')
+
 /**
  * Creates a simple store (wrapped around the keychain) for tokens.
  *
@@ -128,4 +130,5 @@ export {
     iapReceiptCache,
     cacheClearCache,
     validAttemptCache,
+    loggingQueueCache,
 }

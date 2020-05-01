@@ -13,10 +13,10 @@ import {
     iapReceiptCache,
     legacyCASUsernameCache,
     userDataCache,
+    loggingQueueCache,
 } from 'src/helpers/storage'
 import { errorService } from './errors'
 
-const LOG_QUEUE_KEY = '@logQueue'
 const { LOGGING_API_KEY } = Config
 
 enum Level {
@@ -112,7 +112,7 @@ const baseLog = async ({
 
 const queueLogs = async (log: BaseLog[]) => {
     try {
-        const currentQueueString = await AsyncStorage.getItem(LOG_QUEUE_KEY)
+        const currentQueueString = await getQueuedLogs()
         const currentQueue = JSON.parse(currentQueueString || '[{}]')
         const newQueue = [...currentQueue, log]
         const newQueueString = JSON.stringify(newQueue)
@@ -128,16 +128,16 @@ const queueLogs = async (log: BaseLog[]) => {
 
 const getQueuedLogs = async () => {
     try {
-        const logString = await AsyncStorage.getItem(LOGGING_API_KEY)
+        const logString = await loggingQueueCache.get()
         return JSON.parse(logString || '[{}]')
     } catch (e) {
-        // ?
+        return [{}]
     }
 }
 
 const clearLogs = async () => {
     try {
-        return await AsyncStorage.removeItem(LOGGING_API_KEY)
+        return await loggingQueueCache.reset()
     } catch (e) {
         errorService.captureException(e)
     }
@@ -187,6 +187,11 @@ const log = async ({
         return e
     }
 }
+
+// TODO
+// - Offline/Online scenario
+// - Tests
+// - Docs?
 
 // TASK 3
 // Manage offline when sending logs
