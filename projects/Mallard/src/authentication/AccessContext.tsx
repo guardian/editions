@@ -20,7 +20,7 @@ import identity, {
 } from './authorizers/IdentityAuthorizer'
 import cas from './authorizers/CASAuthorizer'
 import iap from './authorizers/IAPAuthorizer'
-import { CASExpiry } from './services/cas'
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { ReceiptIOS } from './services/iap'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'

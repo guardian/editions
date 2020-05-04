@@ -6,7 +6,7 @@ import { ScrollContainer } from 'src/components/layout/ui/container'
 import { WithAppAppearance } from 'src/theme/appearance'
 import { List } from 'src/components/lists/list'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
-import { CasExpiry } from 'src/services/content-auth-service'
+import { CASExpiry } from '../../../../Apps/common/src/cas-expiry'
 import { Heading } from 'src/components/layout/ui/row'
 import { ReceiptIOS } from 'src/authentication/services/iap'
 
@@ -41,10 +41,10 @@ const casCodePrettyLabels: { [key: string]: string } = {
     SevenDay: 'Guardian / Observer',
 }
 
-const getCASType = (casData: CasExpiry) =>
+const getCASType = (casData: CASExpiry) =>
     casCodePrettyLabels[casData.subscriptionCode] || casData.subscriptionCode
 
-const CASDetails = ({ casData }: { casData: CasExpiry }) => (
+const CASDetails = ({ casData }: { casData: CASExpiry }) => (
     <>
         <Heading>Paper + digital subscription</Heading>
         <List

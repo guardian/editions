@@ -6,7 +6,9 @@ import { LogFormat, Level } from '../Apps/common/src/logging'
 const processLog = (rawData: LogFormat[]) => {
     rawData.forEach(logData => {
         logger.info({
-            '@timestamp': logData['@timestamp'] || Date.now(),
+            '@timestamp': logData['@timestamp']
+                ? new Date(logData['@timestamp'])
+                : new Date(),
             level: logData.level || Level.INFO,
             message: logData.message || '',
             ...logData.metadata,

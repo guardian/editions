@@ -1,3 +1,7 @@
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
+import { NetInfoStateType } from '@react-native-community/netinfo'
+import { User } from '@sentry/react-native'
+
 export enum Level {
     INFO = 'INFO',
     WARN = 'WARN',
@@ -6,7 +10,7 @@ export enum Level {
 }
 
 export interface LogFormat {
-    '@timestamp': number
+    '@timestamp': Date
     level: Level
     message: string
     metadata?: LogMetaData
@@ -20,13 +24,13 @@ interface LogMetaData {
     release_channel: 'BETA' | 'RELEASE'
     os: 'android' | 'ios'
     device: string
-    network_status: string
+    network_status: NetInfoStateType
     // feature: Feature
     // May need to consent for the below
     deviceId: string
     signedIn: boolean
-    userId: string | null
+    userId: User['id'] | null
     digitalSub: boolean
-    casCode: string | null
+    casCode: CASExpiry['subscriptionCode'] | null
     iAP: boolean
 }

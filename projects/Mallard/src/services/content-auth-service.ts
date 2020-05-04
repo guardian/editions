@@ -1,13 +1,6 @@
 import DeviceInfo from 'react-native-device-info'
 import { CAS_ENDPOINT_URL } from '../constants'
-
-export interface CasExpiry {
-    content: string
-    expiryDate: string
-    expiryType: string
-    provider: string
-    subscriptionCode: string
-}
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 
 interface CasErrorResponse {
     error: {
@@ -25,7 +18,7 @@ interface CasErrorResponse {
 const fetchCasSubscription = async (
     subscriberID: string,
     password: string,
-): Promise<CasExpiry> => {
+): Promise<CASExpiry> => {
     const appId = DeviceInfo.getBundleId()
     const deviceId = DeviceInfo.getUniqueId()
 
