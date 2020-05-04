@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { londonTime } from 'src/helpers/date'
 import { lastNDays } from 'src/helpers/issues'
-import { log, Level } from 'src/services/logging'
+import { log, Level, Feature } from 'src/services/logging'
 
 const PUSH_TRACKING_KEY = '@push-tracking'
 
@@ -64,6 +64,7 @@ const clearPushTracking = async (): Promise<void> =>
 const pushTracking = async (
     id: PushTrackingId,
     value: string,
+    feature: Feature,
 ): Promise<void> => {
     try {
         if (__DEV__) {
@@ -84,7 +85,7 @@ const pushTracking = async (
         log({
             level: Level.INFO,
             message: { value },
-            optionalFields: { id },
+            optionalFields: { id, feature },
         })
 
         return await AsyncStorage.setItem(

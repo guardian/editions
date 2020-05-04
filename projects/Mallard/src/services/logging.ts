@@ -26,11 +26,12 @@ enum Level {
     DEBUG = 'DEBUG',
 }
 
-/* Do we add this to help us filter in ELK? */
-// enum Feature {
-//     DOWNLOAD = 'DOWNLOAD',
-//     PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
-// }
+enum Feature {
+    DOWNLOAD = 'DOWNLOAD',
+    PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
+    BACKGROUNG_DOWNLOAD = 'BACKGROUND_DOWNLOAD',
+    CLEAR_ISSUES = 'CLEAR_ISSUES',
+}
 
 interface BaseLog {
     app: string
@@ -43,7 +44,6 @@ interface BaseLog {
     os: 'android' | 'ios'
     device: string
     network_status: NetInfoStateType
-    // feature: Feature
     // May need to consent for the below
     deviceId: string
     signedIn: boolean
@@ -51,6 +51,7 @@ interface BaseLog {
     digitalSub: boolean
     casCode: CASExpiry['subscriptionCode'] | null
     iAP: boolean
+    feature?: Feature
 }
 
 interface LogParams {
@@ -110,6 +111,15 @@ const baseLog = async ({
     }
 }
 
+const getQueuedLogs = async () => {
+    try {
+        const logString = await loggingQueueCache.get()
+        return JSON.parse(logString || '[{}]')
+    } catch (e) {
+        return [{}]
+    }
+}
+
 const queueLogs = async (log: BaseLog[]) => {
     try {
         const currentQueueString = await getQueuedLogs()
@@ -123,15 +133,6 @@ const queueLogs = async (log: BaseLog[]) => {
         return updateQueue
     } catch (e) {
         errorService.captureException(e)
-    }
-}
-
-const getQueuedLogs = async () => {
-    try {
-        const logString = await loggingQueueCache.get()
-        return JSON.parse(logString || '[{}]')
-    } catch (e) {
-        return [{}]
     }
 }
 
@@ -189,6 +190,7 @@ const log = async ({
 }
 
 // TODO
+// - feature implementaion ?
 // - Offline/Online scenario
 // - Tests
 // - Docs?
@@ -216,4 +218,4 @@ Offline considerations:
 */
 //
 
-export { Level, log }
+export { Level, Feature, log }

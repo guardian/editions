@@ -16,6 +16,7 @@ import { NetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 import { withCache } from './fetch/cache'
+import { Feature } from 'src/services/logging'
 
 // for cleaning up temporary files when the user hits 'delete all downlods'
 // NOTE: these hard coded names may change when rn-fetch-blob is updated
@@ -81,7 +82,11 @@ const removeTempFiles = () => {
                 })
             }
         } catch (error) {
-            await pushTracking('tempFileRemoveError', JSON.stringify(error))
+            await pushTracking(
+                'tempFileRemoveError',
+                JSON.stringify(error),
+                Feature.CLEAR_ISSUES,
+            )
             console.log(
                 `Error cleaning up temp issue files in directory ${dir}: `,
                 error,
@@ -227,13 +232,14 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
     const { assets, localId } = issue
     try {
         if (!assets) {
-            await pushTracking('noAssets', 'complete')
+            await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
             return
         }
 
         await pushTracking(
             'attemptDataDownload',
             JSON.stringify({ localId, assets: assets.data }),
+            Feature.DOWNLOAD,
         )
 
         const issueDataDownload = await downloadNamedIssueArchive(
@@ -243,11 +249,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const dataRes = await issueDataDownload.promise
 
-        await pushTracking('attemptDataDownload', 'completed')
+        await pushTracking('attemptDataDownload', 'completed', Feature.DOWNLOAD)
 
         await pushTracking(
             'attemptMediaDownload',
             JSON.stringify({ localId, assets: assets[imageSize] }),
+            Feature.DOWNLOAD,
         )
 
         const imgDL = await downloadNamedIssueArchive(localId, assets[
@@ -268,7 +275,11 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
         const imgRes = await imgDL.promise
 
-        await pushTracking('attemptMediaDownload', 'completed')
+        await pushTracking(
+            'attemptMediaDownload',
+            'completed',
+            Feature.DOWNLOAD,
+        )
 
         updateListeners(localId, {
             type: 'unzip',
@@ -283,25 +294,33 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
              * and then block things like re-downloading if the images stopped downloading
              */
 
-            await pushTracking('unzipData', 'start')
+            await pushTracking('unzipData', 'start', Feature.DOWNLOAD)
             await unzipNamedIssueArchive(dataRes.path())
-            await pushTracking('unzipData', 'end')
+            await pushTracking('unzipData', 'end', Feature.DOWNLOAD)
             /**
              * The last thing we do is unzip the directory that will confirm if the issue exists
              */
-            await pushTracking('unzipImages', 'start')
+            await pushTracking('unzipImages', 'start', Feature.DOWNLOAD)
             await unzipNamedIssueArchive(imgRes.path())
-            await pushTracking('unzipImages', 'end')
+            await pushTracking('unzipImages', 'end', Feature.DOWNLOAD)
         } catch (error) {
             updateListeners(localId, { type: 'failure', data: error })
-            await pushTracking('unzipError', JSON.stringify(error))
+            await pushTracking(
+                'unzipError',
+                JSON.stringify(error),
+                Feature.DOWNLOAD,
+            )
             console.log('Unzip error: ', error)
         }
 
-        await pushTracking('downloadAndUnzip', 'complete')
+        await pushTracking('downloadAndUnzip', 'complete', Feature.DOWNLOAD)
         updateListeners(localId, { type: 'success' }) // null is unstarted or end
     } catch (error) {
-        await pushTracking('downloadAndUnzipError', JSON.stringify(error))
+        await pushTracking(
+            'downloadAndUnzipError',
+            JSON.stringify(error),
+            Feature.DOWNLOAD,
+        )
         errorService.captureException(error)
         updateListeners(localId, { type: 'failure', data: error })
         console.log('Download error: ', error)
@@ -337,6 +356,7 @@ export const downloadAndUnzipIssue = async (
         await pushTracking(
             'downloadBlocked',
             DownloadBlockedStatus[downloadBlocked],
+            Feature.DOWNLOAD,
         )
         errorService.captureException(
             new Error('Download Blocked: Required signal not available'),
@@ -353,7 +373,11 @@ export const downloadAndUnzipIssue = async (
             await run(issue, imageSize)
             localIssueListStore.add(localId)
         } finally {
-            await pushTracking('completeAndDeleteCache', 'completed')
+            await pushTracking(
+                'completeAndDeleteCache',
+                'completed',
+                Feature.DOWNLOAD,
+            )
             delete dlCache[localId]
         }
     }
@@ -395,7 +419,9 @@ export const clearOldIssues = async (): Promise<void> => {
     const iTD: string[] = await issuesToDelete(files)
 
     return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
-        .then(() => pushTracking('clearOldIssues', 'completed'))
+        .then(() =>
+            pushTracking('clearOldIssues', 'completed', Feature.CLEAR_ISSUES),
+        )
         .catch(e => errorService.captureException(e))
 }
 
