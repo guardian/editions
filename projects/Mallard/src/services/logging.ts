@@ -42,7 +42,6 @@ interface BaseLog {
     os: 'android' | 'ios'
     device: string
     network_status: NetInfoStateType
-    // May need to consent for the below
     deviceId: string
     signedIn: boolean
     userId: User['id'] | null
@@ -92,7 +91,6 @@ const baseLog = async ({
         message,
         deviceId: DeviceInfo.getUniqueId(),
         signedIn: userData ? true : false,
-
         userId,
         digitalSub,
         casCode,
@@ -188,33 +186,9 @@ const log = async ({ level, message, ...optionalFields }: LogParams) => {
     }
 }
 
-// Do we always want to queue the logs no matter what?
-
 // TODO
+// - Consent?
 // - Tests
-// - Docs?
-
-// TASK 3
-// Manage offline when sending logs
-/*
-Offline considerations:
- - What do do when going offine
- - What to do when they come back online
- - Cleanup when successful logging queue has been processed
- - How do we manage different status codes coming back from logging service (and online)
-
- Async storage cache helpers/storage
- -- offline
- -- get from async cache
- -- append to end
- -- set in async cache
- -- loop while offline
- -- online? send logs
- -- success? reset cache
-
- -- look to keep last 100 logs?
-
-*/
-//
+// - Docs
 
 export { Level, Feature, log }
