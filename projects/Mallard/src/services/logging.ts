@@ -91,7 +91,8 @@ const baseLog = async ({
         level,
         message,
         deviceId: DeviceInfo.getUniqueId(),
-        signedIn: true, // WILL COME BACK TO THIS
+        signedIn: userData ? true : false,
+
         userId,
         digitalSub,
         casCode,
@@ -190,7 +191,6 @@ const log = async ({ level, message, ...optionalFields }: LogParams) => {
 // Do we always want to queue the logs no matter what?
 
 // TODO
-// - Subscription Status and Signed In need adding
 // - Tests
 // - Docs?
 
