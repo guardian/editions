@@ -496,6 +496,9 @@ export const thumbsPath = (
     use: ImageThumbnailUse,
 ) => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
 
+export const getImageQueryString = (image: Image) =>
+    image.role ? `?role=${image.role}` : ''
+
 export const imagePath = (
     issue: string,
     size: ImageSize,
@@ -506,8 +509,7 @@ export const imagePath = (
         use == 'full-size'
             ? mediaPath(issue, size, image)
             : thumbsPath(issue, size, image, use)
-    const queryString = image.role ? `?role=${image.role}` : ''
-    return `${baseUrl}${queryString}`
+    return `${baseUrl}${getImageQueryString(image)}`
 }
 
 export interface CreditedImage extends Image {
