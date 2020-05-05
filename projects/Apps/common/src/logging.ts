@@ -9,18 +9,13 @@ export enum Level {
     DEBUG = 'DEBUG',
 }
 
-export interface LogFormat {
-    '@timestamp': Date
+export interface MallardLogFormat {
+    timestamp: Date
     level: Level
     message: string
-    metadata?: LogMetaData
-}
-
-interface LogMetaData {
     app: string
     version: string
     buildNumber: string
-    message: object
     release_channel: 'BETA' | 'RELEASE'
     os: 'android' | 'ios'
     device: string
