@@ -63,6 +63,7 @@ describe('byline image extractor', () => {
             cutout: {
                 source: 'test',
                 path: 'image2',
+                role: undefined,
             },
         })
     })

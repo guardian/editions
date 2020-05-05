@@ -58,6 +58,7 @@ const mainImgExpected = {
     displayCredit: undefined,
     path: 'master/asset.com',
     source: 'test',
+    role: undefined,
 }
 
 const thumbnailExpected = {
@@ -66,7 +67,7 @@ const thumbnailExpected = {
 }
 
 describe('articleImgPicker.getImages', () => {
-    it('should extracts both images', () => {
+    it('should extract both images', () => {
         const given: IContent = {
             ...sharedGiven,
             blocks: blocks,
@@ -83,6 +84,7 @@ describe('articleImgPicker.getImages', () => {
                     mobile: 'full-size',
                     tablet: 'full-size',
                 },
+                role: undefined,
             },
         }
 
@@ -105,6 +107,7 @@ describe('articleImgPicker.getImages', () => {
                     mobile: 'full-size',
                     tablet: 'full-size',
                 },
+                role: undefined,
             },
         }
 
