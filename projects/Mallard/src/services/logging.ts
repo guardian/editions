@@ -3,7 +3,7 @@ import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
 import { User } from '@sentry/react-native'
 import { Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { CASExpiry } from 'src/authentication/services/cas'
+import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { isInBeta } from 'src/helpers/release-stream'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import {
@@ -14,22 +14,9 @@ import {
 import { errorService } from './errors'
 import { getCASCode } from 'src/authentication/helpers'
 import Config from 'react-native-config'
+import { Level, Feature } from '../../../Apps/common/src/logging'
 
 const { LOGGING_API_KEY } = Config
-
-enum Level {
-    INFO = 'INFO',
-    WARN = 'WARN',
-    ERROR = 'ERROR',
-    DEBUG = 'DEBUG',
-}
-
-enum Feature {
-    DOWNLOAD = 'DOWNLOAD',
-    PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
-    BACKGROUNG_DOWNLOAD = 'BACKGROUND_DOWNLOAD',
-    CLEAR_ISSUES = 'CLEAR_ISSUES',
-}
 
 interface BaseLog {
     app: string
