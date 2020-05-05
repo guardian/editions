@@ -33,7 +33,7 @@ export const frontController = (req: Request, res: Response) => {
                 return
             }
             const json = JSON.stringify(data)
-            console.log(`Got front: ${json}`)
+            console.debug(`Got front: ${json}`)
             res.setHeader('Last-Modifed', date())
             res.setHeader('Content-Type', 'application/json')
             res.send(json)
