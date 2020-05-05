@@ -1,21 +1,19 @@
 // Logging Service that sends event logs to ELK
-import AsyncStorage from '@react-native-community/async-storage'
 import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
 import { User } from '@sentry/react-native'
 import { Platform } from 'react-native'
-import Config from 'react-native-config'
 import DeviceInfo from 'react-native-device-info'
 import { CASExpiry } from 'src/authentication/services/cas'
 import { isInBeta } from 'src/helpers/release-stream'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import {
-    casCredentialsKeychain,
     iapReceiptCache,
-    legacyCASUsernameCache,
     userDataCache,
     loggingQueueCache,
 } from 'src/helpers/storage'
 import { errorService } from './errors'
+import { getCASCode } from 'src/authentication/helpers'
+import Config from 'react-native-config'
 
 const { LOGGING_API_KEY } = Config
 
@@ -60,13 +58,6 @@ interface LogParams {
     optionalFields?: object
 }
 
-// Make this external to call from several places
-const getCASCode = () =>
-    Promise.all([
-        casCredentialsKeychain.get(),
-        legacyCASUsernameCache.get(),
-    ]).then(([current, legacy]) => (current && current.username) || legacy)
-
 const baseLog = async ({
     level,
     message,
@@ -87,8 +78,6 @@ const baseLog = async ({
     const casCode = await getCASCode()
     const iapReceipt = await iapReceiptCache.get()
     const iAP = iapReceipt ? true : false
-
-    // Subscription Status need to be added?
 
     return {
         app: DeviceInfo.getBundleId(),
@@ -111,7 +100,7 @@ const baseLog = async ({
     }
 }
 
-const getQueuedLogs = async () => {
+const getQueuedLogs = async (): Promise<BaseLog[] | [{}]> => {
     try {
         const logString = await loggingQueueCache.get()
         return JSON.parse(logString || '[{}]')
@@ -120,19 +109,30 @@ const getQueuedLogs = async () => {
     }
 }
 
-const queueLogs = async (log: BaseLog[]) => {
+const saveQueuedLogs = async (log: BaseLog[]): Promise<string | Error> => {
     try {
-        const currentQueueString = await getQueuedLogs()
-        const currentQueue = JSON.parse(currentQueueString || '[{}]')
-        const newQueue = [...currentQueue, log]
-        const newQueueString = JSON.stringify(newQueue)
-        const updateQueue = await AsyncStorage.setItem(
-            LOGGING_API_KEY,
-            newQueueString,
-        )
-        return updateQueue
+        const logString = JSON.stringify(log)
+        await loggingQueueCache.set(logString)
+        return 'saved logs'
     } catch (e) {
         errorService.captureException(e)
+        throw new Error(e)
+    }
+}
+
+const queueLogs = async (log: BaseLog[]) => {
+    try {
+        const currentQueue = await getQueuedLogs()
+        const currentQueueString = JSON.stringify(currentQueue)
+        const parsedQueue = JSON.parse(currentQueueString || '[{}]')
+        const newQueue = [...parsedQueue, ...log]
+        const cleanLogs = newQueue.filter(
+            value => Object.keys(value).length !== 0,
+        )
+        return cleanLogs
+    } catch (e) {
+        errorService.captureException(e)
+        throw new Error(e)
     }
 }
 
@@ -162,25 +162,23 @@ const postLog = async (log: BaseLog[]): Promise<Response | Error> => {
         }
         return response
     } catch (e) {
-        // Queue the log if it fails?
-        queueLogs(log)
-        return e
+        saveQueuedLogs(log)
+        throw new Error(e)
     }
 }
 
-const log = async ({
-    level,
-    message,
-    ...optionalFields
-}: LogParams): Promise<Response | Error> => {
+const log = async ({ level, message, ...optionalFields }: LogParams) => {
     try {
         const currentLog = await baseLog({ level, message, ...optionalFields })
-        const queuedLogs = await getQueuedLogs()
-        const logsToPost = [...queuedLogs, currentLog]
-        const cleanLogs = logsToPost.filter(
-            value => Object.keys(value).length !== 0,
-        )
-        const postLogToService = await postLog(cleanLogs)
+        const logsToPost = await queueLogs([currentLog])
+
+        const { isConnected } = await NetInfo.fetch()
+        // Not connected, save the log queue
+        if (!isConnected) {
+            return saveQueuedLogs(logsToPost)
+        }
+
+        const postLogToService = await postLog(logsToPost)
         await clearLogs()
         return postLogToService
     } catch (e) {
@@ -189,9 +187,10 @@ const log = async ({
     }
 }
 
+// Do we always want to queue the logs no matter what?
+
 // TODO
-// - feature implementaion ?
-// - Offline/Online scenario
+// - Subscription Status and Signed In need adding
 // - Tests
 // - Docs?
 

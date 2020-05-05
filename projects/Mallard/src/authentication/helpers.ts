@@ -1,4 +1,8 @@
 import { IdentityAuthData } from './authorizers/IdentityAuthorizer'
+import {
+    casCredentialsKeychain,
+    legacyCASUsernameCache,
+} from 'src/helpers/storage'
 
 const GUARDIAN_SUFFIXES = ['guardian.co.uk', 'theguardian.com']
 
@@ -20,4 +24,13 @@ const isStaffMember = (userData: IdentityAuthData) =>
 const canViewEdition = (userData: IdentityAuthData): boolean =>
     userData.membershipData.contentAccess.digitalPack || isStaffMember(userData)
 
-export { canViewEdition, isStaffMember }
+/**
+ * This gets a CAS code for a user if one exists
+ */
+const getCASCode = () =>
+    Promise.all([
+        casCredentialsKeychain.get(),
+        legacyCASUsernameCache.get(),
+    ]).then(([current, legacy]) => (current && current.username) || legacy)
+
+export { canViewEdition, isStaffMember, getCASCode }
