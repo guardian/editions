@@ -24,11 +24,11 @@ interface BaseLog {
     version: string
     buildNumber: string
     level: Level
-    message: object
+    message: string
     release_channel: 'BETA' | 'RELEASE'
     os: 'android' | 'ios'
     device: string
-    network_status: NetInfoStateType
+    networkStatus: NetInfoStateType
     deviceId: string
     signedIn: boolean
     userId: User['id'] | null
@@ -40,8 +40,23 @@ interface BaseLog {
 
 interface LogParams {
     level: Level
-    message: object
+    message: string
     optionalFields?: object
+}
+
+const getExternalInfo = async () => {
+    const [networkStatus, userData, casCode, iapReceipt] = await Promise.all([
+        NetInfo.fetch(),
+        userDataCache.get(),
+        getCASCode(),
+        iapReceiptCache.get(),
+    ])
+    return {
+        networkStatus,
+        userData,
+        casCode,
+        iapReceipt,
+    }
 }
 
 const baseLog = async ({
@@ -49,10 +64,14 @@ const baseLog = async ({
     message,
     ...optionalFields
 }: LogParams): Promise<BaseLog> => {
-    const network_status = await NetInfo.fetch()
+    const {
+        networkStatus,
+        userData,
+        casCode,
+        iapReceipt,
+    } = await toExport.getExternalInfo()
 
     // User Data and Subscription
-    const userData = await userDataCache.get()
     const userId =
         (userData && userData.userDetails && userData.userDetails.id) || ''
     const digitalSub =
@@ -61,8 +80,6 @@ const baseLog = async ({
             userData.membershipData.contentAccess &&
             userData.membershipData.contentAccess.digitalPack) ||
         false
-    const casCode = await getCASCode()
-    const iapReceipt = await iapReceiptCache.get()
     const iAP = iapReceipt ? true : false
 
     return {
@@ -71,7 +88,9 @@ const baseLog = async ({
         buildNumber: DeviceInfo.getBuildNumber(),
         os: Platform.OS === 'ios' ? 'ios' : 'android',
         device: DeviceInfo.getDeviceId(),
-        network_status: network_status.type,
+        networkStatus: networkStatus
+            ? networkStatus.type
+            : NetInfoStateType.unknown,
         release_channel: isInBeta() ? 'BETA' : 'RELEASE',
         timestamp: new Date(),
         level,
@@ -178,4 +197,7 @@ const log = async ({ level, message, ...optionalFields }: LogParams) => {
 // - Tests
 // - Docs
 
-export { Level, Feature, log }
+// Mocking hack to get around horrible keychain errors
+const toExport = { getExternalInfo }
+
+export { Level, Feature, log, baseLog, toExport }

@@ -84,7 +84,7 @@ const pushTracking = async (
 
         log({
             level: Level.INFO,
-            message: { value },
+            message: value,
             optionalFields: { id, feature },
         })
 
