@@ -5,6 +5,8 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
+import { PillarColours } from '@guardian/pasteup/palette'
+import { ArticleTheme } from '../article'
 
 export const renderCaption = ({
     caption,
@@ -27,6 +29,10 @@ const breakoutCaption = (role: ImageElement['role']) => css`
         transform: rotate(-90deg);
     }
 `
+
+const svgFillColor = (colors: PillarColours, theme: ArticleTheme) => {
+    return theme === 'dark' ? colors.bright : colors.main
+}
 
 const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
     const galleryStyles = css`
@@ -58,7 +64,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
             position: relative;
         }
         .image figcaption svg path {
-            fill: ${colors.main};
+            fill: ${svgFillColor(colors, theme)};
         }
 
         /* Tablet captions */

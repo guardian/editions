@@ -16,6 +16,8 @@ import { sportScoreStyles } from './components/sport-score'
 import { CssProps, themeColors } from './helpers/css'
 import { Breakpoints } from 'src/theme/breakpoints'
 import { mediaAtomStyles } from './components/media-atoms'
+import { PillarColours } from '@guardian/pasteup/palette'
+import { ArticleTheme } from './article'
 
 const makeFontsCss = () => css`
     /* text */
@@ -72,6 +74,17 @@ const makeFontsCss = () => css`
         extension: 'otf',
     })}
 `
+
+const getAttributeTextColor = (theme: ArticleTheme, colors: PillarColours) => {
+    return theme == 'dark' ? colors.bright : colors.main
+}
+
+const getAttributeDecorationColor = (
+    theme: ArticleTheme,
+    colors: PillarColours,
+) => {
+    return theme == 'dark' ? colors.bright : colors.pastel
+}
 
 const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
     ${makeFontsCss()}
@@ -134,8 +147,8 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         margin-bottom: ${px(metrics.vertical * 2)};
     }
     .app a {
-        color: ${colors.main};
-        text-decoration-color: ${colors.pastel};
+        color: ${getAttributeTextColor(theme, colors)};
+        text-decoration-color: ${getAttributeDecorationColor(theme, colors)};
     }
     * {
         margin: 0;
