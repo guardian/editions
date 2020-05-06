@@ -82,11 +82,12 @@ const pushTracking = async (
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
 
-        log({
-            level: Level.INFO,
-            message: value,
-            optionalFields: { id, feature },
-        })
+        // @TODO - Needs implementing once consent is in place
+        // log({
+        //     level: Level.INFO,
+        //     message: value,
+        //     optionalFields: { id, feature },
+        // })
 
         return await AsyncStorage.setItem(
             PUSH_TRACKING_KEY,

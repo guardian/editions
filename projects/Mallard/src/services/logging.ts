@@ -69,7 +69,7 @@ const baseLog = async ({
         userData,
         casCode,
         iapReceipt,
-    } = await toExport.getExternalInfo()
+    } = await privateFunctions.getExternalInfo()
 
     // User Data and Subscription
     const userId =
@@ -180,11 +180,11 @@ const log = async ({ level, message, ...optionalFields }: LogParams) => {
         const { isConnected } = await NetInfo.fetch()
         // Not connected, save the log queue
         if (!isConnected) {
-            return saveQueuedLogs(logsToPost)
+            return privateFunctions.saveQueuedLogs(logsToPost)
         }
 
-        const postLogToService = await postLog(logsToPost)
-        await clearLogs()
+        const postLogToService = await privateFunctions.postLog(logsToPost)
+        await privateFunctions.clearLogs()
         return postLogToService
     } catch (e) {
         errorService.captureException(e)
@@ -192,12 +192,7 @@ const log = async ({ level, message, ...optionalFields }: LogParams) => {
     }
 }
 
-// TODO
-// - Consent?
-// - Tests
-// - Docs
+// Mocking hack as there are a load of external libraries
+const privateFunctions = { getExternalInfo, saveQueuedLogs, clearLogs, postLog }
 
-// Mocking hack to get around horrible keychain errors
-const toExport = { getExternalInfo }
-
-export { Level, Feature, log, baseLog, toExport }
+export { Level, Feature, log, baseLog, privateFunctions }
