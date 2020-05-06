@@ -1,9 +1,4 @@
-import {
-    Level,
-    baseLog,
-    log,
-    privateFunctions as mockWrapper,
-} from '../logging'
+import { loggingService, Level } from '../logging'
 import MockDate from 'mockdate'
 
 jest.mock('@react-native-community/netinfo', () => ({
@@ -17,7 +12,7 @@ MockDate.set('2019-08-21')
 describe('logging service', () => {
     describe('baseLog', () => {
         it('should return a log object that matches the snapshot', async () => {
-            mockWrapper.getExternalInfo = jest.fn().mockReturnValue({
+            loggingService.getExternalInfo = jest.fn().mockReturnValue({
                 networkStatus: { type: 'wifi' },
                 userData: {
                     userDetails: { id: 'testId' },
@@ -28,7 +23,7 @@ describe('logging service', () => {
                 casCode: 'QWERTYUIOP',
                 iapReceipt: true,
             })
-            const log = await baseLog({
+            const log = await loggingService.baseLog({
                 level: Level.INFO,
                 message: 'test log',
                 optionalFields: { id: 'test' },
@@ -36,13 +31,13 @@ describe('logging service', () => {
             expect(log).toMatchSnapshot()
         })
         it('should return an object with default values if they are missing and match snapshot', async () => {
-            mockWrapper.getExternalInfo = jest.fn().mockReturnValue({
+            loggingService.getExternalInfo = jest.fn().mockReturnValue({
                 networkStatus: null,
                 userData: null,
                 casCode: null,
                 iapReceipt: null,
             })
-            const log = await baseLog({
+            const log = await loggingService.baseLog({
                 level: Level.INFO,
                 message: 'test log',
                 optionalFields: { id: 'test' },
@@ -53,7 +48,7 @@ describe('logging service', () => {
 
     describe('log', () => {
         it('should have a successful post log', async () => {
-            mockWrapper.getExternalInfo = jest.fn().mockReturnValue({
+            loggingService.getExternalInfo = jest.fn().mockReturnValue({
                 networkStatus: { type: 'wifi' },
                 userData: {
                     userDetails: { id: 'testId' },
@@ -64,11 +59,11 @@ describe('logging service', () => {
                 casCode: 'QWERTYUIOP',
                 iapReceipt: true,
             })
-            mockWrapper.clearLogs = jest.fn()
-            mockWrapper.postLog = jest.fn()
-            await log({ level: Level.INFO, message: 'test' })
-            expect(mockWrapper.postLog).toHaveBeenCalled()
-            expect(mockWrapper.clearLogs).toHaveBeenCalled()
+            loggingService.clearLogs = jest.fn()
+            loggingService.postLog = jest.fn()
+            await loggingService.log({ level: Level.INFO, message: 'test' })
+            expect(loggingService.postLog).toHaveBeenCalled()
+            expect(loggingService.clearLogs).toHaveBeenCalled()
         })
     })
 })

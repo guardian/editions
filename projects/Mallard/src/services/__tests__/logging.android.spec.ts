@@ -1,4 +1,4 @@
-import { Level, baseLog, privateFunctions as mockWrapper } from '../logging'
+import { Level, loggingService } from '../logging'
 import MockDate from 'mockdate'
 
 MockDate.set('2019-08-21')
@@ -16,7 +16,7 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => {
 describe('logging service (Android and Release)', () => {
     describe('baseLog', () => {
         it('should return a log object that matches the snapshot', async () => {
-            mockWrapper.getExternalInfo = jest.fn().mockReturnValue({
+            loggingService.getExternalInfo = jest.fn().mockReturnValue({
                 networkStatus: { type: 'wifi' },
                 userData: {
                     userDetails: { id: 'testId' },
@@ -27,7 +27,7 @@ describe('logging service (Android and Release)', () => {
                 casCode: 'QWERTYUIOP',
                 iapReceipt: true,
             })
-            const log = await baseLog({
+            const log = await loggingService.baseLog({
                 level: Level.INFO,
                 message: 'test log',
                 optionalFields: { id: 'test' },

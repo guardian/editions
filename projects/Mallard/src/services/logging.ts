@@ -44,155 +44,165 @@ interface LogParams {
     optionalFields?: object
 }
 
-const getExternalInfo = async () => {
-    const [networkStatus, userData, casCode, iapReceipt] = await Promise.all([
-        NetInfo.fetch(),
-        userDataCache.get(),
-        getCASCode(),
-        iapReceiptCache.get(),
-    ])
-    return {
-        networkStatus,
-        userData,
-        casCode,
-        iapReceipt,
+class Logging {
+    async getExternalInfo() {
+        const [
+            networkStatus,
+            userData,
+            casCode,
+            iapReceipt,
+        ] = await Promise.all([
+            NetInfo.fetch(),
+            userDataCache.get(),
+            getCASCode(),
+            iapReceiptCache.get(),
+        ])
+        return {
+            networkStatus,
+            userData,
+            casCode,
+            iapReceipt,
+        }
     }
-}
 
-const baseLog = async ({
-    level,
-    message,
-    ...optionalFields
-}: LogParams): Promise<BaseLog> => {
-    const {
-        networkStatus,
-        userData,
-        casCode,
-        iapReceipt,
-    } = await privateFunctions.getExternalInfo()
-
-    // User Data and Subscription
-    const userId =
-        (userData && userData.userDetails && userData.userDetails.id) || ''
-    const digitalSub =
-        (userData &&
-            userData.membershipData &&
-            userData.membershipData.contentAccess &&
-            userData.membershipData.contentAccess.digitalPack) ||
-        false
-    const iAP = iapReceipt ? true : false
-
-    return {
-        app: DeviceInfo.getBundleId(),
-        version: DeviceInfo.getVersion(),
-        buildNumber: DeviceInfo.getBuildNumber(),
-        os: Platform.OS === 'ios' ? 'ios' : 'android',
-        device: DeviceInfo.getDeviceId(),
-        networkStatus: networkStatus
-            ? networkStatus.type
-            : NetInfoStateType.unknown,
-        release_channel: isInBeta() ? 'BETA' : 'RELEASE',
-        timestamp: new Date(),
+    async baseLog({
         level,
         message,
-        deviceId: DeviceInfo.getUniqueId(),
-        signedIn: userData ? true : false,
-        userId,
-        digitalSub,
-        casCode,
-        iAP,
-        ...optionalFields,
-    }
-}
+        ...optionalFields
+    }: LogParams): Promise<BaseLog> {
+        const {
+            networkStatus,
+            userData,
+            casCode,
+            iapReceipt,
+        } = await this.getExternalInfo()
 
-const getQueuedLogs = async (): Promise<BaseLog[] | [{}]> => {
-    try {
-        const logString = await loggingQueueCache.get()
-        return JSON.parse(logString || '[{}]')
-    } catch (e) {
-        return [{}]
-    }
-}
+        // User Data and Subscription
+        const userId =
+            (userData && userData.userDetails && userData.userDetails.id) || ''
+        const digitalSub =
+            (userData &&
+                userData.membershipData &&
+                userData.membershipData.contentAccess &&
+                userData.membershipData.contentAccess.digitalPack) ||
+            false
+        const iAP = iapReceipt ? true : false
 
-const saveQueuedLogs = async (log: BaseLog[]): Promise<string | Error> => {
-    try {
-        const logString = JSON.stringify(log)
-        await loggingQueueCache.set(logString)
-        return 'saved logs'
-    } catch (e) {
-        errorService.captureException(e)
-        throw new Error(e)
+        return {
+            app: DeviceInfo.getBundleId(),
+            version: DeviceInfo.getVersion(),
+            buildNumber: DeviceInfo.getBuildNumber(),
+            os: Platform.OS === 'ios' ? 'ios' : 'android',
+            device: DeviceInfo.getDeviceId(),
+            networkStatus: networkStatus
+                ? networkStatus.type
+                : NetInfoStateType.unknown,
+            release_channel: isInBeta() ? 'BETA' : 'RELEASE',
+            timestamp: new Date(),
+            level,
+            message,
+            deviceId: DeviceInfo.getUniqueId(),
+            signedIn: userData ? true : false,
+            userId,
+            digitalSub,
+            casCode,
+            iAP,
+            ...optionalFields,
+        }
     }
-}
 
-const queueLogs = async (log: BaseLog[]) => {
-    try {
-        const currentQueue = await getQueuedLogs()
-        const currentQueueString = JSON.stringify(currentQueue)
-        const parsedQueue = JSON.parse(currentQueueString || '[{}]')
-        const newQueue = [...parsedQueue, ...log]
-        const cleanLogs = newQueue.filter(
-            value => Object.keys(value).length !== 0,
-        )
-        return cleanLogs
-    } catch (e) {
-        errorService.captureException(e)
-        throw new Error(e)
+    async getQueuedLogs(): Promise<BaseLog[] | [{}]> {
+        try {
+            const logString = await loggingQueueCache.get()
+            return JSON.parse(logString || '[{}]')
+        } catch (e) {
+            return [{}]
+        }
     }
-}
 
-const clearLogs = async () => {
-    try {
-        return await loggingQueueCache.reset()
-    } catch (e) {
-        errorService.captureException(e)
+    async saveQueuedLogs(log: BaseLog[]): Promise<string | Error> {
+        try {
+            const logString = JSON.stringify(log)
+            await loggingQueueCache.set(logString)
+            return 'saved logs'
+        } catch (e) {
+            errorService.captureException(e)
+            throw new Error(e)
+        }
     }
-}
 
-const postLog = async (log: BaseLog[]): Promise<Response | Error> => {
-    try {
-        const response = await fetch(defaultSettings.logging, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                apiKey: LOGGING_API_KEY,
-            },
-            body: JSON.stringify(log),
-        })
-        if (response.status !== 200) {
-            throw new Error(
-                `Bad response from Logging Service - status: ${response.status}`,
+    async queueLogs(log: BaseLog[]) {
+        try {
+            const currentQueue = await this.getQueuedLogs()
+            const currentQueueString = JSON.stringify(currentQueue)
+            const parsedQueue = JSON.parse(currentQueueString || '[{}]')
+            const newQueue = [...parsedQueue, ...log]
+            const cleanLogs = newQueue.filter(
+                value => Object.keys(value).length !== 0,
             )
+            return cleanLogs
+        } catch (e) {
+            errorService.captureException(e)
+            throw new Error(e)
         }
-        return response
-    } catch (e) {
-        saveQueuedLogs(log)
-        throw new Error(e)
+    }
+
+    async clearLogs() {
+        try {
+            return await loggingQueueCache.reset()
+        } catch (e) {
+            errorService.captureException(e)
+        }
+    }
+
+    async postLog(log: BaseLog[]): Promise<Response | Error> {
+        try {
+            const response = await fetch(defaultSettings.logging, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    apiKey: LOGGING_API_KEY,
+                },
+                body: JSON.stringify(log),
+            })
+            if (response.status !== 200) {
+                throw new Error(
+                    `Bad response from Logging Service - status: ${response.status}`,
+                )
+            }
+            return response
+        } catch (e) {
+            this.saveQueuedLogs(log)
+            throw new Error(e)
+        }
+    }
+
+    async log({ level, message, ...optionalFields }: LogParams) {
+        try {
+            const currentLog = await this.baseLog({
+                level,
+                message,
+                ...optionalFields,
+            })
+            const logsToPost = await this.queueLogs([currentLog])
+
+            const { isConnected } = await NetInfo.fetch()
+            // Not connected, save the log queue
+            if (!isConnected) {
+                return this.saveQueuedLogs(logsToPost)
+            }
+
+            const postLogToService = await this.postLog(logsToPost)
+            await this.clearLogs()
+            return postLogToService
+        } catch (e) {
+            errorService.captureException(e)
+            return e
+        }
     }
 }
 
-const log = async ({ level, message, ...optionalFields }: LogParams) => {
-    try {
-        const currentLog = await baseLog({ level, message, ...optionalFields })
-        const logsToPost = await queueLogs([currentLog])
+const loggingService = new Logging()
 
-        const { isConnected } = await NetInfo.fetch()
-        // Not connected, save the log queue
-        if (!isConnected) {
-            return privateFunctions.saveQueuedLogs(logsToPost)
-        }
-
-        const postLogToService = await privateFunctions.postLog(logsToPost)
-        await privateFunctions.clearLogs()
-        return postLogToService
-    } catch (e) {
-        errorService.captureException(e)
-        return e
-    }
-}
-
-// Mocking hack as there are a load of external libraries
-const privateFunctions = { getExternalInfo, saveQueuedLogs, clearLogs, postLog }
-
-export { Level, Feature, log, baseLog, privateFunctions }
+export { Level, Feature, loggingService }
