@@ -76,7 +76,7 @@ const authWithTokens = async (
 
 // TODO: This function needs a unit test
 const getUserName = (authType: AuthType, params: AuthParams) => {
-    const x = params
+    const unknown = 'unknown'
     switch (authType) {
         case 'email':
             if ('email' in params) {
@@ -89,9 +89,8 @@ const getUserName = (authType: AuthType, params: AuthParams) => {
         case 'apple':
             return 'gu-editions::token::apple'
         default:
-            return x
+            return unknown
     }
-    return x
 }
 
 export default new Authorizer({
