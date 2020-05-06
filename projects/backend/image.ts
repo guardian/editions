@@ -32,18 +32,57 @@ const getSignature = (path: string) => {
         .digest('hex')
 }
 
+type AspectRatioType = 'landscape-wide' | 'portrait' | 'landscape'
+
+// example path /d9dfd06b5042a9808b4bc3be3ccea4122cda6cb1/0_0_<width>_<height>/master/7087.jpg
+const detectImageAspectRatio = (path: string): AspectRatioType => {
+    const widthHeightSegment = path.split('/')[1]
+    const widthHeightSegmentSplit =
+        widthHeightSegment && widthHeightSegment.split('_')
+    if (
+        widthHeightSegment &&
+        widthHeightSegmentSplit &&
+        widthHeightSegmentSplit.length === 4
+    ) {
+        const width = parseInt(widthHeightSegmentSplit[2])
+        const height = parseInt(widthHeightSegmentSplit[3])
+
+        const aspectRatio = width / height
+
+        if (aspectRatio > 2) {
+            return 'landscape-wide'
+        } else if (aspectRatio < 1) {
+            return 'portrait'
+        }
+    }
+
+    return 'landscape'
+}
+
+export const adjustWidth = (
+    width: number,
+    aspectRatio: AspectRatioType,
+    role?: ImageRole,
+): number => {
+    if (
+        role === 'showcase' ||
+        role === 'immersive' ||
+        aspectRatio === 'landscape-wide'
+    ) {
+        return width * 2
+    } else return width
+}
+
 export const getImageURL = (
     image: Image,
     size: ImageSize,
     imageUse: ImageUse,
-    imageRole: ImageRole,
 ) => {
     const width = imageUseSizes[imageUse][size]
-    const widthForRole =
-        imageRole === 'showcase' || imageRole === 'immersive'
-            ? width * 2
-            : width
-    const newPath = `${image.path}?quality=50&dpr=2&width=${widthForRole}`
+    const aspectRatio = detectImageAspectRatio(image.path)
+    const adjustedWidth = adjustWidth(width, aspectRatio, image.role)
+
+    const newPath = `${image.path}?quality=50&dpr=2&width=${adjustedWidth}`
     return `https://i.guim.co.uk/img/${
         image.source
     }/${newPath}&s=${getSignature(newPath)}`

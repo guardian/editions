@@ -18,7 +18,6 @@ const getImageRole = (
     displayHint?: string,
     capiRole?: string,
 ): ImageRole | undefined => {
-    console.log('getImageRole', displayHint, capiRole)
     if (displayHint === 'immersive' && !capiRole) {
         return displayHint
     } else return imageRoles.find(r => r === capiRole)
