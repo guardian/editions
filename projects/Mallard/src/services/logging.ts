@@ -1,9 +1,7 @@
 // Logging Service that sends event logs to ELK
 import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
-import { User } from '@sentry/react-native'
 import { Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { isInBeta } from 'src/helpers/release-stream'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import {
@@ -14,29 +12,13 @@ import {
 import { errorService } from './errors'
 import { getCASCode } from 'src/authentication/helpers'
 import Config from 'react-native-config'
-import { Level, Feature } from '../../../Apps/common/src/logging'
+import {
+    Level,
+    Feature,
+    MallardLogFormat,
+} from '../../../Apps/common/src/logging'
 
 const { LOGGING_API_KEY } = Config
-
-interface BaseLog {
-    app: string
-    timestamp: Date
-    version: string
-    buildNumber: string
-    level: Level
-    message: string
-    release_channel: 'BETA' | 'RELEASE'
-    os: 'android' | 'ios'
-    device: string
-    networkStatus: NetInfoStateType
-    deviceId: string
-    signedIn: boolean
-    userId: User['id'] | null
-    digitalSub: boolean
-    casCode: CASExpiry['subscriptionCode'] | null
-    iAP: boolean
-    feature?: Feature
-}
 
 interface LogParams {
     level: Level
@@ -69,7 +51,7 @@ class Logging {
         level,
         message,
         ...optionalFields
-    }: LogParams): Promise<BaseLog> {
+    }: LogParams): Promise<MallardLogFormat> {
         const {
             networkStatus,
             userData,
@@ -111,7 +93,7 @@ class Logging {
         }
     }
 
-    async getQueuedLogs(): Promise<BaseLog[] | [{}]> {
+    async getQueuedLogs(): Promise<MallardLogFormat[] | [{}]> {
         try {
             const logString = await loggingQueueCache.get()
             return JSON.parse(logString || '[{}]')
@@ -120,7 +102,7 @@ class Logging {
         }
     }
 
-    async saveQueuedLogs(log: BaseLog[]): Promise<string | Error> {
+    async saveQueuedLogs(log: MallardLogFormat[]): Promise<string | Error> {
         try {
             const logString = JSON.stringify(log)
             await loggingQueueCache.set(logString)
@@ -131,7 +113,7 @@ class Logging {
         }
     }
 
-    async queueLogs(log: BaseLog[]) {
+    async queueLogs(log: MallardLogFormat[]) {
         try {
             const currentQueue = await this.getQueuedLogs()
             const currentQueueString = JSON.stringify(currentQueue)
@@ -155,7 +137,7 @@ class Logging {
         }
     }
 
-    async postLog(log: BaseLog[]): Promise<Response | Error> {
+    async postLog(log: MallardLogFormat[]): Promise<Response | Error> {
         try {
             const response = await fetch(defaultSettings.logging, {
                 method: 'POST',

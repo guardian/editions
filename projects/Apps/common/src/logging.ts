@@ -26,7 +26,7 @@ export interface MallardLogFormat {
     release_channel: 'BETA' | 'RELEASE'
     os: 'android' | 'ios'
     device: string
-    network_status: NetInfoStateType
+    networkStatus: NetInfoStateType
     deviceId: string
     signedIn: boolean
     userId: User['id'] | null
@@ -34,11 +34,4 @@ export interface MallardLogFormat {
     casCode: CASExpiry['subscriptionCode'] | null
     iAP: boolean
     feature?: Feature
-}
-
-export interface LogFormat {
-    '@timestamp': Date
-    level: Level
-    message: string
-    metadata?: LogMetaData
 }
