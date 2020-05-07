@@ -93,12 +93,11 @@ class Logging {
         }
     }
 
-    async getQueuedLogs(): Promise<MallardLogFormat[] | [{}]> {
+    async getQueuedLogs(): Promise<string> {
         try {
-            const logString = await loggingQueueCache.get()
-            return JSON.parse(logString || '[{}]')
+            return (await loggingQueueCache.get()) || '[{}]'
         } catch (e) {
-            return [{}]
+            return '[{}]'
         }
     }
 
@@ -115,9 +114,8 @@ class Logging {
 
     async queueLogs(log: MallardLogFormat[]) {
         try {
-            const currentQueue = await this.getQueuedLogs()
-            const currentQueueString = JSON.stringify(currentQueue)
-            const parsedQueue = JSON.parse(currentQueueString || '[{}]')
+            const currentQueueString = await this.getQueuedLogs()
+            const parsedQueue = JSON.parse(currentQueueString)
             const newQueue = [...parsedQueue, ...log]
             const cleanLogs = newQueue.filter(
                 value => Object.keys(value).length !== 0,
