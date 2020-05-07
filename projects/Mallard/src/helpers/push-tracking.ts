@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { londonTime } from 'src/helpers/date'
 import { lastNDays } from 'src/helpers/issues'
+import { Feature } from 'src/services/logging'
 
 const PUSH_TRACKING_KEY = '@push-tracking'
 
@@ -63,6 +64,7 @@ const clearPushTracking = async (): Promise<void> =>
 const pushTracking = async (
     id: PushTrackingId,
     value: string,
+    feature: Feature,
 ): Promise<void> => {
     try {
         if (__DEV__) {
@@ -79,6 +81,16 @@ const pushTracking = async (
         const saveTracking = storedTracking
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
+
+        // Doing this for linting rather than refactor a load of code back again as its used below
+        console.log(feature)
+
+        // @TODO - Needs implementing once consent is in place
+        // loggingService.log({
+        //     level: Level.INFO,
+        //     message: value,
+        //     optionalFields: { id, feature },
+        // })
 
         return await AsyncStorage.setItem(
             PUSH_TRACKING_KEY,

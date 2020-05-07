@@ -134,8 +134,10 @@ const makeCss = ({ colors, theme }: CssProps, contentType: string) => css`
         margin-bottom: ${px(metrics.vertical * 2)};
     }
     .app a {
-        color: ${colors.main};
-        text-decoration-color: ${colors.pastel};
+        color: ${theme == 'dark' ? colors.bright : colors.main};
+        text-decoration-color: ${
+            theme == 'dark' ? colors.bright : colors.pastel
+        };
     }
     * {
         margin: 0;

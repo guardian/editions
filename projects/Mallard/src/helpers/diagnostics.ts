@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { Linking, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import RNFetchBlob from 'rn-fetch-blob'
-import { canViewEdition } from 'src/authentication/helpers'
+import { canViewEdition, getCASCode } from 'src/authentication/helpers'
 import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
 import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
 import { NetInfo } from 'src/hooks/use-net-info'
@@ -14,24 +14,13 @@ import { locale } from './locale'
 import { getDiagnosticPushTracking } from './push-tracking'
 import { isInBeta } from './release-stream'
 import { imageForScreenSize } from './screen'
-import {
-    casCredentialsKeychain,
-    iapReceiptCache,
-    legacyCASUsernameCache,
-    userDataCache,
-} from './storage'
+import { iapReceiptCache, userDataCache } from './storage'
 import {
     ANDROID_BETA_EMAIL,
     DIAGNOSTICS_REQUEST,
     DIAGNOSTICS_TITLE,
     IOS_BETA_EMAIL,
 } from './words'
-
-const getCASCode = () =>
-    Promise.all([
-        casCredentialsKeychain.get(),
-        legacyCASUsernameCache.get(),
-    ]).then(([current, legacy]) => (current && current.username) || legacy)
 
 const getGDPREntries = () =>
     Promise.all(

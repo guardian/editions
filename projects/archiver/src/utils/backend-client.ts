@@ -61,5 +61,9 @@ export const getImageUse = async (
 
     if (hasFailed(maybeResponse)) return [path, maybeResponse]
 
-    return [path, await maybeResponse.buffer()]
+    // Throw away query string before storing the image so that the client
+    // doesn't need to care about it.
+    const pathWithoutQueryString = path.split('?')[0]
+
+    return [pathWithoutQueryString, await maybeResponse.buffer()]
 }

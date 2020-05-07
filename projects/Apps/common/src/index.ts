@@ -453,6 +453,7 @@ export const issueSummaryPath = (edition: string) => `${edition}/issues`
 export interface Image {
     source: string
     path: string
+    role?: ImageRole
 }
 
 export const imageThumbnailUses = ['thumb', 'thumb-large', 'not-used'] as const
@@ -460,6 +461,21 @@ export const imageUses = [...imageThumbnailUses, 'full-size'] as const
 
 export type ImageThumbnailUse = typeof imageThumbnailUses[number]
 export type ImageUse = typeof imageUses[number]
+
+/**
+ * Note that not all of these roles are respected by this project - they are here for completeness.
+ * This list may need to change based off composer changes - currently the full list can be found here:
+ * https://github.com/guardian/flexible-content/blob/2b6c563e7649ccaaba22a178df868f9a274aded4/composer/src/js/controllers/content/common/body-block/elements/edit.js#L269
+ */
+export const imageRoles = [
+    'showcase',
+    'immersive',
+    'inline',
+    'thumbnail',
+    'supporting',
+    'halfWidth',
+] as const
+export type ImageRole = typeof imageRoles[number]
 
 export interface ImageDeviceUses {
     mobile: ImageUse
@@ -480,15 +496,21 @@ export const thumbsPath = (
     use: ImageThumbnailUse,
 ) => `${thumbsDir(issue, size)}${use}/${image.source}/${image.path}`
 
+export const getImageQueryString = (image: Image) =>
+    image.role ? `?role=${image.role}` : ''
+
 export const imagePath = (
     issue: string,
     size: ImageSize,
     image: Image,
     use: ImageUse = 'full-size',
-) =>
-    use == 'full-size'
-        ? mediaPath(issue, size, image)
-        : thumbsPath(issue, size, image, use)
+) => {
+    const baseUrl =
+        use == 'full-size'
+            ? mediaPath(issue, size, image)
+            : thumbsPath(issue, size, image, use)
+    return `${baseUrl}${getImageQueryString(image)}`
+}
 
 export interface CreditedImage extends Image {
     credit?: string

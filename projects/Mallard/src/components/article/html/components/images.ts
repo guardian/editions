@@ -58,7 +58,7 @@ const imageStyles = ({ colors, theme }: CssProps, contentType: string) => {
             position: relative;
         }
         .image figcaption svg path {
-            fill: ${colors.main};
+            fill: ${theme === 'dark' ? colors.bright : colors.main};
         }
 
         /* Tablet captions */
