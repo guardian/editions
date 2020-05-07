@@ -651,17 +651,35 @@ const getHeaderClassForType = (headerType: HeaderType): string => {
     }
 }
 
+const getByLineText = (
+    headerType: HeaderType,
+    headerProps: ArticleHeaderProps,
+): string | undefined => {
+    const byLineText =
+        headerType === HeaderType.NoByline ||
+        headerType === HeaderType.LargeByline
+            ? headerProps.standfirst
+            : headerProps.bylineHtml
+    return byLineText
+}
+
+const hasByLine = (
+    byLineText: string | undefined,
+    canBeShared: boolean,
+): boolean => {
+    if (byLineText || canBeShared) {
+        return true
+    }
+    return false
+}
+
 const getByLine = (
     headerType: HeaderType,
     canBeShared: boolean,
     headerProps: ArticleHeaderProps,
 ): string => {
     const headerClass = getHeaderClassForType(headerType)
-    const bylineText =
-        headerType === HeaderType.NoByline ||
-        headerType === HeaderType.LargeByline
-            ? headerProps.standfirst
-            : headerProps.bylineHtml
+    const bylineText = getByLineText(headerType, headerProps)
     const shareButton = !canBeShared
         ? ''
         : html`
@@ -700,6 +718,7 @@ const Header = ({
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const byLineText = getByLineText(headerType, headerProps)
     return html`
         ${immersive &&
             headerProps.image &&
@@ -747,11 +766,12 @@ const Header = ({
                         getImagePath,
                     )}
                 </header>
-                ${getByLine(
-                    headerType,
-                    headerProps.canBeShared,
-                    headerProps as ArticleHeaderProps,
-                )}
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                    )}
                 <div class="header-bg"></div>
             </div>
         </div>
