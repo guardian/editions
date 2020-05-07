@@ -1,3 +1,4 @@
 *.d.ts
 !types/*.d.ts
 coverage
+yarn-error.log

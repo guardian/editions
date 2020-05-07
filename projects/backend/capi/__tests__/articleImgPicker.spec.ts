@@ -1,4 +1,8 @@
-import { getImages, ImageAndTrailImage } from '../articleImgPicker'
+import {
+    getImages,
+    ImageAndTrailImage,
+    getImageRole,
+} from '../articleImgPicker'
 import {
     IContent,
     IBlocks,
@@ -143,5 +147,22 @@ describe('articleImgPicker.getImages', () => {
         }
 
         expect(actual).toStrictEqual(withNoImages)
+    })
+})
+
+describe('getImageRole', () => {
+    it('should return immersive for displayHint=immersive when capirole is undefined', async () => {
+        const role = getImageRole('immersive', undefined)
+        expect(role).toBe('immersive')
+    })
+
+    it('should return the capi role when it is defined', async () => {
+        const role = getImageRole('immersive', 'showcase')
+        expect(role).toBe('showcase')
+    })
+
+    it('returns undefined when no valid roles provided', async () => {
+        const role = getImageRole('hehe', 'megabigimage')
+        expect(role).toBe(undefined)
     })
 })

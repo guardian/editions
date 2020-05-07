@@ -34,9 +34,10 @@ const getSignature = (path: string) => {
 
 type AspectRatioType = 'landscape-wide' | 'portrait' | 'landscape'
 
-// example path /d9dfd06b5042a9808b4bc3be3ccea4122cda6cb1/0_0_<width>_<height>/master/7087.jpg
-const detectImageAspectRatio = (path: string): AspectRatioType => {
-    const widthHeightSegment = path.split('/')[1]
+// example path d9dfd06b5042a9808b4bc3be3ccea4122cda6cb1/0_0_<width>_<height>/master/7087.jpg
+export const detectImageAspectRatio = (path: string): AspectRatioType => {
+    const pathSegments = path.split('/').filter(s => s !== '')
+    const widthHeightSegment = pathSegments[1]
     const widthHeightSegmentSplit =
         widthHeightSegment && widthHeightSegment.split('_')
     if (

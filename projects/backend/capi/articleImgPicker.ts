@@ -14,7 +14,7 @@ import { getImage, getCreditedImage } from './assets'
  * @param displayHint
  * @param capiRole the image role specified in the content API (if any)
  */
-const getImageRole = (
+export const getImageRole = (
     displayHint?: string,
     capiRole?: string,
 ): ImageRole | undefined => {
