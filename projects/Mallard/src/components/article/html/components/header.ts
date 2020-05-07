@@ -71,6 +71,10 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
+const shareButtonColor = ({ colors, theme }: CssProps) => {
+    return theme === 'dark' ? color.palette.neutral[100] : colors.main
+}
+
 export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     /* prevent clicks on byline links */
@@ -343,15 +347,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         display: flex;
         width:  ${metrics.fronts.circleButtonDiameter}px;
         height: ${metrics.fronts.circleButtonDiameter}px;
-        border: 1px solid ${colors.main};
-        color: ${colors.main};
+        border: 1px solid ${shareButtonColor({ theme, colors })};;
+        color: ${shareButtonColor({ theme, colors })};
         border-radius: 100%;
         align-items: center;
         justify-content: center;
     }
     .share-icon {
         padding-bottom: .1em;
-        color: ${colors.main};
+        color: ${shareButtonColor({ theme, colors })};
     }
 
     .clearfix {
