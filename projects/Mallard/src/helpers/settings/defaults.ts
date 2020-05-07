@@ -140,8 +140,7 @@ export const defaultSettings: Settings = {
     maxAvailableEditions: 7,
     logging: __DEV__
         ? 'https://editions-logging.code.dev-guardianapis.com/log/mallard'
-        : // WAITING FOR PROD ENDPOINT
-          'https://editions-logging.code.dev-guardianapis.com/log/mallard',
+        : 'https://editions-logging.guardianapis.com/log/mallard',
 }
 
 export const isPreview = (apiUrl: Settings['apiUrl']): boolean => {
