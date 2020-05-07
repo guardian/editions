@@ -117,6 +117,7 @@ describe('fronts', () => {
             credit: undefined,
             path: 'master/asset.com',
             source: 'test',
+            role: undefined,
         }
 
         const trailImg: TrailImage = {
@@ -126,6 +127,7 @@ describe('fronts', () => {
                 mobile: 'not-used',
                 tablet: 'not-used',
             },
+            role: undefined,
         }
 
         const pubImg: PublishedImage = {
@@ -179,7 +181,11 @@ describe('fronts', () => {
                     tablet: 'not-used',
                 })
 
-                const expected = { path: 'pub.img', source: 'test' }
+                const expected = {
+                    path: 'pub.img',
+                    source: 'test',
+                    role: undefined,
+                }
                 expect(actual).toStrictEqual(expected)
             })
         })
@@ -229,7 +235,12 @@ describe('fronts', () => {
                     tablet: 'not-used',
                 })
 
-                const expected = { path: 'pub.img', source: 'test', ...notUsed }
+                const expected = {
+                    path: 'pub.img',
+                    role: undefined,
+                    source: 'test',
+                    ...notUsed,
+                }
                 expect(actual).toStrictEqual(expected)
             })
 
@@ -285,8 +296,16 @@ describe('fronts', () => {
                 })
 
                 const expected = {
-                    cardImage: { path: 'pub.img', source: 'test' },
-                    cardImageTablet: { path: 'pub.img', source: 'test' },
+                    cardImage: {
+                        path: 'pub.img',
+                        role: undefined,
+                        source: 'test',
+                    },
+                    cardImageTablet: {
+                        path: 'pub.img',
+                        role: undefined,
+                        source: 'test',
+                    },
                 }
                 expect(actualCoverCardImages).toStrictEqual(expected)
             })
