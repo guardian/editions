@@ -18,6 +18,7 @@ import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
 import { pushTracking } from 'src/helpers/push-tracking'
 import ApolloClient from 'apollo-client'
+import { Feature } from 'src/services/logging'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -73,12 +74,14 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
             pushTracking(
                 'notificationToken',
                 (token && JSON.stringify(token.token)) || '',
+                Feature.PUSH_NOTIFICATION,
             )
             if (token) {
                 maybeRegister(token.token).catch(err => {
                     pushTracking(
                         'notificationTokenError',
                         JSON.stringify(err) || '',
+                        Feature.PUSH_NOTIFICATION,
                     )
                     console.log(`Error registering for notifications: ${err}`)
                     errorService.captureException(err)
@@ -93,20 +96,29 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     ? notification.data.uniqueIdentifier
                     : notification.uniqueIdentifier
 
-            await pushTracking('notification', JSON.stringify(notification))
+            await pushTracking(
+                'notification',
+                JSON.stringify(notification),
+                Feature.DOWNLOAD,
+            )
             notificationTracking(notificationId, 'received')
 
             if (key) {
                 try {
                     const screenSize = await imageForScreenSize()
 
-                    await pushTracking('pushScreenSize', screenSize)
+                    await pushTracking(
+                        'pushScreenSize',
+                        screenSize,
+                        Feature.DOWNLOAD,
+                    )
 
                     const issueSummaries = await getIssueSummary()
 
                     await pushTracking(
                         'pushIssueSummaries',
                         JSON.stringify(issueSummaries),
+                        Feature.DOWNLOAD,
                     )
 
                     // Check to see if we can find the image summary for the one that is pushed
@@ -118,6 +130,7 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                     await pushTracking(
                         'pushImageSummary',
                         JSON.stringify(pushImageSummary),
+                        Feature.DOWNLOAD,
                     )
 
                     await downloadAndUnzipIssue(
@@ -126,10 +139,18 @@ const pushNotifcationRegistration = (apolloClient: ApolloClient<object>) => {
                         screenSize,
                     )
 
-                    await pushTracking('pushDownloadComplete', 'completed')
+                    await pushTracking(
+                        'pushDownloadComplete',
+                        'completed',
+                        Feature.DOWNLOAD,
+                    )
                     notificationTracking(notificationId, 'downloaded')
                 } catch (e) {
-                    await pushTracking('pushDownloadError', JSON.stringify(e))
+                    await pushTracking(
+                        'pushDownloadError',
+                        JSON.stringify(e),
+                        Feature.DOWNLOAD,
+                    )
                     errorService.captureException(e)
                 } finally {
                     // No matter what happens, always clear up old issues

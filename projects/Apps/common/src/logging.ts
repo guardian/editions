@@ -9,6 +9,13 @@ export enum Level {
     DEBUG = 'DEBUG',
 }
 
+export enum Feature {
+    DOWNLOAD = 'DOWNLOAD',
+    PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
+    BACKGROUNG_DOWNLOAD = 'BACKGROUND_DOWNLOAD',
+    CLEAR_ISSUES = 'CLEAR_ISSUES',
+}
+
 export interface MallardLogFormat {
     timestamp: Date
     level: Level
@@ -19,13 +26,12 @@ export interface MallardLogFormat {
     release_channel: 'BETA' | 'RELEASE'
     os: 'android' | 'ios'
     device: string
-    network_status: NetInfoStateType
-    // feature: Feature
-    // May need to consent for the below
+    networkStatus: NetInfoStateType
     deviceId: string
     signedIn: boolean
     userId: User['id'] | null
     digitalSub: boolean
     casCode: CASExpiry['subscriptionCode'] | null
     iAP: boolean
+    feature?: Feature
 }
