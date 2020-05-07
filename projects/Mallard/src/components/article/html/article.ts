@@ -138,6 +138,7 @@ export const renderArticle = (
                 headline: article.headline,
                 byline: article.byline,
                 bylineHtml: article.bylineHtml,
+                standfirst: article.standfirst,
                 image: article.image,
                 showMedia,
                 canBeShared,
