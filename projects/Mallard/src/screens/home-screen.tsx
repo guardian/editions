@@ -77,13 +77,13 @@ const HomeScreenHeader = withNavigation(
         onSettings: () => void
     } & NavigationInjectedProps) => {
         const action = (
-            <Button 
+            <Button
                 accessible={true}
                 accessibilityLabel="Close button"
                 accessibilityHint="Returns to edition"
-                icon={'\uE04F'} 
-                alt="Return to edition" 
-                onPress={onReturn} 
+                icon={'\uE04F'}
+                alt="Return to edition"
+                onPress={onReturn}
             />
         )
         const settings = (
@@ -101,7 +101,7 @@ const HomeScreenHeader = withNavigation(
         )
         return (
             <IssuePickerHeader
-                accessible={true}    
+                accessible={true}
                 accessibilityHint="Returns to edition"
                 leftAction={settings}
                 onPress={onReturn}
@@ -176,7 +176,7 @@ const IssueRowContainer = React.memo(
         ])
 
         const onPressFront = useCallback(
-            frontKey => {
+            (frontKey) => {
                 if (
                     issueId != null &&
                     issueId.publishedIssueId === publishedId &&
@@ -217,8 +217,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
                     accessible={true}
-                    accessibilityLabel={"Manage editions button"}
-                    accessibilityHint={"Navigates to manage editions screen"}
+                    accessibilityLabel={'Manage editions button'}
+                    accessibilityHint={'Navigates to manage editions screen'}
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
                         navigation.navigate({
@@ -233,8 +233,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                 <GridRowSplit>
                     <Button
                         accessible={true}
-                        accessibilityLabel={"Go to latest button"}
-                        accessibilityHint={"Navigates to the latest edition"}
+                        accessibilityLabel={'Go to latest button'}
+                        accessibilityHint={'Navigates to the latest edition'}
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
                             navigateToIssue({
@@ -283,7 +283,7 @@ const IssueListView = withNavigation(
 
             // We want to scroll to the current issue.
             const currentIssueIndex = issueList.findIndex(
-                issue =>
+                (issue) =>
                     issue.localId === localId &&
                     issue.publishedId === publishedId,
             )
