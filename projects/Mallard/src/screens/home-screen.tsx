@@ -77,10 +77,20 @@ const HomeScreenHeader = withNavigation(
         onSettings: () => void
     } & NavigationInjectedProps) => {
         const action = (
-            <Button icon={'\uE04F'} alt="Return to issue" onPress={onReturn} />
+            <Button 
+                accessible={true}
+                accessibilityLabel="Close button"
+                accessibilityHint="Returns to edition"
+                icon={'\uE04F'} 
+                alt="Return to edition" 
+                onPress={onReturn} 
+            />
         )
         const settings = (
             <Button
+                accessible={true}
+                accessibilityLabel="Settings button"
+                accessibilityHint="Navigates to settings screen"
                 icon={'\uE040'}
                 alt="Settings"
                 onPress={() => {
@@ -91,8 +101,9 @@ const HomeScreenHeader = withNavigation(
         )
         return (
             <IssuePickerHeader
+                accessible={true}    
+                accessibilityHint="Returns to edition"
                 leftAction={settings}
-                accessibilityHint={'Return to issue'}
                 onPress={onReturn}
                 action={action}
             />
@@ -205,6 +216,9 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
         <View style={styles.issueListFooter}>
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
+                    accessible={true}
+                    accessibilityLabel={"Manage editions button"}
+                    accessibilityHint={"Navigates to manage editions screen"}
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
                         navigation.navigate({
@@ -218,6 +232,9 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
             {isUsingProdDevtools ? (
                 <GridRowSplit>
                     <Button
+                        accessible={true}
+                        accessibilityLabel={"Go to latest button"}
+                        accessibilityHint={"Navigates to the latest edition"}
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
                             navigateToIssue({
