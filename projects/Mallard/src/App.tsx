@@ -36,6 +36,7 @@ import { ConfigProvider } from 'src/hooks/use-config-provider'
 import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
 import { weatherHider } from './helpers/weather-hider'
+import { loggingService } from './services/logging'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -43,9 +44,11 @@ import { weatherHider } from './helpers/weather-hider'
  */
 const apolloClient = createApolloClient()
 
+// Log Intitialisation
 if (!__DEV__) {
     errorService.init(apolloClient)
 }
+loggingService.init(apolloClient)
 
 // useScreens is not a hook
 // eslint-disable-next-line react-hooks/rules-of-hooks

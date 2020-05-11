@@ -17,6 +17,9 @@ import {
     Feature,
     MallardLogFormat,
 } from '../../../Apps/common/src/logging'
+import { GdprSwitchSetting } from 'src/helpers/settings'
+import gql from 'graphql-tag'
+import ApolloClient from 'apollo-client'
 
 const { LOGGING_API_KEY } = Config
 
@@ -26,7 +29,28 @@ interface LogParams {
     optionalFields?: object
 }
 
+type QueryData = { gdprAllowPerformance: GdprSwitchSetting }
+const QUERY = gql('{ gdprAllowPerformance @client }')
+
 class Logging {
+    hasConsent: GdprSwitchSetting
+
+    constructor() {
+        this.hasConsent = false
+    }
+
+    init(apolloClient: ApolloClient<object>) {
+        apolloClient.watchQuery<QueryData>({ query: QUERY }).subscribe({
+            next: query => {
+                if (query.loading) return
+                this.hasConsent = query.data.gdprAllowPerformance
+            },
+            error: error => {
+                errorService.captureException(error)
+            },
+        })
+    }
+
     async getExternalInfo() {
         const [
             networkStatus,
@@ -160,6 +184,10 @@ class Logging {
 
     async log({ level, message, ...optionalFields }: LogParams) {
         try {
+            if (!this.hasConsent) {
+                return
+            }
+
             const currentLog = await this.baseLog({
                 level,
                 message,
