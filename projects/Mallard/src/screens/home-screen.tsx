@@ -233,7 +233,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                 <GridRowSplit>
                     <Button
                         accessible={true}
-                        accessibilityLabel="Go to latest button"
+                        accessibilityLabel="Go to latest"
                         accessibilityHint="Navigates to the latest edition"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
