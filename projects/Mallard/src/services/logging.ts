@@ -166,7 +166,10 @@ class Logging {
             await this.postLog(queuedLogs)
         } catch {
             // Assumes there is a problem sending logs and clears them
-            await this.clearLogs()
+            const { isConnected } = await NetInfo.fetch()
+            if (isConnected) {
+                await this.clearLogs()
+            }
         }
     }
 
