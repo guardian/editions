@@ -6,8 +6,9 @@ import { defaultSettings } from './settings/defaults'
  *
  * v1 - The initial version that CMP was released with
  * v2 - Move Braze from ESSENTIAL to PERSONALISED_ADS
+ * v3 - Add Logging to PERFORMANCE
  */
-export const CURRENT_CONSENT_VERSION = 2
+export const CURRENT_CONSENT_VERSION = 3
 
 export interface GdprDefaultSettings {
     gdprAllowEssential: boolean
@@ -32,6 +33,7 @@ export type GDPRBucketKeys =
     | 'gdprAllowEssential'
     | 'gdprAllowPerformance'
     | 'gdprAllowFunctionality'
+    | 'gdprConsentVersion'
 type GDPRBucket = { [K in GDPRBucketKeys]: (keyof GdprSettings)[] }
 
 export const gdprSwitchSettings: (keyof GdprSwitchSettings)[] = [
@@ -43,6 +45,7 @@ export const GdprBuckets: GDPRBucket = {
     gdprAllowEssential: ['gdprAllowOphan'],
     gdprAllowPerformance: ['gdprAllowSentry'],
     gdprAllowFunctionality: ['gdprAllowGoogleLogin', 'gdprAllowFacebookLogin'],
+    gdprConsentVersion: ['gdprConsentVersion'],
 }
 
 export interface GdprSettings {

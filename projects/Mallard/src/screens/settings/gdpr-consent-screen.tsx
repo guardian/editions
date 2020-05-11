@@ -74,7 +74,7 @@ const consentToAll = (client: ApolloClient<object>) => {
     setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
 }
 
-const DEVMODE_resetAll = (client: ApolloClient<object>) => {
+const resetAll = (client: ApolloClient<object>) => {
     gdprSwitchSettings.forEach(sw => {
         setConsent(client, sw, null)
     })
@@ -226,9 +226,9 @@ const GdprConsent = ({
                     Privacy Settings from the Settings menu.
                 </UiBodyCopy>
             </Footer>
-            {data.isUsingProdDevtools ? (
+            {__DEV__ ? (
                 <Footer>
-                    <Button onPress={DEVMODE_resetAll.bind(undefined, client)}>
+                    <Button onPress={resetAll.bind(undefined, client)}>
                         Reset
                     </Button>
                 </Footer>
