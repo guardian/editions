@@ -61,9 +61,29 @@ describe('logging service', () => {
             })
             loggingService.clearLogs = jest.fn()
             loggingService.postLog = jest.fn()
+            loggingService.hasConsent = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
             expect(loggingService.postLog).toHaveBeenCalled()
             expect(loggingService.clearLogs).toHaveBeenCalled()
+        })
+        it('should not post a log if there is no consent', async () => {
+            loggingService.getExternalInfo = jest.fn().mockReturnValue({
+                networkStatus: { type: 'wifi' },
+                userData: {
+                    userDetails: { id: 'testId' },
+                    membershipData: {
+                        contentAccess: { digitalPack: true },
+                    },
+                },
+                casCode: 'QWERTYUIOP',
+                iapReceipt: true,
+            })
+            loggingService.clearLogs = jest.fn()
+            loggingService.postLog = jest.fn()
+            loggingService.hasConsent = false
+            await loggingService.log({ level: Level.INFO, message: 'test' })
+            expect(loggingService.postLog).not.toHaveBeenCalled()
+            expect(loggingService.clearLogs).not.toHaveBeenCalled()
         })
     })
 })

@@ -24,6 +24,7 @@ describe('logging service - Offline', () => {
                 iapReceipt: true,
             })
             loggingService.saveQueuedLogs = jest.fn()
+            loggingService.hasConsent = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
             expect(loggingService.saveQueuedLogs).toHaveBeenCalled()
         })

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { londonTime } from 'src/helpers/date'
 import { lastNDays } from 'src/helpers/issues'
-import { Feature } from 'src/services/logging'
+import { Feature, loggingService, Level } from 'src/services/logging'
 
 const PUSH_TRACKING_KEY = '@push-tracking'
 
@@ -85,12 +85,11 @@ const pushTracking = async (
         // Doing this for linting rather than refactor a load of code back again as its used below
         console.log(feature)
 
-        // @TODO - Needs implementing once consent is in place
-        // loggingService.log({
-        //     level: Level.INFO,
-        //     message: value,
-        //     optionalFields: { id, feature },
-        // })
+        loggingService.log({
+            level: Level.INFO,
+            message: value,
+            optionalFields: { id, feature },
+        })
 
         return await AsyncStorage.setItem(
             PUSH_TRACKING_KEY,

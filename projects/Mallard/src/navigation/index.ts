@@ -45,6 +45,7 @@ import {
 } from 'src/screens/settings/manage-editions-screen'
 import { WeatherGeolocationConsentScreen } from 'src/screens/weather-geolocation-consent-screen'
 import StorybookScreen from 'src/screens/storybook-screen'
+import { CURRENT_CONSENT_VERSION } from 'src/helpers/settings'
 
 const navOptionsWithGraunHeader = {
     headerStyle: {
@@ -165,21 +166,21 @@ const ONBOARDING_QUERY = gql(`{
     gdprAllowEssential @client
     gdprAllowPerformance @client
     gdprAllowFunctionality @client
+    gdprConsentVersion @client
 }`)
 
 type OnboardingQueryData = {
     gdprAllowEssential: boolean
     gdprAllowPerformance: boolean
     gdprAllowFunctionality: boolean
+    gdprConsentVersion: number
 }
 
-const hasOnboarded = (data: OnboardingQueryData) => {
-    return (
-        data.gdprAllowEssential != null &&
-        data.gdprAllowFunctionality != null &&
-        data.gdprAllowPerformance != null
-    )
-}
+const hasOnboarded = (data: OnboardingQueryData) =>
+    data.gdprAllowEssential != null &&
+    data.gdprAllowFunctionality != null &&
+    data.gdprAllowPerformance != null &&
+    data.gdprConsentVersion == CURRENT_CONSENT_VERSION
 
 const RootNavigator = createAppContainer(
     createStackNavigator(

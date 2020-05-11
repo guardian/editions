@@ -7,9 +7,15 @@ import {
 import { ButtonAppearance } from 'src/components/button/button'
 import { ModalButton } from 'src/components/modal-button'
 import { LinkNav } from 'src/components/link'
-import { gdprSwitchSettings } from 'src/helpers/settings'
+import {
+    gdprSwitchSettings,
+    CURRENT_CONSENT_VERSION,
+} from 'src/helpers/settings'
 import { GDPR_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
-import { setGdprFlag } from 'src/helpers/settings/setters'
+import {
+    setGdprFlag,
+    setGdprConsentVersion,
+} from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
 
@@ -55,6 +61,7 @@ const OnboardingConsent = ({
                 setGdprFlag(client, sw, true)
             }
         })
+        setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
     }
 
     return (

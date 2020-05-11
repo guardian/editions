@@ -71,6 +71,10 @@ const outieHeader = (type: ArticleType) => css`
     ${outieKicker(type)}
 `
 
+const shareButtonColor = ({ colors, theme }: CssProps) => {
+    return theme === 'dark' ? color.palette.neutral[100] : colors.main
+}
+
 export const headerStyles = ({ colors, theme }: CssProps) => css`
 
     /* prevent clicks on byline links */
@@ -343,15 +347,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         display: flex;
         width:  ${metrics.fronts.circleButtonDiameter}px;
         height: ${metrics.fronts.circleButtonDiameter}px;
-        border: 1px solid ${colors.main};
-        color: ${colors.main};
+        border: 1px solid ${shareButtonColor({ theme, colors })};;
+        color: ${shareButtonColor({ theme, colors })};
         border-radius: 100%;
         align-items: center;
         justify-content: center;
     }
     .share-icon {
         padding-bottom: .1em;
-        color: ${colors.main};
+        color: ${shareButtonColor({ theme, colors })};
     }
 
     .clearfix {
@@ -651,17 +655,35 @@ const getHeaderClassForType = (headerType: HeaderType): string => {
     }
 }
 
+const getByLineText = (
+    headerType: HeaderType,
+    headerProps: ArticleHeaderProps,
+): string | undefined => {
+    const byLineText =
+        headerType === HeaderType.NoByline ||
+        headerType === HeaderType.LargeByline
+            ? headerProps.standfirst
+            : headerProps.bylineHtml
+    return byLineText
+}
+
+const hasByLine = (
+    byLineText: string | undefined,
+    canBeShared: boolean,
+): boolean => {
+    if (byLineText || canBeShared) {
+        return true
+    }
+    return false
+}
+
 const getByLine = (
     headerType: HeaderType,
     canBeShared: boolean,
     headerProps: ArticleHeaderProps,
 ): string => {
     const headerClass = getHeaderClassForType(headerType)
-    const bylineText =
-        headerType === HeaderType.NoByline ||
-        headerType === HeaderType.LargeByline
-            ? headerProps.standfirst
-            : headerProps.bylineHtml
+    const bylineText = getByLineText(headerType, headerProps)
     const shareButton = !canBeShared
         ? ''
         : html`
@@ -700,6 +722,7 @@ const Header = ({
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const byLineText = getByLineText(headerType, headerProps)
     return html`
         ${immersive &&
             headerProps.image &&
@@ -747,11 +770,12 @@ const Header = ({
                         getImagePath,
                     )}
                 </header>
-                ${getByLine(
-                    headerType,
-                    headerProps.canBeShared,
-                    headerProps as ArticleHeaderProps,
-                )}
+                ${hasByLine(byLineText, headerProps.canBeShared) &&
+                    getByLine(
+                        headerType,
+                        headerProps.canBeShared,
+                        headerProps as ArticleHeaderProps,
+                    )}
                 <div class="header-bg"></div>
             </div>
         </div>
