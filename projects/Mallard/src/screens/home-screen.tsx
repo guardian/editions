@@ -80,7 +80,7 @@ const HomeScreenHeader = withNavigation(
             <Button
                 accessible={true}
                 accessibilityLabel="Close button"
-                accessibilityHint="Returns to edition"
+                accessibilityHint="Returns to the edition"
                 icon={'\uE04F'}
                 alt="Return to edition"
                 onPress={onReturn}
@@ -102,7 +102,8 @@ const HomeScreenHeader = withNavigation(
         return (
             <IssuePickerHeader
                 accessible={true}
-                accessibilityHint="Returns to edition"
+                accessibilityLabel="Recent editions button"
+                accessibilityHint="Returns to the edition"
                 leftAction={settings}
                 onPress={onReturn}
                 action={action}
@@ -233,7 +234,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                 <GridRowSplit>
                     <Button
                         accessible={true}
-                        accessibilityLabel="Go to latest"
+                        accessibilityLabel="Go to the latest edition button"
                         accessibilityHint="Navigates to the latest edition"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
