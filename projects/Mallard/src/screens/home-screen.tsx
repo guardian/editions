@@ -218,8 +218,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
                     accessible={true}
-                    accessibilityLabel={'Manage editions button'}
-                    accessibilityHint={'Navigates to manage editions screen'}
+                    accessibilityLabel="Manage editions button"
+                    accessibilityHint="Navigates to manage editions screen"
                     appearance={ButtonAppearance.skeleton}
                     onPress={() => {
                         navigation.navigate({
