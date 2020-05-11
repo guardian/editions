@@ -159,14 +159,14 @@ class Logging {
     }
 
     // Designed to post logs that have been queued but havent sent
-    async postQueuedLogs() {
+    async postQueuedLogs(): Promise<void> {
         try {
             const queuedLogsString = await this.getQueuedLogs()
             const queuedLogs = JSON.parse(queuedLogsString)
             await this.postLog(queuedLogs)
         } catch {
             // Assumes there is a problem sending logs and clears them
-            this.clearLogs()
+            await this.clearLogs()
         }
     }
 
