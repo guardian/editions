@@ -209,6 +209,14 @@ class Logging {
             return e
         }
     }
+
+    async basicLogInfo({
+        level,
+        message,
+        ...optionalFields
+    }: LogParams): Promise<MallardLogFormat> {
+        return await this.baseLog({ level, message, ...optionalFields })
+    }
 }
 
 const loggingService = new Logging()

@@ -37,6 +37,7 @@ import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
 import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
+import { sendCrashlyticsAttributes } from './services/crashlytics'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -141,6 +142,7 @@ export default class App extends React.Component<{}, {}> {
         SplashScreen.hide()
         weatherHider(apolloClient)
         clearAndDownloadIssue(apolloClient)
+        sendCrashlyticsAttributes()
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
