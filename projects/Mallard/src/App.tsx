@@ -36,6 +36,7 @@ import { ConfigProvider } from 'src/hooks/use-config-provider'
 import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
 import { weatherHider } from './helpers/weather-hider'
+import { loggingService } from './services/logging'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -144,6 +145,7 @@ export default class App extends React.Component<{}, {}> {
                 clearAndDownloadIssue(apolloClient)
             }
         })
+        loggingService.postQueuedLogs()
     }
 
     async componentDidCatch(e: Error) {

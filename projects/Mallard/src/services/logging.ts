@@ -158,6 +158,18 @@ class Logging {
         }
     }
 
+    // Designed to post logs that have been queued but havent sent
+    async postQueuedLogs() {
+        try {
+            const queuedLogsString = await this.getQueuedLogs()
+            const queuedLogs = JSON.parse(queuedLogsString)
+            await this.postLog(queuedLogs)
+        } catch {
+            // Assumes there is a problem sending logs and clears them
+            this.clearLogs()
+        }
+    }
+
     async log({ level, message, ...optionalFields }: LogParams) {
         try {
             const currentLog = await this.baseLog({
