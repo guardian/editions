@@ -78,8 +78,9 @@ const HomeScreenHeader = withNavigation(
     } & NavigationInjectedProps) => {
         const action = (
             <Button
+                accessible={true}
                 accessibilityLabel="Close button"
-                accessibilityHint="Returns to the edition"
+                accessibilityHint="Returns to edition"
                 icon={'\uE04F'}
                 alt="Return to edition"
                 onPress={onReturn}
@@ -87,6 +88,7 @@ const HomeScreenHeader = withNavigation(
         )
         const settings = (
             <Button
+                accessible={true}
                 accessibilityLabel="Settings button"
                 accessibilityHint="Navigates to settings screen"
                 icon={'\uE040'}
@@ -99,6 +101,8 @@ const HomeScreenHeader = withNavigation(
         )
         return (
             <IssuePickerHeader
+                accessible={true}
+                accessibilityHint="Returns to edition"
                 leftAction={settings}
                 onPress={onReturn}
                 action={action}
@@ -212,6 +216,7 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
         <View style={styles.issueListFooter}>
             <GridRowSplit style={styles.issueListFooterGrid}>
                 <Button
+                    accessible={true}
                     accessibilityLabel="Manage editions button"
                     accessibilityHint="Navigates to manage editions screen"
                     appearance={ButtonAppearance.skeleton}
@@ -227,7 +232,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
             {isUsingProdDevtools ? (
                 <GridRowSplit>
                     <Button
-                        accessibilityLabel="Go to the latest edition button"
+                        accessible={true}
+                        accessibilityLabel="Go to latest button"
                         accessibilityHint="Navigates to the latest edition"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
