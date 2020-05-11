@@ -21,9 +21,8 @@ const BugButton = () => {
     const client = useApolloClient()
     return isInBeta() ? (
         <Button
-            accessible={true}
             accessibilityLabel="Report a bug button"
-            accessibilitHint="Opens a dialog asking if you want to include diagnostic information to your report"
+            accessibilityHint="Opens a dialog asking if you want to include diagnostic information to your report"
             style={styles.button}
             onPress={createMailtoHandler(client, 'Report a bug', '', attempt)}
             alt="Report a bug"

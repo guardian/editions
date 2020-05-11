@@ -84,7 +84,6 @@ const ArticleImage = ({ image, style, proxy, aspectRatio }: PropTypes) => {
             </ImageBackground>
             {image.credit && (
                 <Button
-                    accessible={true}
                     accessibilityLabel="Image captions button"
                     accessibilityHint="Tells you the image credits and description"
                     alt="Toggle credit"
