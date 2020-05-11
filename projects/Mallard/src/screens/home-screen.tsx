@@ -80,7 +80,7 @@ const HomeScreenHeader = withNavigation(
             <Button
                 accessible={true}
                 accessibilityLabel="Close button"
-                accessibilityHint="Returns to edition"
+                accessibilityHint="Returns to the edition"
                 icon={'\uE04F'}
                 alt="Return to edition"
                 onPress={onReturn}
@@ -102,7 +102,8 @@ const HomeScreenHeader = withNavigation(
         return (
             <IssuePickerHeader
                 accessible={true}
-                accessibilityHint="Returns to edition"
+                accessibilityLabel="Recent editions button"
+                accessibilityHint="Returns to the edition"
                 leftAction={settings}
                 onPress={onReturn}
                 action={action}
@@ -176,7 +177,7 @@ const IssueRowContainer = React.memo(
         ])
 
         const onPressFront = useCallback(
-            (frontKey) => {
+            frontKey => {
                 if (
                     issueId != null &&
                     issueId.publishedIssueId === publishedId &&
@@ -233,8 +234,8 @@ const IssueListFooter = ({ navigation }: NavigationInjectedProps) => {
                 <GridRowSplit>
                     <Button
                         accessible={true}
-                        accessibilityLabel={'Go to latest button'}
-                        accessibilityHint={'Navigates to the latest edition'}
+                        accessibilityLabel="Go to the latest edition button"
+                        accessibilityHint="Navigates to the latest edition"
                         appearance={ButtonAppearance.skeleton}
                         onPress={() => {
                             navigateToIssue({
@@ -283,7 +284,7 @@ const IssueListView = withNavigation(
 
             // We want to scroll to the current issue.
             const currentIssueIndex = issueList.findIndex(
-                (issue) =>
+                issue =>
                     issue.localId === localId &&
                     issue.publishedId === publishedId,
             )
