@@ -71,12 +71,12 @@ class AccessController<I extends AuthMap, S extends AuthName<I>> {
         return cachedValidAttempt && Date.now() - cachedValidAttempt < ONE_MONTH
     }
 
-    private logReAuthentication = (connection: string) => {
+    private logReAuthentication = (expectedConnection: string) => {
         const feature = Feature.SIGN_IN
         loggingService.log({
             level: Level.INFO,
             message: `Previous cached auth expired - re-authenticating user`,
-            optionalFields: { connection, feature },
+            optionalFields: { expectedConnection, feature },
         })
     }
 
