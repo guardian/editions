@@ -57,9 +57,7 @@ const OnboardingConsent = ({
 
     const enableNulls = () => {
         gdprSwitchSettings.map(sw => {
-            if (data[sw] === null) {
-                setGdprFlag(client, sw, true)
-            }
+            setGdprFlag(client, sw, true)
         })
         setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
     }
