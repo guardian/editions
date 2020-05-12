@@ -188,8 +188,9 @@ class Authorizer<
      * This sets the attempt to Invalid
      */
     public signOut() {
+        const feature = Feature.SIGN_IN
         this.updateAttempt(InvalidAttempt('online'))
-        this.logAuthCacheClear('sign out')
+        this.logAuthCacheClear(feature, 'sign out')
         return this.clearCaches()
     }
 
