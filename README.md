@@ -64,6 +64,12 @@ This contains `common` which is the code shared between app and backends and `cr
 
 These are deployed using [riffraff](https://riffraff.gutools.co.uk) as `editions`.
 
+## Uploading iOS internal beta to testflight
+
+1. Create a GitHub personal access token (you will need to select the "repo" scope)
+2. Set your personal access token as an environment variable: export GITHUB_TOKEN="secret".
+3. Execute `editions/script/upload-build.sh` to upload a build from master
+
 ## Complete Process Flow
 
 1) Editors open the Fronts tool and collate the content for an issue.
