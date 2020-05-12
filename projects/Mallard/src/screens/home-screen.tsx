@@ -99,9 +99,6 @@ const HomeScreenHeader = withNavigation(
         )
         return (
             <IssuePickerHeader
-                accessible={true}
-                accessibilityLabel="Recent editions button"
-                accessibilityHint="Returns to the edition"
                 leftAction={settings}
                 onPress={onReturn}
                 action={action}
