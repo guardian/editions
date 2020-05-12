@@ -82,9 +82,6 @@ const pushTracking = async (
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
 
-        // Doing this for linting rather than refactor a load of code back again as its used below
-        console.log(feature)
-
         loggingService.log({
             level: Level.INFO,
             message: value,

@@ -16,12 +16,15 @@ import {
     Level,
     Feature,
     MallardLogFormat,
+    ReleaseChannel,
+    OS,
 } from '../../../Apps/common/src/logging'
 import { GdprSwitchSetting } from 'src/helpers/settings'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
 
 const { LOGGING_API_KEY } = Config
+const ATTEMPTS_THEN_CLEAR = 10
 
 interface LogParams {
     level: Level
@@ -34,9 +37,11 @@ const QUERY = gql('{ gdprAllowPerformance @client }')
 
 class Logging {
     hasConsent: GdprSwitchSetting
+    numberOfAttempts: number
 
     constructor() {
         this.hasConsent = false
+        this.numberOfAttempts = 0
     }
 
     init(apolloClient: ApolloClient<object>) {
@@ -98,12 +103,14 @@ class Logging {
             app: DeviceInfo.getBundleId(),
             version: DeviceInfo.getVersion(),
             buildNumber: DeviceInfo.getBuildNumber(),
-            os: Platform.OS === 'ios' ? 'ios' : 'android',
+            os: Platform.OS === 'ios' ? OS.IOS : OS.ANDROID,
             device: DeviceInfo.getDeviceId(),
             networkStatus: networkStatus
                 ? networkStatus.type
                 : NetInfoStateType.unknown,
-            release_channel: isInBeta() ? 'BETA' : 'RELEASE',
+            release_channel: isInBeta()
+                ? ReleaseChannel.BETA
+                : ReleaseChannel.RELEASE,
             timestamp: new Date(),
             level,
             message,
@@ -153,7 +160,11 @@ class Logging {
 
     async clearLogs() {
         try {
-            return await loggingQueueCache.reset()
+            // Assumes there is a problem sending logs and clears them
+            const { isConnected } = await NetInfo.fetch()
+            if (isConnected) {
+                return await loggingQueueCache.reset()
+            }
         } catch (e) {
             errorService.captureException(e)
         }
@@ -175,9 +186,16 @@ class Logging {
                     `Bad response from Logging Service - status: ${response.status}`,
                 )
             }
+            this.numberOfAttempts = 0
             return response
         } catch (e) {
-            this.saveQueuedLogs(log)
+            if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {
+                await this.clearLogs()
+                this.numberOfAttempts = 0
+            } else {
+                await this.saveQueuedLogs(log)
+                this.numberOfAttempts++
+            }
             throw new Error(e)
         }
     }
@@ -189,11 +207,7 @@ class Logging {
             const queuedLogs = JSON.parse(queuedLogsString)
             await this.postLog(queuedLogs)
         } catch {
-            // Assumes there is a problem sending logs and clears them
-            const { isConnected } = await NetInfo.fetch()
-            if (isConnected) {
-                await this.clearLogs()
-            }
+            await this.clearLogs()
         }
     }
 
