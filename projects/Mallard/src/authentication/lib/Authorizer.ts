@@ -74,8 +74,7 @@ class Authorizer<
         this.checkUserHasAccess = checkUserHasAccess
     }
 
-    private logAuthCacheClear = (reason?: string) => {
-        const feature = Feature.SIGN_IN
+    private logAuthCacheClear = (feature: Feature, reason?: string) => {
         loggingService.log({
             level: Level.INFO,
             message: 'Clearing all authentication caches',
@@ -88,19 +87,34 @@ class Authorizer<
         connectivity: Connectivity,
     ) {
         let attempt: ResolvedAttempt<T>
+        const feature = Feature.SIGN_IN
         try {
             const result = await promise
 
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
                 valid: data => ValidAttempt(data, connectivity),
                 invalid: reason => {
-                    this.logAuthCacheClear(reason)
+                    this.logAuthCacheClear(feature, reason)
                     this.clearCaches()
                     return InvalidAttempt(connectivity, reason)
                 },
-                error: reason => ErrorAttempt(connectivity, reason),
+                error: reason => {
+                    loggingService.log({
+                        level: Level.ERROR,
+                        message:
+                            'Authorization service has returned an error, error attempt created',
+                        optionalFields: { feature, reason },
+                    })
+                    return ErrorAttempt(connectivity, reason)
+                },
             })
         } catch (e) {
+            loggingService.log({
+                level: Level.ERROR,
+                message:
+                    'Authorization attempt threw exception, invalid attempt created',
+                optionalFields: { feature },
+            })
             attempt = InvalidAttempt('online', 'Something went wrong')
         }
         this.upgradeAttempt(attempt)
