@@ -78,7 +78,7 @@ class Authorizer<
         const feature = Feature.SIGN_IN
         loggingService.log({
             level: Level.INFO,
-            message: 'clearing all caches',
+            message: 'Clearing all authentication caches',
             optionalFields: { reason, feature },
         })
     }
