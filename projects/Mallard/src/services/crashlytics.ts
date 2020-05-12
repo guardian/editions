@@ -21,6 +21,6 @@ export const sendCrashlyticsAttributes = async () => {
     crashlytics().setAttributes({
         app: data.app,
         signedIn: String(data.signedIn),
-        userId: data.userId,
+        userId: data.userId || '',
     })
 }
