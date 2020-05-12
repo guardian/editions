@@ -1,5 +1,13 @@
-import { Feature, loggingService, Level } from 'src/services/logging'
+import { loggingService, Level } from 'src/services/logging'
 import crashlytics from '@react-native-firebase/crashlytics'
+
+const enableCrashlytics = async () => {
+    // TODO This need to reflect user consent
+    if (__DEV__) {
+        await crashlytics().setCrashlyticsCollectionEnabled(true)
+        crashlytics().log('Crashlytics initialized')
+    }
+}
 
 export const sendCrashlyticsAttributes = async () => {
     enableCrashlytics()
@@ -15,12 +23,4 @@ export const sendCrashlyticsAttributes = async () => {
         signedIn: String(data.signedIn),
         userId: data.userId,
     })
-}
-
-const enableCrashlytics = async () => {
-    // TODO This need to reflect user consent
-    if (__DEV__) {
-        await crashlytics().setCrashlyticsCollectionEnabled(true)
-        crashlytics().log('Crashlytics initialized')
-    }
 }
