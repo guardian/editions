@@ -14,6 +14,7 @@ import {
 } from './Attempt'
 import { validAttemptCache } from 'src/helpers/storage'
 import { cataResult, AuthResult, ValidResult, InvalidResult } from './Result'
+import { loggingService, Level, Feature } from 'src/services/logging'
 
 type UpdateHandler<T> = (data: AnyAttempt<T>) => void
 
@@ -73,6 +74,15 @@ class Authorizer<
         this.checkUserHasAccess = checkUserHasAccess
     }
 
+    private logAuthCacheClear = (reason?: string) => {
+        const feature = Feature.SIGN_IN
+        loggingService.log({
+            level: Level.INFO,
+            message: 'clearing all caches',
+            optionalFields: { reason, feature },
+        })
+    }
+
     private async handleAuthPromise(
         promise: Promise<AuthResult<T>>,
         connectivity: Connectivity,
@@ -84,6 +94,7 @@ class Authorizer<
             attempt = cataResult<T, ResolvedAttempt<T>>(result, {
                 valid: data => ValidAttempt(data, connectivity),
                 invalid: reason => {
+                    this.logAuthCacheClear(reason)
                     this.clearCaches()
                     return InvalidAttempt(connectivity, reason)
                 },
@@ -164,6 +175,7 @@ class Authorizer<
      */
     public signOut() {
         this.updateAttempt(InvalidAttempt('online'))
+        this.logAuthCacheClear('sign out')
         return this.clearCaches()
     }
 
