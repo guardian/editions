@@ -133,7 +133,8 @@ const GdprConsent = ({
     const onDismiss = () => {
         if (
             data.gdprAllowFunctionality != null &&
-            data.gdprAllowPerformance != null
+            data.gdprAllowPerformance != null &&
+            data.gdprConsentVersion === CURRENT_CONSENT_VERSION
         ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
@@ -214,7 +215,12 @@ const GdprConsent = ({
                                     setConsent(client, item.key, value)
                                     showToast(PREFS_SAVED_MSG)
                                 }}
-                                value={data[item.key]}
+                                value={
+                                    data.gdprConsentVersion !==
+                                    CURRENT_CONSENT_VERSION
+                                        ? null
+                                        : data[item.key]
+                                }
                             />
                         }
                     ></TallRow>
