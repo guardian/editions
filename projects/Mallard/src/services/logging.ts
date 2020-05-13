@@ -228,4 +228,4 @@ class Logging {
 
 const loggingService = new Logging()
 
-export { Level, Feature, loggingService }
+export { Level, Feature, Logging, loggingService }
