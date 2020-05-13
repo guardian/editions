@@ -23,6 +23,8 @@ export interface GdprSwitchSettings {
     gdprAllowFunctionality: GdprSwitchSetting
 }
 
+export const SETTINGS_KEY_PREFIX = '@Setting_'
+
 export const gdprAllowEssentialKey = 'gdprAllowEssential'
 export const gdprAllowPerformanceKey = 'gdprAllowPerformance'
 export const gdprAllowFunctionalityKey = 'gdprAllowFunctionality'
@@ -111,7 +113,7 @@ const unsanitize = (value: string): UnsanitizedSetting => {
 export const getSetting = <S extends keyof Settings>(
     setting: S,
 ): Promise<Settings[S]> =>
-    AsyncStorage.getItem('@Setting_' + setting).then(item => {
+    AsyncStorage.getItem(SETTINGS_KEY_PREFIX + setting).then(item => {
         if (!item) {
             return defaultSettings[setting]
         }
@@ -121,7 +123,7 @@ export const getSetting = <S extends keyof Settings>(
 export const storeSetting = (
     setting: keyof Settings,
     value: UnsanitizedSetting,
-) => AsyncStorage.setItem('@Setting_' + setting, sanitize(value))
+) => AsyncStorage.setItem(SETTINGS_KEY_PREFIX + setting, sanitize(value))
 
 export type GdprSwitch = keyof GdprSwitchSettings
 
