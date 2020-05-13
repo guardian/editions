@@ -48,6 +48,9 @@ const MiscSettingsList = React.memo(
                 onPress: onChange,
                 proxy: (
                     <Switch
+                        accessible={True}
+                        accessibilityLabel="Switch button"
+                        accessibilityHint="Double tap to toggle setting"
                         value={props.isWeatherShown}
                         onValueChange={onChange}
                     />
