@@ -11,6 +11,8 @@ import {
     IAsset,
     AssetType,
 } from '@guardian/capi-ts'
+import { articleTypePicker } from '../articleTypePicker'
+import { ArticleType } from '../../../Apps/common/src'
 
 const masterAsset: IAsset = {
     type: AssetType.IMAGE,
@@ -78,7 +80,7 @@ describe('articleImgPicker.getImages', () => {
             elements: [thumbnailElem],
         }
 
-        const actual = getImages(given)
+        const actual = getImages(given, articleTypePicker(given))
 
         const withBoth: ImageAndTrailImage = {
             image: { ...mainImgExpected },
@@ -101,7 +103,7 @@ describe('articleImgPicker.getImages', () => {
             elements: [thumbnailElem],
         }
 
-        const actual = getImages(given)
+        const actual = getImages(given, articleTypePicker(given))
 
         const withTrailOnly: ImageAndTrailImage = {
             image: undefined,
@@ -124,7 +126,7 @@ describe('articleImgPicker.getImages', () => {
             blocks: blocks,
         }
 
-        const actual = getImages(given)
+        const actual = getImages(given, articleTypePicker(given))
 
         const withMainOnly: ImageAndTrailImage = {
             image: { ...mainImgExpected },
@@ -139,7 +141,7 @@ describe('articleImgPicker.getImages', () => {
             ...sharedGiven,
         }
 
-        const actual = getImages(given)
+        const actual = getImages(given, articleTypePicker(given))
 
         const withNoImages: ImageAndTrailImage = {
             image: undefined,
@@ -152,17 +154,22 @@ describe('articleImgPicker.getImages', () => {
 
 describe('getImageRole', () => {
     it('should return immersive for displayHint=immersive when capirole is undefined', async () => {
-        const role = getImageRole('immersive', undefined)
+        const role = getImageRole(ArticleType.Feature, 'immersive', undefined)
         expect(role).toBe('immersive')
     })
 
     it('should return the capi role when it is defined', async () => {
-        const role = getImageRole('immersive', 'showcase')
+        const role = getImageRole(ArticleType.Feature, 'immersive', 'showcase')
         expect(role).toBe('showcase')
     })
 
     it('returns undefined when no valid roles provided', async () => {
-        const role = getImageRole('hehe', 'megabigimage')
+        const role = getImageRole(ArticleType.Feature, 'hehe', 'megabigimage')
         expect(role).toBe(undefined)
+    })
+
+    it('returns immersive for ArticleType=Immersive when capirole is undefined', async () => {
+        const role = getImageRole(ArticleType.Immersive, undefined, undefined)
+        expect(role).toBe('immersive')
     })
 })
