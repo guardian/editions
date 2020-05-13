@@ -96,10 +96,12 @@ export const ProgressIndicator = ({
         )
 
     return (
-        <View style={styles.progressIndicator}>
-            {circles.map((t, i) => (
-                <ProgressCircle type={t} key={`circle-${i}`} />
-            ))}
-        </View>
+        imageCount > 1 && (
+            <View style={styles.progressIndicator}>
+                {circles.map((t, i) => (
+                    <ProgressCircle type={t} key={`circle-${i}`} />
+                ))}
+            </View>
+        )
     )
 }
