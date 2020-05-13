@@ -456,7 +456,7 @@ export const downloadTodaysIssue = async (client: ApolloClient<object>) => {
             return downloadAndUnzipIssue(client, todaysIssueSummary, imageSize)
         }
     } catch (e) {
-        e.message = `Unable to download todays issue: ${e.message}`
+        e.message = `Unable to download today's issue: ${e.message}`
         errorService.captureException(e)
         console.log(e.message)
     }
@@ -476,6 +476,8 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
 
+    console.log('fetchIssueSummaryUrl', fetchIssueSummaryUrl)
+
     return RNFetchBlob.config({
         overwrite: true,
         path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
@@ -485,6 +487,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
             'Content-Type': 'application/json',
         })
         .then(async res => {
+            // console.log('**response ', res)
             return res.json()
         })
         .then(async resJson => {

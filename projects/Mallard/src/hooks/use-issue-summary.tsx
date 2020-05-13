@@ -26,6 +26,7 @@ const getIssueSummary = async (
         isConnected && !isPoorConnection
             ? await fetchAndStoreIssueSummary()
             : await readIssueSummary()
+    // console.log('**IssueSummary', issueSummary)
     const maxAvailableEditions = await getSetting('maxAvailableEditions')
     const trimmedSummary = issueSummary.slice(0, maxAvailableEditions)
     return trimmedSummary
