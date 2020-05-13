@@ -101,7 +101,6 @@ const GdprConsent = ({
 
     useEffect(() => {
         fetchAndSetGdprData()
-        console.warn('load')
     }, [])
 
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
