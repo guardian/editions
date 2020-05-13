@@ -4,9 +4,11 @@ import { ArticleTheme } from 'src/components/article/html/article'
 import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { Direction } from '../../../../Apps/common/src'
+import { families } from 'src/theme/typography'
 
 const styles = StyleSheet.create({
     captionWrapper: {
+        fontFamily: families.text.regular,
         position: 'absolute',
         zIndex: 1,
         opacity: 0.8,
