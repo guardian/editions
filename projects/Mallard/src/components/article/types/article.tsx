@@ -140,16 +140,24 @@ const Article = ({
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return
-                        Share.share(
-                            {
-                                title: article.headline,
+                        if (Platform.OS === 'ios') {
+                            Share.share({
                                 url: article.webUrl,
-                                message: article.webUrl, // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
-                            },
-                            {
-                                subject: article.headline,
-                            },
-                        )
+                                message: article.headline,
+                            })
+                        } else {
+                            Share.share(
+                                {
+                                    title: article.headline,
+                                    url: article.webUrl,
+                                    // 'message' is required as well as 'url' to support wide range of clients (e.g. email/whatsapp etc)
+                                    message: article.webUrl,
+                                },
+                                {
+                                    subject: article.headline,
+                                },
+                            )
+                        }
                         return
                     }
                     if (parsed.type === 'shouldShowHeaderChange') {
