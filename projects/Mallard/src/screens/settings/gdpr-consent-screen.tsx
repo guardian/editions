@@ -27,9 +27,16 @@ import { routeNames } from 'src/navigation/routes'
 import {
     gdprAllowFunctionalityKey,
     gdprAllowPerformanceKey,
+    gdprConsentVersionKey,
 } from 'src/helpers/settings'
 import { GDPR_CONSENT_VERSION } from 'src/helpers/settings/setters'
 import { storeSetting, getSetting } from 'src/helpers/settings'
+
+interface GdprConfig {
+    gdprAllowPerformance: ThreeWaySwitchValue
+    gdprAllowFunctionality: ThreeWaySwitchValue
+    gdprCurrentVersion: number | null
+}
 
 interface GdprSwitch {
     key: keyof GdprSwitchSettings
@@ -85,17 +92,20 @@ const GdprConsent = ({
 } & NavigationInjectedProps) => {
     const { showToast } = useToast()
 
-    const [gdprData, updateGdprData] = useState<GdprSwitchSettings>({
+    const [gdprData, updateGdprData] = useState<GdprConfig>({
         gdprAllowPerformance: null,
         gdprAllowFunctionality: null,
+        gdprCurrentVersion: null,
     })
 
     const fetchAndSetGdprData = async () => {
         const perfData = await getSetting(gdprAllowPerformanceKey)
         const funcData = await getSetting(gdprAllowFunctionalityKey)
+        const currentVersion = await getSetting(gdprConsentVersionKey)
         updateGdprData({
             gdprAllowPerformance: perfData,
             gdprAllowFunctionality: funcData,
+            gdprCurrentVersion: currentVersion,
         })
     }
 
@@ -128,9 +138,9 @@ const GdprConsent = ({
 
     const onDismiss = () => {
         if (
-            data.gdprAllowFunctionality != null &&
-            data.gdprAllowPerformance != null &&
-            data.gdprConsentVersion === CURRENT_CONSENT_VERSION
+            gdprData.gdprAllowFunctionality != null &&
+            gdprData.gdprAllowPerformance != null &&
+            gdprData.gdprCurrentVersion === CURRENT_CONSENT_VERSION
         ) {
             showToast(PREFS_SAVED_MSG)
             navigation.navigate('App')
@@ -213,10 +223,10 @@ const GdprConsent = ({
                                     fetchAndSetGdprData() // force to re-render UI with update value
                                 }}
                                 value={
-                                    data.gdprConsentVersion !==
+                                    gdprData.gdprCurrentVersion !==
                                     CURRENT_CONSENT_VERSION
                                         ? null
-                                        : data[item.key]
+                                        : gdprData[item.key]
                                 }
                             />
                         }
