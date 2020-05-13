@@ -162,7 +162,7 @@ export const LightboxScreen = ({
                                 }
                                 key={width}
                                 data={images}
-                                onScrollEndDrag={handleScrollEndEvent}
+                                onMomentumScrollEnd={handleScrollEndEvent}
                                 getItemLayout={(_: never, index: number) => ({
                                     length: width,
                                     offset: width * index,
