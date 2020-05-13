@@ -14,6 +14,7 @@ export enum Feature {
     PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
     BACKGROUNG_DOWNLOAD = 'BACKGROUND_DOWNLOAD',
     CLEAR_ISSUES = 'CLEAR_ISSUES',
+    SIGN_IN = 'SIGN_IN',
 }
 
 export interface MallardLogFormat {

@@ -182,6 +182,21 @@ class Logging {
         }
     }
 
+    // Designed to post logs that have been queued but havent sent
+    async postQueuedLogs(): Promise<void> {
+        try {
+            const queuedLogsString = await this.getQueuedLogs()
+            const queuedLogs = JSON.parse(queuedLogsString)
+            await this.postLog(queuedLogs)
+        } catch {
+            // Assumes there is a problem sending logs and clears them
+            const { isConnected } = await NetInfo.fetch()
+            if (isConnected) {
+                await this.clearLogs()
+            }
+        }
+    }
+
     async log({ level, message, ...optionalFields }: LogParams) {
         try {
             if (!this.hasConsent) {

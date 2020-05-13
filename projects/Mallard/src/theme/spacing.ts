@@ -13,6 +13,20 @@ const basicMetrics = {
 const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
 const sides = basicMetrics.horizontal
 
+// FIXME - iOS13 hack for dodgy background scale issue
+const majorVersionIOS =
+    Platform.OS === 'ios' ? parseInt(Platform.Version as string, 10) : 0
+
+const slideCardSpacing = () => {
+    if (Platform.OS === 'ios' && majorVersionIOS === 13) {
+        return 40
+    } else if (Platform.OS === 'ios') {
+        return spacing[5]
+    } else {
+        return StatusBar.currentHeight || spacing[5] + spacing[5]
+    }
+}
+
 export const metrics = {
     ...basicMetrics,
     headerHeight,
@@ -37,8 +51,5 @@ export const metrics = {
         narrow: (width: number) => width * 0.65,
         wide: 240,
     },
-    slideCardSpacing:
-        Platform.OS === 'ios'
-            ? spacing[5] * 2
-            : StatusBar.currentHeight || spacing[5] + spacing[5],
+    slideCardSpacing: slideCardSpacing(),
 }

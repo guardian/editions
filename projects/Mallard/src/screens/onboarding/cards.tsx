@@ -53,13 +53,11 @@ const OnboardingConsent = ({
 }) => {
     const query = useQuery<{ [key: string]: boolean | null }>(QUERY)
     if (query.loading) return null
-    const { data, client } = query
+    const { client } = query
 
     const enableNulls = () => {
         gdprSwitchSettings.map(sw => {
-            if (data[sw] === null) {
-                setGdprFlag(client, sw, true)
-            }
+            setGdprFlag(client, sw, true)
         })
         setGdprConsentVersion(client, CURRENT_CONSENT_VERSION)
     }

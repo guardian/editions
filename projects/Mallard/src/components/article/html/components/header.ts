@@ -688,6 +688,7 @@ const getByLine = (
         ? ''
         : html`
               <button
+                  name="Share button"
                   class="share-touch-zone"
                   onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'share'}))"
               >

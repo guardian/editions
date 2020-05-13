@@ -119,13 +119,14 @@ export const Front = React.memo(
 
         // Whenever we change edition, this resets us back to 0 scroll index for all fronts
         useEffect(() => {
-            flatListRef &&
+            cards.length > 0 &&
+                flatListRef &&
                 flatListRef.current &&
                 flatListRef.current._component.scrollToIndex({
                     animated: false,
                     index: 0,
                 })
-        }, [frontData])
+        }, [frontData, cards])
 
         return (
             <FrontWrapper

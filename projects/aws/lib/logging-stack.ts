@@ -69,7 +69,7 @@ export class LoggingStack extends cdk.Stack {
                     STAGE: stageParameter.valueAsString,
                     STACK: stackParameter.valueAsString,
                     APP: 'editions-logging',
-                    API_Key: apiKeyParameter.valueAsString,
+                    API_KEY: apiKeyParameter.valueAsString,
                 },
             })
             Tag.add(fn, 'App', `editions-logging`)

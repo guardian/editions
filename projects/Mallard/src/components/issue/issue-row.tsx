@@ -179,6 +179,8 @@ const IssueButton = ({
             color={color.primary}
         >
             <Button
+                accessibilityLabel="Download edition"
+                accessibilityHint="Downloads the edition to your device, so you can listen to it when offline"
                 onPress={onDownloadIssue}
                 icon={
                     isOnDevice === ExistsStatus.doesExist ? '\uE062' : '\uE077'
