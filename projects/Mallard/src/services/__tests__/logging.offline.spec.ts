@@ -24,10 +24,10 @@ describe('logging service - Offline', () => {
                 casCode: 'QWERTYUIOP',
                 iapReceipt: true,
             })
-            loggingService.saveQueuedLogs = jest.fn()
+            loggingService.saveQueuedItems = jest.fn()
             loggingService.hasConsent = true
             await loggingService.log({ level: Level.INFO, message: 'test' })
-            expect(loggingService.saveQueuedLogs).toHaveBeenCalled()
+            expect(loggingService.saveQueuedItems).toHaveBeenCalled()
         })
     })
 })

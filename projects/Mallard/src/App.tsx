@@ -147,7 +147,6 @@ export default class App extends React.Component<{}, {}> {
                 clearAndDownloadIssue(apolloClient)
             }
         })
-        loggingService.postQueuedLogs()
     }
 
     async componentDidCatch(e: Error) {
