@@ -109,7 +109,7 @@ const ManageEditionsScreen = () => {
                                       'Editions will only be downloaded when wi-fi is available',
                                   proxy: (
                                       <Switch
-                                          accessible={True}
+                                          accessible={true}
                                           accessibilityLabel="Switch button"
                                           accessibilityHint="Double tap to toggle setting"
                                           value={data.wifiOnlyDownloads}
