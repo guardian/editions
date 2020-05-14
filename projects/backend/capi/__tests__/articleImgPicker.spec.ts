@@ -72,6 +72,8 @@ const thumbnailExpected = {
     source: 'test',
 }
 
+const articleType = articleTypePicker(sharedGiven)
+
 describe('articleImgPicker.getImages', () => {
     it('should extract both images', () => {
         const given: IContent = {
@@ -80,7 +82,7 @@ describe('articleImgPicker.getImages', () => {
             elements: [thumbnailElem],
         }
 
-        const actual = getImages(given, articleTypePicker(given))
+        const actual = getImages(given, articleType)
 
         const withBoth: ImageAndTrailImage = {
             image: { ...mainImgExpected },
@@ -103,7 +105,7 @@ describe('articleImgPicker.getImages', () => {
             elements: [thumbnailElem],
         }
 
-        const actual = getImages(given, articleTypePicker(given))
+        const actual = getImages(given, articleType)
 
         const withTrailOnly: ImageAndTrailImage = {
             image: undefined,
@@ -126,7 +128,7 @@ describe('articleImgPicker.getImages', () => {
             blocks: blocks,
         }
 
-        const actual = getImages(given, articleTypePicker(given))
+        const actual = getImages(given, articleType)
 
         const withMainOnly: ImageAndTrailImage = {
             image: { ...mainImgExpected },
@@ -141,7 +143,7 @@ describe('articleImgPicker.getImages', () => {
             ...sharedGiven,
         }
 
-        const actual = getImages(given, articleTypePicker(given))
+        const actual = getImages(given, articleType)
 
         const withNoImages: ImageAndTrailImage = {
             image: undefined,
