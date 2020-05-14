@@ -4,6 +4,8 @@ import { isInBeta } from 'src/helpers/release-stream'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import { GdprSwitchSetting } from 'src/helpers/settings'
+import { loggingService } from './logging'
+import { Level } from '../../../Apps/common/src/logging'
 
 const { SENTRY_DSN_URL } = Config
 
@@ -72,6 +74,12 @@ class ErrorServiceImpl implements ErrorService {
         } else if (this.hasConsent === true) {
             Sentry.captureException(err)
         }
+        // Also send to the logging service (where it manages its own consent and queue)
+        loggingService.log({
+            level: Level.ERROR,
+            message: 'captureException',
+            optionalFields: { error: err },
+        })
     }
 }
 
