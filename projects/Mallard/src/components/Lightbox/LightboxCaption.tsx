@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     captionText: {
         color: themeColors(ArticleTheme.Dark).dimText,
         paddingLeft: 2,
-        paddingBottom: 50,
     },
     caption: {
         display: 'flex',
@@ -27,20 +26,30 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingHorizontal: 10,
     },
+    creditText: {
+        color: themeColors(ArticleTheme.Dark).dimText,
+        paddingLeft: 12,
+        paddingBottom: 50,
+    },
 })
 
 const LightboxCaption = ({
     caption,
     pillarColor,
+    credit,
 }: {
     caption: string
     pillarColor: string
+    credit: string
 }) => {
     return (
         <View style={styles.captionWrapper}>
             <View style={styles.caption}>
                 <NativeArrow fill={pillarColor} direction={Direction.top} />
                 <Text style={styles.captionText}>{caption}</Text>
+            </View>
+            <View style={styles.caption}>
+                <Text style={styles.creditText}>{credit}</Text>
             </View>
         </View>
     )

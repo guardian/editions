@@ -190,7 +190,8 @@ export const LightboxScreen = ({
                                             >
                                                 <LightboxImage image={item} />
                                                 {captionVisible &&
-                                                    item.caption && (
+                                                    item.caption &&
+                                                    item.credit && (
                                                         <LightboxCaption
                                                             caption={
                                                                 item.caption
@@ -198,6 +199,7 @@ export const LightboxScreen = ({
                                                             pillarColor={
                                                                 pillarColors.main
                                                             }
+                                                            credit={item.credit}
                                                         />
                                                     )}
                                             </View>
