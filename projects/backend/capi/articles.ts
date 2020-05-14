@@ -111,7 +111,7 @@ const parseArticleResult = async (
     const bylineHtml = result.fields && result.fields.bylineHtml
     const bylineImages = getBylineImages(result)
 
-    const images = getImages(result)
+    const images = getImages(result, articleType)
 
     const starRating = result.fields && result.fields.starRating
 
@@ -341,7 +341,6 @@ export const getArticles = async (
 
     //If we fail to get an article in a collection we just ignore it and move on.
     articlePromises.forEach(attempt => {
-        console.debug('Got article: ' + JSON.stringify(attempt))
         if (hasFailed(attempt)) {
             console.log('failure when parsing', attempt.error)
         }
