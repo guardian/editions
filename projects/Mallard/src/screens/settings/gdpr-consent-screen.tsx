@@ -92,11 +92,17 @@ const GdprConsent = ({
 } & NavigationInjectedProps) => {
     const { showToast } = useToast()
 
+    const [updateFlag, setDataUpdated] = useState(false)
     const [gdprData, updateGdprData] = useState<GdprConfig>({
         gdprAllowPerformance: null,
         gdprAllowFunctionality: null,
         gdprCurrentVersion: null,
     })
+
+    useEffect(() => {
+        fetchAndSetGdprData()
+        console.warn('sss')
+    }, [updateFlag])
 
     const fetchAndSetGdprData = async () => {
         const perfData = await getSetting(gdprAllowPerformanceKey)
@@ -109,9 +115,23 @@ const GdprConsent = ({
         })
     }
 
-    useEffect(() => {
-        fetchAndSetGdprData()
-    }, [])
+    const setConsentAndUpdate = (
+        consentBucketKey: keyof GdprSwitchSettings,
+        value: ThreeWaySwitchValue,
+    ) => {
+        setConsent(consentBucketKey, value)
+        setDataUpdated(!updateFlag) // force to re-render UI with updated value
+    }
+
+    const consentAllAndUpdate = () => {
+        consentToAll()
+        setDataUpdated(!updateFlag)
+    }
+
+    const resetAllAndUpdate = () => {
+        resetAll()
+        setDataUpdated(!updateFlag)
+    }
 
     const switches: { [key in keyof GdprSwitchSettings]: GdprSwitch } = {
         gdprAllowPerformance: {
@@ -131,7 +151,7 @@ const GdprConsent = ({
     }
 
     const onEnableAllAndContinue = () => {
-        consentToAll()
+        consentAllAndUpdate()
         showToast(PREFS_SAVED_MSG)
         navigation.navigate('App')
     }
@@ -218,9 +238,8 @@ const GdprConsent = ({
                         proxy={
                             <ThreeWaySwitch
                                 onValueChange={value => {
-                                    setConsent(item.key, value)
+                                    setConsentAndUpdate(item.key, value)
                                     showToast(PREFS_SAVED_MSG)
-                                    fetchAndSetGdprData() // force to re-render UI with update value
                                 }}
                                 value={
                                     gdprData.gdprCurrentVersion !==
@@ -241,7 +260,9 @@ const GdprConsent = ({
             </Footer>
             {__DEV__ ? (
                 <Footer>
-                    <Button onPress={resetAll.bind(undefined)}>Reset</Button>
+                    <Button onPress={resetAllAndUpdate.bind(undefined)}>
+                        Reset
+                    </Button>
                 </Footer>
             ) : null}
         </View>

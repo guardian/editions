@@ -274,8 +274,6 @@ const IssueFronts = ({
         maxToRenderPerBatch: 1,
     }
 
-    frontWithCards.map(f => f.cards.map(c => console.log(c.articles)))
-
     /* setting a key will force a rerender on rotation, removing 1000s of layout bugs */
     return (
         <FlatList
@@ -313,7 +311,6 @@ const IssueFronts = ({
             style={style}
             key={width}
             renderItem={({ item: front }) => {
-                console.log('front', front.cards)
                 return front ? (
                     <Front
                         localIssueId={issue.localId}
