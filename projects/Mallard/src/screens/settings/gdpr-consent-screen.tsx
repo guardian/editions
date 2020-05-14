@@ -53,6 +53,10 @@ const essentials: EssentialGdprSwitch = {
         'These are essential to provide you with services that you have requested. For example, this includes supporting the ability for you to watch videos and see service-related messages.',
 }
 
+const setGDPRCurrentVersion = () => {
+    storeSetting(GDPR_CONSENT_VERSION, CURRENT_CONSENT_VERSION)
+}
+
 export const setConsent = (
     consentBucketKey: keyof GdprSwitchSettings,
     value: ThreeWaySwitchValue,
@@ -76,10 +80,6 @@ export const resetAll = () => {
         setConsent(sw, null)
     })
     setGDPRCurrentVersion()
-}
-
-const setGDPRCurrentVersion = () => {
-    storeSetting(GDPR_CONSENT_VERSION, CURRENT_CONSENT_VERSION)
 }
 
 const GdprConsent = ({

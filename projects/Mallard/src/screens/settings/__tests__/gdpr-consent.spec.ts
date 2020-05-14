@@ -5,7 +5,6 @@ import {
     SETTINGS_KEY_PREFIX,
     gdprAllowFunctionalityKey,
 } from 'src/helpers/settings'
-import { print } from 'graphql'
 
 const getperf = async () =>
     await AsyncStorage.getItem(SETTINGS_KEY_PREFIX + gdprAllowPerformanceKey)
@@ -34,10 +33,10 @@ describe('gdpr-consent', () => {
 
             resetAll()
 
-            let perfValue = await getperf()
+            const perfValue = await getperf()
             expect(perfValue).toBe('null')
 
-            let funcValue = await getfunc()
+            const funcValue = await getfunc()
             expect(funcValue).toBe('null')
         })
     })
