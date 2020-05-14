@@ -32,21 +32,25 @@ const logFixture = [
     },
 ]
 
+const externalInfoFixture = {
+    networkStatus: { type: 'wifi' },
+    userData: {
+        userDetails: { id: 'testId' },
+        membershipData: {
+            contentAccess: { digitalPack: true },
+        },
+    },
+    casCode: 'QWERTYUIOP',
+    iapReceipt: true,
+}
+
 describe('logging service', () => {
     describe('baseLog', () => {
         it('should return a log object that matches the snapshot', async () => {
             const loggingService = new Logging()
-            loggingService.getExternalInfo = jest.fn().mockReturnValue({
-                networkStatus: { type: 'wifi' },
-                userData: {
-                    userDetails: { id: 'testId' },
-                    membershipData: {
-                        contentAccess: { digitalPack: true },
-                    },
-                },
-                casCode: 'QWERTYUIOP',
-                iapReceipt: true,
-            })
+            loggingService.getExternalInfo = jest
+                .fn()
+                .mockReturnValue(externalInfoFixture)
             const log = await loggingService.baseLog({
                 level: Level.INFO,
                 message: 'test log',
@@ -74,17 +78,9 @@ describe('logging service', () => {
     describe('log', () => {
         it('should have a successful post log', async () => {
             const loggingService = new Logging()
-            loggingService.getExternalInfo = jest.fn().mockReturnValue({
-                networkStatus: { type: 'wifi' },
-                userData: {
-                    userDetails: { id: 'testId' },
-                    membershipData: {
-                        contentAccess: { digitalPack: true },
-                    },
-                },
-                casCode: 'QWERTYUIOP',
-                iapReceipt: true,
-            })
+            loggingService.getExternalInfo = jest
+                .fn()
+                .mockReturnValue(externalInfoFixture)
             loggingService.clearItems = jest.fn()
             loggingService.postLog = jest.fn()
             loggingService.hasConsent = true
@@ -94,17 +90,9 @@ describe('logging service', () => {
         })
         it('should not post a log if there is no consent', async () => {
             const loggingService = new Logging()
-            loggingService.getExternalInfo = jest.fn().mockReturnValue({
-                networkStatus: { type: 'wifi' },
-                userData: {
-                    userDetails: { id: 'testId' },
-                    membershipData: {
-                        contentAccess: { digitalPack: true },
-                    },
-                },
-                casCode: 'QWERTYUIOP',
-                iapReceipt: true,
-            })
+            loggingService.getExternalInfo = jest
+                .fn()
+                .mockReturnValue(externalInfoFixture)
             loggingService.clearItems = jest.fn()
             loggingService.postLog = jest.fn()
 

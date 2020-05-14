@@ -54,6 +54,7 @@ class AsyncQueue {
             return await this.cache.reset()
         } catch (e) {
             errorService.captureException(e)
+            throw new Error(e)
         }
     }
 }
