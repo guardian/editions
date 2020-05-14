@@ -51,6 +51,7 @@ const MiscSettingsList = React.memo(
                         accessible={true}
                         accessibilityLabel="Switch button"
                         accessibilityHint="Double tap to toggle setting"
+                        accessibilityRole="switch"
                         value={props.isWeatherShown}
                         onValueChange={onChange}
                     />

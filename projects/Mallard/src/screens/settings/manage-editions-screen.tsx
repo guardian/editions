@@ -112,6 +112,7 @@ const ManageEditionsScreen = () => {
                                           accessible={true}
                                           accessibilityLabel="Switch button"
                                           accessibilityHint="Double tap to toggle setting"
+                                          accessibilityRole="switch"
                                           value={data.wifiOnlyDownloads}
                                           onValueChange={val => {
                                               setWifiOnlyDownloads(client, val)
