@@ -1,14 +1,17 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { ArticleTheme } from 'src/components/article/html/article'
 import { NativeArrow } from 'src/components/article/html/components/icon/native-arrow'
 import { themeColors } from 'src/components/article/html/helpers/css'
 import { Direction } from '../../../../Apps/common/src'
 import { families } from 'src/theme/typography'
+import HTMLView from 'react-native-htmlview'
+import { PillarColours } from '@guardian/pasteup/palette'
 
 const styles = StyleSheet.create({
     captionWrapper: {
         fontFamily: families.text.regular,
+        fontSize: 14,
         position: 'absolute',
         zIndex: 1,
         opacity: 0.8,
@@ -38,13 +41,44 @@ const LightboxCaption = ({
     pillarColor: string
     credit: string
 }) => {
+    const captionStyle = StyleSheet.create({
+        caption: {
+            fontFamily: families.sans.regular,
+            color: themeColors(ArticleTheme.Dark).text,
+        },
+        b: {
+            fontFamily: families.sans.bold,
+            color: themeColors(ArticleTheme.Dark).text,
+        },
+        strong: {
+            fontFamily: families.sans.bold,
+            color: themeColors(ArticleTheme.Dark).text,
+            paddingLeft: 12,
+        },
+        credit: {
+            fontFamily: families.sans.regular,
+            color: themeColors(ArticleTheme.Dark).text,
+        },
+        a: {
+            color: pillarColor,
+            textDecorationLine: 'underline',
+            textDecorationColor: pillarColor,
+        },
+    })
     return (
         <View style={styles.captionWrapper}>
             <View style={styles.caption}>
                 <NativeArrow fill={pillarColor} direction={Direction.top} />
-                <Text style={styles.captionText}>
-                    {caption} {credit}
-                </Text>
+                <View style={styles.captionText}>
+                    <HTMLView
+                        value={'<caption>' + caption + '</caption>'}
+                        stylesheet={captionStyle}
+                    />
+                    <HTMLView
+                        value={'<credit>' + credit + '</credit>'}
+                        stylesheet={captionStyle}
+                    />
+                </View>
             </View>
         </View>
     )
