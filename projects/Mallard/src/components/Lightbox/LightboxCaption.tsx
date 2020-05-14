@@ -6,7 +6,6 @@ import { themeColors } from 'src/components/article/html/helpers/css'
 import { Direction } from '../../../../Apps/common/src'
 import { families } from 'src/theme/typography'
 import HTMLView from 'react-native-htmlview'
-import { PillarColours } from '@guardian/pasteup/palette'
 
 const styles = StyleSheet.create({
     captionWrapper: {
@@ -32,16 +31,8 @@ const styles = StyleSheet.create({
     },
 })
 
-const LightboxCaption = ({
-    caption,
-    pillarColor,
-    credit,
-}: {
-    caption: string
-    pillarColor: string
-    credit: string
-}) => {
-    const captionStyle = StyleSheet.create({
+const captionStyleSheet = (pillarColor: string) => {
+    return StyleSheet.create({
         caption: {
             fontFamily: families.sans.regular,
             color: themeColors(ArticleTheme.Dark).text,
@@ -65,6 +56,18 @@ const LightboxCaption = ({
             textDecorationColor: pillarColor,
         },
     })
+}
+
+const LightboxCaption = ({
+    caption,
+    pillarColor,
+    credit,
+}: {
+    caption: string
+    pillarColor: string
+    credit: string
+}) => {
+    const captionStyles = captionStyleSheet(pillarColor)
     return (
         <View style={styles.captionWrapper}>
             <View style={styles.caption}>
@@ -72,11 +75,11 @@ const LightboxCaption = ({
                 <View style={styles.captionText}>
                     <HTMLView
                         value={'<caption>' + caption + '</caption>'}
-                        stylesheet={captionStyle}
+                        stylesheet={captionStyles}
                     />
                     <HTMLView
                         value={'<credit>' + credit + '</credit>'}
-                        stylesheet={captionStyle}
+                        stylesheet={captionStyles}
                     />
                 </View>
             </View>

@@ -197,7 +197,7 @@ export const LightboxScreen = ({
                                                                 item.caption
                                                             }
                                                             pillarColor={
-                                                                pillarColors.main
+                                                                pillarColors.bright //bright since always on a dark background
                                                             }
                                                             credit={item.credit}
                                                         />
