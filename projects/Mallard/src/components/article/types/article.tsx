@@ -153,6 +153,7 @@ const Article = ({
                 topPadding={topPadding}
                 origin={origin}
                 onMessage={event => {
+                    console.log(event.nativeEvent.data)
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return
@@ -191,14 +192,14 @@ const Article = ({
                         }
                         const lbimages = getLightboxImages(article.elements)
                         const lbCreditedImages = getCreditedImages(lbimages)
+                        let index = parsed.index
                         if (isArticleT(article) && article.image) {
-                            lbCreditedImages.push(article.image)
+                            lbCreditedImages.unshift(article.image)
+                            if (parsed.isMainImage === 'false') {
+                                index++
+                            }
                         }
-                        lbv.setLightboxData(
-                            lbCreditedImages,
-                            parsed.index,
-                            pillar,
-                        )
+                        lbv.setLightboxData(lbCreditedImages, index, pillar)
                         lbv.setLightboxVisible(true)
                     }
                 }}

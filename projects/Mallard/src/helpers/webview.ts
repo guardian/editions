@@ -14,6 +14,7 @@ export type WebViewPing =
     | {
           type: 'openLightbox'
           index: number
+          isMainImage: string
       }
 
 /*

@@ -566,8 +566,8 @@ const MainMediaImage = ({
                     <img
                         class="image-as-bg__img"
                         src="${path}"
-                        aria-hidden
-                        onclick="openLightbox(${0})"
+                        aria-hiddens
+                        onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"
                     />
                 `}
             <button
