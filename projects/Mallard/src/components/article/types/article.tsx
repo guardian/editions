@@ -13,6 +13,7 @@ import {
     IssueOrigin,
     BlockElement,
     ImageElement,
+    CreditedImage,
 } from '../../../../../Apps/common/src'
 import { LightboxContext } from '../../../screens/use-lightbox-modal'
 
@@ -70,6 +71,21 @@ export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
         (e: BlockElement): e is ImageElement => e.id === 'image',
     )
     return images
+}
+
+export const getCreditedImages = (
+    elements: ImageElement[],
+): CreditedImage[] => {
+    const creditedImages: CreditedImage[] = elements.map(e => {
+        return {
+            source: e.src.source,
+            path: e.src.path,
+            role: e.src.role,
+            credit: e.credit,
+            caption: e.caption,
+        }
+    })
+    return creditedImages
 }
 
 /**
@@ -168,8 +184,21 @@ const Article = ({
                         onIsAtTopChange(parsed.isAtTop)
                     }
                     if (parsed.type === 'openLightbox') {
+                        function isArticleT(
+                            article: GalleryArticle | ArticleT | PictureArticle,
+                        ): article is ArticleT {
+                            return (article as ArticleT) !== undefined
+                        }
                         const lbimages = getLightboxImages(article.elements)
-                        lbv.setLightboxData(lbimages, parsed.index, pillar)
+                        const lbCreditedImages = getCreditedImages(lbimages)
+                        if (isArticleT(article) && article.image) {
+                            lbCreditedImages.push(article.image)
+                        }
+                        lbv.setLightboxData(
+                            lbCreditedImages,
+                            parsed.index,
+                            pillar,
+                        )
                         lbv.setLightboxVisible(true)
                     }
                 }}

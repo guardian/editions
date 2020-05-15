@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Modal, SafeAreaView, View, Animated, StyleSheet } from 'react-native'
 import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
-import { ImageElement, ArticlePillar } from '../../../Apps/common/src'
+import { ArticlePillar, CreditedImage } from '../../../Apps/common/src'
 import { CloseModalButton } from 'src/components/button/close-modal-button'
 import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-config-provider'
@@ -73,7 +73,7 @@ export const LightboxScreen = ({
     pillar,
     index,
 }: {
-    images: ImageElement[]
+    images: CreditedImage[]
     visible: boolean
     closeLightbox: () => void
     pillar: ArticlePillar
@@ -127,8 +127,8 @@ export const LightboxScreen = ({
                                 horizontal={true}
                                 initialScrollIndex={index}
                                 pagingEnabled
-                                keyExtractor={(item: ImageElement) =>
-                                    item.src.path
+                                keyExtractor={(item: CreditedImage) =>
+                                    item.path
                                 }
                                 key={width}
                                 data={images}
@@ -141,7 +141,7 @@ export const LightboxScreen = ({
                                 renderItem={({
                                     item,
                                 }: {
-                                    item: ImageElement
+                                    item: CreditedImage
                                     index: number
                                 }) => {
                                     return (
@@ -158,9 +158,7 @@ export const LightboxScreen = ({
                                                     styles.imageWrapper,
                                                 ]}
                                             >
-                                                <LightboxImage
-                                                    image={item.src}
-                                                />
+                                                <LightboxImage image={item} />
                                                 {captionVisible &&
                                                     item.caption &&
                                                     item.credit && (

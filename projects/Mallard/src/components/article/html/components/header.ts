@@ -563,7 +563,12 @@ const MainMediaImage = ({
         >
             ${preserveRatio &&
                 html`
-                    <img class="image-as-bg__img" src="${path}" aria-hidden />
+                    <img
+                        class="image-as-bg__img"
+                        src="${path}"
+                        aria-hidden
+                        onclick="openLightbox(${0})"
+                    />
                 `}
             <button
                 aria-hidden
