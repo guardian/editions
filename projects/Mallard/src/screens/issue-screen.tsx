@@ -15,7 +15,6 @@ import {
 } from 'react-native'
 import { NavigationInjectedProps, withNavigation } from 'react-navigation'
 import { PageLayoutSizes } from 'src/common'
-import { Button } from 'src/components/button/button'
 import { Front } from 'src/components/front'
 import { IssueTitle } from 'src/components/issue/issue-title'
 import { FlexCenter } from 'src/components/layout/flex-center'
@@ -24,7 +23,7 @@ import { Container } from 'src/components/layout/ui/container'
 import { FlexErrorMessage } from 'src/components/layout/ui/errors/flex-error-message'
 import { WithBreakpoints } from 'src/components/layout/ui/sizing/with-breakpoints'
 import { WithLayoutRectangle } from 'src/components/layout/ui/sizing/with-layout-rectangle'
-import { ReloadButton } from 'src/components/reloadButton'
+import { ReloadButton } from 'src/components/Button/ReloadButton'
 import { Spinner } from 'src/components/Spinner/Spinner'
 import {
     WeatherWidget,
@@ -67,6 +66,7 @@ import { FrontSpec } from './article-screen'
 import { useNavPositionChange } from 'src/hooks/use-nav-position'
 import { useLargeDeviceMemory } from 'src/hooks/use-config-provider'
 import { SLIDER_FRONT_HEIGHT } from 'src/screens/article/slider/SliderTitle'
+import { IssueMenuButton } from 'src/components/Button/IssueMenuButton'
 
 const styles = StyleSheet.create({
     emptyWeatherSpace: {
@@ -117,15 +117,7 @@ const ScreenHeader = withNavigation(
                 onPress={() => {
                     goToIssueList()
                 }}
-                action={
-                    <Button
-                        icon={'\uE04A'}
-                        alt="More issues"
-                        onPress={() => {
-                            goToIssueList()
-                        }}
-                    />
-                }
+                action={<IssueMenuButton onPress={goToIssueList} />}
             >
                 <View>
                     <IssueTitle title={weekday} subtitle={date} />

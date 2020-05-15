@@ -1,6 +1,6 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
-import { ModalButton } from './modal-button'
+import { ModalButton } from './Button/ModalButton'
 
 const MissingIAPModalCard = ({
     title,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import { createMailtoHandler } from 'src/helpers/diagnostics'
-import { Button } from './button/button'
+import { Button } from './Button'
 import { isInBeta } from 'src/helpers/release-stream'
 import { StyleSheet } from 'react-native'
 import { AccessContext } from 'src/authentication/AccessContext'
