@@ -22,7 +22,7 @@ import { createApolloClient } from './apollo'
 import { AccessProvider } from './authentication/AccessContext'
 import { IdentityAuthData } from './authentication/authorizers/IdentityAuthorizer'
 import { AnyAttempt, isValid } from './authentication/lib/Attempt'
-import { BugButton } from './components/Button/BugButton'
+import { BugButtonHandler } from './components/Button/BugButtonHandler'
 import { ErrorBoundary } from './components/layout/ui/errors/error-boundary'
 import { Modal, ModalRenderer } from './components/modal'
 import { NetInfoAutoToast } from './components/toast/net-info-auto-toast'
@@ -187,7 +187,7 @@ export default class App extends React.Component<{}, {}> {
                                     <NetInfoAutoToast />
                                 </View>
                                 <ModalRenderer />
-                                <BugButton />
+                                <BugButtonHandler />
                                 <DeprecateVersionModal />
                                 <Lightbox />
                             </AccessProvider>

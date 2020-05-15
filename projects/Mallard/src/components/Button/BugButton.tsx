@@ -1,11 +1,6 @@
 import React from 'react'
-import { useContext } from 'react'
-import { createMailtoHandler } from 'src/helpers/diagnostics'
 import { Button } from './Button'
-import { isInBeta } from 'src/helpers/release-stream'
 import { StyleSheet } from 'react-native'
-import { AccessContext } from 'src/authentication/AccessContext'
-import { useApolloClient } from '@apollo/react-hooks'
 
 const styles = StyleSheet.create({
     button: {
@@ -16,19 +11,15 @@ const styles = StyleSheet.create({
     },
 })
 
-const BugButton = () => {
-    const { attempt } = useContext(AccessContext)
-    const client = useApolloClient()
-    return isInBeta() ? (
-        <Button
-            accessibilityLabel="Report a bug button"
-            accessibilityHint="Opens a dialog asking if you want to include diagnostic information to your report"
-            style={styles.button}
-            onPress={createMailtoHandler(client, 'Report a bug', '', attempt)}
-            alt="Report a bug"
-            icon=""
-        />
-    ) : null
-}
+const BugButton = ({ onPress }: { onPress: () => void }) => (
+    <Button
+        accessibilityLabel="Report a bug button"
+        accessibilityHint="Opens a dialog asking if you want to include diagnostic information to your report"
+        style={styles.button}
+        onPress={onPress}
+        alt="Report a bug"
+        icon=""
+    />
+)
 
 export { BugButton }

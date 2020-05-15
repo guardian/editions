@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IssueMenuButton should display a IssueMenuButton 1`] = `
+<View
+  accessibilityHint="More issues"
+  accessibilityRole="button"
+  accessible={true}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 10,
+      "left": 10,
+      "right": 10,
+      "top": 10,
+    }
+  }
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 999,
+          "height": 42,
+          "justifyContent": "center",
+          "paddingHorizontal": 21,
+        },
+        Object {
+          "backgroundColor": "#ffe500",
+        },
+        Object {
+          "alignItems": "center",
+          "aspectRatio": 1,
+          "justifyContent": "center",
+          "paddingHorizontal": 0,
+          "width": 42,
+        },
+        undefined,
+      ]
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        Array [
+          Object {
+            "fontFamily": "GuardianIcons-Regular",
+            "fontSize": 20,
+            "lineHeight": 20,
+          },
+          Array [
+            Object {
+              "color": "#121212",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+</View>
+`;
