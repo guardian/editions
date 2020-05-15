@@ -80,6 +80,7 @@ const HomeScreenHeader = withNavigation(
             <Button
                 accessibilityLabel="Close button"
                 accessibilityHint="Returns to the edition"
+                accessibilityRole="button"
                 icon={'\uE04F'}
                 alt="Return to edition"
                 onPress={onReturn}
@@ -89,6 +90,7 @@ const HomeScreenHeader = withNavigation(
             <Button
                 accessibilityLabel="Settings button"
                 accessibilityHint="Navigates to settings screen"
+                accessibilityRole="button"
                 icon={'\uE040'}
                 alt="Settings"
                 onPress={() => {

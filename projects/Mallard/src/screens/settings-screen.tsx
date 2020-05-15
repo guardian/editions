@@ -112,6 +112,7 @@ const SettingsScreen = ({ navigation }: NavigationInjectedProps) => {
     const canAccess = useAccess()
     const [, setVersionClickedTimes] = useState(0)
     const { signOutIdentity } = useContext(AccessContext)
+
     const versionNumber = DeviceInfo.getVersion()
 
     if (query.loading) return null

@@ -22,7 +22,8 @@ const BugButton = () => {
     return isInBeta() ? (
         <Button
             accessibilityLabel="Report a bug button"
-            accessibilityHint="Opens a dialog asking if you want to include diagnostic information to your report"
+            accessibilityHint="Double tap to report a bug"
+            accessibilityRole="button"
             style={styles.button}
             onPress={createMailtoHandler(client, 'Report a bug', '', attempt)}
             alt="Report a bug"
