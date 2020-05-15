@@ -45,7 +45,6 @@ const MiscSettingsList = React.memo(
             {
                 key: 'isWeatherShown',
                 title: 'Display weather',
-                onPress: onChange,
                 proxy: (
                     <Switch
                         accessible={true}
