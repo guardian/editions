@@ -191,7 +191,12 @@ const ImageBase = ({
     // add onclick="openLightbox(${index})" to enable lightbox
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" id="img-${index}" />
+            <img
+                src="${path}"
+                onclick="openLightbox(${index})"
+                alt="${alt}"
+                id="img-${index}"
+            />
             ${figcaption &&
                 html`
                     <figcaption>

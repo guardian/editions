@@ -74,11 +74,13 @@ const LightboxCaption = ({
                 <NativeArrow fill={pillarColor} direction={Direction.top} />
                 <View style={styles.captionText}>
                     <HTMLView
-                        value={'<caption>' + caption + '</caption>'}
-                        stylesheet={captionStyles}
-                    />
-                    <HTMLView
-                        value={'<credit>' + credit + '</credit>'}
+                        value={
+                            '<caption>' +
+                            caption +
+                            '<br>' +
+                            credit +
+                            '</caption>'
+                        }
                         stylesheet={captionStyles}
                     />
                 </View>
