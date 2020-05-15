@@ -1,17 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react'
-import {
-    Modal,
-    SafeAreaView,
-    View,
-    Image,
-    Animated,
-    StyleSheet,
-} from 'react-native'
+import { Modal, SafeAreaView, View, Animated, StyleSheet } from 'react-native'
 import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
 import { ImageElement, ArticlePillar } from '../../../Apps/common/src'
-import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 import { CloseModalButton } from 'src/components/button/close-modal-button'
-import { useImagePath } from 'src/hooks/use-image-paths'
 import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-config-provider'
 import { themeColors } from 'src/components/article/html/helpers/css'
@@ -23,6 +14,7 @@ import {
 } from 'src/components/article/progress-indicator'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
+import { LightboxImage } from 'src/components/Lightbox/LightboxImage'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -43,13 +35,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     imageWrapper: {
-        height: '100%',
-    },
-    image: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        width: '100%',
         height: '100%',
     },
     captionWrapper: {
@@ -80,21 +65,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 })
-
-const LightboxImage = ({ image }: { image: ImageElement }) => {
-    const imagePath = useImagePath(image.src, 'full-size')
-    const aspectRatio = useAspectRatio(imagePath)
-    return (
-        <View style={styles.image}>
-            <Image
-                source={{
-                    uri: imagePath,
-                }}
-                style={{ aspectRatio }}
-            />
-        </View>
-    )
-}
 
 export const LightboxScreen = ({
     images,
@@ -188,7 +158,9 @@ export const LightboxScreen = ({
                                                     styles.imageWrapper,
                                                 ]}
                                             >
-                                                <LightboxImage image={item} />
+                                                <LightboxImage
+                                                    image={item.src}
+                                                />
                                                 {captionVisible &&
                                                     item.caption &&
                                                     item.credit && (
