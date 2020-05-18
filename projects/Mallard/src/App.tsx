@@ -32,11 +32,16 @@ import { ToastProvider } from './hooks/use-toast'
 import { DeprecateVersionModal } from './screens/deprecate-screen'
 import { errorService } from './services/errors'
 import { NetInfoDevOverlay } from './components/NetInfoDevOverlay'
-import { ConfigProvider } from 'src/hooks/use-config-provider'
+import {
+    ConfigProvider,
+    largeDeviceMemory,
+} from 'src/hooks/use-config-provider'
 import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
 import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
+import ApolloClient from 'apollo-client'
+import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -136,11 +141,19 @@ const WithProviders = nestProviders(
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>
     setUserId(isValid(attempt) ? attempt.data.userDetails.id : null)
 
+const shouldHavePushFailsafe = async (client: ApolloClient<object>) => {
+    const largeRAM = await largeDeviceMemory()
+    if (largeRAM) {
+        pushDownloadFailsafe(client)
+    }
+}
+
 export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
         clearAndDownloadIssue(apolloClient)
+        shouldHavePushFailsafe(apolloClient)
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
