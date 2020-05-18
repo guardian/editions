@@ -167,13 +167,13 @@ export const LightboxScreen = ({
                                                 styles.imageWrapper,
                                             ]}
                                         >
-                                            <View
-                                                onTouchStart={() =>
+                                            <TouchableWithoutFeedback
+                                                onPress={() =>
                                                     focusOnImageComponent()
                                                 }
                                             >
                                                 <LightboxImage image={item} />
-                                            </View>
+                                            </TouchableWithoutFeedback>
                                             {captionVisible &&
                                                 item.caption &&
                                                 item.credit && (
