@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { BylineCutout } from './helpers/opinion'
-import Quote from 'src/components/icons/Quote'
+import { Quote } from 'src/components/icons/Quote'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
 import { getFont } from 'src/theme/typography'

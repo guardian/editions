@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleProp, View, ViewStyle, Text } from 'react-native'
-import Quote from 'src/components/icons/Quote'
+import { Quote } from 'src/components/icons/Quote'
 import { TextWithIcon } from 'src/components/layout/text-with-icon'
 import { useArticle } from 'src/hooks/use-article'
 import { color } from 'src/theme/color'
