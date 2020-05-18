@@ -5,6 +5,8 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
+import { platform } from 'os'
+import { Platform } from 'react-native'
 
 export const renderCaption = ({
     caption,
@@ -188,12 +190,12 @@ const ImageBase = ({
     role?: ImageElement['role']
 }) => {
     const figcaption = renderCaption({ caption, credit })
-    // add onclick="openLightbox(${index})" to enable lightbox
     return html`
         <figure class="image" data-role="${role || 'inline'}">
             <img
                 src="${path}"
-                onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"
+                ${Platform.OS === 'ios' &&
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"`}
                 alt="${alt}"
                 id="img-${index}"
             />
