@@ -99,11 +99,6 @@ const GdprConsent = ({
         gdprCurrentVersion: null,
     })
 
-    useEffect(() => {
-        fetchAndSetGdprData()
-        console.warn('sss')
-    }, [updateFlag])
-
     const fetchAndSetGdprData = async () => {
         const perfData = await getSetting(gdprAllowPerformanceKey)
         const funcData = await getSetting(gdprAllowFunctionalityKey)
@@ -114,6 +109,11 @@ const GdprConsent = ({
             gdprCurrentVersion: currentVersion,
         })
     }
+
+    useEffect(() => {
+        fetchAndSetGdprData()
+        console.warn('sss')
+    }, [updateFlag])
 
     const setConsentAndUpdate = (
         consentBucketKey: keyof GdprSwitchSettings,
