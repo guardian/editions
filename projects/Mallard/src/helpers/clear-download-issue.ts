@@ -1,5 +1,4 @@
 import ApolloClient from 'apollo-client'
-import { pushDownloadFailsafe } from 'src/helpers/push-download-failsafe'
 import { fetchCacheClear } from './fetch'
 import { clearOldIssues, downloadTodaysIssue, prepFileSystem } from './files'
 import { cleanPushTrackingByDays } from './push-tracking'
