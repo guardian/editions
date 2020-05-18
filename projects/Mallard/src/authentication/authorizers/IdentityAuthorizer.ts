@@ -38,17 +38,26 @@ export type AppleCreds = {
     familyName: string
 }
 
-export type AuthParams = BasicCreds | FacebookCreds | GoogleCreds | AppleCreds
+export const AppleSignInTokenKey = 'apple-sign-in-token'
 
-export type AuthType = 'apple' | 'google' | 'facebook' | 'email' | 'unknown'
-
-export const detectAuthType = (params: AuthParams): AuthType => {
-    if ('email' in params) return 'email'
-    if ('facebook-access-token' in params) return 'facebook'
-    if ('google-access-token' in params) return 'google'
-    if ('idToken' in params) return 'apple'
-    return 'unknown'
+type AppleOauthCreds = {
+    AppleSignInTokenKey: string
 }
+
+export type AuthParams =
+    | BasicCreds
+    | FacebookCreds
+    | GoogleCreds
+    | AppleCreds
+    | AppleOauthCreds
+
+export type AuthType =
+    | 'apple'
+    | 'google'
+    | 'facebook'
+    | 'email'
+    | 'apple-oauth'
+    | 'unknown'
 
 export type IdentityAuthData = {
     userDetails: User
@@ -89,6 +98,16 @@ export const getUserName = (authType: AuthType, params: AuthParams) => {
         default:
             return unknown
     }
+}
+
+// TODO: Write unit test?
+const detectAuthType = (params: AuthParams): AuthType => {
+    if ('email' in params) return 'email'
+    if ('facebook-access-token' in params) return 'facebook'
+    if ('google-access-token' in params) return 'google'
+    if ('apple-sign-in-token' in params) return 'apple-oauth'
+    if ('idToken' in params) return 'apple'
+    return 'unknown'
 }
 
 export default new Authorizer({

@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Image, ImageSourcePropType } from 'react-native'
+import {
+    View,
+    StyleSheet,
+    Image,
+    ImageSourcePropType,
+    Platform,
+} from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
 import { Button } from 'src/components/Button/Button'
 import { metrics } from 'src/theme/spacing'
@@ -10,6 +16,16 @@ import { FormField } from 'src/hooks/use-form-field'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
+import { WebviewModal } from 'src/authentication/webview-modal'
+import {
+    AuthParams,
+    AppleSignInTokenKey,
+} from 'src/authentication/authorizers/IdentityAuthorizer'
+
+function canOSSupportAppleSignin(): boolean {
+    const osVersion = Number(Platform.Version)
+    return Platform.OS === 'ios' && osVersion >= 13
+}
 
 import { iosMajorVersion } from 'src/helpers/platform'
 
@@ -94,6 +110,8 @@ const Login = ({
     submitText,
     resetLink,
     onHelpPress,
+    appleOauthUrl,
+    onAppleOAuthPress,
 }: {
     title: string
     onFacebookPress: () => void
@@ -109,13 +127,22 @@ const Login = ({
     submitText: string
     resetLink: string
     onHelpPress: () => void
+    appleOauthUrl: string
+    onAppleOAuthPress: (token: AuthParams) => void
 }) => {
     const [hasInputEmail, setHasInputEmail] = useState(false)
     const [showError, setShowError] = useState(false)
+    const [showAppleAuthWebView, setShowAppleAuthWebView] = useState(false)
+    const [appleAuthWebUrl, setAppleAuthWebUrl] = useState('')
 
     const onInputChange = (fn: (value: string) => void) => (value: string) => {
         setShowError(false)
         fn(value)
+    }
+
+    const onAppleSignInPress = () => {
+        setAppleAuthWebUrl(appleOauthUrl)
+        setShowAppleAuthWebView(true)
     }
 
     return (
@@ -125,6 +152,18 @@ const Login = ({
             onDismiss={onDismiss}
             errorMessage={errorMessage}
         >
+            <WebviewModal
+                visible={showAppleAuthWebView}
+                url={appleAuthWebUrl}
+                onStateChange={url => {
+                    if (url.includes(AppleSignInTokenKey)) {
+                        setShowAppleAuthWebView(false)
+                        const token = url.split('=')[1]
+                        onAppleOAuthPress({ AppleSignInTokenKey: token })
+                    }
+                }}
+            />
+
             {!hasInputEmail && (
                 <>
                     <View>
@@ -134,14 +173,12 @@ const Login = ({
                         >
                             Continue with Facebook
                         </SocialButton>
-
                         <SocialButton
                             onPress={onGooglePress}
                             iconRequire={require('src/assets/images/google.png')}
                         >
                             Continue with Google
                         </SocialButton>
-
                         {iosMajorVersion >= 13 && (
                             <SocialButton
                                 onPress={onApplePress}
@@ -150,6 +187,12 @@ const Login = ({
                                 Continue with Apple
                             </SocialButton>
                         )}
+                        <SocialButton
+                            onPress={onAppleSignInPress}
+                            iconRequire={require('src/assets/images/google.png')} // TODO add apple png
+                        >
+                            Continue with Apple (oauth)
+                        </SocialButton>
                     </View>
                     <TitlepieceText style={loginStyles.or}>or</TitlepieceText>
                 </>
