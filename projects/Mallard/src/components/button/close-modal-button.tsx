@@ -3,32 +3,38 @@ import { StyleSheet } from 'react-native'
 import { Button } from '../button/button'
 import { color } from 'src/theme/color'
 
-const closeModalButtonStyles = (buttonColor?: string) =>
+const closeModalButtonStyles = (bgColor?: string, borderColor?: string) =>
     StyleSheet.create({
         dismissText: {
-            color: buttonColor ? 'white' : color.primary,
+            color: bgColor ? 'white' : color.primary,
         },
         dismissButton: {
             paddingHorizontal: 0,
-            backgroundColor: buttonColor ? buttonColor : 'transparent',
-            borderColor: buttonColor ? buttonColor : color.primary,
+            backgroundColor: bgColor ? bgColor : 'transparent',
+            borderColor: borderColor ? borderColor : color.primary,
             borderWidth: 1,
         },
     })
 
 const CloseModalButton = ({
     onPress,
-    color,
+    bgColor,
+    borderColor,
 }: {
     onPress: () => void
-    color?: string
+    bgColor?: string
+    borderColor?: string
 }) => {
     return (
         <Button
             icon=""
             alt="Dismiss"
-            buttonStyles={[closeModalButtonStyles(color).dismissButton]}
-            textStyles={closeModalButtonStyles(color).dismissText}
+            buttonStyles={[
+                closeModalButtonStyles(bgColor, borderColor).dismissButton,
+            ]}
+            textStyles={
+                closeModalButtonStyles(bgColor, borderColor).dismissText
+            }
             onPress={onPress}
         />
     )

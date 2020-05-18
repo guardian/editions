@@ -15,6 +15,7 @@ import {
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
 import { LightboxImage } from 'src/components/Lightbox/LightboxImage'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { palette } from '@guardian/pasteup/palette'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -127,7 +128,12 @@ export const LightboxScreen = ({
                                     onPress={() => {
                                         closeLightbox()
                                     }}
-                                    color={pillarColors.main}
+                                    bgColor={pillarColors.main}
+                                    borderColor={
+                                        pillar === 'neutral'
+                                            ? palette.neutral[100]
+                                            : pillarColors.main
+                                    }
                                 />
                             )}
                         </View>
@@ -180,7 +186,10 @@ export const LightboxScreen = ({
                                                     <LightboxCaption
                                                         caption={item.caption}
                                                         pillarColor={
-                                                            pillarColors.bright //bright since always on a dark background
+                                                            pillar === 'neutral'
+                                                                ? palette
+                                                                      .neutral[100]
+                                                                : pillarColors.bright //bright since always on a dark background
                                                         }
                                                         credit={item.credit}
                                                     />
