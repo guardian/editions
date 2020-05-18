@@ -12,9 +12,9 @@ import {
     getWindowStart,
     getNewWindowStart,
 } from 'src/components/article/progress-indicator'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { LightboxCaption } from 'src/components/Lightbox/LightboxCaption'
 import { LightboxImage } from 'src/components/Lightbox/LightboxImage'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -88,6 +88,12 @@ export const LightboxScreen = ({
 
     const [captionVisible, setCaptionVisible] = useState(false)
 
+    const [dotsVisible, setDotsVisible] = useState(false)
+
+    const showProgressIndicator = images.length > 1 ? dotsVisible : false
+
+    const [closeButtonVisible, setCloseButtonVisible] = useState(false)
+
     const handleScrollEndEvent = (ev: any) => {
         const newIndex = Math.ceil(ev.nativeEvent.contentOffset.x / width)
         setCurrentIndex(newIndex)
@@ -96,8 +102,16 @@ export const LightboxScreen = ({
         )
     }
 
+    const focusOnImageComponent = () => {
+        setCaptionVisible(!captionVisible)
+        setDotsVisible(!dotsVisible)
+        setCloseButtonVisible(!closeButtonVisible)
+    }
+
     useEffect(() => {
         setCaptionVisible(true)
+        setDotsVisible(true)
+        setCloseButtonVisible(true)
         setCurrentIndex(index)
         setWindowsStart(getWindowStart(index, numDots, images.length))
     }, [visible, index, numDots, images.length])
@@ -108,12 +122,14 @@ export const LightboxScreen = ({
                 <SafeAreaView>
                     <View style={styles.lightboxPage}>
                         <View style={styles.closeButton}>
-                            <CloseModalButton
-                                onPress={() => {
-                                    closeLightbox()
-                                }}
-                                color={pillarColors.main}
-                            />
+                            {closeButtonVisible && (
+                                <CloseModalButton
+                                    onPress={() => {
+                                        closeLightbox()
+                                    }}
+                                    color={pillarColors.main}
+                                />
+                            )}
                         </View>
 
                         <View style={styles.imageWrapper}>
@@ -145,47 +161,45 @@ export const LightboxScreen = ({
                                     index: number
                                 }) => {
                                     return (
-                                        <TouchableWithoutFeedback
-                                            onPress={() =>
-                                                setCaptionVisible(
-                                                    !captionVisible,
-                                                )
-                                            }
+                                        <View
+                                            style={[
+                                                { width },
+                                                styles.imageWrapper,
+                                            ]}
                                         >
-                                            <View
-                                                style={[
-                                                    { width },
-                                                    styles.imageWrapper,
-                                                ]}
+                                            <TouchableWithoutFeedback
+                                                onPress={() =>
+                                                    focusOnImageComponent()
+                                                }
                                             >
                                                 <LightboxImage image={item} />
-                                                {captionVisible &&
-                                                    item.caption &&
-                                                    item.credit && (
-                                                        <LightboxCaption
-                                                            caption={
-                                                                item.caption
-                                                            }
-                                                            pillarColor={
-                                                                pillarColors.bright //bright since always on a dark background
-                                                            }
-                                                            credit={item.credit}
-                                                        />
-                                                    )}
-                                            </View>
-                                        </TouchableWithoutFeedback>
+                                            </TouchableWithoutFeedback>
+                                            {captionVisible &&
+                                                item.caption &&
+                                                item.credit && (
+                                                    <LightboxCaption
+                                                        caption={item.caption}
+                                                        pillarColor={
+                                                            pillarColors.bright //bright since always on a dark background
+                                                        }
+                                                        credit={item.credit}
+                                                    />
+                                                )}
+                                        </View>
                                     )
                                 }}
                             />
                         </View>
 
                         <View style={styles.progressWrapper}>
-                            <ProgressIndicator
-                                currentIndex={currentIndex}
-                                imageCount={images.length}
-                                windowSize={numDots}
-                                windowStart={windowStart}
-                            />
+                            {showProgressIndicator && (
+                                <ProgressIndicator
+                                    currentIndex={currentIndex}
+                                    imageCount={images.length}
+                                    windowSize={numDots}
+                                    windowStart={windowStart}
+                                />
+                            )}
                         </View>
                     </View>
                 </SafeAreaView>
