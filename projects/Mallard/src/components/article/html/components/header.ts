@@ -544,12 +544,14 @@ const MainMediaImage = ({
     className,
     children,
     preserveRatio,
+    gallery,
     getImagePath,
 }: {
     image: CreditedImage
     className?: string
     children?: string
     preserveRatio?: boolean
+    gallery?: boolean
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
@@ -559,21 +561,18 @@ const MainMediaImage = ({
             class="image-as-bg ${className}"
             data-preserve-ratio="${preserveRatio || 'false'}"
             style="background-image: url(${path}); "
+            ${Platform.OS === 'ios' &&
+                !gallery &&
+                `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
             data-open="false"
         >
             ${preserveRatio &&
                 html`
-                    <img
-                        class="image-as-bg__img"
-                        src="${path}"
-                        aria-hidden
-                        ${Platform.OS === 'ios' &&
-                            `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
-                    />
+                    <img class="image-as-bg__img" src="${path}" aria-hidden />
                 `}
             <button
                 aria-hidden
-                onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+                onclick="event.stopPropagation(); this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
             >
                 
             </button>
@@ -729,6 +728,7 @@ const Header = ({
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const gallery = type === ArticleType.Gallery
     const byLineText = getByLineText(headerType, headerProps)
     return html`
         ${immersive &&
@@ -738,6 +738,7 @@ const Header = ({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
                 getImagePath,
+                gallery,
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -750,6 +751,7 @@ const Header = ({
                             className: 'header-image',
                             image: headerProps.image,
                             preserveRatio: true,
+                            gallery: gallery,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
                                 : headerProps.sportScore
