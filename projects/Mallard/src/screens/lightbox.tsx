@@ -180,20 +180,23 @@ export const LightboxScreen = ({
                                             >
                                                 <LightboxImage image={item} />
                                             </TouchableWithoutFeedback>
-                                            {captionVisible &&
-                                                item.caption &&
-                                                item.credit && (
-                                                    <LightboxCaption
-                                                        caption={item.caption}
-                                                        pillarColor={
-                                                            pillar === 'neutral'
-                                                                ? palette
-                                                                      .neutral[100]
-                                                                : pillarColors.bright //bright since always on a dark background
-                                                        }
-                                                        credit={item.credit}
-                                                    />
-                                                )}
+                                            {captionVisible && item.caption && (
+                                                <LightboxCaption
+                                                    caption={item.caption}
+                                                    pillarColor={
+                                                        pillar === 'neutral'
+                                                            ? palette
+                                                                  .neutral[100]
+                                                            : pillarColors.bright //bright since always on a dark background
+                                                    }
+                                                    credit={
+                                                        item.displayCredit !==
+                                                        false
+                                                            ? item.credit
+                                                            : undefined
+                                                    }
+                                                />
+                                            )}
                                         </View>
                                     )
                                 }}

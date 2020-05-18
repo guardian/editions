@@ -5,7 +5,6 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
-import { platform } from 'os'
 import { Platform } from 'react-native'
 
 export const renderCaption = ({

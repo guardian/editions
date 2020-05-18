@@ -65,7 +65,7 @@ const LightboxCaption = ({
 }: {
     caption: string
     pillarColor: string
-    credit: string
+    credit?: string
 }) => {
     const captionStyles = captionStyleSheet(pillarColor)
     return (
@@ -77,8 +77,7 @@ const LightboxCaption = ({
                         value={
                             '<caption>' +
                             caption +
-                            '<br>' +
-                            credit +
+                            (credit && '<br>' + credit) +
                             '</caption>'
                         }
                         stylesheet={captionStyles}
