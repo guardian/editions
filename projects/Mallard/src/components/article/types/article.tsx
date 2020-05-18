@@ -185,15 +185,11 @@ const Article = ({
                         onIsAtTopChange(parsed.isAtTop)
                     }
                     if (parsed.type === 'openLightbox') {
-                        function isArticleT(
-                            article: GalleryArticle | ArticleT | PictureArticle,
-                        ): article is ArticleT {
-                            return (article as ArticleT) !== undefined
-                        }
                         const lbimages = getLightboxImages(article.elements)
                         const lbCreditedImages = getCreditedImages(lbimages)
                         let index = parsed.index
-                        if (isArticleT(article) && article.image) {
+                        // to avoid image duplication we don't add the main image of gallery articles to the array
+                        if (article.type !== 'gallery' && article.image) {
                             lbCreditedImages.unshift(article.image)
                             if (parsed.isMainImage === 'false') {
                                 index++
