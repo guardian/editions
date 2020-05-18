@@ -14,7 +14,6 @@ const clearAndDownloadIssue = async (client: ApolloClient<object>) => {
         // Check to see if the device has a decent amount of memory before doing intensive tasks
         const largeRAM = await largeDeviceMemory()
         if (largeRAM) {
-            pushDownloadFailsafe(client)
             return await downloadTodaysIssue(client)
         }
         return
