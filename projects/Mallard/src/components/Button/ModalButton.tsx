@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ButtonAppearance } from './button/button'
+import { Button, ButtonAppearance } from './Button'
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({

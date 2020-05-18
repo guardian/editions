@@ -5,7 +5,7 @@ import { color } from 'src/theme/color'
 import { metrics } from 'src/theme/spacing'
 import { getFont } from 'src/theme/typography'
 import { minScreenSize } from 'src/helpers/screen'
-import { CloseModalButton } from '../button/close-modal-button'
+import { CloseModalButton } from '../Button/CloseModalButton'
 
 export enum CardAppearance {
     tomato,

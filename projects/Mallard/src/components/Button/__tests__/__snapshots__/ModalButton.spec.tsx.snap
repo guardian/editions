@@ -1,0 +1,253 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModalButton should display a ModalButton with accessible text 1`] = `
+<View
+  accessibilityHint="This button signs you out"
+  accessibilityRole="button"
+  accessible={true}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 10,
+      "left": 10,
+      "right": 10,
+      "top": 10,
+    }
+  }
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "marginRight": 10,
+      "marginTop": 10,
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 999,
+          "height": 42,
+          "justifyContent": "center",
+          "paddingHorizontal": 21,
+        },
+        Object {
+          "backgroundColor": "#ffffff",
+        },
+        false,
+        undefined,
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "flexShrink": 0,
+            "fontFamily": "GuardianTextSans-Regular",
+            "fontSize": 17,
+            "lineHeight": 21,
+          },
+          Object {
+            "color": "#121212",
+          },
+          Array [
+            Object {
+              "flexShrink": 0,
+              "fontFamily": "GuardianTextSans-Bold",
+              "fontSize": 17,
+              "lineHeight": 21,
+            },
+            Object {
+              "textAlign": "auto",
+            },
+            Object {
+              "color": "#052962",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      Sign out
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`ModalButton should display a ModalButton with an alternative appearance 1`] = `
+<View
+  accessibilityHint="Sign out"
+  accessibilityRole="button"
+  accessible={true}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 10,
+      "left": 10,
+      "right": 10,
+      "top": 10,
+    }
+  }
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "marginRight": 10,
+      "marginTop": 10,
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 999,
+          "height": 42,
+          "justifyContent": "center",
+          "paddingHorizontal": 21,
+        },
+        Object {
+          "backgroundColor": "#ff7f0f",
+        },
+        false,
+        undefined,
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "flexShrink": 0,
+            "fontFamily": "GuardianTextSans-Regular",
+            "fontSize": 17,
+            "lineHeight": 21,
+          },
+          Object {
+            "color": "#121212",
+          },
+          Array [
+            Object {
+              "flexShrink": 0,
+              "fontFamily": "GuardianTextSans-Bold",
+              "fontSize": 17,
+              "lineHeight": 21,
+            },
+            Object {
+              "textAlign": "auto",
+            },
+            Object {
+              "color": "#ffffff",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      Sign out
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`ModalButton should display a default ModalButton 1`] = `
+<View
+  accessibilityHint="Sign out"
+  accessibilityRole="button"
+  accessible={true}
+  focusable={true}
+  hitSlop={
+    Object {
+      "bottom": 10,
+      "left": 10,
+      "right": 10,
+      "top": 10,
+    }
+  }
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "marginRight": 10,
+      "marginTop": 10,
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 999,
+          "height": 42,
+          "justifyContent": "center",
+          "paddingHorizontal": 21,
+        },
+        Object {
+          "backgroundColor": "#ffffff",
+        },
+        false,
+        undefined,
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "flexShrink": 0,
+            "fontFamily": "GuardianTextSans-Regular",
+            "fontSize": 17,
+            "lineHeight": 21,
+          },
+          Object {
+            "color": "#121212",
+          },
+          Array [
+            Object {
+              "flexShrink": 0,
+              "fontFamily": "GuardianTextSans-Bold",
+              "fontSize": 17,
+              "lineHeight": 21,
+            },
+            Object {
+              "textAlign": "auto",
+            },
+            Object {
+              "color": "#052962",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      Sign out
+    </Text>
+  </View>
+</View>
+`;

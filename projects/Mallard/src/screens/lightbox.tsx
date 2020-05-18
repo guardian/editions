@@ -10,7 +10,7 @@ import {
 import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
 import { ImageElement, ArticlePillar } from '../../../Apps/common/src'
 import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
-import { CloseModalButton } from 'src/components/button/close-modal-button'
+import { CloseModalButton } from 'src/components/Button/CloseModalButton'
 import { useImagePath } from 'src/hooks/use-image-paths'
 import { getPillarColors } from 'src/helpers/transform'
 import { useDimensions } from 'src/hooks/use-config-provider'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Image, ImageSourcePropType } from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
-import { Button } from 'src/components/button/button'
+import { Button } from 'src/components/Button/Button'
 import { metrics } from 'src/theme/spacing'
 import { color } from 'src/theme/color'
 import { Link, LinkNav } from 'src/components/link'

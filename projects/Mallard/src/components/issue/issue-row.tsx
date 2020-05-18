@@ -20,7 +20,7 @@ import {
     maybeListenToExistingDownload,
     stopListeningToExistingDownload,
 } from 'src/helpers/files'
-import { Button, ButtonAppearance } from '../button/button'
+import { Button, ButtonAppearance } from '../Button/Button'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
 import { imageForScreenSize } from 'src/helpers/screen'
