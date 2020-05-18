@@ -29,6 +29,9 @@ export const createApp = (): express.Application => {
             processLog(data)
             res.send('Log success')
         } else {
+            logger.info(
+                `Missing or invalid api key. Key received: ${req.headers.apikey}`,
+            )
             res.status(400).send('Missing apikey or request body')
         }
     })
