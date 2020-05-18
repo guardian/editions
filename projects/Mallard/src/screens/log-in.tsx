@@ -22,11 +22,6 @@ import {
     AppleSignInTokenKey,
 } from 'src/authentication/authorizers/IdentityAuthorizer'
 
-function canOSSupportAppleSignin(): boolean {
-    const osVersion = Number(Platform.Version)
-    return Platform.OS === 'ios' && osVersion >= 13
-}
-
 import { iosMajorVersion } from 'src/helpers/platform'
 
 const socialButtonStyles = StyleSheet.create({
@@ -187,12 +182,15 @@ const Login = ({
                                 Continue with Apple
                             </SocialButton>
                         )}
-                        <SocialButton
-                            onPress={onAppleSignInPress}
-                            iconRequire={require('src/assets/images/google.png')} // TODO add apple png
-                        >
-                            Continue with Apple (oauth)
-                        </SocialButton>
+
+                        {iosMajorVersion < 13 && (
+                            <SocialButton
+                                onPress={onAppleSignInPress}
+                                iconRequire={require('src/assets/images/google.png')} // TODO add apple png
+                            >
+                                Continue with Apple (oauth)
+                            </SocialButton>
+                        )}
                     </View>
                     <TitlepieceText style={loginStyles.or}>or</TitlepieceText>
                 </>
