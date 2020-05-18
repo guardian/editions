@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer, { ReactTestRendererJSON } from 'react-test-renderer'
-import Quote from '../Quote'
+import { Quote } from '../Quote'
 
 describe('Quote', () => {
     it('should display a Quote icon in SVG', () => {
