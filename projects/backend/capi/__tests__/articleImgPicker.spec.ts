@@ -10,6 +10,7 @@ import {
     ElementType,
     IAsset,
     AssetType,
+    ContentType,
 } from '@guardian/capi-ts'
 import { articleTypePicker } from '../articleTypePicker'
 import { ArticleType } from '../../../Apps/common/src'
@@ -172,6 +173,16 @@ describe('getImageRole', () => {
 
     it('returns immersive for ArticleType=Immersive when capirole is undefined', async () => {
         const role = getImageRole(ArticleType.Immersive, undefined, undefined)
+        expect(role).toBe('immersive')
+    })
+
+    it('returns immersive for picture content when capirole is undefined', async () => {
+        const role = getImageRole(
+            ArticleType.Feature,
+            undefined,
+            undefined,
+            ContentType.PICTURE,
+        )
         expect(role).toBe('immersive')
     })
 })
