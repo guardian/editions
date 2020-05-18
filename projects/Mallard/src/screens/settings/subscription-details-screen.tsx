@@ -28,8 +28,8 @@ const IdentityDetails = ({
         <List
             data={[
                 keyValueItem(
-                    'Display name',
-                    identityData.userDetails.publicFields.displayName,
+                    'Email Address',
+                    identityData.userDetails.primaryEmailAddress,
                 ),
                 keyValueItem('User ID', identityData.membershipData.userId),
             ]}
