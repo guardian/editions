@@ -58,7 +58,7 @@ const MiscSettingsList = React.memo(
             },
             {
                 key: 'manageEditions',
-                title: 'Manage editions',
+                title: 'Manage downloads',
                 onPress: () =>
                     props.navigation.navigate(
                         routeNames.ManageEditionsSettings,
