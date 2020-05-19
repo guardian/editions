@@ -10,8 +10,12 @@ import { Platform } from 'react-native'
 export const renderCaption = ({
     caption,
     credit,
-}: Pick<ImageElement, 'caption' | 'credit'>) =>
-    [caption, credit].filter(s => !!s).join(' ')
+    displayCredit,
+}: Pick<ImageElement, 'caption' | 'credit' | 'displayCredit'>) => {
+    return displayCredit === true
+        ? [caption, credit].filter(s => !!s).join(' ')
+        : caption
+}
 
 const breakoutCaption = (role: ImageElement['role']) => css`
     .image[data-role='${role}'] figcaption {
@@ -179,6 +183,7 @@ const ImageBase = ({
     alt,
     caption,
     credit,
+    displayCredit,
     role,
 }: {
     path: string
@@ -186,9 +191,10 @@ const ImageBase = ({
     alt?: string
     caption?: string
     credit?: string
+    displayCredit?: boolean
     role?: ImageElement['role']
 }) => {
-    const figcaption = renderCaption({ caption, credit })
+    const figcaption = renderCaption({ caption, credit, displayCredit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
             <img
