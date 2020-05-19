@@ -21,12 +21,8 @@ const fetchAuth = async <T>(
     authType?: AuthType,
     authUrl: string = ID_API_URL,
     token: string = ID_ACCESS_TOKEN,
-    authType?: AuthType,
 ): Promise<AuthResult<T>> => {
     const queryString = authType === 'apple-oauth' ? qs.stringify(params) : ''
-    console.log('auth querystring', queryString)
-    console.log('auth querystring(raw)', params)
-    console.log('auth type', authType)
     const res = await fetch(`${authUrl}/auth?${queryString}`, {
         method: 'POST',
         headers: {

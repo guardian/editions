@@ -41,7 +41,7 @@ export type AppleCreds = {
 export const AppleSignInTokenKey = 'apple-sign-in-token'
 
 type AppleOauthCreds = {
-    AppleSignInTokenKey: string
+    'apple-sign-in-token': string
 }
 
 export type AuthParams =
