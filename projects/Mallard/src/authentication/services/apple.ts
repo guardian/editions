@@ -7,6 +7,7 @@ import appleAuth, {
 import invariant from 'invariant'
 
 import { AppleCreds } from 'src/authentication/authorizers/IdentityAuthorizer'
+import { TokenKind } from 'graphql'
 
 const mapCredentials = (
     appleCredentials: RNAppleAuth.AppleAuthRequestResponse,
@@ -23,24 +24,17 @@ const mapCredentials = (
     }
 }
 
-export const appleNativeAuth = async (): Promise<AppleCreds> => {
-    // performs login request
+export const appleNativeAuth = async (
+    validatorString: string,
+): Promise<AppleCreds> => {
     const appleAuthRequestResponse = await appleAuth.performRequest({
+        state: validatorString,
         requestedOperation: AppleAuthRequestOperation.LOGIN,
         requestedScopes: [
             AppleAuthRequestScope.EMAIL,
             AppleAuthRequestScope.FULL_NAME,
         ],
     })
+
     return mapCredentials(appleAuthRequestResponse)
-    // // get current authentication state for user
-    // const credentialState = await appleAuth.getCredentialStateForUser(
-    //     appleAuthRequestResponse.user,
-    // )
-    // // use credentialState response to ensure the user is authenticated
-    // if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-    //     return mapCredentials(appleAuthRequestResponse)
-    // } else {
-    //     invariant('failed')
-    // }
 }

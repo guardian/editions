@@ -103,19 +103,6 @@ const AuthSwitcherScreen = ({
                         }
                     } catch (e) {
                         setIsLoading(false)
-                        if (
-                            String(e).includes(
-                                'Error: The Apple authentication request has been canceled by the user',
-                            )
-                        ) {
-                            setError('Sign in was cancelled by the user.')
-                        } else {
-                            setError(
-                                typeof e === 'string'
-                                    ? e
-                                    : 'Something went wrong',
-                            )
-                        }
                     }
                 },
                 deny: async () => {
@@ -165,7 +152,7 @@ const AuthSwitcherScreen = ({
                 )
             }
             onApplePress={() =>
-                handleAuthClick(appleNativeAuth, {
+                handleAuthClick(() => appleNativeAuth(validatorString), {
                     requiresFunctionalConsent: true,
                     signInName: 'Apple',
                 })
