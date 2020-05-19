@@ -6,6 +6,8 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
     Object {
       "backgroundColor": "#121212",
       "bottom": 0,
+      "fontFamily": "GuardianTextEgyptian-Reg",
+      "fontSize": 14,
       "opacity": 0.8,
       "position": "absolute",
       "width": "100%",
@@ -186,17 +188,42 @@ exports[`LightboxCaption should show a LightboxCaption with a pillar colour 1`] 
         </RNSVGGroup>
       </RNSVGGroup>
     </RNSVGSvgView>
-    <Text
+    <View
       style={
         Object {
-          "color": "#dcdcdc",
+          "color": "#ffffff",
           "paddingBottom": 50,
           "paddingLeft": 2,
         }
       }
     >
-      Claude Gnapka scores Luton's third and winner
-    </Text>
+      <View>
+        <Text
+          onLongPress={null}
+          onPress={null}
+          style={
+            Object {
+              "color": "#ffffff",
+              "fontFamily": "GuardianTextSans-Regular",
+            }
+          }
+        >
+          <Text
+            style={
+              Array [
+                null,
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "GuardianTextSans-Regular",
+                },
+              ]
+            }
+          >
+            Claude Gnapka scores Luton's third and winner
+          </Text>
+        </Text>
+      </View>
+    </View>
   </View>
 </View>
 `;
