@@ -141,7 +141,10 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
         .then(() => {
             return RNFetchBlob.fs.unlink(zipFilePath)
         })
-        .catch(e => errorService.captureException(e))
+        .catch(e => {
+            e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
+            errorService.captureException(e)
+        })
 }
 
 /**
