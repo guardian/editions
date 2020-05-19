@@ -1,6 +1,7 @@
 import { Platform, StatusBar } from 'react-native'
 import { toSize } from 'src/common'
 import { getFont } from './typography'
+import { iosMajorVersion } from 'src/helpers/platform'
 
 const spacing = [0, 3, 6, 12, 18, 30]
 
@@ -14,11 +15,8 @@ const buttonHeight = getFont('sans', 1).fontSize + basicMetrics.vertical * 2.5
 const sides = basicMetrics.horizontal
 
 // FIXME - iOS13 hack for dodgy background scale issue
-const majorVersionIOS =
-    Platform.OS === 'ios' ? parseInt(Platform.Version as string, 10) : 0
-
 const slideCardSpacing = () => {
-    if (Platform.OS === 'ios' && majorVersionIOS === 13) {
+    if (Platform.OS === 'ios' && iosMajorVersion === 13) {
         return 40
     } else if (Platform.OS === 'ios') {
         return spacing[5]

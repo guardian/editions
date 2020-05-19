@@ -11,14 +11,7 @@ import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
 
-import { Platform } from 'react-native'
-
-function canOSSupportAppleSignin(): boolean {
-    const osVersion = Number(String(Platform.Version).split('.')[0])
-    const osName = Platform.OS
-
-    return osName === 'ios' && osVersion >= 13
-}
+import { iosMajorVersion } from 'src/helpers/platform'
 
 const socialButtonStyles = StyleSheet.create({
     button: {
@@ -149,7 +142,7 @@ const Login = ({
                             Continue with Google
                         </SocialButton>
 
-                        {canOSSupportAppleSignin() && (
+                        {iosMajorVersion >= 13 && (
                             <SocialButton
                                 onPress={onApplePress}
                                 iconRequire={require('src/assets/images/apple.png')}
