@@ -1,13 +1,10 @@
 import appleAuth, {
     AppleAuthRequestOperation,
     AppleAuthRequestScope,
-    AppleAuthCredentialState,
     RNAppleAuth,
 } from '@invertase/react-native-apple-authentication'
-import invariant from 'invariant'
 
 import { AppleCreds } from 'src/authentication/authorizers/IdentityAuthorizer'
-import { TokenKind } from 'graphql'
 
 const mapCredentials = (
     appleCredentials: RNAppleAuth.AppleAuthRequestResponse,
