@@ -8,6 +8,7 @@ function loadStories() {
     require('../src/components/Spinner/Spinner.stories')
     require('../src/components/SportScore/SportScore.stories')
     require('../src/components/Stars/Stars.stories')
+    require('../src/components/icons/Icons.stories')
     require('../src/components/Button/Button.stories')
 }
 
