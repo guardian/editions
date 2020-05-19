@@ -476,28 +476,23 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
 
-    return RNFetchBlob.config({
-        overwrite: true,
-        path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
-        IOSBackgroundTask: true,
-    })
-        .fetch('GET', fetchIssueSummaryUrl, {
+    try {
+        await RNFetchBlob.config({
+            overwrite: true,
+            path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
+            IOSBackgroundTask: true,
+        }).fetch('GET', fetchIssueSummaryUrl, {
             'Content-Type': 'application/json',
         })
-        .then(async res => {
-            return res.json()
-        })
-        .then(async resJson => {
-            if (!Array.isArray(resJson) || resJson.length === 0) {
-                throw new IssueSummaryError('No issues in issue summary')
-            }
-            return resJson
-        })
-        .catch(e => {
-            e.message = `Failed to fetch valid issue summary: ${e.message}`
-            errorService.captureException(e)
-            return readIssueSummary()
-        })
+
+        // The above saves it locally, if successful we return it
+        return await readIssueSummary()
+    } catch (e) {
+        e.message = `Failed to fetch valid issue summary: ${e.message}`
+        errorService.captureException(e)
+        // Got a problem with the endpoint, return the last saved version
+        return readIssueSummary()
+    }
 }
 
 const cleanFileDisplay = (stat: {
