@@ -1,27 +1,31 @@
 // Logging Service that sends event logs to ELK
 import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
+import ApolloClient from 'apollo-client'
+import gql from 'graphql-tag'
 import { Platform } from 'react-native'
+import Config from 'react-native-config'
 import DeviceInfo from 'react-native-device-info'
+import { getCASCode } from 'src/authentication/helpers'
 import { isInBeta } from 'src/helpers/release-stream'
+import { GdprSwitchSetting } from 'src/helpers/settings'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import {
     iapReceiptCache,
-    userDataCache,
     loggingQueueCache,
+    userDataCache,
 } from 'src/helpers/storage'
-import { errorService } from './errors'
-import { getCASCode } from 'src/authentication/helpers'
-import Config from 'react-native-config'
 import {
-    Level,
     Feature,
+    Level,
     MallardLogFormat,
+    ReleaseChannel,
+    OS,
 } from '../../../Apps/common/src/logging'
-import { GdprSwitchSetting } from 'src/helpers/settings'
-import gql from 'graphql-tag'
-import ApolloClient from 'apollo-client'
+import { AsyncQueue } from '../helpers/async-queue-cache'
+import { errorService } from './errors'
 
 const { LOGGING_API_KEY } = Config
+const ATTEMPTS_THEN_CLEAR = 10
 
 interface LogParams {
     level: Level
@@ -32,11 +36,14 @@ interface LogParams {
 type QueryData = { gdprAllowPerformance: GdprSwitchSetting }
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
-class Logging {
+class Logging extends AsyncQueue {
     hasConsent: GdprSwitchSetting
+    numberOfAttempts: number
 
     constructor() {
+        super(loggingQueueCache)
         this.hasConsent = false
+        this.numberOfAttempts = 0
     }
 
     init(apolloClient: ApolloClient<object>) {
@@ -98,12 +105,14 @@ class Logging {
             app: DeviceInfo.getBundleId(),
             version: DeviceInfo.getVersion(),
             buildNumber: DeviceInfo.getBuildNumber(),
-            os: Platform.OS === 'ios' ? 'ios' : 'android',
+            os: Platform.OS === 'ios' ? OS.IOS : OS.ANDROID,
             device: DeviceInfo.getDeviceId(),
             networkStatus: networkStatus
                 ? networkStatus.type
                 : NetInfoStateType.unknown,
-            release_channel: isInBeta() ? 'BETA' : 'RELEASE',
+            release_channel: isInBeta()
+                ? ReleaseChannel.BETA
+                : ReleaseChannel.RELEASE,
             timestamp: new Date(),
             level,
             message,
@@ -117,49 +126,7 @@ class Logging {
         }
     }
 
-    async getQueuedLogs(): Promise<string> {
-        try {
-            return (await loggingQueueCache.get()) || '[{}]'
-        } catch (e) {
-            return '[{}]'
-        }
-    }
-
-    async saveQueuedLogs(log: MallardLogFormat[]): Promise<string | Error> {
-        try {
-            const logString = JSON.stringify(log)
-            await loggingQueueCache.set(logString)
-            return 'saved logs'
-        } catch (e) {
-            errorService.captureException(e)
-            throw new Error(e)
-        }
-    }
-
-    async queueLogs(log: MallardLogFormat[]) {
-        try {
-            const currentQueueString = await this.getQueuedLogs()
-            const parsedQueue = JSON.parse(currentQueueString)
-            const newQueue = [...parsedQueue, ...log]
-            const cleanLogs = newQueue.filter(
-                value => Object.keys(value).length !== 0,
-            )
-            return cleanLogs
-        } catch (e) {
-            errorService.captureException(e)
-            throw new Error(e)
-        }
-    }
-
-    async clearLogs() {
-        try {
-            return await loggingQueueCache.reset()
-        } catch (e) {
-            errorService.captureException(e)
-        }
-    }
-
-    async postLog(log: MallardLogFormat[]): Promise<Response | Error> {
+    async postLogToService(log: object[]): Promise<Response | Error> {
         try {
             const response = await fetch(defaultSettings.logging, {
                 method: 'POST',
@@ -177,23 +144,24 @@ class Logging {
             }
             return response
         } catch (e) {
-            this.saveQueuedLogs(log)
+            await this.saveQueuedItems(log)
             throw new Error(e)
         }
     }
 
-    // Designed to post logs that have been queued but havent sent
-    async postQueuedLogs(): Promise<void> {
+    async postLog(log: object[]) {
         try {
-            const queuedLogsString = await this.getQueuedLogs()
-            const queuedLogs = JSON.parse(queuedLogsString)
-            await this.postLog(queuedLogs)
-        } catch {
-            // Assumes there is a problem sending logs and clears them
-            const { isConnected } = await NetInfo.fetch()
-            if (isConnected) {
-                await this.clearLogs()
+            await this.postLogToService(log)
+            this.numberOfAttempts = 0
+        } catch (e) {
+            if (this.numberOfAttempts >= ATTEMPTS_THEN_CLEAR) {
+                await this.clearItems()
+                this.numberOfAttempts = 0
+            } else {
+                await this.saveQueuedItems(log)
+                this.numberOfAttempts++
             }
+            throw new Error(e)
         }
     }
 
@@ -208,16 +176,16 @@ class Logging {
                 message,
                 ...optionalFields,
             })
-            const logsToPost = await this.queueLogs([currentLog])
+            const logsToPost = await this.queueItems([currentLog])
 
             const { isConnected } = await NetInfo.fetch()
             // Not connected, save the log queue
             if (!isConnected) {
-                return this.saveQueuedLogs(logsToPost)
+                return this.saveQueuedItems(logsToPost)
             }
 
             const postLogToService = await this.postLog(logsToPost)
-            await this.clearLogs()
+            await this.clearItems()
             return postLogToService
         } catch (e) {
             errorService.captureException(e)
@@ -228,4 +196,4 @@ class Logging {
 
 const loggingService = new Logging()
 
-export { Level, Feature, loggingService }
+export { Level, Feature, Logging, loggingService }

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { londonTime } from 'src/helpers/date'
 import { lastNDays } from 'src/helpers/issues'
 import { Feature, loggingService, Level } from 'src/services/logging'
+import NetInfo, { NetInfoStateType } from '@react-native-community/netinfo'
 
 const PUSH_TRACKING_KEY = '@push-tracking'
 
@@ -34,6 +35,7 @@ interface Tracking {
     time: string
     id: string
     value: string
+    networkStatus: NetInfoStateType
 }
 
 const getPushTracking = async (): Promise<string | null> =>
@@ -72,18 +74,17 @@ const pushTracking = async (
         }
 
         const storedTracking = await AsyncStorage.getItem(PUSH_TRACKING_KEY)
+        const { type } = await NetInfo.fetch()
         const tracking: Tracking = {
             time: londonTime().format(),
             id,
             value,
+            networkStatus: type,
         }
 
         const saveTracking = storedTracking
             ? [...JSON.parse(storedTracking), tracking]
             : [tracking]
-
-        // Doing this for linting rather than refactor a load of code back again as its used below
-        console.log(feature)
 
         loggingService.log({
             level: Level.INFO,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { Button } from '../button/button'
+import { Button } from './Button'
 import { color } from 'src/theme/color'
 
 const closeModalButtonStyles = (bgColor?: string, borderColor?: string) =>

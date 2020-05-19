@@ -17,8 +17,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
     const isTypePresent = (tagType: TagType): boolean =>
         doesTypeExist(article, tagType)
 
+    // NOTE: most interviews are also immersive - see switch statement below
     const isImmersive: boolean =
         (article.fields && article.fields.displayHint === 'immersive') || false
+
     const isLongRead: boolean = isTagPresent(
         'theguardian/journal/the-long-read',
     )
@@ -69,10 +71,10 @@ const articleTypePicker = (article: IContent): ArticleType => {
             case 'journal':
                 if (isLongRead) return ArticleType.Longread
                 else if (isImmersive) return ArticleType.Immersive
+                else if (isLetter) return ArticleType.Letter
                 else if (isSeries) return ArticleType.Article
                 else if (isObituary) return ArticleType.Article
                 else if (isAnalysis) return ArticleType.Analysis
-                else if (isLetter) return ArticleType.Letter
                 else if (isEditorial) return ArticleType.Article
                 else if (isComment) return ArticleType.Opinion
                 else return ArticleType.Article

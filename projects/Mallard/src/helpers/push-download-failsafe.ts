@@ -1,5 +1,5 @@
 import BackgroundFetch from 'react-native-background-fetch'
-import { pushTracking } from './push-tracking'
+import { pushTracking } from '../push-notifications/push-tracking'
 import { clearAndDownloadIssue } from './clear-download-issue'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'

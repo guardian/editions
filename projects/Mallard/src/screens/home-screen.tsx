@@ -14,7 +14,7 @@ import {
     NavigationRoute,
 } from 'react-navigation'
 import { IssueSummary } from 'src/common'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import {
     IssueRow,
     ISSUE_ROW_HEADER_HEIGHT,

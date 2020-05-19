@@ -10,7 +10,7 @@ import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
-import { pushTracking } from 'src/helpers/push-tracking'
+import { pushTracking } from 'src/push-notifications/push-tracking'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import { NetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import gql from 'graphql-tag'
@@ -38,13 +38,6 @@ interface OtherFile extends BasicFile {
 interface IssueFile extends BasicFile {
     issue: Issue
     type: 'issue'
-}
-
-class IssueSummaryError extends Error {
-    constructor(message: string) {
-        super(message)
-        this.name = 'IssueSummaryError'
-    }
 }
 
 export type File = OtherFile | IssueFile
@@ -141,7 +134,10 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
         .then(() => {
             return RNFetchBlob.fs.unlink(zipFilePath)
         })
-        .catch(e => errorService.captureException(e))
+        .catch(e => {
+            e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
+            errorService.captureException(e)
+        })
 }
 
 /**
@@ -476,28 +472,23 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
 
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
 
-    return RNFetchBlob.config({
-        overwrite: true,
-        path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
-        IOSBackgroundTask: true,
-    })
-        .fetch('GET', fetchIssueSummaryUrl, {
+    try {
+        await RNFetchBlob.config({
+            overwrite: true,
+            path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
+            IOSBackgroundTask: true,
+        }).fetch('GET', fetchIssueSummaryUrl, {
             'Content-Type': 'application/json',
         })
-        .then(async res => {
-            return res.json()
-        })
-        .then(async resJson => {
-            if (!Array.isArray(resJson) || resJson.length === 0) {
-                throw new IssueSummaryError('No issues in issue summary')
-            }
-            return resJson
-        })
-        .catch(e => {
-            e.message = `Failed to fetch valid issue summary: ${e.message}`
-            errorService.captureException(e)
-            return readIssueSummary()
-        })
+
+        // The above saves it locally, if successful we return it
+        return await readIssueSummary()
+    } catch (e) {
+        e.message = `Failed to fetch valid issue summary: ${e.message}`
+        errorService.captureException(e)
+        // Got a problem with the endpoint, return the last saved version
+        return readIssueSummary()
+    }
 }
 
 const cleanFileDisplay = (stat: {

@@ -707,7 +707,7 @@ const getByLine = (
     return html`
         <aside class="${headerClass}">
             ${shareButton}
-            <span>${bylineText}</span>
+            <span style="pointer-events: none">${bylineText}</span>
             <div class="clearfix"></div>
         </aside>
     `

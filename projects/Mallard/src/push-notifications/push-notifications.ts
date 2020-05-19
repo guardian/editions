@@ -12,11 +12,11 @@ import {
 } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
-import { pushNotificationRegistrationCache } from './storage'
+import { pushNotificationRegistrationCache } from '../helpers/storage'
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { errorService } from 'src/services/errors'
-import { pushTracking } from 'src/helpers/push-tracking'
+import { pushTracking } from './push-tracking'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
 

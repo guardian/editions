@@ -1,6 +1,6 @@
 import React from 'react'
 import { FlatList, View, Alert, Text } from 'react-native'
-import { Button, ButtonAppearance } from 'src/components/button/button'
+import { Button, ButtonAppearance } from 'src/components/Button/Button'
 import { ScrollContainer } from 'src/components/layout/ui/container'
 import { Footer, Separator, TallRow } from 'src/components/layout/ui/row'
 import {

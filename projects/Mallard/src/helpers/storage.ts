@@ -7,7 +7,7 @@ import {
 } from 'src/constants'
 import { CASExpiry } from '../../../Apps/common/src/cas-expiry'
 import { ReceiptIOS } from 'src/authentication/services/iap'
-import { PushNotificationRegistration } from 'src/helpers/push-notifications'
+import { PushNotificationRegistration } from 'src/push-notifications/push-notifications'
 import { IdentityAuthData } from 'src/authentication/authorizers/IdentityAuthorizer'
 /**
  * this is ostensibly used to get the legacy data from the old GCE app

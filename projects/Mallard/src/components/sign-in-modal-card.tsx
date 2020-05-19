@@ -1,9 +1,9 @@
 import React from 'react'
 import { OnboardingCard, CardAppearance } from './onboarding/onboarding-card'
 import { View, Platform, Linking, StyleSheet } from 'react-native'
-import { ModalButton } from './modal-button'
+import { ModalButton } from './Button/ModalButton'
 import { Link } from './link'
-import { ButtonAppearance } from './button/button'
+import { ButtonAppearance } from './Button/Button'
 import { getFont } from 'src/theme/typography'
 import { sendComponentEvent, ComponentType, Action } from 'src/services/ophan'
 

@@ -7,6 +7,7 @@ import {
 } from '../../Apps/common/src'
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
+import { ArticleType } from '../../Apps/common/src'
 
 /**
  * if no role is included in capi and content is immersive, set role to immersive
@@ -15,15 +16,22 @@ import { getImage, getCreditedImage } from './assets'
  * @param capiRole the image role specified in the content API (if any)
  */
 export const getImageRole = (
+    articleType: ArticleType,
     displayHint?: string,
     capiRole?: string,
 ): ImageRole | undefined => {
-    if (displayHint === 'immersive' && !capiRole) {
-        return displayHint
+    if (
+        (displayHint === 'immersive' || articleType == ArticleType.Immersive) &&
+        !capiRole
+    ) {
+        return 'immersive'
     } else return imageRoles.find(r => r === capiRole)
 }
 
-const getMainImage = (result: IContent): CreditedImage | undefined => {
+const getMainImage = (
+    result: IContent,
+    articleType: ArticleType,
+): CreditedImage | undefined => {
     const maybeMainElement = oc(result).blocks.main.elements[0]()
     const maybeCreditedMainImage =
         maybeMainElement && getCreditedImage(maybeMainElement)
@@ -36,12 +44,19 @@ const getMainImage = (result: IContent): CreditedImage | undefined => {
     return maybeCreditedMainImage
         ? {
               ...maybeCreditedMainImage,
-              role: getImageRole(displayHint, maybeCreditedMainImage.role),
+              role: getImageRole(
+                  articleType,
+                  displayHint,
+                  maybeCreditedMainImage.role,
+              ),
           }
         : maybeCreditedMainImage
 }
 
-const getTrailImage = (result: IContent): TrailImage | undefined => {
+const getTrailImage = (
+    result: IContent,
+    articleType: ArticleType,
+): TrailImage | undefined => {
     const maybeThumbnailElement =
         result.elements &&
         result.elements.find(element => element.relation === 'thumbnail')
@@ -58,7 +73,11 @@ const getTrailImage = (result: IContent): TrailImage | undefined => {
                   mobile: 'full-size',
                   tablet: 'full-size',
               },
-              role: getImageRole(displayHint, maybeThumbnailImage.role),
+              role: getImageRole(
+                  articleType,
+                  displayHint,
+                  maybeThumbnailImage.role,
+              ),
           }
         : undefined
 }
@@ -68,12 +87,15 @@ interface ImageAndTrailImage {
     trailImage: TrailImage | undefined
 }
 
-const getImages = (result: IContent): ImageAndTrailImage => {
+const getImages = (
+    result: IContent,
+    articleType: ArticleType,
+): ImageAndTrailImage => {
     const images = {
-        image: getMainImage(result),
-        trailImage: getTrailImage(result),
+        image: getMainImage(result, articleType),
+        trailImage: getTrailImage(result, articleType),
     }
-    console.log('Found images: ' + JSON.stringify(images))
+    console.debug('Found images: ' + JSON.stringify(images))
     return images
 }
 
