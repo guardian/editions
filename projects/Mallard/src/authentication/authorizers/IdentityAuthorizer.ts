@@ -42,8 +42,7 @@ export type AuthParams = BasicCreds | FacebookCreds | GoogleCreds | AppleCreds
 
 export type AuthType = 'apple' | 'google' | 'facebook' | 'email' | 'unknown'
 
-// TODO: Write unit test?
-const detectAuthType = (params: AuthParams): AuthType => {
+export const detectAuthType = (params: AuthParams): AuthType => {
     if ('email' in params) return 'email'
     if ('facebook-access-token' in params) return 'facebook'
     if ('google-access-token' in params) return 'google'
@@ -74,8 +73,7 @@ const authWithTokens = async (
     )
 }
 
-// TODO: This function needs a unit test
-const getUserName = (authType: AuthType, params: AuthParams) => {
+export const getUserName = (authType: AuthType, params: AuthParams) => {
     const unknown = 'unknown'
     switch (authType) {
         case 'email':
