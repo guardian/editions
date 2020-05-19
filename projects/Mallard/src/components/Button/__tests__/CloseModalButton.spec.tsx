@@ -11,7 +11,11 @@ describe('CloseModalButton', () => {
     })
     it('should display a CloseModalButton with a colour prop', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <CloseModalButton onPress={() => {}} color="#41A9E0" />,
+            <CloseModalButton
+                onPress={() => {}}
+                bgColor="#41A9E0"
+                borderColor="#41A9E0"
+            />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
