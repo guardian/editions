@@ -19,7 +19,10 @@ import { ALL_SETTINGS_FRAGMENT } from 'src/helpers/settings/resolvers'
 import { setIsUsingProdDevtools } from 'src/helpers/settings/setters'
 import { useQuery } from 'src/hooks/apollo'
 import gql from 'graphql-tag'
-import { getPushTracking, clearPushTracking } from 'src/helpers/push-tracking'
+import {
+    getPushTracking,
+    clearPushTracking,
+} from 'src/push-notifications/push-tracking'
 import { getFileList } from 'src/helpers/files'
 import { deleteIssueFiles } from 'src/helpers/files'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'

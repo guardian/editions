@@ -1,4 +1,4 @@
-import { maybeRegister } from '../push-notifications'
+import { maybeRegister } from '../../push-notifications/push-notifications'
 import {
     getMockAsyncCache,
     getMockPromise,
