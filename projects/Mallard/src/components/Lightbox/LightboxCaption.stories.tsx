@@ -6,7 +6,7 @@ import { LightboxCaption } from './LightboxCaption'
 const caption = text('caption', 'Some people jumping for joy')
 const pillarColor = color('pillar', '#FF0000')
 
-storiesOf('Lightbox', module)
+storiesOf('LightboxCaption', module)
     .addDecorator(withKnobs)
     .add('LightboxCaption - default', () => (
         <LightboxCaption caption={caption} pillarColor={pillarColor} />
