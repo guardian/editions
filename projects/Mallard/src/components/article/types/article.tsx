@@ -83,6 +83,7 @@ export const getCreditedImages = (
             role: e.src.role,
             credit: e.credit,
             caption: e.caption,
+            displayCredit: e.displayCredit,
         }
     })
     return creditedImages

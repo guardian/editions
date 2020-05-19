@@ -189,12 +189,10 @@ export const LightboxScreen = ({
                                                                   .neutral[100]
                                                             : pillarColors.bright //bright since always on a dark background
                                                     }
-                                                    credit={
-                                                        item.displayCredit !==
-                                                        false
-                                                            ? item.credit
-                                                            : undefined
+                                                    displayCredit={
+                                                        item.displayCredit
                                                     }
+                                                    credit={item.credit}
                                                 />
                                             )}
                                         </View>
