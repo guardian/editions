@@ -40,13 +40,6 @@ interface IssueFile extends BasicFile {
     type: 'issue'
 }
 
-class IssueSummaryError extends Error {
-    constructor(message: string) {
-        super(message)
-        this.name = 'IssueSummaryError'
-    }
-}
-
 export type File = OtherFile | IssueFile
 export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
