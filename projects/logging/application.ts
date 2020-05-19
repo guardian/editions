@@ -22,17 +22,21 @@ export const createApp = (): express.Application => {
     })
 
     app.post('/log/mallard', express.json(), (req: Request, res: Response) => {
-        if (req.headers.apikey !== process.env.API_KEY) {
-            res.status(403).send('Missing or invalid apikey header')
+        const apiKeyHeader = req.headers.apikey
+        if (apiKeyHeader !== process.env.API_KEY) {
+            logger.warn(
+                `Missing or invalid api key. Key received: ${apiKeyHeader}`,
+            )
+            res.status(403).send(
+                `Missing or invalid apikey header: ${apiKeyHeader} is invalid`,
+            )
         } else if (req.body) {
             const data = Array.isArray(req.body) ? req.body : [req.body]
             processLog(data)
             res.send('Log success')
         } else {
-            logger.info(
-                `Missing or invalid api key. Key received: ${req.headers.apikey}`,
-            )
-            res.status(400).send('Missing apikey or request body')
+            logger.info(`Missing request body`)
+            res.status(400).send('Missing request body')
         }
     })
 
