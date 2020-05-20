@@ -461,7 +461,16 @@ export const downloadTodaysIssue = async (client: ApolloClient<object>) => {
 export const readIssueSummary = async (): Promise<IssueSummary[]> =>
     RNFetchBlob.fs
         .readFile(FSPaths.contentPrefixDir + defaultSettings.issuesPath, 'utf8')
-        .then(data => JSON.parse(data))
+        .then(data => {
+            try {
+                return JSON.parse(data)
+            } catch (e) {
+                e.message = `readIssueSummary: ${e.message} - with: ${data}`
+                console.log(e.message)
+                errorService.captureException(e)
+                throw e
+            }
+        })
         .catch(e => {
             throw e
         })
