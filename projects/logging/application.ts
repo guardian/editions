@@ -23,7 +23,9 @@ export const createApp = (): express.Application => {
 
     app.post('/log/mallard', express.json(), (req: Request, res: Response) => {
         const apiKeyHeader = req.headers.apikey
-        if (apiKeyHeader !== process.env.API_KEY) {
+        // the below check has been disabled until we're able to do a new release of the app
+        // it now passes if apiKeyHeader is missing or undefined
+        if (apiKeyHeader && apiKeyHeader !== process.env.API_KEY) {
             logger.warn(
                 `Missing or invalid api key. Key received: ${apiKeyHeader}`,
             )
