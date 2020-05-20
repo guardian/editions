@@ -468,6 +468,7 @@ export const readIssueSummary = async (): Promise<IssueSummary[]> =>
                 e.message = `readIssueSummary: ${e.message} - with: ${data}`
                 console.log(e.message)
                 errorService.captureException(e)
+                throw e
             }
         })
         .catch(e => {
