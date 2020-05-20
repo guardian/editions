@@ -6,27 +6,22 @@ import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 
 const styles = StyleSheet.create({
     image: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        width: '100%',
+        alignSelf: 'center',
         height: '100%',
+        width: '100%',
+        resizeMode: 'contain',
     },
 })
 
 const LightboxImage = ({ image }: { image: IImage }) => {
     const imagePath = useImagePath(image, 'full-size')
-    console.log(imagePath)
-    const aspectRatio = useAspectRatio(imagePath)
     return (
-        <View style={styles.image}>
-            <Image
-                source={{
-                    uri: imagePath,
-                }}
-                style={{ aspectRatio }}
-            />
-        </View>
+        <Image
+            style={styles.image}
+            source={{
+                uri: imagePath,
+            }}
+        />
     )
 }
 
