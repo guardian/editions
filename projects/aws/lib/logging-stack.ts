@@ -89,13 +89,14 @@ export class LoggingStack extends cdk.Stack {
 
         const loggingApi = new apigateway.LambdaRestApi(
             this,
-            `editions-logging-${stageParameter.valueAsString}`,
+            'editions-logging-api',
             {
                 handler: loggingBackend,
                 endpointTypes: [EndpointType.EDGE],
                 policy: new iam.PolicyDocument({
                     statements: [loggingApiPolicyStatement],
                 }),
+                restApiName: `editions-logging-${stageParameter.valueAsString}`,
             },
         )
 
