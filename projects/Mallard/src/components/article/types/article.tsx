@@ -154,7 +154,6 @@ const Article = ({
                 topPadding={topPadding}
                 origin={origin}
                 onMessage={event => {
-                    console.log(event.nativeEvent.data)
                     const parsed = parsePing(event.nativeEvent.data)
                     if (parsed.type === 'share') {
                         if (article.webUrl == null) return
