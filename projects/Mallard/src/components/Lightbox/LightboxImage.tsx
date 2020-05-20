@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import { Image as IImage } from '../../../../Apps/common/src'
 import { useImagePath } from 'src/hooks/use-image-paths'
-import { useAspectRatio } from 'src/hooks/use-aspect-ratio'
 
 const styles = StyleSheet.create({
     image: {
