@@ -89,7 +89,7 @@ export class LoggingStack extends cdk.Stack {
 
         const loggingApi = new apigateway.LambdaRestApi(
             this,
-            'editions-logging',
+            `editions-logging-${stageParameter.valueAsString}`,
             {
                 handler: loggingBackend,
                 endpointTypes: [EndpointType.EDGE],
@@ -98,6 +98,16 @@ export class LoggingStack extends cdk.Stack {
                 }),
             },
         )
+
+        new apigateway.UsagePlan(this, 'usage-plan', {
+            apiStages: [{ stage: loggingApi.deploymentStage, api: loggingApi }],
+            name: `editions-logging-usage-plan-${stageParameter.valueAsString}`,
+            // max of 5 million requests a day (100 log messages per user)
+            quota: {
+                period: apigateway.Period.DAY,
+                limit: 5000000,
+            },
+        })
 
         const loggingDomainName = new apigateway.DomainName(
             this,
