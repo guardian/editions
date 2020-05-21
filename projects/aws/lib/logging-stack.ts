@@ -89,25 +89,42 @@ export class LoggingStack extends cdk.Stack {
 
         const loggingApi = new apigateway.LambdaRestApi(
             this,
-            'editions-logging-api',
+            'editions-logging',
             {
                 handler: loggingBackend,
                 endpointTypes: [EndpointType.EDGE],
                 policy: new iam.PolicyDocument({
                     statements: [loggingApiPolicyStatement],
                 }),
+                defaultMethodOptions: {
+                    apiKeyRequired: false,
+                },
             },
         )
 
-        new apigateway.UsagePlan(this, 'usage-plan', {
-            apiStages: [{ stage: loggingApi.deploymentStage, api: loggingApi }],
-            name: `editions-logging-usage-plan-${stageParameter.valueAsString}`,
-            // max of 5 million requests a day (100 log messages per user)
-            quota: {
-                period: apigateway.Period.DAY,
-                limit: 5000000,
+        const usagePlan = new apigateway.UsagePlan(
+            this,
+            'editions-logging-usage-plan',
+            {
+                name: `editions-logging-usage-plan-${stageParameter.valueAsString}`,
+                apiStages: [
+                    {
+                        stage: loggingApi.deploymentStage,
+                        api: loggingApi,
+                    },
+                ],
+                // max of 5 million requests a day (100 log messages per user)
+                quota: {
+                    period: apigateway.Period.DAY,
+                    limit: 5000000,
+                },
             },
+        )
+
+        const apiKey = new apigateway.ApiKey(this, `editions-logging-apikey`, {
+            apiKeyName: `editions-logging-${stageParameter.valueAsString}`,
         })
+        usagePlan.addApiKey(apiKey)
 
         const loggingDomainName = new apigateway.DomainName(
             this,
@@ -119,7 +136,7 @@ export class LoggingStack extends cdk.Stack {
             },
         )
 
-        loggingDomainName.addBasePathMapping(loggingApi)
+        loggingDomainName.addBasePathMapping(loggingApi, { basePath: '' })
 
         new CfnOutput(this, 'Logging-Api-Target-Hostname', {
             description: 'hostname',
