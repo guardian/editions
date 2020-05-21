@@ -1,10 +1,13 @@
 import ApolloClient from 'apollo-client'
-import { fetchCacheClear } from './fetch'
-import { clearOldIssues, downloadTodaysIssue, prepFileSystem } from './files'
+import { fetchCacheClear } from '../helpers/fetch'
+import { clearOldIssues, prepFileSystem } from '../helpers/files'
 import { cleanPushTrackingByDays } from '../push-notifications/push-tracking'
 import { largeDeviceMemory } from 'src/hooks/use-config-provider'
+import { downloadTodaysEdition } from 'src/download/downloadTodaysEdition'
 
-const clearAndDownloadIssue = async (client: ApolloClient<object>) => {
+const prepareAndDownloadTodaysEdition = async (
+    client: ApolloClient<object>,
+) => {
     await prepFileSystem()
     await clearOldIssues()
     await cleanPushTrackingByDays()
@@ -13,10 +16,10 @@ const clearAndDownloadIssue = async (client: ApolloClient<object>) => {
         // Check to see if the device has a decent amount of memory before doing intensive tasks
         const largeRAM = await largeDeviceMemory()
         if (largeRAM) {
-            return await downloadTodaysIssue(client)
+            return await downloadTodaysEdition(client)
         }
         return
     }
 }
 
-export { clearAndDownloadIssue }
+export { prepareAndDownloadTodaysEdition }
