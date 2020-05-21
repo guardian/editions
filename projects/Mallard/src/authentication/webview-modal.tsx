@@ -20,7 +20,7 @@ export const WebviewModal = ({
                 setVisible(false)
             }}
         >
-            <View style={{ flex: 1, backgroundColor: 'red' }}>
+            <View style={{ flex: 1, backgroundColor: 'black' }}>
                 <WebView
                     source={{ uri: url }}
                     onNavigationStateChange={newState => {

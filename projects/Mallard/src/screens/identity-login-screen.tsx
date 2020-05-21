@@ -171,7 +171,7 @@ const AuthSwitcherScreen = ({
             appleOauthUrl={getAppleOAuthURL(validatorString)}
             onAppleOAuthPress={(token: AuthParams) => {
                 handleAuthClick(() => Promise.resolve(token), {
-                    requiresFunctionalConsent: false, // TODO double check
+                    requiresFunctionalConsent: true,
                     signInName: 'AppleOauth',
                 })
             }}

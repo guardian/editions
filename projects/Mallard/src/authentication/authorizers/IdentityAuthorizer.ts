@@ -100,7 +100,6 @@ export const getUserName = (authType: AuthType, params: AuthParams) => {
     }
 }
 
-// TODO: Write unit test?
 const detectAuthType = (params: AuthParams): AuthType => {
     if ('email' in params) return 'email'
     if ('facebook-access-token' in params) return 'facebook'
