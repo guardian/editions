@@ -96,7 +96,6 @@ export class LoggingStack extends cdk.Stack {
                 policy: new iam.PolicyDocument({
                     statements: [loggingApiPolicyStatement],
                 }),
-                restApiName: `editions-logging-${stageParameter.valueAsString}`,
             },
         )
 
