@@ -544,18 +544,15 @@ const MainMediaImage = ({
     className,
     children,
     preserveRatio,
-    gallery,
     getImagePath,
 }: {
     image: CreditedImage
     className?: string
     children?: string
     preserveRatio?: boolean
-    gallery?: boolean
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
-
     return html`
         <div
             class="image-as-bg ${className}"
@@ -725,7 +722,6 @@ const Header = ({
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
-    const gallery = type === ArticleType.Gallery
     const byLineText = getByLineText(headerType, headerProps)
     return html`
         ${immersive &&
@@ -735,7 +731,6 @@ const Header = ({
                 image: headerProps.image,
                 className: 'header-image header-image--immersive',
                 getImagePath,
-                gallery,
             })}
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
@@ -748,7 +743,6 @@ const Header = ({
                             className: 'header-image',
                             image: headerProps.image,
                             preserveRatio: true,
-                            gallery: gallery,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
                                 : headerProps.sportScore
