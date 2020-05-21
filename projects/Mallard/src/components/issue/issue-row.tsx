@@ -39,7 +39,7 @@ import {
     downloadAndUnzipEdition,
     stopListeningToExistingDownload,
     maybeListenToExistingDownload,
-} from 'src/download/downloadAndUnzip'
+} from 'src/download-edition/download-and-unzip'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)

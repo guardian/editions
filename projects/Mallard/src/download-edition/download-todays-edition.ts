@@ -4,7 +4,7 @@ import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { matchSummmaryToKey, isIssueOnDevice } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { errorService } from 'src/services/errors'
-import { downloadAndUnzipEdition } from './downloadAndUnzip'
+import { downloadAndUnzipEdition } from './download-and-unzip'
 
 const downloadTodaysEdition = async (client: ApolloClient<object>) => {
     const todaysKey = todayAsKey()

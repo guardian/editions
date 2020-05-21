@@ -10,7 +10,7 @@ import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
 import { registerWithNotificationService } from './notification-service'
 import { notificationTracking } from './notification-tracking'
-import { downloadViaNotification } from 'src/download/downloadViaNotification'
+import { downloadViaNotification } from 'src/download-edition/download-via-notification'
 
 export interface PushNotificationRegistration {
     registrationDate: string

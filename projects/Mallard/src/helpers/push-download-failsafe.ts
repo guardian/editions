@@ -2,7 +2,7 @@ import BackgroundFetch from 'react-native-background-fetch'
 import { pushTracking } from '../push-notifications/push-tracking'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
-import { prepareAndDownloadTodaysEdition } from 'src/download/prepare-download-edition'
+import { prepareAndDownloadTodaysEdition } from 'src/download-edition/prepare-and-download-edition'
 
 const feature = Feature.BACKGROUNG_DOWNLOAD
 

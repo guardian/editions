@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client'
 import { DownloadBlockedStatus } from 'src/hooks/use-net-info'
-import { downloadAndUnzipEdition } from '../downloadAndUnzip'
+import { downloadAndUnzipEdition } from '../download-and-unzip'
 
 const createIssueSummary = (localId: string) => ({
     key: 'de/1-1-1',

@@ -5,7 +5,7 @@ import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushTracking } from 'src/push-notifications/push-tracking'
 import { errorService } from 'src/services/errors'
 import { Feature } from '../../../Apps/common/src/logging'
-import { downloadAndUnzipEdition } from './downloadAndUnzip'
+import { downloadAndUnzipEdition } from './download-and-unzip'
 
 const downloadViaNotification = async (
     key: string,

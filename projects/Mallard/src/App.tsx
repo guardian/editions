@@ -41,7 +41,7 @@ import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
-import { prepareAndDownloadTodaysEdition } from './download/prepare-download-edition'
+import { prepareAndDownloadTodaysEdition } from './download-edition/prepare-and-download-edition'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
