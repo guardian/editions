@@ -5,6 +5,7 @@ import { Breakpoints } from 'src/theme/breakpoints'
 import { metrics } from 'src/theme/spacing'
 import { Arrow } from './arrow'
 import { CssProps, themeColors } from '../helpers/css'
+import { Platform } from 'react-native'
 
 export const renderCaption = ({
     caption,
@@ -196,7 +197,14 @@ const ImageBase = ({
     const figcaption = renderCaption({ caption, credit, displayCredit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img src="${path}" alt="${alt}" id="img-${index}" />
+            <img
+                src="${path}"
+                ${Platform.OS === 'ios' &&
+                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"`}
+                alt="${alt}"
+                id="img-${index}"
+            />
+
             ${figcaption &&
                 html`
                     <figcaption>

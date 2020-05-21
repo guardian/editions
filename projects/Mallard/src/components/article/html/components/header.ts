@@ -541,6 +541,7 @@ const Image = ({
 
 const MainMediaImage = ({
     image,
+    isGallery,
     className,
     children,
     preserveRatio,
@@ -548,6 +549,7 @@ const MainMediaImage = ({
 }: {
     image: CreditedImage
     className?: string
+    isGallery?: boolean
     children?: string
     preserveRatio?: boolean
     getImagePath: GetImagePath
@@ -558,6 +560,9 @@ const MainMediaImage = ({
             class="image-as-bg ${className}"
             data-preserve-ratio="${preserveRatio || 'false'}"
             style="background-image: url(${path}); "
+            ${Platform.OS === 'ios' &&
+                !isGallery &&
+                `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
             data-open="false"
         >
             ${preserveRatio &&
@@ -722,6 +727,7 @@ const Header = ({
     getImagePath: GetImagePath
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
+    const isGallery = type === ArticleType.Gallery
     const byLineText = getByLineText(headerType, headerProps)
     return html`
         ${immersive &&
@@ -742,6 +748,7 @@ const Header = ({
                         MainMediaImage({
                             className: 'header-image',
                             image: headerProps.image,
+                            isGallery: isGallery,
                             preserveRatio: true,
                             children: headerProps.starRating
                                 ? Rating(headerProps)
