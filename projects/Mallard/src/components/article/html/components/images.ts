@@ -199,7 +199,7 @@ const ImageBase = ({
         <figure class="image" data-role="${role || 'inline'}">
             <img
                 src="${path}"
-                ${Platform.OS === 'ios' &&
+                ${Platform.OS === 'android' &&
                     `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"`}
                 alt="${alt}"
                 id="img-${index}"

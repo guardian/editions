@@ -560,7 +560,7 @@ const MainMediaImage = ({
             class="image-as-bg ${className}"
             data-preserve-ratio="${preserveRatio || 'false'}"
             style="background-image: url(${path}); "
-            ${Platform.OS === 'ios' &&
+            ${Platform.OS === 'android' &&
                 !isGallery &&
                 `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${0}, isMainImage: 'true'}))"`}
             data-open="false"
