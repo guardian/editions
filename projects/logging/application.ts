@@ -10,7 +10,7 @@ const processLog = (rawData: MallardLogFormat[]) => {
     rawData.forEach(logData => {
         if (logData.timestamp && logData.message) {
             logger.info({
-                '@timestamp': logData.timestamp,
+                clientTimestamp: logData.timestamp,
                 ...logData,
                 // override any stage/stack/app properties included in logData
                 stack: process.env.STACK,
