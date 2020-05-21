@@ -320,6 +320,7 @@ export interface ImageElement {
     caption?: string
     copyright?: string
     credit?: string
+    displayCredit?: boolean
     role?: ImageRoles
 }
 export interface TweetElement {

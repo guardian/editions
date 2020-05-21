@@ -1,12 +1,12 @@
 import React, { useState, createContext, useCallback } from 'react'
-import { ImageElement, ArticlePillar } from '../../../Apps/common/src'
+import { ArticlePillar, CreditedImage } from '../../../Apps/common/src'
 
 export interface LightboxContextType {
     visible: boolean
     setLightboxVisible: (newVisible: boolean) => void
-    images: ImageElement[]
+    images: CreditedImage[]
     setLightboxData: (
-        images: ImageElement[],
+        images: CreditedImage[],
         index: number,
         pillar: ArticlePillar,
     ) => void
@@ -35,12 +35,12 @@ export const useLightboxProvider = (): LightboxContextType => {
         setVisible(newVisible)
     }, [])
 
-    const [images, setImages] = useState<ImageElement[]>([])
+    const [images, setImages] = useState<CreditedImage[]>([])
     const [pillar, setPillar] = useState<ArticlePillar>('news')
     const [index, setIndex] = useState<number>(0)
     const setLightboxData = useCallback(
         (
-            newImages: ImageElement[],
+            newImages: CreditedImage[],
             newIndex: number,
             newPillar: ArticlePillar,
         ): void => {

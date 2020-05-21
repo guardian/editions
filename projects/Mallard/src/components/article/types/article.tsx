@@ -13,6 +13,7 @@ import {
     IssueOrigin,
     BlockElement,
     ImageElement,
+    CreditedImage,
 } from '../../../../../Apps/common/src'
 import { LightboxContext } from '../../../screens/use-lightbox-modal'
 
@@ -70,6 +71,22 @@ export const getLightboxImages = (elements: BlockElement[]): ImageElement[] => {
         (e: BlockElement): e is ImageElement => e.id === 'image',
     )
     return images
+}
+
+export const getCreditedImages = (
+    elements: ImageElement[],
+): CreditedImage[] => {
+    const creditedImages: CreditedImage[] = elements.map(e => {
+        return {
+            source: e.src.source,
+            path: e.src.path,
+            role: e.src.role,
+            credit: e.credit,
+            caption: e.caption,
+            displayCredit: e.displayCredit,
+        }
+    })
+    return creditedImages
 }
 
 /**
@@ -169,7 +186,16 @@ const Article = ({
                     }
                     if (parsed.type === 'openLightbox') {
                         const lbimages = getLightboxImages(article.elements)
-                        lbv.setLightboxData(lbimages, parsed.index, pillar)
+                        const lbCreditedImages = getCreditedImages(lbimages)
+                        let index = parsed.index
+                        // to avoid image duplication we don't add the main image of gallery articles to the array
+                        if (article.type !== 'gallery' && article.image) {
+                            lbCreditedImages.unshift(article.image)
+                            if (parsed.isMainImage === 'false') {
+                                index++
+                            }
+                        }
+                        lbv.setLightboxData(lbCreditedImages, index, pillar)
                         lbv.setLightboxVisible(true)
                     }
                 }}

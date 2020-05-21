@@ -17,7 +17,13 @@ storiesOf('Buttons', module)
     ))
     .add('CloseModalButton - with colour', () => {
         const colorPicker = color('colour', '#41A9E0')
-        return <CloseModalButton onPress={() => {}} color={colorPicker} />
+        return (
+            <CloseModalButton
+                onPress={() => {}}
+                bgColor={colorPicker}
+                borderColor={colorPicker}
+            />
+        )
     })
     .add('BugButton - default', () => <BugButton onPress={() => {}} />)
     .add('ReloadButton - default', () => <ReloadButton onPress={() => {}} />)

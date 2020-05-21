@@ -553,7 +553,6 @@ const MainMediaImage = ({
     getImagePath: GetImagePath
 }) => {
     const path = getImagePath(image)
-
     return html`
         <div
             class="image-as-bg ${className}"
@@ -567,7 +566,7 @@ const MainMediaImage = ({
                 `}
             <button
                 aria-hidden
-                onclick="this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
+                onclick="event.stopPropagation(); this.parentNode.dataset.open = !JSON.parse(this.parentNode.dataset.open)"
             >
                 
             </button>
