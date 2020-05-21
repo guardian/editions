@@ -197,13 +197,7 @@ const ImageBase = ({
     const figcaption = renderCaption({ caption, credit, displayCredit })
     return html`
         <figure class="image" data-role="${role || 'inline'}">
-            <img
-                src="${path}"
-                ${Platform.OS === 'ios' &&
-                    `onclick="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'openLightbox', index: ${index}, isMainImage: 'false'}))"`}
-                alt="${alt}"
-                id="img-${index}"
-            />
+            <img src="${path}" alt="${alt}" id="img-${index}" />
             ${figcaption &&
                 html`
                     <figcaption>
