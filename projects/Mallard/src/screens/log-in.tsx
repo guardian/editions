@@ -150,6 +150,7 @@ const Login = ({
             <WebviewModal
                 visible={showAppleAuthWebView}
                 url={appleAuthWebUrl}
+                setVisible={setShowAppleAuthWebView}
                 onStateChange={url => {
                     if (url.includes(AppleSignInTokenKey)) {
                         setShowAppleAuthWebView(false)
@@ -186,7 +187,7 @@ const Login = ({
                         {iosMajorVersion < 13 && (
                             <SocialButton
                                 onPress={onAppleSignInPress}
-                                iconRequire={require('src/assets/images/google.png')} // TODO add apple png
+                                iconRequire={require('src/assets/images/apple.png')}
                             >
                                 Continue with Apple (oauth)
                             </SocialButton>

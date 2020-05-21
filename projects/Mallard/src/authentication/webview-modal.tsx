@@ -6,21 +6,28 @@ export const WebviewModal = ({
     url,
     visible,
     onStateChange,
+    setVisible,
 }: {
     url: string
     visible: boolean
     onStateChange: (url: string) => void
+    setVisible: (v: boolean) => void
 }) => {
     return (
-        <Modal visible={visible}>
+        <Modal
+            visible={visible}
+            onRequestClose={() => {
+                setVisible(false)
+            }}
+        >
             <View style={{ flex: 1, backgroundColor: 'red' }}>
                 <WebView
                     source={{ uri: url }}
                     onNavigationStateChange={newState => {
                         const { url } = newState
-                        console.log('Webview url change:', url)
                         onStateChange(url)
                     }}
+                    style={{ marginTop: 50 }}
                 />
             </View>
         </Modal>
