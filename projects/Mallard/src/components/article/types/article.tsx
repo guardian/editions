@@ -9,6 +9,7 @@ import { WebviewWithArticle } from './article/webview'
 import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
+import { NavigationScreenProp } from 'react-navigation'
 import {
     IssueOrigin,
     BlockElement,
@@ -16,6 +17,7 @@ import {
     CreditedImage,
 } from '../../../../../Apps/common/src'
 import { LightboxContext } from '../../../screens/use-lightbox-modal'
+import { routeNames } from 'src/navigation/routes'
 
 const styles = StyleSheet.create({
     block: {
@@ -114,6 +116,7 @@ const useUpdateWebviewVariable = (
 }
 
 const Article = ({
+    navigation,
     article,
     path,
     onShouldShowHeaderChange,
@@ -122,6 +125,7 @@ const Article = ({
     onIsAtTopChange,
     origin,
 }: {
+    navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
@@ -197,6 +201,7 @@ const Article = ({
                         }
                         lbv.setLightboxData(lbCreditedImages, index, pillar)
                         lbv.setLightboxVisible(true)
+                        navigation.navigate(routeNames.Lightbox)
                     }
                 }}
             />

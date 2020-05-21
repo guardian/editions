@@ -36,7 +36,6 @@ import {
     ConfigProvider,
     largeDeviceMemory,
 } from 'src/hooks/use-config-provider'
-import { Lightbox } from './screens/lightbox'
 import { LightboxProvider } from './screens/use-lightbox-modal'
 import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
@@ -202,7 +201,6 @@ export default class App extends React.Component<{}, {}> {
                                 <ModalRenderer />
                                 <BugButtonHandler />
                                 <DeprecateVersionModal />
-                                <Lightbox />
                             </AccessProvider>
                         </WithProviders>
                     </NetInfoDevOverlay>
