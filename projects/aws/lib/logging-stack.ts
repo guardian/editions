@@ -37,6 +37,12 @@ export class LoggingStack extends cdk.Stack {
             description: 'Hostname for logging endpoint',
         })
 
+        const maxLogSize = new cdk.CfnParameter(this, 'max-log-size', {
+            type: 'String',
+            description:
+                'Maximum size (in bytes) of log data from an individual request',
+        })
+
         const loggingCertificate = acm.Certificate.fromCertificateArn(
             this,
             'logging-certificate',
@@ -63,6 +69,7 @@ export class LoggingStack extends cdk.Stack {
                     STAGE: stageParameter.valueAsString,
                     STACK: stackParameter.valueAsString,
                     APP: 'editions-logging',
+                    MAX_LOG_SIZE: maxLogSize.valueAsString,
                 },
             })
             Tag.add(fn, 'App', `editions-logging`)
