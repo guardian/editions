@@ -147,7 +147,7 @@ export const LightboxScreen = ({
                                 windowSize={2}
                                 initialNumToRender={1}
                                 horizontal={true}
-                                initialScrollIndex={index}
+                                initialScrollIndex={currentIndex}
                                 pagingEnabled
                                 keyExtractor={(item: CreditedImage) =>
                                     item.path
