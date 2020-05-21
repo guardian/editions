@@ -8,20 +8,26 @@ import {
 import { oc } from 'ts-optchain'
 import { getImage, getCreditedImage } from './assets'
 import { ArticleType } from '../../Apps/common/src'
+import { ContentType } from '@guardian/capi-ts'
 
 /**
- * if no role is included in capi and content is immersive, set role to immersive
- * this makes it easier for the archiver/backend to identify images that will be stretched to full screen
+ * This function exploits the 'role'field that is passed to the backend when generating image urls
+ * to add some image quality overrides in certain scenarios. Any content with displayhint or articleType 'immersive'
+ * gets it's images bumped to 'immersive' quality. The same happens to 'picture' content
  * @param displayHint
  * @param capiRole the image role specified in the content API (if any)
+ * @param contetnType e.g. gallery/picture/article - we want big pictures for the picture type
  */
 export const getImageRole = (
     articleType: ArticleType,
     displayHint?: string,
     capiRole?: string,
+    contentType?: ContentType,
 ): ImageRole | undefined => {
     if (
-        (displayHint === 'immersive' || articleType == ArticleType.Immersive) &&
+        (displayHint === 'immersive' ||
+            articleType === ArticleType.Immersive ||
+            contentType === ContentType.PICTURE) &&
         !capiRole
     ) {
         return 'immersive'
@@ -48,6 +54,7 @@ const getMainImage = (
                   articleType,
                   displayHint,
                   maybeCreditedMainImage.role,
+                  result.type,
               ),
           }
         : maybeCreditedMainImage
