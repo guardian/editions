@@ -2,10 +2,6 @@ import moment, { MomentInput } from 'moment'
 import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 import {
-    fetchFromNotificationService,
-    notificationTracking,
-} from 'src/helpers/fetch'
-import {
     clearOldIssues,
     downloadAndUnzipIssue,
     matchSummmaryToKey,
@@ -19,6 +15,8 @@ import { errorService } from 'src/services/errors'
 import { pushTracking } from './push-tracking'
 import ApolloClient from 'apollo-client'
 import { Feature } from 'src/services/logging'
+import { registerWithNotificationService } from './notification-service'
+import { notificationTracking } from './notification-tracking'
 
 export interface PushNotificationRegistration {
     registrationDate: string
@@ -42,7 +40,7 @@ const maybeRegister = async (
     token: string,
     // mocks for testing
     pushNotificationRegistrationCacheImpl = pushNotificationRegistrationCache,
-    fetchFromNotificationServiceImpl = fetchFromNotificationService,
+    registerWithNotificationServiceImpl = registerWithNotificationService,
     now = moment().toString(),
 ) => {
     let should: boolean
@@ -57,7 +55,7 @@ const maybeRegister = async (
 
     if (should) {
         // this will throw on non-200 so that we won't add registration info to the cache
-        await fetchFromNotificationServiceImpl({ token })
+        await registerWithNotificationServiceImpl({ token })
         await pushNotificationRegistrationCacheImpl.set({
             registrationDate: now,
             token,

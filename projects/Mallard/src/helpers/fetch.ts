@@ -1,4 +1,3 @@
-import { Platform } from 'react-native'
 import { withCache } from './fetch/cache'
 import { getSetting } from './settings'
 import {
@@ -7,11 +6,7 @@ import {
 } from './fetch/cached-or-promise'
 import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
 import { Issue } from 'src/common'
-import {
-    defaultSettings,
-    notificationTrackingUrl,
-    notificationEdition,
-} from './settings/defaults'
+import { defaultSettings } from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { FSPaths, APIPaths } from 'src/paths'
 import { Front, IssueWithFronts } from '../../../Apps/common/src'
@@ -133,47 +128,4 @@ const fetchCacheClear = async (): Promise<boolean> => {
     }
 }
 
-const fetchFromNotificationService = async (deviceToken: { token: string }) => {
-    const registerDeviceUrl = await getSetting('notificationServiceRegister')
-    const { token } = deviceToken
-    const options = {
-        deviceToken: token,
-        platform:
-            Platform.OS === 'ios'
-                ? notificationEdition.ios
-                : notificationEdition.android,
-        topics: [
-            {
-                name: 'uk',
-                type: 'editions',
-            },
-        ],
-    }
-    return fetch(registerDeviceUrl as string, {
-        method: 'post',
-        body: JSON.stringify(options),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(response =>
-        response.ok
-            ? Promise.resolve(response.json())
-            : Promise.reject(response.status),
-    )
-}
-
-const notificationTracking = (
-    notificationId: string,
-    type: 'received' | 'downloaded',
-) => {
-    const url = notificationTrackingUrl(notificationId, type)
-    return fetch(url)
-}
-
-export {
-    fetchIssue,
-    fetchFromNotificationService,
-    fetchCacheClear,
-    fetchDeprecationWarning,
-    notificationTracking,
-}
+export { fetchIssue, fetchCacheClear, fetchDeprecationWarning }
