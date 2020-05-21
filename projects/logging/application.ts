@@ -8,15 +8,18 @@ const maxLogSize = parseInt(process.env.MAX_LOG_SIZE || '0')
 
 const processLog = (rawData: MallardLogFormat[]) => {
     rawData.forEach(logData => {
-        if (logData.timestamp && logData.message) {
-            logger.info({
+        if (logData.message) {
+            const elkJsonObject = {
                 clientTimestamp: logData.timestamp,
                 ...logData,
                 // override any stage/stack/app properties included in logData
                 stack: process.env.STACK,
                 stage: process.env.STAGE,
                 app: process.env.APP,
-            })
+            }
+            // let's rely on cloudwatch timestamp
+            delete elkJsonObject.timestamp
+            logger.info(elkJsonObject)
         } else {
             logger.info('Missing timestamp or message fields')
         }
