@@ -160,7 +160,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
 
 // This caches downloads so that if there is one already running you
 // will get a reference to that rather promise than triggering a new one
-export const downloadAndUnzipEdition = async (
+export const downloadAndUnzipIssue = async (
     client: ApolloClient<object>,
     issue: IssueSummary,
     imageSize: ImageSize,

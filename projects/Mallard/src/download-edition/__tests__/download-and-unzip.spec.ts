@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client'
 import { DownloadBlockedStatus } from 'src/hooks/use-net-info'
-import { downloadAndUnzipEdition } from '../download-and-unzip'
+import { downloadAndUnzipIssue } from '../download-and-unzip'
 
 const createIssueSummary = (localId: string) => ({
     key: 'de/1-1-1',
@@ -36,10 +36,10 @@ describe('download', () => {
     //     })
     // })
 
-    describe('downloadAndUnzipEdition', () => {
+    describe('downloadAndUnzipIssue', () => {
         it('should resolve the outer promise when the download runner resolves', async () => {
             const localId = '1'
-            const p = downloadAndUnzipEdition(
+            const p = downloadAndUnzipIssue(
                 apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
@@ -54,7 +54,7 @@ describe('download', () => {
         })
         it('should not set any statuses without the passed promise calling an updater', async () => {
             const updateStatus = jest.fn(() => {})
-            const p = downloadAndUnzipEdition(
+            const p = downloadAndUnzipIssue(
                 apolloClientMock,
                 createIssueSummary('1'),
                 'phone',
@@ -66,14 +66,14 @@ describe('download', () => {
         })
         it('should create new downloads when previous ones have finished', async () => {
             const localId = '1'
-            const p1 = downloadAndUnzipEdition(
+            const p1 = downloadAndUnzipIssue(
                 apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
                 () => {},
                 () => Promise.resolve(),
             )
-            const p2 = downloadAndUnzipEdition(
+            const p2 = downloadAndUnzipIssue(
                 apolloClientMock,
                 createIssueSummary(localId),
                 'phone',
@@ -81,7 +81,7 @@ describe('download', () => {
                 () => Promise.resolve(),
             )
             await Promise.all([p1, p2])
-            const p3 = downloadAndUnzipEdition(
+            const p3 = downloadAndUnzipIssue(
                 apolloClientMock,
                 createIssueSummary(localId),
                 'phone',

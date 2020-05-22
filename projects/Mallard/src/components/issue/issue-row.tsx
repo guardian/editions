@@ -36,7 +36,7 @@ import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 import { UiBodyCopy } from '../styled-text'
 import { useApolloClient } from '@apollo/react-hooks'
 import {
-    downloadAndUnzipEdition,
+    downloadAndUnzipIssue,
     stopListeningToExistingDownload,
     maybeListenToExistingDownload,
 } from 'src/download-edition/download-and-unzip'
@@ -158,7 +158,7 @@ const IssueButton = ({
                     value: 'issues_list_issue_clicked',
                 })
                 const imageSize = await imageForScreenSize()
-                downloadAndUnzipEdition(client, issue, imageSize, handleUpdate)
+                downloadAndUnzipIssue(client, issue, imageSize, handleUpdate)
             }
         } else {
             showToast(DOWNLOAD_ISSUE_MESSAGE_OFFLINE)

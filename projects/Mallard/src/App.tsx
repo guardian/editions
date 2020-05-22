@@ -41,7 +41,7 @@ import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
-import { prepareAndDownloadTodaysEdition } from './download-edition/prepare-and-download-edition'
+import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -59,7 +59,7 @@ loggingService.init(apolloClient)
 // eslint-disable-next-line react-hooks/rules-of-hooks
 Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
-Platform.OS === 'android' && prepareAndDownloadTodaysEdition(apolloClient)
+Platform.OS === 'android' && prepareAndDownloadTodaysIssue(apolloClient)
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -152,12 +152,12 @@ export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
-        prepareAndDownloadTodaysEdition(apolloClient)
+        prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
-                prepareAndDownloadTodaysEdition(apolloClient)
+                prepareAndDownloadTodaysIssue(apolloClient)
             }
         })
     }

@@ -4,9 +4,9 @@ import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { matchSummmaryToKey, isIssueOnDevice } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { errorService } from 'src/services/errors'
-import { downloadAndUnzipEdition } from './download-and-unzip'
+import { downloadAndUnzipIssue } from './download-and-unzip'
 
-const downloadTodaysEdition = async (client: ApolloClient<object>) => {
+const downloadTodaysIssue = async (client: ApolloClient<object>) => {
     const todaysKey = todayAsKey()
     try {
         const issueSummaries = await getIssueSummary()
@@ -24,11 +24,7 @@ const downloadTodaysEdition = async (client: ApolloClient<object>) => {
         // Only download it if its not on the device
         if (!isTodaysIssueOnDevice) {
             const imageSize = await imageForScreenSize()
-            return downloadAndUnzipEdition(
-                client,
-                todaysIssueSummary,
-                imageSize,
-            )
+            return downloadAndUnzipIssue(client, todaysIssueSummary, imageSize)
         }
     } catch (e) {
         e.message = `Unable to download todays issue: ${e.message}`
@@ -37,4 +33,4 @@ const downloadTodaysEdition = async (client: ApolloClient<object>) => {
     }
 }
 
-export { downloadTodaysEdition }
+export { downloadTodaysIssue }
