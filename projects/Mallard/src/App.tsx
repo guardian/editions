@@ -36,7 +36,6 @@ import {
     ConfigProvider,
     largeDeviceMemory,
 } from 'src/hooks/use-config-provider'
-import { LightboxProvider } from './screens/use-lightbox-modal'
 import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
@@ -134,7 +133,6 @@ const WithProviders = nestProviders(
     ToastProvider,
     NavPositionProvider,
     ConfigProvider,
-    LightboxProvider,
 )
 
 const handleIdStatus = (attempt: AnyAttempt<IdentityAuthData>) =>

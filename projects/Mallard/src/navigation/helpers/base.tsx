@@ -7,7 +7,11 @@ import {
 import { routeNames } from 'src/navigation/routes'
 import { PathToArticle, PathToIssue } from 'src/paths'
 import { ArticleNavigator } from 'src/screens/article-screen'
-import { Issue } from '../../../../Apps/common/src'
+import {
+    Issue,
+    CreditedImage,
+    ArticlePillar,
+} from '../../../../Apps/common/src'
 import { Action, ComponentType, sendComponentEvent } from 'src/services/ophan'
 
 type NavigatorWrapper = ({ navigation }: NavigationInjectedProps) => JSX.Element
@@ -120,6 +124,23 @@ const navigateToSettings = (navigation: NavigationScreenProp<{}>): void => {
     navigation.navigate(routeNames.Settings)
 }
 
+export interface LightboxNavigationProps {
+    images?: CreditedImage[]
+    index?: number
+    pillar?: ArticlePillar
+}
+
+interface LightboxProps {
+    navigation: NavigationScreenProp<{}>
+    navigationProps: LightboxNavigationProps
+}
+
+const navigateToLightbox = ({ navigation, navigationProps }: LightboxProps) => {
+    navigation.navigate(routeNames.Lightbox, {
+        ...navigationProps,
+    })
+}
+
 export {
     mapNavigationToProps,
     navigateToArticle,
@@ -127,4 +148,5 @@ export {
     getArticleNavigationProps,
     navigateToIssue,
     navigateToSettings,
+    navigateToLightbox,
 }

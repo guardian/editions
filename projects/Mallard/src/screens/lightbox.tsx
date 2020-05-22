@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, View, Animated, StyleSheet } from 'react-native'
-import { LightboxContext, LightboxContextType } from './use-lightbox-modal'
 import { CreditedImage } from '../../../Apps/common/src'
 import { CloseModalButton } from 'src/components/Button/CloseModalButton'
 import { getPillarColors } from 'src/helpers/transform'
@@ -18,6 +17,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { palette } from '@guardian/pasteup/palette'
 import { NavigationScreenProp } from 'react-navigation'
 import { StatusBar } from 'react-native'
+import { LightboxNavigationProps } from 'src/navigation/helpers/base'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -72,12 +72,11 @@ const styles = StyleSheet.create({
 const LightboxScreen = ({
     navigation,
 }: {
-    navigation: NavigationScreenProp<{}>
+    navigation: NavigationScreenProp<{}, LightboxNavigationProps>
 }) => {
-    const lightboxContext: LightboxContextType = useContext(LightboxContext)
-    const images = lightboxContext.images
-    const pillar = lightboxContext.pillar
-    const index = lightboxContext.index
+    const images = navigation.getParam('images', [])
+    const index = navigation.getParam('index', 0)
+    const pillar = navigation.getParam('pillar', 'news')
     const pillarColors = getPillarColors(pillar)
     const { width } = useDimensions()
     const [windowStart, setWindowsStart] = useState(0)

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
@@ -16,8 +16,7 @@ import {
     ImageElement,
     CreditedImage,
 } from '../../../../../Apps/common/src'
-import { LightboxContext } from '../../../screens/use-lightbox-modal'
-import { routeNames } from 'src/navigation/routes'
+import { navigateToLightbox } from 'src/navigation/helpers/base'
 
 const styles = StyleSheet.create({
     block: {
@@ -139,8 +138,6 @@ const Article = ({
         shouldShowHeader,
     )
 
-    const lbv = useContext(LightboxContext)
-
     const [, { pillar }] = useArticle()
 
     return (
@@ -199,8 +196,14 @@ const Article = ({
                                 index++
                             }
                         }
-                        lbv.setLightboxData(lbCreditedImages, index, pillar)
-                        navigation.navigate(routeNames.Lightbox)
+                        navigateToLightbox({
+                            navigation,
+                            navigationProps: {
+                                images: lbCreditedImages,
+                                index,
+                                pillar,
+                            },
+                        })
                     }
                 }}
             />
