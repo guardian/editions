@@ -200,7 +200,6 @@ const Article = ({
                             }
                         }
                         lbv.setLightboxData(lbCreditedImages, index, pillar)
-                        lbv.setLightboxVisible(true)
                         navigation.navigate(routeNames.Lightbox)
                     }
                 }}

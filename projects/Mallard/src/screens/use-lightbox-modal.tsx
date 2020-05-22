@@ -2,8 +2,6 @@ import React, { useState, createContext, useCallback } from 'react'
 import { ArticlePillar, CreditedImage } from '../../../Apps/common/src'
 
 export interface LightboxContextType {
-    visible: boolean
-    setLightboxVisible: (newVisible: boolean) => void
     images: CreditedImage[]
     setLightboxData: (
         images: CreditedImage[],
@@ -15,8 +13,6 @@ export interface LightboxContextType {
 }
 
 export const LIGHTBOX_VISIBLE_DEFAULT: LightboxContextType = {
-    visible: false,
-    setLightboxVisible: () => {},
     images: [],
     setLightboxData: () => {},
     pillar: 'news',
@@ -30,11 +26,6 @@ export const LightboxContext = createContext<LightboxContextType>(
 type Props = { children: React.ReactNode }
 
 export const useLightboxProvider = (): LightboxContextType => {
-    const [visible, setVisible] = useState<boolean>(false)
-    const setLightboxVisible = useCallback((newVisible: boolean): void => {
-        setVisible(newVisible)
-    }, [])
-
     const [images, setImages] = useState<CreditedImage[]>([])
     const [pillar, setPillar] = useState<ArticlePillar>('news')
     const [index, setIndex] = useState<number>(0)
@@ -52,8 +43,6 @@ export const useLightboxProvider = (): LightboxContextType => {
     )
 
     return {
-        visible,
-        setLightboxVisible,
         images,
         setLightboxData,
         pillar,
@@ -62,9 +51,9 @@ export const useLightboxProvider = (): LightboxContextType => {
 }
 
 export const LightboxProvider = ({ children }: Props) => {
-    const lightboxVisible = useLightboxProvider()
+    const lightboxData = useLightboxProvider()
     return (
-        <LightboxContext.Provider value={lightboxVisible}>
+        <LightboxContext.Provider value={lightboxData}>
             {children}
         </LightboxContext.Provider>
     )

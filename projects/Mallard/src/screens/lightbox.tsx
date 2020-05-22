@@ -17,7 +17,7 @@ import { LightboxImage } from 'src/components/Lightbox/LightboxImage'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { palette } from '@guardian/pasteup/palette'
 import { NavigationScreenProp } from 'react-navigation'
-import { Text, StatusBar } from 'react-native'
+import { StatusBar } from 'react-native'
 
 const styles = StyleSheet.create({
     lightboxPage: {
@@ -207,8 +207,6 @@ const LightboxScreen = ({
             </SafeAreaView>
         </View>
     )
-}
-
 }
 
 export { LightboxScreen }
