@@ -1,11 +1,12 @@
 import ApolloClient from 'apollo-client'
-import { clearOldIssues, matchSummmaryToKey } from 'src/helpers/files'
+import { matchSummmaryToKey } from 'src/helpers/files'
 import { imageForScreenSize } from 'src/helpers/screen'
 import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { pushTracking } from 'src/push-notifications/push-tracking'
 import { errorService } from 'src/services/errors'
 import { Feature } from '../../../Apps/common/src/logging'
 import { downloadAndUnzipEdition } from './download-and-unzip'
+import { clearOldIssues } from './clear-issues'
 
 const downloadViaNotification = async (
     key: string,

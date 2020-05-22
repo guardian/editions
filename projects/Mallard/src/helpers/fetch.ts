@@ -4,12 +4,13 @@ import {
     CachedOrPromise,
     createCachedOrPromise,
 } from './fetch/cached-or-promise'
-import { getJson, isIssueOnDevice, deleteIssueFiles } from './files'
+import { getJson, isIssueOnDevice } from './files'
 import { Issue } from 'src/common'
 import { defaultSettings } from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { FSPaths, APIPaths } from 'src/paths'
 import { Front, IssueWithFronts } from '../../../Apps/common/src'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 

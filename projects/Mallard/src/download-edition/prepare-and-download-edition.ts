@@ -1,9 +1,10 @@
 import ApolloClient from 'apollo-client'
 import { fetchCacheClear } from '../helpers/fetch'
-import { clearOldIssues, prepFileSystem } from '../helpers/files'
+import { prepFileSystem } from '../helpers/files'
 import { cleanPushTrackingByDays } from '../push-notifications/push-tracking'
 import { largeDeviceMemory } from 'src/hooks/use-config-provider'
 import { downloadTodaysEdition } from 'src/download-edition/download-todays-edition'
+import { clearOldIssues } from './clear-issues'
 
 const prepareAndDownloadTodaysEdition = async (
     client: ApolloClient<object>,
