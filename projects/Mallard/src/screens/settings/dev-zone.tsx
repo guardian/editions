@@ -24,12 +24,12 @@ import {
     clearPushTracking,
 } from 'src/push-notifications/push-tracking'
 import { getFileList } from 'src/helpers/files'
-import { deleteIssueFiles } from 'src/helpers/files'
 import { DEV_getLegacyIAPReceipt } from 'src/authentication/services/iap'
 import { Switch } from 'react-native-gesture-handler'
 import { useNetInfo } from 'src/hooks/use-net-info'
 import { locale } from 'src/helpers/locale'
 import { imageForScreenSize } from 'src/helpers/screen'
+import { deleteIssueFiles } from 'src/download-edition/clear-issues'
 
 const ButtonList = ({ children }: { children: ReactNode }) => {
     return (

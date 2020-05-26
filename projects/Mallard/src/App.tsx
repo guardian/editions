@@ -9,7 +9,6 @@ import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { enableScreens } from 'react-native-screens'
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationState } from 'react-navigation'
-import { clearAndDownloadIssue } from 'src/helpers/clear-download-issue'
 import { NavPositionProvider } from 'src/hooks/use-nav-position'
 import { RootNavigator } from 'src/navigation'
 import {
@@ -42,6 +41,7 @@ import { weatherHider } from './helpers/weather-hider'
 import { loggingService } from './services/logging'
 import ApolloClient from 'apollo-client'
 import { pushDownloadFailsafe } from './helpers/push-download-failsafe'
+import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-download-issue'
 
 /**
  * Only one global Apollo client. As such, any update done from any component
@@ -59,7 +59,7 @@ loggingService.init(apolloClient)
 // eslint-disable-next-line react-hooks/rules-of-hooks
 Platform.OS === 'ios' && enableScreens()
 pushNotifcationRegistration(apolloClient)
-Platform.OS === 'android' && clearAndDownloadIssue(apolloClient)
+Platform.OS === 'android' && prepareAndDownloadTodaysIssue(apolloClient)
 
 const styles = StyleSheet.create({
     appContainer: {
@@ -152,12 +152,12 @@ export default class App extends React.Component<{}, {}> {
     componentDidMount() {
         SplashScreen.hide()
         weatherHider(apolloClient)
-        clearAndDownloadIssue(apolloClient)
+        prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
 
         AppState.addEventListener('change', async appState => {
             if (appState === 'active') {
-                clearAndDownloadIssue(apolloClient)
+                prepareAndDownloadTodaysIssue(apolloClient)
             }
         })
     }

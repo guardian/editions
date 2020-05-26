@@ -14,12 +14,7 @@ import { IssueSummary } from 'src/common'
 import { renderIssueDate } from 'src/helpers/issues'
 import { StyleSheet, View, Text, Alert } from 'react-native'
 import { Highlight } from 'src/components/highlight'
-import {
-    DLStatus,
-    downloadAndUnzipIssue,
-    maybeListenToExistingDownload,
-    stopListeningToExistingDownload,
-} from 'src/helpers/files'
+import { DLStatus } from 'src/helpers/files'
 import { Button, ButtonAppearance } from '../Button/Button'
 import ProgressCircle from 'react-native-progress-circle'
 import { color } from 'src/theme/color'
@@ -40,6 +35,11 @@ import { useNetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
 import { NOT_CONNECTED, WIFI_ONLY_DOWNLOAD } from 'src/helpers/words'
 import { UiBodyCopy } from '../styled-text'
 import { useApolloClient } from '@apollo/react-hooks'
+import {
+    downloadAndUnzipIssue,
+    stopListeningToExistingDownload,
+    maybeListenToExistingDownload,
+} from 'src/download-edition/download-and-unzip'
 
 const FRONT_TITLE_FONT = getFont('titlepiece', 1.25)
 const ISSUE_TITLE_FONT = getFont('titlepiece', 1.25)

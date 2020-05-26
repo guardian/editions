@@ -1,30 +1,15 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob, { RNFetchBlobStat } from 'rn-fetch-blob'
 import { Issue } from 'src/common'
-import { getIssueSummary } from 'src/hooks/use-issue-summary'
 import { FSPaths } from 'src/paths'
-import { ImageSize, IssueSummary } from '../../../Apps/common/src'
-import { lastNDays, todayAsKey } from './issues'
+import { IssueSummary } from '../../../Apps/common/src'
+import { lastNDays } from './issues'
 import { imageForScreenSize } from './screen'
 import { getSetting } from './settings'
 import { defaultSettings } from './settings/defaults'
 import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
-import { pushTracking } from 'src/push-notifications/push-tracking'
-import { localIssueListStore } from 'src/hooks/use-issue-on-device'
-import { NetInfo, DownloadBlockedStatus } from 'src/hooks/use-net-info'
-import gql from 'graphql-tag'
-import ApolloClient from 'apollo-client'
 import { withCache } from './fetch/cache'
-import { Feature } from 'src/services/logging'
-
-// for cleaning up temporary files when the user hits 'delete all downlods'
-// NOTE: these hard coded names may change when rn-fetch-blob is updated
-const TEMP_FILE_LOCATIONS = [
-    `${RNFetchBlob.fs.dirs.DocumentDir}/`,
-    `${RNFetchBlob.fs.dirs.DocumentDir}/RNFetchBlob_tmp/`,
-]
-const RN_FETCH_TEMP_PREFIX = 'RNFetchBlobTmp'
 
 interface BasicFile {
     filename: string
@@ -54,50 +39,6 @@ export const prepFileSystem = (): Promise<void> =>
     ensureDirExists(FSPaths.issuesDir).then(() =>
         ensureDirExists(`${FSPaths.issuesDir}/daily-edition`),
     )
-
-/**
- * rn-fetch-blob stores the zip file we donwnload in a temporary file. Sometimes,
- * the process that deletes these post extraction fails. This function attempts
- * to clean up such files in a fairly stupid way - just searching for files
- * with RNFetchBlobTmp at the start of the filename
- */
-
-const removeTempFiles = () => {
-    const removeOrphanedTempFiles = async (dir: string) => {
-        try {
-            const isDir = await RNFetchBlob.fs.isDir(dir)
-            if (isDir) {
-                RNFetchBlob.fs.ls(dir).then(files => {
-                    files
-                        .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
-                        .map(f => dir + f)
-                        .map(RNFetchBlob.fs.unlink)
-                })
-            }
-        } catch (error) {
-            await pushTracking(
-                'tempFileRemoveError',
-                JSON.stringify(error),
-                Feature.CLEAR_ISSUES,
-            )
-            console.log(
-                `Error cleaning up temp issue files in directory ${dir}: `,
-                error,
-            )
-            errorService.captureException(error)
-        }
-    }
-    TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
-}
-
-export const deleteIssueFiles = async (): Promise<void> => {
-    await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
-    localIssueListStore.reset()
-
-    removeTempFiles()
-
-    await prepFileSystem()
-}
 
 export const getJson = <T extends any>(path: string): Promise<T> =>
     RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
@@ -178,215 +119,6 @@ export type DLStatus =
     | { type: 'success' }
     | { type: 'failure' }
 
-const deleteIssue = (localId: string): Promise<void> => {
-    const promise = RNFetchBlob.fs
-        .unlink(FSPaths.issueRoot(localId))
-        .catch(e => errorService.captureException(e))
-    promise.then(() => localIssueListStore.remove(localId))
-    return promise
-}
-
-// Cache of current downloads
-const dlCache: {
-    [key: string]: {
-        promise: Promise<void>
-        progressListeners: ((status: DLStatus) => void)[]
-    }
-} = {}
-
-export const maybeListenToExistingDownload = (
-    issue: IssueSummary,
-    onProgress: (status: DLStatus) => void = () => {},
-) => {
-    const dl = dlCache[issue.localId]
-    if (dlCache[issue.localId]) {
-        dl.progressListeners.push(onProgress)
-        return dl.promise
-    }
-    return false
-}
-
-export const stopListeningToExistingDownload = (
-    issue: IssueSummary,
-    listener: (status: DLStatus) => void,
-) => {
-    const dl = dlCache[issue.localId]
-    if (dlCache[issue.localId]) {
-        const index = dl.progressListeners.indexOf(listener)
-        if (index < 0) return
-        dl.progressListeners.splice(index, 1)
-    }
-}
-
-// for testing
-export const updateListeners = (localId: string, status: DLStatus) => {
-    const listeners = (dlCache[localId] || {}).progressListeners || []
-    listeners.forEach(listener => listener(status))
-}
-
-const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
-    const { assets, localId } = issue
-    try {
-        if (!assets) {
-            await pushTracking('noAssets', 'complete', Feature.DOWNLOAD)
-            return
-        }
-
-        await pushTracking(
-            'attemptDataDownload',
-            JSON.stringify({ localId, assets: assets.data }),
-            Feature.DOWNLOAD,
-        )
-
-        const issueDataDownload = await downloadNamedIssueArchive(
-            localId,
-            assets.data,
-        ) // just the issue json
-
-        const dataRes = await issueDataDownload.promise
-
-        await pushTracking('attemptDataDownload', 'completed', Feature.DOWNLOAD)
-
-        await pushTracking(
-            'attemptMediaDownload',
-            JSON.stringify({ localId, assets: assets[imageSize] }),
-            Feature.DOWNLOAD,
-        )
-
-        const imgDL = await downloadNamedIssueArchive(localId, assets[
-            imageSize
-        ] as string) // just the images
-
-        imgDL.progress((received, total) => {
-            if (total >= received) {
-                // the progress is only driven by the image download which will always
-                // take the longest amount of time
-                const num = (received / total) * 100
-                updateListeners(localId, {
-                    type: 'download',
-                    data: num,
-                })
-            }
-        })
-
-        const imgRes = await imgDL.promise
-
-        await pushTracking(
-            'attemptMediaDownload',
-            'completed',
-            Feature.DOWNLOAD,
-        )
-
-        updateListeners(localId, {
-            type: 'unzip',
-            data: 'start',
-        })
-
-        try {
-            /**
-             * because `isIssueOnDevice` checks for the issue folder's existence
-             * leave unzipping to be the last thing to do so that, if there is an issue
-             * with the image downloads we don't assume the issue is on the device
-             * and then block things like re-downloading if the images stopped downloading
-             */
-
-            await pushTracking('unzipData', 'start', Feature.DOWNLOAD)
-            await unzipNamedIssueArchive(dataRes.path())
-            await pushTracking('unzipData', 'end', Feature.DOWNLOAD)
-            /**
-             * The last thing we do is unzip the directory that will confirm if the issue exists
-             */
-            await pushTracking('unzipImages', 'start', Feature.DOWNLOAD)
-            await unzipNamedIssueArchive(imgRes.path())
-            await pushTracking('unzipImages', 'end', Feature.DOWNLOAD)
-        } catch (error) {
-            updateListeners(localId, { type: 'failure', data: error })
-            await pushTracking(
-                'unzipError',
-                JSON.stringify(error),
-                Feature.DOWNLOAD,
-            )
-            console.log('Unzip error: ', error)
-        }
-
-        await pushTracking('downloadAndUnzip', 'complete', Feature.DOWNLOAD)
-        updateListeners(localId, { type: 'success' }) // null is unstarted or end
-    } catch (error) {
-        await pushTracking(
-            'downloadAndUnzipError',
-            JSON.stringify(error),
-            Feature.DOWNLOAD,
-        )
-        errorService.captureException(error)
-        updateListeners(localId, { type: 'failure', data: error })
-        console.log('Download error: ', error)
-    }
-}
-
-type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
-const DOWNLOAD_BLOCKED_QUERY = gql`
-    {
-        netInfo @client {
-            downloadBlocked @client
-        }
-    }
-`
-
-// This caches downloads so that if there is one already running you
-// will get a reference to that rather promise than triggering a new one
-export const downloadAndUnzipIssue = async (
-    client: ApolloClient<object>,
-    issue: IssueSummary,
-    imageSize: ImageSize,
-    onProgress: (status: DLStatus) => void = () => {},
-    run = runDownload,
-) => {
-    const queryResult = await client.query<DlBlkQueryValue>({
-        query: DOWNLOAD_BLOCKED_QUERY,
-    })
-    const {
-        netInfo: { downloadBlocked },
-    } = queryResult.data
-
-    if (downloadBlocked !== DownloadBlockedStatus.NotBlocked) {
-        await pushTracking(
-            'downloadBlocked',
-            DownloadBlockedStatus[downloadBlocked],
-            Feature.DOWNLOAD,
-        )
-        errorService.captureException(
-            new Error('Download Blocked: Required signal not available'),
-        )
-        return
-    }
-
-    const { localId } = issue
-    const promise = maybeListenToExistingDownload(issue, onProgress)
-    if (promise) return promise
-
-    const createDownloadPromise = async () => {
-        try {
-            await run(issue, imageSize)
-            localIssueListStore.add(localId)
-        } finally {
-            await pushTracking(
-                'completeAndDeleteCache',
-                'completed',
-                Feature.DOWNLOAD,
-            )
-            delete dlCache[localId]
-        }
-    }
-
-    const downloadPromise = createDownloadPromise()
-
-    dlCache[localId] = {
-        promise: downloadPromise,
-        progressListeners: [onProgress],
-    }
-    return downloadPromise
-}
-
 const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 
 export const getLocalIssues = () =>
@@ -406,21 +138,6 @@ export const issuesToDelete = async (files: string[]) => {
     )
 }
 
-export const clearOldIssues = async (): Promise<void> => {
-    // remove any temp files at this point too
-    removeTempFiles()
-
-    const files = await getLocalIssues()
-
-    const iTD: string[] = await issuesToDelete(files)
-
-    return Promise.all(iTD.map((issue: string) => deleteIssue(issue)))
-        .then(() =>
-            pushTracking('clearOldIssues', 'completed', Feature.CLEAR_ISSUES),
-        )
-        .catch(e => errorService.captureException(e))
-}
-
 export const matchSummmaryToKey = (
     issueSummaries: IssueSummary[],
     key: string,
@@ -429,33 +146,6 @@ export const matchSummmaryToKey = (
         issueSummary => issueSummary.key === key,
     ) as IssueSummary
     return summaryMatch || null
-}
-
-export const downloadTodaysIssue = async (client: ApolloClient<object>) => {
-    const todaysKey = todayAsKey()
-    try {
-        const issueSummaries = await getIssueSummary()
-
-        // Find the todays issue summary from the list of summary
-        const todaysIssueSummary = matchSummmaryToKey(issueSummaries, todaysKey)
-
-        // If there isnt one for today, then fahgettaboudit...
-        if (!todaysIssueSummary) return null
-
-        const isTodaysIssueOnDevice = await isIssueOnDevice(
-            todaysIssueSummary.localId,
-        )
-
-        // Only download it if its not on the device
-        if (!isTodaysIssueOnDevice) {
-            const imageSize = await imageForScreenSize()
-            return downloadAndUnzipIssue(client, todaysIssueSummary, imageSize)
-        }
-    } catch (e) {
-        e.message = `Unable to download todays issue: ${e.message}`
-        errorService.captureException(e)
-        console.log(e.message)
-    }
 }
 
 export const readIssueSummary = async (): Promise<IssueSummary[]> =>
