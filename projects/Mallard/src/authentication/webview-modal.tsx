@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, View } from 'react-native'
 import WebView from 'react-native-webview'
+import { WebViewNavigation } from 'react-native-webview/lib/WebViewTypes'
 
 export const WebviewModal = ({
     url,
@@ -23,11 +24,10 @@ export const WebviewModal = ({
             <View style={{ flex: 1, backgroundColor: 'black' }}>
                 <WebView
                     source={{ uri: url }}
-                    onNavigationStateChange={newState => {
+                    onNavigationStateChange={(newState: WebViewNavigation) => {
                         const { url } = newState
                         onStateChange(url)
                     }}
-                    style={{ marginTop: 50 }}
                 />
             </View>
         </Modal>
