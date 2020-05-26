@@ -11,9 +11,7 @@ const BugButtonHandler = () => {
     const client = useApolloClient()
     return isInBeta() ? (
         <BugButton
-            onPress={() =>
-                createMailtoHandler(client, 'Report a bug', '', attempt)
-            }
+            onPress={createMailtoHandler(client, 'Report a bug', '', attempt)}
         />
     ) : null
 }
