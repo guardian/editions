@@ -736,9 +736,7 @@ const Header = ({
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
                 <header
-                    class=${immersive &&
-                    headerProps.mainMedia &&
-                    headerProps.showMedia
+                    class=${headerProps.mainMedia && headerProps.showMedia
                         ? 'header-immersive-video'
                         : 'header'}
                 >
