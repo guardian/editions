@@ -257,6 +257,11 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         height: 16px;
         margin: 0;
     }
+    @media (min-width: ${px(Breakpoints.tabletVertical)}) {
+        .header-immersive:after {
+            margin-right: ${px(metrics.article.sides * -1)};
+        }
+    }
 
     .header-top p {
         font-family: ${families.headline.medium};
