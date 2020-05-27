@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-    View,
-    StyleSheet,
-    Image,
-    ImageSourcePropType,
-    Platform,
-} from 'react-native'
+import { View, StyleSheet, Image, ImageSourcePropType } from 'react-native'
 import { TitlepieceText } from 'src/components/styled-text'
 import { Button } from 'src/components/Button/Button'
 import { metrics } from 'src/theme/spacing'
@@ -189,7 +183,7 @@ const Login = ({
                                 onPress={onAppleSignInPress}
                                 iconRequire={require('src/assets/images/apple.png')}
                             >
-                                Continue with Apple (oauth)
+                                Continue with Apple
                             </SocialButton>
                         )}
                     </View>
