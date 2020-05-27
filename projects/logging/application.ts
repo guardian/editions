@@ -42,6 +42,9 @@ export const createApp = (): express.Application => {
                 processLog(data)
                 res.send('Log success')
             } else {
+                logger.error(
+                    `Request body too large. Estimated size: ${dataSize}, max size: ${maxLogSize}`,
+                )
                 res.status(413).send(
                     `Request body too large. Estimated size: ${dataSize} bytes`,
                 )
