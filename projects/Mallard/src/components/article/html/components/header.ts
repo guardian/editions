@@ -758,9 +758,10 @@ const Header = ({
                                 : undefined,
                             getImagePath,
                         })}
-                    ${headerProps.mainMedia && headerProps.showMedia
-                        ? renderMediaAtom(headerProps.mainMedia)
-                        : null}
+                    ${headerProps.mainMedia &&
+                        (headerProps.showMedia
+                            ? renderMediaAtom(headerProps.mainMedia)
+                            : null)}
                     ${headerProps.kicker &&
                         html`
                             <span class="header-kicker"
