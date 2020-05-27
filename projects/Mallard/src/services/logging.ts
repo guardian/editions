@@ -144,7 +144,7 @@ class Logging extends AsyncQueue {
             }
             return response
         } catch (e) {
-            await this.saveQueuedItems(log)
+            errorService.captureException(e)
             throw new Error(e)
         }
     }
