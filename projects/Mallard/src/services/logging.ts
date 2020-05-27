@@ -127,26 +127,21 @@ class Logging extends AsyncQueue {
     }
 
     async postLogToService(log: object[]): Promise<Response | Error> {
-        try {
-            const response = await fetch(defaultSettings.logging, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'x-api-key': LOGGING_API_KEY,
-                },
-                body: JSON.stringify(log),
-            })
-            if (response.status !== 200) {
-                throw new Error(
-                    `Bad response from Logging Service - status: ${response.status}`,
-                )
-            }
-            return response
-        } catch (e) {
-            errorService.captureException(e)
-            throw new Error(e)
+        const response = await fetch(defaultSettings.logging, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-api-key': LOGGING_API_KEY,
+            },
+            body: JSON.stringify(log),
+        })
+        if (response.status !== 200) {
+            throw new Error(
+                `Bad response from Logging Service - status: ${response.status}`,
+            )
         }
+        return response
     }
 
     async postLog(log: object[]) {
