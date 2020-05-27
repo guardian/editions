@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { StyleSheet, Share, Platform } from 'react-native'
 import WebView from 'react-native-webview'
 import { parsePing } from 'src/helpers/webview'
@@ -9,13 +9,14 @@ import { WebviewWithArticle } from './article/webview'
 import { Article as ArticleT, PictureArticle, GalleryArticle } from 'src/common'
 import DeviceInfo from 'react-native-device-info'
 import { PathToArticle } from 'src/paths'
+import { NavigationScreenProp } from 'react-navigation'
 import {
     IssueOrigin,
     BlockElement,
     ImageElement,
     CreditedImage,
 } from '../../../../../Apps/common/src'
-import { LightboxContext } from '../../../screens/use-lightbox-modal'
+import { navigateToLightbox } from 'src/navigation/helpers/base'
 
 const styles = StyleSheet.create({
     block: {
@@ -114,6 +115,7 @@ const useUpdateWebviewVariable = (
 }
 
 const Article = ({
+    navigation,
     article,
     path,
     onShouldShowHeaderChange,
@@ -122,6 +124,7 @@ const Article = ({
     onIsAtTopChange,
     origin,
 }: {
+    navigation: NavigationScreenProp<{}>
     article: ArticleT | PictureArticle | GalleryArticle
     path: PathToArticle
     origin: IssueOrigin
@@ -134,8 +137,6 @@ const Article = ({
         'shouldShowHeader',
         shouldShowHeader,
     )
-
-    const lbv = useContext(LightboxContext)
 
     const [, { pillar }] = useArticle()
 
@@ -195,8 +196,14 @@ const Article = ({
                                 index++
                             }
                         }
-                        lbv.setLightboxData(lbCreditedImages, index, pillar)
-                        lbv.setLightboxVisible(true)
+                        navigateToLightbox({
+                            navigation,
+                            navigationProps: {
+                                images: lbCreditedImages,
+                                index,
+                                pillar,
+                            },
+                        })
                     }
                 }}
             />

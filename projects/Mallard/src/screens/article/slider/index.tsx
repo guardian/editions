@@ -1,7 +1,6 @@
 import ViewPagerAndroid from '@react-native-community/viewpager'
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Platform, StyleSheet, View } from 'react-native'
-import { CAPIArticle, Collection, Front, Issue } from 'src/common'
 import { AnimatedFlatListRef } from 'src/components/front/helpers/helpers'
 import { supportsAnimation } from 'src/helpers/features'
 import { clamp } from 'src/helpers/math'
@@ -10,9 +9,10 @@ import { getAppearancePillar } from 'src/hooks/use-article'
 import { useDismissArticle } from 'src/hooks/use-dismiss-article'
 import { useSetNavPosition } from 'src/hooks/use-nav-position'
 import { useDimensions } from 'src/hooks/use-config-provider'
-import { ArticleNavigationProps } from 'src/navigation/helpers/base'
 import { ArticleSpec, getArticleDataFromNavigator } from '../../article-screen'
 import { ArticleScreenBody, OnIsAtTopChange } from '../body'
+import { ArticleNavigator } from 'src/screens/article-screen'
+import { PathToArticle } from 'src/paths'
 import {
     SliderHeaderHighEnd,
     HEADER_HIGH_END_HEIGHT,
@@ -22,13 +22,7 @@ import { SliderSection } from './types'
 import { useIsPreview } from 'src/hooks/use-settings'
 import { PreviewControls } from 'src/components/article/preview-controls'
 import { issueDateFromId } from './slider-helpers'
-
-export interface PathToArticle {
-    collection: Collection['key']
-    front: Front['key']
-    article: CAPIArticle['key']
-    issue: Issue['key']
-}
+import { NavigationScreenProp } from 'react-navigation'
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
@@ -66,14 +60,16 @@ const ArticleSlider = React.memo(
     ({
         path,
         articleNavigator,
-    }: Required<
-        Pick<ArticleNavigationProps, 'articleNavigator' | 'path'>
-    > & {}) => {
+        navigation,
+    }: {
+        path: PathToArticle
+        articleNavigator: ArticleNavigator
+        navigation: NavigationScreenProp<{}>
+    }) => {
         const {
             startingPoint,
             flattenedArticles,
         } = getArticleDataFromNavigator(articleNavigator, path)
-
         const [current, setCurrent] = useState(startingPoint)
         const [sliderPosition] = useState(new Animated.Value(0))
         const [position, setPosition] = useState<
@@ -197,6 +193,7 @@ const ArticleSlider = React.memo(
                                 {index >= current - 1 &&
                                 index <= current + 1 ? (
                                     <ArticleScreenBody
+                                        navigation={navigation}
                                         width={width}
                                         path={item}
                                         pillar={getAppearancePillar(
@@ -290,6 +287,7 @@ const ArticleSlider = React.memo(
                         index: number
                     }) => (
                         <ArticleScreenBody
+                            navigation={navigation}
                             width={width}
                             path={item}
                             pillar={getAppearancePillar(item.appearance)}
