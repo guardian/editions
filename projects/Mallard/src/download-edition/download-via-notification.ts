@@ -21,7 +21,9 @@ const downloadViaNotification = async (
 
         await pushTracking(
             'pushIssueSummaries',
-            JSON.stringify(issueSummaries),
+            `First 3 issues fetched: ${JSON.stringify(
+                issueSummaries.slice(0, 3),
+            )}`,
             Feature.DOWNLOAD,
         )
 
