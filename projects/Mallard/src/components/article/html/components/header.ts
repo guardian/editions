@@ -736,7 +736,9 @@ const Header = ({
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
                 <header
-                    class=${headerProps.mainMedia && headerProps.showMedia
+                    class=${immersive &&
+                    headerProps.mainMedia &&
+                    headerProps.showMedia
                         ? 'header-immersive-video'
                         : 'header'}
                 >
@@ -756,9 +758,7 @@ const Header = ({
                                 : undefined,
                             getImagePath,
                         })}
-                    ${immersive &&
-                    headerProps.mainMedia &&
-                    headerProps.showMedia
+                    ${headerProps.mainMedia && headerProps.showMedia
                         ? renderMediaAtom(headerProps.mainMedia)
                         : null}
                     ${headerProps.kicker &&
