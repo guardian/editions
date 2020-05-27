@@ -82,7 +82,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         pointer-events: none;
     }
 
-    .header:after {
+    .header:after, .header-immersive-video:after {
         background-image: repeating-linear-gradient(
             to bottom,
             ${color.dimLine},
@@ -99,7 +99,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         margin: 0;
     }
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header:after {
+        .header:after, .header-immersive-video:after {
             margin-right: ${px(metrics.article.sides * -1)};
         }
     }
@@ -157,7 +157,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         border-bottom: 1px solid ${color.dimLine};
         display: block;
     }
-    .header h1 {
+    .header h1, .header-immersive-video h1 {
         font-size: 30px;
         font-family: ${families.headline.regular};
         font-weight: 400;
@@ -232,16 +232,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
 
-    .header-top p {
+    .header-top p, .header-immersive-video p {
         font-family: ${families.headline.medium};
         letter-spacing: 0.2px;
         line-height: 1.1875em;
         margin-bottom: 0.875em;
         font-size: 18px;
     }
-
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
-        .header-top p {
+        .header-top p, .header-immersive-video p {
             font-size: 18px;
         }
     }
@@ -459,6 +458,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='immersive'] .header-kicker {
         display: none;
     }
+
     .header-container[data-type='immersive'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
         color: ${colors.dark};
@@ -740,7 +740,13 @@ const Header = ({
         <div class="header-container-line-wrap">
             ${Line({ zIndex: 10 })}
             <div class="header-container wrapper" data-type="${type}">
-                <header class="header">
+                <header
+                    class=${immersive &&
+                    headerProps.mainMedia &&
+                    headerProps.showMedia
+                        ? 'header-immersive-video'
+                        : 'header'}
+                >
                     ${!immersive &&
                         headerProps.image &&
                         publishedId &&
