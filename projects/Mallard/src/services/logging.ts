@@ -133,7 +133,7 @@ class Logging extends AsyncQueue {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    apiKey: LOGGING_API_KEY,
+                    'x-api-key': LOGGING_API_KEY,
                 },
                 body: JSON.stringify(log),
             })
