@@ -38,7 +38,7 @@ export const createApp = (): express.Application => {
         if (req.body) {
             const data = Array.isArray(req.body) ? req.body : [req.body]
             const dataSize = sizeOf(data)
-            if (dataSize > maxLogSize) {
+            if (dataSize < maxLogSize) {
                 processLog(data)
                 res.send('Log success')
             } else {
