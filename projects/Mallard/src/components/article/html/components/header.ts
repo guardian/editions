@@ -166,6 +166,15 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         word-wrap: none;
     }
 
+    .header-immersive h1 {
+        font-size: 30px;
+        font-family: GHGuardianHeadline-Regular;
+        font-weight: 400;
+        line-height: 1.125em;
+        margin: 0.1em 1em 0.75em 0;
+        word-wrap: none;
+    }
+
     @media (min-width: ${px(Breakpoints.tabletVertical)}) {
         .header h1 {
             font-size: 40px;
@@ -232,7 +241,32 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
         }
     }
 
+    .header-immersive:after {
+        background-image: repeating-linear-gradient(
+            to bottom,
+            ${color.dimLine},
+            ${color.dimLine} 1px,
+            transparent 1px,
+            transparent 4px
+        );
+        background-repeat: repeat-x;
+        background-position: bottom;
+        background-size: 1px 16px;
+        content: '';
+        display: block;
+        height: 16px;
+        margin: 0;
+    }
+
     .header-top p {
+        font-family: ${families.headline.medium};
+        letter-spacing: 0.2px;
+        line-height: 1.1875em;
+        margin-bottom: 0.875em;
+        font-size: 18px;
+    }
+
+    .header-immersive p {
         font-family: ${families.headline.medium};
         letter-spacing: 0.2px;
         line-height: 1.1875em;
@@ -459,6 +493,7 @@ export const headerStyles = ({ colors, theme }: CssProps) => css`
     .header-container[data-type='immersive'] .header-kicker {
         display: none;
     }
+
     .header-container[data-type='immersive'] .header-top h1 {
         font-family: ${families.titlepiece.regular};
         color: ${colors.dark};
@@ -707,6 +742,49 @@ const getByLine = (
     `
 }
 
+const ImmersiveMediaHeader = (
+    articleHeaderType: HeaderType,
+    type: ArticleType,
+    headerProps: ArticleHeaderProps,
+    publishedId: Issue['publishedId'] | null,
+    getImagePath: GetImagePath,
+    canBeShared: boolean,
+): string | undefined => {
+    const byLineText = getByLineText(articleHeaderType, headerProps)
+    if (headerProps.mainMedia) {
+        return html`
+            <div class="header-container-line-wrap">
+                ${Line({ zIndex: 10 })}
+                <div class="header-container wrapper" data-type="${type}">
+                    <header class="header-immersive">
+                        ${renderMediaAtom(headerProps.mainMedia)}
+                        ${headerProps.kicker &&
+                            html`
+                                <span class="header-kicker"
+                                    >${headerProps.kicker}</span
+                                >
+                            `}
+                        ${getStandFirst(
+                            articleHeaderType,
+                            type,
+                            headerProps,
+                            publishedId,
+                            getImagePath,
+                        )}
+                    </header>
+                    ${hasByLine(byLineText, canBeShared) &&
+                        getByLine(
+                            articleHeaderType,
+                            canBeShared,
+                            headerProps as ArticleHeaderProps,
+                        )}
+                    <div class="header-bg"></div>
+                </div>
+            </div>
+        `
+    }
+}
+
 const Header = ({
     publishedId,
     type,
@@ -723,63 +801,70 @@ const Header = ({
 } & ArticleHeaderProps) => {
     const immersive = isImmersive(type)
     const byLineText = getByLineText(headerType, headerProps)
-    return html`
-        ${immersive &&
-            headerProps.image &&
-            publishedId &&
-            MainMediaImage({
-                image: headerProps.image,
-                className: 'header-image header-image--immersive',
-                getImagePath,
-            })}
-        <div class="header-container-line-wrap">
-            ${Line({ zIndex: 10 })}
-            <div class="header-container wrapper" data-type="${type}">
-                <header class="header">
-                    ${!immersive &&
-                        headerProps.image &&
-                        publishedId &&
-                        MainMediaImage({
-                            className: 'header-image',
-                            image: headerProps.image,
-                            preserveRatio: true,
-                            children: headerProps.starRating
-                                ? Rating(headerProps)
-                                : headerProps.sportScore
-                                ? SportScore({
-                                      sportScore: headerProps.sportScore,
-                                  })
-                                : undefined,
+    if (immersive && headerProps.mainMedia && headerProps.showMedia) {
+        return ImmersiveMediaHeader(
+            headerType,
+            type,
+            headerProps,
+            publishedId,
+            getImagePath,
+            headerProps.canBeShared,
+        )
+    } else {
+        return html`
+            ${immersive &&
+                headerProps.image &&
+                publishedId &&
+                MainMediaImage({
+                    image: headerProps.image,
+                    className: 'header-image header-image--immersive',
+                    getImagePath,
+                })}
+            <div class="header-container-line-wrap">
+                ${Line({ zIndex: 10 })}
+                <div class="header-container wrapper" data-type="${type}">
+                    <header class="header">
+                        ${!immersive &&
+                            headerProps.image &&
+                            publishedId &&
+                            MainMediaImage({
+                                className: 'header-image',
+                                image: headerProps.image,
+                                preserveRatio: true,
+                                children: headerProps.starRating
+                                    ? Rating(headerProps)
+                                    : headerProps.sportScore
+                                    ? SportScore({
+                                          sportScore: headerProps.sportScore,
+                                      })
+                                    : undefined,
+                                getImagePath,
+                            })}
+                        ${headerProps.kicker &&
+                            html`
+                                <span class="header-kicker"
+                                    >${headerProps.kicker}</span
+                                >
+                            `}
+                        ${getStandFirst(
+                            headerType,
+                            type,
+                            headerProps,
+                            publishedId,
                             getImagePath,
-                        })}
-                    ${headerProps.mainMedia &&
-                        (headerProps.showMedia
-                            ? renderMediaAtom(headerProps.mainMedia)
-                            : null)}
-                    ${headerProps.kicker &&
-                        html`
-                            <span class="header-kicker"
-                                >${headerProps.kicker}</span
-                            >
-                        `}
-                    ${getStandFirst(
-                        headerType,
-                        type,
-                        headerProps,
-                        publishedId,
-                        getImagePath,
-                    )}
-                </header>
-                ${hasByLine(byLineText, headerProps.canBeShared) &&
-                    getByLine(
-                        headerType,
-                        headerProps.canBeShared,
-                        headerProps as ArticleHeaderProps,
-                    )}
-                <div class="header-bg"></div>
+                        )}
+                    </header>
+                    ${hasByLine(byLineText, headerProps.canBeShared) &&
+                        getByLine(
+                            headerType,
+                            headerProps.canBeShared,
+                            headerProps as ArticleHeaderProps,
+                        )}
+                    <div class="header-bg"></div>
+                </div>
             </div>
-        </div>
-    `
+        `
+    }
 }
 
 export { Header }
