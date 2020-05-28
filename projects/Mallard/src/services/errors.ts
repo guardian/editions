@@ -47,7 +47,8 @@ class ErrorServiceImpl implements ErrorService {
         if (hasConsent === false || hasConsent === null) return
 
         if (!this.hasConfigured) {
-            Sentry.init({ dsn: SENTRY_DSN_URL })
+            // sampleRate helps keep our sentry costs down
+            Sentry.init({ dsn: SENTRY_DSN_URL, sampleRate: 0.2 })
 
             Sentry.setTag(
                 'environment',
