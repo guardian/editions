@@ -22,7 +22,9 @@ const fetchAuth = async <T>(
     authUrl: string = ID_API_URL,
     token: string = ID_ACCESS_TOKEN,
 ): Promise<AuthResult<T>> => {
-    const res = await fetch(`${authUrl}/auth`, {
+    const queryString = authType === 'apple-oauth' ? qs.stringify(params) : ''
+
+    const res = await fetch(`${authUrl}/auth?${queryString}`, {
         method: 'POST',
         headers: {
             'X-GU-ID-Client-Access-Token': `Bearer ${token}`,

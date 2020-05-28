@@ -15,6 +15,7 @@ import { Alert } from 'react-native'
 import { AuthParams } from 'src/authentication/authorizers/IdentityAuthorizer'
 import { AccessContext } from 'src/authentication/AccessContext'
 import { isValid } from 'src/authentication/lib/Attempt'
+import { getAppleOAuthURL } from 'src/authentication/apple-oauth'
 
 const useRandomState = () =>
     useState(
@@ -167,6 +168,13 @@ const AuthSwitcherScreen = ({
                 )
             }
             errorMessage={error}
+            appleOauthUrl={getAppleOAuthURL(validatorString)}
+            onAppleOAuthPress={(token: AuthParams) => {
+                handleAuthClick(() => Promise.resolve(token), {
+                    requiresFunctionalConsent: true,
+                    signInName: 'AppleOauth',
+                })
+            }}
         />
     )
 }
