@@ -10,11 +10,6 @@ import { FormField } from 'src/hooks/use-form-field'
 import { LoginLayout } from 'src/components/login/login-layout'
 import { EmailInput, PasswordInput } from 'src/components/login/login-input'
 import { LoginButton } from 'src/components/login/login-button'
-import { WebviewModal } from 'src/authentication/webview-modal'
-import {
-    AuthParams,
-    AppleSignInTokenKey,
-} from 'src/authentication/authorizers/IdentityAuthorizer'
 import remoteConfig from '@react-native-firebase/remote-config'
 
 import { iosMajorVersion } from 'src/helpers/platform'

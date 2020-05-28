@@ -24,23 +24,20 @@ const fetchAuth = async <T>(
 ): Promise<AuthResult<T>> => {
     const queryString = authType === 'apple-oauth' ? qs.stringify(params) : ''
 
-    const res = await fetch(
-        `https://id.code.dev-guardianapis.com/auth?${queryString}`,
-        {
-            method: 'POST',
-            headers: {
-                'X-GU-ID-Client-Access-Token': `Bearer ${token}`,
-                'Content-Type':
-                    authType === 'apple'
-                        ? 'application/json'
-                        : 'application/x-www-form-urlencoded',
-            },
-            body:
+    const res = await fetch(`https://${authUrl}/auth?${queryString}`, {
+        method: 'POST',
+        headers: {
+            'X-GU-ID-Client-Access-Token': `Bearer ${token}`,
+            'Content-Type':
                 authType === 'apple'
-                    ? JSON.stringify(params)
-                    : qs.stringify(params),
+                    ? 'application/json'
+                    : 'application/x-www-form-urlencoded',
         },
-    )
+        body:
+            authType === 'apple'
+                ? JSON.stringify(params)
+                : qs.stringify(params),
+    })
 
     return fromResponse(res, {
         valid: data => data.accessToken.accessToken,
