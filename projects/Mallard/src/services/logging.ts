@@ -36,6 +36,14 @@ interface LogParams {
 type QueryData = { gdprAllowPerformance: GdprSwitchSetting }
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
+const cropMessage = (
+    message: string,
+    maxLength: number,
+    overflowMessage = '... (message cropped)',
+): string => {
+    return message.length > maxLength ? `${message}${overflowMessage}` : message
+}
+
 class Logging extends AsyncQueue {
     hasConsent: GdprSwitchSetting
     numberOfAttempts: number
@@ -161,6 +169,8 @@ class Logging extends AsyncQueue {
     }
 
     async log({ level, message, ...optionalFields }: LogParams) {
+        // limit max length of message we post to logging service
+        const croppedMessage = cropMessage(message, 300)
         try {
             if (!this.hasConsent) {
                 return
@@ -168,7 +178,7 @@ class Logging extends AsyncQueue {
 
             const currentLog = await this.baseLog({
                 level,
-                message,
+                message: croppedMessage,
                 ...optionalFields,
             })
             const logsToPost = await this.queueItems([currentLog])
@@ -191,4 +201,4 @@ class Logging extends AsyncQueue {
 
 const loggingService = new Logging()
 
-export { Level, Feature, Logging, loggingService }
+export { Level, Feature, Logging, loggingService, cropMessage }
