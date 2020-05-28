@@ -441,7 +441,11 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
+<<<<<<< HEAD
   trunk:
+=======
+  https://github.com/CocoaPods/Specs.git:
+>>>>>>> Apple oauth sign in with deep link redirect.
     - boost-for-react-native
     - Firebase
     - FirebaseABTesting

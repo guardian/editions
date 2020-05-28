@@ -92,6 +92,7 @@ const Login = ({
     onApplePress,
     onFacebookPress,
     onGooglePress,
+    onAppleOAuthPress,
     onSubmit,
     onDismiss,
     isLoading,
@@ -100,13 +101,12 @@ const Login = ({
     submitText,
     resetLink,
     onHelpPress,
-    appleOauthUrl,
-    onAppleOAuthPress,
 }: {
     title: string
     onFacebookPress: () => void
     onApplePress: () => void
     onGooglePress: () => void
+    onAppleOAuthPress: () => void
     email: FormField
     password: FormField
     onSubmit: () => void
@@ -117,22 +117,13 @@ const Login = ({
     submitText: string
     resetLink: string
     onHelpPress: () => void
-    appleOauthUrl: string
-    onAppleOAuthPress: (token: AuthParams) => void
 }) => {
     const [hasInputEmail, setHasInputEmail] = useState(false)
     const [showError, setShowError] = useState(false)
-    const [showAppleAuthWebView, setShowAppleAuthWebView] = useState(false)
-    const [appleAuthWebUrl, setAppleAuthWebUrl] = useState('')
 
     const onInputChange = (fn: (value: string) => void) => (value: string) => {
         setShowError(false)
         fn(value)
-    }
-
-    const onAppleSignInPress = () => {
-        setAppleAuthWebUrl(appleOauthUrl)
-        setShowAppleAuthWebView(true)
     }
 
     const appleSignInEnabled = remoteConfig().getValue('apple_sign_in').value
@@ -144,19 +135,6 @@ const Login = ({
             onDismiss={onDismiss}
             errorMessage={errorMessage}
         >
-            <WebviewModal
-                visible={showAppleAuthWebView}
-                url={appleAuthWebUrl}
-                setVisible={setShowAppleAuthWebView}
-                onStateChange={url => {
-                    if (url.includes(AppleSignInTokenKey)) {
-                        setShowAppleAuthWebView(false)
-                        const token = url.split('=')[1]
-                        onAppleOAuthPress({ 'apple-sign-in-token': token })
-                    }
-                }}
-            />
-
             {!hasInputEmail && (
                 <>
                     <View>
@@ -183,7 +161,7 @@ const Login = ({
 
                         {appleSignInEnabled && iosMajorVersion < 13 && (
                             <SocialButton
-                                onPress={onAppleSignInPress}
+                                onPress={onAppleOAuthPress}
                                 iconRequire={require('src/assets/images/apple.png')}
                             >
                                 Continue with Apple
