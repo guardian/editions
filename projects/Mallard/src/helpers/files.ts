@@ -131,9 +131,9 @@ const withPathPrefix = (prefix: string) => (str: string) => `${prefix}/${str}`
 export const getLocalIssues = async () => {
     const editionDirectory = await FSPaths.editionDir()
     const edition = await getSetting('edition')
-    return RNFetchBlob.fs
-        .ls(editionDirectory)
-        .then(files => files.map(withPathPrefix(edition)))
+    return RNFS.readdir(editionDirectory).then(files =>
+        files.map(withPathPrefix(edition)),
+    )
 }
 
 export const issuesToDelete = async (files: string[]) => {
