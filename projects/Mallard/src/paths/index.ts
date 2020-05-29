@@ -9,7 +9,7 @@ import {
     Image,
     ImageUse,
 } from 'src/common'
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFS from 'react-native-fs'
 import { defaultSettings } from 'src/helpers/settings/defaults'
 import { imagePath } from '../../../Apps/common/src'
 import { getSetting } from 'src/helpers/settings'
@@ -33,7 +33,7 @@ export const APIPaths = {
     image: imagePath,
 }
 
-const issuesDir = `${RNFetchBlob.fs.dirs.DocumentDir}/issues`
+const issuesDir = `${RNFS.DocumentDirectoryPath}/issues`
 
 const issueRoot = (localIssueId: string) => `${issuesDir}/${localIssueId}`
 const mediaRoot = (localIssueId: string) => `${issueRoot(localIssueId)}/media`

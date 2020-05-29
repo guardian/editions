@@ -5,6 +5,7 @@
  * with RNFetchBlobTmp at the start of the filename
  */
 
+import RNFS from 'react-native-fs'
 import RNFetchBlob from 'rn-fetch-blob'
 import { pushTracking } from 'src/push-notifications/push-tracking'
 import { Feature } from '../../../Apps/common/src/logging'
@@ -21,8 +22,8 @@ import { crashlyticsService } from 'src/services/crashlytics'
 // for cleaning up temporary files when the user hits 'delete all downlods'
 // NOTE: these hard coded names may change when rn-fetch-blob is updated
 const TEMP_FILE_LOCATIONS = [
-    `${RNFetchBlob.fs.dirs.DocumentDir}/`,
-    `${RNFetchBlob.fs.dirs.DocumentDir}/RNFetchBlob_tmp/`,
+    `${RNFS.DocumentDirectoryPath}/`,
+    `${RNFS.DocumentDirectoryPath}/RNFetchBlob_tmp/`,
 ]
 const RN_FETCH_TEMP_PREFIX = 'RNFetchBlobTmp'
 
@@ -71,18 +72,16 @@ const removeTempFiles = () => {
 }
 
 const deleteIssue = (localId: string): Promise<void> => {
-    const promise = RNFetchBlob.fs
-        .unlink(FSPaths.issueRoot(localId))
-        .catch(e => {
-            errorService.captureException(e)
-            crashlyticsService.captureException(e)
-        })
+    const promise = RNFS.unlink(FSPaths.issueRoot(localId)).catch(e => {
+        errorService.captureException(e)
+        crashlyticsService.captureException(e)
+    })
     promise.then(() => localIssueListStore.remove(localId))
     return promise
 }
 
 const deleteIssueFiles = async (): Promise<void> => {
-    await RNFetchBlob.fs.unlink(FSPaths.issuesDir)
+    await RNFS.unlink(FSPaths.issuesDir)
     localIssueListStore.reset()
 
     removeTempFiles()

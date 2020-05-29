@@ -137,7 +137,7 @@ export const defaultSettings: Settings = {
     gdprAllowGoogleLogin: null,
     notificationServiceRegister: __DEV__
         ? notificationServiceRegister.code
-        : notificationServiceRegister.prod,
+        : notificationServiceRegister.code,
     cacheClearUrl: apiUrl + 'cache-clear',
     deprecationWarningUrl: apiUrl + 'deprecation-warning',
     issuesPath: `/issues`,

@@ -10,8 +10,6 @@ import { Image as IImage, ImageUse } from '../../../../Apps/common/src'
  * Bascially it will try to go to the filesystem and if it fails will
  * go to the API
  *
- * This had been implemented using RNFetchBlob.fs.exists, but it's just as slow
- * as this implementation for API calls and seems slower for cache hits
  */
 type ImageResourceProps = {
     image: IImage

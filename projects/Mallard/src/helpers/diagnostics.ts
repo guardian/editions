@@ -2,7 +2,7 @@ import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import { Linking, Platform, Clipboard } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFS from 'react-native-fs'
 import { canViewEdition, getCASCode } from 'src/authentication/helpers'
 import { AnyAttempt, isValid } from 'src/authentication/lib/Attempt'
 import { gdprSwitchSettings, getSetting } from 'src/helpers/settings'
@@ -59,7 +59,7 @@ const getDiagnosticInfo = async (
     ])
     const netInfo = netInfoResult.data.netInfo
 
-    const folderStat = await RNFetchBlob.fs.stat(FSPaths.issuesDir)
+    const folderStat = await RNFS.stat(FSPaths.issuesDir)
     const size = parseInt(folderStat.size)
     const bytes = size
     const kilobytes = bytes / 1000

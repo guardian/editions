@@ -1,5 +1,6 @@
 import { unzip } from 'react-native-zip-archive'
 import RNFetchBlob, { RNFetchBlobStat } from 'rn-fetch-blob'
+import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
 import { IssueSummary } from '../../../Apps/common/src'
@@ -31,7 +32,7 @@ export const fileIsIssue = (file: File): file is IssueFile =>
     file.type === 'issue'
 
 export const ensureDirExists = (dir: string): Promise<void> =>
-    RNFetchBlob.fs.mkdir(dir).catch(() => Promise.resolve())
+    RNFS.mkdir(dir).catch(() => Promise.resolve())
 
 /*
 We always try to prep the file system before accessing issuesDir
@@ -46,7 +47,7 @@ export const prepFileSystem = (): Promise<void[]> =>
     )
 
 export const getJson = <T extends any>(path: string): Promise<T> =>
-    RNFetchBlob.fs.readFile(path, 'utf8').then(d => JSON.parse(d))
+    RNFS.readFile(path, 'utf8').then(d => JSON.parse(d))
 
 export const downloadNamedIssueArchive = async (
     localIssueId: Issue['localId'],
@@ -78,7 +79,7 @@ export const unzipNamedIssueArchive = (zipFilePath: string) => {
 
     return unzip(zipFilePath, outputPath)
         .then(() => {
-            return RNFetchBlob.fs.unlink(zipFilePath)
+            return RNFS.unlink(zipFilePath)
         })
         .catch(e => {
             e.message = `${e.message} - zipFilePath: ${zipFilePath} - outputPath: ${outputPath}`
@@ -94,10 +95,10 @@ export const isIssueOnDevice = async (
     localIssueId: Issue['localId'],
 ): Promise<boolean> =>
     (await Promise.all([
-        RNFetchBlob.fs.exists(FSPaths.issue(localIssueId)),
-        RNFetchBlob.fs.exists(FSPaths.mediaRoot(localIssueId)),
-        RNFetchBlob.fs.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
-        RNFetchBlob.fs.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
+        RNFS.exists(FSPaths.issue(localIssueId)),
+        RNFS.exists(FSPaths.mediaRoot(localIssueId)),
+        RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/front`),
+        RNFS.exists(`${FSPaths.issueRoot(localIssueId)}/thumbs`),
     ])).every(_ => _)
 
 /*
@@ -158,8 +159,7 @@ export const matchSummmaryToKey = (
 
 export const readIssueSummary = async (): Promise<IssueSummary[]> => {
     const editionDirectory = await FSPaths.editionDir()
-    return RNFetchBlob.fs
-        .readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
+    return RNFS.readFile(editionDirectory + defaultSettings.issuesPath, 'utf8')
         .then(data => {
             try {
                 return JSON.parse(data)
@@ -191,7 +191,7 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
         }
 
         const issueSummaryString = JSON.stringify(issueSummary)
-        await RNFetchBlob.fs.writeFile(
+        await RNFS.writeFile(
             editionDirectory + defaultSettings.issuesPath,
             issueSummaryString,
             'utf8',
