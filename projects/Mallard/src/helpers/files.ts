@@ -271,6 +271,5 @@ export const getFileList = async () => {
             issues: cleanFileDisplay(issuesFile),
         },
     ]
-
     return [...cleanSubfolders, ...cleanIssuesFile, ...imageFolderSearch]
 }
