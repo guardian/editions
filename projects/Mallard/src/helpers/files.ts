@@ -208,29 +208,24 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     }
 }
 
-const cleanFileDisplay = (stat: {
-    path: string
-    lastModified: string
-    type: string
-}) => ({
+const cleanFileDisplay = (stat: RNFS.ReadDirItem | RNFS.StatResult) => ({
     path: stat.path.replace(FSPaths.issuesDir, ''),
-    lastModified: londonTime(Number(stat.lastModified)).format(),
-    type: stat.type,
+    lastModified: londonTime(Number(stat.mtime)).format(),
+    type: stat.isDirectory() ? 'directory' : 'file',
 })
 
 export const getFileList = async () => {
-    const imageFolders: RNFetchBlobStat[] = []
-    const editionDirectory = await FSPaths.editionDir()
-    const files = await RNFetchBlob.fs.lstat(editionDirectory)
+    const imageFolders: RNFS.ReadDirItem[] = []
+    const files = await RNFS.readDir(FSPaths.issuesDir + '/daily-edition')
 
     const subfolders = await Promise.all(
         files.map(file =>
-            file.type === 'directory'
-                ? RNFetchBlob.fs.lstat(file.path).then(filestat => ({
-                      [file.filename]: filestat.map(deepfile => {
+            file.isDirectory()
+                ? RNFS.readDir(file.path).then(filestat => ({
+                      [file.name]: filestat.map(deepfile => {
                           if (
-                              deepfile.filename === 'media' ||
-                              deepfile.filename === 'thumbs'
+                              deepfile.name === 'media' ||
+                              deepfile.name === 'thumbs'
                           ) {
                               imageFolders.push(deepfile)
                           }
@@ -241,35 +236,36 @@ export const getFileList = async () => {
         ),
     )
 
-    const imageSize = await imageForScreenSize()
-
-    // Grab one images from each image folder to confirm successful unzip
-    const imageFolderSearch = await Promise.all(
-        imageFolders.map(async (file: RNFetchBlobStat) => {
-            return await RNFetchBlob.fs
-                .lstat(
-                    file.filename === 'media'
-                        ? `${file.path}/${imageSize}/media`
-                        : `${file.path}/${imageSize}/thumb/media`,
-                )
-                .then(filestat =>
-                    filestat
-                        .map(deepfile => cleanFileDisplay(deepfile))
-                        .slice(0, 1),
-                )
-        }),
-    )
-
     const cleanSubfolders = subfolders.filter(
         value => Object.keys(value).length !== 0,
     )
 
-    const issuesFile = await RNFetchBlob.fs.stat(editionDirectory + '/issues')
+    const imageSize = await imageForScreenSize()
+
+    // Grab one images from each image folder to confirm successful unzip
+    const imageFolderSearch = await Promise.all(
+        imageFolders.map(async (file: RNFS.ReadDirItem) => {
+            return await RNFS.readDir(
+                file.name === 'media'
+                    ? `${file.path}/${imageSize}/media`
+                    : `${file.path}/${imageSize}/thumb/media`,
+            ).then(filestat =>
+                filestat
+                    .map(deepfile => cleanFileDisplay(deepfile))
+                    .slice(0, 1),
+            )
+        }),
+    )
+
+    const issuesFile = await RNFS.stat(
+        FSPaths.issuesDir + '/daily-edition/issues',
+    )
 
     const cleanIssuesFile = [
         {
             issues: cleanFileDisplay(issuesFile),
         },
     ]
+
     return [...cleanSubfolders, ...cleanIssuesFile, ...imageFolderSearch]
 }
