@@ -6,7 +6,6 @@
  */
 
 import RNFS from 'react-native-fs'
-import RNFetchBlob from 'rn-fetch-blob'
 import { pushTracking } from 'src/push-notifications/push-tracking'
 import { Feature } from '../../../Apps/common/src/logging'
 import { errorService } from 'src/services/errors'
@@ -21,55 +20,41 @@ import { crashlyticsService } from 'src/services/crashlytics'
 
 // for cleaning up temporary files when the user hits 'delete all downlods'
 // NOTE: these hard coded names may change when rn-fetch-blob is updated
+
+// CONSIDER RNFS.TemporaryDirectoryPath (needs testing)
 const TEMP_FILE_LOCATIONS = [
     `${RNFS.DocumentDirectoryPath}/`,
     `${RNFS.DocumentDirectoryPath}/RNFetchBlob_tmp/`,
 ]
 const RN_FETCH_TEMP_PREFIX = 'RNFetchBlobTmp'
 
-const handleDeleteFailure = async (error: Error, dir: string) => {
-    await pushTracking(
-        'tempFileRemoveError',
-        JSON.stringify(error),
-        Feature.CLEAR_ISSUES,
-    )
-    console.log(
-        `Error cleaning up temp issue files in directory ${dir}: `,
-        error,
-    )
-    errorService.captureException(error)
-    crashlyticsService.captureException(error)
-}
-
-const removeTempFiles = () => {
-    const removeOrphanedTempFiles = async (dir: string) => {
-        try {
-            const isDir = await RNFetchBlob.fs.isDir(dir)
-            if (isDir) {
-                RNFetchBlob.fs
-                    .ls(dir)
-                    .then(files => {
-                        files
-                            .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
-                            .map(f => dir + f)
-                            .map(f => {
-                                // This seems to throw error when it tries to download
-                                // tmp files while it was being downloaded (possibly due to file
-                                // lock) and error thrown by the `unlink` does not automatically
-                                // propagate to the outer `catch` block, so throwing it manually
-                                RNFetchBlob.fs.unlink(f).catch(e => {
-                                    throw e
-                                })
-                            })
-                    })
-                    .catch(error => handleDeleteFailure(error, dir))
-            }
-        } catch (error) {
-            handleDeleteFailure(error, dir)
-        }
-    }
-    TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
-}
+// const removeTempFiles = () => {
+//     const removeOrphanedTempFiles = async (dir: string) => {
+//         try {
+//             const isDir = await RNFetchBlob.fs.isDir(dir)
+//             if (isDir) {
+//                 RNFetchBlob.fs.ls(dir).then(files => {
+//                     files
+//                         .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
+//                         .map(f => dir + f)
+//                         .map(RNFetchBlob.fs.unlink)
+//                 })
+//             }
+//         } catch (error) {
+//             await pushTracking(
+//                 'tempFileRemoveError',
+//                 JSON.stringify(error),
+//                 Feature.CLEAR_ISSUES,
+//             )
+//             console.log(
+//                 `Error cleaning up temp issue files in directory ${dir}: `,
+//                 error,
+//             )
+//             errorService.captureException(error)
+//         }
+//     }
+//     TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
+// }
 
 const deleteIssue = (localId: string): Promise<void> => {
     const promise = RNFS.unlink(FSPaths.issueRoot(localId)).catch(e => {
@@ -84,16 +69,18 @@ const deleteIssueFiles = async (): Promise<void> => {
     await RNFS.unlink(FSPaths.issuesDir)
     localIssueListStore.reset()
 
-    removeTempFiles()
+    // removeTempFiles()
 
     await prepFileSystem()
 }
 
 const clearOldIssues = async (): Promise<void> => {
     // remove any temp files at this point too
-    removeTempFiles()
+    // removeTempFiles()
+    console.log('temp path', RNFS.TemporaryDirectoryPath)
 
     const files = await getLocalIssues()
+    console.log(files)
 
     const iTD: string[] = await issuesToDelete(files)
 
