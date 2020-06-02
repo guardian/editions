@@ -17,6 +17,7 @@ import {
     CreditedImage,
 } from '../../../../../Apps/common/src'
 import { navigateToLightbox } from 'src/navigation/helpers/base'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 const styles = StyleSheet.create({
     block: {
@@ -186,24 +187,29 @@ const Article = ({
                         onIsAtTopChange(parsed.isAtTop)
                     }
                     if (parsed.type === 'openLightbox') {
-                        const lbimages = getLightboxImages(article.elements)
-                        const lbCreditedImages = getCreditedImages(lbimages)
-                        let index = parsed.index
-                        // to avoid image duplication we don't add the main image of gallery articles to the array
-                        if (article.type !== 'gallery' && article.image) {
-                            lbCreditedImages.unshift(article.image)
-                            if (parsed.isMainImage === 'false') {
-                                index++
+                        const lightboxEnabled = remoteConfig().getValue(
+                            'lightbox_enabled',
+                        ).value
+                        if (lightboxEnabled) {
+                            const lbimages = getLightboxImages(article.elements)
+                            const lbCreditedImages = getCreditedImages(lbimages)
+                            let index = parsed.index
+                            // to avoid image duplication we don't add the main image of gallery articles to the array
+                            if (article.type !== 'gallery' && article.image) {
+                                lbCreditedImages.unshift(article.image)
+                                if (parsed.isMainImage === 'false') {
+                                    index++
+                                }
                             }
+                            navigateToLightbox({
+                                navigation,
+                                navigationProps: {
+                                    images: lbCreditedImages,
+                                    index,
+                                    pillar,
+                                },
+                            })
                         }
-                        navigateToLightbox({
-                            navigation,
-                            navigationProps: {
-                                images: lbCreditedImages,
-                                index,
-                                pillar,
-                            },
-                        })
                     }
                 }}
             />

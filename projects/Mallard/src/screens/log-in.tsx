@@ -136,8 +136,6 @@ const Login = ({
     }
 
     const appleSignInEnabled = remoteConfig().getValue('apple_sign_in').value
-    console.log('apple enabled', appleSignInEnabled)
-    console.log('apple enabled', remoteConfig().getValue('apple_sign_in'))
 
     return (
         <LoginLayout
