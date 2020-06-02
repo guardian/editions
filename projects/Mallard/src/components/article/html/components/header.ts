@@ -734,6 +734,7 @@ const Header = ({
             publishedId &&
             MainMediaImage({
                 image: headerProps.image,
+                isGallery: isGallery,
                 className: 'header-image header-image--immersive',
                 getImagePath,
             })}
