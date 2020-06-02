@@ -69,7 +69,6 @@ export const downloadNamedIssueArchive = async (
             fromUrl: zipUrl,
             toFile: `${downloadFolderLocation}/${filename}`,
             background: true,
-            begin: () => console.log('start your engines'),
             progress: response => {
                 if (withProgress) {
                     const percentage =
