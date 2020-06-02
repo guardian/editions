@@ -23,6 +23,7 @@ import { useIsPreview } from 'src/hooks/use-settings'
 import { PreviewControls } from 'src/components/article/preview-controls'
 import { issueDateFromId } from './slider-helpers'
 import { NavigationScreenProp } from 'react-navigation'
+import { sendPageViewEvent } from 'src/services/ophan'
 
 export interface ArticleTransitionProps {
     startAtHeightFromFrontsItem: number
@@ -183,6 +184,9 @@ const ArticleSlider = React.memo(
                         onPageSelected={(ev: any) => {
                             onShouldShowHeaderChange(true)
                             const newIndex = ev.nativeEvent.position
+                            sendPageViewEvent({
+                                path: flattenedArticles[newIndex].article,
+                            })
                             setCurrent(newIndex)
                             slideToFrontFor(newIndex)
                             setPosition(newIndex)
@@ -255,6 +259,13 @@ const ArticleSlider = React.memo(
                                     0,
                                     flattenedArticles.length - 1,
                                 )
+                                if (current !== newIndex) {
+                                    sendPageViewEvent({
+                                        path:
+                                            flattenedArticles[newIndex].article,
+                                    })
+                                }
+
                                 setCurrent(newIndex)
                                 slideToFrontFor(newIndex)
 
