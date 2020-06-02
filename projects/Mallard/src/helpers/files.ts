@@ -172,16 +172,21 @@ export const fetchAndStoreIssueSummary = async (): Promise<IssueSummary[]> => {
     const fetchIssueSummaryUrl = `${apiUrl}${edition}/issues`
 
     try {
-        await RNFetchBlob.config({
-            overwrite: true,
-            path: FSPaths.contentPrefixDir + defaultSettings.issuesPath,
-            IOSBackgroundTask: true,
-        }).fetch('GET', fetchIssueSummaryUrl, {
-            'Content-Type': 'application/json',
-        })
+        const issueSummaryRequest = await fetch(fetchIssueSummaryUrl)
+        const issueSummary = await issueSummaryRequest.json()
+        if (!issueSummary) {
+            throw new Error('No Issume Summary Avaialble')
+        }
+
+        const issueSummaryString = JSON.stringify(issueSummary)
+        await RNFetchBlob.fs.writeFile(
+            FSPaths.contentPrefixDir + defaultSettings.issuesPath,
+            issueSummaryString,
+            'utf8',
+        )
 
         // The above saves it locally, if successful we return it
-        return await readIssueSummary()
+        return issueSummary
     } catch (e) {
         e.message = `Failed to fetch valid issue summary: ${e.message}`
         errorService.captureException(e)
