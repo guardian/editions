@@ -82,7 +82,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             withProgress: false,
         }) // just the issue json
 
-        const dataRes = await issueDataDownload.promise
+        await issueDataDownload.promise
 
         await pushTracking('attemptDataDownload', 'completed', Feature.DOWNLOAD)
 
@@ -99,7 +99,7 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             withProgress: true,
         }) // just the images
 
-        const imgRes = await imgDL.promise
+        await imgDL.promise
 
         await pushTracking(
             'attemptMediaDownload',
