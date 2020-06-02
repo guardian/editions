@@ -51,12 +51,17 @@ export const prepFileSystem = async (): Promise<void> => {
 export const getJson = <T extends any>(path: string): Promise<T> =>
     RNFS.readFile(path, 'utf8').then(d => JSON.parse(d))
 
-export const downloadNamedIssueArchive = async (
-    localIssueId: Issue['localId'],
-    assetPath: string,
-    withProgress = false,
-    filename: string,
-) => {
+export const downloadNamedIssueArchive = async ({
+    localIssueId,
+    assetPath,
+    filename,
+    withProgress,
+}: {
+    localIssueId: Issue['localId']
+    assetPath: string
+    filename: string
+    withProgress: boolean
+}) => {
     const apiUrl = await getSetting('apiUrl')
     const zipUrl = `${apiUrl}${assetPath}`
     const downloadFolderLocation = FSPaths.downloadIssueLocation(localIssueId)
@@ -69,6 +74,7 @@ export const downloadNamedIssueArchive = async (
             fromUrl: zipUrl,
             toFile: `${downloadFolderLocation}/${filename}`,
             background: true,
+            begin: () => console.log('start download'),
             progress: response => {
                 if (withProgress) {
                     const percentage =

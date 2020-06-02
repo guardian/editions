@@ -75,12 +75,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
 
-        const issueDataDownload = await downloadNamedIssueArchive(
-            localId,
-            assets.data,
-            false,
-            'data.zip',
-        ) // just the issue json
+        const issueDataDownload = await downloadNamedIssueArchive({
+            localIssueId: localId,
+            assetPath: assets.data,
+            filename: 'data.zip',
+            withProgress: false,
+        }) // just the issue json
 
         const dataRes = await issueDataDownload.promise
 
@@ -92,12 +92,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
 
-        const imgDL = await downloadNamedIssueArchive(
-            localId,
-            assets[imageSize] as string,
-            true,
-            'media.zip',
-        ) // just the images
+        const imgDL = await downloadNamedIssueArchive({
+            localIssueId: localId,
+            assetPath: assets[imageSize] as string,
+            filename: 'media.zip',
+            withProgress: true,
+        }) // just the images
 
         const imgRes = await imgDL.promise
 
