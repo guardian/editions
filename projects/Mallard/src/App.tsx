@@ -43,6 +43,7 @@ import { prepareAndDownloadTodaysIssue } from './download-edition/prepare-and-do
 import { initialiseRemoteConfig } from './services/remote-config'
 import analytics from '@react-native-firebase/analytics'
 import { crashlyticsService } from './services/crashlytics'
+import { clearDownloadsDirectory } from './download-edition/clear-issues'
 
 analytics().setAnalyticsCollectionEnabled(false)
 
@@ -155,7 +156,7 @@ export default class App extends React.Component<{}, {}> {
         SplashScreen.hide()
         weatherHider(apolloClient)
         initialiseRemoteConfig()
-
+        clearDownloadsDirectory()
         prepareAndDownloadTodaysIssue(apolloClient)
         shouldHavePushFailsafe(apolloClient)
 

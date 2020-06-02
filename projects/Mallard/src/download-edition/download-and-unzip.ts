@@ -12,6 +12,7 @@ import { DownloadBlockedStatus, NetInfo } from 'src/hooks/use-net-info'
 import { localIssueListStore } from 'src/hooks/use-issue-on-device'
 import gql from 'graphql-tag'
 import { crashlyticsService } from 'src/services/crashlytics'
+import { FSPaths } from 'src/paths'
 
 type DlBlkQueryValue = { netInfo: Pick<NetInfo, 'downloadBlocked'> }
 const DOWNLOAD_BLOCKED_QUERY = gql`
@@ -77,6 +78,8 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
         const issueDataDownload = await downloadNamedIssueArchive(
             localId,
             assets.data,
+            false,
+            'data.zip',
         ) // just the issue json
 
         const dataRes = await issueDataDownload.promise
@@ -89,21 +92,12 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
             Feature.DOWNLOAD,
         )
 
-        const imgDL = await downloadNamedIssueArchive(localId, assets[
-            imageSize
-        ] as string) // just the images
-
-        imgDL.progress((received, total) => {
-            if (total >= received) {
-                // the progress is only driven by the image download which will always
-                // take the longest amount of time
-                const num = (received / total) * 100
-                updateListeners(localId, {
-                    type: 'download',
-                    data: num,
-                })
-            }
-        })
+        const imgDL = await downloadNamedIssueArchive(
+            localId,
+            assets[imageSize] as string,
+            true,
+            'media.zip',
+        ) // just the images
 
         const imgRes = await imgDL.promise
 
@@ -127,21 +121,27 @@ const runDownload = async (issue: IssueSummary, imageSize: ImageSize) => {
              */
 
             await pushTracking('unzipData', 'start', Feature.DOWNLOAD)
-            await unzipNamedIssueArchive(dataRes.path())
+            await unzipNamedIssueArchive(
+                `${FSPaths.downloadIssueLocation(localId)}/data.zip`,
+            )
             await pushTracking('unzipData', 'end', Feature.DOWNLOAD)
             /**
              * The last thing we do is unzip the directory that will confirm if the issue exists
              */
             await pushTracking('unzipImages', 'start', Feature.DOWNLOAD)
-            await unzipNamedIssueArchive(imgRes.path())
+            await unzipNamedIssueArchive(
+                `${FSPaths.downloadIssueLocation(localId)}/media.zip`,
+            )
             await pushTracking('unzipImages', 'end', Feature.DOWNLOAD)
         } catch (error) {
             updateListeners(localId, { type: 'failure', data: error })
+            error.message = `Unzip error: ${error.message}`
             await pushTracking(
                 'unzipError',
                 JSON.stringify(error),
                 Feature.DOWNLOAD,
             )
+            errorService.captureException(error)
             console.log('Unzip error: ', error)
         }
 

@@ -1,5 +1,4 @@
 import { unzip } from 'react-native-zip-archive'
-import RNFetchBlob, { RNFetchBlobStat } from 'rn-fetch-blob'
 import RNFS from 'react-native-fs'
 import { Issue } from 'src/common'
 import { FSPaths } from 'src/paths'
@@ -12,6 +11,7 @@ import { errorService } from 'src/services/errors'
 import { londonTime } from './date'
 import { withCache } from './fetch/cache'
 import { crashlyticsService } from 'src/services/crashlytics'
+import { updateListeners } from 'src/download-edition/download-and-unzip'
 
 interface BasicFile {
     filename: string
@@ -37,14 +37,16 @@ export const ensureDirExists = (dir: string): Promise<void> =>
 /*
 We always try to prep the file system before accessing issuesDir
 */
-export const prepFileSystem = (): Promise<void[]> =>
-    ensureDirExists(FSPaths.issuesDir).then(() =>
-        Promise.all(
-            Object.values(editions).map(edition =>
-                ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
-            ),
+export const prepFileSystem = async (): Promise<void> => {
+    await ensureDirExists(FSPaths.issuesDir)
+    await ensureDirExists(`${FSPaths.issuesDir}/daily-edition`)
+    await ensureDirExists(FSPaths.downloadRoot)
+    await Promise.all(
+        Object.values(editions).map(edition =>
+            ensureDirExists(`${FSPaths.issuesDir}/${edition}`),
         ),
     )
+}
 
 export const getJson = <T extends any>(path: string): Promise<T> =>
     RNFS.readFile(path, 'utf8').then(d => JSON.parse(d))
@@ -52,25 +54,46 @@ export const getJson = <T extends any>(path: string): Promise<T> =>
 export const downloadNamedIssueArchive = async (
     localIssueId: Issue['localId'],
     assetPath: string,
+    withProgress = false,
+    filename: string,
 ) => {
     const apiUrl = await getSetting('apiUrl')
     const zipUrl = `${apiUrl}${assetPath}`
-    const returnable = RNFetchBlob.config({
-        fileCache: true,
-        overwrite: true,
-        IOSBackgroundTask: true,
-    }).fetch('GET', zipUrl)
-    return {
-        promise: returnable.then(async res => {
-            // Ensure issue is removed from the cache on completion
-            const { clear } = withCache('issue')
-            clear(localIssueId)
-            await prepFileSystem()
-            await ensureDirExists(FSPaths.issueRoot(localIssueId))
-            return res
-        }),
-        cancel: returnable.cancel,
-        progress: returnable.progress,
+    const downloadFolderLocation = FSPaths.downloadIssueLocation(localIssueId)
+    await prepFileSystem()
+    await ensureDirExists(FSPaths.issueRoot(localIssueId))
+    await ensureDirExists(downloadFolderLocation)
+
+    try {
+        const returnable = RNFS.downloadFile({
+            fromUrl: zipUrl,
+            toFile: `${downloadFolderLocation}/${filename}`,
+            background: true,
+            begin: () => console.log('start your engines'),
+            progress: response => {
+                if (withProgress) {
+                    const percentage =
+                        (response.bytesWritten / response.contentLength) * 100
+                    updateListeners(localIssueId, {
+                        type: 'download',
+                        data: percentage,
+                    })
+                }
+            },
+            progressInterval: 1,
+        }).promise
+        return {
+            promise: returnable.then(async res => {
+                // Ensure issue is removed from the cache on completion
+                const { clear } = withCache('issue')
+                clear(localIssueId)
+                return res
+            }),
+        }
+    } catch (e) {
+        e.message = `downloadNamedIssueArchive failed: ${e.message}`
+        errorService.captureException(e)
+        throw e
     }
 }
 

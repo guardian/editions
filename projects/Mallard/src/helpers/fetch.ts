@@ -10,7 +10,10 @@ import { defaultSettings } from './settings/defaults'
 import { cacheClearCache } from './storage'
 import { FSPaths, APIPaths } from 'src/paths'
 import { Front, IssueWithFronts } from '../../../Apps/common/src'
-import { deleteIssueFiles } from 'src/download-edition/clear-issues'
+import {
+    deleteIssueFiles,
+    clearDownloadsDirectory,
+} from 'src/download-edition/clear-issues'
 
 export type ValidatorFn<T> = (response: any | T) => boolean
 
@@ -116,6 +119,7 @@ const fetchCacheClear = async (): Promise<boolean> => {
         if (cacheNumberStorage !== cacheNumber.cacheClear) {
             // Deletes downloaded issues and the cache clear - login and GDPR settings need to be kept
             await deleteIssueFiles()
+            await clearDownloadsDirectory()
             await cacheClearCache.reset()
             // Server number doesnt match, which means we are making an attempt to clear the cache.
             return false

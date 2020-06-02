@@ -60,4 +60,7 @@ export const FSPaths = {
     issue: (localIssueId: string) => `${issueRoot(localIssueId)}/issue`,
     front: (localIssueId: string, frontId: string) =>
         `${issueRoot(localIssueId)}/front/${frontId}`,
+    downloadRoot: `${issuesDir}/download`,
+    downloadIssueLocation: (localIssueId: string) =>
+        `${issuesDir}/download/${localIssueId}`,
 }
