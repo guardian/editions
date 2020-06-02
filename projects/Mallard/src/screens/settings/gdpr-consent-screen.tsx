@@ -118,9 +118,9 @@ const GdprConsent = ({
         gdprAllowFunctionality: {
             key: gdprAllowFunctionalityKey,
             name: 'Functionality',
-            services: 'Google - Facebook',
+            services: 'Apple - Google - Facebook',
             description:
-                'Enabling these allow us to provide you with a range of functionality and store related information. For example, you can use social media credentials such as your Google account to log into your Guardian account. If you disable this, some features of our services may not function.',
+                'Enabling these allow us to provide extra sign-in functionality. It enables us to offer alternative options for you to sign-in to your Guardian account using your Apple, Google, or Facebook credentials. If you disable this, you won’t be able to sign-in with the third-party services above.',
         },
     }
 
