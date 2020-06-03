@@ -1,4 +1,4 @@
-import { Logging, Level } from '../logging'
+import { Logging, Level, cropMessage } from '../logging'
 import MockDate from 'mockdate'
 import { ReleaseChannel, OS } from '../../../../Apps/common/src/logging'
 import { NetInfoStateType } from '@react-native-community/netinfo'
@@ -142,5 +142,18 @@ describe('logging service', () => {
                 expect(loggingService.clearItems).toHaveBeenCalled()
             }
         })
+    })
+})
+
+describe('cropMessage', () => {
+    it('should crop strings to a max length', () => {
+        const longstring = 'do you want to build a snowman?'
+        const croppedString = cropMessage(longstring, 6)
+        expect(croppedString).toEqual('do you... (message cropped)')
+    })
+    it('shouldnt crop short strings', () => {
+        const longstring = 'hehe'
+        const croppedString = cropMessage(longstring, 6)
+        expect(croppedString).toEqual('hehe')
     })
 })
