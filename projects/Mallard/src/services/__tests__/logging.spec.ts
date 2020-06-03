@@ -1,10 +1,6 @@
-import { Logging, Level } from '../logging'
+import { Logging, Level, cropMessage } from '../logging'
 import MockDate from 'mockdate'
-import {
-    ReleaseChannel,
-    OS,
-    cropMessage,
-} from '../../../../Apps/common/src/logging'
+import { ReleaseChannel, OS } from '../../../../Apps/common/src/logging'
 import { NetInfoStateType } from '@react-native-community/netinfo'
 
 jest.mock('@react-native-community/netinfo', () => ({
@@ -152,16 +148,12 @@ describe('logging service', () => {
 describe('cropMessage', () => {
     it('should crop strings to a max length', () => {
         const longstring = 'do you want to build a snowman?'
-        const croppedString = cropMessage(
-            longstring,
-            6,
-            ' want to go and play?',
-        )
-        expect(croppedString).toEqual('do you want to go and play?')
+        const croppedString = cropMessage(longstring, 6)
+        expect(croppedString).toEqual('do you... (message cropped)')
     })
     it('shouldnt crop short strings', () => {
         const longstring = 'hehe'
-        const croppedString = cropMessage(longstring, 6, '')
+        const croppedString = cropMessage(longstring, 6)
         expect(croppedString).toEqual('hehe')
     })
 })

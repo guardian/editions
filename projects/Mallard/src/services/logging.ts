@@ -36,12 +36,10 @@ interface LogParams {
 type QueryData = { gdprAllowPerformance: GdprSwitchSetting }
 const QUERY = gql('{ gdprAllowPerformance @client }')
 
-const cropMessage = (
-    message: string,
-    maxLength: number,
-    overflowMessage = '... (message cropped)',
-): string => {
-    return message.length > maxLength ? `${message}${overflowMessage}` : message
+const cropMessage = (message: string, maxLength: number): string => {
+    return message.length > maxLength
+        ? `${message.slice(0, 6)}... (message cropped)`
+        : message
 }
 
 class Logging extends AsyncQueue {
