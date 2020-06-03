@@ -14,14 +14,14 @@ describe('Stars', () => {
 
     it('should show a Stars with trailImage styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <Stars rating={rating} type="trailImage" />,
+            <Stars rating={rating} position="bottomLeft" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })
 
     it('should show a Stars with smallItems styling', () => {
         const component: ReactTestRendererJSON | null = TestRenderer.create(
-            <Stars rating={rating} type="smallItems" />,
+            <Stars rating={rating} position="inline" />,
         ).toJSON()
         expect(component).toMatchSnapshot()
     })

@@ -15,13 +15,12 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         ...getFont('icon', 1),
     },
-    trailImage: {
+    bottomLeft: {
         position: 'absolute',
-        backgroundColor: 'white',
         left: 0,
         bottom: 0,
     },
-    smallItems: {
+    inline: {
         flex: 0,
     },
 })
@@ -38,17 +37,17 @@ export const getRatingAsText = (rating: number) =>
     })
 
 const Stars = ({
-    type,
+    position,
     rating,
 }: {
-    type?: 'trailImage' | 'smallItems'
+    position?: 'bottomLeft' | 'inline'
     rating: number
 }) => {
     const ratingAsText = useMemo(() => getRatingAsText(rating), [rating])
     return (
         <View
             accessibilityLabel={`${rating.toString()} stars`}
-            style={[styles.background, type && styles[type]]}
+            style={[styles.background, position && styles[position]]}
         >
             <Text style={styles.text} accessible={false}>
                 {ratingAsText.join('')}
