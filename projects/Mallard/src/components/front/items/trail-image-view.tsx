@@ -62,7 +62,7 @@ export const TrailImageView = ({
                     image={image}
                     use={use}
                 />
-                <Stars type="trailImage" rating={starRating} />
+                <Stars position="bottomLeft" rating={starRating} />
             </View>
         )
     } else if (sportScore) {
