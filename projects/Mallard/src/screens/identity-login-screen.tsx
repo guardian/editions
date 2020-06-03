@@ -99,6 +99,7 @@ const AuthSwitcherScreen = ({
                             }
                             navigation.goBack()
                         } else {
+                            attempt.reason && setError(attempt.reason)
                             // push this into the catch logic below
                             throw attempt.reason
                         }
