@@ -25,29 +25,36 @@ const TEMP_FILE_LOCATIONS = [
 ]
 const RN_FETCH_TEMP_PREFIX = 'RNFetchBlobTmp'
 
+const handleDeleteFailure = async (error: Error, dir: string) => {
+    await pushTracking(
+        'tempFileRemoveError',
+        JSON.stringify(error),
+        Feature.CLEAR_ISSUES,
+    )
+    console.log(
+        `Error cleaning up temp issue files in directory ${dir}: `,
+        error,
+    )
+    errorService.captureException(error)
+}
+
 const removeTempFiles = () => {
     const removeOrphanedTempFiles = async (dir: string) => {
         try {
             const isDir = await RNFetchBlob.fs.isDir(dir)
             if (isDir) {
-                RNFetchBlob.fs.ls(dir).then(files => {
-                    files
-                        .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
-                        .map(f => dir + f)
-                        .map(RNFetchBlob.fs.unlink)
-                })
+                RNFetchBlob.fs
+                    .ls(dir)
+                    .then(files => {
+                        files
+                            .filter(f => f.startsWith(RN_FETCH_TEMP_PREFIX))
+                            .map(f => dir + f)
+                            .map(RNFetchBlob.fs.unlink)
+                    })
+                    .catch(error => handleDeleteFailure(error, dir))
             }
         } catch (error) {
-            await pushTracking(
-                'tempFileRemoveError',
-                JSON.stringify(error),
-                Feature.CLEAR_ISSUES,
-            )
-            console.log(
-                `Error cleaning up temp issue files in directory ${dir}: `,
-                error,
-            )
-            errorService.captureException(error)
+            handleDeleteFailure(error, dir)
         }
     }
     TEMP_FILE_LOCATIONS.forEach(removeOrphanedTempFiles)
