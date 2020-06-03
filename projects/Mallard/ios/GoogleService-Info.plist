@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>43377569438-e54t618jfilsgvs8josj9l21nbdrajhl.apps.googleusercontent.com</string>
+	<string>493559488652-n5m7i14mfflicgidf2o3mi7gher35ujc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.43377569438-e54t618jfilsgvs8josj9l21nbdrajhl</string>
+	<string>com.googleusercontent.apps.493559488652-n5m7i14mfflicgidf2o3mi7gher35ujc</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>43377569438-s6jrife6hnio9ri66t9ekhij4t6gpnde.apps.googleusercontent.com</string>
+	<string>493559488652-ipm9s93pgcov7oukr6j24dfvuvknig3m.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC0CREFA2t_J_kKuzI7zXI6LlT9SS2Cm10</string>
+	<string>AIzaSyCbwdxS_ridity_UsLvpI7zGQbOMkhJPKk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>43377569438</string>
+	<string>493559488652</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>uk.co.guardian.gce</string>
 	<key>PROJECT_ID</key>
-	<string>guardian-daily-edition-code</string>
+	<string>guardian-daily-edition</string>
 	<key>STORAGE_BUCKET</key>
-	<string>guardian-daily-edition-code.appspot.com</string>
+	<string>guardian-daily-edition.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:43377569438:ios:ce75494a6a5ea60bf4558f</string>
+	<string>1:493559488652:ios:7c36c9d743989eec</string>
 	<key>DATABASE_URL</key>
-	<string>https://guardian-daily-edition-c-d5ba4.firebaseio.com</string>
+	<string>https://guardian-daily-edition.firebaseio.com</string>
 </dict>
 </plist>
