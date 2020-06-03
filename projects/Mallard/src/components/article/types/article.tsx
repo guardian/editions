@@ -141,6 +141,8 @@ const Article = ({
 
     const [, { pillar }] = useArticle()
 
+    const lightboxEnabled = remoteConfig().getValue('lightbox_enabled').value
+
     return (
         <Fader>
             <WebviewWithArticle
@@ -186,30 +188,25 @@ const Article = ({
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }
-                    if (parsed.type === 'openLightbox') {
-                        const lightboxEnabled = remoteConfig().getValue(
-                            'lightbox_enabled',
-                        ).value
-                        if (lightboxEnabled) {
-                            const lbimages = getLightboxImages(article.elements)
-                            const lbCreditedImages = getCreditedImages(lbimages)
-                            let index = parsed.index
-                            // to avoid image duplication we don't add the main image of gallery articles to the array
-                            if (article.type !== 'gallery' && article.image) {
-                                lbCreditedImages.unshift(article.image)
-                                if (parsed.isMainImage === 'false') {
-                                    index++
-                                }
+                    if (lightboxEnabled && parsed.type === 'openLightbox') {
+                        const lbimages = getLightboxImages(article.elements)
+                        const lbCreditedImages = getCreditedImages(lbimages)
+                        let index = parsed.index
+                        // to avoid image duplication we don't add the main image of gallery articles to the array
+                        if (article.type !== 'gallery' && article.image) {
+                            lbCreditedImages.unshift(article.image)
+                            if (parsed.isMainImage === 'false') {
+                                index++
                             }
-                            navigateToLightbox({
-                                navigation,
-                                navigationProps: {
-                                    images: lbCreditedImages,
-                                    index,
-                                    pillar,
-                                },
-                            })
                         }
+                        navigateToLightbox({
+                            navigation,
+                            navigationProps: {
+                                images: lbCreditedImages,
+                                index,
+                                pillar,
+                            },
+                        })
                     }
                 }}
             />
