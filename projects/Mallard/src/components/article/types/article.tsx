@@ -17,6 +17,7 @@ import {
     CreditedImage,
 } from '../../../../../Apps/common/src'
 import { navigateToLightbox } from 'src/navigation/helpers/base'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 const styles = StyleSheet.create({
     block: {
@@ -140,6 +141,8 @@ const Article = ({
 
     const [, { pillar }] = useArticle()
 
+    const lightboxEnabled = remoteConfig().getValue('lightbox_enabled').value
+
     return (
         <Fader>
             <WebviewWithArticle
@@ -185,7 +188,7 @@ const Article = ({
                     if (parsed.type === 'isAtTopChange') {
                         onIsAtTopChange(parsed.isAtTop)
                     }
-                    if (parsed.type === 'openLightbox') {
+                    if (lightboxEnabled && parsed.type === 'openLightbox') {
                         const lbimages = getLightboxImages(article.elements)
                         const lbCreditedImages = getCreditedImages(lbimages)
                         let index = parsed.index

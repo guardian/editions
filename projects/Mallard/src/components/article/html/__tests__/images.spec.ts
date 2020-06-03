@@ -1,5 +1,11 @@
 import { renderCaption } from '../components/images'
 
+jest.mock('@react-native-firebase/remote-config', () => {
+    remoteConfig: jest.fn(() => ({
+        getValue: jest.fn(),
+    }))
+})
+
 describe('html', () => {
     describe('renderCaption', () => {
         it('renders just the caption when the credit is undefined', () => {

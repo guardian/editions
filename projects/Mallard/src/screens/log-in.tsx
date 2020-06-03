@@ -15,6 +15,7 @@ import {
     AuthParams,
     AppleSignInTokenKey,
 } from 'src/authentication/authorizers/IdentityAuthorizer'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 import { iosMajorVersion } from 'src/helpers/platform'
 
@@ -134,6 +135,8 @@ const Login = ({
         setShowAppleAuthWebView(true)
     }
 
+    const appleSignInEnabled = remoteConfig().getValue('apple_sign_in').value
+
     return (
         <LoginLayout
             title={title}
@@ -169,7 +172,7 @@ const Login = ({
                         >
                             Continue with Google
                         </SocialButton>
-                        {iosMajorVersion >= 13 && (
+                        {appleSignInEnabled && iosMajorVersion >= 13 && (
                             <SocialButton
                                 onPress={onApplePress}
                                 iconRequire={require('src/assets/images/apple.png')}
@@ -178,7 +181,7 @@ const Login = ({
                             </SocialButton>
                         )}
 
-                        {iosMajorVersion < 13 && (
+                        {appleSignInEnabled && iosMajorVersion < 13 && (
                             <SocialButton
                                 onPress={onAppleSignInPress}
                                 iconRequire={require('src/assets/images/apple.png')}
