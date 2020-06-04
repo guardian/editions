@@ -92,12 +92,19 @@ const LightboxScreen = ({
 
     const [closeButtonVisible, setCloseButtonVisible] = useState(false)
 
+    const [scrollInProgress, setScrollInProgress] = useState(false)
+
     const handleScrollEndEvent = (ev: any) => {
         const newIndex = Math.ceil(ev.nativeEvent.contentOffset.x / width)
         setCurrentIndex(newIndex)
+        setScrollInProgress(false)
         setWindowsStart(
             getNewWindowStart(newIndex, windowStart, images.length, numDots),
         )
+    }
+
+    const handleScrollStartEvent = () => {
+        setScrollInProgress(true)
     }
 
     const focusOnImageComponent = () => {
@@ -150,6 +157,7 @@ const LightboxScreen = ({
                             key={width}
                             data={images}
                             onMomentumScrollEnd={handleScrollEndEvent}
+                            onMomentumScrollBegin={handleScrollStartEvent}
                             getItemLayout={(_: never, index: number) => ({
                                 length: width,
                                 offset: width * index,
@@ -199,6 +207,7 @@ const LightboxScreen = ({
                                 imageCount={images.length}
                                 windowSize={numDots}
                                 windowStart={windowStart}
+                                scrollInProgress={scrollInProgress}
                             />
                         )}
                     </View>

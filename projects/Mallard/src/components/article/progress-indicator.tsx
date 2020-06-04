@@ -11,17 +11,18 @@ const styles = StyleSheet.create({
     },
 })
 
-type ProgressType = 'current' | 'small' | 'big'
+type ProgressType = 'current' | 'small' | 'big' | 'hidden'
 
 type ProgressIndicatorProps = {
     imageCount: number
     currentIndex: number
     windowStart: number
     windowSize: number
+    scrollInProgress: boolean
 }
 
 const progressStyle = (type: ProgressType) => {
-    const diameter = type === 'small' ? 5 : 10
+    const diameter = type === 'small' ? 5 : type === 'hidden' ? 3 : 10
     const colour =
         type === 'current' ? 'white' : themeColors(ArticleTheme.Dark).line
     return {
@@ -80,6 +81,7 @@ export const ProgressIndicator = ({
     currentIndex,
     windowStart,
     windowSize,
+    scrollInProgress,
 }: ProgressIndicatorProps) => {
     const current = currentIndex - windowStart
     const showStarter = windowStart > 0
@@ -87,8 +89,12 @@ export const ProgressIndicator = ({
     const circles = Array(windowSize)
         .fill('', 0)
         .map((e, index) =>
-            (showStarter && index === 0) ||
-            (showEnd && index === windowSize - 1)
+            scrollInProgress && (showStarter && showEnd && index === 0)
+                ? 'hidden'
+                : scrollInProgress && (showEnd && index === windowSize - 1)
+                ? 'big'
+                : (showStarter && index === 0) ||
+                  (showEnd && index === windowSize - 1)
                 ? 'small'
                 : index === current
                 ? 'current'
